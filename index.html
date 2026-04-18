@@ -133,6 +133,113 @@
     <a href="https://totogt.github.io/AXLE/">Open AXLE Playground</a>
   </div>
 </section>
+<section id="orthogenesis">
+  <h2>Orthogenesis — Moon Base Geometry</h2>
+
+  <div class="card">
+    <h3>Formal Verification of a Phased Moon Base</h3>
+    <p>
+      Orthogenesis models NASA’s lunar base as a mathematically rigorous honeycomb colony:
+      axial hex coordinates, geometric growth across deployment stages, and a
+      <code>Colony.expand</code> operator that mirrors NASA’s three-phase build-out —
+      from the first 4,000 kg payload to a continuous crewed presence at the lunar South Pole.
+    </p>
+
+    <blockquote style="margin:1rem 0; padding:1rem; background:#f0ece4; border-left:4px solid #c9a84c;">
+      “NASA is embarking on the most ambitious space project in recent history: building a Moon Base.”
+      <br><span style="font-size:0.85rem; color:#555;">— NASA Moon Base User’s Guide, Architecture Resources, April 2026</span>
+    </blockquote>
+
+    <h3>Why Lean 4</h3>
+    <p>
+      The NASA Moon Base Architecture Definition Document identifies <strong>functional gaps</strong> —
+      capabilities that are unallocated or under-specified — across seven sub-architectures:
+      Autonomous Systems, Communications & PNT, Habitation, Logistics, Mobility, Power, and Transportation.
+      Orthogenesis treats these gaps as <strong>proof obligations</strong>.
+      A Moon Base that compiles has no unmet structural requirements. A <code>sorry</code> is an open gap.
+    </p>
+
+    <h3>Architecture Layers</h3>
+    <ul>
+      <li><strong>Orthogenesis.Geometry.HexGrid</strong> — axial coordinates, Euclidean embedding</li>
+      <li><strong>Orthogenesis.Geometry.Growth</strong> — geometric radius model <code>R(n) = g^n</code></li>
+      <li><strong>Orthogenesis.Architecture.Cell</strong> — <code>(HexCoord, stage)</code> pair</li>
+      <li><strong>Orthogenesis.Architecture.Colony</strong> — <code>Finset Cell</code> + expansion operator</li>
+    </ul>
+
+    <h3>Hex Grid</h3>
+    <p>
+      Modules on the lunar surface are arranged in a pointy-top axial hex grid — the same honeycomb
+      geometry used in pressurized habitat clusters and ISRU pad layouts. Every hex has exactly six neighbors:
+    </p>
+
+    <pre style="background:#faf7f0; padding:1rem; border-left:4px solid #c9a84c;">
+def hexNeighbors (h : HexCoord) : List HexCoord :=
+  [ ⟨h.q+1, h.r⟩, ⟨h.q+1, h.r-1⟩, ⟨h.q, h.r-1⟩,
+    ⟨h.q-1, h.r⟩, ⟨h.q-1, h.r+1⟩, ⟨h.q, h.r+1⟩ ]
+    </pre>
+
+    <p>Euclidean embedding:</p>
+    <pre style="background:#faf7f0; padding:1rem; border-left:4px solid #c9a84c;">
+x = q + r/2
+y = (√3 / 2) · r
+    </pre>
+
+    <h3>Growth Model</h3>
+    <p>
+      Each cell carries a stage indexing a geometric growth sequence. Structural radius:
+    </p>
+
+    <pre style="background:#faf7f0; padding:1rem; border-left:4px solid #c9a84c;">
+def R (P : GrowthParams) (n : ℕ) : ℝ := P.g ^ n
+    </pre>
+
+    <p>
+      NASA’s phased payload scaling matches this model:
+      4,000 kg → 60,000 kg → 150,000 kg. Growth factor <code>g ≈ 3.87</code>.
+    </p>
+
+    <h3>Colony Expansion</h3>
+    <p>
+      <code>Colony.expand</code> adds all six neighbors of every cell and increments stage:
+    </p>
+
+    <pre style="background:#faf7f0; padding:1rem; border-left:4px solid #c9a84c;">
+def Colony.expand (C : Colony) : Colony :=
+  let newCells :=
+    C.cells.fold
+      (fun acc c =>
+        let neigh := hexNeighbors c.coord
+        let stage := c.stage + 1
+        let new := neigh.map (fun h => Cell.mk h stage)
+        acc ∪ new.toFinset)
+      ∅
+  { cells := C.cells ∪ newCells }
+    </pre>
+
+    <p>
+      One call to <code>expand</code> = one NASA phase.  
+      Depth 2 = Phases 01, 02, 03.
+    </p>
+
+    <h3>Proof Obligations</h3>
+    <ul>
+      <li><strong>hexNeighbors_length</strong> — proved</li>
+      <li><strong>R_mono</strong> — proved</li>
+      <li><strong>expand_mono</strong> — in progress</li>
+      <li><strong>stage_bound</strong> — open</li>
+      <li><strong>coord_coverage</strong> — open</li>
+      <li><strong>no_coord_collision</strong> — open</li>
+    </ul>
+
+    <h3>Repository</h3>
+    <p>
+      <a href="https://github.com/TOTOGT/Orthogenesis" style="color:#1a2744; font-weight:bold;">
+        View Orthogenesis on GitHub →
+      </a>
+    </p>
+  </div>
+</section>
 
 <footer>
   <div class="logo">G6 LLC · Newark, NJ</div>
