@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Student Journey Map · Book 3: The Mini-Beast</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#07050f;color:#e8e0d0;font-family:'Georgia',serif;min-height:100vh;overflow-x:hidden}
+#app{max-width:1040px;margin:0 auto;padding:14px 16px 24px}
+
+/* ── Header ── */
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 0 14px;border-bottom:1px solid #221c38;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.hdr-left h1{font-size:1.08rem;color:#c9a84c;letter-spacing:.04em}
+.hdr-left p{font-size:.72rem;color:#554466;margin-top:2px;font-family:'Courier New',monospace}
+#pass-tabs{display:flex;gap:7px}
+.pass-tab{padding:5px 17px;border:1px solid #332848;border-radius:20px;cursor:pointer;font-size:.78rem;background:#0e0b1a;color:#776688;transition:all .2s;font-family:'Courier New',monospace}
+.pass-tab.active{border-color:#c9a84c;color:#c9a84c;background:#181204}
+.pass-tab:hover:not(.active){border-color:#555;color:#aaa}
+#pass-progress{font-size:.73rem;color:#554466;font-family:'Courier New',monospace}
+
+/* ── Main layout ── */
+#main{display:flex;gap:14px;align-items:flex-start}
+#spiral-col{flex:0 0 572px}
+#spiral-svg{display:block;width:100%;height:auto}
+
+/* ── Legend ── */
+#legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:9px;padding:7px 10px;background:#0c0918;border-radius:5px;border:1px solid #1a1530}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:.69rem;color:#887799;font-family:'Courier New',monospace}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* ── Detail panel ── */
+#detail-panel{flex:1;min-width:260px;background:#0c0918;border:1px solid #1e1840;border-radius:8px;padding:16px;max-height:580px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#2a2040 transparent}
+#detail-panel::-webkit-scrollbar{width:5px}
+#detail-panel::-webkit-scrollbar-thumb{background:#2a2040;border-radius:3px}
+#detail-empty{color:#443355;font-style:italic;font-size:.82rem;text-align:center;padding:50px 0 30px;line-height:1.8}
+#detail-content{display:none}
+.dc-header{margin-bottom:10px}
+#dc-symbol{font-size:2.4rem;line-height:1;margin-bottom:4px}
+#dc-title{font-size:1.05rem;font-weight:bold;margin-bottom:3px}
+#dc-meta{font-size:.69rem;color:#665577;font-family:'Courier New',monospace;margin-bottom:9px}
+#dc-eq{font-family:'Courier New',monospace;font-size:.88rem;color:#9ac8ff;background:#080c18;padding:7px 11px;border-radius:4px;margin-bottom:11px;border-left:3px solid #4a9eff}
+#dc-desc{font-size:.8rem;color:#bbaabb;line-height:1.55;margin-bottom:12px}
+.dc-section{margin-bottom:12px}
+.dc-section h4{font-size:.66rem;color:#554466;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;font-family:'Courier New',monospace}
+.topic-item{font-size:.76rem;color:#9988aa;padding:3px 0 3px 12px;border-left:2px solid #1e1840;margin-bottom:4px;line-height:1.4}
+.pass-hist-table{width:100%;font-size:.73rem;border-collapse:collapse}
+.pass-hist-table td{padding:4px 7px;border:1px solid #180f28;text-align:center}
+.pass-hist-table td:first-child{text-align:left;color:#665577;font-family:'Courier New',monospace}
+.s-done{color:#50c878}.s-in{color:#c9a84c}.s-none{color:#2a2040}
+.ch-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.btn{padding:6px 13px;border-radius:5px;cursor:pointer;font-size:.74rem;border:1px solid;transition:all .18s;font-family:'Courier New',monospace;background:none}
+.btn-in{border-color:#c9a84c;color:#c9a84c}.btn-in:hover{background:#181208}
+.btn-done{border-color:#50c878;color:#50c878}.btn-done:hover{background:#0a1810}
+.btn-open{border-color:#4a9eff;color:#4a9eff;text-decoration:none;display:inline-block}.btn-open:hover{background:#080e1a}
+.btn-rst{border-color:#2a2040;color:#554466}.btn-rst:hover{border-color:#555;color:#888}
+
+/* ── Timeline ── */
+#timeline-wrap{margin-top:14px;background:#0c0918;border:1px solid #1a1530;border-radius:7px;padding:10px 0 4px}
+#tl-label{font-size:.67rem;color:#443355;text-align:center;font-family:'Courier New',monospace;margin-bottom:3px}
+#timeline-svg{display:block;width:100%;height:auto}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <div class="hdr-left">
+      <h1>The Mini-Beast &mdash; Student Journey Map</h1>
+      <p>G = U ∘ F ∘ K ∘ C &nbsp;·&nbsp; Chapters 0&ndash;17 &nbsp;·&nbsp; Book 3 &nbsp;·&nbsp; G6 LLC</p>
+    </div>
+    <div id="pass-tabs">
+      <button class="pass-tab" data-pass="1">Pass 1</button>
+      <button class="pass-tab" data-pass="2">Pass 2</button>
+      <button class="pass-tab" data-pass="3">Pass 3</button>
+    </div>
+    <div id="pass-progress">Loading&hellip;</div>
+  </header>
+
+  <div id="main">
+
+    <div id="spiral-col">
+      <svg id="spiral-svg" viewBox="0 0 572 510" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow4"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="glow3"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="glow2"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <rect width="572" height="510" fill="#07050f" rx="6"/>
+        <g id="sg-guide"></g>
+        <g id="sg-curves"></g>
+        <g id="sg-nodes"></g>
+        <g id="sg-hub"></g>
+      </svg>
+
+      <div id="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#4a9eff"></div>C &mdash; Compression</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#e05a3a"></div>K &mdash; Threshold</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#50c878"></div>F &mdash; Fold</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#c084fc"></div>U &mdash; Unfolding</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#f59e0b"></div>G &mdash; Conclusion</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#1a1728;border:1px solid #2a2248"></div>Ahead</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#181204;border:1px solid #c9a84c"></div>In Progress</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#50c878"></div>Complete</div>
+      </div>
+    </div>
+
+    <div id="detail-panel">
+      <div id="detail-empty">
+        &larr; Select a chapter on the spiral<br>or timeline to view details,<br>track your progress, and navigate.
+        <br><br>
+        <span style="color:#2a2040;font-size:.7rem">The spiral represents 1&frac12; revolutions<br>through G = U&thinsp;&compfn;&thinsp;F&thinsp;&compfn;&thinsp;K&thinsp;&compfn;&thinsp;C.</span>
+      </div>
+      <div id="detail-content">
+        <div class="dc-header">
+          <div id="dc-symbol"></div>
+          <div id="dc-title"></div>
+          <div id="dc-meta"></div>
+        </div>
+        <div id="dc-eq"></div>
+        <div id="dc-desc"></div>
+        <div class="dc-section">
+          <h4>Topics</h4>
+          <div id="dc-topics"></div>
+        </div>
+        <div class="dc-section">
+          <h4>Progress across all passes</h4>
+          <table class="pass-hist-table" id="dc-hist"></table>
+        </div>
+        <div class="ch-actions" id="dc-actions"></div>
+      </div>
+    </div>
+
+  </div><!-- #main -->
+
+  <div id="timeline-wrap">
+    <div id="tl-label">CEFR Writing Level Progression &nbsp;&middot;&nbsp; click any dot to open chapter &nbsp;&middot;&nbsp; A2 &rarr; B1 &rarr; B2 &rarr; C1 &rarr; D1 &rarr; D2</div>
+    <svg id="timeline-svg" viewBox="0 0 1008 90" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1008" height="90" fill="#0c0918"/>
+      <g id="tl-content"></g>
+    </svg>
+  </div>
+
+</div><!-- #app -->
+
+<script>
+// ============================================================
+//  CONSTANTS
+// ============================================================
+const NS = 'http://www.w3.org/2000/svg';
+const PH = {
+  C:{color:'#4a9eff',label:'Compression'},
+  K:{color:'#e05a3a',label:'Threshold'},
+  F:{color:'#50c878',label:'Fold'},
+  U:{color:'#c084fc',label:'Unfolding'},
+  G:{color:'#f59e0b',label:'Conclusion'},
+};
+const NIRVANA = '#67e8f9';
+
+// ============================================================
+//  CHAPTER DATA
+// ============================================================
+const CH = [
+  {n:0,  f:'ch00-introduction.html', t:'Introduction',         s:'\u2205',   eq:'G = U \u2218 F \u2218 K \u2218 C',   ph:'C', lv:'A2',    cv:2,   wk:0,
+   desc:'The operator chain and how to read this book. G is not an endpoint \u2014 it is a map you fold yourself into.',
+   topics:['The operator chain G=U\u2218F\u2218K\u2218C introduced','Reading chapters as iterative operator application','The book as a system that converges to x*']},
+  {n:1,  f:'ch1-seed.html',          t:'The Seed',             s:'\u03c3',   eq:'C(x) = \u03b1x',                    ph:'C', lv:'B1',    cv:3,   wk:1,
+   desc:'Compression begins: the founding constraint that makes growth possible. The seed is not small \u2014 it is dense.',
+   topics:['Seed as compression metaphor','Constraint enables structural complexity','First exercise: reduce any argument to its seed']},
+  {n:2,  f:'ch2-allostatic.html',    t:'Allostatic Load',      s:'\u03bb',   eq:'\u03bb = \u03a3w\u1d62s\u1d62',     ph:'C', lv:'B1',    cv:3,   wk:4,
+   desc:'Stress accumulates across systems \u2014 the body as proof that compression builds toward threshold.',
+   topics:['Allostasis vs homeostasis','Cumulative load approaching the K threshold','Stress argument structure: building to a critical point']},
+  {n:3,  f:'ch3-circadian.html',     t:'Circadian Rhythm',     s:'\u03c9',   eq:'\u1e8b = \u2212\u03b2x + \u03b3',  ph:'K', lv:'B1',    cv:3,   wk:3,
+   desc:'Threshold rhythms: oscillation locked to environment. The K operator regulates the body\u2019s time.',
+   topics:['Phase-locking and entrainment','Clock genes as threshold operators','Writing rhythm as circadian structure']},
+  {n:4,  f:'ch4-neural.html',        t:'Neural Oscillations',  s:'\u03b3',   eq:'\u1e7d = I \u2212 gV',             ph:'K', lv:'B1',    cv:3,   wk:5,
+   desc:'The threshold operator in pure form: neurons fire or they don\u2019t. Binary clarity yields complex behavior.',
+   topics:['All-or-nothing firing threshold','Integrate-and-fire model','The sentence as neural spike: commit or delete']},
+  {n:5,  f:'ch5-immune.html',        t:'Immune Adaptation',    s:'\u03ba',   eq:'dB/dt = \u03b1AB \u2212 \u03bcB',  ph:'K', lv:'B1\u2192B2', cv:3.5, wk:6,
+   desc:'The immune system folds information about past threats into future defense. K transitions to F.',
+   topics:['Memory cells as fold operators','Affinity maturation as iterative refinement','Argument immunity: anticipating counterarguments']},
+  {n:6,  f:'ch6-resonant.html',      t:'Resonance',            s:'\u03c1',   eq:'A\u2099 = F\u2080/(\u03c9\u00b2\u2080 \u2212 \u03c9\u00b2)',  ph:'F', lv:'B2',    cv:4,   wk:7,
+   desc:'Falsifiability as resonant frequency: a good argument has a natural frequency at which it can be broken.',
+   topics:['Popper and the falsifiability criterion','Resonance as structural alignment with reality','Constructing genuinely testable claims']},
+  {n:7,  f:'ch7-crystalline.html',   t:'Crystalline Structure', s:'\u039b',  eq:'E = kT\u00b7ln(\u03a9)',            ph:'F', lv:'B2\u2192C1', cv:4.5, wk:9,
+   desc:'Arguments crystallize when internal symmetry aligns with external constraint. Disorder anneals to form.',
+   topics:['Crystal lattice as logical structure','Entropy and argument disorder','From amorphous draft to crystalline form']},
+  {n:8,  f:'ch8-axiomatic.html',     t:'Axiomatic Foundations', s:'\u22a2',  eq:'\u0393 \u22a2 \u03c6',             ph:'F', lv:'C1',    cv:5,   wk:10,
+   desc:'The fold complete: axioms are the compressed base of all proof. F transitions to U.',
+   topics:['Peano axioms and mathematical induction','Proof structure in academic writing','Building an argument from first principles']},
+  {n:9,  f:'ch9-phi.html',           t:'\u03c6 \u2014 Subcritical', s:'\u03c6', eq:'\u03c6 = (1+\u221a5)/2',       ph:'U', lv:'C1\u2192D1', cv:5.5, wk:11,
+   desc:'The golden ratio as subcritical approach to the fixed point. U begins to unfold what C compressed.',
+   topics:['\u03c6 as limit of Fibonacci ratios','Subcritical dynamics near a fixed point','Proportion in argument architecture']},
+  {n:10, f:'ch10-lyapunov.html',     t:'Lyapunov Stability',   s:'V',        eq:'\u1e7d \u2264 0',                  ph:'U', lv:'D1',    cv:6,   wk:13,
+   desc:'Unfolding stability: when perturbations decay and the system recovers to its basin of attraction.',
+   topics:['Lyapunov functions and energy landscapes','Basin of attraction','Resilient arguments under sustained critique']},
+  {n:11, f:'ch11-spectral.html',     t:'Spectral Radius',      s:'\u03c1(A)', eq:'\u03c1(A) < 1',                   ph:'U', lv:'D1\u2192D2', cv:6.5, wk:14,
+   desc:'The spectral radius governs whether iteration converges. Revision is power iteration toward x*.',
+   topics:['Eigenvalues and matrix convergence','Spectral radius theorem and fixed points','Iterative revision as power iteration']},
+  {n:12, f:'ch12-conclusion.html',   t:'Fixed Point',          s:'x*',       eq:'G(x*) = x*',                       ph:'G', lv:'D1\u2192D2', cv:6.5, wk:15,
+   desc:'The conclusion as fixed point: where the operator meets its own argument and stabilizes.',
+   topics:['Banach fixed-point theorem','Conclusion as convergence, not terminus','Writing the fixed point with precision']},
+  {n:13, f:'ch13-revision.html',     t:'Nirvana Machine',      s:'\u221e',   eq:'T \u2192 0',                       ph:'G', lv:'D2',    cv:7,   wk:16,
+   desc:'Simulated annealing: revision as controlled cooling. Each pass lowers the temperature toward the global optimum.',
+   topics:['Simulated annealing algorithm','Temperature schedule in revision','When to stop revising: the cooling criterion']},
+  {n:14, f:'ch14-axle.html',         t:'Curry-Howard',         s:'\u27fa',   eq:'A\u2236B \u27fa A\u2192B',         ph:'G', lv:'D2',    cv:7,   wk:16,
+   desc:'Proofs are programs: the Curry-Howard correspondence formalized in the AXLE verification system.',
+   topics:['Types as propositions, terms as proofs','Lean 4 formal verification workflow','Writing as proof construction']},
+  {n:15, f:'ch15-entropy.html',      t:'Shannon Entropy',      s:'H',        eq:'H = \u2212\u03a3p\u1d62 log\u2082p\u1d62', ph:'G', lv:'D2', cv:7, wk:16,
+   desc:'Information theory revisits operator C: entropy measures how much compression remains possible in a text.',
+   topics:['Shannon entropy formula and intuition','Information content as surprise','Measuring argument density and redundancy']},
+  {n:16, f:'ch16-scale.html',        t:'Scale Invariance',     s:'\u03be',   eq:'B \u221d M\u00b3\u141f\u2074',     ph:'G', lv:'D2',    cv:7,   wk:16,
+   desc:'Renormalization group: the operator structure G=U\u2218F\u2218K\u2218C is preserved across scales.',
+   topics:['Kleiber\u2019s law and metabolic allometry','RG fixed points and universality classes','Scale-free argument structure']},
+  {n:17, f:'ch17-epilogue.html',     t:'The Living Book',      s:'x*',       eq:'G\u207f(x\u2080) \u2192 x*',       ph:'G', lv:'D2',    cv:7,   wk:16,
+   desc:'The reader becomes the fixed point. The book is alive because you are alive. Pass 2 begins where Pass 1 ends.',
+   topics:['Reader as operator, text as argument','Convergence of understanding across passes','The book reads itself through you']},
+];
+
+// ============================================================
+//  SPIRAL MATH
+// ============================================================
+const CX=284, CY=248, R_MIN=68, R_MAX=216, REVS=1.5;
+
+function spiralPt(t){
+  const theta = -Math.PI/2 + t * REVS * 2 * Math.PI;
+  const r = R_MIN + t * (R_MAX - R_MIN);
+  return { x: CX + r * Math.cos(theta), y: CY + r * Math.sin(theta) };
+}
+function chPt(n){ return spiralPt(n/17); }
+
+// Phase segments using midpoints for smooth colour transitions
+const SEGS=[
+  {ph:'C', t0:0,          t1:2.5/17},
+  {ph:'K', t0:2.5/17,     t1:5.5/17},
+  {ph:'F', t0:5.5/17,     t1:8.5/17},
+  {ph:'U', t0:8.5/17,     t1:11.5/17},
+  {ph:'G', t0:11.5/17,    t1:1.0},
+];
+
+function makePath(t0,t1,n=100){
+  let d='';
+  for(let i=0;i<=n;i++){
+    const t=t0+(t1-t0)*i/n;
+    const p=spiralPt(t);
+    d+=(i===0?`M ${p.x.toFixed(2)},${p.y.toFixed(2)}`:`L ${p.x.toFixed(2)},${p.y.toFixed(2)}`);
+  }
+  return d;
+}
+
+// ============================================================
+//  STORAGE
+// ============================================================
+const SKEY='minibeast-spiral-v1';
+function loadStore(){
+  try{ const s=localStorage.getItem(SKEY); if(s) return JSON.parse(s); }catch(e){}
+  return {pass:1,data:{1:{},2:{},3:{}}};
+}
+function saveStore(){ try{ localStorage.setItem(SKEY,JSON.stringify(store)); }catch(e){} }
+
+let store=loadStore();
+let currentPass=store.pass||1;
+let selectedN=null;
+
+function getSt(n,p){ return (store.data[p]||{})[n]||''; }
+function setSt(n,p,v){
+  if(!store.data[p]) store.data[p]={};
+  if(v===''){ delete store.data[p][n]; } else { store.data[p][n]=v; }
+  store.pass=currentPass; saveStore();
+}
+function countDone(p){ return Object.values(store.data[p]||{}).filter(v=>v==='done').length; }
+
+// ============================================================
+//  SVG HELPERS
+// ============================================================
+function se(tag,attrs,parent){
+  const e=document.createElementNS(NS,tag);
+  for(const [k,v] of Object.entries(attrs||{})) e.setAttribute(k,String(v));
+  if(parent) parent.appendChild(e);
+  return e;
+}
+function sv(content,attrs,parent){
+  const e=se('text',attrs,parent); e.textContent=content; return e;
+}
+
+// ============================================================
+//  RENDER SPIRAL
+// ============================================================
+function renderSpiral(){
+  const guideG=document.getElementById('sg-guide');
+  const curvesG=document.getElementById('sg-curves');
+  const nodesG=document.getElementById('sg-nodes');
+  const hubG=document.getElementById('sg-hub');
+  guideG.innerHTML=''; curvesG.innerHTML=''; nodesG.innerHTML=''; hubG.innerHTML='';
+
+  // Faint concentric guide circles
+  for(let i=1;i<=4;i++){
+    const rf=R_MIN+(i/5)*(R_MAX-R_MIN);
+    se('circle',{cx:CX,cy:CY,r:rf.toFixed(1),fill:'none',stroke:'#14102a','stroke-width':'0.7','stroke-dasharray':'2,6'},guideG);
+  }
+
+  // ── Phase curve segments: glow + solid ──
+  for(const seg of SEGS){
+    const d=makePath(seg.t0,seg.t1,100);
+    const col=PH[seg.ph].color;
+    se('path',{d,stroke:col,'stroke-width':'9','stroke-opacity':'0.12',fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},curvesG);
+    se('path',{d,stroke:col,'stroke-width':'5','stroke-opacity':'0.25',fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},curvesG);
+    se('path',{d,stroke:col,'stroke-width':'2.5','stroke-opacity':'0.9',fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},curvesG);
+  }
+
+  // ── Chapter nodes ──
+  for(const ch of CH){
+    const p=chPt(ch.n);
+    const status=getSt(ch.n,currentPass);
+    const col=(ch.n===13)?NIRVANA:PH[ch.ph].color;
+    const isDone=status==='done', isIn=status==='in';
+    const isSelected=(ch.n===selectedN);
+
+    const g=se('g',{cursor:'pointer','data-n':ch.n,
+      transform:`translate(${p.x.toFixed(2)},${p.y.toFixed(2)})`},nodesG);
+
+    // Selection ring
+    if(isSelected){
+      se('circle',{r:'16',fill:'none',stroke:'#ffffff','stroke-width':'1.5','stroke-opacity':'0.4'},g);
+    }
+
+    // Glow for active chapters
+    if(isDone||isIn){
+      se('circle',{r:'17',fill:'none',stroke:col,'stroke-width':'1.5','stroke-opacity':'0.25',filter:'url(#glow4)'},g);
+    }
+
+    // Main circle
+    se('circle',{r:'12',
+      fill:isDone?col:(isIn?'#1a1406':'#110e1c'),
+      stroke:isDone?col:(isIn?col:(isSelected?'#6655aa':'#221c40')),
+      'stroke-width':isSelected?'2':(isDone?'0':'1.8'),
+      class:'nc'},g);
+
+    // Symbol inside circle
+    const fsize=ch.s.length>3?'5':ch.s.length>2?'6':ch.s.length>1?'7':'9';
+    sv(ch.s,{'text-anchor':'middle','dominant-baseline':'central',
+      'font-size':fsize,'font-family':'Georgia,serif',
+      fill:isDone?'#07050f':(isIn?col:(isSelected?'#9988cc':'#3d3060')),
+      'pointer-events':'none'},g);
+
+    // Chapter number: offset away from centre
+    const angle=Math.atan2(p.y-CY,p.x-CX);
+    const nr=20;
+    sv(String(ch.n),{
+      x:(nr*Math.cos(angle)).toFixed(1),
+      y:(nr*Math.sin(angle)+4).toFixed(1),
+      'text-anchor':'middle','font-size':'6.5',
+      'font-family':'Courier New,monospace',
+      fill:isDone?col:(isIn?col:(isSelected?'#9988cc':'#2d2550')),
+      'pointer-events':'none'},g);
+
+    g.addEventListener('click',()=>selectChapter(ch.n));
+    g.addEventListener('mouseenter',function(){
+      const c=this.querySelector('.nc'); if(c) c.setAttribute('r','14');
+    });
+    g.addEventListener('mouseleave',function(){
+      const c=this.querySelector('.nc'); if(c) c.setAttribute('r','12');
+    });
+  }
+
+  // ── Center hub ──
+  const done=countDone(currentPass);
+  const pct=Math.round(done/18*100);
+  const hubCol=pct===100?'#50c878':'#c9a84c';
+
+  se('circle',{cx:CX,cy:CY,r:'48',fill:'none',stroke:hubCol,'stroke-width':'0.8','stroke-opacity':'0.15',filter:'url(#glow3)'},hubG);
+  se('circle',{cx:CX,cy:CY,r:'46',fill:'#0c0918',stroke:'#231d3a','stroke-width':'1.5'},hubG);
+  se('circle',{cx:CX,cy:CY,r:'41',fill:'#09071a',stroke:'none'},hubG);
+
+  sv('G=U\u2218F\u2218K\u2218C',{x:CX,y:CY-18,'text-anchor':'middle','font-size':'7.5','font-family':'Courier New,monospace',fill:'#c9a84c','font-weight':'bold'},hubG);
+  sv(`Pass ${currentPass}`,{x:CX,y:CY-3,'text-anchor':'middle','font-size':'9','font-family':'Courier New,monospace',fill:'#554466'},hubG);
+  sv(`${pct}%`,{x:CX,y:CY+14,'text-anchor':'middle','font-size':'17','font-family':'Georgia,serif',fill:hubCol,'font-weight':'bold'},hubG);
+  sv(`${done}/18`,{x:CX,y:CY+28,'text-anchor':'middle','font-size':'7.5','font-family':'Courier New,monospace',fill:'#3a2d60'},hubG);
+
+  document.getElementById('pass-progress').textContent=
+    `${done} / 18 complete \u00b7 Pass ${currentPass}`;
+}
+
+// ============================================================
+//  RENDER TIMELINE
+// ============================================================
+function renderTimeline(){
+  const g=document.getElementById('tl-content');
+  g.innerHTML='';
+  const pL=44,pR=16,pT=12,pB=24,W=1008,H=90;
+  const pW=W-pL-pR, pH=H-pT-pB;
+
+  function tx(n){ return pL+(n/17)*pW; }
+  function ty(cv){ return pT+pH-((cv-1)/6)*pH; }
+
+  // Grid lines
+  const levels=[{v:2,l:'A2'},{v:3,l:'B1'},{v:4,l:'B2'},{v:5,l:'C1'},{v:6,l:'D1'},{v:7,l:'D2'}];
+  for(const lv of levels){
+    const y=ty(lv.v);
+    se('line',{x1:pL,y1:y,x2:W-pR,y2:y,stroke:'#17122e','stroke-width':'1','stroke-dasharray':'2,5'},g);
+    sv(lv.l,{x:pL-4,y:y+3.5,'text-anchor':'end','font-size':'7','font-family':'Courier New,monospace',fill:'#3a3060'},g);
+  }
+
+  // Phase-coloured line segments
+  const phR=[
+    {ph:'C',n0:0,n1:2},{ph:'K',n0:2,n1:5},{ph:'F',n0:5,n1:8},
+    {ph:'U',n0:8,n1:11},{ph:'G',n0:11,n1:17}
+  ];
+  for(const pr of phR){
+    let d='';
+    for(let n=pr.n0;n<=pr.n1;n++){
+      const x=tx(n),y=ty(CH[n].cv);
+      d+=(n===pr.n0?`M ${x.toFixed(1)},${y.toFixed(1)}`:`L ${x.toFixed(1)},${y.toFixed(1)}`);
+    }
+    const col=PH[pr.ph].color;
+    se('path',{d,stroke:col,'stroke-width':'6','stroke-opacity':'0.12',fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},g);
+    se('path',{d,stroke:col,'stroke-width':'2','stroke-opacity':'0.75',fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},g);
+  }
+
+  // Chapter dots
+  for(const ch of CH){
+    const x=tx(ch.n),y=ty(ch.cv);
+    const st2=getSt(ch.n,currentPass);
+    const col=(ch.n===13)?NIRVANA:PH[ch.ph].color;
+    const isDone=st2==='done', isIn=st2==='in';
+    const isSel=(ch.n===selectedN);
+
+    const cg=se('g',{cursor:'pointer'},g);
+    cg.addEventListener('click',()=>selectChapter(ch.n));
+
+    if(isDone) se('circle',{cx:x.toFixed(1),cy:y.toFixed(1),r:'7',fill:col,'fill-opacity':'0.2',filter:'url(#glow2)'},cg);
+    if(isSel) se('circle',{cx:x.toFixed(1),cy:y.toFixed(1),r:'7',fill:'none',stroke:'#ffffff','stroke-width':'1','stroke-opacity':'0.5'},cg);
+
+    se('circle',{cx:x.toFixed(1),cy:y.toFixed(1),
+      r:isDone?'5.5':(isIn?'4.5':'4'),
+      fill:isDone?col:(isIn?'#181208':'#0c0918'),
+      stroke:isDone?col:(isIn?col:(isSel?'#9988cc':'#221c40')),
+      'stroke-width':'1.5'},cg);
+
+    sv(String(ch.n),{x:x.toFixed(1),y:(H-pB+13).toFixed(1),
+      'text-anchor':'middle','font-size':'6.5',
+      'font-family':'Courier New,monospace',
+      fill:isDone?col:(isSel?'#9988cc':'#2a2050')},cg);
+  }
+}
+
+// ============================================================
+//  DETAIL PANEL
+// ============================================================
+function selectChapter(n){
+  selectedN=n;
+  const ch=CH[n];
+  const col=(ch.n===13)?NIRVANA:PH[ch.ph].color;
+
+  document.getElementById('detail-empty').style.display='none';
+  document.getElementById('detail-content').style.display='block';
+
+  const sym=document.getElementById('dc-symbol');
+  sym.textContent=ch.s; sym.style.color=col;
+  const tit=document.getElementById('dc-title');
+  tit.textContent=`Chapter ${ch.n}: ${ch.t}`; tit.style.color=col;
+  document.getElementById('dc-meta').textContent=
+    `${PH[ch.ph].label} \u00b7 CEFR ${ch.lv} \u00b7 Week ${ch.wk===0?'Intro':ch.wk}`;
+
+  const eqEl=document.getElementById('dc-eq');
+  eqEl.textContent=ch.eq; eqEl.style.borderLeftColor=col;
+  document.getElementById('dc-desc').textContent=ch.desc;
+
+  document.getElementById('dc-topics').innerHTML=
+    ch.topics.map(t=>`<div class="topic-item" style="border-left-color:${col}44">${t}</div>`).join('');
+
+  // Pass history
+  let rows='';
+  for(const p of [1,2,3]){
+    const s=getSt(n,p);
+    const sym2=s==='done'?'\u25cf':s==='in'?'\u25d1':'\u25cb';
+    const cls=s==='done'?'s-done':s==='in'?'s-in':'s-none';
+    rows+=`<tr><td>Pass ${p}${p===currentPass?' \u25c4':''}</td><td class="${cls}">${s||'\u2014'}</td><td class="${cls}" style="font-size:.95rem">${sym2}</td></tr>`;
+  }
+  document.getElementById('dc-hist').innerHTML=rows;
+
+  // Actions
+  const status=getSt(n,currentPass);
+  const acts=document.getElementById('dc-actions');
+  acts.innerHTML='';
+
+  if(status!=='in'){
+    const b=document.createElement('button');
+    b.className='btn btn-in'; b.textContent='\u25d1 In Progress';
+    b.onclick=()=>{ setSt(n,currentPass,'in'); refresh(); selectChapter(n); };
+    acts.appendChild(b);
+  }
+  if(status!=='done'){
+    const b=document.createElement('button');
+    b.className='btn btn-done'; b.textContent='\u25cf Complete';
+    b.onclick=()=>{ setSt(n,currentPass,'done'); refresh(); selectChapter(n); };
+    acts.appendChild(b);
+  }
+  const a=document.createElement('a');
+  a.className='btn btn-open'; a.textContent='\u2192 Open Chapter';
+  a.href=ch.f; a.target='_blank';
+  acts.appendChild(a);
+  if(status!==''){
+    const b=document.createElement('button');
+    b.className='btn btn-rst'; b.textContent='\u21ba Reset';
+    b.onclick=()=>{ setSt(n,currentPass,''); refresh(); selectChapter(n); };
+    acts.appendChild(b);
+  }
+
+  refresh();
+}
+
+// ============================================================
+//  REFRESH
+// ============================================================
+function refresh(){
+  renderSpiral();
+  renderTimeline();
+}
+
+// ============================================================
+//  PASS TABS
+// ============================================================
+document.querySelectorAll('.pass-tab').forEach(tab=>{
+  tab.addEventListener('click',function(){
+    currentPass=parseInt(this.dataset.pass);
+    store.pass=currentPass; saveStore();
+    document.querySelectorAll('.pass-tab').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active');
+    refresh();
+    if(selectedN!==null) selectChapter(selectedN);
+  });
+});
+document.querySelectorAll('.pass-tab').forEach(t=>{
+  t.classList.toggle('active',parseInt(t.dataset.pass)===currentPass);
+});
+
+// ============================================================
+//  INIT
+// ============================================================
+refresh();
+</script>
+</body>
+</html>
