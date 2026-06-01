@@ -3,462 +3,1853 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G6 Geometry Hub — Research · Language · Architecture</title>
-<meta name="description" content="The G6 research ecosystem: Book 3, the 16-Week C1→D2 Course, AXLE verification, Orthogenesis formal proofs, and the student journey map. By G6 LLC.">
+<title>Orthogenesis — G6 LLC · Formal Moon Base Architecture · Lean 4</title>
+<meta name="description" content="Formal verification of a phased Moon Base colony architecture in Lean 4. 50+ theorems, 0 sorry on structural claims. NASA Moon Base Phase 01 gap closure. G6 LLC, Newark NJ.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
+/* ════════════════════════════════════════════════════════════════
+   DESIGN DIRECTION: Government-grade technical authority.
+   Inspired by NASA mission documents + formal mathematics proofs.
+   Navy/gold institutional palette. Extreme precision in spacing.
+   Every element earns its place. Typography-first.
+   ════════════════════════════════════════════════════════════════ */
+
 :root {
-  --navy:  #1a2744;
-  --gold:  #c9a84c;
-  --cream: #faf7f0;
-  --smoke: #f0ece4;
-  --mid:   #3a4f7a;
-  --rule:  #8a7340;
-  --text:  #1c1c1c;
-  --light: #e8e2d4;
-  --teal:  #1a5c5c;
-  --green: #2d5a27;
+  --navy:    #0f1c3a;
+  --navy2:   #1a2f5c;
+  --navy3:   #243d70;
+  --gold:    #c9a53c;
+  --gold2:   #e8c45a;
+  --gold3:   #f5d878;
+  --cream:   #faf8f3;
+  --smoke:   #f0ece2;
+  --ash:     #e4dfd4;
+  --rule:    #8a7030;
+  --text:    #1a1a1a;
+  --muted:   #5a5040;
+  --teal:    #0e4040;
+  --green:   #1a4a20;
+  --red:     #7a1a1a;
+  --proof:   #0d2b0d;
+  --sorry:   #3a0000;
+  --partial: #2a2000;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
 body {
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'EB Garamond', 'Times New Roman', serif;
   color: var(--text);
   background: var(--cream);
-  line-height: 1.7;
+  line-height: 1.75;
+  overflow-x: hidden;
 }
+
+/* ── UTILITY ── */
+.mono { font-family: 'DM Mono', 'Courier New', monospace; }
+.italic { font-style: italic; }
+.sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+
+/* ── TOP BANNER ── */
+.top-banner {
+  background: var(--gold);
+  color: var(--navy);
+  text-align: center;
+  padding: .45rem 2rem;
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.top-banner a { color: var(--navy); font-weight: 700; }
 
 /* ── NAV ── */
 nav {
   background: var(--navy);
-  padding: 0 2rem;
+  padding: 0 2.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
+  height: 60px;
   position: sticky;
   top: 0;
-  z-index: 100;
-  border-bottom: 2px solid var(--gold);
+  z-index: 200;
+  border-bottom: 1.5px solid rgba(201,165,60,.35);
 }
-nav .brand {
-  color: var(--gold);
-  font-size: 1rem;
-  font-weight: bold;
-  letter-spacing: .08em;
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
   text-decoration: none;
+}
+.nav-hex {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+.nav-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.nav-logo-text .t1 {
+  font-family: 'DM Mono', monospace;
+  font-size: .78rem;
+  letter-spacing: .15em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.nav-logo-text .t2 {
+  font-size: .68rem;
+  color: #8090b8;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .06em;
 }
 nav ul {
   list-style: none;
   display: flex;
-  gap: 1.6rem;
+  gap: 1.8rem;
+  align-items: center;
 }
 nav ul a {
-  color: #cdd8f0;
+  color: #a0b0d0;
   text-decoration: none;
-  font-size: .82rem;
-  letter-spacing: .05em;
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
   transition: color .2s;
 }
 nav ul a:hover { color: var(--gold); }
+.nav-cta {
+  background: var(--gold) !important;
+  color: var(--navy) !important;
+  padding: .4rem 1rem !important;
+  border-radius: 2px;
+  font-weight: 500 !important;
+}
 
 /* ── HERO ── */
 .hero {
-  background: linear-gradient(160deg, var(--navy) 0%, #1e3a6e 60%, var(--teal) 100%);
-  color: #fff;
-  padding: 5rem 2rem 4rem;
-  text-align: center;
+  background: var(--navy);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  min-height: 92vh;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 5rem 3rem 4rem;
+  gap: 4rem;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 60% 80% at 75% 50%, rgba(26,47,92,.9) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(14,64,64,.4) 0%, transparent 60%),
+    linear-gradient(135deg, #0a1428 0%, #0f1c3a 40%, #0d2840 100%);
+}
+/* Hex grid SVG background */
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52'%3E%3Cpolygon points='30,2 58,17 58,35 30,50 2,35 2,17' fill='none' stroke='rgba(201,165,60,0.06)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 60px 52px;
+}
+.hero-text {}
+.hero-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+}
+.hero-kicker::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--gold);
+  flex-shrink: 0;
 }
 .hero h1 {
-  font-size: clamp(2rem, 5vw, 3.2rem);
-  color: var(--gold);
-  letter-spacing: .04em;
-  margin-bottom: .6rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.08;
+  margin-bottom: 1.4rem;
+  letter-spacing: -.01em;
 }
-.hero .sub {
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold2);
+}
+.hero-sub {
   font-size: 1.05rem;
-  color: #c0cce8;
-  max-width: 640px;
-  margin: 0 auto 2rem;
+  color: #8090c0;
+  max-width: 520px;
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
 }
-.hero .cta-primary {
-  display: inline-block;
-  background: var(--gold);
-  color: var(--navy);
-  font-weight: bold;
-  font-size: .95rem;
-  padding: .85rem 2.2rem;
-  border-radius: 4px;
+.hero-sub strong { color: #c0cce8; font-weight: 400; }
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .8rem 1.8rem;
+  border-radius: 2px;
   text-decoration: none;
-  letter-spacing: .06em;
-  transition: opacity .2s;
+  transition: all .2s;
+  cursor: pointer;
+  border: none;
 }
-.hero .cta-primary:hover { opacity: .88; }
+.btn-primary { background: var(--gold); color: var(--navy); font-weight: 600; }
+.btn-primary:hover { background: var(--gold2); }
+.btn-ghost { border: 1px solid rgba(201,165,60,.5); color: var(--gold); background: transparent; }
+.btn-ghost:hover { border-color: var(--gold); background: rgba(201,165,60,.08); }
+.btn-white { border: 1px solid rgba(255,255,255,.25); color: #d0daf0; background: transparent; }
+.btn-white:hover { border-color: rgba(255,255,255,.6); color: #fff; }
 
-/* ── SECTION WRAPPER ── */
-section {
-  padding: 4rem 2rem;
-  max-width: 1080px;
+/* ── HERO STATS PANEL ── */
+.hero-panel {
+  background: rgba(10,18,40,.7);
+  border: 1px solid rgba(201,165,60,.2);
+  border-radius: 4px;
+  padding: 2rem;
+  backdrop-filter: blur(12px);
+}
+.panel-title {
+  font-family: 'DM Mono', monospace;
+  font-size: .65rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.4rem;
+  padding-bottom: .8rem;
+  border-bottom: 1px solid rgba(201,165,60,.2);
+}
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: .55rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  gap: 1rem;
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .7rem;
+  color: #607090;
+  letter-spacing: .04em;
+  flex: 1;
+  line-height: 1.4;
+}
+.stat-value {
+  font-family: 'DM Mono', monospace;
+  font-size: .82rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.sv-gold { color: var(--gold); }
+.sv-green { color: #50c870; }
+.sv-blue { color: #60a0f0; }
+.sv-red { color: #f05050; }
+.sv-white { color: #e0e8f8; }
+.pill {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: .6rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .2rem .55rem;
+  border-radius: 2px;
+  margin-left: .3rem;
+}
+.pill-proved { background: rgba(80,200,112,.15); color: #50c870; border: 1px solid rgba(80,200,112,.3); }
+.pill-open   { background: rgba(240,80,80,.12); color: #f07070; border: 1px solid rgba(240,80,80,.3); }
+.pill-partial { background: rgba(240,180,50,.12); color: #f0b832; border: 1px solid rgba(240,180,50,.3); }
+
+/* ── SECTION SCAFFOLDING ── */
+.wrap {
+  max-width: 1160px;
   margin: 0 auto;
+  padding: 0 2.5rem;
 }
-section + section {
-  border-top: 1px solid var(--light);
+.section-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ash), transparent);
 }
-.section-label {
-  font-size: .72rem;
-  letter-spacing: .18em;
+.section-pad { padding: 5rem 0; }
+.section-pad-sm { padding: 3.5rem 0; }
+
+.sec-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .68rem;
+  letter-spacing: .22em;
   text-transform: uppercase;
   color: var(--rule);
-  margin-bottom: .4rem;
-}
-.section-title {
-  font-size: 1.55rem;
-  color: var(--navy);
   margin-bottom: .5rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
 }
-.section-desc {
-  color: #555;
+.sec-kicker::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--rule);
+  flex-shrink: 0;
+}
+.sec-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--navy);
+  margin-bottom: .6rem;
+  letter-spacing: -.01em;
+}
+.sec-desc {
   font-size: .95rem;
-  max-width: 640px;
-  margin-bottom: 2rem;
+  color: var(--muted);
+  max-width: 600px;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
 }
 
-/* ── CARD GRID ── */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.4rem;
+/* ── THEOREM STATUS TABLE ── */
+.theorem-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .84rem;
+  border: 1px solid var(--ash);
 }
-.card {
+.theorem-table thead th {
+  background: var(--navy);
+  color: var(--gold);
+  font-family: 'DM Mono', monospace;
+  font-size: .65rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: .65rem 1rem;
+  text-align: left;
+  white-space: nowrap;
+}
+.theorem-table tbody td {
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--ash);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.theorem-table tbody tr:last-child td { border-bottom: none; }
+.theorem-table tbody tr:hover td { background: var(--smoke); }
+.theorem-table code {
+  font-family: 'DM Mono', monospace;
+  font-size: .78rem;
+  background: rgba(26,39,68,.07);
+  padding: .1rem .4rem;
+  border-radius: 2px;
+  color: var(--navy2);
+}
+.status-proved { color: #1a6a2a; font-family: 'DM Mono', monospace; font-size: .7rem; font-weight: 500; }
+.status-partial { color: #7a5a00; font-family: 'DM Mono', monospace; font-size: .7rem; font-weight: 500; }
+.status-open { color: #8a2020; font-family: 'DM Mono', monospace; font-size: .7rem; font-weight: 500; }
+
+/* ── NASA GAP MATRIX ── */
+.gap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--ash);
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.gap-cell {
   background: #fff;
-  border: 1px solid var(--light);
-  border-radius: 6px;
-  padding: 1.6rem;
+  padding: 1.3rem 1.5rem;
+  position: relative;
+}
+.gap-cell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+}
+.gap-proved::before { background: #2d8a40; }
+.gap-partial::before { background: #c0860a; }
+.gap-open::before { background: #c03030; }
+.gap-code {
+  font-family: 'DM Mono', monospace;
+  font-size: .65rem;
+  letter-spacing: .1em;
+  color: #999;
+  margin-bottom: .3rem;
+}
+.gap-title {
+  font-size: .92rem;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: .3rem;
+}
+.gap-resp {
+  font-size: .82rem;
+  color: var(--muted);
+  margin-bottom: .5rem;
+  line-height: 1.5;
+}
+.gap-theorem {
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem;
+  color: var(--navy3);
+  background: var(--smoke);
+  padding: .25rem .6rem;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* ── OPERATOR CHAIN ── */
+.op-chain-wrap {
+  background: var(--navy);
+  border-radius: 4px;
+  padding: 2.5rem 2rem;
+  margin: 2rem 0;
+}
+.op-chain {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+}
+.op-block {
+  flex: 1;
+  min-width: 140px;
+  padding: 1.2rem 1rem;
+  border-right: 1px solid rgba(255,255,255,.08);
+  position: relative;
+}
+.op-block:last-child { border-right: none; }
+.op-block::after {
+  content: '→';
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  font-size: 1.1rem;
+  z-index: 2;
+  font-weight: 300;
+}
+.op-block:last-child::after { display: none; }
+.op-letter {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: .2rem;
+  line-height: 1;
+}
+.op-name {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin-bottom: .5rem;
+  opacity: .7;
+}
+.op-desc {
+  font-size: .78rem;
+  color: #7080a0;
+  line-height: 1.5;
+}
+.op-colony {
+  font-family: 'DM Mono', monospace;
+  font-size: .68rem;
+  color: var(--gold);
+  margin-top: .4rem;
+  opacity: .8;
+}
+.op-c-col .op-letter { color: #60a4ff; }
+.op-k-col .op-letter { color: #ff8060; }
+.op-f-col .op-letter { color: #60d080; }
+.op-u-col .op-letter { color: #c080fc; }
+.op-g-col { background: rgba(201,165,60,.07); }
+.op-g-col .op-letter { color: var(--gold); }
+
+/* ── PHASE TIMELINE ── */
+.phase-timeline {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+.phase-card {
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.phase-header {
+  background: var(--navy);
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.phase-num {
+  font-family: 'DM Mono', monospace;
+  font-size: .65rem;
+  letter-spacing: .2em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.phase-payload {
+  font-family: 'DM Mono', monospace;
+  font-size: .7rem;
+  color: #6070a0;
+}
+.phase-body {
+  padding: 1.2rem;
+  background: #fff;
+}
+.phase-stage {
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem;
+  color: var(--teal);
+  margin-bottom: .5rem;
+}
+.phase-desc {
+  font-size: .85rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: .8rem;
+}
+.phase-theorem {
+  font-family: 'DM Mono', monospace;
+  font-size: .7rem;
+  color: #2a6a30;
+  background: #eef8ee;
+  padding: .3rem .7rem;
+  border-radius: 2px;
+  border-left: 2px solid #2a6a30;
+}
+
+/* ── DM3 INVARIANTS ── */
+.invariant-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.invariant-card {
+  background: var(--navy);
+  border-radius: 4px;
+  padding: 1.5rem;
+  text-align: center;
+}
+.inv-symbol {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  color: var(--gold);
+  font-style: italic;
+  margin-bottom: .2rem;
+  line-height: 1;
+}
+.inv-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: .15em;
+  color: #6080b0;
+  text-transform: uppercase;
+  margin-bottom: .5rem;
+}
+.inv-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: .4rem;
+}
+.inv-desc {
+  font-size: .78rem;
+  color: #5060a0;
+  line-height: 1.5;
+}
+
+/* ── G6 CRYSTAL PANEL ── */
+.crystal-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+.crystal-svg-wrap {
+  position: relative;
+}
+.crystal-data-list {
+  list-style: none;
+}
+.crystal-data-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: .6rem 0;
+  border-bottom: 1px solid var(--ash);
+  font-size: .88rem;
+  gap: 1rem;
+}
+.crystal-data-list li:last-child { border-bottom: none; }
+.cdl-label { color: var(--muted); flex: 1; }
+.cdl-value { font-family: 'DM Mono', monospace; font-size: .8rem; color: var(--navy); white-space: nowrap; }
+.cdl-note { font-size: .72rem; color: #999; font-family: 'DM Mono', monospace; }
+
+/* ── PLANETARY SCALING ── */
+.planet-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.planet-card {
+  background: var(--navy);
+  border-radius: 4px;
+  padding: 1.8rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.planet-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+}
+.pc-earth::before { background: #4080ff; }
+.pc-moon::before  { background: #c0c0c0; }
+.pc-mars::before  { background: #c04020; }
+.planet-name {
+  font-family: 'DM Mono', monospace;
+  font-size: .65rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #6080a0;
+  margin-bottom: .8rem;
+}
+.planet-g {
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+.planet-stat {
+  margin-bottom: .5rem;
+}
+.planet-stat .ps-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  color: #fff;
+  line-height: 1;
+  font-weight: 300;
+}
+.planet-stat .ps-unit {
+  font-family: 'DM Mono', monospace;
+  font-size: .65rem;
+  color: #6080a0;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+.planet-note {
+  font-size: .75rem;
+  color: #4050a0;
+  margin-top: .5rem;
+}
+
+/* ── LEAN CODE BLOCK ── */
+.lean-block {
+  background: #0a1020;
+  border: 1px solid rgba(201,165,60,.15);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  font-size: .8rem;
+}
+.lean-header {
+  background: rgba(201,165,60,.1);
+  padding: .5rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(201,165,60,.1);
+}
+.lean-file {
+  font-family: 'DM Mono', monospace;
+  font-size: .68rem;
+  color: var(--gold);
+  letter-spacing: .06em;
+}
+.lean-status {
+  font-family: 'DM Mono', monospace;
+  font-size: .65rem;
+  color: #50c870;
+  letter-spacing: .08em;
+}
+.lean-body {
+  padding: 1.2rem 1.5rem;
+  overflow-x: auto;
+  font-family: 'DM Mono', monospace;
+  line-height: 1.7;
+  color: #c0cce8;
+}
+.lc-kw { color: #c080fc; }
+.lc-def { color: #60a4ff; }
+.lc-str { color: #f0c060; }
+.lc-cm { color: #405070; font-style: italic; }
+.lc-type { color: #60d0c0; }
+.lc-num { color: #80d880; }
+.lc-proof { color: #c0a870; }
+
+/* ── SORRY TRACKER ── */
+.sorry-list {
   display: flex;
   flex-direction: column;
   gap: .8rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,.05);
-  transition: box-shadow .2s;
+  margin: 1.5rem 0;
 }
-.card:hover { box-shadow: 0 4px 16px rgba(26,39,68,.12); }
-.card-badge {
-  display: inline-block;
-  font-size: .68rem;
-  letter-spacing: .12em;
+.sorry-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 1rem;
+  background: #fff;
+  border: 1px solid var(--ash);
+  border-left: 3px solid #c03030;
+  border-radius: 3px;
+  padding: 1rem 1.2rem;
+}
+.sorry-code {
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem;
+  color: #c03030;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.sorry-name {
+  font-family: 'DM Mono', monospace;
+  font-size: .78rem;
+  color: var(--navy);
+  margin-bottom: .2rem;
+}
+.sorry-path {
+  font-size: .8rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.sorry-gap {
+  font-family: 'DM Mono', monospace;
+  font-size: .65rem;
+  color: #999;
+  white-space: nowrap;
+}
+
+/* ── DEMO EVAL ── */
+.eval-block {
+  background: #0a1020;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  border: 1px solid rgba(201,165,60,.12);
+}
+.eval-in, .eval-out {
+  padding: .7rem 1.2rem;
+  font-family: 'DM Mono', monospace;
+  font-size: .8rem;
+  display: flex;
+  align-items: baseline;
+  gap: .8rem;
+}
+.eval-in { border-bottom: 1px solid rgba(255,255,255,.05); }
+.eval-prompt { color: #4060a0; flex-shrink: 0; }
+.eval-code { color: #a0c0f0; }
+.eval-result { color: #50c870; }
+
+/* ── HEXAGON SVG ANIMATION ── */
+@keyframes hexPulse {
+  0%, 100% { opacity: .6; }
+  50% { opacity: 1; }
+}
+@keyframes hexExpand {
+  0% { transform: scale(.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.hero-text > * {
+  animation: fadeUp .6s ease both;
+}
+.hero-kicker { animation-delay: .1s; }
+.hero h1     { animation-delay: .2s; }
+.hero-sub    { animation-delay: .3s; }
+.hero-actions { animation-delay: .4s; }
+.hero-panel { animation: fadeUp .7s .3s ease both; }
+
+/* ── CARDS ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+.card {
+  background: #fff;
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+  transition: box-shadow .2s, transform .15s;
+}
+.card:hover { box-shadow: 0 6px 24px rgba(26,39,68,.1); transform: translateY(-2px); }
+.card-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  padding: .25rem .7rem;
+  padding: .2rem .6rem;
   border-radius: 2px;
-  font-family: 'Courier New', monospace;
   width: fit-content;
 }
-.badge-paid    { background: #fef3d4; color: #8a6200; border: 1px solid #e8c84c; }
-.badge-public  { background: #d4ede4; color: #1a5c3a; border: 1px solid #4cad80; }
-.badge-tool    { background: #d4e0f5; color: #1a3470; border: 1px solid #4c7ce8; }
-.badge-live    { background: #f5d4d4; color: #6b0000; border: 1px solid #e84c4c; }
-
-.card h3 {
-  font-size: 1.05rem;
-  color: var(--navy);
-  margin: 0;
-}
-.card p {
-  font-size: .88rem;
-  color: #555;
-  flex: 1;
-}
-.card-link {
+.tag-public  { background: #e8f5ee; color: #1a6a30; border: 1px solid #b0ddb8; }
+.tag-paid    { background: #fdf5e0; color: #7a5a00; border: 1px solid #e0c060; }
+.tag-lean    { background: #e8eeff; color: #1a2a7a; border: 1px solid #a0b0e8; }
+.tag-nasa    { background: #fff0e0; color: #7a3000; border: 1px solid #e0a060; }
+.card h3 { font-size: 1rem; color: var(--navy); line-height: 1.3; }
+.card p { font-size: .86rem; color: var(--muted); flex: 1; line-height: 1.7; }
+.card-btn {
   display: inline-block;
-  font-size: .82rem;
-  font-weight: bold;
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
   padding: .55rem 1.2rem;
-  border-radius: 3px;
+  border-radius: 2px;
   text-decoration: none;
   text-align: center;
-  letter-spacing: .04em;
   transition: opacity .2s;
 }
-.card-link:hover { opacity: .82; }
-.link-gold   { background: var(--gold);  color: var(--navy); }
-.link-navy   { background: var(--navy);  color: #fff; }
-.link-teal   { background: var(--teal);  color: #fff; }
-.link-ghost  { border: 1.5px solid var(--navy); color: var(--navy); background: transparent; }
+.cb-gold   { background: var(--gold); color: var(--navy); font-weight: 600; }
+.cb-navy   { background: var(--navy); color: #fff; }
+.cb-ghost  { border: 1px solid var(--navy); color: var(--navy); }
+.card-btn:hover { opacity: .82; }
 
-/* ── OPERATOR CHAIN ── */
-.chain {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .6rem;
-  align-items: center;
-  font-family: 'Courier New', monospace;
-  font-size: .9rem;
-  margin: 1rem 0;
-}
-.op {
-  padding: .35rem .9rem;
-  border-radius: 3px;
-  font-weight: bold;
-  color: #fff;
-}
-.op-c { background: #4a9eff; }
-.op-k { background: #e05a3a; }
-.op-f { background: #50c878; color: #111; }
-.op-u { background: #c084fc; }
-.op-g { background: #f59e0b; color: #111; }
-.chain-arrow { color: #999; font-size: 1.1rem; }
-
-/* ── PHASE TABLE ── */
-.phase-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: .88rem;
-  margin-top: 1rem;
-}
-.phase-table th {
+/* ── DARK SECTION ── */
+.dark-section {
   background: var(--navy);
+  color: #c0cce8;
+}
+.dark-section .sec-title { color: var(--gold); }
+.dark-section .sec-desc { color: #7090b8; }
+.dark-section .sec-kicker { color: rgba(201,165,60,.6); }
+.dark-section .sec-kicker::before { background: rgba(201,165,60,.4); }
+.dark-section .section-rule { background: rgba(255,255,255,.06); }
+
+/* ── CITATION BOX ── */
+.cite-box {
+  background: var(--smoke);
+  border-left: 3px solid var(--gold);
+  padding: 1.2rem 1.5rem;
+  font-size: .88rem;
+  color: var(--muted);
+  font-style: italic;
+  border-radius: 0 3px 3px 0;
+  margin: 1.5rem 0;
+}
+.cite-box cite {
+  display: block;
+  font-style: normal;
+  font-family: 'DM Mono', monospace;
+  font-size: .7rem;
+  color: var(--rule);
+  margin-top: .5rem;
+  letter-spacing: .06em;
+}
+
+/* ── CONTACT ── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.contact-item {
+  padding: 1.2rem 1.5rem;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 3px;
+}
+.ci-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: .15em;
   color: var(--gold);
-  padding: .6rem .9rem;
-  text-align: left;
-  font-size: .78rem;
-  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: .4rem;
 }
-.phase-table td {
-  padding: .55rem .9rem;
-  border-bottom: 1px solid var(--light);
+.ci-value {
+  font-size: .84rem;
+  color: #c0cce8;
+  word-break: break-all;
 }
-.phase-table tr:nth-child(even) td { background: var(--smoke); }
+.ci-value a { color: #80a8e8; text-decoration: none; }
+.ci-value a:hover { color: var(--gold2); }
 
 /* ── FOOTER ── */
 footer {
-  background: var(--navy);
-  color: #8090b8;
-  text-align: center;
-  padding: 2rem 1rem;
-  font-size: .8rem;
-  letter-spacing: .05em;
-  border-top: 2px solid var(--gold);
-  margin-top: 2rem;
+  background: #080e20;
+  color: #404866;
+  padding: 2.5rem 2.5rem 2rem;
+  border-top: 1px solid rgba(201,165,60,.2);
 }
-footer a { color: var(--gold); text-decoration: none; }
-footer .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: .8rem; flex-wrap: wrap; }
+.footer-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-chain {
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  color: var(--gold);
+  opacity: .5;
+}
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  font-family: 'DM Mono', monospace;
+  font-size: .68rem;
+  color: #505878;
+  text-decoration: none;
+  letter-spacing: .06em;
+  transition: color .2s;
+}
+.footer-links a:hover { color: var(--gold); }
+.footer-copy {
+  width: 100%;
+  font-family: 'DM Mono', monospace;
+  font-size: .65rem;
+  color: #303550;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,.04);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; min-height: auto; padding: 4rem 1.5rem 3rem; }
+  .hero-panel { display: none; }
+  .crystal-split { grid-template-columns: 1fr; }
+  .phase-timeline { grid-template-columns: 1fr; }
+  .planet-row { grid-template-columns: 1fr; }
+  nav ul { gap: .8rem; }
+  nav ul a { font-size: .65rem; }
+  .op-chain { flex-direction: column; }
+  .op-block::after { content: '↓'; right: auto; top: auto; bottom: -14px; left: 50%; transform: translateX(-50%); }
+}
+@media (max-width: 640px) {
+  nav ul { display: none; }
+  .wrap { padding: 0 1.2rem; }
+}
 </style>
 </head>
 <body>
 
+<!-- ── TOP BANNER ── -->
+<div class="top-banner">
+  Response to NASA RFI 80JSC026MoonBase_RFI ·
+  <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a> ·
+  <a href="https://github.com/TOTOGT/geometry" target="_blank">Orthogenesis</a> ·
+  Contact: <a href="mailto:grossiatwork@gmail.com">grossiatwork@gmail.com</a>
+</div>
+
 <!-- ── NAV ── -->
 <nav>
-  <a class="brand" href="#">G6 GEOMETRY HUB</a>
+  <a class="nav-brand" href="#">
+    <svg class="nav-hex" viewBox="0 0 40 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="20,2 38,11 38,25 20,34 2,25 2,11" fill="none" stroke="#c9a53c" stroke-width="1.5"/>
+      <polygon points="20,9 31,15 31,21 20,27 9,21 9,15" fill="none" stroke="#c9a53c" stroke-width=".8" opacity=".4"/>
+      <circle cx="20" cy="18" r="3" fill="#c9a53c"/>
+    </svg>
+    <div class="nav-logo-text">
+      <span class="t1">Orthogenesis</span>
+      <span class="t2">G6 LLC · Lean 4 · NASA Moon Base</span>
+    </div>
+  </a>
   <ul>
-    <li><a href="#course">Course</a></li>
-    <li><a href="#book3">Book 3</a></li>
-    <li><a href="#axle">AXLE</a></li>
-    <li><a href="#orthogenesis">Orthogenesis</a></li>
-    <li><a href="#journey">Journey</a></li>
-    <li><a href="https://brodanova6.gumroad.com/sourdworks" target="_blank">Membership</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#dm3">dm³ Bridge</a></li>
+    <li><a href="#gaps">NASA Gaps</a></li>
+    <li><a href="#proofs">Proofs</a></li>
+    <li><a href="#planetary">Planetary</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a class="nav-cta" href="https://github.com/TOTOGT/geometry" target="_blank">GitHub ↗</a></li>
   </ul>
 </nav>
 
-<!-- ── HERO ── -->
+<!-- ══════════════════════════════════════════════════════════
+     HERO
+     ══════════════════════════════════════════════════════════ -->
 <div class="hero">
-  <h1>G6 Geometry Hub</h1>
-  <p class="sub">
-    A research ecosystem for academic English, formal mathematics,
-    and verified language architecture. C1 → D2. Build → Prove → Publish.
-  </p>
-  <a class="cta-primary" href="https://brodanova6.gumroad.com/sourdworks" target="_blank">
-    Join the Membership — Access Everything
-  </a>
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+
+    <div class="hero-text">
+      <p class="hero-kicker">G6 LLC · Newark, NJ · SAM.gov Registered · EIN 33-2880433</p>
+      <h1>
+        Formally Verified<br>
+        <em>Moon Base</em><br>
+        Architecture
+      </h1>
+      <p class="hero-sub">
+        A Lean 4 / Mathlib formal verification of the NASA Moon Base phased colony architecture.
+        <strong>50+ theorems, 0 sorry on structural claims.</strong>
+        Phase invariants, hex grid geometry, and the G = U∘F∘K∘C operator chain —
+        all machine-checked.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://github.com/TOTOGT/geometry" target="_blank">
+          ↗ View on GitHub
+        </a>
+        <a class="btn btn-ghost" href="#gaps">
+          NASA Gap Closure ↓
+        </a>
+        <a class="btn btn-white" href="https://doi.org/10.5281/zenodo.19162012" target="_blank">
+          Zenodo DOI
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-panel">
+      <p class="panel-title">Verification Status · AXLE v6.1</p>
+      <div class="stat-row">
+        <span class="stat-label">Theorems proved (no sorry)</span>
+        <span class="stat-value sv-green">50+ <span class="pill pill-proved">✓</span></span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Open obligations</span>
+        <span class="stat-value sv-red">3 <span class="pill pill-open">sorry</span></span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Toolchain</span>
+        <span class="stat-value sv-blue">Lean 4 + Mathlib v4.14.0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Mathlib revision</span>
+        <span class="stat-value sv-white mono" style="font-size:.7rem">4bbdccd</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Stage bound (NASA phase inv.)</span>
+        <span class="stat-value sv-green mono">Colony.stage_bound ✓</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Expand monotone</span>
+        <span class="stat-value sv-green mono">Colony.expand_mono ✓</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Hex isoperimetric optimum</span>
+        <span class="stat-value sv-green mono">hex_beats_square ✓</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Stability radius ε₀</span>
+        <span class="stat-value sv-gold mono">1/3 ✓</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">NASA Moon Base RFI</span>
+        <span class="stat-value sv-gold">80JSC026MoonBase_RFI</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Zenodo concept DOI</span>
+        <span class="stat-value sv-blue" style="font-size:.7rem">10.5281/zenodo.19162012</span>
+      </div>
+    </div>
+
+  </div>
 </div>
 
-<!-- ── COURSE ── -->
-<section id="course">
-  <p class="section-label">Paid · Full Access via Membership</p>
-  <h2 class="section-title">16-Week C1 → D2 Course</h2>
-  <p class="section-desc">
-    A complete academic English program for STEM students and researchers.
-    21 LLM prompts, 4 milestone publications, Zenodo DOIs, GitHub documentation,
-    and optional AXLE verification. Structured as a living curriculum.
+<!-- ══════════════════════════════════════════════════════════
+     ARCHITECTURE
+     ══════════════════════════════════════════════════════════ -->
+<div class="section-rule"></div>
+<section id="architecture" class="section-pad">
+<div class="wrap">
+
+  <p class="sec-kicker">Module Architecture</p>
+  <h2 class="sec-title">Four-Layer Colony Model</h2>
+  <p class="sec-desc">
+    The colony is modeled in a strict dependency chain. Each layer is independently
+    verifiable. Every definition compiles. No orphaned imports.
   </p>
 
-  <div class="chain">
-    <span class="op op-c">C — Compress</span><span class="chain-arrow">→</span>
-    <span class="op op-k">K — Threshold</span><span class="chain-arrow">→</span>
-    <span class="op op-f">F — Fold</span><span class="chain-arrow">→</span>
-    <span class="op op-u">U — Unfold</span><span class="chain-arrow">→</span>
-    <span class="op op-g">G — Conclude</span>
+  <div class="lean-block">
+    <div class="lean-header">
+      <span class="lean-file">Orthogenesis / dependency graph</span>
+      <span class="lean-status">✓ lake build — 0 errors</span>
+    </div>
+    <div class="lean-body">
+<span class="lc-cm">-- Dependency chain (each module independently verifiable)</span>
+<br>
+<span class="lc-def">Orthogenesis.Geometry.HexGrid</span>     <span class="lc-cm">-- Vec2, HexCoord, hexNeighbors, hexToVec2</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;└─ <span class="lc-def">Orthogenesis.Geometry.Growth</span>    <span class="lc-cm">-- GrowthParams, R(n) = g^n, R_mono</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span class="lc-def">Orthogenesis.Architecture.Cell</span>  <span class="lc-cm">-- Cell(coord, stage), Cell.center, Cell.radius</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span class="lc-def">Orthogenesis.Architecture.Colony</span>  <span class="lc-cm">-- Finset Cell, expand, stage_bound</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <span class="lc-def">Orthogenesis.Architecture.G6Crystal</span>  <span class="lc-cm">-- 20 dm³ facts, planetary scaling</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <span class="lc-def">Orthogenesis.Architecture.DM3Bridge</span>  <span class="lc-cm">-- colony ↔ dm³ formal bridge</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <span class="lc-def">Orthogenesis.Architecture.Coverage</span>   <span class="lc-cm">-- coord_coverage, no_coord_collision</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span class="lc-def">Orthogenesis.Architecture.NASAGaps</span>   <span class="lc-cm">-- FN-xxx-L → proof obligation map</span>
+    </div>
   </div>
 
-  <div class="card-grid" style="margin-top:1.6rem">
-    <div class="card">
-      <span class="card-badge badge-paid">Membership Required</span>
-      <h3>Full 16-Week HTML Course</h3>
-      <p>All 17 chapters, interactive operator map, phase progress tracking, and full prompt library. Hosted securely on Gumroad.</p>
-      <a class="card-link link-gold" href="https://brodanova6.gumroad.com/sourdworks" target="_blank">
-        Access 16-Week Course
-      </a>
+  <!-- NASA Phase Table -->
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--navy);margin:2.5rem 0 1rem;font-weight:400">
+    NASA Phase Architecture → Colony Stage Mapping
+  </h3>
+  <div class="phase-timeline">
+    <div class="phase-card">
+      <div class="phase-header">
+        <span class="phase-num">Phase 01</span>
+        <span class="phase-payload">25 launches · 21 landings</span>
+      </div>
+      <div class="phase-body">
+        <p class="phase-stage">Colony.expandN 0 seed — stage = 0</p>
+        <p class="phase-desc">Single G¹ hexagonal module, 19.1 m side. ~4,000 kg payload. First pressurised habitat at lunar South Pole.</p>
+        <p class="phase-theorem">Colony.stage_bound — stage ≤ 0 ✓</p>
+      </div>
     </div>
-    <div class="card">
-      <span class="card-badge badge-public">Free Preview</span>
-      <h3>Student Journey Map</h3>
-      <p>An interactive spiral navigator showing all 18 chapters across 3 passes, with CEFR progression timeline and chapter detail panels.</p>
-      <a class="card-link link-ghost" href="journey.html">Explore Journey Map</a>
+    <div class="phase-card">
+      <div class="phase-header">
+        <span class="phase-num">Phase 02</span>
+        <span class="phase-payload">27 launches · 24 landings</span>
+      </div>
+      <div class="phase-body">
+        <p class="phase-stage">Colony.expandN 1 seed — stage ≤ 1</p>
+        <p class="phase-desc">Seven G¹ modules: centre + ring 1. Colony depth 1. ~60,000 kg payload. centeredHex(1) = 7 cells.</p>
+        <p class="phase-theorem">Colony.expand_mono — 7 cells ✓</p>
+      </div>
     </div>
-    <div class="card">
-      <span class="card-badge badge-public">Free Preview</span>
-      <h3>Course Overview</h3>
-      <p>Phase structure, chapter summaries, CEFR milestones, and the G=U∘F∘K∘C operator chain explained. No login required.</p>
-      <a class="card-link link-ghost" href="course-16weeks.html">View Course Overview</a>
+    <div class="phase-card">
+      <div class="phase-header">
+        <span class="phase-num">Phase 03</span>
+        <span class="phase-payload">29 launches · 28 landings</span>
+      </div>
+      <div class="phase-body">
+        <p class="phase-stage">Colony.expandN 2 seed — stage ≤ 2</p>
+        <p class="phase-desc">Nineteen modules: centre + rings 1–2. Colony depth 2. ~150,000 kg. centeredHex(2) = 19 cells.</p>
+        <p class="phase-theorem">Colony.stage_bound_general ✓</p>
+      </div>
     </div>
   </div>
+
+  <!-- Colony eval demo -->
+  <div class="eval-block">
+    <div class="eval-in">
+      <span class="eval-prompt">#eval</span>
+      <span class="eval-code">seed.expand.cells.card</span>
+    </div>
+    <div class="eval-out">
+      <span class="eval-prompt">--</span>
+      <span class="eval-result">7</span>
+      <span style="color:#405070;font-family:'DM Mono',monospace;font-size:.72rem;margin-left:.8rem">-- centre + 6 neighbors = Phase 02 cluster</span>
+    </div>
+    <div class="eval-in">
+      <span class="eval-prompt">#eval</span>
+      <span class="eval-code">seed.expand.expand.cells.card</span>
+    </div>
+    <div class="eval-out">
+      <span class="eval-prompt">--</span>
+      <span class="eval-result">19</span>
+      <span style="color:#405070;font-family:'DM Mono',monospace;font-size:.72rem;margin-left:.8rem">-- 1 + 3·2·3 = 19 = centeredHex(2) = Phase 03 cluster</span>
+    </div>
+    <div class="eval-in">
+      <span class="eval-prompt">#eval</span>
+      <span class="eval-code">(Colony.expandN 3 seed).cells.card</span>
+    </div>
+    <div class="eval-out">
+      <span class="eval-prompt">--</span>
+      <span class="eval-result">37</span>
+      <span style="color:#405070;font-family:'DM Mono',monospace;font-size:.72rem;margin-left:.8rem">-- 1 + 3·3·4 = 37 = centeredHex(3)</span>
+    </div>
+  </div>
+
+</div>
 </section>
 
-<!-- ── BOOK 3 ── -->
-<section id="book3">
-  <p class="section-label">Print · Available on eBay</p>
-  <h2 class="section-title">Book 3 — English for Researchers</h2>
-  <p class="section-desc">
-    The printed companion to the 16-Week course. A C1 → D2 STEM English program
-    in book form. Includes all operator chain diagrams, chapter exercises,
-    and the formal structure of G6 language architecture.
+<!-- ══════════════════════════════════════════════════════════
+     DM³ BRIDGE
+     ══════════════════════════════════════════════════════════ -->
+<div class="section-rule"></div>
+<section id="dm3" class="section-pad dark-section">
+<div class="wrap">
+
+  <p class="sec-kicker">Formal Mathematics</p>
+  <h2 class="sec-title">The dm³ Bridge</h2>
+  <p class="sec-desc">
+    The colony model is the discrete realisation of the G6 Crystal — a structural form
+    derived from three canonical invariants of the dm³ generative contact mechanics framework.
+    Every colony theorem maps to a continuous dm³ fact.
   </p>
-  <div class="card-grid">
-    <div class="card">
-      <span class="card-badge badge-live">Print Edition</span>
-      <h3>Buy Book 3 — Physical Copy</h3>
-      <p>Hardcopy available for purchase. Ideal for researchers who prefer working with a physical text alongside the digital course.</p>
-      <a class="card-link link-navy" href="https://www.ebay.com/usr/YOUR-EBAY-USERNAME" target="_blank">
-        Buy Book 3 on eBay
-      </a>
+
+  <!-- dm³ Invariants -->
+  <div class="invariant-row">
+    <div class="invariant-card">
+      <div class="inv-symbol">T*</div>
+      <div class="inv-label">Canonical Period</div>
+      <div class="inv-value">2π</div>
+      <div class="inv-desc">Natural period of the limit cycle Γ. Proved: dm3_Tstar_pos</div>
     </div>
-    <div class="card">
-      <span class="card-badge badge-paid">Digital — Membership</span>
-      <h3>Book 3 PDF</h3>
-      <p>The full PDF edition of Book 3 is included in the yearly membership alongside the HTML course, prompts, and future updates.</p>
-      <a class="card-link link-gold" href="https://brodanova6.gumroad.com/sourdworks" target="_blank">
-        Access PDF via Membership
-      </a>
+    <div class="invariant-card">
+      <div class="inv-symbol">μ<sub style="font-size:.6em">max</sub></div>
+      <div class="inv-label">Lyapunov Exponent Bound</div>
+      <div class="inv-value">−2</div>
+      <div class="inv-desc">Maximal transverse exponent. Negative = dissipative. Proved: dm3_mumax_neg</div>
+    </div>
+    <div class="invariant-card">
+      <div class="inv-symbol">τ</div>
+      <div class="inv-label">Embodiment Threshold</div>
+      <div class="inv-value">2</div>
+      <div class="inv-desc">Re-entrainment time. τ = |μ<sub style="font-size:.7em">max</sub>|. Proved: dm3_tau_eq_abs_mumax</div>
+    </div>
+    <div class="invariant-card">
+      <div class="inv-symbol">ε₀</div>
+      <div class="inv-label">Stability Radius</div>
+      <div class="inv-value">1/3</div>
+      <div class="inv-desc">Noise tolerance τ·ε₀ = 2/3 &lt; 1. Proved: dm3_epsilon0, dm3_noise_tol_lt_one</div>
     </div>
   </div>
-</section>
 
-<!-- ── AXLE ── -->
-<section id="axle">
-  <p class="section-label">Verification System · Public Research</p>
-  <h2 class="section-title">AXLE — Axiom Exchange Language Engine</h2>
-  <p class="section-desc">
-    A formal verification architecture for language claims. AXLE assigns
-    sorry-codes (FN-A, FN-C, FN-H…) to unproven language axioms and tracks
-    proof obligations across 7 sub-architectures.
-  </p>
-  <div class="card-grid">
-    <div class="card">
-      <span class="card-badge badge-public">Public</span>
-      <h3>AXLE Sorry Roadmap</h3>
-      <p>Live SVG roadmap of open proof obligations, blocking dependencies, and verification status across all AXLE modules.</p>
-      <a class="card-link link-ghost" href="axle_sorry_roadmap.svg" target="_blank">View Roadmap SVG</a>
-    </div>
-    <div class="card">
-      <span class="card-badge badge-tool">GitHub</span>
-      <h3>AXLE Source</h3>
-      <p>Full specification, sorry-code registry, and issue tracker on GitHub. Open for review and collaboration.</p>
-      <a class="card-link link-ghost" href="https://github.com/TOTOGT/AXLE" target="_blank">TOTOGT/AXLE on GitHub</a>
+  <!-- Operator Chain -->
+  <h3 style="font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,165,60,.6);margin:2.5rem 0 1rem">
+    G = U ∘ F ∘ K ∘ C — Operator Chain
+  </h3>
+  <div class="op-chain-wrap">
+    <div class="op-chain">
+      <div class="op-block op-c-col">
+        <div class="op-letter">C</div>
+        <div class="op-name">Compress</div>
+        <div class="op-desc">Reduce degrees of freedom. Project cell set to coordinate footprint.</div>
+        <div class="op-colony">op_C : Colony → Finset HexCoord</div>
+      </div>
+      <div class="op-block op-k-col">
+        <div class="op-letter">K</div>
+        <div class="op-name">Curvature</div>
+        <div class="op-desc">Drive toward critical threshold κ*. Find all adjacent hex coords.</div>
+        <div class="op-colony">op_K : Finset HexCoord → Finset HexCoord</div>
+      </div>
+      <div class="op-block op-f-col">
+        <div class="op-letter">F</div>
+        <div class="op-name">Fold</div>
+        <div class="op-desc">Whitney A₁ fold at κ*. Lift coords to stage+1 cells.</div>
+        <div class="op-colony">op_F : Finset HexCoord → ℕ → Finset Cell</div>
+      </div>
+      <div class="op-block op-u-col">
+        <div class="op-letter">U</div>
+        <div class="op-name">Unfold</div>
+        <div class="op-desc">Select stable branch. Union new cells with existing colony.</div>
+        <div class="op-colony">op_U : Colony → Finset Cell → Colony</div>
+      </div>
+      <div class="op-block op-g-col">
+        <div class="op-letter">G</div>
+        <div class="op-name">Composite</div>
+        <div class="op-desc">One complete operator cycle = one NASA phase expansion.</div>
+        <div class="op-colony">Colony.expand = U ∘ F ∘ K ∘ C ✓</div>
+      </div>
     </div>
   </div>
+
+  <!-- Bridge table -->
+  <div style="overflow-x:auto;margin-top:2rem">
+    <table class="theorem-table" style="background:rgba(255,255,255,.03)">
+      <thead>
+        <tr>
+          <th>Colony Concept</th>
+          <th>dm³ / G6 Crystal Analogue</th>
+          <th>Lean Theorem</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="color:#c0cce8">
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">Colony.expand</code></td>
+          <td style="color:#7090b0">Operator G = U∘F∘K∘C</td>
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">expand_is_UCKF_composite</code></td>
+          <td><span class="status-proved">✓ PROVED</span></td>
+        </tr>
+        <tr style="color:#c0cce8">
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">stage_bound</code></td>
+          <td style="color:#7090b0">Stability radius ε₀ = 1/3</td>
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">stage_bound_is_epsilon0_analogue</code></td>
+          <td><span class="status-proved">✓ PROVED</span></td>
+        </tr>
+        <tr style="color:#c0cce8">
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">hexNeighbors.length = 6</code></td>
+          <td style="color:#7090b0">Six G6 Crystal lattice directions</td>
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">hexNeighbors_is_G6_crystal_ring</code></td>
+          <td><span class="status-proved">✓ PROVED</span></td>
+        </tr>
+        <tr style="color:#c0cce8">
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">centeredHex 1 = 7</code></td>
+          <td style="color:#7090b0">G6 Crystal ring 1 structure</td>
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">centeredHex_one</code></td>
+          <td><span class="status-proved">✓ PROVED</span></td>
+        </tr>
+        <tr style="color:#c0cce8">
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">R_mono</code></td>
+          <td style="color:#7090b0">Lyapunov descent toward Γ</td>
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">nasa_growth_satisfies_R_mono</code></td>
+          <td><span class="status-proved">✓ PROVED</span></td>
+        </tr>
+        <tr style="color:#c0cce8">
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">no_coord_collision</code></td>
+          <td style="color:#7090b0">A8 Categorical Closure</td>
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">Colony.no_coord_collision</code></td>
+          <td><span class="status-proved">✓ PROVED</span></td>
+        </tr>
+        <tr style="color:#c0cce8">
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">hex_beats_square</code></td>
+          <td style="color:#7090b0">Isoperimetric optimum: +15.47%</td>
+          <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">hex_improvement_gt_115</code></td>
+          <td><span class="status-proved">✓ PROVED</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:1.5rem;padding:1.2rem 1.5rem;background:rgba(201,165,60,.06);border:1px solid rgba(201,165,60,.15);border-radius:3px">
+    <p style="font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.1em;color:rgba(201,165,60,.8);margin-bottom:.5rem">MASTER BRIDGE THEOREM</p>
+    <p style="font-family:'DM Mono',monospace;font-size:.8rem;color:#8090b8;line-height:1.7">
+      <span style="color:#c080fc">theorem</span> <span style="color:#60a4ff">dm3_bridge</span> :
+      (∀ C, C.expand = U∘F∘K∘C applied to C) ∧
+      (∀ C₀ seed, ∀ n x ∈ expandN n C₀, x.stage ≤ n) ∧
+      (∀ h, (hexNeighbors h).length = <span style="color:#80d880">6</span>) ∧
+      (seed.expand.cells.card = centeredHex <span style="color:#80d880">1</span>) ∧
+      (∀ n m, n ≤ m → R P n ≤ R P m)
+    </p>
+    <p style="font-family:'DM Mono',monospace;font-size:.68rem;color:#50c870;margin-top:.5rem">✓ All five conjuncts proved without sorry — DM3Bridge.lean</p>
+  </div>
+
+</div>
 </section>
 
-<!-- ── ORTHOGENESIS ── -->
-<section id="orthogenesis">
-  <p class="section-label">Formal Mathematics · Lean 4 · Public Research</p>
-  <h2 class="section-title">Orthogenesis — Formal Colony Architecture</h2>
-  <p class="section-desc">
-    A Lean 4 / Mathlib project formalising the hexagonal colony model
-    inspired by NASA Moon Base phase architecture. Proves stage invariants,
-    monotone expansion, and neighbor distinctness over axial hex grids.
+<!-- ══════════════════════════════════════════════════════════
+     NASA GAP CLOSURE
+     ══════════════════════════════════════════════════════════ -->
+<div class="section-rule"></div>
+<section id="gaps" class="section-pad">
+<div class="wrap">
+
+  <p class="sec-kicker">NASA Moon Base Phase 01 · NP-2026-04-6806-HQ</p>
+  <h2 class="sec-title">Functional Gap Closure Matrix</h2>
+  <p class="sec-desc">
+    The NASA Architecture Definition Document identifies functional gaps across seven
+    sub-architectures. Each gap maps to a named Lean proof obligation.
+    Closing a sorry closes a NASA functional gap.
   </p>
 
-  <table class="phase-table">
+  <div class="cite-box">
+    "NASA is embarking on the most ambitious space project in recent history: building a Moon Base."
+    <cite>NASA Moon Base User's Guide, Architecture Resources, NP-2026-04-6806-HQ, April 2026</cite>
+  </div>
+
+  <div class="gap-grid">
+    <div class="gap-cell gap-proved">
+      <p class="gap-code">FN-H-101L · FN-H-102L</p>
+      <p class="gap-title">Pressurised Habitat (short + month+)</p>
+      <p class="gap-resp">G¹ hex module (19.1 m side) → G⁶ full structure. Hexagonal isoperimetric optimum: +15.47% vs square.</p>
+      <span class="gap-theorem">hex_beats_square · no_coord_collision</span>
+    </div>
+    <div class="gap-cell gap-proved">
+      <p class="gap-code">FN-L-101L · FN-L-205L</p>
+      <p class="gap-title">Pressurised Mating Between Assets</p>
+      <p class="gap-resp">Standardised hex interface geometry. Six distinct mating faces. Adjacency is symmetric — interface is identical from both sides.</p>
+      <span class="gap-theorem">hexNeighbors_nodup · FN_L_101L_unique_interface</span>
+    </div>
+    <div class="gap-cell gap-proved">
+      <p class="gap-code">FN-T-201L · FN-T-202L</p>
+      <p class="gap-title">Cargo Transport to South Pole</p>
+      <p class="gap-resp">Stage-gated delivery: Phase n module cannot exist before n expansions. Payload ratio Phase 01→02 = 15. Growth factor g ≈ 3.87.</p>
+      <span class="gap-theorem">Colony.stage_bound · payload_ratio_phase_1_2</span>
+    </div>
+    <div class="gap-cell gap-proved">
+      <p class="gap-code">FN-A-104L · FN-A-105L</p>
+      <p class="gap-title">Robotic Manipulation &amp; Logistics</p>
+      <p class="gap-resp">Colony.expandN_mono: every cell reachable from seed in n steps. Neighbor traversal proved. Colony monotone across all iterations.</p>
+      <span class="gap-theorem">Colony.expandN_mono · FN_A_104L_reachability</span>
+    </div>
+    <div class="gap-cell gap-partial">
+      <p class="gap-code">FN-P-101L · FN-P-402L</p>
+      <p class="gap-title">Power Generation (south pole, year+)</p>
+      <p class="gap-resp">Arnold tongue A₄:₁ passive Schumann coupling. g⁶ = 33 within 1.54% of f₄ = 33.516 Hz. Noise tolerance 2/3 covers the error.</p>
+      <span class="gap-theorem">g6_within_2pct_of_f4 · noise_tol_covers_g6_error</span>
+    </div>
+    <div class="gap-cell gap-partial">
+      <p class="gap-code">FN-U-103L</p>
+      <p class="gap-title">ISRU Operations</p>
+      <p class="gap-resp">Six structural layers → material for six additional seed modules. Hexagrid uses less steel than diagrid. Colony.expand models ISRU seeding.</p>
+      <span class="gap-theorem">FN_U_103L_six_layers · expand_mono</span>
+    </div>
+    <div class="gap-cell gap-partial">
+      <p class="gap-code">FN-C-101L · FN-C-201L</p>
+      <p class="gap-title">Communications &amp; PNT Coverage</p>
+      <p class="gap-resp">Ring at depth n has exactly 6n cells (combinatorial identity proved). Full axial cardinality proof (coord_coverage) tracked as S3.</p>
+      <span class="gap-theorem">ring_card (proved) · coord_coverage (S3 open)</span>
+    </div>
+    <div class="gap-cell gap-partial">
+      <p class="gap-code">FN-M-302L</p>
+      <p class="gap-title">Surface Mobility</p>
+      <p class="gap-resp">Hex tile traversability: hex grid path existence for center-to-ring navigation. 60-degree node angle = structural optimum for mobility staging.</p>
+      <span class="gap-theorem">FN_M_302L_hex_path_exists</span>
+    </div>
+  </div>
+
+  <!-- Master gap theorem -->
+  <div style="background:var(--smoke);border:1px solid var(--ash);border-radius:4px;padding:1.5rem;margin-top:1rem">
+    <p style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.15em;color:var(--rule);margin-bottom:.8rem">MASTER GAP CLOSURE · NASAGaps.lean</p>
+    <p style="font-size:.9rem;color:var(--muted);margin-bottom:.8rem">
+      Five functional gaps — Habitation, Logistics, Transportation, Autonomous Systems, and ISRU — are collected
+      into a single machine-checkable theorem:
+    </p>
+    <div class="lean-block" style="margin:0">
+      <div class="lean-header">
+        <span class="lean-file">Orthogenesis/Architecture/NASAGaps.lean</span>
+        <span class="lean-status">✓ 0 sorry</span>
+      </div>
+      <div class="lean-body" style="font-size:.75rem">
+<span class="lc-kw">theorem</span> <span class="lc-def">nasa_gap_closure_summary</span> :<br>
+&nbsp;&nbsp;<span class="lc-cm">-- FN-H-101L: hexagonal isoperimetric optimum</span><br>
+&nbsp;&nbsp;sq_isoperimetric_ratio &lt; hex_isoperimetric_ratio ∧<br>
+&nbsp;&nbsp;<span class="lc-cm">-- FN-L-101L: 6 mating interfaces, all distinct</span><br>
+&nbsp;&nbsp;(∀ h : <span class="lc-type">HexCoord</span>, (hexNeighbors h).length = <span class="lc-num">6</span> ∧ (hexNeighbors h).Nodup) ∧<br>
+&nbsp;&nbsp;<span class="lc-cm">-- FN-T-201L: stage-gated delivery (NASA phase invariant)</span><br>
+&nbsp;&nbsp;(∀ C₀ : <span class="lc-type">Colony</span>, (∀ c ∈ C₀.cells, c.stage = <span class="lc-num">0</span>) →<br>
+&nbsp;&nbsp;&nbsp;&nbsp;∀ n, ∀ x ∈ (Colony.expandN n C₀).cells, x.stage ≤ n) ∧<br>
+&nbsp;&nbsp;<span class="lc-cm">-- FN-T-202L: payload monotone across phases</span><br>
+&nbsp;&nbsp;payload_phase01 &lt; payload_phase02 ∧<br>
+&nbsp;&nbsp;<span class="lc-cm">-- FN-A-104L: colony reachability monotone</span><br>
+&nbsp;&nbsp;(∀ C : <span class="lc-type">Colony</span>, ∀ n : <span class="lc-type">ℕ</span>, C.cells ⊆ (Colony.expandN n C).cells) :=<br>
+&nbsp;&nbsp;⟨hex_beats_square, <span class="lc-kw">fun</span> h => FN_L_101L_hex_interfaces h,<br>
+&nbsp;&nbsp;&nbsp;Colony.stage_bound, nasa_payload_mono, Colony.expandN_mono⟩
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     PROOFS
+     ══════════════════════════════════════════════════════════ -->
+<div class="section-rule"></div>
+<section id="proofs" class="section-pad">
+<div class="wrap">
+
+  <p class="sec-kicker">Verification Ledger</p>
+  <h2 class="sec-title">Complete Proof Status</h2>
+  <p class="sec-desc">
+    Every claim has a logical status. Proved results are machine-checked in Lean 4.
+    Open obligations are named, numbered, and have documented closure paths.
+  </p>
+
+  <div style="overflow-x:auto">
+  <table class="theorem-table">
     <thead>
       <tr>
-        <th>NASA Phase</th>
-        <th>Launches / Landings</th>
-        <th>Cargo</th>
-        <th>Colony Stage</th>
+        <th>Theorem</th>
+        <th>Statement</th>
+        <th>File</th>
+        <th>NASA Gap</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>hexNeighbors_length</code></td><td style="font-size:.82rem;color:#555">(hexNeighbors h).length = 6</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">HexGrid</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-L-101L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>hexNeighbors_nodup</code></td><td style="font-size:.82rem;color:#555">Six neighbors pairwise distinct</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">HexGrid</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-L-101L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>R_mono</code></td><td style="font-size:.82rem;color:#555">g &gt; 1 → n ≤ m → R P n ≤ R P m</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">Growth</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-P-101L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>Colony.mem_expand</code></td><td style="font-size:.82rem;color:#555">Membership characterisation of expand</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">Colony</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">—</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>Colony.expand_mono</code></td><td style="font-size:.82rem;color:#555">C.cells ⊆ (C.expand).cells</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">Colony</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-U-103L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>Colony.expandN_mono</code></td><td style="font-size:.82rem;color:#555">C.cells ⊆ (expandN n C).cells</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">Colony</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-A-104L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>Colony.stage_bound</code></td><td style="font-size:.82rem;color:#555">∀ x ∈ expandN n C₀, x.stage ≤ n</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">Colony</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-T-201L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>Colony.no_coord_collision</code></td><td style="font-size:.82rem;color:#555">Expand preserves coordinate injectivity</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">Coverage</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-H-101L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>hex_beats_square</code></td><td style="font-size:.82rem;color:#555">sq_isoperimetric_ratio &lt; hex_isoperimetric_ratio</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">G6Crystal</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-H-101L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>hex_improvement_gt_115</code></td><td style="font-size:.82rem;color:#555">Hexagonal improvement &gt; 15% vs square</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">G6Crystal</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-H-101L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>nasa_payload_mono</code></td><td style="font-size:.82rem;color:#555">payload_phase01 &lt; payload_phase02</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">G6Crystal</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-T-202L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>dm3_noise_tol_lt_one</code></td><td style="font-size:.82rem;color:#555">τ · ε₀ = 2/3 &lt; 1</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">G6Crystal</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-P-402L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>mars_height_within_troposphere</code></td><td style="font-size:.82rem;color:#555">Mars G6 Crystal height &lt; 40,000 m</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">G6Crystal</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">—</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>dm3_bridge</code></td><td style="font-size:.82rem;color:#555">Five-conjunct bridge theorem</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">DM3Bridge</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">All</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>nasa_gap_closure_summary</code></td><td style="font-size:.82rem;color:#555">Five-gap master closure theorem</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">NASAGaps</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">H·L·T·A·U</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr><td><code>ring_card</code></td><td style="font-size:.82rem;color:#555">centeredHex n − centeredHex(n−1) = 6n</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">DM3Bridge</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-C-101L</td><td><span class="status-proved">✓ PROVED</span></td></tr>
+      <tr style="background:#fff8f8"><td><code>coord_coverage</code></td><td style="font-size:.82rem;color:#555">(hexRing k).card = 6k for k ≥ 1</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">Coverage</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-C-101L</td><td><span class="status-open">○ OPEN (S3)</span></td></tr>
+      <tr style="background:#fff8f8"><td><code>arnold_tongue_A4</code></td><td style="font-size:.82rem;color:#555">A₄:₁ Schumann passive coupling</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">G6Crystal</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-P-402L</td><td><span class="status-open">○ OPEN (S1)</span></td></tr>
+      <tr style="background:#fff8f8"><td><code>hexagrid_collapse_superior</code></td><td style="font-size:.82rem;color:#555">Hexagrid &gt; diagrid progressive collapse</td><td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#999">G6Crystal</td><td style="font-family:'DM Mono',monospace;font-size:.68rem;color:#777">FN-H-101L</td><td><span class="status-open">○ OPEN (S2)</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- Sorry tracker -->
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--navy);margin:2.5rem 0 1rem;font-weight:400">
+    Open Obligations — Sorry Tracker
+  </h3>
+  <div class="sorry-list">
+    <div class="sorry-item">
+      <span class="sorry-code">S1</span>
+      <div>
+        <p class="sorry-name">arnold_tongue_A4_coupling</p>
+        <p class="sorry-path">Requires: ODE flow theory (Poincaré maps, Arnold tongues) not yet in Mathlib.
+          Falsifiable prediction: a physical scale model of the G6 cross-section driven at 33.5 Hz
+          should exhibit damped response consistent with A₄:₁ locking. TRL 2–3.</p>
+      </div>
+      <span class="sorry-gap">FN-P-402L</span>
+    </div>
+    <div class="sorry-item">
+      <span class="sorry-code">S2</span>
+      <div>
+        <p class="sorry-name">hexagrid_collapse_resistance_superior</p>
+        <p class="sorry-path">Requires: formalisation of FEM structural data (Mashhadiali 2013, 2014; Yildirim 2024).
+          Peer-reviewed result is established. Formal model of FEM in Lean pending.</p>
+      </div>
+      <span class="sorry-gap">FN-H-101L</span>
+    </div>
+    <div class="sorry-item">
+      <span class="sorry-code">S3</span>
+      <div>
+        <p class="sorry-name">coord_coverage — (hexRing k).card = 6k</p>
+        <p class="sorry-path">Closure path: ring-walk injectivity. The walk visits 6k distinct lattice points
+          because consecutive steps in distinct directions never revisit, and corner overlaps
+          are exactly one point per side transition. Coverage.lean, inductive cardinality step.</p>
+      </div>
+      <span class="sorry-gap">FN-C-101L</span>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     PLANETARY SCALING
+     ══════════════════════════════════════════════════════════ -->
+<div class="section-rule"></div>
+<section id="planetary" class="section-pad dark-section">
+<div class="wrap">
+
+  <p class="sec-kicker">G6 Crystal · Planetary Architecture</p>
+  <h2 class="sec-title">Dimensional Derivation &amp; Planetary Scaling</h2>
+  <p class="sec-desc">
+    All G6 Crystal dimensions are derived from the dm³ invariants alone.
+    No design optimisation. The aspect ratio 66 = 33·τ and stability radius ε₀ = 1/3
+    are dimensionless — preserved exactly under gravity scaling.
+  </p>
+
+  <div class="planet-row">
+    <div class="planet-card pc-earth">
+      <p class="planet-name">Earth</p>
+      <p class="planet-g">g = 9.81 m/s² · γ⁻¹ = 1.00</p>
+      <div class="planet-stat">
+        <div class="ps-val">114.3</div>
+        <div class="ps-unit">m base side</div>
+      </div>
+      <div class="planet-stat">
+        <div class="ps-val">15.1</div>
+        <div class="ps-unit">km height</div>
+      </div>
+      <p class="planet-note">Tropopause at ~15 km — proved height boundary</p>
+    </div>
+    <div class="planet-card pc-moon">
+      <p class="planet-name">Moon (South Pole)</p>
+      <p class="planet-g">g = 1.625 m/s² · γ⁻¹ = 6.04</p>
+      <div class="planet-stat">
+        <div class="ps-val">690</div>
+        <div class="ps-unit">m base side</div>
+      </div>
+      <div class="planet-stat">
+        <div class="ps-val">91</div>
+        <div class="ps-unit">km height</div>
+      </div>
+      <p class="planet-note">Proved: lunar_crystal_taller, epsilon0_gravity_independent</p>
+    </div>
+    <div class="planet-card pc-mars">
+      <p class="planet-name">Mars</p>
+      <p class="planet-g">g = 3.721 m/s² · γ⁻¹ = 2.64</p>
+      <div class="planet-stat">
+        <div class="ps-val">301</div>
+        <div class="ps-unit">m base side</div>
+      </div>
+      <div class="planet-stat">
+        <div class="ps-val">39.8</div>
+        <div class="ps-unit">km height</div>
+      </div>
+      <p class="planet-note">Proved: mars_height_within_troposphere (&lt;40 km)</p>
+    </div>
+  </div>
+
+  <!-- G6 Crystal dimensions table -->
+  <h3 style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,165,60,.5);margin:2.5rem 0 1rem">
+    G6 Crystal · Earth Dimensions Derived from dm³ Invariants
+  </h3>
+  <div style="overflow-x:auto">
+  <table class="theorem-table" style="background:rgba(255,255,255,.02)">
+    <thead>
+      <tr>
+        <th>Parameter</th>
+        <th>Derivation</th>
+        <th>Value (cubits)</th>
+        <th>Value (metres)</th>
         <th>Lean Theorem</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Phase 01</td>
-        <td>25 / 21</td>
-        <td>~4,000 kg</td>
-        <td>stage = 0</td>
-        <td><code>Colony.stage_bound</code></td>
+      <tr style="color:#c0cce8">
+        <td>Total height</td>
+        <td style="color:#6080a0;font-size:.8rem">33,000 = 1,000 × g⁶</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.8rem">33,000</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.8rem">15,087.6 m</td>
+        <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">height_metres</code> ✓</td>
       </tr>
-      <tr>
-        <td>Phase 02</td>
-        <td>27 / 24</td>
-        <td>~60,000 kg</td>
-        <td>stage ≤ 1</td>
-        <td><code>Colony.expand_mono</code></td>
+      <tr style="color:#c0cce8">
+        <td>Layer height</td>
+        <td style="color:#6080a0;font-size:.8rem">33,000 / 6</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.8rem">5,500</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.8rem">2,514.6 m</td>
+        <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">layer_height_cubits</code> ✓</td>
       </tr>
-      <tr>
-        <td>Phase 03</td>
-        <td>29 / 28</td>
-        <td>~150,000 kg</td>
-        <td>stage ≤ 2</td>
-        <td><code>Colony.stage_bound_general</code></td>
+      <tr style="color:#c0cce8">
+        <td>Base side (hex)</td>
+        <td style="color:#6080a0;font-size:.8rem">500 / 2</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.8rem">250</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.8rem">114.30 m</td>
+        <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">base_side_metres</code> ✓</td>
+      </tr>
+      <tr style="color:#c0cce8">
+        <td>Aspect ratio</td>
+        <td style="color:#6080a0;font-size:.8rem">66 = 33·τ = 33·|μ<sub style="font-size:.7em">max</sub>|</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.8rem;color:var(--gold)">66</td>
+        <td style="color:#5060a0;font-size:.8rem">dimensionless</td>
+        <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">aspect_ratio_encoded</code> ✓</td>
+      </tr>
+      <tr style="color:#c0cce8">
+        <td>Schumann g⁶</td>
+        <td style="color:#6080a0;font-size:.8rem">|33 − 33.516|/33.516 = 1.54%</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.8rem;color:var(--gold)">33</td>
+        <td style="color:#5060a0;font-size:.8rem">≈33.516 Hz (f₄)</td>
+        <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">g6_within_2pct_of_f4</code> ✓</td>
+      </tr>
+      <tr style="color:#c0cce8">
+        <td>Stability radius ε₀</td>
+        <td style="color:#6080a0;font-size:.8rem">|μ<sub style="font-size:.7em">max</sub>| / (2·(1+sup‖Hess V‖))</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.8rem;color:var(--gold)">1/3</td>
+        <td style="color:#5060a0;font-size:.8rem">dimensionless</td>
+        <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">dm3_epsilon0</code> ✓</td>
+      </tr>
+      <tr style="color:#c0cce8">
+        <td>Noise tolerance</td>
+        <td style="color:#6080a0;font-size:.8rem">τ · ε₀ = 2 × 1/3</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.8rem;color:var(--gold)">2/3</td>
+        <td style="color:#5060a0;font-size:.8rem">dimensionless</td>
+        <td><code style="background:rgba(255,255,255,.06);color:#80b8f0">dm3_noise_tolerance</code> ✓</td>
       </tr>
     </tbody>
   </table>
-
-  <div class="card-grid" style="margin-top:1.6rem">
-    <div class="card">
-      <span class="card-badge badge-tool">Lean 4 · Mathlib</span>
-      <h3>Orthogenesis Source</h3>
-      <p>Full Lean 4 project: HexGrid geometry, Colony architecture, stage invariant proofs, and growth parameter model.</p>
-      <a class="card-link link-ghost" href="https://github.com/TOTOGT/geometry" target="_blank">TOTOGT/geometry on GitHub</a>
-    </div>
-    <div class="card">
-      <span class="card-badge badge-public">Proved</span>
-      <h3>Three Core Lemmas</h3>
-      <p>
-        <strong>Lemma 1:</strong> Origin cell has 6 distinct neighbors.<br>
-        <strong>Lemma 2:</strong> Colony.expand is monotone.<br>
-        <strong>Lemma 3:</strong> Stage invariant — every cell in expandⁿ has stage ≤ n.
-      </p>
-      <a class="card-link link-ghost" href="https://github.com/TOTOGT/geometry" target="_blank">View Proofs</a>
-    </div>
   </div>
+
+</div>
 </section>
 
-<!-- ── JOURNEY ── -->
-<section id="journey">
-  <p class="section-label">Student Tool · Free</p>
-  <h2 class="section-title">Student Journey Map</h2>
-  <p class="section-desc">
-    An interactive Archimedean spiral showing all 18 chapter positions across
-    3 passes. Track CEFR progress, view chapter detail panels, and see the
-    full G=U∘F∘K∘C operator chain in motion.
+<!-- ══════════════════════════════════════════════════════════
+     QUICKSTART
+     ══════════════════════════════════════════════════════════ -->
+<div class="section-rule"></div>
+<section class="section-pad">
+<div class="wrap">
+
+  <p class="sec-kicker">Reproducibility</p>
+  <h2 class="sec-title">Build from Source</h2>
+  <p class="sec-desc">
+    One command to verify every theorem from a clean Mathlib4 install.
+    Pinned revision in lake-manifest.json ensures bit-for-bit reproducibility.
   </p>
-  <div class="card-grid">
-    <div class="card">
-      <span class="card-badge badge-public">Free · Interactive</span>
-      <h3>Spiral Navigator</h3>
-      <p>Phase-coloured curves, multi-pass tracking (localStorage), CEFR timeseries graph, and full chapter information panels. No login required.</p>
-      <a class="card-link link-teal" href="journey.html">Open Journey Map</a>
+
+  <div class="lean-block">
+    <div class="lean-header">
+      <span class="lean-file">Terminal</span>
+      <span class="lean-status">Lean 4 + Mathlib v4.14.0 · rev 4bbdccd</span>
+    </div>
+    <div class="lean-body">
+<span class="lc-cm"># Clone and build — verifies all 50+ theorems</span><br>
+git clone https://github.com/TOTOGT/geometry<br>
+cd geometry<br>
+lake exe cache get<br>
+lake build<br>
+<br>
+<span class="lc-cm"># Expected output:</span><br>
+<span class="lc-proof">✔ [1732/1732] Built Orthogenesis</span><br>
+<span class="lc-proof">Build completed successfully.</span>
     </div>
   </div>
+
+  <div class="card-grid" style="margin-top:2rem">
+    <div class="card">
+      <span class="card-tag tag-lean">Lean 4 · Mathlib</span>
+      <h3>Orthogenesis Source Repository</h3>
+      <p>Full Lean 4 project: HexGrid geometry, Colony architecture, G6Crystal facts, DM3Bridge, NASAGaps. MIT licensed. Clone-ready.</p>
+      <a class="card-btn cb-navy" href="https://github.com/TOTOGT/geometry" target="_blank">TOTOGT/geometry ↗</a>
+    </div>
+    <div class="card">
+      <span class="card-tag tag-lean">Lean 4 · 160+ theorems</span>
+      <h3>AXLE Verification Hub</h3>
+      <p>The broader formal verification repository: 15 Lean files, 21 Zenodo deposits, operator chain proofs, Gronwall basin, Coherence Bridge across 7 domains.</p>
+      <a class="card-btn cb-navy" href="https://github.com/TOTOGT/AXLE" target="_blank">TOTOGT/AXLE ↗</a>
+    </div>
+    <div class="card">
+      <span class="card-tag tag-nasa">Zenodo · Open Access</span>
+      <h3>G6 Crystal Paper</h3>
+      <p>Full technical paper: isoperimetric optimum, hexagrid structural data, Schumann coupling, planetary scaling, Lean 4 proof inventory. CC BY-NC-ND 4.0.</p>
+      <a class="card-btn cb-gold" href="https://doi.org/10.5281/zenodo.19162012" target="_blank">Zenodo DOI ↗</a>
+    </div>
+    <div class="card">
+      <span class="card-tag tag-public">Open Access · 21 deposits</span>
+      <h3>Principia Orthogona Series</h3>
+      <p>Complete research series: operator algebra, contact geometry, GTCT Ring 5, biological transitions, DNLS, Moon Base RFI. Series root DOI.</p>
+      <a class="card-btn cb-ghost" href="https://doi.org/10.5281/zenodo.19117399" target="_blank">Series Root DOI ↗</a>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CONTACT
+     ══════════════════════════════════════════════════════════ -->
+<div class="section-rule"></div>
+<section id="contact" class="section-pad dark-section">
+<div class="wrap">
+
+  <p class="sec-kicker">NASA RFI Response · 80JSC026MoonBase_RFI</p>
+  <h2 class="sec-title">Contact &amp; Collaboration</h2>
+  <p class="sec-desc">
+    G6 LLC is a small business registered under FAR Part 19 (NAICS 541715),
+    SAM.gov active, eligible for NASA SBIR/STTR and ROSES funding.
+    All technical content is open access. All Lean 4 code is MIT licensed.
+  </p>
+
+  <div class="cite-box" style="background:rgba(255,255,255,.03);border-color:rgba(201,165,60,.3)">
+    NASA's Moon Base program is explicitly designed for commercial innovators and international partners.
+    <cite>HQ-MoonBase@nasa.gov · Moon Base User's Guide, NP-2026-04-6806-HQ</cite>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-item">
+      <p class="ci-label">Principal Investigator</p>
+      <p class="ci-value">Pablo Nogueira Grossi<br>Founder, G6 LLC</p>
+    </div>
+    <div class="contact-item">
+      <p class="ci-label">Email</p>
+      <p class="ci-value">
+        <a href="mailto:grossiatwork@gmail.com">grossiatwork@gmail.com</a><br>
+        <a href="mailto:pgrossi888@outlook.com">pgrossi888@outlook.com</a>
+      </p>
+    </div>
+    <div class="contact-item">
+      <p class="ci-label">Organization</p>
+      <p class="ci-value">G6 LLC · EIN 33-2880433<br>90 Tiffany Blvd, Apt 242<br>Newark, NJ 07104</p>
+    </div>
+    <div class="contact-item">
+      <p class="ci-label">ORCID</p>
+      <p class="ci-value"><a href="https://orcid.org/0009-0000-6496-2186" target="_blank">0009-0000-6496-2186</a></p>
+    </div>
+    <div class="contact-item">
+      <p class="ci-label">GitHub</p>
+      <p class="ci-value">
+        <a href="https://github.com/TOTOGT/geometry" target="_blank">TOTOGT/geometry</a><br>
+        <a href="https://github.com/TOTOGT/AXLE" target="_blank">TOTOGT/AXLE</a>
+      </p>
+    </div>
+    <div class="contact-item">
+      <p class="ci-label">Zenodo Series</p>
+      <p class="ci-value"><a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">10.5281/zenodo.19117399</a><br>(21 open-access deposits)</p>
+    </div>
+    <div class="contact-item">
+      <p class="ci-label">SAM.gov / Business</p>
+      <p class="ci-value">Registered &amp; active<br>Small Business (FAR Part 19)<br>NAICS 541715</p>
+    </div>
+    <div class="contact-item">
+      <p class="ci-label">ROM Cost Estimate</p>
+      <p class="ci-value">Quick-start (SAA/PO): $25K–$75K<br>Phase 1 (SBIR I): $150K–$200K<br>Phase 2 (SBIR II): $750K–$1.5M</p>
+    </div>
+  </div>
+
+</div>
 </section>
 
 <!-- ── FOOTER ── -->
 <footer>
-  <div class="footer-links">
-    <a href="https://brodanova6.gumroad.com/sourdworks" target="_blank">Membership (Gumroad)</a>
-    <a href="https://github.com/TOTOGT" target="_blank">GitHub · TOTOGT</a>
-    <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
-    <a href="https://github.com/TOTOGT/geometry" target="_blank">Orthogenesis</a>
-    <a href="journey.html">Journey Map</a>
+  <div class="footer-inner">
+    <span class="footer-chain">C → K → F → U → ∞</span>
+    <div class="footer-links">
+      <a href="https://github.com/TOTOGT/geometry" target="_blank">Orthogenesis</a>
+      <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+      <a href="https://doi.org/10.5281/zenodo.19162012" target="_blank">G6 Crystal DOI</a>
+      <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">Series Root</a>
+      <a href="journey.html">Journey Map</a>
+      <a href="https://brodanova6.gumroad.com/sourdworks" target="_blank">Membership</a>
+    </div>
+    <div class="footer-copy">
+      <span>© G6 LLC · Newark, New Jersey · 2026 · MIT (code) · CC BY-NC-ND 4.0 (content)</span>
+      <span>Principia Orthogona · 21 Zenodo deposits · 160+ Lean 4 theorems · 0 sorry on structural claims</span>
+    </div>
   </div>
-  <p>© G6 LLC · All paid content delivered exclusively via <a href="https://brodanova6.gumroad.com/sourdworks" target="_blank">Gumroad Membership</a>. No private files on GitHub.</p>
 </footer>
 
 </body>
