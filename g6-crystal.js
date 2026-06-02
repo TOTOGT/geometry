@@ -18,6 +18,7 @@ const CHAPTERS = [
   {id:'ch5',       short:'C5', label:'Ch 5 · Immune',    url:'ch5-immune.html',            op:'K', desc:'Immune adaptation. Two-signal gate.'},
   {id:'ch6',       short:'C6', label:'Ch 6 · Resonance', url:'ch6-resonance.html',         op:'F', desc:'Chladni. Hypogeum 110 Hz. Schumann. Crystal math.'},
   {id:'ch7',       short:'C7', label:'Ch 7 · Crystal',   url:'ch7-crystalline.html',       op:'F', desc:'G6 Crystal. Monster threshold g₆=33.'},
+   {id:'chT',        short:'TU', label:'Ch T · Tubulin', url:'chT-tubulin.html',       op:'F', desc:'One protein. Fifteen architectures. Biology solved Ulam.'},
   {id:'ch8',       short:'C8', label:'Ch 8 · Axiomatic', url:'ch8-axiomatic.html',         op:'F', desc:'dm³ axioms A1–A8. The fold is testable.'},
   {id:'ch9',       short:'C9', label:'Ch 9 · φ',         url:'ch9-phi.html',               op:'F', desc:'Golden ratio. τ×ε₀=2/3<1. Stability condition.'},
   {id:'ch10',      short:'10', label:'Ch 10 · Lyapunov', url:'ch10-lyapunov.html',         op:'U', desc:'V=(r-1)². Convergence before knowing the trajectory.'},
