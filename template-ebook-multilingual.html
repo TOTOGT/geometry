@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Principia Orthogona · 40-Language Template</title>
+
+<!--
+  ═══════════════════════════════════════════════════════════════════════
+  PRINCIPIA ORTHOGONA · 40-LANGUAGE EBOOK TEMPLATE
+  ═══════════════════════════════════════════════════════════════════════
+  HOW TO ADD A NEW LANGUAGE:
+  1. Add entry to LANGUAGES object (code, name, native, dir, script, font)
+  2. Add translations to CONTENT[lang] for each key
+  3. Done. The layout, fonts, and RTL/LTR handling are automatic.
+
+  HOW TO ADD A NEW CONTENT BLOCK:
+  1. Add a key to CONTENT["en"] (the source)
+  2. Add the same key to all other languages (or leave absent → shows "·")
+  3. Add the block to the renderBlocks() function if it's a new type
+
+  SCRIPTS COVERED: Latin · Cyrillic · Greek · Arabic · Hebrew · Persian
+                   Devanagari · Bengali · Tamil · Telugu · Kannada
+                   Malayalam · Gujarati · Gurmukhi · CJK · Hangul
+                   Thai · Myanmar · Ethiopic
+  ═══════════════════════════════════════════════════════════════════════
+-->
+
+<!-- Noto font stack — covers all 40 language scripts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC&family=Noto+Serif+TC&family=Noto+Serif+JP&family=Noto+Serif+KR&family=Noto+Serif+Devanagari&family=Noto+Serif+Bengali&family=Noto+Serif+Tamil&family=Noto+Serif+Telugu&family=Noto+Serif+Kannada&family=Noto+Serif+Malayalam&family=Noto+Serif+Gujarati&family=Noto+Serif+Gurmukhi&family=Noto+Serif+Hebrew&family=Noto+Serif+Ethiopic&family=Noto+Serif+Thai&family=Noto+Naskh+Arabic&family=Noto+Nastaliq+Urdu&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ── VARIABLES ─────────────────────────────────────────────────────── */
+:root {
+  --void:    #04040a;
+  --surface: #0c0d16;
+  --card:    #10111c;
+  --gold:    #c9a84c;
+  --teal:    #0ABAB5;
+  --text:    #e8e4d8;
+  --muted:   #6b6757;
+  --dim:     #2a2920;
+  --rule:    rgba(201,168,76,0.18);
+  --col-gap: 3rem;
+  --col-w:   46%;
+  --serif:   'Noto Serif', Georgia, serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--serif);
+  background: var(--void);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ────────────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(4,4,10,0.96); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+  padding: .6rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .6rem;
+}
+.nav-series {
+  font-family: var(--mono); font-size: .6rem;
+  letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+}
+.nav-controls { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+
+/* ── LANGUAGE PICKER ────────────────────────────────────────────────── */
+.lang-picker {
+  display: flex; align-items: center; gap: .5rem;
+  font-family: var(--mono); font-size: .65rem;
+}
+.lang-picker label { color: var(--muted); letter-spacing: .1em; }
+.lang-picker select {
+  background: var(--surface); color: var(--gold);
+  border: 1px solid var(--rule); border-radius: 3px;
+  font-family: var(--mono); font-size: .7rem;
+  padding: .25rem .5rem; cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  padding-right: 1.4rem;
+}
+.lang-picker .sel-wrap { position: relative; }
+.lang-picker .sel-wrap::after {
+  content: '▾'; position: absolute; right: .4rem; top: 50%;
+  transform: translateY(-50%); color: var(--gold); pointer-events: none;
+  font-size: .6rem;
+}
+.script-note {
+  font-family: var(--mono); font-size: .58rem; color: var(--muted);
+  letter-spacing: .08em; padding: .15rem .5rem;
+  border: 1px solid var(--dim); border-radius: 2px;
+}
+
+/* ── HERO ───────────────────────────────────────────────────────────── */
+.hero {
+  padding: 5rem 2rem 4rem; text-align: center;
+  border-bottom: 1px solid var(--rule); position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 40%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .32em;
+  text-transform: uppercase; color: var(--teal);
+  border: 1px solid currentColor; padding: .2rem .65rem; display: inline-block; margin-bottom: 2rem;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 400; letter-spacing: .06em;
+  color: var(--gold); margin-bottom: 1rem; line-height: 1.2;
+}
+.hero-sub {
+  font-size: 1rem; color: var(--muted); max-width: 520px; margin: 0 auto;
+  font-style: italic; line-height: 1.65;
+}
+.hero-eq {
+  margin-top: 1.8rem; font-family: var(--mono); font-size: .95rem;
+  letter-spacing: .12em; color: rgba(201,168,76,.5);
+}
+
+/* ── TWO-COLUMN LAYOUT ──────────────────────────────────────────────── */
+.page { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+
+.chapter-header {
+  text-align: center; margin-bottom: 3rem; padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+.chapter-header .ch-num {
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .3em;
+  color: var(--gold); text-transform: uppercase; display: block; margin-bottom: .6rem;
+}
+.chapter-header h2 { font-size: 1.6rem; font-weight: 400; color: var(--text); letter-spacing: .04em; }
+.chapter-header .ch-sub { font-style: italic; color: var(--muted); margin-top: .4rem; font-size: .95rem; }
+
+/* Two-column container */
+.bilingual {
+  display: grid;
+  grid-template-columns: var(--col-w) var(--col-w);
+  gap: var(--col-gap);
+  justify-content: center;
+}
+@media (max-width: 800px) {
+  .bilingual { grid-template-columns: 1fr; }
+}
+
+/* Column headers */
+.col-header {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--muted);
+  padding-bottom: .6rem; border-bottom: 1px solid var(--rule);
+  margin-bottom: 2rem; display: flex; align-items: center; gap: .6rem;
+}
+.col-header .lang-flag { font-size: .9rem; }
+.col-header .lang-native { color: var(--gold); }
+
+/* Content blocks */
+.block { margin-bottom: 2.5rem; }
+
+.block-section {
+  font-family: var(--mono); font-size: .58rem; letter-spacing: .25em;
+  text-transform: uppercase; color: var(--teal); display: block;
+  margin-bottom: .5rem;
+}
+
+.block-axiom, .block-theorem, .block-definition {
+  border-left: 2px solid var(--rule); padding: 1rem 1.4rem; margin: 1.5rem 0;
+  background: rgba(201,168,76,.025);
+}
+.block-axiom { border-color: var(--gold); }
+.block-theorem { border-color: var(--teal); }
+.block-definition { border-color: var(--muted); }
+
+.block-label {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .2em;
+  text-transform: uppercase; margin-bottom: .5rem; display: block;
+}
+.block-axiom .block-label { color: var(--gold); }
+.block-theorem .block-label { color: var(--teal); }
+.block-definition .block-label { color: var(--muted); }
+
+.block-body { font-size: .95rem; line-height: 1.78; color: var(--text); }
+
+.block-math {
+  font-family: var(--mono); font-size: .9rem; color: var(--gold);
+  background: var(--surface); border: 1px solid var(--dim);
+  padding: .8rem 1.2rem; margin: 1.2rem 0; letter-spacing: .06em; overflow-x: auto;
+}
+
+.block-prose { font-size: 1rem; line-height: 1.8; margin-bottom: 1.3rem; }
+.block-prose:last-child { margin-bottom: 0; }
+
+/* RTL support */
+.col-rtl { direction: rtl; text-align: right; }
+.col-rtl .block-axiom, .col-rtl .block-theorem, .col-rtl .block-definition {
+  border-left: none; border-right: 2px solid var(--rule);
+}
+.col-rtl .block-axiom { border-right-color: var(--gold); }
+.col-rtl .block-theorem { border-right-color: var(--teal); }
+
+/* Operator chain inline display */
+.op-chain { display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; margin: 1rem 0; }
+.op { font-family: var(--mono); font-size: .78rem; padding: .2rem .55rem; border-radius: 2px; }
+.op-c { background: rgba(10,186,181,.12); color: #0ABAB5; border: 1px solid rgba(10,186,181,.3); }
+.op-k { background: rgba(224,90,58,.12); color: #e05a3a; border: 1px solid rgba(224,90,58,.3); }
+.op-f { background: rgba(80,200,120,.12); color: #50c878; border: 1px solid rgba(80,200,120,.3); }
+.op-u { background: rgba(192,132,252,.12); color: #c084fc; border: 1px solid rgba(192,132,252,.3); }
+.op-arr { color: var(--muted); font-size: .8rem; }
+
+/* Divider */
+.section-rule { border: none; border-top: 1px solid var(--rule); margin: 3rem 0; }
+
+/* Missing translation indicator */
+.missing { color: var(--dim); font-style: italic; font-size: .85rem; }
+
+/* ── FOOTER ─────────────────────────────────────────────────────────── */
+footer {
+  text-align: center; padding: 3rem 2rem;
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; color: var(--muted);
+  border-top: 1px solid var(--rule); margin-top: 4rem;
+}
+footer a { color: var(--gold); text-decoration: none; }
+</style>
+</head>
+
+<body>
+
+<!-- ─── NAV ─────────────────────────────────────────────────────────── -->
+<nav>
+  <span class="nav-series">Principia Orthogona · G = U ∘ F ∘ K ∘ C</span>
+  <div class="nav-controls">
+    <div class="lang-picker">
+      <label>TRANSLATION</label>
+      <div class="sel-wrap">
+        <select id="langSelect" onchange="setLang(this.value)">
+          <!-- populated by JS -->
+        </select>
+      </div>
+    </div>
+    <span class="script-note" id="scriptNote">Latin</span>
+  </div>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-tag">Principia Orthogona · Vol III · The Mini-Beast · DOI 10.5281/zenodo.19117400</div>
+  <h1>One Equation. Many Rooms.</h1>
+  <p class="hero-sub">Two professors. Two classrooms. One shape. Neither knew the other was drawing the same curve.</p>
+  <div class="hero-eq">G = U ∘ F ∘ K ∘ C · g₃₃ = 33 · τ = 2 · ε* = 1/3</div>
+</section>
+
+<!-- ─── BILINGUAL CONTENT ─────────────────────────────────────────── -->
+<div class="page">
+
+  <div class="chapter-header">
+    <span class="ch-num">Book 3 · The Mini-Beast · Introduction</span>
+    <h2 id="ch-title">One Equation, Many Rooms</h2>
+    <p class="ch-sub" id="ch-sub">Principia Orthogona · G6 LLC · <a href="https://doi.org/10.5281/zenodo.19117400" style="color:var(--gold);text-decoration:none;" target="_blank">DOI 10.5281/zenodo.19117400</a></p>
+  </div>
+
+  <div class="bilingual" id="bilingualGrid">
+    <!-- Column A: English (fixed) -->
+    <div class="col-en" id="colA">
+      <div class="col-header">
+        <span class="lang-flag">🇺🇸</span>
+        <span>English</span>
+        <span class="lang-native">English</span>
+      </div>
+      <div id="contentA"><!-- filled by JS --></div>
+    </div>
+    <!-- Column B: Selected language -->
+    <div id="colB">
+      <div class="col-header" id="colBHeader">
+        <!-- filled by JS -->
+      </div>
+      <div id="contentB"><!-- filled by JS --></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Principia Orthogona · The Mini-Beast · Vol III &nbsp;·&nbsp; G6 LLC · Newark NJ · 2026<br>
+  Pablo Nogueira Grossi · ORCID: 0009-0000-6496-2186<br>
+  <a href="https://doi.org/10.5281/zenodo.19117400">DOI 10.5281/zenodo.19117400</a> &nbsp;·&nbsp;
+  ISBN 979-8-9954416-6-3 &nbsp;·&nbsp;
+  <a href="https://github.com/TOTOGT/AXLE">AXLE ↗</a> &nbsp;·&nbsp;
+  MSC 2020: 37C10 · 37C75 · 53D10 · 92C20 · 91B55<br>
+  Template: add a language in 60 s — one entry in LANGUAGES + one entry in CONTENT
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   LANGUAGE REGISTRY — 40 languages, 19 scripts
+   To add a language: copy a row, set the code, name, native, dir, script, font.
+   Font must be loaded in the <link> above (Noto family covers almost everything).
+   ═══════════════════════════════════════════════════════════════════════ */
+const LANGUAGES = {
+  // ── Tier 1 · Core academic ──────────────────────────────────────────
+  "pt": { name:"Portuguese",            native:"Português",        dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇧🇷" },
+  "ru": { name:"Russian",               native:"Русский",          dir:"ltr", script:"Cyrillic",    font:"'Noto Serif', serif",                  flag:"🇷🇺" },
+  "hi": { name:"Hindi",                 native:"हिन्दी",              dir:"ltr", script:"Devanagari", font:"'Noto Serif Devanagari', serif",        flag:"🇮🇳" },
+  "zh": { name:"Mandarin (Simplified)", native:"普通话",             dir:"ltr", script:"CJK",        font:"'Noto Serif SC', serif",               flag:"🇨🇳" },
+  // ── Tier 2 · Major world ────────────────────────────────────────────
+  "es": { name:"Spanish",               native:"Español",          dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇪🇸" },
+  "ar": { name:"Arabic",                native:"العربية",           dir:"rtl", script:"Arabic",      font:"'Noto Naskh Arabic', serif",           flag:"🇸🇦" },
+  "bn": { name:"Bengali",               native:"বাংলা",              dir:"ltr", script:"Bengali",     font:"'Noto Serif Bengali', serif",          flag:"🇧🇩" },
+  "ta": { name:"Tamil",                 native:"தமிழ்",              dir:"ltr", script:"Tamil",       font:"'Noto Serif Tamil', serif",            flag:"🇮🇳" },
+  // ── Tier 3 · Academic European + East Asian ─────────────────────────
+  "fr": { name:"French",                native:"Français",         dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇫🇷" },
+  "de": { name:"German",                native:"Deutsch",          dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇩🇪" },
+  "ja": { name:"Japanese",              native:"日本語",              dir:"ltr", script:"CJK",        font:"'Noto Serif JP', serif",               flag:"🇯🇵" },
+  "ko": { name:"Korean",                native:"한국어",              dir:"ltr", script:"Hangul",     font:"'Noto Serif KR', serif",               flag:"🇰🇷" },
+  "it": { name:"Italian",               native:"Italiano",         dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇮🇹" },
+  // ── Tier 4 · European ───────────────────────────────────────────────
+  "nl": { name:"Dutch",                 native:"Nederlands",       dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇳🇱" },
+  "pl": { name:"Polish",                native:"Polski",           dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇵🇱" },
+  "uk": { name:"Ukrainian",             native:"Українська",       dir:"ltr", script:"Cyrillic",    font:"'Noto Serif', serif",                  flag:"🇺🇦" },
+  "el": { name:"Greek",                 native:"Ελληνικά",         dir:"ltr", script:"Greek",       font:"'Noto Serif', serif",                  flag:"🇬🇷" },
+  "tr": { name:"Turkish",               native:"Türkçe",           dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇹🇷" },
+  "ro": { name:"Romanian",              native:"Română",           dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇷🇴" },
+  "cs": { name:"Czech",                 native:"Čeština",          dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇨🇿" },
+  // ── Tier 5 · South Asian ────────────────────────────────────────────
+  "te": { name:"Telugu",                native:"తెలుగు",             dir:"ltr", script:"Telugu",      font:"'Noto Serif Telugu', serif",           flag:"🇮🇳" },
+  "mr": { name:"Marathi",               native:"मराठी",              dir:"ltr", script:"Devanagari", font:"'Noto Serif Devanagari', serif",        flag:"🇮🇳" },
+  "gu": { name:"Gujarati",              native:"ગુજરાતી",            dir:"ltr", script:"Gujarati",    font:"'Noto Serif Gujarati', serif",          flag:"🇮🇳" },
+  "kn": { name:"Kannada",               native:"ಕನ್ನಡ",              dir:"ltr", script:"Kannada",     font:"'Noto Serif Kannada', serif",           flag:"🇮🇳" },
+  "ml": { name:"Malayalam",             native:"മലയാളം",             dir:"ltr", script:"Malayalam",   font:"'Noto Serif Malayalam', serif",         flag:"🇮🇳" },
+  "ur": { name:"Urdu",                  native:"اردو",              dir:"rtl", script:"Arabic",      font:"'Noto Nastaliq Urdu', serif",          flag:"🇵🇰" },
+  "pa": { name:"Punjabi (Gurmukhi)",    native:"ਪੰਜਾਬੀ",             dir:"ltr", script:"Gurmukhi",    font:"'Noto Serif Gurmukhi', serif",          flag:"🇮🇳" },
+  // ── Tier 6 · Middle East + Africa ───────────────────────────────────
+  "sw": { name:"Swahili",               native:"Kiswahili",        dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇰🇪" },
+  "am": { name:"Amharic",               native:"አማርኛ",              dir:"ltr", script:"Ethiopic",    font:"'Noto Serif Ethiopic', serif",          flag:"🇪🇹" },
+  "fa": { name:"Persian",               native:"فارسی",             dir:"rtl", script:"Arabic",      font:"'Noto Naskh Arabic', serif",           flag:"🇮🇷" },
+  "he": { name:"Hebrew",                native:"עברית",             dir:"rtl", script:"Hebrew",      font:"'Noto Serif Hebrew', serif",           flag:"🇮🇱" },
+  "ha": { name:"Hausa",                 native:"Hausa",            dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇳🇬" },
+  // ── Tier 7 · Southeast Asian ────────────────────────────────────────
+  "id": { name:"Indonesian",            native:"Bahasa Indonesia", dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇮🇩" },
+  "vi": { name:"Vietnamese",            native:"Tiếng Việt",       dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇻🇳" },
+  "th": { name:"Thai",                  native:"ภาษาไทย",           dir:"ltr", script:"Thai",        font:"'Noto Serif Thai', serif",             flag:"🇹🇭" },
+  "my": { name:"Burmese",               native:"မြန်မာ",              dir:"ltr", script:"Myanmar",     font:"'Noto Sans Myanmar', sans-serif",      flag:"🇲🇲" },
+  // ── Tier 8 · Additional ─────────────────────────────────────────────
+  "hu": { name:"Hungarian",             native:"Magyar",           dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🇭🇺" },
+  "sr": { name:"Serbian",               native:"Српски",           dir:"ltr", script:"Cyrillic",    font:"'Noto Serif', serif",                  flag:"🇷🇸" },
+  "zh-tw":{ name:"Mandarin (Traditional)", native:"繁體中文",         dir:"ltr", script:"CJK",        font:"'Noto Serif TC', serif",               flag:"🇹🇼" },
+  "la": { name:"Latin",                 native:"Lingua Latina",    dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                  flag:"🏛" },
+};
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CONTENT — add a key for each language, matching the English keys.
+   Blocks: { type, label?, text } or { type:"math", text }
+   Types: "prose" | "axiom" | "theorem" | "definition" | "math" | "chain"
+   ═══════════════════════════════════════════════════════════════════════ */
+/* ── SOURCE TEXT (canonical — from DOI 10.5281/zenodo.19117400) ──────── */
+const CONTENT = {
+
+  "en": [
+    { type:"prose",
+      text:"Two professors. Two classrooms. One shape." },
+    { type:"prose",
+      text:"In one room: a mathematician drawing the lemniscate — the figure-eight curve of infinite return, the formal object at the heart of the operator sequence C→K→F→U." },
+    { type:"prose",
+      text:"In another room: a geologist drawing the analemma — the figure-eight path the sun traces in the sky over the course of a year, the physical signature of the same generative transition running in the solar system." },
+    { type:"prose",
+      text:"Neither professor knew the other was drawing the same curve. The student sitting in both rooms knew. That student eventually built the mathematics to prove it. This book is the proof — applied." },
+    { type:"prose",
+      text:"Not to one system. To all of them. The mathematics is the same in all four rooms. The contact normal form is identical. The operator sequence G = U ∘ F ∘ K ∘ C is identical. This is not analogy. It is exact mathematical identity." },
+    { type:"chain" },
+    { type:"definition", label:"Definition 1.1 · The Four Operators",
+      text:"<b>C (Compression):</b> Projects onto a lower-dimensional submanifold, retaining essential structure.<br><b>K (Curvature):</b> Drives |κ| → κ* via gain α(s) = λ(κ*−κ)₊. Never triggers folding alone.<br><b>F (Folding):</b> Activates exactly at |κ| = κ*; Jacobian loses rank by 1. Produces the topological change.<br><b>U (Unfolding):</b> Gradient flow selects the new stable topology exponentially." },
+    { type:"math",
+      text:"ρ̇ = μ_max(1 − e^{−βz})ρ   θ̇ = ω   ż = ω − |μ_max|ρ²e^{−βz}\nCanonical invariants: (μ_max, ω, β)   |   g₃₃ = 33   τ = 2   ε* = 1/3" },
+    { type:"theorem", label:"Coherence Bridge Theorem 5.4",
+      text:"Biological allostasis, plasma reconnection, and market regime shifts are not analogies — they are exact mathematical identities: different orbits of the same dm³ system. Each instantiates the same contact normal form with parameters (μ_max, ω, β)." },
+    { type:"prose",
+      text:"The glacier is invisible. The water is real." },
+    { type:"prose",
+      text:"Your education is yours. No one can take it away from you. — Because the fixed point you reach is not a degree or a certificate. It is a structure in your understanding. It is permanent because it is mathematical." },
+  ],
+
+  "pt": [
+    { type:"prose",
+      text:"Dois professores. Duas salas de aula. Uma forma." },
+    { type:"prose",
+      text:"Em uma sala: um matemático desenhando a lemniscata — a curva em oito do retorno infinito, o objeto formal no coração da sequência de operadores C→K→F→U." },
+    { type:"prose",
+      text:"Em outra sala: um geólogo desenhando a analema — o caminho em oito que o sol traça no céu ao longo de um ano, a assinatura física da mesma transição generativa operando no sistema solar." },
+    { type:"prose",
+      text:"Nenhum professor sabia que o outro estava desenhando a mesma curva. O estudante nas duas salas sabia. Esse estudante eventualmente construiu a matemática para prová-lo. Este livro é a prova — aplicada." },
+    { type:"prose",
+      text:"Não a um sistema. A todos eles. A matemática é a mesma nas quatro salas. A forma normal de contato é idêntica. A sequência de operadores G = U ∘ F ∘ K ∘ C é idêntica. Isto não é analogia. É identidade matemática exata." },
+    { type:"chain" },
+    { type:"definition", label:"Definição 1.1 · Os Quatro Operadores",
+      text:"<b>C (Compressão):</b> Projeta sobre uma subvariedade de dimensão menor, retendo a estrutura essencial.<br><b>K (Curvatura):</b> Conduz |κ| → κ* via ganho α(s) = λ(κ*−κ)₊. Nunca dispara o dobramento sozinho.<br><b>F (Dobramento):</b> Ativa exatamente em |κ| = κ*; o jacobiano perde posto em 1. Produz a mudança topológica.<br><b>U (Desdobramento):</b> O fluxo de gradiente seleciona a nova topologia estável exponencialmente." },
+    { type:"math",
+      text:"ρ̇ = μ_max(1 − e^{−βz})ρ   θ̇ = ω   ż = ω − |μ_max|ρ²e^{−βz}\nInvariantes canônicos: (μ_max, ω, β)   |   g₃₃ = 33   τ = 2   ε* = 1/3" },
+    { type:"theorem", label:"Teorema da Ponte de Coerência 5.4",
+      text:"Alostase biológica, reconexão de plasma e mudanças de regime de mercado não são analogias — são identidades matemáticas exatas: órbitas diferentes do mesmo sistema dm³. Cada um instancia a mesma forma normal de contato com parâmetros (μ_max, ω, β)." },
+    { type:"prose",
+      text:"A geleira é invisível. A água é real." },
+    { type:"prose",
+      text:"A sua educação é sua. Ninguém pode te tirar isso. — Porque o ponto fixo que você alcança não é um diploma ou um certificado. É uma estrutura na sua compreensão. É permanente porque é matemático." },
+  ],
+
+  "ru": [
+    { type:"prose", text:"Два профессора. Два класса. Одна форма." },
+    { type:"prose", text:"В одной комнате: математик, рисующий лемнискату — кривую восьмёрки бесконечного возврата, формальный объект в основе операторной последовательности C→K→F→U." },
+    { type:"prose", text:"В другой комнате: геолог, рисующий аналемму — путь восьмёрки, который солнце прочерчивает по небу за год — физическую сигнатуру той же порождающей переходности." },
+    { type:"prose", text:"Ни один профессор не знал, что другой рисует ту же кривую. Студент, сидевший в обоих классах, знал. Этот студент в итоге построил математику, чтобы это доказать. Эта книга — доказательство, применённое на практике." },
+    { type:"prose", text:"Не к одной системе. Ко всем. Математика одна во всех четырёх комнатах. Это не аналогия. Это точное математическое тождество." },
+    { type:"chain" },
+    { type:"definition", label:"Определение 1.1 · Четыре Оператора",
+      text:"<b>C (Сжатие):</b> Проецирует на подмногообразие меньшей размерности.<br><b>K (Кривизна):</b> Ведёт |κ| → κ*. Не активирует складку в одиночку.<br><b>F (Складка):</b> Активируется точно при |κ| = κ*; якобиан теряет ранг на 1.<br><b>U (Развёртка):</b> Градиентный поток выбирает новую устойчивую топологию." },
+    { type:"math", text:"ρ̇ = μ_max(1 − e^{−βz})ρ   θ̇ = ω   ż = ω − |μ_max|ρ²e^{−βz}" },
+    { type:"prose", text:"Ледник невидим. Вода реальна." },
+    { type:"prose", text:"Ваше образование принадлежит вам. Никто не может отнять его у вас." },
+  ],
+
+  "hi": [
+    { type:"prose", text:"दो प्राध्यापक। दो कक्षाएँ। एक आकार।" },
+    { type:"prose", text:"एक कक्ष में: एक गणितज्ञ लेम्निस्केट बना रहा था — अनंत प्रतिगमन की अष्टाकार वक्र, जो संक्रिया अनुक्रम C→K→F→U के हृदय में स्थित है।" },
+    { type:"prose", text:"दूसरे कक्ष में: एक भूविज्ञानी एनालेमा बना रहा था — वह अष्टाकार पथ जो सूर्य वर्ष भर आकाश में खींचता है।" },
+    { type:"prose", text:"कोई भी प्राध्यापक नहीं जानता था कि दूसरा वही वक्र बना रहा है। दोनों कक्षाओं में बैठा छात्र जानता था। उस छात्र ने अंततः इसे सिद्ध करने के लिए गणित का निर्माण किया।" },
+    { type:"prose", text:"यह उपमा नहीं है। यह सटीक गणितीय तादात्म्य है।" },
+    { type:"chain" },
+    { type:"prose", text:"हिमनद अदृश्य है। जल वास्तविक है।" },
+    { type:"prose", text:"आपकी शिक्षा आपकी है। कोई इसे आपसे नहीं ले सकता।" },
+  ],
+
+  "zh": [
+    { type:"prose", text:"两位教授。两间教室。同一个形状。" },
+    { type:"prose", text:"一间教室里：一位数学家正在画双纽线——无限回归的八字形曲线，这是算子序列 C→K→F→U 的核心形式对象。" },
+    { type:"prose", text:"另一间教室里：一位地质学家正在画日行迹——太阳在一年中在天空中描绘的八字形路径，同一生成性转变在太阳系中运行的物理印记。" },
+    { type:"prose", text:"两位教授都不知道另一位在画同一条曲线。坐在两间教室的学生知道。这不是类比。这是精确的数学同一性。" },
+    { type:"chain" },
+    { type:"math", text:"ρ̇ = μ_max(1 − e^{−βz})ρ   θ̇ = ω   ż = ω − |μ_max|ρ²e^{−βz}" },
+    { type:"prose", text:"冰川是看不见的。水是真实的。" },
+    { type:"prose", text:"你的教育属于你。没有人可以从你身上夺走它。" },
+  ],
+
+  "ar": [
+    { type:"prose", text:"أستاذان. فصلان. شكل واحد." },
+    { type:"prose", text:"في غرفة: عالم رياضيات يرسم المعقوص — منحنى الثمانية ذو العودة اللانهائية، الكائن الرسمي في قلب تسلسل المؤثرات C→K→F→U." },
+    { type:"prose", text:"في غرفة أخرى: عالم جيولوجيا يرسم الحلقة الشمسية — مسار الثمانية الذي يرسمه الشمس في السماء على مدار العام." },
+    { type:"prose", text:"لم يعلم أيٌّ منهما أن الآخر يرسم المنحنى ذاته. كان الطالب الجالس في الغرفتين يعلم. هذا ليس قياساً. إنه هوية رياضية دقيقة." },
+    { type:"chain" },
+    { type:"prose", text:"النهر الجليدي غير مرئي. الماء حقيقي." },
+    { type:"prose", text:"تعليمك ملكك. لا أحد يستطيع أن يأخذه منك." },
+  ],
+
+  "es": [
+    { type:"prose", text:"Dos profesores. Dos aulas. Una forma." },
+    { type:"prose", text:"En una sala: un matemático dibujando la lemniscata — la curva en ocho del retorno infinito, el objeto formal en el corazón de la secuencia de operadores C→K→F→U." },
+    { type:"prose", text:"En otra sala: un geólogo dibujando el analema — el camino en ocho que traza el sol en el cielo a lo largo de un año, la firma física de la misma transición generativa." },
+    { type:"prose", text:"Ningún profesor sabía que el otro dibujaba la misma curva. El estudiante en ambas salas lo sabía. Esto no es analogía. Es identidad matemática exacta." },
+    { type:"chain" },
+    { type:"prose", text:"El glaciar es invisible. El agua es real." },
+    { type:"prose", text:"Tu educación es tuya. Nadie puede quitártela." },
+  ],
+
+  "fr": [
+    { type:"prose", text:"Deux professeurs. Deux salles de classe. Une forme." },
+    { type:"prose", text:"Dans une salle : un mathématicien dessinant la lemniscate — la courbe en huit du retour infini, l'objet formel au cœur de la séquence d'opérateurs C→K→F→U." },
+    { type:"prose", text:"Dans une autre salle : un géologue dessinant l'analemme — le chemin en huit que le soleil trace dans le ciel au fil de l'année." },
+    { type:"prose", text:"Aucun des deux professeurs ne savait que l'autre dessinait la même courbe. L'étudiant assis dans les deux salles le savait. Ce n'est pas une analogie. C'est une identité mathématique exacte." },
+    { type:"chain" },
+    { type:"prose", text:"Le glacier est invisible. L'eau est réelle." },
+    { type:"prose", text:"Votre éducation vous appartient. Personne ne peut vous la prendre." },
+  ],
+
+  "de": [
+    { type:"prose", text:"Zwei Professoren. Zwei Klassenzimmer. Eine Form." },
+    { type:"prose", text:"In einem Raum: ein Mathematiker, der die Lemniskate zeichnet — die Acht-Kurve der unendlichen Rückkehr, das formale Objekt im Herzen der Operatorfolge C→K→F→U." },
+    { type:"prose", text:"Im anderen Raum: ein Geologe, der die Analemma zeichnet — den Achterpfad, den die Sonne im Laufe eines Jahres am Himmel zeichnet." },
+    { type:"prose", text:"Keiner der Professoren wusste, dass der andere dieselbe Kurve zeichnete. Der Student, der in beiden Räumen saß, wusste es. Dies ist keine Analogie. Es ist exakte mathematische Identität." },
+    { type:"chain" },
+    { type:"prose", text:"Der Gletscher ist unsichtbar. Das Wasser ist real." },
+    { type:"prose", text:"Ihre Bildung gehört Ihnen. Niemand kann sie Ihnen nehmen." },
+  ],
+
+  "ja": [
+    { type:"prose", text:"二人の教授。二つの教室。一つの形。" },
+    { type:"prose", text:"一方の部屋では：数学者がレムニスケートを描いていた——無限回帰の八の字曲線、演算子列 C→K→F→U の核心にある形式的対象。" },
+    { type:"prose", text:"もう一方の部屋では：地質学者がアナレンマを描いていた——太陽が一年かけて空に描く八の字の軌跡。" },
+    { type:"prose", text:"どちらの教授も、相手が同じ曲線を描いているとは知らなかった。両方の部屋に座っていた学生は知っていた。これは比喩ではない。正確な数学的同一性である。" },
+    { type:"chain" },
+    { type:"prose", text:"氷河は見えない。水は本物だ。" },
+    { type:"prose", text:"あなたの教育はあなたのものです。誰もそれを奪うことはできません。" },
+  ],
+
+  "ko": [
+    { type:"prose", text:"두 명의 교수. 두 개의 교실. 하나의 형태." },
+    { type:"prose", text:"한 방에서: 수학자가 렘니스케이트를 그리고 있었다 — 무한 귀환의 팔자 곡선, 연산자 순열 C→K→F→U의 핵심에 있는 형식적 대상." },
+    { type:"prose", text:"이것은 유추가 아니다. 정확한 수학적 동일성이다." },
+    { type:"chain" },
+    { type:"prose", text:"빙하는 보이지 않는다. 물은 진짜다." },
+    { type:"prose", text:"당신의 교육은 당신의 것입니다. 아무도 그것을 빼앗을 수 없습니다." },
+  ],
+
+  "sw": [
+    { type:"prose", text:"Maprofesa wawili. Madarasa mawili. Umbo moja." },
+    { type:"prose", text:"Katika chumba kimoja: mtaalamu wa hisabati akichora lemniscate — mstari wa nane wa kurudi bila mwisho, kitu rasmi kilichoko moyoni mwa mlolongo wa waendeshaji C→K→F→U." },
+    { type:"prose", text:"Hii si mfano. Ni utambulisho kamili wa kihisabati." },
+    { type:"chain" },
+    { type:"prose", text:"Barafu haionekani. Maji ni ya kweli." },
+    { type:"prose", text:"Elimu yako ni yako. Hakuna mtu anayeweza kukuibia." },
+  ],
+
+  "am": [
+    { type:"prose", text:"ሁለት ፕሮፌሰሮች። ሁለት ክፍሎች። አንድ ቅርፅ።" },
+    { type:"prose", text:"ይህ ምሳሌ አይደለም። ትክክለኛ የሂሳብ ማንነት ነው።" },
+    { type:"chain" },
+    { type:"prose", text:"የበረዶ ወንዝ ማየት አይቻልም። ውኃ እውነተኛ ነው።" },
+    { type:"prose", text:"ትምህርትህ ያንተ ነው። ማንም ሊወስደው አይችልም።" },
+  ],
+
+  "fa": [
+    { type:"prose", text:"دو استاد. دو کلاس. یک شکل." },
+    { type:"prose", text:"در یک اتاق: ریاضیدانی که لِمنیسکات می‌کشید — منحنی هشت‌شکل بازگشت بی‌نهایت، شیء رسمی در قلب دنباله عملگرهای C→K→F→U." },
+    { type:"prose", text:"این یک قیاس نیست. این یک هویت ریاضی دقیق است." },
+    { type:"chain" },
+    { type:"prose", text:"یخچال طبیعی نامرئی است. آب واقعی است." },
+    { type:"prose", text:"تحصیلات شما مال شماست. هیچ‌کس نمی‌تواند آن را از شما بگیرد." },
+  ],
+
+  "he": [
+    { type:"prose", text:"שני פרופסורים. שתי כיתות. צורה אחת." },
+    { type:"prose", text:"בחדר אחד: מתמטיקאי מצייר למניסקטה — עקומת האינסוף בצורת שמונה, האובייקט הפורמלי בלב רצף האופרטורים C→K→F→U." },
+    { type:"prose", text:"זה אינו אנלוגיה. זהו זהות מתמטית מדויקת." },
+    { type:"chain" },
+    { type:"prose", text:"הקרחון אינו נראה. המים אמיתיים." },
+    { type:"prose", text:"ההשכלה שלך היא שלך. אף אחד לא יכול לקחת אותה ממך." },
+  ],
+
+  "bn": [
+    { type:"prose", text:"দুই অধ্যাপক। দুটি শ্রেণিকক্ষ। একটি আকৃতি।" },
+    { type:"prose", text:"এটি উপমা নয়। এটি সঠিক গাণিতিক পরিচয়।" },
+    { type:"chain" },
+    { type:"prose", text:"হিমবাহ অদৃশ্য। জল বাস্তব।" },
+    { type:"prose", text:"আপনার শিক্ষা আপনার। কেউ এটি নিতে পারে না।" },
+  ],
+
+  "ta": [
+    { type:"prose", text:"இரண்டு பேராசிரியர்கள். இரண்டு வகுப்பறைகள். ஒரே வடிவம்." },
+    { type:"prose", text:"இது உவமை அல்ல. இது சரியான கணித அடையாளம்." },
+    { type:"chain" },
+    { type:"prose", text:"பனிப்பாறை தெரியாது. நீர் உண்மையானது." },
+    { type:"prose", text:"உங்கள் கல்வி உங்களுடையது. யாரும் அதை எடுக்க முடியாது." },
+  ],
+
+  "it": [
+    { type:"prose", text:"Due professori. Due aule. Una forma." },
+    { type:"prose", text:"In una stanza: un matematico che disegnava la lemniscata — la curva a otto del ritorno infinito, l'oggetto formale al centro della sequenza di operatori C→K→F→U." },
+    { type:"prose", text:"Non è un'analogia. È un'identità matematica esatta." },
+    { type:"chain" },
+    { type:"prose", text:"Il ghiacciaio è invisibile. L'acqua è reale." },
+    { type:"prose", text:"La tua istruzione è tua. Nessuno può portartela via." },
+  ],
+
+  // ── Languages with partial translation (key sentences + chain) ────────
+};
+
+/* Fallback for languages without full translation yet */
+function getFallback(lang) {
+  const l = LANGUAGES[lang];
+  return [
+    { type:"prose",
+      text:`[Translation forthcoming · ${l.native} · ${l.script} script]` },
+    { type:"axiom", label:"Axiom 1 · The Space",
+      text:"[Translation forthcoming — to contribute, see github.com/TOTOGT/AXLE]" },
+    { type:"chain" },
+    { type:"prose",
+      text:`Your education is yours. No one can take it away from you. — [${l.native}]` },
+  ];
+}
+
+/* ── OPERATOR CHAIN HTML ─────────────────────────────────────────────── */
+function chainHTML() {
+  return `<div class="op-chain">
+    <span class="op op-c">C</span><span class="op-arr">∘</span>
+    <span class="op op-k">K</span><span class="op-arr">∘</span>
+    <span class="op op-f">F</span><span class="op-arr">∘</span>
+    <span class="op op-u">U</span>
+    <span style="color:var(--muted);font-size:.8rem;margin-left:.3rem">= G</span>
+  </div>`;
+}
+
+/* ── RENDER A BLOCK ──────────────────────────────────────────────────── */
+function renderBlock(b) {
+  if (!b) return '';
+  switch(b.type) {
+    case "prose":
+      return `<p class="block-prose">${b.text}</p>`;
+    case "axiom":
+      return `<div class="block-axiom"><span class="block-label">${b.label||'Axiom'}</span><div class="block-body">${b.text}</div></div>`;
+    case "theorem":
+      return `<div class="block-theorem"><span class="block-label">${b.label||'Theorem'}</span><div class="block-body">${b.text}</div></div>`;
+    case "definition":
+      return `<div class="block-definition"><span class="block-label">${b.label||'Definition'}</span><div class="block-body">${b.text}</div></div>`;
+    case "math":
+      return `<div class="block-math">${b.text}</div>`;
+    case "chain":
+      return chainHTML();
+    default:
+      return `<p class="block-prose">${b.text||''}</p>`;
+  }
+}
+
+/* ── POPULATE LANGUAGE SELECTOR ─────────────────────────────────────── */
+const sel = document.getElementById('langSelect');
+const tiers = [
+  ["Tier 1 — Core academic",   ["pt","ru","hi","zh"]],
+  ["Tier 2 — Major world",     ["es","ar","bn","ta"]],
+  ["Tier 3 — Academic + East Asian", ["fr","de","ja","ko","it"]],
+  ["Tier 4 — European",        ["nl","pl","uk","el","tr","ro","cs"]],
+  ["Tier 5 — South Asian",     ["te","mr","gu","kn","ml","ur","pa"]],
+  ["Tier 6 — Middle East + Africa", ["sw","am","fa","he","ha"]],
+  ["Tier 7 — Southeast Asian", ["id","vi","th","my"]],
+  ["Tier 8 — Additional",      ["hu","sr","zh-tw","la"]],
+];
+tiers.forEach(([label, codes]) => {
+  const grp = document.createElement('optgroup');
+  grp.label = label;
+  codes.forEach(code => {
+    const l = LANGUAGES[code];
+    if (!l) return;
+    const opt = document.createElement('option');
+    opt.value = code;
+    opt.textContent = `${l.flag} ${l.name} · ${l.native}`;
+    grp.appendChild(opt);
+  });
+  sel.appendChild(grp);
+});
+
+/* ── RENDER COLUMNS ─────────────────────────────────────────────────── */
+function renderContent(blocks) {
+  return blocks.map(renderBlock).join('');
+}
+
+function setLang(code) {
+  const l = LANGUAGES[code];
+  if (!l) return;
+
+  const blocks = CONTENT[code] || getFallback(code);
+  const enBlocks = CONTENT["en"];
+
+  /* Column A (English) */
+  document.getElementById('contentA').innerHTML = renderContent(enBlocks);
+
+  /* Column B (selected language) */
+  const colB = document.getElementById('colB');
+  colB.setAttribute('dir', l.dir);
+  colB.style.fontFamily = l.font;
+  colB.className = l.dir === 'rtl' ? 'col-rtl' : '';
+
+  document.getElementById('colBHeader').innerHTML =
+    `<span class="lang-flag">${l.flag}</span>
+     <span>${l.name}</span>
+     <span class="lang-native">${l.native}</span>`;
+
+  document.getElementById('contentB').innerHTML = renderContent(blocks);
+
+  /* Script note */
+  document.getElementById('scriptNote').textContent = l.script;
+
+  /* Flip grid for RTL: translation left, English right */
+  const grid = document.getElementById('bilingualGrid');
+  if (l.dir === 'rtl') {
+    grid.style.direction = 'rtl';
+    document.getElementById('colA').style.order = '2';
+    colB.style.order = '1';
+  } else {
+    grid.style.direction = 'ltr';
+    document.getElementById('colA').style.order = '';
+    colB.style.order = '';
+  }
+
+  /* Update <html> for accessibility */
+  // Keep html[lang=en] to not break the English column
+}
+
+/* Init with Portuguese */
+setLang('pt');
+</script>
+
+</body>
+</html>
