@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch 2 · The Dimensional Field · Vol IV · Principia Orthogona</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Noto+Serif+JP:wght@400;600&family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Serif+Devanagari:wght@400;600&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]},options:{skipHtmlTags:["script","noscript","style","textarea","pre"]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+:root {
+  --void:#04040a; --surface:#0c0d16; --card:#10111c;
+  --gold:#c9a84c; --teal:#0ABAB5; --text:#e8e4d8;
+  --muted:#6b6757; --dim:#2a2920; --rule:rgba(201,168,76,0.18);
+  --serif:'Noto Serif Display','Noto Serif',Georgia,serif;
+  --mono:'JetBrains Mono','Courier New',monospace;
+  --op-c:#0ABAB5; --op-k:#e05a3a; --op-f:#50c878; --op-u:#c084fc;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:19px;line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#cosmos{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:300;background:rgba(4,4,10,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule);padding:.55rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.nav-brand{font-family:var(--mono);font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);text-decoration:none;transition:opacity .2s}
+.nav-brand:hover{opacity:.7}
+.nav-links{display:flex;gap:1.3rem;flex-wrap:wrap}
+.nav-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.cur{color:var(--gold)}
+
+/* LANG BAR */
+.lang-bar{position:sticky;top:40px;z-index:290;background:rgba(6,7,15,0.97);backdrop-filter:blur(10px);border-bottom:1px solid rgba(201,168,76,.12);padding:.38rem 2rem;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap}
+.lang-bar-label{font-family:var(--mono);font-size:.52rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-right:.4rem}
+.lang-btn{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;padding:.2rem .6rem;border:1px solid transparent;border-radius:2px;cursor:pointer;background:none;color:var(--muted);transition:all .15s}
+.lang-btn:hover{color:var(--text);border-color:var(--dim)}
+.lang-btn.active{color:var(--gold);border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.07)}
+.lang-dir-note{font-family:var(--mono);font-size:.52rem;color:var(--muted);margin-left:auto;letter-spacing:.1em}
+
+/* HERO */
+.hero{position:relative;z-index:1;padding:5.5rem 2rem 4rem;text-align:center;border-bottom:1px solid var(--rule);overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 50% at 50% 50%,rgba(201,168,76,.06) 0%,transparent 70%);pointer-events:none}
+.hero-tag{position:relative;z-index:1;font-family:var(--mono);font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--teal);border:1px solid currentColor;padding:.22rem .85rem;display:inline-block;margin-bottom:2rem}
+.hero h1{position:relative;z-index:1;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:300;color:var(--gold);letter-spacing:.03em;line-height:1.18;margin-bottom:.6rem}
+.hero-sub{position:relative;z-index:1;font-size:1.05rem;color:rgba(232,228,216,.55);font-style:italic;line-height:1.6;margin-bottom:2rem}
+.hero-eq{position:relative;z-index:1;font-family:var(--mono);font-size:.76rem;letter-spacing:.14em;color:rgba(201,168,76,.38);margin-top:2rem;line-height:2.2}
+.hero-ops{position:relative;z-index:1;display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:1.2rem}
+.op{font-family:var(--mono);font-size:.8rem;padding:.25rem .6rem;border-radius:2px}
+.op-c{background:rgba(10,186,181,.12);color:var(--op-c);border:1px solid rgba(10,186,181,.3)}
+.op-k{background:rgba(224,90,58,.12);color:var(--op-k);border:1px solid rgba(224,90,58,.3)}
+.op-f{background:rgba(80,200,120,.12);color:var(--op-f);border:1px solid rgba(80,200,120,.3)}
+.op-u{background:rgba(192,132,252,.12);color:var(--op-u);border:1px solid rgba(192,132,252,.3)}
+.op-arr{color:var(--muted);font-size:.85rem}
+.op-g{font-family:var(--mono);font-size:.78rem;color:rgba(201,168,76,.55);margin-left:.3rem}
+
+/* PAGE */
+.page{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:4rem 2rem 6rem}
+.sec-tag{font-family:var(--mono);font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);display:block;margin:3.5rem 0 1rem;padding-top:2.5rem;border-top:1px solid var(--rule)}
+.sec-tag:first-child{border-top:none;margin-top:0;padding-top:0}
+.block-prose{font-size:1.02rem;line-height:1.92;margin-bottom:1.5rem;color:var(--text)}
+
+/* Formal blocks */
+.block-axiom,.block-def,.block-obs,.block-nota{border-left:2px solid var(--rule);padding:1.1rem 1.7rem;margin:1.8rem 0}
+.block-axiom{border-color:var(--gold);background:rgba(201,168,76,.03)}
+.block-def  {border-color:var(--muted);background:rgba(201,168,76,.018)}
+.block-obs  {border-color:rgba(192,132,252,.55);background:rgba(192,132,252,.022)}
+.block-nota {border-color:rgba(10,186,181,.4);background:rgba(10,186,181,.022)}
+.block-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.55rem;display:block}
+.block-axiom .block-label{color:var(--gold)}
+.block-def   .block-label{color:var(--muted)}
+.block-obs   .block-label{color:rgba(192,132,252,.9)}
+.block-nota  .block-label{color:var(--teal)}
+.block-body{font-size:.97rem;line-height:1.88;color:var(--text)}
+.lean-badge{font-family:var(--mono);font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:var(--op-f);border:1px solid rgba(80,200,120,.35);background:rgba(80,200,120,.07);padding:.12rem .4rem;border-radius:2px;margin-left:.6rem;vertical-align:middle}
+.block-math{font-family:var(--mono);font-size:.88rem;color:var(--gold);background:var(--surface);border:1px solid var(--dim);padding:1rem 1.5rem;margin:1.4rem 0;overflow-x:auto;white-space:pre}
+.op-chain{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:1.2rem 0}
+
+/* 12-phase grid */
+.phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin:2rem 0}
+.pg-cell{border:1px solid var(--dim);border-radius:3px;padding:.8rem .9rem;background:var(--card)}
+.pg-cell.pg-c{border-color:rgba(10,186,181,.35);background:rgba(10,186,181,.04)}
+.pg-cell.pg-k{border-color:rgba(224,90,58,.35);background:rgba(224,90,58,.04)}
+.pg-cell.pg-f{border-color:rgba(80,200,120,.35);background:rgba(80,200,120,.04)}
+.pg-cell.pg-u{border-color:rgba(192,132,252,.35);background:rgba(192,132,252,.04)}
+.pg-d{font-family:var(--mono);font-size:.72rem;font-weight:700;display:block}
+.pg-c .pg-d{color:var(--op-c)} .pg-k .pg-d{color:var(--op-k)}
+.pg-f .pg-d{color:var(--op-f)} .pg-u .pg-d{color:var(--op-u)}
+.pg-name{font-size:.82rem;color:var(--text);display:block;margin-top:.2rem;line-height:1.3}
+.pg-tag{font-family:var(--mono);font-size:.52rem;color:var(--muted);display:block;margin-top:.25rem}
+
+/* diagram */
+.diagram-wrap{margin:3rem 0;text-align:center}
+.diagram-caption{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;color:var(--muted);margin-top:1rem;text-transform:uppercase}
+
+/* RTL */
+[dir="rtl"] .block-axiom,[dir="rtl"] .block-def,[dir="rtl"] .block-obs,[dir="rtl"] .block-nota{border-left:none;border-right:2px solid}
+[dir="rtl"] .block-axiom{border-right-color:var(--gold)}
+
+hr.rule{border:none;border-top:1px solid var(--rule);margin:3.5rem 0}
+mjx-container{overflow-x:auto;max-width:100%;display:block!important}
+
+/* CH-NAV */
+.ch-nav{position:relative;z-index:1;background:rgba(4,4,10,.85);border-top:1px solid var(--rule);padding:.9rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-family:var(--mono);font-size:.6rem}
+.ch-nav a{color:var(--muted);text-decoration:none;padding:.3rem .85rem;border:1px solid var(--rule);transition:all .2s}
+.ch-nav a:hover{color:var(--gold);border-color:rgba(201,168,76,.4)}
+.ch-nav .ch-cur{color:var(--gold);letter-spacing:.14em;text-transform:uppercase}
+
+footer{position:relative;z-index:1;text-align:center;padding:3rem 2rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(--muted);border-top:1px solid var(--rule);line-height:2.2}
+footer a{color:var(--gold);text-decoration:none}
+
+@media(max-width:700px){nav{padding:.6rem 1rem}.nav-links{display:none}.lang-bar{top:38px;padding:.35rem 1rem;gap:.35rem}.page{padding:3rem 1.2rem 5rem}body{font-size:17px}.hero{padding:4rem 1.2rem 3rem}.phase-grid{grid-template-columns:repeat(2,1fr)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<canvas id="cosmos"></canvas>
+<script>
+(function(){
+  const cv=document.getElementById('cosmos'),ctx=cv.getContext('2d');
+  let W,H,stars=[],shoots=[];
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}
+  window.addEventListener('resize',resize);resize();
+  for(let i=0;i<220;i++)stars.push({x:Math.random(),y:Math.random(),r:Math.random()*.85+.2,a:Math.random()*.45+.08,tw:Math.random()*Math.PI*2,ts:.004+Math.random()*.006});
+  function spawn(){const ang=(18+Math.random()*28)*Math.PI/180;shoots.push({x:Math.random()*W*1.2-W*.1,y:Math.random()*H*.38,len:70+Math.random()*130,ang,life:0,max:35+Math.random()*28,col:Math.random()>.6?'#c9a84c':'#e8e4d8'})}
+  setInterval(spawn,2800);setTimeout(spawn,900);setTimeout(spawn,1900);
+  function draw(){ctx.clearRect(0,0,W,H);stars.forEach(s=>{s.tw+=s.ts;const a=s.a*(.5+.5*Math.sin(s.tw));ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(232,228,216,${a})`;ctx.fill()});shoots=shoots.filter(s=>{s.life++;const t=s.life/s.max,a=t<.3?t/.3:1-((t-.3)/.7);const ex=s.x+Math.cos(s.ang)*s.len*t,ey=s.y+Math.sin(s.ang)*s.len*t;const g=ctx.createLinearGradient(s.x,s.y,ex,ey);g.addColorStop(0,'rgba(201,168,76,0)');g.addColorStop(.5,`rgba(201,168,76,${a*.5})`);g.addColorStop(1,`rgba(232,228,216,${a*.7})`);ctx.save();ctx.strokeStyle=g;ctx.lineWidth=1.1;ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(ex,ey);ctx.stroke();ctx.restore();return s.life<s.max});requestAnimationFrame(draw)}
+  draw();
+})();
+</script>
+
+<nav>
+  <a class="nav-brand" href="hub.html">⚜ PRINCIPIA ORTHOGONA ⚜</a>
+  <div class="nav-links">
+    <a href="chIV-preface.html">Preface</a>
+    <a href="chIV-axioms.html">Ch 1</a>
+    <a href="chIV-field.html" class="cur">Ch 2</a>
+    <a href="chIV-operators.html">Ch 3</a>
+    <a href="chIV-correspondence.html">Ch 4</a>
+    <a href="chIV-orthogonality.html">Ch 5</a>
+    <a href="chIV-recursion.html">Ch 6</a>
+    <a href="chIV-emergence.html">Ch 7</a>
+    <a href="chIV-time.html">Ch 8</a>
+    <a href="chIV-appendices.html">App</a>
+    <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE ↗</a>
+  </div>
+</nav>
+
+<!-- 12 languages = 12 operators · BRICS: 🇧🇷🇷🇺🇮🇳🇨🇳🇿🇦 -->
+<div class="lang-bar">
+  <span class="lang-bar-label">Lang</span>
+  <button class="lang-btn active" data-lang="en"  onclick="setLang('en')">🇺🇸 EN</button>
+  <button class="lang-btn"        data-lang="pt"  onclick="setLang('pt')">🇧🇷 PT</button>
+  <button class="lang-btn"        data-lang="ru"  onclick="setLang('ru')">🇷🇺 RU</button>
+  <button class="lang-btn"        data-lang="hi"  onclick="setLang('hi')">🇮🇳 HI</button>
+  <button class="lang-btn"        data-lang="zh"  onclick="setLang('zh')">🇨🇳 ZH</button>
+  <button class="lang-btn"        data-lang="zu"  onclick="setLang('zu')">🇿🇦 ZU</button>
+  <button class="lang-btn"        data-lang="ar"  onclick="setLang('ar')">🇸🇦 AR</button>
+  <button class="lang-btn"        data-lang="sw"  onclick="setLang('sw')">🇰🇪 SW</button>
+  <button class="lang-btn"        data-lang="es"  onclick="setLang('es')">🇪🇸 ES</button>
+  <button class="lang-btn"        data-lang="fr"  onclick="setLang('fr')">🇫🇷 FR</button>
+  <button class="lang-btn"        data-lang="de"  onclick="setLang('de')">🇩🇪 DE</button>
+  <button class="lang-btn"        data-lang="ja"  onclick="setLang('ja')">🇯🇵 JA</button>
+  <span class="lang-dir-note" id="dirNote">Latin · LTR</span>
+</div>
+
+<section class="hero">
+  <div class="hero-tag">Principia Orthogona · Vol IV · Ch 2 · IMPA / Bienal SBM 2026</div>
+  <h1>The Dimensional Field</h1>
+  <p class="hero-sub">
+    $\Delta : M \to \mathbb{R}^{12}$ — twelve phase functions, one contact manifold<br>
+    Axioms 8–9 · unit sphere $S^{11}$ · temporal compatibility $T^* = 2\pi$
+  </p>
+  <div class="hero-eq">
+    $\Delta : M \to S^{11} \subset \mathbb{R}^{12}$ &nbsp;·&nbsp;
+    $|\Delta(x)| = 1$ &nbsp;·&nbsp;
+    $\Delta(\varphi_t(x)) = e^{iT^*t}\Delta(x)$ &nbsp;·&nbsp;
+    $T^* = 2\pi$ &nbsp;·&nbsp;
+    <a href="https://doi.org/10.5281/zenodo.19117400" style="color:var(--gold);text-decoration:none" target="_blank">DOI 10.5281/zenodo.19117400</a>
+  </div>
+  <div class="hero-ops">
+    <span class="op op-c">C</span><span class="op-arr">∘</span>
+    <span class="op op-k">K</span><span class="op-arr">∘</span>
+    <span class="op op-f">F</span><span class="op-arr">∘</span>
+    <span class="op op-u">U</span>
+    <span class="op-g">= G &nbsp;·&nbsp; 4 × 3 = 12 &nbsp;·&nbsp; ✓ Lean 4</span>
+  </div>
+</section>
+
+<div class="page" id="mainContent"></div>
+
+<div class="ch-nav">
+  <a href="chIV-axioms.html">← Ch 1 · Seven Axioms</a>
+  <span class="ch-cur">Ch 2 · Dimensional Field</span>
+  <a href="chIV-operators.html">Ch 3 · Dimensional Operators →</a>
+</div>
+
+<footer>
+  Principia Orthogona · Vol IV · GTCT — Generative Temporal Contact Theory &nbsp;·&nbsp; G6 LLC · Newark NJ · 2026<br>
+  Pablo Nogueira Grossi · ORCID: 0009-0000-6496-2186<br>
+  <a href="https://doi.org/10.5281/zenodo.19117400">DOI 10.5281/zenodo.19117400</a>
+  &nbsp;·&nbsp; ISBN 979-8-9954416-8-7 &nbsp;·&nbsp;
+  <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE ↗</a> &nbsp;·&nbsp; MSC 2020: 37C10 · 37C75 · 53D10
+</footer>
+
+<script>
+/* ── FIELD MAP SVG ── */
+function fieldSVG() {
+  return `<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%;margin:0 auto;display:block">
+  <defs>
+    <marker id="arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 Z" fill="rgba(201,168,76,0.7)"/>
+    </marker>
+    <marker id="arr2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 Z" fill="rgba(10,186,181,0.7)"/>
+    </marker>
+  </defs>
+  <!-- M: contact manifold -->
+  <ellipse cx="100" cy="100" rx="70" ry="55" fill="rgba(201,168,76,.04)" stroke="rgba(201,168,76,.4)" stroke-width="1.5"/>
+  <text x="100" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" fill="rgba(201,168,76,.9)" font-style="italic">M</text>
+  <text x="100" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(201,168,76,.5)" letter-spacing="1">contact</text>
+  <text x="100" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(201,168,76,.5)" letter-spacing="1">manifold</text>
+  <!-- Δ arrow -->
+  <line x1="182" y1="100" x2="270" y2="100" stroke="rgba(201,168,76,.7)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="226" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="rgba(201,168,76,.85)" font-style="italic">Δ</text>
+  <!-- S¹¹ sphere -->
+  <circle cx="370" cy="100" r="68" fill="rgba(10,186,181,.04)" stroke="rgba(10,186,181,.4)" stroke-width="1.5"/>
+  <ellipse cx="370" cy="100" rx="68" ry="22" fill="none" stroke="rgba(10,186,181,.2)" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="370" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="rgba(10,186,181,.9)" font-style="italic">S¹¹</text>
+  <text x="370" y="106" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(10,186,181,.6)" letter-spacing="1">⊂ ℝ¹²</text>
+  <text x="370" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(10,186,181,.5)" letter-spacing="1">|Δ(x)|=1</text>
+  <!-- φ_t flow on M -->
+  <path d="M 68 78 Q 40 100 68 122" fill="none" stroke="rgba(201,168,76,.5)" stroke-width="1.2" marker-end="url(#arr)" stroke-dasharray="4,2"/>
+  <text x="30" y="102" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(201,168,76,.6)">φ_t</text>
+  <!-- e^{iT*t} rotation on S¹¹ -->
+  <path d="M 340 72 Q 310 100 340 128" fill="none" stroke="rgba(10,186,181,.5)" stroke-width="1.2" marker-end="url(#arr2)" stroke-dasharray="4,2"/>
+  <text x="294" y="102" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(10,186,181,.7)">e^{iT*t}</text>
+  <!-- T*=2π label -->
+  <text x="460" y="96" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(201,168,76,.45)" letter-spacing="1">T*=2π</text>
+  <text x="460" y="110" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(201,168,76,.35)" letter-spacing="1">one full</text>
+  <text x="460" y="124" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(201,168,76,.35)" letter-spacing="1">rotation</text>
+</svg>`;
+}
+
+/* ── 12-PHASE GRID ── */
+function phaseGrid(lang) {
+  const names = {
+    en: {C:'Compress',K:'Curvature',F:'Fold',U:'Unfold',i1:'Orth.',i2:'Nilp.',i3:'Spec.'},
+    pt: {C:'Compress.',K:'Curvatura',F:'Dobram.',U:'Desdobr.',i1:'Ort.',i2:'Nilp.',i3:'Esp.'},
+    ru: {C:'Компр.',K:'Кривизна',F:'Свёртка',U:'Развёртка',i1:'Орт.',i2:'Нилп.',i3:'Спект.'},
+    hi: {C:'संपीड़न',K:'वक्रता',F:'वलन',U:'अनवलन',i1:'लंब.',i2:'शून्य.',i3:'वर्ण.'},
+    zh: {C:'压缩',K:'曲率',F:'折叠',U:'展开',i1:'正交',i2:'幂零',i3:'谱'},
+    zu: {C:'Ucind.',K:'Ukugoba',F:'Ukuph.',U:'Ukuvula',i1:'Uqond.',i2:'Kutoa',i3:'Isith.'},
+    ar: {C:'ضغط',K:'انحناء',F:'طي',U:'تكشف',i1:'تعامد',i2:'تصفير',i3:'طيف'},
+    sw: {C:'Msongh.',K:'Mkondo',F:'Kukunja',U:'Kukunjua',i1:'Usawa',i2:'Sufuri',i3:'Mwang.'},
+    es: {C:'Compr.',K:'Curvat.',F:'Pliegue',U:'Despl.',i1:'Ort.',i2:'Nilp.',i3:'Esp.'},
+    fr: {C:'Compr.',K:'Courbure',F:'Replie.',U:'Déploie.',i1:'Orth.',i2:'Nilp.',i3:'Spect.'},
+    de: {C:'Kompr.',K:'Krümm.',F:'Faltung',U:'Entfalt.',i1:'Orth.',i2:'Nilp.',i3:'Spekt.'},
+    ja: {C:'圧縮',K:'曲率',F:'折畳み',U:'展開',i1:'直交',i2:'冪零',i3:'スペクト.'},
+  };
+  const n = names[lang] || names.en;
+  const cells = [
+    {d:'D₁',cls:'pg-c',name:`${n.C}–${n.i1}`,tag:'C · I₁'},
+    {d:'D₂',cls:'pg-c',name:`${n.C}–${n.i2}`,tag:'C · I₂'},
+    {d:'D₃',cls:'pg-c',name:`${n.C}–${n.i3}`,tag:'C · I₃'},
+    {d:'D₄',cls:'pg-k',name:`${n.K}–${n.i1}`,tag:'K · I₁'},
+    {d:'D₅',cls:'pg-k',name:`${n.K}–${n.i2}`,tag:'K · I₂'},
+    {d:'D₆',cls:'pg-k',name:`${n.K}–${n.i3}`,tag:'K · I₃'},
+    {d:'D₇',cls:'pg-f',name:`${n.F}–${n.i1}`,tag:'F · I₁'},
+    {d:'D₈',cls:'pg-f',name:`${n.F}–${n.i2}`,tag:'F · I₂'},
+    {d:'D₉',cls:'pg-f',name:`${n.F}–${n.i3}`,tag:'F · I₃'},
+    {d:'D₁₀',cls:'pg-u',name:`${n.U}–${n.i1}`,tag:'U · I₁'},
+    {d:'D₁₁',cls:'pg-u',name:`${n.U}–${n.i2}`,tag:'U · I₂'},
+    {d:'D₁₂',cls:'pg-u',name:`${n.U}–${n.i3}`,tag:'U · I₃'},
+  ];
+  return `<div class="phase-grid">${cells.map(c=>`<div class="pg-cell ${c.cls}"><span class="pg-d">${c.d}</span><span class="pg-name">${c.name}</span><span class="pg-tag">${c.tag}</span></div>`).join('')}</div>`;
+}
+
+/* ── BLOCK RENDERER ── */
+function chainHTML(){return`<div class="op-chain"><span class="op op-c">C</span><span class="op-arr">∘</span><span class="op op-k">K</span><span class="op-arr">∘</span><span class="op op-f">F</span><span class="op-arr">∘</span><span class="op op-u">U</span><span class="op-g">= G</span></div>`}
+
+function renderBlock(b,lang){
+  switch(b.type){
+    case 'section': return`<div class="sec-tag">${b.text}</div>`;
+    case 'prose':   return`<p class="block-prose">${b.text}</p>`;
+    case 'axiom':   return`<div class="block-axiom"><span class="block-label">${b.label}<span class="lean-badge">✓ Lean 4</span></span><div class="block-body">${b.text}</div>${b.math?`<div class="block-math">${b.math}</div>`:''}</div>`;
+    case 'def':     return`<div class="block-def"><span class="block-label">${b.label}</span><div class="block-body">${b.text}</div></div>`;
+    case 'obs':     return`<div class="block-obs"><span class="block-label">${b.label||'Remark'}</span><div class="block-body">${b.text}</div></div>`;
+    case 'nota':    return`<div class="block-nota"><span class="block-label">${b.label||'Note'}</span><div class="block-body">${b.text}</div></div>`;
+    case 'math':    return`<div class="block-math">${b.text}</div>`;
+    case 'chain':   return chainHTML();
+    case 'diagram': return`<div class="diagram-wrap">${fieldSVG()}<p class="diagram-caption">${b.caption||'Δ : M → S¹¹ ⊂ ℝ¹² · temporal compatibility · T* = 2π'}</p></div>`;
+    case 'grid':    return phaseGrid(lang);
+    case 'hr':      return`<hr class="rule">`;
+    default:        return`<p class="block-prose">${b.text||''}</p>`;
+  }
+}
+
+/* ════════════════════════════════════════════
+   CONTENT — 12 LANGUAGES
+   EN + PT: full · others: shortform
+   ════════════════════════════════════════════ */
+const CONTENT = {
+
+en:[
+  {type:'section',text:'§ Overview'},
+  {type:'prose',text:'The dimensional field $\\Delta : M \\to \\mathbb{R}^{12}$ encodes the state of the system across all twelve phases simultaneously. It is not twelve separate functions — it is one map into $\\mathbb{R}^{12}$, meaning every point $x \\in M$ has a well-defined 12-dimensional phase vector. The unit-norm condition $|\\Delta(x)| = 1$ places the field on the unit sphere $S^{11} \\subset \\mathbb{R}^{12}$.'},
+  {type:'prose',text:'The temporal compatibility axiom (Axiom 9) says that following the Reeb flow $\\varphi_t$ rotates the phase vector by $e^{iT^*t}$ — one full rotation per period $T^* = 2\\pi$. This ties the geometry of the contact manifold directly to the algebraic structure of the 12-phase cycle.'},
+  {type:'diagram', caption:'Δ : M → S¹¹ ⊂ ℝ¹² · the Reeb flow φ_t rotates the phase vector by e^{iT*t} · one full turn per T* = 2π'},
+
+  {type:'section',text:'§ Axioms 8–9'},
+
+  {type:'axiom', label:'A8 · Existence of the Dimensional Field',
+   text:'There exists a smooth map $\\Delta : M \\to \\mathbb{R}^{12}$ with linearly independent component functions $\\delta_1, \\ldots, \\delta_{12}$ and $|\\Delta(x)| = 1$ for all $x \\in M$.',
+   math:'Δ : M → ℝ¹²,   δ₁,…,δ₁₂ linearly independent,   |Δ(x)| = 1 ∀x ∈ M'},
+
+  {type:'obs', label:'Remark · Linear independence',
+   text:'Linear independence of the components rules out degenerate configurations where two phases collapse into one. The unit-norm condition is a normalisation — it fixes the scale and allows the orthogonality arguments in Chapter 5 to be stated cleanly in terms of inner products on $S^{11}$.'},
+
+  {type:'axiom', label:'A9 · Temporal Compatibility',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$ in the complexified representation, with period $T^* = 2\\pi$. After one full period, $e^{i\\cdot 2\\pi} = 1$: the phase vector returns to itself.',
+   math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+
+  {type:'obs', label:'Remark · Why T* = 2π is forced',
+   text:'$T^* = 2\\pi$ is not a convention. It is the unique period that makes the field $\\Delta$ single-valued on the closed Reeb orbit. Any other value would make $\\Delta$ multi-valued along the orbit, contradicting smoothness. Axiom 9 therefore determines $T^*$ from the geometry of $(M,\\alpha)$ and the algebraic requirement of single-valuedness.'},
+
+  {type:'section',text:'§ Definitions 2.1–2.4'},
+
+  {type:'def', label:'Definition 2.1 · Phase Subspace',
+   text:'$D_i = \\{x \\in M : \\delta_i(x) = \\max_j \\delta_j(x)\\}$ — the region where the $i$-th phase component dominates. The twelve subspaces $D_1, \\ldots, D_{12}$ partition $M$ generically (Axiom 5).'},
+
+  {type:'def', label:'Definition 2.2 · Phase Projection',
+   text:'$\\pi_i : M \\to \\mathbb{R}$ defined by $\\pi_i(x) = \\delta_i(x)$. The phase projections decompose the action of $\\Delta$ into twelve observable scalar components, one per phase.'},
+
+  {type:'def', label:'Definition 2.3 · Perpendicular Field',
+   text:'$\\Delta_\\perp(O_i(x)) = A_i v - \\Pi(A_i v)$ where $v = \\Delta(x)$ and $\\Pi(w) = \\langle w, v\\rangle / \\|v\\|^2 \\cdot v$ is the orthogonal projection onto $\\mathrm{span}\\{v\\}$. This is the component of the operator output perpendicular to the current phase vector — the quantity the Orthogonality Theorem (Ch 5) controls.'},
+
+  {type:'def', label:'Definition 2.4 · The Twelve Operators (preview)',
+   text:'$O_i$ maps $D_i$ into $D_{i+1 \\bmod 12}$ with matrix action $\\Delta(O_i(x)) = A_i \\Delta(x)$, where $A_i = P^i + u_i w_i^{\\mathsf T}$ (cyclic permutation matrix plus rank-1 correction, $\\|u_i w_i^{\\mathsf T}\\| \\leq \\varepsilon^* = 1/3$). Formally defined and proved in Chapter 3.'},
+
+  {type:'section',text:'§ The 12-Phase Structure — 4 × 3 = 12'},
+  {type:'prose',text:'Each of the four base operators ($C$, $K$, $F$, $U$) contributes three dimensional operators — one per invariant ($I_1$ orthogonality, $I_2$ nilpotency, $I_3$ spectral collapse). The 12-phase partition of $M$ is:'},
+  {type:'grid'},
+  {type:'obs', label:'Remark · Cyclic closure',
+   text:'The cyclic structure $\\delta_{i+12}(x) = \\delta_i(x)$ (Axiom 5) means the phase index is always taken modulo 12. The dimensional field assigns to every point in $M$ a unit-norm vector in $\\mathbb{R}^{12}$ recording which phase is currently dominant and how much energy each phase carries.'},
+],
+
+pt:[
+  {type:'section',text:'§ Visão Geral'},
+  {type:'prose',text:'O campo dimensional $\\Delta : M \\to \\mathbb{R}^{12}$ codifica o estado do sistema em todas as doze fases simultaneamente. Não são doze funções separadas — é uma única aplicação em $\\mathbb{R}^{12}$, significando que todo ponto $x \\in M$ possui um vetor de fase 12-dimensional bem definido. A condição de norma unitária $|\\Delta(x)| = 1$ situa o campo na esfera unitária $S^{11} \\subset \\mathbb{R}^{12}$.'},
+  {type:'prose',text:'O axioma de compatibilidade temporal (Axioma 9) afirma que seguir o fluxo de Reeb $\\varphi_t$ rotaciona o vetor de fase por $e^{iT^*t}$ — uma rotação completa por período $T^* = 2\\pi$. Isso vincula a geometria da variedade de contato diretamente à estrutura algébrica do ciclo de 12 fases.'},
+  {type:'diagram', caption:'Δ : M → S¹¹ ⊂ ℝ¹² · o fluxo de Reeb φ_t rotaciona por e^{iT*t} · uma volta completa por T* = 2π'},
+
+  {type:'section',text:'§ Axiomas 8–9'},
+
+  {type:'axiom', label:'A8 · Existência do Campo Dimensional',
+   text:'Existe aplicação suave $\\Delta : M \\to \\mathbb{R}^{12}$ com componentes $\\delta_1, \\ldots, \\delta_{12}$ linearmente independentes e $|\\Delta(x)| = 1$ para todo $x \\in M$.',
+   math:'Δ : M → ℝ¹²,   δ₁,…,δ₁₂ linearmente independentes,   |Δ(x)| = 1 ∀x ∈ M'},
+
+  {type:'obs', label:'Observação · Independência linear',
+   text:'A independência linear das componentes exclui configurações degeneradas onde duas fases colapsam em uma. A condição de norma unitária é uma normalização — fixa a escala e permite que os argumentos de ortogonalidade do Capítulo 5 sejam enunciados de forma limpa em termos de produtos internos em $S^{11}$.'},
+
+  {type:'axiom', label:'A9 · Compatibilidade Temporal',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$ na representação complexificada, com período $T^* = 2\\pi$. Após um período completo, $e^{i\\cdot 2\\pi} = 1$: o vetor de fase retorna a si mesmo.',
+   math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+
+  {type:'obs', label:'Observação · Por que T* = 2π é forçado',
+   text:'$T^* = 2\\pi$ não é uma convenção. É o período único que torna o campo $\\Delta$ univalente na órbita de Reeb fechada. Qualquer outro valor tornaria $\\Delta$ multivalente ao longo da órbita, contradizendo a suavidade. O Axioma 9 determina portanto $T^*$ a partir da geometria de $(M,\\alpha)$ e da exigência algébrica de univalência.'},
+
+  {type:'section',text:'§ Definições 2.1–2.4'},
+
+  {type:'def', label:'Definição 2.1 · Subespaço de Fase',
+   text:'$D_i = \\{x \\in M : \\delta_i(x) = \\max_j \\delta_j(x)\\}$ — a região onde a $i$-ésima componente de fase domina. Os doze subespaços particionam $M$ genericamente (Axioma 5).'},
+
+  {type:'def', label:'Definição 2.2 · Projeção de Fase',
+   text:'$\\pi_i : M \\to \\mathbb{R}$, $\\pi_i(x) = \\delta_i(x)$. As projeções decompõem a ação de $\\Delta$ em doze componentes escalares observáveis, uma por fase.'},
+
+  {type:'def', label:'Definição 2.3 · Campo Perpendicular',
+   text:'$\\Delta_\\perp(O_i(x)) = A_i v - \\Pi(A_i v)$ onde $v = \\Delta(x)$ e $\\Pi(w) = \\langle w, v\\rangle / \\|v\\|^2 \\cdot v$ é a projeção ortogonal sobre $\\mathrm{span}\\{v\\}$. Esta é a componente da saída do operador perpendicular ao vetor de fase atual — a quantidade que o Teorema da Ortogonalidade (Cap 5) controla.'},
+
+  {type:'def', label:'Definição 2.4 · Os Doze Operadores (prévia)',
+   text:'$O_i$ leva $D_i$ em $D_{i+1 \\bmod 12}$ com ação matricial $\\Delta(O_i(x)) = A_i \\Delta(x)$, onde $A_i = P^i + u_i w_i^{\\mathsf T}$ ($\\|u_i w_i^{\\mathsf T}\\| \\leq \\varepsilon^* = 1/3$). Definidos formalmente no Capítulo 3.'},
+
+  {type:'section',text:'§ A Estrutura de 12 Fases — 4 × 3 = 12'},
+  {type:'prose',text:'Cada um dos quatro operadores base ($C$, $K$, $F$, $U$) contribui com três operadores dimensionais — um por invariante ($I_1$ ortogonalidade, $I_2$ nilpotência, $I_3$ colapso espectral):'},
+  {type:'grid'},
+],
+
+ru:[
+  {type:'section',text:'§ Размерное поле'},
+  {type:'prose',text:'$\\Delta : M \\to \\mathbb{R}^{12}$ — гладкое отображение, кодирующее состояние системы по всем двенадцати фазам одновременно. Условие единичной нормы $|\\Delta(x)|=1$ помещает поле на единичную сферу $S^{11}\\subset\\mathbb{R}^{12}$.'},
+  {type:'diagram', caption:'Δ : M → S¹¹ · поток Реба φ_t вращает вектор фазы на e^{iT*t}'},
+  {type:'axiom', label:'A8 · Существование размерного поля',
+   text:'Существует гладкое отображение $\\Delta : M \\to \\mathbb{R}^{12}$ с линейно независимыми компонентами и $|\\Delta(x)|=1$.', math:'Δ : M → ℝ¹²,   |Δ(x)| = 1'},
+  {type:'axiom', label:'A9 · Временна́я совместимость',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$, $T^* = 2\\pi$. После полного периода вектор фазы возвращается к себе.', math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+  {type:'section',text:'§ 12-фазная структура'},
+  {type:'grid'},
+],
+
+hi:[
+  {type:'section',text:'§ आयामी क्षेत्र'},
+  {type:'prose',text:'$\\Delta : M \\to \\mathbb{R}^{12}$ — एक चिकनी मैपिंग जो सभी बारह चरणों में एक साथ प्रणाली की अवस्था को एन्कोड करती है। $|\\Delta(x)|=1$ क्षेत्र को $S^{11}\\subset\\mathbb{R}^{12}$ पर रखता है।'},
+  {type:'diagram', caption:'Δ : M → S¹¹ · Reeb प्रवाह φ_t फेज वेक्टर को e^{iT*t} से घुमाता है'},
+  {type:'axiom', label:'A8 · आयामी क्षेत्र का अस्तित्व',
+   text:'एक चिकनी मैपिंग $\\Delta : M \\to \\mathbb{R}^{12}$ मौजूद है जिसमें $\\delta_1,\\ldots,\\delta_{12}$ रैखिक रूप से स्वतंत्र हैं और $|\\Delta(x)|=1$।', math:'Δ : M → ℝ¹²,   |Δ(x)| = 1'},
+  {type:'axiom', label:'A9 · कालिक अनुकूलता',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$, $T^* = 2\\pi$।', math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+  {type:'section',text:'§ 12-चरण संरचना'},
+  {type:'grid'},
+],
+
+zh:[
+  {type:'section',text:'§ 维度场'},
+  {type:'prose',text:'$\\Delta : M \\to \\mathbb{R}^{12}$ 同时编码系统在所有12个相位上的状态。单位范数条件 $|\\Delta(x)|=1$ 将场置于 $S^{11}\\subset\\mathbb{R}^{12}$ 上。'},
+  {type:'diagram', caption:'Δ : M → S¹¹ · Reeb流φ_t将相位向量旋转e^{iT*t}'},
+  {type:'axiom', label:'A8 · 维度场的存在性',
+   text:'存在光滑映射 $\\Delta : M \\to \\mathbb{R}^{12}$，$\\delta_1,\\ldots,\\delta_{12}$ 线性独立，且 $|\\Delta(x)|=1$。', math:'Δ : M → ℝ¹²,   |Δ(x)| = 1'},
+  {type:'axiom', label:'A9 · 时间相容性',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$，$T^* = 2\\pi$。', math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+  {type:'section',text:'§ 12相结构'},
+  {type:'grid'},
+],
+
+zu:[
+  {type:'section',text:'§ Insimu Yezigaba'},
+  {type:'prose',text:'$\\Delta : M \\to \\mathbb{R}^{12}$ ibhalela isimo sohlelo kuwo wonke amazinga angu-12 ngasikhathi sinye. $|\\Delta(x)|=1$ ibeka insimu ku-$S^{11}\\subset\\mathbb{R}^{12}$.'},
+  {type:'diagram', caption:'Δ : M → S¹¹ · i-Reeb flow φ_t iphendula ivekthi yesigaba nge-e^{iT*t}'},
+  {type:'axiom', label:'A8 · Ukuba Khona Kwensimu Yezigaba',
+   text:'Kukhona ukufanisa okushelelayo $\\Delta : M \\to \\mathbb{R}^{12}$ okunemidwebo $\\delta_1,\\ldots,\\delta_{12}$ ezizimele ngomugqa futhi $|\\Delta(x)|=1$.', math:'Δ : M → ℝ¹²,   |Δ(x)| = 1'},
+  {type:'axiom', label:'A9 · Ukuhambelana Kwesikhathi',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$, $T^* = 2\\pi$.', math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+  {type:'section',text:'§ Isakhiwo Samazinga Angu-12'},
+  {type:'grid'},
+],
+
+ar:[
+  {type:'section',text:'§ الحقل البعدي'},
+  {type:'prose',text:'$\\Delta : M \\to \\mathbb{R}^{12}$ يُرمِّز حالة المنظومة عبر الأطوار الاثني عشر في آنٍ واحد. الشرط $|\\Delta(x)|=1$ يضع الحقل على المجال $S^{11}\\subset\\mathbb{R}^{12}$.'},
+  {type:'diagram', caption:'Δ : M → S¹¹ · تدفق ريب φ_t يدوّر متجه الطور بـ e^{iT*t}'},
+  {type:'axiom', label:'A8 · وجود الحقل البعدي',
+   text:'يوجد تطبيق أملس $\\Delta : M \\to \\mathbb{R}^{12}$ مع $\\delta_1,\\ldots,\\delta_{12}$ مستقلة خطياً و$|\\Delta(x)|=1$.', math:'Δ : M → ℝ¹²,   |Δ(x)| = 1'},
+  {type:'axiom', label:'A9 · التوافق الزمني',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$، $T^* = 2\\pi$.', math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+  {type:'section',text:'§ بنية الأطوار الاثني عشر'},
+  {type:'grid'},
+],
+
+sw:[
+  {type:'section',text:'§ Shamba la Vipimo'},
+  {type:'prose',text:'$\\Delta : M \\to \\mathbb{R}^{12}$ inasimba hali ya mfumo katika awamu 12 zote kwa wakati mmoja. Sharti $|\\Delta(x)|=1$ linaweka shamba kwenye $S^{11}\\subset\\mathbb{R}^{12}$.'},
+  {type:'diagram', caption:'Δ : M → S¹¹ · mkondo wa Reeb φ_t unazungusha vekta ya awamu kwa e^{iT*t}'},
+  {type:'axiom', label:'A8 · Uwepo wa Shamba la Vipimo',
+   text:'Kuna ramani laini $\\Delta : M \\to \\mathbb{R}^{12}$ yenye $\\delta_1,\\ldots,\\delta_{12}$ huru kwa mstari na $|\\Delta(x)|=1$.', math:'Δ : M → ℝ¹²,   |Δ(x)| = 1'},
+  {type:'axiom', label:'A9 · Ulinganifu wa Wakati',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$, $T^* = 2\\pi$.', math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+  {type:'section',text:'§ Muundo wa Awamu 12'},
+  {type:'grid'},
+],
+
+es:[
+  {type:'section',text:'§ El Campo Dimensional'},
+  {type:'prose',text:'$\\Delta : M \\to \\mathbb{R}^{12}$ codifica el estado del sistema en las doce fases simultáneamente. La condición $|\\Delta(x)|=1$ sitúa el campo en la esfera unitaria $S^{11}\\subset\\mathbb{R}^{12}$.'},
+  {type:'diagram', caption:'Δ : M → S¹¹ · el flujo de Reeb φ_t rota por e^{iT*t} · T* = 2π'},
+  {type:'axiom', label:'A8 · Existencia del Campo Dimensional',
+   text:'Existe $\\Delta : M \\to \\mathbb{R}^{12}$ suave con $\\delta_1,\\ldots,\\delta_{12}$ linealmente independientes y $|\\Delta(x)|=1$.', math:'Δ : M → ℝ¹²,   |Δ(x)| = 1'},
+  {type:'axiom', label:'A9 · Compatibilidad Temporal',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$, $T^* = 2\\pi$. Tras un período completo el vector de fase retorna a sí mismo.', math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+  {type:'section',text:'§ Estructura de 12 Fases'},
+  {type:'grid'},
+],
+
+fr:[
+  {type:'section',text:'§ Le Champ Dimensionnel'},
+  {type:'prose',text:'$\\Delta : M \\to \\mathbb{R}^{12}$ encode l\'état du système à travers les douze phases simultanément. La condition $|\\Delta(x)|=1$ place le champ sur la sphère unitaire $S^{11}\\subset\\mathbb{R}^{12}$.'},
+  {type:'diagram', caption:'Δ : M → S¹¹ · le flot de Reeb φ_t tourne par e^{iT*t} · T* = 2π'},
+  {type:'axiom', label:'A8 · Existence du Champ Dimensionnel',
+   text:'Il existe $\\Delta : M \\to \\mathbb{R}^{12}$ lisse avec $\\delta_1,\\ldots,\\delta_{12}$ linéairement indépendantes et $|\\Delta(x)|=1$.', math:'Δ : M → ℝ¹²,   |Δ(x)| = 1'},
+  {type:'axiom', label:'A9 · Compatibilité Temporelle',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$, $T^* = 2\\pi$.', math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+  {type:'section',text:'§ Structure à 12 Phases'},
+  {type:'grid'},
+],
+
+de:[
+  {type:'section',text:'§ Das Dimensionale Feld'},
+  {type:'prose',text:'$\\Delta : M \\to \\mathbb{R}^{12}$ kodiert den Zustand des Systems in allen zwölf Phasen gleichzeitig. Die Bedingung $|\\Delta(x)|=1$ platziert das Feld auf der Einheitssphäre $S^{11}\\subset\\mathbb{R}^{12}$.'},
+  {type:'diagram', caption:'Δ : M → S¹¹ · Reeb-Fluss φ_t dreht per e^{iT*t} · T* = 2π'},
+  {type:'axiom', label:'A8 · Existenz des Dimensionalen Feldes',
+   text:'Es existiert $\\Delta : M \\to \\mathbb{R}^{12}$ glatt mit $\\delta_1,\\ldots,\\delta_{12}$ linear unabhängig und $|\\Delta(x)|=1$.', math:'Δ : M → ℝ¹²,   |Δ(x)| = 1'},
+  {type:'axiom', label:'A9 · Zeitliche Kompatibilität',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$, $T^* = 2\\pi$.', math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+  {type:'section',text:'§ 12-Phasen-Struktur'},
+  {type:'grid'},
+],
+
+ja:[
+  {type:'section',text:'§ 次元場'},
+  {type:'prose',text:'$\\Delta : M \\to \\mathbb{R}^{12}$ はすべての12位相で同時にシステムの状態を符号化する。$|\\Delta(x)|=1$ により場は $S^{11}\\subset\\mathbb{R}^{12}$ 上に置かれる。'},
+  {type:'diagram', caption:'Δ : M → S¹¹ · Reeb流φ_tがe^{iT*t}で位相ベクトルを回転 · T* = 2π'},
+  {type:'axiom', label:'A8 · 次元場の存在',
+   text:'$\\delta_1,\\ldots,\\delta_{12}$ が線形独立で $|\\Delta(x)|=1$ を満たす滑らかな写像 $\\Delta : M \\to \\mathbb{R}^{12}$ が存在する。', math:'Δ : M → ℝ¹²,   |Δ(x)| = 1'},
+  {type:'axiom', label:'A9 · 時間的整合性',
+   text:'$\\Delta(\\varphi_t(x)) = e^{iT^*t}\\Delta(x)$、$T^* = 2\\pi$。', math:'Δ(φ_t(x)) = e^{iT*t} Δ(x),   T* = 2π'},
+  {type:'section',text:'§ 12位相構造'},
+  {type:'grid'},
+],
+
+}; /* end CONTENT */
+
+const LANG_META={
+  en:{dir:'ltr',font:"'Noto Serif Display','Noto Serif',Georgia,serif",script:'Latin · LTR'},
+  pt:{dir:'ltr',font:"'Noto Serif Display','Noto Serif',Georgia,serif",script:'Latin · LTR'},
+  ru:{dir:'ltr',font:"'Noto Serif','Georgia',serif",script:'Cyrillic · LTR'},
+  hi:{dir:'ltr',font:"'Noto Serif Devanagari','Noto Serif',serif",script:'Devanagari · LTR'},
+  zh:{dir:'ltr',font:"'Noto Serif SC','Noto Serif',serif",script:'CJK · LTR'},
+  zu:{dir:'ltr',font:"'Noto Serif Display','Noto Serif',Georgia,serif",script:'Latin · LTR · 🇿🇦'},
+  ar:{dir:'rtl',font:"'Noto Naskh Arabic','Noto Serif',serif",script:'Arabic · RTL'},
+  sw:{dir:'ltr',font:"'Noto Serif Display','Noto Serif',Georgia,serif",script:'Latin · LTR'},
+  es:{dir:'ltr',font:"'Noto Serif Display','Noto Serif',Georgia,serif",script:'Latin · LTR'},
+  fr:{dir:'ltr',font:"'Noto Serif Display','Noto Serif',Georgia,serif",script:'Latin · LTR'},
+  de:{dir:'ltr',font:"'Noto Serif Display','Noto Serif',Georgia,serif",script:'Latin · LTR'},
+  ja:{dir:'ltr',font:"'Noto Serif JP','Noto Serif',serif",script:'CJK · LTR'},
+};
+
+function setLang(code){
+  const meta=LANG_META[code]||LANG_META.en;
+  const blocks=CONTENT[code]||CONTENT.en;
+  const page=document.getElementById('mainContent');
+  page.innerHTML=blocks.map(b=>renderBlock(b,code)).join('\n');
+  page.setAttribute('dir',meta.dir);
+  page.style.fontFamily=meta.font;
+  document.documentElement.lang=code;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===code));
+  document.getElementById('dirNote').textContent=meta.script;
+  if(window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise([page]).catch(()=>{});
+}
+setLang('en');
+</script>
+</body>
+</html>
