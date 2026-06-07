@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Principia Orthogona · Book 3 · Living Book</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --navy:       #0a1628;
+  --navy-mid:   #0e1e38;
+  --gold:       #c9a84c;
+  --gold-light: #e8c97c;
+  --gold-dim:   rgba(201,168,76,0.3);
+  --cream:      #f5f0e8;
+  --text:       #cdc3aa;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--navy);
+  color: var(--text);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  line-height: 1.85;
+  min-height: 100vh;
+}
+
+/* ── NAV ──────────────────────────────────────── */
+nav {
+  position: sticky; top: 0;
+  background: rgba(10,22,40,0.97);
+  border-bottom: 1px solid rgba(201,168,76,0.18);
+  padding: 0.75rem 2.5rem;
+  display: flex; align-items: center; gap: 2rem;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+.nav-brand {
+  color: var(--gold);
+  font-size: 0.82rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 2rem; margin-left: auto; flex-wrap: wrap; }
+.nav-links a {
+  color: var(--text); text-decoration: none;
+  font-size: 0.82rem; letter-spacing: 0.08em;
+  opacity: 0.6; transition: opacity 0.2s, color 0.2s;
+}
+.nav-links a:hover { opacity: 1; color: var(--gold); }
+
+/* ── HERO ─────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 7rem 2rem 5rem;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center 40%, rgba(201,168,76,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.55;
+  margin-bottom: 1.2rem;
+}
+
+/* THE CLICKABLE TITLE — 7 knocks to wake the labyrinth */
+#mainTitle {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 300;
+  color: var(--gold-light);
+  letter-spacing: 0.08em;
+  cursor: default;
+  user-select: none;
+  display: inline-block;
+  transition: color 0.15s;
+  position: relative;
+}
+#mainTitle:active { color: var(--gold); }
+
+.hero-vol {
+  font-size: 1rem;
+  font-style: italic;
+  opacity: 0.5;
+  margin-top: 0.5rem;
+  letter-spacing: 0.1em;
+}
+.hero-author {
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin-top: 1.2rem;
+}
+
+/* Knock counter (invisible until 7th — it never shows) */
+#knockDots {
+  display: flex; gap: 6px; justify-content: center;
+  margin-top: 1.4rem;
+  height: 6px;
+}
+.k-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.k-dot.lit {
+  opacity: 0.45;
+  transform: scale(1);
+}
+
+/* ── CHAPTER GRID ─────────────────────────────── */
+.grid-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+.grid-section-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.5;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(201,168,76,0.12);
+}
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.08);
+  margin-bottom: 4rem;
+}
+.ch-card {
+  background: var(--navy);
+  padding: 1.6rem 1.4rem;
+  text-decoration: none;
+  color: var(--text);
+  display: flex; flex-direction: column; gap: 0.4rem;
+  transition: background 0.2s;
+  position: relative;
+}
+.ch-card:hover { background: rgba(201,168,76,0.04); }
+.ch-card:hover .ch-num { color: var(--gold-light); }
+.ch-num {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.6;
+  transition: color 0.2s;
+}
+.ch-title {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--cream);
+  line-height: 1.3;
+}
+.ch-desc {
+  font-size: 0.85rem;
+  font-style: italic;
+  opacity: 0.55;
+  line-height: 1.5;
+}
+.ch-badge {
+  display: inline-block;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid;
+  margin-top: 0.4rem;
+  width: fit-content;
+}
+.badge-free    { color: #6abf8a; border-color: rgba(106,191,138,0.4); }
+.badge-paid    { color: var(--gold); border-color: rgba(201,168,76,0.35); }
+.badge-hidden  { color: #8899bb; border-color: rgba(136,153,187,0.35); }
+.badge-preview { color: #aaa; border-color: rgba(170,170,170,0.3); }
+
+/* Greek chapters row */
+.greek-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.08);
+  margin-bottom: 4rem;
+}
+@media (max-width: 700px) {
+  .greek-row { grid-template-columns: repeat(4, 1fr); }
+}
+.greek-card {
+  background: var(--navy);
+  padding: 1.4rem 0.8rem;
+  text-decoration: none;
+  color: var(--text);
+  text-align: center;
+  transition: background 0.2s;
+}
+.greek-card:hover { background: rgba(201,168,76,0.05); }
+.gsym {
+  font-size: 2rem;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+.gname {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+}
+
+/* ── FOOTER ───────────────────────────────────── */
+footer {
+  border-top: 1px solid rgba(201,168,76,0.12);
+  padding: 3rem 2.5rem;
+  text-align: center;
+  font-size: 0.82rem;
+  opacity: 0.4;
+  line-height: 2.2;
+}
+footer a { color: var(--gold); text-decoration: none; opacity: 1; }
+
+/* ══════════════════════════════════════════════════
+   NDA MODAL — appears after 7 knocks
+══════════════════════════════════════════════════ */
+#ndaOverlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  transition: background 0.5s;
+}
+#ndaOverlay.visible {
+  display: flex;
+  background: rgba(0,0,0,0.88);
+}
+#ndaBox {
+  background: var(--navy-mid);
+  border: 1px solid rgba(201,168,76,0.35);
+  max-width: 680px;
+  width: 100%;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(20px) scale(0.97);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  box-shadow: 0 0 80px rgba(201,168,76,0.08), 0 0 0 1px rgba(201,168,76,0.1);
+}
+#ndaOverlay.visible #ndaBox {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Header */
+.nda-header {
+  padding: 2rem 2.5rem 1.5rem;
+  border-bottom: 1px solid rgba(201,168,76,0.15);
+  text-align: center;
+}
+.nda-eyebrow {
+  font-size: 0.65rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.6;
+  margin-bottom: 0.7rem;
+}
+.nda-title {
+  font-size: 1.9rem;
+  font-weight: 300;
+  color: var(--gold-light);
+  letter-spacing: 0.06em;
+  font-style: italic;
+}
+.nda-subtitle {
+  font-size: 0.85rem;
+  opacity: 0.45;
+  margin-top: 0.4rem;
+  letter-spacing: 0.08em;
+  font-style: italic;
+}
+
+/* Scroll body */
+.nda-body {
+  padding: 2rem 2.5rem;
+  overflow-y: auto;
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+.nda-body::-webkit-scrollbar { width: 4px; }
+.nda-body::-webkit-scrollbar-track { background: transparent; }
+.nda-body::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.25); border-radius: 2px; }
+
+.nda-body h3 {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.7;
+  margin: 1.6rem 0 0.6rem;
+}
+.nda-body h3:first-child { margin-top: 0; }
+.nda-body p { margin-bottom: 1rem; }
+.nda-body em { color: var(--gold); font-style: italic; }
+.nda-body strong { color: var(--cream); font-weight: 500; }
+.nda-body .clause {
+  border-left: 2px solid rgba(201,168,76,0.2);
+  padding-left: 1.2rem;
+  margin: 1rem 0;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* Footer buttons */
+.nda-footer {
+  padding: 1.5rem 2.5rem 2rem;
+  border-top: 1px solid rgba(201,168,76,0.15);
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+.btn-enter {
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  padding: 0.75rem 2.2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-enter:hover { background: var(--gold-light); transform: translateY(-1px); }
+.btn-notready {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(201,168,76,0.25);
+  padding: 0.75rem 1.8rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.btn-notready:hover { opacity: 1; }
+
+/* Seal mark at top of modal */
+.nda-seal {
+  text-align: center;
+  font-size: 2.4rem;
+  color: var(--gold);
+  opacity: 0.15;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.3em;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ══════════════════════════════════════════════════════════════════ -->
+<nav>
+  <a class="nav-brand" href="index.html">G6 LLC · Book 3</a>
+  <div class="nav-links">
+    <a href="journey.html">Reading Path</a>
+    <a href="course-16weeks.html">Course</a>
+    <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE ↗</a>
+    <a href="https://www.ebay.com/itm/336530438926" target="_blank">Buy the Book</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-eyebrow">The Living Book</div>
+
+  <!-- Seven knocks on this title opens the labyrinth -->
+  <h1 id="mainTitle">Principia Orthogona</h1>
+
+  <div id="knockDots">
+    <div class="k-dot" id="d0"></div>
+    <div class="k-dot" id="d1"></div>
+    <div class="k-dot" id="d2"></div>
+    <div class="k-dot" id="d3"></div>
+    <div class="k-dot" id="d4"></div>
+    <div class="k-dot" id="d5"></div>
+    <div class="k-dot" id="d6"></div>
+  </div>
+
+  <div class="hero-vol">Book III · The Mini-Beast</div>
+  <div class="hero-author">Pablo Nogueira Grossi · G6 LLC · Newark NJ · 2026</div>
+</div>
+
+<!-- ═══ MAIN NUMBERED CHAPTERS ═══════════════════════════════════════════════ -->
+<div class="grid-wrap">
+
+  <div class="grid-section-label">The Spine · Numbered Chapters</div>
+  <div class="chapter-grid">
+
+    <a class="ch-card" href="ch1-seed.html">
+      <div class="ch-num">Chapter 1</div>
+      <div class="ch-title">The Seed</div>
+      <div class="ch-desc">The dm³ operator introduced. C, K, F, U from first principles.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+    <a class="ch-card" href="ch2-allostatic.html">
+      <div class="ch-num">Chapter 2</div>
+      <div class="ch-title">Allostatic Load</div>
+      <div class="ch-desc">Stress, adaptation, and the operator chain in biological systems.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+    <a class="ch-card" href="ch3-circadian.html">
+      <div class="ch-num">Chapter 3</div>
+      <div class="ch-title">Circadian</div>
+      <div class="ch-desc">The 24-hour cycle as a dm³ limit cycle. Period, phase, and bifurcation.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+    <a class="ch-card" href="ch4-neural.html">
+      <div class="ch-num">Chapter 4</div>
+      <div class="ch-title">Neural</div>
+      <div class="ch-desc">Cortical contact geometry. The synapse as C operator instantiation.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+    <a class="ch-card" href="ch5-immune.html">
+      <div class="ch-num">Chapter 5</div>
+      <div class="ch-title">Immune</div>
+      <div class="ch-desc">Self / non-self recognition. The fixed-point structure of immune memory.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+    <a class="ch-card" href="ch6-resonant.html">
+      <div class="ch-num">Chapter 6</div>
+      <div class="ch-title">Resonant</div>
+      <div class="ch-desc">Sound medicine. Frequency, entrainment, and the U operator in acoustics.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+    <a class="ch-card" href="ch7-crystalline.html">
+      <div class="ch-num">Chapter 7</div>
+      <div class="ch-title">Crystalline · Cosmological</div>
+      <div class="ch-desc">Saturn wavenumber 6, n-Bonacci machines, Collatz, BSD, Navier–Stokes, Monster group, galactic merger.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+    <a class="ch-card" href="ch8-meru.html">
+      <div class="ch-num">Chapter 8</div>
+      <div class="ch-title">The Mountain and the Serpent</div>
+      <div class="ch-desc">Mount Meru, Ouroboros, ancient infinities. The intuition before the notation.</div>
+      <span class="ch-badge badge-free">Free to read &amp; share</span>
+    </a>
+
+    <a class="ch-card" href="ch9-phi.html">
+      <div class="ch-num">Chapter 9</div>
+      <div class="ch-title">Phi</div>
+      <div class="ch-desc">The golden ratio as subcritical dm³. The aesthetic limit.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+  </div>
+
+  <!-- ═══ GREEK CHAPTERS ══════════════════════════════════════════════════════ -->
+  <div class="grid-section-label">Supplementary · Greek-Letter Chapters</div>
+  <div class="greek-row">
+    <a class="greek-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-pi">
+      <span class="gsym">π</span><span class="gname">Limit Cycle</span>
+    </a>
+    <a class="greek-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-phi">
+      <span class="gsym">φ</span><span class="gname">Golden Ratio</span>
+    </a>
+    <a class="greek-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-mu">
+      <span class="gsym">μ</span><span class="gname">Eigenvalue</span>
+    </a>
+    <a class="greek-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-eta">
+      <span class="gsym">η</span><span class="gname">Tribonacci</span>
+    </a>
+    <a class="greek-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-delta">
+      <span class="gsym">Δ</span><span class="gname">Tetranacci</span>
+    </a>
+    <a class="greek-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-sigma">
+      <span class="gsym">Σ</span><span class="gname">Pentanacci</span>
+    </a>
+    <a class="greek-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-omega">
+      <span class="gsym">Ω</span><span class="gname">Hexabonacci</span>
+    </a>
+  </div>
+
+  <!-- ═══ SPECIAL CHAPTERS ══════════════════════════════════════════════════ -->
+  <div class="grid-section-label">Special Chapters</div>
+  <div class="chapter-grid">
+
+    <a class="ch-card" href="ch-e-gtct.html">
+      <div class="ch-num">Chapter E</div>
+      <div class="ch-title">Generative Time Circuit</div>
+      <div class="ch-desc">Theorem T1. Time as C→K→F→U→T. The spiral return. Six graded exercises.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+    <a class="ch-card" href="sample-chapter-tubulin.html">
+      <div class="ch-num">Chapter T</div>
+      <div class="ch-title">Tubulin</div>
+      <div class="ch-desc">Fifteen architectural forms from a single 110 kDa molecule. dm³ in living structure.</div>
+      <span class="ch-badge badge-preview">Preview</span>
+    </a>
+
+    <a class="ch-card" href="chW-wigner.html">
+      <div class="ch-num">Chapter W</div>
+      <div class="ch-title">Wigner Crystal</div>
+      <div class="ch-desc">Electron crystallization from pure Coulomb repulsion. Domain seven of the coherence bridge.</div>
+      <span class="ch-badge badge-preview">Preview</span>
+    </a>
+
+    <a class="ch-card" href="chPI-recurrence.html">
+      <div class="ch-num">Chapter π</div>
+      <div class="ch-title">Recurrence</div>
+      <div class="ch-desc">Why the period is 2π. The geometry underneath the number.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+  </div>
+
+  <!-- ═══ PRINT EDITION ═════════════════════════════════════════════════════ -->
+  <div class="grid-section-label">Print Edition</div>
+  <div class="chapter-grid">
+
+    <a class="ch-card" href="https://www.ebay.com/itm/336530438926" target="_blank">
+      <div class="ch-num">ISBN 979-8-9954416-1-8</div>
+      <div class="ch-title">The Complete Series · PDF + Print</div>
+      <div class="ch-desc">All volumes. All machines. Formal Lean 4 proofs. The work in full.</div>
+      <span class="ch-badge badge-paid">Purchase · eBay</span>
+    </a>
+
+    <a class="ch-card" href="https://github.com/TOTOGT/AXLE" target="_blank">
+      <div class="ch-num">AXLE Repository</div>
+      <div class="ch-title">Formal Verification · Lean 4</div>
+      <div class="ch-desc">dm³ axioms, Collatz Bridge, Connectome, G⁶ Threshold. Open source.</div>
+      <span class="ch-badge badge-free">Free · GitHub</span>
+    </a>
+
+  </div>
+
+</div><!-- /grid-wrap -->
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════════════════ -->
+<footer>
+  <p>Principia Orthogona Series · ISBN 979-8-9954416-1-8 · G6 LLC · Newark NJ</p>
+  <p><a href="https://www.ebay.com/itm/336530438926" target="_blank">Purchase the complete series</a> &ensp;·&ensp; <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE on GitHub</a> &ensp;·&ensp; <a href="https://github.com/TOTOGT/DM3-lab" target="_blank">DM3-Lab</a></p>
+  <p style="margin-top:0.3rem; font-style:italic; font-size:0.78rem">Web chapters are free to read and share · PDF and print are paid</p>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     NDA MODAL — opens after 7 knocks on the title
+══════════════════════════════════════════════════════════════════════════════ -->
+<div id="ndaOverlay" role="dialog" aria-modal="true" aria-labelledby="ndaHeading">
+  <div id="ndaBox">
+
+    <div class="nda-header">
+      <div class="nda-seal">⬡</div>
+      <div class="nda-eyebrow">Before You Enter</div>
+      <h2 class="nda-title" id="ndaHeading">State Your Purpose</h2>
+      <div class="nda-subtitle">Seven knocks. The door is open. Read before you cross.</div>
+    </div>
+
+    <div class="nda-body">
+
+      <h3>What This Is</h3>
+      <p>Beyond this point is the labyrinth — the hidden navigation layer of the Principia Orthogona. It contains chapters and machines not linked from the main sequence. Some are complete. Some are in progress. Some are conjectures held open by intention, not by failure.</p>
+
+      <p>This is an active research program in mathematical physics, formal verification, and sound medicine. It is a living document. You are not reading a finished book. You are reading a book that is being written in real time, in public, by a researcher who is also building the clinic that will use it.</p>
+
+      <h3>What Is Expected of You</h3>
+
+      <div class="clause">
+        A student sits with difficulty. You are not permitted to conclude that something is wrong until you have returned to it three times across three different states of mind.
+      </div>
+
+      <div class="clause">
+        Distinguish between <em>I do not understand this</em> and <em>this is incorrect</em>. These are different statements. The labyrinth will test your ability to tell them apart.
+      </div>
+
+      <div class="clause">
+        Some proofs in the AXLE repository are marked <em>sorry</em> in Lean 4. This is not an admission of defeat. It is a precise statement about what has been verified and what remains open. A sorry is a door, not a wall.
+      </div>
+
+      <div class="clause">
+        You are not required to agree with what you find here. You are required to <strong>engage with it honestly</strong> before you form a judgment.
+      </div>
+
+      <h3>What This Is Not</h3>
+      <p>This is not a standard academic repository. It does not seek peer review as its primary form of validation. It seeks the kind of validation that comes from correct predictions, working machines, and a patient that improves. The mathematics is accountable to biology, and biology is accountable to the patient. This is the chain.</p>
+
+      <h3>Terms of Entry</h3>
+      <p>The material in the labyrinth is the intellectual property of G6 LLC, Newark NJ. It may be read and shared freely. It may not be reproduced for commercial purposes without written permission. The ISBN belongs to the print edition. The web chapters belong to the world.</p>
+
+      <p>By entering, you acknowledge three things:</p>
+      <p><strong>I.</strong> &ensp;I am here to learn, not to confirm what I already believe.</p>
+      <p><strong>II.</strong> &ensp;I understand that the work I am about to read is offered in the spirit of genuine inquiry, and I will receive it in the same spirit.</p>
+      <p><strong>III.</strong> &ensp;I knocked seven times. I know what a labyrinth is. I accept the terms of the walk.</p>
+
+    </div><!-- /nda-body -->
+
+    <div class="nda-footer">
+      <button class="btn-notready" id="btnNotReady">I am not ready</button>
+      <button class="btn-enter"    id="btnEnter">I enter &ensp;→</button>
+    </div>
+
+  </div><!-- /ndaBox -->
+</div><!-- /ndaOverlay -->
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════════════════════════════ -->
+<script>
+
+  // ── HiDPI / Retina helper ───────────────────────────────────────────────
+  function hdpi(canvas, w, h) {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width  = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width  = w + 'px';
+    canvas.style.height = h + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    return ctx;
+  }
+  // ────────────────────────────────────────────────────────────────────────
+
+(function () {
+
+  // ── Seven-knock counter ───────────────────────────────────────────────────
+  const title    = document.getElementById('mainTitle');
+  const dots     = Array.from({ length: 7 }, (_, i) => document.getElementById('d' + i));
+  const overlay  = document.getElementById('ndaOverlay');
+
+  let knockCount = 0;
+  let resetTimer = null;
+  const RESET_MS = 4500;   // silence for 4.5 seconds resets the counter
+
+  function resetKnocks() {
+    knockCount = 0;
+    dots.forEach(d => d.classList.remove('lit'));
+  }
+
+  function scheduleReset() {
+    if (resetTimer) clearTimeout(resetTimer);
+    resetTimer = setTimeout(resetKnocks, RESET_MS);
+  }
+
+  title.addEventListener('click', () => {
+    knockCount++;
+    scheduleReset();
+
+    // Light the corresponding dot (barely visible — only those paying attention)
+    if (knockCount <= 7) {
+      dots[knockCount - 1].classList.add('lit');
+    }
+
+    if (knockCount === 7) {
+      // Stop the reset timer — we're opening the modal
+      clearTimeout(resetTimer);
+      resetKnocks();
+      openModal();
+    }
+  });
+
+  // ── Modal open / close ────────────────────────────────────────────────────
+  function openModal() {
+    overlay.style.display = 'flex';
+    // Force reflow before adding visible class (enables CSS transition)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        overlay.classList.add('visible');
+      });
+    });
+  }
+
+  function closeModal() {
+    overlay.classList.remove('visible');
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      // Reset dots cleanly
+      dots.forEach(d => d.classList.remove('lit'));
+    }, 500);
+  }
+
+  // ── "I enter" ─────────────────────────────────────────────────────────────
+  document.getElementById('btnEnter').addEventListener('click', () => {
+    // Brief gold flash before redirect
+    document.getElementById('ndaBox').style.transition = 'opacity 0.4s';
+    document.getElementById('ndaBox').style.opacity    = '0';
+    setTimeout(() => {
+      window.location.href = 'labyrinth.html';
+    }, 420);
+  });
+
+  // ── "I am not ready" ─────────────────────────────────────────────────────
+  document.getElementById('btnNotReady').addEventListener('click', closeModal);
+
+  // Close on overlay click (outside box)
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeModal();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.classList.contains('visible')) closeModal();
+  });
+
+})();
+</script>
+</body>
+</html>
