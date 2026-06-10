@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HVEH — Helical Vortex Energy Harvesters | G6 LLC / Principia Orthogona</title>
+<style>
+  :root {
+    --teal-0: #e1f5ee;
+    --teal-1: #9fe1cb;
+    --teal-2: #5dcaa5;
+    --teal-3: #1d9e75;
+    --teal-4: #0f6e56;
+    --teal-5: #085041;
+    --teal-6: #04342c;
+    --ink: #0b1f1a;
+    --ink-mid: #1a3830;
+    --paper: #f7faf9;
+    --mist: #e1f0eb;
+    --rule: rgba(15,110,86,0.18);
+    --font-display: 'Georgia', 'Times New Roman', serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--ink);
+    color: #e8f5f0;
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 6rem 5%;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+    background: var(--ink);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 70% 50%, rgba(29,158,117,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-text { position: relative; z-index: 2; }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--teal-2);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--teal-3);
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: #d4f0e8;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--teal-2);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: #8fc4b3;
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+    line-height: 1.75;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    font-size: 0.875rem;
+    font-family: var(--font-body);
+    border-radius: 3px;
+    text-decoration: none;
+    transition: all 0.18s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--teal-3);
+    color: #fff;
+    font-weight: 500;
+  }
+  .btn-primary:hover { background: var(--teal-2); color: #fff; }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--teal-1);
+    border: 1px solid rgba(29,158,117,0.45);
+  }
+  .btn-outline:hover { background: rgba(29,158,117,0.1); }
+
+  /* ── VORTEX SVG ── */
+  .hero-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .vortex-container {
+    position: relative;
+    width: 340px;
+    height: 340px;
+  }
+
+  .vortex-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes spin-rev {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 0.12; }
+    50% { opacity: 0.35; }
+  }
+
+  .ring-1 { animation: spin-slow 18s linear infinite; transform-origin: 170px 170px; }
+  .ring-2 { animation: spin-slow 12s linear infinite; transform-origin: 170px 170px; }
+  .ring-3 { animation: spin-rev 8s linear infinite; transform-origin: 170px 170px; }
+  .ring-4 { animation: spin-slow 5s linear infinite; transform-origin: 170px 170px; }
+  .pulse-1 { animation: pulse-ring 3.5s ease-in-out infinite; }
+  .pulse-2 { animation: pulse-ring 3.5s ease-in-out 1.2s infinite; }
+  .pulse-3 { animation: pulse-ring 3.5s ease-in-out 2.4s infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ring-1, .ring-2, .ring-3, .ring-4 { animation: none; }
+  }
+
+  /* ── GRANT ALERT ── */
+  .grant-alert {
+    background: rgba(29,158,117,0.12);
+    border-left: 3px solid var(--teal-3);
+    padding: 1.25rem 1.75rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin: 0;
+  }
+
+  .grant-alert-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .grant-alert-body { flex: 1; }
+
+  .grant-alert strong {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--teal-2);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+  }
+
+  .grant-alert p {
+    font-size: 0.95rem;
+    color: #a8d5c5;
+    line-height: 1.6;
+  }
+
+  .grant-alert a { color: var(--teal-1); }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 5rem 8%;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-alt {
+    background: var(--ink-mid);
+  }
+
+  .section-light {
+    background: #0e2b23;
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal-3);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 2.8vw, 2.4rem);
+    font-weight: 400;
+    color: #cdeee3;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .section-header p {
+    margin-top: 0.9rem;
+    color: #7ab39e;
+    max-width: 640px;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  /* ── WHAT IS HVEH ── */
+  .what-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .what-prose p {
+    color: #a8ccbd;
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+    font-size: 0.975rem;
+  }
+
+  .what-prose p strong { color: #cdeee3; font-weight: 500; }
+
+  .stats-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: var(--teal-2);
+    line-height: 1;
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-label {
+    font-size: 0.82rem;
+    color: #6b9c8c;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── SCIENCE / 7 PROOFS ── */
+  .proofs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+  }
+
+  .proof-card {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .proof-card:hover { border-color: rgba(29,158,117,0.4); }
+
+  .proof-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--teal-4);
+    margin-bottom: 0.5rem;
+  }
+
+  .proof-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #c0e8d8;
+    margin-bottom: 0.5rem;
+  }
+
+  .proof-body {
+    font-size: 0.825rem;
+    color: #6b9c8c;
+    line-height: 1.65;
+  }
+
+  .proof-link {
+    margin-top: 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--teal-4);
+    letter-spacing: 0.04em;
+    transition: color 0.15s;
+  }
+
+  a.proof-card { text-decoration: none; display: block; }
+  a.proof-card:hover .proof-link { color: var(--teal-2); }
+  a.proof-card:hover { border-color: rgba(29,158,117,0.5); }
+
+  /* ── MATH DISPLAY ── */
+  .math-block {
+    background: rgba(0,0,0,0.25);
+    border-left: 2px solid var(--teal-4);
+    padding: 1.25rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: #9fd4bf;
+    line-height: 1.9;
+    border-radius: 0 4px 4px 0;
+    margin: 1.75rem 0;
+    overflow-x: auto;
+  }
+
+  .math-block .comment {
+    color: #3d7060;
+    font-style: italic;
+  }
+
+  /* ── GRANT TRACK ── */
+  .grant-phases {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .phase-card {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .phase-card.active {
+    border-color: var(--teal-3);
+    background: rgba(29,158,117,0.06);
+  }
+
+  .phase-badge {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal-4);
+    margin-bottom: 0.75rem;
+  }
+
+  .phase-card.active .phase-badge {
+    color: var(--teal-2);
+  }
+
+  .phase-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #c0e8d8;
+    margin-bottom: 0.6rem;
+    line-height: 1.3;
+  }
+
+  .phase-body {
+    font-size: 0.825rem;
+    color: #6b9c8c;
+    line-height: 1.7;
+  }
+
+  .phase-card.active .phase-body { color: #8abfae; }
+
+  .phase-deadline {
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--teal-2);
+    border-top: 1px solid var(--rule);
+    padding-top: 0.75rem;
+  }
+
+  .active-marker {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--teal-2);
+    animation: pulse-ring 2s ease-in-out infinite;
+  }
+
+  /* ── NEED STATEMENT ── */
+  .need-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+  .need-item {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.25rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .need-item h4 {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #b0d9c9;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .need-item p {
+    font-size: 0.875rem;
+    color: #6b9c8c;
+    line-height: 1.7;
+  }
+
+  /* ── DOCUMENTS ── */
+  .doc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .doc-item {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    text-decoration: none;
+    transition: border-color 0.18s, background 0.18s;
+  }
+
+  .doc-item:hover {
+    border-color: rgba(29,158,117,0.4);
+    background: rgba(29,158,117,0.05);
+  }
+
+  .doc-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 3px;
+    background: rgba(29,158,117,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    color: var(--teal-2);
+    text-transform: uppercase;
+  }
+
+  .doc-meta { flex: 1; }
+  .doc-title { font-size: 0.9rem; font-weight: 500; color: #c0e8d8; display: block; }
+  .doc-desc { font-size: 0.8rem; color: #6b9c8c; margin-top: 0.2rem; }
+  .doc-arrow { color: var(--teal-4); font-size: 1.1rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 3rem 8%;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-brand {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #3d7060;
+    line-height: 2;
+  }
+
+  .footer-brand strong { color: var(--teal-4); display: block; font-weight: 400; font-size: 12px; }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    font-size: 0.8rem;
+    color: #3d7060;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .footer-links a:hover { color: var(--teal-2); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; padding: 4rem 6%; gap: 3rem; }
+    .hero-visual { order: -1; }
+    .vortex-container { width: 240px; height: 240px; }
+    .what-grid, .need-cols { grid-template-columns: 1fr; }
+    .grant-phases { grid-template-columns: 1fr; }
+    .section { padding: 3.5rem 6%; }
+    footer { flex-direction: column; }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1rem 8%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(11,31,26,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .nav-brand {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--teal-3);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+    color: #5a9080;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--teal-2); }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="#">HVEH / G6 LLC</a>
+  <ul class="nav-links">
+    <li><a href="#what">System</a></li>
+    <li><a href="#science">Science</a></li>
+    <li><a href="#grant">Grant</a></li>
+    <li><a href="#documents">Documents</a></li>
+    <li><a href="https://totogt.github.io/geometry/book4/hub.html" target="_blank">Principia Orthogona ↗</a></li>
+  </ul>
+</nav>
+
+<!-- GRANT ALERT BANNER -->
+<div class="grant-alert" style="padding-top: 5.5rem;">
+  <div class="grant-alert-icon">⚡</div>
+  <div class="grant-alert-body">
+    <strong>Active Grant Deadline</strong>
+    <p>NJDEP Resilient NJ Regional Resilience Planning Grant — up to $350,000 — deadline <strong style="color: #d4f0e8;">July 7, 2026, 12:00 PM EST</strong>.
+    A complete grant narrative is prepared and ready. Newark is invited to serve as Prime Grantee.
+    Submit to: <a href="mailto:resilientnj@dep.nj.gov">resilientnj@dep.nj.gov</a></p>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" style="padding-top: 4rem;">
+  <div class="hero-text">
+    <div class="eyebrow">G6 LLC / Principia Orthogona</div>
+    <h1>Helical Vortex <em>Energy Harvesters</em></h1>
+    <p class="hero-sub">
+      A contact-geometry-grounded system that converts destructive stormwater and surge energy into clean electricity — reducing flood peaks by 20–50% while the storm pays for itself.
+    </p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#grant">Grant track →</a>
+      <a class="btn btn-outline" href="#science">Mathematical foundation</a>
+    </div>
+  </div>
+
+  <!-- ANIMATED VORTEX -->
+  <div class="hero-visual">
+    <div class="vortex-container">
+      <svg class="vortex-svg" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#1d9e75" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#1d9e75" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Ambient glow -->
+        <circle cx="170" cy="170" r="160" fill="url(#glow)" class="pulse-1"/>
+
+        <!-- Outermost ring - slow -->
+        <g class="ring-1">
+          <circle cx="170" cy="170" r="148" fill="none" stroke="#0f6e56" stroke-width="0.5" stroke-dasharray="6 18"/>
+          <ellipse cx="170" cy="170" rx="148" ry="30" fill="none" stroke="#0f4e3c" stroke-width="0.5" stroke-dasharray="4 20"/>
+        </g>
+
+        <!-- Ring 2 -->
+        <g class="ring-2">
+          <circle cx="170" cy="170" r="118" fill="none" stroke="#1d9e75" stroke-width="0.75" stroke-dasharray="8 14"/>
+          <ellipse cx="170" cy="170" rx="118" ry="40" fill="none" stroke="#155e46" stroke-width="0.75" stroke-dasharray="5 16"/>
+        </g>
+
+        <!-- Ring 3 - counter rotating -->
+        <g class="ring-3">
+          <circle cx="170" cy="170" r="88" fill="none" stroke="#1d9e75" stroke-width="1" stroke-dasharray="12 10"/>
+          <ellipse cx="170" cy="170" rx="88" ry="50" fill="none" stroke="#0f6e56" stroke-width="1" stroke-dasharray="7 12"/>
+        </g>
+
+        <!-- Inner active ring -->
+        <g class="ring-4">
+          <circle cx="170" cy="170" r="56" fill="none" stroke="#5dcaa5" stroke-width="1.25" stroke-dasharray="16 8"/>
+        </g>
+
+        <!-- Helical spiral arms -->
+        <g class="ring-2" opacity="0.7">
+          <path d="M170,170 Q210,130 240,100 Q260,80 250,60" fill="none" stroke="#1d9e75" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M170,170 Q130,210 100,240 Q80,260 60,250" fill="none" stroke="#1d9e75" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M170,170 Q200,200 230,220 Q260,240 270,270" fill="none" stroke="#0f6e56" stroke-width="1" stroke-linecap="round"/>
+          <path d="M170,170 Q140,140 110,120 Q80,100 70,70" fill="none" stroke="#0f6e56" stroke-width="1" stroke-linecap="round"/>
+        </g>
+
+        <!-- Center node -->
+        <circle cx="170" cy="170" r="28" fill="#04342c" stroke="#1d9e75" stroke-width="1.5"/>
+        <circle cx="170" cy="170" r="16" fill="#0f6e56" class="pulse-3"/>
+        <circle cx="170" cy="170" r="7" fill="#5dcaa5"/>
+
+        <!-- Labels -->
+        <text x="170" y="298" text-anchor="middle" font-family="'Courier New', monospace" font-size="9" fill="#3d7060" letter-spacing="2">REEB ORBIT  ·  dm³</text>
+        <text x="170" y="50" text-anchor="middle" font-family="'Courier New', monospace" font-size="9" fill="#3d7060" letter-spacing="2">TOGT / CONTACT GEOMETRY</text>
+
+        <!-- Radius markers -->
+        <line x1="170" y1="170" x2="226" y2="170" stroke="#1d4a3a" stroke-width="0.75" stroke-dasharray="3 4"/>
+        <text x="200" y="167" text-anchor="middle" font-family="'Courier New', monospace" font-size="8" fill="#3d7060">r*≈0.773</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS IT -->
+<section class="section" id="what">
+  <div class="section-header">
+    <div class="section-label">The system</div>
+    <h2>Water as a resource, not an adversary</h2>
+    <p>The HVEH is a modular hydrokinetic infrastructure system grounded in 25 years of mathematical research on contact manifolds and nonlinear operator dynamics.</p>
+  </div>
+
+  <div class="what-grid">
+    <div class="what-prose">
+      <p>Stormwater enters a circular basin tangentially. Contact geometry — the mathematical structure governing which dynamical transitions are possible and in which order — forces the flow into a <strong>stable helical vortex</strong>. A vertical-axis low-head turbine extracts energy from the rotation.</p>
+
+      <p>The basin geometry is not arbitrary. Operator non-commutativity [K, F] ≠ 0 — the curvature gate K must be established before nonlinear vortex amplification F — locks the system into its energy-producing attractor rather than chaotic turbulence. Deploying these in the wrong order produces the wrong outcome. This is a derivable mathematical consequence, not an empirical guess.</p>
+
+      <div class="math-block">
+        <span class="comment">// Contact form on dm³ manifold</span><br>
+        α = dz − r² dθ<br><br>
+        <span class="comment">// Reeb vector field — persistent helical drive</span><br>
+        R = ∂z<br><br>
+        <span class="comment">// Operator sequence (non-commutative)</span><br>
+        G = U ∘ F ∘ K ∘ C<br><br>
+        <span class="comment">// Basin stability bound</span><br>
+        μ_max = −2,  ε₀ = 1/3 &lt; r* ≈ 0.773 &lt; κ* ≈ 0.882 &lt; 1
+      </div>
+
+      <p>The mathematics provides something conventional flood models — Navier-Stokes solvers, SWMM, HEC-RAS — systematically lack: a framework for predicting and preventing the <strong>bifurcation events</strong> (sudden inundation thresholds) that cause the most damage.</p>
+    </div>
+
+    <div class="stats-stack">
+      <div class="stat-card">
+        <div class="stat-number">20–50%</div>
+        <div class="stat-label">flood peak reduction per module during storm events</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">~500 kW</div>
+        <div class="stat-label">electrical output per module at storm scale (size-dependent)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">7</div>
+        <div class="stat-label">independent mathematical proofs validating design claims</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">T* = 2π</div>
+        <div class="stat-label">proved limit cycle period on the contact manifold</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">El Ojo</div>
+        <div class="stat-label">natural proof of concept — rotating island, Paraná Delta, Argentina</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEED -->
+<section class="section section-alt" id="need">
+  <div class="section-header">
+    <div class="section-label">Statement of need</div>
+    <h2>Newark and the Passaic corridor</h2>
+    <p>One of the most flood-vulnerable urban corridors in the northeastern United States — with a 39-day global visibility window that makes the risk immediate.</p>
+  </div>
+
+  <div class="need-cols">
+    <div>
+      <div class="need-item">
+        <h4>Climate risk</h4>
+        <p>1–2 ft of sea-level rise projected by 2050 increases baseline surge risk across Newark Bay and the Raritan estuary. Extreme precipitation events (3″+ under 3 hours) overwhelm combined sewers across Newark, Elizabeth, and Harrison regularly.</p>
+      </div>
+      <div class="need-item">
+        <h4>Equity dimension</h4>
+        <p>Over 40% of Newark's population lives in FEMA Special Flood Hazard Areas. South and East Ward residents bear disproportionate flood risk and energy cost burdens simultaneously. HVEH addresses both: reduced flood peaks and locally generated electricity.</p>
+      </div>
+      <div class="need-item">
+        <h4>Post-Sandy context</h4>
+        <p>Regional recovery costs from Sandy exceeded $36 billion. Ida (2021) killed 27 NJ residents, primarily from urban flooding. Current infrastructure responds to water as an adversary. HVEH proposes a different paradigm: water as resource.</p>
+      </div>
+    </div>
+    <div>
+      <div class="need-item">
+        <h4>The innovation gap</h4>
+        <p>No current NJ flood resilience program employs contact-geometric attractor analysis or operator-ordering theory to predict threshold phenomena — the bifurcation events that conventional solvers systematically miss.</p>
+      </div>
+      <div class="need-item">
+        <h4>World Cup window (June 11 – July 19, 2026)</h4>
+        <p>The FIFA World Cup Jersey Fan Hub at Sports Illustrated Stadium in Harrison is open for 39 days. MetLife Stadium hosts the Final on July 19. Forecasters flag active flash flood risk for the Newark–Harrison corridor during this exact window — with global visibility and billions of viewers.</p>
+      </div>
+      <div class="need-item">
+        <h4>Economic case</h4>
+        <p>Modules installed at Passaic River outfalls generate electricity during the exact events that currently cause the most damage — offsetting pump costs, powering emergency lighting, feeding local microgrids. The storm pays for itself.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCIENCE -->
+<section class="section section-light" id="science">
+  <div class="section-header">
+    <div class="section-label">Mathematical foundation</div>
+    <h2>The seven-proofs framework</h2>
+    <p>Every HVEH design claim is supported by seven independent mathematical proofs — the Principia Orthogona Standard Methodology — ensuring rigor from the molecular to the planetary scale.</p>
+  </div>
+
+  <div class="proofs-grid">
+    <a class="proof-card" href="proofs/operator-algebra.html" style="text-decoration:none;display:block">
+      <div class="proof-num">Proof I</div>
+      <div class="proof-title">Operator Algebra</div>
+      <div class="proof-body">Commutator [K, F] ≠ 0. Non-commutativity localizes at the fold point. Correct operator sequence is derivable, not empirical.</div>
+      <div class="proof-link">Full proof →</div>
+    </a>
+    <a class="proof-card" href="proofs/distribution-theory.html" style="text-decoration:none;display:block">
+      <div class="proof-num">Proof II</div>
+      <div class="proof-title">Distribution Theory</div>
+      <div class="proof-body">Heaviside gate produces unavoidable Dirac delta boundary term encoding irreversibility of the vortex transition.</div>
+      <div class="proof-link">Full proof →</div>
+    </a>
+    <a class="proof-card" href="proofs/catastrophe-theory.html" style="text-decoration:none;display:block">
+      <div class="proof-num">Proof III</div>
+      <div class="proof-title">Catastrophe Theory</div>
+      <div class="proof-body">Whitney A₂ fold. Correct operator order corresponds to a path in control-state space that crosses the fold into the stable helical basin.</div>
+      <div class="proof-link">Full proof →</div>
+    </a>
+    <a class="proof-card" href="proofs/contact-geometry.html" style="text-decoration:none;display:block">
+      <div class="proof-num">Proof IV</div>
+      <div class="proof-title">Contact Geometry</div>
+      <div class="proof-body">Maximal non-integrability of ker(α) at the fold. Curvature bound μ_max = −2 fixes universal sigmoid Hill coefficient n ≈ 3.64.</div>
+      <div class="proof-link">Full proof →</div>
+    </a>
+    <a class="proof-card" href="proofs/spectral-markov.html" style="text-decoration:none;display:block">
+      <div class="proof-num">Proof V</div>
+      <div class="proof-title">Spectral / Markov Generator</div>
+      <div class="proof-body">Discrete state model shows correct operator order creates stable non-absorbing rotating attractor; wrong order creates chaotic or locked-off absorbing state.</div>
+      <div class="proof-link">Full proof →</div>
+    </a>
+    <a class="proof-card" href="proofs/numerical-constructive.html" style="text-decoration:none;display:block">
+      <div class="proof-num">Proof VI</div>
+      <div class="proof-title">Numerical / Constructive</div>
+      <div class="proof-body">Grid simulations confirm P_ON &gt; 0 under correct sequencing and P_ON → 0 under reversed order. Constructive proof closes the algebra–physics loop.</div>
+      <div class="proof-link">Full proof →</div>
+    </a>
+    <a class="proof-card" href="proofs/information-geometry.html" style="text-decoration:none;display:block">
+      <div class="proof-num">Proof VII</div>
+      <div class="proof-title">Information Geometry</div>
+      <div class="proof-body">Flow states on a negatively curved Fisher manifold. Correct and wrong sequences are non-homotopic geodesics — topologically separated outcomes.</div>
+      <div class="proof-link">Full proof →</div>
+    </a>
+  </div>
+
+  <div style="margin-top: 2.5rem; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; border: 1px solid var(--rule);">
+    <p style="font-size: 0.875rem; color: #6b9c8c; line-height: 1.75;">
+      The full framework is formalized in the <strong style="color: #a8ccbd;">Principia Orthogona</strong> series (root DOI: 
+      <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank" style="color: var(--teal-2);">10.5281/zenodo.19117399</a>, 
+      ISBN 979-8-9954416-6-3). Five works from the series were accepted at the 
+      <strong style="color: #a8ccbd;">XII Bienal da Sociedade Brasileira de Matemática</strong> (Natal, Brazil, August 2026). 
+      Formal verification in Lean 4/Mathlib4 is maintained in the 
+      <a href="https://github.com/TOTOGT/AXLE" target="_blank" style="color: var(--teal-2);">AXLE engine →</a>
+    </p>
+  </div>
+</section>
+
+<!-- GRANT TRACK -->
+<section class="section" id="grant">
+  <div class="section-header">
+    <div class="section-label">Funding pathway</div>
+    <h2>Three-phase implementation strategy</h2>
+    <p>The Resilient NJ planning grant is Phase 1. The narrative is written. The science is documented. What is needed now is a municipal partner.</p>
+  </div>
+
+  <div style="background: rgba(29,158,117,0.08); border: 1px solid rgba(29,158,117,0.3); border-radius: 4px; padding: 1.5rem 2rem; margin-bottom: 2.5rem;">
+    <div style="font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; color: var(--teal-3); margin-bottom: 0.6rem;">IMMEDIATE ASK FROM CITY OF NEWARK</div>
+    <p style="font-size: 0.925rem; color: #a8ccbd; line-height: 1.75;">
+      The Resilient NJ grant requires a <strong style="color: #cdeee3;">Prime Grantee municipality</strong> leading a team of ≥3 contiguous municipalities and one community-based organization. 
+      Newark, Belleville, and Harrison form the exact corridor this project addresses. 
+      G6 LLC provides all scientific and technical content — including the complete grant narrative. 
+      The City of Newark is invited to provide a <strong style="color: #cdeee3;">Letter of Commitment</strong> and municipal leadership to submit by July 7.
+    </p>
+  </div>
+
+  <div class="grant-phases">
+    <div class="phase-card active">
+      <div class="active-marker"></div>
+      <div class="phase-badge">Phase 1 — Active</div>
+      <div class="phase-title">Resilient NJ Regional Resilience Planning Grant</div>
+      <div class="phase-body">Up to $350,000. 12-month planning phase: CFD + contact-geometry simulations for 2–4 candidate HVEH sites, community co-design, regulatory feasibility memo, implementation roadmap. NOFA: NJDEP Office of Climate Resilience.</div>
+      <div class="phase-deadline">Deadline: July 7, 2026 · resilientnj@dep.nj.gov</div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-badge">Phase 2 — Years 1–3</div>
+      <div class="phase-title">Pilot deployment</div>
+      <div class="phase-body">NJDEP Shore Protection Program + USACE Engineering With Nature funding for pilot HVEH deployment at 1–3 sites. Full CFD validation, community ownership structures, first electricity generation.</div>
+      <div class="phase-deadline">Funding: Shore Protection + USACE Section 404</div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-badge">Phase 3 — Years 3–6</div>
+      <div class="phase-title">Statewide scale-up</div>
+      <div class="phase-body">Rebuild by Design–style competition and federal IRA clean energy infrastructure funds. Target: MW-scale HVEH network across NJ coastal and urban waterways. The Seven-Proofs framework is open-source for municipal replication.</div>
+      <div class="phase-deadline">Funding: IRA clean energy + Rebuild by Design</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+    <a class="btn btn-primary" href="mailto:resilientnj@dep.nj.gov?subject=Newark%20%E2%80%94%20Helical%20Vortex%20Energy%20Harvesters%20Resilience%20Plan">
+      Submit to NJDEP →
+    </a>
+    <a class="btn btn-outline" href="#documents">View full grant narrative</a>
+  </div>
+</section>
+
+<!-- DOCUMENTS -->
+<section class="section section-alt" id="documents">
+  <div class="section-header">
+    <div class="section-label">Project documents</div>
+    <h2>Ready-to-submit materials</h2>
+  </div>
+
+  <div class="doc-list">
+    <a class="doc-item" href="ResilientNJ_HVEH_Grant_Narrative.pages" target="_blank">
+      <div class="doc-icon">GRANT</div>
+      <div class="doc-meta">
+        <span class="doc-title">Resilient NJ Grant Narrative</span>
+        <span class="doc-desc">11 sections: executive summary, need statement, HVEH description, seven-proofs framework, methodology, equity plan, budget narrative. Complete and ready.</span>
+      </div>
+      <span class="doc-arrow">↗</span>
+    </a>
+
+    <a class="doc-item" href="Newark_Sustainability_PitchLetter.pages" target="_blank">
+      <div class="doc-icon">PITCH</div>
+      <div class="doc-meta">
+        <span class="doc-title">Newark Sustainability Pitch Letter</span>
+        <span class="doc-desc">Letter to Newark Office of Sustainability & Chief Resilience Officer proposing municipal partnership and outlining the World Cup urgency window.</span>
+      </div>
+      <span class="doc-arrow">↗</span>
+    </a>
+
+    <a class="doc-item" href="https://doi.org/10.5281/zenodo.19117399" target="_blank">
+      <div class="doc-icon">DOI</div>
+      <div class="doc-meta">
+        <span class="doc-title">Principia Orthogona — Root Zenodo deposit</span>
+        <span class="doc-desc">Complete mathematical framework. ISBN 979-8-9954416-6-3. Five works accepted at XII Bienal SBM, Natal, Brazil, August 2026.</span>
+      </div>
+      <span class="doc-arrow">↗</span>
+    </a>
+
+    <a class="doc-item" href="https://github.com/TOTOGT/AXLE" target="_blank">
+      <div class="doc-icon">LEAN</div>
+      <div class="doc-meta">
+        <span class="doc-title">AXLE engine — Lean 4 / Mathlib4 formal verification</span>
+        <span class="doc-desc">AutophagyDm3.lean: 21 theorems, 18 proved without sorry. Formal verification of TOGT/GTCT claims.</span>
+      </div>
+      <span class="doc-arrow">↗</span>
+    </a>
+
+    <a class="doc-item" href="https://totogt.github.io/geometry/book4/hub.html" target="_blank">
+      <div class="doc-icon">HUB</div>
+      <div class="doc-meta">
+        <span class="doc-title">Principia Orthogona interactive hub</span>
+        <span class="doc-desc">Interactive HTML books, hologram tutoring tools, and chapter-level deep dives into the TOGT framework.</span>
+      </div>
+      <span class="doc-arrow">↗</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <strong>G6 LLC / Principia Orthogona</strong>
+    229 Ballantine Pkwy, Newark, NJ<br>
+    EIN 33-2880433  ·  NAICS 541715<br>
+    ORCID: 0009-0000-6496-2186<br>
+    Fiscally sponsored by NYFA
+  </div>
+
+  <div class="footer-links">
+    <a href="mailto:resilientnj@dep.nj.gov">resilientnj@dep.nj.gov</a>
+    <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">Zenodo root DOI</a>
+    <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE on GitHub</a>
+    <a href="https://totogt.github.io/geometry/book4/hub.html" target="_blank">Principia Orthogona hub</a>
+  </div>
+</footer>
+
+</body>
+</html>

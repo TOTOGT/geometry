@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proof II — Distribution Theory | HVEH Seven-Proofs</title>
+<style>
+  :root {
+    --teal-0:#e1f5ee;--teal-1:#9fe1cb;--teal-2:#5dcaa5;--teal-3:#1d9e75;
+    --teal-4:#0f6e56;--teal-5:#085041;--teal-6:#04342c;
+    --ink:#0b1f1a;--ink-mid:#1a3830;--rule:rgba(15,110,86,0.18);
+    --font-display:'Georgia','Times New Roman',serif;
+    --font-body:system-ui,-apple-system,'Segoe UI',sans-serif;
+    --font-mono:'Courier New',monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body);background:var(--ink);color:#e8f5f0;line-height:1.7;font-size:16px}
+  nav{position:sticky;top:0;z-index:100;padding:0.75rem 5%;background:rgba(11,31,26,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .nav-brand{font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;color:var(--teal-4);text-decoration:none;white-space:nowrap}
+  .nav-proofs{display:flex;gap:0.4rem;flex-wrap:wrap}
+  .nav-proofs a{font-family:var(--font-mono);font-size:10px;letter-spacing:0.05em;color:#3d7060;text-decoration:none;padding:0.2rem 0.45rem;border:1px solid transparent;border-radius:2px;transition:all 0.15s}
+  .nav-proofs a:hover,.nav-proofs a.active{color:var(--teal-2);border-color:var(--rule)}
+  .proof-hero{padding:4rem 8% 3rem;border-bottom:1px solid var(--rule)}
+  .proof-eyebrow{font-family:var(--font-mono);font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal-3);margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem}
+  .proof-eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:var(--teal-4)}
+  .proof-hero h1{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.2rem);font-weight:400;color:#d4f0e8;line-height:1.15;letter-spacing:-0.01em;margin-bottom:0.5rem}
+  .subtitle{font-family:var(--font-mono);font-size:0.9rem;color:var(--teal-3);margin-bottom:1.5rem}
+  .thesis-block{background:rgba(29,158,117,0.07);border-left:3px solid var(--teal-3);padding:1.25rem 1.75rem;border-radius:0 4px 4px 0;font-size:1.05rem;color:#a8d5c5;line-height:1.8;font-style:italic;max-width:820px}
+  .proof-body-section{padding:3rem 8%;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+  @media(max-width:768px){.proof-body-section{grid-template-columns:1fr;gap:2rem}}
+  .prose p{color:#a8ccbd;line-height:1.85;margin-bottom:1.25rem;font-size:0.975rem}
+  .prose p strong{color:#cdeee3;font-weight:500}
+  .prose p em{color:var(--teal-2);font-style:italic}
+  .math-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-4);margin-bottom:1rem}
+  .math-table{width:100%;border-collapse:collapse}
+  .math-table tr{border-bottom:1px solid rgba(15,110,86,0.12)}
+  .math-table tr:last-child{border-bottom:none}
+  .math-table td{padding:0.6rem 0;font-family:var(--font-mono);font-size:0.82rem;vertical-align:top}
+  .math-table td:first-child{color:#3d7060;width:38%;padding-right:1rem}
+  .math-table td:last-child{color:#9fd4bf}
+  .svg-wrap{margin-top:2rem;background:rgba(0,0,0,0.2);border-radius:4px;padding:1.25rem;border:1px solid var(--rule)}
+  .consequence-section{padding:2.5rem 8%;background:var(--ink-mid);border-bottom:1px solid var(--rule)}
+  .consequence-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--teal-4);margin-bottom:0.75rem}
+  .consequence-text{font-size:0.975rem;color:#a8ccbd;line-height:1.8;max-width:820px}
+  .consequence-text strong{color:#cdeee3;font-weight:500}
+  .proof-nav-footer{padding:2.5rem 8%;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;border-top:1px solid var(--rule)}
+  .pnf-link{text-decoration:none;color:var(--teal-3);font-size:0.875rem;font-family:var(--font-mono);transition:color 0.15s}
+  .pnf-link:hover{color:var(--teal-2)}
+  .pnf-center{text-align:center;font-family:var(--font-mono);font-size:10px;color:#3d7060;line-height:1.8}
+  .pnf-center a{color:#3d7060;text-decoration:none}
+  .pnf-center a:hover{color:var(--teal-3)}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="index.html">HVEH / Seven Proofs</a>
+  <div class="nav-proofs"><a href="operator-algebra.html">I — Operator Algebra</a>
+    <a href="distribution-theory.html" class="active">II — Distribution</a>
+    <a href="catastrophe-theory.html">III — Catastrophe</a>
+    <a href="contact-geometry.html">IV — Contact Geom</a>
+    <a href="spectral-markov.html">V — Markov</a>
+    <a href="numerical-constructive.html">VI — Numerical</a>
+    <a href="information-geometry.html">VII — Info Geom</a></div>
+</nav>
+<section class="proof-hero">
+  <div class="proof-eyebrow">Proof II of VII</div>
+  <h1>Distribution Theory</h1>
+  <div class="subtitle">Heaviside gate and the Dirac boundary</div>
+  <div class="thesis-block">The flow transition from laminar inflow to helical vortex is irreversible. This irreversibility is encoded in a Dirac delta boundary term that appears unavoidably when the Heaviside gate is differentiated — proving the transition is a one-way door.</div>
+</section>
+<section class="proof-body-section">
+  <div class="prose"><p>The flow field is modeled using a Heaviside step function H(r − r*) acting as a gate: below the critical radius r*, the flow is in the laminar inflow regime; above r*, it is in the helical vortex regime.</p>
+<p>When this gated field is differentiated in the distributional (weak) sense, a Dirac delta term δ(r − r*) appears at the transition radius. This is not an artifact of the model — it is a fundamental property of distributional derivatives of discontinuous functions.</p>
+<p>The delta term encodes a concentration of energy exactly at the transition point. Once the flow crosses r*, energy is deposited there as a boundary term that has no smooth path back. The transition is thermodynamically one-way.</p>
+<p>This proves irreversibility without invoking entropy or thermodynamics directly. It falls out of the distributional calculus of the gate function alone — a purer and more general result.</p></div>
+  <div class="math-panel">
+    <div class="math-title">Key relations</div>
+    <table class="math-table"><tr><td>Heaviside gate</td><td>H(r − r*)·v(r)  encodes transition at r = r*</td></tr>
+<tr><td>Weak derivative</td><td>d/dr[H(r − r*)] = δ(r − r*)</td></tr>
+<tr><td>Boundary term</td><td>∫ φ·δ(r−r*)dr = φ(r*)  for test fn φ</td></tr>
+<tr><td>Physical meaning</td><td>energy deposited at r* — no smooth return</td></tr></table>
+    <div class="svg-wrap"><svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px">
+  <defs><marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#1d9e75"/></marker></defs>
+  <line x1="55" y1="15" x2="55" y2="165" stroke="#1d4a3a" stroke-width="1"/>
+  <line x1="45" y1="155" x2="445" y2="155" stroke="#1d4a3a" stroke-width="1" marker-end="url(#arr2)"/>
+  <text x="448" y="159" font-family="'Courier New',monospace" font-size="10" fill="#3d7060">r</text>
+  <text x="35" y="22" font-family="'Courier New',monospace" font-size="10" fill="#3d7060">H</text>
+  <polyline points="60,150 200,150 200,68 430,68" fill="none" stroke="#1d9e75" stroke-width="2.5"/>
+  <line x1="200" y1="45" x2="200" y2="165" stroke="#5dcaa5" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="196" y="42" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#5dcaa5">r*</text>
+  <line x1="200" y1="155" x2="200" y2="18" stroke="#9fe1cb" stroke-width="2.5"/>
+  <polygon points="200,10 194,25 206,25" fill="#9fe1cb"/>
+  <text x="216" y="28" font-family="'Courier New',monospace" font-size="10" fill="#9fe1cb">δ(r − r*)</text>
+  <text x="216" y="43" font-family="'Courier New',monospace" font-size="9" fill="#3d7060">irreversible boundary term</text>
+  <text x="120" y="145" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#3d7060">laminar</text>
+  <text x="330" y="60" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#3d7060">vortex</text>
+  <text x="58" y="148" font-family="'Courier New',monospace" font-size="9" fill="#3d7060">0</text>
+  <text x="40" y="71" font-family="'Courier New',monospace" font-size="9" fill="#3d7060">1</text>
+</svg></div>
+  </div>
+</section>
+<section class="consequence-section">
+  <div class="consequence-label">Engineering consequence</div>
+  <div class="consequence-text">The HVEH cannot be switched off mid-vortex by reducing inflow. Once r* is crossed, the helical state is locked in until the inflow drops below the basin's hysteresis threshold. <strong>There is no gradual ramp-down once the vortex is established.</strong></div>
+</section>
+<div class="proof-nav-footer">
+  <a class="pnf-link" href="operator-algebra.html">← I</a>
+  <div class="pnf-center">
+    <a href="index.html">HVEH Project Index</a><br>
+    <span style="margin-top:0.3rem;display:block">Seven-Proofs Framework · Principia Orthogona · G6 LLC</span>
+  </div>
+  <a class="pnf-link" href="catastrophe-theory.html">III →</a>
+</div>
+</body>
+</html>
