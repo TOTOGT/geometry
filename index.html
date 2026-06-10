@@ -14,7 +14,6 @@
 html{scroll-behavior:smooth}
 body{background:var(--deep);color:var(--ink);font-family:'EB Garamond',Georgia,serif;font-size:17px;line-height:1.75;overflow-x:hidden}
 #bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3rem;background:linear-gradient(to bottom,rgba(3,10,8,.96),transparent);flex-wrap:wrap;gap:.5rem}
 .nav-brand{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--teal);opacity:.85;text-decoration:none}
 .nav-links{display:flex;gap:1.5rem;list-style:none;flex-wrap:wrap}
@@ -137,22 +136,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .boonton-line{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,2.5vw,2rem);font-style:italic;color:var(--teal-soft);opacity:.8;letter-spacing:.02em}
 footer{position:relative;z-index:2;text-align:center;padding:2.5rem 2rem;border-top:1px solid rgba(10,186,181,.07)}
 .footer-copy{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--teal);opacity:.28;line-height:2.4}
-.proof,.block,.axiom-block,.remark,.dep-chain,.time-sec,
-.math-block,.theorem-box,.insight-box,.falsify-box,
-.coherence-row,.table-wrap,pre,code,.code-block,
-.po-ring-strip{overflow-x:auto}
-mjx-container{overflow-x:auto;max-width:100%;display:block!important}
-.MJX-TEX{max-width:100%}
-.block-math,.formal,.axiom-formal,.math-block{overflow-x:auto;white-space:pre;word-break:normal}
-table{min-width:max-content}
-.table-wrap{overflow-x:auto}
 </style>
 </head>
 <body>
 <canvas id="bg"></canvas>
 
 <nav>
-  <a href="/geometry/index.html" class="nav-brand">⚜ PRINCIPIA ORTHOGONA ⚜</a>
+  <a href="/geometry/index.html" class="nav-series">⚜ PRINCIPIA ORTHOGONA ⚜</a>
   <div class="nav-links">
     <a href="/geometry/prelude.html">Prelude</a>
     <a href="/geometry/ch1.html">Ch 1</a>
@@ -169,6 +159,7 @@ table{min-width:max-content}
     <a href="/geometry/ch11-spectral.html">Ch 11</a>
     <a href="/geometry/ch12-conclusion.html">Ch 12</a>
     <a href="/geometry/ch17-epilogue.html">Epilogue</a>
+    <a href="/geometry/ch18-zeolite-noncommutativity.html">Ch 18</a>
     <a href="/geometry/chH-collatz.html">Collatz</a>
     <a href="/geometry/ch-ocio.html">Ocio</a>
     <a href="/geometry/overture.html">Overture</a>
@@ -215,17 +206,20 @@ table{min-width:max-content}
         <ellipse cx="260" cy="70" rx="95" ry="42" fill="#1e7535" opacity=".9"/>
         <ellipse cx="248" cy="62" rx="55" ry="25" fill="#226638" opacity=".6"/>
         <ellipse cx="260" cy="60" rx="90" ry="38" fill="none" stroke="#0ABAB5" stroke-width=".5" opacity=".14"/>
+        <!-- Fruit 1: orange apple + nut below -->
         <line x1="210" y1="157" x2="206" y2="180" stroke="#1a4a2e" stroke-width="1.8"/>
         <ellipse cx="206" cy="189" rx="10" ry="15" fill="#c8742a" opacity=".9"/>
         <ellipse cx="206" cy="182" rx="8" ry="6" fill="#e8941a" opacity=".85"/>
         <path d="M202 174 C199 169 201 164 206 163 C211 162 214 166 212 170" fill="#7a4a1a" opacity=".82"/>
         <line x1="206" y1="203" x2="206" y2="209" stroke="#5a4a2a" stroke-width="1.2"/>
         <path d="M200 212 C198 208 200 205 204 205 C210 205 213 208 212 212 C211 217 206 219 202 217 C199 215 199 213 200 212 Z" fill="#7a6040" opacity=".92"/>
+        <!-- Fruit 2: red apple + nut below -->
         <line x1="308" y1="154" x2="314" y2="176" stroke="#1a4a2e" stroke-width="1.8"/>
         <ellipse cx="314" cy="185" rx="9" ry="14" fill="#b8301a" opacity=".85"/>
         <path d="M310 172 C307 167 309 162 314 161 C319 160 321 164 319 168" fill="#7a2a10" opacity=".75"/>
         <line x1="314" y1="198" x2="314" y2="204" stroke="#5a4a2a" stroke-width="1.2"/>
         <path d="M308 207 C306 203 308 200 312 200 C318 200 321 203 320 207 C319 212 314 214 310 212 C307 210 307 208 308 207 Z" fill="#7a6040" opacity=".9"/>
+        <!-- Fruit 3: yellow apple + nut below -->
         <line x1="245" y1="154" x2="240" y2="172" stroke="#1a4a2e" stroke-width="1.5"/>
         <ellipse cx="240" cy="180" rx="7" ry="11" fill="#c8a21a" opacity=".8"/>
         <line x1="240" y1="190" x2="240" y2="195" stroke="#5a4a2a" stroke-width="1"/>
@@ -341,7 +335,10 @@ table{min-width:max-content}
     <span class="section-tag">g-series · dm³ stability ladder · formal verification · GCTC Chain.lean</span>
     <h2 class="section-title">From seed to canopy:<br>the g-series</h2>
     <p class="section-body" style="max-width:660px;margin-bottom:3rem">The dm³ dynamical system passes through five regimes before the helical attractor locks. Each regime has a name, a cycle count, a place on the walk, and a place in the learning body. The g-series is the formal taxonomy — proved in Lean 4, walked in Newark, taught in the book.</p>
+
     <div style="display:flex;flex-direction:column;gap:0;border:1px solid rgba(10,186,181,.12);border-radius:6px;overflow:hidden">
+
+      <!-- g0 -->
       <div style="display:grid;grid-template-columns:80px 1fr;border-bottom:1px solid rgba(10,186,181,.08)">
         <div style="padding:1.4rem 1.2rem;background:rgba(10,186,181,.04);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem">
           <span style="font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:600;color:var(--teal);opacity:.5">g⁰</span>
@@ -353,6 +350,8 @@ table{min-width:max-content}
           <div style="margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);opacity:.4">C · compress · be here now · 90 Tiffany Blvd</div>
         </div>
       </div>
+
+      <!-- g2 -->
       <div style="display:grid;grid-template-columns:80px 1fr;border-bottom:1px solid rgba(10,186,181,.08)">
         <div style="padding:1.4rem 1.2rem;background:rgba(10,186,181,.06);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem">
           <span style="font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:600;color:var(--teal);opacity:.65">g²</span>
@@ -364,6 +363,8 @@ table{min-width:max-content}
           <div style="margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);opacity:.4">K · constrain · Branch Brook Park · the branches reach</div>
         </div>
       </div>
+
+      <!-- g6 -->
       <div style="display:grid;grid-template-columns:80px 1fr;border-bottom:1px solid rgba(10,186,181,.08)">
         <div style="padding:1.4rem 1.2rem;background:rgba(10,186,181,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem">
           <span style="font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:600;color:var(--teal);opacity:.78">g⁶</span>
@@ -375,6 +376,8 @@ table{min-width:max-content}
           <div style="margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);opacity:.4">F · fold · Forest Hill station · root re-roots · fold point</div>
         </div>
       </div>
+
+      <!-- g33 -->
       <div style="display:grid;grid-template-columns:80px 1fr;border-bottom:1px solid rgba(10,186,181,.08)">
         <div style="padding:1.4rem 1.2rem;background:rgba(10,186,181,.11);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem">
           <span style="font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:600;color:var(--teal);opacity:.9">g³³</span>
@@ -382,10 +385,12 @@ table{min-width:max-content}
         </div>
         <div style="padding:1.4rem 1.8rem">
           <div style="font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:#d4ede4;margin-bottom:.3rem">Stability threshold — the practitioner</div>
-          <div style="font-size:.9rem;color:var(--muted);line-height:1.65">Thirty-three consolidated K-crossings. The formal threshold: in the Lean 4 proof, <code style="font-family:'JetBrains Mono',monospace;font-size:.82em;color:var(--teal-soft)">poincare_collatz_contracting</code> guarantees that consecutive iterates enter the r* basin at or after step 33. In the learner: cortical activation has reduced, dorsal striatum dominates — the practitioner thinks in the domain, not about it.</div>
+          <div style="font-size:.9rem;color:var(--muted);line-height:1.65">Thirty-three consolidated K-crossings. The formal threshold: in the Lean 4 proof, <code style="font-family:'JetBrains Mono',monospace;font-size:.82em;color:var(--teal-soft)">poincare_collatz_contracting</code> guarantees that consecutive iterates enter the r* basin at or after step 33. In the learner: cortical activation has reduced, dorsal striatum dominates — the practitioner thinks in the domain, not about it. The generator has grown. The apple has begun to shrink.</div>
           <div style="margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);opacity:.4">U · unfold · practitioner threshold · C is small · 33 K-events</div>
         </div>
       </div>
+
+      <!-- g64 -->
       <div style="display:grid;grid-template-columns:80px 1fr">
         <div style="padding:1.4rem 1.2rem;background:rgba(10,186,181,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem">
           <span style="font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:600;color:var(--teal)">g⁶⁴</span>
@@ -393,15 +398,17 @@ table{min-width:max-content}
         </div>
         <div style="padding:1.4rem 1.8rem">
           <div style="font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:#d4ede4;margin-bottom:.3rem">Circuit saturation — the full canopy</div>
-          <div style="font-size:.9rem;color:var(--muted);line-height:1.65">Sixty-four passes. The helical attractor is fully locked. The Spiral Return theorem (T1) guarantees a non-trivial second circuit: <code style="font-family:'JetBrains Mono',monospace;font-size:.82em;color:var(--teal-soft)">G^{128}(x₀) ≠ x₀</code>. In the learner: the Cajueiro de Pirangi. One seed, 8,500 m², 70 years. The seed tends to forest.</div>
+          <div style="font-size:.9rem;color:var(--muted);line-height:1.65">Sixty-four passes. The helical attractor is fully locked. The Spiral Return theorem (T1) guarantees a non-trivial second circuit: <code style="font-family:'JetBrains Mono',monospace;font-size:.82em;color:var(--teal-soft)">G^{128}(x₀) ≠ x₀</code>. In the learner: the Cajueiro de Pirangi. One seed, 8,500 m², 70 years. The seed tends to forest — in Forest Hill, then on the moon. This is not the end. It is the point from which the next seed falls.</div>
           <div style="margin-top:.6rem;font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:#9cf3ef;opacity:.7">The caju forest in Forest Hill, then on the moon. We dream big.</div>
           <div style="margin-top:.4rem;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);opacity:.4">G = U ∘ F ∘ K ∘ C · 229 Ballantine · the canopy · the moon cajueiro</div>
         </div>
       </div>
+
     </div>
+
     <div style="margin-top:2rem;padding:1.2rem 1.8rem;border-left:3px solid rgba(10,186,181,.3);background:rgba(10,186,181,.03)">
       <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);opacity:.5;display:block;margin-bottom:.4rem">Lean 4 · GCTC Chain.lean · formally verified</span>
-      <p style="font-size:.9rem;color:var(--muted);line-height:1.75">The g-series is not a metaphor. It is a formally proved regime taxonomy in <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--teal-soft)">GCTC.Operators.Chain</code>, built on Mathlib4, zero axioms beyond the library. <a href="https://github.com/TOTOGT/GTCT" target="_blank" style="color:var(--teal);text-decoration:none">github.com/TOTOGT/GTCT →</a></p>
+      <p style="font-size:.9rem;color:var(--muted);line-height:1.75">The g-series is not a metaphor. It is a formally proved regime taxonomy in <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--teal-soft)">GCTC.Operators.Chain</code>, built on Mathlib4, zero axioms beyond the library. The <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--teal-soft)">poincare_collatz_contracting</code> theorem guarantees entry into the r* basin at n ≥ 33 for any contracting G-chain. The Spiral Return theorem T1 guarantees a non-trivial orbit at g64. <a href="https://github.com/TOTOGT/GTCT" target="_blank" style="color:var(--teal);text-decoration:none">github.com/TOTOGT/GTCT →</a></p>
     </div>
   </div>
 </section>
@@ -411,10 +418,13 @@ table{min-width:max-content}
 <!-- G6 LLC RESEARCH CALLOUT -->
 <section style="position:relative;z-index:2;padding:5rem 5vw;background:#050e0c;">
   <div style="max-width:820px;margin:0 auto" class="fade-in">
+
+    <!-- G6 LLC mark -->
     <div style="display:flex;align-items:center;gap:1.2rem;margin-bottom:2.4rem;">
       <div style="width:52px;height:52px;border:1px solid rgba(201,168,76,0.5);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
         <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg" width="52" height="52">
-          <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" fill="#C9A84C" opacity=".9">g⁶</text>
+          <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
+            font-family="JetBrains Mono,monospace" font-size="15" fill="#C9A84C" opacity=".9">g⁶</text>
         </svg>
       </div>
       <div>
@@ -422,13 +432,17 @@ table{min-width:max-content}
         <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);opacity:.55;margin-top:.2rem;">The Vitruvian Approximation · DOI: 10.5281/zenodo.19984522 · 2026</div>
       </div>
     </div>
+
+    <!-- Pull quote -->
     <blockquote style="border-left:3px solid #C9A84C;margin:0 0 1.8rem;padding:.6rem 0 .6rem 1.6rem;">
       <p style="font-family:'Cormorant Garamond',serif;font-size:1.38rem;font-style:italic;font-weight:300;color:#e8f5f0;line-height:1.7;margin:0;">
         Does the GCM/TO/TOGT operator framework, applied honestly, say anything new about which rational approximations arise naturally within its structure?
       </p>
     </blockquote>
+
+    <!-- Body paragraph -->
     <p style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--muted);line-height:1.85;margin-bottom:1.4rem;">
-      The answer is: partly. The G-cycle provides a clean, explicit route to the Rhind Papyrus approximation — recovering an ancient result via a single deterministic operator pass. A proposed selection functional 𝒞_rat has the continued-fraction convergents of π as its minimizers — but whether iterated G generates those convergents as outputs remains an open problem, honestly marked <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--teal-soft)">sorry</code> in the Lean formalization.
+      The answer is: partly. The G-cycle provides a clean, explicit route to the Rhind Papyrus approximation — recovering an ancient result via a single deterministic operator pass. The dm³ stability conditions confirm that the Rhind compression ratio is admissible in the basin sense but do not select it. A proposed selection functional 𝒞_rat has the continued-fraction convergents of π as its minimizers — but whether iterated G generates those convergents as outputs remains an open problem, honestly marked <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--teal-soft)">sorry</code> in the Lean formalization.
     </p>
     <p style="font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.08em;color:var(--teal);line-height:1.7;margin-bottom:1.2rem;">
       One operator. Any domain. Foundations that hold to g⁵-hyper-Mahlo.<br>
@@ -438,25 +452,23 @@ table{min-width:max-content}
       <span style="font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#C9A84C;">JUST BE</span>
       <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);opacity:.8;">JUST EAT THIS CAKE</span>
     </div>
+
+    <!-- Links -->
     <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">
-      
       <a href="https://doi.org/10.5281/zenodo.19984522" target="_blank"
          style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#030a08;background:#C9A84C;text-decoration:none;padding:.6rem 1.3rem;display:inline-block;">
         Read the paper · Zenodo →
       </a>
-      <a href="AMonster/monsterlaw.html"
+      <a href="vitruvian-approximation.pdf" target="_blank"
          style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);text-decoration:none;border:1px solid rgba(10,186,181,.3);padding:.6rem 1.3rem;display:inline-block;">
-        Law of Monsters · Vol. III →
-      </a>
-      <a href="togt-research-program.html"
-         style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);text-decoration:none;border:1px solid rgba(10,186,181,.3);padding:.6rem 1.3rem;display:inline-block;">
-        TOGT Research Program →
+        Local PDF →
       </a>
       <a href="https://g6llc.gumroad.com/l/soundworks" target="_blank"
          style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;opacity:.6;">
         g6llc.gumroad.com/l/soundworks
       </a>
     </div>
+
   </div>
 </section>
 
@@ -467,7 +479,9 @@ table{min-width:max-content}
     <h2 class="section-title">Join the roda.</h2>
     <p class="section-body" style="max-width:580px;margin-bottom:.8rem">The Principia Orthogona series is a living book — updated as the research advances, the proofs close, and the workshops run. Members receive all volumes, full soundworks access, and GitHub collaborator status. Pay what you can. Every amount funds the same work.</p>
     <p style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);opacity:.5;margin-bottom:3rem">After payment, send your GitHub username to grossiatwork@gmail.com — you will be added as a collaborator within 24 hours.</p>
+
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-bottom:2.5rem">
+      <!-- SEMENTE -->
       <div style="background:#0a0a0a;border:1px solid rgba(10,186,181,.18);padding:2.2rem;display:flex;flex-direction:column;gap:1.2rem">
         <div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--teal);opacity:.5;margin-bottom:.4rem">Tier 1</div>
@@ -483,6 +497,8 @@ table{min-width:max-content}
         </div>
         <a href="https://g6llc.gumroad.com/l/soundworks" target="_blank" style="display:block;text-align:center;padding:.85rem;background:transparent;border:1px solid rgba(10,186,181,.4);color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:background .2s" onmouseover="this.style.background='rgba(10,186,181,.1)'" onmouseout="this.style.background='transparent'">Plant the seed →</a>
       </div>
+
+      <!-- RAIZ -->
       <div style="background:#0d1210;border:1px solid rgba(10,186,181,.45);padding:2.2rem;display:flex;flex-direction:column;gap:1.2rem;position:relative">
         <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--teal);color:#030a08;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:.25rem .8rem;font-weight:600">Most chosen</div>
         <div>
@@ -499,6 +515,8 @@ table{min-width:max-content}
         </div>
         <a href="https://g6llc.gumroad.com/l/soundworks" target="_blank" style="display:block;text-align:center;padding:.85rem;background:var(--teal);color:#030a08;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;border-radius:2px;font-weight:600">Put down roots →</a>
       </div>
+
+      <!-- COPA -->
       <div style="background:#0a0a0a;border:1px solid rgba(200,162,74,.25);padding:2.2rem;display:flex;flex-direction:column;gap:1.2rem">
         <div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);opacity:.55;margin-bottom:.4rem">Tier 3</div>
@@ -515,6 +533,7 @@ table{min-width:max-content}
         <a href="https://g6llc.gumroad.com/l/soundworks" target="_blank" style="display:block;text-align:center;padding:.85rem;background:transparent;border:1px solid rgba(200,162,74,.4);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:background .2s" onmouseover="this.style.background='rgba(200,162,74,.08)'" onmouseout="this.style.background='transparent'">Become a patron →</a>
       </div>
     </div>
+
     <div style="text-align:center;padding:1.5rem;border:1px solid rgba(10,186,181,.1);border-radius:4px;background:rgba(10,186,181,.02)">
       <p style="font-size:.9rem;color:var(--muted);line-height:1.75;margin-bottom:.8rem">All memberships are pay-what-you-can starting at each tier. If $25 is too much right now, reach out — no one is turned away. The roda is open.</p>
       <a href="https://g6llc.gumroad.com/l/soundworks" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);text-decoration:none;opacity:.7">g6llc.gumroad.com/l/soundworks</a>
@@ -579,8 +598,7 @@ table{min-width:max-content}
     <div style="text-align:center;margin-top:2.5rem">
       <p class="section-body" style="margin-bottom:1rem">Every contributor is a new root. Every root becomes a trunk.</p>
       <a href="mailto:grossiatwork@gmail.com" class="btn-ask teal" style="margin-right:.5rem">Contact Pablo</a>
-      
-      <a href="https://github.com/TOTOGT/AXLE" target="_blank" class="btn-sec">GitHub · TOTOGT/AXLE</a>
+      <a href="https://github.com/grossi-ops/cajueiro" target="_blank" class="btn-sec">GitHub</a>
     </div>
   </div>
 </section>
@@ -623,32 +641,10 @@ table{min-width:max-content}
     © 2026 Pablo Nogueira Grossi — G6 LLC · MIT License (code) · CC BY 4.0 (educational materials)<br>
     90 Tiffany Blvd Apt 242 · Newark NJ 07104 · North Ward · EIN 33-2880433<br>
     grossiatwork@gmail.com · ORCID: 0009-0000-6496-2186<br>
-    github.com/TOTOGT/AXLE · github.com/TOTOGT/GTCT · github.com/TOTOGT/DM3-lab<br>
+    github.com/grossi-ops/cajueiro · github.com/TOTOGT/AXLE · github.com/DM3-lab<br>
     Fiscal sponsor: New York Foundation for the Arts (NYFA)
   </p>
 </footer>
-
-<!-- FIX 2: NASA Glenn capability statement removed from here.
-     It does not belong in this page — it uses Claude.ai CSS variables
-     (--color-text-primary etc.) that don't exist in this stylesheet
-     and would render as invisible black text on dark background.
-     Publish it as a standalone post or LinkedIn article instead. -->
-
-<div id="g6-cryst-btn" onclick="document.getElementById('g6-cryst-panel').classList.toggle('g6-open')" title="Crystal Map — Book 3" style="position:fixed;bottom:24px;right:24px;z-index:99998;width:50px;height:50px;border-radius:50%;background:#07050f;border:1.5px solid #c9a84c;color:#c9a84c;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 16px rgba(0,0,0,0.4);user-select:none;transition:transform .18s" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'">🜁</div>
-<div id="g6-cryst-panel" style="position:fixed;bottom:86px;right:24px;z-index:99997;width:370px;max-height:500px;background:#07050f;border:1px solid rgba(201,168,76,.35);border-radius:10px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.55);display:none;flex-direction:column">
-  <div style="padding:9px 14px 7px;border-bottom:.5px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:space-between">
-    <span style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:.2em;color:rgba(201,168,76,.6);text-transform:uppercase">Crystal Map · Book 3</span>
-    <button onclick="document.getElementById('g6-cryst-panel').classList.remove('g6-open')" style="background:none;border:none;color:rgba(201,168,76,.4);font-size:16px;cursor:pointer;line-height:1">×</button>
-  </div>
-  <canvas id="g6-cryst-cv" style="display:block;width:100%;height:290px;cursor:crosshair;background:#07050f"></canvas>
-  <div style="font-family:'Courier New',monospace;font-size:9px;color:rgba(201,168,76,.25);text-align:center;padding:3px 0;letter-spacing:.1em">drag · hover · click to open chapter</div>
-  <div id="g6-cryst-info" style="border-top:.5px solid rgba(201,168,76,.15);padding:8px 14px 10px;min-height:58px">
-    <div id="g6-ci-title" style="font-size:12px;font-weight:bold;color:#c9a84c;margin-bottom:2px;font-family:'Courier New',monospace"></div>
-    <div id="g6-ci-desc" style="font-size:11px;color:rgba(232,224,208,.6);line-height:1.4"></div>
-  </div>
-</div>
-<style>#g6-cryst-panel.g6-open{display:flex!important}</style>
-<script src="/geometry/g6-crystal.js"></script>
 
 <script>
 const cv=document.getElementById('bg'),cx=cv.getContext('2d');
@@ -710,6 +706,23 @@ function stopWave(){wfOn=false;wfEl.classList.remove('playing');bars.forEach(b=>
 const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.08});
 document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
 </script>
+
+<!-- G6 Crystal Navigator -->
+<div id="g6-cryst-btn" onclick="document.getElementById('g6-cryst-panel').classList.toggle('g6-open')" title="Crystal Map — Book 3" style="position:fixed;bottom:24px;right:24px;z-index:99998;width:50px;height:50px;border-radius:50%;background:#07050f;border:1.5px solid #c9a84c;color:#c9a84c;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 16px rgba(0,0,0,0.4);user-select:none;transition:transform .18s" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'">🜁</div>
+<div id="g6-cryst-panel" style="position:fixed;bottom:86px;right:24px;z-index:99997;width:370px;max-height:500px;background:#07050f;border:1px solid rgba(201,168,76,.35);border-radius:10px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.55);display:none;flex-direction:column">
+  <div style="padding:9px 14px 7px;border-bottom:.5px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:space-between">
+    <span style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:.2em;color:rgba(201,168,76,.6);text-transform:uppercase">Crystal Map · Book 3</span>
+    <button onclick="document.getElementById('g6-cryst-panel').classList.remove('g6-open')" style="background:none;border:none;color:rgba(201,168,76,.4);font-size:16px;cursor:pointer;line-height:1">×</button>
+  </div>
+  <canvas id="g6-cryst-cv" style="display:block;width:100%;height:290px;cursor:crosshair;background:#07050f"></canvas>
+  <div style="font-family:'Courier New',monospace;font-size:9px;color:rgba(201,168,76,.25);text-align:center;padding:3px 0;letter-spacing:.1em">drag · hover · click to open chapter</div>
+  <div id="g6-cryst-info" style="border-top:.5px solid rgba(201,168,76,.15);padding:8px 14px 10px;min-height:58px">
+    <div id="g6-ci-title" style="font-size:12px;font-weight:bold;color:#c9a84c;margin-bottom:2px;font-family:'Courier New',monospace"></div>
+    <div id="g6-ci-desc" style="font-size:11px;color:rgba(232,224,208,.6);line-height:1.4"></div>
+  </div>
+</div>
+<style>#g6-cryst-panel.g6-open{display:flex!important}</style>
+<script src="/geometry/g6-crystal.js"></script>
 
 </body>
 </html>
