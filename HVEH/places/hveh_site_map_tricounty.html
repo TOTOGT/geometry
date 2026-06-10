@@ -1,0 +1,288 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.wrap{display:grid;grid-template-columns:1fr 320px;gap:0;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.map-area{position:relative;background:#e8f2ec;min-height:560px}
+.map-svg{width:100%;height:100%;display:block}
+.panel{border-left:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column}
+.panel-header{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.panel-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.panel-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.legend{padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.legend-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.legend-row:last-child{margin-bottom:0}
+.dot{border-radius:50%;flex-shrink:0}
+.dot-s{width:10px;height:10px;background:#1D9E75;border:2px solid #0F6E56}
+.dot-m{width:15px;height:15px;background:#378ADD;border:2px solid #185FA5}
+.dot-l{width:22px;height:22px;background:#D85A30;border:2px solid #993C1D}
+.legend-text{font-size:11px;color:var(--color-text-secondary)}
+.legend-text strong{color:var(--color-text-primary);font-weight:500}
+.totals{padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px}
+.stat-val{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.stat-lbl{font-size:10px;color:var(--color-text-secondary);margin-top:1px}
+.site-detail{flex:1;overflow-y:auto;padding:0}
+.site-none{padding:16px;font-size:12px;color:var(--color-text-tertiary);text-align:center;margin-top:24px}
+.site-card{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.site-card:last-child{border-bottom:none}
+.site-name{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.site-city{font-size:10px;color:var(--color-text-tertiary);margin-bottom:8px}
+.site-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.site-stat{background:var(--color-background-secondary);border-radius:6px;padding:5px 7px}
+.site-stat-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.site-stat-lbl{font-size:10px;color:var(--color-text-secondary)}
+.site-benefit{margin-top:6px;font-size:10px;color:var(--color-text-secondary);line-height:1.5}
+.filter-row{display:flex;gap:6px;padding:10px 16px;border-bottom:0.5px solid var(--color-border-tertiary);flex-wrap:wrap}
+.filter-btn{font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all 0.15s}
+.filter-btn.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.city-label{font-size:10px;font-weight:500;fill:var(--color-text-secondary, #555);pointer-events:none}
+</style>
+
+<h2 class="sr-only">HVEH site map — 25 proposed locations across Newark, Belleville, and Harrison showing module size, cost, and flood mitigation capacity</h2>
+
+<div class="wrap">
+  <div class="map-area">
+    <svg class="map-svg" id="mapsvg" viewBox="0 0 420 560"></svg>
+  </div>
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">HVEH deployment — tri-city corridor</div>
+      <div class="panel-sub">Newark · Belleville · Harrison  ·  25 modules</div>
+    </div>
+    <div class="legend">
+      <div class="legend-row">
+        <div class="dot dot-s"></div>
+        <div class="legend-text"><strong>Small</strong> — CSO outfall / retention basin<br>~40 kW · ~$60k · flood −20–30%</div>
+      </div>
+      <div class="legend-row">
+        <div class="dot dot-m"></div>
+        <div class="legend-text"><strong>Medium</strong> — tidal channel / river reach<br>~200 kW · ~$150k · flood −30–40%</div>
+      </div>
+      <div class="legend-row">
+        <div class="dot dot-l"></div>
+        <div class="legend-text"><strong>Large</strong> — harbor tidal gate<br>~500 kW · ~$500k · flood −40–50%</div>
+      </div>
+    </div>
+    <div class="totals">
+      <div class="stat"><div class="stat-val" id="t-units">25</div><div class="stat-lbl">modules</div></div>
+      <div class="stat"><div class="stat-val" id="t-cost">$2.8M</div><div class="stat-lbl">est. build cost</div></div>
+      <div class="stat"><div class="stat-val" id="t-kw">2.6 MW</div><div class="stat-lbl">storm generation</div></div>
+      <div class="stat"><div class="stat-val" id="t-flood">−30–50%</div><div class="stat-lbl">peak flood reduction</div></div>
+    </div>
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="filterSites('all',this)">All</button>
+      <button class="filter-btn" onclick="filterSites('Newark',this)">Newark</button>
+      <button class="filter-btn" onclick="filterSites('Belleville',this)">Belleville</button>
+      <button class="filter-btn" onclick="filterSites('Harrison',this)">Harrison</button>
+    </div>
+    <div class="site-detail" id="site-detail">
+      <div class="site-none">Click a site on the map to see details</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SITES = [
+  {id:0,name:"Passaic Outfall — Ferry St",city:"Newark",size:"small",lat:40.7282,lng:-74.1571,notes:"CSO relief, Ironbound district"},
+  {id:1,name:"Passaic Outfall — Jackson St",city:"Newark",size:"small",lat:40.7318,lng:-74.1598,notes:"CSO relief point"},
+  {id:2,name:"Passaic Outfall — Pulaski St",city:"Newark",size:"small",lat:40.7355,lng:-74.1621,notes:"CSO relief point"},
+  {id:3,name:"Passaic Outfall — Clay St",city:"Newark",size:"small",lat:40.7388,lng:-74.1644,notes:"CSO relief point"},
+  {id:4,name:"Ironbound Retention — Rte 1&9",city:"Newark",size:"small",lat:40.7245,lng:-74.1538,notes:"Stormwater basin"},
+  {id:5,name:"Branch Brook Park Outflow",city:"Newark",size:"small",lat:40.7529,lng:-74.1725,notes:"Park drainage channel"},
+  {id:6,name:"Third River Confluence",city:"Newark",size:"small",lat:40.7612,lng:-74.1688,notes:"River junction outfall"},
+  {id:7,name:"Passaic Outfall — Market St",city:"Newark",size:"small",lat:40.7362,lng:-74.1665,notes:"CSO relief point"},
+  {id:8,name:"Retention — Ironbound South",city:"Newark",size:"small",lat:40.7198,lng:-74.1502,notes:"Basin, south Ironbound"},
+  {id:9,name:"Newark Bay — Port Outfall",city:"Newark",size:"small",lat:40.7055,lng:-74.1478,notes:"Bay interface outfall"},
+  {id:10,name:"Ironbound Harbor Edge",city:"Newark",size:"medium",lat:40.7271,lng:-74.1610,notes:"Main Passaic tidal reach"},
+  {id:11,name:"Downtown Riverfront Reach",city:"Newark",size:"medium",lat:40.7408,lng:-74.1680,notes:"High-volume tidal reach"},
+  {id:12,name:"Newark Bay — Bayfront Outfall",city:"Newark",size:"medium",lat:40.7082,lng:-74.1521,notes:"Bay-Passaic junction"},
+  {id:13,name:"Belleville Outfall — Main St N",city:"Belleville",size:"small",lat:40.7962,lng:-74.1538,notes:"Main St stormwater network"},
+  {id:14,name:"Belleville Outfall — Main St S",city:"Belleville",size:"small",lat:40.7918,lng:-74.1521,notes:"Main St stormwater network"},
+  {id:15,name:"Belleville Outfall — Franklin Ave",city:"Belleville",size:"small",lat:40.7888,lng:-74.1508,notes:"Franklin Ave drainage"},
+  {id:16,name:"Belleville Outfall — Washington Ave",city:"Belleville",size:"small",lat:40.7855,lng:-74.1495,notes:"Washington Ave drainage"},
+  {id:17,name:"Belleville Outfall — Joralemon St",city:"Belleville",size:"small",lat:40.7825,lng:-74.1482,notes:"Joralemon St drainage"},
+  {id:18,name:"Second River / Watsessing Confluence",city:"Belleville",size:"medium",lat:40.7948,lng:-74.1558,notes:"Primary river junction — prime site"},
+  {id:19,name:"Passaic — Belleville N Reach",city:"Belleville",size:"medium",lat:40.7978,lng:-74.1572,notes:"High-flow tidal reach"},
+  {id:20,name:"Passaic — Belleville S Reach",city:"Belleville",size:"medium",lat:40.7888,lng:-74.1545,notes:"Medium tidal reach"},
+  {id:21,name:"Harrison N Waterfront",city:"Harrison",size:"medium",lat:40.7488,lng:-74.1558,notes:"Adjacent to SI Stadium fan hub"},
+  {id:22,name:"Harrison S Waterfront",city:"Harrison",size:"medium",lat:40.7448,lng:-74.1538,notes:"Tidal channel, Harrison"},
+  {id:23,name:"Harrison Tidal Channel — Penn St",city:"Harrison",size:"medium",lat:40.7468,lng:-74.1575,notes:"CSO outfall, Harrison"},
+  {id:24,name:"Newark Bay — Harbor Tidal Gate",city:"Newark",size:"large",lat:40.7028,lng:-74.1448,notes:"Harbor edge — largest flow in corridor"},
+];
+
+const SPECS = {
+  small:  {kw:40,  cost:60000,  flood:"−20–30%", color:"#1D9E75", stroke:"#0F6E56", r:6},
+  medium: {kw:200, cost:150000, flood:"−30–40%", color:"#378ADD", stroke:"#185FA5", r:9},
+  large:  {kw:500, cost:500000, flood:"−40–50%", color:"#D85A30", stroke:"#993C1D", r:14},
+};
+
+const CITY_LABELS = [
+  {name:"BELLEVILLE",lat:40.797,lng:-74.148},
+  {name:"NEWARK",lat:40.740,lng:-74.172},
+  {name:"HARRISON",lat:40.745,lng:-74.144},
+];
+
+const RIVERS = [
+  [[40.810,-74.158],[40.800,-74.157],[40.795,-74.156],[40.790,-74.155],[40.785,-74.154],[40.778,-74.153],[40.770,-74.151],[40.762,-74.150],[40.755,-74.150],[40.748,-74.150],[40.742,-74.152],[40.736,-74.150],[40.730,-74.148],[40.724,-74.150],[40.718,-74.152],[40.712,-74.152],[40.706,-74.150],[40.700,-74.147]],
+];
+
+let activeFilter = 'all';
+let activeSite = null;
+
+const LAT_MIN = 40.695, LAT_MAX = 40.810;
+const LNG_MIN = -74.182, LNG_MAX = -74.135;
+const W = 420, H = 560;
+const PAD = 20;
+
+function toXY(lat, lng) {
+  const x = PAD + (lng - LNG_MIN) / (LNG_MAX - LNG_MIN) * (W - PAD*2);
+  const y = H - PAD - (lat - LAT_MIN) / (LAT_MAX - LAT_MIN) * (H - PAD*2);
+  return [x, y];
+}
+
+function fmt(n) { return '$' + (n >= 1000000 ? (n/1000000).toFixed(1)+'M' : (n/1000).toFixed(0)+'k'); }
+
+function renderMap(filter) {
+  const svg = document.getElementById('mapsvg');
+  const visible = SITES.filter(s => filter === 'all' || s.city === filter);
+
+  let html = '';
+
+  html += `<rect x="0" y="0" width="${W}" height="${H}" fill="#e8f2ec"/>`;
+
+  const gridLats = [40.70,40.71,40.72,40.73,40.74,40.75,40.76,40.77,40.78,40.79,40.80];
+  const gridLngs = [-74.18,-74.175,-74.17,-74.165,-74.16,-74.155,-74.15,-74.145,-74.14];
+  gridLats.forEach(lat => {
+    const [,y] = toXY(lat, LNG_MIN);
+    html += `<line x1="${PAD}" y1="${y}" x2="${W-PAD}" y2="${y}" stroke="#c8ddd2" stroke-width="0.5"/>`;
+  });
+  gridLngs.forEach(lng => {
+    const [x] = toXY(LAT_MIN, lng);
+    html += `<line x1="${x}" y1="${PAD}" x2="${x}" y2="${H-PAD}" stroke="#c8ddd2" stroke-width="0.5"/>`;
+  });
+
+  RIVERS.forEach(pts => {
+    const d = pts.map((p,i) => { const [x,y]=toXY(p[0],p[1]); return (i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1); }).join(' ');
+    html += `<path d="${d}" fill="none" stroke="#7ab8cc" stroke-width="3.5" stroke-linecap="round"/>`;
+    html += `<path d="${d}" fill="none" stroke="#a8d4e0" stroke-width="1.5" stroke-linecap="round"/>`;
+  });
+
+  CITY_LABELS.forEach(cl => {
+    const [x,y] = toXY(cl.lat, cl.lng);
+    html += `<text x="${x}" y="${y}" text-anchor="middle" font-size="9" font-weight="500" fill="#7a9e8a" letter-spacing="1.5" font-family="system-ui">${cl.name}</text>`;
+  });
+
+  const [sx,sy] = toXY(40.7368, -74.1502);
+  html += `<rect x="${sx-18}" y="${sy-8}" width="36" height="14" rx="2" fill="#e8e0f0" stroke="#b0a0c8" stroke-width="0.5"/>`;
+  html += `<text x="${sx}" y="${sy+3}" text-anchor="middle" font-size="7" fill="#534AB7" font-family="system-ui">SI Stadium</text>`;
+
+  SITES.forEach(s => {
+    if (filter !== 'all' && s.city !== filter) return;
+    const [x,y] = toXY(s.lat, s.lng);
+    const sp = SPECS[s.size];
+    const isActive = activeSite === s.id;
+    const pulse = isActive ? `<circle cx="${x}" cy="${y}" r="${sp.r+5}" fill="${sp.color}" fill-opacity="0.2"/>` : '';
+    html += pulse;
+    html += `<circle cx="${x}" cy="${y}" r="${sp.r}" fill="${sp.color}" stroke="${sp.stroke}" stroke-width="1.5" style="cursor:pointer" data-id="${s.id}" class="site-dot"/>`;
+    if (s.size === 'large') {
+      html += `<text x="${x}" y="${y+3}" text-anchor="middle" font-size="8" font-weight="500" fill="white" style="pointer-events:none">L</text>`;
+    }
+  });
+
+  svg.innerHTML = html;
+
+  svg.querySelectorAll('.site-dot').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = parseInt(el.getAttribute('data-id'));
+      activeSite = activeSite === id ? null : id;
+      renderMap(activeFilter);
+      showDetail(activeFilter);
+    });
+  });
+}
+
+function showDetail(filter) {
+  const detail = document.getElementById('site-detail');
+  const visible = SITES.filter(s => filter === 'all' || s.city === filter);
+  const sorted = [...visible].sort((a,b) => {
+    const order = {large:0,medium:1,small:2};
+    return order[a.size] - order[b.size];
+  });
+
+  if (activeSite !== null) {
+    const s = SITES.find(x => x.id === activeSite);
+    if (s) {
+      const sp = SPECS[s.size];
+      detail.innerHTML = `<div class="site-card">
+        <div class="site-name">${s.name}</div>
+        <div class="site-city">${s.city} · ${s.size} module</div>
+        <div class="site-grid">
+          <div class="site-stat"><div class="site-stat-val">${fmt(sp.cost)}</div><div class="site-stat-lbl">est. build cost</div></div>
+          <div class="site-stat"><div class="site-stat-val">${sp.kw} kW</div><div class="site-stat-lbl">storm generation</div></div>
+          <div class="site-stat"><div class="site-stat-val">${sp.flood}</div><div class="site-stat-lbl">flood reduction</div></div>
+          <div class="site-stat"><div class="site-stat-val">${Math.round(sp.kw * 8760 * 0.15 / 1000)} MWh</div><div class="site-stat-lbl">annual energy est.</div></div>
+        </div>
+        <div class="site-benefit">${s.notes}</div>
+      </div>
+      <div style="padding:10px 16px;border-bottom:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:8px">All sites</div>
+        ${sorted.map(s2 => {
+          const sp2 = SPECS[s2.size];
+          const dot = s2.size==='large'?'dot-l':s2.size==='medium'?'dot-m':'dot-s';
+          return `<div onclick="selectSite(${s2.id})" style="display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer;border-bottom:0.5px solid var(--color-border-tertiary)">
+            <div class="dot ${dot}" style="flex-shrink:0"></div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:11px;font-weight:${s2.id===activeSite?'500':'400'};color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s2.name}</div>
+              <div style="font-size:10px;color:var(--color-text-secondary)">${s2.city} · ${fmt(sp2.cost)}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+      return;
+    }
+  }
+
+  const totalCost = sorted.reduce((a,s) => a + SPECS[s.size].cost, 0);
+  const totalKw = sorted.reduce((a,s) => a + SPECS[s.size].kw, 0);
+
+  detail.innerHTML = sorted.map(s => {
+    const sp = SPECS[s.size];
+    const dot = s.size==='large'?'dot-l':s.size==='medium'?'dot-m':'dot-s';
+    return `<div onclick="selectSite(${s.id})" style="display:flex;align-items:center;gap:8px;padding:8px 16px;cursor:pointer;border-bottom:0.5px solid var(--color-border-tertiary)">
+      <div class="dot ${dot}" style="flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:11px;font-weight:400;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</div>
+        <div style="font-size:10px;color:var(--color-text-secondary)">${s.city} · ${fmt(sp.cost)} · ${sp.kw} kW · ${sp.flood}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectSite(id) {
+  activeSite = id;
+  renderMap(activeFilter);
+  showDetail(activeFilter);
+}
+
+function filterSites(f, btn) {
+  activeFilter = f;
+  activeSite = null;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const vis = SITES.filter(s => f === 'all' || s.city === f);
+  const cost = vis.reduce((a,s) => a + SPECS[s.size].cost, 0);
+  const kw = vis.reduce((a,s) => a + SPECS[s.size].kw, 0);
+  document.getElementById('t-units').textContent = vis.length;
+  document.getElementById('t-cost').textContent = '$' + (cost >= 1000000 ? (cost/1000000).toFixed(1)+'M' : (cost/1000).toFixed(0)+'k');
+  document.getElementById('t-kw').textContent = kw >= 1000 ? (kw/1000).toFixed(1)+' MW' : kw+' kW';
+
+  renderMap(f);
+  showDetail(f);
+}
+
+renderMap('all');
+showDetail('all');
+</script>
