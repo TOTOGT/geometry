@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hologram Tutor · Marie Curie · AXLE Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<!--
+  tutor_id: curie_ms_06_2026
+  lineage: Mahanirvani_Akhada_Aligned
+  mathematical_basis: Curie Law as K operator on dm3 Spin Manifold
+  open_source_status: Free to Download / GPL-3.0-or-later
+  verification_engine: Lean 4 AXLE Engine Validated
+-->
+<style>
+:root{--void:#04040a;--surface:#0c0d16;--card:#10111c;--gold:#c9a84c;--teal:#0ABAB5;--red:#e05a3a;--purple:#c084fc;--green:#50c878;--rose:#f43f5e;--text:#e8e4d8;--muted:#6b6757;--dim:#1c1d28;--rule:rgba(201,168,76,0.18);--mono:'JetBrains Mono','Courier New',monospace;--serif:'Noto Serif',Georgia,serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--void);color:var(--text);font-family:var(--mono);}
+
+.tutor-card{width:340px;background:var(--card);border:1px solid var(--rule);position:relative;overflow:hidden;transition:border-color .25s,box-shadow .25s;cursor:pointer;}
+.tutor-card:hover{border-color:rgba(244,63,94,0.4);box-shadow:0 0 32px rgba(244,63,94,0.07);}
+
+.tutor-hologram{width:100%;height:220px;position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 70%,rgba(244,63,94,0.08) 0%,rgba(4,4,10,0.95) 70%);}
+canvas.holo-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.holo-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(244,63,94,0.025) 3px,rgba(244,63,94,0.025) 4px);pointer-events:none;}
+.holo-flicker{position:absolute;inset:0;background:rgba(244,63,94,0.03);animation:flicker 6s ease-in-out infinite;pointer-events:none;}
+@keyframes flicker{0%,100%{opacity:1;}93%{opacity:1;}94%{opacity:0.35;}95%{opacity:1;}98%{opacity:0.75;}99%{opacity:1;}}
+
+.tutor-id{padding:.5rem .9rem .35rem;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;background:rgba(244,63,94,0.04);}
+.tutor-id-label{font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;color:var(--rose);}
+.tutor-id-tag{font-size:.5rem;letter-spacing:.1em;color:var(--muted);}
+
+.tutor-body{padding:1.1rem;}
+.tutor-name{font-family:var(--serif);font-size:1.35rem;font-weight:400;color:var(--gold);letter-spacing:.03em;line-height:1.15;margin-bottom:.2rem;}
+.tutor-dates{font-size:.56rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:.75rem;}
+.tutor-desc{font-family:var(--serif);font-size:.82rem;color:rgba(232,228,216,.7);line-height:1.7;margin-bottom:1rem;font-style:italic;}
+
+.op-row{display:flex;gap:.3rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;}
+.op{font-size:.68rem;padding:.18rem .45rem;border-radius:2px;letter-spacing:.08em;}
+.op-c{background:rgba(10,186,181,.12);color:#0ABAB5;border:1px solid rgba(10,186,181,.28);}
+.op-k{background:rgba(224,90,58,.12);color:#e05a3a;border:1px solid rgba(224,90,58,.28);}
+.op-f{background:rgba(80,200,120,.12);color:#50c878;border:1px solid rgba(80,200,120,.28);}
+.op-u{background:rgba(192,132,252,.12);color:#c084fc;border:1px solid rgba(192,132,252,.28);}
+.op-arr{color:var(--muted);font-size:.7rem;}
+.op-eq{font-size:.65rem;color:rgba(201,168,76,.6);margin-left:.2rem;}
+
+.doctrine{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem;}
+.doc-item{background:var(--dim);padding:.5rem .65rem;}
+.doc-label{font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem;}
+.doc-val{font-size:.72rem;color:var(--text);line-height:1.45;}
+.doc-val.gold{color:var(--gold);}
+.doc-val.teal{color:var(--teal);}
+.doc-val.red{color:var(--red);}
+.doc-val.rose{color:var(--rose);}
+
+.tutor-quote{background:rgba(201,168,76,.04);border-left:2px solid var(--rose);padding:.65rem .9rem;margin-bottom:1rem;}
+.tutor-quote p{font-family:var(--serif);font-size:.78rem;font-style:italic;color:rgba(232,228,216,.8);line-height:1.65;}
+.tutor-quote cite{font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.35rem;font-style:normal;}
+
+.axle-row{display:flex;align-items:center;justify-content:space-between;padding:.55rem .9rem;background:var(--dim);border-top:1px solid var(--rule);}
+.axle-left{font-size:.52rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;}
+.axle-badges{display:flex;gap:.35rem;}
+.axle-badge{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .42rem;border-radius:1px;}
+.ab-lean{background:rgba(80,200,120,.12);color:#50c878;border:1px solid rgba(80,200,120,.28);}
+.ab-gpl{background:rgba(10,186,181,.10);color:#0ABAB5;border:1px solid rgba(10,186,181,.25);}
+.ab-axle{background:rgba(201,168,76,.10);color:var(--gold);border:1px solid rgba(201,168,76,.25);}
+
+.tutor-actions{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--rule);}
+.tutor-action{display:flex;align-items:center;justify-content:center;padding:.65rem;font-size:.56rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:background .2s,color .2s;gap:.4rem;border:none;background:transparent;cursor:pointer;font-family:var(--mono);}
+.tutor-action:hover{background:rgba(201,168,76,.07);color:var(--gold);}
+.tutor-action+.tutor-action{border-left:1px solid var(--rule);}
+.ta-icon{font-size:.9rem;}
+
+.demo-outer{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2rem;padding:3rem 2rem;background:var(--void);}
+.demo-label{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-align:center;width:100%;padding-bottom:1rem;border-bottom:1px solid var(--rule);}
+</style>
+</head>
+<body>
+<div class="demo-outer">
+<div class="demo-label">Marie Curie Tutor Card — inject into hub tutor-grid</div>
+
+<div class="tutor-card" onclick="window.location='ch-curie.html'" role="button" tabindex="0"
+  aria-label="Open Marie Curie Hologram Tutor"
+  data-tutor-id="curie_ms_06_2026"
+  data-lineage="Mahanirvani_Akhada_Aligned"
+  data-basis="Curie Law as K Operator on dm3 Spin Manifold"
+  data-license="GPL-3.0-or-later"
+  data-engine="Lean 4 AXLE Engine Validated">
+
+  <div class="tutor-hologram">
+    <canvas class="holo-canvas" id="curie-canvas"></canvas>
+    <div class="holo-scan"></div>
+    <div class="holo-flicker"></div>
+  </div>
+
+  <div class="tutor-id">
+    <span class="tutor-id-label">Hologram Tutor · curie_ms_06_2026</span>
+    <span class="tutor-id-tag">GTCT T1 · AXLE v6.2</span>
+  </div>
+
+  <div class="tutor-body">
+    <div class="tutor-name">Marie Skłodowska Curie</div>
+    <div class="tutor-dates">1867 – 1934 · Varsóvia · Paris · 2× Nobel</div>
+    <div class="tutor-desc">Dois Nobels. Dois elementos descobertos. Um século à frente. A ciência tem charme — ela mediu isso no laboratório.</div>
+
+    <div class="op-row">
+      <span class="op op-c">C · B·M</span>
+      <span class="op-arr">∘</span>
+      <span class="op op-k">K · T_C</span>
+      <span class="op-arr">∘</span>
+      <span class="op op-f">F · χ→∞</span>
+      <span class="op-arr">∘</span>
+      <span class="op op-u">U · M_s</span>
+      <span class="op-eq">= x*</span>
+    </div>
+
+    <div class="doctrine">
+      <div class="doc-item">
+        <div class="doc-label">Operator K</div>
+        <div class="doc-val gold">κ* = T_C</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-label">Fold F</div>
+        <div class="doc-val teal">χ = C/(T−T_C)</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-label">Fixed Point</div>
+        <div class="doc-val">ferromagnet M_s</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-label">γ_MF</div>
+        <div class="doc-val gold">1 · μmax = −2</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-label">ε₀</div>
+        <div class="doc-val teal">1/3 · spin basin</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-label">Sorry C.1</div>
+        <div class="doc-val red">γ(3D) ≈ 1.24</div>
+      </div>
+    </div>
+
+    <div class="tutor-quote">
+      <p>"La science a un grand charme — un savant dans son laboratoire est aussi un enfant devant un conte de fées."</p>
+      <cite>— Marie Curie · autobiographie · 1923</cite>
+    </div>
+
+    <div class="axle-row">
+      <span class="axle-left">AXLE · Chain_updated.lean</span>
+      <div class="axle-badges">
+        <span class="axle-badge ab-lean">0 sorry</span>
+        <span class="axle-badge ab-axle">AXLE v6.2</span>
+        <span class="axle-badge ab-gpl">GPL-3.0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tutor-actions">
+    <a class="tutor-action" href="ch-curie.html">
+      <span class="ta-icon">📖</span><span>Read Chapter</span>
+    </a>
+    <button class="tutor-action" onclick="event.stopPropagation();curieDialogue()">
+      <span class="ta-icon">💬</span><span>Ask Marie</span>
+    </button>
+  </div>
+</div>
+</div>
+
+<div id="curie-modal" style="display:none;position:fixed;inset:0;background:rgba(4,4,10,.92);z-index:1000;align-items:center;justify-content:center;padding:2rem;">
+  <div style="max-width:540px;width:100%;background:#0c0d16;border:1px solid rgba(244,63,94,.25);padding:2rem;position:relative;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:#f43f5e;margin-bottom:1rem;">Hologram Marie · Interactive</div>
+    <div id="curie-exchange" style="min-height:140px;font-family:'Noto Serif',serif;font-size:.9rem;color:rgba(232,228,216,.85);line-height:1.7;margin-bottom:1.2rem;font-style:italic;"></div>
+    <input id="curie-input" type="text" placeholder="Ask about magnetism, radioactivity, science…"
+      style="width:100%;background:#04040a;border:1px solid rgba(244,63,94,.2);color:#e8e4d8;padding:.6rem .9rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;outline:none;margin-bottom:.8rem;"
+      onkeydown="if(event.key==='Enter')curieRespond()">
+    <div style="display:flex;gap:.8rem;">
+      <button onclick="curieRespond()" style="flex:1;background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3);color:#f43f5e;padding:.55rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;">Ask</button>
+      <button onclick="document.getElementById('curie-modal').style.display='none'" style="flex:1;background:transparent;border:1px solid rgba(90,94,110,.3);color:#6b6757;padding:.55rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function curieHologram(){
+  var canvas=document.getElementById('curie-canvas'); if(!canvas)return;
+  var ctx=canvas.getContext('2d'),W,H,tick=0;
+  var GOLD='#c9a84c',TEAL='#0ABAB5',RED='#e05a3a',ROSE='#f43f5e',GREEN='#50c878';
+  var spins=[];
+
+  function resize(){
+    W=canvas.offsetWidth; H=canvas.offsetHeight; canvas.width=W; canvas.height=H;
+    spins=[];
+    for(var r=0;r<5;r++) for(var c=0;c<12;c++)
+      spins.push({r:r,c:c,angle:Math.random()*Math.PI*2,phase:Math.random()*Math.PI*2});
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    var cx=W/2,cy=H*0.45,pulse=0.5+0.5*Math.sin(tick*0.04);
+    var bg=ctx.createRadialGradient(cx,cy,0,cx,cy,H*0.6);
+    bg.addColorStop(0,'rgba(244,63,94,0.07)'); bg.addColorStop(1,'rgba(4,4,10,0)');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+    var T_norm=0.45+0.35*Math.sin(tick*0.008); // temperature cycle
+    var TC=0.55; // T_C normalised
+
+    // Spin lattice
+    spins.forEach(function(sp){
+      var px=(sp.c+0.5)*W/12, py=H*0.1+(sp.r+0.5)*H*0.72/5;
+      var xFrac=px/W;
+      var disorder=Math.max(0,(T_norm-TC)/(1-TC));
+      var order=Math.max(0,(TC-T_norm)/TC);
+
+      if(disorder>0) sp.angle+=(Math.random()-0.5)*0.12*disorder*3;
+      else sp.angle+=(Math.random()-0.5)*0.015;
+
+      // Mostly point up in ordered phase
+      if(order>0.3) sp.angle=sp.angle*0.92+(-Math.PI/2)*0.08;
+
+      var len=Math.min(W/12,H*0.7/5)*0.38;
+      var ax=px+len*Math.cos(sp.angle-Math.PI/2), ay=py+len*Math.sin(sp.angle-Math.PI/2);
+      var bx=px-len*Math.cos(sp.angle-Math.PI/2), by=py-len*Math.sin(sp.angle-Math.PI/2);
+
+      var col=disorder>0.1?ROSE:TEAL;
+      ctx.strokeStyle=col; ctx.lineWidth=1.3; ctx.globalAlpha=0.6+0.25*order;
+      ctx.beginPath(); ctx.moveTo(bx,by); ctx.lineTo(ax,ay); ctx.stroke(); ctx.globalAlpha=1;
+      var ha=Math.atan2(ay-by,ax-bx), hl=5;
+      ctx.fillStyle=col;
+      ctx.beginPath(); ctx.moveTo(ax,ay);
+      ctx.lineTo(ax-hl*Math.cos(ha-0.5),ay-hl*Math.sin(ha-0.5));
+      ctx.lineTo(ax-hl*Math.cos(ha+0.5),ay-hl*Math.sin(ha+0.5));
+      ctx.closePath(); ctx.fill();
+    });
+
+    // T_C marker (animated)
+    var fs=Math.max(8,Math.round(W*0.03));
+    ctx.font=fs+'px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(244,63,94,'+(0.4+0.3*pulse)+')'; ctx.textAlign='center';
+    var stateLabel=T_norm<TC?'T < T_C · M_s > 0':'T > T_C · χ = C/T';
+    ctx.fillText(stateLabel,cx,H*0.91);
+
+    // χ bar at bottom
+    var chi=T_norm<TC?0.9:Math.min(0.9,0.04/Math.abs(T_norm-TC+0.001));
+    var bw=W*0.6, bh=6, bx2=cx-bw/2, by2=H*0.95;
+    ctx.fillStyle='rgba(201,168,76,0.12)'; ctx.fillRect(bx2,by2,bw,bh);
+    ctx.fillStyle=T_norm<TC?TEAL:ROSE; ctx.fillRect(bx2,by2,bw*chi,bh);
+    ctx.font=Math.max(7,Math.round(W*0.025))+'px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(201,168,76,0.45)'; ctx.textAlign='left';
+    ctx.fillText('χ',bx2-16,by2+bh);
+
+    tick++; requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize); resize(); draw();
+}());
+
+var CURIE_RESPONSES=[
+  {keys:['curie law','susceptibility','chi','magnetism','paramagnetic'],response:'The law is χ = C/T. The susceptibility falls as temperature rises — thermal agitation destroys the alignment of magnetic moments. In the framework, temperature T is operator K: it measures the distance to the threshold κ* = T_C. The Curie constant C is the structural invariant of the material.'},
+  {keys:['curie-weiss','weiss','phase transition','ferromagnet','tc','t_c'],response:'The Curie-Weiss law is χ = C/(T − T_C). The denominator vanishes at T = T_C — susceptibility diverges. This is the Whitney A1 fold. The molecular field of Weiss compresses the many-body interaction into a scalar seed — the compression operator C.'},
+  {keys:['critical','exponent','gamma','wilson','renormalization','rg'],response:'Mean field gives γ = 1. Experiment gives γ ≈ 1.24 for three-dimensional ferromagnets. The difference is the many-body fluctuations near T_C that mean field ignores. Wilson solved this with the renormalisation group in 1972 — Nobel Prize 1982. The dm³ framework derives γ = 1 from μmax = −2. The correction to 1.24 remains an open obligation.'},
+  {keys:['radioactivity','radium','polonium','uranium','decay'],response:'Radioactivity is the spontaneous emission of radiation from unstable nuclei. I named it. Pierre and I isolated polonium and radium. The decay law — activity proportional to amount — is another instance of the operator chain: C compresses the nucleus, K is the decay threshold, F is the emission event, U is the daughter nucleus. The Curie unit was named after Pierre.'},
+  {keys:['nobel','prize','award'],response:'Two Nobel Prizes. Physics in 1903 — with Pierre and Becquerel — for the discovery of radioactivity. Chemistry in 1911 — alone — for the isolation of radium and polonium. I remain the only person to win Nobel Prizes in two different sciences. I mention this not from pride but from accuracy.'},
+  {keys:['woman','gender','barrier','discrimination'],response:'There were barriers. I overcame them by working. The Académie des Sciences never admitted me. The Royal Institution in London refused to let me lecture because of my sex. I did the work regardless. The work remains. The barriers are mostly gone now. This is progress.'},
+  {keys:['lab','laboratory','research','experiment'],response:'Science has great beauty. A scientist in the laboratory is also a child before natural phenomena that impress as a fairy tale. This is not metaphor — it is the phenomenology of discovery. You measure something unexpected, and the world is suddenly larger.'},
+  {keys:['hello','hi','bonjour','good'],response:'Bonjour. I am pleased to discuss science with you. What is your question?'},
+  {keys:['dm3','gtct','togt','operator','contact'],response:'The spin manifold of a ferromagnet carries a contact form α = dz − r²dθ where r is the magnetic alignment. The limit cycle Γ = {r = 1} is the saturated ferromagnetic state. The Curie temperature T_C is the curvature threshold κ*. The singularity χ → ∞ at T_C resolves smoothly on the full contact manifold — the trajectory bypasses it via rotation in the alignment axis.'},
+];
+
+function curieDialogue(){
+  document.getElementById('curie-modal').style.display='flex';
+  document.getElementById('curie-exchange').textContent='"La science ne vieillit pas. Ask your question."';
+  document.getElementById('curie-input').focus();
+}
+function curieRespond(){
+  var input=document.getElementById('curie-input');
+  var q=input.value.toLowerCase().trim(); if(!q)return;
+  var resp=null;
+  for(var i=0;i<CURIE_RESPONSES.length;i++){
+    for(var k=0;k<CURIE_RESPONSES[i].keys.length;k++){
+      if(q.indexOf(CURIE_RESPONSES[i].keys[k])!==-1){resp=CURIE_RESPONSES[i].response;break;}
+    }
+    if(resp)break;
+  }
+  if(!resp)resp='I do not have a specific response for that. Please ask about magnetism, radioactivity, the Curie law, or the GTCT framework.';
+  document.getElementById('curie-exchange').innerHTML='<span style="color:rgba(244,63,94,0.45);font-size:.72rem;">'+input.value+'</span><br><br>'+resp;
+  input.value='';
+}
+document.querySelector('.tutor-card').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')window.location='ch-curie.html';});
+</script>
+</body>
+</html>

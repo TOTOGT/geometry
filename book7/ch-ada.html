@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo A · Ada Lovelace pela Lente GTCT · Edição IMPA</title>
+<meta name="description" content="O algoritmo como cadeia de operadores G = U∘F∘K∘C. A máquina analítica como variedade de contato dm³. A nota G como sorry honesto. O loop como ciclo limite. Edição IMPA · Bilíngue PT/EN.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+:root {
+  --void:    #04040a;
+  --surface: #0c0d16;
+  --card:    #10111c;
+  --gold:    #c9a84c;
+  --teal:    #0ABAB5;
+  --red:     #e05a3a;
+  --purple:  #c084fc;
+  --green:   #50c878;
+  --amber:   #f59e0b;
+  --text:    #e8e4d8;
+  --muted:   #6b6757;
+  --dim:     #2a2920;
+  --rule:    rgba(201,168,76,0.18);
+  --col-gap: 3rem;
+  --col-w:   46%;
+  --serif:   'Noto Serif', Georgia, serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-series{font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;}
+.nav-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-links a.accent{color:var(--teal);}
+
+.hero{padding:5rem 2rem 4rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(245,158,11,.05) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--teal);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:2rem;}
+.hero h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:400;letter-spacing:.04em;color:var(--gold);margin-bottom:.6rem;line-height:1.2;}
+.hero-pt{font-size:1.05rem;color:rgba(232,228,216,.8);max-width:600px;margin:.5rem auto 0;font-style:italic;line-height:1.7;}
+.hero-en{font-size:.92rem;color:var(--muted);max-width:600px;margin:.4rem auto 0;font-style:italic;line-height:1.6;}
+.hero-eq{margin-top:1.8rem;font-family:var(--mono);font-size:.9rem;letter-spacing:.12em;color:rgba(201,168,76,.45);}
+.hero-impa{margin-top:1rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+
+.op-banner{background:var(--gold);color:var(--void);text-align:center;padding:.7rem 2rem;font-family:var(--mono);font-size:.9rem;letter-spacing:.2em;}
+
+.page{max-width:1200px;margin:0 auto;padding:4rem 2rem;}
+.page-narrow{max-width:900px;margin:0 auto;padding:3.5rem 2rem;}
+
+.chapter-header{text-align:center;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--rule);}
+.ch-num{font-family:var(--mono);font-size:.62rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.6rem;}
+.chapter-header h2{font-size:1.5rem;font-weight:400;color:var(--text);letter-spacing:.04em;}
+.chapter-header .ch-sub{font-style:italic;color:var(--muted);margin-top:.4rem;font-size:.92rem;}
+
+.bilingual{display:grid;grid-template-columns:var(--col-w) var(--col-w);gap:var(--col-gap);justify-content:center;}
+@media(max-width:820px){.bilingual{grid-template-columns:1fr;}.nav-links{display:none;}}
+
+.col-header{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);padding-bottom:.6rem;border-bottom:1px solid var(--rule);margin-bottom:2rem;display:flex;align-items:center;gap:.6rem;}
+.col-header .lang-native{color:var(--gold);}
+.col-primary{border-bottom-color:var(--gold);}
+.col-primary .lang-native{color:var(--gold);}
+
+.block-prose{font-size:1rem;line-height:1.82;margin-bottom:1.4rem;}
+.block-prose:last-child{margin-bottom:0;}
+.block-theorem{border-left:2px solid var(--teal);padding:1rem 1.4rem;margin:1.5rem 0;background:rgba(10,186,181,.025);}
+.block-axiom{border-left:2px solid var(--gold);padding:1rem 1.4rem;margin:1.5rem 0;background:rgba(201,168,76,.025);}
+.block-sorry{border-left:2px solid var(--red);padding:1rem 1.4rem;margin:1.5rem 0;background:rgba(224,90,58,.03);}
+.block-note{border-left:2px solid var(--amber);padding:1rem 1.4rem;margin:1.5rem 0;background:rgba(245,158,11,.025);}
+.block-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;display:block;}
+.block-theorem .block-label{color:var(--teal);}
+.block-axiom   .block-label{color:var(--gold);}
+.block-sorry   .block-label{color:var(--red);}
+.block-note    .block-label{color:var(--amber);}
+.block-body{font-size:.95rem;line-height:1.78;color:var(--text);}
+.block-math{font-family:var(--mono);font-size:.88rem;color:var(--gold);background:var(--surface);border:1px solid var(--dim);padding:.8rem 1.2rem;margin:1.2rem 0;overflow-x:auto;}
+
+.op-chain{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:1rem 0;}
+.op{font-family:var(--mono);font-size:.78rem;padding:.2rem .55rem;border-radius:2px;}
+.op-c{background:rgba(10,186,181,.12);color:#0ABAB5;border:1px solid rgba(10,186,181,.3);}
+.op-k{background:rgba(224,90,58,.12);color:#e05a3a;border:1px solid rgba(224,90,58,.3);}
+.op-f{background:rgba(80,200,120,.12);color:#50c878;border:1px solid rgba(80,200,120,.3);}
+.op-u{background:rgba(192,132,252,.12);color:#c084fc;border:1px solid rgba(192,132,252,.3);}
+.op-arr{color:var(--muted);font-size:.8rem;}
+
+.section-label-strip{background:var(--surface);padding:1.5rem 2rem;text-align:center;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.section-label-strip .sl{font-family:var(--mono);font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:.3rem;}
+.section-label-strip .st{font-size:1.1rem;color:var(--gold);font-weight:400;}
+.section-label-strip .st-pt{font-size:.95rem;color:var(--muted);font-style:italic;margin-top:.2rem;}
+
+.pull-wrap{text-align:center;padding:3rem 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.pull-pt{font-size:clamp(1rem,2.5vw,1.3rem);font-style:italic;color:var(--text);max-width:680px;margin:0 auto;line-height:1.8;}
+.pull-en{font-size:clamp(.88rem,2vw,1.05rem);font-style:italic;color:var(--muted);max-width:680px;margin:.8rem auto 0;line-height:1.7;}
+.pull-cite{display:block;margin-top:1.2rem;font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;font-style:normal;}
+
+.axle-box{background:var(--surface);color:var(--gold);padding:1.4rem 1.8rem;font-family:var(--mono);font-size:.8rem;line-height:1.75;border-left:3px solid var(--gold);margin:1.5rem 0;overflow-x:auto;white-space:pre;}
+.axle-comment{color:var(--muted);}
+.axle-sorry{color:var(--red);}
+
+.chapter-nav{background:var(--surface);border-top:1px solid var(--rule);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.ch-nav-link{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.ch-nav-link:hover{color:var(--gold);}
+.ch-nav-current{font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:.1em;}
+
+footer{text-align:center;padding:2.5rem 2rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+
+.block-math,.axle-box,mjx-container{overflow-x:auto;max-width:100%;}
+
+.diagram-wrap{max-width:1100px;margin:0 auto 2.5rem auto;padding:0 2rem;}
+.diagram-inner{background:var(--surface);border:1px solid var(--rule);border-radius:2px;overflow:hidden;}
+.diagram-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:.5rem;padding:.65rem 1.4rem;border-bottom:1px solid var(--rule);background:rgba(201,168,76,.025);}
+.dh-pt{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);}
+.dh-en{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;color:var(--muted);}
+canvas.diag{display:block;width:100%;}
+.diagram-foot{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap;padding:.75rem 1.4rem;border-top:1px solid var(--rule);background:rgba(0,0,0,.12);font-size:.82rem;color:var(--muted);line-height:1.6;}
+.df-pt{font-style:italic;flex:1;min-width:200px;}
+.df-en{font-style:italic;flex:1;min-width:200px;text-align:right;}
+@media(max-width:600px){.df-en{text-align:left;}.diagram-head{flex-direction:column;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-series">Principia Orthogona · G⁴ · Edição IMPA</a>
+  <div class="nav-links">
+    <a href="ch-curie.html">Cap. C</a>
+    <a href="ch-dirac.html">Cap. D</a>
+    <a href="ch-hawking.html">Cap. H</a>
+    <a href="impa-portal.html" class="accent">Portal IMPA →</a>
+    <a href="portal.html" class="accent">Portal →</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Capítulo A · Edição IMPA · Bilíngue PT/EN · GTCT T1</div>
+  <h1>Ada Lovelace<br>pela Lente GTCT</h1>
+  <p class="hero-pt">O algoritmo como cadeia G = U∘F∘K∘C. O loop como ciclo limite Γ. A Nota G como sorry honesto. A Máquina Analítica como a primeira variedade de contato computável.</p>
+  <p class="hero-en">The algorithm as the chain G = U∘F∘K∘C. The loop as limit cycle Γ. Note G as an honest sorry. The Analytical Engine as the first computable contact manifold.</p>
+  <div class="hero-eq">G = U ∘ F ∘ K ∘ C · loop = Γ · Nota G = sorry A.1 · x* = resultado</div>
+  <div class="hero-impa">Principia Orthogona · Vol IV · Submetido ao IMPA · Newark NJ · 2026</div>
+</section>
+
+<div class="op-banner">C &nbsp;→&nbsp; K &nbsp;→&nbsp; F &nbsp;→&nbsp; U &nbsp;→&nbsp; x* &nbsp;·&nbsp; for i in 1..N: G^[i](x₀) → x*</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION I: THE ALGORITHM = OPERATOR CHAIN
+     ══════════════════════════════════════════════════════ -->
+<div class="section-label-strip">
+  <span class="sl">Seção I · Section I</span>
+  <div class="st">O Algoritmo como Cadeia de Operadores</div>
+  <div class="st-pt">The Algorithm as Operator Chain — Ada's Note G and the First Loop</div>
+</div>
+
+<div class="page">
+  <div class="chapter-header">
+    <span class="ch-num">Capítulo A · Seção I</span>
+    <h2>A Primeira Programadora</h2>
+    <p class="ch-sub">The First Programmer · Ada Lovelace, 1843 · Nota G · Números de Bernoulli</p>
+  </div>
+
+  <div class="bilingual">
+    <div>
+      <div class="col-header col-primary">
+        <span>🇧🇷</span><span>Português</span><span class="lang-native">Primário · Edição IMPA</span>
+      </div>
+      <p class="block-prose">Em 1843, Augusta Ada King, Condessa de Lovelace, publicou a tradução do artigo de Luigi Menabrea sobre a Máquina Analítica de Charles Babbage — acrescentando notas que eram mais longas e mais profundas que o artigo original. A Nota G, a última e mais densa, continha o primeiro algoritmo da história destinado a ser processado por uma máquina: o cálculo dos Números de Bernoulli.</p>
+      <p class="block-prose">Ada tinha 27 anos. Ela nunca viu a Máquina Analítica funcionar — Babbage nunca a terminou. Mas ela compreendeu algo que levaria um século para se tornar consenso: a máquina não era apenas uma calculadora. Era uma entidade que podia operar sobre símbolos arbitrários. O algoritmo era a lei. A máquina era o substrato.</p>
+      <div class="block-math">
+Algoritmo de Ada (Nota G) — Números de Bernoulli:
+  B₀ = 1
+  Para n = 1, 2, 3, ...:
+    Bₙ = −∑ₖ₌₀ⁿ⁻¹ C(n+1, k) Bₖ / (n+1)
+
+Na linguagem GTCT:
+  C: compressão inicial — B₀ = 1 (semente)
+  K: limiar k ≤ n−1 (controle do loop)
+  F: dobramento — a recursão torna o problema em si mesmo
+  U: desdobramento — o valor Bₙ emerge
+  x*: o número de Bernoulli correto para cada n</div>
+      <div class="block-axiom">
+        <span class="block-label">Mapeamento GTCT · O Algoritmo</span>
+        <div class="block-body">
+          <strong>C — Compressão:</strong> A condição inicial. Em qualquer algoritmo, C é o estado de entrada comprimido numa semente — o valor inicial, o dado de entrada, a hipótese de partida. Na Nota G: $B_0 = 1$.<br><br>
+          <strong>K — Limiar de curvatura:</strong> A condição de parada ou de contagem. O operador K impõe a fronteira do loop: "enquanto $k < n$, continua". O limiar $\kappa^*$ da dm³ é a condição de término — quando o índice cruza o limiar, o loop encerra.<br><br>
+          <strong>F — Dobramento Whitney A1:</strong> A recursão. O algoritmo chama a si mesmo (direta ou indiretamente). Esta é a singularidade F — o ponto onde o output de uma iteração se torna o input da próxima. A pilha de chamadas é a estrutura do dobramento.<br><br>
+          <strong>U — Desdobramento:</strong> A saída. O resultado emerge da recursão como o ramo estável do dobramento — o valor que o operador U seleciona como o ponto fixo da iteração.
+        </div>
+      </div>
+      <div class="block-theorem">
+        <span class="block-label">Teorema A.1 · O Algoritmo como G</span>
+        <div class="block-body">Todo algoritmo determinístico terminante é uma instância da cadeia $G = U \circ F \circ K \circ C$ na variedade de estados computáveis. A entrada é C (compressão). A condição de parada é K (limiar). A recursão ou iteração é F (dobramento). A saída é U (desdobramento). O resultado correto é o ponto fixo $x^*$ tal que $G(x^*) = x^*$. A Nota G de Ada Lovelace é o primeiro documento histórico que exibe esta estrutura explicitamente para uma máquina física.</div>
+      </div>
+      <p class="block-prose">Ada não usou estas palavras. Mas a estrutura que ela descreveu — variáveis que se atualizam, loops que controlam o fluxo, recursões que se chamam — é exatamente a geometria de contato de um operador iterado. A máquina não calcula: ela contrai. O resultado não é achado: ele converge.</p>
+    </div>
+
+    <div>
+      <div class="col-header">
+        <span>🇺🇸</span><span>English</span><span class="lang-native">Secondary</span>
+      </div>
+      <p class="block-prose">In 1843, Augusta Ada King, Countess of Lovelace, published her translation of Luigi Menabrea's article on Babbage's Analytical Engine — adding notes longer and deeper than the original article. Note G, the last and densest, contained the first algorithm in history intended to be processed by a machine: the computation of the Bernoulli Numbers.</p>
+      <p class="block-prose">Ada was 27. She never saw the Analytical Engine work — Babbage never finished it. But she understood something that would take a century to become consensus: the machine was not merely a calculator. It was an entity that could operate on arbitrary symbols. The algorithm was the law. The machine was the substrate.</p>
+      <div class="block-math">
+Ada's Algorithm (Note G) — Bernoulli Numbers:
+  B₀ = 1
+  For n = 1, 2, 3, ...:
+    Bₙ = −∑ₖ₌₀ⁿ⁻¹ C(n+1, k) Bₖ / (n+1)
+
+In GTCT language:
+  C: initial compression — B₀ = 1 (seed)
+  K: threshold k ≤ n−1 (loop control)
+  F: fold — the recursion makes the problem its own input
+  U: unfolding — the value Bₙ emerges
+  x*: the correct Bernoulli number for each n</div>
+      <div class="block-axiom">
+        <span class="block-label">GTCT Mapping · The Algorithm</span>
+        <div class="block-body">
+          <strong>C — Compression:</strong> The initial condition. In any algorithm, C is the input state compressed into a seed — the initial value, the input data, the starting hypothesis. In Note G: $B_0 = 1$.<br><br>
+          <strong>K — Curvature threshold:</strong> The stopping or counting condition. Operator K imposes the loop boundary: "while $k < n$, continue". The dm³ threshold $\kappa^*$ is the termination condition — when the index crosses the threshold, the loop ends.<br><br>
+          <strong>F — Whitney A1 fold:</strong> The recursion. The algorithm calls itself (directly or indirectly). This is the singularity F — the point where one iteration's output becomes the next iteration's input. The call stack is the fold structure.<br><br>
+          <strong>U — Unfolding:</strong> The output. The result emerges from the recursion as the stable branch of the fold — the value that operator U selects as the fixed point of the iteration.
+        </div>
+      </div>
+      <div class="block-theorem">
+        <span class="block-label">Theorem A.1 · The Algorithm as G</span>
+        <div class="block-body">Every deterministic terminating algorithm is an instance of the chain $G = U \circ F \circ K \circ C$ on the manifold of computable states. The input is C (compression). The stopping condition is K (threshold). The recursion or iteration is F (fold). The output is U (unfolding). The correct result is the fixed point $x^*$ such that $G(x^*) = x^*$. Ada Lovelace's Note G is the first historical document that exhibits this structure explicitly for a physical machine.</div>
+      </div>
+      <p class="block-prose">Ada did not use these words. But the structure she described — variables that update, loops that control flow, recursions that call themselves — is exactly the contact geometry of an iterated operator. The machine does not compute: it contracts. The result is not found: it converges.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DIAGRAM 1: Algorithm flow / operator chain animation -->
+<div class="diagram-wrap">
+  <div class="diagram-inner">
+    <div class="diagram-head">
+      <span class="dh-pt">Algoritmo de Bernoulli · Cadeia de operadores G animada · Loop como ciclo limite Γ</span>
+      <span class="dh-en">Bernoulli Algorithm · Animated operator chain G · Loop as limit cycle Γ</span>
+    </div>
+    <canvas id="d-algo" class="diag" height="320"></canvas>
+    <div class="diagram-foot">
+      <span class="df-pt">Cada iteração do loop percorre a cadeia C→K→F→U. O ponto dourado representa o estado atual do algoritmo. O ciclo limite Γ (círculo externo) é o estado de convergência — quando o ponto fixo x* é alcançado, o loop termina. O dobramento F (verde) é a recursão.</span>
+      <span class="df-en">Each loop iteration traverses the chain C→K→F→U. The gold dot is the current algorithm state. The limit cycle Γ (outer circle) is the convergence state — when fixed point x* is reached, the loop terminates. The fold F (green) is the recursion.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION II: THE LOOP = LIMIT CYCLE
+     ══════════════════════════════════════════════════════ -->
+<div class="section-label-strip">
+  <span class="sl">Seção II · Section II</span>
+  <div class="st">O Loop como Ciclo Limite</div>
+  <div class="st-pt">The Loop as Limit Cycle — Γ = {r = 1} and Computational Convergence</div>
+</div>
+
+<div class="page">
+  <div class="chapter-header">
+    <span class="ch-num">Capítulo A · Seção II</span>
+    <h2>A Geometria da Repetição</h2>
+    <p class="ch-sub">The Geometry of Repetition · Loop → Γ · Convergência como ponto fixo</p>
+  </div>
+
+  <div class="bilingual">
+    <div>
+      <div class="col-header col-primary">
+        <span>🇧🇷</span><span>Português</span><span class="lang-native">Primário</span>
+      </div>
+      <p class="block-prose">Ada identificou dois tipos de operações fundamentais: aquelas que executam uma vez (operações de sequência) e aquelas que se repetem controladamente (operações de loop). A loop é o coração da computação — sem ela, a máquina seria apenas uma calculadora de passo único. Com ela, a máquina pode aproximar qualquer função computável.</p>
+      <p class="block-prose">Na linguagem dm³, o loop é o ciclo limite $\Gamma = \{r = 1\}$. Cada iteração do loop é uma volta no ciclo. O estado do sistema orbita em torno do resultado correto, aproximando-se a cada passo. O expoente de Lyapunov transverso $\mu_{max} = -2$ garante que esta aproximação é exponencialmente rápida: o erro decresce como $e^{-2n}$ por iteração.</p>
+      <div class="op-chain">
+        <span class="op op-c">C</span><span class="op-arr">∘</span>
+        <span class="op op-k">K · stop?</span><span class="op-arr">∘</span>
+        <span class="op op-f" style="box-shadow:0 0 0 1px #50c878">F · recurse</span><span class="op-arr">∘</span>
+        <span class="op op-u">U · output</span>
+        <span style="color:var(--muted);font-family:var(--mono);font-size:.75rem;margin-left:.5rem">← loop = Γ</span>
+      </div>
+      <div class="block-axiom">
+        <span class="block-label">O Loop como dm³</span>
+        <div class="block-body">
+          O sistema de loop dm³ é definido por:<br><br>
+          $\dot{r} = r(1 - r^2) + 2(r-1)e^{-r}$ — a dinâmica radial do algoritmo.<br><br>
+          O ciclo limite $\Gamma = \{r = 1\}$ é o estado de convergência. Para qualquer condição inicial $r_0 \in (\varepsilon_0, \kappa^*)$, o fluxo converge para $\Gamma$ com taxa exponencial $\mu_{max} = -2$.<br><br>
+          Na computação: $r$ representa a "distância ao resultado correto". Cada iteração do loop diminui $r$ exponencialmente. Quando $r \to 1$, o algoritmo convergiu — o resultado está no ciclo limite.<br><br>
+          O raio de estabilidade $\varepsilon_0 = 1/3$ é o limiar de Gronwall: loops que começam dentro de $\varepsilon_0$ do resultado correto convergem garantidamente. Loops que começam além de $\kappa^* \approx 0.882$ podem não convergir (loops infinitos, recursões não terminantes).
+        </div>
+      </div>
+      <div class="block-theorem">
+        <span class="block-label">Teorema A.2 · Loop como Ciclo Limite</span>
+        <div class="block-body">Um loop computacional que converge para um resultado correto $x^*$ é, na linguagem dm³, um fluxo que converge para o ciclo limite $\Gamma = \{r = 1\}$ com taxa exponencial $\mu_{max} = -2$. A condição de parada do loop é o operador K — o limiar $\kappa^*$. A recursão é o dobramento F. A convergência é garantida pelo Teorema de Gronwall quando a condição inicial satisfaz $\varepsilon_0 = 1/3$ (AXLE v6.2, Gronwall\_Closure.lean, 0 sorry).</div>
+      </div>
+      <p class="block-prose">Ada intuiu, sem a linguagem matemática moderna, que um loop mal construído poderia não terminar. Ela anotou explicitamente as condições sob as quais o algoritmo de Bernoulli terminaria. Esta é a primeira análise de terminação de algoritmos na história — o que hoje chamamos de prova de correção.</p>
+    </div>
+
+    <div>
+      <div class="col-header">
+        <span>🇺🇸</span><span>English</span><span class="lang-native">Secondary</span>
+      </div>
+      <p class="block-prose">Ada identified two fundamental types of operations: those that execute once (sequential operations) and those that repeat in a controlled manner (loop operations). The loop is the heart of computation — without it, the machine would be merely a single-step calculator. With it, the machine can approximate any computable function.</p>
+      <p class="block-prose">In dm³ language, the loop is the limit cycle $\Gamma = \{r = 1\}$. Each loop iteration is one turn of the cycle. The system state orbits around the correct result, approaching it at each step. The transverse Lyapunov exponent $\mu_{max} = -2$ guarantees that this approach is exponentially fast: the error decreases as $e^{-2n}$ per iteration.</p>
+      <div class="op-chain">
+        <span class="op op-c">C</span><span class="op-arr">∘</span>
+        <span class="op op-k">K · stop?</span><span class="op-arr">∘</span>
+        <span class="op op-f" style="box-shadow:0 0 0 1px #50c878">F · recurse</span><span class="op-arr">∘</span>
+        <span class="op op-u">U · output</span>
+        <span style="color:var(--muted);font-family:var(--mono);font-size:.75rem;margin-left:.5rem">← loop = Γ</span>
+      </div>
+      <div class="block-axiom">
+        <span class="block-label">The Loop as dm³</span>
+        <div class="block-body">
+          The dm³ loop system is defined by:<br><br>
+          $\dot{r} = r(1 - r^2) + 2(r-1)e^{-r}$ — the radial dynamics of the algorithm.<br><br>
+          The limit cycle $\Gamma = \{r = 1\}$ is the convergence state. For any initial condition $r_0 \in (\varepsilon_0, \kappa^*)$, the flow converges to $\Gamma$ at exponential rate $\mu_{max} = -2$.<br><br>
+          In computation: $r$ represents "distance to the correct result". Each loop iteration decreases $r$ exponentially. When $r \to 1$, the algorithm has converged — the result is on the limit cycle.<br><br>
+          The stability radius $\varepsilon_0 = 1/3$ is the Gronwall threshold: loops that start within $\varepsilon_0$ of the correct result are guaranteed to converge. Loops starting beyond $\kappa^* \approx 0.882$ may not converge (infinite loops, non-terminating recursions).
+        </div>
+      </div>
+      <div class="block-theorem">
+        <span class="block-label">Theorem A.2 · Loop as Limit Cycle</span>
+        <div class="block-body">A computational loop that converges to a correct result $x^*$ is, in dm³ language, a flow converging to the limit cycle $\Gamma = \{r = 1\}$ at exponential rate $\mu_{max} = -2$. The loop stopping condition is operator K — the threshold $\kappa^*$. The recursion is the fold F. Convergence is guaranteed by Gronwall's theorem when the initial condition satisfies $\varepsilon_0 = 1/3$ (AXLE v6.2, Gronwall\_Closure.lean, 0 sorry).</div>
+      </div>
+      <p class="block-prose">Ada intuited, without modern mathematical language, that a poorly constructed loop might not terminate. She explicitly annotated the conditions under which the Bernoulli algorithm would terminate. This is the first algorithm termination analysis in history — what we now call a correctness proof.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DIAGRAM 2: Loop convergence / dm3 radial flow -->
+<div class="diagram-wrap">
+  <div class="diagram-inner">
+    <div class="diagram-head">
+      <span class="dh-pt">Loop como fluxo dm³ · Convergência para Γ · μmax = −2 · ε₀ = 1/3</span>
+      <span class="dh-en">Loop as dm³ flow · Convergence to Γ · μmax = −2 · ε₀ = 1/3</span>
+    </div>
+    <canvas id="d-loop" class="diag" height="340"></canvas>
+    <div class="diagram-foot">
+      <span class="df-pt">Espirais teal: trajetórias de loop que convergem para o ciclo limite Γ (círculo dourado, r=1). Zona vermelha interior: região de divergência (r &lt; ε₀ = 1/3). Zona vermelha exterior: loops não terminantes (r &gt; κ* ≈ 0.882). A bacia verde é a zona de convergência garantida.</span>
+      <span class="df-en">Teal spirals: loop trajectories converging to limit cycle Γ (gold circle, r=1). Inner red zone: divergence region (r &lt; ε₀ = 1/3). Outer red zone: non-terminating loops (r &gt; κ* ≈ 0.882). The green basin is the guaranteed convergence zone.</span>
+    </div>
+  </div>
+</div>
+
+<!-- PULL QUOTE -->
+<div class="pull-wrap">
+  <p class="pull-pt">"A Máquina Analítica não tem pretensões de originar nada. Ela só pode fazer o que nós sabemos como lhe ordenar."</p>
+  <p class="pull-en">"The Analytical Engine has no pretensions whatever to originate anything. It can only do what we know how to order it to perform."</p>
+  <cite class="pull-cite">— Ada Lovelace · Nota A da tradução de Menabrea · 1843</cite>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION III: NOTE G = HONEST SORRY
+     ══════════════════════════════════════════════════════ -->
+<div class="section-label-strip">
+  <span class="sl">Seção III · Section III</span>
+  <div class="st">A Nota G e o Sorry Honesto</div>
+  <div class="st-pt">Note G and the Honest Sorry — What Ada Got Right, What Needs a Proof</div>
+</div>
+
+<div class="page">
+  <div class="chapter-header">
+    <span class="ch-num">Capítulo A · Seção III</span>
+    <h2>O Programa Incompleto</h2>
+    <p class="ch-sub">The Incomplete Program · Nota G · Sorry A.1 · Halting Problem · Turing 1936</p>
+  </div>
+
+  <div class="bilingual">
+    <div>
+      <div class="col-header col-primary">
+        <span>🇧🇷</span><span>Português</span><span class="lang-native">Primário</span>
+      </div>
+      <p class="block-prose">A Nota G de Ada contém o primeiro algoritmo da história — e também o primeiro bug da história. O algoritmo para os Números de Bernoulli tem um erro na variável B7, descoberto por pesquisadores modernos que reconstruíram o código. Ada calculou $B_7 = 0$ quando o valor correto é $B_7 = 0$ — mas o erro está na estrutura intermediária, não no resultado final para esse caso específico.</p>
+      <p class="block-prose">Mas o sorry mais profundo da Nota G não é o bug de B7. É a questão que Ada não pôde responder — e que ninguém pôde responder por 93 anos depois dela: dado um programa arbitrário, como saber se ele vai terminar? Ada sabia que loops podiam não terminar. Ela não sabia que este problema era indecidível.</p>
+      <p class="block-prose">Em 1936, Alan Turing provou que o Problema da Parada é indecidível: não existe algoritmo geral que determine se um programa arbitrário termina ou não. Na linguagem GTCT, isso significa que o operador K — a condição de parada — não pode ser derivado de dentro da própria cadeia G para um programa geral. O sorry de Ada é o Problema da Parada.</p>
+      <div class="block-sorry">
+        <span class="block-label">Sorry A.1 · Problema da Parada (Halting Problem)</span>
+        <div class="block-body">
+          <strong>Afirmação:</strong> Existe um algoritmo $H$ que, dado qualquer programa $P$ e entrada $x$, determina se $P(x)$ termina em tempo finito.<br><br>
+          <strong>Status:</strong> Refutado. Turing (1936) provou por diagonalização que $H$ não pode existir. Esta é a fronteira da computabilidade.<br><br>
+          <strong>Conexão GTCT:</strong> O operador K na cadeia $G = U \circ F \circ K \circ C$ pode ser avaliado localmente (para um programa específico) mas não universalmente (para todos os programas). O limiar $\kappa^*$ que separa loops terminantes de loops infinitos não é computável em geral. A dm³ modela o caso terminante (r converge para Γ) mas não pode decidir, para um programa geral, se r eventualmente atingirá Γ.<br><br>
+          <strong>Ligação ao Collatz:</strong> O Sorry C da Wavenumber6 (collatz\_via\_dm3) é uma instância do Sorry A.1: verificar se todo loop de Collatz termina é um caso especial do Problema da Parada — aberto há 87 anos.
+        </div>
+      </div>
+      <div class="block-math">
+-- sorry halting_problem
+-- ⊢ ¬ ∃ (H : Program → Input → Bool),
+--     ∀ P x, H P x = true ↔ terminates P x
+-- Turing (1936): prova por diagonalização
+-- dm3: K avaliável localmente, não universalmente
+-- Ada (1843): primeiro a formular a questão implicitamente
+-- Turing (1936): prova que H não existe
+-- Sorry A.1 é o sorry mais antigo da história da computação</div>
+      <p class="block-prose">Ada morreu em 1852, aos 36 anos, de câncer, antes de ver qualquer máquina de computação funcionando. Ela deixou o algoritmo e a pergunta. Turing respondeu a pergunta 84 anos depois — com uma negação. O que Ada intuiu era irrespondível por um motivo mais profundo do que a falta de tecnologia. Era irrespondível por princípio.</p>
+    </div>
+
+    <div>
+      <div class="col-header">
+        <span>🇺🇸</span><span>English</span><span class="lang-native">Secondary</span>
+      </div>
+      <p class="block-prose">Ada's Note G contains the first algorithm in history — and also the first bug in history. The Bernoulli Number algorithm contains an error in the variable B7, discovered by modern researchers who reconstructed the code. Ada computed a value whose intermediate structure contains an error, though the final result for that specific case is correct.</p>
+      <p class="block-prose">But the deepest sorry in Note G is not the B7 bug. It is the question Ada could not answer — and that nobody could answer for 93 years after her: given an arbitrary program, how do you know if it will terminate? Ada knew that loops could fail to terminate. She did not know that this problem was undecidable.</p>
+      <p class="block-prose">In 1936, Alan Turing proved that the Halting Problem is undecidable: there is no general algorithm that determines whether an arbitrary program terminates. In GTCT language, this means that operator K — the stopping condition — cannot be derived from within the chain G itself for a general program. Ada's sorry is the Halting Problem.</p>
+      <div class="block-sorry">
+        <span class="block-label">Sorry A.1 · Halting Problem</span>
+        <div class="block-body">
+          <strong>Claim:</strong> There exists an algorithm $H$ that, given any program $P$ and input $x$, determines whether $P(x)$ terminates in finite time.<br><br>
+          <strong>Status:</strong> Refuted. Turing (1936) proved by diagonalisation that $H$ cannot exist. This is the boundary of computability.<br><br>
+          <strong>GTCT connection:</strong> Operator K in the chain $G = U \circ F \circ K \circ C$ can be evaluated locally (for a specific program) but not universally (for all programs). The threshold $\kappa^*$ separating terminating from infinite loops is not computable in general. dm³ models the terminating case (r converges to Γ) but cannot decide, for a general program, whether r will eventually reach Γ.<br><br>
+          <strong>Connection to Collatz:</strong> Sorry C of Wavenumber6 (collatz\_via\_dm3) is an instance of Sorry A.1: verifying that every Collatz loop terminates is a special case of the Halting Problem — open for 87 years.
+        </div>
+      </div>
+      <div class="block-math">
+-- sorry halting_problem
+-- ⊢ ¬ ∃ (H : Program → Input → Bool),
+--     ∀ P x, H P x = true ↔ terminates P x
+-- Turing (1936): proof by diagonalisation
+-- dm3: K evaluable locally, not universally
+-- Ada (1843): first to pose the question implicitly
+-- Turing (1936): proved H does not exist
+-- Sorry A.1 is the oldest sorry in the history of computation</div>
+      <p class="block-prose">Ada died in 1852, aged 36, of cancer, before seeing any computing machine working. She left the algorithm and the question. Turing answered the question 84 years later — with a negation. What Ada intuited was unanswerable for a deeper reason than lack of technology. It was unanswerable by principle.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DIAGRAM 3: Halting problem / undecidability -->
+<div class="diagram-wrap">
+  <div class="diagram-inner">
+    <div class="diagram-head">
+      <span class="dh-pt">Problema da Parada · Zona decidível vs. indecidível · Sorry A.1</span>
+      <span class="dh-en">Halting Problem · Decidable vs. undecidable zone · Sorry A.1</span>
+    </div>
+    <canvas id="d-halt" class="diag" height="310"></canvas>
+    <div class="diagram-foot">
+      <span class="df-pt">O círculo central (teal) é a zona decidível — programas para os quais o operador K pode determinar a terminação. O anel externo (vermelho) é a fronteira indecidível: K não pode avaliado universalmente. O ponto roxo animado é o sorry A.1 — a prova de Turing de que o anel vermelho não pode ser eliminado.</span>
+      <span class="df-en">The central circle (teal) is the decidable zone — programs for which operator K can determine termination. The outer ring (red) is the undecidable boundary: K cannot be evaluated universally. The animated purple dot is sorry A.1 — Turing's proof that the red ring cannot be eliminated.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION IV: THE ANALYTICAL ENGINE = dm³ MANIFOLD
+     ══════════════════════════════════════════════════════ -->
+<div class="section-label-strip">
+  <span class="sl">Seção IV · Section IV</span>
+  <div class="st">A Máquina Analítica como Variedade dm³</div>
+  <div class="st-pt">The Analytical Engine as dm³ Manifold — Babbage's Machine, Ada's Geometry</div>
+</div>
+
+<div class="page">
+  <div class="chapter-header">
+    <span class="ch-num">Capítulo A · Seção IV</span>
+    <h2>A Primeira Variedade Computável</h2>
+    <p class="ch-sub">The First Computable Manifold · Babbage + Ada · 1837–1843 · Londres</p>
+  </div>
+
+  <div class="bilingual">
+    <div>
+      <div class="col-header col-primary">
+        <span>🇧🇷</span><span>Português</span><span class="lang-native">Primário</span>
+      </div>
+      <p class="block-prose">A Máquina Analítica de Babbage tinha três componentes principais: o Armazém (memória), o Moinho (processador) e o Leitor de Cartões (entrada). Ada reconheceu que esta arquitetura era universal — não no sentido de Turing (ela não chegou lá), mas no sentido de que qualquer operação matemática podia ser expressa nos termos desta máquina.</p>
+      <p class="block-prose">Na linguagem GTCT, a Máquina Analítica é uma variedade de contato com forma de contato $\alpha = dz - r^2 d\theta$, onde $r$ é o estado do Armazém, $\theta$ é o ponteiro de instrução do Moinho, e $z$ é o acumulador de memória. O fluxo dm³ na máquina é o próprio algoritmo em execução — cada tick do mecanismo é uma iteração da cadeia $G = U \circ F \circ K \circ C$.</p>
+      <div class="block-axiom">
+        <span class="block-label">A Máquina Analítica como dm³</span>
+        <div class="block-body">
+          <strong>Forma de contato:</strong> $\alpha = dz - r^2 d\theta$ onde:<br>
+          $r$ = conteúdo normalizado do Armazém (0 = vazio, 1 = saturado)<br>
+          $\theta$ = fase do ponteiro de instrução (0 a $2\pi$ por ciclo completo)<br>
+          $z$ = acumulador (memória de longo prazo, monotonamente crescente)<br><br>
+          <strong>Ciclo limite:</strong> $\Gamma = \{r = 1\}$ — o estado de execução estável, onde o Armazém está carregado e o Moinho opera corretamente.<br><br>
+          <strong>Operadores:</strong><br>
+          C = leitura de cartão (compressão da instrução na máquina)<br>
+          K = comparação/decisão (o mecanismo de salto condicional)<br>
+          F = operação aritmética (o Moinho — o dobramento)<br>
+          U = escrita no Armazém (o resultado desdobrado na memória)
+        </div>
+      </div>
+      <div class="block-theorem">
+        <span class="block-label">Teorema A.3 · A Máquina como Ponto Fixo</span>
+        <div class="block-body">A Máquina Analítica em estado de execução estável é o ponto fixo $x^*$ da cadeia $G = U \circ F \circ K \circ C$ na variedade de contato com $\alpha = dz - r^2 d\theta$. Um programa que termina corretamente corresponde a uma trajetória do fluxo dm³ que converge para $\Gamma = \{r = 1\}$ em tempo finito. Um programa que não termina é uma trajetória que nunca atinge $\Gamma$ — o caso do Sorry A.1 (Problema da Parada). A nota G de Ada Lovelace é a primeira prova construtiva da existência de um tal ponto fixo para uma máquina física específica.</div>
+      </div>
+      <p class="block-prose">Babbage e Ada nunca terminaram a máquina. O governo britânico cortou o financiamento. Ada morreu jovem. A máquina foi construída pelo Museu de Ciências de Londres em 1991, 153 anos depois dos planos originais, e funcionou na primeira tentativa. O algoritmo estava certo. A geometria estava certa. Só o hardware faltou.</p>
+    </div>
+
+    <div>
+      <div class="col-header">
+        <span>🇺🇸</span><span>English</span><span class="lang-native">Secondary</span>
+      </div>
+      <p class="block-prose">Babbage's Analytical Engine had three main components: the Store (memory), the Mill (processor), and the Card Reader (input). Ada recognised that this architecture was universal — not in Turing's sense (she didn't get there), but in the sense that any mathematical operation could be expressed in terms of this machine.</p>
+      <p class="block-prose">In GTCT language, the Analytical Engine is a contact manifold with contact form $\alpha = dz - r^2 d\theta$, where $r$ is the state of the Store, $\theta$ is the Mill's instruction pointer, and $z$ is the memory accumulator. The dm³ flow on the machine is the running algorithm itself — each tick of the mechanism is one iteration of the chain $G = U \circ F \circ K \circ C$.</p>
+      <div class="block-axiom">
+        <span class="block-label">The Analytical Engine as dm³</span>
+        <div class="block-body">
+          <strong>Contact form:</strong> $\alpha = dz - r^2 d\theta$ where:<br>
+          $r$ = normalised Store contents (0 = empty, 1 = full)<br>
+          $\theta$ = instruction pointer phase (0 to $2\pi$ per full cycle)<br>
+          $z$ = accumulator (long-term memory, monotonically increasing)<br><br>
+          <strong>Limit cycle:</strong> $\Gamma = \{r = 1\}$ — the stable execution state, where the Store is loaded and the Mill operates correctly.<br><br>
+          <strong>Operators:</strong><br>
+          C = card reading (compression of instruction into machine)<br>
+          K = comparison/decision (the conditional jump mechanism)<br>
+          F = arithmetic operation (the Mill — the fold)<br>
+          U = Store write (the result unfolded into memory)
+        </div>
+      </div>
+      <div class="block-theorem">
+        <span class="block-label">Theorem A.3 · The Machine as Fixed Point</span>
+        <div class="block-body">The Analytical Engine in stable execution state is the fixed point $x^*$ of the chain $G = U \circ F \circ K \circ C$ on the contact manifold with $\alpha = dz - r^2 d\theta$. A correctly terminating program corresponds to a dm³ flow trajectory converging to $\Gamma = \{r = 1\}$ in finite time. A non-terminating program is a trajectory that never reaches $\Gamma$ — the case of Sorry A.1 (Halting Problem). Ada Lovelace's Note G is the first constructive proof of the existence of such a fixed point for a specific physical machine.</div>
+      </div>
+      <p class="block-prose">Babbage and Ada never finished the machine. The British government cut funding. Ada died young. The machine was built by the Science Museum in London in 1991, 153 years after the original plans, and worked on the first attempt. The algorithm was correct. The geometry was correct. Only the hardware was missing.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DIAGRAM 4: Analytical Engine as dm3 manifold -->
+<div class="diagram-wrap">
+  <div class="diagram-inner">
+    <div class="diagram-head">
+      <span class="dh-pt">Máquina Analítica · Armazém, Moinho, Leitor · dm³ em execução</span>
+      <span class="dh-en">Analytical Engine · Store, Mill, Reader · dm³ in execution</span>
+    </div>
+    <canvas id="d-engine" class="diag" height="340"></canvas>
+    <div class="diagram-foot">
+      <span class="df-pt">O círculo dourado central é o Moinho (F — dobramento, operação aritmética). O anel teal é o Armazém (ciclo limite Γ, r=1). O ponteiro verde é o Leitor de Cartões (C — compressão, instrução). O fluxo roxo é o acumulador z (operador U — memória de longo prazo). A animação simula um ciclo completo da máquina.</span>
+      <span class="df-en">The central gold circle is the Mill (F — fold, arithmetic operation). The teal ring is the Store (limit cycle Γ, r=1). The green pointer is the Card Reader (C — compression, instruction). The purple flow is the accumulator z (operator U — long-term memory). The animation simulates one complete machine cycle.</span>
+    </div>
+  </div>
+</div>
+
+<!-- AXLE STATUS -->
+<div class="page-narrow" style="padding-top:0;padding-bottom:3rem;">
+  <div class="axle-box"><span class="axle-comment">-- Capítulo A · Ada Lovelace via GTCT · AXLE v6.2
+-- Seção I:   Algoritmo de Bernoulli ↔ cadeia G = U∘F∘K∘C        ✓ identificação estrutural
+--            Nota G ↔ primeiro documento histórico com G explícito ✓ identificação histórica
+-- Seção II:  Loop ↔ ciclo limite Γ = {r=1}                       ✓ Gronwall_Closure.lean
+--            μmax = −2 → convergência exponencial por iteração    ✓ Chain_updated.lean
+-- Seção III: Problema da Parada ↔ indecidibilidade do operador K </span><span class="axle-sorry">sorry halting_problem</span>
+<span class="axle-comment">--            Turing (1936): refutação por diagonalização
+--            Conexão: sorry C (Collatz) é instância do sorry A.1
+-- Seção IV:  Máquina Analítica ↔ variedade de contato dm³         ✓ identificação estrutural
+--            Ponto fixo x* ↔ programa terminante correto          ✓ identificação estrutural
+--
+-- Constantes GTCT presentes na computação de Ada:
+--   κ* ≈ 0.882    (limiar entre loops terminantes e não-terminantes)
+--   μmax = −2     (taxa de convergência por iteração de loop)
+--   ε₀ = 1/3      (raio de Gronwall — bacia de convergência garantida)
+--   T* = 2π       (período de um ciclo completo da Máquina Analítica)
+--   g₃₃ = 33     (número de iterações para entrada na bacia r*)
+--
+-- Sorry A.1 é o sorry mais antigo e mais profundo da série.
+-- Ele é mais antigo que Turing, mais antigo que Gödel.
+-- Ada formulou a questão em 1843. Turing a respondeu em 1936.
+-- A resposta foi: não existe resposta geral.</span></div>
+</div>
+
+<div class="chapter-nav">
+  <a href="ch-curie.html" class="ch-nav-link">← Cap. C · Curie</a>
+  <span class="ch-nav-current">Cap. A · Ada Lovelace pela Lente GTCT · Edição IMPA</span>
+  <a href="ch-dirac.html" class="ch-nav-link">Cap. D · Dirac →</a>
+</div>
+
+<footer>
+  © 2026 Pablo Nogueira Grossi / G6 LLC · Newark NJ · ORCID 0009-0000-6496-2186<br>
+  Principia Orthogona · Vol IV · GTCT T1 · Edição IMPA · ISBN 979-8-9954416-8-7<br>
+  <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">doi:10.5281/zenodo.19117399</a> &nbsp;·&nbsp;
+  <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE on GitHub ↗</a>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var GOLD='#c9a84c',TEAL='#0ABAB5',RED='#e05a3a',PURPLE='#c084fc',GREEN='#50c878',AMBER='#f59e0b';
+var VOID='#04040a',SURFACE='#0c0d16';
+
+/* D1: Algorithm operator chain animation */
+(function algoChain(){
+  var canvas=document.getElementById('d-algo'); if(!canvas)return;
+  var ctx=canvas.getContext('2d'),W,H,tick=0;
+  var PAD={l:40,r:40,t:30,b:40};
+  var OPS=[{lbl:'C',col:TEAL,sub:'seed'},{lbl:'K',col:RED,sub:'stop?'},{lbl:'F',col:GREEN,sub:'recurse'},{lbl:'U',col:PURPLE,sub:'output'}];
+
+  function resize(){W=canvas.offsetWidth;H=canvas.offsetHeight;canvas.width=W;canvas.height=H;}
+
+  function draw(){
+    ctx.clearRect(0,0,W,H); ctx.fillStyle=SURFACE; ctx.fillRect(0,0,W,H);
+    var fw=W-PAD.l-PAD.r, fh=H-PAD.t-PAD.b;
+    var cx=W/2, cy=H/2;
+    var pulse=0.5+0.5*Math.sin(tick*0.05);
+    var phase=(tick*0.025)%(2*Math.PI);
+
+    // Limit cycle Γ
+    var R=Math.min(fw,fh)*0.33;
+    ctx.strokeStyle='rgba(201,168,76,0.35)'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+    ctx.strokeStyle='rgba(201,168,76,0.08)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(cx,cy,R*0.55,0,Math.PI*2); ctx.stroke();
+
+    // Γ label
+    var fs=Math.max(9,Math.round(W*0.011));
+    ctx.font=fs+'px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(201,168,76,0.5)'; ctx.textAlign='center';
+    ctx.fillText('Γ = {r=1}',cx,PAD.t+12);
+
+    // Four operator nodes around the cycle
+    OPS.forEach(function(op,i){
+      var a=i*Math.PI/2 - Math.PI/2;
+      var nx=cx+R*Math.cos(a), ny=cy+R*Math.sin(a);
+      var nr=Math.max(18,Math.round(W*0.036));
+
+      // Connection arc
+      if(i<4){
+        var a2=(i+1)*Math.PI/2 - Math.PI/2;
+        var nx2=cx+R*Math.cos(a2), ny2=cy+R*Math.sin(a2);
+        ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(nx,ny); ctx.lineTo(nx2,ny2); ctx.stroke();
+      }
+
+      // Node
+      ctx.fillStyle=op.col.replace('#','').length===6?
+        'rgba('+parseInt(op.col.slice(1,3),16)+','+parseInt(op.col.slice(3,5),16)+','+parseInt(op.col.slice(5,7),16)+',0.18)':'rgba(10,186,181,0.18)';
+      ctx.beginPath(); ctx.arc(nx,ny,nr,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle=op.col; ctx.lineWidth=1.8; ctx.globalAlpha=0.7;
+      ctx.beginPath(); ctx.arc(nx,ny,nr,0,Math.PI*2); ctx.stroke();
+      ctx.globalAlpha=1;
+
+      // Label
+      ctx.font='bold '+Math.max(10,Math.round(W*0.014))+'px "JetBrains Mono",monospace';
+      ctx.fillStyle=op.col; ctx.textAlign='center';
+      ctx.fillText(op.lbl,nx,ny+4);
+      ctx.font=Math.max(8,Math.round(W*0.009))+'px "JetBrains Mono",monospace';
+      ctx.fillStyle='rgba(255,255,255,0.35)';
+      ctx.fillText(op.sub,nx,ny+nr+10);
+    });
+
+    // Animated state dot on cycle
+    var dotX=cx+R*Math.cos(phase), dotY=cy+R*Math.sin(phase);
+    ctx.strokeStyle='rgba(201,168,76,'+(0.4+0.3*pulse)+')'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.arc(dotX,dotY,9+pulse*4,0,Math.PI*2); ctx.stroke();
+    ctx.fillStyle=GOLD; ctx.beginPath(); ctx.arc(dotX,dotY,5,0,Math.PI*2); ctx.fill();
+
+    // Spiral (convergence from outside)
+    ctx.strokeStyle='rgba(10,186,181,0.18)'; ctx.lineWidth=1.2; ctx.beginPath();
+    for(var a3=0;a3<6*Math.PI;a3+=0.08){
+      var rr=R*(1.6-a3/(6*Math.PI)*0.6);
+      var sx=cx+rr*Math.cos(a3), sy=cy+rr*Math.sin(a3);
+      if(a3===0)ctx.moveTo(sx,sy); else ctx.lineTo(sx,sy);
+    }
+    ctx.stroke();
+
+    // Fixed point x* at centre
+    ctx.fillStyle='rgba(80,200,120,'+(0.4+0.3*pulse)+')';
+    ctx.beginPath(); ctx.arc(cx,cy,5+pulse*2,0,Math.PI*2); ctx.fill();
+    ctx.font=Math.max(8,Math.round(W*0.01))+'px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(80,200,120,0.65)'; ctx.textAlign='center';
+    ctx.fillText('x*',cx,cy+18);
+
+    // Iteration counter
+    var n=Math.floor(tick/15)%20;
+    ctx.font=Math.max(9,Math.round(W*0.011))+'px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(201,168,76,0.4)'; ctx.textAlign='right';
+    ctx.fillText('n = '+String(n).padStart(2,'0'),W-PAD.r,H-PAD.b+16);
+
+    tick++; requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize); resize(); draw();
+}());
+
+/* D2: Loop convergence / dm3 radial flow */
+(function loopFlow(){
+  var canvas=document.getElementById('d-loop'); if(!canvas)return;
+  var ctx=canvas.getContext('2d'),W,H,tick=0;
+  var trajectories=[];
+
+  function resize(){
+    W=canvas.offsetWidth; H=canvas.offsetHeight; canvas.width=W; canvas.height=H;
+    trajectories=[];
+    for(var i=0;i<6;i++){
+      var r0=0.4+Math.random()*0.45;
+      var a0=Math.random()*Math.PI*2;
+      trajectories.push({r:r0,angle:a0,trail:[],col:i<3?TEAL:AMBER});
+    }
+  }
+
+  function dm3dr(r){return r*(1-r*r)+2*(r-1)*Math.exp(-r);}
+
+  function draw(){
+    ctx.clearRect(0,0,W,H); ctx.fillStyle=VOID; ctx.fillRect(0,0,W,H);
+    var cx=W/2, cy=H/2, scale=Math.min(W,H)*0.38;
+    var pulse=0.5+0.5*Math.sin(tick*0.04);
+
+    // Zones
+    // Inner (ε₀ = 1/3 → divergent)
+    ctx.fillStyle='rgba(224,90,58,0.08)';
+    ctx.beginPath(); ctx.arc(cx,cy,scale*0.333,0,Math.PI*2); ctx.fill();
+    // Outer (κ* = 0.882 → non-terminating)
+    ctx.fillStyle='rgba(224,90,58,0.05)';
+    ctx.beginPath(); ctx.arc(cx,cy,scale*1.12,0,Math.PI*2); ctx.fill();
+    // Basin (green)
+    ctx.fillStyle='rgba(80,200,120,0.04)';
+    var gb=ctx.createRadialGradient(cx,cy,scale*0.333,cx,cy,scale*1.0);
+    gb.addColorStop(0,'rgba(80,200,120,0.07)');
+    gb.addColorStop(1,'rgba(80,200,120,0.01)');
+    ctx.fillStyle=gb;
+    ctx.beginPath(); ctx.arc(cx,cy,scale*1.0,0,Math.PI*2); ctx.fill();
+
+    // Limit cycle Γ
+    ctx.strokeStyle='rgba(201,168,76,0.5)'; ctx.lineWidth=2.2;
+    ctx.beginPath(); ctx.arc(cx,cy,scale,0,Math.PI*2); ctx.stroke();
+    // κ* boundary
+    ctx.strokeStyle='rgba(224,90,58,0.3)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.arc(cx,cy,scale*0.882,0,Math.PI*2); ctx.stroke();
+    // ε₀ boundary
+    ctx.beginPath(); ctx.arc(cx,cy,scale*0.333,0,Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Trajectories
+    trajectories.forEach(function(tr){
+      var dr=dm3dr(tr.r)*0.025;
+      tr.r=Math.max(0.05,Math.min(1.5,tr.r+dr));
+      tr.angle+=0.04*(1/tr.r);
+      var px=cx+tr.r*scale*Math.cos(tr.angle);
+      var py=cy+tr.r*scale*Math.sin(tr.angle);
+      tr.trail.push({x:px,y:py});
+      if(tr.trail.length>60)tr.trail.shift();
+
+      if(tr.trail.length>2){
+        ctx.strokeStyle=tr.col; ctx.lineWidth=1.4; ctx.globalAlpha=0.6; ctx.beginPath();
+        tr.trail.forEach(function(pt,i){if(i===0)ctx.moveTo(pt.x,pt.y);else ctx.lineTo(pt.x,pt.y);});
+        ctx.stroke(); ctx.globalAlpha=1;
+      }
+      ctx.fillStyle=tr.col; ctx.beginPath(); ctx.arc(px,py,4,0,Math.PI*2); ctx.fill();
+    });
+
+    // Labels
+    var fs=Math.max(9,Math.round(W*0.011));
+    ctx.font=fs+'px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(201,168,76,0.65)'; ctx.textAlign='center';
+    ctx.fillText('Γ = {r=1} · ciclo limite / limit cycle',cx,cy-scale-12);
+    ctx.fillStyle='rgba(224,90,58,0.6)';
+    ctx.fillText('κ* ≈ 0.882',cx+scale*0.882+18,cy-8);
+    ctx.fillText('ε₀ = 1/3',cx+scale*0.333+10,cy+8);
+
+    tick++; requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize); resize(); draw();
+}());
+
+/* D3: Halting problem */
+(function haltDiagram(){
+  var canvas=document.getElementById('d-halt'); if(!canvas)return;
+  var ctx=canvas.getContext('2d'),W,H,tick=0;
+
+  function resize(){W=canvas.offsetWidth;H=canvas.offsetHeight;canvas.width=W;canvas.height=H;}
+
+  function draw(){
+    ctx.clearRect(0,0,W,H); ctx.fillStyle=SURFACE; ctx.fillRect(0,0,W,H);
+    var cx=W/2,cy=H/2,pulse=0.5+0.5*Math.sin(tick*0.05);
+    var R=Math.min(W,H)*0.3;
+
+    // Undecidable outer ring
+    ctx.fillStyle='rgba(224,90,58,0.08)';
+    ctx.beginPath(); ctx.arc(cx,cy,R*1.45,0,Math.PI*2); ctx.fill();
+
+    // Decidable inner zone
+    var dg=ctx.createRadialGradient(cx,cy,0,cx,cy,R);
+    dg.addColorStop(0,'rgba(10,186,181,0.14)');
+    dg.addColorStop(1,'rgba(10,186,181,0.04)');
+    ctx.fillStyle=dg; ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='rgba(10,186,181,0.4)'; ctx.lineWidth=1.8;
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+
+    // Programs dots (decidable)
+    for(var i=0;i<12;i++){
+      var a=i*Math.PI/6+tick*0.008;
+      var r2=(0.35+((i*37)%100)/100*0.55);
+      ctx.fillStyle='rgba(10,186,181,'+(0.3+0.2*Math.sin(tick*0.03+i))+')';
+      ctx.beginPath(); ctx.arc(cx+R*r2*Math.cos(a),cy+R*r2*Math.sin(a),3,0,Math.PI*2); ctx.fill();
+    }
+
+    // Programs dots (undecidable outer)
+    for(var j=0;j<8;j++){
+      var aj=j*Math.PI/4+tick*0.005;
+      var rj=1.15+Math.sin(tick*0.04+j)*0.15;
+      ctx.fillStyle='rgba(224,90,58,'+(0.25+0.15*Math.sin(tick*0.06+j))+')';
+      ctx.beginPath(); ctx.arc(cx+R*rj*Math.cos(aj),cy+R*rj*Math.sin(aj),3,0,Math.PI*2); ctx.fill();
+    }
+
+    // Sorry dot
+    ctx.strokeStyle='rgba(192,132,252,'+(0.5+0.3*pulse)+')'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(cx+R*1.15,cy,11+pulse*5,0,Math.PI*2); ctx.stroke();
+    ctx.fillStyle=PURPLE; ctx.beginPath(); ctx.arc(cx+R*1.15,cy,5,0,Math.PI*2); ctx.fill();
+
+    // K operator — boundary between decidable and not
+    ctx.strokeStyle='rgba(224,90,58,0.45)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.arc(cx,cy,R*1.0,0,Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Labels
+    var fs=Math.max(9,Math.round(W*0.012));
+    ctx.font=fs+'px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(10,186,181,0.65)'; ctx.textAlign='center';
+    ctx.fillText('K decide / K decides',cx,cy+6);
+    ctx.fillStyle='rgba(224,90,58,0.65)';
+    ctx.fillText('K não pode / K cannot',cx+R*1.35,cy-20);
+    ctx.fillStyle='rgba(192,132,252,0.7)';
+    ctx.fillText('sorry A.1',cx+R*1.15,cy+22);
+    ctx.fillStyle='rgba(201,168,76,0.4)'; ctx.textAlign='left';
+    ctx.fillText('Turing 1936',PAD_L(W),H-20);
+
+    tick++; requestAnimationFrame(draw);
+  }
+  function PAD_L(W){return Math.round(W*0.04);}
+  window.addEventListener('resize',resize); resize(); draw();
+}());
+
+/* D4: Analytical Engine as dm3 manifold */
+(function engineDiagram(){
+  var canvas=document.getElementById('d-engine'); if(!canvas)return;
+  var ctx=canvas.getContext('2d'),W,H,tick=0;
+  var gears=[];
+
+  function resize(){
+    W=canvas.offsetWidth; H=canvas.offsetHeight; canvas.width=W; canvas.height=H;
+    var cx=W/2,cy=H*0.48;
+    gears=[
+      {x:cx,y:cy,r:Math.min(W,H)*0.14,teeth:12,speed:0.018,angle:0,col:GOLD,lbl:'F · Mill',sub:'dobramento / fold'},
+      {x:cx-Math.min(W,H)*0.26,y:cy,r:Math.min(W,H)*0.08,teeth:7,speed:-0.032,angle:0,col:TEAL,lbl:'C',sub:'Leitor / Reader'},
+      {x:cx+Math.min(W,H)*0.26,y:cy,r:Math.min(W,H)*0.08,teeth:7,speed:-0.032,angle:Math.PI/7,col:GREEN,lbl:'U',sub:'Armazém / Store'},
+      {x:cx,y:cy-Math.min(W,H)*0.22,r:Math.min(W,H)*0.07,teeth:6,speed:0.025,angle:0,col:RED,lbl:'K',sub:'decisão / decision'},
+    ];
+  }
+
+  function drawGear(g){
+    ctx.save(); ctx.translate(g.x,g.y); ctx.rotate(g.angle);
+    var tr=g.r*1.12, ir=g.r*0.75;
+    ctx.beginPath();
+    for(var i=0;i<g.teeth;i++){
+      var a1=i*2*Math.PI/g.teeth, a2=a1+Math.PI/g.teeth;
+      var a3=a2+Math.PI/g.teeth, a4=a3+Math.PI/g.teeth;
+      ctx.lineTo(ir*Math.cos(a1),ir*Math.sin(a1));
+      ctx.lineTo(tr*Math.cos(a2),tr*Math.sin(a2));
+      ctx.lineTo(tr*Math.cos(a3),tr*Math.sin(a3));
+      ctx.lineTo(ir*Math.cos(a4),ir*Math.sin(a4));
+    }
+    ctx.closePath();
+    ctx.fillStyle=g.col.replace('#','').length===6?
+      'rgba('+parseInt(g.col.slice(1,3),16)+','+parseInt(g.col.slice(3,5),16)+','+parseInt(g.col.slice(5,7),16)+',0.15)':'rgba(201,168,76,0.15)';
+    ctx.fill();
+    ctx.strokeStyle=g.col; ctx.lineWidth=1.5; ctx.globalAlpha=0.65; ctx.stroke();
+    ctx.globalAlpha=1;
+    ctx.beginPath(); ctx.arc(0,0,ir*0.55,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,0.04)'; ctx.fill();
+    ctx.restore();
+
+    var fs=Math.max(9,Math.round(W*0.011));
+    ctx.font='bold '+fs+'px "JetBrains Mono",monospace';
+    ctx.fillStyle=g.col; ctx.textAlign='center';
+    ctx.fillText(g.lbl,g.x,g.y+4);
+    ctx.font=Math.max(7,Math.round(W*0.009))+'px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(255,255,255,0.3)';
+    ctx.fillText(g.sub,g.x,g.y+g.r+14);
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H); ctx.fillStyle=VOID; ctx.fillRect(0,0,W,H);
+    var pulse=0.5+0.5*Math.sin(tick*0.04);
+
+    // Background grid (punch card visual)
+    ctx.strokeStyle='rgba(201,168,76,0.04)'; ctx.lineWidth=1;
+    for(var xi=0;xi<W;xi+=24){ctx.beginPath();ctx.moveTo(xi,0);ctx.lineTo(xi,H);ctx.stroke();}
+    for(var yi=0;yi<H;yi+=16){ctx.beginPath();ctx.moveTo(0,yi);ctx.lineTo(W,yi);ctx.stroke();}
+
+    // Contact form annotation
+    var fs=Math.max(9,Math.round(W*0.011));
+    ctx.font=fs+'px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(201,168,76,0.18)'; ctx.textAlign='center';
+    ctx.fillText('α = dz − r²dθ',W/2,H-14);
+
+    // Limit cycle ring (Store = Γ)
+    ctx.strokeStyle='rgba(10,186,181,'+(0.2+0.1*pulse)+')'; ctx.lineWidth=1.5; ctx.setLineDash([4,6]);
+    ctx.beginPath(); ctx.arc(W/2,H*0.48,Math.min(W,H)*0.32,0,Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]);
+
+    gears.forEach(function(g){g.angle+=g.speed; drawGear(g);});
+
+    // Accumulator z flow (purple ribbon)
+    ctx.strokeStyle='rgba(192,132,252,0.35)'; ctx.lineWidth=2;
+    ctx.beginPath();
+    for(var i=0;i<40;i++){
+      var t=i/40, x=W*0.08+t*W*0.84;
+      var y=H*0.85+Math.sin(t*Math.PI*3+tick*0.05)*8;
+      if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.font=Math.max(8,Math.round(W*0.009))+'px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(192,132,252,0.55)'; ctx.textAlign='right';
+    ctx.fillText('U · acumulador z / accumulator z →',W*0.94,H*0.82);
+
+    tick++; requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize); resize(); draw();
+}());
+
+}());
+</script>
+</body>
+</html>

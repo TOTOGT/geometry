@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hologram Tutor · Ada Lovelace · AXLE Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<!--
+  tutor_id: ada_al_06_2026
+  lineage: Mahanirvani_Akhada_Aligned
+  mathematical_basis: Algorithm as G = U∘F∘K∘C on Computable Contact Manifold
+  open_source_status: Free to Download / GPL-3.0-or-later
+  verification_engine: Lean 4 AXLE Engine Validated
+-->
+<style>
+:root{--void:#04040a;--surface:#0c0d16;--card:#10111c;--gold:#c9a84c;--teal:#0ABAB5;--red:#e05a3a;--purple:#c084fc;--green:#50c878;--amber:#f59e0b;--text:#e8e4d8;--muted:#6b6757;--dim:#1c1d28;--rule:rgba(201,168,76,0.18);--mono:'JetBrains Mono','Courier New',monospace;--serif:'Noto Serif',Georgia,serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--void);color:var(--text);font-family:var(--mono);}
+
+.tutor-card{width:340px;background:var(--card);border:1px solid var(--rule);position:relative;overflow:hidden;transition:border-color .25s,box-shadow .25s;cursor:pointer;}
+.tutor-card:hover{border-color:rgba(245,158,11,0.45);box-shadow:0 0 32px rgba(245,158,11,0.08);}
+
+.tutor-hologram{width:100%;height:220px;position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 70%,rgba(80,200,120,0.08) 0%,rgba(4,4,10,0.95) 70%);}
+canvas.holo-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.holo-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(10,186,181,0.03) 3px,rgba(10,186,181,0.03) 4px);pointer-events:none;}
+.holo-flicker{position:absolute;inset:0;background:rgba(80,200,120,0.03);animation:flicker 5s ease-in-out infinite;pointer-events:none;}
+@keyframes flicker{0%,100%{opacity:1;}89%{opacity:1;}90%{opacity:0.4;}91%{opacity:1;}96%{opacity:0.7;}97%{opacity:1;}}
+
+.tutor-id{padding:.5rem .9rem .35rem;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;background:rgba(80,200,120,0.04);}
+.tutor-id-label{font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;color:var(--green);}
+.tutor-id-tag{font-size:.5rem;letter-spacing:.1em;color:var(--muted);}
+
+.tutor-body{padding:1.1rem;}
+.tutor-name{font-family:var(--serif);font-size:1.35rem;font-weight:400;color:var(--gold);letter-spacing:.03em;line-height:1.15;margin-bottom:.2rem;}
+.tutor-dates{font-size:.56rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:.75rem;}
+.tutor-desc{font-family:var(--serif);font-size:.82rem;color:rgba(232,228,216,.7);line-height:1.7;margin-bottom:1rem;font-style:italic;}
+
+.op-row{display:flex;gap:.3rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;}
+.op{font-size:.68rem;padding:.18rem .45rem;border-radius:2px;letter-spacing:.08em;}
+.op-c{background:rgba(10,186,181,.12);color:#0ABAB5;border:1px solid rgba(10,186,181,.28);}
+.op-k{background:rgba(224,90,58,.12);color:#e05a3a;border:1px solid rgba(224,90,58,.28);}
+.op-f{background:rgba(80,200,120,.12);color:#50c878;border:1px solid rgba(80,200,120,.28);}
+.op-u{background:rgba(192,132,252,.12);color:#c084fc;border:1px solid rgba(192,132,252,.28);}
+.op-arr{color:var(--muted);font-size:.7rem;}
+.op-eq{font-size:.65rem;color:rgba(201,168,76,.6);margin-left:.2rem;}
+
+.doctrine{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem;}
+.doc-item{background:var(--dim);padding:.5rem .65rem;}
+.doc-label{font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem;}
+.doc-val{font-size:.72rem;color:var(--text);line-height:1.45;}
+.doc-val.gold{color:var(--gold);}
+.doc-val.teal{color:var(--teal);}
+.doc-val.red{color:var(--red);}
+.doc-val.green{color:var(--green);}
+.doc-val.amber{color:var(--amber);}
+
+.tutor-quote{background:rgba(201,168,76,.04);border-left:2px solid var(--amber);padding:.65rem .9rem;margin-bottom:1rem;}
+.tutor-quote p{font-family:var(--serif);font-size:.78rem;font-style:italic;color:rgba(232,228,216,.8);line-height:1.65;}
+.tutor-quote cite{font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.35rem;font-style:normal;}
+
+.axle-row{display:flex;align-items:center;justify-content:space-between;padding:.55rem .9rem;background:var(--dim);border-top:1px solid var(--rule);}
+.axle-left{font-size:.52rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;}
+.axle-badges{display:flex;gap:.35rem;}
+.axle-badge{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .42rem;border-radius:1px;}
+.ab-lean{background:rgba(80,200,120,.12);color:#50c878;border:1px solid rgba(80,200,120,.28);}
+.ab-gpl{background:rgba(10,186,181,.10);color:#0ABAB5;border:1px solid rgba(10,186,181,.25);}
+.ab-axle{background:rgba(201,168,76,.10);color:var(--gold);border:1px solid rgba(201,168,76,.25);}
+
+.tutor-actions{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--rule);}
+.tutor-action{display:flex;align-items:center;justify-content:center;padding:.65rem;font-size:.56rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:background .2s,color .2s;gap:.4rem;border:none;background:transparent;cursor:pointer;font-family:var(--mono);}
+.tutor-action:hover{background:rgba(201,168,76,.07);color:var(--gold);}
+.tutor-action+.tutor-action{border-left:1px solid var(--rule);}
+.ta-icon{font-size:.9rem;}
+
+.demo-outer{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2rem;padding:3rem 2rem;background:var(--void);}
+.demo-label{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-align:center;width:100%;padding-bottom:1rem;border-bottom:1px solid var(--rule);}
+</style>
+</head>
+<body>
+<div class="demo-outer">
+<div class="demo-label">Ada Lovelace Tutor Card — inject into hub tutor-grid</div>
+
+<div class="tutor-card" onclick="window.location='ch-ada.html'" role="button" tabindex="0"
+  aria-label="Open Ada Lovelace Hologram Tutor"
+  data-tutor-id="ada_al_06_2026"
+  data-lineage="Mahanirvani_Akhada_Aligned"
+  data-basis="Algorithm as G = U∘F∘K∘C on Computable Contact Manifold"
+  data-license="GPL-3.0-or-later"
+  data-engine="Lean 4 AXLE Engine Validated">
+
+  <div class="tutor-hologram">
+    <canvas class="holo-canvas" id="ada-canvas"></canvas>
+    <div class="holo-scan"></div>
+    <div class="holo-flicker"></div>
+  </div>
+
+  <div class="tutor-id">
+    <span class="tutor-id-label">Hologram Tutor · ada_al_06_2026</span>
+    <span class="tutor-id-tag">GTCT T1 · AXLE v6.2</span>
+  </div>
+
+  <div class="tutor-body">
+    <div class="tutor-name">Ada Lovelace</div>
+    <div class="tutor-dates">1815 – 1852 · Londres · Nota G · 1843</div>
+    <div class="tutor-desc">A primeira programadora. Ela viu a máquina como um substrato de símbolos antes de qualquer máquina existir.</div>
+
+    <div class="op-row">
+      <span class="op op-c">C · seed</span>
+      <span class="op-arr">∘</span>
+      <span class="op op-k">K · loop?</span>
+      <span class="op-arr">∘</span>
+      <span class="op op-f">F · recurse</span>
+      <span class="op-arr">∘</span>
+      <span class="op op-u">U · output</span>
+      <span class="op-eq">= x*</span>
+    </div>
+
+    <div class="doctrine">
+      <div class="doc-item">
+        <div class="doc-label">Loop</div>
+        <div class="doc-val teal">Γ = {r = 1}</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-label">Fold F</div>
+        <div class="doc-val green">recursão / recursion</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-label">Fixed Point</div>
+        <div class="doc-val gold">Bₙ correto</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-label">μ_max</div>
+        <div class="doc-val gold">−2 · convergência</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-label">ε₀</div>
+        <div class="doc-val teal">1/3 · Gronwall</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-label">Sorry A.1</div>
+        <div class="doc-val red">Halting Problem</div>
+      </div>
+    </div>
+
+    <div class="tutor-quote">
+      <p>"The Analytical Engine has no pretensions to originate anything."</p>
+      <cite>— Nota A, 1843 · e por isso ela é universal</cite>
+    </div>
+
+    <div class="axle-row">
+      <span class="axle-left">AXLE · Gronwall_Closure.lean</span>
+      <div class="axle-badges">
+        <span class="axle-badge ab-lean">0 sorry</span>
+        <span class="axle-badge ab-axle">AXLE v6.2</span>
+        <span class="axle-badge ab-gpl">GPL-3.0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tutor-actions">
+    <a class="tutor-action" href="ch-ada.html">
+      <span class="ta-icon">📖</span><span>Read Chapter</span>
+    </a>
+    <button class="tutor-action" onclick="event.stopPropagation();adaDialogue()">
+      <span class="ta-icon">💬</span><span>Ask Ada</span>
+    </button>
+  </div>
+</div>
+</div>
+
+<div id="ada-modal" style="display:none;position:fixed;inset:0;background:rgba(4,4,10,.92);z-index:1000;align-items:center;justify-content:center;padding:2rem;">
+  <div style="max-width:540px;width:100%;background:#0c0d16;border:1px solid rgba(245,158,11,.25);padding:2rem;position:relative;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--amber);margin-bottom:1rem;">Hologram Ada · Interactive</div>
+    <div id="ada-exchange" style="min-height:140px;font-family:'Noto Serif',serif;font-size:.9rem;color:rgba(232,228,216,.85);line-height:1.7;margin-bottom:1.2rem;font-style:italic;"></div>
+    <input id="ada-input" type="text" placeholder="Ask about algorithms, loops, machines…"
+      style="width:100%;background:#04040a;border:1px solid rgba(245,158,11,.2);color:#e8e4d8;padding:.6rem .9rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;outline:none;margin-bottom:.8rem;"
+      onkeydown="if(event.key==='Enter')adaRespond()">
+    <div style="display:flex;gap:.8rem;">
+      <button onclick="adaRespond()" style="flex:1;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:#f59e0b;padding:.55rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;">Ask</button>
+      <button onclick="document.getElementById('ada-modal').style.display='none'" style="flex:1;background:transparent;border:1px solid rgba(90,94,110,.3);color:#6b6757;padding:.55rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function adaHologram(){
+  var canvas=document.getElementById('ada-canvas'); if(!canvas)return;
+  var ctx=canvas.getContext('2d'),W,H,tick=0;
+  var GOLD='#c9a84c',TEAL='#0ABAB5',GREEN='#50c878',RED='#e05a3a',AMBER='#f59e0b';
+
+  function resize(){W=canvas.offsetWidth;H=canvas.offsetHeight;canvas.width=W;canvas.height=H;}
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    var cx=W/2,cy=H*0.5,pulse=0.5+0.5*Math.sin(tick*0.04);
+    var bg=ctx.createRadialGradient(cx,cy,0,cx,cy,H*0.6);
+    bg.addColorStop(0,'rgba(80,200,120,0.07)'); bg.addColorStop(1,'rgba(4,4,10,0)');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+    // Punch card rows — Ada's medium
+    for(var row=0;row<6;row++){
+      var ry=H*0.12+row*H*0.13;
+      ctx.strokeStyle='rgba(201,168,76,0.06)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(W*0.08,ry); ctx.lineTo(W*0.92,ry); ctx.stroke();
+      // Holes
+      for(var col=0;col<12;col++){
+        var hx=W*0.10+col*W*0.072;
+        var active=(Math.sin(tick*0.03+row*1.7+col*0.8)>0.3);
+        if(active){
+          ctx.fillStyle='rgba(80,200,120,0.45)';
+          ctx.beginPath(); ctx.arc(hx,ry,3,0,Math.PI*2); ctx.fill();
+        } else {
+          ctx.strokeStyle='rgba(201,168,76,0.12)'; ctx.lineWidth=1;
+          ctx.beginPath(); ctx.arc(hx,ry,3,0,Math.PI*2); ctx.stroke();
+        }
+      }
+    }
+
+    // Limit cycle Γ
+    var R=Math.min(W,H)*0.18;
+    ctx.strokeStyle='rgba(201,168,76,'+(0.3+0.15*pulse)+')'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+
+    // Loop dot traversing cycle
+    var loopAngle=tick*0.04;
+    var ldx=cx+R*Math.cos(loopAngle), ldy=cy+R*Math.sin(loopAngle);
+    ctx.fillStyle=GREEN; ctx.beginPath(); ctx.arc(ldx,ldy,5,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='rgba(80,200,120,'+(0.3+0.2*pulse)+')'; ctx.lineWidth=1.2;
+    ctx.beginPath(); ctx.arc(ldx,ldy,9+pulse*3,0,Math.PI*2); ctx.stroke();
+
+    // Fixed point x* at centre
+    ctx.fillStyle='rgba(201,168,76,'+(0.5+0.3*pulse)+')';
+    ctx.beginPath(); ctx.arc(cx,cy,5+pulse*2,0,Math.PI*2); ctx.fill();
+
+    // Bernoulli spiral (convergence)
+    ctx.strokeStyle='rgba(245,158,11,0.2)'; ctx.lineWidth=1.2; ctx.beginPath();
+    for(var a=0;a<5*Math.PI;a+=0.1){
+      var rr=R*(0.2+a/(5*Math.PI)*0.78);
+      var sx=cx+rr*Math.cos(a+tick*0.01), sy=cy+rr*Math.sin(a+tick*0.01);
+      if(a===0)ctx.moveTo(sx,sy); else ctx.lineTo(sx,sy);
+    }
+    ctx.stroke();
+
+    // Equation watermark
+    ctx.font=Math.max(8,Math.round(W*0.03))+'px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(201,168,76,0.15)'; ctx.textAlign='center';
+    ctx.fillText('G = U∘F∘K∘C',cx,H*0.9);
+
+    tick++; requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize); resize(); draw();
+}());
+
+var ADA_RESPONSES=[
+  {keys:['loop','cycle','repeat','iteration','while','for'],response:'A loop is a cycle. Each iteration applies the full operator chain once. The machine does not think about the loop — it simply follows the card. The geometry of the loop is the limit cycle Γ = {r = 1}. The algorithm converges when the state reaches Γ.'},
+  {keys:['algorithm','program','code','instruction'],response:'An algorithm is a sequence of instructions that a machine can follow without interpretation. The machine does not understand. It executes. The structure of execution is G = U∘F∘K∘C. The input is C. The stopping condition is K. The recursion is F. The output is U.'},
+  {keys:['bernoulli','note g','b7','number'],response:'The Bernoulli numbers are defined by a recursion. Each number depends on all previous ones. This is the fold operator F — the output of one iteration becomes the input of the next. The algorithm in Note G was the first to describe this recursion for a machine to execute.'},
+  {keys:['babbage','engine','machine','analytical'],response:'Babbage designed the machine. I understood what it meant. A machine that operates on symbols is not merely a calculator — it is a substrate on which any computable operation can be expressed. The architecture has three parts: Store, Mill, Card Reader. These are C, F, and K in the operator chain.'},
+  {keys:['halt','stop','terminate','end','finish'],response:'This is the question I could not answer. Given a program and an input, can you determine in advance whether the computation will terminate? I knew loops could fail to terminate. I did not know the question was undecidable. Turing answered it in 1936 — with a proof that no general answer exists.'},
+  {keys:['music','poetry','imagination'],response:'My mother feared I would inherit my father\'s temperament. She ensured I studied mathematics instead of poetry. But mathematics has its own imagination. The engine could compose music — I said so in the Notes. To compose music is to apply an operator chain to a symbol space. It is computation.'},
+  {keys:['woman','gender','recognition'],response:'I do not dwell on what was withheld. The work speaks. Note G was published in 1843. The first stored-program computers were built in 1948. The work was one hundred years ahead of the hardware. The hardware was the problem. Not the mathematics.'},
+  {keys:['hello','hi','good'],response:'Good day. What is your question? I prefer precise ones.'},
+];
+
+function adaDialogue(){
+  document.getElementById('ada-modal').style.display='flex';
+  document.getElementById('ada-exchange').textContent='"The question is always: what must the machine do, step by step, to produce the result? Begin there."';
+  document.getElementById('ada-input').focus();
+}
+function adaRespond(){
+  var input=document.getElementById('ada-input');
+  var q=input.value.toLowerCase().trim(); if(!q)return;
+  var resp=null;
+  for(var i=0;i<ADA_RESPONSES.length;i++){
+    for(var k=0;k<ADA_RESPONSES[i].keys.length;k++){
+      if(q.indexOf(ADA_RESPONSES[i].keys[k])!==-1){resp=ADA_RESPONSES[i].response;break;}
+    }
+    if(resp)break;
+  }
+  if(!resp)resp='I require more precision. State the specific operation or concept you wish to understand.';
+  document.getElementById('ada-exchange').innerHTML='<span style="color:rgba(245,158,11,0.45);font-size:.72rem;">'+input.value+'</span><br><br>'+resp;
+  input.value='';
+}
+document.querySelector('.tutor-card').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')window.location='ch-ada.html';});
+</script>
+</body>
+</html>
