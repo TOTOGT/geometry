@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G7 · Omega Point · The Scientist Gallery · Principia Orthogona</title>
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+       font-size: 17px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+      backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+      padding: .6rem 2rem; display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+            letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+            text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+               letter-spacing: .1em; color: var(--dim); text-decoration: none;
+               transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+        border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                border: 1px solid currentColor; padding: .2rem .7rem;
+                display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 400;
+           color: var(--gold); letter-spacing: .04em; line-height: 1.1;
+           margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+            max-width: 640px; margin: 0 auto 1.5rem; }
+.chain { font-family: 'Courier New', monospace; font-size: .9rem;
+         letter-spacing: .12em; color: rgba(201,168,76,.4); margin-top: 1rem; }
+.chain .op-c { color: var(--op-c); }
+.chain .op-k { color: var(--op-k); }
+.chain .op-f { color: var(--op-f); }
+.chain .op-u { color: var(--op-u); }
+.chain .op-g { color: var(--gold); }
+
+.page { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+h2 { font-size: 1.2rem; font-weight: 400; color: var(--gold); letter-spacing: .12em;
+     text-transform: uppercase; margin: 3.5rem 0 1.5rem; padding-bottom: .5rem;
+     border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1rem; font-weight: 600; color: var(--text); margin: 2rem 0 .6rem; }
+p { margin-bottom: 1rem; }
+
+/* Scientist grid */
+.sci-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem; margin-top: 1.5rem; }
+.sci-card { background: var(--card); border: 1px solid var(--rule); padding: 1.4rem 1.6rem;
+            text-decoration: none; transition: border-color .2s, transform .2s;
+            display: block; position: relative; }
+.sci-card:hover { border-color: rgba(201,168,76,.4); transform: translateY(-2px); }
+.sci-card.stub { opacity: .55; }
+.sci-card.stub:hover { opacity: .8; }
+.sci-badge { position: absolute; top: .8rem; right: .9rem;
+             font-family: 'Courier New', monospace; font-size: .52rem;
+             letter-spacing: .12em; text-transform: uppercase; padding: .15rem .45rem;
+             border-radius: 2px; }
+.sci-badge.live { background: rgba(52,211,153,.1); color: #34d399;
+                  border: 1px solid rgba(52,211,153,.3); }
+.sci-badge.stub { background: rgba(107,103,87,.1); color: var(--dim);
+                  border: 1px solid rgba(107,103,87,.25); }
+.sci-badge.planned { background: rgba(245,158,11,.08); color: var(--amber);
+                     border: 1px solid rgba(245,158,11,.2); }
+.sci-name { font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: .2rem; }
+.sci-dates { font-family: 'Courier New', monospace; font-size: .6rem;
+             color: var(--dim); letter-spacing: .08em; margin-bottom: .6rem; }
+.sci-desc { font-size: .83rem; color: rgba(232,228,216,.65); line-height: 1.6;
+            margin-bottom: .8rem; }
+.sci-chain { font-family: 'Courier New', monospace; font-size: .7rem;
+             letter-spacing: .08em; color: rgba(201,168,76,.5); }
+.op-c { color: var(--op-c) !important; }
+.op-k { color: var(--op-k) !important; }
+.op-f { color: var(--op-f) !important; }
+.op-u { color: var(--op-u) !important; }
+
+/* Gaps table */
+.gap-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+.gap-table th { background: rgba(12,13,20,.9); color: var(--gold); padding: .5rem .8rem;
+                border: 1px solid rgba(201,168,76,.12); font-family: 'Courier New', monospace;
+                font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; text-align: left; }
+.gap-table td { padding: .5rem .8rem; border: 1px solid rgba(255,255,255,.04);
+                font-size: .82rem; color: rgba(232,228,216,.7); vertical-align: top; }
+.gap-table tr:hover td { background: rgba(201,168,76,.03); }
+.gap-tag { font-family: 'Courier New', monospace; font-size: .55rem; padding: .12rem .4rem;
+           border-radius: 2px; margin-left: .3rem; }
+.tag-gap { background: rgba(239,68,68,.1); color: #ef4444; border: 1px solid rgba(239,68,68,.25); }
+.tag-bridge { background: rgba(16,185,129,.1); color: #10b981; border: 1px solid rgba(16,185,129,.25); }
+.tag-open { background: rgba(245,158,11,.08); color: var(--amber); border: 1px solid rgba(245,158,11,.2); }
+
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+         font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+         border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../book4/living-book.html" class="nav-logo">⚜ Principia Orthogona · G1–G7</a>
+  <div class="nav-links">
+    <a href="../book5/index.html">G5</a>
+    <a href="../book6/index.html">G6</a>
+    <a href="index.html">G7</a>
+    <a href="../omega/omega-point-index.html">Omega Point ↗</a>
+    <a href="../book4/living-book.html">Spiral Hub</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">G7 · Omega Point · Vol VII</div>
+  <h1>The Scientist Gallery</h1>
+  <p class="hero-sub">Every scientist in this volume is an operator. The chain G = U∘F∘K∘C was written by nature before it was written in mathematics — these chapters show who was watching when it happened.</p>
+  <div class="chain">
+    <span class="op-c">C</span> · seed &nbsp;∘&nbsp;
+    <span class="op-k">K</span> · curvature &nbsp;∘&nbsp;
+    <span class="op-f">F</span> · fold &nbsp;∘&nbsp;
+    <span class="op-u">U</span> · expansion &nbsp;=&nbsp;
+    <span class="op-g">τ = 2</span>
+  </div>
+</div>
+
+<div class="page">
+
+  <p style="max-width:680px; color:var(--dim);">G7 is the seventh application of the operator G to itself — the volume where the mathematics meets the mathematicians. Each chapter reads one scientist's life and work through the dm³ lens: which operator were they? Where did the chain close for them? What sorry did they live with, and did they name it?</p>
+
+  <h2>Chapters · Published</h2>
+  <div class="sci-grid">
+
+    <a class="sci-card" href="ch-ada.html">
+      <span class="sci-badge live">live</span>
+      <div class="sci-name">Ada Lovelace</div>
+      <div class="sci-dates">1815–1852 · London · Note G · 1843</div>
+      <div class="sci-desc">The first programmer saw the Analytical Engine as a contact manifold before the vocabulary existed. The loop as limit cycle Γ. Note G as an honest sorry.</div>
+      <div class="sci-chain">C=seed &nbsp;<span class="op-k">K=loop</span>&nbsp; <span class="op-f">F=recursion</span>&nbsp; <span class="op-u">U=output</span>&nbsp; → x*</div>
+    </a>
+
+    <a class="sci-card" href="ch-curie.html">
+      <span class="sci-badge live">live</span>
+      <div class="sci-name">Pierre & Marie Curie</div>
+      <div class="sci-dates">1859–1906 / 1867–1934 · Paris · 2× Nobel</div>
+      <div class="sci-desc">Curie's Law as operator K imposing κ* = T_C. The Curie-Weiss singularity as Whitney A₁ fold. The sea of spins as dm³ contact manifold.</div>
+      <div class="sci-chain"><span class="op-c">C=B·M</span>&nbsp; <span class="op-k">K=T_C</span>&nbsp; <span class="op-f">F=χ→∞</span>&nbsp; <span class="op-u">U=M_s</span></div>
+    </a>
+
+    <a class="sci-card" href="ch-dirac.html">
+      <span class="sci-badge live">live</span>
+      <div class="sci-name">Paul A. M. Dirac</div>
+      <div class="sci-dates">1902–1984 · Cambridge · Florida State</div>
+      <div class="sci-desc">The Dirac equation as G = U∘F∘K∘C. The spinor as fixed point of the Whitney A₁ fold. Antimatter as the unfolded branch U. The Dirac sea as dm³ manifold.</div>
+      <div class="sci-chain"><span class="op-c">C=seed</span>&nbsp; <span class="op-k">K=m/ℏ</span>&nbsp; <span class="op-f">F=Clifford</span>&nbsp; <span class="op-u">U=e⁺</span></div>
+    </a>
+
+    <a class="sci-card" href="ch-hawking.html">
+      <span class="sci-badge live">live</span>
+      <div class="sci-name">Stephen Hawking</div>
+      <div class="sci-dates">1942–2018 · Cambridge</div>
+      <div class="sci-desc">Hawking radiation as fold F. Singularity theorems as Banach. The information paradox as an honest sorry at the event horizon κ*.</div>
+      <div class="sci-chain"><span class="op-c">C=BH</span>&nbsp; <span class="op-k">K=horizon</span>&nbsp; <span class="op-f">F=radiation</span>&nbsp; <span class="op-u">U=S_BH</span></div>
+    </a>
+
+    <a class="sci-card" href="ch-tatiana.html">
+      <span class="sci-badge live">live</span>
+      <div class="sci-name">Tatiana Sampaio</div>
+      <div class="sci-dates">b. ~1999 · UFRJ · Rio de Janeiro</div>
+      <div class="sci-desc">Polylaminin — a protein already in the human body — enables axons to regrow across severed spinal cord. The U operator in flesh: expansion where collapse was expected.</div>
+      <div class="sci-chain"><span class="op-c">C=injury</span>&nbsp; <span class="op-k">K=scaffold</span>&nbsp; <span class="op-f">F=binding</span>&nbsp; <span class="op-u">U=regrowth</span></div>
+    </a>
+
+    <a class="sci-card" href="ch-thoreau.html">
+      <span class="sci-badge live">live</span>
+      <div class="sci-name">Thoreau & Arnold</div>
+      <div class="sci-dates">1817–1862 · Walden Pond / UFRJ</div>
+      <div class="sci-desc">From Walden's phenology to protein engineering that restores motion. The C→K→F→U chain written by evolution before it was written by mathematics.</div>
+      <div class="sci-chain"><span class="op-c">C=Thoreau</span>&nbsp; <span class="op-k">K=phenology</span>&nbsp; <span class="op-f">F=design</span>&nbsp; <span class="op-u">U=motion</span></div>
+    </a>
+
+  </div>
+
+  <h2>Chapters · Priority Queue</h2>
+  <p style="font-size:.85rem; color:var(--dim); margin-bottom:1.5rem;">These are the most mathematically urgent additions — each closes a specific gap in the series.</p>
+  <div class="sci-grid">
+
+    <a class="sci-card stub" href="ch-ramanujan.html">
+      <span class="sci-badge stub">stub</span>
+      <div class="sci-name">Srinivasa Ramanujan</div>
+      <div class="sci-dates">1887–1920 · Madras · Cambridge</div>
+      <div class="sci-desc">Mock theta functions, partition numbers, the Hardy-Ramanujan asymptotic — his circle method IS the n-bonacci recurrence ladder made analytic. The fold F before formalism existed.</div>
+      <div class="sci-chain"><span class="op-c">C=p(n)</span>&nbsp; <span class="op-k">K=modular form</span>&nbsp; <span class="op-f">F=saddle</span>&nbsp; <span class="op-u">U=asymptotics</span></div>
+    </a>
+
+    <a class="sci-card stub" href="ch-noether.html">
+      <span class="sci-badge stub">stub</span>
+      <div class="sci-name">Emmy Noether</div>
+      <div class="sci-dates">1882–1935 · Erlangen · Göttingen · Bryn Mawr</div>
+      <div class="sci-desc">Noether's theorem: symmetry → conservation law. The missing bridge between the Galilean symmetry of GTCT (G4) and the invariants the dm³ chain preserves.</div>
+      <div class="sci-chain"><span class="op-c">C=symmetry</span>&nbsp; <span class="op-k">K=Noether current</span>&nbsp; <span class="op-f">F=variation</span>&nbsp; <span class="op-u">U=conservation law</span></div>
+    </a>
+
+    <a class="sci-card stub" href="ch-dyson.html">
+      <span class="sci-badge stub">stub</span>
+      <div class="sci-name">Freeman Dyson</div>
+      <div class="sci-dates">1923–2020 · Cambridge · IAS Princeton</div>
+      <div class="sci-desc">The Princeton lunch where Montgomery showed him prime-gap statistics and Dyson instantly said "that's the GUE." One conversation bridged number theory and quantum chaos — the link live in chPI-rh and chPHI-rh.</div>
+      <div class="sci-chain"><span class="op-c">C=prime gaps</span>&nbsp; <span class="op-k">K=eigenvalues</span>&nbsp; <span class="op-f">F=GUE recognition</span>&nbsp; <span class="op-u">U=RH bridge</span></div>
+    </a>
+
+    <a class="sci-card stub" href="ch-mirzakhani.html">
+      <span class="sci-badge stub">stub</span>
+      <div class="sci-name">Maryam Mirzakhani</div>
+      <div class="sci-dates">1977–2017 · Tehran · Stanford</div>
+      <div class="sci-desc">Hyperbolic surfaces, Teichmüller theory, moduli spaces — she was doing contact geometry on the space of all contact manifolds. First woman Fields Medal. Iranian.</div>
+      <div class="sci-chain"><span class="op-c">C=surface</span>&nbsp; <span class="op-k">K=geodesic κ*</span>&nbsp; <span class="op-f">F=Teichmüller fold</span>&nbsp; <span class="op-u">U=moduli</span></div>
+    </a>
+
+    <a class="sci-card stub" href="ch-kovalevskaya.html">
+      <span class="sci-badge stub">stub</span>
+      <div class="sci-name">Sofia Kovalevskaya</div>
+      <div class="sci-dates">1850–1891 · Moscow · Stockholm</div>
+      <div class="sci-desc">The Kovalevskaya top is literally a contact-geometry problem — rotation of a rigid body with one fixed point. She proved existence and analyticity of solutions before the framework existed. First woman mathematics PhD.</div>
+      <div class="sci-chain"><span class="op-c">C=rigid body</span>&nbsp; <span class="op-k">K=integrable case</span>&nbsp; <span class="op-f">F=Cauchy-Kovalevskaya</span>&nbsp; <span class="op-u">U=Θ-functions</span></div>
+    </a>
+
+    <a class="sci-card stub" href="ch-katherine-johnson.html">
+      <span class="sci-badge stub">stub</span>
+      <div class="sci-name">Katherine Johnson</div>
+      <div class="sci-dates">1918–2020 · West Virginia · NASA Langley</div>
+      <div class="sci-desc">Orbital rendezvous mechanics, trajectory phase-space geometry, Euler angles for Apollo 11. Contact geometry of spacecraft orbits — the K operator at planetary scale.</div>
+      <div class="sci-chain"><span class="op-c">C=launch</span>&nbsp; <span class="op-k">K=orbital κ*</span>&nbsp; <span class="op-f">F=transfer orbit</span>&nbsp; <span class="op-u">U=rendezvous</span></div>
+    </a>
+
+  </div>
+
+  <h2>Chapters · Extended Roster</h2>
+  <div class="sci-grid">
+
+    <div class="sci-card stub">
+      <span class="sci-badge planned">planned</span>
+      <div class="sci-name">Al-Khwarizmi</div>
+      <div class="sci-dates">c. 780–850 · Baghdad · House of Wisdom</div>
+      <div class="sci-desc">Algebra, the algorithm ("al-Khwarizm"), decimal positional notation. The C operator of all computation — the seed from which every formal system grows.</div>
+      <div class="sci-chain"><span class="op-c">C=Al-jabr</span>&nbsp; the seed of all operator chains</div>
+    </div>
+
+    <div class="sci-card stub">
+      <span class="sci-badge planned">planned</span>
+      <div class="sci-name">Alexander Grothendieck</div>
+      <div class="sci-dates">1928–2014 · Berlin · Paris · Pyrenees</div>
+      <div class="sci-desc">Schemes, étale cohomology, motives, the Weil conjectures (Deligne's proof = function-field RH). The G6 cohomology χ(H*(X⁶)) = 33 is Grothendieck's language.</div>
+      <div class="sci-chain"><span class="op-f">F=étale fold</span>&nbsp; χ=Euler characteristic · G6 bridge</div>
+    </div>
+
+    <div class="sci-card stub">
+      <span class="sci-badge planned">planned</span>
+      <div class="sci-name">Alicia Boole Stott</div>
+      <div class="sci-dates">1860–1940 · Cork · Amsterdam</div>
+      <div class="sci-desc">Classified all regular polytopes in 4D with geometric intuition and no formal degree. Her cross-sections of 4D objects are precursors to G6's 6D crystal faces.</div>
+      <div class="sci-chain"><span class="op-f">F=cross-section fold</span>&nbsp; 4D → G6 six-dimensionality</div>
+    </div>
+
+    <div class="sci-card stub">
+      <span class="sci-badge planned">planned</span>
+      <div class="sci-name">Terence Tao</div>
+      <div class="sci-dates">b. 1975 · Adelaide · UCLA</div>
+      <div class="sci-desc">Green-Tao theorem: primes contain arbitrarily long arithmetic progressions. Compressed sensing, random matrix theory, additive combinatorics. The GUE connects his work to the RH arc of G4.</div>
+      <div class="sci-chain"><span class="op-u">U=primes in AP</span>&nbsp; Green-Tao · GUE bridge to chPI-rh</div>
+    </div>
+
+    <div class="sci-card stub">
+      <span class="sci-badge planned">planned</span>
+      <div class="sci-name">Bhāskara II</div>
+      <div class="sci-dates">1114–1185 · Bijapur · Ujjain Observatory</div>
+      <div class="sci-desc">Cyclic method (chakravāla) for Pell equations — a recurrence-ladder algorithm five centuries before Fermat. Trigonometry, calculus precursors, the Lilavati. South Asian lineage of the recurrence chain.</div>
+      <div class="sci-chain"><span class="op-c">C=Pell seed</span>&nbsp; chakravāla = n-bonacci recurrence ancestor</div>
+    </div>
+
+    <div class="sci-card stub">
+      <span class="sci-badge planned">planned</span>
+      <div class="sci-name">John Horton Conway</div>
+      <div class="sci-dates">1937–2020 · Liverpool · Cambridge · Princeton</div>
+      <div class="sci-desc">Surreal numbers, sphere packing (24D Leech lattice!), the Monster group, Game of Life. The 24D packing connects to the G6 crystal; surreal numbers are a contact manifold over all ordinals.</div>
+      <div class="sci-chain"><span class="op-u">U=Leech lattice</span>&nbsp; 24D · Monster · surreal number contact</div>
+    </div>
+
+    <div class="sci-card stub">
+      <span class="sci-badge planned">planned</span>
+      <div class="sci-name">Wangari Maathai</div>
+      <div class="sci-dates">1940–2011 · Kenya · UN Environment</div>
+      <div class="sci-desc">Nobel Peace Prize for reforestation as a stability operator — 30 million trees as a fixed-point attractor for ecological contact. The G chain at planetary scale, applied biology of G3.</div>
+      <div class="sci-chain"><span class="op-k">K=root κ*</span>&nbsp; ecosystem contact stability · τ = 2 at scale</div>
+    </div>
+
+    <div class="sci-card stub">
+      <span class="sci-badge planned">planned</span>
+      <div class="sci-name">Cecilia Payne-Gaposchkin</div>
+      <div class="sci-dates">1900–1979 · Wendover · Harvard</div>
+      <div class="sci-desc">Proved that stars are made of hydrogen and helium — overruled by male superiors, proved right. The C→U chain: contact with stellar spectra as the seed; the fold F was institutional resistance.</div>
+      <div class="sci-chain"><span class="op-c">C=stellar spectra</span>&nbsp; honest sorry overruled · U = hydrogen abundance</div>
+    </div>
+
+  </div>
+
+  <h2>Gaps · Related Mathematics Not Yet in the Series</h2>
+  <table class="gap-table">
+    <tr><th>Area</th><th>Why it belongs</th><th>Status</th><th>Entry point</th></tr>
+    <tr>
+      <td><strong>Modular forms</strong></td>
+      <td>Ramanujan's mock theta functions, elliptic curves, L-functions — the analytic continuation of the recurrence ladder into the complex plane. Bridges φ (G3) to RH (G4) to G6 cohomology.</td>
+      <td><span class="gap-tag tag-gap">gap</span></td>
+      <td>ch-ramanujan.html</td>
+    </tr>
+    <tr>
+      <td><strong>Noncommutative geometry</strong> (Connes)</td>
+      <td>Connes' approach to RH via the adele class space is the dual of the arithmetic contact form in chPI-rh. The spectral triple is dm³ with a different dressing.</td>
+      <td><span class="gap-tag tag-gap">gap</span></td>
+      <td>book4/ch13.html → new ch-connes.html</td>
+    </tr>
+    <tr>
+      <td><strong>Ergodic theory</strong></td>
+      <td>The Birkhoff ergodic theorem gives the time average → space average correspondence that underlies the Lyapunov chapter. Missing explicit treatment of mixing rates.</td>
+      <td><span class="gap-tag tag-gap">gap</span></td>
+      <td>ch10-lyapunov.html stub needs expansion</td>
+    </tr>
+    <tr>
+      <td><strong>Tropical geometry</strong></td>
+      <td>Contact geometry over the tropical semiring (max, +) — the piecewise-linear skeleton of the smooth theory. Connects to the n-bonacci sequences as tropical polynomials.</td>
+      <td><span class="gap-tag tag-gap">gap</span></td>
+      <td>new ch-tropical.html</td>
+    </tr>
+    <tr>
+      <td><strong>Homotopy type theory</strong></td>
+      <td>HoTT is the logical foundation AXLE is approaching. The univalence axiom closes the gap between "isomorphic" and "equal" — relevant to every Lean 4 sorry in chV-sorrys.html.</td>
+      <td><span class="gap-tag tag-open">open</span></td>
+      <td>book5/chV-axle.html</td>
+    </tr>
+    <tr>
+      <td><strong>Random matrix theory</strong></td>
+      <td>GUE statistics appear in chPI-rh (Montgomery-Dyson) and chPHI-rh (gap distributions). Deserves a standalone chapter explaining the Wigner semicircle, GOE/GUE/GSE.</td>
+      <td><span class="gap-tag tag-bridge">bridge</span></td>
+      <td>ch-dyson.html → chPI-rh.html bridge</td>
+    </tr>
+    <tr>
+      <td><strong>Information theory / Shannon</strong></td>
+      <td>Entropy appears in ch15-entropy.html but Shannon's source coding theorem connects to the Lyapunov exponent and the ε₀ stability radius through the data-compression interpretation.</td>
+      <td><span class="gap-tag tag-bridge">bridge</span></td>
+      <td>ch15-entropy.html needs Shannon section</td>
+    </tr>
+    <tr>
+      <td><strong>p-adic analysis</strong></td>
+      <td>The valuation lock |1−c|_p = 1 in chPI-rh Proof IV is the first appearance. Deserves a standalone chapter: p-adic numbers as the ultrametric cousins of the real recurrence ladder.</td>
+      <td><span class="gap-tag tag-gap">gap</span></td>
+      <td>new chPADIC-ultrametric.html</td>
+    </tr>
+    <tr>
+      <td><strong>Spectral geometry / index theory</strong></td>
+      <td>Atiyah-Singer index theorem connects the spectral data (ch11-spectral.html) to topology. The index is the count of zero modes — directly relevant to G6's χ = 33.</td>
+      <td><span class="gap-tag tag-open">open</span></td>
+      <td>book4/ch11.html → G6 cohomology bridge</td>
+    </tr>
+    <tr>
+      <td><strong>Symplectic geometry</strong></td>
+      <td>Contact geometry is the odd-dimensional sister of symplectic geometry. The Gromov-Witten invariants are the symplectic counting problem — a gap between G4/G5 and the G6 Crystal.</td>
+      <td><span class="gap-tag tag-gap">gap</span></td>
+      <td>new ch-symplectic.html</td>
+    </tr>
+  </table>
+
+  <h2>The Series Spiral · G1 → G7</h2>
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:1rem; margin-top:1rem;">
+    <a href="../" style="text-decoration:none; background:var(--card); border:1px solid var(--rule); padding:1rem; transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(201,168,76,.4)'" onmouseout="this.style.borderColor='var(--rule)'">
+      <div style="font-family:'Courier New',monospace; font-size:.6rem; color:var(--gold); letter-spacing:.15em; margin-bottom:.4rem;">G3 · Vol III</div>
+      <div style="font-size:.9rem; font-weight:600;">The Mini-Beast</div>
+      <div style="font-size:.75rem; color:var(--dim); margin-top:.3rem;">Biology · ESL pilot · μ</div>
+    </a>
+    <a href="../book4/index.html" style="text-decoration:none; background:var(--card); border:1px solid var(--rule); padding:1rem; transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(201,168,76,.4)'" onmouseout="this.style.borderColor='var(--rule)'">
+      <div style="font-family:'Courier New',monospace; font-size:.6rem; color:var(--gold); letter-spacing:.15em; margin-bottom:.4rem;">G4 · Vol IV</div>
+      <div style="font-size:.9rem; font-weight:600;">GTCT</div>
+      <div style="font-size:.75rem; color:var(--dim); margin-top:.3rem;">RH arc · Δ→Σ→Ω</div>
+    </a>
+    <a href="../book5/index.html" style="text-decoration:none; background:var(--card); border:1px solid var(--rule); padding:1rem; transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(201,168,76,.4)'" onmouseout="this.style.borderColor='var(--rule)'">
+      <div style="font-family:'Courier New',monospace; font-size:.6rem; color:var(--gold); letter-spacing:.15em; margin-bottom:.4rem;">G5 · Vol V</div>
+      <div style="font-size:.9rem; font-weight:600;">The Seed</div>
+      <div style="font-size:.75rem; color:var(--dim); margin-top:.3rem;">G(x*)=x* · 0 axioms</div>
+    </a>
+    <a href="../book6/index.html" style="text-decoration:none; background:var(--card); border:1px solid var(--rule); padding:1rem; transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(201,168,76,.4)'" onmouseout="this.style.borderColor='var(--rule)'">
+      <div style="font-family:'Courier New',monospace; font-size:.6rem; color:var(--gold); letter-spacing:.15em; margin-bottom:.4rem;">G6 · Vol VI</div>
+      <div style="font-size:.9rem; font-weight:600;">G6 Crystal</div>
+      <div style="font-size:.75rem; color:var(--dim); margin-top:.3rem;">χ(H*(X⁶)) = 33</div>
+    </a>
+    <a href="index.html" style="text-decoration:none; background:rgba(201,168,76,.06); border:1px solid rgba(201,168,76,.3); padding:1rem;">
+      <div style="font-family:'Courier New',monospace; font-size:.6rem; color:var(--gold); letter-spacing:.15em; margin-bottom:.4rem;">G7 · Vol VII</div>
+      <div style="font-size:.9rem; font-weight:600; color:var(--gold);">Omega Point</div>
+      <div style="font-size:.75rem; color:var(--dim); margin-top:.3rem;">The Scientist Gallery · τ = 2</div>
+    </a>
+  </div>
+
+  <p style="margin-top:2.5rem; font-size:.85rem; color:var(--dim); font-style:italic;">
+    The Omega Point companion series (theological/philosophical vocabulary for the same operators) lives at
+    <a href="../omega/omega-point-index.html" style="color:var(--gold);">omega/</a>.
+    Same mathematics. Different key.
+  </p>
+
+</div>
+
+<footer>
+  Principia Orthogona · Vol VII · G7 · The Omega Point ·
+  © 2026 Pablo Nogueira Grossi · G6 LLC · Newark NJ ·
+  ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a> ·
+  Series DOI <a href="https://doi.org/10.5281/zenodo.19117399">10.5281/zenodo.19117399</a>
+</footer>
+
+</body>
+</html>
