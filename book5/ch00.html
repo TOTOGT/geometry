@@ -385,6 +385,42 @@ footer {
 /* ── Animations ── */
 @keyframes breathe { 0%,100%{opacity:.5} 50%{opacity:1} }
 .breath { animation: breathe 4s ease-in-out infinite; }
+
+/* ── Bilingual grid (PO_CONTENT / PO_RENDER, nav.js) ── */
+.bilingual-grid {
+  display: grid;
+  grid-template-columns: var(--col-w) var(--col-w);
+  gap: var(--col-gap);
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+}
+@media (max-width: 820px) {
+  .bilingual-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+.col-pt h3, .col-tr h3 {
+  font-size: 1.05rem; font-weight: 600; color: var(--gold);
+  margin-bottom: .7rem; font-family: var(--serif);
+}
+.col-pt p, .col-tr p {
+  margin-bottom: .9rem; font-size: .97rem; color: rgba(232,228,216,0.88);
+}
+.col-pt em, .col-tr em { color: var(--teal); font-style: italic; }
+.col-pt strong, .col-tr strong { color: var(--gold2); }
+.col-header {
+  display: flex; gap: .5rem; align-items: baseline; flex-wrap: wrap;
+  font-family: var(--mono); font-size: .55rem; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: .9rem; padding-bottom: .4rem; border-bottom: 1px solid var(--dim);
+}
+.col-tr .nota {
+  font-size: .85rem; color: var(--muted);
+  border-left: 3px solid rgba(10,186,181,.4);
+  padding: .6rem .9rem; background: var(--surface);
+  border-radius: 2px; margin: 0 0 1rem;
+}
+.col-rtl { direction: rtl; text-align: right; }
+.col-rtl .nota { border-left: none; border-right: 3px solid rgba(10,186,181,.4); }
 </style>
 </head>
 <body>
@@ -413,20 +449,17 @@ footer {
   <div class="section-title">O que é este volume<em>/ What this volume is</em></div>
 </div>
 
-<div class="pair-cols" style="padding-top:1rem">
-  <div class="en-col">
-    <h3>The Algebra Ladder</h3>
-    <p>Every volume of Principia Orthogona applies the same operator chain — G = U∘F∘K∘C — to a different underlying algebra. Each step up the ladder costs one algebraic property.</p>
-    <p>Vol V begins the <em>non-commutative turn</em>. The algebra is now ℍ, the quaternions. Commutativity is gone: <strong>ij = k but ji = −k</strong>. The operator chain no longer computes the same result regardless of order.</p>
-    <p>This is not an obstacle. It is the subject.</p>
-    <p>Everything proved in Vol IV — the nine axioms, the Banach contraction, the 8 verified constants — still holds. But the order of operations now matters, and that difference carries new mathematics.</p>
-  </div>
-  <div class="br-col">
+<div id="bilingualGrid" class="bilingual-grid">
+  <div id="colA" class="col-pt">
     <h3>A Escada Algébrica</h3>
     <p>Cada volume de Principia Orthogona aplica a mesma cadeia de operadores — G = U∘F∘K∘C — a uma álgebra diferente. Cada degrau na escada custa uma propriedade algébrica.</p>
     <p>O Vol V começa a <em>virada não-comutativa</em>. A álgebra agora é ℍ, os quaternions. A comutatividade acabou: <strong>ij = k mas ji = −k</strong>. A cadeia de operadores já não produz o mesmo resultado independentemente da ordem.</p>
     <p>Isso não é um obstáculo. É o assunto.</p>
     <p>Tudo que foi provado no Vol IV — os nove axiomas, a contração de Banach, as 8 constantes verificadas — continua válido. Mas a ordem das operações agora importa, e essa diferença carrega nova matemática.</p>
+  </div>
+  <div class="col-tr" id="colB">
+    <div id="colBHeader" class="col-header"></div>
+    <div id="contentB"></div>
   </div>
 </div>
 
@@ -692,7 +725,7 @@ footer {
         <tr><td>Cap 2</td><td>8 Verified Constants — g₃₃, ε*, τ, …</td><td style="color:var(--teal)">✓ decide</td></tr>
         <tr><td>Cap 3</td><td>9 Honest Sorrys — named debts</td><td style="color:var(--gold)">em breve</td></tr>
         <tr><td>Cap G⁶</td><td>Open Conjecture — χ(H*(X⁶)) = 33 ∀n</td><td style="color:var(--gold)">em breve</td></tr>
-        <tr><td>AXLE</td><td>Verification engine — 794 lines, Lean 4</td><td style="color:var(--gold)">em breve</td></tr>
+        <tr><td>AXLE</td><td>Verification engine — 794 lines, Lean 4</td><td style="color:var(--teal)">✓ ao vivo</td></tr>
         <tr><td>Semente</td><td>Complete Completeness — G⁵ = G(G(G(G(G))))</td><td style="color:var(--gold)">em breve</td></tr>
       </tbody>
     </table>
@@ -705,6 +738,8 @@ footer {
     <div style="margin-top:1.5rem">
       <a href="chV-banach.html" class="link-btn">Cap 1 · Banach →</a>
       <a href="chV-constants.html" class="link-btn">Cap 2 · 8 Constantes →</a>
+      <a href="chV-sorrys.html" class="link-btn">Cap 3 · 9 Sorrys →</a>
+      <a href="chV-axle.html" class="link-btn">AXLE · Motor de Verificação →</a>
       <a href="index.html" class="link-btn gold">Índice completo →</a>
     </div>
 
@@ -731,6 +766,86 @@ footer {
   Pablo Nogueira Grossi · G6 LLC · Newark, NJ · doi:10.5281/zenodo.19117399
 </footer>
 
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   §1 bilingual content — PO_CONTENT / PO_RENDER (consumed by nav.js)
+   colA is fixed Portuguese (above). colB switches with #po-lang-select.
+   Languages covered now: pt, en, es, fr, de, ru, zh, hi, ar.
+   Everything else falls back to English + a translation-pending note.
+   ═══════════════════════════════════════════════════════════════ */
+window.PO_RENDER = function (blocks) {
+  return blocks.map(function (b) {
+    if (b.t === 'h')    return '<h3>' + b.text + '</h3>';
+    if (b.t === 'p')    return '<p>' + b.text + '</p>';
+    if (b.t === 'nota') return '<div class="nota">' + b.text + '</div>';
+    return '';
+  }).join('');
+};
+
+window.PO_CONTENT = {
+  pt: [
+    {t:'h', text:'A Escada Algébrica'},
+    {t:'p', text:'Cada volume de Principia Orthogona aplica a mesma cadeia de operadores — G = U∘F∘K∘C — a uma álgebra diferente. Cada degrau na escada custa uma propriedade algébrica.'},
+    {t:'p', text:'O Vol V começa a <em>virada não-comutativa</em>. A álgebra agora é ℍ, os quaternions. A comutatividade acabou: <strong>ij = k mas ji = −k</strong>. A cadeia de operadores já não produz o mesmo resultado independentemente da ordem.'},
+    {t:'p', text:'Isso não é um obstáculo. É o assunto.'},
+    {t:'p', text:'Tudo que foi provado no Vol IV — os nove axiomas, a contração de Banach, as 8 constantes verificadas — continua válido. Mas a ordem das operações agora importa, e essa diferença carrega nova matemática.'}
+  ],
+  en: [
+    {t:'h', text:'The Algebra Ladder'},
+    {t:'p', text:'Every volume of Principia Orthogona applies the same operator chain — G = U∘F∘K∘C — to a different underlying algebra. Each step up the ladder costs one algebraic property.'},
+    {t:'p', text:'Vol V begins the <em>non-commutative turn</em>. The algebra is now ℍ, the quaternions. Commutativity is gone: <strong>ij = k but ji = −k</strong>. The operator chain no longer computes the same result regardless of order.'},
+    {t:'p', text:'This is not an obstacle. It is the subject.'},
+    {t:'p', text:'Everything proved in Vol IV — the nine axioms, the Banach contraction, the 8 verified constants — still holds. But the order of operations now matters, and that difference carries new mathematics.'}
+  ],
+  es: [
+    {t:'h', text:'La Escalera Algebraica'},
+    {t:'p', text:'Cada volumen de Principia Orthogona aplica la misma cadena de operadores — G = U∘F∘K∘C — a un álgebra subyacente diferente. Cada escalón cuesta una propiedad algebraica.'},
+    {t:'p', text:'El Vol V comienza el <em>giro no conmutativo</em>: el álgebra es ahora ℍ, los cuaterniones, donde <strong>ij = k pero ji = −k</strong>. Esto no es un obstáculo — es el tema.'},
+    {t:'p', text:'Todo lo demostrado en el Vol IV — los nueve axiomas, la contracción de Banach, las 8 constantes verificadas — sigue siendo válido. Pero el orden de las operaciones ahora importa.'}
+  ],
+  fr: [
+    {t:'h', text:"L'Échelle Algébrique"},
+    {t:'p', text:"Chaque volume de Principia Orthogona applique la même chaîne d'opérateurs — G = U∘F∘K∘C — à une algèbre sous-jacente différente. Chaque échelon coûte une propriété algébrique."},
+    {t:'p', text:"Le Vol V amorce le <em>tournant non commutatif</em> : l'algèbre est désormais ℍ, les quaternions, où <strong>ij = k mais ji = −k</strong>. Ce n'est pas un obstacle — c'est le sujet."},
+    {t:'p', text:"Tout ce qui a été démontré dans le Vol IV — les neuf axiomes, la contraction de Banach, les 8 constantes vérifiées — reste valable. Mais l'ordre des opérations compte désormais."}
+  ],
+  de: [
+    {t:'h', text:'Die Algebra-Leiter'},
+    {t:'p', text:'Jeder Band von Principia Orthogona wendet dieselbe Operatorkette — G = U∘F∘K∘C — auf eine andere zugrundeliegende Algebra an. Jede Stufe der Leiter kostet eine algebraische Eigenschaft.'},
+    {t:'p', text:'Band V beginnt die <em>nicht-kommutative Wende</em>: Die Algebra ist nun ℍ, die Quaternionen, mit <strong>ij = k, aber ji = −k</strong>. Das ist kein Hindernis — das ist das Thema.'},
+    {t:'p', text:'Alles, was in Band IV bewiesen wurde — die neun Axiome, die Banach-Kontraktion, die 8 verifizierten Konstanten — bleibt gültig. Aber die Reihenfolge der Operationen zählt jetzt.'}
+  ],
+  ru: [
+    {t:'h', text:'Алгебраическая лестница'},
+    {t:'p', text:'Каждый том Principia Orthogona применяет одну и ту же цепочку операторов — G = U∘F∘K∘C — к другой алгебре. Каждая ступень лестницы стоит одного алгебраического свойства.'},
+    {t:'p', text:'Том V начинает <em>некоммутативный поворот</em>: теперь алгебра — это ℍ, кватернионы, где <strong>ij = k, но ji = −k</strong>. Это не препятствие — это и есть тема.'},
+    {t:'p', text:'Всё, что доказано в Томе IV — девять аксиом, сжатие Банаха, 8 проверенных констант — остаётся в силе. Но порядок операций теперь имеет значение.'}
+  ],
+  zh: [
+    {t:'h', text:'代数阶梯'},
+    {t:'p', text:'《正交原理》每一卷都将同一条算子链——G = U∘F∘K∘C——应用于不同的基础代数。阶梯每升一级，就会失去一个代数性质。'},
+    {t:'p', text:'第五卷开启<em>非交换转折</em>：代数现在是四元数 ℍ，其中 <strong>ij = k，但 ji = −k</strong>。这不是障碍——这正是主题。'},
+    {t:'p', text:'第四卷中证明的一切——九条公理、Banach 收缩、8 个已验证常数——仍然成立。但运算的顺序现在变得重要。'}
+  ],
+  hi: [
+    {t:'h', text:'बीजगणितीय सीढ़ी'},
+    {t:'p', text:'Principia Orthogona का प्रत्येक खंड एक ही ऑपरेटर श्रृंखला — G = U∘F∘K∘C — को एक भिन्न अंतर्निहित बीजगणित पर लागू करता है। सीढ़ी के हर पायदान की कीमत एक बीजगणितीय गुण है।'},
+    {t:'p', text:'खंड V <em>अक्रमविनिमेय मोड़</em> की शुरुआत करता है: अब बीजगणित ℍ, क्वाटर्नियन है, जहाँ <strong>ij = k परंतु ji = −k</strong>। यह कोई बाधा नहीं है — यही विषय है।'},
+    {t:'p', text:'खंड IV में सिद्ध सब कुछ — नौ अभिगृहीत, Banach संकुचन, 8 सत्यापित स्थिरांक — अभी भी सत्य है। लेकिन अब संक्रियाओं का क्रम महत्वपूर्ण है।'}
+  ],
+  ar: [
+    {t:'h', text:'سلّم الجبر'},
+    {t:'p', text:'يطبّق كل مجلد من Principia Orthogona نفس سلسلة المؤثرات — G = U∘F∘K∘C — على جبر أساسي مختلف. كل درجة في السلّم تكلّف خاصية جبرية واحدة.'},
+    {t:'p', text:'يبدأ المجلد الخامس <em>التحوّل غير التبادلي</em>: الجبر الآن هو ℍ، الكواتيرنيونات، حيث <strong>ij = k لكن ji = −k</strong>. هذا ليس عائقًا — بل هو الموضوع نفسه.'},
+    {t:'p', text:'كل ما تم إثباته في المجلد الرابع — البديهيات التسع، تقلّص باناخ، الثوابت الثمانية المؤكدة — يبقى صحيحًا. لكن ترتيب العمليات أصبح الآن مهمًا.'}
+  ],
+  __fallback__: function (code, l) {
+    var nota = 'Full translation into ' + l.native + ' (' + l.name + ') is in preparation. ' +
+               'Showing the English text below — the fixed left column is always in Portuguese.';
+    return [{t:'nota', text: nota}].concat(window.PO_CONTENT.en);
+  }
+};
+</script>
 <script src="nav.js"></script>
 </body>
 </html>
