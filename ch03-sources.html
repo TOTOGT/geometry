@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Source Mapping — Citations, DOIs, and the Literature Chain | English for Researchers</title>
+  <style>
+    :root {
+      --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4;
+      --mid: #3a4f7a; --rule: #8a7340; --text: #1c1c1c; --green: #2d5a27;
+      --light: #e8e2d4; --red: #8b1a1a; --teal: #1a5c5c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Georgia','Times New Roman',serif; color: var(--text); background: var(--cream); }
+    nav { background: var(--navy); padding: 0.75rem 2rem; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-logo { color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; text-decoration: none; font-family: sans-serif; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a { color: #ccc; text-decoration: none; font-size: 0.82rem; font-family: sans-serif; }
+    .nav-links a:hover { color: var(--gold); }
+    .chapter-nav { background: var(--smoke); border-top: 1px solid var(--light); padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .chapter-nav a { font-family: sans-serif; font-size: 0.82rem; color: var(--mid); text-decoration: none; padding: 0.4rem 0.9rem; border: 1px solid var(--light); }
+    .chapter-nav a:hover { background: var(--navy); color: var(--gold); }
+    .chapter-nav .current { font-family: sans-serif; font-size: 0.78rem; color: var(--rule); letter-spacing: 0.1em; }
+    .hero { background: var(--navy); color: white; padding: 4rem 2rem 3rem; }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .eyebrow { font-family: sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.8rem; }
+    .op-chain { font-family: sans-serif; font-size: 1.1rem; letter-spacing: 0.15em; color: #888; margin-bottom: 1.2rem; }
+    .op-chain .active { color: var(--gold); font-weight: bold; border-bottom: 2px solid var(--gold); padding-bottom: 2px; }
+    h1 { font-size: clamp(1.7rem, 4vw, 2.8rem); color: white; line-height: 1.2; margin-bottom: 0.6rem; }
+    .hero-sub { color: var(--gold); font-style: italic; font-size: 1.1rem; margin-bottom: 1rem; }
+    .gold-rule { width: 60px; height: 2px; background: var(--gold); margin: 1.2rem 0; }
+    .hero-desc { color: #bbb; font-size: 0.95rem; line-height: 1.8; max-width: 640px; }
+    section { padding: 3rem 2rem; }
+    .section-inner { max-width: 800px; margin: 0 auto; }
+    .section-label { font-family: sans-serif; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rule); margin-bottom: 0.4rem; }
+    h2 { font-size: 1.5rem; border-bottom: 2px solid var(--gold); padding-bottom: 0.3rem; display: inline-block; margin-bottom: 1.2rem; }
+    h3 { font-size: 1.1rem; color: var(--navy); margin: 1.5rem 0 0.6rem; }
+    p { line-height: 1.8; margin-bottom: 1rem; color: #333; }
+    .insight-box { background: var(--navy); color: var(--gold); padding: 1.2rem 1.5rem; border-left: 4px solid var(--gold); margin: 1.5rem 0; font-style: italic; font-size: 0.95rem; line-height: 1.7; }
+    .theorem-box { background: white; border: 1px solid var(--light); border-left: 4px solid var(--mid); padding: 1.2rem 1.5rem; margin: 1.5rem 0; }
+    .theorem-box .theorem-label { font-family: sans-serif; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rule); margin-bottom: 0.5rem; }
+    .theorem-box .theorem-text { font-style: italic; color: var(--navy); line-height: 1.7; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8rem; margin: 1rem 0; }
+    .vocab-item { background: white; border-top: 2px solid var(--gold); padding: 0.6rem 0.8rem; }
+    .vocab-term { font-weight: bold; color: var(--navy); font-size: 0.9rem; }
+    .vocab-def { font-size: 0.8rem; color: #555; margin-top: 0.2rem; line-height: 1.5; }
+    .prompt-section { background: #fffbeb; border-top: 3px solid var(--gold); padding: 2rem; margin-top: 0; }
+    .prompt-section .section-inner { max-width: 800px; margin: 0 auto; }
+    .prompt-label { font-family: sans-serif; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rule); margin-bottom: 0.4rem; }
+    .prompt-title { font-size: 1.1rem; font-weight: bold; color: var(--navy); margin-bottom: 0.8rem; }
+    .prompt-box { background: white; border: 1px solid #fde68a; border-left: 4px solid var(--gold); padding: 1rem 1.2rem; font-size: 0.88rem; line-height: 1.75; color: #444; margin-bottom: 0.8rem; }
+    .prompt-instructions { font-size: 0.82rem; color: #666; font-style: italic; line-height: 1.6; }
+    .copy-btn { background: var(--gold); color: var(--navy); border: none; padding: 0.4rem 1rem; font-family: sans-serif; font-size: 0.75rem; font-weight: bold; cursor: pointer; margin-top: 0.6rem; }
+    .copy-btn:hover { opacity: 0.9; }
+    .output-section { background: var(--navy); padding: 2rem; }
+    .output-section .section-inner { max-width: 800px; margin: 0 auto; }
+    .output-title { font-family: sans-serif; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+    .output-list { list-style: none; padding: 0; }
+    .output-list li { color: #ccc; font-size: 0.9rem; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); padding-left: 1.2rem; position: relative; line-height: 1.6; }
+    .output-list li::before { content: '✓'; position: absolute; left: 0; color: var(--gold); }
+    footer { background: var(--navy); color: #666; padding: 2rem; text-align: center; font-size: 0.78rem; line-height: 1.8; }
+    footer a { color: #888; }
+    .citation-diagram { background: white; border: 1px solid var(--light); padding: 2rem; margin: 1.5rem 0; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 2rem; }
+    .diagram-node { width: 100px; height: 100px; border: 2px solid var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 0.75rem; font-weight: bold; }
+    .center-node { background: var(--navy); color: white; }
+    .source-node { background: var(--smoke); color: var(--navy); }
+    .diagram-connection { position: absolute; width: 150px; height: 2px; background: var(--gold); }
+    .doi-display { background: #f5f5f5; border-left: 4px solid var(--gold); padding: 0.8rem 1rem; margin: 0.5rem 0; font-family: monospace; font-size: 0.85rem; color: #666; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="ch01-cajueiro.html" class="nav-logo">ENGLISH FOR RESEARCHERS · C1→D2</a>
+  <ul class="nav-links">
+    <li><a href="course-16weeks.html">Course Schedule</a></li>
+    <li><a href="https://totogt.github.io/book3-starter/">Book 3</a></li>
+    <li><a href="https://github.com/TOTOGT/AXLE">AXLE</a></li>
+  </ul>
+    <a href="living-book.html">Living Book</a>
+    <a href="series-hub.html">Series ↗</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Week 3 · Phase C · Operator Compression · Level A2</div>
+    <div class="op-chain"><span class="active">C</span> → K → F → U</div>
+    <h1>Source Mapping</h1>
+    <div class="hero-sub">Citations, DOIs, and the Literature Chain</div>
+    <div class="gold-rule"></div>
+    <p class="hero-desc">A citation is a compressed acknowledgment of an entire research tradition. The DOI (Digital Object Identifier) is the key. Every source you cite is a root in the literature — it feeds your claim the way the cajueiro's taproot feeds the canopy.</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">I. The Biological Rhythm</div>
+    <h2>Circadian Regulation as Operator Orbit</h2>
+    <p>The circadian clock is the body's 24-hour operator orbit. It is one of the most fundamental systems in biology. Every cell that has a nucleus carries it. Every organism from single-celled bacteria to humans runs this cycle.</p>
+    <p>The circadian system works in four phases — exactly the operator chain:</p>
+    <div class="insight-box">
+      <strong>C — Compress:</strong> The cell cannot process the full complexity of environmental input continuously. It reduces all input to a single signal: time of day.<br><br>
+      <strong>K — Threshold:</strong> The cell detects a threshold event. Dawn. Dusk. A shift in temperature. A change in light wavelength.<br><br>
+      <strong>F — Fold:</strong> Gene expression changes. Hormone levels shift. The cell enters a new phase of the 24-hour cycle.<br><br>
+      <strong>U — Unfold:</strong> Action. Waking. Metabolism. Sleep. Repair. The internal change becomes behavioral expression.
+    </div>
+    <p>The cell does this every 24 hours, reliably, across billions of iterations. Without your awareness. Without error.</p>
+    <p>A literature review works the same way. Compress the field (C). Identify the gap that has not been crossed (K). Describe a methodology that could cross it (F). Project what the result would mean (U). You are running a circadian rhythm of ideas. You are reading the 24-hour cycle of the research field.</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">II. The Permanent Address</div>
+    <h2>The DOI as a Fixed Point</h2>
+    <p>A DOI (Digital Object Identifier) is a permanent, machine-readable address for a scientific work. It is not a URL. URLs break. Websites move. Servers crash. Years pass and the link you saved is dead.</p>
+    <p>A DOI does not break. It is registered in a central registry. It does not expire. It does not move. You can use a DOI from 1995 today and it will resolve to the same work, in the same form, with the same metadata.</p>
+    <p>Unlike URLs, DOIs do not change when servers move. They are fixed points in the literature — reference stars by which you can navigate. You can always retrieve the object from <strong>doi.org/[DOI]</strong>.</p>
+    <p>When you cite a DOI, you are connecting your work to a permanent node in the knowledge graph. You are saying: "This claim rests on that claim. That claim is recorded here, permanently, with this address."</p>
+    <p>Zenodo assigns DOIs to all uploaded works, including student preprints. Your work, once uploaded with a DOI, becomes a permanent fixed point in the scientific literature — citable by others, retrievable forever. You become part of the permanent record. Your name becomes part of the knowledge graph.</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">III. Compressed Literature Review</div>
+    <h2>Building an Annotated Bibliography</h2>
+    <p>An annotated bibliography is a compressed literature review. Each source gets one paragraph. Not a summary of what the author said. An evaluation of what it means for <em>your</em> research.</p>
+    <p>The paragraph must include three elements:</p>
+    <ol style="margin-left: 2rem; margin-bottom: 1rem;">
+      <li><strong>(C) What does the source claim?</strong> One or two sentences. The core argument.</li>
+      <li><strong>(K) How does it support or challenge your research question?</strong> This is where you connect the source to your work. Does it fill a gap? Does it raise a new question? Does it contradict something you expected?</li>
+      <li><strong>(F/U) What would it mean for your argument if it is correct?</strong> This is speculation. Projection. "If this source is correct, then my research should…" or "This source suggests that future work might…"</li>
+    </ol>
+    <p><strong>Five sources. Five paragraphs. Five DOIs.</strong> This is the Week 3 deliverable. Not a bibliography. An annotated bibliography. Each entry is a compressed conversation between you and the source, framed as C → K → F/U.</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">Visual Example</div>
+    <h2>Citation Network Diagram</h2>
+    <p>Your paper is the center. Five sources are the roots. Each source has a DOI — a permanent address. You cite by DOI, not by URL or author name alone.</p>
+    <div class="citation-diagram">
+      <div class="diagram-node center-node">Your Paper</div>
+      <div style="width: 100%; text-align: center; font-size: 0.75rem; color: var(--rule); font-style: italic; margin-top: 1rem;">Supported by five permanent sources:</div>
+    </div>
+    <div style="background: white; border: 1px solid var(--light); padding: 1.5rem; margin: 1rem 0;">
+      <div style="margin-bottom: 0.8rem;"><strong>Source 1:</strong></div>
+      <div class="doi-display">doi.org/10.5281/zenodo.XXXXXXX</div>
+      <div style="margin-bottom: 0.8rem;"><strong>Source 2:</strong></div>
+      <div class="doi-display">doi.org/10.5281/zenodo.XXXXXXX</div>
+      <div style="margin-bottom: 0.8rem;"><strong>Source 3:</strong></div>
+      <div class="doi-display">doi.org/10.5281/zenodo.XXXXXXX</div>
+      <div style="margin-bottom: 0.8rem;"><strong>Source 4:</strong></div>
+      <div class="doi-display">doi.org/10.5281/zenodo.XXXXXXX</div>
+      <div><strong>Source 5:</strong></div>
+      <div class="doi-display">doi.org/10.5281/zenodo.XXXXXXX</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">Vocabulary</div>
+    <h2>Key Terms</h2>
+    <div class="vocab-grid">
+      <div class="vocab-item">
+        <div class="vocab-term">DOI</div>
+        <div class="vocab-def">Digital Object Identifier — a permanent ID for a scientific work, resolvable via doi.org</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">ORCID</div>
+        <div class="vocab-def">Open Researcher and Contributor ID — a permanent ID for a researcher</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Preprint</div>
+        <div class="vocab-def">A scientific paper shared before formal peer review; counts as a publication on Zenodo</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Citation Graph</div>
+        <div class="vocab-def">The network of connections between scientific papers via citations</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Annotated Bibliography</div>
+        <div class="vocab-def">A bibliography where each source includes a short evaluative paragraph connecting it to your research</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">Theorem</div>
+    <div class="theorem-box">
+      <div class="theorem-label">Theorem 3.1</div>
+      <div class="theorem-text">Citation as Compression: Every citation C(p) in a paper P compresses an entire research tradition T into a single pointer. The annotated bibliography A(P) = {C(p₁)…C(pₙ)} is the compression layer of P — it contains the full literature chain in minimal form.</div>
+    </div>
+  </div>
+</section>
+
+<section class="prompt-section">
+  <div class="section-inner">
+    <div class="prompt-label">Week 3 · Prompt 1.3</div>
+    <div class="prompt-title">First Pattern</div>
+    <div class="prompt-box" id="prompt-1-3">Here is my annotated bibliography: [paste text]. For each entry, tell me: (1) what operator phase this source covers, (2) one academic phrase I could use to connect it to my own research, (3) any vocabulary I should replace with more precise academic language.</div>
+    <div class="prompt-instructions">Paste your 5-paragraph annotated bibliography in full. The LLM will give feedback on all 5 entries. Take notes on the phrases suggested — you will use them in Week 4 when you write Paper 1.</div>
+    <button class="copy-btn" onclick="copyPrompt('prompt-1-3')">Copy Prompt</button>
+  </div>
+</section>
+
+<section class="output-section">
+  <div class="section-inner">
+    <div class="output-title">Week 3 Deliverables</div>
+    <ul class="output-list">
+      <li>5-source annotated bibliography committed to GitHub as annotated-bibliography.md</li>
+      <li>All 5 sources cited by DOI (doi.org/[DOI] format only, no raw URLs)</li>
+      <li>GitHub Research Log updated with the citation network diagram (even if hand-drawn and photographed)</li>
+      <li>LLM Prompt 1.3 completed — academic phrases noted for use in Paper 1</li>
+    </ul>
+  </div>
+</section>
+
+<div class="chapter-nav">
+  <a href="ch02-reading.html">← Week 2: Scientific Reading</a>
+  <span class="current">Week 3 of 16</span>
+  <a href="ch04-milestone1.html">Week 4: Milestone 1 →</a>
+</div>
+
+<footer>
+  <p>© 2026 Pablo Nogueira Grossi / G6 LLC · Newark NJ · Principia Orthogona series · Book 3: The Mini-Beast</p>
+  <p>Course: English for Researchers C1→D2 · <a href="https://github.com/TOTOGT/AXLE">AXLE: github.com/TOTOGT/AXLE</a> · <a href="https://zenodo.org">Zenodo: zenodo.org/grossi-pablo</a></p>
+</footer>
+
+<script>
+function copyPrompt(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('[onclick="copyPrompt(\'' + id + '\')"]');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy Prompt', 2000);
+  });
+}
+</script>
+
+</body>
+</html>

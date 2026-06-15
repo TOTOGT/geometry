@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Berimbau Machine — Cymatics | GTCT Volume V</title>
+<style>
+  :root{
+    --tiffany:#0ABAB5;
+    --tiffany-dark:#067571;
+    --tiffany-deep:#022b2a;
+    --br-green:#009c3b;
+    --br-yellow:#ffdf00;
+    --br-blue:#002776;
+    --br-gold:#c8a24a;
+    --ink:#0b0b0b;
+    --paper:#f8f6ef;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#050608;color:#eaeaea;font-family:"Georgia","Cambria",serif;line-height:1.5}
+  .wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+  @media (max-width:980px){.wrap{grid-template-columns:1fr}}
+  section{padding:32px 28px;position:relative;overflow:hidden}
+
+  /* ENGLISH — TIFFANY DARK */
+  .en{
+    background:
+      radial-gradient(ellipse at 20% 10%, #0ABAB530 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 90%, #0ABAB520 0%, transparent 60%),
+      linear-gradient(180deg, #041414 0%, #011f1e 100%);
+    color:#d8fffd;
+    border-right:1px solid #0ABAB544;
+  }
+  .en h1,.en h2,.en h3{color:var(--tiffany);letter-spacing:.04em}
+  .en .accent{color:#9cf3ef}
+  .en .panel{
+    background:linear-gradient(180deg,#031615,#020b0b);
+    border:1px solid #0ABAB566;
+    border-radius:10px;
+    padding:16px;
+    box-shadow:0 0 40px #0ABAB522 inset;
+  }
+  .en canvas{background:#02100f;border:1px solid #0ABAB5aa;border-radius:8px;display:block;width:100%;height:360px}
+  .en .btn{
+    background:transparent;
+    border:1px solid var(--tiffany);
+    color:var(--tiffany);
+    padding:8px 14px;border-radius:20px;
+    cursor:pointer;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;font-size:12px;
+    transition:all .2s;
+  }
+  .en .btn:hover{background:var(--tiffany);color:#021212}
+  .en .btn.active{background:var(--tiffany);color:#021212;box-shadow:0 0 20px #0ABAB599}
+
+  /* PORTUGUÊS — BRASIL ESCURO, OURO / BRANCO / AZUL / VERDE */
+  .br{
+    background:
+      radial-gradient(ellipse at 80% 10%, #009c3b2a 0%, transparent 55%),
+      radial-gradient(ellipse at 10% 90%, #00277644 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 50%, #c8a24a15 0%, transparent 70%),
+      linear-gradient(180deg, #05120b 0%, #01081a 100%);
+    color:#f2efe4;
+  }
+  .br h1,.br h2,.br h3{color:var(--br-gold);letter-spacing:.04em}
+  .br .accent{color:#ffe7a0}
+  .br .panel{
+    background:linear-gradient(180deg,#061a0c,#010515);
+    border:1px solid var(--br-gold);
+    border-radius:10px;padding:16px;
+    box-shadow:0 0 40px #c8a24a22 inset;
+  }
+  .br canvas{
+    background:#030a04;border:1px solid var(--br-gold);border-radius:8px;display:block;width:100%;height:360px;
+  }
+  .br .btn{
+    background:transparent;border:1px solid var(--br-gold);
+    color:var(--br-gold);
+    padding:8px 14px;border-radius:20px;cursor:pointer;font-family:inherit;
+    letter-spacing:.08em;text-transform:uppercase;font-size:12px;transition:all .2s;
+  }
+  .br .btn:hover{background:var(--br-gold);color:#0a0a05}
+  .br .btn.active{background:var(--br-gold);color:#0a0a05;box-shadow:0 0 20px #c8a24a99}
+
+  h1{font-size:28px;margin-bottom:4px;font-family:"Playfair Display","Georgia",serif}
+  .sub{opacity:.7;font-size:13px;margin-bottom:18px;font-style:italic}
+  h2{font-size:18px;margin:22px 0 8px;font-weight:500}
+  h3{font-size:14px;margin:14px 0 6px;text-transform:uppercase;letter-spacing:.14em;opacity:.85}
+  p{font-size:14.5px;margin:6px 0 10px;opacity:.92}
+  .row{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+  .sliderRow{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:12px}
+  .sliderRow input[type=range]{flex:1}
+  .sliderRow span{min-width:64px;text-align:right;font-family:monospace}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:12.5px;font-family:monospace;opacity:.85;margin:6px 0 12px}
+  .legend{font-size:11.5px;opacity:.7;margin-top:8px}
+  .flag{
+    display:inline-block;margin-right:6px;border-radius:2px;
+  }
+  .banner{
+    font-family:"Playfair Display",serif;
+    font-size:11px;letter-spacing:.3em;text-transform:uppercase;opacity:.6;margin-bottom:4px
+  }
+  .diagram{margin:14px 0}
+  .footer{
+    grid-column:1/-1;text-align:center;padding:18px;font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;opacity:.5;border-top:1px solid #333;background:#030304;
+  }
+
+  /* shared concrete diagram canvas sizing */
+  canvas.diagram-canvas{height:260px!important}
+  input[type=range]{accent-color:currentColor}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ ENGLISH / TIFFANY ============ -->
+  <section class="en">
+    <div class="banner">Principia Orthogona · Vol. V</div>
+    <h1>The Berimbau Machine</h1>
+    <div class="sub">HTML cymatics · bass · D-major triad · binaural beats · African drum cycle</div>
+
+    <div class="panel">
+      <h2>Cymatic plate <span class="accent">— live Chladni figure</span></h2>
+      <canvas id="cymEn"></canvas>
+      <div class="row">
+        <button class="btn" data-engine="en" data-action="start">▶ Start</button>
+        <button class="btn" data-engine="en" data-action="stop">■ Stop</button>
+        <button class="btn" data-engine="en" data-voice="bass">Bass D2</button>
+        <button class="btn" data-engine="en" data-voice="triad">D · F♯ · A</button>
+        <button class="btn" data-engine="en" data-voice="binaural">Binaural 7 Hz</button>
+        <button class="btn" data-engine="en" data-voice="drum">Atabaque</button>
+      </div>
+
+      <div class="sliderRow">
+        <label style="width:90px">Berimbau arame</label>
+        <input type="range" id="enArame" min="0" max="1" step="0.01" value="0.8">
+        <span id="enArameV">0.80</span>
+      </div>
+      <div class="sliderRow">
+        <label style="width:90px">Caxixi buzz</label>
+        <input type="range" id="enCax" min="0" max="1" step="0.01" value="0.35">
+        <span id="enCaxV">0.35</span>
+      </div>
+      <div class="sliderRow">
+        <label style="width:90px">Binaural Δ</label>
+        <input type="range" id="enBin" min="1" max="14" step="0.1" value="7">
+        <span id="enBinV">7.0 Hz</span>
+      </div>
+      <div class="sliderRow">
+        <label style="width:90px">Drum BPM</label>
+        <input type="range" id="enBpm" min="60" max="180" step="1" value="104">
+        <span id="enBpmV">104</span>
+      </div>
+
+      <h3>Tuning</h3>
+      <div class="kv">
+        <span>Bass</span><span>D2 = 73.42 Hz  <span class="accent">(fundamental · arame)</span></span>
+        <span>Triad</span><span>D4 · F♯4 · A4  =  293.66 / 369.99 / 440.00 Hz</span>
+        <span>Binaural</span><span>L = 220 Hz &nbsp; R = 220 + Δ Hz</span>
+        <span>Drum</span><span>atabaque cycle · 12 steps  (T* = 2π)</span>
+      </div>
+      <p class="legend">
+        Listen on headphones for the binaural effect. The plate figure is rendered
+        directly from the live audio spectrum — what you see <em>is</em> what you hear.
+      </p>
+    </div>
+
+    <h2>Concrete demo diagram <span class="accent">— 12-phase cycle → emergent fixed point</span></h2>
+    <div class="panel diagram">
+      <canvas id="diagEn" class="diagram-canvas"></canvas>
+      <p class="legend">
+        Each of the 12 dots on the ring is one operator O<sub>i</sub> (a berimbau strike, an
+        atabaque hit, or a triad voicing). The spiral inside is the orbit <em>x</em><sub>0</sub>,
+        <em>x</em><sub>12</sub>, <em>x</em><sub>24</sub>, … contracting with κ ≈ 0.882 toward the
+        emergent fixed point <em>x</em>* — the resolved identity of the machine.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ PORTUGUÊS / BRASIL ============ -->
+  <section class="br">
+    <div class="banner">Principia Orthogona · Vol. V</div>
+    <h1>A Máquina de Berimbau</h1>
+    <div class="sub">Cimática em HTML · grave · tríade de Ré maior · batidas binaurais · atabaque</div>
+
+    <div class="panel">
+      <h2>Placa cimática <span class="accent">— figura de Chladni ao vivo</span></h2>
+      <canvas id="cymBr"></canvas>
+      <div class="row">
+        <button class="btn" data-engine="br" data-action="start">▶ Tocar</button>
+        <button class="btn" data-engine="br" data-action="stop">■ Parar</button>
+        <button class="btn" data-engine="br" data-voice="bass">Grave Ré2</button>
+        <button class="btn" data-engine="br" data-voice="triad">Ré · Fá♯ · Lá</button>
+        <button class="btn" data-engine="br" data-voice="binaural">Binaural 7 Hz</button>
+        <button class="btn" data-engine="br" data-voice="drum">Atabaque</button>
+      </div>
+
+      <div class="sliderRow">
+        <label style="width:90px">Arame</label>
+        <input type="range" id="brArame" min="0" max="1" step="0.01" value="0.8">
+        <span id="brArameV">0.80</span>
+      </div>
+      <div class="sliderRow">
+        <label style="width:90px">Caxixi</label>
+        <input type="range" id="brCax" min="0" max="1" step="0.01" value="0.35">
+        <span id="brCaxV">0.35</span>
+      </div>
+      <div class="sliderRow">
+        <label style="width:90px">Binaural Δ</label>
+        <input type="range" id="brBin" min="1" max="14" step="0.1" value="7">
+        <span id="brBinV">7.0 Hz</span>
+      </div>
+      <div class="sliderRow">
+        <label style="width:90px">BPM</label>
+        <input type="range" id="brBpm" min="60" max="180" step="1" value="104">
+        <span id="brBpmV">104</span>
+      </div>
+
+      <h3>Afinação</h3>
+      <div class="kv">
+        <span>Grave</span><span>Ré2 = 73,42 Hz  <span class="accent">(fundamental · arame)</span></span>
+        <span>Tríade</span><span>Ré4 · Fá♯4 · Lá4  =  293,66 / 369,99 / 440,00 Hz</span>
+        <span>Binaural</span><span>E = 220 Hz &nbsp; D = 220 + Δ Hz</span>
+        <span>Atabaque</span><span>ciclo de 12 passos  (T* = 2π)</span>
+      </div>
+      <p class="legend">
+        Use fone para sentir o binaural. A figura na placa vem do espectro sonoro
+        ao vivo — o que você vê <em>é</em> o que você escuta.
+      </p>
+    </div>
+
+    <h2>Diagrama concreto <span class="accent">— ciclo de 12 fases → ponto fixo emergente</span></h2>
+    <div class="panel diagram">
+      <canvas id="diagBr" class="diagram-canvas"></canvas>
+      <p class="legend">
+        Cada um dos 12 pontos é um operador O<sub>i</sub> (uma batida do berimbau,
+        um toque do atabaque, uma voz da tríade). A espiral interna é a órbita
+        <em>x</em><sub>0</sub>, <em>x</em><sub>12</sub>, <em>x</em><sub>24</sub>, …
+        contraindo com κ ≈ 0,882 rumo ao ponto fixo emergente <em>x</em>* — a
+        identidade resolvida da máquina.
+      </p>
+    </div>
+  </section>
+
+  <div class="footer">
+    GTCT · Generative Temporal Contact Theory · Pablo Nogueira Grossi · G6 LLC · 2026
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   BERIMBAU-MACHINE ENGINE
+   Shared audio + cymatics logic. Two mirrored UIs (en, br) drive it.
+   ================================================================ */
+
+const engines = {};   // one per side
+
+function makeEngine(id, cymCanvasId, diagCanvasId, palette){
+  const E = {
+    id, palette,
+    ctx:null, master:null, analyser:null,
+    voices:{bass:null, triad:null, binaural:null, drum:null},
+    params:{arame:0.8, caxixi:0.35, binDelta:7, bpm:104},
+    cym: document.getElementById(cymCanvasId),
+    diag: document.getElementById(diagCanvasId),
+    drumTimer:null,
+    running:false,
+    t:0,
+  };
+  return E;
+}
+
+/* ---------- audio init ---------- */
+function ensureAudio(E){
+  if(E.ctx) return;
+  E.ctx = new (window.AudioContext || window.webkitAudioContext)();
+  E.master = E.ctx.createGain();
+  E.master.gain.value = 0.7;
+  E.analyser = E.ctx.createAnalyser();
+  E.analyser.fftSize = 2048;
+  E.master.connect(E.analyser);
+  E.analyser.connect(E.ctx.destination);
+}
+
+/* ---------- voices ---------- */
+function startBass(E){
+  stopVoice(E,'bass');
+  const c = E.ctx;
+  const osc = c.createOscillator();
+  osc.type = 'triangle';
+  osc.frequency.value = 73.42;          // D2
+  const g = c.createGain();
+  g.gain.value = 0;
+  // slow LFO for berimbau tension
+  const lfo = c.createOscillator();
+  lfo.frequency.value = 0.3;
+  const lfoGain = c.createGain();
+  lfoGain.gain.value = 4;
+  lfo.connect(lfoGain).connect(osc.frequency);
+  osc.connect(g).connect(E.master);
+  osc.start();lfo.start();
+  g.gain.linearRampToValueAtTime(0.25*E.params.arame, c.currentTime+0.8);
+  E.voices.bass = {stop:()=>{g.gain.cancelScheduledValues(c.currentTime);g.gain.linearRampToValueAtTime(0,c.currentTime+0.4);
+     setTimeout(()=>{try{osc.stop();lfo.stop();}catch(e){}},500);}};
+}
+function startTriad(E){
+  stopVoice(E,'triad');
+  const c=E.ctx;
+  const freqs=[293.66, 369.99, 440.00]; // D4 F#4 A4
+  const oscs=[],gains=[];
+  freqs.forEach((f,i)=>{
+    const o=c.createOscillator(); o.type='sine'; o.frequency.value=f;
+    const g=c.createGain(); g.gain.value=0;
+    o.connect(g).connect(E.master); o.start();
+    g.gain.linearRampToValueAtTime(0.14, c.currentTime+1.2+i*0.25);
+    oscs.push(o);gains.push(g);
+  });
+  E.voices.triad={stop:()=>{gains.forEach(g=>{g.gain.cancelScheduledValues(c.currentTime);g.gain.linearRampToValueAtTime(0,c.currentTime+0.4)});
+     setTimeout(()=>oscs.forEach(o=>{try{o.stop()}catch(e){}}),500);},
+     setDelta:()=>{}};
+}
+function startBinaural(E){
+  stopVoice(E,'binaural');
+  const c=E.ctx;
+  const merger=c.createChannelMerger(2);
+  const oL=c.createOscillator(); oL.type='sine'; oL.frequency.value=220;
+  const oR=c.createOscillator(); oR.type='sine'; oR.frequency.value=220+E.params.binDelta;
+  const gL=c.createGain(); const gR=c.createGain();
+  gL.gain.value=0; gR.gain.value=0;
+  oL.connect(gL).connect(merger,0,0);
+  oR.connect(gR).connect(merger,0,1);
+  merger.connect(E.master);
+  oL.start(); oR.start();
+  gL.gain.linearRampToValueAtTime(0.18, c.currentTime+0.6);
+  gR.gain.linearRampToValueAtTime(0.18, c.currentTime+0.6);
+  E.voices.binaural={
+    stop:()=>{gL.gain.linearRampToValueAtTime(0,c.currentTime+0.3);gR.gain.linearRampToValueAtTime(0,c.currentTime+0.3);
+      setTimeout(()=>{try{oL.stop();oR.stop();}catch(e){}},400);},
+    setDelta:(d)=>{oR.frequency.linearRampToValueAtTime(220+d, c.currentTime+0.1);}
+  };
+}
+
+/* Atabaque / African drum cycle — 12 steps, accent pattern.
+   Uses short noise bursts filtered to low/mid bands. */
+function startDrum(E){
+  stopVoice(E,'drum');
+  const c=E.ctx;
+  const pattern=[1,0,0.3,0,0.6,0,1,0,0.3,0.5,0.6,0]; // 12 steps
+  let step=0;
+  const schedule=()=>{
+    if(!E.voices.drum) return;
+    const v = pattern[step%12];
+    if(v>0) drumHit(E, v);
+    step++;
+  };
+  const tick=()=>{
+    schedule();
+    const bpm=E.params.bpm;
+    const interval = 60000/(bpm*2); // 2 hits per beat = 12 steps/bar of 6/4 feel
+    E.drumTimer = setTimeout(tick, interval);
+  };
+  E.voices.drum = {stop:()=>{clearTimeout(E.drumTimer); E.drumTimer=null;}};
+  tick();
+}
+function drumHit(E, amp){
+  const c=E.ctx, now=c.currentTime;
+  // low body
+  const bufLen = c.sampleRate*0.25;
+  const noise = c.createBuffer(1, bufLen, c.sampleRate);
+  const d = noise.getChannelData(0);
+  for(let i=0;i<bufLen;i++) d[i]= (Math.random()*2-1)*Math.pow(1-i/bufLen,2.2);
+  const src=c.createBufferSource(); src.buffer=noise;
+  const bp=c.createBiquadFilter(); bp.type='lowpass'; bp.frequency.value= 110 + amp*140;
+  const g=c.createGain(); g.gain.value=0.0;
+  src.connect(bp).connect(g).connect(E.master);
+  g.gain.setValueAtTime(0.0001, now);
+  g.gain.exponentialRampToValueAtTime(0.6*amp, now+0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, now+0.35);
+  src.start(now); src.stop(now+0.4);
+
+  // caxixi shaker layer
+  const cx=E.params.caxixi;
+  if(cx>0.02){
+    const b2=c.createBuffer(1, c.sampleRate*0.12, c.sampleRate);
+    const d2=b2.getChannelData(0);
+    for(let i=0;i<d2.length;i++) d2[i]=(Math.random()*2-1)*Math.pow(1-i/d2.length,1.5);
+    const s2=c.createBufferSource(); s2.buffer=b2;
+    const hp=c.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=3800;
+    const g2=c.createGain(); g2.gain.value=0.0001;
+    s2.connect(hp).connect(g2).connect(E.master);
+    g2.gain.exponentialRampToValueAtTime(0.25*cx*amp, now+0.005);
+    g2.gain.exponentialRampToValueAtTime(0.0001, now+0.12);
+    s2.start(now); s2.stop(now+0.15);
+  }
+}
+
+function stopVoice(E, name){
+  if(E.voices[name] && E.voices[name].stop){ E.voices[name].stop(); E.voices[name]=null; }
+}
+function stopAll(E){
+  Object.keys(E.voices).forEach(k=>stopVoice(E,k));
+  E.running=false;
+}
+
+/* ---------- cymatics render ---------- */
+function drawCym(E){
+  const cvs=E.cym;
+  const dpr=window.devicePixelRatio||1;
+  const W=cvs.clientWidth, H=cvs.clientHeight;
+  if(cvs.width!==W*dpr){cvs.width=W*dpr;cvs.height=H*dpr;}
+  const g=cvs.getContext('2d');
+  g.setTransform(dpr,0,0,dpr,0,0);
+  g.fillStyle='rgba(0,0,0,0.22)';
+  g.fillRect(0,0,W,H);
+
+  // sample audio spectrum (if running)
+  let spectrum=null;
+  if(E.analyser){
+    const buf=new Uint8Array(E.analyser.frequencyBinCount);
+    E.analyser.getByteFrequencyData(buf);
+    spectrum=buf;
+  }
+
+  const cx=W/2, cy=H/2;
+  const N = 240;
+  E.t += 0.012;
+
+  // derive a handful of "modes" from spectrum bins
+  const modes=[];
+  if(spectrum){
+    const bands=[3,6,9,13,18,26,36]; // pick bins
+    bands.forEach((b,i)=>{
+      modes.push({
+        k: 2+i,                        // angular number
+        amp: (spectrum[b]||0)/255,
+        phase: E.t*(0.5+i*0.15)
+      });
+    });
+  } else {
+    for(let i=0;i<6;i++) modes.push({k:2+i, amp:0.15, phase:E.t*(0.3+i*0.1)});
+  }
+
+  // Chladni-like figure: superposition of radial/angular modes
+  const rMax = Math.min(W,H)*0.46;
+  g.lineWidth=1;
+  const [c1,c2,c3] = E.palette;
+  for(let i=0;i<N;i++){
+    const a = i/N * Math.PI*2;
+    let r=0;
+    modes.forEach(m=>{
+      r += m.amp * Math.cos(m.k*a + m.phase) * (1 - m.k*0.04);
+    });
+    const rr = rMax*(0.55 + 0.45*(0.5+0.5*Math.sin(E.t+ a*2)) + r*0.35);
+    const x = cx + Math.cos(a)*rr;
+    const y = cy + Math.sin(a)*rr;
+    if(i===0) g.beginPath(),g.moveTo(x,y);
+    else g.lineTo(x,y);
+  }
+  g.closePath();
+  const grd = g.createRadialGradient(cx,cy,10,cx,cy,rMax);
+  grd.addColorStop(0, c1+"cc");
+  grd.addColorStop(0.6, c2+"66");
+  grd.addColorStop(1, c3+"00");
+  g.fillStyle=grd;
+  g.fill();
+  g.strokeStyle=c1+"aa";
+  g.stroke();
+
+  // inner rings from raw spectrum
+  if(spectrum){
+    for(let ring=0;ring<4;ring++){
+      g.beginPath();
+      const rr0 = rMax*(0.15 + ring*0.09);
+      const idx0 = 4+ring*6;
+      for(let i=0;i<180;i++){
+        const a=i/180*Math.PI*2;
+        const bin=(spectrum[(idx0 + (i%24))] || 0)/255;
+        const r=rr0 + bin*18;
+        const x=cx+Math.cos(a)*r, y=cy+Math.sin(a)*r;
+        if(i===0) g.moveTo(x,y); else g.lineTo(x,y);
+      }
+      g.closePath();
+      g.strokeStyle = [c1,c2,c3,c2][ring]+"77";
+      g.stroke();
+    }
+  }
+
+  // center dot — the emergent fixed point x*
+  g.fillStyle = c1;
+  g.beginPath(); g.arc(cx,cy, 4,0,Math.PI*2); g.fill();
+
+  requestAnimationFrame(()=>drawCym(E));
+}
+
+/* ---------- concrete diagram (12-phase cycle + contraction) ---------- */
+function drawDiagram(E){
+  const cvs=E.diag;
+  const dpr=window.devicePixelRatio||1;
+  const W=cvs.clientWidth, H=cvs.clientHeight;
+  if(cvs.width!==W*dpr){cvs.width=W*dpr;cvs.height=H*dpr;}
+  const g=cvs.getContext('2d');
+  g.setTransform(dpr,0,0,dpr,0,0);
+  g.fillStyle='rgba(0,0,0,0.12)';
+  g.fillRect(0,0,W,H);
+
+  const cx=W/2, cy=H/2;
+  const R = Math.min(W,H)*0.42;
+  const [c1,c2,c3] = E.palette;
+
+  // outer 12-phase ring
+  const labels = ['O₁','O₂','O₃','O₄','O₅','O₆','O₇','O₈','O₉','O₁₀','O₁₁','O₁₂'];
+  const bases  = ['C','C','C','K','K','K','F','F','F','U','U','U'];
+  const invs   = ['I₁','I₂','I₃','I₁','I₂','I₃','I₁','I₂','I₃','I₁','I₂','I₃'];
+
+  // ring circle
+  g.strokeStyle=c2+"55"; g.lineWidth=1;
+  g.beginPath(); g.arc(cx,cy,R,0,Math.PI*2); g.stroke();
+
+  // step arrows between consecutive operator nodes
+  for(let i=0;i<12;i++){
+    const a1 = -Math.PI/2 + i*(Math.PI*2/12);
+    const a2 = -Math.PI/2 + ((i+1)%12)*(Math.PI*2/12);
+    const x1=cx+Math.cos(a1)*R, y1=cy+Math.sin(a1)*R;
+    const x2=cx+Math.cos(a2)*R, y2=cy+Math.sin(a2)*R;
+    g.strokeStyle=c1+"88";
+    g.lineWidth=1.5;
+    g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke();
+  }
+
+  // nodes + labels
+  for(let i=0;i<12;i++){
+    const a = -Math.PI/2 + i*(Math.PI*2/12);
+    const x=cx+Math.cos(a)*R, y=cy+Math.sin(a)*R;
+    // color by base op
+    const col = bases[i]==='C'?c1 : bases[i]==='K'?c2 : bases[i]==='F'?c3 : '#ffffff';
+    g.fillStyle=col;
+    g.beginPath(); g.arc(x,y,6,0,Math.PI*2); g.fill();
+    g.fillStyle=c1;
+    g.font='11px monospace';
+    const lx=cx+Math.cos(a)*(R+18)-12, ly=cy+Math.sin(a)*(R+18)+4;
+    g.fillText(labels[i], lx, ly);
+    g.fillStyle=c2+"cc";
+    g.font='9px monospace';
+    g.fillText(bases[i]+"·"+invs[i], cx+Math.cos(a)*(R+34)-14, cy+Math.sin(a)*(R+34)+4);
+  }
+
+  // spiral: contraction orbit with κ = 0.882 per cycle
+  const kappa = 0.882;
+  let r = R*0.85;
+  let a = -Math.PI/2;
+  const pts=[];
+  for(let n=0;n<120;n++){
+    pts.push([cx+Math.cos(a)*r, cy+Math.sin(a)*r]);
+    a += Math.PI*2/12;
+    r *= Math.pow(kappa, 1/12);
+  }
+  g.strokeStyle=c3; g.lineWidth=1.4;
+  g.beginPath();
+  pts.forEach((p,i)=>{ if(i===0) g.moveTo(p[0],p[1]); else g.lineTo(p[0],p[1]); });
+  g.stroke();
+  // orbit dots every 12 steps
+  g.fillStyle=c1;
+  for(let i=0;i<pts.length;i+=12){
+    g.beginPath(); g.arc(pts[i][0],pts[i][1],3,0,Math.PI*2); g.fill();
+  }
+
+  // emergent fixed point x*
+  g.fillStyle=c1;
+  g.beginPath(); g.arc(cx,cy,7,0,Math.PI*2); g.fill();
+  g.strokeStyle=c3; g.lineWidth=1.5;
+  g.beginPath(); g.arc(cx,cy,11,0,Math.PI*2); g.stroke();
+  g.fillStyle=c1;
+  g.font='italic 12px Georgia,serif';
+  g.fillText('x*', cx+14, cy+4);
+
+  // legend (top-left)
+  g.font='10px monospace'; g.fillStyle=c2;
+  const legendX = 10, legendY = 14;
+  g.fillText('C = Compression', legendX, legendY);
+  g.fillText('K = Curvature',   legendX, legendY+12);
+  g.fillText('F = Fold',         legendX, legendY+24);
+  g.fillText('U = Unfold',       legendX, legendY+36);
+  g.fillStyle=c1;
+  g.fillText('κ ≈ 0.882', W-80, 14);
+  g.fillText('T* = 2π',   W-80, 26);
+  g.fillText('ε* = 1/3',  W-80, 38);
+}
+
+/* ---------- wire-up both sides ---------- */
+function bind(E, prefix){
+  // create buttons
+  document.querySelectorAll(`[data-engine="${E.id}"]`).forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      ensureAudio(E);
+      if(E.ctx.state==='suspended') E.ctx.resume();
+      const action = btn.dataset.action;
+      const voice  = btn.dataset.voice;
+      if(action==='start'){
+        // turn on a default mix
+        startBass(E); startTriad(E); startBinaural(E); startDrum(E);
+        E.running=true;
+        setActiveAll(E.id, true);
+      } else if(action==='stop'){
+        stopAll(E);
+        setActiveAll(E.id, false);
+      } else if(voice){
+        if(E.voices[voice]){
+          stopVoice(E, voice);
+          btn.classList.remove('active');
+        } else {
+          if(voice==='bass') startBass(E);
+          if(voice==='triad') startTriad(E);
+          if(voice==='binaural') startBinaural(E);
+          if(voice==='drum') startDrum(E);
+          btn.classList.add('active');
+        }
+      }
+    });
+  });
+
+  // sliders
+  const $=(id)=>document.getElementById(id);
+  const arame=$(`${prefix}Arame`), arameV=$(`${prefix}ArameV`);
+  const cax=$(`${prefix}Cax`),     caxV=$(`${prefix}CaxV`);
+  const bin=$(`${prefix}Bin`),     binV=$(`${prefix}BinV`);
+  const bpm=$(`${prefix}Bpm`),     bpmV=$(`${prefix}BpmV`);
+
+  arame.addEventListener('input',()=>{E.params.arame=+arame.value; arameV.textContent=(+arame.value).toFixed(2);
+    if(E.voices.bass && E.ctx){ /* retrigger */ stopVoice(E,'bass'); startBass(E);} });
+  cax.addEventListener('input',()=>{E.params.caxixi=+cax.value; caxV.textContent=(+cax.value).toFixed(2);});
+  bin.addEventListener('input',()=>{E.params.binDelta=+bin.value; binV.textContent=(+bin.value).toFixed(1)+' Hz';
+    if(E.voices.binaural && E.voices.binaural.setDelta) E.voices.binaural.setDelta(+bin.value);});
+  bpm.addEventListener('input',()=>{E.params.bpm=+bpm.value; bpmV.textContent=bpm.value;});
+}
+function setActiveAll(engineId, on){
+  document.querySelectorAll(`[data-engine="${engineId}"][data-voice]`).forEach(b=>{
+    if(on) b.classList.add('active'); else b.classList.remove('active');
+  });
+}
+
+/* ---------- boot ---------- */
+const enEngine = makeEngine('en','cymEn','diagEn', ['#0ABAB5','#9cf3ef','#022b2a']);
+const brEngine = makeEngine('br','cymBr','diagBr', ['#c8a24a','#009c3b','#002776']);
+engines.en=enEngine; engines.br=brEngine;
+
+bind(enEngine,'en');
+bind(brEngine,'br');
+
+function loop(){
+  drawCym(enEngine);
+  drawCym(brEngine);
+}
+// cymatics has its own rAF; diagram is static — draw once, redraw on resize
+function redrawDiagrams(){
+  drawDiagram(enEngine);
+  drawDiagram(brEngine);
+}
+window.addEventListener('resize', redrawDiagrams);
+redrawDiagrams();
+drawCym(enEngine);
+drawCym(brEngine);
+</script>
+</body>
+</html>

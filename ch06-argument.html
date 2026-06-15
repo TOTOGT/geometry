@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 6: Argument Architecture | English for Researchers C1→D2</title>
+  <style>
+    :root {
+      --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4;
+      --mid: #3a4f7a; --rule: #8a7340; --text: #1c1c1c; --green: #2d5a27;
+      --light: #e8e2d4; --red: #8b1a1a; --teal: #1a5c5c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Georgia','Times New Roman',serif; color: var(--text); background: var(--cream); }
+    nav { background: var(--navy); padding: 0.75rem 2rem; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-logo { color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; text-decoration: none; font-family: sans-serif; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a { color: #ccc; text-decoration: none; font-size: 0.82rem; font-family: sans-serif; }
+    .nav-links a:hover { color: var(--gold); }
+    .chapter-nav { background: var(--smoke); border-top: 1px solid var(--light); padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .chapter-nav a { font-family: sans-serif; font-size: 0.82rem; color: var(--mid); text-decoration: none; padding: 0.4rem 0.9rem; border: 1px solid var(--light); }
+    .chapter-nav a:hover { background: var(--navy); color: var(--gold); }
+    .chapter-nav .current { font-family: sans-serif; font-size: 0.78rem; color: var(--rule); letter-spacing: 0.1em; }
+    .hero { background: var(--navy); color: white; padding: 4rem 2rem 3rem; }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .eyebrow { font-family: sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.8rem; }
+    .op-chain { font-family: sans-serif; font-size: 1.1rem; letter-spacing: 0.15em; color: #888; margin-bottom: 1.2rem; }
+    .op-chain .active { color: var(--gold); font-weight: bold; border-bottom: 2px solid var(--gold); padding-bottom: 2px; }
+    h1 { font-size: clamp(1.7rem, 4vw, 2.8rem); color: white; line-height: 1.2; margin-bottom: 0.6rem; }
+    .hero-sub { color: var(--gold); font-style: italic; font-size: 1.1rem; margin-bottom: 1rem; }
+    .gold-rule { width: 60px; height: 2px; background: var(--gold); margin: 1.2rem 0; }
+    .hero-desc { color: #bbb; font-size: 0.95rem; line-height: 1.8; max-width: 640px; }
+    section { padding: 3rem 2rem; }
+    .section-inner { max-width: 800px; margin: 0 auto; }
+    .section-label { font-family: sans-serif; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rule); margin-bottom: 0.4rem; }
+    h2 { font-size: 1.5rem; border-bottom: 2px solid var(--gold); padding-bottom: 0.3rem; display: inline-block; margin-bottom: 1.2rem; }
+    h3 { font-size: 1.1rem; color: var(--navy); margin: 1.5rem 0 0.6rem; }
+    p { line-height: 1.8; margin-bottom: 1rem; color: #333; }
+    .insight-box { background: var(--navy); color: var(--gold); padding: 1.2rem 1.5rem; border-left: 4px solid var(--gold); margin: 1.5rem 0; font-style: italic; font-size: 0.95rem; line-height: 1.7; }
+    .theorem-box { background: white; border: 1px solid var(--light); border-left: 4px solid var(--mid); padding: 1.2rem 1.5rem; margin: 1.5rem 0; }
+    .theorem-box .theorem-label { font-family: sans-serif; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rule); margin-bottom: 0.5rem; }
+    .theorem-box .theorem-text { font-style: italic; color: var(--navy); line-height: 1.7; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8rem; margin: 1rem 0; }
+    .vocab-item { background: white; border-top: 2px solid var(--gold); padding: 0.6rem 0.8rem; }
+    .vocab-term { font-weight: bold; color: var(--navy); font-size: 0.9rem; }
+    .vocab-def { font-size: 0.8rem; color: #555; margin-top: 0.2rem; line-height: 1.5; }
+    .prompt-section { background: #fffbeb; border-top: 3px solid var(--gold); padding: 2rem; }
+    .prompt-section .section-inner { max-width: 800px; margin: 0 auto; }
+    .prompt-label { font-family: sans-serif; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rule); margin-bottom: 0.4rem; }
+    .prompt-title { font-size: 1.1rem; font-weight: bold; color: var(--navy); margin-bottom: 0.8rem; }
+    .prompt-box { background: white; border: 1px solid #fde68a; border-left: 4px solid var(--gold); padding: 1rem 1.2rem; font-size: 0.88rem; line-height: 1.75; color: #444; margin-bottom: 0.8rem; }
+    .prompt-instructions { font-size: 0.82rem; color: #666; font-style: italic; line-height: 1.6; }
+    .copy-btn { background: var(--gold); color: var(--navy); border: none; padding: 0.4rem 1rem; font-family: sans-serif; font-size: 0.75rem; font-weight: bold; cursor: pointer; margin-top: 0.6rem; }
+    .copy-btn:hover { opacity: 0.9; }
+    .output-section { background: var(--navy); padding: 2rem; }
+    .output-section .section-inner { max-width: 800px; margin: 0 auto; }
+    .output-title { font-family: sans-serif; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+    .output-list { list-style: none; padding: 0; }
+    .output-list li { color: #ccc; font-size: 0.9rem; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); padding-left: 1.2rem; position: relative; line-height: 1.6; }
+    .output-list li::before { content: '✓'; position: absolute; left: 0; color: var(--gold); }
+    footer { background: var(--navy); color: #666; padding: 2rem; text-align: center; font-size: 0.78rem; line-height: 1.8; }
+    footer a { color: #888; text-decoration: none; }
+    .toulmin-diagram { background: white; border: 1px solid var(--light); padding: 1.5rem; margin: 1.5rem 0; border-radius: 4px; }
+    .toulmin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    .toulmin-box { background: #f5f0e8; border: 2px solid var(--mid); padding: 0.8rem; text-align: center; font-size: 0.9rem; color: var(--navy); }
+    .toulmin-box.claim { grid-column: 1 / -1; background: #fffbeb; border: 2px solid var(--gold); }
+    .toulmin-box.grounds { }
+    .toulmin-box.warrant { }
+    .toulmin-box.backing { grid-column: 1 / -1; font-size: 0.85rem; color: #666; }
+    .toulmin-label { font-size: 0.7rem; color: var(--rule); font-weight: bold; margin-bottom: 0.3rem; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">ENGLISH FOR RESEARCHERS · C1→D2</a>
+  <ul class="nav-links">
+    <li><a href="course-16weeks.html">Course Schedule</a></li>
+    <li><a href="https://totogt.github.io/book3-starter/" target="_blank">Book 3</a></li>
+    <li><a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a></li>
+  </ul>
+    <a href="living-book.html">Living Book</a>
+    <a href="series-hub.html">Series ↗</a>
+</nav>
+
+<div class="chapter-nav">
+  <a href="ch05-oscillations.html">← Week 5: Neural Oscillations</a>
+  <span class="current">WEEK 6 OF 16</span>
+  <a href="ch07-bridge.html">Week 7: Literature Bridge →</a>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Week 6 · Phase K · Operator Curvature · Level B1</div>
+    <div class="op-chain">C → <span class="active">K</span> → F → U</div>
+    <h1>The Argument Architecture</h1>
+    <div class="hero-sub">From Claim to Structure</div>
+    <div class="gold-rule"></div>
+    <p class="hero-desc">A claim without a warrant is a door without a frame. The Toulmin model gives your argument its architecture: claim, grounds, warrant, backing, qualifier, rebuttal. K operator in writing: the structure that holds your claim in place.</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">Part 1</div>
+    <h2>The Toulmin Model as Operator Structure</h2>
+    <p>Stephen Toulmin's argument model (1958) maps directly to the operator chain. The claim (C_arg) is the compression of your argument into one sentence. The grounds are the K operator — the evidence that marks the threshold, the specific facts that support the claim. The warrant is the F operator — the principle that crosses from evidence to claim. The backing is the prior literature that stabilizes the warrant. The qualifier hedges the claim back from overclaiming (a crucial academic skill). The rebuttal is the acknowledged counterargument — the honest sorry of argument.</p>
+
+    <div class="toulmin-diagram">
+      <div class="toulmin-grid">
+        <div class="toulmin-box claim">
+          <div class="toulmin-label">CLAIM</div>
+          <strong>Therefore, [X is true]</strong>
+        </div>
+        <div class="toulmin-box grounds">
+          <div class="toulmin-label">GROUNDS (Evidence)</div>
+          <small>Because we have observed [Y]</small>
+        </div>
+        <div class="toulmin-box warrant">
+          <div class="toulmin-label">WARRANT (Principle)</div>
+          <small>Since [general principle linking Y to X]</small>
+        </div>
+        <div class="toulmin-box backing">
+          <div class="toulmin-label">BACKING (Support for Warrant)</div>
+          <small>As established in [prior research / accepted theory]</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <strong>Structure:</strong> Grounds (K) supply the measurable evidence. Warrant (F) is the principle connecting evidence to claim. Backing (C) is the literature stabilizing the warrant. Together they hold the claim at the curvature threshold.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">Part 2</div>
+    <h2>Warrants in Academic Writing</h2>
+    <p>The weakest part of most student arguments is the warrant — the implicit principle that connects evidence to claim. Consider this example:</p>
+    <p style="margin-left: 1.5rem; font-style: italic; color: #555;">Neural oscillations synchronize under stress (grounds) → therefore allostatic load disrupts cognitive performance (claim)</p>
+    <p>This requires the warrant: <strong>"Synchronization of neural oscillations is a measure of cognitive stability."</strong> If you do not state the warrant, the reviewer will find it and challenge it. State it first. Academic writing that hides its warrants is not stronger — it is weaker.</p>
+
+    <h3>How to State Your Warrant</h3>
+    <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8;">
+      <li><strong>Directly:</strong> "The principle connecting these results is that [warrant]."</li>
+      <li><strong>As a conditional:</strong> "If [warrant is true], then [evidence] supports [claim]."</li>
+      <li><strong>As a logical step:</strong> "This evidence suggests [claim] because [warrant]."</li>
+      <li><strong>With backing:</strong> "Following [author, year], [warrant] provides the mechanism by which [evidence] supports [claim]."</li>
+    </ul>
+
+    <div class="theorem-box">
+      <div class="theorem-label">Theorem 6.1 — Warrant Visibility</div>
+      <div class="theorem-text">Let A be an academic argument with claim C_arg, grounds G, and warrant W. If W is not explicitly stated, A is formally incomplete — a reviewer can always locate W and challenge it. Explicit warrant statement reduces argumentation surface area.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">Part 3</div>
+    <h2>Hedging Language: The Qualifier in Academic English</h2>
+    <p>Hedging is not weakness — it is precision. The qualifier in the Toulmin model is the range within which the claim holds. Phrases like "This suggests…", "the evidence is consistent with…", "it may be the case that…", "under the conditions described, it appears that…" are not apologies. They are specifications of the claim's domain of validity.</p>
+    <p>A claim without a qualifier claims too much and is therefore weaker than one that specifies its limits. D2-level writing hedges precisely. A1-level writing either overclaims or underclaims.</p>
+
+    <h3>Precision Hedging (B1 → B2)</h3>
+    <p style="margin-bottom: 0.5rem;"><strong>Weak (overclaiming):</strong> "Stress causes cognitive decline."</p>
+    <p style="margin-bottom: 0.5rem; margin-left: 1.5rem; color: #666; font-size: 0.9rem;">Too broad. No conditions specified. No measurable threshold.</p>
+
+    <p style="margin-bottom: 0.5rem; margin-top: 1rem;"><strong>Hedged (precise):</strong> "Under conditions of sustained allostatic load above 6 units, stress-induced neural oscillation desynchronization correlates with measurable decline in working memory performance in adults aged 30–50."</p>
+    <p style="margin-left: 1.5rem; color: #666; font-size: 0.9rem;">Specific. Measurable. Limited to stated conditions. Falsifiable.</p>
+
+    <div class="insight-box">
+      Hedging language at B1-B2 is not "weakening your argument." It is sharpening it. You are moving from vague to precise, from undisprovable to falsifiable. This is exactly what the K operator does: it marks the threshold.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">Vocabulary — Week 6</div>
+    <h2>Essential Terms</h2>
+    <div class="vocab-grid">
+      <div class="vocab-item">
+        <div class="vocab-term">Warrant</div>
+        <div class="vocab-def">The principle connecting evidence to claim in an argument.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Backing</div>
+        <div class="vocab-def">The prior work or accepted principle that supports the warrant.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Qualifier</div>
+        <div class="vocab-def">The hedge that specifies the range and conditions of a claim.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Rebuttal</div>
+        <div class="vocab-def">The acknowledged counterargument and the response to it.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Hedging</div>
+        <div class="vocab-def">Using language to specify the limits of a claim — a sign of precision, not weakness.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Grounds</div>
+        <div class="vocab-def">The evidence or facts that support a claim.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Argument Architecture</div>
+        <div class="vocab-def">The structural framework of a logical argument: grounds, warrant, claim.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Implicit</div>
+        <div class="vocab-def">Suggested or meant without being stated directly.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Toll</div>
+        <div class="vocab-def">In academic writing: the cost or burden of a claim not being supported.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Domain of Validity</div>
+        <div class="vocab-def">The specific conditions, populations, and contexts to which a claim applies.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="prompt-section">
+  <div class="section-inner">
+    <div class="prompt-label">Week 6 Prompts</div>
+    <h2 style="border: none; display: block; color: var(--navy); margin-bottom: 1.2rem;">Argument Analysis — B1 Level</h2>
+
+    <div class="prompt-title">Prompt 2.2: Curvature Check</div>
+    <div class="prompt-box" id="prompt-2-2">Here is my argument paragraph: [paste text]. Identify: (1) the claim, (2) the evidence cited, (3) the implicit warrant connecting them. Is the warrant stated or assumed? What would a reviewer ask about the warrant?</div>
+    <button class="copy-btn" onclick="copyPrompt('prompt-2-2')">Copy Prompt</button>
+
+    <div class="prompt-instructions" style="margin-top: 1rem;">
+      <strong>Use this first:</strong> Paste your full argument paragraph (5–8 sentences). The LLM will help you identify the parts of the Toulmin structure and spot hidden warrants.
+    </div>
+
+    <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #ddd;">
+
+    <div class="prompt-title">Prompt 2.3: Hedging Refinement</div>
+    <div class="prompt-box" id="prompt-2-3">Rewrite this sentence using precise academic hedging language (not vague hedging): [paste one sentence from your argument]. Provide 3 alternatives at different levels of specificity.</div>
+    <button class="copy-btn" onclick="copyPrompt('prompt-2-3')">Copy Prompt</button>
+
+    <div class="prompt-instructions" style="margin-top: 1rem;">
+      <strong>Use this second:</strong> After using 2.2, identify the sentence your warrant depends on most. Use this prompt to sharpen the hedging language. Precise hedging is B2-level writing.
+    </div>
+  </div>
+</section>
+
+<section class="output-section">
+  <div class="section-inner">
+    <div class="output-title">Expected Outputs — Week 6</div>
+    <ul class="output-list">
+      <li>250-word argument paragraph using Toulmin structure</li>
+      <li>Warrant explicitly stated and labeled</li>
+      <li>LLM Prompt 2.2 and 2.3 completed — feedback noted</li>
+      <li>argument-draft.md committed to GitHub</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  © 2026 Pablo Nogueira Grossi / G6 LLC · Newark NJ · Principia Orthogona series · Book 3: The Mini-Beast · Course: English for Researchers C1→D2 · <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE: github.com/TOTOGT/AXLE</a>
+</footer>
+
+<script>
+function copyPrompt(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('[onclick="copyPrompt(\'' + id + '\')"]');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy Prompt', 2000);
+  });
+}
+</script>
+
+</body>
+</html>
