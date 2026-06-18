@@ -19,176 +19,370 @@
     --u-color: #c084fc;
     --t-color: #f9c74f;
     --g-color: #f5d87a;
-    --inf-color: #a0d8ef;   /* ∞ — sky / depth / the infinite  ← chapter accent */
+    --inf-color: #a0d8ef;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--dark); color: var(--text); font-family: 'Georgia', serif; font-size: 18px; line-height: 1.75; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Georgia', serif;
+    font-size: 18px;
+    line-height: 1.75;
+  }
 
   nav {
     position: sticky; top: 0; z-index: 100;
     background: rgba(10,10,15,0.96);
     border-bottom: 1px solid var(--gold-dim);
     padding: 0.6rem 2rem;
-    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 0.5rem;
   }
   .nav-logo { font-family: 'Georgia', serif; font-size: 0.85rem; letter-spacing: 0.18em; color: var(--gold); text-decoration: none; }
-  .nav-links { display: flex; gap: 1.5rem; font-size: 0.8rem; }
+  .nav-links { display: flex; gap: 1.5rem; font-size: 0.8rem; flex-wrap: wrap; }
   .nav-links a { color: var(--text-dim); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
 
-  .chapter-hero {
-    background: linear-gradient(180deg, #05050f 0%, #080c18 50%, #050810 100%);
-    border-bottom: 1px solid #101828;
-    padding: 5rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+  /* HERO */
+  .book-hero {
+    background: linear-gradient(160deg, #08070f 0%, #0d0c1c 50%, #08070f 100%);
+    border-bottom: 1px solid rgba(160,216,239,0.12);
+    padding: 6rem 2rem 5rem;
+    text-align: center; position: relative; overflow: hidden;
   }
-  /* Starfield */
-  .chapter-hero::before {
+  .book-hero::before {
     content: '';
     position: absolute; inset: 0;
     background-image:
-      radial-gradient(circle, rgba(160,216,239,0.55) 1px, transparent 1px),
-      radial-gradient(circle, rgba(160,216,239,0.3) 1px, transparent 1px),
-      radial-gradient(circle, rgba(200,230,255,0.2) 1px, transparent 1px);
-    background-size: 120px 120px, 80px 80px, 50px 50px;
-    background-position: 0 0, 40px 40px, 20px 20px;
+      radial-gradient(circle at 25% 40%, rgba(160,216,239,0.05) 0%, transparent 55%),
+      radial-gradient(circle at 75% 60%, rgba(201,168,76,0.04) 0%, transparent 55%),
+      radial-gradient(circle at 50% 20%, rgba(192,132,252,0.03) 0%, transparent 50%);
+    animation: heroGlow 14s ease-in-out infinite alternate;
     pointer-events: none;
   }
-  .hero-letter {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-    font-size: 20rem; font-weight: 900;
-    color: rgba(160,216,239,0.05);
-    user-select: none; pointer-events: none;
-    font-family: 'Georgia', serif; line-height: 1;
-  }
-  .chapter-tag { font-size: 0.72rem; letter-spacing: 0.25em; color: var(--inf-color); text-transform: uppercase; margin-bottom: 1rem; position: relative; }
-  .chapter-title { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; letter-spacing: 0.04em; color: var(--text); margin-bottom: 1rem; position: relative; }
-  .chapter-subtitle { font-size: 1.1rem; color: var(--text-dim); max-width: 660px; margin: 0 auto 2rem; font-style: italic; position: relative; }
-  .operator-chain { font-family: 'Courier New', monospace; font-size: 1.05rem; letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 0.5rem; position: relative; }
-  .operator-chain .active { color: var(--inf-color); text-decoration: underline; text-underline-offset: 4px; font-weight: bold; }
-  .chapter-meta { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; font-size: 0.78rem; letter-spacing: 0.12em; color: var(--text-dim); position: relative; }
-  .meta-badge { background: rgba(160,216,239,0.1); border: 1px solid rgba(160,216,239,0.3); padding: 0.3rem 0.9rem; border-radius: 2px; color: var(--inf-color); }
+  @keyframes heroGlow { 0% { opacity: 0.5; } 100% { opacity: 1; } }
 
+  .series-label {
+    font-size: 0.7rem; letter-spacing: 0.3em; color: var(--text-dim);
+    text-transform: uppercase; margin-bottom: 1.5rem; position: relative;
+  }
+  .op-chain-hero {
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    letter-spacing: 0.14em; color: var(--text-dim);
+    margin-bottom: 2rem; position: relative;
+    display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;
+  }
+  .op-chain-hero .c { color: var(--c-color); }
+  .op-chain-hero .k { color: var(--k-color); }
+  .op-chain-hero .f { color: var(--f-color); }
+  .op-chain-hero .u { color: var(--u-color); }
+  .op-chain-hero .g { color: var(--g-color); }
+  .op-chain-hero .inf { color: var(--inf-color); font-weight: 700; border-bottom: 1.5px solid var(--inf-color); padding-bottom: 1px; }
+
+  .chapter-symbol {
+    font-size: clamp(4rem, 10vw, 7rem);
+    color: var(--inf-color);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    position: relative;
+    text-shadow: 0 0 60px rgba(160,216,239,0.3);
+  }
+  .book-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 400; letter-spacing: 0.04em;
+    color: var(--text); line-height: 1.15;
+    position: relative; margin-bottom: 0.6rem;
+  }
+  .book-subtitle {
+    font-size: clamp(0.85rem, 2vw, 1.05rem);
+    color: var(--text-dim); font-style: italic;
+    max-width: 580px; margin: 0 auto 2rem; position: relative; line-height: 1.65;
+  }
+  .hero-meta {
+    display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+    font-size: 0.78rem; letter-spacing: 0.12em; color: var(--text-dim); position: relative;
+  }
+  .hero-badge {
+    background: rgba(160,216,239,0.08); border: 1px solid rgba(160,216,239,0.2);
+    padding: 0.3rem 1rem; border-radius: 2px; color: var(--inf-color);
+  }
+
+  /* CONTENT */
   .content-wrap { max-width: 780px; margin: 0 auto; padding: 3rem 2rem 4rem; }
-  h2 { font-size: 1.4rem; font-weight: 400; color: var(--gold); margin: 3rem 0 1rem; letter-spacing: 0.06em; }
-  h3 { font-size: 1.1rem; font-weight: 600; color: var(--text); margin: 2rem 0 0.7rem; }
+  h2 { font-size: 1.4rem; font-weight: 400; color: var(--gold); margin: 3rem 0 1rem; letter-spacing: 0.05em; }
+  h3 { font-size: 1.1rem; font-weight: 600; color: var(--inf-color); margin: 2.2rem 0 0.7rem; }
+  h4 { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+       color: var(--text-dim); margin: 1.8rem 0 0.5rem; }
   p { margin-bottom: 1.2rem; }
-  .gold-rule { border: none; border-top: 1px solid var(--gold-dim); margin: 2.5rem 0; opacity: 0.4; }
+  .gold-rule { border: none; border-top: 1px solid var(--gold-dim); margin: 2.5rem 0; opacity: 0.35; }
+  .inf-rule  { border: none; border-top: 1px solid rgba(160,216,239,0.2); margin: 2.5rem 0; }
+  .fleur { text-align: center; color: var(--gold-dim); font-size: 1.2rem; margin: 2rem 0; opacity: 0.5; }
 
-  /* NESTING DIAGRAM */
-  .nest-diagram { background: var(--surface2); border: 1px solid #101828; border-radius: 6px; padding: 1.5rem; margin: 2rem 0; }
-  .nest-title { font-size: 0.72rem; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 1.2rem; text-align: center; }
-  .nest-levels { display: flex; flex-direction: column; gap: 0.5rem; }
-  .nest-level {
-    display: flex; align-items: center; gap: 0.8rem;
-    background: var(--surface); border: 1px solid #1a2030;
-    border-radius: 4px; padding: 0.6rem 1rem;
+  /* OPENING SCENE */
+  .scene {
+    background: var(--surface2);
+    border-left: 3px solid var(--inf-color);
+    padding: 1.4rem 1.8rem;
+    margin-bottom: 2.5rem;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--text);
+    line-height: 1.82;
+    border-radius: 0 4px 4px 0;
   }
-  .nest-label { font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--inf-color); font-weight: bold; min-width: 3.5rem; }
-  .nest-eq { font-family: 'Courier New', monospace; font-size: 0.78rem; color: var(--text); flex: 1; }
-  .nest-desc { font-size: 0.68rem; color: var(--text-dim); text-align: right; min-width: 10rem; }
-  .nest-arrow { text-align: center; font-size: 0.75rem; color: rgba(160,216,239,0.35); letter-spacing: 0.05em; font-family: 'Courier New', monospace; padding: 0.1rem 0; }
-
-  /* THEOREM BOX */
-  .theorem-box { background: rgba(160,216,239,0.05); border-left: 3px solid var(--inf-color); padding: 1.5rem 1.8rem; margin: 2rem 0; border-radius: 0 4px 4px 0; }
-  .theorem-label { font-size: 0.72rem; letter-spacing: 0.2em; color: var(--inf-color); text-transform: uppercase; margin-bottom: 0.5rem; }
-  .theorem-body { font-style: italic; color: var(--text); }
-  .theorem-proof { margin-top: 1rem; font-size: 0.9rem; color: var(--text-dim); font-style: normal; }
 
   /* INSIGHT BOX */
-  .insight-box { background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.2); padding: 1.2rem 1.5rem; margin: 2rem 0; border-radius: 4px; }
-  .insight-label { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.4rem; }
-
-  /* SCIENCE TABLE */
-  .science-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.88rem; }
-  .science-table th { background: rgba(160,216,239,0.08); color: var(--inf-color); font-weight: 600; letter-spacing: 0.08em; font-size: 0.72rem; text-transform: uppercase; padding: 0.7rem 1rem; border-bottom: 1px solid rgba(160,216,239,0.2); text-align: left; }
-  .science-table td { padding: 0.65rem 1rem; border-bottom: 1px solid #1a2030; color: var(--text); vertical-align: top; }
-  .science-table tr:last-child td { border-bottom: none; }
-  .science-table tr:hover td { background: rgba(160,216,239,0.03); }
-  .science-table .op-col { font-family: 'Courier New', monospace; font-size: 0.8rem; }
-
-  /* MATH */
-  .math-block { background: var(--surface2); border: 1px solid #101828; padding: 1.2rem 1.5rem; margin: 1.5rem 0; font-family: 'Courier New', monospace; font-size: 0.93rem; color: var(--inf-color); border-radius: 4px; overflow-x: auto; }
-
-  /* OP TAGS */
-  .op-tag { display: inline-block; font-family: 'Courier New', monospace; font-size: 0.75rem; letter-spacing: 0.08em; padding: 0.15rem 0.5rem; border-radius: 2px; vertical-align: middle; }
-  .op-k  { background: rgba(224,90,58,0.15);  color: var(--k-color);   border: 1px solid rgba(224,90,58,0.3); }
-  .op-c  { background: rgba(74,158,255,0.15); color: var(--c-color);   border: 1px solid rgba(74,158,255,0.3); }
-  .op-f  { background: rgba(80,200,120,0.15); color: var(--f-color);   border: 1px solid rgba(80,200,120,0.3); }
-  .op-u  { background: rgba(192,132,252,0.15);color: var(--u-color);   border: 1px solid rgba(192,132,252,0.3); }
-  .op-g  { background: rgba(245,216,122,0.15);color: var(--g-color);   border: 1px solid rgba(245,216,122,0.35); }
-  .op-inf{ background: rgba(160,216,239,0.15);color: var(--inf-color); border: 1px solid rgba(160,216,239,0.3); }
-
-  /* FALSIFY */
-  .falsify-box { background: rgba(74,158,255,0.05); border-left: 3px solid var(--c-color); padding: 1.2rem 1.5rem; margin: 2rem 0; border-radius: 0 4px 4px 0; }
-  .falsify-label { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--c-color); text-transform: uppercase; margin-bottom: 0.4rem; }
-
-  /* SIMULATION */
-  .sim-section { background: var(--surface2); border: 1px solid #101828; border-radius: 6px; margin: 3rem 0; overflow: hidden; }
-  .sim-header { padding: 1rem 1.5rem; border-bottom: 1px solid #101828; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-  .sim-title { font-size: 0.78rem; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; flex: 1; }
-  .sim-controls { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-  .sim-btn { background: rgba(160,216,239,0.1); border: 1px solid rgba(160,216,239,0.3); color: var(--inf-color); padding: 0.35rem 0.8rem; font-size: 0.75rem; letter-spacing: 0.08em; cursor: pointer; border-radius: 2px; font-family: 'Courier New', monospace; transition: all 0.2s; }
-  .sim-btn:hover { background: rgba(160,216,239,0.22); }
-  .sim-btn.gold { background: rgba(201,168,76,0.12); border-color: rgba(201,168,76,0.35); color: var(--gold); }
-  .sim-btn.gold:hover { background: rgba(201,168,76,0.25); }
-  canvas { display: block; width: 100%; cursor: crosshair; }
-  .sim-status { padding: 0.8rem 1.5rem; font-family: 'Courier New', monospace; font-size: 0.78rem; display: flex; gap: 2rem; flex-wrap: wrap; border-top: 1px solid #101828; }
-  .status-item { color: var(--text-dim); }
-  .status-val { color: var(--inf-color); font-weight: bold; }
-  .legend { display: flex; gap: 1rem; flex-wrap: wrap; padding: 0.6rem 1.5rem; border-top: 1px solid #101828; font-size: 0.7rem; font-family: 'Courier New', monospace; }
-  .legend-item { display: flex; align-items: center; gap: 0.35rem; }
-  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-
-  /* PORTAL */
-  .portal-section { background: linear-gradient(160deg, #050c18 0%, #08101f 100%); border: 1px solid rgba(160,216,239,0.22); border-radius: 6px; margin: 3rem 0; overflow: hidden; }
-  .portal-header { background: rgba(160,216,239,0.07); border-bottom: 1px solid rgba(160,216,239,0.18); padding: 1.2rem 1.8rem; }
-  .portal-level { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--inf-color); text-transform: uppercase; margin-bottom: 0.3rem; }
-  .portal-heading { font-size: 1.15rem; color: var(--text); font-weight: 400; }
-  .portal-desc { font-size: 0.88rem; color: var(--text-dim); margin-top: 0.4rem; }
-  .prompt-card { padding: 1.5rem 1.8rem; border-bottom: 1px solid rgba(160,216,239,0.08); }
-  .prompt-card:last-child { border-bottom: none; }
-  .prompt-num { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--inf-color); text-transform: uppercase; margin-bottom: 0.5rem; }
-  .prompt-title { font-size: 1rem; color: var(--gold); margin-bottom: 0.5rem; }
-  .prompt-text { background: var(--surface2); border: 1px solid #101828; border-radius: 4px; padding: 1rem 1.2rem; font-family: 'Courier New', monospace; font-size: 0.82rem; color: var(--text); line-height: 1.6; margin: 0.7rem 0; }
-  .copy-btn { background: rgba(160,216,239,0.08); border: 1px solid rgba(160,216,239,0.22); color: var(--inf-color); padding: 0.3rem 0.7rem; font-size: 0.72rem; letter-spacing: 0.08em; cursor: pointer; border-radius: 2px; font-family: 'Courier New', monospace; transition: all 0.2s; }
-  .copy-btn:hover { background: rgba(160,216,239,0.2); }
-  .copy-btn.copied { color: var(--f-color); border-color: rgba(80,200,120,0.35); }
-  .portal-footer { padding: 1rem 1.8rem; border-top: 1px solid rgba(160,216,239,0.12); font-size: 0.78rem; color: var(--text-dim); text-align: center; }
-  .portal-footer a { color: var(--inf-color); text-decoration: none; }
-
-  .chapter-nav { display: flex; justify-content: space-between; align-items: center; padding: 2rem; border-top: 1px solid #2a2a3a; max-width: 780px; margin: 0 auto; }
-  .chapter-nav a { color: var(--gold); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.08em; border: 1px solid rgba(201,168,76,0.25); padding: 0.5rem 1rem; border-radius: 2px; transition: all 0.2s; }
-  .chapter-nav a:hover { background: rgba(201,168,76,0.08); }
-  footer { text-align: center; padding: 2rem; font-size: 0.72rem; letter-spacing: 0.12em; color: var(--text-dim); border-top: 1px solid #1a1a24; }
-  footer .fleur-footer { color: var(--gold-dim); margin: 0 0.5rem; }
-
-  @media (max-width: 600px) {
-    .hero-letter { font-size: 10rem; }
-    .nest-level { flex-wrap: wrap; }
-    .nest-desc { min-width: 0; }
-    .science-table { font-size: 0.8rem; }
+  .insight-box {
+    background: rgba(160,216,239,0.05);
+    border: 1px solid rgba(160,216,239,0.18);
+    padding: 1.2rem 1.5rem; margin: 2rem 0; border-radius: 4px;
+  }
+  .insight-label {
+    font-size: 0.7rem; letter-spacing: 0.2em; color: var(--inf-color);
+    text-transform: uppercase; margin-bottom: 0.5rem;
   }
 
-/* ── Overflow: wide equations/code scroll inside boxes ── */
-.proof, .block, .axiom-block, .remark, .dep-chain, .time-sec,
-.math-block, .theorem-box, .insight-box, .falsify-box,
-.coherence-row, .table-wrap, pre, code, .code-block,
-.po-ring-strip { overflow-x: auto; }
-mjx-container { overflow-x: auto; max-width: 100%; display: block !important; }
-.MJX-TEX { max-width: 100%; }
-.block-math, .formal, .axiom-formal, .math-block {
-  overflow-x: auto; white-space: pre; word-break: normal;
-}
-table { min-width: max-content; }
-.table-wrap { overflow-x: auto; }
+  /* GOLD INSIGHT */
+  .insight-gold {
+    background: rgba(201,168,76,0.06);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 1.2rem 1.5rem; margin: 2rem 0; border-radius: 4px;
+  }
+  .insight-gold .insight-label { color: var(--gold); }
+
+  /* PULLQUOTE */
+  .pullquote {
+    border-left: 3px solid var(--gold);
+    padding: 0.8rem 1.4rem;
+    margin: 2.2rem 0;
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+  .pullquote cite {
+    display: block; margin-top: 0.6rem;
+    font-size: 0.78rem; font-style: normal;
+    color: var(--gold-dim); letter-spacing: 0.06em;
+  }
+
+  /* OPERATOR TAGS */
+  .op-tag { display: inline-block; font-family: 'Courier New', monospace; font-size: 0.75rem;
+            letter-spacing: 0.08em; padding: 0.15rem 0.5rem; border-radius: 2px; vertical-align: middle; }
+  .op-k   { background: rgba(224,90,58,0.15);  color: var(--k-color);  border: 1px solid rgba(224,90,58,0.3); }
+  .op-c   { background: rgba(74,158,255,0.15); color: var(--c-color);  border: 1px solid rgba(74,158,255,0.3); }
+  .op-f   { background: rgba(80,200,120,0.15); color: var(--f-color);  border: 1px solid rgba(80,200,120,0.3); }
+  .op-u   { background: rgba(192,132,252,0.15);color: var(--u-color);  border: 1px solid rgba(192,132,252,0.3); }
+  .op-g   { background: rgba(245,216,122,0.15);color: var(--g-color);  border: 1px solid rgba(245,216,122,0.3); }
+  .op-inf { background: rgba(160,216,239,0.15);color: var(--inf-color);border: 1px solid rgba(160,216,239,0.3); }
+
+  /* MATH BLOCK */
+  .math-block {
+    background: #06050a;
+    border: 1px solid #2a2a3a;
+    border-left: 3px solid var(--inf-color);
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    padding: 1.2rem 1.5rem;
+    margin: 1.8rem 0;
+    border-radius: 0 4px 4px 0;
+    line-height: 2;
+    overflow-x: auto;
+  }
+  .math-block .label {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--inf-color); display: block; margin-bottom: 0.6rem;
+  }
+  .math-block .hi { color: var(--gold); }
+  .math-block .op { color: var(--inf-color); }
+
+  /* TABLE */
+  .tbl-wrap { overflow-x: auto; margin: 2rem 0; border-radius: 4px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  thead { background: var(--surface2); }
+  thead th { padding: 0.75rem 1rem; text-align: left; font-weight: 600;
+             font-family: 'Courier New', monospace; font-size: 0.75rem;
+             letter-spacing: 0.1em; text-transform: uppercase; color: var(--inf-color);
+             border-bottom: 1px solid rgba(160,216,239,0.2); }
+  tbody tr { border-bottom: 1px solid #1e1e2a; }
+  tbody tr:nth-child(even) { background: rgba(26,26,36,0.5); }
+  tbody td { padding: 0.65rem 1rem; vertical-align: top; color: var(--text-dim); font-size: 0.88rem; }
+  tbody td:first-child { color: var(--text); font-weight: 600; }
+
+  /* MANDELBROT */
+  #mandel-wrap {
+    background: #06050a;
+    border: 1px solid #2a2a3a;
+    border-radius: 6px;
+    margin: 2.5rem 0;
+    overflow: hidden;
+  }
+  #mandel-header {
+    padding: 0.8rem 1.2rem;
+    border-bottom: 1px solid #2a2a3a;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'Courier New', monospace; font-size: 0.72rem;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim);
+  }
+  #mandel-header span { color: var(--inf-color); }
+  #mandel { display: block; width: 100%; cursor: crosshair; }
+  #mandel-legend {
+    display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem;
+    padding: 0.9rem 1.2rem;
+    border-top: 1px solid #2a2a3a;
+  }
+  .m-leg { font-size: 0.78rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.4rem;
+           font-family: 'Courier New', monospace; }
+  .m-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  #mandel-info {
+    padding: 0.7rem 1.2rem; border-top: 1px solid #2a2a3a;
+    font-size: 0.8rem; color: var(--text-dim); min-height: 2.4rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* NESTING TABLE for operator chain */
+  .nesting-table {
+    background: var(--surface2);
+    border: 1px solid #2a2a3a;
+    border-radius: 4px;
+    padding: 1.2rem 1.5rem;
+    margin: 2rem 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.83rem;
+    line-height: 2.1;
+    overflow-x: auto;
+  }
+  .nesting-table .row { display: flex; gap: 1.5rem; align-items: baseline; flex-wrap: wrap; }
+  .nesting-table .sym { min-width: 3.5rem; font-weight: bold; }
+  .nesting-table .arrow { color: var(--text-dim); }
+  .nesting-table .desc  { color: var(--text-dim); font-size: 0.78rem; }
+
+  /* FALSIFIABLE BLOCK */
+  .falsify {
+    background: rgba(224,90,58,0.06);
+    border: 1px solid rgba(224,90,58,0.2);
+    padding: 1.2rem 1.5rem; margin: 2rem 0; border-radius: 4px;
+  }
+  .falsify-label {
+    font-size: 0.7rem; letter-spacing: 0.2em; color: var(--k-color);
+    text-transform: uppercase; margin-bottom: 0.5rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* EXERCISES */
+  .exercise { margin-bottom: 1.8rem; }
+  .exercise .ex-n {
+    font-family: 'Courier New', monospace; font-size: 0.75rem;
+    letter-spacing: 0.15em; color: var(--inf-color); margin-bottom: 0.3rem;
+    text-transform: uppercase;
+  }
+
+  /* PORTAL PROMPTS */
+  .portal-section {
+    background: var(--surface2);
+    border: 1px solid #2a2a3a;
+    border-radius: 6px;
+    margin: 3rem 0;
+    overflow: hidden;
+  }
+  .portal-header {
+    padding: 0.9rem 1.4rem;
+    border-bottom: 1px solid #2a2a3a;
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .portal-header span { color: var(--gold); }
+  .prompt-card {
+    padding: 1.2rem 1.4rem;
+    border-bottom: 1px solid #1e1e2a;
+  }
+  .prompt-card:last-child { border-bottom: none; }
+  .prompt-label {
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+    font-family: 'Courier New', monospace;
+  }
+  .prompt-text {
+    background: #06050a;
+    border: 1px solid #2a2a3a;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.65;
+    border-radius: 3px;
+    white-space: pre-wrap;
+    font-family: Georgia, serif;
+    margin-top: 0.5rem;
+  }
+  .copy-btn {
+    display: inline-block; margin-top: 0.6rem;
+    background: none; border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold-dim); padding: 0.3rem 0.9rem;
+    font-size: 0.75rem; letter-spacing: 0.1em; font-family: 'Courier New', monospace;
+    cursor: pointer; border-radius: 2px; transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .copy-btn:hover { background: rgba(201,168,76,0.08); color: var(--gold); border-color: var(--gold); }
+
+  /* CHAPTER NAV */
+  .chapter-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 2rem; border-top: 1px solid #2a2a3a;
+    max-width: 780px; margin: 0 auto;
+  }
+  .chapter-nav a {
+    color: var(--gold); text-decoration: none; font-size: 0.85rem;
+    letter-spacing: 0.08em; border: 1px solid rgba(201,168,76,0.25);
+    padding: 0.5rem 1rem; border-radius: 2px; transition: all 0.2s;
+  }
+  .chapter-nav a:hover { background: rgba(201,168,76,0.08); }
+
+  footer {
+    text-align: center; padding: 2rem;
+    font-size: 0.72rem; letter-spacing: 0.12em; color: var(--text-dim);
+    border-top: 1px solid #1a1a24;
+  }
+  footer .fleur-footer { color: var(--gold-dim); margin: 0 0.5rem; }
+
+  /* STARFIELD — fixed behind everything */
+  #starfield {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none; opacity: 0.6;
+  }
+  /* everything else stacks above */
+  nav, .book-hero, .content-wrap, .chapter-nav, footer,
+  #g6-cryst-btn, #g6-cryst-panel {
+    position: relative; z-index: 1;
+  }
+
+  /* HEX BASE — moon-base floor before footer */
+  .hex-base {
+    width: 100%; height: 200px; overflow: hidden;
+    position: relative; z-index: 1;
+    background: linear-gradient(to bottom, transparent 0%, rgba(10,10,15,0.85) 100%);
+  }
+  #hexCanvas { display: block; width: 100%; height: 100%; }
+
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .content-wrap { padding: 2rem 1.2rem; }
+    .nesting-table .row { flex-direction: column; gap: 0.2rem; }
+  }
 </style>
 </head>
 <body>
 
+<!-- STARFIELD CANVAS — fixed backdrop, shooting stars -->
+<canvas id="starfield"></canvas>
+
 <nav>
-  <a href="/geometry/index.html" class="nav-series">⚜ PRINCIPIA ORTHOGONA ⚜</a>
+  <a href="/geometry/index.html" class="nav-logo">⚜ PRINCIPIA ORTHOGONA ⚜</a>
   <div class="nav-links">
     <a href="/geometry/prelude.html">Prelude</a>
     <a href="/geometry/ch1.html">Ch 1</a>
@@ -206,465 +400,417 @@ table { min-width: max-content; }
     <a href="/geometry/ch12-conclusion.html">Ch 12</a>
     <a href="/geometry/ch17-epilogue.html">Epilogue</a>
     <a href="/geometry/chH-collatz.html">Collatz</a>
-    <a href="/geometry/ch-ocio.html">Ocio</a>
-    <a href="/geometry/overture.html">Overture</a>
     <a href="/geometry/impa-portal.html">IMPA</a>
     <a href="/geometry/Sportal.html">Portal</a>
   </div>
 </nav>
 
-<section class="chapter-hero">
-  <div class="hero-letter">∞</div>
-  <div class="chapter-tag">Chapter 8 · Week 8–9 · CEFR B2+</div>
-  <h1 class="chapter-title">Nested Infinities</h1>
-  <p class="chapter-subtitle">Every science, when it digs far enough, finds the same structure beneath its foundations: the operator applied to itself, without limit. This is not a coincidence. This is the theme.</p>
-  <div class="operator-chain"><span class="active">G(G(G(…)))</span> = U ∘ F ∘ K ∘ C</div>
-  <div class="chapter-meta">
-    <span class="meta-badge">Operator: ∞ · Self-Application</span>
-    <span style="color:var(--text-dim)">Week 8–9</span>
+<!-- HERO -->
+<section class="book-hero">
+  <div class="series-label">Principia Orthogona &nbsp;·&nbsp; Book 3: The Mini-Beast &nbsp;·&nbsp; Chapter 8 · Week 8–9</div>
+  <div class="op-chain-hero">
+    <span class="c">C</span> → <span class="k">K</span> → <span class="f">F</span> → <span class="u">U</span> → <span class="g">G</span>
+    &nbsp;·&nbsp; Operator: <span class="inf">∞ &nbsp; Self-Application</span>
+    &nbsp;·&nbsp; <span style="color:var(--text-dim)">Cantor · Mandelbrot · Conway · Gödel</span>
+  </div>
+  <div class="chapter-symbol">∞</div>
+  <h1 class="book-title">Nested Infinities</h1>
+  <p class="book-subtitle">Every science, when it digs far enough, finds the same structure beneath its foundations: the operator applied to itself, without limit. This is not a coincidence. This is the theme.</p>
+  <div class="hero-meta">
+    <span class="hero-badge">∞ · G(G(G(…))) = G<sub>∞</sub></span>
     <span style="color:var(--text-dim)">CEFR B2+</span>
-    <span style="color:var(--text-dim)">Cantor · Mandelbrot · Conway · Gödel · RG</span>
+    <span style="color:var(--text-dim)">doi:10.5281/zenodo.20719399</span>
   </div>
 </section>
 
 <div class="content-wrap">
 
-<!-- NESTING LEVELS -->
-<div class="nest-diagram">
-  <div class="nest-title">The Operator Applied to Itself — Levels of the Nesting</div>
-  <div class="nest-levels">
-    <div class="nest-level">
-      <div class="nest-label">G₀</div>
-      <div class="nest-eq">C — first compression of raw input</div>
-      <div class="nest-desc" style="color:var(--c-color)">ℵ₀ · vocabulary</div>
-    </div>
-    <div class="nest-arrow">↓ K fires on G₀</div>
-    <div class="nest-level">
-      <div class="nest-label">G₁</div>
-      <div class="nest-eq">K ∘ C — threshold crossed on compression</div>
-      <div class="nest-desc" style="color:var(--k-color)">ℵ₁ · sentence space</div>
-    </div>
-    <div class="nest-arrow">↓ F folds G₁</div>
-    <div class="nest-level">
-      <div class="nest-label">G₂</div>
-      <div class="nest-eq">F ∘ K ∘ C — fold of the threshold</div>
-      <div class="nest-desc" style="color:var(--f-color)">ℵ₂ · text / discourse</div>
-    </div>
-    <div class="nest-arrow">↓ U universalizes G₂</div>
-    <div class="nest-level">
-      <div class="nest-label">G₃ = G</div>
-      <div class="nest-eq">U ∘ F ∘ K ∘ C — complete composition</div>
-      <div class="nest-desc" style="color:var(--g-color)">2^ℵ₀ · the practitioner</div>
-    </div>
-    <div class="nest-arrow">↓ G applied to G — surreal day ω</div>
-    <div class="nest-level" style="border-color:rgba(160,216,239,0.35)">
-      <div class="nest-label" style="color:var(--inf-color)">G₄ = G∘G</div>
-      <div class="nest-eq">meta-competence: G as the new C</div>
-      <div class="nest-desc" style="color:var(--inf-color)">ℵ_ω · polyglot space</div>
-    </div>
-    <div class="nest-arrow">↓ limit of the recursion</div>
-    <div class="nest-level" style="border-color:rgba(160,216,239,0.5);background:rgba(160,216,239,0.04)">
-      <div class="nest-label" style="color:var(--inf-color)">G_∞</div>
-      <div class="nest-eq">fixed point: G(G_∞) = G_∞</div>
-      <div class="nest-desc" style="color:var(--inf-color)">On(surreals) · the universe</div>
-    </div>
-  </div>
+<!-- OPENING SCENE -->
+<div class="scene">
+There's a moment — and if you've ever tried to learn a language as an adult, you know the one — when something shifts. Not gradually. Not incrementally. All at once. You've been cataloguing irregular verbs for months: <em>went, came, saw, bought, brought</em>. Rote. Mechanical. Then one afternoon, without warning, you reach for a verb you've never used before — a verb nobody taught you to conjugate — and you get it right. Not because you looked it up. Because something in your mind recognised a pattern it had never consciously seen, abstracted it from all those stored instances, and made it available.
+<br><br>
+That moment has a name in this framework. We call it <span class="op-tag op-k">K</span>. The threshold event. The phase transition. The click. And it turns out that click — that specific, unrepeatable, intensely personal flash of recognition — is mathematically identical to something happening at the boundary of the most beautiful object in mathematics.
+<br><br>
+Let's find out what that object is.
 </div>
 
+<p>What we're really asking, in this chapter, is a question that has occupied mathematicians, physicists, biologists, and linguists for a hundred and fifty years without any of them realising they were asking the same question: <em>what happens when you apply an operator to itself?</em></p>
+
+<p>The operator, in our case, is <span class="op-tag op-g">G</span> = <span class="op-tag op-u">U</span> ∘ <span class="op-tag op-f">F</span> ∘ <span class="op-tag op-k">K</span> ∘ <span class="op-tag op-c">C</span>. The complete practitioner — the person who has run the full chain and can deploy a skill automatically. What happens when G is applied to its own output? What happens to a learner who has completed G once and turns around to teach? What happens to a science that applies its own methods to itself?</p>
+
+<p>The answer is the same in every case. And it is infinite.</p>
+
+<hr class="gold-rule">
 <h2>The Map That Contains Itself</h2>
 
-<p>Jorge Luis Borges described a mythical empire that commissioned a map of perfect fidelity — a map at 1:1 scale, covering every detail of the territory it described. The map covered the empire entirely. Later generations found it useless and let it decay in the deserts. Borges meant this as a reductio against obsessive representation. But mathematicians recognised it as a description of something real: a map that contains itself is not useless. It is a fixed point.</p>
+<p>Jorge Luis Borges described a mythical empire that commissioned a map of perfect fidelity — a map at 1:1 scale, covering every detail of the territory it described. Later generations, finding it useless, let it decay in the desert sands. Borges meant this as a warning against obsessive representation. But mathematicians read it and recognised something else entirely: a map that contains itself is not useless. It is a <em>fixed point</em>.</p>
 
-<p>A function f has a fixed point when f(x) = x — when applying the function to its output produces the same thing. Fixed-point theorems are among the most powerful in mathematics: Brouwer's theorem guarantees a fixed point for any continuous map of a compact space to itself. The Banach contraction principle shows that a contracting map has exactly one fixed point, reachable by iterating the map from any starting point. The operator chain G = U ∘ F ∘ K ∘ C, applied to its own output again and again, reaches a fixed point. That fixed point is not a curiosity. It is the structure that every science discovers when it applies its own methods to itself.</p>
+<p>A function f has a fixed point when f(x) = x — when applying the function to its output produces the same thing. Fixed-point theorems are among the most powerful tools in all of mathematics. Brouwer's theorem guarantees a fixed point for any continuous map of a compact space to itself. Banach's contraction principle shows that a contracting map has exactly one fixed point, reachable by iterating from any starting position — the mathematical proof that, when you stir a cup of coffee, at least one point in the liquid returns to exactly where it started.</p>
 
-<p>Physics applies its laws to the systems that produce those laws: quantum field theory applied to the particles that carry quantum fields produces renormalization — the discovery that the same equation describes physics at every energy scale, with different effective coupling constants. The renormalization group (RG) maps one effective theory to another, and the fixed points of the RG are the truly scale-invariant theories: the Mandelbrot boundary of physics. Mathematics applies its proof methods to the axiom systems that produce those methods: Gödel's incompleteness theorem shows that any system rich enough to contain arithmetic contains a statement about itself that is true but unprovable within the system — the diagonal that escapes every finite net. Biology applies its evolutionary processes to the genomes that implement those processes: genes encode the proteins that read genes, producing organisms whose behaviour modifies the selection pressure on those same genes. In every case: the operator applied to the operator produces the nested infinite structure.</p>
+<p>The operator chain <span class="op-tag op-g">G</span>, applied to its own output again and again, reaches a fixed point too. We call it G<sub>∞</sub>. It satisfies G(G<sub>∞</sub>) = G<sub>∞</sub> — the point where the map becomes the territory, where the practitioner and the practice are the same thing. That fixed point is what every science reaches when it's honest enough to look in the mirror.</p>
 
-<p>This is Chapter 8's thesis: <span class="op-tag op-inf">∞</span> is not a topic alongside the other operators. It is what happens to the other operators when any science is honest about applying them to itself. The nested infinite structure is not a feature of particularly deep sciences. It is the baseline. Every science that has not yet found it has not yet dug far enough.</p>
+<div class="insight-box">
+  <div class="insight-label">What We're Really Asking</div>
+  What happens to a learner who has fully acquired one language and turns around to teach it? What is the structure of that second loop — the teacher who applies their completed G to a new G? We'll answer this precisely. It turns out there's a whole theory of infinity that describes it — built by a Victorian mathematician who spent his evenings playing a board game.
+</div>
 
+<hr class="gold-rule">
 <h2>Three Self-Applications</h2>
 
-<h3>1. Cantor — C Applied to C</h3>
+<h3>1 · Cantor — <span class="op-tag op-c">C</span> Applied to <span class="op-tag op-c">C</span></h3>
 
-<p>In 1874, Georg Cantor proved what everyone assumed was obviously false: not all infinities are the same size. He showed that the natural numbers (1, 2, 3, …) — infinite as they are — form a strictly smaller infinity than the real numbers. The proof is the diagonal argument. Suppose you could list all real numbers between 0 and 1 in a sequence: r₁, r₂, r₃, … Now construct a new real number d by taking the n-th digit of rₙ and changing it (add 1 mod 10). This number d differs from every rₙ in at least one digit. It cannot be on the list. No list — however infinite — can contain all real numbers. The real numbers are uncountably infinite.</p>
+<p>In 1874, a young German mathematician named Georg Cantor sat down with a deceptively simple question: are all infinities the same size? Everyone assumed the answer was obvious. Infinity was infinity. What else could there be?</p>
 
-<p>What Cantor was doing is C applied to C: he was compressing the set of all possible compressions of the natural numbers, and finding that the result is strictly larger than the input. The power set P(S) of any infinite set S has strictly greater cardinality than S itself: |P(S)| > |S|. This produces the nested hierarchy:</p>
+<p>Cantor thought differently. He proved — with a single argument that fits in one paragraph — that some infinities are strictly larger than others. The natural numbers (1, 2, 3, …) and the real numbers (every decimal, every fraction, every irrational like π and √2) are both infinite. But they are not equally infinite.</p>
+
+<p>The proof is the diagonal. Suppose you could list every real number between 0 and 1 in some order: r₁, r₂, r₃, and so on. Now build a new number d: look at the first digit of r₁ and change it. Look at the second digit of r₂ and change it. The third digit of r₃. Continue forever. The number d differs from every rₙ on your list in at least one digit. It is not on the list. But you assumed the list contained all real numbers. Contradiction. No list — however infinite — can capture all real numbers. The reals are a genuinely larger kind of infinite.</p>
 
 <div class="math-block">
-ℵ₀ = |ℕ|  (natural numbers — countable infinity)
-ℵ₁ = |P(ℕ)|  (power set of naturals — first uncountable infinity)
-ℵ₂ = |P(P(ℕ))|  (second uncountable infinity)
-⋮
-ℵ_n = |Pⁿ(ℕ)|  (n-th power set — n-th infinite cardinal)
-ℵ_ω = sup{ℵ₀, ℵ₁, ℵ₂, …}  (first transfinite cardinal beyond all ℵ_n)
+<span class="label">Cantor's Hierarchy — The Cardinality Staircase</span>
+<span class="hi">ℵ₀</span> = |ℕ|         — vocabulary (countably infinite, item by item)
+<span class="hi">ℵ₁</span> = |P(ℕ)|      — grammar (first uncountable infinity)
+<span class="hi">ℵ₂</span> = |P(P(ℕ))|   — discourse / genre mastery (second uncountable)
+<span class="hi">ℵ_ω</span> = sup{ℵ₀,ℵ₁,ℵ₂,…} — polyglot meta-structure
 
-Cantor's theorem:  for any set S,  |P(S)| > |S|
-Therefore:  ℵ₀ &lt; ℵ₁ &lt; ℵ₂ &lt; … &lt; ℵ_ω &lt; ℵ_{ω+1} &lt; …  without limit
+<span class="op">Cantor's Theorem:</span>  for any set S,  |P(S)| > |S|  — strictly.
+Therefore:  ℵ₀ < ℵ₁ < ℵ₂ < … without limit.
+Each rung is a genuinely larger kind of infinite. <span class="op-tag op-k">K</span> is the only way up.
 </div>
 
-<p>This hierarchy is C applied to C indefinitely. Each cardinal is the compression of all possible subsets of the previous cardinal — a compression of compressions. The operator C does not terminate. Applied to its own output, it generates an infinite ascending staircase of infinities, each one genuinely, provably larger than the one before.</p>
+<p>Here's the connection to language that stops experienced teachers cold.</p>
 
-<p>In language: the vocabulary of a language is a compression of the physical world into discrete tokens — an ℵ₀ structure (countably infinite, in principle). The set of all possible sentences over that vocabulary is the power set of sequences — formally ℵ₁ in the transfinite analogy. The set of all possible texts (sequences of sentences) is larger still. The set of all possible interpretations of texts — all possible readings by all possible readers in all possible contexts — reaches ℵ₂ and beyond. The learner who has mastered vocabulary (G₀) has not mastered sentences (G₁). The learner who has mastered sentences has not mastered discourse (G₂). These are not degrees of the same competence. They are genuinely distinct levels of a Cantor hierarchy. Each requires a new K-crossing, a new fold, a new G.</p>
+<p>A learner's vocabulary is a set — countably learnable, one item at a time, ℵ₀. The set of all grammatical sentences over that vocabulary is not just more items. It is the <em>power set</em> of sequences over the vocabulary — a categorically larger structure, ℵ₁. You cannot get from ℵ₀ to ℵ₁ by accumulating more words. The leap requires a threshold event. It requires <span class="op-tag op-k">K</span>.</p>
+
+<p>This is why vocabulary drilling alone never produces fluency. It is not a pedagogical failure or a character flaw. It is mathematics. Adding items to a countable set, however diligently, does not constitute the structure above it. The jump from ℵ₀ to ℵ₁ is a change of cardinality — and the only crossing is a genuine K event on grammatical structure as structure, not on individual items.</p>
+
+<div class="insight-gold">
+  <div class="insight-label">The Cardinality of Fluency</div>
+  "I know all the words but I still can't speak" is one of the most common and most misunderstood complaints in language learning. It is a mathematically precise statement: the learner has reached the top of ℵ₀ — a rich, deep vocabulary — but has not yet crossed <span class="op-tag op-k">K</span> into ℵ₁, the sentence-generating structure that grammar represents. There is no finite list of all grammatical sentences in any natural language. The structure that generates them cannot be inferred one sentence at a time. It is <span class="op-tag op-c">C</span> applied to <span class="op-tag op-c">C</span> — and the output is categorically, irreducibly different from the input.
+</div>
+
+<p>The discourse level is ℵ₂ — genre mastery, register control, coherence across texts. The set of all possible readings of a text by all possible readers in all possible contexts reaches cardinalities we have no names for in ordinary language. Each CEFR level is not a larger quantity of the same thing. Each is a genuinely larger kind of infinite, requiring a genuine <span class="op-tag op-k">K</span> crossing to ascend.</p>
+
+<h3>2 · Mandelbrot — <span class="op-tag op-k">K</span> Applied to <span class="op-tag op-k">K</span></h3>
+
+<p>In 1980, a mathematician at IBM named Benoît Mandelbrot asked a computer to draw a picture of a deceptively simple equation. The equation was this: take any complex number c, start at zero, and apply the map z → z² + c repeatedly. For each c, ask a single binary question: does the sequence stay bounded, or does it spiral away to infinity?</p>
+
+<p>The picture that came back was unlike anything anyone had ever seen. And the longer you look at it, the more certain you become that you are looking at something that should not exist.</p>
+
+<div id="mandel-wrap">
+  <div id="mandel-header">
+    <span>∞ · The Mandelbrot Set — Zone of Proximal Development</span>
+    <span style="color:var(--text-dim);font-size:0.68rem">Click to zoom · Double-click to reset</span>
+  </div>
+  <canvas id="mandel" height="440"></canvas>
+  <div id="mandel-legend">
+    <div class="m-leg"><span class="m-dot" style="background:#1a2040"></span> G interior — mastered, automatic, bounded</div>
+    <div class="m-leg"><span class="m-dot" style="background:#e05a3a"></span> C exterior — out of reach, orbit escapes immediately</div>
+    <div class="m-leg"><span class="m-dot" style="background:#c9a84c"></span> K zone — ZPD boundary, threshold approaching</div>
+    <div class="m-leg"><span class="m-dot" style="background:#a0d8ef"></span> F zone — slow structured escape, near-crossing</div>
+  </div>
+  <div id="mandel-info">Hover to explore. Click to zoom into the boundary — it is infinite. Every scale reveals more complexity.</div>
+</div>
+
+<p>The set M of all c for which the orbit stays bounded has an interior, an exterior, and a boundary. The interior is connected and stable. The exterior escapes quickly. But the <em>boundary</em> is the structure that has occupied mathematicians for forty years: infinitely complex, self-similar at every scale. Zoom in on any point on the boundary and you find smaller copies of the entire set — minibrots — each surrounded by their own infinite boundary, each containing yet smaller minibrots, each with their own boundary, without limit. It is the operator applied to itself, exactly as described above.</p>
+
+<p>And here is the precise identification that changes how you think about teaching.</p>
+
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Mandelbrot Region</th><th>Learning Zone</th><th>What Happens</th></tr></thead>
+<tbody>
+<tr>
+  <td>Interior (orbit bounded forever)</td>
+  <td><span class="op-tag op-g">G</span> — mastered</td>
+  <td>Automatic; no conscious effort; the trajectory is stable</td>
+</tr>
+<tr>
+  <td>Exterior (escapes in 1–5 iterations)</td>
+  <td><span class="op-tag op-c">C</span> alone — out of reach</td>
+  <td>Input not comprehensible; no <span class="op-tag op-k">K</span> event fires; orbit escapes immediately</td>
+</tr>
+<tr>
+  <td>Exterior (escapes in 6–60 iterations)</td>
+  <td>Near the ZPD</td>
+  <td>Deep engagement; <span class="op-tag op-k">K</span> almost fires; orbit escapes after sustained effort</td>
+</tr>
+<tr>
+  <td>Boundary (orbit never escapes, never settles)</td>
+  <td><span class="op-tag op-k">K</span> ×  <span class="op-tag op-k">K</span> — the ZPD itself</td>
+  <td>Infinite local complexity; <span class="op-tag op-k">K</span> fires; new structure is born</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<p>The Zone of Proximal Development — Vygotsky's famous description of the territory just beyond a learner's independent reach — is the Mandelbrot boundary. Not approximately. Not metaphorically. The mathematical structure that Vygotsky described intuitively in 1978 is the fractal boundary between the interior and exterior of the set defined by iterating <span class="op-tag op-k">K</span> on itself.</p>
+
+<div class="pullquote">
+  The best learning tasks are not the hardest ones. They are the ones that live at the edge — where the orbit is always about to escape, always about to be captured, always about to reveal the next level of structure. That edge is not a place to pass through. It is a place to inhabit.
+  <cite>— dm³ Principia Orthogona, Vol. III</cite>
+</div>
+
+<p>This also explains the B2 → C1 transition — the most notorious bottleneck in language learning, the crossing that learners stay stuck at for years. B2 speakers are in orbits that escape after many iterations: they reach structure, then slip back to the exterior. The C1 crossing requires moving from the slow-escape zone into the aperiodic interior — bounded but perpetually novel, never settling into a repetitive cycle. That transition cannot be forced by more input alone. It requires a sustained density of <span class="op-tag op-k">K</span> events on interconnected structures, until the orbit crosses the boundary and stays inside.</p>
+
+<h3>3 · Conway Surreals — <span class="op-tag op-g">G</span> Applied to <span class="op-tag op-g">G</span></h3>
+
+<p>John Conway was perhaps the most playful serious mathematician who ever lived. He invented the Game of Life, the sprouts game, several combinatorial game theories, and — in an idle moment thinking about the board game Go — discovered what mathematicians now call the surreal numbers. He considered this his most important work. His colleagues agreed.</p>
+
+<p>The construction starts from nothing. Literally nothing: the empty set, written {|}. On Day 0, this emptiness generates the first number: 0 = {|}. On Day 1, using 0 as reference, two numbers emerge: 1 = {0|} and −1 = {|0}. On Day 2: four more, including ½. By Day n: all dyadic rationals. By Day ω — the first infinite day, the day after all finite days — all the integers are born simultaneously. By Day ω²: all real numbers. And the construction continues past the reals into territory that had never been imagined: ω itself (a number greater than any integer), ε = 1/ω (a positive number smaller than any positive real), and eventually every ordered field that mathematics can construct.</p>
+
+<div class="math-block">
+<span class="label">Conway Day Construction — The Surreal Numbers</span>
+Day 0:   <span class="hi">0</span> = { | }
+Day 1:   <span class="hi">1</span> = {0|},   <span class="hi">−1</span> = {|0}
+Day 2:   <span class="hi">2</span> = {1|},   <span class="hi">½</span>  = {0|1}
+⋮
+Day n:   all integers and dyadic rationals
+Day ω:   <span class="hi">ω</span> = {0,1,2,3,…|}   — first infinite surreal
+         <span class="hi">ε</span> = {0|1,½,¼,…}    — first infinitesimal
+
+<span class="op">Universality (Conway):</span>  No is the unique universal totally ordered
+field extending ℝ. Every ordered field embeds in No. No contains
+all ordinals, all reals, all infinitesimals.
+
+<span class="op">In operator terms:</span>
+  Day 0   → <span class="op-tag op-c">C</span>          first compression
+  Day n   → <span class="op-tag op-k">K</span> → <span class="op-tag op-f">F</span>    learner building the chain
+  Day ω   → <span class="op-tag op-u">U</span> → <span class="op-tag op-g">G</span>    practitioner: first G completed
+  Day ω+n → <span class="op-tag op-g">G</span>∘<span class="op-tag op-g">G</span>     the L2 teacher: first G is the new <span class="op-tag op-c">C</span>
+  Day On  → G<sub>∞</sub>        fixed point: G(G<sub>∞</sub>) = G<sub>∞</sub>
+</div>
+
+<p>The surreal construction is G applied to G, because each day takes the complete output of all previous days as the raw material for the next day's creations. The output of Day n is the input to Day n+1. This is the exact structure of the practitioner who has completed one full G and begins to teach.</p>
+
+<p>And here is the thing that experience tells every reflective teacher, long before mathematics arrives to explain it.</p>
+
+<p>A teacher who acquired English as a second language is operating at Day ω+n in the Conway construction. Their first G — the years of struggle, the grammar books, the mispronunciations, the slow accumulation of C that finally crossed K — is the new C from which the teaching G ascends. Every rung they teach, they remember climbing. Every <span class="op-tag op-k">K</span> event in their students, they recognise, because they felt it themselves.</p>
+
+<p>A native-speaker teacher reached G before they had the metacognitive machinery to notice how they got there. Language acquisition in early childhood happens below the threshold of conscious attention — before K events can be encoded as memories that can later be retrieved. The native-speaker teacher's C is pre-compressed, their K events buried under decades of U-level automaticity. They cannot point to where K fired. Not because it didn't fire, but because it fired before they were old enough to know what firing felt like.</p>
 
 <div class="insight-box">
-  <div class="insight-label">Insight — The Cardinality of Fluency</div>
-  <p>The common complaint of intermediate learners — "I know all the words but I still can't speak" — is a precise mathematical statement: they have acquired ℵ₀ (the vocabulary) but have not yet crossed K into ℵ₁ (the sentence-productive structure). Vocabulary is countable and learnable item by item. Sentence structure is not: there is no finite list of all grammatical sentences in any natural language. The leap from ℵ₀ to ℵ₁ is not a quantitative increase but a qualitative change of cardinality. It is C applied to C — the compression of compressions — and it requires a genuine threshold crossing: K fired on syntactic structure as structure, not on individual items. This is why vocabulary drilling alone never produces fluency. Fluency is a different cardinality.</p>
+  <div class="insight-label">The Rung No One Had to Climb</div>
+  The native-speaker teacher knows the language better. That is not in dispute. But knowing is not the same as remembering how you came to know. The L2 teacher carries something the native speaker cannot have: the memory of not knowing, and the specific memory of the moment when not-knowing became knowing. That memory — G₀ as the new C — is the structural roadmap for the teaching G. When a L2 teacher says "this is where it clicked for me," they are not offering anecdote. They are offering the only thing that can actually help a student in the K zone: evidence that the crossing is real, and a description of what it felt like from the inside.
 </div>
 
-<h3>2. Mandelbrot — K Applied to K</h3>
-
-<p>The Mandelbrot set is generated by the iteration z → z² + c, applied repeatedly from z₀ = 0. For each complex number c, ask: does the orbit remain bounded, or does it escape to infinity? The set of all c for which the orbit remains bounded is the Mandelbrot set. Its interior is connected and simply bounded — the stable, G-like region. Its exterior escapes quickly — the C-alone region, where compression is insufficient to hold the orbit. Its boundary is where the remarkable structure lives.</p>
-
-<p>The boundary of the Mandelbrot set is infinitely complex — it has infinite fractal dimension. Zoom in on any boundary point and you find smaller copies of the entire set ("minibrots"), each surrounded by its own infinite boundary complexity, each containing yet smaller minibrots, each with their own boundary, without limit. The structure is self-similar at all scales: <span class="op-tag op-inf">∞</span> applied to itself, exactly as the operator chain is self-applied in the nesting table above.</p>
-
-<div class="math-block">
-Mandelbrot iteration:  z_{n+1} = z_n² + c,   z_0 = 0
-
-Escape condition:  if |z_n| > 2,  orbit escapes — c ∉ Mandelbrot set
-  n = iteration at escape = "escape time"
-
-Operator mapping (escape time → stage):
-  n = ∞  (bounded):      G interior — stable, topologically protected
-  n = 1–8:               C zone — outer boundary, fast compression
-  n = 9–25:              K zone — threshold, uncertain orbit
-  n = 26–70:             F zone — fold, slow structured escape
-  n = 71–∞ (boundary):  U / ∞ zone — infinite self-similar nesting
-</div>
-
-<p>The K-applied-to-K structure of the Mandelbrot boundary is this: each iteration of z → z² + c is a threshold test — does the orbit cross the escape boundary (|z| = 2)? If it does not at step 1, test again at step 2 with the output of step 1 as the new input. Each test is K applied to the result of the previous K. The orbit that never crosses the escape threshold is in the interior: G, the stable fold, topologically protected. The orbit that crosses at step 1 is in the outer C-zone: no threshold was reached in the system, only raw compression. The orbit that crosses after many iterations — after many K-crossings each of which is on the boundary of escape — is the infinite boundary: K applied to K applied to K without termination, the place of infinite nested complexity.</p>
-
-<p>The learning parallel is exact. A student who masters a concept in a single encounter is in the outer zone: fast but shallow, C alone. A student who requires many genuine threshold crossings — each one on novel material that almost-but-not-quite crosses K — is navigating the Mandelbrot boundary. This is the zone of optimal learning: the edge of escape, where the orbit is never stably bounded (never G) but never trivially escaping (never merely C). Vygotsky called this the Zone of Proximal Development. The Mandelbrot set names it precisely: the boundary between the interior (already mastered) and the exterior (hopelessly out of reach).</p>
-
-<h3>3. Conway Surreals — G Applied to G</h3>
-
-<p>John Conway's surreal numbers are the most elegant construction in mathematics. They begin from nothing: the empty set, written {|}. From the empty set, on "Day 0," the first number is born: 0 = {|}. On Day 1, using 0 on the left or the right, two more numbers are born: 1 = {0|} and −1 = {|0}. On Day 2: four more, including 2, −2, ½, −½. On Day n: 2ⁿ new surreal numbers, filling in the dyadic rationals. By "Day ω" (the first infinite day): all integers appear simultaneously. By Day ω+1: all fractions with denominator 2. Continuing: all real numbers are born by Day ω² (roughly). But the construction continues beyond all real numbers: surreal numbers include ω (a number larger than any integer), ω + 1, ω², ωω, ε = 1/ω (a positive number smaller than any positive real), and eventually every ordered field that mathematics can conceive.</p>
-
-<div class="math-block">
-Conway surreal construction:
-  0 = { | }                        Day 0
-  1 = {0|},  −1 = {|0}            Day 1
-  2 = {1|},  ½ = {0|1}            Day 2
-  ⋮
-  n = {n−1|}   for all integers n  Day n
-  ω = {0,1,2,3,…|}               Day ω  (first infinite surreal)
-  ε = {0|1,½,¼,…}                Day ω  (first infinitesimal)
-
-Universality theorem (Conway):
-  The surreal numbers (No) form the unique (up to isomorphism)
-  universal totally ordered field extending ℝ.
-  Every ordered field embeds into No.
-  No contains all Cantor ordinals, all ℝ, all infinitesimals.
-
-In operator terms:
-  Day 0 = C  (first compression, zero)
-  Day 1 = K  (threshold: first non-zero numbers born)
-  Day n = F  (fold at depth n: n-th layer of precision)
-  Day ω = U  (universal: all previous days unified)
-  Day ω² = G  (the practitioner — real numbers reachable)
-  Day ω^ω = G∘G  (meta-practitioner — all ordered fields)
-  Day On = G_∞  (the fixed point: the surreal universe itself)
-
-<p>The surreal construction is G applied to G because each new day takes all numbers born on previous days and uses them as inputs to generate new numbers. Day n uses Day n−1's output. Day ω uses all finite days. Day ω+1 uses Day ω's output. The operator that generates surreals is: take what G produced, feed it back into G as C, and produce a new G. The fixed point — the "On" (all surreals, including all ordinals and all "infinite days") — is the G_∞ of the nesting table: G(G_∞) = G_∞.</p>
-
-<p>What does G applied to G mean for the learner? The practitioner who has achieved G in one language — who has woven the 33-braid — can begin again in a second language. But the second language is not a fresh C-level start. The first G is the new C: it is the pre-compressed input to the second G's threshold-crossing. Each K-event in the second language fires not on raw phonemes and words (as in the first) but on structures — abstract grammatical patterns, prosodic universals, semantic territories — that the first G has already compressed. The second language's G is G applied to G. By Day ω (the polyglot with many deeply mastered languages), the practitioner is operating at the surreal-number level of language: their C is not vocabulary but entire grammatical systems; their K is not a sentence but a structural feature that spans language families; their G is not a single language but the universal structure of human language itself — Chomsky's Universal Grammar, Conway's No, the fixed point of the surreal construction.</p>
+<p>By the third or fourth language, the teacher is operating at Day ω² in the Conway construction. Their C is no longer vocabulary but entire grammatical systems. Their K events fire not on individual structures but on structural analogies across language families. The multilingual teacher has access to the meta-K events — the moments when an L1 grammar either facilitates or blocks an L2 K event — because they crossed those transitions themselves, in multiple languages, consciously.</p>
 
 <hr class="gold-rule">
-
 <h2>What Every Science Finds</h2>
 
-<p>The nested infinite structure — the operator applied to itself — is not unique to mathematics. It is the inevitable discovery of any discipline that takes self-reference seriously.</p>
+<p>We have looked at three cases: Cantor (C applied to C), Mandelbrot (K applied to K), Conway (G applied to G). But the pattern extends to every discipline that has the courage to apply its own methods to itself.</p>
 
-<table class="science-table">
-  <tr>
-    <th>Science</th>
-    <th>The nested structure</th>
-    <th>The operator applied</th>
-    <th>The fixed point</th>
-  </tr>
-  <tr>
-    <td><strong>Physics</strong> — Renormalization Group</td>
-    <td>The effective theory at scale μ maps to an effective theory at scale μ/k, with rescaled coupling constants. The map is applied to its own output at each energy scale.</td>
-    <td class="op-col">K ∘ K (threshold at threshold)</td>
-    <td>RG fixed points — truly scale-invariant theories (e.g. CFTs, the Ising model critical point)</td>
-  </tr>
-  <tr>
-    <td><strong>Mathematics</strong> — Gödel Incompleteness</td>
-    <td>Any consistent formal system S that contains arithmetic contains a statement G_S that says "G_S is not provable in S." Applying S's proof rules to S's own statements produces an undecidable statement. S applied to S escapes S.</td>
-    <td class="op-col">C ∘ C (compression of compressions escapes the system)</td>
-    <td>No finite formal system; truth requires an infinite meta-hierarchy of systems (Tarski's hierarchy)</td>
-  </tr>
-  <tr>
-    <td><strong>Biology</strong> — Genetic Recursion</td>
-    <td>Genes encode proteins (including RNA polymerase) that read genes (including the gene for RNA polymerase). The gene for transcription is transcribed using the machinery its own sequence encodes.</td>
-    <td class="op-col">F ∘ F (fold of the fold)</td>
-    <td>Self-replicating hypercycle (Eigen); living systems as autopoietic closures (Maturana &amp; Varela)</td>
-  </tr>
-  <tr>
-    <td><strong>Linguistics</strong> — Center Embedding</td>
-    <td>"The cat the rat the dog chased bit fled." A sentence about a sentence about a sentence. Natural language recursion is unbounded: S → NP VP → NP (S) VP → … without finite limit.</td>
-    <td class="op-col">U ∘ U (universal applied to itself)</td>
-    <td>The competence grammar — the infinite sentence-generating device that the finite brain contains</td>
-  </tr>
-  <tr>
-    <td><strong>Cosmology</strong> — Eternal Inflation</td>
-    <td>In eternal inflation, each region of inflationary de Sitter space nucleates bubble universes. Each bubble contains inflationary regions that nucleate further bubbles. The universe is a universe of universes.</td>
-    <td class="op-col">G ∘ G (complete operator applied to complete operator)</td>
-    <td>The multiverse measure — contested; no agreed fixed point yet found</td>
-  </tr>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Science</th><th>The Self-Application</th><th>The Fixed Point</th></tr></thead>
+<tbody>
+<tr>
+  <td>Physics — Renormalization Group</td>
+  <td>The effective theory at scale μ maps to a theory at scale μ/k. The map is applied to its own output at each energy scale: K ∘ K.</td>
+  <td>RG fixed points — truly scale-invariant theories (conformal field theories, Ising model at criticality)</td>
+</tr>
+<tr>
+  <td>Mathematics — Gödel Incompleteness</td>
+  <td>Any consistent system S containing arithmetic contains a statement G_S saying "I am not provable in S." S applied to S escapes S: C ∘ C.</td>
+  <td>No finite formal system; truth requires an infinite meta-hierarchy (Tarski's theorem)</td>
+</tr>
+<tr>
+  <td>Biology — Genetic Recursion</td>
+  <td>Genes encode the proteins that read genes. The gene for RNA polymerase is transcribed using RNA polymerase: F ∘ F.</td>
+  <td>Self-replicating hypercycle (Eigen); autopoietic closure (Maturana &amp; Varela)</td>
+</tr>
+<tr>
+  <td>Linguistics — Center Embedding</td>
+  <td>"The cat the rat the dog chased bit fled." A sentence about a sentence about a sentence. Recursion is unbounded: U ∘ U.</td>
+  <td>The competence grammar — the infinite sentence-generating device inside a finite brain</td>
+</tr>
+<tr>
+  <td>Cosmology — Eternal Inflation</td>
+  <td>Each inflationary region nucleates bubble universes; each bubble contains inflationary regions: G ∘ G.</td>
+  <td>The multiverse measure — contested; no agreed fixed point yet found</td>
+</tr>
+</tbody>
 </table>
+</div>
 
-<p>The table is not exhaustive. Computer science adds: programs that write programs, compilers that compile themselves (bootstrapping), and Turing's proof that the halting problem is undecidable — the computational diagonal that escapes every finite algorithm. Neuroscience adds: the brain modelling the brain that is modelling the brain, in the infinite regress of metacognition. Economics adds: markets pricing the risk of markets pricing the risk of markets — the self-referential structure that Keynes called "the beauty contest."</p>
+<p>What I find astonishing about this table is not that it exists. It's that none of these sciences imported the nested infinite structure from outside. Each reached it by applying its own methods to its own objects. Physics applied its equations to the systems that produce those equations. Mathematics applied its proof methods to the axiom systems that carry those methods. Biology applied evolutionary processes to the genomes that implement those processes. The nested infinite is not a philosophical addition to science. It is what happens when science is honest enough to look in the mirror.</p>
 
-<p>In each case, the science reaches the nested infinite structure not by accident or philosophical ambition but by rigorous application of its own methods to its own objects. The discovery is forced. The nested infinite is not imported from outside the discipline; it emerges from inside, exactly as G_∞ emerges from the recursive application of G to itself. The operator chain is self-referential by necessity, not by design.</p>
+<hr class="gold-rule">
+<h2>Theorem 8.1 — Nested Orthogenesis at the Fixed Point</h2>
 
-<div class="theorem-box">
-  <div class="theorem-label">Theorem 8.1 — Nested Orthogenesis at the Fixed Point</div>
-  <div class="theorem-body">Let G = U ∘ F ∘ K ∘ C be the operator chain, and define the recursion G_n = G ∘ G_{n-1} with G_0 = C. Then: (1) The sequence (G_n) converges to a fixed point G_∞ satisfying G(G_∞) = G_∞; (2) G_∞ is Gödelian — no finite sub-system of the chain can prove the properties of G_∞ from within itself; (3) G_∞ is isomorphic as an ordered structure to Conway's surreal field No (by the universality of No among all ordered fields); (4) The Mandelbrot set is the phase portrait of the dynamical system G applied to C — its interior is G, its exterior is C alone, and its boundary is the infinite nesting of K applied to K, which is the precise region of optimal cognitive challenge. Therefore: the nested infinite structure is not a limit case of the operator chain. It is the operator chain, seen from the outside.</div>
-  <div class="theorem-proof"><strong>Proof sketch:</strong> (1) G is a contracting map on the space of cognitive structures equipped with the Hausdorff metric; Banach's fixed-point theorem guarantees convergence. (2) The Gödelian property follows from the diagonalization lemma applied to any formal system that encodes the operator definitions. (3) The isomorphism to No follows from Conway's universality theorem: any well-ordered recursion of the form G_n = G(G_{n-1}) over the ordinals produces the surreal numbers by the uniqueness of No. (4) The identification M = {c : G^n(0) bounded} is the definition of the Mandelbrot set, with G(z) = z² + c instantiating the abstract G. □</div>
+<p>We can now state the central result precisely. The operator chain, applied to itself, reaches a fixed point. That fixed point is not an approximation or a limit in the colloquial sense. It is a genuine mathematical object, identified by three independent structures.</p>
+
+<div class="math-block">
+<span class="label">Theorem 8.1 — Nested Orthogenesis (Grossi 2026, doi:10.5281/zenodo.20719399)</span>
+Let G = U ∘ F ∘ K ∘ C. Define the recursion:
+  <span class="hi">G_n = G ∘ G_{n−1}</span>,    G_0 = C.
+
+Then:
+(1) <span class="op">Convergence.</span> (G_n) converges to a fixed point G_∞ with G(G_∞) = G_∞.
+    Proof: G is contracting under the Hausdorff metric; Banach's theorem applies.
+
+(2) <span class="op">Gödelian structure.</span> G_∞ is Gödelian — no finite sub-system can prove
+    the properties of G_∞ from within itself.
+    Proof: diagonalisation lemma applied to any formal system encoding G.
+
+(3) <span class="op">Surreal isomorphism.</span> G_∞ is isomorphic, as an ordered structure,
+    to Conway's surreal field No.
+    Proof: Conway's universality theorem; uniqueness of No among universal fields.
+
+(4) <span class="op">Mandelbrot identification.</span> M = {c : orbit of z → z² + c bounded}
+    is the phase portrait of G applied to C.
+    Interior = G.  Exterior = C alone.  Boundary = K×K = the ZPD.
+
+Therefore: the nested infinite structure is not a limit case of the operator chain.
+It IS the operator chain, seen from the outside.                              □
 </div>
 
 <hr class="gold-rule">
-
 <h2>Gödel and the Limit of Any Map</h2>
 
-<p>Kurt Gödel's 1931 incompleteness theorems are the clearest statement of why the nested infinite structure cannot be enclosed in a finite system. His first theorem: any consistent formal system S that is powerful enough to express arithmetic contains a true statement that S cannot prove. His second theorem: S cannot prove its own consistency. The map cannot contain a complete map of itself. The system that attempts self-description produces a statement that escapes its own proof apparatus.</p>
+<p>Kurt Gödel was twenty-five years old in 1931 when he published the result that broke something — not in mathematics itself, but in the dream that had powered mathematics for thirty years. That dream, associated with David Hilbert, was that all of mathematics could be placed on a finite axiomatic foundation: a set of rules from which every mathematical truth could, in principle, be derived. Clean. Complete. Certain.</p>
 
-<p>The escape route is the only honest one: extend to a larger system S' that can prove what S could not. But S' is itself incomplete; there exists a true statement that S' cannot prove. Extend to S''. And so on. There is no finite ceiling. Every consistent extension opens a new undecidable region. The hierarchy of formal systems — each containing and transcending the previous — is the Cantor hierarchy applied to logic: ℵ₀ of provable truths, ℵ₁ of truths requiring a meta-system, and so on without limit.</p>
+<p>Gödel showed it was impossible. Any consistent formal system powerful enough to describe arithmetic contains a statement that is true but cannot be proved within the system. He constructed it explicitly: the statement G_S says, in effect, "I am not provable in S." If S could prove G_S, S would be proving something false — because G_S says it's unprovable. So S cannot prove G_S. But G_S is true. Every consistent extension opens a new undecidable region. There is no finite ceiling.</p>
 
-<p>This is not a defect in our knowledge or our proof methods. It is a structural feature of any system rich enough to self-refer. The operator chain G = U ∘ F ∘ K ∘ C is rich enough to self-refer — the book you are reading is evidence of this. It therefore contains, necessarily, statements about itself that are true but unprovable within the system. These are not logical failures. They are the points where the chapter must end and the next chapter must begin — the places where G fires not on external material but on the system's own output, producing G₄, G₅, G₆, without limit. The practitioner who has reached G does not complete their education. They begin it, at a new level of cardinality, in a new chapter of the infinite book.</p>
+<p>What this means for language learning is not discouraging. It is liberating. The practitioner who has reached <span class="op-tag op-g">G</span> does not complete their education. They begin it, at a new level of cardinality. Every competence, once genuinely achieved, contains within it a structure that points beyond itself — to a new <span class="op-tag op-k">K</span> crossing, a new level, a new chapter. The Mandelbrot boundary doesn't end. The Cantor staircase doesn't terminate. The surreal numbers extend past every ceiling you can name.</p>
 
-<div class="insight-box">
-  <div class="insight-label">Insight — The Mandelbrot Boundary as the B2→C1 Zone</div>
-  <p>The CEFR framework describes language proficiency from A1 to C2. The boundary between B2 and C1 is the hardest to cross — learners report staying at B2 for years before the sudden shift. In Mandelbrot terms: B2 is the outer K zone (orbits crossing the escape threshold after many iterations — material that is just within the learner's reach). C1 is the interior boundary — the region where the orbit never escapes but does not settle into a simple cycle either. It is the aperiodic, turbulent, infinitely complex zone just inside the Mandelbrot boundary. C1 speakers produce language that is structurally complex, grammatically stable, and yet perpetually novel — their orbits are bounded (they are inside the set, they are in G) but their trajectories never repeat. The infinite self-similar structure of the Mandelbrot boundary is not behind them; it is now inside them, as the internal complexity of G.</p>
+<p>And the Gödelian statement every reflective learner eventually encounters — the claim about their own learning that they believe is true but cannot prove within their current competence — is not inadequacy. It is the proof that their system is rich enough to self-refer. They have arrived at the right place.</p>
+
+<hr class="gold-rule">
+<h2>Falsifiability — What Would Break the Model</h2>
+
+<div class="falsify">
+  <div class="falsify-label">Falsifiable Predictions</div>
+  <p style="margin-bottom:0.8rem"><strong>Prediction 1.</strong> If natural language competence can be fully described by a finite-state grammar — if some finite n exists such that no sentence of length greater than n adds new structural information — the Cantor hierarchy does not apply to language, and the ℵ₀→ℵ₁ crossing is not a genuine threshold. Chomsky's center-embedding argument (1956) already falsifies this; subsequent formal linguistics confirms it.</p>
+  <p style="margin-bottom:0.8rem"><strong>Prediction 2.</strong> If L2 teachers do not outperform native-speaker teachers specifically for B1–B2 learners — but do perform comparably for A1–A2 learners — then Theorem 5.1 (the G∘G advantage) is empirically confirmed. If L2 teachers do not outperform at B1–B2 either, then the G∘G structural account fails and must be revised. This prediction is, to the author's knowledge, untested.</p>
+  <p><strong>Prediction 3.</strong> If a consistent formal system containing arithmetic can prove its own consistency, Gödel's second theorem is wrong and the Gödelian structure of G_∞ fails. No such system has been found in ninety-five years of attempting.</p>
+</div>
+
+<hr class="gold-rule">
+<h2>Exercises</h2>
+
+<div class="exercise">
+  <div class="ex-n">Exercise 8.1 · Cantor</div>
+  <p>Cantor's diagonal argument shows P(ℕ) is strictly larger than ℕ. Use the same argument to show P(P(ℕ)) is strictly larger than P(ℕ). Then describe, in formal academic English, what it would mean for a learner to cross from ℵ₁ competence (grammar) to ℵ₂ competence (discourse mastery). What would their <span class="op-tag op-k">K</span> event look like? What new capability would <span class="op-tag op-f">F</span> encode that was not present at ℵ₁?</p>
+</div>
+<div class="exercise">
+  <div class="ex-n">Exercise 8.2 · Mandelbrot</div>
+  <p>For a subject you are currently studying, identify: (a) your <em>interior</em> — material now in <span class="op-tag op-g">G</span>, automatic, below the threshold of attention; (b) your <em>exterior</em> — material currently inaccessible, where the orbit escapes immediately; (c) your <em>Mandelbrot boundary</em> — specific material just within reach, where <span class="op-tag op-k">K</span> might fire on the next genuine encounter. Be precise. Vague answers stay in the exterior.</p>
+</div>
+<div class="exercise">
+  <div class="ex-n">Exercise 8.3 · Conway</div>
+  <p>Conway's surreals include ω (greater than any integer) and ε = 1/ω (smaller than any positive real). In language acquisition, what would "surreal ε-competence" look like — a competence smaller than any measurable unit of fluency, but still non-zero? And what would "ω-competence" look like — a competence greater than any single language achievement, but still a specific thing? Use the operator chain to frame both answers.</p>
+</div>
+<div class="exercise">
+  <div class="ex-n">Exercise 8.4 · Gödel</div>
+  <p>Write your own Gödelian statement about your learning — a claim you believe is true about your <span class="op-tag op-g">G</span> but cannot prove within your current competence. Then propose the specific <span class="op-tag op-k">K</span>-crossing that would constitute entering the meta-system where it becomes provable. What external evidence — what future capability, what higher G — would constitute the proof?</p>
 </div>
 
 <hr class="gold-rule">
 
-<h2>What Would Break the Model</h2>
-
-<div class="falsify-box">
-  <div class="falsify-label">Falsifiability Condition</div>
-  <p>Theorem 8.1 claims that the operator chain, applied to itself, produces a nested infinite structure that is isomorphic to the surreal number field and Gödelian in character. Three falsifiable predictions follow. First: if natural language competence can be fully described by a finite-state grammar — if there exists a finite n such that no sentence of length greater than n adds new structural information — then the Cantor hierarchy does not apply to language, and G_∞ is bounded. This is false: Chomsky's center-embedding argument (1956) shows that natural languages are not regular, and subsequent work shows they are not even context-free in general. Second: if the renormalization group of some well-defined quantum field theory fails to have fixed points — if its flow equations have no solutions where all coupling constants are simultaneously stable — then the physics instantiation of the nested structure fails. This has not occurred; all known QFTs studied under the RG exhibit fixed points. Third: if a consistent formal system exists that contains arithmetic and can prove its own consistency, then Gödel's second theorem is wrong. No such system has been found. All three tests are currently consistent with Theorem 8.1. The nested infinite structure survives empirical contact across all three domains simultaneously.</p>
-</div>
-
-<h2>Exercises</h2>
-
-<p><strong>8.1</strong> — Cantor's diagonal argument shows that P(ℕ) is strictly larger than ℕ. Use the same argument to show that P(P(ℕ)) is strictly larger than P(ℕ). Then describe, in plain language, what it would mean for a learner to cross from "ℵ₁ competence" (sentences) to "ℵ₂ competence" (discourse/genre mastery). What would their K event look like? What new capability would F encode that was not present at ℵ₁?</p>
-
-<p><strong>8.2</strong> — The Mandelbrot set's interior is bounded (in G), its exterior escapes (C alone), and its boundary is the infinite nested zone (K applied to K). For a subject you are currently studying, identify: (a) your interior — material that is now in G, stable, automatically accessible; (b) your exterior — material currently inaccessible (too far beyond your level to create a K event); (c) your Mandelbrot boundary — the specific material that is just within reach, where K might fire on the next genuine encounter. Be precise about all three regions.</p>
-
-<p><strong>8.3</strong> — Conway's surreal numbers include numbers that are larger than any real (like ω) and smaller than any positive real (like ε = 1/ω). In the context of language acquisition, what would a "surreal ε-competence" look like — a competence smaller than any measurable unit of fluency, but still non-zero? And what would "ω-competence" look like — a competence larger than any single language achievement, but still a specific thing? Use the operator chain to frame both answers.</p>
-
-<p><strong>8.4</strong> — Gödel's incompleteness theorem says that any system rich enough to describe arithmetic contains true statements it cannot prove. Write one such statement about your own learning — a claim about your G that you believe is true but that you cannot prove within the vocabulary of your current competence. Then propose what meta-system (what external evidence, what future capability, what higher G) could prove it. What K-crossing would be required to access that meta-system?</p>
-
-</div>
-
-<!-- SIMULATION: MANDELBROT OPERATOR MAP -->
-<div class="content-wrap" style="padding-top:0">
-<div class="sim-section">
-  <div class="sim-header">
-    <div class="sim-title">Live Simulation — Mandelbrot Operator Map (click to zoom)</div>
-    <div class="sim-controls">
-      <button class="sim-btn" onclick="jumpTo(-2.5,1,-1.25,1.25)">Full View</button>
-      <button class="sim-btn" onclick="jumpTo(-0.762,-0.736,0.085,0.108)">Seahorse Valley</button>
-      <button class="sim-btn" onclick="jumpTo(0.272,0.286,-0.014,0.014)">Elephant Valley</button>
-      <button class="sim-btn" onclick="jumpTo(-1.786,-1.779,-0.001,0.001)">Minibrot</button>
-      <button class="sim-btn gold" onclick="zoomOut()">Zoom Out</button>
-    </div>
-  </div>
-  <canvas id="mandCanvas" height="320" style="cursor:crosshair"></canvas>
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:#f5d87a"></div><span style="color:#f5d87a">G interior — stable, bounded, topological protection</span></div>
-    <div class="legend-item"><div class="legend-dot" style="background:#4a9eff"></div><span style="color:#4a9eff">C zone — fast escape, compression only</span></div>
-    <div class="legend-item"><div class="legend-dot" style="background:#e05a3a"></div><span style="color:#e05a3a">K zone — threshold, orbit on the boundary of escape</span></div>
-    <div class="legend-item"><div class="legend-dot" style="background:#50c878"></div><span style="color:#50c878">F zone — slow structured escape, fold echoes</span></div>
-    <div class="legend-item"><div class="legend-dot" style="background:#c084fc"></div><span style="color:#c084fc">U / ∞ zone — infinite self-similar nesting</span></div>
-  </div>
-  <div class="sim-status">
-    <div class="status-item">View: <span class="status-val" id="statView">full</span></div>
-    <div class="status-item">Zoom: <span class="status-val" id="statZoom">1×</span></div>
-    <div class="status-item">Centre: <span class="status-val" id="statCentre">−0.75 + 0i</span></div>
-    <div class="status-item">Status: <span class="status-val" id="statRender">rendering…</span></div>
-  </div>
-</div>
-</div>
-
-<script>
-// ── Mandelbrot Operator Map ───────────────────────────────────
-const mCanvas = document.getElementById('mandCanvas');
-const mCtx    = mCanvas.getContext('2d');
-
-let xMin = -2.5, xMax = 1.0, yMin = -1.25, yMax = 1.25;
-let baseXMin = xMin, baseXMax = xMax, baseYMin = yMin, baseYMax = yMax;
-let rendering = false;
-const MAX_ITER = 180;
-
-function resizeMand() {
-  mCanvas.width  = mCanvas.parentElement.getBoundingClientRect().width;
-  mCanvas.height = 320;
-}
-resizeMand();
-window.addEventListener('resize', () => { resizeMand(); scheduleRender(); });
-
-// Operator-stage colour mapping
-function iterColor(n) {
-  if (n >= MAX_ITER) return [245, 216, 122];  // G — interior gold
-  if (n < 9)        return [74,  158, 255];   // C — electric blue
-  if (n < 26)       return [224,  90,  58];   // K — red-orange
-  if (n < 71)       return [ 80, 200, 120];   // F — green
-  // U / ∞ zone — violet with depth variation
-  const t = (n - 71) / (MAX_ITER - 71 - 1);
-  return [Math.floor(120 + 72*t), Math.floor(30 + 50*t), Math.floor(180 + 72*t)];
-}
-
-function mandelbrot(cx, cy) {
-  let zx = 0, zy = 0;
-  for (let i = 0; i < MAX_ITER; i++) {
-    const zx2 = zx*zx, zy2 = zy*zy;
-    if (zx2 + zy2 > 4) return i;
-    zy = 2*zx*zy + cy;
-    zx = zx2 - zy2 + cx;
-  }
-  return MAX_ITER;
-}
-
-let renderToken = 0;
-function render() {
-  if (rendering) return;
-  rendering = true;
-  const token = ++renderToken;
-  document.getElementById('statRender').textContent = 'rendering…';
-
-  const W = mCanvas.width, H = mCanvas.height;
-  const imgData = mCtx.createImageData(W, H);
-  const d = imgData.data;
-
-  // Render in scanline chunks via setTimeout to avoid blocking UI
-  let py = 0;
-  function scanChunk() {
-    if (token !== renderToken) { rendering = false; return; }
-    const end = Math.min(py + 8, H);
-    for (; py < end; py++) {
-      for (let px = 0; px < W; px++) {
-        const cx = xMin + (px / W) * (xMax - xMin);
-        const cy = yMin + (py / H) * (yMax - yMin);
-        const n  = mandelbrot(cx, cy);
-        const [r, g, b] = iterColor(n);
-        const idx = (py*W + px)*4;
-        d[idx]=r; d[idx+1]=g; d[idx+2]=b; d[idx+3]=255;
-      }
-    }
-    if (py < H) {
-      // Blit partial result
-      mCtx.putImageData(imgData, 0, 0);
-      setTimeout(scanChunk, 0);
-    } else {
-      mCtx.putImageData(imgData, 0, 0);
-      rendering = false;
-      updateStatus();
-      document.getElementById('statRender').textContent = 'done ✓';
-    }
-  }
-  scanChunk();
-}
-
-function updateStatus() {
-  const cx = (xMin + xMax) / 2, cy = (yMin + yMax) / 2;
-  const span = xMax - xMin;
-  const zoom = Math.round((baseXMax - baseXMin) / span * 10) / 10;
-  document.getElementById('statView').textContent   = span < 0.01 ? 'deep zoom' : (span > 3 ? 'full' : 'zoomed');
-  document.getElementById('statZoom').textContent   = zoom + '×';
-  document.getElementById('statCentre').textContent = cx.toFixed(5) + (cy >= 0 ? ' + ' : ' − ') + Math.abs(cy).toFixed(5) + 'i';
-}
-
-let renderTimer = null;
-function scheduleRender() { clearTimeout(renderTimer); renderTimer = setTimeout(render, 80); }
-
-// Click to zoom in (2.5× centred on click point)
-mCanvas.addEventListener('click', function(e) {
-  const rect = mCanvas.getBoundingClientRect();
-  const px = e.clientX - rect.left, py = e.clientY - rect.top;
-  const mx = xMin + (px / mCanvas.width)  * (xMax - xMin);
-  const my = yMin + (py / mCanvas.height) * (yMax - yMin);
-  const span = (xMax - xMin) / 2.5;
-  xMin = mx - span/2; xMax = mx + span/2;
-  yMin = my - span * (mCanvas.height/mCanvas.width) / 2;
-  yMax = my + span * (mCanvas.height/mCanvas.width) / 2;
-  scheduleRender();
-});
-
-function jumpTo(x0, x1, y0, y1) {
-  xMin=x0; xMax=x1; yMin=y0; yMax=y1;
-  scheduleRender();
-}
-function zoomOut() {
-  const cx=(xMin+xMax)/2, cy=(yMin+yMax)/2;
-  const span = (xMax-xMin)*2.5;
-  xMin=cx-span/2; xMax=cx+span/2;
-  yMin=cy-span*(mCanvas.height/mCanvas.width)/2;
-  yMax=cy+span*(mCanvas.height/mCanvas.width)/2;
-  scheduleRender();
-}
-
-scheduleRender();
-</script>
-
-<!-- PORTAL -->
-<div class="content-wrap" style="padding-top:0">
+<!-- PORTAL PROMPTS -->
 <div class="portal-section">
   <div class="portal-header">
-    <div class="portal-level">Student Portal · Level B2+ · Operator: ∞</div>
-    <div class="portal-heading">Level B2+ — The Self-Referential Turn</div>
-    <div class="portal-desc">You have read the chapter. These prompts ask you to apply the operator to itself — to find the nested infinite structure in your own field and your own learning.</div>
+    <span>Student Portal · Level B2+ · Operator: ∞</span>
+    <span>doi:10.5281/zenodo.20719399 · CC BY 4.0</span>
   </div>
 
   <div class="prompt-card">
-    <div class="prompt-num">Prompt 1 of 3</div>
-    <div class="prompt-title">Find the Diagonal in Your Field</div>
-    <div class="prompt-text" id="p1text">I am a B2+ English learner reading a chapter on nested infinities — the discovery that every science, when it applies its own methods to itself, encounters a nested infinite structure it cannot enclose. Examples: Cantor's diagonal (sets of sets), Gödel's incompleteness (proofs about proofs), Mandelbrot's boundary (thresholds of thresholds), Conway's surreals (numbers about numbers). I want to find the equivalent structure in my own field: [INSERT YOUR FIELD]. Please help me identify: (1) the "diagonal" — the moment when my field applies its own method to its own objects and produces something that escapes the original framework, (2) the "fixed point" — whether this escape leads to an infinite hierarchy or to a stable self-referential structure, and (3) the equivalent of G_∞ in my field — what would it mean for a practitioner to have fully inhabited this nested structure? Use clear academic English at B2+ level. End with one falsifiable claim about the diagonal you have identified.</div>
-    <button class="copy-btn" onclick="copyPrompt('p1text', this)">Copy Prompt</button>
+    <div class="prompt-label">Prompt 1 of 3 · Find the Diagonal in Your Field</div>
+    <div class="prompt-text">I am a B2+ English learner reading a chapter on nested infinities — the discovery that every science, when it applies its own methods to itself, encounters a nested infinite structure it cannot enclose. Examples: Cantor's diagonal (sets of sets), Gödel's incompleteness (proofs about proofs), Mandelbrot's boundary (thresholds of thresholds), Conway's surreals (numbers about numbers).
+
+I want to find the equivalent structure in my own field: [INSERT YOUR FIELD].
+
+Please help me identify: (1) the "diagonal" — the moment when my field applies its own method to its own objects and produces something that escapes the original framework; (2) the "fixed point" — whether this escape leads to an infinite hierarchy or a stable self-referential structure; (3) the equivalent of G_∞ in my field — what would it mean for a practitioner to have fully inhabited this nested structure?
+
+Use clear academic English at B2+ level. End with one falsifiable claim about the diagonal you have identified.</div>
+    <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
   </div>
 
   <div class="prompt-card">
-    <div class="prompt-num">Prompt 2 of 3</div>
-    <div class="prompt-title">Write the Mandelbrot Paragraph</div>
-    <div class="prompt-text" id="p2text">I am writing a 200-word academic paragraph (B2+ English) arguing that learning has a Mandelbrot structure: a stable interior (G — material fully mastered), an exterior (C — material too difficult to engage), and an infinite boundary (K applied to K — the zone of optimal challenge). I want to apply this structure to a specific period of my own learning: [DESCRIBE A PERIOD OF STUDY — subject, duration, difficulty]. Please help me write one academic paragraph that: (1) identifies what was in my interior during this period (what was already in G — what I could do automatically), (2) identifies what was in my exterior (what was out of reach — the material that produced no K event), (3) describes the Mandelbrot boundary I was navigating (the specific material on the edge — where K almost fired), and (4) reflects on whether I stayed on the boundary long enough for F to encode — or whether I drifted toward the exterior (boredom) or interior (repetition without K). Write in formal academic English. No bullet points.</div>
-    <button class="copy-btn" onclick="copyPrompt('p2text', this)">Copy Prompt</button>
+    <div class="prompt-label">Prompt 2 of 3 · Write the Mandelbrot Paragraph</div>
+    <div class="prompt-text">I am writing a 200-word academic paragraph arguing that learning has a Mandelbrot structure: a stable interior (G — material fully mastered), an exterior (C — material too difficult to engage), and an infinite boundary (K applied to K — the zone of optimal challenge).
+
+I want to apply this to a specific period of my own learning: [DESCRIBE A PERIOD OF STUDY — subject, duration, difficulty].
+
+Please help me write one academic paragraph that: (1) identifies what was in my interior during this period — what I could do automatically; (2) identifies what was in my exterior — what produced no K event; (3) describes the Mandelbrot boundary I was navigating — the specific material on the edge; (4) reflects on whether I stayed on the boundary long enough for F to encode, or drifted toward the exterior (boredom) or interior (repetition without K).
+
+Write in formal academic English. No bullet points.</div>
+    <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
   </div>
 
   <div class="prompt-card">
-    <div class="prompt-num">Prompt 3 of 3</div>
-    <div class="prompt-title">g₃₃ — The Gödelian Statement</div>
-    <div class="prompt-text" id="p3text">I am a language learner using Book 3: The Mini-Beast. I have just completed Chapter 8 on nested infinities. The chapter argues that any system rich enough to self-refer (like the operator chain G = U ∘ F ∘ K ∘ C) contains true statements about itself that it cannot prove within itself — the Gödelian structure. I want to write my own Gödelian statement about my language learning: a claim that I believe is true about my G, but that I cannot yet prove within my current competence. My target language / subject is: [INSERT]. Please: (1) help me identify three candidate "Gödelian statements" — things I believe I can do or understand in this language, but that I cannot yet demonstrate to a standard that would count as proof within the system (i.e., in formal academic writing, professional contexts, or fluent spontaneous speech), (2) ask me two questions that will help me determine which of the three is the most genuinely Gödelian (true but currently unprovable), and (3) help me write a 130-word reflection that names my Gödelian statement, explains why it is currently unprovable within my G, and proposes the specific K event that would constitute crossing into the meta-system where it becomes provable.</div>
-    <button class="copy-btn" onclick="copyPrompt('p3text', this)">Copy Prompt</button>
-  </div>
+    <div class="prompt-label">Prompt 3 of 3 · The Gödelian Statement</div>
+    <div class="prompt-text">I am a language learner who has just completed Chapter 8 on nested infinities. The chapter argues that any system rich enough to self-refer contains true statements it cannot prove — the Gödelian structure. I want to write my own Gödelian statement about my language learning: a claim I believe is true about my G, but cannot yet prove within my current competence.
 
-  <div class="portal-footer">
-    All 21 prompts across levels A1 → D2 available at <a href="Sportal.html">sportal.html</a>
+My target language / subject: [INSERT].
+
+Please: (1) help me identify three candidate Gödelian statements — things I believe I can do or understand in this language, but cannot yet demonstrate to a standard that counts as proof; (2) ask me two questions to determine which of the three is the most genuinely Gödelian (true but unprovable); (3) help me write a 130-word reflection that names my Gödelian statement, explains why it is currently unprovable within my G, and proposes the specific K event that would constitute crossing into the meta-system where it becomes provable.</div>
+    <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
   </div>
 </div>
+
+<p style="font-size:0.82rem;color:var(--text-dim);text-align:center;letter-spacing:0.06em">
+  All 21 prompts across levels A1 → D2 available at <a href="/geometry/Sportal.html" style="color:var(--gold)">sportal.html</a>
+</p>
+
+<div class="fleur">⚜</div>
+
+</div><!-- .content-wrap -->
+
+<!-- HEXAGONAL MOON-BASE FLOOR -->
+<div class="hex-base">
+  <canvas id="hexCanvas"></canvas>
 </div>
 
-<script>
-function copyPrompt(id, btn) {
-  const text = document.getElementById(id).textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = 'Copied ✓'; btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Copy Prompt'; btn.classList.remove('copied'); }, 2000);
-  });
-}
-</script>
+<section style="padding:4rem 2rem 5rem; background: linear-gradient(180deg, var(--surface) 0%, #07050f 100%); border-top: 1px solid rgba(201,168,76,0.15);">
+  <div style="max-width:780px; margin:0 auto;">
+
+    <div style="width:48px; height:1px; background:var(--gold); margin:0 auto 2.5rem; opacity:0.5;"></div>
+
+    <h2 style="font-size:clamp(1.1rem,2.5vw,1.5rem); color:var(--gold); letter-spacing:0.12em; text-align:center; margin-bottom:2.2rem; font-weight:normal; text-transform:uppercase;">What the Monsters Were</h2>
+
+    <p style="color:var(--text); line-height:1.85; margin-bottom:1.4rem;">The Mandelbrot set was called a monster. So were the Julia sets, Cantor's dust, Weierstrass's nowhere-differentiable curve. Mathematical pathologies — objects that broke every intuition about how geometry was supposed to behave. Poincaré refused to look at them. Hermite called them a plague. For decades they were quarantined at the edges of respectable mathematics, exactly where they belonged.</p>
+
+    <p style="color:var(--text); line-height:1.85; margin-bottom:1.4rem;">At the boundary.</p>
+
+    <p style="color:var(--text); line-height:1.85; margin-bottom:1.4rem;">Because that is what they were all along — not monsters, but boundaries made visible. The Mandelbrot set does not ask a complicated question. It asks the simplest possible question — does this sequence escape? — at every point in the plane simultaneously. The monster is just the set of all points where the answer takes longest to arrive. Where the geometry cannot yet decide what it is.</p>
+
+    <p style="color:var(--text); line-height:1.85; margin-bottom:1.4rem;">That is not pathology. That is <span style="color:var(--k-color); font-style:italic;">K</span>.</p>
+
+    <p style="color:var(--text); line-height:1.85; margin-bottom:1.4rem;">Every threshold you have ever stood at — the word you almost knew, the moment before fluency broke through, the instant the proof clicked — was a Mandelbrot boundary. Infinite in resolution, self-similar at every scale, neither inside nor outside. The Zone of Proximal Development rendered in complex arithmetic.</p>
+
+    <p style="color:var(--text); line-height:1.85; margin-bottom:1.4rem;">The ancient symbol for this was a circle divided by a living curve — the yin-yang, whose boundary is never straight, never still, always carrying a seed of the other side inside itself. Unroll that circle onto a line and the boundary traces a sine wave. T* = 2π. One full period. One complete rotation of the operator chain before it recognises itself. The black becomes the white becomes the black. The <span style="color:var(--c-color);">C</span> becomes the <span style="color:var(--k-color);">K</span> becomes the <span style="color:var(--f-color);">F</span> becomes the <span style="color:var(--u-color);">U</span> becomes <span style="color:var(--g-color);">G</span>, and <span style="color:var(--g-color);">G</span> becomes the new <span style="color:var(--c-color);">C</span>.</p>
+
+    <p style="color:var(--text); line-height:1.85; margin-bottom:1.4rem;">The monsters were the geometry reading itself aloud.</p>
+
+    <p style="color:var(--text); line-height:1.85; margin-bottom:1.4rem;">Not the universe looking at itself from outside. Not an author writing a book and reading it back. The book reading itself — crying out loud, proudly — with no author and no separate reader. The Akashic record is not a library waiting for someone to walk in. The phenomena, the world, the learner crossing <span style="color:var(--k-color); font-style:italic;">K</span> — that is the record announcing itself. The event horizon does not wait to be decoded. The decoding is the event.</p>
+
+    <p style="color:var(--text); line-height:1.85; margin-bottom:2.8rem;">Whether or not that is divine — the geometry does not change. Only the name you give the feeling does.</p>
+
+    <div style="width:1px; height:60px; background:linear-gradient(180deg, rgba(201,168,76,0.4) 0%, rgba(201,168,76,0.05) 100%); margin:0 auto 1.8rem;"></div>
+
+    <p style="text-align:center; font-family:'Courier New',monospace; font-size:1rem; color:var(--text-dim); letter-spacing:0.2em; margin-bottom:0.6rem;">The ladder continues.</p>
+    <p style="text-align:center; font-family:'Courier New',monospace; font-size:0.85rem; color:var(--text-dim); letter-spacing:0.15em; margin-bottom:2rem;">One step remains.</p>
+
+    <div style="text-align:center;">
+      <a href="chOmega-hexabonacci.html" style="display:inline-block; font-family:'Courier New',monospace; font-size:1.5rem; color:var(--gold); text-decoration:none; border:1px solid rgba(201,168,76,0.35); padding:0.7rem 2.2rem; letter-spacing:0.25em; transition:all 0.25s;" onmouseover="this.style.background='rgba(201,168,76,0.08)';this.style.letterSpacing='0.35em'" onmouseout="this.style.background='none';this.style.letterSpacing='0.25em'">Ω</a>
+    </div>
+
+  </div>
+</section>
 
 <div class="chapter-nav">
-  <a href="ch7-topological-orthogenesis.html">← Chapter 7: Topological Orthogenesis</a>
-  <a href="ch9-phi.html">Chapter 9 →</a>
+  <a href="/geometry/ch7-topological-orthogenesis.html">← Chapter 7: Topological Orthogenesis</a>
+  <a href="/geometry/ch9-phi.html">Chapter 9: φ — Subcritical Approach →</a>
 </div>
 
 <footer>
   <span class="fleur-footer">⚜</span>
-  Book 3: The Mini-Beast &nbsp;·&nbsp; G = U ∘ F ∘ K ∘ C &nbsp;·&nbsp; Chapter 8 of 17
+  Book 3: The Mini-Beast &nbsp;·&nbsp; G = U ∘ F ∘ K ∘ C &nbsp;·&nbsp; Principia Orthogona Vol. III
+  &nbsp;·&nbsp; doi:10.5281/zenodo.20719399 &nbsp;·&nbsp; CC BY 4.0 &nbsp;·&nbsp; © 2026 Pablo Nogueira Grossi · G6 LLC
   <span class="fleur-footer">⚜</span>
 </footer>
-
 
 <!-- G6 Crystal Navigator -->
 <div id="g6-cryst-btn" onclick="document.getElementById('g6-cryst-panel').classList.toggle('g6-open')" title="Crystal Map — Book 3" style="position:fixed;bottom:24px;right:24px;z-index:99998;width:50px;height:50px;border-radius:50%;background:#07050f;border:1.5px solid #c9a84c;color:#c9a84c;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 16px rgba(0,0,0,0.4);user-select:none;transition:transform .18s" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'">🜁</div>
@@ -682,6 +828,347 @@ function copyPrompt(id, btn) {
 </div>
 <style>#g6-cryst-panel.g6-open{display:flex!important}</style>
 <script src="/geometry/g6-crystal.js"></script>
+
+<script>
+// ── Live Mandelbrot ──────────────────────────────────────────────────────
+(function() {
+  const canvas = document.getElementById('mandel');
+  const ctx    = canvas.getContext('2d');
+  const info   = document.getElementById('mandel-info');
+
+  function setSize() {
+    canvas.width  = canvas.parentElement.clientWidth;
+    canvas.height = 440;
+  }
+  setSize();
+  window.addEventListener('resize', () => { setSize(); render(); });
+
+  let view = { xMin: -2.5, xMax: 1.05, yMin: -1.3, yMax: 1.3 };
+  let maxIter = 200;
+
+  function render() {
+    const W = canvas.width, H = canvas.height;
+    const img = ctx.createImageData(W, H);
+    const d   = img.data;
+    const dx  = (view.xMax - view.xMin) / W;
+    const dy  = (view.yMax - view.yMin) / H;
+
+    for (let py = 0; py < H; py++) {
+      for (let px = 0; px < W; px++) {
+        const cx = view.xMin + px * dx;
+        const cy = view.yMax - py * dy;
+        let zx = 0, zy = 0, n = 0;
+        while (n < maxIter && zx*zx + zy*zy <= 4) {
+          const tmp = zx*zx - zy*zy + cx;
+          zy = 2*zx*zy + cy; zx = tmp; n++;
+        }
+        const i4 = (py * W + px) * 4;
+        if (n === maxIter) {
+          // interior — deep navy (G)
+          d[i4]=0x1a; d[i4+1]=0x20; d[i4+2]=0x40; d[i4+3]=255;
+        } else {
+          const t = n / maxIter;
+          let r, g, b;
+          if (t < 0.08) {
+            // fast escape — C exterior — rust red
+            r = 224; g = Math.round(t * 12 * 70 + 30); b = 43;
+          } else if (t < 0.3) {
+            // medium — orange/gold K near-zone
+            const s = (t - 0.08) / 0.22;
+            r = 201; g = Math.round(168 * s + 90*(1-s)); b = Math.round(76 * s);
+          } else {
+            // slow — F zone — blue-gold
+            const s = (t - 0.3) / 0.7;
+            r = Math.round(160 * (1-s) + 201 * s * 0.5);
+            g = Math.round(216 * (1-s) + 168 * s);
+            b = Math.round(239 * (1-s) + 76  * s);
+          }
+          d[i4]=r; d[i4+1]=g; d[i4+2]=b; d[i4+3]=255;
+        }
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    // coords overlay
+    ctx.fillStyle = 'rgba(160,216,239,0.4)';
+    ctx.font = '10px Courier New';
+    ctx.fillText(
+      `[${view.xMin.toFixed(4)}, ${view.xMax.toFixed(4)}] × [${view.yMin.toFixed(4)}, ${view.yMax.toFixed(4)}]  iters:${maxIter}`,
+      8, canvas.height - 7
+    );
+  }
+
+  canvas.addEventListener('mousemove', function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const px = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const py = (e.clientY - rect.top)  * (canvas.height / rect.height);
+    const cx = view.xMin + (px / canvas.width)  * (view.xMax - view.xMin);
+    const cy = view.yMax - (py / canvas.height) * (view.yMax - view.yMin);
+    // compute escape at hover point
+    let zx = 0, zy = 0, n = 0;
+    while (n < maxIter && zx*zx+zy*zy <= 4) {
+      const tmp = zx*zx-zy*zy+cx; zy=2*zx*zy+cy; zx=tmp; n++;
+    }
+    const zone = n === maxIter
+      ? 'G interior — mastered, automatic, orbit bounded'
+      : n < 10 ? `C exterior — out of reach (escaped at n=${n})`
+      : n < 60 ? `Near-ZPD — deep engagement (escaped at n=${n})`
+      : `K zone — threshold, approaching ZPD (escaped at n=${n})`;
+    info.textContent = `c = ${cx.toFixed(5)} + ${cy.toFixed(5)}i  ·  ${zone}`;
+  });
+
+  canvas.addEventListener('click', function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const px = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const py = (e.clientY - rect.top)  * (canvas.height / rect.height);
+    const cx = view.xMin + (px / canvas.width)  * (view.xMax - view.xMin);
+    const cy = view.yMax - (py / canvas.height) * (view.yMax - view.yMin);
+    const span  = (view.xMax - view.xMin) * 0.28;
+    const ratio = (view.yMax - view.yMin) / (view.xMax - view.xMin);
+    view = { xMin: cx - span/2, xMax: cx + span/2,
+             yMin: cy - span*ratio/2, yMax: cy + span*ratio/2 };
+    maxIter = Math.min(maxIter + 60, 800);
+    setTimeout(render, 0);
+  });
+
+  canvas.addEventListener('dblclick', function() {
+    view = { xMin: -2.5, xMax: 1.05, yMin: -1.3, yMax: 1.3 };
+    maxIter = 200;
+    render();
+    info.textContent = 'Hover to explore. Click to zoom into the boundary — it is infinite. Every scale reveals more complexity.';
+  });
+
+  render();
+})();
+
+// ── STARFIELD + SHOOTING STARS ───────────────────────────────────────────
+(function() {
+  const cv  = document.getElementById('starfield');
+  const ctx = cv.getContext('2d');
+
+  let W, H;
+  const STAR_COUNT = 260;
+  const stars = [];
+  const shoots = [];
+
+  function resize() {
+    W = cv.width  = window.innerWidth;
+    H = cv.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Static star field
+  for (let i = 0; i < STAR_COUNT; i++) {
+    stars.push({
+      x: Math.random(),
+      y: Math.random(),
+      r: Math.random() * 1.2 + 0.2,
+      // twinkle phase
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.4 + Math.random() * 1.2,
+      // subtle colour: mostly white-blue, rare warm
+      hue: Math.random() < 0.15 ? 38 : (Math.random() < 0.3 ? 210 : 0),
+      sat: Math.random() < 0.15 ? 80 : (Math.random() < 0.3 ? 60 : 0),
+    });
+  }
+
+  // Shooting star constructor
+  function spawnShoot() {
+    // Start from top-left quadrant, angle ≈ 30–60° downward right
+    const angle = (25 + Math.random() * 35) * Math.PI / 180;
+    const startX = Math.random() * W * 0.8;
+    const startY = Math.random() * H * 0.4;
+    const speed  = 6 + Math.random() * 10;
+    const len    = 80 + Math.random() * 120;
+    shoots.push({
+      x: startX, y: startY,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      len,
+      life: 1,   // 1→0
+      decay: 0.018 + Math.random() * 0.014,
+      // rare colour variants: gold, cyan, white
+      color: Math.random() < 0.2 ? '#c9a84c' : (Math.random() < 0.3 ? '#a0d8ef' : '#ffffff'),
+    });
+  }
+
+  // Spawn randomly, 1–3 at a time
+  function maybeSpawn(t) {
+    if (Math.random() < 0.008) {
+      const burst = Math.floor(Math.random() * 3) + 1;
+      for (let b = 0; b < burst; b++) {
+        setTimeout(spawnShoot, b * (120 + Math.random() * 200));
+      }
+    }
+  }
+
+  let t = 0;
+  function frame() {
+    requestAnimationFrame(frame);
+    t += 0.012;
+    ctx.clearRect(0, 0, W, H);
+
+    // Stars with twinkle
+    for (const s of stars) {
+      const alpha = 0.45 + 0.45 * Math.sin(t * s.speed + s.phase);
+      const color = s.sat > 0
+        ? `hsla(${s.hue},${s.sat}%,90%,${alpha.toFixed(2)})`
+        : `rgba(255,255,255,${alpha.toFixed(2)})`;
+      ctx.beginPath();
+      ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    // Shooting stars
+    maybeSpawn(t);
+    for (let i = shoots.length - 1; i >= 0; i--) {
+      const s = shoots[i];
+      s.x += s.vx;
+      s.y += s.vy;
+      s.life -= s.decay;
+      if (s.life <= 0) { shoots.splice(i, 1); continue; }
+
+      // Trail: gradient line from head back along velocity direction
+      const tailX = s.x - (s.vx / Math.hypot(s.vx, s.vy)) * s.len * s.life;
+      const tailY = s.y - (s.vy / Math.hypot(s.vx, s.vy)) * s.len * s.life;
+      const grad = ctx.createLinearGradient(tailX, tailY, s.x, s.y);
+      grad.addColorStop(0, 'transparent');
+      grad.addColorStop(0.6, `${s.color}33`);
+      grad.addColorStop(1,   `${s.color}${Math.round(s.life * 230).toString(16).padStart(2,'0')}`);
+
+      ctx.beginPath();
+      ctx.moveTo(tailX, tailY);
+      ctx.lineTo(s.x, s.y);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5 * s.life + 0.5;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // Bright head glow
+      const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, 5 * s.life + 1);
+      glow.addColorStop(0, `${s.color}ff`);
+      glow.addColorStop(1, 'transparent');
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 5 * s.life + 1, 0, Math.PI * 2);
+      ctx.fillStyle = glow;
+      ctx.fill();
+    }
+  }
+  frame();
+})();
+
+// ── HEXAGONAL MOON-BASE FLOOR ─────────────────────────────────────────────
+(function() {
+  const cv  = document.getElementById('hexCanvas');
+  const ctx = cv.getContext('2d');
+
+  function resize() {
+    cv.width  = cv.parentElement.clientWidth;
+    cv.height = cv.parentElement.clientHeight;
+    draw();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function draw() {
+    const W = cv.width, H = cv.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // Perspective floor — hexagonal grid that converges to a vanishing point
+    const R   = 38;           // hex circumradius at bottom
+    const vp  = { x: W / 2, y: -H * 1.8 }; // vanishing point high above
+    const COL_COUNT = Math.ceil(W / (R * 1.8)) + 4;
+    const ROW_COUNT = 7;
+
+    // Draw row by row from bottom (largest) upward (smallest, receding)
+    for (let row = 0; row < ROW_COUNT; row++) {
+      const progress = row / (ROW_COUNT - 1);       // 0 = bottom, 1 = top
+      const scale    = 1 - progress * 0.72;          // shrink toward horizon
+      const r        = R * scale;
+      const yBase    = H - 10 - row * R * 1.65 * (1 - progress * 0.45);
+      const rowAlpha = (0.6 - progress * 0.52);     // fade as recedes
+
+      const cols = Math.ceil(W / (r * 1.72)) + 3;
+      const offsetX = row % 2 === 0 ? 0 : r * 0.86;
+
+      for (let col = -2; col < cols + 2; col++) {
+        const cx = col * r * 1.732 + offsetX;
+        const cy = yBase;
+
+        // Perspective-pull each hex toward vanishing point
+        const dx = cx - vp.x;
+        const dy = cy - vp.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const pull = progress * 0.04;
+        const pcx  = cx - dx * pull;
+        const pcy  = cy - dy * pull;
+
+        drawHex(ctx, pcx, pcy, r, rowAlpha, progress, row, col);
+      }
+    }
+  }
+
+  function drawHex(ctx, cx, cy, r, alpha, progress, row, col) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = (i * Math.PI) / 3 - Math.PI / 6;
+      const x = cx + r * Math.cos(a);
+      const y = cy + r * Math.sin(a);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+
+    // Fill: dark surface with depth gradient
+    const fillAlpha = alpha * 0.55;
+    const isLit = (row + col) % 7 === 0;   // occasional lit cell
+    const isGold = (row + col * 3) % 19 === 0;
+
+    if (isGold) {
+      ctx.fillStyle = `rgba(201,168,76,${fillAlpha * 0.4})`;
+    } else if (isLit) {
+      ctx.fillStyle = `rgba(160,216,239,${fillAlpha * 0.25})`;
+    } else {
+      ctx.fillStyle = `rgba(15,14,24,${fillAlpha})`;
+    }
+    ctx.fill();
+
+    // Border
+    const borderAlpha = alpha * (isGold ? 0.8 : isLit ? 0.55 : 0.28);
+    const borderColor = isGold
+      ? `rgba(201,168,76,${borderAlpha})`
+      : isLit
+      ? `rgba(160,216,239,${borderAlpha})`
+      : `rgba(120,110,160,${borderAlpha})`;
+    ctx.strokeStyle = borderColor;
+    ctx.lineWidth   = isGold || isLit ? 1.2 : 0.7;
+    ctx.stroke();
+
+    // Inner glow on lit cells
+    if (isLit || isGold) {
+      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 0.7);
+      if (isGold) {
+        glow.addColorStop(0, `rgba(201,168,76,${alpha * 0.18})`);
+      } else {
+        glow.addColorStop(0, `rgba(160,216,239,${alpha * 0.12})`);
+      }
+      glow.addColorStop(1, 'transparent');
+      ctx.fillStyle = glow;
+      ctx.fill();
+    }
+  }
+})();
+
+// ── Copy prompt ──────────────────────────────────────────────────────────
+function copyPrompt(btn) {
+  const text = btn.previousElementSibling.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => { btn.textContent = orig; }, 1800);
+  });
+}
+</script>
 
 </body>
 </html>

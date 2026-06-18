@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G6 Geometry Hub — Research · Language · Architecture</title>
+<meta name="description" content="The G6 research ecosystem: Book 3, the 16-Week C1→D2 Course, AXLE verification, Orthogenesis formal proofs, and the student journey map. By G6 LLC.">
+<style>
+:root {
+  --navy:  #1a2744;
+  --gold:  #c9a84c;
+  --cream: #faf7f0;
+  --smoke: #f0ece4;
+  --mid:   #3a4f7a;
+  --rule:  #8a7340;
+  --text:  #1c1c1c;
+  --light: #e8e2d4;
+  --teal:  #1a5c5c;
+  --green: #2d5a27;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: var(--text);
+  background: var(--cream);
+  line-height: 1.7;
+}
+
+/* ── NAV ── */
+nav {
+  background: var(--navy);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 2px solid var(--gold);
+}
+nav .brand {
+  color: var(--gold);
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: .08em;
+  text-decoration: none;
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.6rem;
+}
+nav ul a {
+  color: #cdd8f0;
+  text-decoration: none;
+  font-size: .82rem;
+  letter-spacing: .05em;
+  transition: color .2s;
+}
+nav ul a:hover { color: var(--gold); }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(160deg, var(--navy) 0%, #1e3a6e 60%, var(--teal) 100%);
+  color: #fff;
+  padding: 5rem 2rem 4rem;
+  text-align: center;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  color: var(--gold);
+  letter-spacing: .04em;
+  margin-bottom: .6rem;
+}
+.hero .sub {
+  font-size: 1.05rem;
+  color: #c0cce8;
+  max-width: 640px;
+  margin: 0 auto 2rem;
+}
+.hero .cta-primary {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: bold;
+  font-size: .95rem;
+  padding: .85rem 2.2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  letter-spacing: .06em;
+  transition: opacity .2s;
+}
+.hero .cta-primary:hover { opacity: .88; }
+
+/* ── SECTION WRAPPER ── */
+section {
+  padding: 4rem 2rem;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+section + section {
+  border-top: 1px solid var(--light);
+}
+.section-label {
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--rule);
+  margin-bottom: .4rem;
+}
+.section-title {
+  font-size: 1.55rem;
+  color: var(--navy);
+  margin-bottom: .5rem;
+}
+.section-desc {
+  color: #555;
+  font-size: .95rem;
+  max-width: 640px;
+  margin-bottom: 2rem;
+}
+
+/* ── CARD GRID ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.4rem;
+}
+.card {
+  background: #fff;
+  border: 1px solid var(--light);
+  border-radius: 6px;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  transition: box-shadow .2s;
+}
+.card:hover { box-shadow: 0 4px 16px rgba(26,39,68,.12); }
+.card-badge {
+  display: inline-block;
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: .25rem .7rem;
+  border-radius: 2px;
+  font-family: 'Courier New', monospace;
+  width: fit-content;
+}
+.badge-paid    { background: #fef3d4; color: #8a6200; border: 1px solid #e8c84c; }
+.badge-public  { background: #d4ede4; color: #1a5c3a; border: 1px solid #4cad80; }
+.badge-tool    { background: #d4e0f5; color: #1a3470; border: 1px solid #4c7ce8; }
+.badge-live    { background: #f5d4d4; color: #6b0000; border: 1px solid #e84c4c; }
+
+.card h3 {
+  font-size: 1.05rem;
+  color: var(--navy);
+  margin: 0;
+}
+.card p {
+  font-size: .88rem;
+  color: #555;
+  flex: 1;
+}
+.card-link {
+  display: inline-block;
+  font-size: .82rem;
+  font-weight: bold;
+  padding: .55rem 1.2rem;
+  border-radius: 3px;
+  text-decoration: none;
+  text-align: center;
+  letter-spacing: .04em;
+  transition: opacity .2s;
+}
+.card-link:hover { opacity: .82; }
+.link-gold   { background: var(--gold);  color: var(--navy); }
+.link-navy   { background: var(--navy);  color: #fff; }
+.link-teal   { background: var(--teal);  color: #fff; }
+.link-ghost  { border: 1.5px solid var(--navy); color: var(--navy); background: transparent; }
+
+/* ── OPERATOR CHAIN ── */
+.chain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: center;
+  font-family: 'Courier New', monospace;
+  font-size: .9rem;
+  margin: 1rem 0;
+}
+.op {
+  padding: .35rem .9rem;
+  border-radius: 3px;
+  font-weight: bold;
+  color: #fff;
+}
+.op-c { background: #4a9eff; }
+.op-k { background: #e05a3a; }
+.op-f { background: #50c878; color: #111; }
+.op-u { background: #c084fc; }
+.op-g { background: #f59e0b; color: #111; }
+.chain-arrow { color: #999; font-size: 1.1rem; }
+
+/* ── PHASE TABLE ── */
+.phase-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .88rem;
+  margin-top: 1rem;
+}
+.phase-table th {
+  background: var(--navy);
+  color: var(--gold);
+  padding: .6rem .9rem;
+  text-align: left;
+  font-size: .78rem;
+  letter-spacing: .08em;
+}
+.phase-table td {
+  padding: .55rem .9rem;
+  border-bottom: 1px solid var(--light);
+}
+.phase-table tr:nth-child(even) td { background: var(--smoke); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--navy);
+  color: #8090b8;
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: .8rem;
+  letter-spacing: .05em;
+  border-top: 2px solid var(--gold);
+  margin-top: 2rem;
+}
+footer a { color: var(--gold); text-decoration: none; }
+footer .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: .8rem; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="brand" href="#">G6 GEOMETRY HUB</a>
+  <ul>
+    <li><a href="#course">Course</a></li>
+    <li><a href="#book3">Book 3</a></li>
+    <li><a href="#axle">AXLE</a></li>
+    <li><a href="#orthogenesis">Orthogenesis</a></li>
+    <li><a href="#journey">Journey</a></li>
+    <li><a href="https://brodanova6.gumroad.com/sourdworks" target="_blank">Membership</a></li>
+  </ul>
+    <a href="living-book.html">Living Book</a>
+    <a href="series-hub.html">Series ↗</a>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <h1>G6 Geometry Hub</h1>
+  <p class="sub">
+    A research ecosystem for academic English, formal mathematics,
+    and verified language architecture. C1 → D2. Build → Prove → Publish.
+  </p>
+  <a class="cta-primary" href="https://brodanova6.gumroad.com/sourdworks" target="_blank">
+    Join the Membership — Access Everything
+  </a>
+</div>
+
+<!-- ── COURSE ── -->
+<section id="course">
+  <p class="section-label">Paid · Full Access via Membership</p>
+  <h2 class="section-title">16-Week C1 → D2 Course</h2>
+  <p class="section-desc">
+    A complete academic English program for STEM students and researchers.
+    21 LLM prompts, 4 milestone publications, Zenodo DOIs, GitHub documentation,
+    and optional AXLE verification. Structured as a living curriculum.
+  </p>
+
+  <div class="chain">
+    <span class="op op-c">C — Compress</span><span class="chain-arrow">→</span>
+    <span class="op op-k">K — Threshold</span><span class="chain-arrow">→</span>
+    <span class="op op-f">F — Fold</span><span class="chain-arrow">→</span>
+    <span class="op op-u">U — Unfold</span><span class="chain-arrow">→</span>
+    <span class="op op-g">G — Conclude</span>
+  </div>
+
+  <div class="card-grid" style="margin-top:1.6rem">
+    <div class="card">
+      <span class="card-badge badge-paid">Membership Required</span>
+      <h3>Full 16-Week HTML Course</h3>
+      <p>All 17 chapters, interactive operator map, phase progress tracking, and full prompt library. Hosted securely on Gumroad.</p>
+      <a class="card-link link-gold" href="https://brodanova6.gumroad.com/sourdworks" target="_blank">
+        Access 16-Week Course
+      </a>
+    </div>
+    <div class="card">
+      <span class="card-badge badge-public">Free Preview</span>
+      <h3>Student Journey Map</h3>
+      <p>An interactive spiral navigator showing all 18 chapters across 3 passes, with CEFR progression timeline and chapter detail panels.</p>
+      <a class="card-link link-ghost" href="journey.html">Explore Journey Map</a>
+    </div>
+    <div class="card">
+      <span class="card-badge badge-public">Free Preview</span>
+      <h3>Course Overview</h3>
+      <p>Phase structure, chapter summaries, CEFR milestones, and the G=U∘F∘K∘C operator chain explained. No login required.</p>
+      <a class="card-link link-ghost" href="course-16weeks.html">View Course Overview</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── BOOK 3 ── -->
+<section id="book3">
+  <p class="section-label">Print · Available on eBay</p>
+  <h2 class="section-title">Book 3 — English for Researchers</h2>
+  <p class="section-desc">
+    The printed companion to the 16-Week course. A C1 → D2 STEM English program
+    in book form. Includes all operator chain diagrams, chapter exercises,
+    and the formal structure of G6 language architecture.
+  </p>
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-badge badge-live">Print Edition</span>
+      <h3>Buy Book 3 — Physical Copy</h3>
+      <p>Hardcopy available for purchase. Ideal for researchers who prefer working with a physical text alongside the digital course.</p>
+      <a class="card-link link-navy" href="https://www.ebay.com/usr/YOUR-EBAY-USERNAME" target="_blank">
+        Buy Book 3 on eBay
+      </a>
+    </div>
+    <div class="card">
+      <span class="card-badge badge-paid">Digital — Membership</span>
+      <h3>Book 3 PDF</h3>
+      <p>The full PDF edition of Book 3 is included in the yearly membership alongside the HTML course, prompts, and future updates.</p>
+      <a class="card-link link-gold" href="https://brodanova6.gumroad.com/sourdworks" target="_blank">
+        Access PDF via Membership
+      </a>
+    </div>
+    <div class="card">
+      <span class="card-badge badge-public">Free · Interactive</span>
+      <h3>Read Book 3 Online</h3>
+      <p>The interactive HTML edition of Book 3: The Mini-Beast. All 17 chapters with live operator simulations, CEFR scaffolding, and the G = U ∘ F ∘ K ∘ C framework in motion.</p>
+      <a class="card-link link-ghost" href="prelude.html">
+        Open Book 3 →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── AXLE ── -->
+<section id="axle">
+  <p class="section-label">Verification System · Public Research</p>
+  <h2 class="section-title">AXLE — Axiom Exchange Language Engine</h2>
+  <p class="section-desc">
+    A formal verification architecture for language claims. AXLE assigns
+    sorry-codes (FN-A, FN-C, FN-H…) to unproven language axioms and tracks
+    proof obligations across 7 sub-architectures.
+  </p>
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-badge badge-public">Public</span>
+      <h3>AXLE Sorry Roadmap</h3>
+      <p>Live SVG roadmap of open proof obligations, blocking dependencies, and verification status across all AXLE modules.</p>
+      <a class="card-link link-ghost" href="axle_sorry_roadmap.svg" target="_blank">View Roadmap SVG</a>
+    </div>
+    <div class="card">
+      <span class="card-badge badge-tool">GitHub</span>
+      <h3>AXLE Source</h3>
+      <p>Full specification, sorry-code registry, and issue tracker on GitHub. Open for review and collaboration.</p>
+      <a class="card-link link-ghost" href="https://github.com/TOTOGT/AXLE" target="_blank">TOTOGT/AXLE on GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── ORTHOGENESIS ── -->
+<section id="orthogenesis">
+  <p class="section-label">Formal Mathematics · Lean 4 · Public Research</p>
+  <h2 class="section-title">Orthogenesis — Formal Colony Architecture</h2>
+  <p class="section-desc">
+    A Lean 4 / Mathlib project formalising the hexagonal colony model
+    inspired by NASA Moon Base phase architecture. Proves stage invariants,
+    monotone expansion, and neighbor distinctness over axial hex grids.
+  </p>
+
+  <table class="phase-table">
+    <thead>
+      <tr>
+        <th>NASA Phase</th>
+        <th>Launches / Landings</th>
+        <th>Cargo</th>
+        <th>Colony Stage</th>
+        <th>Lean Theorem</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Phase 01</td>
+        <td>25 / 21</td>
+        <td>~4,000 kg</td>
+        <td>stage = 0</td>
+        <td><code>Colony.stage_bound</code></td>
+      </tr>
+      <tr>
+        <td>Phase 02</td>
+        <td>27 / 24</td>
+        <td>~60,000 kg</td>
+        <td>stage ≤ 1</td>
+        <td><code>Colony.expand_mono</code></td>
+      </tr>
+      <tr>
+        <td>Phase 03</td>
+        <td>29 / 28</td>
+        <td>~150,000 kg</td>
+        <td>stage ≤ 2</td>
+        <td><code>Colony.stage_bound_general</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card-grid" style="margin-top:1.6rem">
+    <div class="card">
+      <span class="card-badge badge-tool">Lean 4 · Mathlib</span>
+      <h3>Orthogenesis Source</h3>
+      <p>Full Lean 4 project: HexGrid geometry, Colony architecture, stage invariant proofs, and growth parameter model.</p>
+      <a class="card-link link-ghost" href="https://github.com/TOTOGT/geometry" target="_blank">TOTOGT/geometry on GitHub</a>
+    </div>
+    <div class="card">
+      <span class="card-badge badge-public">Proved</span>
+      <h3>Three Core Lemmas</h3>
+      <p>
+        <strong>Lemma 1:</strong> Origin cell has 6 distinct neighbors.<br>
+        <strong>Lemma 2:</strong> Colony.expand is monotone.<br>
+        <strong>Lemma 3:</strong> Stage invariant — every cell in expandⁿ has stage ≤ n.
+      </p>
+      <a class="card-link link-ghost" href="https://github.com/TOTOGT/geometry" target="_blank">View Proofs</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── JOURNEY ── -->
+<section id="journey">
+  <p class="section-label">Student Tool · Free</p>
+  <h2 class="section-title">Student Journey Map</h2>
+  <p class="section-desc">
+    An interactive Archimedean spiral showing all 18 chapter positions across
+    3 passes. Track CEFR progress, view chapter detail panels, and see the
+    full G=U∘F∘K∘C operator chain in motion.
+  </p>
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-badge badge-public">Free · Interactive</span>
+      <h3>Spiral Navigator</h3>
+      <p>Phase-coloured curves, multi-pass tracking (localStorage), CEFR timeseries graph, and full chapter information panels. No login required.</p>
+      <a class="card-link link-teal" href="journey.html">Open Journey Map</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-links">
+    <a href="https://brodanova6.gumroad.com/sourdworks" target="_blank">Membership (Gumroad)</a>
+    <a href="https://github.com/TOTOGT" target="_blank">GitHub · TOTOGT</a>
+    <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+    <a href="https://github.com/TOTOGT/geometry" target="_blank">Orthogenesis</a>
+    <a href="journey.html">Journey Map</a>
+  </div>
+  <p>© G6 LLC · All paid content delivered exclusively via <a href="https://brodanova6.gumroad.com/sourdworks" target="_blank">Gumroad Membership</a>. No private files on GitHub.</p>
+</footer>
+
+</body>
+</html>

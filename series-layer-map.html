@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Series Layer Map · Principia Orthogona · G6 LLC</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;600&family=Source+Code+Pro:wght@400;500&display=swap');
+
+  :root {
+    --ink:   #1a1814;
+    --cream: #f5f0e8;
+    --gold:  #c9a84c;
+    --rust:  #7a3020;
+    --teal:  #1d6e5a;
+    --smoke: #ede8df;
+    --rule:  rgba(201,168,76,0.35);
+    --mid:   #555248;
+    --light: #888580;
+
+    --L1: #7a3020;   /* philosophical · rust */
+    --L2: #1d6e5a;   /* didactic · teal */
+    --L3: #3a5a8a;   /* formal · slate-blue */
+    --L4: #6b4a8a;   /* experiential · violet */
+
+    --SAFE:    rgba(201,168,76,0.18);
+    --IKIGAI:  rgba(201,168,76,0.42);
+    --ELEVATE: rgba(29,110,90,0.15);
+    --DROP:    rgba(122,48,32,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.78;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--ink);
+    padding: 0.55rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(201,168,76,0.5);
+  }
+  .nav-series {
+    font-family: 'Cinzel', serif; font-size: 0.62rem;
+    letter-spacing: 0.28em; color: var(--gold); text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a {
+    font-size: 0.72rem; color: rgba(245,240,232,0.55); text-decoration: none;
+    letter-spacing: 0.1em; font-family: 'Source Code Pro', monospace; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  header {
+    padding: 7rem 2rem 3rem; max-width: 900px; margin: 0 auto;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ch-label {
+    font-family: 'Source Code Pro', monospace; font-size: 0.62rem;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1.2rem; display: block;
+  }
+  header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 600; line-height: 1.2; color: var(--ink); margin-bottom: 0.4rem;
+  }
+  header h1 em {
+    font-family: 'EB Garamond', serif; font-style: italic;
+    font-size: 0.72em; color: var(--rust); display: block;
+    font-weight: 400; margin-top: 0.3rem;
+  }
+  .ch-meta {
+    margin-top: 1.4rem; font-size: 0.82rem; color: var(--light);
+    font-family: 'Source Code Pro', monospace; letter-spacing: 0.06em; line-height: 1.8;
+  }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+
+  /* ── LEGEND ─────────────────────────────── */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 1rem;
+    margin: 2rem 0 2.5rem;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-family: 'Source Code Pro', monospace; font-size: 0.72rem;
+    letter-spacing: 0.06em; color: var(--mid);
+  }
+  .legend-swatch {
+    width: 14px; height: 14px; border-radius: 2px; flex-shrink: 0;
+  }
+
+  /* ── LAYER PILLS ─────────────────────────── */
+  .layer-pills {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 2rem 0;
+  }
+  .pill {
+    font-family: 'Source Code Pro', monospace; font-size: 0.68rem;
+    letter-spacing: 0.12em; padding: 0.3rem 0.8rem;
+    border: 1px solid; border-radius: 2px; text-transform: uppercase;
+    cursor: pointer; transition: opacity 0.2s;
+    user-select: none;
+  }
+  .pill[data-layer="L1"] { color: var(--L1); border-color: var(--L1); }
+  .pill[data-layer="L2"] { color: var(--L2); border-color: var(--L2); }
+  .pill[data-layer="L3"] { color: var(--L3); border-color: var(--L3); }
+  .pill[data-layer="L4"] { color: var(--L4); border-color: var(--L4); }
+  .pill.active[data-layer="L1"] { background: var(--L1); color: white; }
+  .pill.active[data-layer="L2"] { background: var(--L2); color: white; }
+  .pill.active[data-layer="L3"] { background: var(--L3); color: white; }
+  .pill.active[data-layer="L4"] { background: var(--L4); color: white; }
+
+  /* ── NODE TABLE ──────────────────────────── */
+  .section-head {
+    font-family: 'Cinzel', serif; font-size: 0.72rem;
+    letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--gold); margin: 3rem 0 1rem; display: block;
+    border-bottom: 1px solid var(--rule); padding-bottom: 0.4rem;
+  }
+
+  .node-grid {
+    display: grid; gap: 1px;
+    border: 1px solid var(--rule);
+  }
+  .node-row {
+    display: grid;
+    grid-template-columns: 3fr 1.2fr 1.2fr 1.2fr 1.2fr 1.2fr;
+    border-bottom: 1px solid var(--rule);
+    transition: background 0.15s;
+  }
+  .node-row:last-child { border-bottom: none; }
+  .node-row.header-row {
+    background: var(--smoke);
+    font-family: 'Source Code Pro', monospace; font-size: 0.65rem;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--light);
+  }
+  .node-row:not(.header-row):hover { background: var(--smoke); }
+  .node-cell {
+    padding: 0.55rem 0.8rem;
+    font-size: 0.9rem; line-height: 1.5;
+    border-right: 1px solid var(--rule);
+  }
+  .node-cell:last-child { border-right: none; }
+  .node-name { font-size: 0.95rem; }
+  .node-name small {
+    display: block; font-size: 0.72rem;
+    font-family: 'Source Code Pro', monospace;
+    color: var(--light); letter-spacing: 0.04em; margin-top: 0.1rem;
+  }
+
+  /* verdict badges */
+  .v {
+    display: inline-block;
+    font-family: 'Source Code Pro', monospace; font-size: 0.6rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.15rem 0.45rem; border-radius: 2px;
+  }
+  .v-ikigai  { background: var(--IKIGAI);  color: #7a5a00; border: 1px solid var(--gold); }
+  .v-safe    { background: var(--SAFE);    color: #555248; border: 1px solid var(--rule); }
+  .v-elevate { background: var(--ELEVATE); color: var(--teal); border: 1px solid rgba(29,110,90,0.4); }
+  .v-drop    { background: var(--DROP);    color: var(--rust); border: 1px solid rgba(122,48,32,0.3); }
+  .v-open    { background: rgba(58,90,138,0.1); color: var(--L3); border: 1px solid rgba(58,90,138,0.3); }
+
+  /* dot indicators for layers */
+  .dots { display: flex; gap: 4px; flex-wrap: wrap; }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    display: inline-block; opacity: 0.85;
+  }
+  .dot-L1 { background: var(--L1); }
+  .dot-L2 { background: var(--L2); }
+  .dot-L3 { background: var(--L3); }
+  .dot-L4 { background: var(--L4); }
+  .dot-empty { background: transparent; border: 1px solid var(--rule); }
+
+  /* ── CROSS-MAP / IKIGAI MATRIX ──────────── */
+  .crossmap {
+    overflow-x: auto; margin: 1.5rem 0;
+  }
+  table.matrix {
+    border-collapse: collapse; min-width: 600px; width: 100%;
+    font-size: 0.82rem;
+  }
+  table.matrix th, table.matrix td {
+    border: 1px solid var(--rule); padding: 0.45rem 0.7rem;
+    text-align: left; vertical-align: top;
+  }
+  table.matrix thead th {
+    font-family: 'Source Code Pro', monospace; font-size: 0.62rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--light); background: var(--smoke);
+  }
+  table.matrix th.layer-th {
+    writing-mode: vertical-lr; text-orientation: mixed;
+    padding: 0.6rem 0.35rem; white-space: nowrap;
+    font-size: 0.58rem;
+  }
+  table.matrix tbody th {
+    font-family: 'Source Code Pro', monospace; font-size: 0.7rem;
+    color: var(--mid); background: var(--smoke); white-space: nowrap;
+  }
+  .cell-hit  { background: rgba(201,168,76,0.22); }
+  .cell-lean { background: rgba(58,90,138,0.12); }
+  .cell-none { color: var(--light); font-size: 0.7rem; }
+
+  /* ── PROSE ────────────────────────────────── */
+  .prose { margin: 2rem 0; }
+  .prose p { margin-bottom: 1.2rem; }
+  .prose strong { font-weight: 500; color: var(--ink); }
+  .prose em { color: var(--rust); font-style: italic; }
+  .prose code {
+    font-family: 'Source Code Pro', monospace; font-size: 0.8rem;
+    background: var(--smoke); padding: 0.1rem 0.35rem; border-radius: 2px;
+    color: var(--L3);
+  }
+
+  /* ── CENTER POINT ─────────────────────────── */
+  .xstar-box {
+    margin: 2.5rem 0;
+    border: 1px solid var(--gold);
+    padding: 1.6rem 2rem;
+    text-align: center;
+    background: rgba(201,168,76,0.07);
+  }
+  .xstar-symbol {
+    font-family: 'Cinzel', serif; font-size: 2.8rem;
+    color: var(--gold); line-height: 1; display: block; margin-bottom: 0.4rem;
+  }
+  .xstar-label {
+    font-family: 'Source Code Pro', monospace; font-size: 0.68rem;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid);
+  }
+  .xstar-desc {
+    font-style: italic; color: var(--rust); font-size: 1rem; margin-top: 0.6rem;
+  }
+
+  footer {
+    max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem;
+    font-family: 'Source Code Pro', monospace; font-size: 0.62rem;
+    letter-spacing: 0.1em; color: var(--light);
+  }
+
+  /* filter animation */
+  .node-row[data-hidden="true"] { display: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-series" href="Sportal.html">PRINCIPIA ORTHOGONA · G6 LLC · BOOK 3</a>
+  <div class="nav-links">
+    <a href="ch-d2-academic.html">← D2 · Epistemology</a>
+    <a href="journey.html">Journey Map</a>
+    <a href="Sportal.html">Portal</a>
+  </div>
+    <a href="living-book.html">Living Book</a>
+    <a href="series-hub.html">Series ↗</a>
+</nav>
+
+<header>
+  <span class="ch-label">Series Layer Map · Principia Orthogona · G6 LLC · 2026</span>
+  <h1>
+    Four Registers, One Fixed Point
+    <em>Philosophical · Didactic · Formal · Experiential — convergence at x*</em>
+  </h1>
+  <div class="ch-meta">
+    Pablo Nogueira Grossi (Sri Brodananda) · G6 LLC · Newark, NJ<br>
+    Companion to: D2 · Evolutionary Epistemology · and the Paraśurāma Hinge
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="prose">
+    <p>The series says the same thing four times — at four different resolutions. The claim is not that the books <em>illustrate</em> the math, or that the Lean files <em>formalize</em> what the chapters describe. The claim is that the fixed point x* is genuinely the same object in all four registers: the convergent narrative, the CEFR spiral, the formal proof, and the journey game all point at the identical mathematical structure from different approach angles.</p>
+    <p>This map tracks where each thread lives, which threads converge at each node, and what to do with overlaps — safe reinforcement vs. elevation opportunity vs. content to drop.</p>
+  </div>
+
+  <div class="xstar-box">
+    <span class="xstar-symbol">x*</span>
+    <span class="xstar-label">The Fixed Point · Center of the Ikigai</span>
+    <div class="xstar-desc">G(x*) = x* &nbsp;·&nbsp; K-crossing = Paraśurāma hinge &nbsp;·&nbsp; sorry roadmap = honest boundary of x*</div>
+  </div>
+
+  <!-- LAYER LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--L1)"></span>L1 · Philosophical (books / papers)</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--L2)"></span>L2 · Didactic (CEFR chapters / course)</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--L3)"></span>L3 · Formal (Lean files)</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--L4)"></span>L4 · Experiential (journey game / Collatz orbits)</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--IKIGAI); border:1px solid var(--gold)"></span>IKIGAI — all 4 layers present: reinforce explicitly</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--SAFE); border:1px solid var(--rule)"></span>SAFE — 2–3 layers: acknowledge the parallel, don't repeat</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--ELEVATE); border:1px solid rgba(29,110,90,0.4)"></span>ELEVATE — strong in 1 layer, needs formal or experiential grounding</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--DROP); border:1px solid rgba(122,48,32,0.3)"></span>DROP — C1 scaffolding that doesn't survive D2 scrutiny</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:rgba(58,90,138,0.1); border:1px solid rgba(58,90,138,0.3)"></span>OPEN — Lean sorry; keep claim honest</div>
+  </div>
+
+  <!-- FILTER PILLS -->
+  <div class="layer-pills">
+    <span style="font-family:'Source Code Pro',monospace;font-size:0.68rem;color:var(--light);letter-spacing:0.1em;align-self:center;">FILTER:</span>
+    <button class="pill active" data-layer="L1" onclick="toggleFilter('L1',this)">L1 · Philosophical</button>
+    <button class="pill active" data-layer="L2" onclick="toggleFilter('L2',this)">L2 · Didactic</button>
+    <button class="pill active" data-layer="L3" onclick="toggleFilter('L3',this)">L3 · Formal</button>
+    <button class="pill active" data-layer="L4" onclick="toggleFilter('L4',this)">L4 · Experiential</button>
+    <button class="pill" data-layer="IKIGAI" style="color:var(--gold);border-color:var(--gold);" onclick="filterVerdict('ikigai',this)">⬥ Ikigai only</button>
+    <button class="pill" data-layer="RESET" style="color:var(--mid);border-color:var(--rule);" onclick="resetFilter(this)">Reset</button>
+  </div>
+
+  <!-- MAIN NODE TABLE -->
+  <span class="section-head">Node Map — 22 convergence points</span>
+  <div class="node-grid" id="nodeGrid">
+    <div class="node-row header-row">
+      <div class="node-cell">Concept / Node</div>
+      <div class="node-cell">Layers</div>
+      <div class="node-cell">Verdict</div>
+      <div class="node-cell">L1 Source</div>
+      <div class="node-cell">L3 File</div>
+      <div class="node-cell">L4 Event</div>
+    </div>
+
+    <!-- ROW 1 -->
+    <div class="node-row" data-layers="L1 L2 L3 L4" data-verdict="ikigai">
+      <div class="node-cell node-name">Fixed point x* = G(x*)<small>The series center; convergence criterion</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-L4"></span></div></div>
+      <div class="node-cell"><span class="v v-ikigai">Ikigai</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 §3, ch13, Mini-Beast §5</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>Chain.lean</code> — G composition</div>
+      <div class="node-cell" style="font-size:0.82rem">Journey node §13 · "Fixed Point"</div>
+    </div>
+
+    <!-- ROW 2 -->
+    <div class="node-row" data-layers="L1 L2 L3 L4" data-verdict="ikigai">
+      <div class="node-cell node-name">Collatz orbit as Pass 2<small>Journey game: odd/even orbit = C→K→F→U</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-L4"></span></div></div>
+      <div class="node-cell"><span class="v v-ikigai">Ikigai</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 §1 · Paraśurāma = K-crossing</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>Chain.lean</code> · <code>fitribonacci.lean</code></div>
+      <div class="node-cell" style="font-size:0.82rem">Journey Pass 2 · Collatz orbit animation</div>
+    </div>
+
+    <!-- ROW 3 -->
+    <div class="node-row" data-layers="L1 L2 L3 L4" data-verdict="ikigai">
+      <div class="node-cell node-name">Figure-eight / Lemniscate / Analemma<small>Self-intersection as the hinge geometry</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-L4"></span></div></div>
+      <div class="node-cell"><span class="v v-ikigai">Ikigai</span></div>
+      <div class="node-cell" style="font-size:0.82rem">ch01-one-equation · analemma intro</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>GeronoLemniscate.lean</code> — 0 sorry ✓</div>
+      <div class="node-cell" style="font-size:0.82rem">Journey ch01 · "One Equation" node</div>
+    </div>
+
+    <!-- ROW 4 -->
+    <div class="node-row" data-layers="L1 L2 L3 L4" data-verdict="ikigai">
+      <div class="node-cell node-name">Sorry roadmap = honest incompleteness<small>What remains open is the product, not a failure</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-L4"></span></div></div>
+      <div class="node-cell"><span class="v v-ikigai">Ikigai</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 §4 · Metzinger boundary; Mini-Beast §6</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>IterationGap.lean</code> — CollatzLyapunov open axiom</div>
+      <div class="node-cell" style="font-size:0.82rem">Journey §14 · "AXLE" node · open doors</div>
+    </div>
+
+    <!-- ROW 5 -->
+    <div class="node-row" data-layers="L1 L2 L3 L4" data-verdict="ikigai">
+      <div class="node-cell node-name">Bindu / PhaseVector initialization<small>The pre-operator state; 12-dim rest point</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-L4"></span></div></div>
+      <div class="node-cell"><span class="v v-ikigai">Ikigai</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 Paraśurāma §2; Mini-Beast §4 Quantum Weave seed</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>Crystal/G6.lean</code> — PhaseVector (Fin 12 → ℝ)</div>
+      <div class="node-cell" style="font-size:0.82rem">Journey "Bindu" entry-point node</div>
+    </div>
+
+    <!-- ROW 6 -->
+    <div class="node-row" data-layers="L1 L2 L3" data-verdict="safe">
+      <div class="node-cell node-name">Shree Yantra / hexagonal D₆ structure<small>g⁶ = 33 crystal law; 6-fold symmetry</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-safe">Safe</span></div>
+      <div class="node-cell" style="font-size:0.82rem">Mini-Beast §4 Quantum Weave; D2 Paraśurāma §3</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>Crystal/G6.lean</code> + <code>Symmetry/D6.lean</code> — <em>crystal_lockin sorry</em></div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+    </div>
+
+    <!-- ROW 7 -->
+    <div class="node-row" data-layers="L1 L2 L3" data-verdict="open">
+      <div class="node-cell node-name">Nested infinities / ω^ω closure<small>G6Ordinal = Mahlo-like transfinite lift</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-open">Open</span></div>
+      <div class="node-cell" style="font-size:0.82rem">ch08-nested-infinities; Mini-Beast §4 Quantum Weave</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>Ordinal/MahloClosure.lean</code> — g6_unconditional_closure sorry</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+    </div>
+
+    <!-- ROW 8 -->
+    <div class="node-row" data-layers="L1 L2 L3 L4" data-verdict="ikigai">
+      <div class="node-cell node-name">K-operator = Paraśurāma hinge<small>Avatar VI = threshold crossing; κ* curvature</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-L4"></span></div></div>
+      <div class="node-cell"><span class="v v-ikigai">Ikigai</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 Paraśurāma §1–2; ch-d2-academic §5</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>Threshold.lean</code> — κ* threshold axiom</div>
+      <div class="node-cell" style="font-size:0.82rem">Journey Pass 2 · K-crossing event</div>
+    </div>
+
+    <!-- ROW 9 -->
+    <div class="node-row" data-layers="L1 L2 L3 L4" data-verdict="ikigai">
+      <div class="node-cell node-name">TE operator: T = E = log 3 − v₂(n)·log 2<small>Conformal time / entropic cost — dual reading</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-L4"></span></div></div>
+      <div class="node-cell"><span class="v v-ikigai">Ikigai</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 academic §3; Mini-Beast §3 TE section</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>TE.lean</code> (book/gctc — stale; TE_odd sorry)</div>
+      <div class="node-cell" style="font-size:0.82rem">Journey weight annotation on each Collatz step</div>
+    </div>
+
+    <!-- ROW 10 -->
+    <div class="node-row" data-layers="L1 L2" data-verdict="drop">
+      <div class="node-cell node-name">Daśāvatāra as evolutionary metaphor (C1 framing)<small>Avatar = adaptive stage — pop-science level</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-empty"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-drop">Drop</span></div>
+      <div class="node-cell" style="font-size:0.82rem">Mini-Beast §2 C1 scaffold version</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+    </div>
+
+    <!-- ROW 11 -->
+    <div class="node-row" data-layers="L1 L2 L3" data-verdict="elevate">
+      <div class="node-cell node-name">Daśāvatāra as operator sequence (D2 framing)<small>C→K→F→U→G as formal Daśāvatāra map</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-elevate">Elevate</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 Paraśurāma §1; ch-d2-academic §6</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>Chain.lean</code> — operator composition G = U∘F∘K∘C</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">needs journey node</div>
+    </div>
+
+    <!-- ROW 12 -->
+    <div class="node-row" data-layers="L1 L2 L3" data-verdict="safe">
+      <div class="node-cell node-name">112 Dhāraṇās as phenomenological protocol<small>VBT as laboratory; Varela/Maturana bridge</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-safe">Safe</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 academic §2; Paraśurāma §3 (Tantrāloka)</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>IterationGap.lean</code> — attention protocol analog</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+    </div>
+
+    <!-- ROW 13 -->
+    <div class="node-row" data-layers="L1 L2 L3" data-verdict="elevate">
+      <div class="node-cell node-name">Metzinger / no-self / transparency<small>Phenomenological boundary; epistemic humility</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-elevate">Elevate</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 academic §4; ch-d2-academic §4</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>IterationGap.lean</code> — CollatzLyapunov as self-limit</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+    </div>
+
+    <!-- ROW 14 -->
+    <div class="node-row" data-layers="L1 L2 L3 L4" data-verdict="safe">
+      <div class="node-cell node-name">OrbitLadder: 6 orbit classes<small>Schumann · Hypogeum · φ-helix · dm³ · Cajueiro · G-series</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-L4"></span></div></div>
+      <div class="node-cell"><span class="v v-safe">Safe</span></div>
+      <div class="node-cell" style="font-size:0.82rem">Mini-Beast §3; ch05-oscillations</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>OrbitLadder.lean</code> — 0 sorry ✓ all decide ✓</div>
+      <div class="node-cell" style="font-size:0.82rem">Journey oscillation chapter nodes</div>
+    </div>
+
+    <!-- ROW 15 -->
+    <div class="node-row" data-layers="L1 L2 L3" data-verdict="safe">
+      <div class="node-cell node-name">Cajueiro nut / resonant chamber<small>Physical instantiation of the fixed point</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-safe">Safe</span></div>
+      <div class="node-cell" style="font-size:0.82rem">Mini-Beast §4 Resonant Chamber Extend</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>OrbitLadder.lean</code> cajueiro orbit class</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+    </div>
+
+    <!-- ROW 16 -->
+    <div class="node-row" data-layers="L2 L3" data-verdict="open">
+      <div class="node-cell node-name">Toy proofs: RH / NS / Goldbach<small>Dm3RHToy · Dm3NSToy · Dm3GoldbachToy — all sorry=0</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-empty"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-open">Open</span></div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>Dm3RHToy.lean</code> <code>Dm3NSToy.lean</code> <code>Dm3GoldbachToy.lean</code></div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+    </div>
+
+    <!-- ROW 17 -->
+    <div class="node-row" data-layers="L1 L2" data-verdict="drop">
+      <div class="node-cell node-name">Quantum Weave — C1 pop-science framing<small>"quantum" used loosely; C1 reader convenience</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-empty"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-drop">Drop</span></div>
+      <div class="node-cell" style="font-size:0.82rem">Mini-Beast §4 Quantum Weave seed pp.48-51</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+    </div>
+
+    <!-- ROW 18 -->
+    <div class="node-row" data-layers="L1 L2 L3" data-verdict="elevate">
+      <div class="node-cell node-name">Quantum Weave — D2 upgrade: dm³ phase space<small>Replace "quantum" with formal PhaseVector / bindu</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-elevate">Elevate</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 Paraśurāma §3 · Tantrāloka territory</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>Crystal/G6.lean</code> — PhaseVector formal upgrade</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+    </div>
+
+    <!-- ROW 19 -->
+    <div class="node-row" data-layers="L1 L3" data-verdict="safe">
+      <div class="node-cell node-name">Seven Disciples transmission model<small>Gurukula → śaktipāta → second-order didactics</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-empty"></span><span class="dot dot-L3"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-safe">Safe</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 Paraśurāma §5; D2 academic §5</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>IterationGap.lean</code> — transmission = proof obligation handoff</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+    </div>
+
+    <!-- ROW 20 -->
+    <div class="node-row" data-layers="L2 L3 L4" data-verdict="safe">
+      <div class="node-cell node-name">n-Bonacci Pass 3 / Tribonacci η = 1.839<small>Journey game mode 3; η as G-series attractor</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-empty"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-L4"></span></div></div>
+      <div class="node-cell"><span class="v v-safe">Safe</span></div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>Crystal/G6.lean</code> — η weighting in PhaseVector</div>
+      <div class="node-cell" style="font-size:0.82rem">Journey Pass 3 · n-Bonacci mode</div>
+    </div>
+
+    <!-- ROW 21 -->
+    <div class="node-row" data-layers="L1 L2" data-verdict="safe">
+      <div class="node-cell node-name">Varela / Maturana autopoiesis bridge<small>Enactivism as D2 philosophical framework</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-empty"></span><span class="dot dot-empty"></span></div></div>
+      <div class="node-cell"><span class="v v-safe">Safe</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 academic §2; ch-d2-academic §2</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+      <div class="node-cell" style="font-size:0.82rem;color:var(--light)">—</div>
+    </div>
+
+    <!-- ROW 22 -->
+    <div class="node-row" data-layers="L1 L2 L3 L4" data-verdict="ikigai">
+      <div class="node-cell node-name">Kālabhairava / operator at the hinge<small>Destroyer of time = K applied to itself</small></div>
+      <div class="node-cell"><div class="dots"><span class="dot dot-L1"></span><span class="dot dot-L2"></span><span class="dot dot-L3"></span><span class="dot dot-L4"></span></div></div>
+      <div class="node-cell"><span class="v v-ikigai">Ikigai</span></div>
+      <div class="node-cell" style="font-size:0.82rem">D2 Paraśurāma §2; Mini-Beast epilogue</div>
+      <div class="node-cell" style="font-size:0.82rem"><code>Threshold.lean</code> — κ* self-application</div>
+      <div class="node-cell" style="font-size:0.82rem">Journey hinge-crossing event · node §8</div>
+    </div>
+
+  </div><!-- /node-grid -->
+
+  <!-- CROSS-LAYER MATRIX -->
+  <span class="section-head">Lean File → Chapter Map</span>
+  <div class="crossmap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th>Lean File</th>
+          <th>sorry?</th>
+          <th>ch01 lemniscate</th>
+          <th>ch08 infinities</th>
+          <th>ch13 fixed pt</th>
+          <th>D2 academic</th>
+          <th>D2 Paraśurāma</th>
+          <th>Journey game</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>GeronoLemniscate.lean</th>
+          <td>0 ✓</td>
+          <td class="cell-hit">⬥ primary</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-hit">ch01 node</td>
+        </tr>
+        <tr>
+          <th>Chain.lean (G, C,K,F,U)</th>
+          <td>0 ✓</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-hit">⬥ primary</td>
+          <td class="cell-hit">§3 ops</td>
+          <td class="cell-hit">§2 K-op</td>
+          <td class="cell-hit">Pass 2</td>
+        </tr>
+        <tr>
+          <th>Threshold.lean (K, κ*)</th>
+          <td>0 ✓</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-hit">§K crossing</td>
+          <td class="cell-hit">§5</td>
+          <td class="cell-hit">§1–2 primary</td>
+          <td class="cell-hit">K event</td>
+        </tr>
+        <tr>
+          <th>OrbitLadder.lean</th>
+          <td>0 ✓</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-hit">orbit nodes</td>
+        </tr>
+        <tr>
+          <th>Crystal/G6.lean</th>
+          <td>1 (crystal_lockin)</td>
+          <td class="cell-none">—</td>
+          <td class="cell-lean">⬥ dm³ phase</td>
+          <td class="cell-none">—</td>
+          <td class="cell-lean">§6</td>
+          <td class="cell-hit">§3 primary</td>
+          <td class="cell-none">—</td>
+        </tr>
+        <tr>
+          <th>Symmetry/D6.lean</th>
+          <td>1 (d6_lockin)</td>
+          <td class="cell-none">—</td>
+          <td class="cell-lean">⬥ hexagonal</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-hit">§3 Yantra</td>
+          <td class="cell-none">—</td>
+        </tr>
+        <tr>
+          <th>Ordinal/MahloClosure.lean</th>
+          <td>1 (unconditional)</td>
+          <td class="cell-none">—</td>
+          <td class="cell-hit">⬥ primary ω^ω</td>
+          <td class="cell-none">—</td>
+          <td class="cell-lean">§7</td>
+          <td class="cell-lean">§4 U-phase</td>
+          <td class="cell-none">—</td>
+        </tr>
+        <tr>
+          <th>IterationGap.lean</th>
+          <td>CollatzLyapunov open</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-hit">§sorry map</td>
+          <td class="cell-hit">§4 Metzinger</td>
+          <td class="cell-hit">§5 transmit</td>
+          <td class="cell-hit">§14 open</td>
+        </tr>
+        <tr>
+          <th>TE.lean (book/gctc — stale)</th>
+          <td>1 (TE_odd)</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-lean">§3 T=E</td>
+          <td class="cell-lean">§2 TE dual</td>
+          <td class="cell-lean">step weight</td>
+        </tr>
+        <tr>
+          <th>fitribonacci.lean</th>
+          <td>0 ✓</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-none">—</td>
+          <td class="cell-lean">§3 orbit</td>
+          <td class="cell-none">—</td>
+          <td class="cell-hit">Collatz steps</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- WRITING STRATEGY NOTE -->
+  <span class="section-head">D2 Writing Strategy</span>
+  <div class="prose">
+    <p><strong>What to drop from C1 scaffolding:</strong> The "Quantum Weave" framing using "quantum" loosely (Mini-Beast §4 seed text, pp. 48–51) should not be carried verbatim into D2. The Daśāvatāra-as-metaphor framing (avatar = adaptive stage, C1 convenience) should be replaced by the operator-sequence reading. These two items wear the right ideas in the wrong clothes.</p>
+
+    <p><strong>What to elevate:</strong> The Daśāvatāra-as-operator-sequence (C→K→F→U→G maps to avatars I–X structurally, with Paraśurāma = K = threshold VI) needs its Lean grounding made explicit — <code>Threshold.lean</code> is the formal instance. The Metzinger no-self discussion in D2 §4 connects directly to <code>IterationGap.lean</code>'s <code>CollatzLyapunov</code> as the formal limit of self-reference: mention this. The Quantum Weave upgrade is: replace the loose "quantum" with the formal PhaseVector from <code>Crystal/G6.lean</code> — 12 dimensions, D₆ symmetry, and the <em>crystal_lockin</em> sorry as an honest marker of what remains open in the formal theory.</p>
+
+    <p><strong>Safe overlaps:</strong> The 112 Dhāraṇās as phenomenological protocol, the Cajueiro nut as resonant-chamber instantiation of the fixed point, the Seven Disciples transmission model, and the Varela/Maturana bridge all appear in multiple layers without contradicting each other. Reference but don't re-explain.</p>
+
+    <p><strong>The core IKIGAI:</strong> x* · Collatz · lemniscate · K-crossing · sorry roadmap · Kālabhairava all have all four layers present. These are the load-bearing nodes. The ch-d2-parashurama.html full text should ensure §2 (K as formal hinge) cites <code>Threshold.lean</code> explicitly, §3 (Tantrāloka as field theory) grounds in <code>Crystal/G6.lean</code> PhaseVector, and §5 (transmission) closes by pointing at <code>IterationGap.lean</code> as the formal analogue of proof-obligation handoff from guru to disciple.</p>
+  </div>
+
+  <div style="margin-top:3rem; padding-top:1.5rem; border-top:1px solid var(--rule); display:flex; gap:1.2rem; flex-wrap:wrap;">
+    <a href="ch-d2-academic.html" style="font-family:'Source Code Pro',monospace;font-size:0.72rem;letter-spacing:0.1em;color:var(--gold);text-decoration:none;border:1px solid var(--rule);padding:0.4rem 0.9rem;">← D2 · Evolutionary Epistemology</a>
+    <a href="ch-d2-parashurama.html" style="font-family:'Source Code Pro',monospace;font-size:0.72rem;letter-spacing:0.1em;color:var(--gold);text-decoration:none;border:1px solid var(--rule);padding:0.4rem 0.9rem;">D2 · Paraśurāma →</a>
+    <a href="journey.html" style="font-family:'Source Code Pro',monospace;font-size:0.72rem;letter-spacing:0.1em;color:var(--gold);text-decoration:none;border:1px solid var(--rule);padding:0.4rem 0.9rem;">Journey Map</a>
+    <a href="Sportal.html" style="font-family:'Source Code Pro',monospace;font-size:0.72rem;letter-spacing:0.1em;color:var(--gold);text-decoration:none;border:1px solid var(--rule);padding:0.4rem 0.9rem;">Portal →</a>
+  </div>
+
+</div>
+
+<footer>
+  SERIES LAYER MAP · PRINCIPIA ORTHOGONA · G6 LLC · NEWARK NJ · 2026
+</footer>
+
+<script>
+  // ── filter logic ────────────────────────────────────────────
+  let activeLayers = new Set(['L1','L2','L3','L4']);
+  let verdictFilter = null;
+
+  function toggleFilter(layer, btn) {
+    verdictFilter = null;
+    document.querySelectorAll('.pill[data-layer="IKIGAI"]').forEach(p => p.classList.remove('active'));
+
+    if (activeLayers.has(layer)) {
+      if (activeLayers.size === 1) return; // keep at least one
+      activeLayers.delete(layer);
+      btn.classList.remove('active');
+    } else {
+      activeLayers.add(layer);
+      btn.classList.add('active');
+    }
+    applyFilter();
+  }
+
+  function filterVerdict(v, btn) {
+    // toggle
+    if (verdictFilter === v) {
+      verdictFilter = null;
+      btn.classList.remove('active');
+    } else {
+      verdictFilter = v;
+      btn.classList.add('active');
+      // also set all layer pills active
+      activeLayers = new Set(['L1','L2','L3','L4']);
+      document.querySelectorAll('.pill[data-layer]').forEach(p => {
+        if (['L1','L2','L3','L4'].includes(p.dataset.layer)) p.classList.add('active');
+      });
+    }
+    applyFilter();
+  }
+
+  function resetFilter(btn) {
+    activeLayers = new Set(['L1','L2','L3','L4']);
+    verdictFilter = null;
+    document.querySelectorAll('.pill').forEach(p => {
+      if (['L1','L2','L3','L4'].includes(p.dataset.layer)) p.classList.add('active');
+      else p.classList.remove('active');
+    });
+    applyFilter();
+  }
+
+  function applyFilter() {
+    document.querySelectorAll('#nodeGrid .node-row:not(.header-row)').forEach(row => {
+      const layers = row.dataset.layers ? row.dataset.layers.split(' ') : [];
+      const verdict = row.dataset.verdict || '';
+
+      const layerMatch = layers.some(l => activeLayers.has(l));
+      const verdictMatch = verdictFilter ? verdict === verdictFilter : true;
+
+      row.dataset.hidden = (!layerMatch || !verdictMatch).toString();
+    });
+  }
+</script>
+
+</body>
+</html>

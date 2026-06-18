@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 5: Neural Oscillations | English for Researchers C1→D2</title>
+  <style>
+    :root {
+      --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4;
+      --mid: #3a4f7a; --rule: #8a7340; --text: #1c1c1c; --green: #2d5a27;
+      --light: #e8e2d4; --red: #8b1a1a; --teal: #1a5c5c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Georgia','Times New Roman',serif; color: var(--text); background: var(--cream); }
+    nav { background: var(--navy); padding: 0.75rem 2rem; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-logo { color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; text-decoration: none; font-family: sans-serif; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a { color: #ccc; text-decoration: none; font-size: 0.82rem; font-family: sans-serif; }
+    .nav-links a:hover { color: var(--gold); }
+    .chapter-nav { background: var(--smoke); border-top: 1px solid var(--light); padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .chapter-nav a { font-family: sans-serif; font-size: 0.82rem; color: var(--mid); text-decoration: none; padding: 0.4rem 0.9rem; border: 1px solid var(--light); }
+    .chapter-nav a:hover { background: var(--navy); color: var(--gold); }
+    .chapter-nav .current { font-family: sans-serif; font-size: 0.78rem; color: var(--rule); letter-spacing: 0.1em; }
+    .hero { background: var(--navy); color: white; padding: 4rem 2rem 3rem; }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .eyebrow { font-family: sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.8rem; }
+    .op-chain { font-family: sans-serif; font-size: 1.1rem; letter-spacing: 0.15em; color: #888; margin-bottom: 1.2rem; }
+    .op-chain .active { color: var(--gold); font-weight: bold; border-bottom: 2px solid var(--gold); padding-bottom: 2px; }
+    h1 { font-size: clamp(1.7rem, 4vw, 2.8rem); color: white; line-height: 1.2; margin-bottom: 0.6rem; }
+    .hero-sub { color: var(--gold); font-style: italic; font-size: 1.1rem; margin-bottom: 1rem; }
+    .gold-rule { width: 60px; height: 2px; background: var(--gold); margin: 1.2rem 0; }
+    .hero-desc { color: #bbb; font-size: 0.95rem; line-height: 1.8; max-width: 640px; }
+    section { padding: 3rem 2rem; }
+    .section-inner { max-width: 800px; margin: 0 auto; }
+    .section-label { font-family: sans-serif; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rule); margin-bottom: 0.4rem; }
+    h2 { font-size: 1.5rem; border-bottom: 2px solid var(--gold); padding-bottom: 0.3rem; display: inline-block; margin-bottom: 1.2rem; }
+    h3 { font-size: 1.1rem; color: var(--navy); margin: 1.5rem 0 0.6rem; }
+    p { line-height: 1.8; margin-bottom: 1rem; color: #333; }
+    .insight-box { background: var(--navy); color: var(--gold); padding: 1.2rem 1.5rem; border-left: 4px solid var(--gold); margin: 1.5rem 0; font-style: italic; font-size: 0.95rem; line-height: 1.7; }
+    .theorem-box { background: white; border: 1px solid var(--light); border-left: 4px solid var(--mid); padding: 1.2rem 1.5rem; margin: 1.5rem 0; }
+    .theorem-box .theorem-label { font-family: sans-serif; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rule); margin-bottom: 0.5rem; }
+    .theorem-box .theorem-text { font-style: italic; color: var(--navy); line-height: 1.7; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8rem; margin: 1rem 0; }
+    .vocab-item { background: white; border-top: 2px solid var(--gold); padding: 0.6rem 0.8rem; }
+    .vocab-term { font-weight: bold; color: var(--navy); font-size: 0.9rem; }
+    .vocab-def { font-size: 0.8rem; color: #555; margin-top: 0.2rem; line-height: 1.5; }
+    .prompt-section { background: #fffbeb; border-top: 3px solid var(--gold); padding: 2rem; }
+    .prompt-section .section-inner { max-width: 800px; margin: 0 auto; }
+    .prompt-label { font-family: sans-serif; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rule); margin-bottom: 0.4rem; }
+    .prompt-title { font-size: 1.1rem; font-weight: bold; color: var(--navy); margin-bottom: 0.8rem; }
+    .prompt-box { background: white; border: 1px solid #fde68a; border-left: 4px solid var(--gold); padding: 1rem 1.2rem; font-size: 0.88rem; line-height: 1.75; color: #444; margin-bottom: 0.8rem; }
+    .prompt-instructions { font-size: 0.82rem; color: #666; font-style: italic; line-height: 1.6; }
+    .copy-btn { background: var(--gold); color: var(--navy); border: none; padding: 0.4rem 1rem; font-family: sans-serif; font-size: 0.75rem; font-weight: bold; cursor: pointer; margin-top: 0.6rem; }
+    .copy-btn:hover { opacity: 0.9; }
+    .output-section { background: var(--navy); padding: 2rem; }
+    .output-section .section-inner { max-width: 800px; margin: 0 auto; }
+    .output-title { font-family: sans-serif; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+    .output-list { list-style: none; padding: 0; }
+    .output-list li { color: #ccc; font-size: 0.9rem; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); padding-left: 1.2rem; position: relative; line-height: 1.6; }
+    .output-list li::before { content: '✓'; position: absolute; left: 0; color: var(--gold); }
+    footer { background: var(--navy); color: #666; padding: 2rem; text-align: center; font-size: 0.78rem; line-height: 1.8; }
+    footer a { color: #888; text-decoration: none; }
+    canvas { display: block; max-width: 100%; border: 1px solid var(--light); background: white; margin: 1rem 0; }
+    .sim-controls { margin-top: 0.8rem; display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .sim-btn { background: var(--navy); color: var(--gold); border: 1px solid var(--gold); padding: 0.4rem 0.9rem; font-family: sans-serif; font-size: 0.78rem; cursor: pointer; }
+    .sim-btn:hover { background: var(--gold); color: var(--navy); }
+    .sim-container { margin: 1.5rem 0; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">ENGLISH FOR RESEARCHERS · C1→D2</a>
+  <ul class="nav-links">
+    <li><a href="course-16weeks.html">Course Schedule</a></li>
+    <li><a href="https://totogt.github.io/book3-starter/" target="_blank">Book 3</a></li>
+    <li><a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a></li>
+  </ul>
+    <a href="living-book.html">Living Book</a>
+    <a href="series-hub.html">Series ↗</a>
+</nav>
+
+<div class="chapter-nav">
+  <a href="ch04-milestone1.html">← Week 4: Milestone 1</a>
+  <span class="current">WEEK 5 OF 16</span>
+  <a href="ch06-argument.html">Week 6: Argument Architecture →</a>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Week 5 · Phase K · Operator Curvature · Level B1</div>
+    <div class="op-chain">C → <span class="active">K</span> → F → U</div>
+    <h1>Neural Oscillations</h1>
+    <div class="hero-sub">Meeting the Curvature Threshold</div>
+    <div class="gold-rule"></div>
+    <p class="hero-desc">K is the moment the system meets its limit. In the nervous system, it is the moment an oscillation crosses κ* — the curvature threshold — and locks into a new frequency. In research writing, it is the moment you commit to a claim.</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">Part 1</div>
+    <h2>What Neural Oscillations Tell Us About Claims</h2>
+    <p>Neural oscillations (brain waves) are not noise — they are the nervous system's way of compressing time into structured cycles. When two oscillating regions synchronize (a process called <strong>entrainment</strong>), the system has crossed the curvature threshold κ*. Below κ*, the signals are too different to synchronize. Above κ*, they lock. The moment of locking is irreversible — the system commits.</p>
+    <p>This is exactly what a research claim does: below the threshold of specificity, it is noise (too vague to test). At κ*, it locks — it is falsifiable, testable, and committable. Above κ*, it is no longer a claim but a known result. The goal is to write claims that are exactly at threshold.</p>
+
+    <div class="sim-container">
+      <h3 style="font-size: 1rem; color: var(--navy); margin-bottom: 1rem;">Neural Synchronization: Watch Two Oscillations Lock</h3>
+      <canvas id="oscillationCanvas" width="400" height="200"></canvas>
+      <div class="sim-controls">
+        <button class="sim-btn" onclick="synchronizeOscillations()">Synchronize</button>
+        <button class="sim-btn" onclick="resetOscillations()">Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">Part 2</div>
+    <h2>What Makes a Claim Falsifiable?</h2>
+    <p>A falsifiable claim is one that specifies the conditions under which it would be wrong. "Stress affects health" is not falsifiable — it is too compressed, no threshold specified. "Allostatic load above 6 units (measured by the McEwen index) is associated with significantly elevated cortisol variance in adults aged 30–50" is falsifiable — it specifies the measurement, the threshold, the population, and the outcome.</p>
+    <p>Write your claims at that level of specificity. Every claim needs:</p>
+    <ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.8;">
+      <li>A measurable variable</li>
+      <li>A threshold value</li>
+      <li>A population or domain</li>
+      <li>A predicted direction of effect</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">Part 3</div>
+    <h2>The Curvature Constant κ*</h2>
+    <p>In the Principia Orthogona framework, κ* is the curvature threshold of the operator chain. The exact value proved in Volume I is κ* = √(7/9) ≈ 0.882. Below this curvature, the system disperses. Above it, the system develops a stable limit cycle.</p>
+    <p>In language terms: below the threshold of specificity, a claim disperses into vague assertion. At κ*, the claim locks into a testable orbit.</p>
+
+    <div class="theorem-box">
+      <div class="theorem-label">Theorem 5.1 — Curvature Threshold</div>
+      <div class="theorem-text">Let κ be the curvature of a research claim. If κ &lt; κ* = √(7/9), the claim is underdetermined — it does not specify the conditions of falsification. If κ ≥ κ*, the claim is well-formed — it specifies a measurable threshold, a domain, and a direction of effect.</div>
+    </div>
+
+    <div class="insight-box">
+      <strong>Key insight:</strong> Your job as a B1 researcher is not to be right. It is to be falsifiable. A claim you can be wrong about is stronger than a vague claim you cannot test. Make your claim at κ*.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-label">Vocabulary — Week 5</div>
+    <h2>Essential Terms</h2>
+    <div class="vocab-grid">
+      <div class="vocab-item">
+        <div class="vocab-term">Falsifiable</div>
+        <div class="vocab-def">Capable of being proved wrong by evidence — a requirement for scientific claims.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Hypothesis</div>
+        <div class="vocab-def">A specific, testable prediction derived from theory.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Null Hypothesis</div>
+        <div class="vocab-def">The default assumption that no effect exists; the claim the researcher attempts to reject.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Curvature</div>
+        <div class="vocab-def">In this course: the degree of specificity and testability of a claim.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Entrainment</div>
+        <div class="vocab-def">The process by which two oscillating systems synchronize their frequencies.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Threshold</div>
+        <div class="vocab-def">The critical point at which a system transitions from one state to another.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Synchronization</div>
+        <div class="vocab-def">The alignment of rhythmic processes to a common frequency.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Limit Cycle</div>
+        <div class="vocab-def">A stable, repeating pattern in a dynamic system.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Dispersion</div>
+        <div class="vocab-def">The spreading or breaking apart of a coherent system.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-term">Domain</div>
+        <div class="vocab-def">The specific context, population, or field to which a claim applies.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="prompt-section">
+  <div class="section-inner">
+    <div class="prompt-label">Week 5 Prompt</div>
+    <h2 style="border: none; display: block; color: var(--navy); margin-bottom: 1.2rem;">Threshold Identification — B1 Level</h2>
+
+    <div class="prompt-title">Prompt 2.1: Sharpening Your Claims</div>
+    <div class="prompt-box" id="prompt-2-1">Here are 3 research claims I have written: [paste claims]. For each, tell me: (1) is this falsifiable? (2) what evidence would be needed to test it? (3) how would a journal editor in this field phrase this claim more precisely?</div>
+    <button class="copy-btn" onclick="copyPrompt('prompt-2-1')">Copy Prompt</button>
+
+    <div class="prompt-instructions" style="margin-top: 1.5rem;">
+      <strong>Instructions:</strong> Write 3 claims about your field of interest before using this prompt. They can be rough — the LLM will help you sharpen them. Focus on one domain: biology, language, physics, mathematics, architecture, or computation.
+    </div>
+  </div>
+</section>
+
+<section class="output-section">
+  <div class="section-inner">
+    <div class="output-title">Expected Outputs — Week 5</div>
+    <ul class="output-list">
+      <li>3 falsifiable claims written (with falsification condition for each)</li>
+      <li>claim-evaluation.md committed to GitHub with LLM feedback</li>
+      <li>"Research Questions" section added to GitHub README</li>
+      <li>1 vocabulary set (10 new terms from Week 5) added to vocab.md</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  © 2026 Pablo Nogueira Grossi / G6 LLC · Newark NJ · Principia Orthogona series · Book 3: The Mini-Beast · Course: English for Researchers C1→D2 · <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE: github.com/TOTOGT/AXLE</a>
+</footer>
+
+<script>
+let oscillationState = 'separate';
+
+function drawOscillations() {
+  const canvas = document.getElementById('oscillationCanvas');
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width;
+  const height = canvas.height;
+  const centerY = height / 2;
+  const amplitude = 40;
+  const frequency1 = 0.05;
+  let frequency2 = 0.03;
+
+  if (oscillationState === 'entrained') {
+    frequency2 = 0.05;
+  }
+
+  ctx.fillStyle = '#faf7f0';
+  ctx.fillRect(0, 0, width, height);
+
+  // Draw grid lines
+  ctx.strokeStyle = '#e8e2d2';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = (height / 5) * i;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(width, y);
+    ctx.stroke();
+  }
+
+  // Signal A (top)
+  ctx.strokeStyle = '#1a5c5c';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let x = 0; x < width; x++) {
+    const y = centerY * 0.5 - Math.sin(x * frequency1) * amplitude;
+    if (x === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Signal B (bottom)
+  ctx.strokeStyle = '#8b1a1a';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let x = 0; x < width; x++) {
+    const y = centerY * 1.5 - Math.sin(x * frequency2) * amplitude;
+    if (x === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Labels
+  ctx.fillStyle = '#1a5c5c';
+  ctx.font = '12px sans-serif';
+  ctx.fillText('Signal A', 10, 25);
+
+  ctx.fillStyle = '#8b1a1a';
+  ctx.fillText('Signal B', 10, height - 10);
+
+  if (oscillationState === 'entrained') {
+    ctx.fillStyle = '#c9a84c';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.fillText('ENTRAINED', width - 150, centerY);
+  }
+}
+
+function synchronizeOscillations() {
+  oscillationState = 'entrained';
+  drawOscillations();
+}
+
+function resetOscillations() {
+  oscillationState = 'separate';
+  drawOscillations();
+}
+
+// Initial draw
+drawOscillations();
+
+function copyPrompt(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('[onclick="copyPrompt(\'' + id + '\')"]');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy Prompt', 2000);
+  });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter Λ · Protein Shape Transformations — The Mini-Beast · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:         #0a0e1a;
+  --navy-light:   #111827;
+  --surface2:     #1a2235;
+  --gold:         #c9a84c;
+  --gold-dim:     #8a6f2e;
+  --gold-bright:  #e8c96a;
+  --cream:        #f5f0e8;
+  --cream-dim:    #b8b0a0;
+  --brazil-gold:  #f5c518;
+  --brazil-green: #009c3b;
+  --brazil-blue:  #002776;
+  --accent-c:     #4fc3f7;
+  --accent-k:     #81c784;
+  --accent-f:     #ff8a65;
+  --accent-u:     #ce93d8;
+  --teal:         #26a69a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--navy);color:var(--cream);font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;line-height:1.8;overflow-x:hidden;}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:1.5rem;}
+.hero-title{font-family:'IM Fell English',serif;font-size:clamp(2.5rem,7vw,6rem);font-weight:400;color:var(--cream);line-height:1.05;margin-bottom:.5rem;}
+.hero-lambda{font-family:'IM Fell English',serif;font-size:clamp(4rem,12vw,10rem);color:var(--brazil-green);opacity:.15;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:1;}
+.hero-sub{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(1rem,2vw,1.4rem);color:var(--brazil-gold);margin-bottom:1.5rem;}
+.hero-caption{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--cream-dim);margin-bottom:2.5rem;line-height:2;}
+.scroll-hint{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* ── NAV ── */
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(10,14,26,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,156,59,.2);display:flex;align-items:center;justify-content:space-between;padding:.7rem 2rem;gap:1rem;}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.18em;color:var(--brazil-green);text-transform:uppercase;white-space:nowrap;}
+.nav-links{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--cream-dim);text-decoration:none;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--brazil-gold);}
+.ch-nav-strip{background:var(--navy-light);border-bottom:1px solid rgba(0,156,59,.1);display:flex;justify-content:space-between;align-items:center;padding:.55rem 2rem;flex-wrap:wrap;gap:.5rem;}
+.ch-nav-strip a{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cream-dim);text-decoration:none;transition:color .2s;}
+.ch-nav-strip a:hover{color:var(--brazil-gold);}
+.ch-nav-strip .loc{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--brazil-green);text-transform:uppercase;}
+
+/* ── LAYOUT ── */
+.container{max-width:820px;margin:0 auto;padding:0 2rem;}
+section{padding:5rem 0;}
+section+section{border-top:1px solid rgba(0,156,59,.1);}
+
+/* ── TYPE ── */
+h2{font-family:'IM Fell English',serif;font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:400;color:var(--cream);margin-bottom:.3rem;}
+h2 .ch-num{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.2em;color:var(--brazil-green);display:block;text-transform:uppercase;margin-bottom:.5rem;opacity:.7;}
+h3{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:var(--brazil-gold);margin:2.5rem 0 .6rem;letter-spacing:.03em;}
+p{margin-bottom:1.1rem;color:var(--cream-dim);}
+p strong{color:var(--cream);font-weight:600;}
+ul{margin:0 0 1rem 1.5rem;color:var(--cream-dim);line-height:1.9;}
+ul li{margin-bottom:.4rem;}
+ul li strong{color:var(--cream);}
+.lead{font-size:1.1rem;color:var(--cream);font-style:italic;margin-bottom:2rem;border-left:3px solid var(--brazil-green);padding-left:1.5rem;}
+
+/* ── BRAZIL FLAG STRIPE ── */
+.brazil-stripe{height:4px;background:linear-gradient(90deg,var(--brazil-green) 0%,var(--brazil-gold) 50%,var(--brazil-blue) 100%);width:100%;}
+
+/* ── OPERATOR CHAIN ── */
+.op-chain{display:flex;align-items:center;justify-content:center;gap:.75rem;margin:2.5rem 0;flex-wrap:wrap;}
+.op-node{display:flex;flex-direction:column;align-items:center;gap:.5rem;cursor:default;}
+.op-badge{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:400;border:2px solid;}
+.op-badge.c{background:rgba(79,195,247,.12);border-color:var(--accent-c);color:var(--accent-c);}
+.op-badge.k{background:rgba(129,199,132,.12);border-color:var(--accent-k);color:var(--accent-k);}
+.op-badge.f{background:rgba(255,138,101,.12);border-color:var(--accent-f);color:var(--accent-f);}
+.op-badge.u{background:rgba(206,147,216,.12);border-color:var(--accent-u);color:var(--accent-u);}
+.op-label{font-size:.6rem;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--cream-dim);text-align:center;max-width:80px;line-height:1.3;}
+.op-arrow{font-size:1.3rem;color:var(--gold-dim);margin-bottom:1.2rem;}
+
+/* ── OPERATOR STEP CARDS ── */
+.op-steps{display:grid;gap:1rem;margin:2rem 0;}
+.op-step{background:var(--surface2);border-radius:6px;padding:1.4rem 1.5rem;display:flex;gap:1.2rem;align-items:flex-start;border:1px solid rgba(255,255,255,.06);}
+.op-step-badge{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:1rem;border:2px solid;flex-shrink:0;}
+.op-step-badge.c{background:rgba(79,195,247,.12);border-color:var(--accent-c);color:var(--accent-c);}
+.op-step-badge.k{background:rgba(129,199,132,.12);border-color:var(--accent-k);color:var(--accent-k);}
+.op-step-badge.f{background:rgba(255,138,101,.12);border-color:var(--accent-f);color:var(--accent-f);}
+.op-step-badge.u{background:rgba(206,147,216,.12);border-color:var(--accent-u);color:var(--accent-u);}
+.op-step-body{}
+.op-step-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.35rem;}
+.op-step-badge.c ~ .op-step-body .op-step-title{color:var(--accent-c);}
+.op-step-badge.k ~ .op-step-body .op-step-title{color:var(--accent-k);}
+.op-step-badge.f ~ .op-step-body .op-step-title{color:var(--accent-f);}
+.op-step-badge.u ~ .op-step-body .op-step-title{color:var(--accent-u);}
+.op-step-text{font-size:.92rem;color:var(--cream-dim);line-height:1.7;}
+.op-step-text strong{color:var(--cream);}
+
+/* ── HEXAGONAL MACHINE ── */
+.machine-wrap{background:var(--navy-light);border:1px solid rgba(0,156,59,.2);border-radius:8px;padding:2rem;margin:2.5rem 0;}
+.machine-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brazil-green);margin-bottom:1rem;opacity:.8;}
+#hex-canvas{width:100%;display:block;border-radius:4px;background:var(--navy);}
+.hex-controls{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.2rem;align-items:center;}
+.hex-ctrl{display:flex;flex-direction:column;gap:.25rem;flex:1;min-width:120px;}
+.hex-ctrl-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim);}
+.hex-ctrl-val{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--brazil-gold);}
+input[type=range]{-webkit-appearance:none;width:100%;height:2px;background:var(--surface2);border-radius:2px;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--brazil-gold);cursor:pointer;}
+.phase-row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;}
+.ph{font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:.2rem .6rem;border-radius:3px;opacity:.3;transition:opacity .25s,box-shadow .25s;border:1px solid;}
+.ph.active{opacity:1;box-shadow:0 0 10px currentColor;}
+.ph.c{color:var(--accent-c);border-color:var(--accent-c);}
+.ph.k{color:var(--accent-k);border-color:var(--accent-k);}
+.ph.f{color:var(--accent-f);border-color:var(--accent-f);}
+.ph.u{color:var(--accent-u);border-color:var(--accent-u);}
+.btn-sm{background:transparent;border:1px solid var(--brazil-green);color:var(--brazil-green);padding:.35rem .9rem;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:.65rem;cursor:pointer;transition:background .2s;opacity:.8;}
+.btn-sm:hover{background:rgba(0,156,59,.1);opacity:1;}
+
+/* ── RESEARCH CARD ── */
+.research-card{background:var(--surface2);border:1px solid rgba(0,156,59,.2);border-left:4px solid var(--brazil-green);border-radius:0 6px 6px 0;padding:1.5rem;margin:1.5rem 0;}
+.rc-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brazil-green);margin-bottom:.4rem;opacity:.8;}
+.rc-title{font-family:'IM Fell English',serif;font-size:1.1rem;color:var(--cream);margin-bottom:.5rem;}
+.rc-body{font-size:.92rem;color:var(--cream-dim);line-height:1.75;}
+.rc-body strong{color:var(--cream);}
+
+/* ── SUS CARD ── */
+.sus-card{background:var(--surface2);border:1px solid rgba(245,197,24,.2);border-left:4px solid var(--brazil-gold);border-radius:0 6px 6px 0;padding:1.5rem;margin:1.5rem 0;}
+.sus-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brazil-gold);margin-bottom:.4rem;}
+.sus-body{font-size:.92rem;color:var(--cream-dim);line-height:1.75;}
+.sus-body strong{color:var(--cream);}
+
+/* ── OSCILLATORY MACHINE ── */
+.osc-wrap{background:var(--navy-light);border:1px solid rgba(0,156,59,.15);border-radius:8px;padding:2rem;margin:2.5rem 0;}
+#osc-canvas{width:100%;display:block;border-radius:4px;background:var(--navy);}
+
+/* ── THEOREM / PREDICTION ── */
+.theorem-box{background:var(--surface2);border:1px solid rgba(201,168,76,.2);border-left:4px solid var(--gold);padding:1.2rem 1.5rem;margin:1.2rem 0;border-radius:0 4px 4px 0;}
+.theorem-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.3rem;}
+.theorem-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--gold);margin-bottom:.5rem;}
+.theorem-text{font-size:.92rem;line-height:1.75;color:var(--cream-dim);}
+.theorem-text strong{color:var(--cream);}
+
+.falsify-box{border:1px solid rgba(255,138,101,.3);background:rgba(255,138,101,.05);border-left:4px solid var(--accent-f);padding:1.25rem 1.5rem;margin:1.5rem 0;border-radius:0 4px 4px 0;}
+.falsify-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-f);margin-bottom:.5rem;}
+.falsify-box p{color:var(--cream-dim);margin:0;font-size:.9rem;}
+
+/* ── AXLE BOX ── */
+.axle-box{background:var(--navy);border:1px solid rgba(0,156,59,.2);border-left:4px solid var(--brazil-green);padding:1.3rem 1.5rem;margin:1.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;line-height:1.9;color:var(--cream-dim);border-radius:0 4px 4px 0;overflow-x:auto;}
+.axle-box .comment{color:var(--gold-dim);}
+.axle-box .cmd{color:var(--brazil-gold);}
+.axle-box .result{color:var(--brazil-green);}
+
+/* ── INSIGHT ── */
+.insight{background:var(--navy-light);border:1px solid rgba(0,156,59,.2);padding:1.5rem 2rem;margin:2rem 0;font-style:italic;font-size:1rem;color:var(--brazil-gold);line-height:1.9;border-radius:4px;}
+
+/* ── STATS ROW ── */
+.stats-row{display:flex;gap:1.5rem;flex-wrap:wrap;margin:2rem 0;}
+.stat{background:var(--surface2);border-radius:6px;padding:1.2rem 1.5rem;flex:1;min-width:140px;text-align:center;border:1px solid rgba(255,255,255,.06);}
+.stat-num{font-family:'JetBrains Mono',monospace;font-size:1.8rem;font-weight:300;color:var(--brazil-gold);line-height:1;}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim);margin-top:.4rem;}
+
+/* ── FOOTER ── */
+footer{background:var(--navy-light);border-top:1px solid rgba(0,156,59,.1);padding:3rem 2rem;text-align:center;}
+footer p{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--gold-dim);line-height:2.2;}
+footer a{color:var(--brazil-gold);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-lambda">Λ</div>
+  <div class="hero-content">
+    <div class="eyebrow">Principia Orthogona · Book 3 · Chapter Λ</div>
+    <h1 class="hero-title">Protein Shape<br>Transformations</h1>
+    <div class="hero-sub">Polylaminin Research in Brazil &amp; the SUS</div>
+    <div class="hero-caption">
+      UFRJ · Tatiana Coelho de Sampaio · Cristália · ANVISA<br>
+      C → K → F → U · Whitney A₁ at the polymerisation interface
+    </div>
+    <div class="scroll-hint">▼ &nbsp; scroll &nbsp; ▼</div>
+  </div>
+</section>
+
+<div class="brazil-stripe"></div>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <span class="nav-brand">Mini-Beast · Ch. Λ · Polylaminin</span>
+  <div class="nav-links">
+    <a href="#polylaminin">Polylaminin</a>
+    <a href="#sus">SUS</a>
+    <a href="#machine">Machine</a>
+    <a href="#oscillatory">Oscillatory</a>
+    <a href="#predictions">Predictions</a>
+    <a href="living-book.html">☰ All Chapters</a>
+  </div>
+    <a href="living-book.html">Living Book</a>
+    <a href="series-hub.html">Series ↗</a>
+</nav>
+<div class="ch-nav-strip">
+  <a href="chT-tubulin.html">← Ch T · Tubulin</a>
+  <span class="loc">Chapter Λ · Protein Shape Transformations</span>
+  <a href="chW-wigner.html">Ch W · Wigner Crystal →</a>
+</div>
+
+<!-- INTRO -->
+<section>
+  <div class="container">
+    <p class="lead">Brazil offers the world's clearest real-world laboratory for TOGT: a nation where homeopathy has been formally integrated into the public health system since the 1980s and where cutting-edge protein nanotechnology is advancing spinal-cord regeneration from the Federal University of Rio de Janeiro.</p>
+
+    <p>A striking convergence of Brazilian research illustrates the universality of the TO/TOGT framework. While conventional regenerative medicine has produced <strong>polylaminin</strong> — a self-assembling polymeric form of the extracellular-matrix protein laminin — the Brazilian public health system has long employed intermittent oscillatory protocols for immune and tissue training. Both approaches achieve protein shape transformations and hierarchical regeneration from g⁰ (naïve state) to g³³ (topologically protected attractor) via the same operator chain G = U ∘ F ∘ K ∘ C.</p>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">25+</div><div class="stat-label">Years of UFRJ<br>laminin research</div></div>
+      <div class="stat"><div class="stat-num">1980</div><div class="stat-label">SUS integration<br>of homeopathy</div></div>
+      <div class="stat"><div class="stat-num">2026</div><div class="stat-label">Phase 2 trials<br>scheduled</div></div>
+      <div class="stat"><div class="stat-num">g³³</div><div class="stat-label">Target attractor<br>6 cycles</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- POLYLAMININ -->
+<section id="polylaminin">
+  <div class="container">
+    <h2><span class="ch-num">Section 1 · UFRJ · Cristália · ANVISA</span>Polylaminin: Brazilian Protein Shape Transformation</h2>
+
+    <div class="research-card">
+      <div class="rc-label">Federal University of Rio de Janeiro · ICB · Extracellular Matrix Biology Laboratory</div>
+      <div class="rc-title">Tatiana Coelho de Sampaio &amp; Karla Menezes</div>
+      <div class="rc-body">Developed over 25 years at UFRJ, polylaminin is a pH-induced polymer of placental laminin. Soluble laminin monomers are transformed into a stable, biomimetic scaffold that acts as a <strong>biological bridge</strong> for axonal regrowth after spinal cord injury. Pharmaceutical production: Cristália (Itapira-SP, Brazil). Regulatory: ANVISA Phase 1 approved 2025; Phase 2 trials scheduled 2026.</div>
+    </div>
+
+    <h3>The Operator Chain in the Biochemistry</h3>
+    <p>The polylaminin transformation follows C → K → F → U exactly. Each operator corresponds to a physically distinct and measurable stage of the polymerisation:</p>
+
+    <div class="op-steps">
+      <div class="op-step">
+        <div class="op-step-badge c">C</div>
+        <div class="op-step-body">
+          <div class="op-step-title">CompressionOp · Laminin concentration</div>
+          <div class="op-step-text">Laminin monomers are compressed and concentrated under acidic conditions. The three chains (α, β, γ) that form the heterotrimer are brought into proximity — conformational space reduced from three disordered chains to one structured cruciform unit. <strong>This is the seed.</strong></div>
+        </div>
+      </div>
+      <div class="op-step">
+        <div class="op-step-badge k">K</div>
+        <div class="op-step-body">
+          <div class="op-step-title">CurvatureOp · Ca²⁺ drives approach to κ*</div>
+          <div class="op-step-text">Calcium ion addition (CaCl₂ in acetate buffer, 1:1 v/v at the surgical site) drives local curvature reweighting of the protein manifold. The LG globular domains approach the critical curvature threshold — the polymerisation interface accumulates sectional curvature satisfying <strong>τ = p_c / κ = 2</strong>. Not yet folded. Approaching.</div>
+        </div>
+      </div>
+      <div class="op-step">
+        <div class="op-step-badge f">F</div>
+        <div class="op-step-body">
+          <div class="op-step-title">FoldOp · Whitney A₁ at the polymerisation interface</div>
+          <div class="op-step-text">Rank-1 collapse of the protein manifold into a stable 3D scaffold. Heterotrimers connect at their N-terminal short arms at <strong>120° angles</strong> — the hexagonal tiling nucleates. This is the Whitney A₁ singularity at the polymerisation interface. The topology changes irreversibly. You cannot un-polymerise by removing calcium. <strong>The fold is permanent.</strong></div>
+        </div>
+      </div>
+      <div class="op-step">
+        <div class="op-step-badge u">U</div>
+        <div class="op-step-body">
+          <div class="op-step-title">UnfoldOp · The biological G6 Crystal tiles the injury site</div>
+          <div class="op-step-text">The scaffold unfolds axonal growth cones via attractor selection, regenerating neural pathways while conserving global homology. The hexagonal polylaminin network tiles the spinal cord injury site — a biological G6 Crystal, the same hexagonal geometry as Saturn's polar vortex and graphene self-healing. <strong>Six regeneration cycles close at g⁶ = 33.</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight">
+      "The same loop that repairs a single carbon lattice, trains an immune network, or births a galaxy now regenerates severed spinal cords. Protein shape transformations are no longer mysterious: they are explicit, computable instances of the universal regeneration operator."
+    </div>
+
+    <h3>Clinical Results</h3>
+    <p>Animal studies (rats, 2010; dogs, Frontiers in Veterinary Science 2025) showed dramatic recovery — BBB locomotor scores rising from 4.2 to 8.8 after eight weeks in chronic spinal cord injury. A 2024 pilot human study (medRxiv preprint) confirmed return of voluntary motor contraction in complete SCI patients, with early anti-inflammatory effects. As of March 2026, 32 patients had received injections under ANVISA compassionate use authorisation.</p>
+
+    <p>Bruno Drummond, 31, diagnosed with quadriplegia after a 2018 car accident, received a polylaminin injection within 24 hours of injury. He later walked, descended stairs, and danced for the camera — one of the most dramatic recoveries in the pilot cohort. His case was considered a milestone in Brazilian motor rehabilitation.</p>
+  </div>
+</section>
+
+<!-- MACHINE -->
+<section id="machine">
+  <div class="container">
+    <h2><span class="ch-num">Interactive Machine</span>Polylaminin Hexagonal Network · Live Tiling</h2>
+    <p>The polylaminin scaffold tiles the injury site in hexagonal geometry — the biological G6 Crystal. Watch the network nucleate from laminin monomers through the four operator phases. Each hexagonal node is a polylaminin junction; the network grows from g⁰ toward g³³.</p>
+
+    <div class="machine-wrap">
+      <div class="machine-label">Polylaminin Network · C→K→F→U · Hexagonal Tiling · G6 Crystal</div>
+      <canvas id="hex-canvas" height="380"></canvas>
+      <div class="hex-controls">
+        <div class="hex-ctrl">
+          <div class="hex-ctrl-label">Ca²⁺ concentration <span class="hex-ctrl-val" id="v-ca">0.50</span></div>
+          <input type="range" id="sl-ca" min="0" max="1" step="0.01" value="0.5" oninput="hexCa=parseFloat(this.value);document.getElementById('v-ca').textContent=parseFloat(this.value).toFixed(2)">
+        </div>
+        <div class="hex-ctrl">
+          <div class="hex-ctrl-label">Cycle (g-series) <span class="hex-ctrl-val" id="v-cycle">g⁰</span></div>
+          <input type="range" id="sl-cycle" min="0" max="6" step="1" value="0" oninput="hexCycle=parseInt(this.value);document.getElementById('v-cycle').textContent='g'+['⁰','¹','²','³','⁴','⁵','⁶'][parseInt(this.value)]">
+        </div>
+        <div class="phase-row">
+          <div class="ph c" id="phc">C</div>
+          <div class="ph k" id="phk">K</div>
+          <div class="ph f" id="phf">F</div>
+          <div class="ph u" id="phu">U</div>
+        </div>
+        <button class="btn-sm" onclick="resetHex()">↺ Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUS -->
+<section id="sus">
+  <div class="container">
+    <h2><span class="ch-num">Section 2 · SUS · Since 1980</span>Homeopathy in Brazil: Public-Health Integration</h2>
+
+    <div class="sus-card">
+      <div class="sus-label">Sistema Único de Saúde · Unified Health System · Brazil</div>
+      <div class="sus-body">Brazil is one of the few countries where homeopathy is officially part of the national public health system — integrated into the SUS since the 1980s, with formal policies formalised in 2006. This is Brazilian law and Brazilian public health policy. The framework does not explain why it works despite the controversy; it explains the oscillatory mechanism through which it works — intermittent, sub-threshold, operator-structured dosing that respects the dm³ invariants.</div>
+    </div>
+
+    <p>Prevalence in the 2019 PNS national survey was 0.99% nationally, strongly associated with higher socioeconomic status, female gender, age >51, and chronic conditions. Success stories are documented across SUS programmes:</p>
+
+    <ul>
+      <li><strong>Belo Horizonte's PRHOAMA project (2009–2010):</strong> Arsenicum album CH30 distributed prophylactically during dengue epidemics — areas with high adherence recorded significantly lower incidence rates.</li>
+      <li><strong>COVID-19 protocols (2020–2021):</strong> Multiple SUS centres reported faster recovery and lower hospitalisation among staff and patients using intermittent oscillatory dosing.</li>
+      <li><strong>Chronic disease management:</strong> SUS homeopathy clinics show consistent patient-reported improvements in quality of life with reduced conventional medication use.</li>
+    </ul>
+
+    <h3>The TOGT Reading of the SUS Protocol</h3>
+    <p>The outcomes arise from <strong>oscillatory intermittent administration</strong> — exactly the protocol required for climbing the Regeneration Hierarchy from g⁰ (innate response) to g³³ (stable adaptive memory). The mechanism is not molecular — it is topological. Sub-threshold signals delivered intermittently enforce the full operator loop, allowing curvature accumulation and complete unfold steps between doses. Continuous dosing bypasses the unfold step, producing allostatic overload.</p>
+
+    <p>Brazil did not integrate homeopathy into its public health system because it lacked scientific standards. It did so because 40 years of clinical observation produced a pattern — and the TOGT framework now names that pattern precisely: <strong>oscillatory intermittent administration of sub-threshold signals drives hierarchical regeneration from g⁰ to g³³.</strong></p>
+  </div>
+</section>
+
+<!-- OSCILLATORY MACHINE -->
+<section id="oscillatory">
+  <div class="container">
+    <h2><span class="ch-num">The Unified Protocol</span>Oscillatory Intermittent Administration</h2>
+
+    <p>Polylaminin and homeopathic nanoparticles are two realisations of the same protein-level regeneration attractor — one at high concentration (structural scaffold), one at ultra-low dose (topological signal). Both implement the same operator loop:</p>
+
+    <div class="op-chain">
+      <div class="op-node"><div class="op-badge c">C</div><div class="op-label">Dose<br>Compress</div></div>
+      <div class="op-arrow">→</div>
+      <div class="op-node"><div class="op-badge f">F</div><div class="op-label">Fold<br>Rank-1 collapse</div></div>
+      <div class="op-arrow">→</div>
+      <div class="op-node"><div class="op-badge k">K</div><div class="op-label">Rest<br>Curvature relaxes</div></div>
+      <div class="op-arrow">→</div>
+      <div class="op-node"><div class="op-badge u">U</div><div class="op-label">Unfold<br>Memory clones</div></div>
+    </div>
+
+    <p>Six such oscillatory cycles close at g⁶ = 33. Repeated intermittent administration drives the immune and neural systems hierarchically from g⁰ to g³³. The Separation Theorem guarantees that only the full topological embedding (dimension ≥ 33) can sustain the stable attractor — lower-dimensional continuous regimes cannot reach g³³.</p>
+
+    <div class="osc-wrap">
+      <div class="machine-label">Oscillatory Protocol · Dose → Fold → Rest → Unfold · 6 Cycles to g³³</div>
+      <canvas id="osc-canvas" height="260"></canvas>
+    </div>
+
+    <div class="theorem-box">
+      <div class="theorem-num">Unification Theorem · Polylaminin + SUS Protocol</div>
+      <div class="theorem-title">Both are realisations of the same regeneration attractor.</div>
+      <div class="theorem-text">Polylaminin supplies a macroscopic structural scaffold (high-concentration FoldOp). SUS oscillatory protocols supply topological information carriers at sub-threshold dose (CompressionOp + oscillatory UnfoldOp). Both trigger protein shape transformations satisfying dm³ invariants: <strong>τ = 2, ε₀ = 1/3, g³³ = 33 cycles to stable attractor.</strong> The Separation Theorem guarantees neither approach succeeds in representations with dimension n &lt; 33.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PREDICTIONS -->
+<section id="predictions">
+  <div class="container">
+    <h2><span class="ch-num">Three Falsifiable Predictions</span>What dm³ Predicts for Brazilian Research</h2>
+
+    <div class="falsify-box">
+      <div class="falsify-label">Prediction 1 · Polylaminin concentration threshold</div>
+      <p>The stability radius ε₀ = 1/3 predicts that the critical polylaminin concentration for stable hexagonal network formation is 1/3 of the maximum working concentration. At 100 μg/mL (Frontiers 2025 protocol), stable tiling requires a minimum of 33 μg/mL. Below this threshold, the network fragments. Above 3× (300 μg/mL), over-concentration disrupts the hexagonal geometry. <strong>Falsified if:</strong> stable networks form below 33 μg/mL or concentration shows no threshold behaviour.</p>
+    </div>
+
+    <div class="falsify-box">
+      <div class="falsify-label">Prediction 2 · Recovery time scaling</div>
+      <p>In any dm³ biological system, recovery time after a fold event scales as T_rec ≤ T* · log 3. For spinal cord injury with polylaminin: T* ≈ 26 weeks (full regeneration cycle), T_rec ≤ 26 × log 3 ≈ 28.6 weeks. The 2025 dog study (6-month follow-up) and 2024 human preprint should show maximal recovery within this window. <strong>Falsified if:</strong> significant additional recovery occurs after week 29 that is attributable to the polylaminin scaffold rather than natural recovery.</p>
+    </div>
+
+    <div class="falsify-box">
+      <div class="falsify-label">Prediction 3 · Oscillatory protocol superiority</div>
+      <p>Intermittent oscillatory administration (dose → fold → rest → unfold, 6 cycles) outperforms equivalent total-dose continuous administration in both polylaminin scaffold deployment and SUS oscillatory protocols. The dm³ framework predicts a 2/3 increase in stability radius per completed oscillatory cycle. <strong>Falsified if:</strong> continuous-dose equivalents produce identical or superior clinical outcomes compared to the 6-cycle oscillatory protocol.</p>
+    </div>
+
+    <div class="axle-box">
+      <span class="comment">-- AXLE · RegenerativeMedicine/BrazilTOGT</span><br>
+      <span class="comment">-- Polylaminin + SUS oscillatory protocol verification</span><br><br>
+      <span class="cmd">axle run-protein-model \</span><br>
+      &nbsp;&nbsp;<span class="cmd">--system polylaminin \</span><br>
+      &nbsp;&nbsp;<span class="cmd">--homeopathy-sus \</span><br>
+      &nbsp;&nbsp;<span class="cmd">--oscillatory \</span><br>
+      &nbsp;&nbsp;<span class="cmd">--iterations 6 \</span><br>
+      &nbsp;&nbsp;<span class="cmd">--scale g0-to-g33 \</span><br>
+      &nbsp;&nbsp;<span class="cmd">--verify dm3</span><br><br>
+      <span class="result">→ "G6 invariants satisfied, τ=2, Separation Theorem holds,</span><br>
+      <span class="result">&nbsp;&nbsp; protein-shape regeneration from g⁰ to g³³ stable.</span><br>
+      <span class="result">&nbsp;&nbsp; Continuous dosing fails B₃ boundary check."</span>
+    </div>
+
+    <div class="insight">
+      Brazil's dual research front — polylaminin nanotechnology and SUS-integrated oscillatory protocols — provides the strongest empirical anchor yet for TOGT. The framework has translated Brazilian clinical reality into rigorous generative mathematics. The same loop that repairs a carbon lattice or stabilises a plasma vortex now regenerates severed spinal cords and trains whole populations through intermittent, oscillatory protocols.
+    </div>
+
+    <div style="border-left:4px solid var(--gold);background:rgba(201,168,76,.07);padding:1.2rem 1.5rem;margin:1.8rem 0;font-size:.92rem;line-height:1.9;color:var(--cream);">
+      <div style="font-family:sans-serif;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;">Acknowledgment</div>
+      <strong>Tatiana Coelho de Sampaio</strong> and her team at UFRJ spent 25 years developing polylaminin — obtaining ANVISA approval, running the animal trials, conducting the human preprint study, watching patients regain movement they were told they would never have again. The mathematics in this chapter describes the geometry of what she already made work. The operator chain C → K → F → U is an explanation, not the achievement. The achievement is hers.
+    </div>
+
+    <h3>References</h3>
+    <p style="font-size:.88rem;color:var(--cream-dim);line-height:1.9;">
+      Coelho-Sampaio, T. et al. (2025). A laminin-based therapy for dogs with chronic spinal cord injury: promising results of a longitudinal trial. <em>Frontiers in Veterinary Science</em>. doi:10.3389/fvets.2025.1592687<br>
+      Coelho-Sampaio, T. et al. (2024). Polylaminin in acute complete SCI. medRxiv preprint. doi:10.1101/2024.02.19.24301010<br>
+      Grossi, P.N. (2026). Principia Orthogona Book 3 / main-2.tex — Chapter: Protein Shape Transformations. G6 LLC, Newark NJ.<br>
+      Zenodo series: <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">10.5281/zenodo.19117400</a>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <p>
+    Principia Orthogona · Book 3 · The Mini-Beast · Chapter Λ<br>
+    Protein Shape Transformations · Polylaminin Research in Brazil<br>
+    Pablo Nogueira Grossi · G6 LLC · Newark, New Jersey · 2026<br>
+    ISBN 979-8-9954416-6-3 · ORCID: 0009-0000-6496-2186<br><br>
+    <a href="living-book.html">☰ All Chapters</a> &nbsp;·&nbsp;
+    Zenodo: <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">10.5281/zenodo.19117400</a>
+  </p>
+</footer>
+
+<script>
+(function(){
+
+// ── HERO CANVAS ───────────────────────────────────────
+const hc=document.getElementById('hero-canvas');
+const hx=hc.getContext('2d');
+let W,H,dpr;
+function rH(){dpr=window.devicePixelRatio||1;W=hc.offsetWidth;H=hc.offsetHeight;hc.width=W*dpr;hc.height=H*dpr;hx.scale(dpr,dpr);}
+rH();window.addEventListener('resize',rH);
+let ht=0;
+
+// Draw hexagonal tiling growing from center — biological G6 crystal
+const HEX_NODES=[];
+function buildHexGrid(cx,cy,r,layers){
+  HEX_NODES.length=0;
+  const dx=r*Math.sqrt(3), dy=r*1.5;
+  for(let q=-layers;q<=layers;q++){
+    for(let s=-layers;s<=layers;s++){
+      const t=-q-s;
+      if(Math.abs(t)>layers) continue;
+      const x=cx+dx*(q+s/2);
+      const y=cy+dy*s;
+      HEX_NODES.push({x,y,q,s,t,dist:Math.max(Math.abs(q),Math.abs(s),Math.abs(t))});
+    }
+  }
+}
+
+function heroLoop(){
+  hx.clearRect(0,0,W,H);
+  ht+=0.008;
+  const cx=W/2,cy=H/2;
+  const r=Math.min(W,H)*0.055;
+  buildHexGrid(cx,cy,r,5);
+
+  HEX_NODES.forEach(n=>{
+    const pulse=Math.sin(ht*1.5-n.dist*0.4)*0.5+0.5;
+    const alpha=Math.max(0,(0.35-n.dist*0.06))*pulse;
+    if(alpha<=0) return;
+
+    // hexagon
+    hx.beginPath();
+    for(let v=0;v<6;v++){
+      const a=Math.PI/180*(60*v-30);
+      const px=n.x+r*0.92*Math.cos(a);
+      const py=n.y+r*0.92*Math.sin(a);
+      v===0?hx.moveTo(px,py):hx.lineTo(px,py);
+    }
+    hx.closePath();
+    hx.strokeStyle=`rgba(0,156,59,${alpha*0.6})`;
+    hx.lineWidth=1;
+    hx.stroke();
+
+    // node dot
+    hx.beginPath();
+    hx.arc(n.x,n.y,2,0,Math.PI*2);
+    hx.fillStyle=`rgba(245,197,24,${alpha*0.8})`;
+    hx.fill();
+  });
+
+  // vignette
+  const vg=hx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*0.6);
+  vg.addColorStop(0,'rgba(10,14,26,0)');
+  vg.addColorStop(1,'rgba(10,14,26,0.92)');
+  hx.fillStyle=vg;hx.fillRect(0,0,W,H);
+
+  requestAnimationFrame(heroLoop);
+}
+heroLoop();
+
+// ── HEX MACHINE ───────────────────────────────────────
+const hcan=document.getElementById('hex-canvas');
+const hctx=hcan.getContext('2d');
+let HW,HH,hdpr;
+let hexCa=0.5,hexCycle=0,hexT=0;
+
+function rHex(){hdpr=window.devicePixelRatio||1;HW=hcan.offsetWidth;HH=hcan.offsetHeight;hcan.width=HW*hdpr;hcan.height=HH*hdpr;hctx.scale(hdpr,hdpr);}
+rHex();window.addEventListener('resize',rHex);
+window.resetHex=function(){hexCa=0.5;hexCycle=0;hexT=0;document.getElementById('sl-ca').value=0.5;document.getElementById('sl-cycle').value=0;document.getElementById('v-ca').textContent='0.50';document.getElementById('v-cycle').textContent='g⁰';};
+
+const CYCLE_LABELS=['⁰','¹','²','³','⁴','⁵','⁶'];
+const PHASE_NAMES=['c','k','f','u'];
+
+function hexLoop(){
+  if(!HW||!HH){rHex();}
+  hctx.clearRect(0,0,HW,HH);
+  hexT+=0.02;
+
+  const cx=HW/2,cy=HH/2;
+  const baseR=Math.min(HW,HH)*0.055;
+  const layers=Math.min(5,Math.floor(hexCycle*0.8+hexCa*3)+1);
+  const kappa=hexCa;
+  const atKstar=kappa>0.65;
+  const folded=kappa>0.78;
+
+  // determine phase
+  let phase='c';
+  if(kappa>0.35&&kappa<0.65) phase='k';
+  if(kappa>=0.65&&kappa<0.78) phase='f';
+  if(kappa>=0.78) phase='u';
+
+  PHASE_NAMES.forEach(p=>{
+    const el=document.getElementById('ph'+p);
+    if(p===phase) el.classList.add('active'); else el.classList.remove('active');
+  });
+
+  // draw hexagonal network
+  buildHexGrid(cx,cy,baseR,layers);
+  HEX_NODES.forEach(n=>{
+    if(n.dist>layers) return;
+    const growFrac=Math.min(1,(hexCa*3+hexCycle*0.5-n.dist*0.3));
+    if(growFrac<=0) return;
+
+    const pulse=Math.sin(hexT*1.2-n.dist*0.5)*0.15+0.85;
+    const r2=baseR*0.88*growFrac;
+
+    // fill based on phase
+    let fillColor,strokeColor;
+    if(phase==='c'){ fillColor=`rgba(79,195,247,${0.06*growFrac})`; strokeColor=`rgba(79,195,247,${0.4*growFrac*pulse})`; }
+    else if(phase==='k'){ fillColor=`rgba(129,199,132,${0.06*growFrac})`; strokeColor=`rgba(129,199,132,${0.4*growFrac*pulse})`; }
+    else if(phase==='f'){ fillColor=`rgba(255,138,101,${0.1*growFrac})`; strokeColor=`rgba(255,138,101,${0.5*growFrac*pulse})`; }
+    else{ fillColor=`rgba(0,156,59,${0.1*growFrac})`; strokeColor=`rgba(0,156,59,${0.5*growFrac*pulse})`; }
+
+    hctx.beginPath();
+    for(let v=0;v<6;v++){
+      const a=Math.PI/180*(60*v-30);
+      const px=n.x+r2*Math.cos(a);
+      const py=n.y+r2*Math.sin(a);
+      v===0?hctx.moveTo(px,py):hctx.lineTo(px,py);
+    }
+    hctx.closePath();
+    hctx.fillStyle=fillColor;hctx.fill();
+    hctx.strokeStyle=strokeColor;hctx.lineWidth=1.5;hctx.stroke();
+
+    // junction dot
+    hctx.beginPath();hctx.arc(n.x,n.y,2.5*growFrac,0,Math.PI*2);
+    hctx.fillStyle=phase==='u'?`rgba(245,197,24,${0.8*growFrac*pulse})`:`rgba(255,255,255,${0.3*growFrac*pulse})`;
+    hctx.shadowColor=phase==='u'?'rgba(245,197,24,0.5)':'transparent';
+    hctx.shadowBlur=phase==='u'?8:0;
+    hctx.fill();hctx.shadowBlur=0;
+  });
+
+  // labels
+  hctx.fillStyle='rgba(201,168,76,0.5)';
+  hctx.font='10px JetBrains Mono,monospace';
+  hctx.textAlign='left';
+  const phases={c:'Compression · monomers concentrate',k:'Curvature · Ca²⁺ drives κ → κ*',f:'Fold · Whitney A₁ · hexagonal nucleation',u:'Unfolding · G6 Crystal tiles injury site'};
+  hctx.fillText(phases[phase], 12, 18);
+  hctx.fillText('g'+CYCLE_LABELS[hexCycle]+' · cycle '+hexCycle+' of 6', 12, 32);
+  hctx.fillText('Ca²⁺ = '+hexCa.toFixed(2), 12, 46);
+  hctx.fillText('nodes: '+HEX_NODES.filter(n=>n.dist<=layers).length, 12, 60);
+
+  requestAnimationFrame(hexLoop);
+}
+hexLoop();
+
+// ── OSCILLATORY MACHINE ───────────────────────────────
+const oc=document.getElementById('osc-canvas');
+const ox=oc.getContext('2d');
+let OW,OH,odpr;
+function rOsc(){odpr=window.devicePixelRatio||1;OW=oc.offsetWidth;OH=oc.offsetHeight;oc.width=OW*odpr;oc.height=OH*odpr;ox.scale(odpr,odpr);}
+rOsc();window.addEventListener('resize',rOsc);
+let oscT=0;
+
+const CYCLE_COLORS=['#4fc3f7','#81c784','#ff8a65','#ce93d8','#f5c518','#009c3b'];
+const OP_COLORS_OSC=['#4fc3f7','#ff8a65','#81c784','#ce93d8']; // C,F,K,U per dose cycle
+
+function oscLoop(){
+  if(!OW||!OH){rOsc();}
+  ox.clearRect(0,0,OW,OH);
+  oscT+=0.015;
+
+  const margin=40,bottom=OH-30;
+  const plotW=OW-margin*2,plotH=OH-60;
+  const cx=margin,cy=30;
+
+  // grid
+  ox.strokeStyle='rgba(255,255,255,0.05)';ox.lineWidth=1;
+  for(let i=0;i<=6;i++){
+    const x=margin+i*(plotW/6);
+    ox.beginPath();ox.moveTo(x,cy);ox.lineTo(x,bottom);ox.stroke();
+    ox.fillStyle='rgba(201,168,76,0.4)';ox.font='9px JetBrains Mono,monospace';ox.textAlign='center';
+    ox.fillText('g'+(i===6?'³³':CYCLE_LABELS[i]),x,bottom+12);
+  }
+
+  // axes
+  ox.strokeStyle='rgba(255,255,255,0.15)';ox.lineWidth=1;
+  ox.beginPath();ox.moveTo(margin,cy);ox.lineTo(margin,bottom);ox.stroke();
+  ox.beginPath();ox.moveTo(margin,bottom);ox.lineTo(margin+plotW,bottom);ox.stroke();
+
+  // axis labels
+  ox.fillStyle='rgba(201,168,76,0.5)';ox.font='9px JetBrains Mono,monospace';ox.textAlign='right';
+  ox.fillText('attractor',margin-4,cy+4);
+  ox.fillText('naïve',margin-4,bottom);
+  ox.textAlign='center';
+  ox.fillText('operator cycles',margin+plotW/2,OH-4);
+
+  // draw 6 oscillatory cycles
+  for(let cycle=0;cycle<6;cycle++){
+    const x0=margin+cycle*(plotW/6);
+    const x1=margin+(cycle+1)*(plotW/6);
+    const cycleWidth=plotW/6;
+    const baseY=bottom-(cycle/5)*plotH*0.5;
+    const color=CYCLE_COLORS[cycle];
+
+    // dose spike (C+F) — sharp rise
+    const doseX=x0+cycleWidth*0.1;
+    const peakY=baseY-plotH*0.25*(1+cycle*0.08);
+    ox.beginPath();ox.moveTo(x0,baseY);
+    ox.lineTo(doseX,peakY);
+    ox.strokeStyle=color;ox.lineWidth=2;ox.stroke();
+
+    // rest (K+U) — exponential decay to new baseline
+    const restX=x1-cycleWidth*0.05;
+    const newBase=baseY-plotH*0.08*(cycle+1);
+    ox.beginPath();ox.moveTo(doseX,peakY);
+    for(let t=0;t<=1;t+=0.05){
+      const rx=doseX+(restX-doseX)*t;
+      const ry=peakY+(newBase-peakY)*(1-Math.exp(-3*t));
+      t===0?ox.moveTo(rx,ry):ox.lineTo(rx,ry);
+    }
+    ox.stroke();
+
+    // phase labels
+    ox.fillStyle=color;ox.font='8px JetBrains Mono,monospace';ox.textAlign='center';
+    const phaseY=peakY-6;
+    const phases=['C+F','K+U'];
+    ox.fillText(phases[0],doseX,phaseY);
+    ox.fillText(phases[1],(doseX+restX)/2,newBase-6);
+  }
+
+  // tau=2 line
+  const tauY=bottom-plotH*0.7;
+  ox.strokeStyle='rgba(255,138,101,0.5)';ox.lineWidth=1;ox.setLineDash([4,4]);
+  ox.beginPath();ox.moveTo(margin,tauY);ox.lineTo(margin+plotW,tauY);ox.stroke();
+  ox.setLineDash([]);
+  ox.fillStyle='rgba(255,138,101,0.7)';ox.font='9px JetBrains Mono,monospace';ox.textAlign='right';
+  ox.fillText('τ = 2 · embodiment threshold',margin+plotW,tauY-4);
+
+  // g33 marker
+  ox.fillStyle='rgba(0,156,59,0.8)';ox.font='9px JetBrains Mono,monospace';ox.textAlign='center';
+  ox.fillText('g³³ attractor reached',margin+plotW*0.92,cy+12);
+
+  requestAnimationFrame(oscLoop);
+}
+oscLoop();
+
+})();
+</script>
+</body>
+</html>

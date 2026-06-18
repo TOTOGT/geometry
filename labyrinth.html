@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Labyrinth · Principia Orthogona · Book 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+ --navy: #0a1628;
+ --gold: #c9a84c;
+ --gold-light: #e8c97c;
+ --gold-dim: rgba(201,168,76,0.35);
+ --cream: #f5f0e8;
+ --text: #cdc3aa;
+}
+html { scroll-behavior: smooth; }
+body {
+ background: var(--navy);
+ color: var(--text);
+ font-family: 'Cormorant Garamond', Georgia, serif;
+ font-size: 1.15rem;
+ line-height: 1.85;
+ overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+ position: fixed; top: 0; width: 100%;
+ background: rgba(10,22,40,0.96);
+ border-bottom: 1px solid rgba(201,168,76,0.2);
+ padding: 0.75rem 2rem;
+ display: flex; align-items: center; gap: 2rem;
+ z-index: 200;
+ backdrop-filter: blur(10px);
+}
+.nav-brand {
+ color: var(--gold);
+ font-size: 0.82rem;
+ letter-spacing: 0.18em;
+ text-transform: uppercase;
+ text-decoration: none;
+ white-space: nowrap;
+}
+.nav-links { display: flex; gap: 1.8rem; margin-left: auto; }
+.nav-links a {
+ color: var(--text); text-decoration: none;
+ font-size: 0.85rem; letter-spacing: 0.07em;
+ opacity: 0.65; transition: opacity 0.2s, color 0.2s;
+}
+.nav-links a:hover { opacity: 1; color: var(--gold); }
+
+/* ── HERO ── */
+.hero {
+ min-height: 100vh;
+ display: flex; flex-direction: column;
+ align-items: center; justify-content: center;
+ padding: 80px 2rem 4rem;
+ position: relative;
+}
+.hero-eyebrow {
+ font-size: 0.75rem;
+ letter-spacing: 0.35em;
+ text-transform: uppercase;
+ color: var(--gold);
+ opacity: 0.6;
+ margin-bottom: 1.1rem;
+}
+.hero-title {
+ font-size: clamp(2.8rem, 7vw, 5rem);
+ font-weight: 300;
+ color: var(--gold-light);
+ letter-spacing: 0.06em;
+ margin-bottom: 0.4rem;
+ text-align: center;
+}
+.hero-sub {
+ font-size: 1rem;
+ color: var(--text);
+ opacity: 0.5;
+ letter-spacing: 0.1em;
+ font-style: italic;
+ margin-bottom: 3.5rem;
+ text-align: center;
+}
+#labyCanvas {
+ display: block;
+ max-width: 600px;
+ width: min(90vw, 600px);
+ aspect-ratio: 1;
+}
+
+/* ── SECTIONS ── */
+.section {
+ max-width: 820px;
+ margin: 0 auto;
+ padding: 5rem 2rem;
+ border-top: 1px solid rgba(201,168,76,0.12);
+}
+.section-label {
+ font-size: 0.72rem;
+ letter-spacing: 0.32em;
+ text-transform: uppercase;
+ color: var(--gold);
+ opacity: 0.55;
+ margin-bottom: 1rem;
+}
+h2 {
+ font-size: clamp(1.6rem, 3vw, 2.2rem);
+ font-weight: 400;
+ color: var(--gold-light);
+ font-style: italic;
+ margin-bottom: 1.8rem;
+ letter-spacing: 0.02em;
+}
+p { margin-bottom: 1.3rem; }
+em { color: var(--gold); font-style: italic; }
+strong { color: var(--cream); font-weight: 500; }
+
+/* ── GREEK GRID ── */
+.ring-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+ gap: 1.2rem;
+ margin: 2.5rem 0;
+}
+.ring-card {
+ border: 1px solid rgba(201,168,76,0.2);
+ padding: 1.4rem 1.2rem;
+ background: rgba(201,168,76,0.025);
+ text-decoration: none;
+ color: var(--text);
+ display: block;
+ transition: background 0.25s, border-color 0.25s;
+}
+.ring-card:hover {
+ background: rgba(201,168,76,0.07);
+ border-color: rgba(201,168,76,0.45);
+}
+.ring-sym {
+ font-size: 2.6rem;
+ color: var(--gold);
+ display: block;
+ margin-bottom: 0.5rem;
+ line-height: 1;
+}
+.ring-label {
+ font-size: 0.72rem;
+ letter-spacing: 0.18em;
+ text-transform: uppercase;
+ opacity: 0.5;
+ margin-bottom: 0.3rem;
+}
+.ring-desc {
+ font-size: 0.88rem;
+ font-style: italic;
+ line-height: 1.5;
+}
+
+/* ── DIVIDER ── */
+.rule {
+ text-align: center;
+ color: var(--gold);
+ opacity: 0.25;
+ letter-spacing: 0.6em;
+ margin: 2rem 0;
+ font-size: 0.8rem;
+}
+
+/* ── FOOTER ── */
+footer {
+ border-top: 1px solid rgba(201,168,76,0.15);
+ padding: 3.5rem 2rem;
+ text-align: center;
+ font-size: 0.85rem;
+ color: var(--text);
+ opacity: 0.45;
+ line-height: 2;
+}
+footer a { color: var(--gold); text-decoration: none; opacity: 1; }
+
+/* ── EGGS (hidden spans in text) ── */
+.egg {
+ cursor: none !important;
+ color: inherit !important;
+ text-decoration: none !important;
+ border: none !important;
+ outline: none !important;
+}
+.egg:hover { cursor: none !important; }
+</style>
+</head>
+<body>
+
+<nav>
+ <a class="nav-brand" href="index.html">Principia Orthogona · Book 3</a>
+ <div class="nav-links">
+ <a href="ch7-crystalline.html">← Ch 7</a>
+ <a href="ch8-meru.html">Ch 8 · Meru</a>
+ <a href="living-book.html">All Chapters</a>
+ </div>
+    <a href="living-book.html">Living Book</a>
+    <a href="series-hub.html">Series ↗</a>
+</nav>
+
+<!-- ═══════════════════════════════════ HERO ═══════════════════════════════════ -->
+<div class="hero">
+ <div class="hero-eyebrow">Hidden Passage · Principia Orthogona</div>
+ <h1 class="hero-title">The Labyrinth</h1>
+ <div class="hero-sub">not all who wander are lost — some are looking</div>
+ <canvas id="labyCanvas" width="600" height="600"></canvas>
+</div>
+
+<!-- ═══════════════════════════════ THE STRUCTURE ══════════════════════════════ -->
+<section class="section" id="structure">
+ <div class="section-label">The Structure</div>
+ <h2>Seven Rings, One Path</h2>
+
+ <p>The Cretan labyrinth is not a maze. There are no dead ends, no wrong turns, no branching decisions to make. There is one path, and it leads to the <span class="egg" onclick="window.location='ch8-axiomatic.html'">center</span>. The complexity is in the winding — the patient, spiraling approach that passes through every ring before arriving at the heart of the thing.</p>
+
+ <p>This is not a structure designed to confuse. It is a structure designed to <em>slow you down</em>. The labyrinth makes you walk every ring before you are permitted to stand at the center. You cannot skip ring four because ring three felt sufficient. The geometry of the approach is the lesson.</p>
+
+ <p>The dm³ operator series has the same structure. C → K → F → U is not a choice tree. It is a unicursal path through four operators, each one required, each one transforming the state before passing it to the next. You cannot reach the fixed point without first conjugating the contact. You cannot reach unification without the fixed point. The operators are rings. The reading is the walking.</p>
+
+ <div class="rule">· · · · · · ·</div>
+</section>
+
+<!-- ═══════════════════════════════ THE EGGS ══════════════════════════════ -->
+<section class="section" id="eggs">
+ <div class="section-label">What Is Hidden</div>
+ <h2>The Eggs in the Rings</h2>
+
+ <p>The Greek-letter chapters below are the seven rings of this labyrinth — each one isolates a single constant or threshold that appears in the dm³ framework. They are not hidden. They are simply below the numbered sequence, accessible to those who walk past the main chapters into the supplementary spiral.</p>
+
+ <p>Beyond those, there are other things here. Five locations in the labyrinth above contain something that does not announce itself. No underline. No color shift. No pointer cursor. The cursor <em>disappears</em> when you pass over them — which is either a sign, or nothing at all, depending on how carefully you are walking.</p>
+
+ <p>The five are distributed across the rings. The center holds the most consequential. The <span class="egg" onclick="window.location='chapters-pi-phi-mu-eta-delta-sigma-omega.html'">outermost ring</span> holds the entrance to the seven. The ones between carry the hidden chapters on the Wigner crystal, the generative time circuit, and the recurrence of <span class="egg" onclick="window.location='chPI-recurrence.html'">π</span>.</p>
+
+ <p>Walk the rings. Not every door has a handle on the outside.</p>
+
+ <div class="rule">· · · · · · ·</div>
+</section>
+
+<!-- ═══════════════════════════════ THE SEVEN RINGS ════════════════════════════ -->
+<section class="section" id="rings">
+ <div class="section-label">The Seven Rings</div>
+ <h2>Greek-Letter Chapters</h2>
+
+ <p>Each chapter below isolates a single mathematical quantity — a threshold, eigenvalue, or universal constant — that appears in the dm³ framework. They can be read in order from the innermost ring outward, or entered from whichever ring calls to you first.</p>
+
+ <div class="ring-grid">
+ <a class="ring-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-pi">
+ <span class="ring-sym">π</span>
+ <div class="ring-label">Ring One</div>
+ <div class="ring-desc">Why the period is 2π — the geometry of the limit cycle</div>
+ </a>
+ <a class="ring-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-phi">
+ <span class="ring-sym">φ</span>
+ <div class="ring-label">Ring Two</div>
+ <div class="ring-desc">The golden ratio — Fibonacci as subcritical dm³</div>
+ </a>
+ <a class="ring-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-mu">
+ <span class="ring-sym">μ</span>
+ <div class="ring-label">Ring Three</div>
+ <div class="ring-desc">Why μ<sub>max</sub> = −2 — the exact transverse eigenvalue</div>
+ </a>
+ <a class="ring-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-eta">
+ <span class="ring-sym">η</span>
+ <div class="ring-label">Ring Four</div>
+ <div class="ring-desc">The tribonacci constant — η ≈ 1.839 and the η weighting</div>
+ </a>
+ <a class="ring-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-delta">
+ <span class="ring-sym">Δ</span>
+ <div class="ring-label">Ring Five</div>
+ <div class="ring-desc">Tetranacci — the first supercritical step</div>
+ </a>
+ <a class="ring-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-sigma">
+ <span class="ring-sym">Σ</span>
+ <div class="ring-label">Ring Six</div>
+ <div class="ring-desc">Pentanacci — strong supercritical, four decaying modes</div>
+ </a>
+ <a class="ring-card" href="chapters-pi-phi-mu-eta-delta-sigma-omega.html#ch-omega">
+ <span class="ring-sym">Ω</span>
+ <div class="ring-label">Ring Seven</div>
+ <div class="ring-desc">Hexabonacci — the fixed point of the sequence of sequences</div>
+ </a>
+ </div>
+
+ <div class="rule">· · · · · · ·</div>
+</section>
+
+<!-- ═══════════════════════════════ THE THREAD ════════════════════════════════ -->
+<section class="section" id="thread">
+ <div class="section-label">The Thread</div>
+ <h2>Ariadne's Operator</h2>
+
+ <p>In the myth, Ariadne gives Theseus a ball of thread. He carries it into the labyrinth unspooling it behind him. On the return, the thread is the proof: here is where I was, here is the path, here is the complete structure of what I walked through. The thread does not show you the way in. It shows you the way back out — and in doing so, it shows you what the inside looked like.</p>
+
+ <p>The dm³ operator is the thread. C marks the contact. K conjugates that contact into structure. F finds the point that does not move under the structure. U unifies the motion and the stillness. After the path is walked, the operator sequence <em>is</em> the record of the walk. The thread is not the path. The thread is what the path looks like after you have walked it fully.</p>
+
+ <p>The labyrinth is complete when the thread runs from entrance to center without a break. In this book, the entrance is Chapter 1. The <span class="egg" onclick="window.location='ch8-axiomatic.html'">center</span> is something you find when you have been through every ring.</p>
+
+ <div class="rule">· · · · · · ·</div>
+</section>
+
+<!-- ════════════════════════════════ FOOTER ═══════════════════════════════════ -->
+<footer>
+ <p>Principia Orthogona Series · ISBN 979-8-9954416-1-8</p>
+ <p><a href="https://www.ebay.com/itm/336530438926" target="_blank">Purchase the complete series</a> &ensp;·&ensp; G6 LLC, Newark NJ &ensp;·&ensp; 2026</p>
+ <p style="font-style:italic; font-size:0.8rem; margin-top:0.3rem">This page is free to read and share</p>
+</footer>
+
+<!-- ════════════════════════════════ CANVAS JS ════════════════════════════════ -->
+<script>
+
+ // ── HiDPI / Retina helper ───────────────────────────────────────────────
+ function hdpi(canvas, w, h) {
+ const dpr = window.devicePixelRatio || 1;
+ canvas.width = w * dpr;
+ canvas.height = h * dpr;
+ canvas.style.width = w + 'px';
+ canvas.style.height = h + 'px';
+ canvas._lw = w; canvas._lh = h;
+ const ctx = canvas.getContext('2d');
+ ctx.scale(dpr, dpr);
+ return ctx;
+ }
+ // ────────────────────────────────────────────────────────────────────────
+
+(function () {
+ const canvas = document.getElementById('labyCanvas');
+ const ctx = canvas.getContext('2d');
+ const W = canvas.width, H = canvas.height;
+ const cx = W / 2, cy = H / 2;
+
+ const GOLD = '#c9a84c';
+ const NAVY = '#0a1628';
+ const ga = a => `rgba(201,168,76,${a})`;
+ const rad = d => d * Math.PI / 180;
+
+ // ── Ring geometry ─────────────────────────────────────────────────────────
+ const N = 7;
+ const maxR = 262;
+ const dr = maxR / (N + 0.5); // ~33px per ring
+
+ // Gap: [centerAngle°, halfWidth°]
+ // Angles in canvas space: 0=right, 90=down, 180=left, 270=up
+ const GAPS = [
+ [270, 14], // ring 1 — top
+ [ 90, 14], // ring 2 — bottom
+ [ 0, 14], // ring 3 — right
+ [180, 14], // ring 4 — left
+ [270, 14], // ring 5 — top
+ [ 90, 14], // ring 6 — bottom
+ [135, 22], // ring 7 — lower-left entrance
+ ];
+
+ // ── Draw labyrinth walls ──────────────────────────────────────────────────
+ function drawWalls() {
+ ctx.strokeStyle = GOLD;
+ ctx.lineWidth = 1.9;
+ ctx.lineCap = 'round';
+
+ for (let i = 0; i < N; i++) {
+ const r = dr * (i + 1);
+ const [ang, h] = GAPS[i];
+ const arcStart = rad(ang + h);
+ const arcEnd = rad(ang - h + 360);
+ ctx.beginPath();
+ ctx.arc(cx, cy, r, arcStart, arcEnd);
+ ctx.stroke();
+ }
+ }
+
+ // ── Draw bridging radials between adjacent ring gaps ──────────────────────
+ function drawBridges() {
+ ctx.strokeStyle = ga(0.75);
+ ctx.lineWidth = 1.6;
+ ctx.lineCap = 'round';
+
+ for (let i = 0; i < N - 1; i++) {
+ const r1 = dr * (i + 1);
+ const r2 = dr * (i + 2);
+ const [a1] = GAPS[i];
+ const [a2] = GAPS[i + 1];
+ const ra1 = rad(a1);
+ const ra2 = rad(a2);
+
+ // Bridge: line from gap-centre of inner ring to gap-centre of outer ring
+ ctx.beginPath();
+ ctx.moveTo(cx + r1 * Math.cos(ra1), cy + r1 * Math.sin(ra1));
+ ctx.lineTo(cx + r2 * Math.cos(ra2), cy + r2 * Math.sin(ra2));
+ ctx.stroke();
+ }
+ }
+
+ // ── Draw centre seed (cross + corner dots) ─────────────────────────────────
+ function drawSeed() {
+ const s = dr * 0.58;
+ ctx.strokeStyle = GOLD;
+ ctx.fillStyle = GOLD;
+ ctx.lineWidth = 1.6;
+ ctx.lineCap = 'round';
+
+ ctx.beginPath();
+ ctx.moveTo(cx, cy - s);
+ ctx.lineTo(cx, cy + s);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.moveTo(cx - s * 0.6, cy);
+ ctx.lineTo(cx + s * 0.6, cy);
+ ctx.stroke();
+
+ for (const [dx, dy] of [[1,1],[-1,1],[1,-1],[-1,-1]]) {
+ ctx.beginPath();
+ ctx.arc(cx + dx * s * 0.55, cy + dy * s * 0.55, 2.8, 0, 2 * Math.PI);
+ ctx.fill();
+ }
+ }
+
+ // ── Draw entrance dash + label ─────────────────────────────────────────────
+ function drawEntrance() {
+ const [ang] = GAPS[6];
+ const ra = rad(ang);
+ const r7 = dr * 7;
+
+ ctx.save();
+ ctx.strokeStyle = ga(0.45);
+ ctx.lineWidth = 1.5;
+ ctx.setLineDash([4, 5]);
+ ctx.beginPath();
+ ctx.moveTo(cx + r7 * Math.cos(ra), cy + r7 * Math.sin(ra));
+ ctx.lineTo(cx + (r7 + 36) * Math.cos(ra), cy + (r7 + 36) * Math.sin(ra));
+ ctx.stroke();
+ ctx.setLineDash([]);
+ ctx.restore();
+
+ ctx.fillStyle = ga(0.55);
+ ctx.font = '500 10px "Cormorant Garamond", serif';
+ ctx.textAlign = 'center';
+ ctx.textBaseline = 'middle';
+ ctx.fillText('ENTER', cx + (r7 + 55) * Math.cos(ra), cy + (r7 + 55) * Math.sin(ra));
+ }
+
+ // ── Floating glyphs ────────────────────────────────────────────────────────
+ const GLYPHS = [
+ { sym: '∞', ax: cx - 220, ay: cy - 180, phase: 0.0 },
+ { sym: 'π', ax: cx + 210, ay: cy - 170, phase: 1.2 },
+ { sym: 'Ω', ax: cx + 225, ay: cy + 160, phase: 2.4 },
+ { sym: 'φ', ax: cx - 215, ay: cy + 170, phase: 3.6 },
+ { sym: 'dm³', ax: cx, ay: cy - 270, phase: 1.8 },
+ ];
+
+ function drawGlyphs(t) {
+ GLYPHS.forEach(g => {
+ const y = g.ay + Math.sin(t * 0.7 + g.phase) * 6;
+ const a = 0.12 + 0.06 * Math.sin(t * 0.5 + g.phase);
+ ctx.fillStyle = ga(a);
+ ctx.font = '300 18px "Cormorant Garamond", serif';
+ ctx.textAlign = 'center';
+ ctx.textBaseline = 'middle';
+ ctx.fillText(g.sym, g.ax, y);
+ });
+ }
+
+ // ── Radial glow ────────────────────────────────────────────────────────────
+ function drawGlow() {
+ const gr = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.75);
+ gr.addColorStop(0, ga(0.09));
+ gr.addColorStop(0.4, ga(0.03));
+ gr.addColorStop(1, ga(0));
+ ctx.fillStyle = gr;
+ ctx.fillRect(0, 0, W, H);
+ }
+
+ // ── Ariadne's thread (animated spiral inward) ─────────────────────────────
+ let tAnim = 0;
+ const SPEED = 0.0012;
+ const TRAIL_LEN = 90;
+ const DT = 0.003; // trail segment step
+
+ function threadXY(t) {
+ // Spiral from ring-7 entrance angle, winding inward 3.8 turns
+ const angle = rad(135) + t * 3.8 * 2 * Math.PI;
+ const r = (1 - t) * (maxR - dr * 0.4) + t * dr * 0.28;
+ return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+ }
+
+ function drawThread(t) {
+ // Fading trail
+ for (let i = TRAIL_LEN; i >= 1; i--) {
+ const t0 = Math.max(0, t - i * DT);
+ const t1 = Math.max(0, t - (i - 1) * DT);
+ const p0 = threadXY(t0), p1 = threadXY(t1);
+ const alpha = ((TRAIL_LEN - i + 1) / TRAIL_LEN) * 0.65;
+ const w = 0.8 + ((TRAIL_LEN - i + 1) / TRAIL_LEN) * 1.4;
+ ctx.strokeStyle = ga(alpha);
+ ctx.lineWidth = w;
+ ctx.lineCap = 'round';
+ ctx.beginPath();
+ ctx.moveTo(p0.x, p0.y);
+ ctx.lineTo(p1.x, p1.y);
+ ctx.stroke();
+ }
+
+ // Head dot with glow
+ const p = threadXY(t);
+ ctx.save();
+ ctx.shadowColor = GOLD;
+ ctx.shadowBlur = 12;
+ ctx.fillStyle = GOLD;
+ ctx.beginPath();
+ ctx.arc(p.x, p.y, 3.8, 0, 2 * Math.PI);
+ ctx.fill();
+ ctx.restore();
+ }
+
+ // ── Animation loop ────────────────────────────────────────────────────────
+ function frame() {
+ ctx.clearRect(0, 0, W, H);
+ ctx.fillStyle = NAVY;
+ ctx.fillRect(0, 0, W, H);
+
+ drawGlow();
+ drawGlyphs(tAnim * 60);
+ drawWalls();
+ drawBridges();
+ drawSeed();
+ drawEntrance();
+ drawThread(tAnim);
+
+ tAnim += SPEED;
+ if (tAnim > 1) tAnim = 0;
+
+ requestAnimationFrame(frame);
+ }
+
+ frame();
+
+ // ── Easter egg zones (invisible click targets) ────────────────────────────
+ // Five eggs hidden at specific ring/angle positions
+ const EGG_R = dr * 0.72;
+ const eggs = [
+ // 1. Center → the axiomatic chapter
+ {
+ x: cx, y: cy,
+ r: EGG_R * 1.15,
+ url: 'ch8-axiomatic.html'
+ },
+ // 2. Ring 3 gap (right) → π recurrence
+ {
+ x: cx + 3 * dr * Math.cos(rad(0)),
+ y: cy + 3 * dr * Math.sin(rad(0)),
+ r: EGG_R,
+ url: 'chPI-recurrence.html'
+ },
+ // 3. Ring 5 gap (top) → Wigner crystal
+ {
+ x: cx + 5 * dr * Math.cos(rad(270)),
+ y: cy + 5 * dr * Math.sin(rad(270)),
+ r: EGG_R,
+ url: 'chW-wigner.html'
+ },
+ // 4. Ring 6 gap (bottom) → Generative Time Circuit
+ {
+ x: cx + 6 * dr * Math.cos(rad(90)),
+ y: cy + 6 * dr * Math.sin(rad(90)),
+ r: EGG_R,
+ url: 'ch-e-gtct.html'
+ },
+ // 5. Ring 7 entrance area → all Greek chapters
+ {
+ x: cx + 7 * dr * Math.cos(rad(225)),
+ y: cy + 7 * dr * Math.sin(rad(225)),
+ r: EGG_R * 1.3,
+ url: 'chapters-pi-phi-mu-eta-delta-sigma-omega.html'
+ },
+ ];
+
+ function hitEgg(mx, my) {
+ for (const e of eggs) {
+ if (Math.hypot(mx - e.x, my - e.y) < e.r) return e;
+ }
+ return null;
+ }
+
+ function canvasCoords(event) {
+ const rect = canvas.getBoundingClientRect();
+ const sx = W / rect.width;
+ const sy = H / rect.height;
+ return {
+ mx: (event.clientX - rect.left) * sx,
+ my: (event.clientY - rect.top) * sy,
+ };
+ }
+
+ canvas.addEventListener('mousemove', e => {
+ const { mx, my } = canvasCoords(e);
+ canvas.style.cursor = hitEgg(mx, my) ? 'none' : 'default';
+ });
+
+ canvas.addEventListener('click', e => {
+ const { mx, my } = canvasCoords(e);
+ const egg = hitEgg(mx, my);
+ if (egg) window.location.href = egg.url;
+ });
+
+ // Touch support
+ canvas.addEventListener('touchend', e => {
+ e.preventDefault();
+ const touch = e.changedTouches[0];
+ const rect = canvas.getBoundingClientRect();
+ const sx = W / rect.width;
+ const sy = H / rect.height;
+ const mx = (touch.clientX - rect.left) * sx;
+ const my = (touch.clientY - rect.top) * sy;
+ const egg = hitEgg(mx, my);
+ if (egg) window.location.href = egg.url;
+ });
+
+})();
+</script>
+</body>
+</html>
