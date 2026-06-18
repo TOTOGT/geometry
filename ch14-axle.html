@@ -329,23 +329,93 @@
     border-top: 1px solid var(--border);
   }
 
+  /* ── n-bonacci ladder ──────────────────────── */
+  .nbonacci-ladder {
+    display: flex; gap: 0; margin: 1.6rem 0;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .nb-step {
+    flex: 1; padding: .8rem .4rem; text-align: center;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    transition: background .2s;
+  }
+  .nb-step:last-child { border-right: none; }
+  .nb-step:hover { background: var(--a-glow); }
+  .nb-step .nb-sym {
+    font-family: Georgia, serif; font-size: 1.2rem;
+    color: var(--a-color); display: block; margin-bottom: .2rem;
+  }
+  .nb-step .nb-val {
+    font-family: 'Courier New', monospace; font-size: .68rem;
+    color: var(--a-warn); display: block; margin-bottom: .2rem;
+  }
+  .nb-step .nb-err {
+    font-family: 'Courier New', monospace; font-size: .62rem;
+    color: var(--muted); display: block; line-height: 1.3;
+  }
+  .nb-step.nb-tau { background: rgba(74,222,128,.10); }
+  .nb-step.nb-tau .nb-sym { color: #fff; font-weight: bold; }
+
+  /* ── Central dogma flow ─────────────────────── */
+  .dogma-flow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: .7rem; margin: 1.4rem 0;
+  }
+  .df-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: .9rem;
+    text-align: center;
+  }
+  .df-op {
+    font-family: 'Courier New', monospace;
+    font-size: .70rem; color: var(--a-color);
+    letter-spacing: .08em; text-transform: uppercase;
+    margin-bottom: .3rem;
+  }
+  .df-molecule { font-size: 1.4rem; margin-bottom: .25rem; }
+  .df-name {
+    font-size: .85rem; font-weight: 600;
+    color: var(--text); margin-bottom: .25rem;
+  }
+  .df-rate {
+    font-family: 'Courier New', monospace;
+    font-size: .68rem; color: var(--a-warn);
+    margin-bottom: .25rem;
+  }
+  .df-mech { font-size: .75rem; color: var(--muted); font-style: italic; line-height: 1.4; }
+
+  /* ── CRISPR table ───────────────────────────── */
+  .crispr-table {
+    width: 100%; border-collapse: collapse;
+    font-size: .86rem; margin: 1.4rem 0;
+  }
+  .crispr-table th {
+    text-align: left; color: var(--a-color);
+    border-bottom: 1px solid var(--border);
+    padding: .5rem .8rem;
+    font-family: 'Courier New', monospace;
+    font-size: .74rem; letter-spacing: .06em; text-transform: uppercase;
+  }
+  .crispr-table td {
+    padding: .55rem .8rem;
+    border-bottom: 1px solid rgba(74,222,128,.08);
+    vertical-align: top;
+  }
+  .crispr-table .c-sys { font-family: 'Courier New', monospace; color: var(--a-color); font-weight: bold; }
+  .crispr-table .c-rate { font-family: 'Courier New', monospace; color: var(--a-warn); }
+  .crispr-table .c-axle { color: var(--text); font-style: italic; }
+  .crispr-table tr.c-best td { background: rgba(74,222,128,.06); }
+
   @media (max-width: 600px) {
     .hero-letter { font-size: 4rem; }
     .type-grid { grid-template-columns: 1fr; }
+    .dogma-flow { grid-template-columns: 1fr 1fr; }
+    .nbonacci-ladder { flex-wrap: wrap; }
+    .nb-step { flex: 0 0 30%; }
   }
-
-/* ── Overflow: wide equations/code scroll inside boxes ── */
-.proof, .block, .axiom-block, .remark, .dep-chain, .time-sec,
-.math-block, .theorem-box, .insight-box, .falsify-box,
-.coherence-row, .table-wrap, pre, code, .code-block,
-.po-ring-strip { overflow-x: auto; }
-mjx-container { overflow-x: auto; max-width: 100%; display: block !important; }
-.MJX-TEX { max-width: 100%; }
-.block-math, .formal, .axiom-formal, .math-block {
-  overflow-x: auto; white-space: pre; word-break: normal;
-}
-table { min-width: max-content; }
-.table-wrap { overflow-x: auto; }
 </style>
 </head>
 <body>
@@ -357,51 +427,6 @@ table { min-width: max-content; }
   <a href="Sportal.html">S-Portal</a>
   <a href="trilogy-sale.html">Trilogy</a>
 </nav>
-<!-- ── PO Ring Strip ── -->
-
-<style>
-/* ── Principia Orthogona · Ring Nav Strip ─── */
-.po-ring-strip {
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: .4rem;
-  padding: .45rem 1.4rem;
-  background: rgba(0,0,0,.55);
-  border-bottom: 1px solid var(--po-rc, #0ABAB5);
-  font-family: 'JetBrains Mono','SF Mono','Courier New',monospace;
-  font-size: .72rem; letter-spacing: .08em;
-  backdrop-filter: blur(4px);
-}
-.po-ring-strip a { color: var(--po-rc,#0ABAB5); text-decoration:none; opacity:.85; transition: opacity .18s; }
-.po-ring-strip a:hover { opacity:1; text-decoration:underline; }
-.po-ring-badge {
-  display: inline-flex; align-items: center; gap: .5rem;
-  color: var(--po-rc,#0ABAB5);
-}
-.po-ring-num { font-weight:700; letter-spacing:.15em; }
-.po-ring-sep { opacity:.4; }
-.po-ring-meta { opacity:.7; }
-.po-ring-pos { opacity:.5; }
-.po-ring-ends { display:flex; gap:1rem; }
-.po-ring-ends a { opacity:.6; }
-.po-ring-ends a:hover { opacity:1; }
-</style>
-
-<div class="po-ring-strip" style="--po-rc:#c9a84c">
-  <div class="po-ring-badge">
-    <span class="po-ring-num">G3 · Part V</span>
-    <span class="po-ring-sep">·</span>
-    <span class="po-ring-meta">Practitioner &nbsp;·&nbsp; G &nbsp;·&nbsp; D1–D2 &nbsp;·&nbsp; Book 3</span>
-    <span class="po-ring-sep">·</span>
-    <span class="po-ring-pos">2/6</span>
-  </div>
-  <div class="po-ring-ends">
-    <a href="ch12-conclusion.html" title="Ring IV · Writer">↑ Ring IV</a>
-    <a href="book4/living-book.html" title="Spiral Map · G1–G5">◉</a>
-    <a href="book4/chIV-preface.html" title="Ring VI · GTCT">↓ Ring VI</a>
-  </div>
-</div>
-<!-- ── /PO Ring Strip ── -->
-
 
 <!-- ── Hero ─────────────────────────────────── -->
 <div class="hero">
@@ -634,6 +659,273 @@ table { min-width: max-content; }
   </div>
 </div>
 
+<!-- ── Section 5: Kinetic Proofreading Math ──────────── -->
+<div class="section">
+  <h2>§5 · Kinetic Proofreading — The Mathematics of Error Discrimination</h2>
+  <p>
+    Thermodynamics imposes a hard floor on discrimination accuracy. Given a binding
+    energy difference Δε between correct and incorrect substrates,
+    the equilibrium error rate cannot fall below
+    <em>f₀ = e<sup>−Δε / k<sub>B</sub>T</sup></em>.
+    For nucleotide selectivity Δε ≈ 2–3 k<sub>B</sub>T,
+    giving f₀ ≈ 0.01–0.14 — far too high for a genome that must
+    copy 3 × 10⁹ bases with fewer than one error per cell division.
+  </p>
+  <p>
+    In 1974, John Hopfield showed this limit can be broken by coupling discrimination
+    to an irreversible, energy-consuming step — GTP hydrolysis.
+    The system discriminates <em>twice</em>: once before hydrolysis,
+    once after. Because hydrolysis is irreversible, each pass is statistically independent.
+    The error rates multiply:
+  </p>
+
+  <div class="theorem">
+    <div class="thm-label">Theorem 5.1 — Hopfield 1974 · Kinetic Proofreading</div>
+    <div class="thm-body">
+      Let <code>f₀ = e<sup>−Δε/k<sub>B</sub>T</sup></code> be the thermodynamic discrimination factor.<br>
+      With <strong>n</strong> irreversible proofreading steps (each costing ≥ k<sub>B</sub>T · ln(1/f₀)
+      in free energy), the achieved error rate is:<br><br>
+      <strong>f<sub>n</sub> = f₀<sup>n + 1</sup></strong><br><br>
+      This is the <strong>K operator</strong> in the dm³ chain.
+      Each GTP hydrolysis event is a threshold crossing — the irreversible step that resets
+      the discrimination clock and permits a second independent rejection opportunity.
+      <code>K</code> does not merely filter; it <em>multiplies</em> the fidelity of C.
+    </div>
+  </div>
+
+  <p>
+    In ribosomal translation — Hopfield's original example —
+    EF-Tu carries aminoacyl-tRNA to the ribosome A-site.
+    For a near-cognate (mismatched) codon-anticodon pair,
+    GTPase activation slows by a factor of ~100
+    (k<sub>cat</sub> = 120–500 s⁻¹ cognate vs. 0.06–1.3 s⁻¹ near-cognate).
+    After GTP hydrolysis and EF-Tu release, the aa-tRNA must accommodate
+    into the peptidyl transferase centre — a second independent rejection opportunity.
+    The product: f₁ = f₀² ≈ 10⁻⁴ per codon, matching observation.
+  </p>
+
+  <p>
+    The <strong>n-bonacci recurrence ladder</strong> is the abstract form of this principle.
+    Each additional proofreading layer advances the verification ratio toward the limit —
+    the embodiment threshold τ = 2:
+  </p>
+
+  <div class="nbonacci-ladder">
+    <div class="nb-step">
+      <span class="nb-sym">φ</span>
+      <span class="nb-val">≈ 1.618</span>
+      <span class="nb-err">Base selection ~10⁻⁵</span>
+    </div>
+    <div class="nb-step">
+      <span class="nb-sym">η</span>
+      <span class="nb-val">≈ 1.839</span>
+      <span class="nb-err">+ Exonuclease ~10⁻⁷</span>
+    </div>
+    <div class="nb-step">
+      <span class="nb-sym">Δ</span>
+      <span class="nb-val">≈ 1.927</span>
+      <span class="nb-err">+ MMR ~10⁻⁹</span>
+    </div>
+    <div class="nb-step">
+      <span class="nb-sym">Σ</span>
+      <span class="nb-val">≈ 1.966</span>
+      <span class="nb-err">+ HF-CRISPR ~10⁻¹¹</span>
+    </div>
+    <div class="nb-step">
+      <span class="nb-sym">Ω</span>
+      <span class="nb-val">≈ 1.984</span>
+      <span class="nb-err">Prime editing ~10⁻¹³</span>
+    </div>
+    <div class="nb-step nb-tau">
+      <span class="nb-sym">τ</span>
+      <span class="nb-val">= 2</span>
+      <span class="nb-err">Perfect fidelity · limit</span>
+    </div>
+  </div>
+
+  <div class="insight">
+    The n-bonacci constant φₙ is the unique root in (1, 2) of
+    x<sup>n</sup> − x<sup>n−1</sup> − … − x − 1 = 0. As n → ∞, φₙ → 2.
+    This is the mathematical statement that infinite kinetic proofreading achieves
+    perfect discrimination. The embodiment threshold τ = 2 is the biological asymptote —
+    the limit no finite molecular machine can reach, but that every proofreading cascade approaches.
+    Each rung of the dm³ recurrence ladder is one more GTP hydrolysis step.
+  </div>
+</div>
+
+<!-- ── Section 6: Central Dogma as G = U∘F∘K∘C ─────────── -->
+<div class="section">
+  <h2>§6 · The Central Dogma as G = U ∘ F ∘ K ∘ C</h2>
+  <p>
+    DNA stores information; RNA reads it; ribosomes translate it into protein; protein acts.
+    This four-layer cascade is not merely an analogy to the dm³ operator chain —
+    it is a physical instantiation of G = U ∘ F ∘ K ∘ C.
+    Each operator has a corresponding molecular machine, error rate, and proofreading mechanism:
+  </p>
+
+  <div class="dogma-flow">
+    <div class="df-card">
+      <div class="df-op">C — Contact</div>
+      <div class="df-molecule">🧬</div>
+      <div class="df-name">DNA Replication</div>
+      <div class="df-rate">10⁻⁵ → 10⁻⁹ / bp</div>
+      <div class="df-mech">Pol III base selection driven by Watson-Crick contact geometry. The template strand is the contact form; complementarity is the contact condition.</div>
+    </div>
+    <div class="df-card">
+      <div class="df-op">K — Threshold</div>
+      <div class="df-molecule">🔬</div>
+      <div class="df-name">RNA Transcription</div>
+      <div class="df-rate">10⁻⁵ → 10⁻⁶ / nt</div>
+      <div class="df-mech">RNA Pol II backtracking on mismatch triggers TFIIS-stimulated cleavage. Misincorporation is the threshold K* — it activates the proofreading response.</div>
+    </div>
+    <div class="df-card">
+      <div class="df-op">F — Fold</div>
+      <div class="df-molecule">⚗️</div>
+      <div class="df-name">Translation</div>
+      <div class="df-rate">~10⁻⁴ / amino acid</div>
+      <div class="df-mech">EF-Tu GTPase kinetic proofreading (Hopfield's original example). The nascent polypeptide folds co-translationally — the narrative assembles as it is written.</div>
+    </div>
+    <div class="df-card">
+      <div class="df-op">U — Unfold</div>
+      <div class="df-molecule">⚡</div>
+      <div class="df-name">Active Protein</div>
+      <div class="df-rate">Post-translational QC</div>
+      <div class="df-mech">Chaperone-assisted folding; ER quality control; proteasomal degradation of misfolds. Only sorry-free proteins enter the functional proteome.</div>
+    </div>
+  </div>
+
+  <p>
+    The cascade is not monotonically improving: translation is <em>less</em> accurate
+    than replication (10⁻⁴ vs. 10⁻⁹ per residue).
+    This is not a flaw — it reflects different cost structures.
+    DNA errors are permanent; protein errors are transient.
+    A misfolded protein is degraded and re-synthesised by U, which loops back to C.
+    The operator chain is not linear — it is a <em>recurrence</em>,
+    cycling until the expressed output is sorry-free.
+  </p>
+
+  <div class="lean-block">
+    <div class="label">Central Dogma as dm³ type composition</div>
+<span class="cm">-- C: genome as a contact structure (Watson-Crick geometry)</span>
+<span class="kw">structure</span> <span class="ty">Genome</span> <span class="kw">where</span>
+  sequence  : List Nucleotide
+  h_contact : ∀ b ∈ sequence, WatsonCrick b.complement = true
+
+<span class="cm">-- K: RNA Pol II threshold — backtracking activates on mismatch</span>
+<span class="kw">def</span> <span class="ty">K_transcribe</span> (g : Genome) : Transcript :=
+  polII g |>.filter (fun nt => nt.misincorporated → TFIIS.cleave nt)
+
+<span class="cm">-- F: ribosome + EF-Tu kinetic proofreading (Hopfield 1974: f₀² discrimination)</span>
+<span class="kw">def</span> <span class="ty">F_translate</span> (t : Transcript) : NascentPolypeptide :=
+  ribosome t |>.proofread EF_Tu_GTPase
+
+<span class="cm">-- U: chaperones, ER-QC, proteasome — sorry-free proteins proceed</span>
+<span class="kw">def</span> <span class="ty">U_express</span> (p : NascentPolypeptide) : ActiveProtein :=
+  match chaperone.fold p with
+  | .correct x => x.activate
+  | .misfolded => proteasome.degrade p; <span class="sorry-kw">sorry</span>  <span class="cm">-- retry loop</span>
+
+<span class="cm">-- G = U ∘ F ∘ K ∘ C  ←→  the central dogma</span>
+<span class="kw">def</span> <span class="ty">G</span> (genome : Genome) : ActiveProtein :=
+  U_express (F_translate (K_transcribe genome))
+  </div>
+
+  <p>
+    The Drosophila melanogaster connectome — 130,000 neurons, 50 million synapses,
+    published 2023 — is the output of this cascade applied ~10¹¹ times across development.
+    Each synapse is a sorry-free expressed claim:
+    "neuron A contacts neuron B at strength w."
+    The connectome as a whole is a formally verified proof of the fly's neural architecture —
+    AXLE at the organismal scale.
+  </p>
+</div>
+
+<!-- ── Section 7: CRISPR as Sorry Corrector ──────────────── -->
+<div class="section">
+  <h2>§7 · CRISPR — Post-Hoc Genome Editing as Sorry Correction</h2>
+  <p>
+    DNA proofreading, RNA fidelity, and ribosomal kinetic proofreading all operate
+    <em>during</em> the biological writing process.
+    CRISPR-Cas9 is something different: it is a post-hoc editor —
+    capable of finding a specific 20-nucleotide address anywhere in a 3 × 10⁹ bp genome
+    and correcting it after the fact.
+    In Lean terms, DNA proofreading is the type-checker running on compilation;
+    CRISPR is the proof repair tool applied to a compiled but sorry-containing file.
+  </p>
+
+  <table class="crispr-table">
+    <thead>
+      <tr>
+        <th>System</th>
+        <th>Mechanism</th>
+        <th>Off-target Rate</th>
+        <th>AXLE Analogy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="c-sys">Wild-type Cas9</td>
+        <td>DSB → NHEJ or HDR</td>
+        <td class="c-rate">~10⁻² to 10⁻³</td>
+        <td class="c-axle">Early draft — one sorry removed, another introduced by error-prone repair</td>
+      </tr>
+      <tr>
+        <td class="c-sys">SpCas9-HF1</td>
+        <td>Reduced PAM-distal contacts; tolerates only perfect-match guides</td>
+        <td class="c-rate">~10⁻⁵</td>
+        <td class="c-axle">Exonuclease pass — sorry rate drops 100×; some sorries remain</td>
+      </tr>
+      <tr>
+        <td class="c-sys">eSpCas9 / HypaCas9</td>
+        <td>Modulated protein–DNA non-specific contacts</td>
+        <td class="c-rate">~10⁻⁵ to 10⁻⁶</td>
+        <td class="c-axle">MMR pass — approaching 1 sorry per genome</td>
+      </tr>
+      <tr class="c-best">
+        <td class="c-sys">Prime Editing (2019–)</td>
+        <td>Cas9n + reverse transcriptase + pegRNA encodes both target and edit</td>
+        <td class="c-rate">~10⁻⁷ or below</td>
+        <td class="c-axle">AXLE-verified — the pegRNA is the proof term, encoding location and correction simultaneously</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Prime editing is architecturally closest to AXLE verification.
+    The <em>pegRNA</em> (prime editing guide RNA) encodes two things simultaneously:
+    the genomic address (where) and the desired sequence (what the correct text should be).
+    This is precisely the structure of a Lean 4 evidence term —
+    <code style="color:var(--a-color)">h : Claim</code> encodes both the proposition and its proof.
+    The reverse transcriptase copies the correct sequence directly from the pegRNA template:
+    no double-strand break, no error-prone NHEJ, no newly introduced sorries.
+  </p>
+
+  <div class="theorem">
+    <div class="thm-label">Theorem 7.1 — CRISPR as dm³ Operator Composition</div>
+    <div class="thm-body">
+      Let genome G be a Lean file with n sorry-containing theorems at positions p₁ … pₙ.
+      A prime-editing correction targeting position p with sequence c applies:<br><br>
+      <code>edit : G → G' where G'[p] = c</code><br><br>
+      The edit is <strong>AXLE-verified</strong> iff:<br>
+      (C) the guide RNA uniquely identifies p — no off-target contacts (C is injective);<br>
+      (K) c is the cognate sequence at p — the K threshold is satisfied;<br>
+      (F) the reverse transcriptase copies c without error — the corrected strand folds correctly;<br>
+      (U) G' expresses a functional protein — the sorry-free output is inhabited.<br><br>
+      Prime editing satisfies all four. Wild-type Cas9 with NHEJ satisfies (C) and (K) probabilistically
+      but routinely fails (F) and (U) by introducing indels at the repair site.
+    </div>
+  </div>
+
+  <div class="insight">
+    Lynch syndrome (§4) arises when MMR fails — the biological sorry-eliminator is broken,
+    and colorectal cancer risk climbs. CRISPR prime editing can in principle correct
+    the causative MSH2 or MLH1 mutations in somatic cells, restoring the MMR apparatus itself.
+    This closes the loop: the same sorry that biological verification failed to catch
+    is addressable by an externally applied AXLE pass. Every unresolved sorry — in a genome or in a paper —
+    has a repair pathway. The question is only the cost of the proofreading step.
+  </div>
+</div>
+
 <!-- ── Sorry Eliminator Simulation ─────────────────── -->
 <div class="canvas-panel">
   <h3>▶ AXLE Sorry Eliminator — Interactive Proof Assistant</h3>
@@ -694,6 +986,38 @@ table { min-width: max-content; }
   </div>
 
   <div class="prompt-card">
+    <div class="p-id">PROMPT 9.1 · CENTRAL DOGMA AUDIT</div>
+    <div class="p-title">Map Your Paper's Operator Chain</div>
+    <div class="p-text">
+      Treat your paper as a Central Dogma cascade. Identify which layer each claim lives in:<br>
+      · C (Contact / Data): raw measurements, observations, sequences — what did you actually touch?<br>
+      · K (Threshold / Significance): which results crossed a pre-defined threshold K*? Was K* set before data collection?<br>
+      · F (Fold / Narrative): how did you structure results into a story? Which framings are interpretations vs. facts?<br>
+      · U (Unfold / Conclusion): which claims in your conclusion are actually in your data, vs. extrapolated?<br>
+      For each misplaced claim (a U-level conclusion supported only by C-level data),
+      either add the missing K and F operators, or downgrade the claim to its actual layer.
+    </div>
+    <button class="copy-btn" onclick="copyPrompt('p91', this)">Copy Prompt 9.1</button>
+  </div>
+
+  <div class="prompt-card">
+    <div class="p-id">PROMPT 9.2 · KINETIC PROOFREADING SELF-AUDIT</div>
+    <div class="p-title">Count Your Proofreading Steps</div>
+    <div class="p-text">
+      For each major claim in your paper, count how many independent verification steps it has passed:<br>
+      Step 1 (φ, f₀): you ran the analysis and got a result;<br>
+      Step 2 (η, f₀²): a co-author checked the analysis independently;<br>
+      Step 3 (Δ, f₀³): a blinded reviewer attempted to replicate the result;<br>
+      Step 4 (Σ): the result survived peer review with methods scrutiny;<br>
+      Step 5 (Ω): the result has been independently replicated by another lab.<br>
+      Claims at Step 1 only have thermodynamic-limit error rates (~10⁻²).
+      Claims at Step 3+ approach the DNA replication standard (~10⁻⁹).
+      Which of your claims are still at Step 1? Those are your highest-risk sorries.
+    </div>
+    <button class="copy-btn" onclick="copyPrompt('p92', this)">Copy Prompt 9.2</button>
+  </div>
+
+  <div class="prompt-card">
     <div class="p-id">EXTENSION · PROOFREADING CASCADE</div>
     <div class="p-title">Three-Stage Verification Protocol</div>
     <div class="p-text">
@@ -721,7 +1045,7 @@ table { min-width: max-content; }
 
 <footer>
   Chapter 14 of 17 &nbsp;·&nbsp; Book 3: The Mini-Beast &nbsp;·&nbsp;
-  G = U ∘ F ∘ K ∘ C &nbsp;·&nbsp; © G6 LLC
+  G = U ∘ F ∘ K ∘ C &nbsp;·&nbsp; §1–7 · Hopfield 1974 · Central Dogma · CRISPR &nbsp;·&nbsp; © G6 LLC
 </footer>
 
 <script>
@@ -857,6 +1181,39 @@ For each claim, state:
 (c) Type-check result: MATCH ✓ / MISMATCH ✗ / METAVARIABLE ?
 
 For every MISMATCH: either downgrade the claim to match the evidence (e.g., "X causes Y" → "X is associated with Y"), or upgrade the evidence to match the claim (run the study needed).`,
+
+  p91: `CENTRAL DOGMA AUDIT — Prompt 9.1
+
+Treat your paper as a Central Dogma cascade and map each claim to its operator layer:
+
+C (Contact / Data): raw measurements, observations, sequences — what did you actually touch and measure?
+K (Threshold / Significance): which results crossed a pre-defined threshold K*? Was K* set before data collection, or after seeing the data?
+F (Fold / Narrative): how did you structure results into a story? Which framings are interpretations vs. empirical facts?
+U (Unfold / Conclusion): which claims in your Conclusion are actually present in your data, vs. extrapolated beyond it?
+
+For each claim, annotate: C / K / F / U
+
+For each misplaced claim (a U-level conclusion supported only by C-level data, with no K or F operators in between):
+Either add the missing operators (run the significance test, make the narrative framing explicit), or downgrade the claim to its actual operator layer.
+
+Output: a two-column table with Claim | Actual Layer | Required Operators to Justify at U`,
+
+  p92: `KINETIC PROOFREADING SELF-AUDIT — Prompt 9.2
+
+For each major claim in your paper, count how many independent verification steps it has passed.
+Map to the n-bonacci ladder:
+
+Step 1 (φ ≈ 1.618, error rate ~10⁻²): You ran the analysis and got a result. One observer, one pass.
+Step 2 (η ≈ 1.839, error rate ~10⁻⁴): A co-author independently checked the analysis or re-ran the code.
+Step 3 (Δ ≈ 1.927, error rate ~10⁻⁶): A blinded reviewer or replication attempt tested the result.
+Step 4 (Σ ≈ 1.966, error rate ~10⁻⁸): The result survived peer review with detailed methods scrutiny.
+Step 5 (Ω ≈ 1.984, error rate ~10⁻¹⁰): Independent replication by another lab confirmed the result.
+
+For each claim, report its current step number on the ladder.
+Claims at Step 1 have thermodynamic-limit error rates (~10⁻²) — they are your highest-risk sorries.
+Claims at Step 3+ approach the DNA replication standard.
+
+Which claims are still at Step 1? Those are the paper's kinetic proofreading gaps.`,
 
   ext: `PROOFREADING CASCADE — Extension
 
