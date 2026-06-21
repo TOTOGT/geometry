@@ -73,7 +73,7 @@ Five different templates are currently live in one arc:
 ### ch08 — The Axiomatic Turn
 - One-off template; GoFundMe/eBay footer; Book 3 ISBN again.
 - **Broken next-links:** header "Ch. 9 →" goes to `geometry/ch9-phi.html` (Book 3); footer "Ch 9 · φ →" goes to `book4/ch9-phi.html` (no such file — it's `ch09.html`).
-- Content (Letter to the Pope, Foulques→Clement IV→Grossi heraldry, 229 Ballantine Pkwy) is editorial/personal rather than mathematical. Historical flags if you keep it: Clement IV (Gui Foucois) was the son of a Provençal jurist — describing him as a *descendant of Foulques V* is genealogically unsupported; "only pope ever to have been a practising lawyer" is hard to defend. AXLE proof-state language here ("G⁶ threshold … sorry") is good and matches ch10's honesty convention.
+- Content (Letter to the Pope, Foulques→Clement IV→Grossi heraldry, ) is editorial/personal rather than mathematical. Historical flags if you keep it: Clement IV (Gui Foucois) was the son of a Provençal jurist — describing him as a *descendant of Foulques V* is genealogically unsupported; "only pope ever to have been a practising lawyer" is hard to defend. AXLE proof-state language here ("G⁶ threshold … sorry") is good and matches ch10's honesty convention.
 - Same decision as ch07: arc chapter (restyle) or special file (relabel + fix links)?
 
 ### ch09 — φ · The Subcritical Approach

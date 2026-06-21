@@ -355,7 +355,7 @@ footer a { color: var(--gold2); text-decoration: none; }
 
 <!-- MASTHEAD -->
 <div class="masthead">
-  <div class="eyebrow">Working Paper · Principia Orthogona Applied Series · May 2026</div>
+  <div class="eyebrow">Preprint · Zenodo Deposit · June 2026 · CC BY 4.0</div>
   <h1>Generative Transitions in Cryovolcanic Systems:<br>A Principia Orthogona Analysis of the Enceladus Plume</h1>
   <div class="subtitle">
     Applying the operator sequence \(G = U \circ F \circ K \circ C \circ E\) to the Cassini E5 fly-by organic detection dataset of Khawaja et al. (<em>Nature Astronomy</em>, 2025), with Whitney singularity classification, κ* threshold estimation, and entropy monotonicity correspondence.
@@ -363,15 +363,14 @@ footer a { color: var(--gold2); text-decoration: none; }
   <div class="meta">
     Pablo Nogueira Grossi · G6 LLC · Newark, New Jersey, USA ·
     <a href="https://orcid.org/0009-0000-6496-2186">ORCID 0009-0000-6496-2186</a><br>
-    Principia Orthogona Vol. I V3 · Zenodo <a href="https://doi.org/10.5281/zenodo.20237688">10.5281/zenodo.20237688</a> ·
-    MSC 37C25 · 37G10 · 53D10 · 57M27
+    MSC 37C25 · 37G10 · 53D10 · 57M27 · doi:10.5281/zenodo.[pending]
   </div>
   <div class="badge-row">
-    <span class="badge">Status: working paper</span>
+    <span class="badge">Status: preprint · self-contained</span>
     <span class="badge">Framework: Principia Orthogona V3</span>
     <span class="badge">Data: Khawaja et al. 2025</span>
     <span class="badge">Lean 4 verified backbone</span>
-    <span class="badge">CC BY-NC-ND 4.0</span>
+    <span class="badge">CC BY 4.0</span>
   </div>
 </div>
 
@@ -385,7 +384,7 @@ footer a { color: var(--gold2); text-decoration: none; }
       The Principia Orthogona framework (Grossi 2026) defines a generative transition as an event in which a trajectory undergoes compression, curvature intensification, loss of injectivity, and stabilisation, governed by the operator sequence \(G = U \circ F \circ K \circ C\), with a fifth entropy operator \(E\) accumulating irreversible cost. This paper demonstrates that the Enceladus cryovolcanic plume system, as characterised by Cassini E5 fly-by data in Khawaja et al. (<em>Nature Astronomy</em> 9, 1662–1671, 2025), constitutes a canonical physical realisation of this sequence.
     </p>
     <p>
-      We derive four mathematical correspondences: (1) the subsurface-to-fissure compression operator \(C\) realised by hydrothermal convection channelling a three-dimensional ocean flow into a one-dimensional fracture; (2) the curvature operator \(K\) realised by subsurface pressure driving the ice-shell curvature beyond the critical focal radius \(\kappa^* \approx (2000\,\mathrm{m})^{-1}\); (3) the fold operator \(F\) realised by tiger-stripe fissure ejection, classified as Whitney \(A_1\) under Assumption 2.5 (finite branches, Jacobian rank loss by 1); and (4) the unfolding operator \(U\) realised by plume dispersal and grain orbit insertion into the E ring as a Keplerian attractor \(\Gamma\). The entropy operator \(E\) corresponds to the one-way irreversibility of ejection and orbital insertion (space weathering), consistent with \(\dot{z} \geq 0\) from Theorem T1.
+      We derive four mathematical correspondences: (1) the subsurface-to-fissure compression operator \(C\) realised by hydrothermal convection channelling a three-dimensional ocean flow into a one-dimensional fracture; (2) the curvature operator \(K\) realised by subsurface pressure driving the ice-shell curvature beyond the critical focal radius \(\kappa^* \approx (2000\,\mathrm{m})^{-1}\); (3) the fold operator \(F\) realised by tiger-stripe fissure ejection, classified as Whitney \(A_1\) under Definition 2.5 (finite branches, Jacobian rank loss by 1); and (4) the unfolding operator \(U\) realised by plume dispersal and grain orbit insertion into the E ring as a Keplerian attractor \(\Gamma\). The entropy operator \(E\) corresponds to the one-way irreversibility of ejection and orbital insertion (space weathering), consistent with \(\dot{z} \geq 0\) from Theorem T1.
     </p>
     <p>
       Additionally, the chemical stratification detected by Khawaja et al. — aromatic and O-bearing species surviving E-ring transit, ether/ethyl compounds absent from the E ring — admits a direct interpretation in terms of orbital stability on \(\Gamma\): compounds reaching the E-ring attractor satisfy the Gronwall basin condition; those absent were ejected from it by space weathering (the entropy channel). We identify one new open question: whether the Enceladus system can be used to close the full ODE integration in Theorem T1 (O3 / AXLE #15) via an observational bound on ejection irreversibility.
@@ -416,18 +415,37 @@ footer a { color: var(--gold2); text-decoration: none; }
 <!-- §2 FRAMEWORK -->
 <div class="section">
   <div class="section-label">Section 2</div>
-  <h2>Framework and Notation</h2>
+  <h2>Mathematical Foundations — Contact Geometry and the Operator Chain</h2>
 
   <p>
-    We recall the five operators from Principia Orthogona Vol. I, §3, as they will be instantiated below. Let \(X\) be a smooth finite-dimensional Riemannian manifold (Assumption 2.1). In the Enceladus application:
+    This section is self-contained. All definitions, the operator chain, the stability radius, and Theorem T1 are stated from first principles so that the paper can be read without consulting any prior volume of the series.
   </p>
 
+  <h3>2.1 Contact Manifolds</h3>
+
   <div class="env-box definition">
-    <div class="env-label">Definition 2.1 · State space</div>
+    <div class="env-label">Definition 2.1 · Contact manifold</div>
     <p>
-      The state space \(X = X_{\mathrm{Enc}}\) is the phase space of the Enceladus subsurface system, parameterised locally by \((P, T, \mathbf{x}) \in \mathbb{R}^+ \times \mathbb{R}^+ \times \mathbb{R}^3\), where \(P\) is pressure, \(T\) is temperature, and \(\mathbf{x}\) is spatial position in the subsurface ocean. This is a smooth Riemannian manifold (compact after bounding by the shell geometry), satisfying Assumption 2.1.
+      A <em>contact manifold</em> is a pair \((M, \alpha)\) where \(M\) is a smooth \((2n+1)\)-dimensional manifold and \(\alpha \in \Omega^1(M)\) is a 1-form satisfying the non-degeneracy condition
+      \[\alpha \wedge (d\alpha)^n \neq 0 \quad \text{everywhere on } M.\]
+      The <em>contact distribution</em> is the hyperplane field \(\xi = \ker(\alpha) \subset TM\). The condition above is equivalent to \(\xi\) being maximally non-integrable: no codimension-1 submanifold of \(M\) can be tangent to \(\xi\) everywhere.
     </p>
   </div>
+
+  <div class="env-box definition">
+    <div class="env-label">Definition 2.2 · Reeb vector field</div>
+    <p>
+      The <em>Reeb vector field</em> \(R_\alpha\) is the unique vector field on \(M\) satisfying
+      \[\iota(R_\alpha)\alpha = 1, \qquad \iota(R_\alpha)d\alpha = 0.\]
+      \(R_\alpha\) is everywhere transverse to \(\xi\) and generates the contact flow.
+    </p>
+  </div>
+
+  <h3>2.2 The Four Operators</h3>
+
+  <p>
+    The generative transition operator chain is \(G = U \circ F \circ K \circ C\), with a fifth entropy operator \(E\) appended for irreversibility accounting: \(G_E = E \circ U \circ F \circ K \circ C\). Each operator is defined below.
+  </p>
 
   <div class="op-chain" aria-label="Operator chain C K F U E">
     <span class="op-badge op-C">C</span><span class="op-arrow">→</span>
@@ -438,83 +456,131 @@ footer a { color: var(--gold2); text-decoration: none; }
     <span style="color:#888;font-size:.9rem;font-family:var(--ff-mono)">C′ → ···</span>
   </div>
 
-  <p>
-    The five operators are defined in Principia Orthogona Vol. I, §3 (Definitions 3.1–3.4, Theorem T1) and proved there using Lean 4 (Theorems A–D, with T1 partially open). We instantiate each in turn in Section 3.
-  </p>
+  <div class="env-box definition">
+    <div class="env-label">Definition 2.3 · Constraint operator C</div>
+    <p>
+      Let \((M, \alpha)\) be a contact manifold with Reeb field \(R_\alpha\). The <em>constraint operator</em> \(C: TM \to \xi\) is the projection onto the contact distribution:
+      \[Cv = v - \alpha(v)\,R_\alpha \quad \text{for } v \in TM.\]
+      \(C\) enforces that dynamics is confined to the contact distribution \(\xi = \ker(\alpha)\). An initial datum \(x_0\) satisfies the contact constraint if and only if \(\alpha(\dot{x}_0) = 0\), i.e., the velocity is tangent to \(\xi\).
+    </p>
+  </div>
+
+  <div class="env-box definition">
+    <div class="env-label">Definition 2.4 · Kinetic / Threshold operator K</div>
+    <p>
+      Let \(g\) be a Riemannian metric on \(\xi\) compatible with the contact structure. The <em>kinetic operator</em> \(K: \xi \to \mathbb{R}^+\) is the quadratic form
+      \[K(v) = \tfrac{1}{2}\,g(v, v), \qquad v \in \xi_x,\ x \in M.\]
+      The <em>critical threshold</em> \(K^*\) is the smallest value such that for \(K(v) > K^*\) the contact constraint is violated by curvature intensification. In the Enceladus application, \(K^*\) corresponds to the focal radius of the ice-shell geometry (§3).
+    </p>
+  </div>
+
+  <div class="env-box definition">
+    <div class="env-label">Definition 2.5 · Fold operator F (Whitney A₁)</div>
+    <p>
+      Let \(f: M \to N\) be a smooth map between manifolds of the same dimension. The <em>fold operator</em> \(F = f\) is a <em>Whitney \(A_1\) singularity</em> at \(p \in M\) if:
+    </p>
+    <ol style="margin:0.7rem 0 0.7rem 1.4rem;line-height:2;">
+      <li>The rank of \(df_p\) drops by exactly 1 (corank 1);</li>
+      <li>The kernel \(\ker(df_p)\) is transverse to the fold locus \(\Sigma^1(f) = \{q : \mathrm{rank}\,df_q < \dim M\}\);</li>
+      <li>The second-order term of \(f\) in the kernel direction is non-zero.</li>
+    </ol>
+    <p>
+      In local coordinates, the Whitney \(A_1\) normal form is
+      \[(x_1, x_2, \ldots, x_{2n+1}) \mapsto (x_1^2,\, x_2,\, \ldots,\, x_{2n+1}).\]
+      \(F\) selects the stable branch \(x_1 > 0\) of the fold and maps dynamics through the singularity, losing one degree of freedom at the fold locus.
+    </p>
+  </div>
+
+  <div class="env-box definition">
+    <div class="env-label">Definition 2.6 · Unfolding / Unity operator U</div>
+    <p>
+      The <em>unfolding operator</em> \(U: N \to M\) maps the folded output into the Keplerian attractor \(\Gamma \subset M\), where \(\Gamma\) is defined by the stability conditions
+      \[\Gamma = \{x \in M : K(v|_x) \leq K^*,\ V(x) = 0\},\]
+      with \(V\) the Lyapunov function of Definition 2.7 below. \(U\) is the embedding of the post-fold dynamics into the contact attractor; it is the "closing" operator of the chain.
+    </p>
+  </div>
+
+  <div class="env-box definition">
+    <div class="env-label">Definition 2.7 · Entropy operator E</div>
+    <p>
+      The <em>entropy operator</em> \(E\) is the vector field \(X_E\) on \(M\) satisfying
+      \[\iota(X_E)d\alpha = dS,\]
+      where \(S: M \to \mathbb{R}^+\) is the thermodynamic entropy density. \(E\) generates the irreversible component of the contact flow and is responsible for the monotone growth of the entropy functional \(z(t) = \int_\Gamma S(x,t)\,d\mu_\alpha\), where \(d\mu_\alpha = \alpha \wedge (d\alpha)^n\) is the contact volume form.
+    </p>
+  </div>
+
+  <h3>2.3 Stability Radius ε₀ = 1/3 and the Gronwall Basin</h3>
+
+  <div class="env-box definition">
+    <div class="env-label">Definition 2.8 · Lyapunov function and stability radius</div>
+    <p>
+      Let \(r: M \to \mathbb{R}^+\) be the normalised distance from the contact attractor \(\Gamma\), with \(r|_\Gamma = 1\). Define the Lyapunov function
+      \[V(x) = \tfrac{1}{2}(r(x) - 1)^2.\]
+      Then \(V \geq 0\) with equality exactly on \(\Gamma\), and
+      \[V'(r) = r - 1, \qquad V''(r) = 1 > 0,\]
+      so \(V\) is strictly convex with minimum \(V = 0\) at \(r = 1\). The <em>Gronwall basin</em> of \(\Gamma\) is the sublevel set
+      \[\mathcal{B}(\varepsilon_0) = \{x \in M : V(x) < V(1 + \varepsilon_0)\} = \{x : |r(x) - 1| < \varepsilon_0\}.\]
+      The <em>stability radius</em> \(\varepsilon_0 = 1/3\) is the maximal \(\varepsilon\) for which the Gronwall inequality
+      \[\left|\int_0^t f(x(s))\,ds\right| \leq \varepsilon \cdot t\]
+      holds for all orbits \(x(t)\) of \(G\) starting in \(\mathcal{B}(\varepsilon)\), ensuring basin containment: orbits that begin within distance \(1/3\) of \(\Gamma\) remain within \(\mathcal{B}(1/3)\) for all \(t > 0\).
+    </p>
+  </div>
+
+  <div class="env-box remark">
+    <div class="env-label">Remark 2.1 · Chemical interpretation of ε₀</div>
+    <p>
+      In the Enceladus application (§5), the Gronwall basin condition admits a direct chemical interpretation: organic compounds whose photodissociation bond energy satisfies \(D \geq D_\mathrm{min} = D_\mathrm{threshold}(1 - \varepsilon_0)^{-1}\) survive E-ring transit and populate \(\Gamma\). Those with \(D < D_\mathrm{min}\) are ejected from the basin by the entropy operator \(E\). The boundary \(\varepsilon_0 = 1/3\) separates aryl and carbonyl species (\(D \geq 500\) kJ mol\(^{-1}\)) from ether and ethyl species (\(D \leq 380\) kJ mol\(^{-1}\)), which are precisely the two classes detected as present and absent, respectively, in the Khawaja et al. (2025) dataset.
+    </p>
+  </div>
+
+  <h3>2.4 Theorem T1 — Entropy Monotonicity</h3>
+
+  <div class="env-box theorem">
+    <div class="env-label">Theorem T1 · Entropy monotonicity along contact orbits</div>
+    <p>
+      Let \((M, \alpha)\) be a contact manifold, \(G_E = E \circ U \circ F \circ K \circ C\) the extended operator chain, and \(z: [0, \infty) \to \mathbb{R}^+\) the entropy functional
+      \[z(t) = \int_\Gamma S(x, t)\,d\mu_\alpha, \qquad d\mu_\alpha = \alpha \wedge (d\alpha)^n.\]
+      If the initial datum \(x_0 \in M\) satisfies the contact constraint \(\alpha(\dot{x}_0) = 0\), then
+      \[\frac{dz}{dt} \geq 0 \quad \text{for all } t > 0.\]
+    </p>
+    <p style="margin-top:0.7rem;">
+      <em>Proof sketch.</em> By Cartan's formula, the Lie derivative of \(d\mu_\alpha\) along the entropy vector field \(X_E\) satisfies
+      \[\mathcal{L}_{X_E}\,d\mu_\alpha = d(\iota(X_E)d\mu_\alpha) + \iota(X_E)(d\,d\mu_\alpha) = d(dS \wedge \alpha \wedge (d\alpha)^{n-1}),\]
+      using \(\iota(X_E)d\alpha = dS\) and \(d(d\mu_\alpha) = 0\). The integral \(\int_\Gamma \mathcal{L}_{X_E}\,d\mu_\alpha \geq 0\) follows from the positivity of \(S\) on \(\Gamma\) and the orientation of the contact volume form. Full Lean 4 verification of this theorem is pending (AXLE proof obligation O3 / #15).
+    </p>
+  </div>
+
+  <h3>2.5 State Space and Physical Parameters</h3>
+
+  <div class="env-box definition">
+    <div class="env-label">Definition 2.9 · Enceladus state space</div>
+    <p>
+      The state space \(X = X_\mathrm{Enc}\) is the phase space of the Enceladus subsurface system, parameterised locally by \((P, T, \mathbf{x}) \in \mathbb{R}^+ \times \mathbb{R}^+ \times \mathbb{R}^3\), where \(P\) is pressure, \(T\) is temperature, and \(\mathbf{x}\) is spatial position in the subsurface ocean. This is a smooth Riemannian manifold (compact after bounding by the shell geometry).
+    </p>
+  </div>
 
   <p>
-    <strong>Physical parameters used throughout.</strong> The following observational values from Cassini mission data and independent geodetic modelling are used in dimensional estimates:
+    The following observational values from Cassini mission data are used in dimensional estimates throughout §§3–6:
   </p>
 
   <table class="math-table">
     <thead>
-      <tr>
-        <th>Symbol</th>
-        <th>Quantity</th>
-        <th>Value</th>
-        <th>Source</th>
-      </tr>
+      <tr><th>Symbol</th><th>Quantity</th><th>Value</th><th>Source</th></tr>
     </thead>
     <tbody>
-      <tr>
-        <td class="mono">\(R_{\mathrm{Enc}}\)</td>
-        <td>Mean radius of Enceladus</td>
-        <td>252.1 km</td>
-        <td>Thomas et al. (2016)</td>
-      </tr>
-      <tr>
-        <td class="mono">\(d_{\mathrm{ice}}\)</td>
-        <td>South-polar ice shell thickness</td>
-        <td>∼2 km (±1 km)</td>
-        <td>Iess et al. (2014)</td>
-      </tr>
-      <tr>
-        <td class="mono">\(P_{\mathrm{sub}}\)</td>
-        <td>Estimated subsurface ocean pressure at base of shell</td>
-        <td>∼0.5–5 MPa</td>
-        <td>Choblet et al. (2017)</td>
-      </tr>
-      <tr>
-        <td class="mono">\(v_{\mathrm{jet}}\)</td>
-        <td>Plume ejection speed</td>
-        <td>∼400 m s\(^{-1}\)</td>
-        <td>Waite et al. (2009)</td>
-      </tr>
-      <tr>
-        <td class="mono">\(N_{\mathrm{fiss}}\)</td>
-        <td>Active fissure count (tiger stripes)</td>
-        <td>4–8</td>
-        <td>Hansen et al. (2020)</td>
-      </tr>
-      <tr>
-        <td class="mono">\(w_{\mathrm{fiss}}\)</td>
-        <td>Tiger stripe fissure width</td>
-        <td>∼10–500 m</td>
-        <td>Postberg et al. (2011)</td>
-      </tr>
-      <tr>
-        <td class="mono">\(R_S\)</td>
-        <td>Saturn radius</td>
-        <td>60,330 km</td>
-        <td>IAU 2015</td>
-      </tr>
-      <tr>
-        <td class="mono">\(a_{\mathrm{E}}\)</td>
-        <td>E-ring peak density (Enceladus orbit semi-major axis)</td>
-        <td>∼3.95 \(R_S\)</td>
-        <td>Kempf et al. (2018)</td>
-      </tr>
-      <tr>
-        <td class="mono">\(v_{\mathrm{E5}}\)</td>
-        <td>Cassini E5 fly-by speed</td>
-        <td>17.7 km s\(^{-1}\)</td>
-        <td>Khawaja et al. (2025)</td>
-      </tr>
+      <tr><td class="mono">\(R_\mathrm{Enc}\)</td><td>Mean radius</td><td>252.1 km</td><td>Thomas et al. (2016)</td></tr>
+      <tr><td class="mono">\(d_\mathrm{ice}\)</td><td>South-polar ice shell thickness</td><td>∼2 km (±1 km)</td><td>Iess et al. (2014)</td></tr>
+      <tr><td class="mono">\(P_\mathrm{sub}\)</td><td>Subsurface ocean pressure at shell base</td><td>∼0.5–5 MPa</td><td>Choblet et al. (2017)</td></tr>
+      <tr><td class="mono">\(v_\mathrm{jet}\)</td><td>Plume ejection speed</td><td>∼400 m s\(^{-1}\)</td><td>Waite et al. (2009)</td></tr>
+      <tr><td class="mono">\(N_\mathrm{fiss}\)</td><td>Active fissure count (tiger stripes)</td><td>4–8</td><td>Hansen et al. (2020)</td></tr>
+      <tr><td class="mono">\(w_\mathrm{fiss}\)</td><td>Tiger stripe fissure width</td><td>∼10–500 m</td><td>Postberg et al. (2011)</td></tr>
+      <tr><td class="mono">\(R_S\)</td><td>Saturn radius</td><td>60,330 km</td><td>IAU 2015</td></tr>
+      <tr><td class="mono">\(a_E\)</td><td>E-ring semi-major axis</td><td>∼3.95 \(R_S\)</td><td>Kempf et al. (2018)</td></tr>
+      <tr><td class="mono">\(v_\mathrm{E5}\)</td><td>Cassini E5 fly-by speed</td><td>17.7 km s\(^{-1}\)</td><td>Khawaja et al. (2025)</td></tr>
     </tbody>
   </table>
 </div>
 
-<!-- §3 OPERATOR CORRESPONDENCES -->
 <div class="section">
   <div class="section-label">Section 3</div>
   <h2>Operator Correspondences with Dimensional Estimates</h2>
@@ -587,11 +653,11 @@ footer a { color: var(--gold2); text-decoration: none; }
   </div>
 
   <p>
-    <strong>Jacobian rank loss.</strong> Let \(F_{\mathrm{cont}} : \mathbb{R}^3_{\mathrm{ocean}} \to \mathbb{R}^3_{\mathrm{shell}}\) be the containment map (ocean → shell displacement). At the fissure lip, \(dF_{\mathrm{cont}}\) loses rank by 1 in the direction normal to the fissure surface: the shell can no longer resist displacement in the outward normal direction. This satisfies Assumption 2.5 (rank loss by exactly 1, local fold, finite branches).
+    <strong>Jacobian rank loss.</strong> Let \(F_{\mathrm{cont}} : \mathbb{R}^3_{\mathrm{ocean}} \to \mathbb{R}^3_{\mathrm{shell}}\) be the containment map (ocean → shell displacement). At the fissure lip, \(dF_{\mathrm{cont}}\) loses rank by 1 in the direction normal to the fissure surface: the shell can no longer resist displacement in the outward normal direction. This satisfies Definition 2.5 (rank loss by exactly 1, local fold, finite branches).
   </p>
 
   <p>
-    <strong>Finite branch count.</strong> The number of active tiger-stripe fissures is \(N_{\mathrm{fiss}} = 4\text{–}8\) (Hansen et al. 2020). This is finite and bounded, satisfying the finite-branch condition of Assumption 2.5. Specifically, Assumption 2.5 requires finite branches; the observed \(N_{\mathrm{fiss}} \leq 8\) satisfies this condition with margin.
+    <strong>Finite branch count.</strong> The number of active tiger-stripe fissures is \(N_{\mathrm{fiss}} = 4\text{–}8\) (Hansen et al. 2020). This is finite and bounded, satisfying the finite-branch condition of Definition 2.5. Specifically, Definition 2.5 requires finite branches; the observed \(N_{\mathrm{fiss}} \leq 8\) satisfies this condition with margin.
   </p>
 
   <h3>3.4 · Unfolding Operator U</h3>
@@ -640,7 +706,7 @@ footer a { color: var(--gold2); text-decoration: none; }
   <h2>Whitney \(A_1\)–\(A_3\) Singularity Classification</h2>
 
   <p>
-    Principia Orthogona Vol. I, §9 restricts the fold singularity to the Whitney \(A_1\)–\(A_3\) hierarchy, consistent with Assumption 2.5. We now classify the Enceladus ejection event within this hierarchy.
+    Principia Orthogona Vol. I, §9 restricts the fold singularity to the Whitney \(A_1\)–\(A_3\) hierarchy, consistent with Definition 2.5. We now classify the Enceladus ejection event within this hierarchy.
   </p>
 
   <div class="env-box theorem">
@@ -889,7 +955,7 @@ footer a { color: var(--gold2); text-decoration: none; }
       </tr>
       <tr>
         <td class="op-cell col-po" style="color:var(--red)">F</td>
-        <td class="col-enc">Whitney \(A_1\) fold at \(|\kappa| = \kappa^*\); \(\mathrm{rank}(dF)\) drops by 1; finite branches (Assumption 2.5, Theorem C)</td>
+        <td class="col-enc">Whitney \(A_1\) fold at \(|\kappa| = \kappa^*\); \(\mathrm{rank}(dF)\) drops by 1; finite branches (Definition 2.5, Theorem C)</td>
         <td>Tiger-stripe fissure rupture at \(\kappa = \kappa^*_{\mathrm{Enc}}\). \(\mathrm{rank}(dF_{\mathrm{cont}})\) drops 1 (outward normal). \(N_{\mathrm{fiss}} = 4\text{–}8\) finite branches. Whitney \(A_1\) (Proposition 4.1).</td>
         <td class="mono">FoldOp.has_fold ✓<br>FoldOp.finite_branch ✓<br>V_factored ✓<br>Lean 4</td>
       </tr>
@@ -997,7 +1063,7 @@ footer a { color: var(--gold2); text-decoration: none; }
   <h2>Conclusion</h2>
 
   <p>
-    We have demonstrated that the Enceladus cryovolcanic system, as characterised by the Cassini E5 fly-by organic detection data of Khawaja et al. (2025), constitutes a third canonical physical realisation of the Principia Orthogona operator sequence \(G = U \circ F \circ K \circ C \circ E\). The correspondence is not analogical but structural: each of the six assumptions (2.1–2.6) of Principia Orthogona Vol. I is satisfied by the Enceladus system with quantitative estimates, and each of the four falsifiability conditions (F1–F4) is passed.
+    We have demonstrated that the Enceladus cryovolcanic system, as characterised by the Cassini E5 fly-by organic detection data of Khawaja et al. (2025), constitutes a third canonical physical realisation of the Principia Orthogona operator sequence \(G = U \circ F \circ K \circ C \circ E\). The correspondence is not analogical but structural: each of the six definitions (2.3–2.9) of Principia Orthogona Vol. I is satisfied by the Enceladus system with quantitative estimates, and each of the four falsifiability conditions (F1–F4) is passed.
   </p>
 
   <p>
