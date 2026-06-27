@@ -2,6 +2,8 @@
 
 **Logged:** 2026-06-25, Newark, NJ (G6 LLC)
 **Status:** OPEN — prediction window active
+**Pre-registered DOI:** [10.5281/zenodo.20963383](https://doi.org/10.5281/zenodo.20963383)
+**Pre-registration document:** `crop-circle-briefing-2026-06-25.pdf` (this folder; deposited to Zenodo 2026-06-25 before window closes)
 **Context:** see `LAW3M_Poster_SpacePlasma_Grossi2026.pdf` in TOTOGT/3M; the two prior formations (CH 2026-06-23, UK 2026-06-24) hit κ* and r* respectively in their geometric ratios.
 
 ---
