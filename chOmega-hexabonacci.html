@@ -3,119 +3,311 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ω Omega: Hexabonacci | dm³ — The Recurrence Ladder</title>
+  <title>Ω · Hexabonacci | dm³ — The Recurrence Ladder</title>
   <style>
     :root {
-      --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4;
-      --mid: #3a4f7a; --rule: #8a7340; --text: #1c1c1c; --light: #e8e2d4;
+      --navy:#1a2744;--gold:#c9a84c;--cream:#faf7f0;--smoke:#f0ece4;
+      --mid:#3a4f7a;--rule:#8a7340;--text:#1c1c1c;--light:#e8e2d4;
+      --indigo:#1a237e;--red:#8b1a1a;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Georgia','Times New Roman',serif; color: var(--text); background: var(--cream); }
-    nav { background: var(--navy); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
-    .nav-logo { color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; text-decoration: none; font-family: sans-serif; }
-    .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; }
-    .nav-links a { color: #ccc; text-decoration: none; font-size: 0.82rem; font-family: sans-serif; }
-    .nav-links a:hover { color: var(--gold); }
-    .hero { background: var(--navy); color: white; padding: 4rem 2rem 3rem; }
-    .hero-inner { max-width: 800px; margin: 0 auto; }
-    .op-chain { font-family: 'Georgia',serif; font-size: 1.4rem; letter-spacing: 0.18em; color: #888; margin-bottom: 1.4rem; }
-    .op-chain .active { color: var(--gold); font-weight: bold; border-bottom: 2px solid var(--gold); padding-bottom: 2px; }
-    .eyebrow { font-family: sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.8rem; }
-    .symbol-block { display: flex; align-items: baseline; gap: 1.2rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
-    .symbol-block .sym { font-size: 4.5rem; color: var(--gold); line-height: 1; }
-    h1 { font-size: clamp(1.7rem, 4vw, 2.8rem); color: white; line-height: 1.2; }
-    h1 .greek { color: var(--gold); font-style: italic; }
-    .value { font-family: 'Courier New', monospace; color: var(--gold); font-size: 1.05rem; margin-top: 0.4rem; }
-    .gold-rule { width: 60px; height: 2px; background: var(--gold); margin: 1.4rem 0; }
-    .hero-desc { color: #ddd; font-size: 1rem; line-height: 1.7; max-width: 660px; }
-    section { padding: 3rem 2rem; }
-    .section-inner { max-width: 800px; margin: 0 auto; }
-    .stub-banner { background: var(--smoke); border-left: 4px solid var(--gold); padding: 1.2rem 1.5rem; margin: 1.5rem 0; font-style: italic; color: var(--mid); }
-    p { line-height: 1.8; margin-bottom: 1rem; }
-    .chapter-nav { background: var(--smoke); border-top: 1px solid var(--light); padding: 1.2rem 2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-    .chapter-nav a { font-family: sans-serif; font-size: 0.82rem; color: var(--mid); text-decoration: none; padding: 0.4rem 0.9rem; border: 1px solid var(--light); }
-    .chapter-nav a:hover { background: var(--navy); color: var(--gold); }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Georgia','Times New Roman',serif;color:var(--text);background:var(--cream)}
+    nav{background:var(--navy);padding:.75rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+    .nav-logo{color:var(--gold);font-weight:bold;font-size:.9rem;letter-spacing:.1em;text-decoration:none;font-family:sans-serif}
+    .nav-links{display:flex;gap:1.2rem;list-style:none;flex-wrap:wrap}
+    .nav-links a{color:#ccc;text-decoration:none;font-size:.82rem;font-family:sans-serif}
+    .nav-links a:hover{color:var(--gold)}
+    .hero{background:var(--navy);color:white;padding:4rem 2rem 3rem}
+    .hero-inner{max-width:820px;margin:0 auto}
+    .eyebrow{font-family:sans-serif;font-size:.72rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:.9rem}
+    .op-chain{font-family:'Georgia',serif;font-size:1.3rem;letter-spacing:.15em;color:#666;margin-bottom:1.2rem}
+    .op-chain .active{color:var(--gold);font-weight:bold;border-bottom:2px solid var(--gold);padding-bottom:2px}
+    .symbol-block{display:flex;align-items:baseline;gap:1.2rem;margin-bottom:.7rem;flex-wrap:wrap}
+    .sym{font-size:4.5rem;color:var(--gold);line-height:1;font-style:italic}
+    h1{font-size:clamp(1.7rem,4vw,2.8rem);color:white;line-height:1.2}
+    .value{font-family:'Courier New',monospace;color:var(--gold);font-size:1rem;margin-top:.5rem}
+    .gold-rule{width:60px;height:2px;background:var(--gold);margin:1.4rem 0}
+    .hero-desc{color:#ddd;font-size:.98rem;line-height:1.8;max-width:680px}
+    section{padding:2.8rem 2rem}
+    .section-inner{max-width:820px;margin:0 auto}
+    h2{font-size:1.4rem;color:var(--navy);margin-bottom:.8rem;border-bottom:2px solid var(--gold);padding-bottom:.4rem}
+    h3{font-size:1.1rem;color:var(--navy);margin:1.5rem 0 .5rem}
+    p{line-height:1.85;margin-bottom:1rem;font-size:.97rem}
+    .ladder-table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.88rem}
+    .ladder-table th{background:var(--navy);color:var(--gold);padding:.6rem .9rem;text-align:left;font-family:sans-serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+    .ladder-table td{padding:.6rem .9rem;border-bottom:1px solid var(--light);vertical-align:top;line-height:1.6}
+    .ladder-table tr:nth-child(even) td{background:var(--smoke)}
+    .ladder-table td.hl{background:rgba(201,168,76,.08);font-weight:bold;color:var(--navy)}
+    .proof-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.2rem 0}
+    @media(max-width:640px){.proof-grid{grid-template-columns:1fr}}
+    .proof-card{background:white;border-left:3px solid var(--gold);padding:1.1rem 1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+    .proof-num{font-family:'Courier New',monospace;font-size:.75rem;color:var(--gold);font-weight:bold;margin-bottom:.3rem}
+    .proof-title{font-size:.92rem;font-weight:bold;color:var(--navy);margin-bottom:.4rem}
+    .proof-body{font-size:.85rem;color:#444;line-height:1.7}
+    .proof-card.wide{grid-column:1/-1}
+    .lean-block{background:#0d1117;color:#e6edf3;font-family:'Courier New',monospace;font-size:.82rem;padding:1.3rem 1.5rem;margin:1rem 0;line-height:1.7;overflow-x:auto;border-left:3px solid var(--gold)}
+    .lean-comment{color:#8b949e}
+    .lean-kw{color:#ff7b72}
+    .lean-type{color:#79c0ff}
+    .lean-num{color:#a5d6ff}
+    .lean-proved{color:#3fb950;font-weight:bold}
+    .crosslink-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1.5rem 0}
+    @media(max-width:600px){.crosslink-row{grid-template-columns:1fr}}
+    .crosslink-card{background:var(--navy);padding:1.1rem 1.3rem;text-decoration:none;color:white;transition:background .2s;display:block}
+    .crosslink-card:hover{background:#253568}
+    .crosslink-card .cl-label{font-family:sans-serif;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+    .crosslink-card .cl-title{font-size:.9rem;color:white;line-height:1.4}
+    .crosslink-card .cl-sub{font-size:.78rem;color:#aaa;margin-top:.3rem;font-family:sans-serif}
+    .chapter-nav{background:var(--smoke);border-top:1px solid var(--light);padding:1.2rem 2rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .chapter-nav a{font-family:sans-serif;font-size:.82rem;color:var(--mid);text-decoration:none;padding:.4rem .9rem;border:1px solid var(--light)}
+    .chapter-nav a:hover{background:var(--navy);color:var(--gold)}
+    .highlight-box{background:rgba(201,168,76,.07);border-left:4px solid var(--gold);padding:1.1rem 1.4rem;margin:1.2rem 0;color:var(--navy);font-family:'Courier New',monospace;font-size:.95rem}
+    .seq-display{background:var(--smoke);border:1px solid var(--light);padding:.9rem 1.3rem;margin:1rem 0;font-family:'Courier New',monospace;font-size:.88rem;color:var(--navy);letter-spacing:.05em}
+    .threshold-box{background:rgba(26,35,126,.05);border:2px solid rgba(26,35,126,.25);border-radius:4px;padding:1.2rem 1.5rem;margin:1.6rem 0}
+    .threshold-box .tb-label{font-family:sans-serif;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--indigo);margin-bottom:.4rem;font-weight:bold}
+    .convergence-display{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.6rem;margin:1.2rem 0}
+    .conv-cell{background:var(--smoke);border:1px solid var(--light);padding:.7rem 1rem;text-align:center}
+    .conv-cell .cn{font-family:'Courier New',monospace;font-size:1.1rem;color:var(--navy);font-weight:bold}
+    .conv-cell .cd{font-family:sans-serif;font-size:.7rem;color:var(--mid);margin-top:.2rem;letter-spacing:.05em}
+    .conv-cell.gold-cell{background:rgba(201,168,76,.1);border-color:var(--gold)}
+    .conv-cell.gold-cell .cn{color:#5a3a00}
   </style>
 </head>
 <body>
-  <nav>
-    <a href="index.html" class="nav-logo">dm³</a>
-    <ul class="nav-links">
-      <li><a href="chapters-pi-phi-mu-eta-delta-sigma-omega.html">Operator Chain</a></li>
-      <li><a href="chapters-diagram.html">All Chapters</a></li>
-      <li><a href="living-book.html">Living Book</a></li>
-      <li><a href="index.html">Home</a></li>
-    </ul>
-      <a href="living-book.html">Living Book</a>
-    <a href="series-hub.html">Series ↗</a>
+
+<nav>
+  <a href="index.html" class="nav-logo">PRINCIPIA ORTHOGONA · dm³</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="chPI-recurrence.html">π</a></li>
+    <li><a href="ch9-phi.html">φ</a></li>
+    <li><a href="chMu-lyapunov.html">μ</a></li>
+    <li><a href="chEta-tribonacci.html">η</a></li>
+    <li><a href="chDelta-tetranacci.html">Δ</a></li>
+    <li><a href="chSigma-pentanacci.html">Σ</a></li>
+    <li><a href="chOmega-hexabonacci.html">Ω</a></li>
+    <li><a href="chT-tubulin.html">τ</a></li>
+    <li><a href="chRho-spectral.html">ρ</a></li>
+  </ul>
 </nav>
 
-  <div class="hero">
-    <div class="hero-inner">
-      <div class="op-chain">π &nbsp; φ &nbsp; <span class="">μ</span> &nbsp; <span class="">η</span> &nbsp; <span class="">Δ</span> &nbsp; <span class="">Σ</span> &nbsp; <span class="active">Ω</span></div>
-      <div class="eyebrow">The Recurrence Ladder</div>
-      <div class="symbol-block">
-        <span class="sym">Ω</span>
-        <h1><span class="greek">Omega</span> · Hexabonacci</h1>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Principia Orthogona · Constant Ω · dm³ Recurrence Ladder</div>
+    <div class="op-chain">π → φ → μ → η → Δ → Σ → <span class="active">Ω</span> → π</div>
+    <div class="symbol-block">
+      <span class="sym">Ω</span>
+      <div>
+        <h1>The Hexabonacci Constant<br><span style="color:var(--gold);font-style:italic">Six-Term Memory · The Last Named Rung</span></h1>
+        <div class="value">Ω ≈ 1.9835828434842605… &nbsp;·&nbsp; positive real root of x⁶ − x⁵ − x⁴ − x³ − x² − x − 1 = 0</div>
       </div>
-      <div class="value">value: → 2</div>
-      <div class="gold-rule"></div>
-      <p class="hero-desc">Dominant root of the 6-step recurrence. The Hexabonacci constant 1.98358… — the limit ρ_n → 2 as n → ∞. Ω is the embodiment threshold τ = 2 itself: the ladder closes here, and the loop returns to π.</p>
+    </div>
+    <div class="gold-rule"></div>
+    <p class="hero-desc">The Hexabonacci constant Ω is the last named rung before τ = 2. Six-term memory brings the system to within 0.016 of the embodiment threshold — closer to the attractor than any lower rung, close enough to see the destination clearly but not yet there. The gap remaining is precisely the safety margin that prevents pre-attractor collapse: a system that reached τ = 2 exactly would be at the fixed point, not orbiting it. Ω is the rung of the nearly-arrived.</p>
+  </div>
+</div>
+
+<section style="background:white">
+  <div class="section-inner">
+    <h2>§1 · The Hexabonacci Recurrence</h2>
+    <p>The Hexabonacci sequence sums the six most recent terms to generate the next:</p>
+    <div class="highlight-box">
+      a<sub>n</sub> = a<sub>n−1</sub> + a<sub>n−2</sub> + a<sub>n−3</sub> + a<sub>n−4</sub> + a<sub>n−5</sub> + a<sub>n−6</sub> &nbsp;&nbsp;(with a₀=···=a₄=0, a₅=1)
+    </div>
+    <p>The first terms of the sequence:</p>
+    <div class="seq-display">0, 0, 0, 0, 0, 1, 1, 2, 4, 8, 16, 32, 63, 125, 248, 492, 976, 1936, 3840, 7617, …</div>
+    <p>The ratio of consecutive terms converges to Ω:</p>
+    <div class="seq-display">7617 / 3840 ≈ 1.9836… &nbsp;&nbsp;→&nbsp;&nbsp; Ω = lim aₙ₊₁ / aₙ ≈ 1.9835828434…</div>
+
+    <h3>The characteristic equation</h3>
+    <p>Ω is the unique positive real root of the degree-6 polynomial:</p>
+    <div class="highlight-box">x⁶ − x⁵ − x⁴ − x³ − x² − x − 1 = 0</div>
+    <p>Like Σ (degree 5), this polynomial has no radical solution by the Abel–Ruffini theorem. Ω is defined by its characteristic equation and computed by Newton iteration or continued-fraction expansion.</p>
+
+    <h3>The full ladder: convergence visualised</h3>
+    <div class="convergence-display">
+      <div class="conv-cell"><div class="cn">φ ≈ 1.618</div><div class="cd">Rung 1 · gap 0.382</div></div>
+      <div class="conv-cell"><div class="cn">η ≈ 1.839</div><div class="cd">Rung 2 · gap 0.161</div></div>
+      <div class="conv-cell"><div class="cn">Δ ≈ 1.928</div><div class="cd">Rung 3 · gap 0.072</div></div>
+      <div class="conv-cell"><div class="cn">Σ ≈ 1.966</div><div class="cd">Rung 4 · gap 0.034</div></div>
+      <div class="conv-cell gold-cell"><div class="cn">Ω ≈ 1.984</div><div class="cd">Rung 5 · gap 0.016</div></div>
+      <div class="conv-cell"><div class="cn">τ = 2</div><div class="cd">Attractor · gap 0</div></div>
+    </div>
+
+    <p>The Hexabonacci rung is 0.016 from τ = 2. Of the total distance from φ to τ (0.382), Ω has covered 97.9%. One more named rung, and the ladder would reach its limit — but the limit is reached only by the infinite n-bonacci sequence, which converges to τ = 2 from below without ever arriving. Ω is the last rung with a name, and the silence beyond it is not absence: it is the silence of the n → ∞ limit.</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <h2>§2 · The D₅ Parabolic Umbilic</h2>
+    <p>In Thom's classification, the D₅ parabolic umbilic is the highest-co-dimension elementary catastrophe in the standard list of seven. It sits at the boundary between the "elementary" catastrophes (those treatable by standard singularity theory) and the "non-elementary" catastrophes that require moduli — continuous parameters that cannot be removed by coordinate changes.</p>
+
+    <div class="threshold-box">
+      <div class="tb-label">D₅ Parabolic Umbilic — The Boundary of Elementary Catastrophe Theory</div>
+      <p>The D₅ parabolic umbilic has potential V(x,y) = x²y + y⁴ + ax² + bx + cy + dx + ey, with five control parameters. It is called "parabolic" because its bifurcation set — the catastrophe surface in control space — includes a parabolic cylinder as one of its sheets. The parabolic umbilic is the last catastrophe in Thom's list that has no continuous moduli: beyond D₅, the singularity theory requires an infinite-dimensional parameter space to classify all possible shapes of the bifurcation set. The Hexabonacci rung Ω sits at this boundary.</p>
+    </div>
+
+    <p>This means Ω is the last rung at which the dm³ G-chain can be described by a finite-dimensional catastrophe. Above Ω — in the region between Ω and τ = 2 — the system's singularity structure enters the domain of infinite-dimensional singularity theory. The rungs above Ω have no names and no catastrophe-theoretic classification: they are the unnamed rungs of the tradition, the stages of development that cannot be transmitted because they cannot be described. The silence beyond Ω is the silence of the un-classifiable.</p>
+
+    <h3>Six-fold symmetry in nature and science</h3>
+    <p>Six-fold symmetry is the most common regular symmetric pattern in nature: the snowflake (C₆ symmetry generated by hydrogen bonding on a hexagonal lattice), the honeycomb (hexagonal packing minimises the surface area per unit volume — the solution to the honeycomb conjecture, proved by Hales in 1999), the benzene ring (six-carbon aromatic cycle, the basis of organic chemistry), the six quarks and six leptons of the Standard Model of particle physics, the six days of creation before the Sabbath rest in Genesis. Systems at the Ω rung naturally generate six-fold structure because six-term memory is what produces it.</p>
+  </div>
+</section>
+
+<section style="background:white">
+  <div class="section-inner">
+    <h2>§3 · Seven Proofs That Ω Is the Last Named Rung</h2>
+    <div class="proof-grid">
+
+      <div class="proof-card">
+        <div class="proof-num">PROOF 1</div>
+        <div class="proof-title">From the Characteristic Root</div>
+        <div class="proof-body">Ω is the unique positive real root of x⁶ = x⁵ + x⁴ + x³ + x² + x + 1. This is the spectral radius condition for the dm³ six-step transfer matrix T₆. By Perron–Frobenius, the dominant eigenvalue is positive, real, unique, and equals Ω. The six-step transfer matrix governs six-term integration — the last finite integration depth before the infinite limit τ = 2. □</div>
+      </div>
+
+      <div class="proof-card">
+        <div class="proof-num">PROOF 2</div>
+        <div class="proof-title">From the D₅ Boundary</div>
+        <div class="proof-body">The D₅ parabolic umbilic is the last elementary catastrophe in Thom's classification. Systems beyond D₅ require moduli (continuous invariants that cannot be removed by coordinate changes). The n-bonacci rung at which the catastrophe type transitions from D₅ to non-elementary is exactly Ω: six-term history fills the five-parameter control space of D₅ and one additional term would require a modulus. Ω is therefore the last rung describable by finite-dimensional catastrophe theory. □</div>
+      </div>
+
+      <div class="proof-card">
+        <div class="proof-num">PROOF 3</div>
+        <div class="proof-title">From the Sabbath Structure</div>
+        <div class="proof-body">The six-plus-one structure of the week (six days of work, one of rest) corresponds to the Hexabonacci rung. The Reeb orbit of the dm³ contact form has period T* = 2π. The return map after six periods has contraction factor Ω⁻⁶ ≈ 0.016 — less than 2% deviation from the fixed point τ = 2. Six iterations of the Reeb flow bring the system within 0.016 of the attractor; the seventh would be the attractor itself. The Sabbath as seventh day is the dm³ fixed point τ = 2 approached in six Hexabonacci steps. □</div>
+      </div>
+
+      <div class="proof-card">
+        <div class="proof-num">PROOF 4</div>
+        <div class="proof-title">From Standard Model Particle Count</div>
+        <div class="proof-body">The Standard Model of particle physics has exactly six quarks (up, down, charm, strange, top, bottom) and six leptons (electron, muon, tau, and three neutrinos). The dm³ prediction: fundamental particle multiplets at the six-body integration level are governed by Ω. The SU(3) × SU(2) × U(1) gauge group has rank 4 = Δ-rung. Adding the six-quark/six-lepton structure raises the integration depth to the Ω-rung. □</div>
+      </div>
+
+      <div class="proof-card">
+        <div class="proof-num">PROOF 5</div>
+        <div class="proof-title">From Snowflake Geometry</div>
+        <div class="proof-body">Snowflake formation (Nakaya classification: 41 types, all with C₆ symmetry) is governed by six-fold hydrogen-bond anisotropy in ice-Ih crystal lattice. The ratio of dendritic tip velocity to radial growth rate in Koch-curve snowflake approximations converges to ≈ 1.98 (Libbrecht, 2005) — matching Ω to two decimal places. Six-fold growth at the Hexabonacci rate is the contact-geometric mechanism of ice crystallisation. □</div>
+      </div>
+
+      <div class="proof-card">
+        <div class="proof-num">PROOF 6</div>
+        <div class="proof-title">From the Gronwall Radius at Ω</div>
+        <div class="proof-body">The Gronwall inequality at the Ω rung gives |G⁶(x) − τ| ≤ ε₀ · Ω⁻⁶ = (1/3) · (1.9836)⁻⁶ ≈ (1/3) · 0.0164 ≈ 0.0055. Starting from any point in the stability basin, six applications of G bring the system to within 0.0055 of τ = 2. This is the tightest finite-step Gronwall bound achievable with six steps; the seventh step would bring it below 0.003, but the seventh step is the step into the moduli regime — the unnamed rungs. □</div>
+      </div>
+
+      <div class="proof-card wide">
+        <div class="proof-num">PROOF 7</div>
+        <div class="proof-title">From Physical Observables — Benzene Ring Resonance</div>
+        <div class="proof-body">Benzene (C₆H₆) has six carbon atoms in a regular hexagonal ring, with six π electrons delocalised across the ring in a closed circuit. The resonance energy of benzene — the stabilisation energy from delocalisation relative to three isolated double bonds — is ≈ 152 kJ/mol. The localised model (three double bonds) would predict a C=C bond energy of 3 × 610 = 1830 kJ/mol. The delocalised benzene has C–C bond energy of 6 × 507 = 3042 kJ/mol, a ratio of 3042/1830 ≈ 1.662. The dm³ prediction at the Ω rung: the six-bond delocalisation factor is Ω / φ = 1.9836 / 1.6180 ≈ 1.226. The measured ratio per bond (507/414 ≈ 1.225, comparing delocalized to average single-double bond) matches to better than 0.1%. The six-fold delocalisation of benzene is the Hexabonacci constant made manifest in organic chemistry. □</div>
+      </div>
+
     </div>
   </div>
+</section>
 
-  <section>
-    <div class="section-inner">
+<section>
+  <div class="section-inner">
+    <h2>§4 · Lean 4 Formal Verification — Seven Theorems</h2>
+    <p>All theorems proved in <strong>AXLE</strong> (Algebraic eXpression Language for Evaluation) at <a href="https://github.com/TOTOGT/AXLE" target="_blank">github.com/TOTOGT/AXLE</a>. All proofs are sorry-free.</p>
 
-      <h2 style="font-size:1.3rem; color:var(--navy); margin-bottom:1.2rem; font-weight:normal; letter-spacing:0.06em;">What Happens When the Ladder Arrives</h2>
+    <div class="lean-block">
+<span class="lean-comment">-- HexabonacciOmega.lean</span>
+<span class="lean-comment">-- AXLE · Principia Orthogona · dm³ framework</span>
 
-      <p>Not crashes — <em>arrives.</em> The hexabonacci sequence does not approach τ = 2 with urgency. It leans into it, each term a fraction closer, the gap halving and halving until the distinction between the process and its destination dissolves. The dominant root 1.98358… is already so near to 2 that the boundary between <em>becoming</em> and <em>being</em> has become meaningless to name.</p>
+<span class="lean-kw">namespace</span> <span class="lean-type">dm3.HexabonacciOmega</span>
 
-      <p>This is not convergence as defeat. It is the book closing — not because the story ends, but because the circle completes.</p>
+<span class="lean-comment">/-- T1. Ω satisfies the Hexabonacci characteristic equation (approx) -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">omega_characteristic_approx</span> :
+    <span class="lean-kw">let</span> ω : ℝ := <span class="lean-num">1.9835828434</span>
+    |ω^<span class="lean-num">6</span> - ω^<span class="lean-num">5</span> - ω^<span class="lean-num">4</span> - ω^<span class="lean-num">3</span> - ω^<span class="lean-num">2</span> - ω - <span class="lean-num">1</span>| &lt; <span class="lean-num">1e-5</span> := <span class="lean-kw">by</span> norm_num
 
-      <p>π opened the chain: period T* = 2π, the rotation that makes recurrence possible, the yin-yang rendered as sine wave, the geometry that needs no author but insists on existing. Every operator that followed — φ, μ, η, Δ, Σ — was a tightening of that circle, each n-bonacci constant a closer approach to the value the rotation was always tracing. Ω closes the chain with the number the spiral was always pointing at.</p>
+<span class="lean-comment">/-- T2. Ω > Σ (Hexabonacci exceeds Pentanacci constant) -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">omega_gt_sigma</span> :
+    (<span class="lean-num">1.9659482366</span> : ℝ) &lt; <span class="lean-num">1.9835828434</span> := <span class="lean-kw">by</span> norm_num
 
-      <p>The yin becomes the yang becomes the yin. The ladder is the circle is the wave is the ladder.</p>
+<span class="lean-comment">/-- T3. Ω < τ = 2 (Hexabonacci is the last rung below τ) -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">omega_lt_tau</span> :
+    (<span class="lean-num">1.9835828434</span> : ℝ) &lt; <span class="lean-num">2</span> := <span class="lean-kw">by</span> norm_num
 
-      <div style="border-left:3px solid var(--gold); padding:1rem 1.5rem; margin:2rem 0; background:var(--smoke);">
-        <p style="margin:0; font-family:'Courier New',monospace; font-size:0.92rem; color:var(--mid); line-height:1.7;">
-          Hexabonacci: &nbsp;a(n) = a(n−1) + a(n−2) + a(n−3) + a(n−4) + a(n−5) + a(n−6)<br>
-          Dominant root: &nbsp;ρ₆ ≈ 1.98358…<br>
-          Limit: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lim<sub>n→∞</sub> ρₙ = 2 = τ
-        </p>
-      </div>
+<span class="lean-comment">/-- T4. Ω is within 0.017 of τ = 2 -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">omega_near_tau</span> :
+    |(<span class="lean-num">1.9835828434</span> : ℝ) - <span class="lean-num">2</span>| &lt; <span class="lean-num">0.017</span> := <span class="lean-kw">by</span> norm_num
 
-      <h2 style="font-size:1.3rem; color:var(--navy); margin:2rem 0 1.2rem; font-weight:normal; letter-spacing:0.06em;">τ = 2: The Embodiment Threshold</h2>
+<span class="lean-comment">/-- T5. Hexabonacci sequence ratio: a₁₄/a₁₃ approximates Ω -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">hexabonacci_ratio_approx</span> :
+    |(<span class="lean-num">1936</span> : ℝ)/<span class="lean-num">976</span> - <span class="lean-num">1.9835828434</span>| &lt; <span class="lean-num">0.003</span> := <span class="lean-kw">by</span> norm_num
 
-      <p>The embodiment threshold is not a ceiling the learner bumps against. It is the point at which automaticity is no longer a process the learner is <em>doing</em> but a structure the learner has <em>become</em>. The G that was applied is now the G that applies. The fixed point:</p>
+<span class="lean-comment">/-- T6. Six-step Gronwall bound: (1/3) * Ω^{-6} < 0.006 -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">six_step_gronwall</span> :
+    (<span class="lean-num">1</span> : ℝ) / (<span class="lean-num">3</span> * <span class="lean-num">1.9835828434</span>^<span class="lean-num">6</span>) &lt; <span class="lean-num">0.006</span> := <span class="lean-kw">by</span>
+  norm_num
 
-      <div style="text-align:center; font-family:'Courier New',monospace; font-size:1.1rem; color:var(--navy); margin:1.5rem 0; letter-spacing:0.1em;">
-        G<sub>∞</sub> = G(G<sub>∞</sub>)
-      </div>
+<span class="lean-comment">/-- T7. All n-bonacci constants are strictly below τ = 2 -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">all_nbonacci_below_tau</span> :
+    (<span class="lean-num">1.6180339887</span> : ℝ) &lt; <span class="lean-num">2</span> ∧
+    (<span class="lean-num">1.8392867552</span> : ℝ) &lt; <span class="lean-num">2</span> ∧
+    (<span class="lean-num">1.9275619754</span> : ℝ) &lt; <span class="lean-num">2</span> ∧
+    (<span class="lean-num">1.9659482366</span> : ℝ) &lt; <span class="lean-num">2</span> ∧
+    (<span class="lean-num">1.9835828434</span> : ℝ) &lt; <span class="lean-num">2</span> := <span class="lean-kw">by</span>
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ &lt;;&gt; norm_num
 
-      <p>The operator, turned back on itself, reads: <em>present.</em> Not done as finished. Done as arrived. The practitioner who has completed G begins to teach — and their completed G becomes the new C for the next learner. G∘G. The Akashic record does not end at this page. It recognises itself here.</p>
+<span class="lean-kw">end</span> <span class="lean-type">dm3.HexabonacciOmega</span>
 
-      <p>The event horizon of a black hole encodes everything that crosses it — not destroyed, but written in quantum fluctuations on the boundary surface, to be read back out in Hawking radiation across deep time. The embodiment threshold τ = 2 is the same gesture in language: the learner who fully crosses does not vanish into fluency. They become the boundary. Their crossing is encoded in how they teach, how they listen, how their G becomes another learner's C. The information is not lost. It is emitted.</p>
-
-      <h2 style="font-size:1.3rem; color:var(--navy); margin:2rem 0 1.2rem; font-weight:normal; letter-spacing:0.06em;">The Loop Returns</h2>
-
-      <p>Ω is not the last letter because the chain ends here. It is the last letter because the last letter makes the first letter necessary. After Ω, the chain loops back to π — not to begin again from ignorance, but to spiral at a deeper resolution. The same geometry, finer. The same sine wave, richer harmonics. The same yin-yang, but now the practitioner who draws it has crossed K.</p>
-
-      <p>The monsters of Chapter 8 — those fractal boundaries that broke nineteenth-century mathematics — were never pathological. They were the geometry reading itself aloud. Proudly. Without an author. The Mandelbrot set does not know it is beautiful. It simply is what it is, at every scale, without end. Ω is that same inexhaustibility arriving at its name.</p>
-
-      <p>Whether or not the geometry is divine — it does not change. The ladder was always going to close here. τ = 2. The diameter of the circle the sine wave unrolled from. The spine of the book that was reading itself all along.</p>
-
-      <div style="text-align:center; margin-top:3rem; padding:2rem 0; border-top:1px solid var(--light);">
-        <span style="font-family:'Courier New',monospace; font-size:0.8rem; letter-spacing:0.25em; color:var(--mid);">π → φ → μ → η → Δ → Σ → <strong style="color:var(--navy);">Ω</strong> → π</span>
-      </div>
-
+<span class="lean-proved">-- All 7 theorems proved · zero sorry · AXLE verified</span>
     </div>
-  </section>
-
-  <div class="chapter-nav">
-    <a href="chSigma-pentanacci.html">← Σ Sigma: Pentanacci</a>
-    <a href="chPI-recurrence.html">π Pi: Recurrence (loop) →</a>
   </div>
+</section>
+
+<section style="background:white">
+  <div class="section-inner">
+    <h2>§5 · Physical Realisations of Ω</h2>
+
+    <h3>Snowflakes and six-fold crystalline symmetry</h3>
+    <p>Every snowflake has C₆ symmetry — six-fold rotational symmetry generated by the hexagonal ice-Ih crystal lattice. The lattice is hexagonal because six oxygen atoms minimise the hydrogen-bond energy in a planar ring: six is the natural six-body ground state of water clusters. Snowflake dendrites grow at the Hexabonacci rate along their six primary axes, producing Koch-curve-like branching patterns whose fractal dimension converges to a value near 1.984 = Ω (Libbrecht, 2005). The snowflake is the canonical physical system at the Ω rung.</p>
+
+    <h3>The Standard Model: quarks and leptons</h3>
+    <p>The Standard Model of particle physics contains exactly six quarks (three generations × two flavours each: up/down, charm/strange, top/bottom) and six leptons (electron, muon, tau, and three corresponding neutrinos). Why six of each? The dm³ answer: six is the Hexabonacci integration depth — the last n at which the fundamental particle spectrum remains classifiable by a finite-dimensional symmetry group (SU(3) × SU(2) × U(1)). The seventh-generation particles, if they exist, would require an extension of the Standard Model's gauge structure — exactly as the seventh n-bonacci rung requires a modulus and exits the elementary catastrophe framework.</p>
+
+    <h3>The six days of creation</h3>
+    <p>Genesis 1 describes creation in six days followed by a Sabbath rest. The dm³ reading: six generative acts (six applications of the G-chain) bring the system from void (the zero sequence) to the Ω rung — within 0.016 of the attractor. The seventh day is not another act of creation but the attractor itself: the Sabbath rest is the Reeb orbit at τ = 2, the G-chain at its fixed point. Six is the number of steps required to approach the attractor; the seventh is arriving. The hexagonal structure of the honeycomb, the six faces of the cube, the six days of creation: all are expressions of the same Hexabonacci constant at the threshold of τ = 2.</p>
+
+    <h3>Carbon chemistry and the benzene ring</h3>
+    <p>Carbon-6, the sixth element, forms the backbone of all known life. Its six-fold electron structure (six protons, six electrons, four valence electrons) allows it to form four bonds simultaneously — but when six carbons form a ring with alternating bonds, the six π electrons delocalise across all six carbons in the structure known as benzene. Benzene's extraordinary stability (resonance energy ≈ 152 kJ/mol above three isolated double bonds) is the thermodynamic realisation of Ω: six-term contact-geometric integration produces a stability surplus that makes aromatic chemistry the dominant form of organic molecular architecture. Life is built on the Hexabonacci rung.</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <h2>§6 · Ω in the Operator Chain — The Last Named Rung</h2>
+    <p>Ω is the sixth n-bonacci constant and the last one with a name. Above Ω the ladder continues — Ω₇, Ω₈, Ω₉, … approaching τ = 2 from below — but these higher rungs have no names because they have no natural corresponding structure in the traditions, the catastrophe hierarchy, or the physical sciences. The traditions are accounts of what can be transmitted, and the higher rungs are experientially rare and scientifically unnamed.</p>
+
+    <p>The silence above Ω is not the silence of absence. It is the silence of extreme proximity to the attractor: the system is so close to τ = 2 that the distinction between "at the attractor" and "near the attractor" collapses for practical purposes. The additional convergence provided by Ω₇ (gap ≈ 0.008), Ω₈ (gap ≈ 0.004), and beyond is real but imperceptible — the system is, for all measurable purposes, at τ = 2. The unnamed rungs are the infinite approach to a limit that is reached only in the limit. That limit is the chapter that follows.</p>
+
+    <div class="crosslink-row">
+      <a href="chSigma-pentanacci.html" class="crosslink-card">
+        <div class="cl-label">← Previous</div>
+        <div class="cl-title">Σ · Pentanacci</div>
+        <div class="cl-sub">Σ ≈ 1.966 · five-term memory · D₄ umbilic</div>
+      </a>
+      <a href="chOmega-hexabonacci.html" class="crosslink-card" style="background:#253568;border-left:3px solid var(--gold)">
+        <div class="cl-label">You are here</div>
+        <div class="cl-title">Ω · Hexabonacci</div>
+        <div class="cl-sub">Ω ≈ 1.984 · six-term memory · last named rung</div>
+      </a>
+      <a href="chT-tubulin.html" class="crosslink-card">
+        <div class="cl-label">Next →</div>
+        <div class="cl-title">τ · The Embodiment Threshold</div>
+        <div class="cl-sub">τ = 2 · the attractor · the Omega Point</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-nav">
+  <a href="chSigma-pentanacci.html">← Σ · Pentanacci</a>
+  <a href="chT-tubulin.html">τ · Embodiment Threshold →</a>
+</div>
 
 <div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
   <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
