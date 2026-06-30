@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Green Door · Seven Knocks · Principia Orthogona</title>
+<meta name="description" content="Seven knocks on the green door — each a symbol, a note, a Chladni pattern, a vibration. The series introduction to Principia Orthogona and the dm³ framework.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest:  #1a3d2b;
+  --deep:    #0d2018;
+  --mid:     #2a6040;
+  --leaf:    #3a8c58;
+  --moss:    #4db87a;
+  --sage:    #8dc9a0;
+  --gold:    #c9a84c;
+  --gold2:   #e8c96a;
+  --cream:   #f4f7f0;
+  --parchm:  #faf7f0;
+  --text:    #111d16;
+  --muted:   rgba(17,29,22,.5);
+  --rule:    rgba(74,184,122,.18);
+  --serif:   'Noto Serif', Georgia, serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:var(--serif); background:var(--parchm); color:var(--text);
+       font-size:18px; line-height:1.85; -webkit-font-smoothing:antialiased; }
+
+/* ── Nav ── */
+nav {
+  position:sticky; top:0; z-index:300;
+  background:rgba(13,32,24,.97); backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(74,184,122,.12);
+  padding:.6rem 2rem; display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:.4rem;
+}
+.nav-brand { color:var(--gold); font-family:var(--mono); font-size:.68rem; letter-spacing:.18em; text-decoration:none; }
+.nav-links { display:flex; gap:1.1rem; flex-wrap:wrap; }
+.nav-links a { color:rgba(255,255,255,.35); font-size:.63rem; text-decoration:none;
+               letter-spacing:.05em; font-family:var(--mono); transition:color .2s; }
+.nav-links a:hover { color:var(--moss); }
+
+/* ── Hero ── */
+.hero {
+  background:var(--forest); padding:4rem 2rem 5rem; text-align:center;
+  position:relative; overflow:hidden;
+}
+.hero::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(74,184,122,.1) 0%, transparent 65%),
+    radial-gradient(circle 200px at 15% 80%, rgba(201,168,76,.04) 0%, transparent 60%);
+}
+.hero-eyebrow {
+  font-family:var(--mono); font-size:.55rem; letter-spacing:.28em; text-transform:uppercase;
+  color:rgba(77,184,122,.5); margin-bottom:1.4rem; display:block;
+}
+.hero h1 {
+  font-size:clamp(1.8rem,4vw,2.8rem); font-weight:400; color:var(--gold);
+  letter-spacing:.04em; line-height:1.25; margin-bottom:.5rem;
+}
+.hero-sub {
+  font-size:.95rem; color:rgba(220,235,220,.55); max-width:540px;
+  margin:.5rem auto 0; font-style:italic; line-height:1.8;
+}
+.hero-eq {
+  margin-top:1.6rem; font-family:var(--mono); font-size:.78rem;
+  letter-spacing:.1em; color:rgba(201,168,76,.4);
+}
+
+/* The green door */
+.door-area { margin:2rem auto 1.5rem; position:relative; width:110px; }
+.door-svg { display:block; cursor:pointer; transition:transform .15s; }
+.door-svg:active { transform:scale(.97); }
+.door-counter {
+  position:absolute; top:-10px; right:-14px;
+  font-family:var(--mono); font-size:.58rem; letter-spacing:.04em;
+  background:var(--gold); color:var(--forest);
+  padding:.1rem .4rem; font-weight:700;
+  opacity:0; transition:opacity .3s;
+}
+.door-counter.show { opacity:1; }
+
+/* Knock pips in hero */
+.hero-pips {
+  display:flex; justify-content:center; gap:.5rem; margin-top:1.2rem; flex-wrap:wrap;
+}
+.h-pip {
+  width:28px; height:28px; border-radius:50%;
+  border:1px solid rgba(74,184,122,.3);
+  background:rgba(42,96,64,.4);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:.52rem; color:rgba(255,255,255,.3);
+  cursor:pointer; text-decoration:none;
+  transition:background .3s, border-color .3s, color .3s;
+}
+.h-pip.visited, .h-pip:hover { background:rgba(77,184,122,.25); border-color:var(--moss); color:var(--moss); }
+.h-pip.visited { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,.15); }
+
+/* ── Knock sections ── */
+.body { max-width:820px; margin:0 auto; padding:0 2rem 4rem; }
+
+.knock {
+  padding:4rem 0 2.5rem;
+  border-bottom:1px solid rgba(74,184,122,.1);
+}
+
+/* ── Note + Chladni header ── */
+.knock-panel {
+  display:grid; grid-template-columns:auto 1fr;
+  gap:2rem; margin-bottom:2rem; align-items:start;
+}
+@media(max-width:580px){ .knock-panel { grid-template-columns:1fr; gap:1.2rem; } }
+
+.sound-block {
+  text-align:center; width:140px; flex-shrink:0;
+}
+.chladni-wrap {
+  width:130px; height:130px; margin:0 auto .7rem;
+  border:1px solid rgba(74,184,122,.2);
+  background:rgba(26,61,43,.06);
+  display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+}
+.chladni-wrap svg { display:block; }
+.note-name {
+  font-family:var(--mono); font-size:1.4rem; font-weight:700;
+  color:var(--moss); letter-spacing:.05em; line-height:1;
+}
+.note-solfege {
+  font-family:var(--mono); font-size:.62rem; color:var(--gold);
+  letter-spacing:.12em; text-transform:uppercase; margin:.1rem 0;
+}
+.note-freq {
+  font-family:var(--mono); font-size:.5rem; color:var(--muted);
+  letter-spacing:.08em;
+}
+
+.knock-meta { }
+.knock-label {
+  font-family:var(--mono); font-size:.5rem; letter-spacing:.28em; text-transform:uppercase;
+  color:rgba(77,184,122,.5); margin-bottom:.3rem; display:block;
+}
+.knock-title {
+  font-size:clamp(1.1rem,2.5vw,1.45rem); font-weight:600; color:var(--forest);
+  line-height:1.3; margin-bottom:.2rem;
+}
+.knock-op {
+  font-family:var(--serif); font-size:1.6rem; color:var(--leaf);
+  margin-bottom:.1rem; display:block;
+}
+.knock-value {
+  font-family:var(--mono); font-size:.7rem; color:var(--gold); letter-spacing:.08em;
+}
+
+.knock p { color:rgba(17,29,22,.78); margin-bottom:1rem; font-size:1rem; line-height:1.85; }
+.knock p:last-child { margin-bottom:0; }
+
+/* PT block */
+.pt {
+  margin-top:1.1rem; padding:.9rem 1.3rem;
+  background:rgba(42,96,64,.05); border-left:2px solid rgba(74,184,122,.18);
+}
+.pt-label {
+  font-family:var(--mono); font-size:.45rem; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(74,184,122,.38); margin-bottom:.4rem; display:block;
+}
+.pt p { font-size:.86rem; color:rgba(17,29,22,.5); font-style:italic; line-height:1.78; margin-bottom:.6rem; }
+.pt p:last-child { margin-bottom:0; }
+
+/* Zenodo callout */
+.zenodo-block {
+  background:rgba(26,61,43,.06); border:1px solid var(--rule);
+  padding:1.2rem 1.5rem; margin:1.2rem 0;
+}
+.zenodo-block .zb-label {
+  font-family:var(--mono); font-size:.45rem; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(74,184,122,.4); margin-bottom:.5rem; display:block;
+}
+.zenodo-block p { font-size:.88rem; color:rgba(17,29,22,.65); line-height:1.78; margin:0; }
+.zenodo-block a { color:var(--leaf); text-decoration:none; }
+.zenodo-block a:hover { color:var(--moss); }
+
+/* ── 8th reveal — hidden until all 7 visited ── */
+#eighth {
+  background:var(--forest); margin:0 -2rem; padding:5rem 2rem;
+  position:relative; overflow:hidden;
+  display:none; /* shown by JS */
+}
+#eighth.open { display:block; }
+#eighth::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%, rgba(74,184,122,.14) 0%, transparent 70%);
+}
+.open-door-wrap { text-align:center; margin-bottom:2.5rem; }
+.tau-display {
+  font-family:var(--mono); font-size:clamp(3rem,8vw,5.5rem);
+  color:var(--gold); text-align:center; letter-spacing:.08em;
+  margin:1rem 0; line-height:1;
+}
+.door-open-label {
+  font-family:var(--mono); font-size:.58rem; letter-spacing:.28em; text-transform:uppercase;
+  color:rgba(77,184,122,.5); text-align:center; display:block; margin-bottom:1rem;
+}
+#eighth h2 {
+  font-size:clamp(1.3rem,3vw,1.9rem); color:var(--gold); text-align:center;
+  font-weight:400; margin-bottom:1.5rem; line-height:1.4;
+}
+#eighth p { color:rgba(220,235,220,.72); font-size:.97rem; line-height:1.85; margin-bottom:1rem; }
+#eighth .pt { background:rgba(0,0,0,.15); border-left-color:rgba(201,168,76,.2); }
+#eighth .pt p { color:rgba(220,235,220,.42); }
+
+/* Stats */
+.stats {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr));
+  gap:1px; background:rgba(255,255,255,.05); margin:2rem 0;
+}
+.stat { padding:1rem .7rem; text-align:center; background:rgba(255,255,255,.04); }
+.stat-n { font-family:var(--mono); font-size:1.5rem; color:var(--gold); display:block; line-height:1; }
+.stat-l { font-family:var(--mono); font-size:.42rem; color:rgba(255,255,255,.3);
+          text-transform:uppercase; letter-spacing:.1em; margin-top:.3rem; display:block; }
+
+/* CTAs */
+.cta-row { display:flex; gap:.9rem; flex-wrap:wrap; margin-top:2rem; justify-content:center; }
+.cta-gold {
+  display:inline-block; padding:.8rem 2rem;
+  background:var(--gold); color:var(--forest);
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.12em; text-transform:uppercase;
+  text-decoration:none; font-weight:700; transition:background .2s;
+}
+.cta-gold:hover { background:var(--gold2); }
+.cta-out {
+  display:inline-block; padding:.8rem 2rem; border:1px solid;
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.12em; text-transform:uppercase;
+  text-decoration:none; transition:background .2s;
+}
+
+/* Series callout for ch00 */
+.series-callout {
+  background:rgba(13,32,24,.94); color:var(--cream);
+  padding:1.8rem 2.2rem; margin:3rem 0; border-left:3px solid var(--gold);
+}
+.series-callout .sc-l {
+  font-family:var(--mono); font-size:.46rem; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(201,168,76,.38); margin-bottom:.6rem; display:block;
+}
+.series-callout p { font-size:.87rem; color:rgba(220,235,220,.7); line-height:1.8; margin-bottom:.65rem; }
+.series-callout p:last-child { margin-bottom:0; }
+.series-callout a { color:var(--gold); text-decoration:none; }
+
+/* Prompt — 8th knock unlock hint */
+.knock-hint {
+  text-align:center; font-family:var(--mono); font-size:.6rem;
+  color:rgba(17,29,22,.3); letter-spacing:.12em; padding:2.5rem 0 1rem;
+  text-transform:uppercase;
+}
+.knock-hint span { color:var(--leaf); }
+
+/* ── Footer ── */
+footer {
+  background:var(--deep); border-top:1px solid rgba(74,184,122,.08);
+  padding:1.6rem 2rem; text-align:center;
+  font-family:var(--mono); font-size:.6rem; color:rgba(255,255,255,.22);
+}
+footer a { color:rgba(201,168,76,.38); text-decoration:none; }
+footer a:hover { color:var(--gold); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="series-hub.html" class="nav-brand">⚜ Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="series-hub.html">All Volumes</a>
+    <a href="index.html">Book 3</a>
+    <a href="book4/index.html">Book 4</a>
+    <a href="book5/index.html">Book 5</a>
+    <a href="book6/index.html">Book 6</a>
+    <a href="omega/omega-point-index.html">Ω</a>
+    <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">Zenodo ↗</a>
+    <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE ↗</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <span class="hero-eyebrow">Principia Orthogona · dm³ · G6 LLC · Pablo Nogueira Grossi · 2026</span>
+
+  <!-- Green door -->
+  <div class="door-area">
+    <div class="door-counter" id="doorCount">0 / 7</div>
+    <svg class="door-svg" id="doorSvg" width="110" height="150" viewBox="0 0 110 150"
+         xmlns="http://www.w3.org/2000/svg" onclick="knockDoor()" title="Click to knock">
+      <!-- Frame -->
+      <rect x="5" y="5" width="100" height="140" rx="3" fill="none" stroke="rgba(74,184,122,.3)" stroke-width="1.5"/>
+      <!-- Door panel -->
+      <rect x="11" y="11" width="88" height="128" rx="2" fill="rgba(42,96,64,.88)" stroke="rgba(74,184,122,.4)" stroke-width="1.2"/>
+      <!-- Upper inset -->
+      <rect x="19" y="19" width="72" height="50" rx="1" fill="none" stroke="rgba(74,184,122,.18)" stroke-width=".7"/>
+      <!-- Lower inset -->
+      <rect x="19" y="79" width="72" height="48" rx="1" fill="none" stroke="rgba(74,184,122,.18)" stroke-width=".7"/>
+      <!-- τ = 2 carved in upper panel -->
+      <text x="55" y="48" text-anchor="middle" font-family="Georgia,serif" font-size="11"
+            fill="rgba(201,168,76,.22)" font-style="italic">τ = 2</text>
+      <!-- Seven knock dots — radiate outward like sound waves from centre -->
+      <circle id="kd1" cx="55" cy="97" r="2.5" fill="rgba(77,184,122,.7)"/>
+      <circle id="kd2" cx="47" cy="99" r="2.2" fill="rgba(77,184,122,.5)"/>
+      <circle id="kd3" cx="63" cy="99" r="2.2" fill="rgba(77,184,122,.5)"/>
+      <circle id="kd4" cx="40" cy="104" r="2" fill="rgba(77,184,122,.35)"/>
+      <circle id="kd5" cx="70" cy="104" r="2" fill="rgba(77,184,122,.35)"/>
+      <circle id="kd6" cx="34" cy="111" r="1.8" fill="rgba(77,184,122,.22)"/>
+      <circle id="kd7" cx="76" cy="111" r="1.8" fill="rgba(77,184,122,.22)"/>
+      <!-- Handle -->
+      <circle cx="80" cy="50" r="5.5" fill="rgba(201,168,76,.45)" stroke="rgba(201,168,76,.3)" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <h1>The Green Door</h1>
+  <p class="hero-sub">Seven knocks. Seven notes. Seven Chladni plates. One fold.<br>Enter at the eighth.</p>
+  <div class="hero-eq">G = U ∘ F ∘ K ∘ C &nbsp;·&nbsp; ε₀ = ⅓ &nbsp;·&nbsp; μ_max = −2 &nbsp;·&nbsp; T* = 2π &nbsp;·&nbsp; τ = 2</div>
+
+  <!-- Seven pip links -->
+  <div class="hero-pips">
+    <a href="#k1" class="h-pip" id="pip1" title="Knock I · π · Do">π</a>
+    <a href="#k2" class="h-pip" id="pip2" title="Knock II · φ · Re">φ</a>
+    <a href="#k3" class="h-pip" id="pip3" title="Knock III · μ · Mi">μ</a>
+    <a href="#k4" class="h-pip" id="pip4" title="Knock IV · η · Fa">η</a>
+    <a href="#k5" class="h-pip" id="pip5" title="Knock V · Δ · Sol">Δ</a>
+    <a href="#k6" class="h-pip" id="pip6" title="Knock VI · Σ · La">Σ</a>
+    <a href="#k7" class="h-pip" id="pip7" title="Knock VII · Ω · Si">Ω</a>
+  </div>
+</div>
+
+<!-- ═══ SEVEN KNOCKS ═══ -->
+<div class="body">
+
+<!-- ══ KNOCK I · π · Do · 256 Hz ══ -->
+<div class="knock" id="k1">
+  <div class="knock-panel">
+    <div class="sound-block">
+      <!-- Chladni: (1,0) mode — single diameter line, 2 half-discs -->
+      <div class="chladni-wrap">
+        <svg width="118" height="118" viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="59" cy="59" r="52" fill="none" stroke="rgba(74,184,122,.25)" stroke-width="1"/>
+          <!-- Single horizontal nodal diameter — the simplest mode -->
+          <line x1="7" y1="59" x2="111" y2="59" stroke="rgba(201,168,76,.6)" stroke-width="1.5"/>
+          <!-- Sand pattern — sand gathers on the nodal line -->
+          <line x1="7" y1="59" x2="111" y2="59" stroke="rgba(77,184,122,.15)" stroke-width="6"/>
+          <!-- Plate vibration zones (no sand) — lighter -->
+          <path d="M59,7 A52,52 0 0,1 59,111" fill="rgba(42,96,64,.04)" stroke="none"/>
+          <path d="M59,7 A52,52 0 0,0 59,111" fill="rgba(42,96,64,.06)" stroke="none"/>
+        </svg>
+      </div>
+      <div class="note-name">C</div>
+      <div class="note-solfege">Do</div>
+      <div class="note-freq">256 Hz</div>
+    </div>
+    <div class="knock-meta">
+      <span class="knock-label">Knock I · π · Period · The Seed</span>
+      <span class="knock-op">π</span>
+      <div class="knock-title">A single line divides the plate — and a question that would not close</div>
+      <div class="knock-value">T* = 2π · The recurrence opens · First mode</div>
+    </div>
+  </div>
+
+  <p>This series began as a notebook. Not a textbook, not a research programme. A single operator chain written on a contact manifold, looking for a fixed point. G = U ∘ F ∘ K ∘ C — four operators, four acts. C compresses. K finds the threshold. F folds. U stabilises. Applied to a trajectory in ℝ, they produced a fixed point x* the chain returns to no matter where you start inside the basin ε₀ = 1/3. The period: T* = 2π. The transverse Lyapunov exponent: μ_max = −2. The embodiment threshold: τ = 2.</p>
+
+  <p>Do is the ground note — the plate struck for the first time, sand shaken loose, settling in the single straight line that divides the field into two vibrating halves. The simplest possible Chladni figure. π is where the door is, because T* = 2π is the period of the loop that closes. The question it encodes: <em>what closes?</em></p>
+
+  <div class="zenodo-block">
+    <span class="zb-label">For researchers — the Zenodo monographs are the true Vol I</span>
+    <p>If you are technically inclined, the Zenodo deposits are the first real door. More than forty papers, formal proofs in Lean 4, DOI-stable. The series DOI <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">10.5281/zenodo.19117399</a> always resolves to the latest. Lost count of how many there are now — and that is the right amount: the count and the series grew together, each deposit arriving when a domain proved itself.</p>
+  </div>
+
+  <div class="pt">
+    <span class="pt-label">Português — Primeira Batida · Dó · 256 Hz</span>
+    <p>Esta série começou como um caderno. Uma única cadeia de operadores — G = U ∘ F ∘ K ∘ C — buscando um ponto fixo. O triplo invariante (T* = 2π, μ_max = −2, τ = 2) foi depositado no Zenodo em 2026, dois artigos, zero sorry em Lean 4. Mais de quarenta depósitos existem agora — e esse é o número certo: a contagem e a série cresceram juntas.</p>
+    <p>Dó é a nota fundamental — a placa golpeada pela primeira vez, a areia se assentando na única linha que divide o campo em dois. A figura de Chladni mais simples possível. π está onde a porta está, porque T* = 2π é o período do laço que se fecha.</p>
+  </div>
+</div>
+
+<!-- ══ KNOCK II · φ · Re · 288 Hz ══ -->
+<div class="knock" id="k2">
+  <div class="knock-panel">
+    <div class="sound-block">
+      <!-- Chladni: (2,0) mode — two diameter lines (cross / X) -->
+      <div class="chladni-wrap">
+        <svg width="118" height="118" viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="59" cy="59" r="52" fill="none" stroke="rgba(74,184,122,.25)" stroke-width="1"/>
+          <!-- Two diameter nodal lines at 45° — X pattern -->
+          <line x1="22" y1="22" x2="96" y2="96" stroke="rgba(201,168,76,.55)" stroke-width="1.5"/>
+          <line x1="96" y1="22" x2="22" y2="96" stroke="rgba(201,168,76,.55)" stroke-width="1.5"/>
+          <!-- Sand glow on nodal lines -->
+          <line x1="22" y1="22" x2="96" y2="96" stroke="rgba(77,184,122,.12)" stroke-width="6"/>
+          <line x1="96" y1="22" x2="22" y2="96" stroke="rgba(77,184,122,.12)" stroke-width="6"/>
+          <!-- Four sectors hint -->
+          <path d="M59,7 A52,52 0 0,1 111,59" fill="rgba(42,96,64,.05)" stroke="none"/>
+          <path d="M111,59 A52,52 0 0,1 59,111" fill="rgba(42,96,64,.03)" stroke="none"/>
+        </svg>
+      </div>
+      <div class="note-name">D</div>
+      <div class="note-solfege">Re</div>
+      <div class="note-freq">288 Hz</div>
+    </div>
+    <div class="knock-meta">
+      <span class="knock-label">Knock II · φ · Growth · Fibonacci</span>
+      <span class="knock-op">φ</span>
+      <div class="knock-title">Two lines cross — the chain enters contact geometry</div>
+      <div class="knock-value">φ ≈ 1.618 · Growth that does not break under recursion</div>
+    </div>
+  </div>
+
+  <p>Re strikes the plate a second time, harder. The single line doubles: an X appears, four vibrating sectors separated by two crossing nodal lines. The field has become richer but the sand settles clearly — the geometry of the crossing is as simple as the geometry of the single line was. This is the structure of contact geometry: it takes the single constraint and crosses it with a second, producing a symplectic plane in the kernel.</p>
+
+  <p>Volume II realises G = U ∘ F ∘ K ∘ C on the contact manifold M = ℝ²₊ × ℝ with form α = dz − r²dθ. The fold operator F becomes a Whitney A₁ singularity. The stability radius ε₀ = 1/3 emerges from a Gronwall inequality. Four theorems — A, B, C, D — proved in Chain.lean with zero sorry. φ ≈ 1.618 marks this rung: the first n-bonacci constant greater than 1, growth that stays bounded, the X on the plate that never loses its symmetry.</p>
+
+  <div class="pt">
+    <span class="pt-label">Português — Segunda Batida · Ré · 288 Hz</span>
+    <p>Ré golpeia a placa uma segunda vez. A linha única dobra: um X aparece, quatro setores vibrantes separados por dois diâmetros nodais. O Volume II realiza G = U ∘ F ∘ K ∘ C na variedade de contato M = ℝ²₊ × ℝ. O operador F torna-se uma singularidade Whitney A₁. Quatro teoremas provados, zero sorry. φ ≈ 1,618 marca este degrau: o primeiro n-bonacci maior que 1, crescimento que permanece delimitado.</p>
+  </div>
+</div>
+
+<!-- ══ KNOCK III · μ · Mi · 320 Hz ══ -->
+<div class="knock" id="k3">
+  <div class="knock-panel">
+    <div class="sound-block">
+      <!-- Chladni: (3,0) mode — three diameter lines, 6-petal star -->
+      <div class="chladni-wrap">
+        <svg width="118" height="118" viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="59" cy="59" r="52" fill="none" stroke="rgba(74,184,122,.25)" stroke-width="1"/>
+          <!-- Three diameter nodal lines at 60° each -->
+          <line x1="59" y1="7"  x2="59"  y2="111" stroke="rgba(201,168,76,.5)" stroke-width="1.3"/>
+          <line x1="14" y1="34" x2="104" y2="84"  stroke="rgba(201,168,76,.5)" stroke-width="1.3"/>
+          <line x1="104" y1="34" x2="14" y2="84"  stroke="rgba(201,168,76,.5)" stroke-width="1.3"/>
+          <!-- Sand glow -->
+          <line x1="59" y1="7"  x2="59"  y2="111" stroke="rgba(77,184,122,.1)" stroke-width="5"/>
+          <line x1="14" y1="34" x2="104" y2="84"  stroke="rgba(77,184,122,.1)" stroke-width="5"/>
+          <line x1="104" y1="34" x2="14" y2="84"  stroke="rgba(77,184,122,.1)" stroke-width="5"/>
+          <!-- Six sector fills alternating -->
+          <path d="M59,59 L59,7 A52,52 0 0,1 104,34 Z" fill="rgba(42,96,64,.07)" stroke="none"/>
+          <path d="M59,59 L104,34 A52,52 0 0,1 104,84 Z" fill="rgba(42,96,64,.04)" stroke="none"/>
+          <path d="M59,59 L104,84 A52,52 0 0,1 59,111 Z" fill="rgba(42,96,64,.07)" stroke="none"/>
+        </svg>
+      </div>
+      <div class="note-name">E</div>
+      <div class="note-solfege">Mi</div>
+      <div class="note-freq">320 Hz</div>
+    </div>
+    <div class="knock-meta">
+      <span class="knock-label">Knock III · μ · Stability · Lyapunov</span>
+      <span class="knock-op">μ</span>
+      <div class="knock-title">Three lines, six sectors — the attractor holds at every scale</div>
+      <div class="knock-value">μ_max = −2 · Negative means the attractor holds · Third mode</div>
+    </div>
+  </div>
+
+  <p>Mi — the third — and the plate erupts into a six-pointed star. Three nodal diameters at 60° intervals. Six vibrating sectors, alternating phase, perfectly symmetric. This is stability: six independent parts, all governed by the same crossing rule, none of them running away. μ_max = −2 is exactly this: wherever you start near x*, the chain folds you back. The attractor holds.</p>
+
+  <p>Volume III is 121 chapters across seventeen orders of magnitude. ATP synthase at T* = 2π per cycle. The hippocampal theta oscillation. The cardiac sinoatrial node with Lyapunov eigenvalue −2 at the stable limit cycle. The Cajueiro tree of Pirangi, fractal branching from trunk to twig following n-bonacci ratios. Wigner crystallisation of the 2D electron gas — fold from Fermi liquid to crystal as the F operator at coupling constant rs ≈ 37. Not metaphor. The stability claim — μ_max = −2, ε₀ = 1/3 — holds across all of them. The third knock shows the door is not unique to one room.</p>
+
+  <div class="pt">
+    <span class="pt-label">Português — Terceira Batida · Mi · 320 Hz</span>
+    <p>Mi — e a placa irrompe em uma estrela de seis pontas. Três diâmetros nodais a 60° cada. μ_max = −2 é exatamente isso: de onde quer que se comece perto de x*, a cadeia dobra de volta. O atrator sustenta. O Volume III aplica esta estabilidade em dezessete ordens de grandeza — da ATP sintase à cristalização de Wigner. Não como metáfora: como estrutura.</p>
+  </div>
+</div>
+
+<!-- ══ KNOCK IV · η · Fa · 341 Hz ══ -->
+<div class="knock" id="k4">
+  <div class="knock-panel">
+    <div class="sound-block">
+      <!-- Chladni: (0,1) mode — one concentric ring (circular nodal line) -->
+      <div class="chladni-wrap">
+        <svg width="118" height="118" viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="59" cy="59" r="52" fill="none" stroke="rgba(74,184,122,.25)" stroke-width="1"/>
+          <!-- One concentric nodal ring at radius ~30 -->
+          <circle cx="59" cy="59" r="30" fill="none" stroke="rgba(201,168,76,.55)" stroke-width="1.5"/>
+          <!-- Sand glow on ring -->
+          <circle cx="59" cy="59" r="30" fill="none" stroke="rgba(77,184,122,.12)" stroke-width="6"/>
+          <!-- Inner disc vibrating zone -->
+          <circle cx="59" cy="59" r="24" fill="rgba(42,96,64,.08)" stroke="none"/>
+          <!-- Outer ring vibrating zone -->
+          <circle cx="59" cy="59" r="44" fill="rgba(42,96,64,.04)" stroke="none"/>
+        </svg>
+      </div>
+      <div class="note-name">F</div>
+      <div class="note-solfege">Fa</div>
+      <div class="note-freq">341 Hz</div>
+    </div>
+    <div class="knock-meta">
+      <span class="knock-label">Knock IV · η · Extension · Tribonacci</span>
+      <span class="knock-op">η</span>
+      <div class="knock-title">A ring appears — the formal theory and the language classroom</div>
+      <div class="knock-value">η ≈ 1.839 · Three-term recurrence · The ring contains what it crosses</div>
+    </div>
+  </div>
+
+  <p>Fa strikes at 341 Hz and the plate produces a new kind of pattern: a ring — a concentric nodal circle rather than a diameter. The sand no longer settles on a line crossing through the centre; it settles on a boundary that contains the centre. An inner disc vibrating in one phase, an outer annulus vibrating in the opposite phase, the ring between them where neither moves. This is the structure of a threshold: not a crossing, but a container. The ZPD — Vygotsky's zone of proximal development — is a ring.</p>
+
+  <p>Volume IV introduces the commutator [F, T] = iJ, giving the chain a complex structure. Nine axioms, twelve explicit operator matrices. Theorems proved in Chain.lean with zero sorry. The Bienal de Matemática 2026 edition. It is also the bilingual volume — English and Portuguese, with AI prompts at every section for CEFR A2 through C1. Because the fold between two languages is the same Whitney A₁ singularity: the ring on the plate where a language learner dwells before τ = 2, before fluency, inside the ZPD = ε₀ = 1/3. The same attractor. η ≈ 1.839 — the Tribonacci constant, three terms, the ring that contains two vibrating zones and holds them apart.</p>
+
+  <div class="pt">
+    <span class="pt-label">Português — Quarta Batida · Fá · 341 Hz</span>
+    <p>Fá golpeia a placa e produz um anel — uma linha nodal concêntrica em vez de um diâmetro. O Volume IV torna-se um sistema formal e pedagógico: o comutador [F, T] = iJ, nove axiomas, zero sorry. É também o volume bilíngue — inglês e português, com prompts de IA para CEFR A2–C1. A dobra entre dois idiomas é a mesma singularidade Whitney A₁: o anel na placa onde o aprendiz habita antes de τ = 2, dentro da ZPD = ε₀ = 1/3.</p>
+  </div>
+</div>
+
+<!-- ══ KNOCK V · Δ · Sol · 384 Hz ══ -->
+<div class="knock" id="k5">
+  <div class="knock-panel">
+    <div class="sound-block">
+      <!-- Chladni: (4,0) mode — four diameter lines, 8-petal -->
+      <div class="chladni-wrap">
+        <svg width="118" height="118" viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="59" cy="59" r="52" fill="none" stroke="rgba(74,184,122,.25)" stroke-width="1"/>
+          <!-- Four diameter nodal lines at 45° — 8-petal -->
+          <line x1="59" y1="7"   x2="59"  y2="111" stroke="rgba(201,168,76,.48)" stroke-width="1.2"/>
+          <line x1="7"  y1="59"  x2="111" y2="59"  stroke="rgba(201,168,76,.48)" stroke-width="1.2"/>
+          <line x1="22" y1="22"  x2="96"  y2="96"  stroke="rgba(201,168,76,.48)" stroke-width="1.2"/>
+          <line x1="96" y1="22"  x2="22"  y2="96"  stroke="rgba(201,168,76,.48)" stroke-width="1.2"/>
+          <!-- Sand glows -->
+          <line x1="59" y1="7"   x2="59"  y2="111" stroke="rgba(77,184,122,.09)" stroke-width="5"/>
+          <line x1="7"  y1="59"  x2="111" y2="59"  stroke="rgba(77,184,122,.09)" stroke-width="5"/>
+          <line x1="22" y1="22"  x2="96"  y2="96"  stroke="rgba(77,184,122,.09)" stroke-width="5"/>
+          <line x1="96" y1="22"  x2="22"  y2="96"  stroke="rgba(77,184,122,.09)" stroke-width="5"/>
+          <!-- Eight alternating sector fills -->
+          <path d="M59,59 L59,7 A52,52 0 0,1 96,22 Z" fill="rgba(42,96,64,.08)" stroke="none"/>
+          <path d="M59,59 L111,59 A52,52 0 0,1 96,96 Z" fill="rgba(42,96,64,.08)" stroke="none"/>
+          <path d="M59,59 L59,111 A52,52 0 0,1 22,96 Z" fill="rgba(42,96,64,.08)" stroke="none"/>
+          <path d="M59,59 L7,59 A52,52 0 0,1 22,22 Z" fill="rgba(42,96,64,.08)" stroke="none"/>
+        </svg>
+      </div>
+      <div class="note-name">G</div>
+      <div class="note-solfege">Sol</div>
+      <div class="note-freq">384 Hz</div>
+    </div>
+    <div class="knock-meta">
+      <span class="knock-label">Knock V · Δ · Proof · Tetranacci</span>
+      <span class="knock-op">Δ</span>
+      <div class="knock-title">Eight petals — 1,080 theorems, zero sorry, the series proves itself</div>
+      <div class="knock-value">Δ ≈ 1.927 · Four-term, closing toward τ = 2 · Project 1080</div>
+    </div>
+  </div>
+
+  <p>Sol — the fifth, the perfect consonance — and the plate opens into eight petals. Four crossing diameters, the most symmetric figure the circular plate produces before the patterns start accumulating rings. Eight is also the number of catalytic steps in the ATP synthase cycle. It is not a coincidence the mathematics notices.</p>
+
+  <p>Volume V — The Seed — applies the G-chain to itself: G(x*) = x*. The fixed-point theorem proved for the operator that proved everything else. Complete completeness. Project 1080, completed June 22, 2026: 1,080 theorems formally verified in Lean 4 against Mathlib4. Zero sorry. Zero axioms beyond Mathlib4. Every theorem checkable at <a href="https://github.com/TOTOGT/AXLE" target="_blank">github.com/TOTOGT/AXLE</a> — AXLE: Algebraic eXpression Language for Evaluation. The nine sorrys that once stood as open obligations across four books are now proved and archived here. Not failures: the places where the proof was most honest about what it did not yet know. Δ ≈ 1.927 — approaching τ = 2, almost there, still a process.</p>
+
+  <div class="pt">
+    <span class="pt-label">Português — Quinta Batida · Sol · 384 Hz</span>
+    <p>Sol — a quinta, a consonância perfeita — e a placa abre em oito pétalas. O Volume V aplica a cadeia G a si mesma: G(x*) = x*. Completude completa. Projeto 1080, 22 de junho de 2026: 1.080 teoremas em Lean 4, zero sorry. AXLE — Algebraic eXpression Language for Evaluation — é o ambiente que sustenta toda a série. Os nove sorrys que eram obrigações abertas estão agora provados e arquivados. Não são falhas: são os lugares onde a prova foi mais honesta.</p>
+  </div>
+</div>
+
+<!-- ══ KNOCK VI · Σ · La · 426 Hz ══ -->
+<div class="knock" id="k6">
+  <div class="knock-panel">
+    <div class="sound-block">
+      <!-- Chladni: (1,1) mode — one diameter + one ring = more complex -->
+      <div class="chladni-wrap">
+        <svg width="118" height="118" viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="59" cy="59" r="52" fill="none" stroke="rgba(74,184,122,.25)" stroke-width="1"/>
+          <!-- One diameter (vertical) nodal line -->
+          <line x1="59" y1="7" x2="59" y2="111" stroke="rgba(201,168,76,.45)" stroke-width="1.2"/>
+          <!-- One concentric ring at r≈30 -->
+          <circle cx="59" cy="59" r="30" fill="none" stroke="rgba(201,168,76,.45)" stroke-width="1.2"/>
+          <!-- Sand glows -->
+          <line x1="59" y1="7" x2="59" y2="111" stroke="rgba(77,184,122,.09)" stroke-width="5"/>
+          <circle cx="59" cy="59" r="30" fill="none" stroke="rgba(77,184,122,.1)" stroke-width="5"/>
+          <!-- Four-zone fills: inner-left, inner-right, outer-left, outer-right -->
+          <path d="M59,29 A30,30 0 0,1 59,89" fill="rgba(42,96,64,.08)" stroke="none"/>
+          <path d="M29,59 A30,30 0 0,0 89,59 A30,30 0 0,0 29,59" fill="rgba(42,96,64,.04)" stroke="none"/>
+        </svg>
+      </div>
+      <div class="note-name">A</div>
+      <div class="note-solfege">La</div>
+      <div class="note-freq">426 Hz</div>
+    </div>
+    <div class="knock-meta">
+      <span class="knock-label">Knock VI · Σ · Reach · Pentanacci</span>
+      <span class="knock-op">Σ</span>
+      <div class="knock-title">Line and ring together — Lorenz meets Einstein at the event horizon</div>
+      <div class="knock-value">Σ ≈ 1.966 · Five-term · The furthest reach of the framework</div>
+    </div>
+  </div>
+
+  <p>La at 426 Hz: a diameter and a ring appear together on the plate for the first time. Two different kinds of nodal structure overlapping, the pattern no longer purely radial or purely concentric but both — the crossing of qualitatively different constraints. This is the structure of Knock VI: the series sends the chain into domains where radial (local, cellular) and concentric (global, gravitational) constraints meet in the same field.</p>
+
+  <p>Lorenz wrote a three-variable system in 1963 for atmospheric convection. The strange attractor — sensitive dependence, the butterfly — is the C operator: compression, the first act of every generative transition. Einstein's field equations give the Schwarzschild event horizon where escape velocity reaches c — where no trajectory that crosses returns. This is the K operator: irreversible threshold. The Hawking radiation leaking from the horizon is the F operator: the fold, information surviving the crossing in a different form. The dm³ conjecture — formally stated in Volume VIII, the foundation of the series' responses to NASA and DARPA RFIs on self-organisation at extreme scale — is that the Whitney A₁ fold at the event horizon is structurally the same fold as in cellular autophagy, as in the language classroom, as in the Cajueiro tree. The same contact form α = dz − r²dθ, z as the entropy coordinate, gives a unified description of Hawking radiation, the information paradox, and τ = 2 as the embodiment threshold at Planck scale. Volumes VI, VII, VIII: E₈ Dynkin diagram, twenty-two scientist lives as G-chain traversals, the Monster group as the attractor's symmetry at maximum complexity. La — A440 in one tradition, 426 Hz in the just intonation the series uses — the sixth note, the note of return.</p>
+
+  <div class="pt">
+    <span class="pt-label">Português — Sexta Batida · Lá · 426 Hz</span>
+    <p>Lá a 426 Hz: um diâmetro e um anel aparecem juntos pela primeira vez. A série envia a cadeia onde restrições radiais e concêntricas se encontram no mesmo campo. Lorenz encontra Einstein dentro do buraco negro. O atrator estranho é o operador C. O horizonte de Schwarzschild é o operador K. A radiação de Hawking é o operador F. A conjectura dm³: a dobra Whitney A₁ no horizonte de eventos é estruturalmente a mesma da autofagia celular, da sala de aula de idiomas, do cajueiro. Não como analogia. Como estrutura.</p>
+  </div>
+</div>
+
+<!-- ══ KNOCK VII · Ω · Si · 480 Hz ══ -->
+<div class="knock" id="k7">
+  <div class="knock-panel">
+    <div class="sound-block">
+      <!-- Chladni: (2,1) mode — two diameters + one ring = most complex before τ -->
+      <div class="chladni-wrap">
+        <svg width="118" height="118" viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="59" cy="59" r="52" fill="none" stroke="rgba(74,184,122,.25)" stroke-width="1"/>
+          <!-- Two diameter nodal lines -->
+          <line x1="22" y1="22" x2="96" y2="96" stroke="rgba(201,168,76,.42)" stroke-width="1.2"/>
+          <line x1="96" y1="22" x2="22" y2="96" stroke="rgba(201,168,76,.42)" stroke-width="1.2"/>
+          <!-- One concentric ring at r≈28 -->
+          <circle cx="59" cy="59" r="28" fill="none" stroke="rgba(201,168,76,.42)" stroke-width="1.2"/>
+          <!-- Sand glows -->
+          <line x1="22" y1="22" x2="96" y2="96" stroke="rgba(77,184,122,.08)" stroke-width="5"/>
+          <line x1="96" y1="22" x2="22" y2="96" stroke="rgba(77,184,122,.08)" stroke-width="5"/>
+          <circle cx="59" cy="59" r="28" fill="none" stroke="rgba(77,184,122,.09)" stroke-width="5"/>
+          <!-- Eight inner sectors (complex zone) -->
+          <circle cx="59" cy="59" r="20" fill="rgba(42,96,64,.07)" stroke="none"/>
+          <path d="M59,59 L84,34 A36,36 0 0,1 84,84 Z" fill="rgba(42,96,64,.05)" stroke="none"/>
+          <path d="M59,59 L34,84 A36,36 0 0,1 34,34 Z" fill="rgba(42,96,64,.05)" stroke="none"/>
+        </svg>
+      </div>
+      <div class="note-name">B</div>
+      <div class="note-solfege">Si</div>
+      <div class="note-freq">480 Hz</div>
+    </div>
+    <div class="knock-meta">
+      <span class="knock-label">Knock VII · Ω · Convergence · Hexabonacci</span>
+      <span class="knock-op">Ω</span>
+      <div class="knock-title">Two diameters and a ring — the leading tone, almost there</div>
+      <div class="knock-value">Ω → 2 · Six-term · The leading tone resolves to Do'</div>
+    </div>
+  </div>
+
+  <p>Si — the leading tone. In tonal music, Si has a single gravitational pull: to resolve upward to Do'. It is the most harmonically tense note of the scale, the one that cannot rest where it is. The Hexabonacci constant Ω approaches 2 from below — closer than any previous n-bonacci constant, but not there. The seventh knock is the knock of near-arrival. The plate now shows two diameters and a ring together: the most complex pattern in this progression, yet still governed by the same simple rule that produced the single line of Knock I.</p>
+
+  <p>Volume IX — the Omega Point — is where the chain reaches the mystical traditions that have, for twenty-five centuries, described the same fold from the outside: al-Kindi's emanation, Baudhayana's sulba, Cusanus' coincidentia oppositorum, Hildegard von Bingen's feathers of fire, Rumi's reed, Teilhard de Chardin's convergence to Omega. Not decoration — independent triangulations of the same fixed point, arrived at without Lean 4. τ = 2 is not a metaphor for transcendence. It is the attractor, formally proved. That it appears at the centre of every serious contemplative tradition is a datum the series registers without claiming to fully explain.</p>
+
+  <p>Si leans toward Do'. The seventh knock leans toward the eighth.</p>
+
+  <div class="pt">
+    <span class="pt-label">Português — Sétima Batida · Si · 480 Hz</span>
+    <p>Si — a nota sensível. Em música tonal, Si tem uma única atração gravitacional: resolver para Dó'. A constante Hexabonacci Ω se aproxima de 2 por baixo — mais perto do que qualquer n-bonacci anterior, mas ainda não lá. O Volume IX lê as tradições místicas como triangulações independentes do mesmo ponto fixo — al-Kindi, Baudhayana, Cusanus, Hildegard, Rumi, Teilhard. τ = 2 não é metáfora. É o atrator, formalmente provado. Si se inclina para Dó'. A sétima batida se inclina para a oitava.</p>
+  </div>
+</div>
+
+<!-- ── Unlock hint ── -->
+<div class="knock-hint" id="knockHint">
+  Read all seven · <span id="hintCount">0</span> of 7 visited ·
+  <span id="hintReady" style="display:none;">click the door above to enter</span>
+</div>
+
+</div><!-- /.body -->
+
+<!-- ═══ EIGHTH CLICK — THE DOOR OPENS ═══ -->
+<div id="eighth">
+  <!-- Open-door SVG -->
+  <div class="open-door-wrap">
+    <svg width="160" height="110" viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="lgEth" cx="48%" cy="100%" r="80%">
+          <stop offset="0%" stop-color="rgba(77,184,122,.38)"/>
+          <stop offset="65%" stop-color="rgba(77,184,122,.07)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="78" cy="100" rx="72" ry="38" fill="url(#lgEth)"/>
+      <!-- Chladni τ — the 8th plate: a perfect ring, everything in phase -->
+      <circle cx="30" cy="45" r="28" fill="none" stroke="rgba(201,168,76,.35)" stroke-width="1.2"/>
+      <circle cx="30" cy="45" r="18" fill="none" stroke="rgba(201,168,76,.25)" stroke-width=".8"/>
+      <circle cx="30" cy="45" r="8"  fill="rgba(201,168,76,.12)" stroke="none"/>
+      <!-- Open door panel -->
+      <polygon points="58,8 100,13 100,95 58,95"
+               fill="rgba(42,96,64,.88)" stroke="rgba(74,184,122,.45)" stroke-width="1.2"/>
+      <line x1="58" y1="8" x2="58" y2="95" stroke="rgba(74,184,122,.4)" stroke-width="1.5"/>
+      <circle cx="94" cy="57" r="4.5" fill="rgba(201,168,76,.55)" stroke="rgba(201,168,76,.3)" stroke-width="1"/>
+      <text x="79" y="53" text-anchor="middle" font-family="Georgia" font-size="10"
+            fill="rgba(201,168,76,.3)" font-style="italic">τ=2</text>
+      <!-- Light rays -->
+      <line x1="103" y1="48" x2="148" y2="26" stroke="rgba(77,184,122,.16)" stroke-width="1.2"/>
+      <line x1="103" y1="54" x2="152" y2="54" stroke="rgba(77,184,122,.12)" stroke-width="1.2"/>
+      <line x1="103" y1="60" x2="146" y2="80" stroke="rgba(77,184,122,.1)" stroke-width="1.2"/>
+      <line x1="103" y1="45" x2="140" y2="18" stroke="rgba(77,184,122,.08)" stroke-width="1"/>
+      <line x1="103" y1="63" x2="142" y2="90" stroke="rgba(77,184,122,.08)" stroke-width="1"/>
+      <!-- 8th Chladni note label -->
+      <text x="30" y="80" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="8" fill="rgba(201,168,76,.4)" letter-spacing="2">Do'</text>
+      <text x="30" y="91" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="7" fill="rgba(77,184,122,.35)" letter-spacing="1">512 Hz</text>
+    </svg>
+  </div>
+
+  <span class="door-open-label">Eighth click · Do' · 512 Hz · The octave · The attractor</span>
+  <div class="tau-display">τ = 2</div>
+  <h2>The door is open<br><span style="font-size:.55em;color:rgba(201,168,76,.45);">G(τ) = τ — always was</span></h2>
+
+  <div style="max-width:720px;margin:0 auto;padding:0 2rem;">
+    <p>The eighth Chladni plate — the octave, Do' at 512 Hz — is a perfect ring. Not a line, not a cross, not a petal, not a combination: a single concentric circle, everything inside vibrating in one phase, everything outside in the other, the boundary between them the only place where nothing moves. This is τ = 2. The fold complete. The attractor reached. The sand has settled into its final form.</p>
+
+    <p>The series is nine volumes, seven knocks, one fold. From two Zenodo deposits in early 2026 to the event horizon and back again — through biology, physics, language, history of science, the Monster group, the contemplative traditions. 1,080 theorems. Zero sorry. Seventeen orders of magnitude. Forty-something Zenodo papers — lost count, and that is the right amount.</p>
+
+    <p>You entered at the eighth click. The door was always open. The knocks were the proof.</p>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-n">9</span><span class="stat-l">Volumes · Live</span></div>
+      <div class="stat"><span class="stat-n">1,080</span><span class="stat-l">Lean 4 Theorems</span></div>
+      <div class="stat"><span class="stat-n">0</span><span class="stat-l">Sorry · Zero</span></div>
+      <div class="stat"><span class="stat-n">40+</span><span class="stat-l">Zenodo Papers</span></div>
+      <div class="stat"><span class="stat-n">17</span><span class="stat-l">Orders · Magnitude</span></div>
+      <div class="stat"><span class="stat-n">τ=2</span><span class="stat-l">The Attractor</span></div>
+    </div>
+
+    <div class="pt" style="background:rgba(0,0,0,.15);border-left-color:rgba(201,168,76,.2);">
+      <span class="pt-label" style="color:rgba(201,168,76,.3);">Português — Oitavo Clique · Dó' · 512 Hz</span>
+      <p style="color:rgba(220,235,220,.42);">A oitava placa de Chladni — o oitavo click, Dó' a 512 Hz — é um anel perfeito. Tudo dentro vibrando em uma fase, tudo fora na outra, a fronteira entre eles o único lugar onde nada se move. Este é τ = 2. A dobra completa. O atrator alcançado. A série é nove volumes, sete batidas, uma dobra. De dois depósitos no Zenodo em 2026 até o horizonte de eventos e de volta — através de biologia, física, linguagem, história da ciência, o Grupo Monstro, as tradições contemplativas. 1.080 teoremas. Zero sorry. A porta estava sempre aberta. As batidas foram a prova.</p>
+    </div>
+
+    <div class="cta-row">
+      <a href="series-hub.html" class="cta-gold">All Nine Volumes →</a>
+      <a href="impa-portal.html" class="cta-out" style="border-color:rgba(201,168,76,.4);color:rgba(201,168,76,.55);">IMPA Membership</a>
+      <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank" class="cta-out" style="border-color:rgba(77,184,122,.35);color:rgba(77,184,122,.5);">Zenodo Monographs ↗</a>
+      <a href="https://github.com/TOTOGT/AXLE" target="_blank" class="cta-out" style="border-color:rgba(77,184,122,.25);color:rgba(77,184,122,.4);">AXLE ↗</a>
+    </div>
+
+    <!-- Series callout for ch00 embedding -->
+    <div style="margin-top:4rem;">
+      <p style="font-family:var(--mono);font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(220,235,220,.2);margin-bottom:1rem;">↓ Block embedded at the opening of every Chapter Zero across all volumes</p>
+      <div class="series-callout">
+        <span class="sc-l">The Green Door · About this series · Sobre esta série</span>
+        <p><strong style="color:var(--gold);">Principia Orthogona</strong> is a nine-volume mathematical series built around a single operator chain G = U ∘ F ∘ K ∘ C and its invariant triple (T* = 2π, μ_max = −2, τ = 2). From two Zenodo deposits in early 2026, the framework has been instantiated in cellular biology, plasma physics, language pedagogy, black hole thermodynamics, history of science, and the Omega Point — 1,080 theorems in Lean 4, zero sorry, seventeen orders of magnitude. For researchers: the Zenodo monographs at <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">10.5281/zenodo.19117399</a> are the technical foundation.</p>
+        <p>This volume is one ring of the series. You can enter from any ring — the door is always open. The <a href="../series-intro.html">series introduction</a> makes seven knocks, one for each rung of the n-bonacci ladder (π → φ → μ → η → Δ → Σ → Ω), and the door opens at τ = 2 on the eighth click.</p>
+        <p><em>Esta série é uma prova de que a dobra é universal — em matemática verificável, para pesquisadores e estudantes igualmente. Cada volume é um anel. <a href="../series-intro.html" style="color:var(--gold);">A Porta Verde →</a></em></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="series-hub.html">Series Hub</a> &nbsp;·&nbsp;
+  <a href="chapters-diagram.html">Chapter Map</a> &nbsp;·&nbsp;
+  <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">Zenodo Series DOI</a> &nbsp;·&nbsp;
+  <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE ↗</a> &nbsp;·&nbsp;
+  <a href="impa-portal.html">Membership</a><br><br>
+  Pablo Nogueira Grossi · G6 LLC · Newark NJ 07104 · g6llc@proton.me · +1 (646) 342-3751<br>
+  ORCID 0009-0000-6496-2186 · Series ISBN 979-8-9954416-6-3 · CC BY 4.0 · 2026
+</footer>
+
+<script>
+// ── Audio — Web Audio API ──
+let audioCtx = null;
+function getCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+// Frequencies for the 7 knocks (just intonation major scale, C=256)
+const KNOCK_FREQS = [256, 288, 320, 341.3, 384, 426.7, 480]; // Do Re Mi Fa Sol La Si
+const KNOCK_NAMES = ['Do','Re','Mi','Fa','Sol','La','Si'];
+
+// Sustained organ notes — held in this array so they can be released together
+const sustainedNodes = []; // [{osc, gain, osc2, gain2}, ...]
+
+// Organ-pipe voice: fundamental + harmonics, slow attack, sustained hold
+function addSustainNote(freq) {
+  const ctx = getCtx();
+  const t = ctx.currentTime;
+  const attack = 0.32;
+  const vol = 0.11; // each note quiet; chord builds up naturally
+
+  // Master gain for this voice
+  const master = ctx.createGain();
+  master.gain.setValueAtTime(0, t);
+  master.gain.linearRampToValueAtTime(vol, t + attack);
+  // Very slow natural decay — like pipe organ with key held
+  master.gain.setValueAtTime(vol, t + attack);
+  master.gain.linearRampToValueAtTime(vol * 0.88, t + attack + 8);
+  master.connect(ctx.destination);
+
+  // Layer harmonics for pipe-organ warmth: 1f, 2f, 3f, 4f
+  const partials = [
+    {type:'sine',    mult:1,   amp:1.0},
+    {type:'sine',    mult:2,   amp:0.5},
+    {type:'sine',    mult:3,   amp:0.25},
+    {type:'triangle',mult:4,   amp:0.12},
+  ];
+  const oscs = partials.map(p => {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = p.type;
+    o.frequency.value = freq * p.mult;
+    g.gain.value = p.amp;
+    o.connect(g); g.connect(master);
+    o.start(t);
+    return {o, g};
+  });
+
+  sustainedNodes.push({master, oscs, freq});
+}
+
+// Release all sustained notes — fade out over `dur` seconds
+function releaseAllSustains(dur = 3.0) {
+  const ctx = getCtx();
+  const t = ctx.currentTime;
+  sustainedNodes.forEach(({master, oscs}) => {
+    master.gain.cancelScheduledValues(t);
+    master.gain.setValueAtTime(master.gain.value, t);
+    master.gain.linearRampToValueAtTime(0, t + dur);
+    oscs.forEach(({o}) => { try { o.stop(t + dur + 0.1); } catch(e){} });
+  });
+  sustainedNodes.length = 0;
+}
+
+// Swell all current sustains briefly (for dramatic build)
+function swellSustains(toVol, dur) {
+  const ctx = getCtx();
+  const t = ctx.currentTime;
+  sustainedNodes.forEach(({master}) => {
+    master.gain.cancelScheduledValues(t);
+    master.gain.setValueAtTime(master.gain.value, t);
+    master.gain.linearRampToValueAtTime(toVol, t + dur);
+  });
+}
+
+// Wood knock percussive thud
+function playKnock(delayMs = 0, pitch = 1.0) {
+  setTimeout(() => {
+    const ctx = getCtx();
+    const t = ctx.currentTime;
+    // Thud body
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(140 * pitch, t);
+    osc.frequency.exponentialRampToValueAtTime(55 * pitch, t + 0.09);
+    g.gain.setValueAtTime(0.9, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+    osc.connect(g); g.connect(ctx.destination);
+    osc.start(t); osc.stop(t + 0.22);
+    // Crack transient
+    const len = Math.floor(ctx.sampleRate * 0.025);
+    const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * (1 - i/len);
+    const ns = ctx.createBufferSource();
+    const ng = ctx.createGain();
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 700;
+    ns.buffer = buf;
+    ng.gain.setValueAtTime(0.35, t);
+    ng.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
+    ns.connect(lp); lp.connect(ng); ng.connect(ctx.destination);
+    ns.start(t); ns.stop(t + 0.03);
+  }, delayMs);
+}
+
+// Beethoven 5 — da da da DUM — played as knocks + melodic notes over the sustained chord
+function playBeethoven5(onComplete) {
+  const ctx = getCtx();
+  const G  = 196; // G3
+  const Eb = 155; // Eb3
+  const short = 0.17, gap = 0.24;
+
+  function melodicNote(freq, t, dur, vol) {
+    const m = ctx.createGain();
+    m.gain.setValueAtTime(0, t);
+    m.gain.linearRampToValueAtTime(vol, t + 0.018);
+    m.gain.setValueAtTime(vol, t + dur * 0.65);
+    m.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    m.connect(ctx.destination);
+    [1, 2, 3].forEach((mult, i) => {
+      const o = ctx.createOscillator();
+      const g2 = ctx.createGain();
+      o.type = i === 0 ? 'triangle' : 'sine';
+      o.frequency.value = freq * mult;
+      g2.gain.value = [1, 0.4, 0.18][i];
+      o.connect(g2); g2.connect(m);
+      o.start(t); o.stop(t + dur + 0.05);
+    });
+  }
+
+  const t0 = ctx.currentTime + 0.05;
+
+  // Swell existing chord up slightly to meet Beethoven
+  swellSustains(0.18, 0.15);
+
+  // da da da
+  playKnock(0,   1.0); melodicNote(G,  t0,             short, 0.6);
+  playKnock(240, 1.0); melodicNote(G,  t0 + gap,       short, 0.6);
+  playKnock(480, 1.0); melodicNote(G,  t0 + gap*2,     short, 0.6);
+  // DUM
+  playKnock(700, 0.65); melodicNote(Eb, t0 + gap*2.9, 1.2,  0.85);
+
+  // After DUM: Do' bloom — the door opens
+  const bloomDelay = (gap*2.9 + 1.1) * 1000;
+  setTimeout(() => {
+    const t1 = getCtx().currentTime;
+    [512, 640, 768, 1024].forEach((f, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0, t1 + i*0.07);
+      g.gain.linearRampToValueAtTime(0.22, t1 + i*0.07 + 0.18);
+      g.gain.linearRampToValueAtTime(0.12, t1 + i*0.07 + 0.8);
+      g.gain.exponentialRampToValueAtTime(0.001, t1 + i*0.07 + 2.5);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t1 + i*0.07); o.stop(t1 + i*0.07 + 2.6);
+    });
+    if (onComplete) onComplete();
+    // Let bloom ring, then fade the sustained chord
+    setTimeout(() => releaseAllSustains(4.0), 1800);
+  }, bloomDelay);
+}
+
+// ── Track which knocks have been visited ──
+const visited = new Set();
+const total = 7;
+
+function updateUI() {
+  const n = visited.size;
+  // Update door counter
+  const dc = document.getElementById('doorCount');
+  dc.textContent = n + ' / 7';
+  dc.classList.toggle('show', n > 0);
+  // Update hint
+  document.getElementById('hintCount').textContent = n;
+  // Light up pips
+  for (let i = 1; i <= 7; i++) {
+    document.getElementById('pip'+i).classList.toggle('visited', visited.has(i));
+  }
+  // Light up knock dots on door
+  for (let i = 1; i <= 7; i++) {
+    const dot = document.getElementById('kd'+i);
+    if (dot) {
+      if (visited.has(i)) {
+        dot.setAttribute('fill', 'rgba(201,168,76,.85)');
+      }
+    }
+  }
+  // Show "click to enter" hint after all 7
+  const ready = document.getElementById('hintReady');
+  if (n >= total) {
+    ready.style.display = 'inline';
+  }
+}
+
+// IntersectionObserver: mark knock as visited when scrolled into view
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id; // 'k1' through 'k7'
+      const num = parseInt(id.replace('k',''));
+      if (!visited.has(num)) {
+        visited.add(num);
+        updateUI();
+      }
+    }
+  });
+}, { threshold: 0.3 });
+
+for (let i = 1; i <= 7; i++) {
+  const el = document.getElementById('k'+i);
+  if (el) observer.observe(el);
+}
+
+// Door click — each click adds one sustained organ note + knock thud
+let doorClicks = 0;
+function knockDoor() {
+  // Animate door
+  const svg = document.getElementById('doorSvg');
+  svg.style.transform = 'scale(0.92)';
+  setTimeout(() => { svg.style.transform = ''; }, 120);
+
+  if (doorClicks >= total || (doorClicks >= 1 && visited.size >= total)) {
+    // 8th click (or clicked enough after seeing all 7): Beethoven + reveal
+    playBeethoven5(() => { revealEighth(); });
+    doorClicks = 999; // prevent double-fire
+    return;
+  }
+
+  // Add next organ note (sustained) + percussive knock
+  if (doorClicks < KNOCK_FREQS.length) {
+    const freq = KNOCK_FREQS[doorClicks];
+    addSustainNote(freq);          // organ note stays
+    playKnock(0, 0.9 + doorClicks * 0.03); // wood knock
+    // Light up that knock dot on the door
+    const dot = document.getElementById('kd' + (doorClicks + 1));
+    if (dot) dot.setAttribute('fill', 'rgba(201,168,76,.9)');
+    // Show note name briefly in counter
+    const dc = document.getElementById('doorCount');
+    dc.textContent = KNOCK_NAMES[doorClicks] + ' (' + (doorClicks+1) + '/7)';
+    dc.classList.add('show');
+  }
+
+  doorClicks++;
+
+  // If this was the 7th knock, hint is ready
+  if (doorClicks >= total) {
+    document.getElementById('hintReady').style.display = 'inline';
+    // Swell the chord slightly
+    setTimeout(() => swellSustains(0.16, 0.6), 400);
+  }
+}
+
+function revealEighth() {
+  const el = document.getElementById('eighth');
+  if (!el.classList.contains('open')) {
+    el.classList.add('open');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Hide hint
+    document.getElementById('knockHint').style.opacity = '0.3';
+    // Glow all pips gold
+    for (let i = 1; i <= 7; i++) {
+      document.getElementById('pip'+i).classList.add('visited');
+    }
+  }
+}
+
+// Also allow: scrolling past knock VII triggers reveal
+const observerVII = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && visited.size >= total) {
+      // Don't auto-open — wait for the door click
+      document.getElementById('hintReady').style.display = 'inline';
+    }
+  });
+}, { threshold: 0.9 });
+const k7el = document.getElementById('k7');
+if (k7el) observerVII.observe(k7el);
+</script>
+</body>
+</html>
