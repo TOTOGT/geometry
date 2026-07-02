@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Principia Orthogona · Volume I · The Mathematics of Generative Transitions</title>
-<meta name="description" content="Principia Orthogona Volume I, Version 4 (June 2026). Five structural theorems each proved by seven independent arguments. Gronwall radius ε₀=1/3, Lyapunov exponent μ_max=−2, embodiment threshold τ=2 — machine-checked in Lean 4. Whitney A₁–A₃ classification, symplectic geometry. G6 LLC · Pablo Nogueira Grossi · 2026.">
+<meta name="description" content="Principia Orthogona Volume I, Version 5 (July 2026). Five structural theorems each proved by seven independent arguments. Gronwall radius ε₀=1/3, Lyapunov exponent μ_max=−2, embodiment threshold τ=2 — machine-checked in Lean 4. Whitney A₁–A₃ classification, symplectic geometry. G6 LLC · Pablo Nogueira Grossi · 2026.">
 <meta name="author" content="Pablo Nogueira Grossi · G6 LLC">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -394,7 +394,7 @@ footer a:hover { color: var(--gold); }
     <a href="sample-chapter-autophagy.html">Chapter A</a>
     <a href="vol2-contact.html">Vol II →</a>
     <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
-    <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">Zenodo</a>
+    <a href="https://doi.org/10.5281/zenodo.21121980" target="_blank">Zenodo</a>
     <button class="nav-toc-btn" onclick="document.getElementById('toc-drawer').classList.toggle('open')">Contents</button>
   </div>
     <a href="living-book.html">Living Book</a>
@@ -432,7 +432,7 @@ footer a:hover { color: var(--gold); }
 
 <!-- ── HERO ─────────────────────────────────────────────────── -->
 <div class="hero">
-  <div class="hero-eyebrow">Principia Orthogona · Volume I · Version 4 · June 21, 2026</div>
+  <div class="hero-eyebrow">Principia Orthogona · Volume I · Version 5 · July 2026</div>
   <h1 class="hero-title"><strong>The Mathematics of</strong><br>Generative Transitions</h1>
   <div class="hero-subtitle">A unified framework for threshold events on contact 3-manifolds</div>
   <div class="gold-rule"></div>
@@ -443,7 +443,7 @@ footer a:hover { color: var(--gold); }
   </div>
   <div class="hero-badges">
     <span class="badge">Lean 4 · Zero sorry</span>
-    <span class="badge"><a href="https://doi.org/10.5281/zenodo.20784030" target="_blank" style="color:inherit">Zenodo V4: 10.5281/zenodo.20784030</a></span>
+    <span class="badge"><a href="https://doi.org/10.5281/zenodo.21121980" target="_blank" style="color:inherit">Zenodo V5: 10.5281/zenodo.21121980</a></span>
     <span class="badge">ISBN 979-8-9954416-0-1</span>
     <span class="badge">CC BY-NC-ND 4.0</span>
     <span class="badge">MSC 37C25 · 37G10 · 53D10 · 57M27</span>
@@ -766,7 +766,7 @@ footer a:hover { color: var(--gold); }
       </select></label>
       <label><input type="checkbox" id="show-esc" checked> Escape paths</label>
     </div>
-    <div class="sim-label">Contact normal form (ρ, θ). Gold = Γ (r=1). Dashed = ε₀=1/3 and r*≈0.80. Blue = converging. Red = escaping. Lean: gronwall_radius, basin_asymmetry.</div>
+    <div class="sim-label">Full dm³ contact system: ṙ = r(1−r²)+ε(r−1)e⁻ᶻ, ż = r²−ε(r−1)²e⁻ᶻ, θ̇ = 1 — integrated live (RK4). Gold = Γ (r=1). Dashed = ε₀=1/3 (Gronwall) and the r* separatrix, bisected live from the dynamics (r*=0.77594 at ε=2; certify_rstar.py). Blue = converge to Γ; red = escape to 0. Lean: gronwall_radius, basin_asymmetry.</div>
   </div>
 </div>
 
@@ -898,7 +898,7 @@ footer a:hover { color: var(--gold); }
   <a href="chapters-diagram.html" style="color:var(--mid);text-decoration:none;">All Chapters</a> &nbsp;·&nbsp;
   <a href="chRho-spectral.html" style="color:var(--mid);text-decoration:none;">ρ Chapter</a> &nbsp;·&nbsp;
   <a href="https://github.com/TOTOGT/AXLE" target="_blank" style="color:var(--mid);text-decoration:none;">AXLE</a> &nbsp;·&nbsp;
-  <a href="https://doi.org/10.5281/zenodo.20784030" target="_blank" style="color:var(--mid);text-decoration:none;">Zenodo V4</a><br><br>
+  <a href="https://doi.org/10.5281/zenodo.21121980" target="_blank" style="color:var(--mid);text-decoration:none;">Zenodo V5</a><br><br>
   © 2026 Pablo Nogueira Grossi / G6 LLC · Newark, New Jersey, USA ·
   <a href="mailto:g6llc@proton.me" style="color:var(--mid);text-decoration:none;">g6llc@proton.me</a> ·
   CC BY-NC-ND 4.0
@@ -932,14 +932,57 @@ footer a:hover { color: var(--gold); }
   function getEscOn(){ return chkEsc ? chkEsc.checked : true; }
 
   if (slRho) slRho.addEventListener('input', () => { vRho.textContent = parseFloat(slRho.value).toFixed(2); });
-  if (slEps) slEps.addEventListener('input', () => { vEps.textContent = parseFloat(slEps.value).toFixed(1); });
-
-  // ODE: dr/dt = eps * r*(1 - r^2),  dθ/dt = 1
-  function step(r, theta, eps, dt) {
-    const dr     = eps * r * (1 - r * r);
-    const dtheta = 1;
-    return [r + dr * dt, theta + dtheta * dt];
+  if (slEps) {
+    slEps.addEventListener('input',  () => { vEps.textContent = parseFloat(slEps.value).toFixed(1); });
+    slEps.addEventListener('change', () => { recomputeRStar(); });  // heavier work on release
   }
+
+  // ── True dm³ coupled contact system (matches certify_rstar.py) ──
+  //   ṙ = r(1 − r²) + ε (r − 1) e^{−z}
+  //   ż = r²        − ε (r − 1)² e^{−z}
+  //   θ̇ = 1                         (ε = 2 is the certified coupling)
+  function deriv(r, z, eps) {
+    const ez = Math.exp(Math.min(-z, 200));
+    return [ r * (1 - r * r) + eps * (r - 1) * ez,
+             r * r           - eps * (r - 1) * (r - 1) * ez ];
+  }
+  // One RK4 step in (r, z)
+  function rk4(r, z, eps, dt) {
+    const [a1, b1] = deriv(r, z, eps);
+    const [a2, b2] = deriv(r + 0.5 * dt * a1, z + 0.5 * dt * b1, eps);
+    const [a3, b3] = deriv(r + 0.5 * dt * a2, z + 0.5 * dt * b2, eps);
+    const [a4, b4] = deriv(r + dt * a3,       z + dt * b3,       eps);
+    return [ r + dt / 6 * (a1 + 2*a2 + 2*a3 + a4),
+             z + dt / 6 * (b1 + 2*b2 + 2*b3 + b4) ];
+  }
+
+  // Classify a start radius (z0 = 0): converge → Γ (r=1), or escape → 0.
+  function classify(r0, eps) {
+    let r = r0, z = 0; const dt = 0.01;
+    for (let i = 0; i < 30000; i++) {
+      [r, z] = rk4(r, z, eps, dt);
+      if (r < 1e-3) return 'escape';
+      if (Math.abs(r - 1) < 1e-4 && z > 5) return 'converge';
+      if (!isFinite(r)) return 'escape';
+    }
+    return (r > 0.5) ? 'converge' : 'escape';
+  }
+
+  // Bisect r*(ε) live — the same separatrix and method as certify_rstar.py.
+  let R_STAR = 0.77594;   // certified value at ε = 2 (fallback)
+  function recomputeRStar() {
+    const eps = getEps();
+    let lo = 0.05, hi = 0.999;
+    if (classify(lo, eps) !== 'escape' || classify(hi, eps) !== 'converge') {
+      R_STAR = 0.77594; return;   // keep certified value if no clean bracket
+    }
+    for (let i = 0; i < 20; i++) {
+      const mid = 0.5 * (lo + hi);
+      if (classify(mid, eps) === 'escape') lo = mid; else hi = mid;
+    }
+    R_STAR = 0.5 * (lo + hi);
+  }
+  recomputeRStar();
 
   function toXY(r, theta, cx, cy, scale) {
     return [cx + r * scale * Math.cos(theta), cy - r * scale * Math.sin(theta)];
@@ -951,21 +994,23 @@ footer a:hover { color: var(--gold); }
     return                       { conv: '#60a5fa', esc: '#ef4444', gamma: '#c9a84c', bg: '#0d1117' };
   }
 
-  // Pre-compute trajectories
+  // Integrate a display trajectory: evolve (r, z) by the true system while
+  // θ advances at θ̇ = 1; return the (r, θ) points for plotting.
   function computeTrajectory(r0, theta0, eps, steps, dt) {
     const pts = [[r0, theta0]];
-    let r = r0, theta = theta0;
+    let r = r0, z = 0, theta = theta0;
     for (let i = 0; i < steps; i++) {
-      [r, theta] = step(r, theta, eps, dt);
+      [r, z] = rk4(r, z, eps, dt);
+      theta += dt;                       // θ̇ = 1
       pts.push([r, theta]);
-      if (r > 4 || r < 0.001) break;
+      if (r > 3.5 || r < 5e-3) break;    // resolved (escape → 0)
     }
     return pts;
   }
 
   let t = 0;
   const DT = 0.02;
-  const STEPS = 300;
+  const STEPS = 420;
 
   function draw() {
     const W = canvas.width, H = canvas.height;
@@ -985,16 +1030,16 @@ footer a:hover { color: var(--gold); }
     ctx.setLineDash([4, 4]);
     ctx.lineWidth = 1;
 
-    // ε₀ = 1/3 circle
+    // ε₀ = 1/3 circle (Gronwall radius)
     ctx.strokeStyle = 'rgba(201,168,76,0.25)';
     ctx.beginPath();
     ctx.arc(cx, cy, (1/3) * scale, 0, Math.PI * 2);
     ctx.stroke();
 
-    // r* ≈ 0.80 circle
-    ctx.strokeStyle = 'rgba(201,168,76,0.2)';
+    // r* separatrix — drawn at the live-bisected value (certify_rstar.py method)
+    ctx.strokeStyle = 'rgba(239,68,68,0.35)';
     ctx.beginPath();
-    ctx.arc(cx, cy, 0.80 * scale, 0, Math.PI * 2);
+    ctx.arc(cx, cy, R_STAR * scale, 0, Math.PI * 2);
     ctx.stroke();
 
     ctx.setLineDash([]);
@@ -1006,14 +1051,13 @@ footer a:hover { color: var(--gold); }
     ctx.arc(cx, cy, scale, 0, Math.PI * 2);
     ctx.stroke();
 
-    // ── Background trajectories ──
-    const seeds = [0.3, 0.55, 0.75, 1.3, 1.7, 2.0];
+    // ── Background trajectories (straddling r*) ──
+    const seeds = [0.45, 0.65, 0.75, 0.85, 1.15, 1.6, 2.0];
     seeds.forEach(r0 => {
-      const isEsc = r0 > 1.2;
+      const isEsc = r0 < R_STAR;                 // truth: below r* escapes to 0
       if (isEsc && !escOn) return;
       const pts = computeTrajectory(r0, 0, eps, STEPS, DT);
-      const color = isEsc ? col.esc + '55' : col.conv + '55';
-      ctx.strokeStyle = color;
+      ctx.strokeStyle = (isEsc ? col.esc : col.conv) + '55';
       ctx.lineWidth = 1;
       ctx.beginPath();
       pts.forEach(([r, theta], i) => {
@@ -1025,7 +1069,7 @@ footer a:hover { color: var(--gold); }
 
     // ── Main animated trajectory ──
     const pts0 = computeTrajectory(rho0, t, eps, STEPS, DT);
-    const isEscMain = rho0 > 1.2;
+    const isEscMain = rho0 < R_STAR;             // truth: below r* escapes
     ctx.strokeStyle = isEscMain ? col.esc : col.conv;
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -1050,8 +1094,9 @@ footer a:hover { color: var(--gold); }
     ctx.fillStyle = 'rgba(201,168,76,0.7)';
     ctx.font = '11px monospace';
     ctx.fillText('Γ (r=1)', cx + scale + 4, cy - 4);
+    ctx.fillStyle = 'rgba(239,68,68,0.6)';
+    ctx.fillText('r*≈' + R_STAR.toFixed(3), cx + R_STAR * scale + 4, cy + 12);
     ctx.fillStyle = 'rgba(201,168,76,0.4)';
-    ctx.fillText('r*≈0.80', cx + 0.80 * scale + 4, cy - 4);
     ctx.fillText('ε₀=1/3', cx + (1/3) * scale + 4, cy - 4);
 
     t += DT * 0.5;
