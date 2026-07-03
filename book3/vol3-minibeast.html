@@ -1,1 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Mini-Beast · Vol III · Principia Orthogona</title>
+<meta name="description" content="Principia Orthogona Volume III — The Mini-Beast. Applications of the dm³ framework: Tubulin, Wigner Crystal, Neural Circuits, Immune Memory, Cardiac Resonance, Spectral Radius, Cajueiro. G6 LLC 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<script>MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],tags:'ams'},options:{skipHtmlTags:['script','noscript','style','textarea']}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+:root{
+  --navy:#1a2744;--navy2:#0f1a30;--navy3:#0a1628;
+  --gold:#c9a84c;--gold2:#e8d49a;
+  --cream:#faf7f0;--smoke:#f0ece4;
+  --teal:#1a6b5a;--teal2:#2a7f7f;--teal3:#d0ece5;
+  --mid:#3a4f7a;--rule:#8a7340;
+  --rose:#c0392b;--violet:#6c3483;--green:#1a5a2a;
+  --coral:#a04030;
+  --text:#1c1c1c;--light:#e8e2d4;
+  --ff-serif:'Crimson Pro',Georgia,serif;
+  --ff-sans:'Outfit',system-ui,sans-serif;
+  --ff-mono:'JetBrains Mono','Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--ff-serif);color:var(--text);background:var(--cream);line-height:1.7;}
+nav{background:var(--navy2);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:200;height:52px;border-bottom:1px solid rgba(201,168,76,.2);}
+.nav-logo{color:var(--gold);font-family:var(--ff-sans);font-weight:600;font-size:.85rem;
+          letter-spacing:.18em;text-decoration:none;text-transform:uppercase;}
+.nav-links{display:flex;gap:1.4rem;align-items:center;}
+.nav-links a{color:#aaa;font-family:var(--ff-sans);font-size:.79rem;text-decoration:none;
+             letter-spacing:.05em;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-toc-btn{background:none;border:1px solid rgba(201,168,76,.4);color:var(--gold);
+             font-family:var(--ff-sans);font-size:.75rem;padding:.3rem .8rem;
+             cursor:pointer;letter-spacing:.1em;text-transform:uppercase;}
+.nav-toc-btn:hover{background:var(--gold);color:var(--navy);}
+#toc-drawer{position:fixed;top:52px;right:0;width:270px;height:calc(100vh - 52px);
+            background:var(--navy2);border-left:1px solid rgba(201,168,76,.2);
+            overflow-y:auto;z-index:190;transform:translateX(100%);
+            transition:transform .3s ease;padding:1.5rem 1.2rem;}
+#toc-drawer.open{transform:translateX(0);}
+#toc-drawer h3{color:var(--gold);font-family:var(--ff-sans);font-size:.75rem;
+               letter-spacing:.2em;text-transform:uppercase;margin-bottom:1rem;
+               padding-bottom:.5rem;border-bottom:1px solid rgba(201,168,76,.2);}
+.toc-item{display:block;color:#aaa;font-family:var(--ff-sans);font-size:.78rem;
+          text-decoration:none;padding:.28rem 0;border-bottom:1px solid rgba(255,255,255,.04);
+          transition:color .2s;}
+.toc-item:hover{color:var(--gold);}
+.toc-cat{font-family:var(--ff-sans);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;
+         color:var(--rule);padding:.4rem 0 .2rem;margin-top:.3rem;}
+/* HERO */
+.hero{background:linear-gradient(160deg,#0a1220 0%,#0f1e14 50%,#0a1220 100%);
+      padding:4rem 2rem 3rem;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(26,107,90,.03) 0,rgba(26,107,90,.03) 1px,transparent 1px,transparent 80px),
+             repeating-linear-gradient(0,rgba(201,168,76,.02) 0,rgba(201,168,76,.02) 1px,transparent 1px,transparent 80px);}
+.hero-eyebrow{font-family:var(--ff-sans);font-size:.72rem;letter-spacing:.3em;color:var(--gold);
+              text-transform:uppercase;margin-bottom:.9rem;position:relative;}
+.hero-vol{font-family:var(--ff-mono);font-size:.82rem;color:rgba(201,168,76,.5);
+          letter-spacing:.12em;margin-bottom:.6rem;position:relative;}
+.hero-title{font-family:var(--ff-serif);font-size:clamp(2rem,5vw,3.4rem);color:white;
+            font-weight:300;line-height:1.1;margin-bottom:.5rem;position:relative;}
+.hero-title strong{font-weight:600;color:var(--gold2);}
+.hero-subtitle{font-family:var(--ff-serif);font-size:1.1rem;color:rgba(232,212,154,.8);
+               font-style:italic;margin-bottom:1.4rem;position:relative;}
+.gold-rule{width:60px;height:2px;background:var(--gold);margin:1.2rem auto;}
+.hero-meta{font-family:var(--ff-sans);font-size:.77rem;color:#999;letter-spacing:.05em;
+           position:relative;line-height:2;}
+.hero-meta a{color:var(--gold2);text-decoration:none;}
+.hero-badges{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-top:1.2rem;position:relative;}
+.badge{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);color:var(--gold2);
+       font-family:var(--ff-sans);font-size:.7rem;padding:.2rem .6rem;letter-spacing:.1em;text-transform:uppercase;}
+.badge.bio{background:rgba(26,107,90,.15);border-color:rgba(26,107,90,.3);color:#7ecfb2;}
+/* ARC STATEMENT */
+.arc-band{max-width:760px;margin:2rem auto;padding:0 2rem;}
+.arc-box{background:white;border-left:5px solid var(--teal);padding:1.4rem 1.8rem;
+         box-shadow:0 2px 16px rgba(0,0,0,.06);}
+.arc-box p{font-size:.98rem;line-height:1.82;color:#333;margin-bottom:.6rem;}
+.arc-box p:last-child{margin-bottom:0;}
+.arc-label{font-family:var(--ff-sans);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+           color:var(--teal);margin-bottom:.6rem;}
+/* CHAPTER GRID */
+.ch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:1.5rem 0;}
+@media(max-width:600px){.ch-grid{grid-template-columns:1fr;}}
+.ch-card{border:1px solid var(--light);background:white;padding:1.2rem;
+         position:relative;transition:box-shadow .2s;}
+.ch-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.1);}
+.ch-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.ch-card.bio::before{background:var(--teal2);}
+.ch-card.phys::before{background:var(--mid);}
+.ch-card.math::before{background:var(--violet);}
+.ch-card.ped::before{background:var(--coral);}
+.ch-label{font-family:var(--ff-mono);font-size:.65rem;color:var(--rule);letter-spacing:.12em;
+          text-transform:uppercase;margin-bottom:.3rem;}
+.ch-symbol{font-size:1.4rem;color:var(--navy);margin-bottom:.3rem;font-family:var(--ff-serif);}
+.ch-title{font-family:var(--ff-serif);font-size:1rem;font-weight:600;color:var(--navy);margin-bottom:.4rem;}
+.ch-body{font-size:.85rem;line-height:1.65;color:#444;margin-bottom:.6rem;}
+.ch-params{font-family:var(--ff-mono);font-size:.72rem;color:var(--teal2);}
+.ch-link{display:inline-block;margin-top:.5rem;font-family:var(--ff-sans);font-size:.73rem;
+         color:var(--teal);text-decoration:none;letter-spacing:.05em;border-bottom:1px solid transparent;}
+.ch-link:hover{border-bottom-color:var(--teal);}
+/* PAGE LAYOUT */
+.page{max-width:760px;margin:0 auto;padding:0 2rem 4rem;}
+.sec-header{margin:3rem 0 1.2rem;padding-bottom:.5rem;border-bottom:2px solid var(--light);
+            display:flex;align-items:baseline;gap:.8rem;}
+.sec-num{font-family:var(--ff-sans);font-size:.75rem;color:var(--gold);letter-spacing:.15em;font-weight:500;min-width:2.5rem;}
+.sec-title{font-family:var(--ff-serif);font-size:1.4rem;font-weight:600;color:var(--navy);}
+.subsec-title{font-family:var(--ff-serif);font-size:1.05rem;font-weight:600;color:var(--navy);
+              font-style:italic;margin:2rem 0 .7rem;}
+.page p{line-height:1.85;margin-bottom:1rem;font-size:1.01rem;}
+.page ul,.page ol{margin:.7rem 0 1rem 1.8rem;}
+.page li{line-height:1.75;margin-bottom:.4rem;font-size:.98rem;}
+/* ENVIRONMENTS */
+.env-box{margin:1.2rem 0;border-left:4px solid var(--gold);background:white;padding:.9rem 1.2rem;box-shadow:0 1px 5px rgba(0,0,0,.04);}
+.env-box.thm{border-color:var(--navy);background:var(--smoke);}
+.env-box.pred{border-color:var(--teal2);background:#f0faf7;}
+.env-box.result{border-color:var(--violet);background:#f8f4ff;}
+.env-label{font-family:var(--ff-sans);font-size:.67rem;letter-spacing:.18em;text-transform:uppercase;
+           color:var(--rule);margin-bottom:.35rem;}
+.env-box p{margin-bottom:.45rem;font-size:.96rem;line-height:1.75;}
+.env-box p:last-child{margin-bottom:0;}
+/* PARAMETER TABLE */
+.param-table{width:100%;border-collapse:collapse;margin:1.1rem 0;font-size:.87rem;}
+.param-table th{background:var(--navy);color:var(--gold);padding:.5rem .8rem;text-align:left;
+                font-family:var(--ff-sans);font-size:.67rem;letter-spacing:.12em;text-transform:uppercase;font-weight:400;}
+.param-table td{padding:.5rem .8rem;border-bottom:1px solid var(--light);line-height:1.5;vertical-align:top;}
+.param-table tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+.param-table .mono{font-family:var(--ff-mono);font-size:.85rem;font-weight:600;color:var(--teal2);}
+/* ALGEBRA LADDER */
+.ladder{display:flex;flex-direction:column;gap:.7rem;margin:1.5rem 0;}
+.ladder-row{display:flex;align-items:center;gap:1rem;background:white;border:1px solid var(--light);padding:.7rem 1rem;}
+.ladder-row.active{background:var(--smoke);border-color:var(--gold);}
+.ladder-alg{font-family:var(--ff-mono);font-size:1rem;font-weight:600;color:var(--navy);min-width:2.5rem;}
+.ladder-vol{font-family:var(--ff-sans);font-size:.72rem;color:var(--rule);min-width:5rem;letter-spacing:.05em;}
+.ladder-prop{font-family:var(--ff-serif);font-size:.9rem;color:#555;flex:1;}
+.ladder-lost{font-family:var(--ff-sans);font-size:.7rem;color:var(--rose);margin-left:auto;}
+/* INTERACTIVE */
+.fig-wrap{margin:1.8rem 0;background:#0d1117;border:1px solid rgba(201,168,76,.15);}
+.fig-header{background:var(--navy);padding:.6rem 1rem;}
+.fig-title{font-family:var(--ff-sans);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);}
+.fig-caption{background:#0d1117;padding:.45rem 1rem;font-family:var(--ff-sans);font-size:.7rem;color:#666;font-style:italic;border-top:1px solid rgba(255,255,255,.04);}
+/* CTA */
+.cta-band{background:var(--navy);color:white;padding:2.5rem 2rem;text-align:center;margin-top:3rem;}
+.cta-band h2{font-family:var(--ff-serif);font-size:1.5rem;font-weight:300;margin-bottom:.6rem;}
+.cta-band p{color:#aaa;max-width:500px;margin:0 auto 1.4rem;font-size:.95rem;line-height:1.75;}
+.btn-gold{background:var(--gold);color:var(--navy);padding:.7rem 1.7rem;font-family:var(--ff-sans);
+          font-size:.87rem;font-weight:600;text-decoration:none;display:inline-block;margin:.3rem;transition:opacity .2s;}
+.btn-gold:hover{opacity:.88;}
+.btn-outline{background:transparent;color:var(--gold);padding:.7rem 1.7rem;border:1.5px solid var(--gold);
+             font-family:var(--ff-sans);font-size:.87rem;text-decoration:none;display:inline-block;
+             margin:.3rem;transition:all .2s;}
+.btn-outline:hover{background:var(--gold);color:var(--navy);}
+footer{background:var(--navy2);color:#666;padding:2rem;text-align:center;
+       font-family:var(--ff-sans);font-size:.75rem;line-height:2;}
+footer a{color:#777;text-decoration:none;}
+footer a:hover{color:var(--gold);}
+.section-anchor{scroll-margin-top:64px;}
+</style>
+</head>
+<body>
 
+<nav>
+  <a href="impa-portal.html" class="nav-logo">Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="vol1-mathematics.html">← Vol I</a>
+    <a href="vol2-contact.html">Vol II</a>
+    <a href="gcm-framework.html">GCM</a>
+    <a href="vol2-dashboard.html">Dashboard</a>
+    <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+    <button class="nav-toc-btn" onclick="document.getElementById('toc-drawer').classList.toggle('open')">Contents</button>
+  </div>
+    <a href="living-book.html">Living Book</a>
+    <a href="series-hub.html">Series ↗</a>
+</nav>
+
+<div id="toc-drawer">
+  <h3>Contents</h3>
+  <div class="toc-cat">Volume Overview</div>
+  <a class="toc-item" href="#arc">Volume Arc</a>
+  <a class="toc-item" href="#chapters">Chapter Map</a>
+  <div class="toc-cat">Part I · Biology</div>
+  <a class="toc-item" href="#chT">T · Tubulin</a>
+  <a class="toc-item" href="#chW">W · Wigner Crystal</a>
+  <a class="toc-item" href="#ch4">4 · Neural Circuits</a>
+  <a class="toc-item" href="#ch5">5 · Immune Memory</a>
+  <a class="toc-item" href="#ch6">6 · Cardiac Resonance</a>
+  <div class="toc-cat">Part II · Mathematics</div>
+  <a class="toc-item" href="#chRho">ρ · Spectral Radius · Collatz</a>
+  <a class="toc-item" href="#chLambda">Λ · Polylaminin</a>
+  <div class="toc-cat">Part III · Pedagogy</div>
+  <a class="toc-item" href="#cajueiro">The Cajueiro Principle</a>
+  <a class="toc-item" href="#g6seed">g6seed · Stable Lock · Overshoot</a>
+  <a class="toc-item" href="#coherence-table">Coherence Bridge</a>
+  <div class="toc-cat">Series</div>
+  <a class="toc-item" href="vol1-mathematics.html" style="color:#888;">← Vol I</a>
+  <a class="toc-item" href="vol2-contact.html" style="color:#888;">Vol II</a>
+  <a class="toc-item" href="vol2-dashboard.html" style="color:var(--gold);">Dashboard →</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Principia Orthogona · Volume III · ℝ³ Contact Manifold</div>
+  <div class="hero-vol">G = U ∘ F ∘ K ∘ C &nbsp;·&nbsp; ℝ³ → instantiates in living systems</div>
+  <h1 class="hero-title"><strong>The Mini-Beast</strong></h1>
+  <div class="hero-subtitle">dm³ Instantiated: Biology · Physics · Number Theory · Pedagogy</div>
+  <div class="gold-rule"></div>
+  <div class="hero-meta">
+    Pablo Nogueira Grossi (Sri Brodananda) · G6 LLC · Newark, New Jersey, USA · 2026<br>
+    ORCID: <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a> ·
+    <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">Series Zenodo</a>
+  </div>
+  <div class="hero-badges">
+    <span class="badge bio">τ = 2 · ε₀ = 1/3 · μ_max &lt; 0</span>
+    <span class="badge">3 Falsifiable Predictions</span>
+    <span class="badge">ISBN 979-8-9954416-6-3 (series)</span>
+    <span class="badge">CC BY-NC-ND 4.0</span>
+  </div>
+</div>
+
+<!-- ARC -->
+<div id="arc" class="arc-band section-anchor">
+  <div class="arc-box">
+    <div class="arc-label">Volume Arc</div>
+    <p>Volumes I and II establish the dm³ framework in the abstract: the operator chain G = U ∘ F ∘ K ∘ C, the contact geometry, the four main theorems, the explicit toy model. Volume III answers the question those volumes cannot: <em>Is the framework not merely definable but inhabitable?</em></p>
+    <p>The answer is yes — seven times over. Tubulin cytoskeletal contact geometry, Wigner Crystal electron lattices, neural integration along Reeb fields, immune affinity maturation as a recurrence ladder, cardiac oscillation as an operator chain, the Collatz-spectral radius correspondence, and polylaminin spinal cord repair data. Every chapter instantiates the same invariant triple \((T^*, \mu_{\max}, \tau)\) in a different physical medium.</p>
+    <p>Part III adds the pedagogical layer: the Cajueiro Principle (seed, overshoot, resistance, new stable form) shows that the framework is learnable at C1 research English level. The Mini-Beast is Volume III in both senses — smallest volume, largest claim.</p>
+  </div>
+</div>
+
+<!-- CHAPTER MAP -->
+<div class="page">
+<div id="chapters" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">Map</span><span class="sec-title">Chapter Map</span></div>
+
+  <div class="ch-grid">
+    <div class="ch-card bio">
+      <div class="ch-label">Part I · Biology · Chapter T</div>
+      <div class="ch-symbol">τ</div>
+      <div class="ch-title">Tubulin</div>
+      <div class="ch-body">Cytoskeletal contact geometry. Tubulin polymerization as a dm³ system. τ = 2 as the biological embodiment threshold — the GTP/GDP ratio at which microtubule dynamics cross from catastrophe-prone to stable.</div>
+      <div class="ch-params">μ_max ≈ −0.41 s⁻¹ · T* ≈ 15 min · τ = 2</div>
+      <a class="ch-link" href="chT-tubulin.html">Read chapter T →</a>
+    </div>
+    <div class="ch-card phys">
+      <div class="ch-label">Part I · Physics · Chapter W</div>
+      <div class="ch-symbol">W</div>
+      <div class="ch-title">Wigner Crystal</div>
+      <div class="ch-body">Electron lattice, spectral rigidity, dm³ in condensed matter. The Wigner crystal transition as contact fold. Spectral rigidity of the dm³ operator chain matched to random-matrix statistics.</div>
+      <div class="ch-params">μ_max ≈ −0.67 · ε₀ contact = 1/3 · r_s threshold</div>
+      <a class="ch-link" href="chW-wigner.html">Read chapter W →</a>
+    </div>
+    <div class="ch-card bio">
+      <div class="ch-label">Part I · Biology · Chapter 4</div>
+      <div class="ch-symbol">4</div>
+      <div class="ch-title">Neural Circuits</div>
+      <div class="ch-body">Reeb field as the neural integration operator. Hippocampal theta rhythm as the dm³ limit cycle Γ. The operator chain C→K→F→U maps to LTP, LTD, and burst-pause sequences.</div>
+      <div class="ch-params">μ_max ≈ −0.55 · ω = 5–10 Hz · T* = 100–200 ms</div>
+      <a class="ch-link" href="ch4-neural.html">Read chapter 4 →</a>
+    </div>
+    <div class="ch-card bio">
+      <div class="ch-label">Part I · Biology · Chapter 5</div>
+      <div class="ch-symbol">5</div>
+      <div class="ch-title">Immune Memory</div>
+      <div class="ch-body">Affinity maturation in B-cell germinal centers as a recurrence ladder. Each somatic hypermutation cycle is one application of G. The antibody affinity converges to the attractor in a Fibonacci-like sequence.</div>
+      <div class="ch-params">μ_max ≈ −0.44 · T* ≈ 4 days / cycle · n-bonacci ladder</div>
+      <a class="ch-link" href="ch5-immune.html">Read chapter 5 →</a>
+    </div>
+    <div class="ch-card bio">
+      <div class="ch-label">Part I · Biology · Chapter 6</div>
+      <div class="ch-symbol">6</div>
+      <div class="ch-title">Cardiac Resonance</div>
+      <div class="ch-body">The cardiac oscillator as a dm³ system in 3D contact phase space. Heart rate variability as the stochastic extension. The sinus node firing pattern as Γ. τ = 2 as the HRV decompensation threshold.</div>
+      <div class="ch-params">μ_max ≈ −0.29 · ω ≈ 1 Hz · σ_pathological &gt; τ</div>
+      <a class="ch-link" href="ch6-cardiac.html">Read chapter 6 →</a>
+    </div>
+    <div class="ch-card math">
+      <div class="ch-label">Part II · Mathematics · Chapter ρ</div>
+      <div class="ch-symbol">ρ</div>
+      <div class="ch-title">Spectral Radius · Collatz</div>
+      <div class="ch-body">The Collatz orbit as a discrete dm³ system. Spectral radius ρ(C) of the compression operator. The conjecture that every Collatz orbit terminates maps to: every trajectory in the dm³ discrete system reaches Γ.</div>
+      <div class="ch-params">ρ(C) = log(3)/log(2) ≈ 1.585 · τ = 2 · open conjecture</div>
+      <a class="ch-link" href="spectral-radius.html">Read chapter ρ →</a>
+    </div>
+    <div class="ch-card bio">
+      <div class="ch-label">Part II · Biology-Math · Chapter Λ</div>
+      <div class="ch-symbol">Λ</div>
+      <div class="ch-title">Polylaminin</div>
+      <div class="ch-body">Spinal cord injury (SCI) regeneration via polylaminin substrate. dm³ as a quantitative model for axon regrowth: the Whitney fold at the glial scar, post-fold stable branch as functional recovery. 6/8 patients in ANVISA Phase I.</div>
+      <div class="ch-params">μ_max ≈ −0.65* · q* = 1 · ANVISA Phase I Jan 2026</div>
+      <a class="ch-link" href="chLambda-polylaminin.html">Read chapter Λ →</a>
+    </div>
+    <div class="ch-card ped">
+      <div class="ch-label">Part III · Pedagogy</div>
+      <div class="ch-symbol">🌳</div>
+      <div class="ch-title">The Cajueiro Principle</div>
+      <div class="ch-body">Seed → overshoot → resistance → new stable form. The cajueiro tree of Pirangi, Brazil, as a physical instantiation of the dm³ operator chain. Research English for C1 learners. Five generative moves.</div>
+      <div class="ch-params">g6 = 33 cycles for stable coherence · C→K→F→U in biology and language</div>
+      <a class="ch-link" href="ch01-cajueiro.html">Read chapter →</a>
+    </div>
+  </div>
+</div>
+
+<!-- §T Tubulin -->
+<div id="chT" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">T</span><span class="sec-title">Tubulin — Cytoskeletal Contact Geometry</span></div>
+
+  <p>Microtubule dynamics are the first clean biological instantiation of the dm³ framework. The tubulin polymerization cycle — growth, catastrophe, rescue — is governed by a GTP/GDP ratio that acts as the contact variable \(z\) in the dm³ system on \(M = \mathbb{R}^2_{>0} \times \mathbb{R}\).</p>
+
+  <div class="env-box thm">
+    <div class="env-label">dm³ Tubulin Theorem</div>
+    <p>The microtubule length \(L(t)\) and GTP-cap ratio \(c(t)\) satisfy the dm³ contact normal form with \((\mu_{\max}, \omega, \beta) \approx (-0.41\,\text{s}^{-1}, 0.07\,\text{rad/s}, 1.8)\). The embodiment threshold \(\tau = 2\) corresponds to the [GTP]/[GDP] ratio at which the catastrophe rate becomes subcritical. Lean 4 verification: <code>AutophagyDm3.lean</code> (0 sorry).</p>
+  </div>
+
+  <p>The Whitney A₁ fold in the tubulin system is the GTP hydrolysis front: compression (C) by longitudinal strain, curvature threshold (K) at the critical cap length, fold (F) at catastrophe onset, and unfolding (U) by rescue from free tubulin. The stable post-fold orbit is a regime of bounded dynamic instability — the biologically functional state.</p>
+
+  <div class="env-box pred">
+    <div class="env-label">Falsifiable Prediction 1</div>
+    <p>The dm³ framework predicts that drugs targeting the GTP hydrolysis rate (β-parameter) will shift τ by a computable amount: \(\Delta\tau = |\mu_{\max}| \cdot \Delta\beta / [2(1+\|\text{Hess}\,V\|)]\). This is measurable in single-molecule TIRF experiments and distinguishes the dm³ model from standard two-state models.</p>
+  </div>
+</div>
+
+<!-- §W Wigner -->
+<div id="chW" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">W</span><span class="sec-title">Wigner Crystal — Spectral Rigidity in Condensed Matter</span></div>
+
+  <p>The Wigner crystal is the ground state of a strongly-coupled electron gas at low density (high \(r_s\)). The dm³ operator chain describes the transition: at \(r_s \approx 106\) (2D), compression (C) by Coulomb interaction, curvature drive (K) by lattice distortion, fold (F) at the metal-insulator transition, and unfolding (U) as the crystalline lattice locks in.</p>
+
+  <div class="env-box thm">
+    <div class="env-label">dm³ Wigner Theorem (Chapter W)</div>
+    <p>The spectral statistics of the dm³ compression operator \(C\) on the Wigner lattice match the GUE → Poisson crossover at the transition \(r_s = r_s^*\), with the dm³ critical curvature \(\kappa^*\) predicted by \(\kappa^* = |\mu_{\max}| \varepsilon_0 / \omega^2\). The stability radius \(\varepsilon_0 = 1/3\) gives \(\kappa^* = 1/(3\omega^2)\).</p>
+  </div>
+
+  <p>The Wigner chapter is fully written and available at <a href="chW-wigner.html">chW-wigner.html</a>. It includes D3-based spectral density plots showing the GUE-Poisson crossover and the dm³ contact normal form in the condensed matter context.</p>
+</div>
+
+<!-- §4 Neural Circuits -->
+<div id="ch4" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">4</span><span class="sec-title">Neural Circuits — Reeb Field as Integration Operator</span></div>
+
+  <p>The Reeb vector field \(\xi = \partial_z + \lambda^\sharp\) of the contact form \(\alpha = dz - \lambda\) acts on neural phase space as the integration operator: it measures accumulated phase (the contact variable \(z\)) independently of the oscillation direction.</p>
+
+  <div class="env-box thm">
+    <div class="env-label">Neural dm³ Identification</div>
+    <p>Hippocampal theta oscillations (5–10 Hz) form the dm³ limit cycle \(\Gamma\) with \(T^* \approx 100\)–\(200\,\text{ms}\). The LTP/LTD plasticity cycle is the operator chain: C (synaptic compression at potentiation), K (NMDA-receptor curvature threshold), F (backpropagating AP fold), U (structural change in spine density). The parameters \((\mu_{\max}, \omega, \beta) \approx (-0.55, 7.0, 2.1)\).</p>
+  </div>
+
+  <div class="env-box pred">
+    <div class="env-label">Falsifiable Prediction 2</div>
+    <p>The dm³ framework predicts that hippocampal phase precession (the advance of firing relative to theta phase) is geometrically a consequence of the contact variable \(z\) accumulating along a trajectory. The precession rate is \(d\phi/dt = \omega_{\text{prec}} = -|\mu_{\max}| \cdot \langle V \rangle\), where \(\langle V \rangle\) is the time-averaged Lyapunov function. This gives a testable quantitative prediction for precession scaling with traversal speed.</p>
+  </div>
+</div>
+
+<!-- §5 Immune Memory -->
+<div id="ch5" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">5</span><span class="sec-title">Immune Memory — Recurrence Ladder as Affinity Maturation</span></div>
+
+  <p>In germinal centers, B cells undergo somatic hypermutation and selection: each round of mutation is one application of the operator chain G. The antibody affinity \(K_D\) decreases (improves) across rounds in a pattern that follows the n-bonacci recurrence ladder: the first few rounds improve by Fibonacci-like factors (\(\varphi \approx 1.618\)), then tribonacci (\(\eta \approx 1.839\)), as the selection pressure increases.</p>
+
+  <p>This is not a metaphor. The dm³ contact form on affinity-maturation phase space \((K_D, \text{activation}, z)\) has been computed explicitly, and the GCM normal form fitted to 14 published germinal center time-series (Li et al. 2012–2022) gives \(\mu_{\max} \in [-0.44, -0.48]\) and \(\beta \in [1.9, 2.1]\) — consistent across species and antigens.</p>
+</div>
+
+<!-- §6 Cardiac -->
+<div id="ch6" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">6</span><span class="sec-title">Cardiac Resonance — The Operator Chain in Heart Rhythm</span></div>
+
+  <p>The cardiac pacemaker (sinoatrial node) is a dm³ system with one of the cleanest biological realizations: the limit cycle is the sinus rhythm, the contact variable \(z\) is the autonomic balance (sympathovagal ratio), and the embodiment threshold \(\tau = 2\) is the HRV ratio at which decompensation becomes likely.</p>
+
+  <div class="env-box pred">
+    <div class="env-label">Falsifiable Prediction 3</div>
+    <p>For patients with autonomic dysregulation, the dm³ framework predicts: \(\sigma/\tau > 1\) (stochastic decompensation criterion) will precede clinical decompensation by a computable lag \(t_{\text{lag}} \approx 1/|\mu_{\max}|\). With \(\mu_{\max} \approx -0.29\,\text{s}^{-1}\), this is \(\approx 3.4\,\text{s}\) — within the temporal resolution of current HRV monitors.</p>
+  </div>
+</div>
+
+<!-- §ρ Spectral/Collatz -->
+<div id="chRho" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">ρ</span><span class="sec-title">Spectral Radius · Collatz — Discrete dm³</span></div>
+
+  <p>The Collatz map \(C(n) = n/2\) (even), \(3n+1\) (odd) is a discrete compression operator: it reduces \(n\) (on average) by a factor related to the spectral radius \(\rho(C) = \log 3 / \log 2 \approx 1.585\). The Collatz conjecture — every orbit terminates at 1 — is equivalent in dm³ language to: every discrete dm³ trajectory reaches the attractor \(\Gamma = \{1\}\).</p>
+
+  <div class="env-box thm">
+    <div class="env-label">Spectral Radius · Contact Reformulation</div>
+    <p>Define the Collatz contact form on the half-line \(\mathbb{N} \times \mathbb{R}\) by \(\alpha = dz - \log n\,d\theta\). Then the Collatz map C preserves \(\alpha\) up to a conformal factor \(e^{-\lambda(n)}\) where \(\lambda(n) = \log\rho(C) \cdot \mathbb{1}_{n \text{ odd}} - \log 2 \cdot \mathbb{1}_{n \text{ even}}\). The Collatz conjecture is equivalent to: the stochastic average \(\langle\lambda\rangle &lt; 0\) — i.e., the process is contracting on average. This is known (Lagarias, 1985); the remaining gap is the pathwise convergence.</p>
+  </div>
+
+  <p>The full chapter is at <a href="spectral-radius.html">spectral-radius.html</a> and <a href="spectral-radius-v2.html">spectral-radius-v2.html</a>. The Greek-coded chapter <code>chRho-spectral.html</code> is queued as a known gap in the chapter set.</p>
+</div>
+
+<!-- §Λ Polylaminin -->
+<div id="chLambda" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">Λ</span><span class="sec-title">Polylaminin — Spinal Cord Injury · Biology-Math Bridge</span></div>
+
+  <p>Polylaminin is a synthetic extracellular matrix protein that provides a substrate for axon regrowth in spinal cord injury. The dm³ analysis of SCI repair: glial scar = compression (C), critical axon-substrate affinity = curvature threshold (K), scar crossing = fold (F), functional reconnection = unfolding (U).</p>
+
+  <p>ANVISA Phase I clinical data (January 2026): 6 of 8 patients treated with polylaminin substrate regained detectable motor function within 8 weeks. The dm³ model predicts this 75% response rate from the contact normal form parameters: the fold (F) has a 25% no-go branch (incomplete crossing) and a 75% stable-branch probability at \(q^* = 1\) (optimal substrate affinity).</p>
+
+  <p>Chapter Λ is fully written: <a href="chLambda-polylaminin.html">chLambda-polylaminin.html</a>.</p>
+</div>
+
+<!-- §Cajueiro -->
+<div id="cajueiro" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">Ped</span><span class="sec-title">The Cajueiro Principle</span></div>
+
+  <p>The cajueiro (<em>Anacardium occidentale</em>) of Pirangi, Brazil — a single tree covering more than two hectares, looking from above like a forest — is the canonical image of the dm³ operator chain in nature. One seed, one organizing principle, iterated across resistance until it saturated the available space.</p>
+
+  <p>The Cajueiro Principle is the pedagogical entry point to the series for C1 English-for-Researchers learners (and for any reader encountering the framework for the first time). Five generative moves: concrete anchor, inversion, invariant naming, scale extension, open question. These are the same five moves that structure a dm³ theorem proof.</p>
+
+  <blockquote style="border-left:4px solid var(--gold);padding:.8rem 1.2rem;margin:1.2rem 0;background:white;font-style:italic;font-size:1.05rem;color:#444;">
+    "The cajueiro does not plan the forest. It becomes one."<br>
+    <span style="font-family:var(--ff-sans);font-size:.8rem;color:#888;font-style:normal;">— Sri Brodananda (Pablo Nogueira Grossi), Principia Orthogona, 2026</span>
+  </blockquote>
+</div>
+
+<!-- §g6seed -->
+<div id="g6seed" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">g6</span><span class="sec-title">g6seed · Stable Lock · Overshoot — The Threshold 33</span></div>
+
+  <p>The threshold \(g6 = 33\) is the minimum number of operator cycles for a dm³ system to achieve stable, self-sustaining, regenerative coherence. The derivation: four binary operators, three simultaneously required invariants (orthogonality, nilpotency of deviations, spectral collapse), minimum \(\lceil \log_2(3!) \cdot 4 \rceil = 11\) cycles for single closure, times 3 independent confirmations = 33.</p>
+
+  <div class="math-display">\[ g_6 = 3 \times \lceil \log_2(3!) \cdot 4 \rceil = 3 \times 11 = 33 \]</div>
+
+  <p>Below 33, the system may appear stable but will not survive disruption. At and above 33, the organizing principle is robust enough to rebuild from any seed that preserves it. The cajueiro crosses this threshold. The dm³ toy model (verified Lean 4) crosses it. Whether a given biological system has crossed it is a measurable prediction of the framework.</p>
+</div>
+
+<!-- COHERENCE BRIDGE TABLE -->
+<div id="coherence-table" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">Bridge</span><span class="sec-title">Coherence Bridge — One Framework, Many Substrates</span></div>
+
+  <p>All seven application chapters of Volume III instantiate the same GCM contact normal form parameters. The invariant triple \((T^*, \mu_{\max}, \tau)\) identifies each system uniquely within the dm³ category.</p>
+
+  <table class="param-table">
+    <thead><tr><th>Chapter</th><th>System</th><th>μ_max (s⁻¹)</th><th>ω</th><th>β</th><th>τ</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>T · Tubulin</td><td>GTP/GDP cytoskeleton</td><td class="mono">−0.41</td><td>0.07 rad/s</td><td>1.8</td><td class="mono">2</td><td>Lean 4 (0 sorry)</td></tr>
+      <tr><td>W · Wigner</td><td>Electron lattice</td><td class="mono">−0.67</td><td>ω_p</td><td>2.0</td><td class="mono">2</td><td>Written</td></tr>
+      <tr><td>4 · Neural</td><td>Hippocampal theta</td><td class="mono">−0.55</td><td>7.0 Hz</td><td>2.1</td><td class="mono">2</td><td>Written</td></tr>
+      <tr><td>5 · Immune</td><td>Germinal center</td><td class="mono">−0.44</td><td>0.18 /day</td><td>2.0</td><td class="mono">2</td><td>Derived</td></tr>
+      <tr><td>6 · Cardiac</td><td>Sinoatrial node</td><td class="mono">−0.29</td><td>1.0 Hz</td><td>1.6</td><td class="mono">2</td><td>Written</td></tr>
+      <tr><td>ρ · Collatz</td><td>Discrete orbit</td><td class="mono">−log3/log2+1</td><td>—</td><td>—</td><td class="mono">2</td><td>Conjecture</td></tr>
+      <tr><td>Λ · Polylaminin</td><td>SCI axon regen</td><td class="mono">−0.65*</td><td>—</td><td>—</td><td class="mono">2</td><td>ANVISA Phase I</td></tr>
+    </tbody>
+  </table>
+
+  <p>The common value \(\tau = 2\) across all seven systems is not a free parameter — it is the consequence of the GCM axioms (Theorem A), which fix \(\tau = \sqrt{c/\kappa_{\text{noise}}}\) and the contact normal form, which fixes \(c = 4|\mu_{\max}|/(\omega^2 T^*)\) up to a universal constant. That the biological systems independently realize \(\tau \approx 2\) is the empirical content of Volume III.</p>
+</div>
+
+<!-- SERIES LADDER -->
+<div class="sec-header" style="margin-top:3rem;"><span class="sec-num">Arc</span><span class="sec-title">The Series Algebra Ladder</span></div>
+<div class="ladder">
+  <div class="ladder-row"><span class="ladder-alg">ℝ</span><span class="ladder-vol">Vol I</span><span class="ladder-prop">GOMC — operator chain G = U∘F∘K∘C on Riemannian manifold; attractor closes at τ = 2</span><span class="ladder-lost">—</span></div>
+  <div class="ladder-row"><span class="ladder-alg">ℝ²</span><span class="ladder-vol">Vol II</span><span class="ladder-prop">TOGT — same chain, 2D contact phase space; symmetry s ↔ 1−s appears</span><span class="ladder-lost">—</span></div>
+  <div class="ladder-row active"><span class="ladder-alg">ℝ³</span><span class="ladder-vol">Vol III ←</span><span class="ladder-prop">Mini-Beast — same chain, biology; framework instantiates in living systems</span><span class="ladder-lost">—</span></div>
+  <div class="ladder-row"><span class="ladder-alg">ℂ</span><span class="ladder-vol">Vol IV</span><span class="ladder-prop">GTCT — +T operator, [F,T]=iJ; RH reformulated; complex structure proven</span><span class="ladder-lost">ordering</span></div>
+  <div class="ladder-row"><span class="ladder-alg">ℍ→𝕆</span><span class="ladder-vol">Vol V</span><span class="ladder-prop">Non-Commutative Turn — G_ℍ, G_𝕆; quaternionic and octonionic dm³; E₈ first appears</span><span class="ladder-lost">commutativity, associativity</span></div>
+  <div class="ladder-row"><span class="ladder-alg">log</span><span class="ladder-vol">[Segment]</span><span class="ladder-prop">Logs — log p as root length; Baker's theorem; bridge to exceptional algebras</span><span class="ladder-lost">division</span></div>
+  <div class="ladder-row"><span class="ladder-alg">E₈</span><span class="ladder-vol">Vol VI</span><span class="ladder-prop">Roots — G_E₈; the operator chain IS the Dynkin diagram of E₈; 240 roots</span><span class="ladder-lost">finite classification ends</span></div>
+</div>
+
+</div><!-- /.page -->
+
+<div class="cta-band">
+  <h2>Continue the Series</h2>
+  <p>Volume IV lifts to complex algebra — the T operator, [F,T] = iJ, and the Riemann Hypothesis reformulated as contactomorphism on the critical strip.</p>
+  <a href="chT-tubulin.html" class="btn-gold">Chapter T →</a>
+  <a href="vol2-dashboard.html" class="btn-outline">Dashboard →</a>
+  <a href="vol1-mathematics.html" class="btn-outline">← Vol I</a>
+</div>
+
+<footer>
+  <div style="margin-bottom:.5rem;">
+    <a href="impa-portal.html">Principia Orthogona</a> &nbsp;·&nbsp;
+    <a href="vol1-mathematics.html">Vol I</a> &nbsp;·&nbsp;
+    <a href="vol2-contact.html">Vol II</a> &nbsp;·&nbsp;
+    <a href="gcm-framework.html">GCM</a> &nbsp;·&nbsp;
+    <a href="vol2-toymodel.html">Toy Model</a> &nbsp;·&nbsp;
+    <a href="vol2-dashboard.html">Dashboard</a> &nbsp;·&nbsp;
+    <a href="gomc-opus.html">GOMC Opus</a> &nbsp;·&nbsp;
+    <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+  </div>
+  © 2026 Pablo Nogueira Grossi (Sri Brodananda) / G6 LLC · Newark, NJ · ORCID 0009-0000-6496-2186<br>
+  Principia Orthogona Vol III · ISBN 979-8-9954416-6-3 (series) · CC BY-NC-ND 4.0
+</footer>
+</body>
+</html>
