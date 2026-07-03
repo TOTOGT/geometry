@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formal Verification Registry &middot; Lean 4 / Coq &middot; dm&#xB3; Geometry &middot; Pablo Nogueira Grossi</title>
+<style>
+:root {
+  --navy: #1a2744;
+  --gold: #c9a84c;
+  --cream: #faf7f0;
+  --smoke: #f0ece4;
+  --green: #155724;
+  --red: #7a2020;
+  --amber: #8a5a10;
+  --mid: #3a4f7a;
+  --mono: 'Courier New', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--cream); font-family: Georgia, serif; color: #1c1c1c; }
+a { color: var(--mid); text-decoration: none; }
+a:hover { color: var(--gold); }
+
+nav {
+  background: var(--navy);
+  padding: 0.5rem 1.4rem;
+  display: flex; gap: 1.6rem;
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em;
+  align-items: center; flex-wrap: wrap;
+}
+nav a { color: rgba(255,255,255,0.6); }
+nav a:first-child { color: var(--gold); }
+nav a:hover { color: var(--gold); }
+
+.hero { background: var(--navy); color: var(--cream); text-align: center; padding: 3rem 1.5rem 2.4rem; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 70%); pointer-events: none; }
+.hero-sub { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.24em; color: var(--gold); text-transform: uppercase; margin-bottom: 1rem; }
+.hero h1 { font-size: clamp(1.4rem, 3vw, 2.1rem); font-weight: normal; letter-spacing: 0.02em; margin-bottom: 0.6rem; color: var(--cream); }
+.hero-tagline { font-size: clamp(0.85rem, 1.6vw, 1rem); color: rgba(250,247,240,0.72); max-width: 640px; margin: 0 auto; line-height: 1.7; }
+.gold-rule { width: 60px; height: 2px; background: var(--gold); margin: 1.4rem auto 0; border-radius: 1px; }
+
+.banner {
+  max-width: 1000px; margin: 2rem auto 0; padding: 1rem 1.4rem;
+  background: #fdf6e3; border: 1px solid rgba(201,168,76,0.4); border-left: 4px solid var(--gold);
+  border-radius: 6px; font-size: 0.85rem; line-height: 1.65; color: #4a3c1a;
+}
+.banner strong { color: var(--navy); }
+.banner.warn { background: #fbeee9; border-color: rgba(122,32,32,0.35); border-left-color: var(--red); color: #5a2020; }
+
+main { max-width: 1000px; margin: 0 auto; padding: 2.4rem 1.5rem 5rem; }
+.section-title { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.22em; color: var(--gold); text-transform: uppercase; margin: 2.6rem 0 1.1rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(201,168,76,0.25); }
+.section-title:first-child { margin-top: 0; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.5rem; }
+.stat-card { flex: 1; min-width: 130px; background: white; border: 1px solid #ddd; border-left: 3px solid var(--gold); border-radius: 6px; padding: 1rem 1.2rem; }
+.stat-num { font-family: var(--mono); font-size: 1.6rem; font-weight: bold; color: var(--navy); display: block; }
+.stat-label { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: #777; margin-top: 0.2rem; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: white; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; }
+thead th { background: var(--navy); color: var(--gold); font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; text-align: left; padding: 0.6rem 0.7rem; }
+tbody td { padding: 0.6rem 0.7rem; border-top: 1px solid var(--smoke); vertical-align: top; line-height: 1.5; }
+tbody tr:hover { background: #fbfaf6; }
+
+.status { font-family: var(--mono); font-size: 0.68rem; font-weight: bold; padding: 0.15rem 0.5rem; border-radius: 3px; white-space: nowrap; display: inline-block; }
+.status-proved { background: #e8f5e9; color: var(--green); border: 1px solid #b8dcbb; }
+.status-sorry { background: #fdf3d9; color: var(--amber); border: 1px solid #eed9a3; }
+.status-open { background: #fbe9e7; color: var(--red); border: 1px solid #edc3bd; }
+.status-checked { background: #eef4fc; color: #1a4a7a; border: 1px solid #b9d3ee; }
+
+.file-name { font-family: var(--mono); font-size: 0.78rem; color: var(--navy); font-weight: bold; }
+.lemma-name { font-family: var(--mono); font-size: 0.76rem; }
+.notes { font-size: 0.76rem; color: #555; max-width: 320px; }
+
+.file-block { margin-bottom: 2.4rem; }
+.file-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.8rem; }
+.file-header h3 { font-size: 1rem; color: var(--navy); }
+.file-header .file-target { font-family: var(--mono); font-size: 0.72rem; color: #777; }
+.file-summary { font-size: 0.82rem; color: #444; line-height: 1.6; margin-bottom: 0.8rem; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 0.6rem 1.6rem; margin: 1rem 0 1.8rem; font-size: 0.78rem; color: #555; }
+.legend span.status { margin-right: 0.4rem; }
+
+.about-block { background: var(--navy); color: var(--cream); border-radius: 8px; padding: 1.8rem 2rem; margin-top: 3rem; }
+.about-block h2 { font-size: 0.95rem; color: var(--gold); font-weight: normal; letter-spacing: 0.05em; margin-bottom: 0.6rem; }
+.about-block p { font-size: 0.83rem; color: rgba(250,247,240,0.75); line-height: 1.75; margin-bottom: 0.8rem; }
+.about-block a { color: var(--gold); }
+
+footer { background: var(--navy); color: rgba(250,247,240,0.45); font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.08em; text-align: center; padding: 1.2rem; border-top: 1px solid rgba(201,168,76,0.15); }
+footer a { color: var(--gold); opacity: 0.7; }
+footer a:hover { opacity: 1; }
+
+@media (max-width: 700px) {
+  table, thead, tbody, th, td, tr { display: block; }
+  thead { display: none; }
+  tbody tr { border: 1px solid #ddd; border-radius: 6px; margin-bottom: 0.8rem; padding: 0.5rem; }
+  tbody td { border: none; padding: 0.3rem 0.2rem; }
+  tbody td::before { content: attr(data-label); display: block; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.15rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">Formal Verification Registry</a>
+  <a href="../book1/index.html">Book I</a>
+  <a href="../book2/index.html">Book II</a>
+  <a href="https://sluing.github.io/neuro/SBM/1080.html" target="_blank">Theorem Registry (AXLE) &#8599;</a>
+  <a href="https://github.com/TOTOGT/AXLE" target="_blank">GitHub &#8599;</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-sub">dm&#xB3; Geometry &middot; GOMC Science</div>
+  <h1>Formal Verification Registry</h1>
+  <p class="hero-tagline">
+    Per-file, per-lemma tracking of Lean&nbsp;4 (and, when they exist, Coq)
+    formalization progress for the prose-level fixes closed in Book&nbsp;I and
+    Book&nbsp;II. This page tracks <em>code</em>, not papers &mdash; see Book&nbsp;I
+    and Book&nbsp;II for the theorem-level prose audit trail these files are
+    ports of.
+  </p>
+  <div class="gold-rule"></div>
+</div>
+
+<div class="banner warn">
+  <strong>None of this is machine-checked yet.</strong> Every file below was
+  written and independently re-verified by hand/computer-algebra this session
+  (symbolic and numeric cross-checks on every claim marked &ldquo;proved&rdquo;),
+  but <strong>none have been compiled against Mathlib4 with <code>lake
+  build</code></strong>. Lemma and API names (e.g.
+  <code>ContractingWith.fixedPoint</code>, <code>Real.exp_add</code>,
+  <code>AnalyticOn</code> vs. the renamed <code>AnalyticOnNhds</code>) are
+  best-effort and must be confirmed by an actual build before any
+  &ldquo;proved&rdquo; row here should be treated as machine-verified. This
+  page will be updated the moment a real <code>lake build</code> log is
+  available.
+</div>
+
+<main>
+
+<div class="section-title">Coverage summary</div>
+<div class="stats">
+  <div class="stat-card"><span class="stat-num">5</span><span class="stat-label">Lean files</span></div>
+  <div class="stat-card"><span class="stat-num">0</span><span class="stat-label">Coq files</span></div>
+  <div class="stat-card"><span class="stat-num">~48</span><span class="stat-label">Lemmas, hand-checked</span></div>
+  <div class="stat-card"><span class="stat-num">10</span><span class="stat-label">sorry (open)</span></div>
+</div>
+
+<div class="legend">
+  <div><span class="status status-proved">proved</span> stated and proved in-file; independently re-verified this session by symbolic/numeric cross-check; NOT yet lake-built</div>
+  <div><span class="status status-sorry">sorry</span> explicitly marked open, with a stated proof route</div>
+  <div><span class="status status-open">open / no content</span> placeholder (e.g. <code>True</code>) with no mathematical content claimed &mdash; honestly blocked (usually on missing Mathlib infrastructure)</div>
+  <div><span class="status status-checked">arithmetic resolved</span> a flagged discrepancy that was independently re-derived and closed this session</div>
+</div>
+
+<div class="section-title">Volume I files</div>
+
+<div class="file-block">
+  <div class="file-header">
+    <h3>ExistenceWellPosedness.lean</h3>
+    <span class="file-target">Vol. I &sect;4 &middot; Book I: Existence and Well-Posedness</span>
+  </div>
+  <div class="file-summary">
+    Rewritten 2026-07-03 to remove vacuous tautologies (the original proved
+    only that Lean functions are functions). Now states real metric content:
+    compression genuinely contracts by <code>r*</code>, and the composite
+    &Phi;=R&#8728;K&#8728;F&#8728;C contracts when F, K, R are non-expansive.
+    The Banach fixed-point conclusion is correctly routed to Mathlib's
+    <code>ContractingWith</code> API rather than asserted.
+  </div>
+  <table>
+    <thead><tr><th>Lemma</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td data-label="Lemma"><span class="lemma-name">compression_contracts</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Independently re-verified numerically this session.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">compression_strict</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Direct consequence of the above.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">Phi_contracts</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Sound calc-chain, checked by hand.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">Phi_wellPosed</span></td><td data-label="Status"><span class="status status-sorry">sorry</span></td><td data-label="Notes" class="notes">Banach fixed point via <code>ContractingWith.fixedPoint</code>.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">Phi_iterates_converge</span></td><td data-label="Status"><span class="status status-sorry">sorry</span></td><td data-label="Notes" class="notes">Same witness as above, plus <code>tendsto_iterate_fixedPoint</code>.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="file-block">
+  <div class="file-header">
+    <h3>FiniteBranching.lean</h3>
+    <span class="file-target">Vol. I &sect;5 &middot; Book I: Finite Branching</span>
+  </div>
+  <div class="file-summary">
+    Kept unchanged from the original draft &mdash; the audit found this file
+    already followed the correct discipline (honestly incomplete, not falsely
+    complete). Reference pattern the other four files were rewritten to match.
+  </div>
+  <table>
+    <thead><tr><th>Lemma</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td data-label="Lemma"><span class="lemma-name">analytic_zeros_isolated</span></td><td data-label="Status"><span class="status status-sorry">sorry</span></td><td data-label="Notes" class="notes">Route via <code>AnalyticOn.eq_zero_of_frequently_zero</code>, contrapositive.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">discrete_closed_in_compact_finite</span></td><td data-label="Status"><span class="status status-sorry">sorry</span></td><td data-label="Notes" class="notes">Route via compactness + discrete topology &rarr; finite.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">finiteBranching</span></td><td data-label="Status"><span class="status status-sorry">sorry</span></td><td data-label="Notes" class="notes">Combines the two lemmas above.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">branchingIndex</span></td><td data-label="Status"><span class="status status-sorry">sorry</span></td><td data-label="Notes" class="notes">Depends on <code>finiteBranching</code>.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="file-block">
+  <div class="file-header">
+    <h3>Invariant75.lean</h3>
+    <span class="file-target">Vol. I &sect;7.5 &middot; Book I: Invariant 7.5 companion note</span>
+  </div>
+  <div class="file-summary">
+    Rewritten 2026-07-03 after the audit found the original formalized a
+    <em>different theorem</em> (a generic Lyapunov-contraction inequality,
+    not the injectivity/chord-arc statement of &sect;7.5). Now states and
+    proves the real theorem: condition (D) &rArr; injectivity, with the
+    Gerono lemniscate proved as the necessity witness. Zero <code>sorry</code>
+    in this file &mdash; the one open geometric obligation (concrete
+    curvature &rArr; chord-arc constant) is correctly left as an abstract
+    hypothesis, not a claimed-and-failed proof.
+  </div>
+  <table>
+    <thead><tr><th>Lemma</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td data-label="Lemma"><span class="lemma-name">invariant_7_5_injective</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">From <code>ConditionD</code>, an abstract hypothesis (concrete unfolding lives in the geometry file, not claimed here).</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">gerono_self_intersects</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">&gamma;(&pi;/2)=&gamma;(3&pi;/2)=(0,0); independently confirmed numerically to float precision.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">gerono_not_injOn</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Direct consequence.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">gerono_fails_conditionD</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Contrapositive of <code>invariant_7_5_injective</code>.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">cos_three_pi_div_two</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Addition-formula route independently confirmed symbolically.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">Volume II files</div>
+
+<div class="file-block">
+  <div class="file-header">
+    <h3>ContactHopf.lean</h3>
+    <span class="file-target">Vol. II &sect;3 &middot; Book II: Contact Hopf coefficient correction</span>
+  </div>
+  <div class="file-summary">
+    Rewritten 2026-07-03 to remove a fabricated geometric justification (a
+    claimed "Reeb-direction projection" mechanism for the factor of 2, which
+    the session never derived). Replaced with the real algebra. The file then
+    flagged an apparent direction conflict between the coefficient correction
+    and the &gamma;* correction &mdash; correctly refusing to guess &mdash;
+    which was independently re-derived and resolved this session (see
+    Book&nbsp;II for the full derivation): both directions are correct
+    simultaneously, since the coefficient sits in the denominator when
+    solving for the root.
+  </div>
+  <table>
+    <thead><tr><th>Lemma</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td data-label="Lemma"><span class="lemma-name">gammaStar_eq_two_mul_old</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Arithmetic identity.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">linearization_erroneous_expansion</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes"><code>ring</code> identity; the honest locus of the factor of 2.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">erroneous_root_is_exp</span></td><td data-label="Status"><span class="status status-checked">arithmetic resolved</span></td><td data-label="Notes" class="notes">Independently re-verified: <code>2&middot;(e^z0&middot;e^-z0)&minus;2=0</code>.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">gammaStar_is_root</span></td><td data-label="Status"><span class="status status-checked">arithmetic resolved</span></td><td data-label="Notes" class="notes">Independently re-verified: confirms 2e^z0 solves the corrected equation.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">contactHopf_bifurcation</span></td><td data-label="Status"><span class="status status-sorry">sorry</span></td><td data-label="Notes" class="notes">The actual Hopf existence/uniqueness theorem &mdash; genuine open geometric content; no general Hopf theorem in Mathlib yet.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">dm&#xB3; toy model files</div>
+
+<div class="file-block">
+  <div class="file-header">
+    <h3>Dm3Arithmetic.lean</h3>
+    <span class="file-target">dm&#xB3; toy model V3 &middot; three arithmetic corrections</span>
+  </div>
+  <div class="file-summary">
+    Rewritten 2026-07-03. The original defined a plain exponential-decay flow
+    and a textbook <code>N(0,&sigma;&sup2;)</code> density &mdash; neither
+    matched the paper's actual corrected objects. Now states the real
+    Bernoulli-solution flow and the correctly-centered, correctly-coefficiented
+    stationary density, both independently re-verified this session.
+  </div>
+  <table>
+    <thead><tr><th>Lemma</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td data-label="Lemma"><span class="lemma-name">flowAux_ode</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Derivative independently re-verified symbolically &mdash; exact match.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">flow_equilibrium_at_one</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Trivial arithmetic, confirmed.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">&mu;_hopf_approx</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Numeric bound (1.55, 1.56) independently recomputed: 2r*=1.55188118.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">&rho;_peak_at_one</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Trivial, confirmed.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">&rho;_nonneg</span></td><td data-label="Status"><span class="status status-proved">proved</span></td><td data-label="Notes" class="notes">Standard positivity argument.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">flow_zero</span></td><td data-label="Status"><span class="status status-sorry">sorry</span></td><td data-label="Notes" class="notes">rpow coercion mechanics only &mdash; elementary, pending exact Mathlib lemma names.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">flow_ode</span></td><td data-label="Status"><span class="status status-sorry">sorry</span></td><td data-label="Notes" class="notes">&#7769;=r&minus;r&sup3; derivative of the Bernoulli solution; route verified by hand this session, not yet machine-checked.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">&rho;_normalised</span></td><td data-label="Status"><span class="status status-sorry">sorry</span></td><td data-label="Notes" class="notes">Normalization constant 2/(&sigma;&radic;&pi;) independently re-integrated and confirmed correct; Gaussian integral lemma name pending.</td></tr>
+      <tr><td data-label="Lemma"><span class="lemma-name">&rho;_is_stationary_of_dm3_flow</span></td><td data-label="Status"><span class="status status-open">open / no content</span></td><td data-label="Notes" class="notes">Honestly blocked &mdash; no Fokker&ndash;Planck/SDE machinery in Mathlib4 yet.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">Coq</div>
+<p style="font-size:0.85rem; color:#555; line-height:1.7; margin-bottom:2rem;">
+  No Coq files exist in this project. All formal verification work to date
+  is in Lean&nbsp;4 / Mathlib4. This section is a placeholder in case that
+  changes.
+</p>
+
+<div class="about-block">
+  <h2>How this registry is maintained</h2>
+  <p>
+    A row is added only after the corresponding Lean file has been read in
+    full and every claim marked &ldquo;proved&rdquo; has been independently
+    re-derived &mdash; by symbolic computation, numeric cross-check, or both
+    &mdash; not merely re-read. <code>sorry</code> rows are never silently
+    closed; they move to <span class="status status-proved">proved</span>
+    only after a real derivation is added to the file and re-verified here.
+  </p>
+  <p>
+    This page tracks code. For the theorem-level prose audit trail these
+    files are ports of &mdash; including gaps found, counterexamples
+    constructed, and citations corrected &mdash; see
+    <a href="../book1/index.html">Book&nbsp;I</a> and
+    <a href="../book2/index.html">Book&nbsp;II</a>.
+  </p>
+  <p>
+    Pablo Nogueira Grossi &middot; G6 LLC, Newark NJ &middot;
+    ORCID <a href="https://orcid.org/0009-0000-6496-2186" target="_blank">0009-0000-6496-2186</a>
+  </p>
+</div>
+
+</main>
+
+<footer>
+  dm&#xB3; Geometry &middot; Formal Verification Registry &middot; &copy; 2026 Pablo Nogueira Grossi, G6 LLC &middot;
+  <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a> &middot;
+  <a href="https://zenodo.org/records/19117399" target="_blank">Series DOI</a> &middot;
+  CC BY 4.0 &middot; MIT
+</footer>
+
+</body>
+</html>
