@@ -23,11 +23,11 @@ Ch 6 (666 · 5D+t) → **Ch 6½ El Ojo** → **Ch 7 Newark** → **Ch 8 Harrison
   - Ch 9 · Belleville — Verification and the Ladder's End → ch09.html
 - Move the OLD ch07/ch08/ch09 (Book 3 Mini-Beast: Crystalline Return, Axiomatic Turn, φ) to the Book 3 root or an "Extended / Mini-Beast" section, under new filenames so they don't collide with the new ch07–09. They are Book 3 content (CEFR badges, Student Portal, Book 3 ISBN/DOI).
 
-### r* = 0.773 (canonical — chosen)
-Propagate everywhere; the new chapters already use 0.773. Fix:
-- **ch10.html** body "r* ≈ 0.80" → 0.773; figure label "r* ≈ 0.8123" → 0.773; Lean `r_star := 0.80` → 0.773.
-- **ch03.html** "r* ≈ 0.8" (×2) → 0.773.
-- Anywhere the symmetric Gronwall 1/3 is described: keep ε₀ = 1/3 as the *outer* stability radius, r* ≈ 0.773 as the *inner* nonlinear boundary (the new chapters state it this way).
+### r* = 0.77594059 (canonical — chosen)
+Propagate everywhere; the new chapters already use 0.77594059. Fix:
+- **ch10.html** — body text, figure label, and Lean `r_star` all standardized to **0.77594059** (displayed 0.776). (Earlier drafts: 0.80 body, 0.8123 figure.)
+- **ch03.html** — the two "r* ≈ 0.8" refs standardized to 0.77594059 (0.776).
+- Anywhere the symmetric Gronwall 1/3 is described: keep ε₀ = 1/3 as the *outer* stability radius, r* ≈ 0.77594059 as the *inner* nonlinear boundary (the new chapters state it this way).
 
 ### Other cross-cutting (from the earlier audit, still open)
 - GTCT expansion: pick one — index/hub say *Generative Temporal Contact Theory*; ch05/ch06 say *Galilean Contact Transformations*. ch10 Lean namespace says "GCTC" (typo for GTCT).
