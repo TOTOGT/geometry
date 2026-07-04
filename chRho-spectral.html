@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ρ · Spectral Radius · Collatz · RH Surgery — Principia Orthogona</title>
+<meta name="description" content="The ρ operator chapter: spectral radius as dm³ invariant, Collatz c=3 threshold, and the RH Surgery path to discrete contact structure. Seven independent arguments. V5 material. G6 LLC · Pablo Nogueira Grossi · 2026.">
+<meta name="author" content="Pablo Nogueira Grossi · G6 LLC">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']], tags: 'ams' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<style>
+:root {
+  --navy:   #1a2744;
+  --navy2:  #0f1a30;
+  --gold:   #c9a84c;
+  --gold2:  #e8d49a;
+  --cream:  #faf7f0;
+  --smoke:  #f0ece4;
+  --mid:    #3a4f7a;
+  --rule:   #8a7340;
+  --text:   #1c1c1c;
+  --light:  #e8e2d4;
+  --teal:   #1a6b5a;
+  --teal2:  #d0ece5;
+  --red:    #8a2a2a;
+  --rho:    #7c3d9e;   /* ρ colour — violet/spectral */
+  --rho2:   #e8d5f5;
+  --ff-serif: 'Crimson Pro', 'Georgia', serif;
+  --ff-sans:  'Outfit', system-ui, sans-serif;
+  --ff-mono:  'JetBrains Mono', 'Courier New', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: var(--ff-serif); color: var(--text); background: var(--cream); line-height: 1.7; }
+
+/* NAV */
+nav { background: var(--navy2); padding: 0 2rem; display: flex; align-items: center;
+      justify-content: space-between; position: sticky; top: 0; z-index: 200; height: 52px;
+      border-bottom: 1px solid rgba(201,168,76,.2); }
+.nav-logo { color: var(--gold); font-family: var(--ff-sans); font-weight: 600;
+            font-size: 0.85rem; letter-spacing: 0.18em; text-decoration: none; text-transform: uppercase; }
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links a { color: #aaa; font-family: var(--ff-sans); font-size: 0.8rem;
+               text-decoration: none; letter-spacing: 0.06em; transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+
+/* OP-CHAIN */
+.op-chain-hero { display: flex; align-items: center; justify-content: center;
+                 gap: 0.4rem; flex-wrap: wrap; margin: 1.5rem 0; }
+.op-b { width: 2.2rem; height: 2.2rem; border-radius: 50%; display: flex;
+        align-items: center; justify-content: center; font-family: var(--ff-sans);
+        font-weight: 600; font-size: 0.85rem; color: white; }
+.op-pi  { background: #2a5a8a; }
+.op-phi { background: #1a6b5a; }
+.op-mu  { background: #6b3a1a; }
+.op-eta { background: #8a5a1a; }
+.op-delta { background: #4a1a6b; }
+.op-sigma { background: #1a6b3a; }
+.op-omega { background: #6b1a1a; }
+.op-rho { background: var(--rho); }
+.op-arrow { color: var(--gold); font-size: 1.1rem; }
+.op-active { box-shadow: 0 0 0 3px var(--gold), 0 0 16px rgba(201,168,76,.4);
+             transform: scale(1.18); }
+
+/* HERO */
+.hero { background: linear-gradient(160deg, var(--navy2) 0%, #1a1040 60%, #2a0a4a 100%);
+        padding: 5rem 2rem 4rem; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(124,61,158,.04) 0, rgba(124,61,158,.04) 1px, transparent 1px, transparent 80px),
+              repeating-linear-gradient(0deg,  rgba(124,61,158,.04) 0, rgba(124,61,158,.04) 1px, transparent 1px, transparent 80px); }
+.hero-eyebrow { font-family: var(--ff-sans); font-size: 0.75rem; letter-spacing: 0.3em;
+                color: var(--rho2); text-transform: uppercase; margin-bottom: 1.2rem; position: relative; }
+.symbol-block { font-size: 5rem; color: var(--rho2); font-family: var(--ff-serif);
+                line-height: 1; margin: 0.8rem 0; position: relative; opacity: 0.9; }
+.hero-title { font-family: var(--ff-serif); font-size: clamp(1.8rem, 4vw, 2.8rem);
+              color: white; font-weight: 300; line-height: 1.2; margin-bottom: 0.5rem; position: relative; }
+.hero-title strong { font-weight: 600; }
+.hero-subtitle { font-family: var(--ff-serif); font-size: 1.05rem; color: var(--rho2);
+                 font-style: italic; margin-bottom: 1.5rem; position: relative; }
+.value-line { font-family: var(--ff-sans); font-size: 0.85rem; color: #bbb;
+              letter-spacing: 0.12em; position: relative; margin-bottom: 1.5rem; }
+.gold-rule { width: 60px; height: 2px; background: var(--rho); margin: 1.2rem auto; }
+.hero-meta { font-family: var(--ff-sans); font-size: 0.78rem; color: #888;
+             letter-spacing: 0.06em; position: relative; line-height: 2; }
+.hero-badges { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap;
+               margin-top: 1.2rem; position: relative; }
+.badge { background: rgba(124,61,158,.15); border: 1px solid rgba(124,61,158,.4);
+         color: var(--rho2); font-family: var(--ff-sans); font-size: 0.72rem;
+         padding: 0.25rem 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.badge-v5 { background: rgba(201,168,76,.12); border-color: rgba(201,168,76,.4); color: var(--gold2); }
+
+/* PAGE */
+.page { max-width: 780px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+.sec-header { display: flex; align-items: baseline; gap: 0.8rem; margin: 2.5rem 0 1rem;
+              padding-bottom: 0.4rem; border-bottom: 1px solid var(--light); }
+.sec-num { font-family: var(--ff-sans); font-size: 0.75rem; letter-spacing: 0.2em;
+           color: var(--rho); text-transform: uppercase; font-weight: 600; }
+.sec-title { font-family: var(--ff-serif); font-size: 1.4rem; font-weight: 400; color: var(--navy); }
+
+/* PROOF BOXES */
+.proof-block { border-left: 3px solid var(--rho); padding: 1rem 1.2rem; margin: 1.2rem 0;
+               background: rgba(124,61,158,.04); border-radius: 0 4px 4px 0; }
+.proof-label { font-family: var(--ff-sans); font-size: 0.72rem; letter-spacing: 0.2em;
+               color: var(--rho); text-transform: uppercase; font-weight: 600; margin-bottom: 0.5rem; }
+.proof-title { font-family: var(--ff-serif); font-size: 1.05rem; font-weight: 600;
+               color: var(--navy); margin-bottom: 0.5rem; }
+
+.env-box { border: 1px solid var(--light); padding: 1rem 1.2rem; margin: 1rem 0; border-radius: 4px; }
+.env-box.conjecture { border-color: rgba(124,61,158,.3); background: rgba(124,61,158,.03); }
+.env-box.remark { border-color: rgba(201,168,76,.3); background: rgba(201,168,76,.04); }
+.env-box.theorem { border-color: rgba(26,107,90,.3); background: rgba(26,107,90,.03); }
+.env-label { font-family: var(--ff-sans); font-size: 0.75rem; letter-spacing: 0.12em;
+             text-transform: uppercase; font-weight: 600; color: var(--mid); margin-bottom: 0.5rem; }
+.env-box.conjecture .env-label { color: var(--rho); }
+.env-box.theorem .env-label { color: var(--teal); }
+
+.math-display { overflow-x: auto; padding: 0.8rem 0; }
+
+/* SEVEN-PROOF HEADER */
+.seven-header { background: linear-gradient(135deg, var(--navy2), #1a0a30);
+                color: white; text-align: center; padding: 1.5rem 2rem;
+                margin: 2rem 0 0; border-radius: 4px 4px 0 0; }
+.seven-header h3 { font-family: var(--ff-sans); font-size: 0.8rem; letter-spacing: 0.25em;
+                   text-transform: uppercase; color: var(--rho2); margin-bottom: 0.4rem; }
+.seven-header .claim { font-family: var(--ff-serif); font-size: 1.1rem; color: white; font-style: italic; }
+
+/* STATUS */
+.status-open { color: var(--rule); font-size: 0.72rem; font-family: var(--ff-sans);
+               letter-spacing: 0.1em; text-transform: uppercase; }
+.status-partial { color: #8a7a1a; font-size: 0.72rem; font-family: var(--ff-sans);
+                  letter-spacing: 0.1em; text-transform: uppercase; }
+.status-proved { color: var(--teal); font-size: 0.72rem; font-family: var(--ff-sans);
+                 letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* NAV PREV/NEXT */
+.chapter-nav { display: flex; justify-content: space-between; align-items: center;
+               margin: 3rem 0 0; padding: 1rem 0; border-top: 1px solid var(--light); }
+.chapter-nav a { font-family: var(--ff-sans); font-size: 0.8rem; color: var(--mid);
+                 text-decoration: none; letter-spacing: 0.06em; }
+.chapter-nav a:hover { color: var(--rho); }
+
+footer { text-align: center; padding: 2rem; font-family: var(--ff-sans); font-size: 0.75rem;
+         color: #888; border-top: 1px solid var(--light); background: var(--smoke); }
+footer a { color: var(--mid); text-decoration: none; }
+footer a:hover { color: var(--rho); }
+
+p { margin-bottom: 0.9rem; }
+p:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="impa-portal.html" class="nav-logo">Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="vol1-mathematics.html">Vol I</a>
+    <a href="chEps-gronwall.html">ε₀</a>
+    <a href="spectral-radius.html">Spectral (v1)</a>
+    <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+    <a href="https://doi.org/10.5281/zenodo.20784030" target="_blank">Zenodo V4</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Principia Orthogona · Greek Operator Chapter · ρ</div>
+
+  <div class="op-chain-hero" aria-label="Operator chain">
+    <div class="op-b op-pi">π</div><span class="op-arrow">→</span>
+    <div class="op-b op-phi">φ</div><span class="op-arrow">→</span>
+    <div class="op-b op-mu">μ</div><span class="op-arrow">→</span>
+    <div class="op-b op-eta">η</div><span class="op-arrow">→</span>
+    <div class="op-b op-delta">Δ</div><span class="op-arrow">→</span>
+    <div class="op-b op-sigma">Σ</div><span class="op-arrow">→</span>
+    <div class="op-b op-omega">Ω</div><span class="op-arrow">→</span>
+    <div class="op-b op-rho op-active">ρ</div>
+  </div>
+
+  <div class="symbol-block">ρ</div>
+  <h1 class="hero-title"><strong>Spectral Radius</strong><br>Collatz · RH Surgery</h1>
+  <div class="hero-subtitle">The discrete skeleton of the dm³ operator chain</div>
+  <div class="value-line">Spectral radius r(G) · Collatz threshold c = 3 · Critical line σ = ½</div>
+  <div class="gold-rule"></div>
+  <div class="hero-meta">
+    Pablo Nogueira Grossi · G6 LLC · Newark, New Jersey, USA<br>
+    ORCID: <a href="https://orcid.org/0009-0000-6496-2186" style="color:var(--rho2)">0009-0000-6496-2186</a> ·
+    <a href="mailto:g6llc@proton.me" style="color:var(--rho2)">g6llc@proton.me</a>
+  </div>
+  <div class="hero-badges">
+    <span class="badge">Vol V — V5 Material</span>
+    <span class="badge badge-v5">Seven-Proof Template</span>
+    <span class="badge">Research Direction</span>
+    <span class="badge">Open Programme</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="page">
+
+<!-- §1 -->
+<div class="sec-header">
+  <span class="sec-num">1</span>
+  <span class="sec-title">The ρ Invariant: Spectral Radius of G</span>
+</div>
+
+<p>Every operator \(G = U \circ F \circ K \circ C\) on a Riemannian manifold \((X, g)\) has a spectral radius: the largest absolute eigenvalue of its linearisation at the limit cycle \(\Gamma\). In the dm³ toy model, the transverse linearisation at \(\Gamma\) gives the Jacobian eigenvalue \(\mu_{\max} = -2\), so the spectral radius of the transverse dynamics is \(r_\perp(G) = |\mu_{\max}| = 2 = \tau\). The spectral radius equals the embodiment threshold.</p>
+
+<p>More precisely: let \(L_\Gamma : T_\Gamma X \to T_\Gamma X\) be the Poincaré return map linearised at \(\Gamma\). The spectral radius \(r(L_\Gamma)\) controls the rate at which nearby trajectories converge to \(\Gamma\). The dm³ Gronwall condition \(\varepsilon_0 = 1/3\) is the basin in which \(r(L_\Gamma) < 1\) transversely, while the longitudinal (phase) direction has \(r = 1\) (neutral, limit cycle). The three canonical constants connect to the spectral radius as follows:</p>
+
+<div class="math-display">\[
+  r_\perp(G) = |\mu_{\max}| = 2 = \tau, \qquad
+  r_\parallel(G) = 1 \text{ (limit cycle)}, \qquad
+  \varepsilon_0 = \frac{|\mu_{\max}|}{2|L_2|} = \frac{2}{6} = \frac{1}{3}.
+\]</div>
+
+<p>The spectral radius \(\rho = r(G)\) is thus the simplest numerical invariant of the operator chain — the dm³ analogue of the Perron–Frobenius eigenvalue for non-negative matrices, or the spectral abscissa of a semigroup generator.</p>
+
+<!-- §2 -->
+<div class="sec-header">
+  <span class="sec-num">2</span>
+  <span class="sec-title">The Collatz Map as Discrete dm³</span>
+</div>
+
+<p>The Collatz map on \(\mathbb{Z}_{>0}\) is the function
+\[
+  T(n) = \begin{cases} n/2 & n \text{ even} \\ 3n + 1 & n \text{ odd.} \end{cases}
+\]</p>
+
+<p>This is not a coincidence of arithmetic. Each of the four dm³ operators has a discrete counterpart in the Collatz iteration:</p>
+
+<table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:.9rem;">
+  <thead>
+    <tr style="background:var(--navy);color:white;">
+      <th style="padding:.5rem .8rem;text-align:left;font-family:var(--ff-sans);font-size:.75rem;letter-spacing:.1em;">dm³ Operator</th>
+      <th style="padding:.5rem .8rem;text-align:left;font-family:var(--ff-sans);font-size:.75rem;letter-spacing:.1em;">Role</th>
+      <th style="padding:.5rem .8rem;text-align:left;font-family:var(--ff-sans);font-size:.75rem;letter-spacing:.1em;">Collatz Counterpart</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom:1px solid var(--light);">
+      <td style="padding:.5rem .8rem;">\(C\) — Compress</td>
+      <td style="padding:.5rem .8rem;">Reduce degrees of freedom</td>
+      <td style="padding:.5rem .8rem;">\(n \mapsto n/2\) (even step: halving)</td>
+    </tr>
+    <tr style="background:var(--smoke);border-bottom:1px solid var(--light);">
+      <td style="padding:.5rem .8rem;">\(K\) — Curvature</td>
+      <td style="padding:.5rem .8rem;">Drive toward threshold</td>
+      <td style="padding:.5rem .8rem;">Accumulation of odd iterates (approach to fold)</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--light);">
+      <td style="padding:.5rem .8rem;">\(F\) — Fold</td>
+      <td style="padding:.5rem .8rem;">Non-injective irreversible jump</td>
+      <td style="padding:.5rem .8rem;">\(n \mapsto 3n+1\) (odd step: non-injective expansion)</td>
+    </tr>
+    <tr style="background:var(--smoke);">
+      <td style="padding:.5rem .8rem;">\(U\) — Unfold</td>
+      <td style="padding:.5rem .8rem;">Stabilise on new branch</td>
+      <td style="padding:.5rem .8rem;">Convergence to \(4 \to 2 \to 1\) cycle (\(\Gamma_\mathbb{Z}\))</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The constant \(c = 3\) is the fold multiplier — the analogue of the Whitney \(A_1\) coefficient \(|L_2| = 3\) in the dm³ toy model (where \(V(q) = q^3 - 3q\) at \(q=1\) gives \(V''(1) = 6 = 2 \cdot |L_2|\)). This is Research Direction 16.1 in Vol I: <em>why is \(c = 3\) the minimum for non-trivial discrete contact geometry?</em></p>
+
+<div class="env-box remark">
+  <div class="env-label">Remark · Why c = 1, 2 are trivial</div>
+  <p>\(c = 1\): \(T(n) = n+1\) for odd \(n\). Orbits grow without bound. No limit cycle \(\Gamma_\mathbb{Z}\).</p>
+  <p style="margin-top:.4rem;">\(c = 2\): \(T(n) = 2n+1\). Orbits grow without bound (proven). Again no \(\Gamma_\mathbb{Z}\).</p>
+  <p style="margin-top:.4rem;">\(c = 3\): Conjectured universal convergence to \(\Gamma_\mathbb{Z} = \{4, 2, 1, 4, 2, 1, \ldots\}\). The fold multiplier \(3\) balances the halving (compression) to produce a non-trivial attracting cycle — the first discrete dm³ limit cycle.</p>
+</div>
+
+<!-- §3 -->
+<div class="sec-header">
+  <span class="sec-num">3</span>
+  <span class="sec-title">The RH Surgery Programme</span>
+</div>
+
+<p>To formalise the Collatz / dm³ connection, we need a definition of <em>contact-geometric structure for discrete systems on \(\mathbb{Z}\)</em> — the missing ingredient for Research Direction 16.1. The following programme proposes to obtain it by applying the dm³ surgical framework to the Riemann zeta function.</p>
+
+<div class="env-box conjecture">
+  <div class="env-label">Research Direction · Discrete Contact Structure Conjecture (DCS) <span class="status-open">[V5 — Open]</span></div>
+  <p><strong>Construction.</strong> Let \(M = (0,1) \times \mathbb{R} \times \mathbb{R}\) with coordinates \((\sigma, t, z)\). Define the contact form</p>
+  <div class="math-display">\[ \alpha = dz - \mathrm{Im}\!\bigl(\log \zeta(\sigma + it)\bigr)\, dt. \]</div>
+  <p>\((M, \alpha)\) is a contact 3-manifold on the Riemann critical strip. The <em>fold locus</em> is \(\Sigma = \{\zeta(\sigma + it) = 0\}\) — the non-trivial zeros, where \(\zeta\) loses local injectivity. The <em>curvature threshold</em> is \(\kappa^* = \tfrac{1}{2}\) (the critical line).</p>
+  <p style="margin-top:.7rem;"><strong>Equivalence.</strong> <em>The Riemann Hypothesis is equivalent to: every fold event in \((M, \alpha)\) lies on the limit cycle \(\Gamma = \{\sigma = \tfrac{1}{2}\}.\)</em> This is exactly the dm³ condition: all Whitney \(A_1\) folds occur at \(\kappa^*\).</p>
+  <p style="margin-top:.7rem;"><strong>Surgery.</strong> RH surgery proceeds by: (i) identifying hypothetical off-axis zeros (folds at \(\sigma \neq \tfrac{1}{2}\)); (ii) excising them from \(M\) as in dm³ fold surgery; (iii) proving the excised set is empty. The post-surgery manifold is contact-equivalent to the dm³ canonical model with \((\tau, \varepsilon_0, \mu_{\max}) = (2, 1/3, -2)\).</p>
+  <p style="margin-top:.7rem;"><strong>Discrete extension.</strong> RH surgery simultaneously produces the discrete contact structure on \(\mathbb{Z}\) with fold multiplier \(c = 3\), the minimum for which \(\Gamma_\mathbb{Z}\) is non-trivial.</p>
+</div>
+
+<!-- §4 — SEVEN PROOFS -->
+<div class="sec-header">
+  <span class="sec-num">4</span>
+  <span class="sec-title">Seven Arguments for the DCS Conjecture</span>
+</div>
+
+<div class="seven-header">
+  <h3>Seven-Proof Template · Discrete Contact Structure</h3>
+  <div class="claim">Each argument establishes a different facet of the equivalence RH ↔ "all dm³ folds lie on Γ"</div>
+</div>
+
+<!-- P1 -->
+<div class="proof-block">
+  <div class="proof-label">Argument I · Algebraic</div>
+  <div class="proof-title">Functional Equation Symmetry as Fold Symmetry</div>
+  <p>The completed zeta function \(\xi(s) = \pi^{-s/2}\,\Gamma(s/2)\,\zeta(s)\) satisfies \(\xi(s) = \xi(1-s)\). The map \(s \mapsto 1-\bar{s}\) is a symmetry of the critical strip fixing the line \(\sigma = \tfrac{1}{2}\). This is exactly the dm³ <em>fold symmetry</em>: the fold operator \(F\) maps \(\gamma_K(s_0)\) to its reflection across the fold locus, which in the dm³ toy model is the quadratic symmetry \(V(q) = V(2-q)\) at \(q=1\). The critical line \(\sigma = \tfrac{1}{2}\) is the <em>unique fixed set</em> of the functional equation symmetry — the unique \(\sigma\) where a point maps back to itself under the fold reflection. Algebraically, RH states that the zero set \(\Sigma\) is contained in this fixed set, which is the Whitney \(A_1\) condition: folds occur only at the symmetric point.</p>
+</div>
+
+<!-- P2 -->
+<div class="proof-block">
+  <div class="proof-label">Argument II · Geometric</div>
+  <div class="proof-title">Zeros as Whitney A₁ Folds on the Critical Strip</div>
+  <p>At a zero \(z_0 = \sigma_0 + it_0\), the locally defined map \(\log \zeta(\sigma + it)\) has a branch point. The imaginary part \(\mathrm{Im}(\log \zeta)\) — which defines the contact form \(\alpha\) — jumps by \(\pm\pi\) as \(t\) passes through \(t_0\). This jump is precisely the momentum kick \(p(s_0^+) - p(s_0^-) = \mu\,\mathbf{n}(s_0)\) in the Hamiltonian impulsive formulation (Vol I §12): each zero is a Whitney \(A_1\) fold. The critical line \(\sigma = \tfrac{1}{2}\) is where the functional equation forces the momentum jump to be <em>symmetric</em> — each fold is balanced by its mirror under \(s \mapsto 1-\bar{s}\). Geometrically, RH is the statement that every Whitney \(A_1\) fold of \(\zeta\) on \((M, \alpha)\) lies on the unique symmetry axis of the critical strip contact manifold.</p>
+</div>
+
+<!-- P3 -->
+<div class="proof-block">
+  <div class="proof-label">Argument III · Mechanical</div>
+  <div class="proof-title">Critical Damping of the Selberg Trace Operator</div>
+  <p>The Selberg trace formula connects the spectrum of the hyperbolic Laplacian \(\Delta_\mathbb{H}\) on a finite-area surface to zeros of the associated zeta function. The eigenvalues \(\lambda_n = \tfrac{1}{4} + t_n^2\) of \(\Delta_\mathbb{H}\) correspond to zeros \(\tfrac{1}{2} + it_n\) on the critical line. In the dm³ framework, the critical damping condition for the Euler–Bernoulli rod is \(\kappa^* = \pi^2 EI/L^2\): the unique load at which compression first causes the fold. The spectral analogue is \(\sigma = \tfrac{1}{2}\): the unique value at which the hyperbolic Laplacian first generates oscillatory (rather than decaying or growing) modes. Below \(\tfrac{1}{2}\), the corresponding modes grow exponentially in \(t\) (unstable, no dm³ basin); above \(\tfrac{1}{2}\), they decay too fast to generate a limit cycle. The critical line is the mechanical balance point — the curvature threshold \(\kappa^*\) for the spectral operator.</p>
+</div>
+
+<!-- P4 -->
+<div class="proof-block">
+  <div class="proof-label">Argument IV · Biological</div>
+  <div class="proof-title">Collatz Iteration as Discrete Autophagy Cycle</div>
+  <p>In the dm³ canonical biological example (autophagy, Vol I §6), the cell commits to self-digestion when mTORC1 inhibition reaches the fold threshold \(\kappa^* = \mathrm{IC}_{50}/\mathrm{foc}(x_\mathrm{auto})\). The Collatz iteration is the discrete skeleton of this cycle: odd integers \(n\) correspond to <em>active metabolic states</em> (mTORC1 active, nutrient-replete), and the map \(n \mapsto 3n+1\) is the irreversible fold — commitment to autophagy, tripling the stress signal before the first halving step. Even integers correspond to <em>processing states</em> (enzymatic digestion, \(n \mapsto n/2\)). The 4→2→1 cycle is the <em>basal autophagy oscillation</em> \(\Gamma_\mathbb{Z}\). The threshold \(c = 3\) is minimal because: \(c = 1\) gives \(n \mapsto n+1\) (no compression), \(c = 2\) gives unbounded growth (no fold balance), \(c = 3\) is the first multiplier for which the fold-to-compress ratio \(3/2\) generates a non-trivial attracting cycle — the biological fold committed with sufficient force to return to baseline.</p>
+</div>
+
+<!-- P5 -->
+<div class="proof-block">
+  <div class="proof-label">Argument V · Spectral</div>
+  <div class="proof-title">Montgomery–Odlyzko Law as dm³ Eigenvalue Spacing</div>
+  <p>Montgomery (1973) showed the pair-correlation of zeros of \(\zeta\) on the critical line matches the GUE (Gaussian Unitary Ensemble) eigenvalue distribution. In the dm³ framework, the linearised Poincaré map at \(\Gamma\) has eigenvalues \(\{\mu_{\max}, \pm i\} = \{-2, \pm i\}\). The transverse eigenvalue spacing \(\Delta\mu = \mu_{\max} - 0 = 2 = \tau\) sets the scale. The imaginary part spacing of consecutive zeta zeros near height \(T\) is \(\sim 2\pi/\log(T/2\pi)\) — this is the discrete analogue of the period \(T^* = 2\pi\) of the dm³ limit cycle. At leading order, the first zero at \(t_1 \approx 14.135\) gives \(t_1/(2\pi) \approx 2.25 \approx \tau \cdot \varepsilon_0^{-1} \cdot (1/3)\) — within the dm³ scaling of the first spectral gap. The spectral argument: if any zero lies off \(\sigma = \tfrac{1}{2}\), the GUE statistics are broken, implying a non-generic eigenvalue of the Poincaré map — which would violate the dm³ stability condition \(|\mu_{\max}| = 2\) (the unique eigenvalue consistent with \(\varepsilon_0 = 1/3\) and \(\tau = 2\)).</p>
+</div>
+
+<!-- P6 -->
+<div class="proof-block">
+  <div class="proof-label">Argument VI · Contact-Geometric</div>
+  <div class="proof-title">Weinstein Conjecture and Reeb Orbits on (M, α)</div>
+  <p>By the Weinstein conjecture (proved for closed contact 3-manifolds by Taubes 2007, building on Etnyre [16]), every contact form on a closed 3-manifold admits a closed Reeb orbit. For the contact form \(\alpha = dz - \mathrm{Im}(\log \zeta)\,dt\) on \((M, \alpha)\), the Reeb vector field is \(R = \partial/\partial z\). Closed Reeb orbits correspond to values of \((\sigma, t)\) where \(\mathrm{Im}(\log \zeta(\sigma + it))\) returns to its initial value periodically in \(t\) — these are exactly the locations of zeros of \(\zeta\) on the critical line, where the argument winding number contributes \(\pm 1/2\) (Backlund's formula). By the contact structure theorem, the Reeb flow on \((M, \alpha)\) must organise all closed orbits on the limit cycle \(\Gamma = \{\sigma = \tfrac{1}{2}\}\). Off-axis zeros would produce non-closed (escaping) Reeb trajectories — trajectories that leave the contact manifold without returning, violating the dm³ fold condition that all Whitney \(A_1\) singularities are on \(\Gamma\). dm³ surgery excises these would-be escape trajectories, and the Weinstein framework guarantees the post-surgery manifold has only closed Reeb orbits, all on \(\Gamma\).</p>
+</div>
+
+<!-- P7 -->
+<div class="proof-block">
+  <div class="proof-label">Argument VII · Formal / Lean 4</div>
+  <div class="proof-title">AXLE Structure: ContactManifoldZeta and DiscreteContactZ</div>
+  <p>The formal programme in Lean 4 / Mathlib4 targets the following type-theoretic structure:</p>
+  <div class="math-display" style="font-family:var(--ff-mono);font-size:.85rem;background:#0d1117;color:#e8d49a;padding:1rem;border-radius:4px;white-space:pre-wrap;">structure RHSurgery where
+  -- Contact 3-manifold on critical strip
+  M : ContactManifold := criticalStripContact ζ
+  -- Fold locus = zeros of ζ
+  foldLocus : Set M := {s | riemannZeta s = 0}
+  -- Curvature threshold = critical line
+  critLine : Set M := {s | s.re = 1/2}
+  -- Core equivalence (= RH)
+  rhEquiv : foldLocus ⊆ critLine ↔ RiemannHypothesis
+  -- Post-surgery = dm³ canonical model
+  surgeryResult : dm3Surgery M foldLocus ≅ dm3CanonicalModel
+  -- Discrete contact structure for c = 3
+  discreteContact : dm3Surgery M foldLocus →
+    ∃ α : ContactForm ℤ, collatzLimitCycle α 3</div>
+  <p style="margin-top:.8rem;">Open obligations for AXLE: (O-RH1) <code>criticalStripContact</code> — explicit Reeb vector field and contact condition on the strip; (O-RH2) <code>surgeryResult</code> — dm³ surgery theorem generalised from smooth manifolds to the zeta contact manifold; (O-RH3) <code>discreteContact</code> — discrete contact form on \(\mathbb{Z}\) induced by the surgery. The equivalence <code>rhEquiv</code> is RH itself — the core sorry. The programme's value: if O-RH1 and O-RH2 are formalised and <code>surgeryResult</code> is proved, then <code>rhEquiv</code> reduces RH to a dm³ surgery problem, providing a concrete proof target.</p>
+</div>
+
+<!-- §5 Status -->
+<div class="sec-header">
+  <span class="sec-num">5</span>
+  <span class="sec-title">Open Obligations</span>
+</div>
+
+<table style="width:100%;border-collapse:collapse;font-size:.88rem;">
+  <thead>
+    <tr style="background:var(--navy);color:white;">
+      <th style="padding:.5rem .8rem;text-align:left;font-family:var(--ff-sans);font-size:.72rem;letter-spacing:.1em;">ID</th>
+      <th style="padding:.5rem .8rem;text-align:left;font-family:var(--ff-sans);font-size:.72rem;letter-spacing:.1em;">Description</th>
+      <th style="padding:.5rem .8rem;text-align:left;font-family:var(--ff-sans);font-size:.72rem;letter-spacing:.1em;">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom:1px solid var(--light);">
+      <td style="padding:.5rem .8rem;font-family:var(--ff-mono);font-size:.8rem;">O-RH1</td>
+      <td style="padding:.5rem .8rem;">Contact structure on critical strip: explicit \(\alpha\), Reeb field, non-degeneracy</td>
+      <td style="padding:.5rem .8rem;"><span class="status-open">Open</span></td>
+    </tr>
+    <tr style="background:var(--smoke);border-bottom:1px solid var(--light);">
+      <td style="padding:.5rem .8rem;font-family:var(--ff-mono);font-size:.8rem;">O-RH2</td>
+      <td style="padding:.5rem .8rem;">dm³ surgery theorem for \((M,\alpha)\) — generalise from smooth to zeta manifold</td>
+      <td style="padding:.5rem .8rem;"><span class="status-open">Open</span></td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--light);">
+      <td style="padding:.5rem .8rem;font-family:var(--ff-mono);font-size:.8rem;">O-RH3</td>
+      <td style="padding:.5rem .8rem;">Discrete contact form on \(\mathbb{Z}\) induced by surgery; \(c=3\) minimality</td>
+      <td style="padding:.5rem .8rem;"><span class="status-open">Open</span></td>
+    </tr>
+    <tr style="background:var(--smoke);border-bottom:1px solid var(--light);">
+      <td style="padding:.5rem .8rem;font-family:var(--ff-mono);font-size:.8rem;">O-RH4</td>
+      <td style="padding:.5rem .8rem;">Montgomery–Odlyzko / GUE statistics as dm³ eigenvalue constraint (Arg. V)</td>
+      <td style="padding:.5rem .8rem;"><span class="status-partial">Partial — numerical</span></td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--light);">
+      <td style="padding:.5rem .8rem;font-family:var(--ff-mono);font-size:.8rem;">O-RH5</td>
+      <td style="padding:.5rem .8rem;">Collatz convergence for \(c=3\): prove \(\Gamma_\mathbb{Z}\) is the unique limit cycle</td>
+      <td style="padding:.5rem .8rem;"><span class="status-open">Open (Collatz conjecture)</span></td>
+    </tr>
+    <tr style="background:var(--smoke);">
+      <td style="padding:.5rem .8rem;font-family:var(--ff-mono);font-size:.8rem;">O-RH6</td>
+      <td style="padding:.5rem .8rem;">Core equivalence: \(\text{foldLocus} \subseteq \Gamma \iff \text{RH}\)</td>
+      <td style="padding:.5rem .8rem;"><span class="status-open">Open (= RH)</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- §6 -->
+<div class="sec-header">
+  <span class="sec-num">6</span>
+  <span class="sec-title">Series Position</span>
+</div>
+
+<p>This chapter is the <strong>ρ operator node</strong> of the Principia Orthogona operator ladder. It connects:</p>
+
+<ul style="margin:.5rem 0 1rem 1.5rem;line-height:1.9;">
+  <li><strong>Vol I §16</strong> (Research Direction 16.1) — the dimensional threshold \(N = c = 3\)</li>
+  <li><strong>Vol II</strong> — contact realisation of the dm³ chain (the smooth setting that ρ discretises)</li>
+  <li><strong>TOGT / DNLS</strong> — the Tribonacci constant as dm³ spectral growth rate for the three-operator iteration</li>
+  <li><strong>Vol V</strong> — formal development of the DCS programme (this chapter is its seed)</li>
+</ul>
+
+<p>The spectral radius \(r(G) = \tau = 2\) closing the operator ladder \(\pi \to \varphi \to \mu \to \eta \to \Delta \to \Sigma \to \Omega \to \rho \to \pi\) is the statement: the n-bonacci constants converge to 2 (the embodiment threshold), and the discrete skeleton of this convergence is the Collatz map with \(c = 3\).</p>
+
+<div class="env-box remark">
+  <div class="env-label">Note for V5</div>
+  <p>This chapter is a research programme stub, not a completed proof. The seven arguments above provide independent motivations; none constitutes a proof of RH or the Collatz conjecture. The formal development belongs to Principia Orthogona Vol V and AXLE Issues O-RH1 through O-RH6. Deposit this chapter as part of the DM3-lab research record.</p>
+</div>
+
+<!-- PREV/NEXT -->
+<div class="chapter-nav">
+  <a href="chOmega-hexabonacci.html">← Ω · Hexabonacci</a>
+  <a href="chPI-recurrence.html">π · Recurrence →</a>
+</div>
+
+</div><!-- /.page -->
+
+<!-- FOOTER -->
+<footer>
+  <a href="vol1-mathematics.html">Vol I</a> &nbsp;·&nbsp;
+  <a href="chEps-gronwall.html">ε₀ · Gronwall</a> &nbsp;·&nbsp;
+  <a href="spectral-radius.html">Spectral Radius (v1)</a> &nbsp;·&nbsp;
+  <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a> &nbsp;·&nbsp;
+  <a href="https://doi.org/10.5281/zenodo.20784030" target="_blank">Zenodo V4</a><br><br>
+  © 2026 Pablo Nogueira Grossi / G6 LLC · Newark, New Jersey, USA<br>
+  ORCID: <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a> ·
+  <a href="mailto:g6llc@proton.me">g6llc@proton.me</a> ·
+  CC BY-NC-ND 4.0
+</footer>
+
+
+<div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
+  <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
+  <span style="color:#333">&nbsp;·&nbsp;</span>
+  <span>g6llc@proton.me</span>
+  <span style="color:#333">&nbsp;·&nbsp;</span>
+  <span>+1 (646) 342-3751</span>
+</div>
+</body>
+</html>
