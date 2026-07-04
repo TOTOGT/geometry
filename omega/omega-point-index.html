@@ -3,6 +3,431 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clay Energy — an open archaeology of unread tablets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#1F1912;
+    --bg-panel:#2B2318;
+    --bg-panel-2:#342A1D;
+    --bone:#E9E1CC;
+    --bone-dim:#B9AF97;
+    --lapis:#3E6291;
+    --lapis-bright:#6D93C4;
+    --ochre:#B5813A;
+    --rust:#9A4F30;
+    --crack:#100C08;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg-deep);
+    background-image:
+      radial-gradient(ellipse at 20% -10%, rgba(109,147,196,0.10), transparent 45%),
+      radial-gradient(ellipse at 90% 10%, rgba(181,129,58,0.08), transparent 40%);
+    color:var(--bone);
+    font-family:'Source Serif 4', serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--lapis-bright);}
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ochre);
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--bone);
+    margin:0 0 0.4em 0;
+  }
+  h1{font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.08;font-weight:700;}
+  h2{font-size:clamp(1.5rem,3.2vw,2.05rem);}
+  h3{font-size:1.15rem;font-weight:600;}
+  p{color:var(--bone-dim);}
+  .lede{color:var(--bone);font-size:1.15rem;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- HERO / SIGNATURE JOIN ---------- */
+  .hero{
+    position:relative;
+    padding:96px 0 64px 0;
+    overflow:hidden;
+  }
+  .join-stage{
+    position:relative;
+    height:180px;
+    margin:44px 0 8px 0;
+  }
+  .frag{
+    position:absolute;
+    top:20px;
+    width:230px;
+    height:140px;
+    background:linear-gradient(160deg, #4a3c28, #362c1d 70%);
+    box-shadow: inset 0 0 22px rgba(0,0,0,0.45), 0 8px 18px rgba(0,0,0,0.35);
+    border:1px solid rgba(233,225,204,0.08);
+  }
+  .frag::before{
+    content:"";
+    position:absolute;
+    inset:14px;
+    background-image:
+      repeating-linear-gradient(100deg, rgba(233,225,204,0.10) 0 2px, transparent 2px 14px),
+      repeating-linear-gradient(10deg, rgba(233,225,204,0.06) 0 2px, transparent 2px 18px);
+    opacity:0.6;
+  }
+  .frag.left{
+    left:calc(50% - 234px);
+    clip-path: polygon(0 0, 100% 0, 100% 20%, 88% 32%, 100% 44%, 91% 58%, 100% 70%, 86% 84%, 100% 100%, 0 100%);
+    animation: driftLeft 7s ease-in-out infinite;
+  }
+  .frag.right{
+    left:calc(50% + 4px);
+    clip-path: polygon(0 20%, 12% 32%, 0 44%, 9% 58%, 0 70%, 14% 84%, 0 100%, 100% 100%, 100% 0, 0 0);
+    animation: driftRight 7s ease-in-out infinite;
+  }
+  @keyframes driftLeft{
+    0%,100%{ transform:translateX(0px); }
+    45%,55%{ transform:translateX(4px); }
+  }
+  @keyframes driftRight{
+    0%,100%{ transform:translateX(0px); }
+    45%,55%{ transform:translateX(-4px); }
+  }
+  .join-caption{
+    text-align:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    color:var(--bone-dim);
+    text-transform:uppercase;
+  }
+  .hero h1{max-width:14ch;}
+  .hero .lede{max-width:56ch;margin-top:18px;}
+
+  /* ---------- STAT BAR ---------- */
+  .statbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0;
+    border-top:1px solid rgba(233,225,204,0.14);
+    border-bottom:1px solid rgba(233,225,204,0.14);
+    margin:56px 0;
+  }
+  .stat{
+    flex:1 1 200px;
+    padding:22px 24px;
+    border-right:1px solid rgba(233,225,204,0.10);
+  }
+  .stat:last-child{border-right:none;}
+  .stat .num{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:2.1rem;
+    color:var(--ochre);
+    display:block;
+  }
+  .stat .lab{font-size:0.85rem;color:var(--bone-dim);}
+
+  section{padding:40px 0;}
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin-bottom:22px;
+    border-bottom:1px solid rgba(233,225,204,0.14);
+    padding-bottom:10px;
+  }
+
+  /* ---------- TOOLKIT CARDS ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+  }
+  .card{
+    background:var(--bg-panel);
+    border:1px solid rgba(233,225,204,0.10);
+    padding:20px 22px;
+    position:relative;
+  }
+  .card::before{
+    content:"";
+    position:absolute; left:0; top:0; bottom:0; width:3px;
+    background:var(--lapis);
+  }
+  .card h3{margin-bottom:6px;}
+  .card p{font-size:0.94rem;margin:0 0 12px 0;}
+  .card .go{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    text-decoration:none;
+    border-bottom:1px solid var(--lapis-bright);
+    padding-bottom:2px;
+  }
+  .tag{
+    display:inline-block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+    border:1px solid rgba(233,225,204,0.22);
+    padding:2px 7px;
+    border-radius:var(--radius);
+    margin-bottom:10px;
+  }
+
+  /* ---------- DISCIPLINE BOX ---------- */
+  .filter-box{
+    background:var(--bg-panel-2);
+    border-left:3px solid var(--rust);
+    padding:24px 26px;
+  }
+  .filter-box p{color:var(--bone);}
+  .filter-box .small{font-size:0.85rem;color:var(--bone-dim);margin-top:14px;}
+
+  /* ---------- STEPS ---------- */
+  .steps{counter-reset:step;}
+  .step{
+    display:flex;
+    gap:18px;
+    padding:18px 0;
+    border-bottom:1px solid rgba(233,225,204,0.10);
+  }
+  .step:last-child{border-bottom:none;}
+  .step-num{
+    counter-increment:step;
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:1.4rem;
+    color:var(--ochre);
+    width:2ch;
+    flex-shrink:0;
+  }
+  .step-num::before{content:counter(step, decimal-leading-zero);}
+  .step h3{margin-bottom:4px;}
+  .step p{font-size:0.95rem;margin:0;}
+
+  /* ---------- CLASSROOM ---------- */
+  .classroom{
+    background:linear-gradient(180deg, var(--bg-panel), var(--bg-panel-2));
+    border:1px solid rgba(233,225,204,0.10);
+    padding:34px;
+  }
+  .classroom .lapis-tag{
+    color:var(--lapis-bright);
+  }
+  .credit-flow{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    margin:20px 0 6px 0;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:0.02em;
+  }
+  .credit-flow span.node{
+    background:rgba(233,225,204,0.06);
+    border:1px solid rgba(233,225,204,0.18);
+    padding:6px 12px;
+    color:var(--bone);
+  }
+  .credit-flow span.arrow{color:var(--bone-dim);}
+
+  footer{
+    padding:50px 0 70px 0;
+    border-top:1px solid rgba(233,225,204,0.14);
+    margin-top:40px;
+  }
+  footer p{font-size:0.88rem;}
+  footer a.mono{color:var(--lapis-bright);text-decoration:none;}
+
+  @media (max-width:560px){
+    .join-stage{height:140px;}
+    .frag{width:44vw;height:110px;top:14px;}
+    .frag.left{left:calc(50% - 44vw - 4px);}
+    .frag.right{left:calc(50% + 4px);}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow">G6 · Clay Energy</div>
+    <h1>The tablets are already digitized.<br>Almost no one has read them.</h1>
+
+    <div class="join-stage" aria-hidden="true">
+      <div class="frag left"></div>
+      <div class="frag right"></div>
+    </div>
+    <div class="join-caption">two fragments, photographed decades apart — a join, waiting to be noticed</div>
+
+    <p class="lede">
+      An estimated half a million cuneiform tablets survive in museum and university collections around the world — administrative
+      records, omens, letters, myths, grain loans, school exercises. Most have been photographed and catalogued in the last
+      twenty-five years. Far fewer have been fully transliterated, joined to their missing fragments, or read by anyone since
+      the scribe who wrote them. That gap is the project. Here Comes Everybody, for the oldest writing there is.
+    </p>
+  </section>
+
+  <div class="statbar">
+    <div class="stat"><span class="num">~500k</span><span class="lab">tablets estimated to survive in collections worldwide</span></div>
+    <div class="stat"><span class="num">170 yrs</span><span class="lab">since cuneiform was first deciphered — still too few specialists per genre</span></div>
+    <div class="stat"><span class="num">1</span><span class="lab">successful fragment join is a real, citable, permanent addition to the record</span></div>
+  </div>
+
+  <section id="why">
+    <div class="section-head"><span class="eyebrow">Why this works now</span></div>
+    <p>Three things converged that weren't true a generation ago, and together they turn a closed specialist backlog into open work.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="tag">Digitized</div>
+        <h3>The images already exist</h3>
+        <p>Major collections — the British Museum, the Vorderasiatisches Museum, Penn, the Hermitage and more — have been
+        photographed and catalogued online over the past two decades, largely through the Cuneiform Digital Library Initiative.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Joinable</div>
+        <h3>Fragments can be matched from home</h3>
+        <p>A large share of tablets survive only as broken pieces. 3D viewers now let anyone rotate, compare, and attempt a
+        physical join between fragments online — the same act a curator does in a storeroom, done in a browser.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Machine-assisted</div>
+        <h3>First-pass reading is faster</h3>
+        <p>Computer-vision and translation models trained on annotated tablets (UChicago's DeepScribe is one example) now offer
+        rough first drafts of sign identification and translation — a triage tool, not a replacement for the philologist who checks it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="toolkit">
+    <div class="section-head"><span class="eyebrow">The toolkit — real, open, live today</span></div>
+    <div class="grid">
+      <div class="card">
+        <h3>CDLI</h3>
+        <p>Cuneiform Digital Library Initiative. The central catalogue — search by museum, period, or text type, and see the actual
+        photograph alongside any existing transliteration.</p>
+        <a class="go" href="https://cdli.earth/" target="_blank" rel="noopener">cdli.earth →</a>
+      </div>
+      <div class="card">
+        <h3>ORACC</h3>
+        <p>Open Richly Annotated Cuneiform Corpus. Dozens of curated sub-projects with full annotation — royal inscriptions,
+        letters, lexical lists — each maintained by a specialist.</p>
+        <a class="go" href="http://oracc.museum.upenn.edu/" target="_blank" rel="noopener">oracc.museum.upenn.edu →</a>
+      </div>
+      <div class="card">
+        <h3>Electronic Babylonian Library</h3>
+        <p>The Fragmentarium — transliterated Babylonian fragments with a public API and an active algorithmic join effort that
+        has already recovered new lines of Gilgamesh.</p>
+        <a class="go" href="https://www.ebl.lmu.de/" target="_blank" rel="noopener">ebl.lmu.de →</a>
+      </div>
+      <div class="card">
+        <h3>ETCSL</h3>
+        <p>Electronic Text Corpus of Sumerian Literature. Nearly 400 literary compositions in transliteration and English
+        translation. Funding ended in 2006; the archive remains fully online and citable.</p>
+        <a class="go" href="https://etcsl.orinst.ox.ac.uk/" target="_blank" rel="noopener">etcsl.orinst.ox.ac.uk →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="discipline">
+    <div class="section-head"><span class="eyebrow">The one rule</span></div>
+    <div class="filter-box">
+      <p><strong>Read what's there, not what you hope is there.</strong> A join, a transliteration, a corrected sign reading —
+      these are claims about the world, and they face a real filter: an Assyriologist can tell you if you're wrong, and being
+      correctable is the whole point. The moment a recovered text gets read as secretly encoding something it doesn't say —
+      confirming a theory, hiding a message — the work stops being archaeology and starts being wishful reading. The Sumerians
+      mostly wrote about grain, gods, kings, and floods. Recovering what they actually said is the gift. That's the entire
+      standard this project holds itself to.</p>
+      <p class="small">This is also why the credit is real: a claim that survives expert review is worth something precisely
+      because it could have failed to.</p>
+    </div>
+  </section>
+
+  <section id="start">
+    <div class="section-head"><span class="eyebrow">How to actually start</span></div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div><h3>Pick one small corpus</h3><p>Not "cuneiform" — one genre, one collection, one period. Sumerian proverbs on
+        ETCSL. Neo-Assyrian letters on ORACC. One shelf, not the library.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div><h3>Learn to see a sign, not read a language</h3><p>You don't need fluent Akkadian to start. Learn to recognize
+        wedge groups and tablet layout — enough to compare two images and notice whether they share a hand, a ductus, a break line.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div><h3>Attempt one real thing</h3><p>One join attempt. One flagged sign that looks misread. One metadata gap filled in.
+        Small and checkable beats broad and speculative, every time.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div><h3>Submit it to the actual archive</h3><p>CDLI, ORACC and eBL all take corrections and contributions from outside
+        their core teams. The submission is the point — it's what makes the discovery real instead of private.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div><h3>Log it, whatever the answer</h3><p>Accepted, rejected, or "already known" — all three are useful outcomes.
+        A rejected join with a documented reason is still a real result: it closes a possibility for the next person.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="classroom">
+    <div class="section-head"><span class="eyebrow">For classrooms &amp; Hour House</span></div>
+    <div class="classroom">
+      <h2>Here Comes Everybody, applied to a clay tablet</h2>
+      <p class="lede">The coordination problem used to be the whole obstacle: too many tablets, too few trained readers, no
+      way for anyone outside the field to help. That's gone. What's left is a pipeline problem — getting a classroom a real
+      task and routing what they find back into the actual record, with their name on it.</p>
+      <div class="credit-flow">
+        <span class="node">student attempts a join</span><span class="arrow">→</span>
+        <span class="node">logged &amp; submitted</span><span class="arrow">→</span>
+        <span class="node">checked by a specialist</span><span class="arrow">→</span>
+        <span class="node">accepted into CDLI / eBL</span><span class="arrow">→</span>
+        <span class="node lapis-tag">credited, permanently</span>
+      </div>
+      <p>The credit is not a certificate of participation — it's a citable line in a real archive, findable by anyone, forever.
+      That's a different thing to hand a student than a grade. It's purpose with a paper trail: a fifteen-year-old's join
+      sitting in the same catalogue as a Yale curator's, because the tablet doesn't know or care who found it.</p>
+      <p class="small">Keep the same discipline in the classroom as everywhere else in this project: the task is "what does this
+      say," never "what does this prove." That boundary is what makes the credit worth having.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Clay Energy is a project of G6 LLC, Newark NJ — part of the <em>Principia Orthogona</em> series.
+    Not affiliated with CDLI, ORACC, the Electronic Babylonian Library, or the University of Oxford; this page is a
+    doorway to their work, not a replacement for it.</p>
+    <p><a class="mono" href="mailto:g6llc@proton.me">g6llc@proton.me</a></p>
+  </footer>
+
+</div>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Omega Point — The Convergence Series</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
