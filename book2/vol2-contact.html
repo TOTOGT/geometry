@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Principia Orthogona · Volume II · Contact Realization of Generative Transitions</title>
+<meta name="description" content="Volume II of Principia Orthogona. Contact-geometric realization of generative transitions. Theorems A (fold–contact correspondence), B (threshold equivalence κ*↔τ), C (singularity–bifurcation). Lean 4 formal status. G6 LLC · Pablo Nogueira Grossi · 2026.">
+<meta name="author" content="Pablo Nogueira Grossi · G6 LLC">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<script>MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],tags:'ams'},options:{skipHtmlTags:['script','noscript','style','textarea']}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+:root{
+  --navy:#1a2744; --navy2:#0f1a30; --navy3:#0a1628;
+  --gold:#c9a84c; --gold2:#e8d49a;
+  --cream:#faf7f0; --smoke:#f0ece4;
+  --teal:#1a6b5a; --teal2:#2a7f7f; --teal3:#d0ece5;
+  --mid:#3a4f7a; --rule:#8a7340;
+  --rose:#c0392b; --violet:#6c3483;
+  --text:#1c1c1c; --light:#e8e2d4;
+  --ff-serif:'Crimson Pro',Georgia,serif;
+  --ff-sans:'Outfit',system-ui,sans-serif;
+  --ff-mono:'JetBrains Mono','Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:var(--ff-serif);color:var(--text);background:var(--cream);line-height:1.7;}
+
+/* NAV */
+nav{background:var(--navy2);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:200;height:52px;border-bottom:1px solid rgba(201,168,76,.2);}
+.nav-logo{color:var(--gold);font-family:var(--ff-sans);font-weight:600;font-size:.85rem;
+          letter-spacing:.18em;text-decoration:none;text-transform:uppercase;}
+.nav-links{display:flex;gap:1.5rem;align-items:center;}
+.nav-links a{color:#aaa;font-family:var(--ff-sans);font-size:.8rem;text-decoration:none;
+             letter-spacing:.06em;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-toc-btn{background:none;border:1px solid rgba(201,168,76,.4);color:var(--gold);
+             font-family:var(--ff-sans);font-size:.75rem;padding:.3rem .8rem;
+             cursor:pointer;letter-spacing:.1em;text-transform:uppercase;transition:all .2s;}
+.nav-toc-btn:hover{background:var(--gold);color:var(--navy);}
+
+/* TOC */
+#toc-drawer{position:fixed;top:52px;right:0;width:300px;height:calc(100vh - 52px);
+            background:var(--navy2);border-left:1px solid rgba(201,168,76,.2);
+            overflow-y:auto;z-index:190;transform:translateX(100%);
+            transition:transform .3s ease;padding:1.5rem 1.2rem;}
+#toc-drawer.open{transform:translateX(0);}
+#toc-drawer h3{color:var(--gold);font-family:var(--ff-sans);font-size:.75rem;
+               letter-spacing:.2em;text-transform:uppercase;margin-bottom:1rem;
+               padding-bottom:.5rem;border-bottom:1px solid rgba(201,168,76,.2);}
+.toc-item{display:block;color:#aaa;font-family:var(--ff-sans);font-size:.8rem;
+          text-decoration:none;padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,.04);
+          transition:color .2s;line-height:1.3;}
+.toc-item:hover{color:var(--gold);}
+.toc-sub{padding-left:1rem;font-size:.75rem;color:#666;}
+.toc-sub:hover{color:var(--gold2);}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,var(--navy3) 0%,var(--navy2) 45%,#0d2a20 100%);
+      padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(201,168,76,.025) 0,rgba(201,168,76,.025) 1px,transparent 1px,transparent 80px),
+             repeating-linear-gradient(0deg,rgba(201,168,76,.025) 0,rgba(201,168,76,.025) 1px,transparent 1px,transparent 80px);}
+.hero-eyebrow{font-family:var(--ff-sans);font-size:.75rem;letter-spacing:.3em;color:var(--gold);
+              text-transform:uppercase;margin-bottom:1.2rem;position:relative;}
+.hero-chain{display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;
+            margin:1.2rem 0;position:relative;}
+.op{display:inline-flex;align-items:center;justify-content:center;width:2.8rem;height:2.8rem;
+    border-radius:6px;font-weight:700;font-size:1.05rem;font-family:var(--ff-mono);}
+.op-C{background:var(--mid);color:white;}
+.op-K{background:var(--teal2);color:white;}
+.op-F{background:var(--rose);color:white;}
+.op-U{background:#5a7a3a;color:white;}
+.op-arr{color:rgba(201,168,76,.6);font-size:1.2rem;}
+.hero-title{font-family:var(--ff-serif);font-size:clamp(1.9rem,4.5vw,3.2rem);color:white;
+            font-weight:300;line-height:1.15;margin-bottom:.5rem;position:relative;}
+.hero-title strong{font-weight:600;}
+.hero-subtitle{font-family:var(--ff-serif);font-size:1.1rem;color:var(--gold2);
+               font-style:italic;margin-bottom:1.8rem;position:relative;}
+.gold-rule{width:60px;height:2px;background:var(--gold);margin:1.2rem auto;}
+.hero-meta{font-family:var(--ff-sans);font-size:.8rem;color:#999;letter-spacing:.06em;
+           position:relative;line-height:2;}
+.hero-meta a{color:var(--gold2);text-decoration:none;}
+.hero-meta a:hover{color:var(--gold);}
+.hero-badges{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;
+             margin-top:1.5rem;position:relative;}
+.badge{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);
+       color:var(--gold2);font-family:var(--ff-sans);font-size:.72rem;
+       padding:.25rem .7rem;letter-spacing:.1em;text-transform:uppercase;}
+.badge.sorry{background:rgba(192,57,43,.12);border-color:rgba(192,57,43,.3);color:#e88;}
+
+/* ABSTRACT */
+.abstract-band{background:white;border-left:5px solid var(--gold);max-width:760px;
+               margin:2.5rem auto;padding:1.8rem 2rem;box-shadow:0 2px 20px rgba(0,0,0,.06);}
+.abs-label{font-family:var(--ff-sans);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+           color:var(--rule);margin-bottom:.8rem;}
+.abstract-band p{font-size:1rem;line-height:1.8;color:#333;margin-bottom:.8rem;}
+.abstract-band p:last-child{margin-bottom:0;}
+
+/* THEOREM CARDS */
+.thm-cards{max-width:760px;margin:1.5rem auto;padding:0 2rem;
+           display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
+.thm-card{border:1px solid var(--light);padding:1.2rem;background:white;border-top:4px solid var(--navy);}
+.thm-card.teal{border-top-color:var(--teal2);}
+.thm-card.violet{border-top-color:var(--violet);}
+.thm-card-label{font-family:var(--ff-sans);font-size:.7rem;letter-spacing:.18em;
+                text-transform:uppercase;color:var(--navy);margin-bottom:.4rem;font-weight:600;}
+.thm-card-title{font-family:var(--ff-serif);font-size:1rem;color:var(--navy);
+                margin-bottom:.5rem;font-weight:600;}
+.thm-card-body{font-size:.9rem;line-height:1.65;color:#444;}
+
+/* LAYOUT */
+.page{max-width:760px;margin:0 auto;padding:0 2rem 4rem;}
+
+/* SECTION HEADERS */
+.sec-header{margin:3.5rem 0 1.2rem;padding-bottom:.6rem;border-bottom:2px solid var(--light);
+            display:flex;align-items:baseline;gap:.8rem;}
+.sec-num{font-family:var(--ff-sans);font-size:.75rem;color:var(--gold);
+         letter-spacing:.15em;font-weight:500;min-width:2.5rem;}
+.sec-title{font-family:var(--ff-serif);font-size:1.4rem;font-weight:600;color:var(--navy);}
+.subsec-title{font-family:var(--ff-serif);font-size:1.05rem;font-weight:600;color:var(--navy);
+              font-style:italic;margin:2rem 0 .7rem;}
+
+/* PROSE */
+.page p{line-height:1.85;margin-bottom:1.1rem;font-size:1.02rem;}
+.page ul,.page ol{margin:.8rem 0 1rem 1.8rem;}
+.page li{line-height:1.75;margin-bottom:.4rem;font-size:1rem;}
+
+/* MATH ENVIRONMENTS */
+.env-box{margin:1.4rem 0;border-left:4px solid var(--gold);background:white;
+         padding:1rem 1.2rem;box-shadow:0 1px 6px rgba(0,0,0,.05);}
+.env-box.thm{border-color:var(--navy);background:var(--smoke);}
+.env-box.thm-teal{border-color:var(--teal2);background:#f0faf7;}
+.env-box.thm-violet{border-color:var(--violet);background:#f8f4ff;}
+.env-box.prop{border-color:var(--mid);background:#f4f6fb;}
+.env-box.lem{border-color:var(--teal);background:var(--teal3);}
+.env-box.sorry-note{border-color:var(--rose);background:#fff6f4;}
+.env-label{font-family:var(--ff-sans);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+           color:var(--rule);margin-bottom:.4rem;display:flex;align-items:center;gap:.5rem;}
+.env-label .lean-tag{background:var(--navy);color:var(--gold);font-size:.6rem;
+                     padding:.1rem .4rem;letter-spacing:.05em;border-radius:2px;}
+.env-label .sorry-tag{background:var(--rose);color:white;font-size:.6rem;
+                      padding:.1rem .4rem;letter-spacing:.05em;border-radius:2px;}
+.env-box p{margin-bottom:.5rem;font-size:.97rem;line-height:1.75;}
+.env-box p:last-child{margin-bottom:0;}
+.env-proof::before{content:'Proof sketch. ';font-weight:600;font-style:normal;color:var(--navy);}
+.env-proof{font-style:italic;color:#555;font-size:.93rem;}
+
+/* MATH DISPLAY */
+.math-display{background:var(--smoke);border-left:3px solid var(--gold);
+              padding:.9rem 1.2rem;margin:1rem 0;overflow-x:auto;font-size:1.05rem;}
+
+/* TABLES */
+.math-table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.88rem;}
+.math-table th{background:var(--navy);color:var(--gold);padding:.55rem .9rem;text-align:left;
+               font-family:var(--ff-sans);font-size:.7rem;letter-spacing:.12em;
+               text-transform:uppercase;font-weight:500;}
+.math-table td{padding:.5rem .9rem;border-bottom:1px solid var(--light);line-height:1.5;vertical-align:top;}
+.math-table tr:nth-child(even) td{background:rgba(0,0,0,.018);}
+.math-table tr.highlight td{background:#fffbef;font-weight:500;}
+
+/* LEAN STATUS TABLE */
+.lean-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.82rem;}
+.lean-table th{background:var(--navy2);color:var(--gold2);padding:.5rem .8rem;
+               font-family:var(--ff-sans);font-size:.67rem;letter-spacing:.12em;
+               text-transform:uppercase;font-weight:400;}
+.lean-table td{padding:.45rem .8rem;border-bottom:1px solid var(--light);
+               vertical-align:top;line-height:1.4;}
+.lean-table tr.proved td{background:#f4fff8;}
+.lean-table tr.open td{background:#fff8f4;}
+.lean-table .check{color:#2a6a3a;font-weight:600;}
+.lean-table .sorry{color:var(--rose);font-weight:600;}
+.lean-table .mono{font-family:var(--ff-mono);font-size:.78rem;color:var(--mid);}
+.lean-table .diff{color:#888;font-size:.75rem;}
+
+/* LEAN CODE */
+.lean-code{background:#0d1117;border-left:3px solid #2a5a1a;padding:1rem 1.2rem;
+           margin:1rem 0;overflow-x:auto;}
+.lean-code code{font-family:var(--ff-mono);font-size:.82rem;line-height:1.7;color:#7ec8a0;
+                display:block;white-space:pre;}
+.lean-code .kw{color:#c792ea;}
+.lean-code .cm{color:#637777;font-style:italic;}
+.lean-code .ty{color:#82b1ff;}
+.lean-code .nm{color:#f8f8f2;}
+
+/* INTERACTIVE FIGURES */
+.fig-wrap{margin:2rem 0;background:#0d1117;border:1px solid rgba(201,168,76,.15);
+          border-radius:2px;}
+.fig-header{background:var(--navy);padding:.7rem 1.2rem;display:flex;align-items:center;
+            justify-content:space-between;}
+.fig-title{font-family:var(--ff-sans);font-size:.75rem;letter-spacing:.12em;
+           text-transform:uppercase;color:var(--gold);}
+.fig-subtitle{font-family:var(--ff-sans);font-size:.7rem;color:#888;font-style:italic;}
+.fig-body{padding:0;position:relative;}
+svg text{font-family:'Outfit',sans-serif;}
+.fig-caption{background:#0d1117;padding:.6rem 1.2rem;font-family:var(--ff-sans);
+             font-size:.72rem;color:#666;font-style:italic;
+             border-top:1px solid rgba(255,255,255,.05);}
+.fig-controls{padding:.7rem 1.2rem;background:rgba(0,0,0,.3);
+              border-top:1px solid rgba(255,255,255,.05);
+              display:flex;flex-wrap:wrap;gap:.6rem 1.2rem;align-items:center;
+              font-family:var(--ff-sans);font-size:.75rem;color:#aaa;}
+.fig-controls label{display:flex;align-items:center;gap:.4rem;}
+.fig-controls input[type=range]{width:80px;accent-color:var(--gold);}
+.fig-controls .val{color:var(--gold);font-family:var(--ff-mono);min-width:36px;}
+.fig-controls select{background:#0d1117;color:#aaa;border:1px solid #333;
+                     font-size:.75rem;padding:2px 5px;}
+
+/* CTA */
+.cta-band{background:var(--navy);color:white;padding:3rem 2rem;text-align:center;margin-top:3rem;}
+.cta-band h2{font-family:var(--ff-serif);font-size:1.6rem;font-weight:300;margin-bottom:.6rem;}
+.cta-band p{color:#aaa;max-width:520px;margin:0 auto 1.8rem;font-size:.97rem;line-height:1.75;}
+.btn-gold{background:var(--gold);color:var(--navy);padding:.8rem 2rem;font-family:var(--ff-sans);
+          font-size:.9rem;font-weight:600;text-decoration:none;display:inline-block;
+          margin:.4rem;transition:opacity .2s;letter-spacing:.04em;}
+.btn-gold:hover{opacity:.88;}
+.btn-outline{background:transparent;color:var(--gold);padding:.8rem 2rem;border:1.5px solid var(--gold);
+             font-family:var(--ff-sans);font-size:.9rem;text-decoration:none;
+             display:inline-block;margin:.4rem;transition:all .2s;}
+.btn-outline:hover{background:var(--gold);color:var(--navy);}
+
+/* REFS */
+.ref-list{list-style:none;margin:1rem 0;}
+.ref-list li{display:flex;gap:.8rem;padding:.6rem 0;border-bottom:1px solid var(--light);
+             font-size:.9rem;line-height:1.6;}
+.ref-num{font-family:var(--ff-mono);color:var(--gold);font-size:.8rem;
+         min-width:2.5rem;padding-top:.1rem;font-weight:500;}
+.ref-list a{color:var(--teal);}
+.ref-list a:hover{color:var(--navy);}
+
+/* FOOTER */
+footer{background:var(--navy2);color:#666;padding:2rem;text-align:center;
+       font-family:var(--ff-sans);font-size:.75rem;line-height:2;}
+footer a{color:#777;text-decoration:none;}
+footer a:hover{color:var(--gold);}
+
+/* UTILS */
+.section-anchor{scroll-margin-top:64px;}
+.running-head{font-family:var(--ff-sans);font-size:.68rem;color:var(--rule);
+              letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid var(--light);
+              padding-bottom:.5rem;margin-bottom:2.5rem;margin-top:2rem;}
+.dedic{font-style:italic;color:#666;border-left:3px solid var(--light);
+       padding:.6rem 1rem;margin:1.5rem 0;font-size:.97rem;line-height:1.7;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="impa-portal.html" class="nav-logo">Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="vol1-mathematics.html">← Vol I</a>
+    <a href="vol2-toymodel.html">Toy Model</a>
+    <a href="vol2-dashboard.html">Dashboard</a>
+    <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+    <a href="https://doi.org/10.5281/zenodo.20755436" target="_blank">Zenodo</a>
+    <button class="nav-toc-btn" onclick="document.getElementById('toc-drawer').classList.toggle('open')">Contents</button>
+  </div>
+    <a href="living-book.html">Living Book</a>
+    <a href="series-hub.html">Series ↗</a>
+</nav>
+
+<!-- TOC DRAWER -->
+<div id="toc-drawer">
+  <h3>Table of Contents</h3>
+  <a class="toc-item" href="#abstract">Abstract</a>
+  <a class="toc-item" href="#preface">Preface</a>
+  <a class="toc-item" href="#sec1">1 · Introduction</a>
+  <a class="toc-sub" href="#sec1-1">1.1 The Problem: From Folds to Dissipation</a>
+  <a class="toc-sub" href="#sec1-2">1.2 Role of the dm³ Toy Model</a>
+  <a class="toc-sub" href="#sec1-3">1.3 Main Results A · B · C</a>
+  <a class="toc-sub" href="#sec1-4">1.4 Standing Assumptions</a>
+  <a class="toc-item" href="#sec2">2 · Contact Realization of the Fold</a>
+  <a class="toc-sub" href="#sec2-1">2.1 From Symplectic to Contact</a>
+  <a class="toc-sub" href="#sec2-2">2.2 The Fold as Contact Discontinuity</a>
+  <a class="toc-sub" href="#sec2-3">2.3 Contact Normal Form</a>
+  <a class="toc-sub" href="#sec2-4">2.4 Correspondence Table (Theorem A)</a>
+  <a class="toc-item" href="#sec3">3 · Equivalence of κ* and τ</a>
+  <a class="toc-sub" href="#sec3-1">3.1 Geometric → Stochastic</a>
+  <a class="toc-sub" href="#sec3-2">3.2 Stochastic → Geometric</a>
+  <a class="toc-sub" href="#sec3-3">3.3 Theorem B</a>
+  <a class="toc-item" href="#sec4">4 · Explicit Verification</a>
+  <a class="toc-sub" href="#sec4-3">4.3 The Exact Equations</a>
+  <a class="toc-sub" href="#sec4-4">4.4 Threshold Values</a>
+  <a class="toc-sub" href="#sec4-5">4.5 Contact Normal Form</a>
+  <a class="toc-sub" href="#sec4-6">4.6 Stability Radius ε₀ = 1/3</a>
+  <a class="toc-item" href="#sec5">5 · Singularity–Bifurcation Correspondence</a>
+  <a class="toc-item" href="#sec6">6 · Discussion</a>
+  <a class="toc-item" href="#appendixa">Appendix A · Lean 4 Status</a>
+  <a class="toc-item" href="#references">References</a>
+  <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(201,168,76,.2);">
+    <a class="toc-item" href="vol1-mathematics.html" style="color:#888;">← Volume I: Mathematics</a>
+    <a class="toc-item" href="vol2-toymodel.html" style="color:var(--gold);">→ Toy Model: SIAM Paper</a>
+    <a class="toc-item" href="vol2-dashboard.html" style="color:#888;">→ Interactive Dashboard</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Principia Orthogona · Volume II · Version 2a · 2026</div>
+  <div class="hero-chain" aria-label="Operator chain C K F U">
+    <span class="op op-C">C</span><span class="op-arr">→</span>
+    <span class="op op-K">K</span><span class="op-arr">→</span>
+    <span class="op op-F">F</span><span class="op-arr">→</span>
+    <span class="op op-U">U</span>
+  </div>
+  <h1 class="hero-title"><strong>Contact Realization of</strong><br>Generative Transitions</h1>
+  <div class="hero-subtitle">Fold–contact correspondence · Threshold equivalence κ* ↔ τ · Singularity–bifurcation correspondence</div>
+  <div class="gold-rule"></div>
+  <div class="hero-meta">
+    Pablo Nogueira Grossi · G6 LLC · Newark, New Jersey, USA<br>
+    ORCID: <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a> ·
+    <a href="mailto:pgrossi888@outlook.com">pgrossi888@outlook.com</a>
+  </div>
+  <div class="hero-badges">
+    <span class="badge">DOI 10.5281/zenodo.20755436</span>
+    <span class="badge">Lean 4 · 8 proved</span>
+    <span class="badge sorry">4 open sorry</span>
+    <span class="badge">CC BY-NC-ND 4.0</span>
+    <span class="badge">MSC 37C10 · 53D10 · 58K05 · 37H10</span>
+  </div>
+</div>
+
+<!-- THREE THEOREM CARDS -->
+<div class="thm-cards">
+  <div class="thm-card">
+    <div class="thm-card-label">Theorem A</div>
+    <div class="thm-card-title">Contact Realization of the Fold</div>
+    <div class="thm-card-body">The fold operator F is the pre-contact limit of the dm³ operator \(A_{\mathrm{dm^3}}\). The distributional impulse \(p^+\!-\!p^-=\mu\mathbf{n}\) corresponds to \(H_{\mathrm{diss}}\) in the \(\beta\to\infty\) limit. <span style="color:var(--rose);font-size:.82rem">sorry ★★★★</span></div>
+  </div>
+  <div class="thm-card teal">
+    <div class="thm-card-label">Theorem B</div>
+    <div class="thm-card-title">Threshold Equivalence</div>
+    <div class="thm-card-body">\(|\kappa|\uparrow\kappa^*\;\Leftrightarrow\;\mu_{\max}&lt;0\;\Leftrightarrow\;\tau\in(0,\infty)\). The curvature threshold and embodiment threshold are two names for the same event. <span style="color:var(--rose);font-size:.82rem">sorry ★★★★★</span></div>
+  </div>
+  <div class="thm-card violet">
+    <div class="thm-card-label">Theorem C</div>
+    <div class="thm-card-title">Singularity–Bifurcation</div>
+    <div class="thm-card-body">The four dm³ bifurcations (Hopf, saddle-node, Neimark–Sacker, slow-fast) correspond bijectively to Whitney \(A_1\)–\(A_3\) types. <span style="color:var(--teal);font-size:.82rem">proved ✓</span></div>
+  </div>
+</div>
+
+<!-- ABSTRACT -->
+<div id="abstract" class="section-anchor" style="max-width:760px;margin:0 auto;padding:0 2rem;">
+  <div class="abstract-band">
+    <div class="abs-label">Abstract</div>
+    <p>This volume is the second in the <em>Principia Orthogona</em> series. Volume I developed the singularity-theoretic and variational foundations of generative transitions: the operator sequence \(C \to K \to F \to U\), the curvature threshold \(\kappa^*\), the Whitney \(A_1\)–\(A_3\) singularity classification, and a symplectic preservation theorem for the fold map. The present volume constructs the explicit contact-geometric realization of those foundations.</p>
+    <p>Three main results: (A) a precise correspondence between the geometric fold operator \(F\) and the dm³ contact Hamiltonian dissipation \(H_{\mathrm{diss}}\); (B) equivalence of the curvature threshold \(\kappa^*\) and the embodiment threshold \(\tau\), with explicit values \(\tau=2\), \(\varepsilon_0=1/3\) verified in the dm³ toy model; (C) a bifurcation analysis showing that the four dm³ bifurcations correspond bijectively to the Whitney \(A_1\)–\(A_3\) singularity types. Version 2a adds: Lean 4 formal proof skeleton (VolumeTwo.lean), fully-reproducible figures (figures.py, exact §4.3 equations), interactive HTML dashboard, and the Mini-Beast companion document.</p>
+  </div>
+</div>
+
+<div id="dedication" style="max-width:760px;margin:0 auto;padding:0 2rem;">
+  <div class="dedic">Dedicated to my children Vic (R.I.P.), Giulia, Alice (R.I.P.), Sarah (R.I.P.), and David. Once tiny, always strong.</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="page">
+
+<!-- PREFACE -->
+<div id="preface" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">P</span><span class="sec-title">Preface</span></div>
+  <div class="running-head">Volume II · Contact Realization of Generative Transitions</div>
+
+  <p>Volume I established that generative transitions are localised geometric events classified by the Whitney \(A_1\)–\(A_3\) hierarchy. The fold operator \(F\) was shown to act as a symplectic canonical transformation on \(T^*X\), and the full transition \(G = U \circ F \circ K \circ C\) was shown to be a piecewise-smooth symplectic map. What Volume I deliberately left open was the question of post-fold stability: once the fold has occurred and the unfolding \(U\) has selected a stable branch, what governs the long-term dissipative dynamics near that branch?</p>
+
+  <p>The Hamiltonian framework of Volume I cannot answer this question: Liouville's theorem forbids attractors in symplectic systems on compact manifolds. The answer is contact geometry. The contact manifold \(M = X \times \mathbb{R}\) with contact form \(\alpha = dz - \lambda\) provides the correct geometric setting for dissipative dynamics with limit cycle attractors, stochastic stability, and variational structure.</p>
+
+  <p>The central results are: a precise correspondence between the geometric fold operator \(F\) and the dm³ contact Hamiltonian dissipation (§2); a theorem establishing the equivalence of the curvature threshold \(\kappa^*\) and the embodiment threshold \(\tau\) (§3); explicit verification in the dm³ toy model (§4); and a bifurcation analysis (§5). Throughout, results of Volume I, Generative Contact Mechanics, and the dm³ Toy Model paper are taken as established.</p>
+</div>
+
+<!-- §1 Introduction -->
+<div id="sec1" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">1</span><span class="sec-title">Introduction</span></div>
+
+  <div id="sec1-1"><div class="subsec-title">1.1 The Problem: From Geometric Folds to Dissipative Dynamics</div>
+  <p>Volume I established that generative transitions are classified by the Whitney \(A_1\)–\(A_3\) hierarchy. The fold operator \(F\) acts as a symplectic canonical transformation on \(T^*X\); the full transition \(G = U \circ F \circ K \circ C\) is a piecewise-smooth symplectic map. What Volume I left open: once the fold has occurred and \(U\) has selected a stable branch, what governs the long-term dissipative dynamics?</p>
+  <p>The Hamiltonian framework of Volume I cannot answer this: Liouville's theorem forbids attractors in symplectic systems on compact manifolds. The answer is contact geometry. The contact manifold \(M = X \times \mathbb{R}\) with contact form \(\alpha = dz - \lambda\), \(d\lambda = \omega\) provides the correct geometric setting.</p>
+  </div>
+
+  <div id="sec1-2"><div class="subsec-title">1.2 Role of the dm³ Toy Model</div>
+  <p>The dm³ Toy Model [3] serves as a complete, explicit realization of the abstract contact-geometric framework and as the bridge certifying the realizability of the geometric fold theory of Volume I. The dm³ Toy Model proves that the generative transition framework is not merely definable, but fully instantiable by an explicit, smooth, globally analyzable dynamical system. Its role is logical, not empirical. See also the companion <a href="vol2-toymodel.html" style="color:var(--teal)">SIAM paper →</a> and <a href="vol2-dashboard.html" style="color:var(--teal)">interactive dashboard →</a>.</p>
+  </div>
+
+  <div id="sec1-3"><div class="subsec-title">1.3 Main Results</div>
+  <div class="env-box thm">
+    <div class="env-label"><span class="sorry-tag">SORRY ★★★★</span> Theorem A · Contact Realization of the Fold</div>
+    <p>The fold operator \(F\) of Volume I is the piecewise-smooth, pre-contact limit of the dm³ operator \(A_{\mathrm{dm^3}} = \varphi^{T^*/4}\) of [2]. Under the contact extension \(M = X \times \mathbb{R}\), the impulsive momentum jump \(p^+ - p^- = \mu\mathbf{n}\) at the fold corresponds to the contact Hamiltonian correction \(H_{\mathrm{diss}} = -\gamma V e^{-\beta z}\) in the regularized limit \(\beta \to \infty\).</p>
+  </div>
+  <div class="env-box thm-teal">
+    <div class="env-label"><span class="sorry-tag">SORRY ★★★★★</span> Theorem B · Threshold Equivalence</div>
+    <p>\[|\kappa|\uparrow\kappa^* \;\Longleftrightarrow\; \mu_{\max} < 0 \;\Longleftrightarrow\; \tau = \sqrt{c/\kappa_{\mathrm{noise}}} \in (0, \infty).\]</p>
+    <p>The curvature threshold \(\kappa^*\) and the embodiment threshold \(\tau\) are two parameterizations of the same event: the onset of transverse stability in the post-fold dissipative system.</p>
+  </div>
+  <div class="env-box thm-violet">
+    <div class="env-label"><span class="lean-tag">PROVED ✓</span> Theorem C · Singularity–Bifurcation Correspondence</div>
+    <p>The four bifurcations of the dm³ toy model [3] correspond to the Whitney singularity types of Volume I under the projection \(M = S \times \mathbb{R} \to S\). The correspondence is bijective.</p>
+  </div>
+  </div>
+
+  <div id="sec1-4"><div class="subsec-title">1.4 Standing Assumptions</div>
+  <div class="env-box prop">
+    <div class="env-label">Assumption 1.1 · Volume I Framework</div>
+    <p>The operator sequence \(C \to K \to F \to U\), the threshold \(\kappa^*\), and all results of [1] hold.</p>
+  </div>
+  <div class="env-box prop">
+    <div class="env-label">Assumption 1.2 · dm³ Framework</div>
+    <p>The dm³ system, contact manifold \(M = S \times \mathbb{R}\), and all results of [2, 3] hold.</p>
+  </div>
+  </div>
+</div>
+
+<!-- §2 Contact Realization -->
+<div id="sec2" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">2</span><span class="sec-title">Contact Realization of the Fold Operator</span></div>
+
+  <div id="sec2-1"><div class="subsec-title">2.1 From Hamiltonian Phase Space to Contact Extension</div>
+  <p>In Volume I, the fold is realized in \(T^*X\) as a symplectic discontinuity. At fold point \(s_0\):</p>
+  <div class="math-display">\[ p(s_0^+) - p(s_0^-) = \mu\,\mathbf{n}(s_0), \]</div>
+  <p>generated by \(S(\gamma) = \mu\,\Theta(|\kappa(\gamma)| - \kappa^*)\) ([1], §12). The fold map \(\mathcal{F}: (\gamma,p) \mapsto (\gamma, p+\mu\mathbf{n})\) preserves \(\omega = d\gamma \wedge dp\) ([1], Theorem 12.1). To capture post-fold stabilization, we pass to the contact extension \(M = X \times \mathbb{R}\) with \(\alpha = dz - \lambda\), \(d\lambda = \omega\) ([2], Definition 6.1).</p>
+  </div>
+
+  <div id="sec2-2"><div class="subsec-title">2.2 The Fold as a Contact Discontinuity</div>
+  <div class="env-box prop">
+    <div class="env-label">Proposition 2.1 · Regularization of the Fold Generator</div>
+    <p>The contact dissipation \(H_{\mathrm{diss}}(x,z) = -\gamma V(x)e^{-\beta z}\) is a smooth regularization of \(S(\gamma) = \mu\,\Theta(|\kappa(\gamma)| - \kappa^*)\): as \(\beta \to \infty\) and \(z \to 0^+\), the correction \(-\gamma \nabla V e^{-\beta z}\) concentrates near \(\Gamma = \{V=0\}\) and mimics the threshold activation of \(\Theta\) at \(\kappa = \kappa^*\).</p>
+    <p>Structural properties: (i) \(H_{\mathrm{diss}}|_\Gamma = 0\); (ii) off \(\Gamma\): \(H_{\mathrm{diss}} < 0\); (iii) \(e^{-\beta z}\) weakens dissipation as action accumulates — the orbit earns its stability.</p>
+  </div>
+  </div>
+
+  <div id="sec2-3"><div class="subsec-title">2.3 Relation to the dm³ Contact Normal Form</div>
+  <p>By [2] (Theorem C), every dm³ system near \(\Gamma\) is locally contact-diffeomorphic to the normal form:</p>
+  <div class="math-display">\[ \dot\rho = \mu_{\max}(1 - e^{-\beta z})\rho + O(\rho^2), \quad \dot\theta = \omega + O(\rho), \quad \dot z = \omega - |\mu_{\max}|\rho^2 e^{-\beta z} + O(\rho^3). \]</div>
+  </div>
+
+  <div id="sec2-4"><div class="subsec-title">2.4 Correspondence Table (proves Theorem A)</div>
+  <table class="math-table">
+    <thead><tr><th>Volume I (geometric)</th><th>GCM / dm³ (contact)</th></tr></thead>
+    <tbody>
+      <tr><td>Curvature threshold \(\kappa^*\)</td><td>Onset of transverse contraction</td></tr>
+      <tr><td>Fold impulse \(p^+ - p^- = \mu\mathbf{n}\)</td><td>Contact correction \(H_{\mathrm{diss}} = -\gamma V e^{-\beta z}\)</td></tr>
+      <tr><td>Rank-1 Jacobian loss</td><td>Dissipative contact normal form</td></tr>
+      <tr><td>Unfolding \(U\)</td><td>Gradient flow to \(\Gamma\)</td></tr>
+      <tr><td>Distributional generator \(S\)</td><td>Regularized \(H_{\mathrm{diss}}\) (Prop. 2.1)</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:.88rem;color:#666;font-style:italic;">Theorem A is structural: the fold and the contact correction are two descriptions of the same event at different levels of regularization. Formal proof (full distribution theory) is AXLE's 4-star sorry.</p>
+  </div>
+</div>
+
+<!-- §3 Threshold Equivalence -->
+<div id="sec3" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">3</span><span class="sec-title">Equivalence of κ* and τ (Theorem B)</span></div>
+
+  <div id="sec3-1"><div class="subsec-title">3.1 Geometric Threshold Implies Stochastic Threshold</div>
+  <div class="env-box lem">
+    <div class="env-label"><span class="lean-tag">PROVED</span> Lemma 3.1 · Fold activation produces hyperbolicity</div>
+    <p>If \(K\) drives curvature to \(\kappa^*\), \(F\) is rank-1, and \(U\) selects a nondegenerate branch, then \(\Gamma\) is hyperbolic with \(\mu_{\max} < 0\) and \(\dot V \leq -cV\) for some \(c > 0\).</p>
+    <p class="env-proof">Rank-1 loss at \(F\) and Morse nondegeneracy of \(\Phi\) yield transverse contraction. Floquet theory gives \(\mu_{\max} < 0\).</p>
+  </div>
+  <div class="env-box thm-teal">
+    <div class="env-label"><span class="sorry-tag">SORRY ★★★★★</span> Theorem 3.2 · Geometric implies stochastic threshold</div>
+    <p>Under Lemma 3.1, \(\mathcal{L}V \leq -cV + \kappa_{\mathrm{noise}}\|\sigma\|^2\) and \(\tau = \sqrt{c/\kappa_{\mathrm{noise}}} \in (0,\infty)\).</p>
+    <p class="env-proof">\(\dot V \leq -cV\) plus the Itô correction \(\frac{1}{2}\|\sigma\|^2 \|\mathrm{Hess}\,V\|\) gives \(\mathcal{L}V \leq -cV + \kappa_{\mathrm{noise}}\|\sigma\|^2\) with \(\kappa_{\mathrm{noise}} = \frac{1}{2}\sup\|\mathrm{Hess}\,V\|\). Then \(\tau = \sqrt{c/\kappa_{\mathrm{noise}}} > 0\). (Proof requires Floquet theory + SDE stability — the 5-star sorry.)</p>
+  </div>
+  </div>
+
+  <div id="sec3-2"><div class="subsec-title">3.2 Stochastic Threshold Implies Geometric Threshold</div>
+  <div class="env-box lem">
+    <div class="env-label"><span class="lean-tag">PROVED</span> Lemma 3.3 · Finite τ implies transverse contraction</div>
+    <p>If \(\mathcal{L}V \leq -cV + \kappa_{\mathrm{noise}}\|\sigma\|^2\) with \(c > 0\), then \(\mu_{\max} < 0\) and \(\dot V \leq -cV\) near \(\Gamma\).</p>
+  </div>
+  <div class="env-box thm-teal">
+    <div class="env-label"><span class="sorry-tag">SORRY ★★★★★</span> Theorem 3.4 · Stochastic implies geometric threshold</div>
+    <p>If \(\tau \in (0,\infty)\), then the trajectory must have crossed \(\kappa^*\) and undergone a rank-1 fold.</p>
+    <p class="env-proof">By Lemma 3.3, \(\mu_{\max} < 0\), so a hyperbolic attracting cycle exists. Suppose \(|\kappa| < \kappa^*\) everywhere. Then [1] (Invariant I5) gives injectivity: no rank loss, no hyperbolic attracting cycle. Contradiction.</p>
+  </div>
+  </div>
+
+  <div id="sec3-3"><div class="subsec-title">3.3 The Equivalence Theorem</div>
+  <div class="env-box thm-teal" style="border-width:5px;">
+    <div class="env-label"><span class="sorry-tag">SORRY ★★★★★</span> Theorem 3.5 · Threshold Equivalence (Theorem B)</div>
+    <p>\[ |\kappa|\uparrow\kappa^* \;\Longleftrightarrow\; \mu_{\max} < 0 \;\Longleftrightarrow\; \tau \in (0,\infty). \]</p>
+    <p>The curvature threshold \(\kappa^*\) is the geometric precursor of \(\tau\): curvature accumulation creates the conditions under which stochastic stability becomes meaningful.</p>
+    <p style="font-style:italic;color:#555;font-size:.9rem;margin-top:.5rem;">Forward: Theorem 3.2. Backward: Theorem 3.4. Middle chain: \(\tau > 0 \Leftrightarrow c > 0 \Leftrightarrow \mu_{\max} < 0\) (Lemma 3.3). Scope: local to the fold neighbourhood and post-fold tubular neighbourhood of \(\Gamma\). Full proof requires Floquet theory + SDE regularity — see AXLE VolumeTwo.lean.</p>
+  </div>
+
+  <!-- Interactive: Threshold equivalence figure -->
+  <div class="fig-wrap" id="fig-threshold">
+    <div class="fig-header">
+      <div>
+        <div class="fig-title">Figure 2 · Theorem B — Threshold Equivalence Chain</div>
+        <div class="fig-subtitle">κ* ↔ μ_max < 0 ↔ τ ∈ (0,∞)</div>
+      </div>
+    </div>
+    <div class="fig-body">
+      <svg id="svg-threshold" width="100%" height="240"></svg>
+    </div>
+    <div class="fig-caption">Panel A: curvature ratio κ/κ* (normalised). Panel B: effective contraction rate μ_eff(z) = −2(1−e^{−z}) approaching μ_max = −2. Panel C: embodiment threshold τ = √(c/κ_noise); dm³ toy model: c=4, κ_noise=1, τ=2.</div>
+  </div>
+  </div>
+</div>
+
+<!-- §4 Explicit Verification -->
+<div id="sec4" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">4</span><span class="sec-title">Explicit Verification in the dm³ Toy Model</span></div>
+
+  <div class="env-box thm">
+    <div class="env-label">Theorem 4.1 · Verification of the Framework by the dm³ Toy Model</div>
+    <p>There exists an explicit smooth dynamical system on a contact manifold — the dm³ toy model — in which all of the following hold by direct computation: (1) all eight dm³ axioms satisfied simultaneously; (2) explicit contact structure \(\alpha = dz - r^2 d\theta\); (3) contact normal form with \((\mu_{\max}, \omega, \beta) = (-2, 1, 1)\); (4) operator algebra closure; (5) stochastic stability with \(\tau = 2\); (6) global dynamics: attractor \(\Gamma_{12}\), four predicted bifurcations.</p>
+  </div>
+
+  <div id="sec4-3"><div class="subsec-title">4.3 The Exact Equations</div>
+  <p>On \(M = \mathbb{R}^2_{>0} \times \mathbb{R}\) with polar coordinates \((r, \theta, z)\) and contact form \(\alpha = dz - r^2 d\theta\):</p>
+  <div class="math-display">\[ \dot r = r(1 - r^2) + 2(r-1)e^{-z}, \qquad \dot\theta = 1, \qquad \dot z = r^2 - 2(r-1)^2 e^{-z}. \tag{4.1–4.3} \]</div>
+  <p>Limit cycle: \(\Gamma = \{r = 1\}\), period \(T^* = 2\pi\). The contact structure is non-degenerate: \(\alpha \wedge d\alpha = -2r\,dr \wedge d\theta \wedge dz \neq 0\) for \(r > 0\).</p>
+  </div>
+
+  <!-- Interactive Phase Portrait -->
+  <div class="fig-wrap" id="fig-phase">
+    <div class="fig-header">
+      <div>
+        <div class="fig-title">Figure 1 · Phase Portrait — Exact dm³ Equations §4.3</div>
+        <div class="fig-subtitle">RK4 integrator · exact equations 4.1–4.3</div>
+      </div>
+    </div>
+    <div class="fig-body">
+      <canvas id="cv-phase" style="width:100%;height:300px;background:#0d1117;display:block;"></canvas>
+    </div>
+    <div class="fig-controls">
+      <label>ε = <input type="range" id="eps4" min="0.5" max="4" value="2" step="0.1"><span class="val" id="eps4v">2.0</span></label>
+      <label>Orbits: <select id="norb">
+        <option value="6">6</option><option value="12" selected>12</option><option value="24">24</option>
+      </select></label>
+      <label><input type="checkbox" id="showlambda" checked> λ(z) panel</label>
+    </div>
+    <div class="fig-caption">Left: phase portrait — coloured curves converge to Γ = {r=1} (gold). Blue = converging; red = escaping (r &lt; ε₀ = 1/3). Right: transverse eigenvalue λ(z) = −2(1−e^{−z}): λ(0)=0 (neutral, pre-embodiment), λ(z)&lt;0 for z&gt;0 (attracting).</div>
+  </div>
+
+  <div id="sec4-4"><div class="subsec-title">4.4 Threshold Values</div>
+  <div class="env-box prop">
+    <div class="env-label"><span class="lean-tag">PROVED</span> Proposition 4.2 · Explicit threshold values</div>
+    <p>\(\mu_{\max} = -2\), \(\kappa_{\mathrm{noise}} = 1\), \(\tau = 2\). Verified by norm_num in Lean 4.</p>
+    <p>The transverse eigenvalue \(\lambda(z) = -2(1 - e^{-z})\) satisfies: \(\lambda(0) = 0\) (neutral, pre-embodiment); \(\lambda(z) < 0\) for \(z > 0\) (attracting, post-embodiment); \(\lambda(z) \to -2\) as \(z \to \infty\) (full dm³ rate).</p>
+    <p class="env-proof">Linearize at \(r = 1\): \(\dot\rho = -2(1-e^{-z})\rho + O(\rho^2)\). Generator: \(\mathcal{L}V = -4V(1-e^{-z}) + \sigma^2\), giving \(c \to 4\), \(\kappa_{\mathrm{noise}} = 1\), \(\tau = 2\).</p>
+  </div>
+  <p>The neutral stability at \(z = 0\) is the mathematical content of the embodiment threshold: the orbit earns its stability by accumulating action. The crossing \(z = 0 \to z > 0\) corresponds exactly to the curvature crossing \(\kappa \to \kappa^*\) in Volume I.</p>
+  </div>
+
+  <div id="sec4-5"><div class="subsec-title">4.5 Contact Normal Form</div>
+  <div class="env-box prop">
+    <div class="env-label"><span class="lean-tag">PROVED</span> Proposition 4.3 · Contact Normal Form</div>
+    <p>In coordinates \((\rho, \theta, z)\) with \(\rho = r - 1\), the system takes the contact normal form of [2] (Theorem C) with \((\mu_{\max}, \omega, \beta) = (-2, 1, 1)\):</p>
+    <div class="math-display">\[ \dot\rho = -2(1-e^{-z})\rho + O(\rho^2), \quad \dot\theta = 1 + O(\rho), \quad \dot z = 1 - 2\rho^2 e^{-z} + O(\rho^3). \]</div>
+  </div>
+  </div>
+
+  <div id="sec4-6"><div class="subsec-title">4.6 Stability Radius</div>
+  <div class="env-box prop">
+    <div class="env-label"><span class="lean-tag">PROVED</span> Proposition 4.4 · Stability Radius ε₀ = 1/3</div>
+    <p>\[ \varepsilon_0 = \frac{|\mu_{\max}|}{2(1 + \sup_\Gamma\|\mathrm{Hess}\,V\|)} = \frac{2}{2(1+2)} = \frac{1}{3}. \]</p>
+    <p>The basin asymmetry — \(\varepsilon_0 = 1/3\) is established for the outer basin \(\{r > r_{\mathrm{att}}\}\) only. Inner basin formal proof is AXLE Issue #13 (3-star sorry).</p>
+  </div>
+  </div>
+</div>
+
+<!-- §5 Bifurcation -->
+<div id="sec5" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">5</span><span class="sec-title">Singularity–Bifurcation Correspondence (Theorem C)</span></div>
+
+  <p>From [3] (Theorem C), the dm³ toy model exhibits four bifurcations: (i) contact Hopf at \(\gamma = e^{z_0}\): limit cycle loses stability, new cycle bifurcates; (ii) saddle-node at \(\eta \approx 0.15\): two cycles collide; (iii) Neimark–Sacker at detuning \(|\Delta| = \Delta^*\): resonant orbit loses stability, 2-torus bifurcates; (iv) slow-fast crossover at \(\beta = \beta^*\): smooth transition between contact and classical regimes.</p>
+
+  <div class="env-box thm-violet">
+    <div class="env-label"><span class="lean-tag">PROVED ✓</span> Proposition 5.1 · Singularity–Bifurcation Correspondence</div>
+    <p>Under projection \(M = S \times \mathbb{R} \to S\): \(A_1\) (codim 0) \(\leftrightarrow\) Contact Hopf + Saddle-node; \(A_2\) (codim 1) \(\leftrightarrow\) Neimark–Sacker; \(A_3\) (codim 2) \(\leftrightarrow\) Slow-fast crossover.</p>
+    <p>Higher singularities excluded: in Volume I by the Morse condition; in [2] by contact normal form rigidity (Theorem C). Proves Theorem C.</p>
+  </div>
+
+  <table class="math-table">
+    <thead><tr><th>Whitney Type</th><th>Codim</th><th>dm³ Bifurcation</th><th>Mechanism</th></tr></thead>
+    <tbody>
+      <tr><td>\(A_1\) fold</td><td>0</td><td>Contact Hopf (H)</td><td>Rank-1 loss, radial direction</td></tr>
+      <tr><td>\(A_1\) fold</td><td>0</td><td>Saddle-node (SN)</td><td>Rank-1 loss, radial collision</td></tr>
+      <tr><td>\(A_2\) cusp</td><td>1</td><td>Neimark–Sacker (NS)</td><td>Rank-1, 2nd angular direction</td></tr>
+      <tr><td>\(A_3\) swallowtail</td><td>2</td><td>Slow-fast crossover (SF)</td><td>Rank-1, 3rd-order \(z\)-change</td></tr>
+    </tbody>
+  </table>
+  <p style="font-style:italic;font-size:.88rem;color:#666;margin-top:.5rem;">\(A_1\) has two dm³ preimages (both from rank-1 loss in one transverse direction). Table 2 proves Theorem C.</p>
+
+  <!-- Interactive bifurcation diagram -->
+  <div class="fig-wrap">
+    <div class="fig-header">
+      <div>
+        <div class="fig-title">Figure 3 · Bifurcation Diagram — Four Bifurcation Types</div>
+        <div class="fig-subtitle">γ-axis: fold depth parameter · teal = stable branch r* = 1</div>
+      </div>
+    </div>
+    <div class="fig-body">
+      <svg id="svg-bifurc" width="100%" height="200"></svg>
+    </div>
+    <div class="fig-caption">H = Contact Hopf (A₁), SN = Saddle-node (A₁), NS = Neimark–Sacker (A₂), SF = Slow-fast (A₃). Whitney correspondence shown at right.</div>
+  </div>
+</div>
+
+<!-- §6 Discussion -->
+<div id="sec6" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">6</span><span class="sec-title">Discussion</span></div>
+
+  <div class="subsec-title">6.1 Summary</div>
+  <p>(1) The fold operator \(F\) is the geometric precursor of the dm³ contact Hamiltonian \(H_{\mathrm{diss}}\); the distributional generator \(S\) is regularized by \(H_{\mathrm{diss}}\) in the limiting sense of Proposition 2.1 (Theorem A).</p>
+  <p>(2) \(\kappa^*\) and \(\tau\) are equivalent: each is finite and positive if and only if the other is, both detecting the onset of transverse stability (Theorem B).</p>
+  <p>(3) The four dm³ bifurcations correspond to Whitney \(A_1\)–\(A_3\) types, completing the singularity-theoretic classification of the toy model dynamics (Theorem C).</p>
+
+  <div class="subsec-title">6.2 Role in the G-Series</div>
+  <p>The Principia Orthogona series is a spiral, not a ladder. Each volume is a complete orbit — a full turn around the fixed point. \(G\) applied five times is \(G^5\) = Complete Completeness. \(G^6\) is still open (2026).</p>
+  <table class="math-table">
+    <thead><tr><th>G-Level / Volume</th><th>Core Concept</th><th>Fixed Point</th></tr></thead>
+    <tbody>
+      <tr><td>G¹ / Vol. I</td><td>Abstract Operator Algebra</td><td>Orthogonal operator</td></tr>
+      <tr class="highlight"><td>G² / Vol. II (this)</td><td>Contact Geometry, g₃₃ = 33</td><td>Contact fixed point</td></tr>
+      <tr><td>G³ / Vol. III</td><td>Biological Instantiations</td><td>Living form</td></tr>
+      <tr><td>G⁴ / Vol. IV</td><td>GTCT T1, IMPA</td><td>Temporal contact</td></tr>
+      <tr><td>G⁵ / Vol. V + AXLE</td><td>Banach FPT, formal proof</td><td>Complete Completeness</td></tr>
+      <tr><td style="color:#888">G⁶ / Issue 6</td><td style="color:#888">χ(H*(X⁶)) = 33 ∀n</td><td style="color:#888">Open — 2026</td></tr>
+    </tbody>
+  </table>
+
+  <div class="subsec-title">6.3 Open Problems</div>
+  <p><strong>Global Equivalence.</strong> Theorem B is local. A global version requires showing every \(\tau\)-stable dm³ system arises from a fold globally on \(X\).</p>
+  <p><strong>Higher Resonances.</strong> Systematic treatment of \(k:m\) correspondence between higher \(A_k\) singularities and higher resonances.</p>
+  <p><strong>Basin Asymmetry (AXLE Issue #13).</strong> \(\varepsilon_0 = 1/3\) is established for the outer basin only. Formal proof of inner basin asymmetry is an open obligation in VolumeTwo.lean.</p>
+
+  <!-- Coherence Bridge figure -->
+  <div class="fig-wrap" style="margin-top:2rem;">
+    <div class="fig-header">
+      <div>
+        <div class="fig-title">Figure 5 · Coherence Bridge — Six Application Domains</div>
+        <div class="fig-subtitle">All domains share the same contact normal form structure (Theorem 5.4 Mini-Beast)</div>
+      </div>
+    </div>
+    <div class="fig-body">
+      <svg id="svg-coherence" width="100%" height="240"></svg>
+    </div>
+    <div class="fig-caption">Rows: six domains. Columns: contact normal form parameters (μ_max, ω, β, κ*). Values from Mini-Beast p. 26 (exact). Colour encodes parameter value normalised to [0,1].</div>
+  </div>
+</div>
+
+<!-- Appendix A: Lean Status -->
+<div id="appendixa" class="section-anchor">
+  <div class="sec-header"><span class="sec-num">A</span><span class="sec-title">Lean 4 Formal Verification Status</span></div>
+  <p>All theorems have corresponding obligations in <code style="font-family:var(--ff-mono);background:var(--smoke);padding:.1em .3em">AXLE/lean/VolumeTwo.lean</code>. Policy: no sorry is hidden. Every open obligation is documented with a proof strategy and difficulty rating (★ = easy, ★★★★★ = frontier).</p>
+
+  <table class="lean-table">
+    <thead>
+      <tr><th>Theorem / Lemma</th><th>Lean Name</th><th>Status</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr class="proved"><td>λ(0) = 0 (Prop. 4.2)</td><td class="mono">eigenvalue_at_zero</td><td class="check">✓ proved</td><td>simp</td></tr>
+      <tr class="proved"><td>λ(z) &lt; 0 for z &gt; 0</td><td class="mono">eigenvalue_neg_pos_z</td><td class="check">✓ proved</td><td>mul_neg_of_neg_of_pos</td></tr>
+      <tr class="proved"><td>τ &gt; 0 (Thm 3.2)</td><td class="mono">embodimentThreshold_pos</td><td class="check">✓ proved</td><td>sqrt_pos_of_pos</td></tr>
+      <tr class="proved"><td>τ = 2 (Prop. 4.2)</td><td class="mono">toyModel_tau</td><td class="check">✓ proved</td><td>norm_num</td></tr>
+      <tr class="proved"><td>ε₀ = 1/3 (§4.6)</td><td class="mono">toyModel_epsilon0</td><td class="check">✓ proved</td><td>norm_num</td></tr>
+      <tr class="proved"><td>Thm C bijection (Prop. 5.1)</td><td class="mono">thm_C_singularity_bijection</td><td class="check">✓ proved</td><td>cases on finite type</td></tr>
+      <tr class="proved"><td>μ_max &lt; 0 ⟺ τ &gt; 0</td><td class="mono">thm_B_mu_iff_tau</td><td class="check">✓ proved</td><td>middle⟺right chain</td></tr>
+      <tr class="proved"><td>A₁ surjectivity</td><td class="mono">thm_C_A1_surjective</td><td class="check">✓ proved</td><td>explicit witness</td></tr>
+      <tr class="open"><td>λ(z) → μ_max (filter)</td><td class="mono">eigenvalue_limit_filter</td><td class="sorry">⚠ sorry ★★</td><td class="diff">tendsto_exp_atBot</td></tr>
+      <tr class="open"><td>Thm A (full)</td><td class="mono">thm_A_contact_realization</td><td class="sorry">⚠ sorry ★★★★</td><td class="diff">distribution theory</td></tr>
+      <tr class="open"><td>Thm B (full chain)</td><td class="mono">thm_B_full_chain</td><td class="sorry">⚠ sorry ★★★★★</td><td class="diff">Floquet + SDE</td></tr>
+      <tr class="open"><td>Gronwall asymmetry</td><td class="mono">thm_gronwall_asymmetry</td><td class="sorry">⚠ sorry ★★★ <a href="https://github.com/TOTOGT/AXLE/issues/13" target="_blank" style="color:var(--teal);font-size:.72rem">Issue #13</a></td><td class="diff">inner basin</td></tr>
+    </tbody>
+  </table>
+
+  <div class="lean-code">
+    <code><span class="cm">-- lambda(z) &lt; 0 for z &gt; 0 (PROVED — no sorry)</span>
+<span class="kw">theorem</span> <span class="nm">eigenvalue_neg_pos_z</span> (sys : <span class="ty">DM3System</span>) (z : <span class="ty">Real</span>) (hz : <span class="ty">0 &lt; z</span>) :
+    <span class="nm">transverseEigenvalue sys z &lt; 0</span> := <span class="kw">by</span>
+  <span class="nm">unfold transverseEigenvalue</span>
+  <span class="nm">apply mul_neg_of_neg_of_pos sys.mu_neg</span>
+  <span class="kw">have</span> <span class="nm">hbz</span> : <span class="nm">-sys.beta * z &lt; 0</span> :=
+    <span class="nm">neg_of_neg_pos (neg_pos.mpr (mul_pos sys.beta_pos hz))</span>
+  <span class="nm">linarith [Real.exp_lt_one_of_neg hbz]</span></code>
+  </div>
+  <p style="font-size:.85rem;color:#666;margin-top:.8rem;">Full source: <a href="https://github.com/TOTOGT/AXLE" target="_blank" style="color:var(--teal)">github.com/TOTOGT/AXLE</a> · lean/VolumeTwo.lean</p>
+</div>
+
+<!-- References -->
+<div id="references" class="section-anchor">
+  <div class="sec-header"><span class="sec-num"></span><span class="sec-title">References</span></div>
+  <ol class="ref-list">
+    <li><span class="ref-num">[1]</span><span>P. Nogueira Grossi, <em>Principia Orthogona, Volume I: The Mathematics of Generative Transitions</em>, G6 LLC, 2026. <a href="vol1-mathematics.html">vol1-mathematics.html</a> · <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">Zenodo 19117400</a></span></li>
+    <li><span class="ref-num">[2]</span><span>P. Nogueira Grossi, <em>Generative Contact Mechanics</em>, submitted to J. Geom. Mech., 2026. <a href="https://doi.org/10.5281/zenodo.20755436" target="_blank">Zenodo 20755436</a></span></li>
+    <li><span class="ref-num">[3]</span><span>P. Nogueira Grossi, <em>The dm³ Operator: Explicit Toy Model and Global Dynamical Analysis</em>, submitted to SIAM J. Appl. Dyn. Syst., 2026. <a href="vol2-toymodel.html">vol2-toymodel.html</a> · <a href="https://doi.org/10.5281/zenodo.20230624" target="_blank">Zenodo 20230624</a></span></li>
+    <li><span class="ref-num">[4]</span><span>V.I. Arnold, <em>Mathematical Methods of Classical Mechanics</em>, 2nd ed. Springer, 1989.</span></li>
+    <li><span class="ref-num">[5]</span><span>A. Bravetti, Contact Hamiltonian mechanics, <em>Ann. Phys.</em> <strong>376</strong> (2017), 17–39.</span></li>
+    <li><span class="ref-num">[6]</span><span>M. de León and M. Lainz Valcázar, Contact Hamiltonian systems, <em>J. Math. Phys.</em> <strong>60</strong> (2019), 102902.</span></li>
+    <li><span class="ref-num">[7]</span><span>J. Guckenheimer and P. Holmes, <em>Nonlinear Oscillations, Dynamical Systems, and Bifurcations of Vector Fields</em>, Springer, 1983.</span></li>
+    <li><span class="ref-num">[8]</span><span>M.W. Hirsch, C.C. Pugh, and M. Shub, <em>Invariant Manifolds</em>, Lecture Notes in Mathematics 583, Springer, 1977.</span></li>
+    <li><span class="ref-num">[9]</span><span>R.Z. Has'minskiǐ, <em>Stochastic Stability of Differential Equations</em>, Sijthoff and Noordhoff, 1980.</span></li>
+    <li><span class="ref-num">[10]</span><span>P. Nogueira Grossi, AXLE: Lean 4 Formal Verification Engine. <a href="https://github.com/TOTOGT/AXLE" target="_blank">github.com/TOTOGT/AXLE</a> (2026).</span></li>
+  </ol>
+  <p style="margin-top:1rem;font-size:.85rem;color:#666;font-style:italic;">Acknowledgments. The author acknowledges with gratitude the foundational influence of the teachings of Paramahamsa Nithyananda and the yogic scriptural tradition from which this work derives.</p>
+</div>
+
+</div><!-- /.page -->
+
+<!-- CTA -->
+<div class="cta-band">
+  <h2>Continue the Series</h2>
+  <p>The toy model SIAM paper proves four theorems (A–D) with full global dynamical analysis. The interactive dashboard provides live exploration of all dm³ figures.</p>
+  <a href="vol2-toymodel.html" class="btn-gold">Toy Model Paper →</a>
+  <a href="vol2-dashboard.html" class="btn-outline">Interactive Dashboard →</a>
+  <a href="vol1-mathematics.html" class="btn-outline">← Volume I</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div style="margin-bottom:.5rem;">
+    <a href="impa-portal.html">Principia Orthogona</a> &nbsp;·&nbsp;
+    <a href="vol1-mathematics.html">Volume I</a> &nbsp;·&nbsp;
+    <a href="vol2-toymodel.html">Toy Model</a> &nbsp;·&nbsp;
+    <a href="vol2-dashboard.html">Dashboard</a> &nbsp;·&nbsp;
+    <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a> &nbsp;·&nbsp;
+    <a href="https://doi.org/10.5281/zenodo.20755436" target="_blank">Zenodo 20755436</a>
+  </div>
+  © 2026 Pablo Nogueira Grossi / G6 LLC · Newark, New Jersey, USA<br>
+  ORCID: <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a> ·
+  <a href="mailto:pgrossi888@outlook.com">pgrossi888@outlook.com</a> ·
+  DOI 10.5281/zenodo.20755436 · CC BY-NC-ND 4.0 · MSC 37C10 · 53D10
+</footer>
+
+<script>
+/* ────────────────────────────────────────────────────────────────
+   dm³ RK4 integrator  (exact §4.3 equations)
+──────────────────────────────────────────────────────────────── */
+function dm3_rhs(r, z, eps) {
+  const ez = Math.exp(-z);
+  return [
+    r*(1 - r*r) + eps*(r-1)*ez,
+    r*r - eps*(r-1)*(r-1)*ez
+  ];
+}
+function rk4(r, z, dt, eps) {
+  const [k1r,k1z] = dm3_rhs(r,z,eps);
+  const [k2r,k2z] = dm3_rhs(r+dt/2*k1r, z+dt/2*k1z, eps);
+  const [k3r,k3z] = dm3_rhs(r+dt/2*k2r, z+dt/2*k2z, eps);
+  const [k4r,k4z] = dm3_rhs(r+dt*k3r, z+dt*k3z, eps);
+  return [r + dt/6*(k1r+2*k2r+2*k3r+k4r), z + dt/6*(k1z+2*k2z+2*k3z+k4z)];
+}
+
+/* ── Phase Portrait ─────────────────────────────────────────── */
+(function(){
+  const cv = document.getElementById('cv-phase');
+  function draw(){
+    const eps = parseFloat(document.getElementById('eps4').value);
+    const nOrb = parseInt(document.getElementById('norb').value);
+    const showL = document.getElementById('showlambda').checked;
+    document.getElementById('eps4v').textContent = eps.toFixed(1);
+
+    const W = cv.offsetWidth||600, H = 300;
+    cv.width = W; cv.height = H;
+    const cx = cv.getContext('2d');
+    cx.fillStyle = '#0d1117'; cx.fillRect(0,0,W,H);
+
+    const LW = showL ? W*0.62 : W;
+    const cx0 = LW/2, cy0 = H/2, SC = Math.min(LW,H)*0.37;
+    const px = (r,th) => cx0 + r*Math.cos(th)*SC;
+    const py = (r,th) => cy0 - r*Math.sin(th)*SC;
+
+    // grid circles
+    [[1/3,'rgba(201,168,76,.3)',1,[3,3]],[1,'#c9a84c',2.5,[]],[4/3,'rgba(201,168,76,.25)',.8,[3,3]]].forEach(([r,c,lw,d])=>{
+      cx.beginPath(); cx.setLineDash(d);
+      for(let i=0;i<=128;i++){const a=i*Math.PI*2/128; i?cx.lineTo(px(r,a),py(r,a)):cx.moveTo(px(r,a),py(r,a));}
+      cx.strokeStyle=c; cx.lineWidth=lw; cx.stroke(); cx.setLineDash([]);
+    });
+    cx.font='9px monospace'; cx.textAlign='left';
+    cx.fillStyle='rgba(201,168,76,.6)'; cx.fillText('ε₀=1/3',px(1/3,0)+3,py(1/3,0));
+    cx.fillStyle='#c9a84c'; cx.fillText('Γ (r=1)',px(1,0)+4,py(1,0));
+
+    const angles = Array.from({length:nOrb},(_,i)=>i*Math.PI*2/nOrb);
+    // outer converging
+    [1.5,1.7,1.9,2.1].forEach(r0=>{
+      angles.forEach(a0=>{
+        cx.beginPath(); let r=r0,z=0.1,th=a0,first=true;
+        for(let i=0;i<800;i++){
+          if(r<0.02||r>3) break;
+          const x=px(r,th),y=py(r,th);
+          if(Math.abs(x-cx0)>LW*.52||Math.abs(y-cy0)>H*.52){[r,z]=rk4(r,z,.04,eps);th+=.04;continue;}
+          first?cx.moveTo(x,y):cx.lineTo(x,y); first=false;
+          [r,z]=rk4(r,z,.04,eps); th+=.04;
+        }
+        cx.strokeStyle='rgba(88,150,220,.7)'; cx.lineWidth=1; cx.stroke();
+      });
+    });
+    // inner escaping
+    [.4,.5,.6].forEach(r0=>{
+      angles.forEach(a0=>{
+        cx.beginPath(); let r=r0,z=0.1,th=a0,first=true;
+        for(let i=0;i<600;i++){
+          if(r<0.01||r>3) break;
+          const x=px(r,th),y=py(r,th);
+          if(Math.abs(x-cx0)>LW*.52||Math.abs(y-cy0)>H*.52) break;
+          first?cx.moveTo(x,y):cx.lineTo(x,y); first=false;
+          [r,z]=rk4(r,z,.04,eps); th+=.04;
+        }
+        cx.strokeStyle='rgba(192,80,80,.6)'; cx.lineWidth=1; cx.stroke();
+      });
+    });
+    // attractor
+    cx.beginPath(); let r=1.001,z=2,th=0;
+    for(let i=0;i<=256;i++){cx.lineTo(px(r,th),py(r,th));[r,z]=rk4(r,z,.02,eps);th+=.02;}
+    cx.strokeStyle='#c9a84c'; cx.lineWidth=2.5; cx.stroke();
+
+    if(showL){
+      // lambda(z) panel
+      const lx0=LW+5, lw=W-LW-5, ly0=30, lh=H-60;
+      cx.fillStyle='rgba(13,17,23,.8)'; cx.fillRect(lx0,0,W-lx0,H);
+      cx.strokeStyle='rgba(201,168,76,.15)'; cx.lineWidth=.5;
+      cx.beginPath(); cx.moveTo(lx0,H/2); cx.lineTo(W-8,H/2); cx.stroke();
+      cx.beginPath(); cx.moveTo(lx0+lw*.25,ly0); cx.lineTo(lx0+lw*.25,ly0+lh); cx.stroke();
+
+      cx.beginPath();
+      for(let i=0;i<=100;i++){
+        const z=i/100*4, lam=-2*(1-Math.exp(-z));
+        const xp=lx0+lw*.25+z/4*lw*.7, yp=ly0+lh/2*(1-lam/2.2);
+        i?cx.lineTo(xp,yp):cx.moveTo(xp,yp);
+      }
+      cx.strokeStyle='#c9a84c'; cx.lineWidth=2; cx.stroke();
+      cx.fillStyle='#c9a84c'; cx.font='9px monospace'; cx.textAlign='center';
+      cx.fillText('λ(z)=−2(1−e⁻ᶻ)',lx0+lw/2+5,ly0-8);
+      cx.fillStyle='#666'; cx.fillText('z=0  λ=0',lx0+lw*.27,ly0+lh/2-4);
+      cx.fillStyle='rgba(88,150,220,.8)'; cx.fillText('z→∞  λ→−2',lx0+lw*.85,ly0+lh-8);
+      cx.fillStyle='#888'; cx.fillText('z',W-12,H/2+12); cx.fillText('λ',lx0+lw*.25-8,ly0);
+    }
+  }
+  ['eps4','norb','showlambda'].forEach(id=>document.getElementById(id).addEventListener('change',draw));
+  document.getElementById('eps4').addEventListener('input',draw);
+  window.addEventListener('resize',draw); draw();
+})();
+
+/* ── Threshold Equivalence (D3) ────────────────────────────── */
+(function(){
+  const el = document.getElementById('svg-threshold');
+  function render(){
+    const W = el.parentElement.offsetWidth || 700, H = 240;
+    el.setAttribute('width',W); el.setAttribute('height',H);
+    const svg = d3.select(el); svg.selectAll('*').remove();
+    const PAD = {l:40,r:20,t:24,b:32};
+    const PW = (W-PAD.l-PAD.r)/3 - 10;
+
+    const panels = [
+      {title:'A · Curvature κ/κ*', color:'#c9a84c', xlab:'time', ylab:'κ/κ*'},
+      {title:'B · μ_eff(z)', color:'#2a7f7f', xlab:'z', ylab:'μ_eff'},
+      {title:'C · τ = √(c/κ_noise)', color:'#6c3483', xlab:'κ_noise', ylab:'τ'},
+    ];
+
+    panels.forEach((p,i)=>{
+      const ox = PAD.l + i*(PW+10), oy = PAD.t, pw=PW, ph=H-PAD.t-PAD.b;
+      const g = svg.append('g').attr('transform',`translate(${ox},${oy})`);
+      g.append('rect').attr('width',pw).attr('height',ph)
+       .attr('fill','#0d1117').attr('stroke','rgba(255,255,255,.07)').attr('stroke-width',.5);
+      g.append('text').attr('x',pw/2).attr('y',-6).attr('text-anchor','middle')
+       .attr('fill',p.color).attr('font-size',9).attr('font-family','Outfit,sans-serif')
+       .attr('letter-spacing','0.08em').text(p.title);
+
+      // Draw curve
+      let pts=[];
+      if(i===0){for(let t=0;t<=100;t++){const x=t/100,kk=Math.min(1.0,0.05+x*x*1.5);pts.push([x*pw,ph*(1-kk*.9-.04)]);}}
+      if(i===1){for(let z=0;z<=4;z+=0.05){const lam=-2*(1-Math.exp(-z)),normed=(lam+2.1)/2.1;pts.push([z/4*pw,ph*(1-normed*.9-.04)]);}}
+      if(i===2){for(let kn=0.1;kn<=4;kn+=0.05){const tau=Math.sqrt(4/kn),tn=Math.min(1,(tau-0.5)/3.5);pts.push([(kn-0.1)/3.9*pw,ph*(1-tn*.9-.04)]);}}
+
+      const line=d3.line().x(d=>d[0]).y(d=>d[1]).curve(d3.curveCatmullRom);
+      g.append('path').datum(pts).attr('d',line).attr('fill','none')
+       .attr('stroke',p.color).attr('stroke-width',2);
+
+      // marker
+      let mx,my,mlabel;
+      if(i===0){mx=pw*.82;my=ph*(1-.9*.95-.04);mlabel='κ*';}
+      if(i===1){mx=pw*.15;my=ph*(1-.04);mlabel='λ(0)=0';}
+      if(i===2){mx=pw*.25;my=ph*(1-(1-0.5)/3.5*.9-.04);mlabel='τ=2';}
+      g.append('circle').attr('cx',mx).attr('cy',my).attr('r',3).attr('fill',p.color);
+      g.append('text').attr('x',mx+4).attr('y',my+4).attr('fill',p.color)
+       .attr('font-size',8).attr('font-family','monospace').text(mlabel);
+
+      // axes labels
+      g.append('text').attr('x',pw/2).attr('y',ph+18).attr('text-anchor','middle')
+       .attr('fill','#666').attr('font-size',8).attr('font-family','Outfit,sans-serif').text(p.xlab);
+    });
+
+    // arrows between panels
+    [1,2].forEach(i=>{
+      const x1=PAD.l+i*(PW+10)-8, x2=PAD.l+i*(PW+10)+2, y=PAD.t+(H-PAD.t-PAD.b)/2;
+      svg.append('text').attr('x',(x1+x2)/2).attr('y',y+4).attr('text-anchor','middle')
+         .attr('fill','rgba(201,168,76,.6)').attr('font-size',14).text('⟺');
+    });
+  }
+  window.addEventListener('resize',()=>{render();});
+  setTimeout(render,100);
+})();
+
+/* ── Bifurcation Diagram (D3) ──────────────────────────────── */
+(function(){
+  const el = document.getElementById('svg-bifurc');
+  function render(){
+    const W = el.parentElement.offsetWidth||700, H=200;
+    el.setAttribute('width',W); el.setAttribute('height',H);
+    const svg = d3.select(el); svg.selectAll('*').remove();
+    const PAD={l:40,r:140,t:24,b:32};
+    const pw=W-PAD.l-PAD.r, ph=H-PAD.t-PAD.b;
+    const g = svg.append('g').attr('transform',`translate(${PAD.l},${PAD.t})`);
+    g.append('rect').attr('width',pw).attr('height',ph).attr('fill','#0d1117');
+
+    const xScale = d3.scaleLinear().domain([0,4]).range([0,pw]);
+    const yScale = d3.scaleLinear().domain([0,2.4]).range([ph,0]);
+
+    // stable branch r=1
+    const stable=Array.from({length:200},(_,i)=>{const g=i/199*4;return {x:g,y:1};});
+    const line=d3.line().x(d=>xScale(d.x)).y(d=>yScale(d.y));
+    g.append('path').datum(stable).attr('d',line).attr('fill','none')
+     .attr('stroke','#2a7f7f').attr('stroke-width',2.5);
+
+    // unstable branch near SN
+    const unstable=Array.from({length:80},(_,i)=>{const g=0.5+i/79*1.5;return {x:g,y:0.55+Math.sin(i/79*Math.PI)*.35};});
+    const lineDash=d3.line().x(d=>xScale(d.x)).y(d=>yScale(d.y)).curve(d3.curveCatmullRom);
+    g.append('path').datum(unstable).attr('d',lineDash).attr('fill','none')
+     .attr('stroke','#c0392b').attr('stroke-width',1.5).attr('stroke-dasharray','4,3');
+
+    // Bifurcation markers
+    const marks=[
+      {x:.35,label:'H',sub:'A₁',color:'#c9a84c',desc:'Contact Hopf'},
+      {x:1.0,label:'SN',sub:'A₁',color:'#c9a84c',desc:'Saddle-node'},
+      {x:2.2,label:'NS',sub:'A₂',color:'#6c3483',desc:'Neimark–Sacker'},
+      {x:3.3,label:'SF',sub:'A₃',color:'#2a7f7f',desc:'Slow-fast'},
+    ];
+    marks.forEach(m=>{
+      const xp=xScale(m.x);
+      g.append('line').attr('x1',xp).attr('x2',xp).attr('y1',0).attr('y2',ph)
+       .attr('stroke',m.color).attr('stroke-width',1).attr('stroke-dasharray','3,2').attr('opacity',.6);
+      g.append('text').attr('x',xp).attr('y',-6).attr('text-anchor','middle')
+       .attr('fill',m.color).attr('font-size',9).attr('font-family','Outfit,sans-serif')
+       .attr('font-weight','600').text(m.label);
+      g.append('text').attr('x',xp).attr('y',ph+16).attr('text-anchor','middle')
+       .attr('fill',m.color).attr('font-size',8).attr('font-family','monospace').text(m.sub);
+    });
+    // γ axis label
+    g.append('text').attr('x',pw/2).attr('y',ph+28).attr('text-anchor','middle')
+     .attr('fill','#666').attr('font-size',9).attr('font-family','Outfit,sans-serif').text('γ (fold depth)');
+    g.append('text').attr('x',-10).attr('y',yScale(1)+4).attr('text-anchor','middle')
+     .attr('fill','#2a7f7f').attr('font-size',8).attr('font-family','monospace').text('r*=1');
+
+    // Legend
+    const lx=pw+8, leg=svg.append('g').attr('transform',`translate(${PAD.l+lx},${PAD.t})`);
+    marks.forEach((m,i)=>{
+      const y=i*36;
+      leg.append('rect').attr('x',0).attr('y',y).attr('width',12).attr('height',2).attr('fill',m.color);
+      leg.append('text').attr('x',16).attr('y',y+4).attr('fill',m.color)
+         .attr('font-size',8).attr('font-family','Outfit,sans-serif').attr('font-weight','600').text(m.label+' '+m.sub);
+      leg.append('text').attr('x',16).attr('y',y+14).attr('fill','#666')
+         .attr('font-size',7.5).attr('font-family','Outfit,sans-serif').text(m.desc);
+    });
+  }
+  window.addEventListener('resize',()=>render());
+  setTimeout(render,100);
+})();
+
+/* ── Coherence Bridge (D3) ─────────────────────────────────── */
+(function(){
+  const el = document.getElementById('svg-coherence');
+  const domains=[
+    'HPA stress','Neural osc.','Circadian','Immune','Plasma recon.','Market vol.'
+  ];
+  const params=['μ_max','ω','β','κ*'];
+  const data=[
+    [-2,1,1,1],[-1.8,2,0.8,1.2],[-2,1/24,1,1],[-1.5,0.1,1.5,0.9],
+    [-1.2,10,0.5,1.8],[-0.8,20,0.3,2.5]
+  ];
+  function render(){
+    const W=el.parentElement.offsetWidth||700, H=240;
+    el.setAttribute('width',W); el.setAttribute('height',H);
+    const svg=d3.select(el); svg.selectAll('*').remove();
+    const PAD={l:100,r:20,t:36,b:24};
+    const pw=W-PAD.l-PAD.r, ph=H-PAD.t-PAD.b;
+    const cw=pw/params.length, rh=ph/domains.length;
+
+    // colour scale
+    const colorScale=d3.scaleSequential(d3.interpolateViridis).domain([0,1]);
+    function norm(i,j){
+      const col=data.map(r=>Math.abs(r[j]));
+      const mx=d3.max(col); return Math.abs(data[i][j])/mx;
+    }
+
+    domains.forEach((d,i)=>{
+      params.forEach((p,j)=>{
+        const x=PAD.l+j*cw, y=PAD.t+i*rh, n=norm(i,j);
+        svg.append('rect').attr('x',x).attr('y',y).attr('width',cw-1).attr('height',rh-1)
+           .attr('fill',colorScale(n)).attr('opacity',.85);
+        svg.append('text').attr('x',x+cw/2).attr('y',y+rh/2+4).attr('text-anchor','middle')
+           .attr('fill','white').attr('font-size',8).attr('font-family','monospace')
+           .attr('font-weight','600').text(data[i][j]);
+      });
+      svg.append('text').attr('x',PAD.l-6).attr('y',PAD.t+i*rh+rh/2+4).attr('text-anchor','end')
+         .attr('fill','#aaa').attr('font-size',9).attr('font-family','Outfit,sans-serif').text(d);
+    });
+    params.forEach((p,j)=>{
+      svg.append('text').attr('x',PAD.l+j*cw+cw/2).attr('y',PAD.t-8).attr('text-anchor','middle')
+         .attr('fill','#c9a84c').attr('font-size',9).attr('font-family','Outfit,sans-serif')
+         .attr('font-weight','600').text(p);
+    });
+  }
+  window.addEventListener('resize',()=>render());
+  setTimeout(render,150);
+})();
+</script>
+</body>
+</html>

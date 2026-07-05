@@ -130,7 +130,7 @@ Update §11.2 to quote the corrected Ch 2.
 
 ## ▲ M12. Ch 12 small items
 
-- Table: "Inner basin r\* ≈ 0.80" → **0.773** (canonical value you fixed).
+- Table: "Inner basin r\* ≈ 0.80" → **0.776** (canonical value you fixed).
 - "Hopf symmetry r ↦ 2−r": the dm³ flow is not equivariant under r ↦ 2−r; label the row
   "(structural analogy, not an equivariance)".
 - §12.3 "unique fixed set of the Hopf symmetry r ↦ r (trivially)" — delete or rewrite; r ↦ r

@@ -41,7 +41,7 @@ Five different templates are currently live in one arc:
 ### ch03 — Contact 3-Manifold + S³
 - Style A — closest in substance to ch10; easiest house-style migration; it even has the same sim concept (r–z portrait + 3D helix).
 - "the radial ODE from Chapter 1" — stale: Chapter 1 is now the fermion seed, not r(1−r²).
-- **r\* value conflict:** ch03 says r\* ≈ 0.8; ch10 body says r\* ≈ 0.80 but ch10's figure label reads **r\* ≈ 0.8123**, and the **index card for ch10 says r\* ≈ 0.773**. Four claims, three values. Pick one (presumably the current DOP853 number) and propagate.
+- **r\* value conflict:** ch03 says r\* ≈ 0.8; ch10 body says r\* ≈ 0.80 but ch10's figure label reads **r\* ≈ 0.8123**, and the **index card for ch10 says r\* ≈ 0.776**. Four claims, three values. Pick one (presumably the current DOP853 number) and propagate.
 - ch03 next-link calls ch04 "First Lift"; ch04 calls itself "The Hypercube"; the index calls it "The Tesseract". One name, please.
 - Theorem 3.3 "locally contactomorphic to S³ near the attractor" is vacuous as stated (Darboux makes *everything* locally contactomorphic) — consider restating as: the attractor's neighbourhood geometry matches the Hopf/Reeb model on S³.
 
@@ -87,7 +87,7 @@ Five different templates are currently live in one arc:
 
 ## Cross-cutting issues (fix once, propagate everywhere)
 
-1. **r\*** : 0.773 (index) vs 0.80 (ch03, ch10 §6) vs 0.8123 (ch10 figure). One number.
+1. **r\*** : 0.776 (index) vs 0.80 (ch03, ch10 §6) vs 0.8123 (ch10 figure). One number.
 2. **Operator chain arity**: 4 ops (G = U∘F∘K∘C — ch02, ch10, series branding) vs 5 ops (C→K→F→U→T — ch01, ch05–ch06). If T is real, the brand formula should say so once ("G closes to G·T in 6D"), not vary silently.
 3. **GTCT expansion**: Generative Temporal Contact Theory (hub/index) vs Galilean Contact Transformations (ch00, ch05, ch06). Also ch10's Lean block says "GCTC" (namespace GCTC) — typo for GTCT.
 4. **Chapter 1 identity**: ch00, ch03, ch05 still reference the old "Ch 1 = radial ODE, x\* = 1". Live ch01 is the Fermion Seed. (My ch02 revamp keeps "Chapter 1 gave us ẋ = f(x)" from your original text — if ch01 stays fermionic, that opener should become "Chapter 1 gave us the seed; the first ODE…" Tell me and I'll adjust.)

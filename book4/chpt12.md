@@ -160,7 +160,7 @@ The parallel is structural. The proof of convergence for dm³ used the explicit 
 
 ### Why the Analogy Has a Limit
 
-Chapter 10 (and §6 of the dm³ paper) discovered an important asymmetry: the outer basin ($r > 1$) converges to the attractor cleanly, but the inner basin has an irregular boundary at $r^* \approx 0.80$ — below which trajectories escape. The Gronwall estimate predicted a symmetric basin; the numerics corrected it.
+Chapter 10 (and §6 of the dm³ paper) discovered an important asymmetry: the outer basin ($r > 1$) converges to the attractor cleanly, but the inner basin has an irregular boundary at $r^* \approx 0.776$ — below which trajectories escape. The Gronwall estimate predicted a symmetric basin; the numerics corrected it.
 
 The arithmetic case has an analogue of this asymmetry, and it is more severe. In the dm³ system, the inner-basin boundary was a technical complication of the coupling term $\varepsilon(r-1)e^{-z}$. In the arithmetic system, the "inner basin" — the region of the critical strip away from $\sigma = \tfrac{1}{2}$ — is precisely the territory where the Riemann Hypothesis claims no zeros exist.
 

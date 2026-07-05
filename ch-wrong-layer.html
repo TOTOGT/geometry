@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Wrong Layer · 432 Hz, 440 Hz, and the Geometry of Resonance — Principia Orthogona</title>
+<meta name="description" content="The 432/440 Hz debate asks a real question in the wrong coordinate system. The fixed point is not in the frequency — it is in the geometry of the space that receives it.">
+<style>
+:root {
+  --navy:#1a2744; --gold:#c9a84c; --cream:#faf7f0; --smoke:#f0ece4;
+  --mid:#3a4f7a; --rule:#8a7340; --text:#1c1c1c; --light:#e8e2d4;
+  --teal:#1a5c5c; --muted:#888;
+  --surface:rgba(26,39,68,.95);
+  --gold-dim:rgba(201,168,76,.4); --mono:'JetBrains Mono','Fira Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Georgia','Times New Roman',serif;color:var(--text);background:var(--cream);}
+
+nav{background:var(--navy);padding:.75rem 2rem;position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.nav-logo{color:var(--gold);font-weight:bold;font-size:.95rem;letter-spacing:.1em;text-decoration:none;font-family:sans-serif;}
+.nav-links{display:flex;gap:1.2rem;list-style:none;flex-wrap:wrap;}
+.nav-links a{color:#ccc;text-decoration:none;font-size:.82rem;font-family:sans-serif;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+
+.hero{background:var(--navy);color:white;padding:5rem 2rem 3.5rem;text-align:center;}
+.eyebrow{font-family:sans-serif;font-size:.82rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.9rem,4.5vw,3.2rem);line-height:1.2;color:white;margin-bottom:.6rem;}
+.hero-sub{color:var(--gold);font-size:1.25rem;font-style:italic;margin-bottom:1.2rem;}
+.gold-rule{width:70px;height:2px;background:var(--gold);margin:1.2rem auto;}
+.hero-desc{max-width:700px;margin:0 auto 2rem;color:#c0c0c0;font-size:.97rem;line-height:1.85;}
+
+.op-chain{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin:1.5rem 0;}
+.op-chip{font-family:sans-serif;font-size:.85rem;padding:.3rem .8rem;
+  border:1px solid rgba(201,168,76,.3);color:#aaa;letter-spacing:.06em;}
+.op-chip.active{background:var(--gold);color:var(--navy);font-weight:bold;border-color:var(--gold);}
+
+.meta-strip{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;}
+.meta-chip{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);
+  color:var(--gold);padding:.4rem 1rem;font-family:sans-serif;font-size:.78rem;letter-spacing:.08em;}
+
+section{padding:4rem 2rem;}
+.section-inner{max-width:880px;margin:0 auto;}
+.section-label{font-family:sans-serif;font-size:.72rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--rule);margin-bottom:.4rem;}
+h2{font-size:clamp(1.3rem,2.8vw,1.9rem);color:var(--navy);margin-bottom:1.2rem;}
+h3{font-size:1.15rem;color:var(--navy);margin:2rem 0 .8rem;}
+p{line-height:1.85;margin-bottom:1.2rem;font-size:.97rem;}
+p:last-child{margin-bottom:0;}
+
+.eq-block{background:var(--navy);color:white;padding:1.8rem 2rem;
+  margin:2rem 0;border-left:4px solid var(--gold);font-family:var(--mono);
+  font-size:.88rem;line-height:2.2;border-radius:0 6px 6px 0;}
+.eq-label{font-family:sans-serif;font-size:.65rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block;}
+.eq-line{color:#e8e2d4;}
+.eq-gold{color:var(--gold);}
+
+.callout{background:var(--smoke);border-left:4px solid var(--gold);
+  padding:1.6rem 2rem;margin:2.5rem 0;font-style:italic;font-size:.97rem;line-height:1.85;}
+.callout strong{font-style:normal;color:var(--navy);}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:2rem 0;}
+@media(max-width:640px){.two-col{grid-template-columns:1fr;}}
+.col-card{background:var(--smoke);padding:1.6rem;border-top:3px solid var(--gold-dim);}
+.col-card h4{font-family:sans-serif;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--rule);margin-bottom:.8rem;}
+.col-card p{font-size:.92rem;margin-bottom:.7rem;}
+.col-card p:last-child{margin-bottom:0;}
+
+.verdict{background:var(--navy);color:white;padding:2rem 2.5rem;margin:2.5rem 0;
+  border-left:5px solid var(--gold);}
+.verdict .verdict-label{font-family:sans-serif;font-size:.65rem;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;}
+.verdict p{color:#ddd;line-height:1.85;font-size:.97rem;margin-bottom:.8rem;}
+.verdict p:last-child{margin-bottom:0;}
+
+.basin-diagram{background:var(--navy);border:1px solid var(--gold-dim);
+  padding:2rem;margin:2.5rem 0;text-align:center;}
+.basin-label{font-family:sans-serif;font-size:.65rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem;display:block;}
+.basin-ring{display:inline-flex;flex-direction:column;align-items:center;gap:.3rem;
+  font-family:var(--mono);font-size:.82rem;}
+.r-line{color:#aaa;padding:.2rem 0;}
+.r-line.attractor{color:var(--gold);font-weight:bold;font-size:.95rem;}
+.r-line.stable{color:#6abf8a;}
+.r-line.unstable{color:#cc7766;}
+.r-line.marker{color:#8899bb;}
+
+section.alt{background:var(--smoke);}
+section.dark{background:var(--navy);color:white;}
+section.dark h2{color:var(--gold);}
+section.dark h3{color:#ddd;}
+section.dark p{color:#ccc;}
+section.dark .section-label{color:var(--gold-dim);}
+
+.nav-footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+  padding:2.5rem 2rem;background:var(--navy);border-top:1px solid rgba(201,168,76,.15);}
+.nav-footer a{color:var(--gold);text-decoration:none;font-family:sans-serif;font-size:.85rem;}
+.nav-footer a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="living-book.html">Principia Orthogona</a>
+  <ul class="nav-links">
+    <li><a href="living-book.html">Contents</a></li>
+    <li><a href="ch6-resonant.html">← Ch 6 · Resonant</a></li>
+    <li><a href="ch-energy-entropy.html">Energy Arc →</a></li>
+    <li><a href="https://www.ebay.com/str/principiaorthogona" target="_blank">eBay Store</a></li>
+    <li><a href="https://g6llc.gumroad.com" target="_blank">Gumroad</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">Scientists Series · Sound &amp; Geometry</div>
+
+  <div class="op-chain">
+    <span class="op-chip active">C</span>
+    <span class="op-chip">→</span>
+    <span class="op-chip">K</span>
+    <span class="op-chip">→</span>
+    <span class="op-chip">F</span>
+    <span class="op-chip">→</span>
+    <span class="op-chip">U</span>
+  </div>
+
+  <h1>The Wrong Layer</h1>
+  <div class="hero-sub">432 Hz, 440 Hz, and the Geometry of Resonance</div>
+  <div class="gold-rule"></div>
+  <p class="hero-desc">
+    The 432/440 Hz debate asks a real question in the wrong coordinate system.
+    The fixed point is not in the frequency. It is in the geometry of the space that receives it.
+  </p>
+
+  <div class="meta-strip">
+    <span class="meta-chip">Operator: C (collapse)</span>
+    <span class="meta-chip">Constants: τ = 2, ε₀ = 1/3</span>
+    <span class="meta-chip">Evidence: Hypogeum of Ħal Saflieni · 111 Hz</span>
+    <span class="meta-chip">Free</span>
+  </div>
+</div>
+
+<!-- SECTION 1: THE CLAIM -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">I · The Claim</div>
+    <h2>A real question, badly located</h2>
+
+    <p>
+      In 1939, an international conference set the concert pitch standard at A = 440 Hz.
+      Since then, a persistent counter-tradition has argued that this was wrong — not
+      technically wrong, but <em>cosmically</em> wrong. The "correct" frequency, they say,
+      is A = 432 Hz. Music tuned to 432 Hz is said to resonate with the human body,
+      with the Schumann resonance of the Earth, with sacred geometry, with the mathematics
+      of the cosmos. Music tuned to 440 Hz, by contrast, is said to cause anxiety,
+      aggression, and spiritual disconnection — and some versions of the story attribute
+      this choice to deliberate manipulation by Nazi propagandists, the Rockefeller
+      Foundation, or a generically sinister music industry.
+    </p>
+
+    <p>
+      The conspiracy is not well-supported. The historical record for a universal 432 Hz
+      standard does not exist — pitch varied enormously across centuries and continents,
+      and medieval and baroque instruments often ran at what we would now call 415 Hz
+      or lower. The Schumann resonance is approximately 7.83 Hz, not 432. The Nazi
+      connection is poorly documented. The 1939 conference was a routine standardization
+      effort, not a psychoacoustic operation.
+    </p>
+
+    <p>
+      And yet.
+    </p>
+
+    <p>
+      The underlying intuition — that there is a preferred frequency at which biological
+      systems entrain most stably, and that forcing them away from it degrades the attractor
+      — is not a conspiracy. It is a claim about basin structure. It is the kind of claim
+      that contact geometry was built to address. The 432/440 debate is asking the right
+      question in the wrong coordinate system. This chapter is about what the right
+      coordinate system looks like.
+    </p>
+  </div>
+</section>
+
+<!-- SECTION 2: THE CORRECT QUESTION -->
+<section class="alt">
+  <div class="section-inner">
+    <div class="section-label">II · The Correct Question</div>
+    <h2>What does "the right frequency" actually mean?</h2>
+
+    <p>
+      In dm³, the limit cycle Γ is the attractor. It is the orbit the system returns to
+      after perturbation — the stable pattern that living systems sustain when their
+      dynamics are functioning well. The question "is there a correct frequency?" is,
+      in this language, the question: <em>does the attractor have a preferred period,
+      and does the input frequency affect whether the system lands inside or outside
+      the basin of attraction?</em>
+    </p>
+
+    <p>
+      The answer is yes — but the way it works is not what the 432 Hz community imagines.
+      The attractor's period is not a fixed number in Hz. It is a function of the
+      contact structure of the receiving system. Change the system — the room, the body,
+      the architecture of the ear — and the preferred period changes with it.
+    </p>
+
+    <div class="eq-block">
+      <span class="eq-label">dm³ system — contact manifold M = ℝ²₊ × ℝ, α = dz − r²dθ</span>
+      <div class="eq-line">ṙ &nbsp;= <span class="eq-gold">r(1 − r²) + 2(r − 1)e⁻ᶻ</span></div>
+      <div class="eq-line">θ̇ &nbsp;= <span class="eq-gold">1</span></div>
+      <div class="eq-line">ż &nbsp;= <span class="eq-gold">r² − 2(r − 1)²e⁻ᶻ</span></div>
+      <div class="eq-line" style="margin-top:.8rem;color:#888;font-size:.78rem;">
+        Attractor: Γ = {r = 1}, period T* = 2π, Lyapunov exponent μ_max = −2
+      </div>
+    </div>
+
+    <p>
+      The period T* = 2π is the intrinsic period of this particular system. It is not
+      universal. It emerges from the contact structure — from the specific geometry of
+      M and the form α. If you change the geometry, you change T*. The 432/440 debate
+      treats T* as a fixed constant of nature. It is not. It is a consequence of structure.
+    </p>
+  </div>
+</section>
+
+<!-- SECTION 3: THE BASIN -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">III · The Basin</div>
+    <h2>Why the direction of the error matters</h2>
+
+    <p>
+      Even granting that the attractor exists and has a preferred period, the 432/440
+      debate implicitly claims that tuning slightly flat (432 vs 440) is better than
+      tuning at the standard. This is a claim about which side of the attractor is more
+      forgiving. And here, the dm³ framework has something precise to say.
+    </p>
+
+    <p>
+      The stability radius is ε₀ = 1/3. Any trajectory starting within 1/3 of the
+      attractor boundary will return to Γ. But the Gronwall asymmetry — established
+      numerically in Version 3 of Volume II and verified to r* ≈ 0.776 — shows that
+      the inner basin is smaller than the outer basin. Trajectories starting slightly
+      <em>above</em> r = 1 return more easily than trajectories starting slightly
+      <em>below</em> it.
+    </p>
+
+    <div class="basin-diagram">
+      <span class="basin-label">Basin of Attraction — Radial Cross-Section</span>
+      <div class="basin-ring">
+        <div class="r-line unstable">r = 0.667 &nbsp;— inner Gronwall bound</div>
+        <div class="r-line marker">r* ≈ 0.776 &nbsp;— true inner basin boundary (V3 certified)</div>
+        <div class="r-line stable">r ∈ (0.776, 1) &nbsp;— stable inner approach</div>
+        <div class="r-line attractor">r = 1 &nbsp;— Γ · the attractor</div>
+        <div class="r-line stable">r ∈ (1, 1.333) &nbsp;— stable outer approach</div>
+        <div class="r-line unstable">r &gt; 1.333 &nbsp;— outside stability radius</div>
+      </div>
+    </div>
+
+    <p>
+      If you map frequency to the radial coordinate r — with the attractor at r = 1
+      corresponding to the "correct" frequency — then the question becomes: is 440 Hz
+      above or below the attractor, and is 432 Hz on the other side? The asymmetric basin
+      says that if the standard is slightly above the attractor (outer approach), it
+      recovers more easily than a frequency that sits slightly below it (inner approach).
+      This is the mathematical content of the intuition that "flat is worse than sharp"
+      in acoustic entrainment.
+    </p>
+
+    <p>
+      This does not validate the specific claim that 432 Hz is correct and 440 Hz is wrong.
+      It says that <em>if</em> there is a preferred frequency and the current standard
+      is on the wrong side of it, the direction of the error matters — and that contact
+      geometry gives you the tools to analyze which direction is more recoverable.
+    </p>
+  </div>
+</section>
+
+<!-- SECTION 4: THE HYPOGEUM -->
+<section class="alt">
+  <div class="section-inner">
+    <div class="section-label">IV · The Correct Coordinate System</div>
+    <h2>The Hypogeum of Ħal Saflieni · 111 Hz</h2>
+
+    <p>
+      The Hypogeum of Ħal Saflieni is a Neolithic underground sanctuary in Malta,
+      built between 3600 and 2500 BCE. It descends three levels into limestone bedrock.
+      It is the oldest known roofed structure on Earth. In 2008, the RARG (Resonance
+      in the Architecture Research Group) conducted acoustic measurements throughout
+      the Hypogeum and found that the Oracle Chamber resonates at approximately 111 Hz.
+      At this frequency, sound does not scatter. It stabilizes. It fills the space
+      uniformly and decays slowly, holding its pattern against the stone.
+    </p>
+
+    <p>
+      This is not a coincidence of measurement. It is a consequence of geometry.
+      The Oracle Chamber has specific dimensions, specific stone surfaces, specific
+      proportions of curved and flat wall, specific depth below ground. These properties
+      determine which frequencies collapse into standing waves and which disperse.
+      The chamber is not tuned to 111 Hz by choice. It <em>is</em> 111 Hz, in the same
+      way that a violin string of a given length and tension <em>is</em> a particular pitch.
+    </p>
+
+    <div class="callout">
+      <strong>The room instantiates C.</strong> The contact operator C — the first operator
+      in the chain G = U∘F∘K∘C — collapses the input field to the manifold. In the
+      Hypogeum, the room performs this operation acoustically: of all the frequencies
+      that enter the space, only those near 111 Hz are retained. The geometry selects
+      the attractor. The frequency is the input. The room is the operator.
+    </div>
+
+    <p>
+      This is what the 432/440 debate gets wrong. It looks for the fixed point in the
+      frequency domain — as if 432 Hz were a number written into the laws of physics
+      that all spaces must honor. But no such number exists. What exists is the operator:
+      the geometry of the receiving system that determines which frequencies stabilize
+      and which do not.
+    </p>
+
+    <p>
+      Change the room and the number changes. Put the Hypogeum's geometry at sea level
+      in a different latitude, with granite instead of limestone, and the resonant
+      frequency shifts. The 5,000-year-old builders of the Hypogeum did not know this
+      in mathematical terms. But they found it empirically: they built until the room
+      sang, and then they stopped. C → K, in stone.
+    </p>
+  </div>
+</section>
+
+<!-- SECTION 5: THE WRONG LAYER -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">V · The Argument</div>
+    <h2>Why the debate is in the wrong coordinate system</h2>
+
+    <p>
+      There are two ways to ask "what is the correct frequency for human resonance?"
+      The first is to look for a number — a constant of nature that applies universally,
+      independent of context. This is the 432 Hz approach. It treats the frequency
+      domain as the primary layer of reality, and the geometry as secondary.
+    </p>
+
+    <p>
+      The second way is to recognize that the correct frequency is not a constant but
+      a <em>functional</em> — a value that depends on the structure of the system
+      receiving it. This is the dm³ approach. The attractor period T* is determined
+      by the contact geometry of M, not written in the air before the room is built.
+    </p>
+
+    <div class="two-col">
+      <div class="col-card">
+        <h4>432 Hz approach</h4>
+        <p>The correct frequency is a fixed constant of nature.</p>
+        <p>432 Hz aligns with the Schumann resonance, sacred geometry, and the human body universally.</p>
+        <p>440 Hz was chosen to deliberately detune this alignment.</p>
+        <p><em>Coordinate system: frequency domain. Fixed point is a number.</em></p>
+      </div>
+      <div class="col-card">
+        <h4>dm³ approach</h4>
+        <p>The correct frequency is a functional of the receiving geometry.</p>
+        <p>The attractor period T* is determined by the contact structure of M — the room, the body, the architecture of the ear.</p>
+        <p>The question is not "what Hz?" but "what geometry produces Γ here?"</p>
+        <p><em>Coordinate system: contact manifold. Fixed point is a structure.</em></p>
+      </div>
+    </div>
+
+    <p>
+      The 432 Hz community is right that there is a preferred frequency — a value at
+      which biological systems entrain most stably. They are right that detuning from
+      it degrades the attractor. They are right that this matters for health and
+      cognition. These are real claims with real evidence behind them.
+    </p>
+
+    <p>
+      Where they go wrong is the layer. They look for the preferred frequency in the
+      frequency domain. It is not there. It is in the contact structure of the operator
+      that receives the frequency. The fixed point is not 432 Hz. The fixed point is
+      the geometry that makes some frequency — possibly near 432 Hz in a given context —
+      into an attractor. Build the room first. Then measure what it sings.
+    </p>
+  </div>
+</section>
+
+<!-- SECTION 6: THE VERDICT -->
+<section class="dark">
+  <div class="section-inner">
+    <div class="section-label">VI · Conclusion</div>
+    <h2>What this means for the Cajueiro Hypogeum</h2>
+
+    <div class="verdict">
+      <div class="verdict-label">The operator chain · C → K → F → U</div>
+      <p>
+        The Cajueiro Hypogeum project — a permanent therapeutic soundworks space in Newark —
+        is not built around 111 Hz because 111 Hz is a magic number. It is built around
+        the question: <em>what geometry, in this place, with these materials, at this depth,
+        produces Γ?</em>
+      </p>
+      <p>
+        The Neolithic builders of Ħal Saflieni answered that question in limestone over
+        a thousand years of construction. The answer happened to be 111 Hz. The number
+        came last. The geometry came first.
+      </p>
+      <p>
+        This is C. The collapse operator. The room selects. Everything else follows.
+      </p>
+    </div>
+
+    <p>
+      The 432/440 debate will continue because it is asking a real question.
+      The question deserves a real answer — which means moving it out of the
+      frequency domain and into the geometry of the spaces where sound lives.
+      That is the program. That is what a hypogeum is for.
+    </p>
+
+    <p>
+      The conspiracy is not the point. The intuition is the point.
+      And the intuition, properly translated, is contact geometry.
+    </p>
+  </div>
+</section>
+
+<!-- NAV FOOTER -->
+<div class="nav-footer">
+  <a href="ch6-resonant.html">← Chapter 6 · Resonant</a>
+  <a href="living-book.html">↑ Contents</a>
+  <a href="ch-energy-entropy.html">Energy Arc →</a>
+</div>
+
+</body>
+</html>
