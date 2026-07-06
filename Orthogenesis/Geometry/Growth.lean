@@ -7,7 +7,6 @@ structure GrowthParams where
   stages : ℕ
   target : ℝ
   rel    : Prop
-deriving Repr
 
 def R (P : GrowthParams) (n : ℕ) : ℝ :=
   P.g ^ (n : ℝ)
