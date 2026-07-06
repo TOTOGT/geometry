@@ -1,4 +1,4 @@
-import Orthogenesis.Architecture.Cell
+import Orthogenesis.Geometry.Cell
 import Mathlib.Data.Finset.Basic
 
 namespace Orthogenesis
