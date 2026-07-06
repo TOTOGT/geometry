@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Missing Anchor — Principia Orthogona, Book 6</title>
+<style>
+  :root { --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Georgia, 'Times New Roman', serif; background: var(--cream); color: var(--navy); }
+  main { max-width: 780px; margin: 0 auto; padding: 64px 40px 80px; }
+  .eyebrow { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+  h1 { font-size: 32px; font-weight: normal; text-align: center; margin: 0 0 6px; line-height: 1.25; }
+  .value-line { text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13.5px; color: #6b7280; margin-bottom: 28px; }
+  .gold-rule { height: 1px; width: 120px; margin: 0 auto 32px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  h2 { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); border-bottom: 1px solid var(--smoke); padding-bottom: 8px; margin: 44px 0 16px; }
+  p { font-size: 16.5px; line-height: 1.75; margin: 0 0 20px; }
+  table.status-table { width: 100%; border-collapse: collapse; margin: 16px 0 28px; font-size: 14px; }
+  table.status-table th, table.status-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--smoke); vertical-align: top; }
+  table.status-table th { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #9ca3af; }
+  .numeric-check { background: var(--smoke); border-radius: 4px; padding: 16px 20px; font-family: 'SF Mono', Menlo, monospace; font-size: 13px; line-height: 1.7; margin: 20px 0 28px; overflow-x: auto; white-space: pre; }
+  .finding { background: #fdf0ee; border: 1px solid #e8b8ae; border-radius: 4px; padding: 18px 22px; margin: 12px 0 28px; font-size: 15.5px; line-height: 1.7; }
+  .finding .lbl { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #a5453a; display: block; margin-bottom: 8px; }
+  .clean { background: #eef7f0; border: 1px solid #b8dcc0; border-radius: 4px; padding: 18px 22px; margin: 12px 0 28px; font-size: 15.5px; line-height: 1.7; }
+  .clean .lbl { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #2f7d43; display: block; margin-bottom: 8px; }
+  .caveat { font-size: 15px; line-height: 1.7; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 18px; margin: 24px 0 32px; }
+  .prevnext { display: flex; justify-content: space-between; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; padding-top: 24px; margin-top: 44px; border-top: 1px solid var(--smoke); }
+  .prevnext a { color: inherit; text-decoration: none; }
+  .prevnext a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+<main>
+
+  <div class="eyebrow">Principia Orthogona &nbsp;·&nbsp; Book 6 &nbsp;·&nbsp; Working Papers · Mathematics &amp; Formal Proofs</div>
+
+  <h1>The Missing Anchor</h1>
+  <div class="value-line">the corpus's one attempt at a real physical calibration for μ_max and ε₀, traced to its source and found unsupported</div>
+
+  <div class="gold-rule"></div>
+
+  <p>
+    Every "canonical constant" in this series &mdash; ε₀ = 1/3, μ_max = &minus;2,
+    τ = 2 &mdash; is proved as a dimensionless fact about an abstract operator
+    chain. None of them carry a physical unit anywhere in the Lean sources.
+    The autophagy/mTORC1 chapter is the one place in the corpus that
+    reaches past that and claims a real, unit-bearing number: μ_max &asymp;
+    &minus;0.41 s&#8315;&#185;, obtained by rescaling the dimensionless
+    &minus;2 with a physical mTORC1 kinase time constant, citing Mizushima
+    et al. (2010) and Melia et al. (2020). This working paper traces that
+    calibration to its source. It does not hold up, on two independent
+    grounds, and both are fixed in the source files as of this paper.
+  </p>
+
+  <h2>What was checked first, and cleared</h2>
+  <p>
+    Before treating anything here as an error, the apparent &minus;3-vs-&minus;2
+    discrepancy between <code>mu_canonical</code> and <code>mu_dm3</code> in
+    <code>AutophagyDm3_v2.lean</code> was checked directly, by hand, rather
+    than assumed to be a bug.
+  </p>
+  <div class="numeric-check">mu_canonical:  -V''(1)/2  where V(q) = q^3 - 3q,  V''(q) = 6q
+               V''(1) = 6,  so  -V''(1)/2 = -3     [correct]
+
+mu_dm3:        linearise  r(1 - r^2)  at  r = 1 + delta:
+               r(1-r^2) = (1+delta)(1 - (1+delta)^2)
+                        = (1+delta)(-2*delta - delta^2)
+                        = -2*delta - 3*delta^2 - delta^3
+               First-order (linear) coefficient in delta:  -2     [correct]
+
+               These are two different functions (V(q)=q^3-3q is not a
+               rescaling of r(1-r^2)), each correctly evaluated. -3 and -2
+               are not the same computation done two ways; they are two
+               distinct quantities from two distinct toy models.</div>
+  <div class="clean">
+    <span class="lbl">Cleared</span>
+    The &minus;3/&minus;2 gap is not an error. Both numbers are correctly
+    derived from their respective models, and the corpus's own remark
+    ("the gap... is the &epsilon;-rescaling, not a sorry") is accurate on
+    this specific point. This paper's finding is about what happens next,
+    not about this step.
+  </div>
+
+  <h2>What was checked next, and did not clear</h2>
+  <p>
+    The next step in the same source claims a physiological rescaling:
+    dividing the dimensionless &minus;2 by a real time constant &tau;_mTOR
+    to get a rate in inverse seconds. Two files in the corpus make this
+    claim, with two different numbers, for the identical result.
+  </p>
+  <div class="numeric-check">sample-chapter-autophagy.html (Step 4):
+    "rescaled to mu_max ~ -0.41 s^-1 by the mTORC1 kinase time constant
+     tau_mTOR ~ 7.3 s"
+    Check:  -2 / 7.3  =  -0.274                    <- does NOT match -0.41
+
+AutophagyDm3_v2.lean (Section 3 remark):
+    "mu_max ~ -0.41 s^-1 follows by further dividing by the mTORC1
+     kinase time constant tau_mTOR ~ 4.9 s"
+    Check:  -2 / 4.9  =  -0.408  ~  -0.41           <- matches
+
+Two different tau_mTOR values (7.3 s vs 4.9 s) are cited in two files
+of the same corpus for the same claimed -0.41 s^-1 result. Only one of
+the two arithmetic paths actually produces -0.41.</div>
+  <p>
+    Neither number was found anywhere in a search of the ULK1/mTORC1
+    kinetics literature. What that literature actually reports, across
+    several 2015&ndash;2024 papers on mTORC1&ndash;ULK1&ndash;AMPK regulation and
+    oscillatory autophagy induction, is timescales of <strong>hours</strong>:
+    ULK1 protein levels fall over roughly the first 4 hours of starvation
+    and recover to baseline by roughly 6 hours, and autophagy induction
+    itself is described as oscillatory on that same hours-long scale.
+    A single-digit-second time constant is roughly three to four orders
+    of magnitude away from anything reported for this specific pathway.
+    "Melia et al. (2020)" did not surface as a findable paper on this
+    topic in the sources checked.
+  </p>
+  <p>
+    The chapter also contradicts itself internally, in adjacent sections
+    of the same file. Step 4 states the &minus;0.41 s&#8315;&#185; result as
+    settled. Step 5, "Obligation 2," lists as an <em>open</em> obligation
+    that "establishing that the mTORC1 suppression map &sigma; is
+    C&#8734;-equivalent to V near &rho;* (Mather's theorem) requires
+    constitutive data from Mizushima et al. (2010)" &mdash; i.e., the same
+    file already says, two paragraphs later, that the data needed to
+    justify the Step 4 claim has not yet been brought in.
+  </p>
+  <div class="finding">
+    <span class="lbl">Finding</span>
+    No physiological calibration for &mu;_max or &epsilon;&#8320; is
+    currently established anywhere in this corpus. The one number that
+    looked like a real anchor was carried by an internally inconsistent
+    constant (two different values for the same claimed result), was not
+    traceable to either cited source, and was already flagged as
+    unresolved by the same chapter's own open-obligations list. Fixed:
+    the &minus;0.41 s&#8315;&#185; / &tau;_mTOR claim has been removed from
+    <code>sample-chapter-autophagy.html</code> and withdrawn with a
+    correction note in <code>AutophagyDm3_v2.lean</code>, both pointing
+    here. The dimensionless results (&minus;3, &minus;2, 1/3, all still
+    Lean-proved as dimensionless facts) are untouched; only the claim that
+    they'd been anchored to a real, physical, unit-bearing measurement is
+    withdrawn.
+  </div>
+
+  <h2>Why this one is bigger than WP-24/28/29</h2>
+  <p>
+    The earlier working papers in this series each found one unsupported
+    or false claim in one place. This one is different in kind: it was
+    the corpus's only candidate for a genuine bridge from an abstract,
+    dimensionless, Lean-proved dynamical system to a real, externally
+    measurable, unit-bearing quantity &mdash; the thing that would let
+    someone actually test the framework against data, the way NANOGrav's
+    15-year pulsar timing data set tests general relativity's prediction
+    for a stochastic gravitational-wave background. It does not currently
+    do that. This does not mean such a bridge is impossible to build; it
+    means it has not been built yet, and the corpus should not describe
+    itself, in any chapter, as though it has been.
+  </p>
+
+  <p class="caveat">
+    Path forward, if this is worth pursuing properly: go to the actual
+    Mizushima (2010) and a correctly identified Melia paper (the 2020
+    citation could not be confirmed as it stands and may be a wrong year,
+    wrong author, or non-existent reference — this should be checked
+    directly against a citation database, not assumed), extract whatever
+    real kinetic time constant either paper actually reports for ULK1 or
+    mTORC1 activity, and redo the rescaling from that number rather than
+    from a placeholder. Until then, the honest status of "μ_max in
+    physiological units" is: not yet computed.
+  </p>
+
+  <div class="prevnext">
+    <a href="index.html">&larr; Book 6 index</a>
+    <a href="wp29-numerology-sweep.html">WP-29: The Numerology Sweep &rarr;</a>
+  </div>
+
+</main>
+</body>
+</html>

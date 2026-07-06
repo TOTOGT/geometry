@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thymic Selection as a Three-Stage Proofreading Cascade | dm³ — Book VI</title>
+  <style>
+    :root {
+      --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4;
+      --mid: #3a4f7a; --rule: #8a7340; --text: #1c1c1c; --light: #e8e2d4;
+      --teal: #2a7a6a; --amber: #b8860b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia','Times New Roman',serif; color: var(--text); background: var(--cream); }
+    nav { background: var(--navy); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-logo { color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; text-decoration: none; font-family: sans-serif; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a { color: #ccc; text-decoration: none; font-size: 0.82rem; font-family: sans-serif; }
+    .nav-links a:hover { color: var(--gold); }
+
+    .hero { background: var(--navy); color: white; padding: 4rem 2rem 3rem; }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .op-ref { font-family: sans-serif; font-size: 0.78rem; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.6rem; }
+    .eyebrow { font-family: sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; color: #aaa; text-transform: uppercase; margin-bottom: 0.8rem; }
+    h1 { font-size: clamp(1.7rem, 4vw, 2.8rem); color: white; line-height: 1.2; margin-bottom: 0.4rem; }
+    h1 .hi { color: var(--gold); font-style: italic; }
+    .gold-rule { width: 60px; height: 2px; background: var(--gold); margin: 1.4rem 0; }
+    .hero-desc { color: #ddd; font-size: 1rem; line-height: 1.7; max-width: 680px; }
+    .hero-meta { font-family: sans-serif; font-size: 0.8rem; color: #aaa; margin-top: 1.4rem; }
+    .hero-meta span { color: var(--gold); }
+
+    section { padding: 3rem 2rem; }
+    .section-inner { max-width: 800px; margin: 0 auto; }
+    section:nth-child(even) { background: var(--smoke); }
+    h2 { font-size: 1.55rem; color: var(--navy); margin-bottom: 1.2rem; border-bottom: 1px solid var(--light); padding-bottom: 0.5rem; }
+    h3 { font-size: 1.15rem; color: var(--mid); margin: 1.4rem 0 0.7rem; }
+    p { line-height: 1.85; margin-bottom: 1.1rem; }
+    p:last-child { margin-bottom: 0; }
+
+    .callout { background: white; border-left: 4px solid var(--gold); padding: 1.2rem 1.5rem; margin: 1.5rem 0; border-radius: 0 4px 4px 0; }
+    .callout strong { color: var(--navy); }
+    .theorem { background: #f0f4ff; border: 1px solid #b0bce8; padding: 1.2rem 1.5rem; margin: 1.5rem 0; border-radius: 4px; }
+    .theorem .label { font-family: sans-serif; font-size: 0.78rem; font-weight: bold; color: var(--mid); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+    .math { font-family: 'Courier New', monospace; background: var(--smoke); padding: 0.9rem 1.2rem; border-radius: 4px; margin: 1rem 0; font-size: 0.93rem; color: var(--navy); white-space: pre-wrap; }
+    .operator-map { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.88rem; }
+    .operator-map th { background: var(--navy); color: white; padding: 0.5rem 0.8rem; text-align: left; font-family: sans-serif; font-weight: normal; letter-spacing: 0.05em; }
+    .operator-map td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--light); }
+    .operator-map tr:last-child td { border-bottom: none; }
+    .operator-map .op { color: var(--mid); font-weight: bold; font-family: 'Courier New', monospace; }
+    .operator-map .hi { color: var(--teal); font-weight: bold; }
+
+    .cascade-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
+    .cascade-card { background: white; border: 1px solid var(--light); border-radius: 4px; padding: 1rem; }
+    .cascade-card .stage { font-family: sans-serif; font-size: 0.78rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; }
+    .cascade-card .frac { font-family: 'Courier New', monospace; color: var(--teal); font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .cascade-card p { font-size: 0.85rem; line-height: 1.5; margin: 0; }
+
+    .numeric-check { background: #0d1f0d; border-radius: 6px; padding: 1.2rem 1.5rem; margin: 1rem 0; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.7; color: #7eff7e; white-space: pre-wrap; overflow-x: auto; }
+    .numeric-check .comment { color: #6a9f5a; }
+
+    .axle-block { background: #0d1f0d; border-radius: 6px; padding: 1.2rem 1.5rem; margin: 1rem 0; }
+    .axle-block code { font-family: 'Courier New', monospace; color: #7eff7e; font-size: 0.88rem; display: block; white-space: pre; }
+    .axle-block .comment { color: #6a9f5a; }
+
+    .caveat { font-size: 0.95rem; line-height: 1.75; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 1.1rem; margin: 1.4rem 0; }
+
+    .chapter-nav { background: var(--smoke); border-top: 1px solid var(--light); padding: 1.2rem 2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .chapter-nav a { font-family: sans-serif; font-size: 0.82rem; color: var(--mid); text-decoration: none; padding: 0.4rem 0.9rem; border: 1px solid var(--light); }
+    .chapter-nav a:hover { background: var(--navy); color: var(--gold); }
+    footer { background: var(--navy); color: #aaa; text-align: center; padding: 1.5rem; font-family: sans-serif; font-size: 0.78rem; }
+    footer a { color: var(--gold); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      section { padding: 2rem 1.2rem; }
+      .hero { padding: 2.5rem 1.2rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-logo">dm³</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Book VI Index</a></li>
+      <li><a href="chDev-waddington.html">← Waddington's Landscape</a></li>
+      <li><a href="../chapters-diagram.html">All Chapters</a></li>
+    </ul>
+      <a href="../living-book.html">Living Book</a>
+    <a href="../series-hub.html">Series ↗</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="op-ref">C → K → F chain · Immunological Development</div>
+      <div class="eyebrow">Book VI · Chapter Im</div>
+      <h1>Thymic Selection<br>as a <span class="hi">Three-Stage Proofreading Cascade</span></h1>
+      <div class="gold-rule"></div>
+      <p class="hero-desc">
+        Roughly 10&#8311; developing T cells enter thymic selection each day; on the order of 2% leave the
+        thymus as mature, self-tolerant T cells. The other &sim;98% die in place. This is not wastage &mdash;
+        it is proofreading, structurally the same discrimination-by-irreversible-step logic as Hopfield's
+        1974 kinetic proofreading and this corpus's own K-operator threshold, run here across three
+        sequential filters instead of one. This chapter lays out the three stages, states plainly what is
+        an established immunological fact and what is this corpus's own operator-chain framing, and does
+        not blur the two.
+      </p>
+      <div class="hero-meta">
+        Operators: <span>C &rarr; K &rarr; F</span> · Daily input: <span>&sim;10&#8311;&ndash;10&#8312;</span> ·
+        Output fraction: <span>&sim;2%</span> ·
+        Connects to: <span>chDev-waddington · ch5-immune (Book 3)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- §1 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;1 The Established Biology</h2>
+      <p>
+        Double-positive (CD4&#8314;CD8&#8314;) thymocytes are produced in the thymic cortex after
+        successful V(D)J recombination of the T-cell receptor (TCR) locus &mdash; the combinatorial step
+        that generates an estimated 10&#8311; distinct receptor specificities from roughly 50 V, 25 D, and
+        6 J gene segments (plus junctional diversity). Each of these receptors is then tested, in sequence,
+        against self-peptide&ndash;MHC complexes displayed on thymic epithelial cells. The outcome of that
+        test is not binary tolerance or rejection; it is an affinity measurement with three possible
+        results, and getting the biology of that measurement right is the entire content of this section
+        (Klein et al. 2014; Hogquist, Baldwin &amp; Jameson 2005).
+      </p>
+
+      <div class="cascade-grid">
+        <div class="cascade-card">
+          <div class="stage">Stage 1 &middot; Contact</div>
+          <div class="frac">cortex, cTECs</div>
+          <p>DP thymocyte TCR engages self-peptide&ndash;MHC on cortical thymic epithelial cells. No
+          selection yet &mdash; this stage only establishes whether contact of sufficient quality occurs
+          at all.</p>
+        </div>
+        <div class="cascade-card">
+          <div class="stage">Stage 2 &middot; Positive selection</div>
+          <div class="frac">affinity &ge; K*</div>
+          <p>Thymocytes whose TCR fails to engage self-MHC with at least a minimum affinity receive no
+          survival signal and die by neglect &mdash; apoptosis by default, the majority outcome at this
+          stage.</p>
+        </div>
+        <div class="cascade-card">
+          <div class="stage">Stage 3 &middot; Negative selection</div>
+          <div class="frac">affinity &le; K**</div>
+          <p>Of the survivors, thymocytes whose TCR binds self-peptide&ndash;MHC too strongly are
+          deleted (clonal deletion) or diverted to the regulatory T-cell lineage, mainly in the medulla,
+          via AIRE-dependent presentation of tissue-restricted antigens on mTECs.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>The Goldilocks affinity window:</strong> survival requires affinity strictly between two
+        thresholds, K* (below which: death by neglect) and K** (above which: clonal deletion or Treg
+        diversion), K* &lt; K**. This is a window, not a single monotonic cutoff &mdash; the immunological
+        fact this chapter's operator mapping in &sect;2 has to actually respect.
+      </div>
+    </div>
+  </section>
+
+  <!-- §2 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;2 The Operator Mapping</h2>
+      <p>
+        This corpus's own convention, used throughout Book VI's bio-domain chapters, reads C (Contact),
+        K (threshold/Kommit), F (Fold), U (Unfold/express) as a generic sequence: establish geometric
+        contact, cross an irreversible threshold, compress onto an attractor, express the output. Thymic
+        selection instantiates the first three operators directly, and the window structure in &sect;1's
+        callout is exactly why the third stage is F and not another K: a second monotonic threshold would
+        just be another commitment step, but a window with two boundaries &mdash; die below K*, die above
+        K** &mdash; is a fold in the technical sense used elsewhere in this corpus (a stability region
+        bounded on two sides, collapsing to a point if the window closes), not a second one-sided cutoff.
+      </p>
+
+      <table class="operator-map">
+        <thead>
+          <tr><th>Operator</th><th>dm&sup3; role</th><th>Thymic selection</th><th>Key molecules</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="op">C &mdash; Contact</td>
+            <td>Establish geometric/recognition contact</td>
+            <td>TCR&ndash;self-peptide&ndash;MHC engagement on cortical epithelium</td>
+            <td>TCR, MHC-I/II, CD4, CD8</td>
+          </tr>
+          <tr>
+            <td class="op hi">K &mdash; Threshold</td>
+            <td>Irreversible commitment given adequate signal</td>
+            <td class="hi"><strong>Positive selection.</strong> Affinity &ge; K* required to survive;
+            below it, death by neglect (the default fate).</td>
+            <td>ZAP-70, ERK signaling intensity/duration</td>
+          </tr>
+          <tr>
+            <td class="op">F &mdash; Fold</td>
+            <td>Bounded stability region, collapsing at its edges</td>
+            <td>Negative selection. The surviving affinity window K* &le; affinity &le; K** is the fold;
+            crossing the upper edge triggers clonal deletion or Treg diversion.</td>
+            <td>AIRE, mTECs, dendritic cells, Bim-dependent apoptosis</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        A fourth, U (Unfold/express), is the mature single-positive T cell's export to the periphery and
+        its functional repertoire there &mdash; outside the thymus proper, and not this chapter's subject.
+      </p>
+    </div>
+  </section>
+
+  <!-- §3 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;3 The Numbers, Stated Honestly</h2>
+      <p>
+        The headline figures in this chapter's own hero line &mdash; roughly 10&#8311; thymocytes produced
+        daily, roughly 2% surviving to export &mdash; are the widely cited order-of-magnitude estimates in
+        the immunology literature (Klein et al. 2014; Palmer 2003). What is <em>not</em> as cleanly settled
+        in the literature is the precise per-stage split: what fraction dies specifically at positive
+        selection versus specifically at negative selection varies by study, repertoire, and measurement
+        method, and no single agreed number exists to two significant figures for each individual stage.
+        This chapter states the two well-established facts &mdash; the large-order input, the small-order
+        output &mdash; and does not manufacture false precision for the intermediate split.
+      </p>
+    </div>
+  </section>
+
+  <!-- §4 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;4 The &phi;&rarr;&eta;&rarr;&Delta; Framing &mdash; What It Is and Isn't</h2>
+      <p>
+        The corpus's n-bonacci recurrence ladder &mdash; &phi; (Fibonacci, n=2), &eta; (Tribonacci, n=3),
+        &Delta; (Tetranacci, n=4), each the unique real root &gt;1 of
+        <em>x&#8319; = x&#8319;&#8315;&sup1;+&hellip;+x+1</em>, converging monotonically toward the
+        embodiment threshold &tau;=2 as n grows &mdash; is real and independently checkable arithmetic, not
+        tied to any biological measurement:
+      </p>
+
+      <div class="numeric-check">Verified this session (numpy, real root of x^n - x^(n-1) - ... - x - 1 = 0):
+
+  phi   (n=2, Fibonacci):   1.618033989   <span class="comment">(golden ratio, exact match to (1+sqrt5)/2)</span>
+  eta   (n=3, Tribonacci):  1.839286755
+  delta (n=4, Tetranacci):  1.927561975
+
+  Monotone increasing, phi &lt; eta &lt; delta &lt; 2: confirmed.</div>
+
+      <p>
+        This chapter's three biological stages (Contact, positive selection, negative selection) sit in
+        the same three-deep sequence as &phi;, &eta;, &Delta; sit in the recurrence ladder &mdash; three
+        successive steps in a chain that this corpus elsewhere associates with a convergence toward
+        &tau;=2. That is a structural, naming-level correspondence: three stages, three constants, same
+        chain convention used across this book's chapters. It is not a numerical fit. No published
+        thymic-selection survival ratio is claimed here to equal, approximate, or derive &phi;, &eta;, or
+        &Delta; &mdash; &sect;3 was explicit that the per-stage percentages aren't even settled precisely
+        enough in the literature to compare against anything. The n-bonacci arithmetic above is checked and
+        real; the biological numbers in &sect;1 and &sect;3 are checked and real; the bridge between them
+        offered in this section is a naming convention, stated as exactly that.
+      </p>
+    </div>
+  </section>
+
+  <!-- §5 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;5 AXLE Sketch</h2>
+      <p>
+        Unlike the differential-equations chapters elsewhere in Book VI, this chapter has no Lean
+        scaffold file yet. The natural formal object &mdash; a thymocyte's affinity as a real number
+        required to lie in an open window (K*, K**) &mdash; is straightforward to state and is sketched
+        here for the record, not claimed as done:
+      </p>
+      <div class="axle-block">
+        <code><span class="comment">-- sketch only, not yet a file in this repo</span>
+structure Thymocyte where
+  affinity : &#8477;
+  <span class="comment">-- survives iff affinity lies strictly inside the selection window</span>
+
+def survives (Kstar Kstarstar : &#8477;) (t : Thymocyte) : Prop :=
+  Kstar &lt; t.affinity &and; t.affinity &lt; Kstarstar
+
+<span class="comment">-- not proved: existence/nonemptiness of the window for a given TCR repertoire,
+-- which is an empirical immunological question, not a theorem</span></code>
+      </div>
+      <p class="caveat">
+        No claim is made that this window's existence is provable from first principles &mdash; whether a
+        given repertoire has a nonempty (K*,K**) window for a given self-antigen set is an empirical
+        question about real receptor sequences and real MHC molecules, not a mathematical one. The sketch
+        above states the shape of the object honestly; it formalizes nothing yet.
+      </p>
+    </div>
+  </section>
+
+  <!-- §6 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;6 Key References</h2>
+      <p>
+        Klein, L., Kyewski, B., Allen, P.M., Hogquist, K.A. (2014). Positive and negative selection of the
+        T cell repertoire: what thymocytes see (and don't see). <em>Nat. Rev. Immunol.</em> 14, 377&ndash;391.
+        &mdash; The standard modern review of the three-stage process described in &sect;1&ndash;2.
+      </p>
+      <p>
+        Hogquist, K.A., Baldwin, T.A., Jameson, S.C. (2005). Central tolerance: learning self-control in
+        the thymus. <em>Nat. Rev. Immunol.</em> 5, 772&ndash;782. &mdash; Affinity-threshold model of
+        positive/negative selection.
+      </p>
+      <p>
+        Palmer, E. (2003). Negative selection &mdash; clearing out the bad apples from the T-cell
+        repertoire. <em>Nat. Rev. Immunol.</em> 3, 383&ndash;391. &mdash; Negative selection mechanism and
+        the medullary/AIRE component.
+      </p>
+      <p>
+        Hopfield, J.J. (1974). Kinetic proofreading: a new mechanism for reducing errors in biosynthetic
+        processes requiring high specificity. <em>PNAS</em> 71, 4135&ndash;4139. &mdash; The general
+        irreversible-threshold discrimination mechanism this chapter's K operator borrows its logic from.
+      </p>
+      <p>
+        Nogueira Grossi, P. (2026). <em>Principia Orthogona</em> Vol I. G6 LLC.
+        <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">doi:10.5281/zenodo.19117400</a>
+        &mdash; dm&sup3; framework foundations: C, K, F, U operators and the n-bonacci recurrence ladder.
+      </p>
+      <p>
+        See also: <a href="chDev-waddington.html">Waddington's Landscape as Lyapunov Potential</a> ·
+        <a href="../ch5-immune.html">Immune Adaptation (Book 3, Ch. 5)</a> ·
+        <a href="index.html">Book VI Index</a>
+      </p>
+    </div>
+  </section>
+
+  <div class="chapter-nav">
+    <a href="chDev-waddington.html">&larr; Waddington's Landscape</a>
+    <a href="index.html">Book VI Index</a>
+    <a href="../ch5-immune.html">Immune Adaptation (Book 3) &rarr;</a>
+  </div>
+
+  <footer>
+    <p>dm&sup3; &mdash; Principia Orthogona &middot; G6 LLC &middot; Newark NJ &middot;
+      <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">Zenodo 19117400</a> &middot;
+      <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+    </p>
+  </footer>
+
+<div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
+  <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span>
+  <span>g6llc@proton.me</span>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span>
+  <span>+1 (646) 342-3751</span>
+</div>
+</body>
+</html>
