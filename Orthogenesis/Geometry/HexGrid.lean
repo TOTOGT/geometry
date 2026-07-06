@@ -6,7 +6,6 @@ namespace Orthogenesis
 structure Vec2 where
   x : ℝ
   y : ℝ
-deriving Repr, DecidableEq
 
 /-- Axial hex coordinates (q, r). -/
 structure HexCoord where
