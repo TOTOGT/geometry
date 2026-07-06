@@ -10,11 +10,11 @@ structure Cell where
 deriving Repr, DecidableEq
 
 /-- Center of the cell in ℝ². -/
-def Cell.center (c : Cell) : Vec2 :=
+noncomputable def Cell.center (c : Cell) : Vec2 :=
   hexToVec2 c.coord
 
 /-- Structural radius of the cell at its stage. -/
-def Cell.radius (P : GrowthParams) (c : Cell) : ℝ :=
+noncomputable def Cell.radius (P : GrowthParams) (c : Cell) : ℝ :=
   R P c.stage
 
 end Orthogenesis
