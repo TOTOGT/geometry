@@ -6,7 +6,6 @@ namespace Orthogenesis
 /-- A honeycomb colony: finite set of structural cells. -/
 structure Colony where
   cells : Finset Cell
-deriving Repr
 
 /-- Insert a new cell into the colony. -/
 def Colony.insert (C : Colony) (c : Cell) : Colony :=
