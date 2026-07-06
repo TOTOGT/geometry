@@ -9,7 +9,7 @@ structure Colony where
 
 /-- Insert a new cell into the colony. -/
 def Colony.insert (C : Colony) (c : Cell) : Colony :=
-  { cells := C.cells.insert c }
+    { cells := insert c C.cells }
 
 /-- Expand the colony by adding all neighbors of all existing cells. -/
 def Colony.expand (C : Colony) : Colony :=
