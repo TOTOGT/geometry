@@ -8,7 +8,7 @@ structure GrowthParams where
   target : ℝ
   rel    : Prop
 
-def R (P : GrowthParams) (n : ℕ) : ℝ :=
+noncomputable def R (P : GrowthParams) (n : ℕ) : ℝ :=
   P.g ^ (n : ℝ)
 
 end Orthogenesis
