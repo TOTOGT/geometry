@@ -1,4 +1,4 @@
-import Orthogenesis.Architecture.Cell
+import Orthogenesis.Geometry.Cell
 import Mathlib.Data.Finset.Basic
 
 namespace Orthogenesis
@@ -6,22 +6,17 @@ namespace Orthogenesis
 /-- A honeycomb colony: finite set of structural cells. -/
 structure Colony where
   cells : Finset Cell
-deriving Repr
 
 /-- Insert a new cell into the colony. -/
 def Colony.insert (C : Colony) (c : Cell) : Colony :=
-  { cells := C.cells.insert c }
+  { cells := Insert.insert c C.cells }
 
 /-- Expand the colony by adding all neighbors of all existing cells. -/
 def Colony.expand (C : Colony) : Colony :=
-  let newCells :=
-    C.cells.fold
-      (fun acc c =>
-        let neigh := hexNeighbors c.coord
-        let stage := c.stage + 1
-        let new := neigh.map (fun h => Cell.mk h stage)
-        acc ∪ new.toFinset)
-      ∅
+  let expandOne (c : Cell) : Finset Cell :=
+    let neigh := hexNeighbors c.coord
+    let stage := c.stage + 1
+    (neigh.map (fun h => Cell.mk h stage)).toFinset
+  let newCells := C.cells.biUnion expandOne
   { cells := C.cells ∪ newCells }
-
 end Orthogenesis

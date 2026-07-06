@@ -1,10 +1,11 @@
+import Mathlib
+
 namespace Orthogenesis
 
 /-- 2D vector for geometric embedding. -/
 structure Vec2 where
   x : ℝ
   y : ℝ
-deriving Repr, DecidableEq
 
 /-- Axial hex coordinates (q, r). -/
 structure HexCoord where
@@ -22,7 +23,7 @@ def hexNeighbors (h : HexCoord) : List HexCoord :=
     ⟨h.q,   h.r+1⟩ ]
 
 /-- Axial → Euclidean embedding (standard). -/
-def hexToVec2 (h : HexCoord) : Vec2 :=
+noncomputable def hexToVec2 (h : HexCoord) : Vec2 :=
   let x : ℝ := (h.q : ℝ) + (h.r : ℝ) / 2
   let y : ℝ := (Real.sqrt 3 / 2) * (h.r : ℝ)
   ⟨x, y⟩
