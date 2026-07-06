@@ -9,14 +9,14 @@ structure Colony where
 
 /-- Insert a new cell into the colony. -/
 def Colony.insert (C : Colony) (c : Cell) : Colony :=
-      { cells := _root_.insert c C.cells }
+  { cells := Insert.insert c C.cells }
 
 /-- Expand the colony by adding all neighbors of all existing cells. -/
 def Colony.expand (C : Colony) : Colony :=
-    let expandOne (c : Cell) : Finset Cell :=
+  let expandOne (c : Cell) : Finset Cell :=
     let neigh := hexNeighbors c.coord
     let stage := c.stage + 1
     (neigh.map (fun h => Cell.mk h stage)).toFinset
-  let newCells := C.cells.fold (· ∪ ·) ∅ expandOne
+  let newCells := C.cells.biUnion expandOne
   { cells := C.cells ∪ newCells }
 end Orthogenesis
