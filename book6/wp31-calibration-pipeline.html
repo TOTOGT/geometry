@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Calibration Pipeline — Principia Orthogona, Book 6</title>
+<style>
+  :root { --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Georgia, 'Times New Roman', serif; background: var(--cream); color: var(--navy); }
+  main { max-width: 780px; margin: 0 auto; padding: 64px 40px 80px; }
+  .eyebrow { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+  h1 { font-size: 32px; font-weight: normal; text-align: center; margin: 0 0 6px; line-height: 1.25; }
+  .value-line { text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13.5px; color: #6b7280; margin-bottom: 28px; }
+  .gold-rule { height: 1px; width: 120px; margin: 0 auto 32px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  h2 { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); border-bottom: 1px solid var(--smoke); padding-bottom: 8px; margin: 44px 0 16px; }
+  h3 { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12.5px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--navy); margin: 28px 0 10px; }
+  p { font-size: 16.5px; line-height: 1.75; margin: 0 0 20px; }
+  table.status-table { width: 100%; border-collapse: collapse; margin: 16px 0 28px; font-size: 14px; }
+  table.status-table th, table.status-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--smoke); vertical-align: top; }
+  table.status-table th { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #9ca3af; }
+  .numeric-check { background: var(--smoke); border-radius: 4px; padding: 16px 20px; font-family: 'SF Mono', Menlo, monospace; font-size: 13px; line-height: 1.7; margin: 20px 0 28px; overflow-x: auto; white-space: pre; }
+  .finding { background: #fdf0ee; border: 1px solid #e8b8ae; border-radius: 4px; padding: 18px 22px; margin: 12px 0 28px; font-size: 15.5px; line-height: 1.7; }
+  .finding .lbl { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #a5453a; display: block; margin-bottom: 8px; }
+  .clean { background: #eef7f0; border: 1px solid #b8dcc0; border-radius: 4px; padding: 18px 22px; margin: 12px 0 28px; font-size: 15.5px; line-height: 1.7; }
+  .clean .lbl { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #2f7d43; display: block; margin-bottom: 8px; }
+  .vignette { background: #f4f1e8; border-left: 3px solid var(--gold); border-radius: 0 4px 4px 0; padding: 16px 22px; margin: 12px 0 28px; font-size: 15px; line-height: 1.7; }
+  .vignette .lbl { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 8px; }
+  .caveat { font-size: 15px; line-height: 1.7; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 18px; margin: 24px 0 32px; }
+  .prevnext { display: flex; justify-content: space-between; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; padding-top: 24px; margin-top: 44px; border-top: 1px solid var(--smoke); }
+  .prevnext a { color: inherit; text-decoration: none; }
+  .prevnext a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+<main>
+
+  <div class="eyebrow">Principia Orthogona &nbsp;·&nbsp; Book 6 &nbsp;·&nbsp; Methodology · Living Note</div>
+
+  <h1>The Calibration Pipeline</h1>
+  <div class="value-line">how a dimensionless fixed point becomes a real, fitted, falsifiable function of measured data — and the five ways that step goes wrong</div>
+
+  <div class="gold-rule"></div>
+
+  <p>
+    Every canonical constant in this series — &epsilon;&#8320; = 1/3, &mu;_max = &minus;2,
+    &tau; = 2 — is proved as a dimensionless fact about an abstract operator chain.
+    None of them carry a physical unit anywhere in the Lean sources. That is fine;
+    it is what a fixed point is. The trouble starts the moment anyone, including
+    this author, wants to say the constant means something about a real system —
+    NJ flood recurrence, a custody bank's exposure, a settlement mechanism, a
+    seismic retrofit. At that point the dimensionless number has to become a
+    <em>function of measured state</em>, fit to real data, carrying real error
+    bars. <a href="wp30-the-missing-anchor.html" style="color:var(--navy);">WP-30</a>
+    tried exactly this once, for &mu;_max, and did not clear. This paper is the
+    general method that attempt was missing — written so the next attempt, on
+    &tau; or anything else, has a checklist to fail against instead of failing
+    quietly.
+  </p>
+
+  <h2>The problem in one line</h2>
+  <p>
+    A theory gives you a limit: the value a system converges to under stated
+    idealizing assumptions. Real data never sits at the limit — it moves around
+    a target that itself depends on conditions the idealization assumed away.
+    So the constant <em>c</em> has to be replaced by a function
+    <code>f(x&#8321;(t), x&#8322;(t), &hellip;; &theta;)</code>, where the
+    <code>x&#8305;</code> are real, measurable covariates and &theta; is a
+    parameter vector estimated from data, not read off a theorem. The theorem
+    tells you what <code>f</code> should approach asymptotically. It does not
+    tell you the shape of <code>f</code> anywhere else. That shape is an
+    empirical question, and empirical questions are answered by a pipeline, not
+    by a substitution.
+  </p>
+
+  <h2>The four-stage pipeline</h2>
+  <table class="status-table">
+    <tr><th>Stage</th><th>What it means</th><th>Where it fails</th></tr>
+    <tr>
+      <td><strong>Operationalize</strong></td>
+      <td>Pick a real, measurable proxy for the abstract quantity — a hazard rate, a coupling ratio, a spread — not the quantity itself, which usually isn't directly observable.</td>
+      <td>Skipping straight from the constant to a number that "sounds physical," with no named observable in between (WP-30's failure mode).</td>
+    </tr>
+    <tr>
+      <td><strong>Estimate</strong></td>
+      <td>Fit &theta; against a real historical time series by minimizing a stated loss (least squares, MLE, whatever matches the noise model).</td>
+      <td>Citing a number instead of deriving it; two files in the same corpus quietly disagreeing on the input constant (WP-30 again: 7.3s vs 4.9s for the same claimed result).</td>
+    </tr>
+    <tr>
+      <td><strong>Validate</strong></td>
+      <td>Test the fitted function out-of-sample — does it predict the next observation, not just explain the last one.</td>
+      <td>Reporting in-sample fit as if it were predictive power; not checking whether the "prior art" search was actually run (WP-29's numerology sweep found exactly this gap).</td>
+    </tr>
+    <tr>
+      <td><strong>Iterate</strong></td>
+      <td>Refit as new data arrives; treat the current &theta; as provisional, not final.</td>
+      <td>Publishing a static figure and never re-checking it — the Banking Butterfly's custody table had to be re-verified twice before it was internally consistent.</td>
+    </tr>
+  </table>
+
+  <h2>Five ways the chase actually goes wrong</h2>
+
+  <h3>1 — Non-stationarity</h3>
+  <p>
+    Every fit assumes the process that produced the historical sample is the
+    same one producing tomorrow's observation. Under a changing climate, a
+    changing rate environment, or a changing regulatory regime, that assumption
+    is false by construction. The confidence interval you report is honest
+    about sampling noise and silent about the fact that the whole distribution
+    is drifting under it.
+  </p>
+
+  <h3>2 — Reflexivity</h3>
+  <p>
+    If the fitted function is acted on — capital moves, a settlement mechanism
+    gets renegotiated, a rate gets repriced — the model's own output becomes an
+    input to the next period's data. A price collapse caused by the model being
+    believed is not the same thing as the model being right, and the two are
+    easy to conflate after the fact.
+  </p>
+
+  <h3>3 — Thin tails</h3>
+  <p>
+    The part of the function that matters most — the threshold crossing, the
+    once-a-century event — is usually the part with the least data behind it.
+    A rare-event estimate is mostly extrapolation dressed as inference, and
+    that should be stated plainly rather than smoothed over with a confidence
+    interval that implies more certainty than the sample supports.
+  </p>
+
+  <h3>4 — Compounding uncertainty across a chain</h3>
+  <p>
+    A real pipeline is rarely one fit; it's a chain (physical process &rarr;
+    proxy measurement &rarr; financial or structural impact), and each stage's
+    error multiplies through rather than averaging out. A 70%-confidence
+    estimate feeding a 60%-confidence estimate does not net to 65% — the honest
+    combined interval is wider and uglier than either stage alone suggests.
+  </p>
+
+  <h3>5 — Curve-fitting to the constant you already believed</h3>
+  <p>
+    This is the one worth naming directly, given this corpus's own history.
+    If you go in expecting a &tau; = 2-style threshold, it is easy to choose a
+    covariate transform, a window length, or a smoothing method that manufactures
+    a clean crossing at the point you wanted, and call that "letting the data
+    speak." The only real defense is stating what would count as a
+    <em>disconfirming</em> fit before looking at the numbers, and being willing
+    to publish a fit that doesn't confirm the framework.
+  </p>
+
+  <h2>Three corpus vignettes: one failed, one recovered, one honestly tiered</h2>
+
+  <div class="vignette">
+    <span class="lbl">Failed at Operationalize/Estimate — WP-30, The Missing Anchor</span>
+    The autophagy chapter's &mu;_max &asymp; &minus;0.41 s&#8315;&#185; skipped straight
+    from a dimensionless &minus;2 to a unit-bearing rate, using a kinase time
+    constant that appeared as two different values (7.3s and 4.9s) in two files
+    of the same corpus for the identical claimed result, neither traceable to
+    the cited literature, and already flagged as unresolved by the chapter's own
+    open-obligations list. The failure happened at the first stage: no real
+    observable was named before the substitution was made.
+  </div>
+
+  <div class="vignette">
+    <span class="lbl">Recovered at Validate/Iterate — the Banking Butterfly custody table</span>
+    The Big Four custody figures (BNY Mellon, State Street, JPMorgan, Citi) were
+    published, found internally inconsistent on inspection, re-verified against
+    each bank's own quarterly disclosures, and corrected in a public corrigendum
+    — twice, in two separate rounds, with each round's source dated and named.
+    This is the pipeline working as it should <em>after</em> an initial miss: the
+    fix wasn't silent, and the second re-verification pass is what actually
+    caught it, not the first draft.
+  </div>
+
+  <div class="vignette">
+    <span class="lbl">Operationalized honestly — ch-seismic §13.5</span>
+    Rather than claim one verified bridge between the ancient-architecture
+    pattern and modern seismic engineering, the chapter states three explicit
+    confidence tiers — established and code-mandated (tuned mass dampers),
+    active research, pre-code (periodic foundations, buried resonators), and
+    proof-of-concept only (city-scale seismic cloaks) — and is explicit that no
+    AXLE derivation connects the real seismic spectrum to the operator chain.
+    This is what stage 1 (operationalize) looks like when the honest answer is
+    "partially," rather than forcing a single confident claim.
+  </div>
+
+  <h2>What a defensible calibration would actually require</h2>
+  <p>
+    Before any future chapter in this series claims a constant has been fit to
+    real, unit-bearing data, it should be able to state, in writing, before the
+    fit is run: what covariate stands in for the abstract quantity; what would
+    count as a result that <em>fails</em> to confirm the framework; what
+    primary source each parameter comes from, dated; what the out-of-sample
+    test was, and what it showed, including if it showed nothing; and whether
+    the underlying dynamics are chaotic enough that a point estimate is the
+    wrong kind of answer to be giving at all.
+  </p>
+
+  <div class="finding">
+    <span class="lbl">Standing status</span>
+    No chapter in this corpus currently satisfies this checklist end to end for
+    any of the canonical constants. WP-30 is the one attempt on record, and it
+    is withdrawn. That is not a defect to paper over — it is the accurate
+    description of where the framework's empirical grounding currently stands,
+    and any future chapter claiming otherwise should be checked against this
+    page before it is published.
+  </div>
+
+  <p class="caveat">
+    None of this is an argument against attempting the fit. It's an argument
+    for making the attempt legible enough that someone other than the author
+    could find where it breaks — which is the same standard WP-24, WP-28, and
+    WP-29 already apply to citations and derivations elsewhere in this volume,
+    extended here to the specific step of turning a proof into a measurement.
+  </p>
+
+  <div class="prevnext">
+    <a href="index.html">&larr; Book 6 index</a>
+    <a href="wp30-the-missing-anchor.html">WP-30: The Missing Anchor &rarr;</a>
+  </div>
+
+</main>
+</body>
+</html>
