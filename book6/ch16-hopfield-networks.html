@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hopfield Networks — The Energy Function as Lyapunov Proof | dm³ — Book VI</title>
+  <style>
+    :root {
+      --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4;
+      --mid: #3a4f7a; --rule: #8a7340; --text: #1c1c1c; --light: #e8e2d4; --teal: #2a7a6a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia','Times New Roman',serif; color: var(--text); background: var(--cream); }
+    nav { background: var(--navy); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-logo { color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; text-decoration: none; font-family: sans-serif; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a { color: #ccc; text-decoration: none; font-size: 0.82rem; font-family: sans-serif; }
+    .nav-links a:hover { color: var(--gold); }
+    .hero { background: var(--navy); color: white; padding: 4rem 2rem 3rem; }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .op-ref { font-family: sans-serif; font-size: 0.78rem; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.6rem; }
+    .eyebrow { font-family: sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; color: #aaa; text-transform: uppercase; margin-bottom: 0.8rem; }
+    h1 { font-size: clamp(1.7rem, 4vw, 2.8rem); color: white; line-height: 1.2; margin-bottom: 0.4rem; }
+    h1 .hi { color: var(--gold); font-style: italic; }
+    .gold-rule { width: 60px; height: 2px; background: var(--gold); margin: 1.4rem 0; }
+    .hero-desc { color: #ddd; font-size: 1rem; line-height: 1.7; max-width: 680px; }
+    .hero-meta { font-family: sans-serif; font-size: 0.8rem; color: #aaa; margin-top: 1.4rem; }
+    .hero-meta span { color: var(--gold); }
+    section { padding: 3rem 2rem; }
+    .section-inner { max-width: 800px; margin: 0 auto; }
+    section:nth-child(even) { background: var(--smoke); }
+    h2 { font-size: 1.55rem; color: var(--navy); margin-bottom: 1.2rem; border-bottom: 1px solid var(--light); padding-bottom: 0.5rem; }
+    p { line-height: 1.85; margin-bottom: 1.1rem; }
+    p:last-child { margin-bottom: 0; }
+    .callout { background: white; border-left: 4px solid var(--gold); padding: 1.2rem 1.5rem; margin: 1.5rem 0; border-radius: 0 4px 4px 0; }
+    .callout strong { color: var(--navy); }
+    .numeric-check { background: #0d1f0d; border-radius: 6px; padding: 1.2rem 1.5rem; margin: 1rem 0; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.7; color: #7eff7e; white-space: pre-wrap; overflow-x: auto; }
+    .numeric-check .comment { color: #6a9f5a; }
+    .caveat { font-size: 0.95rem; line-height: 1.75; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 1.1rem; margin: 1.4rem 0; }
+    .chapter-nav { background: var(--smoke); border-top: 1px solid var(--light); padding: 1.2rem 2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .chapter-nav a { font-family: sans-serif; font-size: 0.82rem; color: var(--mid); text-decoration: none; padding: 0.4rem 0.9rem; border: 1px solid var(--light); }
+    .chapter-nav a:hover { background: var(--navy); color: var(--gold); }
+    footer { background: var(--navy); color: #aaa; text-align: center; padding: 1.5rem; font-family: sans-serif; font-size: 0.78rem; }
+    footer a { color: var(--gold); text-decoration: none; }
+    @media (max-width: 600px) { section { padding: 2rem 1.2rem; } .hero { padding: 2.5rem 1.2rem 2rem; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-logo">dm³</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Book VI Index</a></li>
+      <li><a href="ch15-cardiac-rhythms.html">← Ch 15</a></li>
+      <li><a href="../chapters-diagram.html">All Chapters</a></li>
+    </ul>
+      <a href="../living-book.html">Living Book</a>
+    <a href="../series-hub.html">Series ↗</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="op-ref">K (energy-descent threshold) · Neural Domain (6)</div>
+      <div class="eyebrow">Book VI · Chapter 16 · Part III, Domain 6 (Neural)</div>
+      <h1>Hopfield Networks<br><span class="hi">The Energy Function as Lyapunov Proof</span></h1>
+      <div class="gold-rule"></div>
+      <p class="hero-desc">
+        John Hopfield published two unrelated-looking papers eight years apart: 1974's kinetic
+        proofreading (already this book's Ch 13 citation) and 1982's associative-memory networks. Both
+        rest on the same underlying logic &mdash; an irreversible process that monotonically approaches a
+        stable state &mdash; and in the 1982 case that logic is not just analogical, it is a proved
+        mathematical fact: the network's energy function is a genuine Lyapunov function, and the network's
+        storage capacity (~0.138N patterns before catastrophic failure) is itself a rigorously derived,
+        widely reproduced result. This chapter, unlike several others in this book, needed almost no
+        correction to the index's original claims &mdash; they were already accurate.
+      </p>
+      <div class="hero-meta">
+        Energy function: <span>E = -½Σ Wᵢⱼ Sᵢ Sⱼ</span> · Capacity: <span>~0.138N patterns</span> ·
+        Same author, 1974 &amp; 1982: <span>J.J. Hopfield</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- §1 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;1 The Established Science</h2>
+      <p>
+        Hopfield (1982) defined a network of N binary neurons with symmetric connections
+        W&#7522;&#7527; = W&#7527;&#7522;, updated asynchronously, and showed that the quantity
+        E = &minus;&frac12;&sum;W&#7522;&#7527;S&#7522;S&#7527; never increases under any single-neuron
+        update that flips a neuron to agree with its net input. This is precisely the definition of a
+        Lyapunov function for the network's dynamics: E is bounded below, and monotonically non-increasing,
+        which forces the network into a stable fixed point (a local energy minimum) from any starting state.
+        Memories are stored by choosing the weights (classically via a Hebbian outer-product rule) so that
+        the desired patterns sit at energy minima; recall is exactly the process of the energy function
+        doing its job.
+      </p>
+      <div class="numeric-check">Storage capacity (Amit, Gutfreund, Sompolinsky 1985a/b; "AGS" theory,
+statistical-physics replica method, confirmed by McEliece et al. 1987):
+
+  p_max  ~=  0.138 * N     patterns reliably stored and retrievable
+
+  For p &lt; 0.138N: stored patterns are stable attractors, retrieval works.
+  For p &gt; 0.138N: catastrophic "blackout" -- ALL memories, not just the excess
+  ones, become unretrievable. This sharp, all-or-nothing failure mode (not a
+  gradual degradation) is itself a real, well-replicated, non-obvious result.</div>
+    </div>
+  </section>
+
+  <!-- §2 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;2 The Same Hopfield, Two Papers, One Logic</h2>
+      <p>
+        J.J. Hopfield's 1974 kinetic-proofreading paper (already cited in this book's Ch 13, thymic
+        selection) and his 1982 neural-network paper are both about the same mathematical shape: a system
+        driven toward increasing discrimination or decreasing energy through an irreversible process that
+        cannot run backward. This is a genuinely real link &mdash; the same person, working on two very
+        different biological/computational substrates eight years apart, applying what is recognizably the
+        same style of argument each time. This chapter treats that as what it is: an interesting fact about
+        one scientist's recurring mathematical instinct, not evidence that biochemistry and neural memory
+        are "the same system." The K operator in this corpus's convention names the shared shape (irreversible,
+        monotone approach to a stable state) that both papers instantiate, honestly, without claiming more.
+      </p>
+    </div>
+  </section>
+
+  <!-- §3 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;3 Key References</h2>
+      <p>Hopfield, J.J. (1982). Neural networks and physical systems with emergent collective computational abilities. <em>PNAS</em> 79, 2554&ndash;2558.</p>
+      <p>Amit, D.J., Gutfreund, H., Sompolinsky, H. (1985). Storing infinite numbers of patterns in a spin-glass model of neural networks. <em>Phys. Rev. Lett.</em> 55, 1530&ndash;1533. — Source for the 0.138N capacity result.</p>
+      <p>McEliece, R.J. et al. (1987). The capacity of the Hopfield associative memory. <em>IEEE Trans. Inf. Theory</em> 33, 461&ndash;482. — Independent confirmation.</p>
+      <p>Hopfield, J.J. (1974). Kinetic proofreading: a new mechanism for reducing errors in biosynthetic processes requiring high specificity. <em>PNAS</em> 71, 4135&ndash;4139.</p>
+      <p>See also: <a href="chIm-thymus.html">Ch 13 — Thymic Selection</a> (cites the same 1974 paper) · <a href="index.html">Book VI Index</a></p>
+    </div>
+  </section>
+
+  <div class="chapter-nav">
+    <a href="ch15-cardiac-rhythms.html">&larr; Ch 15 — Cardiac Rhythms</a>
+    <a href="index.html">Book VI Index</a>
+    <a href="ch17-neural-coherence.html">Ch 17 — Neural Coherence &rarr;</a>
+  </div>
+
+  <footer>
+    <p>dm&sup3; &mdash; Principia Orthogona &middot; G6 LLC &middot; Newark NJ &middot;
+      <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">Zenodo 19117400</a> &middot;
+      <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+    </p>
+  </footer>
+<div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
+  <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span><span>g6llc@proton.me</span>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span><span>+1 (646) 342-3751</span>
+</div>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neural Coherence — Gamma Oscillations and Connectomes | dm³ — Book VI</title>
+  <style>
+    :root {
+      --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4;
+      --mid: #3a4f7a; --rule: #8a7340; --text: #1c1c1c; --light: #e8e2d4; --teal: #2a7a6a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia','Times New Roman',serif; color: var(--text); background: var(--cream); }
+    nav { background: var(--navy); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-logo { color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; text-decoration: none; font-family: sans-serif; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a { color: #ccc; text-decoration: none; font-size: 0.82rem; font-family: sans-serif; }
+    .nav-links a:hover { color: var(--gold); }
+    .hero { background: var(--navy); color: white; padding: 4rem 2rem 3rem; }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .op-ref { font-family: sans-serif; font-size: 0.78rem; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.6rem; }
+    .eyebrow { font-family: sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; color: #aaa; text-transform: uppercase; margin-bottom: 0.8rem; }
+    h1 { font-size: clamp(1.7rem, 4vw, 2.8rem); color: white; line-height: 1.2; margin-bottom: 0.4rem; }
+    h1 .hi { color: var(--gold); font-style: italic; }
+    .gold-rule { width: 60px; height: 2px; background: var(--gold); margin: 1.4rem 0; }
+    .hero-desc { color: #ddd; font-size: 1rem; line-height: 1.7; max-width: 680px; }
+    .hero-meta { font-family: sans-serif; font-size: 0.8rem; color: #aaa; margin-top: 1.4rem; }
+    .hero-meta span { color: var(--gold); }
+    section { padding: 3rem 2rem; }
+    .section-inner { max-width: 800px; margin: 0 auto; }
+    section:nth-child(even) { background: var(--smoke); }
+    h2 { font-size: 1.55rem; color: var(--navy); margin-bottom: 1.2rem; border-bottom: 1px solid var(--light); padding-bottom: 0.5rem; }
+    p { line-height: 1.85; margin-bottom: 1.1rem; }
+    p:last-child { margin-bottom: 0; }
+    .callout { background: white; border-left: 4px solid var(--gold); padding: 1.2rem 1.5rem; margin: 1.5rem 0; border-radius: 0 4px 4px 0; }
+    .callout strong { color: var(--navy); }
+    .finding { background: #fdf0ee; border: 1px solid #e8b8ae; border-radius: 4px; padding: 1.1rem 1.4rem; margin: 1.2rem 0; font-size: 0.95rem; line-height: 1.75; }
+    .finding .lbl { font-family: sans-serif; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: #a5453a; display: block; margin-bottom: 0.4rem; }
+    .caveat { font-size: 0.95rem; line-height: 1.75; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 1.1rem; margin: 1.4rem 0; }
+    .chapter-nav { background: var(--smoke); border-top: 1px solid var(--light); padding: 1.2rem 2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .chapter-nav a { font-family: sans-serif; font-size: 0.82rem; color: var(--mid); text-decoration: none; padding: 0.4rem 0.9rem; border: 1px solid var(--light); }
+    .chapter-nav a:hover { background: var(--navy); color: var(--gold); }
+    footer { background: var(--navy); color: #aaa; text-align: center; padding: 1.5rem; font-family: sans-serif; font-size: 0.78rem; }
+    footer a { color: var(--gold); text-decoration: none; }
+    @media (max-width: 600px) { section { padding: 2rem 1.2rem; } .hero { padding: 2.5rem 1.2rem 2rem; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-logo">dm³</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Book VI Index</a></li>
+      <li><a href="ch16-hopfield-networks.html">← Ch 16</a></li>
+      <li><a href="../chapters-diagram.html">All Chapters</a></li>
+    </ul>
+      <a href="../living-book.html">Living Book</a>
+    <a href="../series-hub.html">Series ↗</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="op-ref">C (coherence/binding) · Neural Domain (6)</div>
+      <div class="eyebrow">Book VI · Chapter 17 · Part III, Domain 6 (Neural)</div>
+      <h1>Neural Coherence<br><span class="hi">Gamma Oscillations and Connectomes</span></h1>
+      <div class="gold-rule"></div>
+      <p class="hero-desc">
+        Fries's Communication-Through-Coherence hypothesis is real, influential, and correctly cited in
+        this book's index &mdash; but this chapter also checked the index's specific claim of a "C. elegans
+        302-neuron sorry-free proof," and found no such Lean file anywhere in this repository. What actually
+        exists is a Drosophila/FlyWire connectome loader (Python, NetworkX), a different organism, with a
+        synthetic 200-neuron fallback when real data isn't available &mdash; not a formal proof, and not
+        C. elegans. Both corrections are made here plainly.
+      </p>
+      <div class="hero-meta">
+        C. elegans neurons: <span>302 (real, White et al. 1986)</span> ·
+        What exists in AXLE: <span>Drosophila/FlyWire loader, synthetic fallback</span> ·
+        Gamma band: <span>~40 Hz</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- §1 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;1 The Established Science</h2>
+      <p>
+        Pascal Fries's Communication-Through-Coherence (CTC) hypothesis, most fully stated in his 2015
+        <em>Neuron</em> review "Rhythms for Cognition: Communication through Coherence," proposes that
+        effective communication between neural populations depends on their oscillatory coherence: a
+        postsynaptic group preferentially responds to whichever presynaptic group it is currently
+        oscillating in phase with, so selective coherence implements selective routing of information.
+        This builds on the earlier binding-by-synchrony hypothesis and gamma-band (~40 Hz) oscillations
+        specifically. This is a real, actively cited, influential framework in systems neuroscience &mdash;
+        and, honestly stated, it remains a hypothesis under continued empirical test and refinement, not a
+        universally settled mechanism; this chapter cites it as exactly that.
+      </p>
+      <div class="finding">
+        <span class="lbl">Checked: the C. elegans / connectome claim</span>
+        <em>Caenorhabditis elegans</em>'s hermaphrodite nervous system genuinely has 302 neurons, fully
+        mapped by White, Southgate, Thomson &amp; Brenner (1986) &mdash; the first complete wiring diagram of
+        any animal's nervous system, ~7,000 chemical and electrical synapses. That specific fact is real
+        and correctly citable. What is not found anywhere in this corpus is a Lean file that formally proves
+        anything about this connectome, sorry-free or otherwise. The actual matching artifact in AXLE is
+        <code>simulations/connectome_loader.py</code>, which loads the <strong>Drosophila</strong> (fruit
+        fly) connectome via the FlyWire API, or generates a synthetic 200-neuron / 800-synapse fallback
+        graph when real data is unavailable &mdash; a different organism, and Python simulation code rather
+        than a formal proof. The index's "C. elegans 302-neuron sorry-free proof" line has been corrected
+        here and in the index entry.
+      </div>
+    </div>
+  </section>
+
+  <!-- §2 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;2 What Would Actually Close This Gap</h2>
+      <p>
+        If a genuine C. elegans-specific formal result is wanted, the honest next step is building it from
+        the real White et al. (1986) wiring diagram data (available through WormAtlas and the OpenWorm
+        Connectome Toolbox) rather than continuing to cite a proof that does not exist. Alternatively, the
+        Drosophila connectome loader that does exist in this repo could be honestly built out and cited on
+        its own terms &mdash; as a fruit fly simulation, not relabeled as a nematode proof. This chapter
+        does not attempt either build; it states which of the two is real, and leaves the gap open rather
+        than papered over.
+      </p>
+    </div>
+  </section>
+
+  <!-- §3 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;3 Key References</h2>
+      <p>Fries, P. (2015). Rhythms for cognition: communication through coherence. <em>Neuron</em> 88, 220&ndash;235.</p>
+      <p>White, J.G., Southgate, E., Thomson, J.N., Brenner, S. (1986). The structure of the nervous system of the nematode <em>Caenorhabditis elegans</em>. <em>Phil. Trans. R. Soc. Lond. B</em> 314, 1&ndash;340.</p>
+      <p>AXLE <code>simulations/connectome_loader.py</code> — the actual, existing Drosophila/FlyWire connectome code in this repository, cited honestly as what it is.</p>
+      <p>See also: <a href="ch16-hopfield-networks.html">Ch 16 — Hopfield Networks</a> · <a href="index.html">Book VI Index</a></p>
+    </div>
+  </section>
+
+  <div class="chapter-nav">
+    <a href="ch16-hopfield-networks.html">&larr; Ch 16 — Hopfield Networks</a>
+    <a href="index.html">Book VI Index</a>
+  </div>
+
+  <footer>
+    <p>dm&sup3; &mdash; Principia Orthogona &middot; G6 LLC &middot; Newark NJ &middot;
+      <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">Zenodo 19117400</a> &middot;
+      <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+    </p>
+  </footer>
+<div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
+  <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span><span>g6llc@proton.me</span>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span><span>+1 (646) 342-3751</span>
+</div>
+</body>
+</html>

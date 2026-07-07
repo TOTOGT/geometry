@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Molecular Cascade — tRNA Double-Sieve, RNA Fold, NMD | dm³ — Book VI</title>
+  <style>
+    :root {
+      --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4;
+      --mid: #3a4f7a; --rule: #8a7340; --text: #1c1c1c; --light: #e8e2d4;
+      --teal: #2a7a6a; --amber: #b8860b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia','Times New Roman',serif; color: var(--text); background: var(--cream); }
+    nav { background: var(--navy); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-logo { color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; text-decoration: none; font-family: sans-serif; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a { color: #ccc; text-decoration: none; font-size: 0.82rem; font-family: sans-serif; }
+    .nav-links a:hover { color: var(--gold); }
+
+    .hero { background: var(--navy); color: white; padding: 4rem 2rem 3rem; }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .op-ref { font-family: sans-serif; font-size: 0.78rem; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.6rem; }
+    .eyebrow { font-family: sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; color: #aaa; text-transform: uppercase; margin-bottom: 0.8rem; }
+    h1 { font-size: clamp(1.7rem, 4vw, 2.8rem); color: white; line-height: 1.2; margin-bottom: 0.4rem; }
+    h1 .hi { color: var(--gold); font-style: italic; }
+    .gold-rule { width: 60px; height: 2px; background: var(--gold); margin: 1.4rem 0; }
+    .hero-desc { color: #ddd; font-size: 1rem; line-height: 1.7; max-width: 680px; }
+    .hero-meta { font-family: sans-serif; font-size: 0.8rem; color: #aaa; margin-top: 1.4rem; }
+    .hero-meta span { color: var(--gold); }
+
+    section { padding: 3rem 2rem; }
+    .section-inner { max-width: 800px; margin: 0 auto; }
+    section:nth-child(even) { background: var(--smoke); }
+    h2 { font-size: 1.55rem; color: var(--navy); margin-bottom: 1.2rem; border-bottom: 1px solid var(--light); padding-bottom: 0.5rem; }
+    h3 { font-size: 1.15rem; color: var(--mid); margin: 1.4rem 0 0.7rem; }
+    p { line-height: 1.85; margin-bottom: 1.1rem; }
+    p:last-child { margin-bottom: 0; }
+
+    .callout { background: white; border-left: 4px solid var(--gold); padding: 1.2rem 1.5rem; margin: 1.5rem 0; border-radius: 0 4px 4px 0; }
+    .callout strong { color: var(--navy); }
+    .theorem { background: #f0f4ff; border: 1px solid #b0bce8; padding: 1.2rem 1.5rem; margin: 1.5rem 0; border-radius: 4px; }
+    .math { font-family: 'Courier New', monospace; background: var(--smoke); padding: 0.9rem 1.2rem; border-radius: 4px; margin: 1rem 0; font-size: 0.93rem; color: var(--navy); white-space: pre-wrap; }
+    .operator-map { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.88rem; }
+    .operator-map th { background: var(--navy); color: white; padding: 0.5rem 0.8rem; text-align: left; font-family: sans-serif; font-weight: normal; letter-spacing: 0.05em; }
+    .operator-map td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--light); }
+    .operator-map tr:last-child td { border-bottom: none; }
+    .operator-map .op { color: var(--mid); font-weight: bold; font-family: 'Courier New', monospace; }
+    .operator-map .hi { color: var(--teal); font-weight: bold; }
+
+    .cascade-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
+    .cascade-card { background: white; border: 1px solid var(--light); border-radius: 4px; padding: 1rem; }
+    .cascade-card .stage { font-family: sans-serif; font-size: 0.78rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; }
+    .cascade-card .frac { font-family: 'Courier New', monospace; color: var(--teal); font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .cascade-card p { font-size: 0.85rem; line-height: 1.5; margin: 0; }
+
+    .numeric-check { background: #0d1f0d; border-radius: 6px; padding: 1.2rem 1.5rem; margin: 1rem 0; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.7; color: #7eff7e; white-space: pre-wrap; overflow-x: auto; }
+    .numeric-check .comment { color: #6a9f5a; }
+
+    .axle-block { background: #0d1f0d; border-radius: 6px; padding: 1.2rem 1.5rem; margin: 1rem 0; }
+    .axle-block code { font-family: 'Courier New', monospace; color: #7eff7e; font-size: 0.88rem; display: block; white-space: pre; }
+    .axle-block .comment { color: #6a9f5a; }
+
+    .caveat { font-size: 0.95rem; line-height: 1.75; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 1.1rem; margin: 1.4rem 0; }
+
+    .chapter-nav { background: var(--smoke); border-top: 1px solid var(--light); padding: 1.2rem 2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .chapter-nav a { font-family: sans-serif; font-size: 0.82rem; color: var(--mid); text-decoration: none; padding: 0.4rem 0.9rem; border: 1px solid var(--light); }
+    .chapter-nav a:hover { background: var(--navy); color: var(--gold); }
+    footer { background: var(--navy); color: #aaa; text-align: center; padding: 1.5rem; font-family: sans-serif; font-size: 0.78rem; }
+    footer a { color: var(--gold); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      section { padding: 2rem 1.2rem; }
+      .hero { padding: 2.5rem 1.2rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-logo">dm³</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Book VI Index</a></li>
+      <li><a href="ch05-self-organization.html">← Ch 05</a></li>
+      <li><a href="../chapters-diagram.html">All Chapters</a></li>
+    </ul>
+      <a href="../living-book.html">Living Book</a>
+    <a href="../series-hub.html">Series ↗</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="op-ref">C → K chain (nested) · F · U · Molecular Domain</div>
+      <div class="eyebrow">Book VI · Chapter 06 · Part III, Domain 1 (Molecular)</div>
+      <h1>The Molecular Cascade<br><span class="hi">tRNA Double-Sieve, RNA Fold, NMD</span></h1>
+      <div class="gold-rule"></div>
+      <p class="hero-desc">
+        Three real, independently studied molecular quality-control systems, each already understood on
+        its own terms in the biochemistry literature: a two-stage editing mechanism that turns a roughly
+        1-in-40 mischarging error into one closer to 1-in-40,000; RNA secondary structure, which is folding
+        in the literal sense the word is used everywhere else in this corpus; and nonsense-mediated decay,
+        a surveillance system that deletes defective transcripts on a precise structural rule. This chapter
+        lays out what each system actually does, then states plainly where the C→K→F→U naming is being
+        borrowed as an organizing template and where it is not claiming anything beyond that.
+      </p>
+      <div class="hero-meta">
+        Operators: <span>C → K (nested) · F · U</span> · Pre-editing error: <span>~1/10–1/100</span> ·
+        Post-editing error: <span>~1/40,000</span> ·
+        Connects to: <span>ch07 (microtubule Fibonacci) · ch08 (dynamic instability)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- §1 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;1 The Established Biology</h2>
+      <p>
+        Aminoacyl-tRNA synthetases (aaRSs) charge tRNAs with their cognate amino acid, and about half of
+        them rely on a proofreading step to do this accurately enough for the cell to function. The
+        classic case is isoleucyl-tRNA synthetase (IleRS) discriminating against valine, an amino acid
+        one methyl group smaller than isoleucine and difficult to exclude by shape alone at the
+        aminoacylation site. Left uncorrected, this misactivation would occur at a rate on the order of
+        1 in 10 to 1 in 100. A second, physically separate active site &mdash; the editing (or "fine
+        sieve") site &mdash; hydrolyzes the misactivated product after the fact, bringing the net error
+        rate for this step down to roughly 1 in 40,000. The two-site logic is literally called the
+        "double sieve": a coarse sieve (the aminoacylation site) excludes amino acids larger than cognate,
+        and a fine sieve (the editing site) catches smaller or isosteric near-misses that slipped through
+        the first site (Fersht &amp; Kaeser 1976; reviewed in Ling, Reynolds &amp; Ibba 2009).
+      </p>
+      <p>
+        RNA secondary structure is a separate, unrelated system, but the word "fold" is not a metaphor
+        here &mdash; a single-stranded RNA molecule base-pairs with itself to form stems, loops, and
+        pseudoknots, and that literal folding step determines function for everything from tRNA's
+        cloverleaf shape to riboswitches to the untranslated regions that regulate translation.
+      </p>
+      <p>
+        Nonsense-mediated decay (NMD) is a third, independent surveillance system, acting on mature
+        mRNA rather than on tRNA charging or folding. In mammals, an mRNA is flagged for NMD when a stop
+        codon is found more than roughly 50&ndash;55 nucleotides upstream of the last exon-exon junction
+        &mdash; the standard model holds that exon-junction complexes (EJCs) deposited during splicing are
+        normally displaced by the first ribosome to translate the message, and any EJC left behind because
+        translation stopped early is the signal that triggers degradation (reviewed in Kurosaki, Popp
+        &amp; Maquat 2019; Wikipedia's Nonsense-mediated decay entry summarizes the same 50&ndash;55 nt
+        rule consistently with the primary literature).
+      </p>
+      <div class="callout">
+        <strong>Three systems, one theme:</strong> in each case, a first, permissive step is followed by a
+        second step that can reverse or destroy what the first step produced, if and only if the first
+        step's product fails a specific structural or affinity check. None of the three systems needs the
+        others to be understood; each is textbook molecular biology on its own.
+      </div>
+    </div>
+  </section>
+
+  <!-- §2 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;2 The Operator Mapping</h2>
+      <p>
+        This corpus's C (Contact) &rarr; K (threshold/commit) &rarr; F (Fold) &rarr; U (Unfold/express)
+        convention maps onto these three systems as a nested pair followed by two further stages, not as
+        one flat four-step sequence for all three at once &mdash; the double-sieve mechanism is itself a
+        C&middot;K pair (contact at the coarse sieve, threshold-crossing hydrolysis at the fine sieve),
+        and that pair is what feeds into F and U for the rest of the molecular cascade.
+      </p>
+      <table class="operator-map">
+        <thead>
+          <tr><th>Operator</th><th>dm&sup3; role</th><th>Molecular system</th><th>Key molecules/rule</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="op">C &mdash; Contact</td>
+            <td>Establish initial recognition/binding</td>
+            <td>Amino acid binds the aaRS aminoacylation site (coarse sieve)</td>
+            <td>aaRS, ATP, cognate + near-cognate amino acids</td>
+          </tr>
+          <tr>
+            <td class="op hi">K &mdash; Threshold</td>
+            <td>Irreversible commitment or correction</td>
+            <td class="hi">Editing-site hydrolysis (fine sieve): misactivated product is
+            irreversibly cleaved if it fails the second check</td>
+            <td>aaRS editing domain, near-cognate discrimination</td>
+          </tr>
+          <tr>
+            <td class="op">F &mdash; Fold</td>
+            <td>Literal folding into a stable structure</td>
+            <td>RNA secondary structure: base-pairing into stems, loops, pseudoknots</td>
+            <td>tRNA cloverleaf, riboswitches, UTR structure</td>
+          </tr>
+          <tr>
+            <td class="op">U &mdash; Unfold/express</td>
+            <td>Final expression, or removal if defective</td>
+            <td>NMD as a quality gate: correctly terminated mRNA is exported/translated;
+            a transcript with a premature stop &gt;50&ndash;55 nt from the last exon-exon
+            junction is degraded instead</td>
+            <td>EJC, UPF1/2/3, ribosome (pioneer round)</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="caveat">
+        Calling NMD "U-layer sorry elimination" (the phrasing used in this book's index) is a naming
+        analogy to a Lean proof assistant's <code>sorry</code> tactic &mdash; a placeholder marking an
+        incomplete proof step &mdash; and nothing more: a premature stop codon is a literal molecular
+        defect with a real biochemical consequence (a truncated, often toxic protein), not a gap in a
+        formal proof. The analogy is between two different kinds of "catch the broken thing before it
+        ships," not a claim that translation is a proof system.
+      </p>
+    </div>
+  </section>
+
+  <!-- §3 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;3 The Numbers, Stated Honestly</h2>
+      <p>
+        The pre-editing/post-editing error-rate improvement for the classic Ile/Val discrimination case
+        (roughly 1/10&ndash;1/100 down to roughly 1/40,000) is well established for that specific pair and
+        should not be read as a universal constant across all twenty aaRSs &mdash; editing stringency
+        varies by enzyme and by which near-cognate amino acid is being excluded. The broader, independently
+        measured figure for overall translational fidelity in cells &mdash; on the order of 1 to 3 amino
+        acid misincorporations per 10,000 residues synthesized, corresponding to a decoding fidelity
+        window cited in the range of roughly 1/2,400 to 1/40,000 &mdash; is a composite of aaRS charging
+        fidelity, ribosomal decoding fidelity, and proofreading at multiple steps, not attributable to
+        tRNA charging alone. This chapter's earlier index entry cited a "10&#8315;&#8308; &rarr; 10&#8315;&#8312;"
+        range for this improvement; that figure has been corrected here to the actual literature range
+        above, which is roughly an order of magnitude looser at the low end and does not reach 10&#8315;&#8312;
+        for this specific mechanism.
+      </p>
+      <p>
+        The NMD threshold (50&ndash;55 nucleotides from the last exon-exon junction) is a precise,
+        well-replicated rule in mammalian systems specifically; it is a mechanistic consequence of EJC
+        deposition and ribosome scanning distance, not an arbitrary round number, and does not need any
+        further interpretation to be a real, checkable fact.
+      </p>
+    </div>
+  </section>
+
+  <!-- §4 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;4 What the Framing Is and Isn't</h2>
+      <p>
+        Unlike some of this book's other bio-domain chapters, no n-bonacci or 1/3-radius numerical claim
+        is made here at all. The C&middot;K&middot;F&middot;U labels above are an organizing template for
+        presenting three unrelated, well-studied molecular systems side by side under one consistent
+        naming convention used throughout Book VI &mdash; nothing in this chapter claims any of the three
+        systems' rate constants, thresholds, or structures numerically derive from, converge to, or
+        instantiate any of this corpus's proved constants (&epsilon;&#8320;=1/3, &mu;_max=&minus;2,
+        &tau;=2). Where a number appears in &sect;3, it is a molecular-biology number with a molecular-biology
+        citation, full stop.
+      </p>
+    </div>
+  </section>
+
+  <!-- §5 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;5 AXLE Sketch</h2>
+      <p>
+        No Lean file exists for this chapter. The double-sieve mechanism has the most naturally formalizable
+        shape of the three systems &mdash; a two-stage filter with a real-valued discrimination margin at
+        each stage &mdash; and is sketched here for the record only:
+      </p>
+      <div class="axle-block">
+        <code><span class="comment">-- sketch only, not yet a file in this repo</span>
+structure ChargingAttempt where
+  aminoAcid    : String
+  coarseFit    : &#8477;   <span class="comment">-- steric fit at the aminoacylation site, higher = better fit</span>
+  fineMisfit   : &#8477;   <span class="comment">-- how much the editing site's discriminator disfavors it</span>
+
+<span class="comment">-- passes the coarse sieve if fit exceeds a size-exclusion bound</span>
+def passesCoarse (bound : &#8477;) (a : ChargingAttempt) : Prop := a.coarseFit &ge; bound
+
+<span class="comment">-- survives editing (is NOT hydrolyzed) if fine-sieve misfit stays below its own bound</span>
+def survivesEditing (bound : &#8477;) (a : ChargingAttempt) : Prop := a.fineMisfit &lt; bound
+
+<span class="comment">-- not proved: that real physical (coarseFit, fineMisfit) values for the twenty aaRS/amino-acid
+-- pairs actually satisfy any stated bound -- that is a question for structural biology and
+-- enzyme kinetics, not a theorem this sketch can supply</span></code>
+      </div>
+      <p class="caveat">
+        As with the thymic-selection sketch elsewhere in this book, the shape of the object is honestly
+        statable in a few lines; whether any real enzyme's measured kinetic parameters satisfy it is an
+        empirical question this sketch does not and cannot answer.
+      </p>
+    </div>
+  </section>
+
+  <!-- §6 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;6 Key References</h2>
+      <p>
+        Fersht, A.R., Kaeser, H.J. (1976). Enzyme editing mechanisms and the genetic code. <em>Nature</em>
+        or successor reviews on aaRS proofreading kinetics &mdash; the original kinetic-proofreading-in-aaRS
+        framing that the double-sieve model builds on.
+      </p>
+      <p>
+        Ling, J., Reynolds, N., Ibba, M. (2009). Aminoacyl-tRNA synthesis and translational quality
+        control. <em>Annu. Rev. Microbiol.</em> 63, 61&ndash;78. &mdash; Standard modern review of the
+        double-sieve mechanism and observed error rates.
+      </p>
+      <p>
+        Kurosaki, T., Popp, M.W., Maquat, L.E. (2019). Quality and quantity control of gene expression by
+        nonsense-mediated mRNA decay. <em>Nat. Rev. Mol. Cell Biol.</em> 20, 406&ndash;420. &mdash; The
+        50&ndash;55 nt EJC rule and NMD mechanism in mammals.
+      </p>
+      <p>
+        Nogueira Grossi, P. (2026). <em>Principia Orthogona</em> Vol I. G6 LLC.
+        <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">doi:10.5281/zenodo.19117400</a>
+        &mdash; dm&sup3; framework foundations: C, K, F, U operators.
+      </p>
+      <p>
+        See also: <a href="chIm-thymus.html">Thymic Selection as a Three-Stage Proofreading Cascade</a>
+        (the same C&rarr;K&rarr;F convention applied to an immunological rather than molecular cascade) ·
+        <a href="index.html">Book VI Index</a>
+      </p>
+    </div>
+  </section>
+
+  <div class="chapter-nav">
+    <a href="index.html">Book VI Index</a>
+    <a href="ch07-microtubule-fibonacci.html">Ch 07 — Fibonacci at the Nanometre &rarr;</a>
+  </div>
+
+  <footer>
+    <p>dm&sup3; &mdash; Principia Orthogona &middot; G6 LLC &middot; Newark NJ &middot;
+      <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">Zenodo 19117400</a> &middot;
+      <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+    </p>
+  </footer>
+
+<div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
+  <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span>
+  <span>g6llc@proton.me</span>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span>
+  <span>+1 (646) 342-3751</span>
+</div>
+</body>
+</html>
