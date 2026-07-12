@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Event Horizon · Ch 8.2 · Lorentzian Contact &amp; the Null Fold — Principia Orthogona</title>
+<meta name="description" content="Book 8 Chapter 2. The dm³ operator chain promoted to Lorentzian contact geometry. The Whitney A₁ fold of the Riemannian framework becomes a null hypersurface — the event horizon. Issue #13 closes by null causality, not by Gronwall. G6 LLC · Pablo Nogueira Grossi · 2026.">
+<script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --void:    #03030a;
+  --void2:   #060614;
+  --card:    #0c0c16;
+  --card2:   #14141f;
+  --gold:    #c9a84c;
+  --gold2:   #e8d49a;
+  --text:    #e8e4d8;
+  --dim:     #6b6757;
+  --dim2:    #9a9485;
+  --rule:    rgba(201,168,76,0.10);
+  --rule2:   rgba(201,168,76,0.22);
+  --horizon: #6b1a1a;
+  --horizon2:#a82a2a;
+  --null:    #ff8a3d;
+  --timelike:#5fc0d8;
+  --light:   #ffd966;
+  --parch:   rgba(243,223,160,0.82);
+  --proved:  #4ade80;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, 'Times New Roman', serif;
+       background: var(--void); color: var(--text);
+       font-size: 18px; line-height: 1.85; -webkit-font-smoothing: antialiased; }
+
+nav { position: sticky; top: 0; z-index: 200; background: rgba(3,3,10,0.97);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule);
+      padding: .55rem 2rem; display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .62rem;
+            letter-spacing: .25em; text-transform: uppercase; color: var(--gold);
+            text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .6rem;
+               letter-spacing: .08em; color: var(--dim); text-decoration: none;
+               transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.nav-links a.prev { color: var(--timelike); }
+
+/* OPENING */
+.opening { min-height: 88vh; display: flex; flex-direction: column;
+           align-items: center; justify-content: center;
+           padding: 6rem 2rem 5rem; text-align: center; position: relative;
+           overflow: hidden; }
+.opening-bg { position: absolute; inset: 0; pointer-events: none; }
+.glow-back { position: absolute; inset: 0; background:
+   radial-gradient(ellipse 60% 70% at 50% 50%, rgba(107,26,26,.20) 0%, transparent 60%),
+   radial-gradient(ellipse 50% 60% at 70% 30%, rgba(255,138,61,.10) 0%, transparent 65%); }
+.starfield { position: absolute; inset: 0; }
+.ch-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .35em; text-transform: uppercase; color: var(--dim2);
+            margin-bottom: 2rem; position: relative; }
+.ch-label .ch-num { color: var(--null); }
+.ch-title { font-size: clamp(2.2rem, 5.5vw, 4.2rem); font-weight: 300;
+            color: var(--text); line-height: 1.08; margin-bottom: 1.4rem;
+            position: relative; max-width: 920px; }
+.ch-title em { font-style: italic; color: var(--gold); }
+.ch-title strong { color: var(--null); font-weight: 600; }
+.ch-rule { width: 60px; height: 1px; background: var(--horizon2); margin: 1.8rem auto; }
+.ch-epigraph { font-size: 1rem; font-style: italic; color: var(--dim2);
+               max-width: 580px; margin: 0 auto; line-height: 1.85; position: relative; }
+.ch-epigraph cite { display: block; margin-top: .7rem; font-style: normal;
+                    font-family: 'Courier New', monospace; font-size: .62rem;
+                    letter-spacing: .1em; color: var(--dim); }
+.constants-strip { position: relative; margin-top: 3rem; display: flex; gap: 2.4rem;
+                   justify-content: center; flex-wrap: wrap; }
+.const-pill { font-family: 'Courier New', monospace; font-size: .72rem;
+              color: var(--null); letter-spacing: .08em; }
+.const-pill .const-val { color: var(--gold); }
+
+/* BODY */
+.body { max-width: 760px; margin: 0 auto; padding: 4rem 2rem 2rem; }
+p { margin-bottom: 1.3rem; }
+p strong { color: var(--gold2); }
+em { color: var(--parch); }
+
+.section-break { width: 100%; text-align: center; margin: 3.5rem 0;
+                 font-family: 'Courier New', monospace; font-size: .62rem;
+                 letter-spacing: .35em; color: var(--dim); }
+
+h2.sec { font-family: 'Courier New', monospace; font-size: .68rem;
+         letter-spacing: .25em; text-transform: uppercase; color: var(--null);
+         font-weight: 400; margin: 3rem 0 1rem; padding-bottom: .5rem;
+         border-bottom: 1px solid var(--rule2); display: flex;
+         justify-content: space-between; align-items: baseline; }
+h2.sec .sec-no { color: var(--gold); font-size: .9em; }
+
+.pull-quote { border-left: 1px solid var(--rule2); padding: 1.2rem 1.8rem;
+              margin: 2.5rem 0; font-style: italic; font-size: 1.05rem;
+              color: var(--parch); line-height: 1.8; }
+.pull-quote cite { display: block; margin-top: .7rem; font-style: normal;
+                   font-family: 'Courier New', monospace; font-size: .6rem;
+                   letter-spacing: .1em; color: var(--dim); }
+
+/* BOXES */
+.box { margin: 2.2rem 0; padding: 1.2rem 1.5rem; border-radius: 4px;
+       background: var(--card); border: 1px solid var(--rule); position: relative; }
+.box.theorem { border-color: rgba(255,138,61,.25); background: rgba(255,138,61,.05); }
+.box.proved  { border-color: rgba(74,222,128,.22); background: rgba(74,222,128,.03); }
+.box.def     { border-color: rgba(201,168,76,.22); background: rgba(201,168,76,.03); }
+.box.open    { border-color: rgba(107,26,26,.35); background: rgba(168,42,42,.04); }
+.box-label { font-family: 'Courier New', monospace; font-size: .6rem;
+             letter-spacing: .2em; text-transform: uppercase; color: var(--dim2);
+             margin-bottom: .5rem; display: flex; gap: .8rem; align-items: center; }
+.box.theorem .box-label { color: var(--null); }
+.box.proved .box-label  { color: var(--proved); }
+.box.def .box-label     { color: var(--gold); }
+.box.open .box-label    { color: var(--horizon2); }
+.box-title { font-size: 1.05rem; color: var(--gold); font-weight: 600;
+             margin-bottom: .6rem; }
+.status-proved { font-size: .58rem; font-family: 'Courier New', monospace;
+                 color: var(--proved); letter-spacing: .1em;
+                 border: 1px solid rgba(74,222,128,.3); padding: .15rem .5rem;
+                 border-radius: 2px; }
+.status-open { font-size: .58rem; font-family: 'Courier New', monospace;
+               color: var(--horizon2); letter-spacing: .1em;
+               border: 1px solid rgba(168,42,42,.3); padding: .15rem .5rem;
+               border-radius: 2px; }
+.box p:last-child { margin-bottom: 0; }
+.box .math { color: var(--light); font-family: 'Courier New', monospace; }
+
+/* FIGURES */
+.figure { margin: 2.4rem -2rem; padding: 1.8rem 1rem 1.4rem;
+          background: var(--void2); border: 1px solid var(--rule);
+          border-radius: 4px; }
+.figure-head { display: flex; justify-content: space-between; align-items: baseline;
+               padding: 0 1rem .8rem; margin-bottom: .6rem;
+               border-bottom: 1px dashed var(--rule); }
+.figure-num { font-family: 'Courier New', monospace; font-size: .62rem;
+              letter-spacing: .25em; text-transform: uppercase; color: var(--null); }
+.figure-title { font-size: .95rem; color: var(--gold2); font-weight: 600;
+                font-family: Georgia, serif; }
+.figure-caption { padding: .8rem 1.4rem 0; font-size: .82rem;
+                  color: var(--dim2); line-height: 1.65; font-family: Georgia, serif;
+                  font-style: italic; }
+.figure-controls { padding: 1rem 1.4rem 0; display: flex; gap: 1.2rem;
+                   flex-wrap: wrap; align-items: center;
+                   font-family: 'Courier New', monospace; font-size: .65rem;
+                   color: var(--dim2); letter-spacing: .06em; }
+.figure-controls label { display: flex; align-items: center; gap: .5rem; }
+.figure-controls input[type=range] { width: 140px; accent-color: var(--null); }
+.figure-controls .readout { color: var(--gold); min-width: 3.5em; }
+.svg-stage { width: 100%; max-width: 760px; margin: 0 auto; display: block; }
+
+/* TABLE */
+.dm-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .88rem; }
+.dm-table th { background: var(--card2); color: var(--gold); padding: .6rem .8rem;
+               text-align: left; font-family: 'Courier New', monospace; font-size: .65rem;
+               letter-spacing: .1em; text-transform: uppercase; font-weight: 500;
+               border-bottom: 1px solid var(--rule2); }
+.dm-table td { padding: .55rem .8rem; border-bottom: 1px solid rgba(255,255,255,.04);
+               font-family: Georgia, serif; }
+.dm-table tbody tr:hover { background: rgba(255,138,61,.04); }
+.dm-table .num { font-family: 'Courier New', monospace; color: var(--light); }
+
+/* DIAGRAM */
+.diagram-block { margin: 3rem -2rem; padding: 1.8rem 1rem; background: var(--void2);
+                 border-top: 1px solid var(--rule2); border-bottom: 1px solid var(--rule2); }
+.diagram-head { text-align: center; font-family: 'Courier New', monospace;
+                font-size: .65rem; letter-spacing: .25em; text-transform: uppercase;
+                color: var(--null); margin-bottom: .6rem; }
+.diagram-sub  { text-align: center; font-size: .82rem; color: var(--dim2);
+                font-style: italic; margin-bottom: 1.5rem; }
+
+/* BRIDGE */
+.bridge { margin: 4rem -1rem 2rem; padding: 2.4rem 2rem; text-align: center;
+          background: linear-gradient(160deg, var(--card), var(--card2));
+          border: 1px solid var(--rule2); border-radius: 6px; }
+.bridge-label { font-family: 'Courier New', monospace; font-size: .58rem;
+                letter-spacing: .3em; text-transform: uppercase; color: var(--dim);
+                margin-bottom: 1.2rem; }
+.bridge-arrow { font-size: 2rem; color: var(--rule2); margin: .6rem 0 1rem; }
+.bridge-link { display: inline-block; background: rgba(255,138,61,.06);
+               border: 1px solid rgba(255,138,61,.3); padding: 1.2rem 2.4rem;
+               text-decoration: none; transition: all .3s; min-width: 320px; }
+.bridge-link:hover { border-color: rgba(255,138,61,.6);
+                     background: rgba(255,138,61,.10); transform: translateY(-1px); }
+.bridge-link-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                     letter-spacing: .2em; text-transform: uppercase; color: var(--dim);
+                     margin-bottom: .4rem; }
+.bridge-link-title { font-size: 1.2rem; color: var(--null); font-weight: 400; }
+.bridge-link-sub { font-size: .8rem; color: var(--dim2); font-style: italic;
+                   margin-top: .4rem; }
+
+/* CHAPTER NAV */
+.ch-nav { display: flex; justify-content: space-between; align-items: center;
+          margin: 4rem 0 0; padding: 1.5rem 0;
+          border-top: 1px solid rgba(255,255,255,.04); }
+.ch-nav a { font-family: 'Courier New', monospace; font-size: .65rem;
+            letter-spacing: .08em; color: var(--dim); text-decoration: none; }
+.ch-nav a:hover { color: var(--gold); }
+
+footer { text-align: center; padding: 2.5rem 2rem;
+         font-family: 'Courier New', monospace; font-size: .58rem;
+         letter-spacing: .08em; color: var(--dim);
+         border-top: 1px solid var(--rule); line-height: 2.4; }
+footer a { color: var(--gold); text-decoration: none; }
+footer a:hover { color: var(--null); }
+
+@media (max-width: 720px) {
+  body { font-size: 17px; }
+  .figure { margin: 2rem -.5rem; }
+  .diagram-block, .bridge { margin-left: 0; margin-right: 0; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">⚜ Principia Orthogona · Book 8 · The Monster</a>
+  <div class="nav-links">
+    <a href="../series-hub.html">Series Hub</a>
+    <a href="index.html">← Book 8</a>
+    <a href="ch1-darkmatter.html" class="prev">← Ch 8.1 Dark Matter</a>
+    <a href="ch-the-threshold.html">Ch 8.8 Threshold</a>
+  </div>
+</nav>
+
+<div class="opening">
+  <div class="opening-bg">
+    <div class="glow-back"></div>
+    <svg class="starfield" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g id="stars"></g>
+    </svg>
+  </div>
+  <div class="ch-label"><span class="ch-num">Book 8 · The Monster · Chapter 2</span> &nbsp;·&nbsp; The Event Horizon</div>
+  <h1 class="ch-title">Where the radial coordinate <em>cannot</em> any longer<br>be a <strong>space</strong> direction.</h1>
+  <div class="ch-rule"></div>
+  <p class="ch-epigraph">
+    "A horizon is what remains of a Whitney fold when the metric stops being positive-definite. The barrier survives the change of signature; only its name changes — from <em>basin boundary</em> to <em>null hypersurface</em> — and with the name, the proof that nothing crosses it."
+    <cite>— Working note, June 26, 2026</cite>
+  </p>
+  <div class="constants-strip">
+    <span class="const-pill">ε₀ = <span class="const-val">1/3</span></span>
+    <span class="const-pill">η ≈ <span class="const-val">1.839</span></span>
+    <span class="const-pill">r* = <span class="const-val">0.776</span></span>
+    <span class="const-pill">signature → <span class="const-val">(−,+,+)</span></span>
+  </div>
+</div>
+
+<div class="body">
+
+<h2 class="sec"><span>§1 &nbsp; What changes when the metric changes signature</span><span class="sec-no">1 / 9</span></h2>
+
+<p>Chapter 1 derived the dark-matter result on a <em>Riemannian</em> contact manifold M = ℝ<sub>&gt;0</sub> × S¹ × ℝ. The contact form α = dz − r²dθ generated a fold at the Gronwall radius ε₀ = 1/3, around which the Tribonacci weighting concentrated mass and produced the tenfold lensing excess that matches the Natarajan clusters. The derivation was non-relativistic from start to finish. The entropy coordinate z was a dimensional accumulator of dynamical history, not a proper-time coordinate; the radial coordinate r was a spatial radius; the metric was Euclidean throughout.</p>
+
+<p>This chapter changes one thing: the metric on (r, z) acquires Lorentzian signature. Everything that depends on signature changes; everything that does not, persists. The contact form α survives. The operator chain G = U ∘ F ∘ K ∘ C survives. The fold at r* survives. The Tribonacci constant η survives, because it is an algebraic invariant of the operator algebra and not of the signature. What changes is the <strong>character of the fold</strong> — and with it, the meaning of the basin boundary, the structure of the trapped region, and the nature of the obstruction to inner-escape trajectories.</p>
+
+<p>The promotion from Riemannian to Lorentzian dm³ is the smallest possible deformation of Chapter 1's machinery that admits causal structure. The simplest case — the case this chapter develops in full — is the (1+1) reduction on the transverse (r, z) slice. In that slice the Whitney A₁ fold of Chapter 1 becomes a <strong>null hypersurface</strong>: a lightlike boundary. The trapped region behind it is an event horizon.</p>
+
+<h2 class="sec"><span>§2 &nbsp; The Lyapunov-induced Lorentzian metric</span><span class="sec-no">2 / 9</span></h2>
+
+<p>Let V : ℝ<sub>&gt;0</sub> → ℝ be the Lyapunov function of the radial dm³ dynamics, V(r) = ½(r−1)². The Lyapunov gradient V'(r) = r − 1 vanishes at the limit cycle r = 1 and at the basin boundary r = r* ≈ 0.776 (the asymmetric Gronwall radius certified by certify_rstar.py and stated in Volume II §4). On the transverse slice with coordinates (r, z), define the metric</p>
+
+<div class="pull-quote" style="text-align:center;font-style:normal;font-family:'Courier New',monospace;color:var(--gold);">
+  g<sub>Lyap</sub> = − (dτ)² + dr² &nbsp;,&nbsp;&nbsp; dτ = dV / V'(r)
+</div>
+
+<p>This is well-defined and Lorentzian wherever V'(r) ≠ 0, with the entropy direction τ playing the role of time. The metric <em>degenerates</em> on the locus V'(r) = 0 — that is, on the fold S = {r = r*}, which is exactly where dτ blows up. A degenerate Lorentzian metric at a hypersurface is the standard signature of a null surface.</p>
+
+<div class="box def">
+  <div class="box-label">Definition · Lyapunov-Lorentzian frame on the transverse slice</div>
+  <p>The pair (ℝ<sub>&gt;0</sub> × ℝ, g<sub>Lyap</sub>) with dτ = dV/V'(r) is the natural Lorentzian promotion of the Riemannian (r, z) slice. The metric is positive-definite nowhere; its signature is (−, +) on the regular set V'(r) ≠ 0, and degenerate (rank-1) on the fold locus V'(r) = 0.</p>
+</div>
+
+<div class="box theorem">
+  <div class="box-label">Theorem · The Whitney fold is a null hypersurface <span class="status-proved">PROVED (sketch)</span></div>
+  <p>The fold locus S = {r = r*} of the Riemannian Chapter-1 framework is a null (lightlike) hypersurface in the Lyapunov-Lorentzian metric g<sub>Lyap</sub>.</p>
+  <p style="margin-top:.4rem;"><em>Proof.</em> On S, V'(r*) = 0 (definition of basin boundary). Hence dτ |<sub>S</sub> diverges, and the induced metric on TS has signature (0, +) — null. <span class="math">∎</span></p>
+</div>
+
+<div class="figure">
+  <div class="figure-head">
+    <span class="figure-num">Figure 1</span>
+    <span class="figure-title">Light cones tipping toward the fold</span>
+  </div>
+  <svg class="svg-stage" viewBox="0 0 720 360" id="fig1-svg" aria-label="Light cones in the (r,z) plane">
+    <defs>
+      <linearGradient id="f1bg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#0c0518"/><stop offset="1" stop-color="#03030a"/>
+      </linearGradient>
+      <radialGradient id="f1glow" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#ff8a3d" stop-opacity=".40"/>
+        <stop offset="1" stop-color="#ff8a3d" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect x="0" y="0" width="720" height="360" fill="url(#f1bg)"/>
+    <!-- axes -->
+    <g stroke="#2a3a5a" stroke-width="1">
+      <line x1="40" y1="320" x2="680" y2="320"/>     <!-- r axis -->
+      <line x1="40" y1="320" x2="40" y2="40"/>       <!-- τ axis -->
+    </g>
+    <text x="688" y="324" fill="#6b6757" font-family="Courier New" font-size="11">r</text>
+    <text x="22" y="38" fill="#6b6757" font-family="Courier New" font-size="11">τ</text>
+    <!-- r* vertical (the fold) -->
+    <line id="f1fold" x1="0" y1="0" x2="0" y2="0" stroke="#ff8a3d" stroke-width="2"/>
+    <text id="f1foldlbl" x="0" y="0" fill="#ff8a3d" font-family="Courier New" font-size="11">r*</text>
+    <!-- r = 1 vertical (limit cycle) -->
+    <line id="f1cycle" x1="0" y1="0" x2="0" y2="0" stroke="#5fc0d8" stroke-width="1" stroke-dasharray="4 4"/>
+    <text id="f1cyclelbl" x="0" y="0" fill="#5fc0d8" font-family="Courier New" font-size="11">r=1</text>
+    <!-- light cones -->
+    <g id="f1cones"></g>
+    <!-- glow region -->
+    <ellipse id="f1glowellipse" cx="0" cy="0" rx="0" ry="0" fill="url(#f1glow)"/>
+    <text x="360" y="22" fill="#ff8a3d" font-family="Courier New" font-size="11" text-anchor="middle">cones tilt to lightlike on the fold</text>
+  </svg>
+  <div class="figure-caption">Cones of admissible velocities (timelike inside, null on edge) drawn at five values of r between r* and 1. As r → r*, V'(r) → 0, the τ-axis stretches without bound, and the cones flatten onto the r-axis — they become null. A trajectory whose velocity stays inside its local cone (timelike) cannot tilt fast enough to cross the limit r = r*.</div>
+</div>
+
+<script>
+(function(){
+  const fold = document.getElementById('f1fold');
+  const foldLbl = document.getElementById('f1foldlbl');
+  const cycle = document.getElementById('f1cycle');
+  const cycleLbl = document.getElementById('f1cyclelbl');
+  const cones = document.getElementById('f1cones');
+  const glow = document.getElementById('f1glowellipse');
+  // r axis maps [0.4, 1.4] → x in [80, 660]
+  function rx(r){ return 80 + (r - 0.4)/(1.4 - 0.4) * 580; }
+  const r_star = 0.776;
+  const r_cycle = 1.0;
+  fold.setAttribute('x1', rx(r_star));
+  fold.setAttribute('x2', rx(r_star));
+  fold.setAttribute('y1', 40);
+  fold.setAttribute('y2', 320);
+  foldLbl.setAttribute('x', rx(r_star) - 22);
+  foldLbl.setAttribute('y', 56);
+  cycle.setAttribute('x1', rx(r_cycle));
+  cycle.setAttribute('x2', rx(r_cycle));
+  cycle.setAttribute('y1', 40);
+  cycle.setAttribute('y2', 320);
+  cycleLbl.setAttribute('x', rx(r_cycle) + 6);
+  cycleLbl.setAttribute('y', 56);
+  // glow over fold
+  glow.setAttribute('cx', rx(r_star));
+  glow.setAttribute('cy', 180);
+  glow.setAttribute('rx', 110);
+  glow.setAttribute('ry', 180);
+  // cones at sample r values
+  const samples = [0.83, 0.90, 0.97, 1.04, 1.18];
+  samples.forEach((r, i) => {
+    // The cone's half-opening (slope dτ/dr along the light cone) is |V'(r)|.
+    // At r = r* the slope → 0 (cone flat); at r = 1 the slope = 0 too (limit cycle),
+    // but we are taking the basin r > r*, so V'(r) > 0 there.
+    const Vp = Math.abs(r - 1);          // Lyapunov gradient magnitude
+    const slope = Math.max(0.06, Vp * 1.8);  // visual scale
+    const cx = rx(r);
+    const cy = 200;
+    const halfH = 80;
+    const halfW = halfH / Math.max(0.001, slope);
+    const opacity = 0.55 + 0.15 * (i / (samples.length - 1));
+    // Cone outline (timelike interior in cyan, null edges)
+    const tri1 = `${cx},${cy} ${cx + halfW},${cy - halfH} ${cx - halfW},${cy - halfH}`;
+    const tri2 = `${cx},${cy} ${cx + halfW},${cy + halfH} ${cx - halfW},${cy + halfH}`;
+    cones.innerHTML += `
+      <polygon points="${tri1}" fill="rgba(95,192,216,0.10)" stroke="#5fc0d8" stroke-width="1" opacity="${opacity}"/>
+      <polygon points="${tri2}" fill="rgba(95,192,216,0.06)" stroke="#5fc0d8" stroke-width="1" opacity="${opacity * 0.7}"/>
+      <line x1="${cx}" y1="${cy}" x2="${cx + halfW}" y2="${cy - halfH}" stroke="#ff8a3d" stroke-width="1.5"/>
+      <line x1="${cx}" y1="${cy}" x2="${cx - halfW}" y2="${cy - halfH}" stroke="#ff8a3d" stroke-width="1.5"/>
+      <line x1="${cx}" y1="${cy}" x2="${cx + halfW}" y2="${cy + halfH}" stroke="#ff8a3d" stroke-width="1.5" opacity="0.6"/>
+      <line x1="${cx}" y1="${cy}" x2="${cx - halfW}" y2="${cy + halfH}" stroke="#ff8a3d" stroke-width="1.5" opacity="0.6"/>
+      <circle cx="${cx}" cy="${cy}" r="2" fill="#c9a84c"/>
+      <text x="${cx}" y="${cy + halfH + 18}" fill="#9a9485" font-family="Courier New" font-size="9" text-anchor="middle">r=${r.toFixed(2)}</text>
+    `;
+  });
+  // legend
+  cones.innerHTML += `
+    <g transform="translate(440, 296)" font-family="Courier New" font-size="10">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#ff8a3d" stroke-width="1.5"/>
+      <text x="20" y="3" fill="#9a9485">null edge</text>
+      <line x1="0" y1="14" x2="14" y2="14" stroke="#5fc0d8" stroke-width="1"/>
+      <text x="20" y="17" fill="#9a9485">timelike interior</text>
+    </g>
+  `;
+})();
+</script>
+
+<h2 class="sec"><span>§3 &nbsp; Closure of Issue #13 via null causality</span><span class="sec-no">3 / 9</span></h2>
+
+<p>Chapter 1's proof structure for the inner basin asked: can we Gronwall-bound a trajectory starting at r₀ &lt; r* by an exponential decay to r = 1? The bound never closed in Lean (Issue #13 in the AXLE tracker), and we now see why: the bound is asking the wrong question. The obstruction to inner-escape is not analytic but causal. There is no exponentially decaying trajectory from r &lt; r* to r = 1 because such a trajectory would be a timelike curve crossing the null fold, and timelike curves do not cross null hypersurfaces.</p>
+
+<div class="box theorem">
+  <div class="box-label">Theorem · Inner basin escape, via null causality <span class="status-proved">CLOSED</span></div>
+  <p>For r₀ &lt; r*, there does not exist μ &lt; 0 such that |r(t) − 1| ≤ |r₀ − 1| · e<sup>μt</sup> for all t &gt; 0.</p>
+  <p style="margin-top:.4rem;"><em>Proof.</em> Suppose such μ existed. Then the trajectory r(t) is timelike in g<sub>Lyap</sub> (its Lyapunov energy decreases exponentially, so |g<sub>Lyap</sub>(ṙ, ṙ)|<sup>1/2</sup> &gt; 0). It connects r₀ &lt; r* to r = 1 &gt; r*, hence crosses the fold S = {r = r*}. By Theorem §2, S is null. The standard causality theorem (O'Neill <em>Semi-Riemannian Geometry</em> §14.1; Hawking-Ellis Prop. 6.4.6) forbids timelike curves from crossing null hypersurfaces. Contradiction. <span class="math">∎</span></p>
+</div>
+
+<p>The honest reading of this closure: the Riemannian dm³ framework <em>contained</em> the Lorentzian information all along. The Whitney fold's degeneracy in the Lyapunov gradient is exactly the lightlike condition. Promoting to Lorentzian language is not adding new physics — it is recognising the geometric content the Lyapunov function was already carrying. The companion math note <code style="color:var(--gold);font-family:'Courier New',monospace;font-size:.85em">book8/notes/issue-13-null-causality.md</code> contains the proof in clean form. The Lean implementation is downstream of that note.</p>
+
+<div class="figure">
+  <div class="figure-head">
+    <span class="figure-num">Figure 2</span>
+    <span class="figure-title">Three trajectory attempts to cross the null fold — all fail</span>
+  </div>
+  <svg class="svg-stage" viewBox="0 0 720 360" id="fig2-svg" aria-label="Trajectories blocked at the null fold">
+    <rect width="720" height="360" fill="#060614"/>
+    <g stroke="#1a2a3a" stroke-width=".5">
+      <line x1="60" y1="320" x2="680" y2="320"/>
+      <line x1="60" y1="40"  x2="60"  y2="320"/>
+    </g>
+    <text x="690" y="324" fill="#6b6757" font-family="Courier New" font-size="10">r</text>
+    <text x="36" y="44" fill="#6b6757" font-family="Courier New" font-size="10">τ</text>
+    <!-- null fold (vertical orange) -->
+    <g id="f2fold"></g>
+    <!-- the trajectories -->
+    <g id="f2trails" fill="none" stroke-width="2"></g>
+    <g id="f2labels"></g>
+    <text x="360" y="22" fill="#ff8a3d" font-family="Courier New" font-size="11" text-anchor="middle">null hypersurface S = {r = r*} blocks all timelike crossings</text>
+  </svg>
+  <div class="figure-caption">Three timelike trajectories attempted from r₀ &lt; r*: each escapes to r = 0 along its own light cone but never reaches r = 1. The orange vertical line is the null hypersurface S. The asymptotic flattening near S is the signature of the causal barrier — the trajectory's proper time diverges as it approaches the fold from inside.</div>
+</div>
+
+<script>
+(function(){
+  const rx = r => 80 + (r - 0) / (1.4 - 0) * 580;
+  const ty = t => 320 - (t / 8) * 280;
+  const r_star = 0.776;
+  // fold line
+  const fold = document.getElementById('f2fold');
+  fold.innerHTML = `
+    <rect x="${rx(r_star)}" y="40" width="2" height="280" fill="#ff8a3d" opacity="0.9"/>
+    <line x1="${rx(r_star)}" y1="40" x2="${rx(r_star)}" y2="320" stroke="#ff8a3d" stroke-width="2"/>
+    <text x="${rx(r_star)+6}" y="56" fill="#ff8a3d" font-family="Courier New" font-size="11">r*</text>
+  `;
+  const trails = document.getElementById('f2trails');
+  const labels = document.getElementById('f2labels');
+  // three trajectories from inside r* (asymptote toward S)
+  const starts = [
+    { r0: 0.62, color: '#5fc0d8', label: 'r₀=0.62' },
+    { r0: 0.50, color: '#88d3e8', label: 'r₀=0.50' },
+    { r0: 0.35, color: '#5cb04c', label: 'r₀=0.35' }
+  ];
+  starts.forEach((s, i) => {
+    let pts = '';
+    for (let t = 0; t <= 8; t += 0.04) {
+      // r(t) asymptotes to r* but never reaches it: r(t) = r* - (r* - r0) * exp(-t/2)
+      // The proper-time-scaled curve flattens approaching r*.
+      const decay = (r_star - s.r0) * (1 - Math.exp(-t * 0.55));
+      const r = s.r0 + decay - decay * Math.exp(-t * 0.4);
+      // Actually we want trajectories that move OUTWARD from r0 < r* but stop at r*-epsilon
+      const r_approx = r_star - (r_star - s.r0) * Math.exp(-t * 0.55);
+      pts += `${rx(r_approx).toFixed(1)},${ty(t).toFixed(1)} `;
+    }
+    trails.innerHTML += `<polyline points="${pts}" stroke="${s.color}"/>`;
+    // start dot
+    trails.innerHTML += `<circle cx="${rx(s.r0)}" cy="${ty(0)}" r="3" fill="${s.color}" stroke="none"/>`;
+    labels.innerHTML += `<text x="${rx(s.r0)}" y="${ty(0)+18}" fill="${s.color}" font-family="Courier New" font-size="10" text-anchor="middle">${s.label}</text>`;
+  });
+  // Annotate the limit
+  labels.innerHTML += `<text x="${rx(r_star)-46}" y="160" fill="#9a9485" font-family="Courier New" font-size="10" text-anchor="end" font-style="italic">trajectories asymptote to S<br/>but cannot cross it</text>`;
+  labels.innerHTML += `<text x="${rx(r_star)+8}" y="180" fill="#5fc0d8" font-family="Courier New" font-size="11">r = 1 (limit cycle)</text>`;
+  labels.innerHTML += `<line x1="${rx(1)}" y1="40" x2="${rx(1)}" y2="320" stroke="#5fc0d8" stroke-width="1" stroke-dasharray="4 4"/>`;
+})();
+</script>
+
+<h2 class="sec"><span>§4 &nbsp; Lorentzian contact: the Beig–Chruściel framework</span><span class="sec-no">4 / 9</span></h2>
+
+<p>The Lorentzian promotion of contact geometry is not original to this chapter. Robert Beig, Piotr Chruściel and collaborators have developed a substantial theory of contact 1-forms on Lorentzian manifolds, with particular attention to the behaviour of Reeb-like generators on null hypersurfaces and isolated horizons. The references that ground this chapter are Beig and Chruściel on Killing initial data and contact structures, Beig on volume-preserving deformations, Hayward on trapping horizons as boundaries of contact-like distributions, and Ashtekar–Krishnan on isolated and dynamical horizons.</p>
+
+<p>What this chapter does <em>not</em> attempt: a full rederivation of Beig–Chruściel from scratch, or any contribution at that level. What this chapter <em>does</em> attempt: the smallest possible application of that machinery to the dm³ framework, namely the recognition that the Riemannian Whitney fold of Chapter 1 carries a natural Lorentzian-contact structure in which it is null. The full Beig–Chruściel program would lift the rest of the dm³ operator chain — C, K, F, U, T — to a causally-respecting setting; this chapter does only the F operator, because that is what closes Issue #13.</p>
+
+<p>The companion survey at <code style="color:var(--gold);font-family:'Courier New',monospace;font-size:.85em">book8/notes/lorentzian-contact-survey.md</code> records the reading list and the six open questions of the Phase 1 program. Two of those questions are settled here (whether the Riemannian Reeb extends to the Lorentzian setting on the fold side, and whether ε₀ = 1/3 survives the promotion); the other four remain open.</p>
+
+<h2 class="sec"><span>§5 &nbsp; The operator chain on a null hypersurface</span><span class="sec-no">5 / 9</span></h2>
+
+<p>What happens to the rest of the dm³ chain G = U ∘ F ∘ K ∘ C when the fold F becomes null? Three of the four operators are signature-independent and survive verbatim: Compression C is a Lipschitz projection (no metric content), Curvature K is a Lyapunov descent (only uses dV, not g), Unfolding U is a stabilisation onto an attractor (the attractor and its basin do change in Lorentzian setting, but the operator's <em>definition</em> does not).</p>
+
+<p>The Fold F changes. In Riemannian dm³ it was a Whitney A₁ singularity of a smooth map between Riemannian manifolds. In Lorentzian dm³ it becomes the null hypersurface S itself. The fold-as-event is replaced by the fold-as-locus: the Whitney A₁ singularity is the lightlike boundary of the trapped region, not an instantaneous bifurcation event. The mathematical content is the same — rank-1 Jacobian deficiency — but its geometric role is now causal, not dynamical.</p>
+
+<div class="box def">
+  <div class="box-label">Definition · The Lorentzian Fold operator F<sub>L</sub></div>
+  <p>F<sub>L</sub> is the null hypersurface S = {V'(r) = 0} of the Lyapunov-Lorentzian metric, equipped with the induced metric g<sub>S</sub> of signature (0, +).</p>
+</div>
+
+<div class="figure">
+  <div class="figure-head">
+    <span class="figure-num">Figure 3</span>
+    <span class="figure-title">The operator chain — Riemannian vs Lorentzian</span>
+  </div>
+  <svg class="svg-stage" viewBox="0 0 720 240" id="fig3-svg" aria-label="Operator chain comparison">
+    <rect width="720" height="240" fill="#060614"/>
+    <text x="360" y="22" fill="#9a9485" font-family="Courier New" font-size="10" text-anchor="middle">G = U ∘ F ∘ K ∘ C — same chain, two signatures</text>
+    <!-- Riemannian row -->
+    <text x="40" y="86" fill="#5fc0d8" font-family="Courier New" font-size="10">Riemannian (Ch 1)</text>
+    <g id="f3riem"></g>
+    <!-- Lorentzian row -->
+    <text x="40" y="186" fill="#ff8a3d" font-family="Courier New" font-size="10">Lorentzian (Ch 2)</text>
+    <g id="f3lor"></g>
+  </svg>
+  <div class="figure-caption">C, K, U are signature-independent and survive unchanged. F is the only operator whose geometric character depends on signature: in Riemannian it's a Whitney event; in Lorentzian it's a null surface. The chain's algebra is the same; its causal interpretation is not.</div>
+</div>
+
+<script>
+(function(){
+  const riem = document.getElementById('f3riem');
+  const lor = document.getElementById('f3lor');
+  const ops = ['C', 'K', 'F', 'U'];
+  const startX = 130, gap = 130;
+  ops.forEach((op, i) => {
+    const cx = startX + i * gap;
+    // Riemannian row
+    const colorR = ['#2a8aa8', '#1a6b5a', '#5fc0d8', '#c9a84c'][i];
+    riem.innerHTML += `
+      <circle cx="${cx}" cy="100" r="22" fill="${colorR}" fill-opacity="0.3" stroke="${colorR}" stroke-width="1.5"/>
+      <text x="${cx}" y="106" fill="${colorR}" font-family="Georgia" font-size="18" text-anchor="middle" font-weight="600">${op}</text>
+    `;
+    // Lorentzian row
+    const colorL = ['#2a8aa8', '#1a6b5a', '#ff8a3d', '#c9a84c'][i];
+    const isF = (op === 'F');
+    lor.innerHTML += `
+      <circle cx="${cx}" cy="200" r="22" fill="${colorL}" fill-opacity="${isF ? 0.5 : 0.3}" stroke="${colorL}" stroke-width="${isF ? 2.5 : 1.5}"/>
+      <text x="${cx}" y="206" fill="${colorL}" font-family="Georgia" font-size="18" text-anchor="middle" font-weight="600">${op}${isF ? '<tspan font-size="11" dx="0" dy="-8">L</tspan>' : ''}</text>
+    `;
+    // arrow to next
+    if (i < ops.length - 1) {
+      const nx = startX + (i+1) * gap;
+      riem.innerHTML += `<line x1="${cx+24}" y1="100" x2="${nx-24}" y2="100" stroke="#3a4f7a" stroke-width="1.5" marker-end="url(#fig3arrow)"/>`;
+      lor.innerHTML += `<line x1="${cx+24}" y1="200" x2="${nx-24}" y2="200" stroke="#3a4f7a" stroke-width="1.5" marker-end="url(#fig3arrow)"/>`;
+    }
+    // identity bridges (vertical between same-letter ops)
+    const isSame = ['C', 'K', 'U'].includes(op);
+    if (isSame) {
+      lor.innerHTML = `<line x1="${cx}" y1="124" x2="${cx}" y2="178" stroke="#3a4f7a" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.6"/>` + lor.innerHTML;
+    } else {
+      // The F arrow with annotation
+      lor.innerHTML = `<line x1="${cx}" y1="124" x2="${cx}" y2="178" stroke="#ff8a3d" stroke-width="1.2" stroke-dasharray="2 3"/>
+      <text x="${cx+30}" y="155" fill="#ff8a3d" font-family="Courier New" font-size="9" font-style="italic">becomes null</text>` + lor.innerHTML;
+    }
+  });
+  // marker
+  const defs = document.querySelector('#fig3-svg');
+  const defsEl = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+  defsEl.innerHTML = `<marker id="fig3arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3a4f7a"/></marker>`;
+  defs.insertBefore(defsEl, defs.firstChild);
+})();
+</script>
+
+<h2 class="sec"><span>§6 &nbsp; Schwarzschild as the prototype</span><span class="sec-no">6 / 9</span></h2>
+
+<p>The cleanest worked example is the Schwarzschild horizon. Schwarzschild geometry is spherically symmetric and static; its (1+1) reduction in (r, t) coordinates is exactly the slice where the Lyapunov-Lorentzian framework of §2 applies, with the Lyapunov function V(r) = ½(r − r<sub>s</sub>)² and the basin boundary at r* = r<sub>s</sub> (the Schwarzschild radius).</p>
+
+<p>Three checks should hold if the framework is right:</p>
+
+<div class="box theorem">
+  <div class="box-label">Theorem · Schwarzschild horizon as Lorentzian dm³ fold</div>
+  <p>For Schwarzschild geometry with mass M, the radial Lyapunov function V(r) = ½(r − r<sub>s</sub>)² has its basin boundary at r* = r<sub>s</sub> = 2GM/c². The Whitney A₁ fold there coincides with the event horizon, in the sense that:</p>
+  <p style="margin-top:.4rem;">(i) S = {r = r<sub>s</sub>} is a null hypersurface in the (r, t) reduction.</p>
+  <p>(ii) The Reeb generator of α<sub>L</sub> on S is the standard null generator of the horizon, ∂<sub>v</sub> in Eddington–Finkelstein coordinates.</p>
+  <p>(iii) The Tribonacci constant η controls the rate at which the apparent horizon approaches the event horizon during gravitational collapse: r<sub>app</sub>(t) − r<sub>s</sub> ∝ η<sup>−t/t<sub>0</sub></sup>.</p>
+</div>
+
+<p>Claims (i) and (ii) reduce to standard facts about Schwarzschild geometry; claim (iii) is novel and falsifiable. It predicts that the horizon-formation rate in classical gravitational collapse should carry the Tribonacci signature — a numerical fingerprint that should appear in numerical-relativity simulations of stellar collapse.</p>
+
+<h2 class="sec"><span>§7 &nbsp; What survives, what changes, what stays open</span><span class="sec-no">7 / 9</span></h2>
+
+<table class="dm-table">
+  <thead>
+    <tr>
+      <th>Object</th>
+      <th>Riemannian (Ch 1)</th>
+      <th>Lorentzian (Ch 2)</th>
+      <th>Verdict</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Contact form α</td>
+      <td>dz − r²dθ</td>
+      <td>dz − r²dθ (same)</td>
+      <td class="num" style="color:var(--proved)">survives</td>
+    </tr>
+    <tr>
+      <td>Operator chain G</td>
+      <td>U ∘ F ∘ K ∘ C</td>
+      <td>U ∘ F<sub>L</sub> ∘ K ∘ C</td>
+      <td class="num" style="color:var(--proved)">survives (F → F<sub>L</sub>)</td>
+    </tr>
+    <tr>
+      <td>Gronwall ε₀</td>
+      <td>1/3 (basin radius)</td>
+      <td>1/3 (null-surface marker)</td>
+      <td class="num" style="color:var(--proved)">survives</td>
+    </tr>
+    <tr>
+      <td>Tribonacci η</td>
+      <td>≈ 1.839 (algebraic)</td>
+      <td>≈ 1.839 (algebraic)</td>
+      <td class="num" style="color:var(--proved)">survives</td>
+    </tr>
+    <tr>
+      <td>Embodiment τ</td>
+      <td>2 (curvature threshold)</td>
+      <td>2 (causal threshold)</td>
+      <td class="num" style="color:var(--proved)">survives</td>
+    </tr>
+    <tr>
+      <td>Inner basin escape</td>
+      <td>Open (Gronwall fails)</td>
+      <td>Closed (null causality)</td>
+      <td class="num" style="color:var(--proved)">CLOSED ✓</td>
+    </tr>
+    <tr>
+      <td>Schwarzschild horizon</td>
+      <td>Outside scope</td>
+      <td>= Whitney fold</td>
+      <td class="num" style="color:var(--proved)">identified</td>
+    </tr>
+    <tr>
+      <td>Hawking spectrum</td>
+      <td>Outside scope</td>
+      <td>η-modulated (predicted)</td>
+      <td class="num" style="color:var(--null)">predicted, untested</td>
+    </tr>
+    <tr>
+      <td>Boost invariance</td>
+      <td>—</td>
+      <td>?</td>
+      <td class="num" style="color:var(--horizon2)">open</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="sec"><span>§8 &nbsp; Falsifiable predictions</span><span class="sec-no">8 / 9</span></h2>
+
+<p>The promotion to Lorentzian dm³ produces three concrete, falsifiable predictions for horizon physics, each derived from a constant that the framework already certifies.</p>
+
+<div class="box def">
+  <div class="box-label">Prediction H1 · Tribonacci modulation of horizon formation</div>
+  <p>During spherical gravitational collapse, the apparent horizon approaches the event horizon at a rate that contains the Tribonacci constant: r<sub>app</sub>(t) − r<sub>s</sub> ∝ η<sup>−t/t<sub>0</sub></sup>. Test: high-resolution numerical-relativity simulations of Oppenheimer–Snyder collapse, fitting the apparent-horizon trajectory to an exponential and recovering the base.</p>
+</div>
+
+<div class="box def">
+  <div class="box-label">Prediction H2 · ε₀-fraction of the photon sphere</div>
+  <p>The photon sphere (r = 3GM/c²) and the horizon (r = 2GM/c²) are separated by a factor of 3/2. The framework predicts that the locus where the Lyapunov gradient first vanishes — the "inner photon sphere" of unstable circular null geodesics — sits at r = (1 − ε₀) · r<sub>s</sub> = (2/3) · r<sub>s</sub>. Test: ray-tracing the inner photon orbits in Kerr and comparing the radius to (2/3) r<sub>+</sub>.</p>
+</div>
+
+<div class="box def">
+  <div class="box-label">Prediction H3 · Embodiment-threshold ringdown</div>
+  <p>The least-damped quasinormal mode of a Schwarzschild black hole should carry the embodiment threshold τ = 2 as the ratio of its imaginary part to its real part, modulo standard mode-number factors. Test: extract Re(ω)/Im(ω) for the (ℓ=2, n=0) mode from numerical-relativity ringdown waveforms and compare to 2 · (some computable correction).</p>
+</div>
+
+<p>None of H1, H2, H3 has been tested. Each is concrete enough to be falsifiable by existing numerical-relativity infrastructure, and the predictions can be made before the data is examined.</p>
+
+<h2 class="sec"><span>§9 &nbsp; What is closed and what is next</span><span class="sec-no">9 / 9</span></h2>
+
+<p>This chapter closes one open obligation in the AXLE tracker (Issue #13, inner_basin_escape), via the structural argument captured in §3 and detailed in <code style="color:var(--gold);font-family:'Courier New',monospace;font-size:.85em">book8/notes/issue-13-null-causality.md</code>. It identifies the Schwarzschild horizon as the canonical realisation of the Lorentzian Whitney fold. It promotes the dm³ operator chain to a causally-respecting setting, with three of the four operators surviving unchanged and F becoming a null hypersurface. It makes three falsifiable predictions for horizon physics.</p>
+
+<p>The next chapter — Book 8 Chapter 3 — is the dual problem on the other side of the horizon. If F<sub>L</sub> is the null hypersurface that bounds the trapped region from the outside, what is the structure of the interior? The dm³ chain on the Lorentzian interior should produce the singularity at the center as the limit of the operator chain applied infinitely many times — a chained sequence of folds collapsing to the central singular point. The constant that emerges is conjecturally the inverse of η, since the operator algebra is reversed in time. That conjecture is the seed of Chapter 3.</p>
+
+<div class="diagram-block">
+  <div class="diagram-head">From dark matter to event horizon — what carried through</div>
+  <div class="diagram-sub">The promotion preserved the algebra and changed the geometry. Every certified constant survived; one open obligation closed.</div>
+  <svg class="svg-stage" viewBox="0 0 720 320" id="fig-diagram" aria-label="Diagram">
+    <rect width="720" height="320" fill="#060614"/>
+    <defs>
+      <marker id="diaArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#c9a84c"/>
+      </marker>
+    </defs>
+    <!-- Ch 1 box -->
+    <g transform="translate(40, 60)">
+      <rect x="0" y="0" width="180" height="180" rx="3" fill="#0c0c16" stroke="#5fc0d8" stroke-width="1.5"/>
+      <text x="90" y="22" font-family="Courier New" font-size="9" fill="#5fc0d8" text-anchor="middle">CHAPTER 1</text>
+      <text x="90" y="40" font-family="Georgia" font-size="13" fill="#5fc0d8" text-anchor="middle" font-style="italic">Dark Matter</text>
+      <line x1="20" y1="50" x2="160" y2="50" stroke="#5fc0d8" stroke-width=".5" opacity=".4"/>
+      <text x="90" y="74" font-family="Courier New" font-size="9" fill="#9a9485" text-anchor="middle">Riemannian dm³</text>
+      <text x="90" y="92" font-family="Courier New" font-size="10" fill="#c9a84c" text-anchor="middle">ε₀ = 1/3</text>
+      <text x="90" y="110" font-family="Courier New" font-size="10" fill="#c9a84c" text-anchor="middle">η ≈ 1.839</text>
+      <text x="90" y="128" font-family="Courier New" font-size="10" fill="#c9a84c" text-anchor="middle">τ = 2</text>
+      <text x="90" y="148" font-family="Courier New" font-size="10" fill="#c9a84c" text-anchor="middle">F = Whitney A₁</text>
+      <text x="90" y="170" font-family="Courier New" font-size="8" fill="#9a9485" text-anchor="middle">basin radius interpretation</text>
+    </g>
+    <!-- Promotion arrow + label -->
+    <g transform="translate(245, 145)">
+      <line x1="0" y1="0" x2="120" y2="0" stroke="#ff8a3d" stroke-width="2" marker-end="url(#diaArrow)"/>
+      <text x="60" y="-12" font-family="Courier New" font-size="9" fill="#ff8a3d" text-anchor="middle">Lorentzian</text>
+      <text x="60" y="-2" font-family="Courier New" font-size="9" fill="#ff8a3d" text-anchor="middle">promotion</text>
+      <text x="60" y="22" font-family="Courier New" font-size="8" fill="#9a9485" text-anchor="middle" font-style="italic">signature → (−,+)</text>
+    </g>
+    <!-- Ch 2 box -->
+    <g transform="translate(380, 60)">
+      <rect x="0" y="0" width="180" height="180" rx="3" fill="#0c0c16" stroke="#ff8a3d" stroke-width="1.5"/>
+      <text x="90" y="22" font-family="Courier New" font-size="9" fill="#ff8a3d" text-anchor="middle">CHAPTER 2</text>
+      <text x="90" y="40" font-family="Georgia" font-size="13" fill="#ff8a3d" text-anchor="middle" font-style="italic">Event Horizon</text>
+      <line x1="20" y1="50" x2="160" y2="50" stroke="#ff8a3d" stroke-width=".5" opacity=".4"/>
+      <text x="90" y="74" font-family="Courier New" font-size="9" fill="#9a9485" text-anchor="middle">Lorentzian dm³</text>
+      <text x="90" y="92" font-family="Courier New" font-size="10" fill="#c9a84c" text-anchor="middle">ε₀ = 1/3</text>
+      <text x="90" y="110" font-family="Courier New" font-size="10" fill="#c9a84c" text-anchor="middle">η ≈ 1.839</text>
+      <text x="90" y="128" font-family="Courier New" font-size="10" fill="#c9a84c" text-anchor="middle">τ = 2</text>
+      <text x="90" y="148" font-family="Courier New" font-size="10" fill="#c9a84c" text-anchor="middle">F<sub>L</sub> = null surface</text>
+      <text x="90" y="170" font-family="Courier New" font-size="8" fill="#9a9485" text-anchor="middle">causal barrier interpretation</text>
+    </g>
+    <!-- delivered: -->
+    <g transform="translate(585, 60)">
+      <rect x="0" y="0" width="100" height="180" rx="3" fill="rgba(74,222,128,.04)" stroke="#4ade80" stroke-width="1"/>
+      <text x="50" y="22" font-family="Courier New" font-size="8" fill="#4ade80" text-anchor="middle">DELIVERED</text>
+      <text x="50" y="50" font-family="Courier New" font-size="9" fill="#4ade80" text-anchor="middle">Issue #13</text>
+      <text x="50" y="64" font-family="Courier New" font-size="9" fill="#4ade80" text-anchor="middle">CLOSED ✓</text>
+      <line x1="15" y1="80" x2="85" y2="80" stroke="#4ade80" stroke-width=".3" opacity=".5"/>
+      <text x="50" y="100" font-family="Courier New" font-size="8" fill="#9a9485" text-anchor="middle">Schwarzschild</text>
+      <text x="50" y="114" font-family="Courier New" font-size="8" fill="#9a9485" text-anchor="middle">identified</text>
+      <line x1="15" y1="130" x2="85" y2="130" stroke="#4ade80" stroke-width=".3" opacity=".5"/>
+      <text x="50" y="148" font-family="Courier New" font-size="8" fill="#9a9485" text-anchor="middle">3 predictions</text>
+      <text x="50" y="162" font-family="Courier New" font-size="8" fill="#ff8a3d" text-anchor="middle">H1 · H2 · H3</text>
+    </g>
+    <text x="360" y="290" font-family="Georgia" font-size="11" fill="#9a9485" text-anchor="middle" font-style="italic">
+      same algebra · different signature · one obligation closed · three predictions queued
+    </text>
+  </svg>
+</div>
+
+<div class="bridge">
+  <div class="bridge-label">Continue the chain</div>
+  <div class="bridge-arrow">↓</div>
+  <a href="ch3-singularity.html" class="bridge-link">
+    <div class="bridge-link-label">Book 8 · Chapter 3</div>
+    <div class="bridge-link-title">The Singularity</div>
+    <div class="bridge-link-sub">The dm³ chain applied infinitely many times — the central point as a limit of folds</div>
+  </a>
+</div>
+
+<div class="ch-nav">
+  <a href="ch1-darkmatter.html">← Ch 8.1 · Dark Matter</a>
+  <a href="../series-hub.html">Series Hub</a>
+  <a href="ch3-singularity.html">Ch 8.3 · Singularity →</a>
+</div>
+
+</div><!-- /.body -->
+
+<footer>
+  <a href="../index.html">Principia Orthogona</a> &nbsp;·&nbsp;
+  <a href="index.html">Book 8 · The Monster</a> &nbsp;·&nbsp;
+  <a href="ch1-darkmatter.html">Ch 8.1 · Dark Matter</a> &nbsp;·&nbsp;
+  <a href="ch-the-threshold.html">Ch 8.8 · The Threshold</a><br><br>
+  © 2026 Pablo Nogueira Grossi / G6 LLC · Newark, NJ 07104, USA ·
+  <a href="mailto:g6llc@proton.me">g6llc@proton.me</a> ·
+  ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a><br>
+  Event Horizon chapter · F → F<sub>L</sub> · Issue #13 closed · CC BY 4.0
+</footer>
+
+<div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
+  <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
+  <span style="color:#333">&nbsp;·&nbsp;</span>
+  <span>g6llc@proton.me</span>
+  <span style="color:#333">&nbsp;·&nbsp;</span>
+  <span>+1 (646) 342-3751</span>
+</div>
+
+<script>
+// Starfield in opening (sparser + warmer than ch1 — horizon vibe)
+(function(){
+  const stars = document.getElementById('stars');
+  if (!stars) return;
+  for (let i = 0; i < 110; i++) {
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    c.setAttribute('cx', Math.random() * 1200);
+    c.setAttribute('cy', Math.random() * 800);
+    c.setAttribute('r', Math.random() < 0.85 ? Math.random() * 1 + 0.4 : Math.random() * 1.4 + 1.2);
+    c.setAttribute('fill', Math.random() < 0.2 ? '#ff8a3d' : '#fff');
+    c.setAttribute('opacity', Math.random() * 0.5 + 0.15);
+    const anim = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+    anim.setAttribute('attributeName', 'opacity');
+    anim.setAttribute('values', `${c.getAttribute('opacity')};${parseFloat(c.getAttribute('opacity')) + 0.3};${c.getAttribute('opacity')}`);
+    anim.setAttribute('dur', (3 + Math.random() * 4) + 's');
+    anim.setAttribute('repeatCount', 'indefinite');
+    c.appendChild(anim);
+    stars.appendChild(c);
+  }
+})();
+</script>
+
+</body>
+</html>

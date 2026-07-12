@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOX Collinearity — Ordered Operator Chains in Development | dm³ — Book VI</title>
+  <style>
+    :root {
+      --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4;
+      --mid: #3a4f7a; --rule: #8a7340; --text: #1c1c1c; --light: #e8e2d4; --teal: #2a7a6a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia','Times New Roman',serif; color: var(--text); background: var(--cream); }
+    nav { background: var(--navy); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-logo { color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; text-decoration: none; font-family: sans-serif; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a { color: #ccc; text-decoration: none; font-size: 0.82rem; font-family: sans-serif; }
+    .nav-links a:hover { color: var(--gold); }
+    .hero { background: var(--navy); color: white; padding: 4rem 2rem 3rem; }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .op-ref { font-family: sans-serif; font-size: 0.78rem; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.6rem; }
+    .eyebrow { font-family: sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; color: #aaa; text-transform: uppercase; margin-bottom: 0.8rem; }
+    h1 { font-size: clamp(1.7rem, 4vw, 2.8rem); color: white; line-height: 1.2; margin-bottom: 0.4rem; }
+    h1 .hi { color: var(--gold); font-style: italic; }
+    .gold-rule { width: 60px; height: 2px; background: var(--gold); margin: 1.4rem 0; }
+    .hero-desc { color: #ddd; font-size: 1rem; line-height: 1.7; max-width: 680px; }
+    .hero-meta { font-family: sans-serif; font-size: 0.8rem; color: #aaa; margin-top: 1.4rem; }
+    .hero-meta span { color: var(--gold); }
+    section { padding: 3rem 2rem; }
+    .section-inner { max-width: 800px; margin: 0 auto; }
+    section:nth-child(even) { background: var(--smoke); }
+    h2 { font-size: 1.55rem; color: var(--navy); margin-bottom: 1.2rem; border-bottom: 1px solid var(--light); padding-bottom: 0.5rem; }
+    p { line-height: 1.85; margin-bottom: 1.1rem; }
+    p:last-child { margin-bottom: 0; }
+    .callout { background: white; border-left: 4px solid var(--gold); padding: 1.2rem 1.5rem; margin: 1.5rem 0; border-radius: 0 4px 4px 0; }
+    .callout strong { color: var(--navy); }
+    .operator-map { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.88rem; }
+    .operator-map th { background: var(--navy); color: white; padding: 0.5rem 0.8rem; text-align: left; font-family: sans-serif; font-weight: normal; letter-spacing: 0.05em; }
+    .operator-map td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--light); }
+    .operator-map tr:last-child td { border-bottom: none; }
+    .operator-map .op { color: var(--mid); font-weight: bold; font-family: 'Courier New', monospace; }
+    .operator-map .hi { color: var(--teal); font-weight: bold; }
+    .caveat { font-size: 0.95rem; line-height: 1.75; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 1.1rem; margin: 1.4rem 0; }
+    .chapter-nav { background: var(--smoke); border-top: 1px solid var(--light); padding: 1.2rem 2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .chapter-nav a { font-family: sans-serif; font-size: 0.82rem; color: var(--mid); text-decoration: none; padding: 0.4rem 0.9rem; border: 1px solid var(--light); }
+    .chapter-nav a:hover { background: var(--navy); color: var(--gold); }
+    footer { background: var(--navy); color: #aaa; text-align: center; padding: 1.5rem; font-family: sans-serif; font-size: 0.78rem; }
+    footer a { color: var(--gold); text-decoration: none; }
+    @media (max-width: 600px) { section { padding: 2rem 1.2rem; } .hero { padding: 2.5rem 1.2rem 2rem; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-logo">dm³</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Book VI Index</a></li>
+      <li><a href="ch10-turing-patterns.html">← Ch 10</a></li>
+      <li><a href="../chapters-diagram.html">All Chapters</a></li>
+    </ul>
+      <a href="../living-book.html">Living Book</a>
+    <a href="../series-hub.html">Series ↗</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="op-ref">C → K → F → U (ordered, unskippable) · Developmental Domain (3)</div>
+      <div class="eyebrow">Book VI · Chapter 11 · Part III, Domain 3 (Developmental)</div>
+      <h1>HOX Collinearity<br><span class="hi">Ordered Operator Chains in Development</span></h1>
+      <div class="gold-rule"></div>
+      <p class="hero-desc">
+        Hox genes sit on the chromosome in the same order as the body parts they pattern, and they switch
+        on in that same order in time. This is one of the most robust, most independently replicated facts
+        in developmental biology &mdash; first recognized by Ed Lewis in <em>Drosophila</em>'s Bithorax
+        complex, confirmed across vertebrates by Duboule and coworkers, and it is a genuinely ordered,
+        unskippable sequence: genome position determines both when and where each gene acts, in the same
+        order, every time.
+      </p>
+      <div class="hero-meta">
+        Hox genes (mouse/chicken): <span>39, in 4 clusters</span> · Paralogous genes per cluster: <span>up to 13</span> ·
+        Connects to: <span>ch9-phi · ch13-thymus</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- §1 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;1 The Established Biology</h2>
+      <p>
+        Hox genes are not scattered through the genome; in most animals they sit in clusters, and in
+        mouse and chicken the 39 Hox genes are organized into four clusters (HoxA&ndash;D) with up to
+        thirteen paralogous genes each. Two independent, well-replicated correspondences hold across this
+        arrangement. <strong>Spatial collinearity:</strong> genes positioned toward the 3&prime; end of a
+        cluster are expressed in, and pattern, the more anterior parts of the body axis; genes toward the
+        5&prime; end pattern more posterior parts &mdash; first worked out genetically by Ed Lewis in the
+        Bithorax complex of <em>Drosophila</em>, and shown to hold in vertebrates by Duboule &amp; Doll&eacute;
+        (1989). <strong>Temporal collinearity:</strong> the same genes are also switched on in a time
+        sequence that matches their order along the cluster, first characterized by Izpisúa-Belmonte,
+        Falkenstein, Doll&eacute;, Renucci &amp; Duboule (1991). The mechanism linking chromosomal position to
+        activation timing involves Polycomb (PRC) and Trithorax (TrxG) group chromatin proteins, which
+        appear to translate the temporal sequence in progenitor cells into the spatial pattern seen in the
+        finished body axis.
+      </p>
+      <div class="callout">
+        <strong>The order cannot be skipped or reversed:</strong> this is not a loose statistical tendency.
+        A gene's position in the cluster reliably predicts both its activation time and its anterior-posterior
+        domain, in the same direction, across species separated by hundreds of millions of years of
+        evolution &mdash; among the most robust correlations in all of developmental genetics.
+      </div>
+    </div>
+  </section>
+
+  <!-- §2 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;2 The Operator Mapping</h2>
+      <p>
+        This corpus's C&rarr;K&rarr;F&rarr;U convention names a sequence in which each step is a
+        precondition for the next and no step may be skipped. HOX collinearity is a genuinely strong
+        instance of exactly that structure &mdash; not a metaphor stretched to fit, but a real biological
+        system where "no skipping, fixed order" is the literal, measured phenomenon:
+      </p>
+      <table class="operator-map">
+        <thead>
+          <tr><th>Position in cluster</th><th>dm&sup3; role (ordinal, not literal C/K/F/U)</th><th>Biological consequence</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="op">3&prime; genes, activated first</td>
+            <td>Early step in the chain</td>
+            <td>Anterior body axis patterning</td>
+          </tr>
+          <tr>
+            <td class="op hi">Middle genes</td>
+            <td class="hi">Sequential intermediate steps, each gated by the one before</td>
+            <td class="hi">Mid-axis segments, in strict chromosomal order</td>
+          </tr>
+          <tr>
+            <td class="op">5&prime; genes, activated last</td>
+            <td>Final step in the chain</td>
+            <td>Posterior body axis patterning</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="caveat">
+        This chapter deliberately does not force HOX collinearity into a literal four-letter C/K/F/U
+        assignment the way Ch06 and Ch13 do, because the genuine content here is the ordinal property
+        (fixed sequence, no skipping) rather than any specific four-stage structure &mdash; HOX clusters have
+        up to thirteen genes, not four, and imposing a four-operator read-out on a thirteen-step biological
+        sequence would manufacture a correspondence the biology doesn't actually have. The honest claim is
+        narrower and, for that reason, stronger: HOX collinearity is real, independent evidence that
+        "position in a sequence determines both timing and role, unskippably," is a pattern biology actually
+        uses &mdash; not evidence for any particular operator count.
+      </p>
+    </div>
+  </section>
+
+  <!-- §3 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;3 Key References</h2>
+      <p>Lewis, E.B. (1978). A gene complex controlling segmentation in <em>Drosophila</em>. <em>Nature</em> 276, 565&ndash;570.</p>
+      <p>Duboule, D., Doll&eacute;, P. (1989). The structural and functional organization of the murine Hox gene family resembles that of <em>Drosophila</em> homeotic genes. <em>EMBO J.</em> 8, 1497&ndash;1505.</p>
+      <p>Izpis&uacute;a-Belmonte, J.C., Falkenstein, H., Doll&eacute;, P., Renucci, A., Duboule, D. (1991). Murine genes related to the <em>Drosophila</em> AbdB homeotic genes are sequentially expressed during development of the posterior part of the body. <em>EMBO J.</em> 10, 2279&ndash;2289.</p>
+      <p>See also: <a href="index.html">Book VI Index</a> · <a href="ch12-vdj-recombination.html">Ch 12 — VDJ Recombination</a> (a different, combinatorial rather than ordinal, genomic pattern-generation mechanism).</p>
+    </div>
+  </section>
+
+  <div class="chapter-nav">
+    <a href="ch10-turing-patterns.html">&larr; Ch 10 — Turing Patterns</a>
+    <a href="index.html">Book VI Index</a>
+    <a href="ch12-vdj-recombination.html">Ch 12 — VDJ Recombination &rarr;</a>
+  </div>
+
+  <footer>
+    <p>dm&sup3; &mdash; Principia Orthogona &middot; G6 LLC &middot; Newark NJ &middot;
+      <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">Zenodo 19117400</a> &middot;
+      <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+    </p>
+  </footer>
+<div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
+  <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span><span>g6llc@proton.me</span>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span><span>+1 (646) 342-3751</span>
+</div>
+</body>
+</html>

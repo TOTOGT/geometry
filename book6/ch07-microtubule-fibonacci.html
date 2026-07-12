@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fibonacci at the Nanometre — 13 Protofilaments and φ | dm³ — Book VI</title>
+  <style>
+    :root {
+      --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4;
+      --mid: #3a4f7a; --rule: #8a7340; --text: #1c1c1c; --light: #e8e2d4;
+      --teal: #2a7a6a; --amber: #b8860b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia','Times New Roman',serif; color: var(--text); background: var(--cream); }
+    nav { background: var(--navy); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-logo { color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; text-decoration: none; font-family: sans-serif; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a { color: #ccc; text-decoration: none; font-size: 0.82rem; font-family: sans-serif; }
+    .nav-links a:hover { color: var(--gold); }
+
+    .hero { background: var(--navy); color: white; padding: 4rem 2rem 3rem; }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .op-ref { font-family: sans-serif; font-size: 0.78rem; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.6rem; }
+    .eyebrow { font-family: sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; color: #aaa; text-transform: uppercase; margin-bottom: 0.8rem; }
+    h1 { font-size: clamp(1.7rem, 4vw, 2.8rem); color: white; line-height: 1.2; margin-bottom: 0.4rem; }
+    h1 .hi { color: var(--gold); font-style: italic; }
+    .gold-rule { width: 60px; height: 2px; background: var(--gold); margin: 1.4rem 0; }
+    .hero-desc { color: #ddd; font-size: 1rem; line-height: 1.7; max-width: 680px; }
+    .hero-meta { font-family: sans-serif; font-size: 0.8rem; color: #aaa; margin-top: 1.4rem; }
+    .hero-meta span { color: var(--gold); }
+
+    section { padding: 3rem 2rem; }
+    .section-inner { max-width: 800px; margin: 0 auto; }
+    section:nth-child(even) { background: var(--smoke); }
+    h2 { font-size: 1.55rem; color: var(--navy); margin-bottom: 1.2rem; border-bottom: 1px solid var(--light); padding-bottom: 0.5rem; }
+    h3 { font-size: 1.15rem; color: var(--mid); margin: 1.4rem 0 0.7rem; }
+    p { line-height: 1.85; margin-bottom: 1.1rem; }
+    p:last-child { margin-bottom: 0; }
+
+    .callout { background: white; border-left: 4px solid var(--gold); padding: 1.2rem 1.5rem; margin: 1.5rem 0; border-radius: 0 4px 4px 0; }
+    .callout strong { color: var(--navy); }
+    .operator-map { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.88rem; }
+    .operator-map th { background: var(--navy); color: white; padding: 0.5rem 0.8rem; text-align: left; font-family: sans-serif; font-weight: normal; letter-spacing: 0.05em; }
+    .operator-map td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--light); }
+    .operator-map tr:last-child td { border-bottom: none; }
+    .operator-map .op { color: var(--mid); font-weight: bold; font-family: 'Courier New', monospace; }
+    .operator-map .hi { color: var(--teal); font-weight: bold; }
+
+    .numeric-check { background: #0d1f0d; border-radius: 6px; padding: 1.2rem 1.5rem; margin: 1rem 0; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.7; color: #7eff7e; white-space: pre-wrap; overflow-x: auto; }
+    .numeric-check .comment { color: #6a9f5a; }
+
+    .finding { background: #fdf0ee; border: 1px solid #e8b8ae; border-radius: 4px; padding: 1.1rem 1.4rem; margin: 1.2rem 0; font-size: 0.95rem; line-height: 1.75; }
+    .finding .lbl { font-family: sans-serif; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: #a5453a; display: block; margin-bottom: 0.4rem; }
+
+    .caveat { font-size: 0.95rem; line-height: 1.75; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 1.1rem; margin: 1.4rem 0; }
+
+    .chapter-nav { background: var(--smoke); border-top: 1px solid var(--light); padding: 1.2rem 2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .chapter-nav a { font-family: sans-serif; font-size: 0.82rem; color: var(--mid); text-decoration: none; padding: 0.4rem 0.9rem; border: 1px solid var(--light); }
+    .chapter-nav a:hover { background: var(--navy); color: var(--gold); }
+    footer { background: var(--navy); color: #aaa; text-align: center; padding: 1.5rem; font-family: sans-serif; font-size: 0.78rem; }
+    footer a { color: var(--gold); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      section { padding: 2rem 1.2rem; }
+      .hero { padding: 2.5rem 1.2rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-logo">dm³</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Book VI Index</a></li>
+      <li><a href="ch06-molecular-cascade.html">← Ch 06</a></li>
+      <li><a href="../chapters-diagram.html">All Chapters</a></li>
+    </ul>
+      <a href="../living-book.html">Living Book</a>
+    <a href="../series-hub.html">Series ↗</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="op-ref">Structural Geometry · Cytoskeletal Domain (2)</div>
+      <div class="eyebrow">Book VI · Chapter 07 · Part III, Domain 2 (Cytoskeletal)</div>
+      <h1>Fibonacci at the Nanometre<br><span class="hi">13 Protofilaments and &phi;</span></h1>
+      <div class="gold-rule"></div>
+      <p class="hero-desc">
+        A microtubule wall is a real, measured lattice: 13 protofilaments in the dominant in-vivo
+        configuration, three consecutive Fibonacci numbers (3, 5, 8) tracing distinct diagonal helical
+        paths through that same lattice, and 13 itself sitting in the sequence right after them. This is
+        genuine structural crystallography, not a metaphor. What the literature does <em>not</em> settle is
+        whether those diagonal numbers have any mechanistic role in how microtubules actually grow, and a
+        much more speculative extension of this geometry into quantum biology and consciousness (Penrose
+        &amp; Hameroff's Orch-OR) is kept firmly separate from the structural fact in this chapter.
+      </p>
+      <div class="hero-meta">
+        Protofilaments: <span>13 (dominant)</span> · Helical starts: <span>3, 5, 8</span> ·
+        Lattice type: <span>B-lattice + seam</span> ·
+        Connects to: <span>ch9-phi (Fibonacci) · ch08 (dynamic instability)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- §1 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;1 The Established Biology</h2>
+      <p>
+        Most microtubules assembled in vivo have 13 protofilaments &mdash; parallel chains of &alpha;&beta;-tubulin
+        dimers running the length of the tube &mdash; arranged in what structural biologists call the
+        B-lattice: adjacent protofilaments contact each other with a small vertical offset (about 0.9&nbsp;nm
+        between adjacent &alpha;-tubulins), producing a left-handed helical pitch. Because a whole number of
+        protofilaments must close up into a cylinder, and the B-lattice's natural offset doesn't divide
+        evenly into most protofilament counts, a single seam is required &mdash; one lateral join where the
+        lattice contact is of the alternative (A-lattice) type instead of the dominant B-lattice type. This
+        is not a defect; it is a geometric necessity of closing a helical lattice with 13 protofilaments into
+        a tube (Amos &amp; Klug 1974; Kikkawa, Ishikawa, Nakayama &amp; Hirokawa 1994; reviewed in Chr&eacute;tien
+        &amp; Wade 1991).
+      </p>
+      <p>
+        Separately from the protofilament count, three distinct diagonal (helical) pathways can be traced
+        across the same physical lattice by stepping from one tubulin subunit to its nearest neighbor along
+        different lattice directions: one such pathway repeats every 3 subunits, another every 5, another
+        every 8 &mdash; and the protofilament count itself, 13, continues the same sequence (3, 5, 8, 13).
+        This is real lattice geometry, described in the structural literature on microtubule surface
+        lattices going back to the 1970s-80s (Amos &amp; Klug 1974; the helix-start/seam/handedness
+        literature summarized in Chr&eacute;tien &amp; Wade 1991), independent of any biological function
+        claim &mdash; it is the same kind of counting used to describe spiral families in a sunflower head
+        or pinecone, applied to a cylindrical protein lattice instead of a plant meristem.
+      </p>
+      <div class="finding">
+        <span class="lbl">Important caveat, checked directly</span>
+        At least one structural study concluded that neither the 5-start nor the 8-start helical pathway
+        has demonstrated physical significance for microtubule elongation &mdash; meaning the Fibonacci-indexed
+        diagonal count is a real description of the lattice's static geometry, but is not established as
+        playing a causal role in how the microtubule actually grows, shrinks, or nucleates. This chapter
+        reports the geometric fact and this caveat together, rather than the geometric fact alone.
+      </div>
+    </div>
+  </section>
+
+  <!-- §2 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;2 What This Chapter Does and Does Not Claim</h2>
+      <p>
+        13, 5, 8, and 3 are consecutive or near-consecutive Fibonacci numbers, and &phi; = 1.618... is the
+        limit of the ratio of consecutive Fibonacci numbers &mdash; both true, checkable mathematical facts,
+        entirely independent of microtubules. This chapter does not claim that the microtubule lattice
+        "computes" or "encodes" &phi; in any functional sense, and does not claim the lattice's Fibonacci-indexed
+        helix counts are evidence for or against Penrose &amp; Hameroff's Orchestrated Objective Reduction
+        (Orch-OR) proposal, which argues for a specific quantum-computational role for microtubule lattice
+        geometry in consciousness. Orch-OR is a live, published, but scientifically contested hypothesis,
+        not settled cell biology, and this book's dm&sup3; operator-chain framing is a separate project from
+        it: dm&sup3; does not depend on Orch-OR being right, and nothing in this chapter should be read as
+        endorsing it.
+      </p>
+      <table class="operator-map">
+        <thead>
+          <tr><th>Claim</th><th>Status</th><th>Source</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>13 protofilaments dominate the in-vivo B-lattice</td>
+            <td class="hi">Established structural fact</td>
+            <td>Amos &amp; Klug 1974; standard cell biology texts</td>
+          </tr>
+          <tr>
+            <td>3-, 5-, 8-start diagonal helical pathways exist in this lattice</td>
+            <td class="hi">Established structural fact</td>
+            <td>Amos &amp; Klug 1974; Chr&eacute;tien &amp; Wade 1991</td>
+          </tr>
+          <tr>
+            <td>5-start/8-start pathways drive microtubule elongation dynamics</td>
+            <td>Explicitly not established (per the cited study)</td>
+            <td>See finding box, &sect;1</td>
+          </tr>
+          <tr>
+            <td>This geometry implies quantum computation / consciousness (Orch-OR)</td>
+            <td>Disputed, minority hypothesis</td>
+            <td>Penrose &amp; Hameroff; not adopted or required by this chapter</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- §3 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;3 The Numbers, Verified</h2>
+      <div class="numeric-check">Fibonacci sequence, first several terms:
+  1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...
+
+Ratio of consecutive terms converging to phi:
+  8/5   = 1.6
+  13/8  = 1.625
+  21/13 = 1.615...
+  -&gt; phi = (1+sqrt(5))/2 = 1.618033988...    <span class="comment">standard convergence, verified</span>
+
+Microtubule lattice counts actually measured/reported in the structural literature:
+  protofilament count (dominant):     13     <span class="comment">Fibonacci number</span>
+  helix-start counts observed:        3, 5, 8 <span class="comment">consecutive Fibonacci numbers</span>
+
+These are two independently true facts placed next to each other: the arithmetic
+convergence of Fibonacci ratios to phi, and the measured lattice geometry of
+microtubules. No claim is made here that the lattice's specific numeric values
+were selected "because of" phi, nor that phi appears as a measured physical
+quantity (a rate, an angle, an energy) anywhere in this chapter.</div>
+      <p>
+        The Fibonacci-ratio convergence itself is not just numerically checked here; it is formally
+        proved, machine-checked, in Mathlib4 &mdash; the same Lean 4 library AXLE builds on elsewhere in
+        this corpus &mdash;
+        as <code>tendsto_fib_succ_div_fib_atTop</code>: the sequence fib(n+1)/fib(n) tends to
+        <code>Real.goldenRatio</code> as n&rarr;&infin;, with the companion theorem
+        <code>tendsto_fib_div_fib_succ_atTop</code> giving the reciprocal sequence's limit as the negative
+        golden-ratio conjugate. This is the strongest available citation for the arithmetic half of this
+        chapter's claim, and it should be used in place of an ad hoc numeric check wherever this corpus
+        needs to cite Fibonacci-ratio convergence to &phi; going forward (see also ch9-phi.html, which
+        should be updated to point here for the formal version of the same fact).
+      </p>
+      <p class="caveat">
+        Mathlib4, <code>Mathlib.Analysis.SpecificLimits.Fibonacci</code>:
+        <a href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/SpecificLimits/Fibonacci.html" target="_blank">leanprover-community.github.io/mathlib4_docs/&hellip;/Fibonacci.html</a>
+        &mdash; formally proves only the arithmetic convergence fib(n+1)/fib(n)&rarr;&phi;. It says nothing
+        about microtubules, and is cited here for exactly the one fact it proves, not as support for
+        anything in &sect;1's biology.
+      </p>
+    </div>
+  </section>
+
+  <!-- §4 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;4 Connection to This Corpus</h2>
+      <p>
+        This corpus's <a href="../ch9-phi.html">ch9-phi.html</a> chapter treats &phi; as the n=2 case of
+        the n-bonacci recurrence ladder (the unique real root &gt;1 of x&sup2;=x+1), independently of biology.
+        This chapter's contribution is narrower and more modest: microtubules are a real, physical structure
+        whose protofilament and helix-start counts happen to be small Fibonacci numbers, which is worth
+        stating plainly and citing correctly &mdash; and worth stating just as plainly that "happens to be a
+        Fibonacci number" is not the same claim as "instantiates the dm&sup3; operator chain" or "confirms
+        &epsilon;&#8320;, &mu;_max, or &tau;." No such numerical claim is made in this chapter. The genuine
+        link to this book's other cytoskeletal chapter is structural, not numerological: Ch 08's dynamic
+        instability describes what happens at the growing end of this same 13-protofilament lattice, and the
+        two chapters describe the same physical object from two different angles (static geometry here,
+        dynamics there).
+      </p>
+    </div>
+  </section>
+
+  <!-- §5 -->
+  <section>
+    <div class="section-inner">
+      <h2>&sect;6 Key References</h2>
+      <p>
+        Amos, L.A., Klug, A. (1974). Arrangement of subunits in flagellar microtubules. <em>J. Cell Sci.</em>
+        14, 523&ndash;549. &mdash; Original description of the B-lattice, 13-protofilament geometry, and helix
+        starts.
+      </p>
+      <p>
+        Chr&eacute;tien, D., Wade, R.H. (1991). New data on the microtubule surface lattice.
+        <em>Biol. Cell</em> 71, 161&ndash;174. &mdash; Modern review of helix starts, protofilament number,
+        seam, and handedness across microtubule preparations.
+      </p>
+      <p>
+        Kikkawa, M., Ishikawa, T., Nakayama, T., Hirokawa, N. (1994). Direct visualization of the microtubule
+        lattice seam both in vitro and in vivo. <em>J. Cell Biol.</em> 127, 1965&ndash;1971.
+      </p>
+      <p class="caveat">
+        Penrose, R., Hameroff, S. &mdash; Orchestrated Objective Reduction (Orch-OR), cited here only to name
+        and set aside the more speculative quantum-consciousness extension of microtubule lattice geometry,
+        which this chapter does not adopt or require.
+      </p>
+      <p>
+        See also: <a href="../ch9-phi.html">&phi; — The Fixed Point (main series)</a> ·
+        <a href="ch08-dynamic-instability.html">Ch 08 — Dynamic Instability</a> ·
+        <a href="index.html">Book VI Index</a>
+      </p>
+    </div>
+  </section>
+
+  <div class="chapter-nav">
+    <a href="ch06-molecular-cascade.html">&larr; Ch 06 — Molecular Cascade</a>
+    <a href="index.html">Book VI Index</a>
+    <a href="ch08-dynamic-instability.html">Ch 08 — Dynamic Instability &rarr;</a>
+  </div>
+
+  <footer>
+    <p>dm&sup3; &mdash; Principia Orthogona &middot; G6 LLC &middot; Newark NJ &middot;
+      <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">Zenodo 19117400</a> &middot;
+      <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE</a>
+    </p>
+  </footer>
+
+<div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
+  <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span>
+  <span>g6llc@proton.me</span>
+  <span style="color:#333">&nbsp;&middot;&nbsp;</span>
+  <span>+1 (646) 342-3751</span>
+</div>
+</body>
+</html>

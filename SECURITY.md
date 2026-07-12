@@ -70,5 +70,5 @@ vulnerability in this project.
 ## Contact
 
 Pablo Nogueira Grossi · G6 LLC · Newark, NJ
-grossiatwork@gmail.com · ORCID: 0009-0000-6496-2186
+g6llc@proton.me · ORCID: 0009-0000-6496-2186
 GitHub: https://github.com/TOTOGT

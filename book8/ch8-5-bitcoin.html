@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitcoin · Ch 8.5 · The Nakamoto Fold — Principia Orthogona</title>
+<meta name="description" content="Book 8 Chapter 5 — Bitcoin's halving mechanism as the dm³ G-chain. Supply compression, miner equilibrium, adoption inflection, and the Nakamoto fold. $0.0008 → $70,000. G6 LLC · Pablo Nogueira Grossi · 2026.">
+<script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root{--void:#03030a;--card:#0c0c16;--gold:#c9a84c;--gold2:#e8d49a;--text:#e8e4d8;--dim:#6b6757;--dim2:#9a9485;--rule:rgba(201,168,76,0.10);--rule2:rgba(201,168,76,0.22);--monster:#c0392b;--monster2:#ff6b35;--parch:rgba(243,223,160,0.82);--bitcoin:#f7931a;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:Georgia,'Times New Roman',serif;background:var(--void);color:var(--text);font-size:18px;line-height:1.95;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(3,3,10,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);padding:.55rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.nav-logo{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;}
+.nav-links a{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--dim);text-decoration:none;}
+.nav-links a:hover{color:var(--gold);}
+.opening{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 2rem 5rem;text-align:center;position:relative;}
+.opening-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 65% 75% at 50% 45%,rgba(247,147,26,.09) 0%,transparent 65%);}
+.ch-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--dim2);margin-bottom:2rem;}
+.btc-symbol{font-size:clamp(4rem,12vw,8rem);color:var(--bitcoin);margin-bottom:1.2rem;opacity:.9;}
+.ch-title{font-size:clamp(2.2rem,5vw,3.6rem);font-weight:300;color:var(--text);line-height:1.12;margin-bottom:1.2rem;max-width:720px;}
+.ch-title em{font-style:italic;color:var(--gold);}
+.ch-rule{width:40px;height:1px;background:var(--rule2);margin:1.8rem auto;}
+.ch-epigraph{font-size:.97rem;font-style:italic;color:var(--dim2);max-width:540px;margin:0 auto;line-height:1.8;}
+.ch-epigraph cite{display:block;margin-top:.6rem;font-style:normal;font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--dim);}
+.body{max-width:680px;margin:0 auto;padding:4rem 2rem 2rem;}
+p{margin-bottom:1.4rem;}
+h2{font-size:1.25rem;font-weight:600;color:var(--gold);margin:3rem 0 1rem;letter-spacing:.03em;}
+.section-break{width:100%;text-align:center;margin:3.5rem 0;font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.35em;color:var(--dim);}
+.pull-quote{border-left:1px solid var(--rule2);padding:1.2rem 1.8rem;margin:2.5rem 0;font-style:italic;font-size:1.05rem;color:var(--parch);line-height:1.85;}
+.pull-quote cite{display:block;margin-top:.7rem;font-style:normal;font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--dim);}
+.halving-table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.86rem;}
+.halving-table th{font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--rule2);padding:.5rem .8rem;text-align:left;}
+.halving-table td{padding:.5rem .8rem;border-bottom:1px solid var(--rule);color:var(--dim2);}
+.halving-table td:first-child{color:var(--text);}
+.halving-table tr.fold-row td{color:var(--bitcoin);border-left:3px solid var(--bitcoin);}
+.fact-box{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--bitcoin);padding:1.5rem 1.8rem;margin:2.5rem 0;}
+.fact-box .label{font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bitcoin);margin-bottom:.7rem;}
+.footer-nav{max-width:680px;margin:5rem auto 3rem;padding:2rem;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.08em;}
+.footer-nav a{color:var(--dim);text-decoration:none;}
+.footer-nav a:hover{color:var(--gold);}
+.license{text-align:center;padding:2rem;font-family:'Courier New',monospace;font-size:.55rem;letter-spacing:.1em;color:var(--dim);}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">G8 · The Monster</a>
+  <div class="nav-links">
+    <a href="index.html">Index</a>
+    <a href="ch8-4-embryogenesis.html">8.4</a>
+    <a href="../chapters-diagram.html">All Chapters</a>
+  </div>
+</nav>
+
+<div class="opening">
+  <div class="opening-bg"></div>
+  <div class="ch-label">Book 8 · Chapter 8.5 · Monster Arc</div>
+  <div class="btc-symbol">₿</div>
+  <h1 class="ch-title">Bitcoin<br>The <em>Nakamoto Fold</em></h1>
+  <div class="ch-rule"></div>
+  <p class="ch-epigraph">
+    "The root problem with conventional currency is all the trust that's required to make it work."
+    <cite>— Satoshi Nakamoto, 2009</cite>
+  </p>
+</div>
+
+<div class="body">
+
+<p>On 3 January 2009, a single transaction was processed on a new peer-to-peer network: 50 bitcoin were minted to an address controlled by a pseudonymous person or group called Satoshi Nakamoto. The first external transaction occurred nine days later. The first commercial transaction — 10,000 BTC for two pizzas — occurred on 22 May 2010, at a price of $0.0008 per bitcoin. By March 2024 the price reached $73,000. No asset in recorded financial history has appreciated this much in fifteen years.</p>
+
+<p>This is not a story about price. It is a story about a fold. The Nakamoto fold is the irreversible moment at which Bitcoin transitioned from a cryptographic experiment to a global monetary network — and the dm³ operator chain explains the mechanism and timing of that transition.</p>
+
+<div class="section-break">· · ·</div>
+
+<h2>C — Compress: The Halving Mechanism</h2>
+
+<p>The Bitcoin protocol specifies that new coins are issued at a rate that halves every 210,000 blocks — approximately every four years. The initial block reward was 50 BTC; it has since halved four times to 3.125 BTC per block (as of the April 2024 halving). The total supply is mathematically bounded at 21 million BTC:</p>
+
+$$S_{\max} = 50 \times 210{,}000 \times \sum_{n=0}^{\infty} \frac{1}{2^n} = 50 \times 210{,}000 \times 2 = 21{,}000{,}000\,\text{BTC}$$
+
+<p>The halving is the Compress operator $C$: every four years, the rate of new supply is halved. The supply schedule is not a policy choice subject to revision; it is encoded in the protocol and enforced by every node on the network. This is a structural compression of the monetary base's growth rate — geometrically decreasing, asymptotically approaching zero.</p>
+
+<table class="halving-table">
+  <tr><th>Halving</th><th>Date</th><th>Block</th><th>Reward</th><th>BTC Price (approx)</th></tr>
+  <tr><td>Genesis</td><td>Jan 2009</td><td>0</td><td>50 BTC</td><td>$0.00</td></tr>
+  <tr><td>1st</td><td>Nov 2012</td><td>210,000</td><td>25 BTC</td><td>$12</td></tr>
+  <tr><td>2nd</td><td>Jul 2016</td><td>420,000</td><td>12.5 BTC</td><td>$650</td></tr>
+  <tr class="fold-row"><td>3rd ← fold</td><td>May 2020</td><td>630,000</td><td>6.25 BTC</td><td>$8,600</td></tr>
+  <tr><td>4th</td><td>Apr 2024</td><td>840,000</td><td>3.125 BTC</td><td>$63,000</td></tr>
+  <tr><td>5th</td><td>~2028</td><td>1,050,000</td><td>1.5625 BTC</td><td>—</td></tr>
+</table>
+
+<div class="section-break">· · ·</div>
+
+<h2>K — Curvature: Miner Equilibrium and Hash Rate</h2>
+
+<p>Mining is the process by which new blocks are added to the Bitcoin blockchain. Miners compete to find a nonce that makes the block header's SHA-256 hash below the current target — a probabilistic puzzle with adjustable difficulty. The network adjusts difficulty every 2016 blocks (~2 weeks) to maintain the 10-minute block interval regardless of total hash rate.</p>
+
+<p>The miner equilibrium is the Curvature operator $K$: at any given difficulty and BTC price, there is an efficient frontier of mining economics — a curvature in the space of (hash rate, energy cost, block reward) that defines which miners are profitable. As the block reward halves, marginal miners are pushed below their cost of electricity and must exit. This causes a temporary hash rate drop (visible after each halving), which triggers a difficulty adjustment downward, which restores miner equilibrium at a lower scale. The curvature of the mining equilibrium surface is the structural fingerprint of the $K$ operator.</p>
+
+<div class="section-break">· · ·</div>
+
+<h2>F — Fold: The Nakamoto Fold</h2>
+
+<p>The fold is the moment at which Bitcoin became structurally irreversible as a monetary network — the transition from cryptographic experiment to global reserve asset. This is not a single transaction or a single date; it is a bifurcation, identifiable in retrospect, that occurred in the 2020–2021 period around the third halving.</p>
+
+<p>Before the 2020 halving, Bitcoin was held primarily by retail speculators, early adopters, and a small community of ideological adherents. Its market infrastructure (custody solutions, regulated derivatives, institutional-grade prime brokers) was nascent. After the 2020 halving, the following fold events occurred in sequence: MicroStrategy (August 2020) announced Bitcoin as its primary treasury reserve asset; Square purchased $50M BTC (October 2020); PayPal enabled Bitcoin purchase for 350M users (November 2020); the OCC clarified that US banks could hold crypto assets (January 2021); BNY Mellon announced crypto custody (February 2021); the US Bitcoin ETF (BlackRock, Fidelity) was approved (January 2024).</p>
+
+<p>The fold is the transition of Bitcoin from optional speculation to institutionally mandated exposure. Institutional fiduciaries — pension funds, sovereign wealth funds, endowments — cannot be seen to have had zero Bitcoin exposure if Bitcoin becomes a standard reserve asset. The fold creates an irreversible obligation: once Bitcoin is in institutional portfolios at sufficient scale, it cannot be removed without marking it as a catastrophic write-off. The system cannot return to the pre-fold state.</p>
+
+<div class="fact-box">
+  <div class="label">The Nakamoto Fold — Numbers</div>
+  Price at 3rd halving (May 2020): $8,600<br>
+  Price at cycle peak (Nov 2021): $69,000<br>
+  Price at 4th halving (Apr 2024): $63,000<br>
+  First US spot ETF AUM (Jan 2024): $40B in 30 days<br>
+  Total estimated institutional BTC (2024): ~900,000 BTC (~4.3% of supply)
+</div>
+
+<div class="section-break">· · ·</div>
+
+<h2>U — Unfold: Network Effects and Monetary Topology</h2>
+
+<p>The Unfold operator $U$ is the expansion of the Bitcoin network into new applications and markets following the fold. Layer-2 protocols (Lightning Network for micropayments, RGB for asset issuance), wrapped Bitcoin on Ethereum (enabling DeFi applications), Bitcoin-secured sidechains, and finally the ETF infrastructure linking Bitcoin to the existing $100 trillion global asset management industry — all of these are the unfold of the energy released by the Nakamoto fold.</p>
+
+<p>The topological aspect of $U$ is the network's settlement assurance: Bitcoin transactions are irreversibly settled by proof-of-work, which makes each confirmed transaction a permanent entry in a distributed ledger replicated on 15,000+ nodes worldwide. The network topology — decentralised, non-hierarchical, with no single point of failure — is the contact-geometric analogue of the Reeb orbit structure: a dense set of closed orbits (transactions) in the contact manifold of the global financial system.</p>
+
+<div class="section-break">· · ·</div>
+
+<h2>The Monster at Monetary Scale</h2>
+
+<p>The connection between Bitcoin and the Monster is not via price or numerology. It is via the structure of the fold. The Nakamoto fold is a Whitney $A_1$ singularity in the space of monetary network states: a smooth bifurcation surface separating "Bitcoin as experiment" from "Bitcoin as standard." Every participant in the financial system, as they approach this bifurcation, faces the same choice that cells face at gastrulation, stars face at nuclear ignition, and galaxies face at black hole coalescence: commit or do not commit. There is no middle ground after the fold.</p>
+
+<p>The Monster group $\mathbb{M}$ acts on the space of all possible such folds — all possible Whitney singularities of the contact structure on the space of monetary states. Bitcoin is one fold; gold demonetisation in 1971 was another; the invention of double-entry accounting in 14th-century Florence was another. The Monster is the symmetry group of the fold lattice. It does not predict prices. It classifies transitions.</p>
+
+<div class="pull-quote">
+  Satoshi Nakamoto encoded the fold into the protocol. The halving was not an aesthetic choice. It was the Compress operator — the guarantee that the fold would eventually be forced.
+</div>
+
+<div class="section-break">· · ·</div>
+
+<h2>EMMEs — The Operator Tokens</h2>
+
+<p>Bitcoin demonstrates the G-chain at the scale of a global monetary network. The EMMEs project asks what happens when you tokenise the operators themselves — not the asset, but the algebraic structure underneath it — and deploy them on Solana.</p>
+
+<p>Three tokens, three operators, one chain:</p>
+
+<div class="fact-box" style="border-left-color:var(--bitcoin);">
+  <div class="label" style="color:var(--bitcoin);">EMMEs · Solana Operator Tokens · <a href="../../AXLE/EMMEs/index.html" style="color:var(--bitcoin);">emmes index</a></div>
+  <table style="width:100%;border-collapse:collapse;font-size:.84rem;margin:.5rem 0 0;">
+    <tr>
+      <td style="padding:.4rem .6rem;color:var(--text);font-weight:600;">PROPAGANDA! · <code style="font-size:.72rem;color:var(--bitcoin);">PROPAGAN</code></td>
+      <td style="padding:.4rem .6rem;color:var(--gold);">C · Compress</td>
+      <td style="padding:.4rem .6rem;color:var(--dim2);font-size:.78rem;">Reduces information to what fits in the attention span. All price action is narrative. The exclamation mark is load-bearing.</td>
+    </tr>
+    <tr style="border-top:1px solid var(--rule);">
+      <td style="padding:.4rem .6rem;color:var(--text);font-weight:600;">PROBABILITY · <code style="font-size:.72rem;color:var(--bitcoin);">PROBABY</code></td>
+      <td style="padding:.4rem .6rem;color:var(--gold);">K · Curvature</td>
+      <td style="padding:.4rem .6rem;color:var(--dim2);font-size:.78rem;">Drives toward threshold κ* without overshoot. Every market move is a probability distribution. You are always inside one.</td>
+    </tr>
+    <tr style="border-top:1px solid var(--rule);">
+      <td style="padding:.4rem .6rem;color:var(--text);font-weight:600;">GAME THEORY · <code style="font-size:.72rem;color:var(--bitcoin);">THEORY</code></td>
+      <td style="padding:.4rem .6rem;color:var(--gold);">F · Fold</td>
+      <td style="padding:.4rem .6rem;color:var(--dim2);font-size:.78rem;">The commitment point. Rank-1 Jacobian loss. Irreversible. The Nash equilibrium that enforces itself. Banned in China.</td>
+    </tr>
+  </table>
+  <p style="font-size:.72rem;color:var(--dim);margin-top:1rem;font-family:'Courier New',monospace;">Chain: Solana · 𝕏 @myemmecoin · <em>Not financial advice. G = F · U · C · K. Play harder.</em></p>
+</div>
+
+<p>The EMMEs project is the dm³ framework running on a different substrate than Bitcoin. Where Bitcoin's halving is the $C$ operator hardcoded into a fixed-supply monetary protocol, EMMEs tokenise the operators themselves — making the algebraic structure tradeable, liquid, and on-chain. The fold ($F$ = GAME THEORY) is the token whose price discovery is itself a fold event: a commitment by market participants to a new equilibrium that cannot be reached any other way.</p>
+
+<p>The three tokens together — $C$, $K$, $F$ — are the compressible, curvature, and fold stages of any transition. The $U$ operator is the market itself. You do not control the unfold. The EMMEs project encodes this honestly: only three tokens, not four.</p>
+
+</div>
+
+<div class="footer-nav">
+  <a href="ch8-4-embryogenesis.html">← 8.4 Embryogenesis</a>
+  <span style="color:var(--dim)">8.5 · Bitcoin</span>
+  <a href="ch8-6-voa.html">8.6 Monster VOA →</a>
+</div>
+<div class="license">CC BY 4.0 · G6 LLC · Pablo Nogueira Grossi · g6llc@proton.me · ORCID 0009-0000-6496-2186 · 2026</div>
+</body>
+</html>

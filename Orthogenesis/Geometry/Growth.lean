@@ -1,3 +1,5 @@
+import Mathlib
+
 namespace Orthogenesis
 
 structure GrowthParams where
@@ -5,9 +7,8 @@ structure GrowthParams where
   stages : ℕ
   target : ℝ
   rel    : Prop
-deriving Repr
 
-def R (P : GrowthParams) (n : ℕ) : ℝ :=
+noncomputable def R (P : GrowthParams) (n : ℕ) : ℝ :=
   P.g ^ (n : ℝ)
 
 end Orthogenesis

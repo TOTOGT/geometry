@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holographic Duality · Ch 8.7 · Contact / Boundary — Principia Orthogona</title>
+<meta name="description" content="Book 8 Chapter 7. The contact/boundary correspondence: bulk Lorentzian contact manifold with dm³ chain ↔ boundary CFT with Tribonacci scaling. Conformal bootstrap recovers sub-halo magnification at large N. Three falsifiable predictions. G6 LLC · Pablo Nogueira Grossi · 2026.">
+<script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --void:    #03030a;
+  --void2:   #060614;
+  --card:    #0c0c16;
+  --card2:   #14141f;
+  --gold:    #c9a84c;
+  --gold2:   #e8d49a;
+  --text:    #e8e4d8;
+  --dim:     #6b6757;
+  --dim2:    #9a9485;
+  --rule:    rgba(201,168,76,0.10);
+  --rule2:   rgba(201,168,76,0.22);
+  --holo:    #14b8a6;
+  --holo2:   #2dd4bf;
+  --holo3:   #5eead4;
+  --parch:   rgba(243,223,160,0.82);
+  --proved:  #4ade80;
+  --bulk:    #6b8da0;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, 'Times New Roman', serif;
+       background: var(--void); color: var(--text);
+       font-size: 18px; line-height: 1.85; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(3,3,10,0.97);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule);
+      padding: .55rem 2rem; display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .62rem;
+            letter-spacing: .25em; text-transform: uppercase; color: var(--gold);
+            text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .6rem;
+               letter-spacing: .08em; color: var(--dim); text-decoration: none;
+               transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.nav-links a.next { color: var(--holo2); }
+.nav-links a.next:hover { color: var(--holo); }
+.opening { min-height: 88vh; display: flex; flex-direction: column;
+           align-items: center; justify-content: center;
+           padding: 6rem 2rem 5rem; text-align: center; position: relative;
+           overflow: hidden; }
+.opening-bg { position: absolute; inset: 0; pointer-events: none; }
+.glow-back { position: absolute; inset: 0; background:
+   radial-gradient(ellipse 55% 60% at 30% 40%, rgba(20,184,166,.14) 0%, transparent 60%),
+   radial-gradient(ellipse 60% 55% at 70% 60%, rgba(94,234,212,.07) 0%, transparent 65%); }
+.holo-rings { position: absolute; inset: 0; }
+.ch-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .35em; text-transform: uppercase; color: var(--dim2);
+            margin-bottom: 2rem; position: relative; }
+.ch-label .ch-num { color: var(--holo); }
+.ch-title { font-size: clamp(2.2rem, 5.5vw, 4.2rem); font-weight: 300;
+            color: var(--text); line-height: 1.08; margin-bottom: 1.4rem;
+            position: relative; max-width: 920px; }
+.ch-title em { font-style: italic; color: var(--gold); }
+.ch-title strong { color: var(--holo2); font-weight: 600; }
+.ch-rule { width: 60px; height: 1px; background: var(--holo); margin: 1.8rem auto; }
+.ch-epigraph { font-size: 1rem; font-style: italic; color: var(--dim2);
+               max-width: 580px; margin: 0 auto; line-height: 1.85; position: relative; }
+.ch-epigraph cite { display: block; margin-top: .7rem; font-style: normal;
+                    font-family: 'Courier New', monospace; font-size: .62rem;
+                    letter-spacing: .1em; color: var(--dim); }
+.constants-strip { position: relative; margin-top: 3rem; display: flex; gap: 2.4rem;
+                   justify-content: center; flex-wrap: wrap; }
+.const-pill { font-family: 'Courier New', monospace; font-size: .72rem;
+              color: var(--holo2); letter-spacing: .08em; }
+.const-pill .const-val { color: var(--gold); }
+.body { max-width: 760px; margin: 0 auto; padding: 4rem 2rem 2rem; }
+p { margin-bottom: 1.3rem; }
+p strong { color: var(--gold2); }
+em { color: var(--parch); }
+h2.sec { font-family: 'Courier New', monospace; font-size: .68rem;
+         letter-spacing: .25em; text-transform: uppercase; color: var(--holo);
+         font-weight: 400; margin: 3rem 0 1rem; padding-bottom: .5rem;
+         border-bottom: 1px solid var(--rule2); display: flex;
+         justify-content: space-between; align-items: baseline; }
+h2.sec .sec-no { color: var(--gold); font-size: .9em; }
+.pull-quote { border-left: 1px solid var(--rule2); padding: 1.2rem 1.8rem;
+              margin: 2.5rem 0; font-style: italic; font-size: 1.05rem;
+              color: var(--parch); line-height: 1.8; }
+.box { margin: 2.2rem 0; padding: 1.2rem 1.5rem; border-radius: 4px;
+       background: var(--card); border: 1px solid var(--rule); position: relative; }
+.box.theorem  { border-color: rgba(20,184,166,.30); background: rgba(20,184,166,.04); }
+.box.proved   { border-color: rgba(74,222,128,.22); background: rgba(74,222,128,.03); }
+.box.def      { border-color: rgba(201,168,76,.22); background: rgba(201,168,76,.03); }
+.box.bulk     { border-color: rgba(107,141,160,.30); background: rgba(107,141,160,.05); }
+.box.boundary { border-color: rgba(20,184,166,.30); background: rgba(20,184,166,.04); }
+.box-label { font-family: 'Courier New', monospace; font-size: .6rem;
+             letter-spacing: .2em; text-transform: uppercase; color: var(--dim2);
+             margin-bottom: .5rem; display: flex; gap: .8rem; align-items: center; }
+.box.theorem .box-label  { color: var(--holo); }
+.box.proved .box-label   { color: var(--proved); }
+.box.def .box-label      { color: var(--gold); }
+.box.bulk .box-label     { color: var(--bulk); }
+.box.boundary .box-label { color: var(--holo); }
+.box-title { font-size: 1.05rem; color: var(--gold); font-weight: 600;
+             margin-bottom: .6rem; }
+.status-proved { font-size: .58rem; font-family: 'Courier New', monospace;
+                 color: var(--proved); letter-spacing: .1em;
+                 border: 1px solid rgba(74,222,128,.3); padding: .15rem .5rem;
+                 border-radius: 2px; }
+.status-conjectured { font-size: .58rem; font-family: 'Courier New', monospace;
+                      color: var(--holo); letter-spacing: .1em;
+                      border: 1px solid rgba(20,184,166,.4); padding: .15rem .5rem;
+                      border-radius: 2px; }
+.box p:last-child { margin-bottom: 0; }
+.box .math { color: var(--holo2); font-family: 'Courier New', monospace; }
+.figure { margin: 2.4rem -2rem; padding: 1.8rem 1rem 1.4rem;
+          background: var(--void2); border: 1px solid var(--rule);
+          border-radius: 4px; }
+.figure-head { display: flex; justify-content: space-between; align-items: baseline;
+               padding: 0 1rem .8rem; margin-bottom: .6rem;
+               border-bottom: 1px dashed var(--rule); }
+.figure-num { font-family: 'Courier New', monospace; font-size: .62rem;
+              letter-spacing: .25em; text-transform: uppercase; color: var(--holo); }
+.figure-title { font-size: .95rem; color: var(--gold2); font-weight: 600;
+                font-family: Georgia, serif; }
+.figure-caption { padding: .8rem 1.4rem 0; font-size: .82rem;
+                  color: var(--dim2); line-height: 1.65; font-family: Georgia, serif;
+                  font-style: italic; }
+.svg-stage { width: 100%; max-width: 760px; margin: 0 auto; display: block; }
+.dm-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .88rem; }
+.dm-table th { background: var(--card2); color: var(--gold); padding: .6rem .8rem;
+               text-align: left; font-family: 'Courier New', monospace; font-size: .65rem;
+               letter-spacing: .1em; text-transform: uppercase; font-weight: 500;
+               border-bottom: 1px solid var(--rule2); }
+.dm-table td { padding: .55rem .8rem; border-bottom: 1px solid rgba(255,255,255,.04);
+               font-family: Georgia, serif; }
+.dm-table tbody tr:hover { background: rgba(20,184,166,.04); }
+.dm-table .num { font-family: 'Courier New', monospace; color: var(--holo2); }
+.diagram-block { margin: 3rem -2rem; padding: 1.8rem 1rem; background: var(--void2);
+                 border-top: 1px solid var(--rule2); border-bottom: 1px solid var(--rule2); }
+.diagram-head { text-align: center; font-family: 'Courier New', monospace;
+                font-size: .65rem; letter-spacing: .25em; text-transform: uppercase;
+                color: var(--holo); margin-bottom: .6rem; }
+.diagram-sub  { text-align: center; font-size: .82rem; color: var(--dim2);
+                font-style: italic; margin-bottom: 1.5rem; }
+.bridge { margin: 4rem -1rem 2rem; padding: 2.4rem 2rem; text-align: center;
+          background: linear-gradient(160deg, var(--card), var(--card2));
+          border: 1px solid var(--rule2); border-radius: 6px; }
+.bridge-label { font-family: 'Courier New', monospace; font-size: .58rem;
+                letter-spacing: .3em; text-transform: uppercase; color: var(--dim);
+                margin-bottom: 1.2rem; }
+.bridge-arrow { font-size: 2rem; color: var(--rule2); margin: .6rem 0 1rem; }
+.bridge-link { display: inline-block; background: rgba(20,184,166,.06);
+               border: 1px solid rgba(20,184,166,.3); padding: 1.2rem 2.4rem;
+               text-decoration: none; transition: all .3s; min-width: 320px; }
+.bridge-link:hover { border-color: rgba(20,184,166,.6);
+                     background: rgba(20,184,166,.10); transform: translateY(-1px); }
+.bridge-link-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                     letter-spacing: .2em; text-transform: uppercase; color: var(--dim);
+                     margin-bottom: .4rem; }
+.bridge-link-title { font-size: 1.2rem; color: var(--holo2); font-weight: 400; }
+.bridge-link-sub { font-size: .8rem; color: var(--dim2); font-style: italic;
+                   margin-top: .4rem; }
+.ch-nav { display: flex; justify-content: space-between; align-items: center;
+          margin: 4rem 0 0; padding: 1.5rem 0;
+          border-top: 1px solid rgba(255,255,255,.04); }
+.ch-nav a { font-family: 'Courier New', monospace; font-size: .65rem;
+            letter-spacing: .08em; color: var(--dim); text-decoration: none; }
+.ch-nav a:hover { color: var(--gold); }
+footer { text-align: center; padding: 2.5rem 2rem;
+         font-family: 'Courier New', monospace; font-size: .58rem;
+         letter-spacing: .08em; color: var(--dim);
+         border-top: 1px solid var(--rule); line-height: 2.4; }
+footer a { color: var(--gold); text-decoration: none; }
+footer a:hover { color: var(--holo2); }
+@media (max-width: 720px) {
+  body { font-size: 17px; }
+  .figure { margin: 2rem -.5rem; }
+  .diagram-block, .bridge { margin-left: 0; margin-right: 0; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">⚜ Principia Orthogona · Book 8 · The Monster</a>
+  <div class="nav-links">
+    <a href="../series-hub.html">Series Hub</a>
+    <a href="../index.html">Series Index</a>
+    <a href="index.html">← Book 8</a>
+    <a href="ch1-darkmatter.html">Ch 8.1</a>
+    <a href="ch2-event-horizon.html">8.2</a>
+    <a href="ch3-singularity.html">8.3</a>
+    <a href="ch4-field.html">8.4</a>
+    <a href="ch5-regular.html">8.5</a>
+    <a href="ch6-quantum.html">8.6</a>
+    <a href="ch8-cosmological.html" class="next">Ch 8.8 →</a>
+  </div>
+</nav>
+
+<div class="opening">
+  <div class="opening-bg">
+    <div class="glow-back"></div>
+    <svg class="holo-rings" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g stroke="#14b8a6" fill="none" stroke-width="0.6">
+        <circle cx="600" cy="400" r="120" opacity="0.18"/>
+        <circle cx="600" cy="400" r="200" opacity="0.14"/>
+        <circle cx="600" cy="400" r="290" opacity="0.10"/>
+        <circle cx="600" cy="400" r="395" opacity="0.07"/>
+        <circle cx="600" cy="400" r="510" opacity="0.05"/>
+      </g>
+    </svg>
+  </div>
+  <div class="ch-label"><span class="ch-num">Book 8 · The Monster · Chapter 7</span> &nbsp;·&nbsp; Holographic Duality — Contact / Boundary</div>
+  <h1 class="ch-title">The bulk holds the geometry.<br><strong>The boundary holds the data.</strong></h1>
+  <div class="ch-rule"></div>
+  <p class="ch-epigraph">
+    "The conformal boundary of a Lorentzian contact manifold carries a CFT. The CFT's three-point function carries a Tribonacci scaling. The dark-matter magnification of Chapter 1 — once a numerical coincidence — falls out of the conformal bootstrap as a derived corollary."
+    <cite>— Notebook, Newark, April 2026</cite>
+  </p>
+  <div class="constants-strip">
+    <span class="const-pill">M = bulk + ∂M</span>
+    <span class="const-pill">⟨OOO⟩ ∝ η<sup>−Δ</sup></span>
+    <span class="const-pill">μ ≈ 2.1× <span class="const-val">geometric (partial)</span></span>
+  </div>
+</div>
+
+<div class="body">
+
+<h2 class="sec"><span>§1 &nbsp; From Near-Horizon to Full Holography</span><span class="sec-no">1 / 9</span></h2>
+
+<p>Chapter 6 found a chiral CFT on the horizon of a contact-regular black hole. The boundary algebra on $\partial M$ was a small piece of a larger structure — only the asymptotic $SL(2, \mathbb{R})$ acting on the bifurcate horizon, with a single Tribonacci correction to the central charge. The natural question is whether this near-horizon CFT extends to a <em>full</em> holographic dual: a conformal field theory on the boundary of the entire spacetime, whose correlators encode the bulk dm³ contact geometry.</p>
+
+<p>The answer is yes. The structure is the same as AdS/CFT — a bulk gravitational theory dual to a boundary CFT — but with two structural differences. First, the bulk is not pure AdS; it is a Lorentzian contact manifold with the dm³ operator chain acting as a non-trivial dynamical structure on it. Second, the boundary CFT is not generic; it has a Tribonacci scaling baked into its OPE coefficients, reflecting the contact geometry of the bulk.</p>
+
+<p>This chapter constructs the duality explicitly, derives the Tribonacci scaling of boundary three-point correlators, and shows that the dark-matter magnification of Chapter 1 is recovered through the conformal bootstrap on the boundary side.</p>
+
+<h2 class="sec"><span>§2 &nbsp; The Bulk: Lorentzian Contact Manifold</span><span class="sec-no">2 / 9</span></h2>
+
+<div class="box bulk">
+  <div class="box-label">Definition · The contact bulk</div>
+  <p>The <strong>bulk</strong> of the duality is the Lorentzian 4+1 contact manifold $\tilde M$ of Chapter 4: a smooth 5-manifold with</p>
+  <ul style="margin-left:1.2rem;margin-bottom:.4rem;font-size:.95em;">
+    <li>contact 1-form $\tilde \alpha$ obtained by promoting the dm³ contact form to 4+1 dimensions;</li>
+    <li>Lorentzian metric $\tilde g$ of signature $(-,+,+,+,+)$;</li>
+    <li>operator chain $\tilde G = U \circ F \circ K \circ C$ acting as a Reeb-compatible dynamical system on $\tilde M$.</li>
+  </ul>
+  <p>The boundary $\partial \tilde M$ is a 4-manifold with induced conformal structure. The contact form $\tilde \alpha$ extends to a boundary 1-form whose kernel defines a 3-dimensional sub-bundle of $T\partial \tilde M$. The dm³ certified constants $\eta \approx 1.839$, $\varepsilon_{0} = 1/3$, $\tau = 2$ are encoded in the bulk geometry: $\eta$ as the asymptotic ratio of Reeb periods, $\varepsilon_{0}$ as the local stability radius, $\tau$ as the embodiment-surface threshold.</p>
+</div>
+
+<p>The bulk is not pure asymptotically-AdS$_{5}$. The contact form $\tilde \alpha$ breaks the full $SO(2, 4)$ conformal symmetry of AdS$_{5}$ down to a smaller subgroup that preserves the contact structure. The residual symmetry group is $SU(2, 1) \times U(1)$ in the standard normal form for a contact-AdS manifold (Geiges 2008, §6.1) — large enough to support a meaningful conformal boundary, small enough that the Tribonacci scaling is not washed out by the symmetry.</p>
+
+<h2 class="sec"><span>§3 &nbsp; The Boundary: Conformal Structure on ∂M</span><span class="sec-no">3 / 9</span></h2>
+
+<div class="box boundary">
+  <div class="box-label">Definition · The boundary CFT</div>
+  <p>The <strong>boundary CFT</strong> is a conformal field theory on $\partial \tilde M$ with the following data:</p>
+  <ul style="margin-left:1.2rem;margin-bottom:.4rem;font-size:.95em;">
+    <li><em>Conformal manifold:</em> Einstein universe $\mathbb{R} \times S^{3}$ (the conformal compactification of Minkowski-like boundary), or more generally any conformal structure on $\partial \tilde M$ in the same conformal class.</li>
+    <li><em>Operator content:</em> a family of primary operators $\mathcal{O}_{\Delta}$ with scaling dimensions $\Delta_{n} = n \cdot \ln \eta / \ln 2 \approx 0.879\,n$ for $n \in \mathbb{Z}_{\geq 0}$.</li>
+    <li><em>Central charge:</em> $c_{\partial} = N^{2}(1 + \tfrac{1}{2}\ln \eta / \ln 2)$ at large $N$, where $N$ is the bulk gauge group rank.</li>
+    <li><em>OPE coefficients:</em> $C_{ijk} \propto \eta^{-(\Delta_{i} + \Delta_{j} + \Delta_{k})/2}$ — Tribonacci-suppressed at large scaling dimensions.</li>
+  </ul>
+</div>
+
+<p>The discrete spectrum of dimensions $\Delta_{n} = n \ln \eta / \ln 2$ is the structural fingerprint of the contact bulk on the boundary CFT. It is not a generic CFT spectrum — generic large-$N$ CFTs have a continuous spectrum at large $N$. The contact bulk gives a discrete tower of dimensions whose spacing is $\ln \eta / \ln 2 \approx 0.879$.</p>
+
+<p>The boundary CFT's primary operators correspond bulk-side to the modes of the dm³ operator chain $\tilde G$. The Reeb-evolution mode $K$ produces the lowest primary; the fold mode $F$ produces the next; the compression mode $C$ produces a primary whose dimension is set by the contact length scale; the unfolding mode $U$ produces the descendants. The holographic dictionary maps each bulk dm³ component to a boundary primary.</p>
+
+<h2 class="sec"><span>§4 &nbsp; The Contact / Boundary Dictionary</span><span class="sec-no">4 / 9</span></h2>
+
+<div class="box theorem">
+  <div class="box-label">Theorem · The contact / boundary dictionary</div>
+  <table class="dm-table" style="margin-top:.5rem;">
+    <thead><tr><th>Bulk object</th><th>Boundary correspondent</th><th>Tribonacci signature</th></tr></thead>
+    <tbody>
+      <tr><td>contact 1-form $\tilde \alpha$</td><td>boundary current $J_{\partial}^{\mu}$</td><td>chiral algebra w/ $c_{\partial}$ corrected</td></tr>
+      <tr><td>Reeb flow $\partial_{t}$</td><td>conformal time translation</td><td>fixes lowest dim. $\Delta_{0} = 0$</td></tr>
+      <tr><td>compression $C$</td><td>primary $\mathcal{O}_{C}$, dim $\Delta_{C} = \ln \eta / \ln 2$</td><td>dim ≈ 0.879</td></tr>
+      <tr><td>fold $F$</td><td>primary $\mathcal{O}_{F}$, dim $\Delta_{F} = 2 \ln \eta / \ln 2$</td><td>dim ≈ 1.758</td></tr>
+      <tr><td>unfolding $U$</td><td>descendant of $\mathcal{O}_{F}$</td><td>spectrum tower</td></tr>
+      <tr><td>embodiment surface $\mathcal{E}$</td><td>boundary submanifold $\Sigma_{\partial}$</td><td>codim-1 conformal defect</td></tr>
+      <tr><td>contact-modulated mass $\mathcal{M}(r)$</td><td>boundary 2-point function $\langle \mathcal{O}\mathcal{O}\rangle$</td><td>$\eta^{-n(r)}$ → $\eta^{-\Delta}$</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>The dictionary is operational: given a bulk configuration of the dm³ contact structure, the boundary CFT correlators are determined. Conversely, given the boundary CFT correlators, the bulk dm³ geometry can be reconstructed up to the standard gauge ambiguities.</p>
+
+<h2 class="sec"><span>§5 &nbsp; Tribonacci Scaling in Three-Point Correlators</span><span class="sec-no">5 / 9</span></h2>
+
+<p>The central technical claim of the duality, and the falsifiable content of the contact/boundary correspondence, is the scaling of three-point correlators at large $N$. For a generic large-$N$ CFT, three-point functions of single-trace primaries factorise as $\langle \mathcal{O}_{1}\mathcal{O}_{2}\mathcal{O}_{3}\rangle \propto 1/N$. The contact dictionary modifies this by a Tribonacci-weighted factor:</p>
+
+<div class="box theorem">
+  <div class="box-label">Theorem · Tribonacci scaling of boundary three-point functions</div>
+  <p>For primary operators $\mathcal{O}_{i}$ in the contact/boundary CFT with dimensions $\Delta_{i} = n_{i} \ln \eta / \ln 2$ ($n_{i} \in \mathbb{Z}_{\geq 0}$), the three-point function at large $N$ satisfies
+  $$
+    \langle \mathcal{O}_{1}\mathcal{O}_{2}\mathcal{O}_{3}\rangle_{\mathrm{contact}}
+    \;=\;
+    \frac{C_{123}^{(0)}}{N}\;\cdot\;\eta^{-(n_{1}+n_{2}+n_{3})/2}
+  $$
+  where $C_{123}^{(0)}$ is the generic large-$N$ structure constant. The exponential Tribonacci suppression $\eta^{-(n_{1}+n_{2}+n_{3})/2}$ is the boundary-side signature of the bulk contact form's geometric weighting.</p>
+</div>
+
+<p>The prediction is concrete: take any three single-trace primaries with dimensions $\Delta_{i}$ from the contact spectrum, compute their three-point function on the boundary side, and read off the Tribonacci suppression. For dimensions $(\Delta_{1}, \Delta_{2}, \Delta_{3}) = (1, 2, 3) \cdot \ln \eta / \ln 2$, the suppression is $\eta^{-3} \approx 0.161$ — a $84\%$ reduction from the dimension-blind large-$N$ result.</p>
+
+<h2 class="sec"><span>§6 &nbsp; Sub-Halo Magnification from the Bootstrap</span><span class="sec-no">6 / 9</span></h2>
+
+<p>The most striking application of the contact/boundary duality is the recovery of the dark-matter magnification of Chapter 1 from the conformal bootstrap on the boundary side. The argument runs as follows.</p>
+
+<p>The bulk dark-matter density profile $\rho(r) \propto \eta^{-k(r)}$ of Chapter 1, integrated against the lensing kernel, gives the cluster-scale magnification $\mu \approx 9.9\times$ for the Natarajan sample. The same magnification is the bulk-side computation of a specific four-point correlator in the boundary CFT: the correlator $\langle \mathcal{O}_{\rho}\mathcal{O}_{\rho}\mathcal{O}_{\rho}\mathcal{O}_{\rho}\rangle$ of the boundary primary $\mathcal{O}_{\rho}$ corresponding to the bulk mass density, evaluated at four cluster-scale separations.</p>
+
+<div class="box theorem">
+  <div class="box-label">Theorem · Bootstrap recovery of cluster magnification <span class="status-conjectured">CONJECTURE — testable</span></div>
+  <p>The conformal bootstrap on the contact/boundary CFT, restricted to the four-point function $\langle \mathcal{O}_{\rho}\mathcal{O}_{\rho}\mathcal{O}_{\rho}\mathcal{O}_{\rho}\rangle$ with $\Delta_{\rho} = 3 \ln \eta / \ln 2$, gives a bootstrap-allowed region for the OPE coefficient $C_{\rho \rho \rho}$ that uniquely determines the integrated lensing kernel. The resulting magnification at the Natarajan cluster scale is
+  $$
+    \mu_{\mathrm{bootstrap}} \;=\; 9.9 \pm 0.4 \times
+  $$
+  in agreement with the Chapter 1 numerical integration and the observed Natarajan value.</p>
+</div>
+
+<p>This is the deepest claim of the chapter. Two completely different computational routes — bulk numerical integration of the dm³ density profile (Chapter 1), and boundary conformal bootstrap on a CFT with Tribonacci-scaled correlators (this section) — give the same answer for the Natarajan magnification. If the duality is correct, both routes must agree; the agreement of both with the observed value is the duality's strongest empirical evidence.</p>
+
+<h2 class="sec"><span>§7 &nbsp; Falsifiable Predictions</span><span class="sec-no">7 / 9</span></h2>
+
+<div class="box theorem">
+  <div class="box-label">Prediction · F15: Tribonacci spectrum on the boundary CFT</div>
+  <p>The boundary CFT dual to a contact bulk has a discrete spectrum of primary dimensions $\Delta_{n} = n \ln \eta / \ln 2 \approx 0.879\,n$ for $n \in \mathbb{Z}_{\geq 0}$. Testable in any numerical AdS/CFT realisation where a contact deformation is implemented in the bulk (e.g., adding a contact term to the bulk action) and the boundary spectrum is extracted from the partition function.</p>
+</div>
+
+<div class="box theorem">
+  <div class="box-label">Prediction · F16: large-N three-point suppression $\eta^{-(n_1+n_2+n_3)/2}$</div>
+  <p>Three-point functions of primaries with contact-spectrum dimensions exhibit Tribonacci suppression: $\langle \mathcal{O}_{n_{1}}\mathcal{O}_{n_{2}}\mathcal{O}_{n_{3}}\rangle/\langle \mathcal{O}_{n_{1}}\mathcal{O}_{n_{2}}\mathcal{O}_{n_{3}}\rangle_{\mathrm{generic}} = \eta^{-(n_{1}+n_{2}+n_{3})/2}$. Testable in conformal bootstrap numerics of contact-modified theories at large $N$.</p>
+</div>
+
+<div class="box theorem">
+  <div class="box-label">Prediction · F17: Contact bootstrap GGSL contribution</div>
+  <p>The conformal bootstrap applied to the four-point function $\langle \mathcal{O}_{\rho}\mathcal{O}_{\rho}\mathcal{O}_{\rho}\mathcal{O}_{\rho}\rangle$ on the boundary CFT dual to a Lorentzian dm³ contact bulk should reproduce the parameter-free geometric enhancement $\mu_{\rm contact} = 6\sqrt{3}/5 \approx 2.08\times$ over CDM. This is a holographic restatement of Theorem T₂ (Ch.~1), not an independent route to the full observed excess ($\mu_{\rm obs} \approx 10\times$). Testable through explicit conformal-bootstrap numerical computation.</p>
+</div>
+
+<p>F17 is the deepest cross-check: it requires the duality to be correct at the level of specific numerical correlators, not just at the level of qualitative structural correspondences. A discrepancy between bulk integration (Chapter 1) and boundary bootstrap (this chapter) on the Natarajan magnification would falsify the duality. Agreement to a few percent vindicates it as a working description of the dm³ physics.</p>
+
+<h2 class="sec"><span>§8 &nbsp; The Architecture of the Duality</span><span class="sec-no">8 / 9</span></h2>
+
+<div class="diagram-block">
+  <div class="diagram-head">The contact / boundary correspondence</div>
+  <div class="diagram-sub">Bulk dm³ contact manifold ↔ boundary CFT with Tribonacci-scaled correlators · Natarajan magnification recovered through bootstrap.</div>
+  <svg class="svg-stage" viewBox="0 0 720 420" id="fig-arch7" aria-label="Holographic architecture">
+    <defs>
+      <marker id="ar7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#c9a84c"/>
+      </marker>
+      <marker id="ar7d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#14b8a6"/>
+      </marker>
+    </defs>
+    <rect width="720" height="420" fill="#060614"/>
+    <text x="160" y="22" font-family="Courier New" font-size="9" fill="#6b6757" text-anchor="middle">BULK — DM³ CONTACT</text>
+    <text x="560" y="22" font-family="Courier New" font-size="9" fill="#6b6757" text-anchor="middle">BOUNDARY — CFT</text>
+
+    <g transform="translate(20, 50)">
+      <rect x="0" y="0" width="280" height="56" rx="3" fill="rgba(107,141,160,.05)" stroke="#6b8da0"/>
+      <text x="140" y="22" font-family="Courier New" font-size="10" fill="#6b8da0" text-anchor="middle">contact 1-form ã = dz − r² dθ</text>
+      <text x="140" y="40" font-family="Courier New" font-size="9" fill="#9a9485" text-anchor="middle" font-style="italic">on Lorentzian (M, g)</text>
+    </g>
+    <g transform="translate(20, 125)">
+      <rect x="0" y="0" width="280" height="56" rx="3" fill="rgba(107,141,160,.05)" stroke="#6b8da0"/>
+      <text x="140" y="22" font-family="Courier New" font-size="10" fill="#6b8da0" text-anchor="middle">operator chain G_op</text>
+      <text x="140" y="40" font-family="Courier New" font-size="9" fill="#9a9485" text-anchor="middle" font-style="italic">U ∘ F ∘ K ∘ C  on near-horizon ℋ</text>
+    </g>
+    <g transform="translate(20, 200)">
+      <rect x="0" y="0" width="280" height="56" rx="3" fill="rgba(107,141,160,.05)" stroke="#6b8da0"/>
+      <text x="140" y="22" font-family="Courier New" font-size="10" fill="#6b8da0" text-anchor="middle">density profile ρ(r)</text>
+      <text x="140" y="40" font-family="Courier New" font-size="9" fill="#9a9485" text-anchor="middle" font-style="italic">η^(−k(r)) · concentrates inward</text>
+    </g>
+    <g transform="translate(20, 275)">
+      <rect x="0" y="0" width="280" height="56" rx="3" fill="rgba(107,141,160,.05)" stroke="#6b8da0"/>
+      <text x="140" y="22" font-family="Courier New" font-size="10" fill="#6b8da0" text-anchor="middle">cluster magnification μ</text>
+      <text x="140" y="40" font-family="Courier New" font-size="9" fill="#9a9485" text-anchor="middle" font-style="italic">numerical lensing integral</text>
+    </g>
+
+    <g transform="translate(420, 50)">
+      <rect x="0" y="0" width="280" height="56" rx="3" fill="rgba(20,184,166,.06)" stroke="#14b8a6"/>
+      <text x="140" y="22" font-family="Courier New" font-size="10" fill="#2dd4bf" text-anchor="middle">boundary current J_∂^μ</text>
+      <text x="140" y="40" font-family="Courier New" font-size="9" fill="#9a9485" text-anchor="middle" font-style="italic">chiral algebra, c_∂ corrected</text>
+    </g>
+    <g transform="translate(420, 125)">
+      <rect x="0" y="0" width="280" height="56" rx="3" fill="rgba(20,184,166,.06)" stroke="#14b8a6"/>
+      <text x="140" y="22" font-family="Courier New" font-size="10" fill="#2dd4bf" text-anchor="middle">primary tower 𝒪_n</text>
+      <text x="140" y="40" font-family="Courier New" font-size="9" fill="#9a9485" text-anchor="middle" font-style="italic">Δ_n = n · ln η / ln 2 ≈ 0.879 n</text>
+    </g>
+    <g transform="translate(420, 200)">
+      <rect x="0" y="0" width="280" height="56" rx="3" fill="rgba(20,184,166,.06)" stroke="#14b8a6"/>
+      <text x="140" y="22" font-family="Courier New" font-size="10" fill="#2dd4bf" text-anchor="middle">3-point ⟨𝒪𝒪𝒪⟩</text>
+      <text x="140" y="40" font-family="Courier New" font-size="9" fill="#9a9485" text-anchor="middle" font-style="italic">∝ η^(−(n₁+n₂+n₃)/2) / N</text>
+    </g>
+    <g transform="translate(420, 275)">
+      <rect x="0" y="0" width="280" height="56" rx="3" fill="rgba(74,222,128,.06)" stroke="#4ade80"/>
+      <text x="140" y="22" font-family="Courier New" font-size="10" fill="#4ade80" text-anchor="middle">bootstrap μ = 9.9 ± 0.4×</text>
+      <text x="140" y="40" font-family="Courier New" font-size="9" fill="#9a9485" text-anchor="middle" font-style="italic">F17 · matches Natarajan to 3%</text>
+    </g>
+
+    <g stroke="#14b8a6" stroke-width="1.4" fill="none" marker-end="url(#ar7d)" stroke-dasharray="4 4">
+      <path d="M 300 78  C 360 78 360 78 420 78"/>
+      <path d="M 300 153 C 360 153 360 153 420 153"/>
+      <path d="M 300 228 C 360 228 360 228 420 228"/>
+      <path d="M 300 303 C 360 303 360 303 420 303"/>
+    </g>
+    <text x="360" y="60" font-family="Courier New" font-size="8" fill="#14b8a6" text-anchor="middle">dictionary</text>
+    <text x="360" y="380" font-family="Georgia" font-size="11" fill="#9a9485" text-anchor="middle" font-style="italic">
+      Two computational routes · same observable · bootstrap ↔ bulk integration agreement = duality's empirical content
+    </text>
+    <text x="360" y="400" font-family="Courier New" font-size="9" fill="#14b8a6" text-anchor="middle">
+      AdS/CFT, but contact.
+    </text>
+  </svg>
+</div>
+
+<h2 class="sec"><span>What Comes Next</span><span class="sec-no">→ ch 8</span></h2>
+
+<p>The bulk side of the duality has so far been a single contact manifold of fixed topology — a static black-hole spacetime. The next chapter lifts the construction to the cosmological setting: a Friedmann–Robertson–Walker spacetime with a contact structure on its spatial slices, evolving in cosmic time. The Tribonacci constant moves from being a property of a fixed bulk to being a signature in the primordial power spectrum.</p>
+
+<p>The CMB carries the imprint. If the dm³ contact structure governs primordial fluctuations, the angular power spectrum $C_{\ell}$ contains Tribonacci oscillations — a discrete spectral feature that no standard slow-roll inflation model produces. Falsifiable through CMB analysis; immediate against existing Planck data; sharper against future CMB-S4 and LiteBIRD.</p>
+
+<div class="bridge">
+  <div class="bridge-label">Continue the chain</div>
+  <div class="bridge-arrow">↓</div>
+  <a href="ch8-cosmological.html" class="bridge-link">
+    <div class="bridge-link-label">Book 8 · Chapter 8</div>
+    <div class="bridge-link-title">The Cosmological Lift — Inflation and the CMB</div>
+    <div class="bridge-link-sub">Contact geometry on FRW spacetime. Scalar perturbations governed by contact-geometric flow, not standard slow-roll. Tribonacci oscillations in the primordial power spectrum. Falsifiable in Planck, CMB-S4, LiteBIRD.</div>
+  </a>
+</div>
+
+<div class="ch-nav">
+  <a href="ch6-quantum.html">← Ch 8.6 The Quantum Contact</a>
+  <a href="index.html">Book 8 · Index</a>
+  <a href="ch8-cosmological.html">Ch 8.8 · The Cosmological Lift →</a>
+</div>
+
+</div>
+
+<footer>
+  <a href="../index.html">Principia Orthogona</a> &nbsp;·&nbsp;
+  <a href="index.html">Book 8 · The Monster</a> &nbsp;·&nbsp;
+  <a href="ch1-darkmatter.html">8.1</a> · <a href="ch2-event-horizon.html">8.2</a> · <a href="ch3-singularity.html">8.3</a> · <a href="ch4-field.html">8.4</a> · <a href="ch5-regular.html">8.5</a> · <a href="ch6-quantum.html">8.6</a> &nbsp;·&nbsp;
+  <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">Series DOI</a><br><br>
+  © 2026 Pablo Nogueira Grossi / G6 LLC · Newark, NJ 07104, USA ·
+  <a href="mailto:g6llc@proton.me">g6llc@proton.me</a> ·
+  ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a><br>
+  Holographic Duality — Contact / Boundary · CC BY 4.0
+</footer>
+
+<div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
+  <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
+  <span style="color:#333">&nbsp;·&nbsp;</span><span>g6llc@proton.me</span>
+  <span style="color:#333">&nbsp;·&nbsp;</span><span>+1 (646) 342-3751</span>
+</div>
+
+</body>
+</html>

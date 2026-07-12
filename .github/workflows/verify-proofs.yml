@@ -1,0 +1,53 @@
+name: Verify Lean proofs (real kernel check)
+
+on: push
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan (Lean version manager)
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- --default-toolchain none -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Cache Mathlib build
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake
+          key: geometry-lake-${{ hashFiles('lakefile.lean', 'lean-toolchain') }}
+
+      - name: lake build (the real check -- fails the job if anything doesn't compile)
+        run: |
+          lake update
+          lake exe cache get || true
+          lake build
+
+      - name: Real declaration + sorry scan (informational, from actually-compiled source)
+        run: |
+          echo "== theorem/lemma declarations in Orthogenesis/ =="
+          grep -rn "^theorem \|^lemma " Orthogenesis || echo "(none found -- package is definitions/structures only, no proofs yet)"
+          echo "== sorry usage in Orthogenesis/ =="
+          grep -rn "sorry" Orthogenesis || echo "(none found)"
+
+      - name: Real axiom check through the Lean kernel
+        run: |
+          cat > /tmp/probe.lean << 'EOF'
+          import Orthogenesis.Geometry.HexGrid
+          import Orthogenesis.Geometry.Growth
+          import Orthogenesis.Geometry.Cell
+          import Orthogenesis.Geometry.Colony
+
+          open Orthogenesis
+
+          #print axioms hexNeighbors
+          #print axioms hexToVec2
+          #print axioms Cell.center
+          #print axioms Cell.radius
+          #print axioms Colony.insert
+          #print axioms Colony.expand
+          EOF
+          lake env lean /tmp/probe.lean

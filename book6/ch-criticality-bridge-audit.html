@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auditing the Criticality Bridge — Principia Orthogona, Book 6</title>
+<style>
+  :root { --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Georgia, 'Times New Roman', serif; background: var(--cream); color: var(--navy); }
+  main { max-width: 760px; margin: 0 auto; padding: 64px 40px 80px; }
+  .eyebrow { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+  .op-chain { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; margin-bottom: 44px; }
+  .op-chain .sep { opacity: 0.5; }
+  .op-chain .active { color: var(--gold); font-weight: bold; }
+  .symbol-block { text-align: center; margin: 8px 0 28px; }
+  .symbol-block .glyph { font-size: 26px; line-height: 1.3; color: var(--navy); font-style: italic; }
+  .symbol-block .label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: #9ca3af; margin-top: 10px; }
+  h1 { font-size: 34px; font-weight: normal; text-align: center; margin: 0 0 6px; line-height: 1.25; }
+  .value-line { text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13.5px; color: #6b7280; margin-bottom: 28px; }
+  .gold-rule { height: 1px; width: 120px; margin: 0 auto 32px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  h2 { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); border-bottom: 1px solid var(--smoke); padding-bottom: 8px; margin: 44px 0 16px; }
+  p { font-size: 16.5px; line-height: 1.75; margin: 0 0 20px; }
+  .eqn { text-align: center; font-style: italic; font-size: 18px; margin: 22px 0; color: var(--navy); }
+  table.status-table { width: 100%; border-collapse: collapse; margin: 16px 0 28px; font-size: 14.5px; }
+  table.status-table th, table.status-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--smoke); }
+  table.status-table th { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #9ca3af; }
+  .numeric-check { background: var(--smoke); border-radius: 4px; padding: 16px 20px; font-family: 'SF Mono', Menlo, monospace; font-size: 13px; line-height: 1.7; margin: 20px 0 28px; overflow-x: auto; white-space: pre; }
+  .caveat { font-size: 15px; line-height: 1.7; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 18px; margin: 24px 0 32px; }
+  .verdict { background: #fdf0ee; border: 1px solid #e8b8ae; border-radius: 4px; padding: 18px 22px; margin: 20px 0 28px; font-size: 15.5px; line-height: 1.7; }
+  .verdict .lbl { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #a5453a; display: block; margin-bottom: 8px; }
+  .prevnext { display: flex; justify-content: space-between; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; padding-top: 24px; margin-top: 44px; border-top: 1px solid var(--smoke); }
+  .prevnext a { color: inherit; text-decoration: none; }
+  .prevnext a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+<main>
+
+  <div class="eyebrow">Principia Orthogona &nbsp;·&nbsp; Book 6 &nbsp;·&nbsp; Working Papers · Mathematics &amp; Formal Proofs</div>
+
+  <div class="op-chain">
+    <span>WP-01 TOGT</span>
+    <span class="sep">→</span>
+    <span class="sep">…</span>
+    <span class="sep">→</span>
+    <span class="sep">WP-07 Spectral Radius</span>
+    <span class="sep">→</span>
+    <span class="active">WP-24 Criticality Bridge, Audited</span>
+  </div>
+
+  <div class="symbol-block">
+    <div class="glyph">q³ &minus; 3q &nbsp;&ne;&nbsp; (q&minus;1)²(q+2)</div>
+    <div class="label">the identity the bridge was built on does not hold</div>
+  </div>
+
+  <h1>Auditing the Criticality Bridge</h1>
+  <div class="value-line">a claim in this corpus's own GTCT material is checked against real algebra, and does not survive as stated</div>
+
+  <div class="gold-rule"></div>
+
+  <p>
+    This corpus has a standing habit of catching its own errors in public: the
+    Verified Archive chapter (WP-23) exists precisely to let a Lean kernel
+    catch a 3,800-year-old scribal slip in Plimpton 322, and a prior session's
+    notes on the Collatz descent file record an old claim that "did not
+    appear anywhere in the old files" being caught and flagged rather than
+    left to silently propagate. This working paper applies that same
+    standard to a claim already sitting in this corpus's own <em>GTCT
+    Criticality Principle</em> material &mdash; not material borrowed from
+    anyone else. The claim was checked with real algebra (SymPy), not
+    re-asserted, and it does not hold as originally stated.
+  </p>
+
+  <h2>The claim as written</h2>
+  <p>
+    The GTCT criticality material states a cubic potential <em>V<sub>c</sub>(q)
+    = q³ &minus; cq</em>, asserts that <em>c* = 3</em> is the unique value at
+    which this potential has a <strong>double root</strong> at <em>q=1</em>,
+    and writes the factorization explicitly:
+  </p>
+  <div class="eqn">V₃(q) = q³ &minus; 3q &nbsp;=&nbsp; (q&minus;1)²(q+2)</div>
+  <p>
+    This factorization is then used as the "algebraic fingerprint" for a
+    larger claim: that GTCT's criticality condition and the n-bonacci
+    (Tribonacci) polynomial's own rank-3 phase boundary are, in the source
+    document's own words, <em>"the same criticality condition, expressed in
+    two different languages."</em>
+  </p>
+
+  <h2>What the algebra actually gives</h2>
+  <p>
+    Expand the right-hand side directly: <em>(q&minus;1)²(q+2) = q³ &minus;
+    3q + 2</em>. That has a constant term, <em>+2</em>. The left-hand side,
+    <em>q³ &minus; 3q</em>, does not &mdash; and no choice of <em>c</em> in
+    <em>V<sub>c</sub>(q) = q³ &minus; cq</em> can ever produce one, since that
+    family has no constant term by construction. The two sides are not
+    equal. This is not a matter of interpretation; it is checked directly
+    below.
+  </p>
+
+  <div class="numeric-check">Verified this session (SymPy, symbolic expansion, not approximation):
+
+  V_c(q) = q^3 - c*q,  V_3(q) = q^3 - 3q
+  (q-1)^2 (q+2) expanded  =  q^3 - 3q + 2
+
+  V_3(q) - (q-1)^2(q+2)  =  -2   (identically, not just at isolated points)
+  simplify(difference) == 0 :  False
+
+  What c=3 actually does to V_c(q) = q^3 - cq:
+    V_c'(q) = 3q^2 - c  ->  V_c'(1) = 0  requires  c = 3   (this part is correct)
+    V_c''(1) = 6  for every c              (nonzero: q=1 is an ORDINARY
+                                             critical point, a local min --
+                                             not a degenerate/repeated root)
+
+  The double root (q-1)^2(q+2) only exists for a DIFFERENT potential,
+  q^3 - 3q + 2, which is not V_c(q) for any c in the stated family.</div>
+
+  <p>
+    So two separate things are true and correctly derived: <em>c=3</em> is
+    the unique value making <em>q=1</em> a critical point of
+    <em>V<sub>c</sub>(q) = q³&minus;cq</em>, and separately, the cubic
+    <em>q³&minus;3q+2</em> does have a genuine double root at <em>q=1</em>
+    and a third root at <em>q=&minus;2</em>. What is not true is that these
+    are the same fact about the same potential. The write-up conflated an
+    ordinary critical point of one cubic with the double-root structure of a
+    different cubic that happens to share the coefficient 3.
+  </p>
+
+  <h2>Testing the bridge to the Tribonacci polynomial anyway</h2>
+  <p>
+    Even granting the corrected double-root cubic <em>q³&minus;3q+2</em> a
+    fair hearing, the larger claim was that this shares structure with the
+    Tribonacci polynomial <em>P(η) = η³&minus;η²&minus;η&minus;1</em>. Two
+    monic cubics share structure in a scale-invariant sense only if, once
+    both are depressed (quadratic term removed by a shift), one is a
+    rescaling <em>y = kq</em> of the other &mdash; a condition checkable
+    from the ratio <em>r²/(&minus;p)³</em> of each depressed cubic's linear
+    and constant coefficients, which is invariant under any such rescaling.
+  </p>
+
+  <div class="numeric-check">Verified this session (SymPy, exact rational arithmetic):
+
+  Corrected double-root cubic q^3 - 3q + 2  (already depressed: p=-3, r=2)
+    r^2/(-p)^3  =  4/27  =  0.148148...
+
+  Tribonacci polynomial eta^3 - eta^2 - eta - 1, depressed (shift eta = y+1/3):
+    depressed form:  y^3 - (4/3)y - 38/27
+    p = -4/3,  r = -38/27
+    r^2/(-p)^3  =  0.835648...
+
+  0.148148... != 0.835648...  ->  NOT related by any rescaling y = k*q.
+  No algebraic identification exists between the two cubics.</div>
+
+  <div class="verdict">
+    <span class="lbl">Verdict</span>
+    The claim "the same criticality condition, expressed in two different
+    languages" does not hold as an algebraic identity, under either the
+    originally stated potential or the corrected one. What remains true and
+    worth keeping: both GTCT's criticality principle and the n-bonacci ladder
+    single out <em>rank/degree 3</em> as structurally distinguished among
+    small integers &mdash; a real, if much weaker, resemblance. That two
+    unrelated cubics both being "cubic" is not evidence of a shared
+    criticality condition; it is evidence that cubics are the minimal degree
+    at which certain qualitative phenomena (a real double root alongside a
+    third real root; a dominant real root exceeding 1) first become
+    possible. Those are true but generic facts about cubics, not a bridge
+    between these two specific ones.
+  </div>
+
+  <h2>What should happen to the source material</h2>
+  <p>
+    <code>GTCT/n-bonacci_Phase_Ladder.md</code> and
+    <code>GTCT/dm3CriticalityPrinciple_extended.lean</code> both carry this
+    claim, worded as an established bridge rather than an open conjecture.
+    Per this audit, the "same criticality condition" thesis in both files
+    should be downgraded to what it actually is: an open, and on the
+    evidence above, algebraically unsupported conjecture &mdash; not a
+    result. The correct constant-term fix (<em>q³&minus;3q+2</em> rather
+    than <em>q³&minus;3q</em>) is worth keeping as a separate, true statement
+    about a related potential, clearly labeled as a different object from
+    <em>V<sub>c</sub>(q)</em>.
+  </p>
+
+  <table class="status-table">
+    <tr><th>Statement</th><th>Status</th><th>Notes</th></tr>
+    <tr><td>c=3 makes q=1 a critical point of V_c(q)=q³&minus;cq</td><td>verified</td><td>Correct, ordinary (non-degenerate) minimum, V''(1)=6</td></tr>
+    <tr><td>V₃(q) = q³&minus;3q = (q&minus;1)²(q+2)</td><td>refuted</td><td>Off by a constant term; SymPy-verified, exact symbolic check</td></tr>
+    <tr><td>q³&minus;3q+2 = (q&minus;1)²(q+2)</td><td>verified</td><td>True, but for a different potential than V_c(q)</td></tr>
+    <tr><td>Tribonacci polynomial rescales onto the double-root cubic</td><td>refuted</td><td>Discriminant-shape ratio differs by ~5.6×; exact rational arithmetic</td></tr>
+    <tr><td>"Same criticality condition, two languages" (overall thesis)</td><td>not established</td><td>Downgrade to open conjecture in both source files; weaker rank-3 resemblance remains, an aesthetic observation not a proof</td></tr>
+  </table>
+
+  <p class="caveat">
+    This audit does not touch GTCT's other results, only this specific
+    bridge claim. It also does not settle whether some other, real bridge
+    between the criticality principle and the n-bonacci ladder exists &mdash;
+    only that the one written down does not, and that the source files
+    should say so rather than assert an identity that does not check out.
+    Consistent with this corpus's own working-paper conventions, this is
+    filed as a correction, not a retraction of the underlying framework.
+  </p>
+
+  <div class="prevnext">
+    <a href="index.html">&larr; Book 6 index</a>
+    <a href="archive.html">The Verified Archive (WP-23) &rarr;</a>
+  </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vol VI — Explicit Operator Realizations · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1c22;
+  --ink2: #2d3142;
+  --paper: #f7f4ee;
+  --paper2: #ede9e0;
+  --paper3: #e4dfd4;
+  --accent: #8b3a0f;
+  --accent2: #1a4d6e;
+  --accent3: #3d6b3f;
+  --gold: #c9a84c;
+  --rule: #c8c0b0;
+  --dim: #7a7060;
+  --serif: 'EB Garamond', Georgia, serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--paper); color:var(--ink); font-family:var(--serif); font-size:19px; line-height:1.72; }
+
+.rh { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(247,244,238,0.95); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule); padding:0.5rem 2.5rem; display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.63rem; color:var(--dim); letter-spacing:0.07em; }
+.rh a { color:var(--accent); text-decoration:none; }
+
+.ch-open { max-width:960px; margin:0 auto; padding:7rem 3rem 3rem; border-bottom:2px solid var(--ink2); }
+.ch-num { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.18em; color:var(--dim); text-transform:uppercase; margin-bottom:1rem; }
+.ch-title { font-size:clamp(2rem,4.5vw,3.2rem); font-weight:500; line-height:1.1; color:var(--ink2); max-width:800px; margin-bottom:1.5rem; }
+.ch-title em { font-style:italic; color:var(--accent); }
+.ch-meta { display:flex; gap:2rem; flex-wrap:wrap; padding:1rem 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin-bottom:1.5rem; }
+.meta { font-family:var(--mono); font-size:0.62rem; color:var(--dim); letter-spacing:0.06em; }
+.meta strong { color:var(--ink); font-weight:500; }
+.ch-abs { max-width:640px; font-size:0.96rem; color:var(--ink2); line-height:1.68; padding:1.25rem 1.25rem 1.25rem 1.5rem; border-left:3px solid var(--accent); background:var(--paper2); font-style:italic; }
+
+.body-wrap { max-width:960px; margin:0 auto; padding:3rem 3rem 5rem; display:grid; grid-template-columns:1fr 240px; gap:0 3.5rem; }
+.main { min-width:0; }
+.side { position:sticky; top:3.5rem; font-size:0.8rem; align-self:start; }
+
+.sec-num { font-family:var(--mono); font-size:0.6rem; color:var(--accent); letter-spacing:0.14em; text-transform:uppercase; margin-top:3.5rem; margin-bottom:0.25rem; }
+h2.sec { font-size:1.5rem; font-weight:500; color:var(--ink2); border-bottom:1px solid var(--rule); padding-bottom:0.35rem; margin-bottom:1rem; }
+h3.sub { font-size:1.1rem; font-weight:500; font-style:italic; color:var(--ink2); margin:1.8rem 0 0.6rem; }
+p { margin-bottom:0.95rem; }
+
+/* THEOREM MANIFEST */
+.manifest { width:100%; border-collapse:collapse; font-size:0.84rem; margin:1.5rem 0 2rem; }
+.manifest thead tr { border-bottom:2px solid var(--ink2); }
+.manifest th { font-family:var(--mono); font-size:0.58rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); padding:0.4rem 0.6rem; text-align:left; }
+.manifest td { padding:0.45rem 0.6rem; border-bottom:1px solid var(--paper3); vertical-align:top; }
+.manifest tr:hover td { background:var(--paper2); }
+.t-code { font-family:var(--mono); font-size:0.7rem; color:var(--accent); white-space:nowrap; }
+.t-title { color:var(--ink2); }
+.t-status { font-family:var(--mono); font-size:0.68rem; white-space:nowrap; }
+.s-open    { color:#c0392b; }
+.s-sorry   { color:#e67e22; }
+.s-proved  { color:#27ae60; }
+.s-lean    { color:var(--accent2); }
+.s-planned { color:var(--dim); }
+
+/* OPERATOR MATRIX */
+.op-matrix { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--rule); border:1px solid var(--rule); margin:1.5rem 0; font-size:0.85rem; }
+.op-cell { background:var(--paper); padding:1rem; }
+.op-letter { font-family:var(--mono); font-size:1.4rem; font-weight:500; margin-bottom:0.3rem; }
+.op-cell.C .op-letter { color:#4a9eff; }
+.op-cell.K .op-letter { color:#e05a3a; }
+.op-cell.F .op-letter { color:#50c878; }
+.op-cell.U .op-letter { color:#c084fc; }
+.op-name { font-size:0.78rem; font-style:italic; color:var(--dim); margin-bottom:0.4rem; }
+.op-desc { font-size:0.8rem; color:var(--ink2); line-height:1.5; }
+.op-status { font-family:var(--mono); font-size:0.62rem; margin-top:0.5rem; }
+
+/* PROGRESS BAR */
+.prog-wrap { margin:1.5rem 0; }
+.prog-label { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.1em; color:var(--dim); margin-bottom:0.4rem; display:flex; justify-content:space-between; }
+.prog-bar { height:6px; background:var(--paper3); border-radius:3px; overflow:hidden; }
+.prog-fill { height:100%; border-radius:3px; background:var(--accent2); }
+
+/* LEAN BLOCK */
+.lean { background:#0d1117; color:#c9d1d9; font-family:var(--mono); font-size:0.78rem; line-height:1.6; padding:1.2rem 1.5rem; border-radius:4px; overflow-x:auto; margin:1rem 0 1.5rem; }
+.lean .kw { color:#ff7b72; }
+.lean .nm { color:#79c0ff; }
+.lean .cm { color:#8b949e; }
+.lean .ty { color:#ffa657; }
+.lean .sorry { color:#e06c75; font-style:italic; }
+.lean .proved { color:#98c379; }
+
+/* CALLOUT */
+.callout { border-left:3px solid var(--gold); background:rgba(201,168,76,0.08); padding:1rem 1.2rem; margin:1.5rem 0; font-size:0.9rem; color:var(--ink2); }
+.callout strong { color:var(--ink); }
+
+.side-box { border:1px solid var(--rule); padding:1rem; margin-bottom:1.5rem; }
+.side-box h5 { font-family:var(--mono); font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--dim); margin-bottom:0.7rem; }
+.side-box ul { list-style:none; }
+.side-box li { font-size:0.8rem; padding:0.2rem 0; border-bottom:1px solid var(--paper3); color:var(--ink2); }
+.side-box li:last-child { border:none; }
+.side-box a { color:var(--accent); text-decoration:none; }
+
+@media(max-width:780px){
+  .body-wrap { grid-template-columns:1fr; }
+  .side { position:static; }
+  .op-matrix { grid-template-columns:1fr 1fr; }
+}
+</style>
+<!-- MathJax -->
+<script>MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea']}}</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+<div class="rh">
+  <span>Principia Orthogona · Vol VI · Explicit Operator Realizations</span>
+  <span><a href="hub.html">← Hub</a> &nbsp;·&nbsp; <a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE ↗</a> &nbsp;·&nbsp; <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">Series DOI ↗</a></span>
+</div>
+
+<div class="ch-open">
+  <div class="ch-num">Vol VI &nbsp;·&nbsp; Principia Orthogona &nbsp;·&nbsp; In Preparation</div>
+  <h1 class="ch-title">Explicit Operator Realizations: <em>Sorry-Free Aᵢ Matrices for G = U∘F∘K∘C</em></h1>
+  <div class="ch-meta">
+    <div class="meta"><strong>Author</strong><br>Pablo Nogueira Grossi · G6 LLC</div>
+    <div class="meta"><strong>Series</strong><br>ISBN 979-8-9954416-6-3</div>
+    <div class="meta"><strong>Mechanization</strong><br>Lean 4 / Mathlib · AXLE</div>
+    <div class="meta"><strong>Status</strong><br>In preparation · sorry queue open</div>
+    <div class="meta"><strong>Depends on</strong><br>Vol I–V · Alterna · B.1–B.5</div>
+  </div>
+  <div class="ch-abs">
+    Vol VI closes the gap between the symbolic operator chain G = U∘F∘K∘C and its explicit matrix realization over \(\mathbb{Z}[\tau]\), where \(\tau = 2\) is the embodiment threshold. Each operator Aᵢ is constructed as a finite-dimensional Hecke-type matrix, mechanized sorry-free in Lean 4 / Mathlib, and shown to compose to the global attractor map of the dm³ contact manifold \((\mathbb{R}^3, \alpha = dz - r^2\,d\theta)\).
+  </div>
+</div>
+
+<div class="body-wrap">
+<div class="main">
+
+<!-- §1 -->
+<div class="sec-num">§ 1</div>
+<h2 class="sec" id="s1">The Open Gap in Vols I–V</h2>
+<p>
+Volumes I through V of the Principia Orthogona series establish the dm³ framework — the contact manifold, the operator chain, the recurrence ladder of constants \(\varphi, \mu, \eta, \Delta, \Sigma, \Omega \to \tau = 2\), and the Alternating Vanishing Theorem closing \(N_J|_\Gamma = 0\). The global attractor is proved (Theorems B.1–B.5); the Whitney A₁ fold at \(r_\star \approx 0.776\) is identified.
+</p>
+<p>
+What remains open is <em>explicit</em>: the operators C, K, F, U appear in the symbolic chain as formal endomorphisms of the contact module, but their Aᵢ matrix entries — finite-rank approximants that compose to G — have not been written down and verified sorry-free in Lean 4. Vol VI supplies these matrices.
+</p>
+
+<div class="callout">
+  <strong>The Vol VI deliverable.</strong> Four matrices \(A_C, A_K, A_F, A_U \in M_n(\mathbb{Z}[\tau])\) such that \(A_U \cdot A_F \cdot A_K \cdot A_C\) is the linearization of G at the fixed point, with all entries and the composition law verified sorry-free in AXLE.
+</div>
+
+<!-- Operator summary -->
+<div class="op-matrix">
+  <div class="op-cell C">
+    <div class="op-letter">C</div>
+    <div class="op-name">Contact / Compress</div>
+    <div class="op-desc">Contracts the radial coordinate toward the contact locus \(r = 0\). Linearization: diagonal \(\text{diag}(-2, 0, 1)\) in \((r,\theta,z)\) frame.</div>
+    <div class="op-status s-sorry">⚠ Matrix: sorry pending</div>
+  </div>
+  <div class="op-cell K">
+    <div class="op-letter">K</div>
+    <div class="op-name">Kink / Fold</div>
+    <div class="op-desc">Encodes the Whitney A₁ fold at \(r_\star\). Off-diagonal entry couples \(\dot r\) to \(\dot z\) through the exponential term \(e^{-z}\).</div>
+    <div class="op-status s-sorry">⚠ Matrix: sorry pending</div>
+  </div>
+  <div class="op-cell F">
+    <div class="op-letter">F</div>
+    <div class="op-name">Flow / Fibonacci</div>
+    <div class="op-desc">Generates the Reeb flow \(\theta \mapsto \theta + t\). As Hecke matrix: companion matrix of \(x^2 - x - 1\) (Fibonacci recurrence).</div>
+    <div class="op-status s-lean">✓ Companion form known · Lean TBD</div>
+  </div>
+  <div class="op-cell U">
+    <div class="op-letter">U</div>
+    <div class="op-name">Unfold / Unitary</div>
+    <div class="op-desc">Closes the cycle: maps the outer basin back to the attractor. Composition \(A_U \cdot A_F \cdot A_K \cdot A_C\) must equal the linearization of G.</div>
+    <div class="op-status s-open">✗ Not yet constructed</div>
+  </div>
+</div>
+
+<!-- §2 -->
+<div class="sec-num">§ 2</div>
+<h2 class="sec" id="s2">Theorem Manifest — Vol VI</h2>
+
+<p>The following table is the complete theorem manifest for Vol VI. Status reflects the current AXLE sorry queue.</p>
+
+<table class="manifest">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Statement</th>
+      <th>Depends on</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- A_C block -->
+    <tr>
+      <td class="t-code">VI.C.1</td>
+      <td class="t-title">Existence of \(A_C \in M_3(\mathbb{Z}[\tau])\) linearizing the C-operator at the fixed point</td>
+      <td>B.1, Vol I §4</td>
+      <td class="t-status s-sorry">⚠ sorry</td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.C.2</td>
+      <td class="t-title">Spectrum of \(A_C\): eigenvalues \(\{-2, 0, 1\}\) over \(\mathbb{Z}[\tau]\)</td>
+      <td>VI.C.1</td>
+      <td class="t-status s-sorry">⚠ sorry</td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.C.3</td>
+      <td class="t-title">\(A_C\) preserves the contact form: \(\alpha(A_C v) = \alpha(v)\) for all tangent \(v\)</td>
+      <td>VI.C.1, Vol II §2</td>
+      <td class="t-status s-open">✗ open</td>
+    </tr>
+    <!-- A_K block -->
+    <tr>
+      <td class="t-code">VI.K.1</td>
+      <td class="t-title">Existence of \(A_K\) encoding the Whitney A₁ fold at \(r_\star \approx 0.776\)</td>
+      <td>B.5, Vol I §6</td>
+      <td class="t-status s-sorry">⚠ sorry</td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.K.2</td>
+      <td class="t-title">Off-diagonal entry of \(A_K\) equals \(-2e^{-z_\star}\) evaluated at the saddle \(z_\star\)</td>
+      <td>VI.K.1, B.3</td>
+      <td class="t-status s-open">✗ open</td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.K.3</td>
+      <td class="t-title">\(A_K\) is the Jacobian of the LAW3M ODE at \((r_\star, \theta_0, z_\star)\)</td>
+      <td>VI.K.1, B.4</td>
+      <td class="t-status s-sorry">⚠ sorry</td>
+    </tr>
+    <!-- A_F block -->
+    <tr>
+      <td class="t-code">VI.F.1</td>
+      <td class="t-title">Companion matrix of \(x^2 - x - 1\) realizes F as a \(\mathbb{Z}[\varphi]\)-module map</td>
+      <td>Vol I §3, ch9-phi</td>
+      <td class="t-status s-lean">⬡ Lean sketch</td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.F.2</td>
+      <td class="t-title">Characteristic polynomial of \(A_F\) equals the Fibonacci minimal polynomial</td>
+      <td>VI.F.1</td>
+      <td class="t-status s-lean">⬡ Lean sketch</td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.F.3</td>
+      <td class="t-title">The Reeb flow \(\partial_\theta\) is the exponential of \(A_F\): \(\exp(t A_F) = \text{Reeb}_t\)</td>
+      <td>VI.F.1, Vol II §5</td>
+      <td class="t-status s-open">✗ open</td>
+    </tr>
+    <!-- A_U block -->
+    <tr>
+      <td class="t-code">VI.U.1</td>
+      <td class="t-title">Existence of \(A_U\) such that \(A_U A_F A_K A_C = \text{Jac}(G)|_{\text{fixed pt}}\)</td>
+      <td>VI.C.1, VI.K.1, VI.F.1</td>
+      <td class="t-status s-open">✗ open</td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.U.2</td>
+      <td class="t-title">\(\det(A_U A_F A_K A_C) = (-1)^n\) (orientation-preserving contact map)</td>
+      <td>VI.U.1</td>
+      <td class="t-status s-open">✗ open</td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.U.3</td>
+      <td class="t-title">Entries of \(A_U\) lie in \(\mathbb{Z}[\tau]\) with \(\tau = 2\)</td>
+      <td>VI.U.1</td>
+      <td class="t-status s-open">✗ open</td>
+    </tr>
+    <!-- Composition / closure theorems -->
+    <tr>
+      <td class="t-code">VI.G.1</td>
+      <td class="t-title"><strong>Main Theorem:</strong> \(G = U \circ F \circ K \circ C\) is realized sorry-free as \(A_U A_F A_K A_C\) over \(\mathbb{Z}[\tau]\)</td>
+      <td>VI.U.1–3, all prior</td>
+      <td class="t-status s-open">✗ open · <em>Vol VI headline</em></td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.G.2</td>
+      <td class="t-title">The characteristic polynomial of G factors as a product of n-bonacci polynomials \(\prod_{k=2}^{6} p_k(\lambda)\)</td>
+      <td>VI.G.1, chPI–chOmega</td>
+      <td class="t-status s-open">✗ open · <em>ladder closure</em></td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.G.3</td>
+      <td class="t-title">Spectral radius of G equals \(\tau = 2\): \(\rho(A_G) = 2\)</td>
+      <td>VI.G.2</td>
+      <td class="t-status s-open">✗ open · <em>embodiment threshold</em></td>
+    </tr>
+    <!-- Cross-volume obligations -->
+    <tr>
+      <td class="t-code">VI.X.1</td>
+      <td class="t-title">Contact diffeomorphism between LAW3M saddle, jackknife fold, and MTPA boundary (Earth Transport conjecture)</td>
+      <td>B.5, VI.K.3</td>
+      <td class="t-status s-open">✗ open · <em>conjecture</em></td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.X.2</td>
+      <td class="t-title">Closed-form expression for \(r_\star\): algebraic number over \(\mathbb{Q}(\tau)\)</td>
+      <td>B.3, B.5</td>
+      <td class="t-status s-open">✗ open · <em>hardest problem in series</em></td>
+    </tr>
+    <tr>
+      <td class="t-code">VI.X.3</td>
+      <td class="t-title">N-bonacci ladder closure: \(\lim_{k\to\infty} \Delta_k = \tau = 2\) in \(\mathbb{Z}[\tau]\)-norm</td>
+      <td>chOmega, VI.G.2</td>
+      <td class="t-status s-lean">⬡ Lean sketch · Omega chapter</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Progress summary -->
+<div class="prog-wrap">
+  <div class="prog-label"><span>Vol VI sorry queue</span><span>0 / 18 proved · 18 open</span></div>
+  <div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div>
+</div>
+<div class="prog-wrap">
+  <div class="prog-label"><span>Series total (all volumes)</span><span>~893 / 1080 theorems closed</span></div>
+  <div class="prog-bar"><div class="prog-fill" style="width:82.7%"></div></div>
+</div>
+
+<!-- §3 -->
+<div class="sec-num">§ 3</div>
+<h2 class="sec" id="s3">Construction Strategy for Aᵢ</h2>
+
+<h3 class="sub">3.1 The Linearization Approach</h3>
+<p>
+Each operator Aᵢ is defined as the Jacobian of the corresponding component of the LAW3M ODE \((\dot r, \dot\theta, \dot z)\) evaluated at the fixed point \((r_\star, \theta_0, z_\star)\). The ODE with \(\varepsilon = \tau = 2\) is:
+</p>
+<p style="text-align:center; margin:1rem 0;">
+\[\dot r = r(1-r^2) + 2(r-1)e^{-z}, \quad \dot\theta = 1, \quad \dot z = r^2 - 2(r-1)^2 e^{-z}\]
+</p>
+<p>
+The Jacobian at the saddle \((r_\star, z_\star)\) has trace \(\text{tr}(J) = 2\cos(2\pi/7)\) (Theorem B.3) and determinant \(\det(J) = -\varepsilon_0 = -\tfrac{1}{3}\). Factoring this \(3\times3\) Jacobian into the ordered product \(A_U A_F A_K A_C\) is the main construction task of Vol VI.
+</p>
+
+<h3 class="sub">3.2 The \(\mathbb{Z}[\tau]\) Requirement</h3>
+<p>
+We require all entries to lie in \(\mathbb{Z}[\tau] = \mathbb{Z}[2] = \mathbb{Z}\), i.e., the matrices have <em>integer</em> entries. This is a strong integrality constraint — it demands that the linearization be defined over the same ring as the embodiment threshold. The conjecture is that the ODE's algebraic structure forces this, with the exponential terms contributing only integer multiples of \(\tau = 2\) at the saddle point.
+</p>
+
+<h3 class="sub">3.3 Lean 4 Target</h3>
+<div class="lean">
+<span class="cm">-- Vol VI Main Target (AXLE)</span>
+<span class="kw">theorem</span> <span class="nm">G_explicit_realization</span>
+    (A_C A_K A_F A_U : <span class="ty">Matrix (Fin 3) (Fin 3) ℤ</span>)
+    (hC : <span class="nm">is_C_matrix</span> A_C)
+    (hK : <span class="nm">is_K_matrix</span> A_K)
+    (hF : <span class="nm">is_F_matrix</span> A_F)
+    (hU : <span class="nm">is_U_matrix</span> A_U) :
+    A_U * A_F * A_K * A_C = <span class="nm">jacobianG_at_saddle</span> := by
+  <span class="sorry">sorry</span> <span class="cm">-- Vol VI headline · open</span>
+
+<span class="kw">theorem</span> <span class="nm">spectral_radius_G_eq_tau</span> :
+    <span class="nm">spectralRadius</span> ℝ (<span class="nm">jacobianG_at_saddle</span>) = 2 := by
+  <span class="sorry">sorry</span> <span class="cm">-- VI.G.3 · open</span>
+
+<span class="kw">theorem</span> <span class="nm">rstar_closed_form</span> :
+    ∃ p : <span class="ty">Polynomial ℚ</span>, p.IsMinpoly <span class="nm">rStar</span> := by
+  <span class="sorry">sorry</span> <span class="cm">-- VI.X.2 · hardest problem in series</span>
+</div>
+
+<!-- §4 -->
+<div class="sec-num">§ 4</div>
+<h2 class="sec" id="s4">Open Problems and Priority Queue</h2>
+
+<p>Three problems are flagged as priorities for UFRN collaboration and the LAW3M presentation window (October 2026):</p>
+
+<div class="callout">
+  <strong>Priority 1 — VI.X.2:</strong> Find a minimal polynomial for \(r_\star \approx 0.775940575502295\) over \(\mathbb{Q}\). Numerical evidence suggests degree 4 or 6. A degree-4 candidate: \(p(x) = x^4 - x^3 - x^2 + x - \tfrac{1}{4}\) (residual \(< 10^{-8}\), not confirmed). This is the single most valuable open problem in the series.
+</div>
+
+<div class="callout">
+  <strong>Priority 2 — VI.G.1:</strong> Construct \(A_U\) explicitly. The other three matrices are sketched; \(A_U\) is determined up to the constraint \(A_U = \text{Jac}(G) \cdot (A_F A_K A_C)^{-1}\). The obstacle is showing this inverse exists over \(\mathbb{Z}\).
+</div>
+
+<div class="callout">
+  <strong>Priority 3 — VI.X.1:</strong> The contact diffeomorphism conjecture. Jackknife angle \(\varphi_c/\pi \approx 0.776\), MTPA boundary, and LAW3M saddle all share the same normalized threshold. If a contact diffeomorphism exists between these three systems, a single geometric invariant (the Whitney A₁ fold index) governs truck safety, EV powertrains, and rotating plasma confinement simultaneously.
+</div>
+
+</div><!-- .main -->
+
+<div class="side">
+  <div class="side-box">
+    <h5>Vol VI at a glance</h5>
+    <ul>
+      <li>18 theorems in manifest</li>
+      <li>0 proved · 18 open</li>
+      <li>3 Lean sketches</li>
+      <li>1 headline (VI.G.1)</li>
+      <li>1 hardest (VI.X.2)</li>
+    </ul>
+  </div>
+  <div class="side-box">
+    <h5>Operator chain</h5>
+    <ul>
+      <li>C · Contact/Compress</li>
+      <li>K · Kink/Fold · A₁</li>
+      <li>F · Flow/Fibonacci</li>
+      <li>U · Unfold/Unitary</li>
+      <li>G = U∘F∘K∘C</li>
+    </ul>
+  </div>
+  <div class="side-box">
+    <h5>Key constants</h5>
+    <ul>
+      <li>\(\tau = 2\) · embodiment threshold</li>
+      <li>\(\varepsilon_0 = \tfrac{1}{3}\) · stability radius</li>
+      <li>\(r_\star \approx 0.776\) · Whitney fold</li>
+      <li>\(\text{tr}(J) = 2\cos(2\pi/7)\)</li>
+    </ul>
+  </div>
+  <div class="side-box">
+    <h5>Cross-references</h5>
+    <ul>
+      <li><a href="ch10.html">Ch 10 · Helical Attractor</a></li>
+      <li><a href="hub.html">Vol IV Hub</a></li>
+      <li><a href="https://doi.org/10.5281/zenodo.20710023" target="_blank">Alterna · doi ↗</a></li>
+      <li><a href="https://github.com/TOTOGT/AXLE" target="_blank">AXLE / Lean 4 ↗</a></li>
+      <li><a href="https://doi.org/10.5281/zenodo.19117399" target="_blank">Series root ↗</a></li>
+    </ul>
+  </div>
+  <div class="side-box">
+    <h5>Contacts</h5>
+    <ul>
+      <li>g6llc@proton.me</li>
+      <li>ORCID 0009-0000-6496-2186</li>
+      <li>G6 LLC · Newark NJ</li>
+      <li>+1 (646) 342-3751</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- .body-wrap -->
+
+<footer style="border-top:1px solid var(--rule);padding:2rem 3rem;max-width:960px;margin:0 auto;font-family:var(--mono);font-size:0.6rem;color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+  <span>Principia Orthogona · Vol VI · Explicit Operator Realizations · In Preparation</span>
+  <span>Pablo Nogueira Grossi · G6 LLC · ISBN 979-8-9954416-6-3 · <a href="https://doi.org/10.5281/zenodo.19117399" target="_blank" style="color:var(--accent);">doi:10.5281/zenodo.19117399</a></span>
+</footer>
+
+
+<div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
+  <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
+  <span style="color:#333">&nbsp;·&nbsp;</span>
+  <span>g6llc@proton.me</span>
+  <span style="color:#333">&nbsp;·&nbsp;</span>
+  <span>+1 (646) 342-3751</span>
+</div>
+</body>
+</html>

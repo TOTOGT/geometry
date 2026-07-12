@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>No-Go-as-a-Service — Principia Orthogona, Book 6</title>
+<style>
+  :root { --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Georgia, 'Times New Roman', serif; background: var(--cream); color: var(--navy); }
+  main { max-width: 760px; margin: 0 auto; padding: 64px 40px 80px; }
+  .eyebrow { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+  .op-chain { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; margin-bottom: 44px; }
+  .op-chain .sep { opacity: 0.5; }
+  .op-chain .active { color: var(--gold); font-weight: bold; }
+  .symbol-block { text-align: center; margin: 8px 0 28px; }
+  .symbol-block .glyph { font-size: 26px; line-height: 1.3; color: var(--navy); font-style: italic; }
+  .symbol-block .label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: #9ca3af; margin-top: 10px; }
+  h1 { font-size: 34px; font-weight: normal; text-align: center; margin: 0 0 6px; line-height: 1.25; }
+  .value-line { text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13.5px; color: #6b7280; margin-bottom: 28px; }
+  .gold-rule { height: 1px; width: 120px; margin: 0 auto 32px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  h2 { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); border-bottom: 1px solid var(--smoke); padding-bottom: 8px; margin: 44px 0 16px; }
+  p { font-size: 16.5px; line-height: 1.75; margin: 0 0 20px; }
+  .eqn { text-align: center; font-style: italic; font-size: 18px; margin: 22px 0; color: var(--navy); }
+  table.status-table { width: 100%; border-collapse: collapse; margin: 16px 0 28px; font-size: 14.5px; }
+  table.status-table th, table.status-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--smoke); }
+  table.status-table th { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #9ca3af; }
+  .numeric-check { background: var(--smoke); border-radius: 4px; padding: 16px 20px; font-family: 'SF Mono', Menlo, monospace; font-size: 13px; line-height: 1.7; margin: 20px 0 28px; overflow-x: auto; white-space: pre; }
+  .caveat { font-size: 15px; line-height: 1.7; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 18px; margin: 24px 0 32px; }
+  .product-box { background: #eef6f0; border: 1px solid #b9dcc4; border-radius: 4px; padding: 18px 22px; margin: 20px 0 28px; font-size: 15.5px; line-height: 1.7; }
+  .product-box .lbl { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #2a7a4a; display: block; margin-bottom: 8px; }
+  .prevnext { display: flex; justify-content: space-between; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; padding-top: 24px; margin-top: 44px; border-top: 1px solid var(--smoke); }
+  .prevnext a { color: inherit; text-decoration: none; }
+  .prevnext a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+<main>
+
+  <div class="eyebrow">Principia Orthogona &nbsp;·&nbsp; Book 6 &nbsp;·&nbsp; Working Papers · Series Notes &amp; Applications</div>
+
+  <div class="op-chain">
+    <span>WP-14 EMMEs</span>
+    <span class="sep">→</span>
+    <span class="active">WP-25 No-Go-as-a-Service</span>
+    <span class="sep">→</span>
+    <span class="sep">Ch DE-1 The Cosmic No-Go</span>
+  </div>
+
+  <div class="symbol-block">
+    <div class="glyph">GET /nogo?limit=&minus;2 &nbsp;&rarr;&nbsp; deSitter_possible: false</div>
+    <div class="label">the theorem, called like a function</div>
+  </div>
+
+  <h1>No-Go-as-a-Service</h1>
+  <div class="value-line">the contact no-go theorem's parameter, served behind an API — product spec and working prototype</div>
+
+  <div class="gold-rule"></div>
+
+  <p>
+    Book 6's job, per its own charter, is finding uses and turning ideas
+    into products. The Cosmic No-Go chapter (Ch DE-1) proves something with
+    a genuinely portable shape: given a system's transverse stability rate,
+    a locked identity (<em>c = H&prime;</em>) forces a hard exclusion on
+    what the system's expansion behavior can do. That shape &mdash;
+    <em>feed in a measured rate, get back a hard yes/no on what's excluded</em>
+    &mdash; is exactly the shape of a useful API call. This working paper is
+    both the product spec and a working prototype of it.
+  </p>
+
+  <h2>What actually ships</h2>
+  <p>
+    Four endpoints, each a thin numeric wrapper around a specific theorem in
+    <code>HelixToyModel.lean</code>, not a black box:
+  </p>
+  <table class="status-table">
+    <tr><th>Route</th><th>Backing theorem</th><th>Returns</th></tr>
+    <tr><td><code>/trichotomy?z=</code></td><td><code>neutral_line_trichotomy</code> — fully proved, no sorry</td><td>repelling / neutral / attracting classification</td></tr>
+    <tr><td><code>/epsilon?eps0=&z0=&t=</code></td><td><code>epsSol</code> — closed form (issue #H1)</td><td>the transverse deviation ε(t)</td></tr>
+    <tr><td><code>/lyapunov?eps0=&z0=&t=</code></td><td><code>lyapunov_exponent_eq</code> — issue #H2</td><td>numerical Lyapunov rate, converging to &minus;2</td></tr>
+    <tr><td><code>/nogo?limit=</code></td><td><code>nogo_attractor_not_deSitter</code> + <code>attractor_excludes_deSitter</code> — issue #H3/#H3b</td><td>whether a claimed transverse-rate limit excludes any positive finite (de Sitter) expansion rate</td></tr>
+  </table>
+
+  <div class="numeric-check">Verified this session (Flask test client, no server round-trip skipped):
+
+  /trichotomy?z=1.5   -> transRate=-1.5537...  classification=attracting
+  /trichotomy?z=-1.5  -> transRate=+6.9634...  classification=repelling
+  /trichotomy?z=0     -> transRate=0.0         classification=neutral
+
+  /lyapunov numerical convergence to the proved limit -2, eps0=0.01, z0=0:
+    t=10        -> rate=-1.80000908  (error 2.0e-1)
+    t=50        -> rate=-1.96000000  (error 4.0e-2)
+    t=500       -> rate=-1.99600000  (error 4.0e-3)
+    t=50000     -> rate=-1.99996000  (error 4.0e-5)
+    t=1e7       -> rate=-1.99999980  (error 2.0e-7)
+  Monotone convergence across 6 orders of magnitude in t -- not a single
+  lucky sample.
+
+  /nogo?limit=-2   -> deSitter_possible=false (genuine attractor, excluded)
+  /nogo?limit=0.5  -> deSitter_possible="not excluded by this result"
+                      (theorem's precondition, limit<0, not met -- correctly
+                      declines to overclaim in the other direction)</div>
+
+  <p>
+    One real bug was caught and fixed in building this: the naive
+    implementation of <code>/lyapunov</code> computed ε(t) directly and then
+    took its log, which underflows to exactly <code>0.0</code> in floating
+    point once <em>t</em> is more than a few hundred, throwing a
+    <code>math domain error</code> on <code>log(0)</code>. The fix computes
+    <em>log|ε(t)/ε0|</em> directly from the closed-form exponent
+    (<em>&minus;2t + 2e<sup>&minus;z0</sup>(1&minus;e<sup>&minus;t</sup>)</em>)
+    instead of exponentiating and then re-taking the log &mdash; the kind of
+    numerical-stability bug that only shows up when a proof gets turned into
+    running code, not when it stays a theorem statement.
+  </p>
+
+  <h2>The product angle</h2>
+  <div class="product-box">
+    <span class="lbl">What it's for</span>
+    A researcher or engineer with a system exhibiting some measured or
+    modeled transverse contraction rate can query whether a target
+    steady-state behavior is structurally excluded &mdash; without needing
+    to read the contact-geometry paper first. The API is the theorem,
+    packaged as a single HTTP call with a plain-language verdict attached.
+    This is the same "AXLE as a service" model already running for the
+    differential-equations working papers (WP-21/WP-22), applied to a
+    result that happens to produce a crisp binary answer rather than a
+    numeric estimate &mdash; a better shape for metering per call.
+  </div>
+  <p>
+    Fit with existing distribution: the membership tiers already on Gumroad
+    ($25&ndash;$250/year, per-repo access) are built for humans reading
+    chapters. An API is a different buyer &mdash; a script, not a person
+    &mdash; and the natural model is metered or flat-fee API-key access
+    layered on top of the existing tiers, not a replacement for them. No
+    pricing number is committed here; that is a decision for after the
+    prototype has real callers, not before.
+  </p>
+
+  <h2>What this chapter does not claim</h2>
+  <p class="caveat">
+    The underlying Lean file still carries three tracked sorries (#H1, #H2,
+    #H3/#H3b) &mdash; the closed-form ODE check, the Lyapunov limit, and the
+    no-go integral are stated precisely but not machine-verified in Lean
+    yet, only numerically verified in Python above and derived on paper in
+    <code>helix_toy_model.tex</code>. The API is honest about this: every
+    response names the theorem it implements, sorry-status included, so a
+    caller can tell the difference between "kernel-checked" and "numerically
+    checked, paper-derived" without reading the Lean source. Selling access
+    to a numerically-verified-but-not-yet-kernel-checked result is fine as
+    long as it is labeled as such, which is why every JSON response carries
+    its own theorem citation rather than a bare number.
+  </p>
+
+  <table class="status-table">
+    <tr><th>Component</th><th>Status</th><th>Notes</th></tr>
+    <tr><td>4 endpoints, running prototype</td><td>built + tested</td><td>Flask, tested via test client; see AXLE/nogo-api/</td></tr>
+    <tr><td>Numerical stability (large-t underflow)</td><td>fixed</td><td>Caught this session; see bug note above</td></tr>
+    <tr><td>Underlying Lean proofs</td><td>partial</td><td>Trichotomy proved; #H1/#H2/#H3/#H3b remain sorry</td></tr>
+    <tr><td>Auth, rate limiting, deployment</td><td>not started</td><td>Prototype 0.1 is local-only, no production hardening</td></tr>
+    <tr><td>Pricing model</td><td>deliberately undecided</td><td>Metered API-key layer proposed; no number committed</td></tr>
+  </table>
+
+  <div class="prevnext">
+    <a href="index.html">&larr; Book 6 index</a>
+    <a href="../../AXLE/differential-equations/ch-cosmic-no-go.html">The Cosmic No-Go &rarr;</a>
+  </div>
+
+</main>
+</body>
+</html>
