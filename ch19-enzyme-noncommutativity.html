@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ch 19 · Non-Commutativity — The Active Site Remembers Order — Book 3: The Mini-Beast</title>
+<style>
+:root {
+  --bg0:#020a14; --bg1:#03111f; --bg2:#05192c;
+  --surf:#0a2238; --surf2:#0e2d49;
+  --acc:#22d3ee; --acc2:#67e8f9; --acc3:#cffafe;
+  --dim:#0c3a57; --sub:#38bdf8; --mut:#0e5673;
+  --text:#dff4fb;
+  --c:#4a9eff; --k:#e05a3a; --f:#50c878; --u:#c084fc; --g:#22d3ee;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:linear-gradient(160deg,var(--bg0) 0%,var(--bg1) 55%,var(--bg2) 100%);
+  min-height:100vh;color:var(--text);font-family:'Georgia',serif;line-height:1.72;
+}
+header{
+  border-bottom:1px solid var(--dim);padding:1.1rem 2rem;
+  display:flex;align-items:center;gap:1rem;
+  background:rgba(0,0,0,.45);backdrop-filter:blur(6px);
+  position:sticky;top:0;z-index:100;
+}
+.series-tag{font-size:.76rem;color:var(--mut);letter-spacing:.12em;text-transform:uppercase}
+.ch-label{font-size:.88rem;color:var(--sub)}
+.op-chips{display:flex;gap:.35rem;margin-left:auto;align-items:center}
+.chip{font-size:.68rem;padding:.15rem .45rem;border-radius:99px;font-family:monospace;
+  font-weight:700;letter-spacing:.04em;border:1px solid currentColor}
+.chip-c{color:var(--c);border-color:var(--c);background:rgba(74,158,255,.08)}
+.chip-k{color:var(--k);border-color:var(--k);background:rgba(224,90,58,.16)}
+.chip-f{color:var(--f);border-color:var(--f);background:rgba(80,200,120,.16)}
+.chip-u{color:var(--u);border-color:var(--u);background:rgba(192,132,252,.08)}
+.chip-g{color:var(--g);border-color:var(--g);background:rgba(34,211,238,.12)}
+.op-sep{color:var(--mut);font-size:.85rem}
+
+.hero{
+  text-align:center;padding:5rem 2rem 3.5rem;
+  background:radial-gradient(ellipse 55% 38% at 50% 40%,rgba(34,211,238,.13) 0%,transparent 70%);
+}
+.hero-sym{
+  font-size:clamp(2.6rem,8.5vw,5.5rem);color:var(--acc);font-family:monospace;
+  line-height:1;letter-spacing:.05em;
+  text-shadow:0 0 60px rgba(34,211,238,.5),0 0 120px rgba(34,211,238,.18);
+}
+.hero-title{font-size:clamp(1.35rem,3.2vw,2.3rem);color:var(--acc2);margin:.9rem 0 .35rem}
+.hero-sub{font-size:.98rem;color:var(--sub);max-width:600px;margin:0 auto}
+.level-badge{
+  display:inline-block;margin-top:1.1rem;padding:.28rem .85rem;border-radius:4px;
+  background:rgba(34,211,238,.12);border:1px solid var(--dim);
+  font-size:.78rem;letter-spacing:.08em;color:var(--acc3)
+}
+
+main{max-width:860px;margin:0 auto;padding:2rem 2rem 4rem}
+section{margin-bottom:3.5rem}
+h2{font-size:1.4rem;color:var(--acc2);margin-bottom:1rem;
+  padding-bottom:.38rem;border-bottom:1px solid rgba(34,211,238,.18)}
+h3{font-size:1.08rem;color:var(--acc);margin:1.3rem 0 .55rem}
+p{margin-bottom:.95rem;color:var(--text)}
+a{color:var(--acc)}
+
+.math-block{
+  background:var(--surf);border:1px solid var(--dim);border-radius:8px;
+  padding:1.15rem 1.4rem;margin:1.1rem 0;font-family:monospace;
+  border-left:3px solid var(--acc);
+}
+.math-block .mlabel{font-size:.73rem;color:var(--mut);letter-spacing:.08em;margin-bottom:.45rem}
+.eq{color:var(--acc2);font-size:1.04rem}
+.eq-note{color:var(--mut);font-size:.85rem;margin-top:.35rem}
+
+.theorem{
+  background:linear-gradient(135deg,rgba(34,211,238,.07),rgba(103,232,249,.03));
+  border:1px solid rgba(34,211,238,.28);border-radius:10px;
+  padding:1.4rem;margin:1.5rem 0;
+}
+.thm-label{font-size:.73rem;color:var(--acc);letter-spacing:.1em;font-family:monospace;margin-bottom:.45rem}
+.thm-body{font-size:.97rem;color:var(--acc3)}
+.thm-corollary{margin-top:.75rem;font-size:.87rem;color:var(--sub);
+  padding-top:.75rem;border-top:1px solid rgba(34,211,238,.15)}
+
+.domain-box{
+  background:rgba(80,200,120,.055);border:1px solid rgba(80,200,120,.22);
+  border-radius:8px;padding:1.1rem 1.4rem;margin:1.1rem 0;border-left:3px solid var(--f);
+}
+.domain-box.kk{background:rgba(224,90,58,.06);border-color:rgba(224,90,58,.24);border-left-color:var(--k)}
+.domain-label{font-size:.72rem;color:var(--f);letter-spacing:.08em;font-family:monospace;margin-bottom:.4rem}
+.domain-box.kk .domain-label{color:var(--k)}
+
+.data-table{width:100%;border-collapse:collapse;font-size:.87rem;margin:1rem 0}
+.data-table th{
+  background:var(--surf2);color:var(--acc2);padding:.55rem .85rem;
+  text-align:left;border-bottom:1px solid var(--dim);font-weight:600
+}
+.data-table td{
+  padding:.5rem .85rem;border-bottom:1px solid rgba(34,211,238,.09);vertical-align:top
+}
+.data-table tr:hover td{background:rgba(34,211,238,.03)}
+
+.interactive{
+  background:var(--surf);border:1px solid var(--dim);border-radius:12px;
+  padding:1.4rem;margin:1.8rem 0;
+}
+.interactive h3{
+  border-bottom:1px solid rgba(34,211,238,.18);padding-bottom:.45rem;
+  margin-bottom:.9rem;margin-top:0
+}
+canvas{display:block;border-radius:8px;width:100%;max-width:820px}
+.canvas-caption{font-size:.76rem;color:var(--mut);text-align:center;margin-top:.5rem}
+.op-legend{display:flex;gap:1.4rem;flex-wrap:wrap;font-size:.8rem;margin-top:.7rem}
+.op-legend span{display:flex;align-items:center;gap:.3rem}
+.op-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.prompt-card{
+  background:var(--surf);border:1px solid var(--dim);border-radius:8px;
+  padding:1.15rem 1.4rem;margin:.75rem 0;
+}
+.prompt-num{font-size:.72rem;font-family:monospace;color:var(--acc);letter-spacing:.08em;margin-bottom:.28rem}
+.prompt-text{font-size:.94rem;color:var(--text)}
+.prompt-tag{font-size:.7rem;color:var(--sub);margin-top:.38rem}
+
+.refs{font-size:.82rem;color:var(--mut);margin-top:.6rem}
+.refs a{color:var(--sub)}
+.refs li{margin-bottom:.35rem}
+
+.chapter-nav{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:3.5rem;padding:1.1rem 0;
+  border-top:1px solid rgba(34,211,238,.18);flex-wrap:wrap;gap:.75rem;
+}
+.chapter-nav a{
+  color:var(--acc2);text-decoration:none;font-size:.88rem;
+  padding:.38rem .75rem;border-radius:6px;border:1px solid rgba(34,211,238,.22);
+  transition:all .2s;
+}
+.chapter-nav a:hover{background:rgba(34,211,238,.1);border-color:var(--acc)}
+.chapter-nav .center{color:var(--mut);font-size:.8rem;text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="series-tag">Book 3 · The Mini-Beast</div>
+    <div class="ch-label">Chapter 19 — Non-Commutativity: The Active Site Remembers Order</div>
+  </div>
+  <div class="op-chips">
+    <span class="chip chip-c">C</span><span class="op-sep">∘</span>
+    <span class="chip chip-k">K</span><span class="op-sep">∘</span>
+    <span class="chip chip-f">F</span><span class="op-sep">∘</span>
+    <span class="chip chip-u">U</span><span class="op-sep">→</span>
+    <span class="chip chip-g">G</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-sym">[K,F] ≠ 0</div>
+  <div class="hero-title">The Active Site Remembers Order — Enzymes, Induced Fit, and the Sitagliptin Bridge</div>
+  <div class="hero-sub">A lid-gated active site and a single substrate molecule obey the same non-commuting algebra as the dm³ operator chain — and that algebra is the difference between a promiscuous enzyme and an industrial-scale chiral catalyst.</div>
+  <div class="level-badge">Week 19+ · Advanced · D3 · Open Problem</div>
+</div>
+
+<main>
+
+<!-- 19.1 -->
+<section>
+  <h2>19.1 Two Operators, One Active Site</h2>
+  <p>An enzyme's active site is a pocket sculpted by evolution — a cavity a few angstroms across, lined with residues positioned to recognize one substrate (or a narrow family of substrates) and exclude almost everything else. Recognition is only half the job. Once bound, the substrate has to be held in exactly the geometry that lets catalysis happen: the transition state has to be stabilized, not just the ground state.</p>
+  <p>That gives every enzyme-catalyzed reaction the same two operators seen in the zeolite cage of Chapter 18, now acting on a protein instead of a crystal:</p>
+
+  <div class="domain-box kk">
+    <div class="domain-label">K — GATING (SUBSTRATE RECOGNITION / LID CLOSURE)</div>
+    <p style="margin-bottom:0">Kψ = θ(c<sub>*</sub> − |c(ψ) − c<sub>bound</sub>|) · ψ — a projection onto conformational states within gating tolerance of the catalytically competent, substrate-bound geometry. c(ψ) is the conformational coordinate of the enzyme–substrate complex (loop position, lid angle, domain-closure state); c<sub>*</sub> is how much mismatch the site will tolerate before it rejects the complex. This is molecular recognition in its purest form: the site is a shape-and-chemistry filter, just as the zeolite pore was a size filter.</p>
+  </div>
+
+  <div class="domain-box">
+    <div class="domain-label">F — FOLD (CATALYTIC CONFORMATIONAL CHANGE)</div>
+    <p style="margin-bottom:0">Fψ = ψ + λ·R(ψ) — the catalytic turnover step itself: bond-breaking, bond-forming, proton transfer, a Whitney-fold of the reaction coordinate at the active site. R(ψ) changes the conformation of the complex — closing a lid, repositioning a loop, shifting c(ψ) — and therefore changes the very coordinate K tests.</p>
+  </div>
+
+  <div class="data-table">
+    <table style="width:100%">
+      <thead><tr><th>System</th><th>Binding/catalysis relationship</th><th>Order forced by geometry?</th></tr></thead>
+      <tbody>
+        <tr><td>Hexokinase + glucose</td><td>Classic induced fit — large domain closure over the sugar</td><td style="color:var(--k)">yes — induced fit only (Koshland's original case)</td></tr>
+        <tr><td><strong>PEPCK</strong> (phosphoenolpyruvate carboxykinase)</td><td><strong>Lid-gated active site</strong></td><td style="color:var(--k)"><strong>yes — induced fit only</strong> (Sullivan &amp; Holyoak, 2008)</td></tr>
+        <tr><td>DHFR binding NADPH</td><td>Mechanism ratio shifts with ligand concentration</td><td style="color:var(--acc)">order-dependent on [L] (Hammes, Chang &amp; Oas, 2009)</td></tr>
+        <tr><td>Flavodoxin, folding-upon-binding</td><td>Disordered → ordered transition coupled to binding</td><td style="color:var(--acc)">order-dependent on [L] (Hammes, Chang &amp; Oas, 2009)</td></tr>
+        <tr><td>Engineered transaminase ATA-117</td><td>Active-site pocket redesigned by directed evolution to accept a bulky prositagliptin ketone</td><td style="color:var(--f)">order engineered deliberately (Savile et al., 2010)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.85rem;color:var(--mut);margin-top:-.4rem">The point, as in Chapter 18, is the ordering — not a precise numeric threshold. Some enzymes are structurally locked into one ordering; others switch depending on conditions; the last row is one humans rewired on purpose.</p>
+</section>
+
+<!-- 19.2 -->
+<section>
+  <h2>19.2 Theorem 19.1 — The Site Does Not Commute</h2>
+  <p>The same commutator that governed the riboswitch domain and the zeolite cage reappears here: [K,F]ψ = −λ|ψ(c<sub>*</sub>)|²ψ(c<sub>*</sub>)δ(c−c<sub>*</sub>) ≠ 0. Where Chapter 18 asked whether a molecule fits before or after a confined reaction, this chapter asks whether an enzyme binds before or after it folds into its catalytically competent shape — the textbook distinction between <em>induced fit</em> and <em>conformational selection</em>.</p>
+
+  <div class="theorem">
+    <div class="thm-label">THEOREM 19.1 — ENZYME NON-COMMUTATIVITY</div>
+    <div class="thm-body">
+      Let K denote the gating projection onto catalytically competent conformations (Kψ = θ(c<sub>*</sub> − |c(ψ)−c<sub>bound</sub>|)ψ) and F the catalytic conformational-change operator. If F changes c(ψ) — if the pre- and post-catalysis conformations sit on opposite sides of the gating tolerance c<sub>*</sub> — then [K,F]ψ ≠ 0: binding and folding do not commute.
+    </div>
+    <div class="thm-corollary">
+      <strong>Two orderings, two mechanisms.</strong> <em>K∘F</em> ("bind-first" — <strong>induced fit</strong>): the substrate binds a loosely-gated, open conformation first, and F then folds the complex closed into the catalytically competent geometry. <em>F∘K</em> ("fold-first" — <strong>conformational selection</strong>): the enzyme population already samples the folded, catalytically competent conformation at equilibrium; K then selects which pre-existing conformer captures the ligand. These are not the same map — this is exactly the mechanistic fork enzymology has argued over since Koshland proposed induced fit in 1958 as an alternative to Fischer's lock-and-key.
+    </div>
+  </div>
+
+  <div class="math-block">
+    <div class="mlabel">DOMAIN APPLICATION SLOT — D-ENZ (extends Theorem D1-4)</div>
+    <div class="eq">c<sub>*</sub> ↔ conformational gating tolerance (active-site closure state)</div>
+    <div class="eq">λ ↔ catalytic turnover rate, k<sub>cat</sub></div>
+    <div class="eq">μ<sub>max</sub> = −2 ↔ [open] curvature bound on the mechanism-switch landscape</div>
+    <div class="eq">Hill n ≈ 3.64 ↔ [open] does the conformational-selection → induced-fit transition, as a function of ligand concentration, follow this same sigmoid?</div>
+    <div class="eq-note">Status: Domain mapping proposed here for the first time. Parameters in brackets are <strong>not yet measured</strong> — see §19.8, the open problem this chapter leaves for the camarada.</div>
+  </div>
+</section>
+
+<!-- 19.3 -->
+<section>
+  <h2>19.3 Lid-Gated Enzymes: When Geometry Forces the Order</h2>
+  <p>Chapter 18 found a fixed point — methane, small enough that the pore never argues about order. Enzymology hands us the mirror case: a system where geometry doesn't erase the ordering question, it <em>answers</em> it by force.</p>
+  <p>Sullivan &amp; Holyoak (2008) showed that enzymes with lid-gated active sites — where a mobile domain must close over the substrate before catalysis can occur, as in phosphoenolpyruvate carboxykinase (PEPCK) — are structurally barred from conformational selection. A lid cannot pre-close over an empty site the way DHFR's loop can pre-sample an open/closed equilibrium; there is nothing there yet to hold it shut. K∘F (induced fit) is the only physically accessible path. F∘K is not a slower alternative here — it is geometrically forbidden.</p>
+  <p>This is worth stating plainly, in the spirit of Chapter 18's honesty about what is and is not established: not every non-commuting pair gets to choose its ordering. Some systems, like methane in the MFI pore, sit at a fixed point where order stops mattering. Others, like lid-gated enzymes, sit at the opposite extreme, where the geometry of K forecloses one of the two orderings entirely. Both are real, and they are not the same kind of special case.</p>
+</section>
+
+<!-- 19.4 -->
+<section>
+  <h2>19.4 The Concentration Bridge — C and F Together</h2>
+  <p>Not every enzyme is locked in like PEPCK. Hammes, Chang &amp; Oas (2009) analyzed reaction flux directly — rather than just structure — for systems including DHFR binding NADPH and flavodoxin's folding-upon-binding transition, and found that the dominant mechanism itself depends on ligand concentration.</p>
+  <div class="math-block">
+    <div class="mlabel">CONCENTRATION-DEPENDENT MECHANISM SWITCH</div>
+    <div class="eq">Low [L]: conformational selection dominates flux — the pre-existing folded conformer is scarce, but ligand is scarcer, so waiting for the right conformer to appear costs little relative to waiting for enough ligand.</div>
+    <div class="eq">High [L]: induced fit dominates flux — ligand is abundant enough that binding an initially incorrect conformation, then folding it, outpaces waiting for the rare pre-folded state.</div>
+    <div class="eq-note">Source: Hammes, G.G.; Chang, Y.-C.; Oas, T.G. "Conformational selection or induced fit: a flux description of reaction mechanism." PNAS 2009, 106(33):13737–13741.</div>
+  </div>
+  <p>C, the constraint/gathering operator, is exactly the concentration knob here — the same role it played concentrating dilute Martian CO₂ into a Sabatier reactor feed in Chapter 18. There, C and F together decided how much methane a reactor could make. Here, C and F together decide which non-commuting path — K∘F or F∘K — actually carries the reaction flux at a given substrate concentration.</p>
+</section>
+
+<!-- 19.5 -->
+<section>
+  <h2>19.5 U — Unfolding into Product: The Sitagliptin Bridge</h2>
+  <p>The clearest real-world instance of engineers deliberately choosing K and F is Codexis's transaminase, engineered for Merck's manufacture of sitagliptin (the active ingredient in Januvia, a diabetes drug).</p>
+  <div class="math-block">
+    <div class="mlabel">THE ATA-117 TRANSAMINASE</div>
+    <div class="eq">Prositagliptin ketone + alanine → sitagliptin + pyruvate</div>
+    <div class="eq-note">Starting from a transaminase with no measurable activity on the bulky prositagliptin substrate, eleven rounds of directed evolution reshaped the active-site pocket — enlarging it, and re-gating which substrates K would admit — to accept the target ketone. The engineered enzyme replaced a rhodium-catalyzed asymmetric hydrogenation step entirely, eliminating a heavy-metal catalyst and improving yield and waste profile at manufacturing scale. Savile, C.K. et al. "Biocatalytic Asymmetric Synthesis of Chiral Amines from Ketones Applied to Sitagliptin Manufacture." Science 2010, 329(5989):305–309.</div>
+  </div>
+  <p>Trace the full chain: <strong>C</strong> concentrates a library of enzyme variants and screens them against the target substrate; <strong>K</strong> is re-gated round by round — the pocket's shape and chemistry redesigned to admit the bulky ketone it originally rejected; <strong>F</strong> folds the re-gated complex through the transamination step; <strong>U</strong> unfolds the engineered catalyst into a deployed, GMP-scale industrial process. G = U∘F∘K∘C, instantiated in a redesigned protein, is a chiral amine manufactured without a rhodium catalyst.</p>
+  <p>The directed-evolution search itself is now increasingly guided by machine learning rather than pure screening — exactly the "AI-enabled enzyme engineering" premise that opened this line of inquiry. Yang, Wu &amp; Arnold's 2019 review formalizes how regression and Gaussian-process models over sequence space narrow the search that once took Codexis eleven rounds of largely empirical evolution. The tools are real and improving; whether they yet make de novo enzyme design routine at industrial scale is a separate, more honest question — taken up in §19.7.</p>
+</section>
+
+<!-- INTERACTIVE 19.6 -->
+<section>
+  <h2>19.6 Interactive: The Mechanism Switch</h2>
+  <p>The stacked bars show, schematically, how the fraction of reaction flux carried by each mechanism shifts with ligand concentration, following the qualitative picture in Hammes, Chang &amp; Oas (2009). This is illustrative of the reported trend, not a plot of a specific measured dataset — the crossover concentration is system-dependent and is not asserted here as universal.</p>
+  <div class="interactive">
+    <h3>⊞ Mechanism Flux Fraction vs. Ligand Concentration (schematic)</h3>
+    <canvas id="switchCanvas" height="340"></canvas>
+    <div class="op-legend">
+      <span><span class="op-dot" style="background:var(--f)"></span>conformational selection (F∘K) — dominant at low [L]</span>
+      <span><span class="op-dot" style="background:var(--k)"></span>induced fit (K∘F) — dominant at high [L]</span>
+      <span><span class="op-dot" style="background:var(--acc)"></span>50/50 crossover</span>
+    </div>
+    <div class="canvas-caption">No system is asserted to cross exactly at the marked point — the crossover position itself is part of what §19.8 leaves open.</div>
+  </div>
+</section>
+
+<!-- 19.7 -->
+<section>
+  <h2>19.7 The g-Series of Way-Stations</h2>
+  <p>Reading the chapter index as a roadmap for enzyme engineering, the same g-series recurrence gives it a direction — and, unlike Chapter 18's ISRU chain, biocatalysis has already reached one rung further than the zeolite domain has.</p>
+  <div class="data-table">
+    <table style="width:100%">
+      <thead><tr><th>Regime</th><th>Biocatalysis analogue</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>g⁰ — Quiescent</td><td>Natural enzyme sequence diversity, unscreened (metagenomic reservoirs)</td><td style="color:var(--f)">observed</td></tr>
+        <tr><td>g² — Nascent oscillation</td><td>First classical directed-evolution round improving a known enzyme for a single target reaction</td><td style="color:var(--f)">prototyped (Arnold lab and others, 1990s)</td></tr>
+        <tr><td>g⁶ — Stable micro-cycle</td><td>A validated, GMP-scale industrial biocatalytic process replacing a chemical step entirely</td><td style="color:var(--f)">deployed (Codexis/Merck ATA-117, Savile et al. 2010)</td></tr>
+        <tr><td>g³³ — Stability threshold</td><td>Routine, AI-guided de novo design of enzymes for arbitrary non-natural reactions, at production scale, without bespoke evolution campaigns</td><td style="color:var(--mut)">tools emerging, not yet routine (Yang, Wu &amp; Arnold, 2019)</td></tr>
+        <tr><td>g⁶⁴ — Circuit saturation</td><td>A fully generative "any enzyme, for any reaction, on demand" design regime</td><td style="color:var(--k)">Axiom 9 — honest incompleteness</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Unlike the ISRU chain in Chapter 18, where g⁶ (a network of propellant depots) remains an engineering target, biocatalysis has already reached g⁶: the sitagliptin transaminase is not a prototype but a deployed, ton-scale manufacturing process. The honest frontier here sits one rung higher — g³³, where machine-learning-guided search would make what took Codexis years of directed evolution into a routine, on-demand design step. Axiom 9 still applies at g⁶⁴: the chapter does not claim a fully generative enzyme-design regime exists. It claims that the same non-commuting K and F that decide whether a lid-gated site can only do induced fit, or a DHFR-like site can do either depending on concentration, also govern — recursively — whether each rung of engineered biocatalysis produces a usable process or an inactive protein.</p>
+</section>
+
+<!-- 19.8 Open problem -->
+<section>
+  <h2>19.8 Open Problem for the Camarada</h2>
+  <div class="prompt-card">
+    <div class="prompt-num">PREDICTION D-ENZ — CONFORMATIONAL SWITCH HILL EXPONENT</div>
+    <div class="prompt-text">Theorem D1-4 (riboswitch domain) predicted a Hill coefficient n ≈ 3.64 ± 0.4 from the curvature bound μ<sub>max</sub> = −2, observed across dose-response curves in three unrelated biological systems; Chapter 18 proposed (untested) that the same exponent might govern zeolite confinement-selectivity. Does it also govern the conformational-selection-to-induced-fit flux transition in enzymes? Take a system with published concentration-resolved mechanism-flux data — DHFR–NADPH, flavodoxin folding-upon-binding, or an analogous pair — and fit the conformational-selection flux fraction φ<sub>CS</sub>([L]) against φ<sub>CS</sub> = 1/(1+([L]/L<sub>*</sub>)<sup>n</sup>). If n ≈ 3.64 reappears, the same curvature bound spans biology, zeolite chemistry, and enzymology without a free parameter. If it doesn't, that is itself the finding — and the honest answer this chapter leaves open.</div>
+    <div class="prompt-tag">Status: [ ] Pending — no dataset yet assembled · Genre: literature reanalysis + sigmoid fit · Level: D3+</div>
+  </div>
+  <ul class="refs">
+    <li><a href="https://doi.org/10.1126/science.1188934" target="_blank" rel="noopener">Savile, C.K. et al. — Biocatalytic Asymmetric Synthesis of Chiral Amines from Ketones Applied to Sitagliptin Manufacture. Science 329(5989):305–309 (2010)</a></li>
+    <li><a href="https://doi.org/10.1073/pnas.0805364105" target="_blank" rel="noopener">Sullivan, S.M.; Holyoak, T. — Enzymes with lid-gated active sites must operate by an induced fit mechanism instead of conformational selection. PNAS 105(37):13829–13834 (2008)</a></li>
+    <li><a href="https://doi.org/10.1073/pnas.0907195106" target="_blank" rel="noopener">Hammes, G.G.; Chang, Y.-C.; Oas, T.G. — Conformational selection or induced fit: a flux description of reaction mechanism. PNAS 106(33):13737–13741 (2009)</a></li>
+    <li><a href="https://doi.org/10.1038/s41592-019-0496-6" target="_blank" rel="noopener">Yang, K.K.; Wu, Z.; Arnold, F.H. — Machine-learning-guided directed evolution for protein engineering. Nature Methods 16(8):687–694 (2019)</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Induced_fit" target="_blank" rel="noopener">Induced fit — overview (Koshland model)</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Conformational_selection" target="_blank" rel="noopener">Conformational selection — overview</a></li>
+  </ul>
+</section>
+
+<nav class="chapter-nav">
+  <a href="ch18-zeolite-noncommutativity.html">← Ch18 · Zeolite to the Stars</a>
+  <div class="center">Book 3 · The Mini-Beast</div>
+  <a href="index.html">⌂ Index</a>
+    <a href="living-book.html">Living Book</a>
+    <a href="series-hub.html">Series ↗</a>
+</nav>
+
+</main>
+
+<script>
+const swCanvas = document.getElementById('switchCanvas');
+const swCtx = swCanvas.getContext('2d');
+const concLabels = ['0.1×Kd','0.3×Kd','1×Kd','3×Kd','10×Kd','30×Kd'];
+const csFraction = [0.85,0.70,0.50,0.30,0.15,0.05];
+
+function drawSwitch(){
+  const W = swCanvas.width, H = swCanvas.height;
+  const pad = {l:60,r:24,t:30,b:50};
+  const pw = W-pad.l-pad.r, ph = H-pad.t-pad.b;
+
+  swCtx.clearRect(0,0,W,H);
+  swCtx.fillStyle='#020a14'; swCtx.fillRect(0,0,W,H);
+
+  function ty(frac){ return pad.t+ph-(frac)*ph; }
+
+  // grid (0%, 25%, 50%, 75%, 100%)
+  swCtx.strokeStyle='rgba(34,211,238,0.08)'; swCtx.lineWidth=1;
+  for(let f=0; f<=1.0001; f+=0.25){
+    const y = ty(f);
+    swCtx.beginPath(); swCtx.moveTo(pad.l,y); swCtx.lineTo(pad.l+pw,y); swCtx.stroke();
+    swCtx.fillStyle='#0e5673'; swCtx.font='10px monospace'; swCtx.textAlign='right';
+    swCtx.fillText(Math.round(f*100)+'%', pad.l-8, y+3);
+  }
+
+  // 50% crossover line
+  const midY = ty(0.5);
+  swCtx.strokeStyle='#22d3ee'; swCtx.lineWidth=2; swCtx.setLineDash([6,4]);
+  swCtx.beginPath(); swCtx.moveTo(pad.l,midY); swCtx.lineTo(pad.l+pw,midY); swCtx.stroke();
+  swCtx.setLineDash([]);
+  swCtx.fillStyle='#67e8f9'; swCtx.font='bold 11px monospace'; swCtx.textAlign='left';
+  swCtx.fillText('50/50 crossover (schematic)', pad.l+8, midY-8);
+
+  // stacked bars
+  const n = concLabels.length;
+  const bw = pw/n*0.6;
+  const gap = pw/n;
+  concLabels.forEach((label,i)=>{
+    const cs = csFraction[i];
+    const ifr = 1-cs;
+    const x = pad.l + i*gap + (gap-bw)/2;
+
+    // conformational selection segment (bottom, green)
+    const csY = ty(cs);
+    const csH = pad.t+ph - csY;
+    swCtx.fillStyle = 'rgba(80,200,120,0.55)';
+    swCtx.strokeStyle = '#50c878';
+    swCtx.lineWidth = 1.5;
+    swCtx.fillRect(x,csY,bw,csH);
+    swCtx.strokeRect(x,csY,bw,csH);
+
+    // induced fit segment (top, orange)
+    const ifY = ty(1.0);
+    const ifH = csY - ifY;
+    swCtx.fillStyle = 'rgba(224,90,58,0.55)';
+    swCtx.strokeStyle = '#e05a3a';
+    swCtx.fillRect(x,ifY,bw,ifH);
+    swCtx.strokeRect(x,ifY,bw,ifH);
+
+    swCtx.fillStyle = '#dff4fb'; swCtx.font='11px Georgia'; swCtx.textAlign='center';
+    swCtx.fillText(label, x+bw/2, pad.t+ph+16);
+  });
+
+  // axis title
+  swCtx.fillStyle='#38bdf8'; swCtx.font='11px Georgia'; swCtx.textAlign='center';
+  swCtx.fillText('Ligand concentration [L] (relative to Kd)', pad.l+pw/2, H-6);
+}
+
+function resizeSwitch(){
+  const cont = swCanvas.parentElement;
+  swCanvas.width = Math.min(820, cont.offsetWidth);
+  drawSwitch();
+}
+resizeSwitch();
+window.addEventListener('resize', resizeSwitch);
+</script>
+
+<!-- G6 Crystal Navigator -->
+<div id="g6-cryst-btn" onclick="document.getElementById('g6-cryst-panel').classList.toggle('g6-open')" title="Crystal Map — Book 3" style="position:fixed;bottom:24px;right:24px;z-index:99998;width:50px;height:50px;border-radius:50%;background:#07050f;border:1.5px solid #c9a84c;color:#c9a84c;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 16px rgba(0,0,0,0.4);user-select:none;transition:transform .18s" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'">🜁</div>
+<div id="g6-cryst-panel" style="position:fixed;bottom:86px;right:24px;z-index:99997;width:370px;max-height:500px;background:#07050f;border:1px solid rgba(201,168,76,.35);border-radius:10px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.55);display:none;flex-direction:column">
+  <div style="padding:9px 14px 7px;border-bottom:.5px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:space-between">
+    <span style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:.2em;color:rgba(201,168,76,.6);text-transform:uppercase">Crystal Map · Book 3</span>
+    <button onclick="document.getElementById('g6-cryst-panel').classList.remove('g6-open')" style="background:none;border:none;color:rgba(201,168,76,.4);font-size:16px;cursor:pointer;line-height:1">×</button>
+  </div>
+  <canvas id="g6-cryst-cv" style="display:block;width:100%;height:290px;cursor:crosshair;background:#07050f"></canvas>
+  <div style="font-family:'Courier New',monospace;font-size:9px;color:rgba(201,168,76,.25);text-align:center;padding:3px 0;letter-spacing:.1em">drag · hover · click to open chapter</div>
+  <div id="g6-cryst-info" style="border-top:.5px solid rgba(201,168,76,.15);padding:8px 14px 10px;min-height:58px">
+    <div id="g6-ci-title" style="font-size:12px;font-weight:bold;color:#c9a84c;margin-bottom:2px;font-family:'Courier New',monospace"></div>
+    <div id="g6-ci-desc" style="font-size:11px;color:rgba(232,224,208,.6);line-height:1.4"></div>
+  </div>
+</div>
+<style>#g6-cryst-panel.g6-open{display:flex!important}</style>
+<script src="/geometry/g6-crystal.js"></script>
+
+</body>
+</html>
