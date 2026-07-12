@@ -15,6 +15,10 @@
   --gold-dim:   rgba(201,168,76,0.3);
   --cream:      #f5f0e8;
   --text:       #cdc3aa;
+  --nebula-violet: #7b4fb0;
+  --nebula-magenta: #c65b9e;
+  --nebula-teal:    #2ec4b6;
+  --nebula-blue:    #3a5fc9;
 }
 html { scroll-behavior: smooth; }
 body {
@@ -24,6 +28,70 @@ body {
   font-size: 1.1rem;
   line-height: 1.85;
   min-height: 100vh;
+  position: relative;
+}
+
+/* ── COSMOS LAYER — fixed starfield + drifting nebulae ───────── */
+#starfield {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.nebula-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.16;
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+.nebula-1 {
+  width: 46vw; height: 46vw; max-width: 620px; max-height: 620px;
+  top: -12vw; left: -8vw;
+  background: radial-gradient(circle, var(--nebula-violet), transparent 70%);
+  animation: driftA 38s ease-in-out infinite;
+}
+.nebula-2 {
+  width: 38vw; height: 38vw; max-width: 520px; max-height: 520px;
+  top: 20vh; right: -10vw;
+  background: radial-gradient(circle, var(--nebula-teal), transparent 70%);
+  animation: driftB 46s ease-in-out infinite;
+}
+.nebula-3 {
+  width: 42vw; height: 42vw; max-width: 560px; max-height: 560px;
+  bottom: -14vw; left: 12vw;
+  background: radial-gradient(circle, var(--nebula-magenta), transparent 70%);
+  animation: driftC 52s ease-in-out infinite;
+}
+.nebula-4 {
+  width: 30vw; height: 30vw; max-width: 420px; max-height: 420px;
+  bottom: 8vh; right: 18vw;
+  background: radial-gradient(circle, var(--nebula-blue), transparent 70%);
+  animation: driftA 60s ease-in-out infinite reverse;
+}
+@keyframes driftA {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(4vw, 5vh) scale(1.12); }
+}
+@keyframes driftB {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-5vw, 3vh) scale(0.92); }
+}
+@keyframes driftC {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(3vw, -4vh) scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nebula-blob { animation: none !important; }
+}
+
+/* Everything else sits above the cosmos layer */
+nav, .hero, .grid-wrap, footer, #ndaOverlay {
+  position: relative;
+  z-index: 1;
 }
 
 /* ── NAV ──────────────────────────────────────── */
@@ -83,10 +151,19 @@ nav {
   cursor: default;
   user-select: none;
   display: inline-block;
-  transition: color 0.15s;
+  transition: color 0.15s, text-shadow 1.8s ease-in-out;
   position: relative;
+  text-shadow: 0 0 18px rgba(201,168,76,0.15), 0 0 46px rgba(123,79,176,0.12);
+  animation: titleGlow 7s ease-in-out infinite;
 }
 #mainTitle:active { color: var(--gold); }
+@keyframes titleGlow {
+  0%, 100% { text-shadow: 0 0 18px rgba(201,168,76,0.15), 0 0 46px rgba(123,79,176,0.10); }
+  50%      { text-shadow: 0 0 26px rgba(201,168,76,0.30), 0 0 64px rgba(46,196,182,0.16); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #mainTitle { animation: none; }
+}
 
 .hero-vol {
   font-size: 1rem;
@@ -155,7 +232,14 @@ nav {
   transition: background 0.2s;
   position: relative;
 }
-.ch-card:hover { background: rgba(201,168,76,0.04); }
+.ch-card {
+  transition: background 0.25s, box-shadow 0.35s, transform 0.25s;
+}
+.ch-card:hover {
+  background: rgba(201,168,76,0.05);
+  box-shadow: inset 0 0 0 1px rgba(201,168,76,0.16), 0 0 26px rgba(123,79,176,0.10);
+  transform: translateY(-2px);
+}
 .ch-card:hover .ch-num { color: var(--gold-light); }
 .ch-num {
   font-size: 0.72rem;
@@ -212,7 +296,16 @@ nav {
   text-align: center;
   transition: background 0.2s;
 }
-.greek-card:hover { background: rgba(201,168,76,0.05); }
+.greek-card {
+  transition: background 0.25s, box-shadow 0.35s, transform 0.25s;
+}
+.greek-card:hover {
+  background: rgba(201,168,76,0.06);
+  box-shadow: inset 0 0 0 1px rgba(201,168,76,0.16), 0 0 22px rgba(46,196,182,0.12);
+  transform: translateY(-2px);
+}
+.gsym { transition: text-shadow 0.3s; }
+.greek-card:hover .gsym { text-shadow: 0 0 16px rgba(201,168,76,0.5); }
 .gsym {
   font-size: 2rem;
   color: var(--gold);
@@ -383,6 +476,13 @@ footer a { color: var(--gold); text-decoration: none; opacity: 1; }
 </head>
 <body>
 
+<!-- ═══ COSMOS — starfield canvas + drifting nebulae ═══════════════════════ -->
+<canvas id="starfield"></canvas>
+<div class="nebula-blob nebula-1"></div>
+<div class="nebula-blob nebula-2"></div>
+<div class="nebula-blob nebula-3"></div>
+<div class="nebula-blob nebula-4"></div>
+
 <!-- ═══ NAV ══════════════════════════════════════════════════════════════════ -->
 <nav>
   <a class="nav-brand" href="index.html">G6 LLC · Book 3</a>
@@ -541,6 +641,20 @@ footer a { color: var(--gold); text-decoration: none; opacity: 1; }
       <div class="ch-num">Chapter π</div>
       <div class="ch-title">Recurrence</div>
       <div class="ch-desc">Why the period is 2π. The geometry underneath the number.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+    <a class="ch-card" href="chLambda-polylaminin.html">
+      <div class="ch-num">Chapter Λ</div>
+      <div class="ch-title">Protein Shape Transformations</div>
+      <div class="ch-desc">Polylaminin research in Brazil &amp; the SUS. UFRJ · Cristália · ANVISA. The Whitney A₁ fold at the polymerisation interface.</div>
+      <span class="ch-badge badge-free">Free</span>
+    </a>
+
+    <a class="ch-card" href="chRho-spectral.html">
+      <div class="ch-num">Chapter ρ</div>
+      <div class="ch-title">Spectral Radius · Collatz · RH Surgery</div>
+      <div class="ch-desc">The discrete skeleton of the dm³ operator chain. Spectral radius r(G), the Collatz threshold c=3, and surgery on the critical line σ=½.</div>
       <span class="ch-badge badge-free">Free</span>
     </a>
 
@@ -707,6 +821,109 @@ footer a { color: var(--gold); text-decoration: none; opacity: 1; }
      JAVASCRIPT
 ══════════════════════════════════════════════════════════════════════════════ -->
 <script>
+// ══════════════════════════════════════════════════════════════════════════
+// COSMOS ENGINE — starfield + twinkle + parallax + occasional shooting star
+// Pure canvas 2D, no dependencies. Pauses under prefers-reduced-motion.
+// ══════════════════════════════════════════════════════════════════════════
+(function () {
+  const canvas = document.getElementById('starfield');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let W, H, dpr, stars, shootingStars = [];
+  const STAR_COUNT_PER_MPX = 140; // density scales with viewport area
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    seedStars();
+  }
+
+  function seedStars() {
+    const count = Math.round((W * H / 1_000_000) * STAR_COUNT_PER_MPX);
+    stars = new Array(count).fill(0).map(() => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.15 + 0.25,
+      baseAlpha: Math.random() * 0.5 + 0.25,
+      phase: Math.random() * Math.PI * 2,
+      speed: Math.random() * 0.15 + 0.03,   // twinkle speed
+      drift: (Math.random() - 0.5) * 0.012, // slow vertical parallax drift
+      hue: Math.random() < 0.12 ? '201,168,76' :        // gold flecks, rare
+           Math.random() < 0.5  ? '205,195,255' :        // cool white-violet
+                                   '255,247,230'          // warm white
+    }));
+  }
+
+  function maybeSpawnShootingStar() {
+    if (reduceMotion) return;
+    if (Math.random() < 0.0026 && shootingStars.length < 2) {
+      const startX = Math.random() * W * 0.7 + W * 0.15;
+      shootingStars.push({
+        x: startX, y: -10,
+        vx: (Math.random() * 2.2 + 2.4),
+        vy: (Math.random() * 2.6 + 3.2),
+        len: Math.random() * 90 + 60,
+        life: 1
+      });
+    }
+  }
+
+  let t = 0;
+  function frame() {
+    t += 1;
+    ctx.clearRect(0, 0, W, H);
+
+    // Stars
+    for (const s of stars) {
+      const tw = reduceMotion ? s.baseAlpha
+        : s.baseAlpha * (0.6 + 0.4 * Math.sin(t * s.speed * 0.05 + s.phase));
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(${s.hue},${tw.toFixed(3)})`;
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (!reduceMotion) {
+        s.y += s.drift;
+        if (s.y > H + 2) s.y = -2;
+        if (s.y < -2) s.y = H + 2;
+      }
+    }
+
+    // Shooting stars
+    maybeSpawnShootingStar();
+    shootingStars = shootingStars.filter(sh => sh.life > 0);
+    for (const sh of shootingStars) {
+      const tailX = sh.x - sh.vx * (sh.len / 10);
+      const tailY = sh.y - sh.vy * (sh.len / 10);
+      const grad = ctx.createLinearGradient(sh.x, sh.y, tailX, tailY);
+      grad.addColorStop(0, `rgba(232,201,124,${0.85 * sh.life})`);
+      grad.addColorStop(1, 'rgba(232,201,124,0)');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(sh.x, sh.y);
+      ctx.lineTo(tailX, tailY);
+      ctx.stroke();
+      sh.x += sh.vx; sh.y += sh.vy;
+      sh.life -= 0.012;
+      if (sh.x > W + 50 || sh.y > H + 50) sh.life = 0;
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(frame);
+})();
 
   // ── HiDPI / Retina helper ───────────────────────────────────────────────
   function hdpi(canvas, w, h) {
