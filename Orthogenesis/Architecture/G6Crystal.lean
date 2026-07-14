@@ -15,10 +15,8 @@
 -- Zenodo concept DOI: 10.5281/zenodo.19162012
 -- GitHub: https://github.com/TOTOGT/geometry
 
-import Orthogenesis.Architecture.Colony
-import Mathlib.Analysis.SpecialFunctions.Sqrt
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Tactic
+import Mathlib
+import Orthogenesis.Geometry.Colony
 
 namespace Orthogenesis.G6Crystal
 
