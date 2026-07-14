@@ -119,12 +119,12 @@ theorem layer_height_cubits : height_cubits / n_layers = 5500 := by decide
 -- ── Fact 11 ─────────────────────────────────────────────────────────────────
 /-- Total height in metres: 33,000 × 0.4572 = 15,087.6 m. -/
 theorem height_metres : (height_cubits : ℝ) * cubit_m = 15087.6 := by
-  unfold cubit_m; norm_num
+  norm_num [height_cubits, cubit_m]
 
 -- ── Fact 12 ─────────────────────────────────────────────────────────────────
 /-- Base side in metres: 250 × 0.4572 = 114.30 m. -/
 theorem base_side_metres : (side_cubits : ℝ) * cubit_m = 114.30 := by
-  unfold cubit_m; norm_num
+  norm_num [side_cubits, cubit_m]
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- §3  Hexagonal Isoperimetric Optimum
@@ -144,13 +144,10 @@ noncomputable def sq_isoperimetric_ratio : ℝ := 1 / 16
     √3/24 > 1/16. -/
 theorem hex_beats_square : sq_isoperimetric_ratio < hex_isoperimetric_ratio := by
   unfold hex_isoperimetric_ratio sq_isoperimetric_ratio
-  rw [div_lt_div_iff (by norm_num) (by norm_num)]
-  -- Need: 24 < 16 * √3, i.e., 3/2 < √3, i.e., 9/4 < 3
-  have h3 : (1 : ℝ) < sqrt 3 := by
-    rw [show (1 : ℝ) = sqrt 1 from (sqrt_one).symm]
-    exact sqrt_lt_sqrt (by norm_num) (by norm_num)
-  linarith [sq_sqrt (show (0:ℝ) ≤ 3 by norm_num),
-            mul_pos (show (0:ℝ) < 16 by norm_num) h3]
+  -- Need 1/16 < √3/24, i.e. 3 < 2√3, from √3² = 3 and √3 > 0.
+  have h3 : Real.sqrt 3 ^ 2 = 3 := Real.sq_sqrt (by norm_num)
+  have hpos : (0 : ℝ) < Real.sqrt 3 := Real.sqrt_pos.mpr (by norm_num)
+  nlinarith [h3, hpos]
 
 -- ── Fact 14 ─────────────────────────────────────────────────────────────────
 /-- The hexagonal improvement over the square exceeds 15%.
@@ -308,11 +305,14 @@ theorem colony_depth1_cells :
     seed.expand.cells.card = 7 := by
   native_decide
 
-/-- Seed colony at depth 2: 19 cells (centre + ring 1 + ring 2).
-    Centered hexagonal number: 1 + 3·1·2 = 7, 1 + 3·2·3 = 19. -/
-theorem colony_depth2_cells :
+/-- Seed colony at depth 2: 19 distinct coordinates (centre + ring 1 + ring 2).
+    Centered hexagonal number 1 + 3·2·3 = 19. NB: `Colony.expand` tags the
+    stage into cell identity, so the raw `cells.card` counts (coord,stage)
+    pairs (26 here); the centered-hexagonal number is the distinct-coordinate
+    count, taken via `image (·.coord)`. -/
+theorem colony_depth2_coords :
     let seed : Colony := { cells := {Cell.mk ⟨0,0⟩ 0} }
-    seed.expand.expand.cells.card = 19 := by
+    (seed.expand.expand.cells.image (fun c => c.coord)).card = 19 := by
   native_decide
 
 -- ─────────────────────────────────────────────────────────────────────────────
