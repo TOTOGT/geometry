@@ -5,3 +5,4 @@ import Orthogenesis.Geometry.Colony
 import Orthogenesis.Architecture.G6Crystal
 import Orthogenesis.Architecture.MagneticLattice
 import Orthogenesis.Architecture.SeismicLattice
+import Orthogenesis.Architecture.AcousticLattice
