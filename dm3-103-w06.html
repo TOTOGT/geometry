@@ -93,7 +93,7 @@ footer a{color:var(--gold);text-decoration:none;}
 <div class="hero" style="padding:3rem 2rem 2rem;">
   <div class="eyebrow">dm³ 103 · Week 06 · Ω Operator</div>
   <h1 style="font-size:clamp(1.4rem,3.5vw,2.2rem);">The Limit: n-bonacci → τ = 2 as n → ∞</h1>
-  <div class="hero-sub" style="font-size:1rem;">Proof that the dominant n-bonacci root approaches 2 monotonically. This is the content of no_return_to_critical reframed.</div>
+  <div class="hero-sub" style="font-size:1rem;">The dominant n-bonacci root climbs to 2 — and the DNLS self-trapping threshold climbs with it. A difference in regime, not magnitude.</div>
   <div class="gold-rule"></div>
 </div>
 
@@ -108,20 +108,36 @@ footer a{color:var(--gold);text-decoration:none;}
     </div>
 
     <div class="stub-content">
-      <p><em>Content stub — prose, diagrams, and Lean 4 exercises to be written.</em></p>
-      <br>
-      <p><strong>This week covers:</strong> Proof that the dominant n-bonacci root approaches 2 monotonically. This is the content of no_return_to_critical reframed.</p>
-      <br>
-      <p>Primary chapter references from <code>book/</code>: chOmega-hexabonacci.html</p>
+      <p><strong>The limit.</strong> The dominant n-bonacci root ηₙ climbs monotonically toward 2: φ ≈ 1.618, η ≈ 1.839, Δ ≈ 1.928, Σ ≈ 1.966, Ω ≈ 1.984 … → τ = 2 as n → ∞. This is <code>no_return_to_critical</code> reframed — once the ladder passes a rung it never falls back below it.</p>
+
+      <p style="margin-top:1rem;"><strong>The DNLS counterpart (Version 4).</strong> The same monotone climb has a dynamical face. Back in dm³ 102 (<a href="dm3-102-w06.html" style="color:var(--gold);">Week 6 · the DNLS lab</a>) you saw tribonacci resist nonlinearity better than Fibonacci at λ = 1.5. Version 4 of the study asks what that resistance <em>becomes</em> at the extremes, and finds not a bigger number but a different regime.</p>
+
+      <div style="background:rgba(201,168,76,.06);border-left:3px solid var(--gold);padding:1rem 1.3rem;margin:1.2rem 0;font-size:.9rem;line-height:1.7;">
+        <p><strong>Self-trapping threshold gap.</strong> Sweeping λ ∈ {1, 2, 4, 8, 10} at N=500, T=10⁵: the Fibonacci chain crosses into the self-trapped regime (spreading rate α ≈ 0) somewhere in λ ∈ [4, 8]. The tribonacci chain has <em>not</em> self-trapped by λ = 10 (α ≥ 0.09 throughout). Because η &gt; φ, the tribonacci threshold sits higher — a difference in kind, not magnitude.</p>
+        <p style="margin-top:.6rem;"><strong>Finite-size scaling.</strong> Across N ∈ {500, 1000, 2000} at T=10⁴, the ratio IPR<sub>trib</sub>/IPR<sub>fib</sub> generally grows with N — the differential persists toward the thermodynamic limit.</p>
+        <p style="margin-top:.6rem;"><strong>Long-time honesty.</strong> Run to T=10⁶ (N=1000, λ=1.5), the ratio peaks at 4.18× near T=10⁴, then both chains saturate to chain-limited IPR ≈ 0.002. The peak is a transient finite-size feature — reported, not hidden.</p>
+      </div>
+
+      <p><strong>The bridge.</strong> The spectral-gap-controls-threshold mechanism (higher rung → higher self-trapping threshold, because ηₙ climbs toward 2) is the nonlinear-dynamics counterpart of the criticality line λc(n) ≈ 0.958 Δₙ + 0.107 across n = 2…5 (r = 0.989) in the <a href="https://doi.org/10.5281/zenodo.20077205" style="color:var(--gold);">companion criticality paper</a>. Full V4: <a href="https://doi.org/10.5281/zenodo.20230642" style="color:var(--gold);">10.5281/zenodo.20230642</a> · <a href="https://totogt.github.io/dnls" style="color:var(--gold);">companion site</a>.</p>
+    </div>
+
+    <div class="stub-content" style="background:rgba(201,168,76,.06);border-left:3px solid var(--gold);padding:1.2rem 1.4rem;margin:1.6rem 0;">
+      <div style="font-family:sans-serif;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--rule);margin-bottom:.6rem;">Lab exercise · D1–D2</div>
+      <p><strong>1.</strong> From <a href="https://github.com/grossi-ops/Atratores" style="color:var(--gold);">grossi-ops/Atratores</a>, run <code>dnls_long_time.py</code> at N=500, T=10⁵ for λ ∈ {1,2,4,8,10}. Locate the Fibonacci self-trapping window. Confirm tribonacci stays untrapped through λ=10.</p>
+      <p style="margin-top:.6rem;"><strong>2.</strong> Add a hexanacci (n=6) chain. Predict, then measure: is its threshold higher than tribonacci's? Does λc(6) fall on the line λc(n) ≈ 0.958 Δₙ + 0.107? This closes an open regression point.</p>
+      <p style="margin-top:.6rem;"><strong>3.</strong> D2 writing task: state the regime distinction as a fixed-point argument. The self-trapped state is a fixed point of the DNLS flow; argue why raising the rung raises the λ at which that fixed point becomes attracting.</p>
     </div>
 
     <div class="stub-lean">
-      <pre>-- dm³ 103 · Week 06 · Lean 4 Lab
--- Operator: Ω (→ τ = 2 Hexabonacci)
--- TODO: fill in theorems and exercises
+      <pre>-- dm³ 103 · Week 06 · Lean 4 Lab · the monotone climb
+-- ηₙ = dominant real root of xⁿ = xⁿ⁻¹ + … + 1 ;  ηₙ ↑ 2
+theorem nbonacci_root_lt_two (n : ℕ) (hn : 2 ≤ n) : nbonacciRoot n < 2 := by
+  sorry  -- ← exercise: the ladder never reaches τ at finite n (no_return_to_critical)
 
--- stub
-example : True := trivial</pre>
+-- OPEN on the AXLE roadmap — do NOT mark done:
+--   IPR_trib(0) > IPR_fib(0)                     (the linear-limit inequality)
+--   Lean statement of the self-trapping threshold gap
+-- These are the frontier. Naming them honestly is the D2 deliverable.</pre>
     </div>
 
     <div class="back-nav">
