@@ -11,12 +11,12 @@
 --   5. The six-fold symmetry of hexNeighbors realises the G6 Crystal's
 --      six-fold rotational structure.
 --
--- Toolchain: Lean 4 + Mathlib v4.14.0
+-- Toolchain: Lean 4 + Mathlib (v4.14.0, as G6Crystal.lean)
 -- Zenodo: 10.5281/zenodo.19162012  AXLE: github.com/TOTOGT/AXLE
 
-import Orthogenesis.Architecture.Colony
+import Mathlib
+import Orthogenesis.Geometry.Colony
 import Orthogenesis.Architecture.G6Crystal
-import Mathlib.Tactic
 
 namespace Orthogenesis.DM3Bridge
 
@@ -40,12 +40,8 @@ theorem centeredHex_four  : centeredHex 4 = 61 := by decide
 theorem centeredHex_strictMono : StrictMono centeredHex := by
   intro m n h
   unfold centeredHex
-  have : m * (m + 1) < n * (n + 1) := by
-    calc m * (m + 1) ≤ m * (n + 1) := by
-          apply Nat.mul_le_mul_right; exact Nat.le_of_lt h
-      _ < n * (n + 1) := by
-          apply Nat.mul_lt_mul_right; omega; omega
-  omega
+  have key : m * (m + 1) < n * (n + 1) := by nlinarith [h, Nat.mul_le_mul h.le h.le]
+  nlinarith [key]
 
 /-- The ring at depth n has exactly centeredHex(n) - centeredHex(n-1) = 6n cells.
     This is the coord_coverage statement in combinatorial form. -/
@@ -54,7 +50,9 @@ theorem ring_card (n : ℕ) (hn : 1 ≤ n) :
   cases n with
   | zero => omega
   | succ m =>
-    simp [centeredHex]
+    have h1 : centeredHex (m + 1) = centeredHex m + 6 * (m + 1) := by
+      unfold centeredHex; ring
+    simp only [Nat.add_sub_cancel]
     omega
 
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -75,7 +73,21 @@ theorem expand_is_UCKF_composite (C : Colony) :
         C.cells.biUnion (fun c =>
           (hexNeighbors c.coord).toFinset.image
             (fun h => Cell.mk h (c.stage + 1))) } := by
-  rfl
+  have hcells : C.expand.cells = C.cells ∪
+      C.cells.biUnion (fun c =>
+        (hexNeighbors c.coord).toFinset.image
+          (fun h => Cell.mk h (c.stage + 1))) := by
+    ext x
+    rw [Colony.mem_expand]
+    simp only [Finset.mem_union, Finset.mem_biUnion, Finset.mem_image,
+               List.mem_toFinset]
+    apply or_congr_right
+    constructor
+    · rintro ⟨c, hc, h, hh, rfl⟩; exact ⟨c, hc, h, hh, rfl⟩
+    · rintro ⟨c, hc, h, hh, rfl⟩; exact ⟨c, hc, h, hh, rfl⟩
+  have hmk : ∀ a b : Colony, a.cells = b.cells → a = b :=
+    fun a b hab => by cases a; cases b; exact congrArg Colony.mk hab
+  exact hmk _ _ hcells
 
 /-- Operator C (Compress): extract the coordinate footprint of the colony. -/
 def op_C (C : Colony) : Finset HexCoord :=
@@ -103,17 +115,17 @@ theorem opG_superset_expand (C : Colony) (s : ℕ)
     (hStage : ∀ c ∈ C.cells, c.stage = s) :
     C.expand.cells ⊆ (op_G C s).cells := by
   intro x hx
+  simp only [op_G, op_U]
   rw [Colony.mem_expand] at hx
-  simp only [op_G, op_U, op_F, op_K, op_C, Finset.mem_union,
-             Finset.mem_biUnion, Finset.mem_image, List.mem_toFinset]
-  rcases hx with hx_old | ⟨p, hp, hn, hs⟩
-  · exact Or.inl hx_old
-  · right
-    refine ⟨p.coord, ⟨p.coord, ⟨p.coord, ?_, rfl⟩, hn⟩, ?_⟩
-    · exact Finset.mem_image_of_mem _ hp
-    · have hps : p.stage = s := hStage p hp
-      rw [hs, hps]
-      simp
+  rcases hx with hold | ⟨p, hp, h, hh, rfl⟩
+  · exact Finset.mem_union_left _ hold
+  · have hps : p.stage = s := hStage p hp
+    have hmem : h ∈ op_K (op_C C) := by
+      simp only [op_K, op_C, Finset.mem_biUnion]
+      exact ⟨p.coord, Finset.mem_image_of_mem _ hp, List.mem_toFinset.mpr hh⟩
+    apply Finset.mem_union_right
+    rw [hps]
+    exact Finset.mem_image_of_mem _ hmem
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- §3  Stage Bound as Discrete ε₀
@@ -140,7 +152,7 @@ theorem stage_bound_is_epsilon0_analogue (C₀ : Colony)
     g ≈ 3.87 is the value where g^2 ≈ 15 = 60,000/4,000. -/
 theorem nasa_growth_satisfies_R_mono :
     ∀ (n m : ℕ), n ≤ m →
-    R ⟨Real.sqrt 15, 2, 150000⟩ n ≤ R ⟨Real.sqrt 15, 2, 150000⟩ m := by
+    R ⟨Real.sqrt 15, 2, 150000, True⟩ n ≤ R ⟨Real.sqrt 15, 2, 150000, True⟩ m := by
   intro n m h
   apply R_mono
   · show 1 < Real.sqrt 15
@@ -169,10 +181,7 @@ theorem hexNeighbors_unit_steps (h : HexCoord) :
     (nb.q - h.q).natAbs + (nb.r - h.r).natAbs +
     (nb.q + nb.r - h.q - h.r).natAbs = 2 := by
   intro nb hnb
-  simp [hexNeighbors] at hnb
-  rcases hnb with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ |
-                  ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;>
-  simp [Int.natAbs]
+  fin_cases hnb <;> dsimp only <;> omega
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- §5  The dm³ Bridge Theorem
@@ -185,15 +194,8 @@ theorem hexNeighbors_unit_steps (h : HexCoord) :
     (a) Colony.expand = discrete G = U∘F∘K∘C  [proved: expand_is_UCKF_composite]
     (b) stage_bound = discrete ε₀ stability   [proved: stage_bound_is_epsilon0_analogue]
     (c) hexNeighbors_length = 6 = n_layers    [proved: hexNeighbors_is_G6_crystal_ring]
-    (d) centeredHex n = colony card at depth n [proved: colony_depth1_cells, colony_depth2_cells]
-    (e) R_mono = Lyapunov descent across phases [proved: nasa_growth_satisfies_R_mono]
-
-    Together these constitute the formal bridge between:
-    · The continuous dm³ framework (invariants T* = 2π, μ_max = −2, τ = 2)
-    · The discrete Orthogenesis colony (hex grid, stage calculus, expand operator)
-
-    NASA interpretation: a colony that compiles is a colony whose structural
-    phase invariants are formally verified. Every sorry is an open NASA gap. -/
+    (d) centeredHex n = colony card at depth n [proved: colony_depth1_cells]
+    (e) R_mono = Lyapunov descent across phases [proved: nasa_growth_satisfies_R_mono] -/
 theorem dm3_bridge :
     -- (a) expand has the UCKF composite structure
     (∀ C : Colony, C.expand.cells = C.cells ∪
@@ -210,12 +212,13 @@ theorem dm3_bridge :
      seed.expand.cells.card = centeredHex 1) ∧
     -- (e) growth is monotone (Lyapunov descent)
     (∀ n m : ℕ, n ≤ m →
-     R ⟨Real.sqrt 15, 2, 150000⟩ n ≤ R ⟨Real.sqrt 15, 2, 150000⟩ m) := by
-  refine ⟨fun C => ?_, Colony.stage_bound, hexNeighbors_length,
+     R ⟨Real.sqrt 15, 2, 150000, True⟩ n ≤ R ⟨Real.sqrt 15, 2, 150000, True⟩ m) := by
+  refine ⟨fun C => congrArg Colony.cells (expand_is_UCKF_composite C),
+          Colony.stage_bound, hexNeighbors_length,
           ?_, nasa_growth_satisfies_R_mono⟩
-  · rfl
-  · -- centeredHex 1 = 7, colony depth 1 = 7
-    simp [centeredHex]
-    exact colony_depth1_cells
+  -- centeredHex 1 = 7, colony depth 1 = 7
+  show (Colony.mk {Cell.mk ⟨0,0⟩ 0}).expand.cells.card = centeredHex 1
+  rw [show centeredHex 1 = 7 from centeredHex_one]
+  exact colony_depth1_cells
 
 end Orthogenesis.DM3Bridge

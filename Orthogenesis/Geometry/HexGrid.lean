@@ -28,4 +28,7 @@ noncomputable def hexToVec2 (h : HexCoord) : Vec2 :=
   let y : ℝ := (Real.sqrt 3 / 2) * (h.r : ℝ)
   ⟨x, y⟩
 
+/-- The six-neighbour list always has length 6 — the six-fold ring. -/
+theorem hexNeighbors_length (h : HexCoord) : (hexNeighbors h).length = 6 := rfl
+
 end Orthogenesis
