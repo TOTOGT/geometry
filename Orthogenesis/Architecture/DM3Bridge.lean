@@ -39,9 +39,9 @@ theorem centeredHex_four  : centeredHex 4 = 61 := by decide
 /-- The centered hexagonal sequence is strictly monotone. -/
 theorem centeredHex_strictMono : StrictMono centeredHex := by
   intro m n h
-  have hlt : m * (m + 1) < n * (n + 1) := by nlinarith [h]
   unfold centeredHex
-  omega
+  have key : m * (m + 1) < n * (n + 1) := by nlinarith [h, Nat.mul_le_mul h.le h.le]
+  nlinarith [key]
 
 /-- The ring at depth n has exactly centeredHex(n) - centeredHex(n-1) = 6n cells.
     This is the coord_coverage statement in combinatorial form. -/
@@ -73,7 +73,21 @@ theorem expand_is_UCKF_composite (C : Colony) :
         C.cells.biUnion (fun c =>
           (hexNeighbors c.coord).toFinset.image
             (fun h => Cell.mk h (c.stage + 1))) } := by
-  simp only [Colony.expand, List.toFinset_map]
+  have hcells : C.expand.cells = C.cells ∪
+      C.cells.biUnion (fun c =>
+        (hexNeighbors c.coord).toFinset.image
+          (fun h => Cell.mk h (c.stage + 1))) := by
+    ext x
+    rw [Colony.mem_expand]
+    simp only [Finset.mem_union, Finset.mem_biUnion, Finset.mem_image,
+               List.mem_toFinset]
+    apply or_congr_right
+    constructor
+    · rintro ⟨c, hc, h, hh, rfl⟩; exact ⟨c, hc, h, hh, rfl⟩
+    · rintro ⟨c, hc, h, hh, rfl⟩; exact ⟨c, hc, h, hh, rfl⟩
+  have hmk : ∀ a b : Colony, a.cells = b.cells → a = b :=
+    fun a b hab => by cases a; cases b; exact congrArg Colony.mk hab
+  exact hmk _ _ hcells
 
 /-- Operator C (Compress): extract the coordinate footprint of the colony. -/
 def op_C (C : Colony) : Finset HexCoord :=
@@ -167,7 +181,7 @@ theorem hexNeighbors_unit_steps (h : HexCoord) :
     (nb.q - h.q).natAbs + (nb.r - h.r).natAbs +
     (nb.q + nb.r - h.q - h.r).natAbs = 2 := by
   intro nb hnb
-  fin_cases hnb <;> omega
+  fin_cases hnb <;> dsimp only <;> omega
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- §5  The dm³ Bridge Theorem
@@ -199,12 +213,12 @@ theorem dm3_bridge :
     -- (e) growth is monotone (Lyapunov descent)
     (∀ n m : ℕ, n ≤ m →
      R ⟨Real.sqrt 15, 2, 150000, True⟩ n ≤ R ⟨Real.sqrt 15, 2, 150000, True⟩ m) := by
-  refine ⟨fun C => ?_, Colony.stage_bound, hexNeighbors_length,
+  refine ⟨fun C => congrArg Colony.cells (expand_is_UCKF_composite C),
+          Colony.stage_bound, hexNeighbors_length,
           ?_, nasa_growth_satisfies_R_mono⟩
-  · simp only [Colony.expand, List.toFinset_map]
-  · -- centeredHex 1 = 7, colony depth 1 = 7
-    show (Colony.mk {Cell.mk ⟨0,0⟩ 0}).expand.cells.card = centeredHex 1
-    rw [show centeredHex 1 = 7 from centeredHex_one]
-    exact colony_depth1_cells
+  -- centeredHex 1 = 7, colony depth 1 = 7
+  show (Colony.mk {Cell.mk ⟨0,0⟩ 0}).expand.cells.card = centeredHex 1
+  rw [show centeredHex 1 = 7 from centeredHex_one]
+  exact colony_depth1_cells
 
 end Orthogenesis.DM3Bridge
