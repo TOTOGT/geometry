@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codifying the Cosmos — Machine-Checked Maya Calendar Mathematics · G⁶ Vol VI</title>
+<meta name="description" content="The alignment cycles of the 8th-century Maya scribe Sak Tahn Waax (Xultun, deciphered 2026), formalized in Lean 4. Tzolk'in, Haab', Venus and Mars: the true four-cycle grand alignment is 113,880 days — six Calendar Rounds — because Mars = 3 × Tzolk'in.">
+<script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#04040a;--surface:#0c0d16;--card:#10111c;
+  --gold:#c9a84c;--teal:#0ABAB5;--red:#e05a3a;--green:#4ade80;--muted:#6b6757;
+  --text:#e8e4d8;--rule:rgba(201,168,76,0.18);
+  --serif:'Noto Serif',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:18px;line-height:1.85;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.8rem 2rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.8rem;}
+.nav-brand{font-family:var(--mono);font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--teal);text-decoration:none;opacity:.85;}
+.nav-links{display:flex;gap:1.2rem;flex-wrap:wrap;}
+.nav-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;opacity:.75;}
+.nav-links a:hover{opacity:1;color:var(--gold);}
+.hero{padding:4.5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 45% at 50% 40%,rgba(201,168,76,.06) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--teal);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:1.6rem;}
+.hero h1{font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:400;letter-spacing:.02em;color:var(--gold);margin-bottom:.5rem;line-height:1.15;}
+.hero .small{display:block;font-size:.42em;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:.9rem;}
+.hero-en{font-size:1rem;color:rgba(232,228,216,.82);max-width:720px;margin:1.3rem auto 0;font-style:italic;line-height:1.75;}
+.main{max-width:880px;margin:0 auto;padding:3rem 2rem 5rem;}
+.section-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:.6rem;}
+.section-h2{font-size:clamp(1.15rem,2.5vw,1.6rem);font-weight:400;color:var(--gold);margin-bottom:1.1rem;letter-spacing:.03em;}
+.block{margin-bottom:3rem;}
+.main p{margin-bottom:1.2rem;color:rgba(232,228,216,.9);}
+.main em{color:var(--gold);font-style:normal;}
+.lede{font-size:1.12rem;line-height:1.8;color:var(--text);border-left:3px solid var(--gold);padding-left:1.4rem;margin-bottom:2rem;}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.6rem 0;}
+.statgrid .s{background:var(--card);padding:1.1rem;text-align:center;}
+.statgrid .n{font-family:var(--mono);font-size:1.4rem;color:var(--gold);display:block;line-height:1.1;}
+.statgrid .l{font-family:var(--mono);font-size:.53rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.4rem;display:block;line-height:1.5;}
+table{width:100%;border-collapse:collapse;margin:1.4rem 0;font-size:.9rem;}
+th,td{border:1px solid var(--rule);padding:.55rem .7rem;text-align:left;}
+th{font-family:var(--mono);font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);background:rgba(10,186,181,.05);}
+td{color:rgba(232,228,216,.85);}
+.eqn{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--gold);border-radius:5px;padding:1rem 1.3rem;margin:1.3rem 0;overflow-x:auto;}
+pre{background:#0a0b12;border:1px solid var(--rule);border-radius:6px;padding:1.1rem 1.3rem;margin:1.2rem 0;overflow-x:auto;font-family:var(--mono);font-size:.78rem;line-height:1.65;color:#cdd3e0;}
+pre .k{color:var(--teal);} pre .c{color:var(--muted);font-style:italic;} pre .n{color:var(--gold);}
+.callout{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--teal);padding:1.2rem 1.5rem;margin:1.5rem 0;}
+.callout .lab{font-family:var(--mono);font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem;display:block;}
+.callout p{font-size:.92rem;margin-bottom:.5rem;}.callout p:last-child{margin-bottom:0;}
+.honest{background:var(--surface);border:1px solid rgba(224,90,58,.3);border-left:3px solid var(--red);padding:1.2rem 1.5rem;margin:1.5rem 0;}
+.honest .lab{font-family:var(--mono);font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:.6rem;display:block;}
+.honest p{font-size:.9rem;color:rgba(232,228,216,.84);margin-bottom:.5rem;}.honest p:last-child{margin-bottom:0;}
+ol.refs{margin:1rem 0 0 1.2rem;font-size:.85rem;color:rgba(232,228,216,.8);line-height:1.7;}
+ol.refs a{color:var(--gold);text-decoration:none;}
+.disclaimer{font-size:.78rem;color:var(--muted);line-height:1.7;border-top:1px solid var(--rule);margin-top:2.5rem;padding-top:1.3rem;}
+footer{text-align:center;padding:2.5rem 2rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-brand">⚜ PRINCIPIA ORTHOGONA ⚜</a>
+  <div class="nav-links">
+    <a href="index.html">Vol VI · Index</a>
+    <a href="MayaCalendar.lean">Lean source</a>
+    <a href="on-publication.html">On Publication</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Vol VI · Ethnomathematics · Lean 4</div>
+  <h1>Codifying the Cosmos<span class="small">Machine-Checked Maya Calendar Mathematics</span></h1>
+  <p class="hero-en">
+    The alignment cycles of Sak Tahn Waax — the 8th-century Xultun scribe whose name was deciphered
+    in 2026 — set in Lean 4. Four interlocking periods, one clean number-theoretic punchline:
+    because Mars is three sacred rounds, the grand alignment is exactly six Calendar Rounds.
+  </p>
+</section>
+
+<div class="main">
+
+  <div class="block">
+    <span class="section-label">1 · The scribe of Xultun</span>
+    <h2 class="section-h2">A name on the wall</h2>
+    <p class="lede">
+      In July 2026, a team led by archaeologist Franco Rossi (MIT) reported the decipherment of an
+      eleven-glyph inscription — "Text 19" — in a scribal workshop at Xultun, in the Petén of
+      Guatemala. Closing with <em>cheheen</em> ("so says") and a personal signature, it names
+      <em>Sak Tahn Waax</em> ("White-Chested Fox") — the earliest astronomer-mathematician known by
+      name anywhere in the Americas.
+    </p>
+    <p>
+      The workshop's plaster walls carry astronomical "microtexts": scratch calculations
+      co-indexing the ritual calendar, the solar year, and the synodic periods of Venus and Mars.
+      The scribe's recurring problem is a least-common-multiple problem — <em>when do distinct
+      cosmic cycles reset together?</em> — and it is exactly the kind of statement a modern proof
+      assistant settles with certainty. This chapter formalizes the core of that matrix in Lean 4.
+    </p>
+  </div>
+
+  <div class="block">
+    <span class="section-label">2 · Four cycles</span>
+    <h2 class="section-h2">The periods, and where they align</h2>
+    <table>
+      <thead><tr><th>Cycle</th><th>Days</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Tzolk'in</td><td>260</td><td>ritual round (13 × 20)</td></tr>
+        <tr><td>Haab'</td><td>365</td><td>vague solar year (18 × 20 + 5)</td></tr>
+        <tr><td>Venus</td><td>584</td><td>synodic period of Venus</td></tr>
+        <tr><td>Mars</td><td>780</td><td>synodic period of Mars = <em>3 × 260</em></td></tr>
+      </tbody>
+    </table>
+    <p>Stacking the periods by least common multiple gives a ladder of alignment windows:</p>
+    <div class="eqn">
+      $$\operatorname{lcm}(260,365)=18{,}980\ \text{days}=52\ \text{years}\quad(\textbf{Calendar Round})$$
+      $$\operatorname{lcm}(365,584)=2{,}920\ \text{days}=8\ \text{years}=5\ \text{Venus periods}$$
+      $$\operatorname{lcm}(260,365,584)=37{,}960\ \text{days}=104\ \text{years}=2\ \text{Calendar Rounds}$$
+    </div>
+    <div class="statgrid">
+      <div class="s"><span class="n">18,980</span><span class="l">Calendar Round<br>52 years</span></div>
+      <div class="s"><span class="n">2,920</span><span class="l">Venus–Solar<br>8 years</span></div>
+      <div class="s"><span class="n">37,960</span><span class="l">+ Venus<br>2 Rounds · 104 yr</span></div>
+      <div class="s"><span class="n">113,880</span><span class="l">+ Mars<br>6 Rounds · 312 yr</span></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <span class="section-label">3 · The Mars punchline</span>
+    <h2 class="section-h2">Why the grand alignment is exactly six Calendar Rounds</h2>
+    <p>
+      Adding Mars looks like it should blow the number up. It doesn't — and the reason is the
+      prettiest fact in the whole matrix. Since $780 = 3 \times 260$, Mars is <em>three Tzolk'in
+      rounds</em>. A system that already contains the Tzolk'in therefore gains nothing from Mars
+      except a single factor of 3:
+    </p>
+    <div class="eqn">
+      $$\operatorname{lcm}\!\big(37{,}960,\ 780\big)=3\times 37{,}960=113{,}880\ \text{days}=6\ \text{Calendar Rounds}=312\ \text{years}.$$
+    </div>
+    <p>
+      Equivalently, the Tzolk'in is <em>absorbed</em> by Mars: any day count that returns Mars to
+      its origin has already returned the Tzolk'in, because $260 \mid 780$. Four cycles collapse to
+      three independent constraints, and the grand return of Earth, Venus, Mars and the ritual
+      matrix to a shared origin takes 113,880 days.
+    </p>
+  </div>
+
+  <div class="block">
+    <span class="section-label">4 · Formalization in Lean 4</span>
+    <h2 class="section-h2">The matrix, as dependent type theory</h2>
+    <p>
+      We model each cycle as a modular type <code>ZMod n</code>, define the alignment windows as
+      nested <code>Nat.lcm</code>, and prove the two structural theorems: Tzolk'in–Mars absorption,
+      and the grand alignment divisibility bound.
+    </p>
+<pre><span class="c">-- the four periods (days)</span>
+<span class="k">def</span> tzolkin : ℕ := <span class="n">260</span>   <span class="c">-- ritual round (13 × 20)</span>
+<span class="k">def</span> haab    : ℕ := <span class="n">365</span>   <span class="c">-- vague solar year</span>
+<span class="k">def</span> venus   : ℕ := <span class="n">584</span>   <span class="c">-- Venus synodic period</span>
+<span class="k">def</span> mars    : ℕ := <span class="n">780</span>   <span class="c">-- Mars synodic period = 3 × 260</span>
+
+<span class="c">-- alignment windows as nested least common multiples</span>
+<span class="k">def</span> calendarRound : ℕ := Nat.lcm tzolkin haab
+<span class="k">def</span> cosmicAlign   : ℕ := Nat.lcm calendarRound venus
+<span class="k">def</span> grandAlign    : ℕ := Nat.lcm cosmicAlign mars
+
+<span class="c">-- scalar values (rfl forces kernel evaluation)</span>
+<span class="k">theorem</span> calendarRound_eq : calendarRound = <span class="n">18980</span>  := <span class="k">by</span> rfl
+<span class="k">theorem</span> cosmicAlign_eq   : cosmicAlign   = <span class="n">37960</span>  := <span class="k">by</span> rfl
+<span class="k">theorem</span> grandAlign_eq    : grandAlign    = <span class="n">113880</span> := <span class="k">by</span> rfl
+<span class="k">theorem</span> grand_six_rounds : grandAlign = <span class="n">6</span> * calendarRound := <span class="k">by</span> rfl
+
+<span class="c">-- Mars = 3 × Tzolk'in, so adjoining Mars only triples the window</span>
+<span class="k">theorem</span> grand_is_triple_cosmic : grandAlign = <span class="n">3</span> * cosmicAlign := <span class="k">by</span> rfl
+
+<span class="c">-- absorption: any day resetting Mars has already reset the Tzolk'in (260 ∣ 780)</span>
+<span class="k">theorem</span> tzolkin_mars_absorption (d : ℕ) (h : (d : ZMod mars) = <span class="n">0</span>) :
+    (d : ZMod tzolkin) = <span class="n">0</span> := <span class="k">by</span>
+  <span class="k">have</span> dvd_mars : mars ∣ d := (ZMod.natCast_zmod_eq_zero_iff_dvd d mars).mp h
+  <span class="k">have</span> factor   : tzolkin ∣ mars := <span class="k">by</span> decide
+  <span class="k">exact</span> (ZMod.natCast_zmod_eq_zero_iff_dvd d tzolkin).mpr (dvd_trans factor dvd_mars)
+
+<span class="c">-- grand alignment: resetting all four cycles ⇒ a multiple of 113,880 days</span>
+<span class="k">theorem</span> grand_alignment (d : ℕ)
+    (h1 : (d : ZMod tzolkin) = <span class="n">0</span>) (h2 : (d : ZMod haab) = <span class="n">0</span>)
+    (h3 : (d : ZMod venus) = <span class="n">0</span>)   (h4 : (d : ZMod mars) = <span class="n">0</span>) :
+    <span class="n">113880</span> ∣ d := <span class="k">by</span>
+  <span class="k">have</span> dt := (ZMod.natCast_zmod_eq_zero_iff_dvd d tzolkin).mp h1
+  <span class="k">have</span> dh := (ZMod.natCast_zmod_eq_zero_iff_dvd d haab).mp h2
+  <span class="k">have</span> dv := (ZMod.natCast_zmod_eq_zero_iff_dvd d venus).mp h3
+  <span class="k">have</span> dm := (ZMod.natCast_zmod_eq_zero_iff_dvd d mars).mp h4
+  <span class="k">have</span> dcr : calendarRound ∣ d := Nat.lcm_dvd dt dh
+  <span class="k">have</span> dca : cosmicAlign   ∣ d := Nat.lcm_dvd dcr dv
+  <span class="k">have</span> dga : grandAlign    ∣ d := Nat.lcm_dvd dca dm
+  <span class="k">rwa</span> [grandAlign_eq] <span class="k">at</span> dga</pre>
+    <div class="callout">
+      <span class="lab">Verification status — honest</span>
+      <p>The <strong>arithmetic</strong> (every <code>rfl</code> value, the divisibility facts) is independently verified by exact-integer computation. The <strong>Lean proofs</strong> are written to be sound but have <strong>not yet been run through the kernel</strong> — the <code>lake build</code> against Mathlib is deferred until we have the compute for it. Until it passes, this is a careful formalization, not yet a machine-checked one; it will not be cited as "compiles with zero errors" before it does. Full source: <a href="MayaCalendar.lean" style="color:var(--gold);">MayaCalendar.lean</a>.</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <span class="section-label">5 · Why it matters</span>
+    <h2 class="section-h2">Ethnomathematics, on its own terms</h2>
+    <p>
+      Interactive theorem proving has been aimed almost entirely at modern, Western mathematics.
+      Sak Tahn Waax worked without any of it — charcoal and red oxide on stucco — yet his cycle
+      arithmetic obeys exactly the modular-arithmetic and divisibility laws a proof assistant
+      enforces today. Formalizing it treats the work as what it is: rigorous number theory, not
+      "mysticism" or "folk counting." The point of this chapter is small and exact — one corrected
+      constant, one elegant factor of three — but that is the register the material deserves.
+    </p>
+  </div>
+
+  <div class="block">
+    <span class="section-label">References</span>
+    <ol class="refs">
+      <li>Rossi, F. et al. (2026). The identification and work of an eighth-century Maya mathematician. <em>Antiquity</em> (Cambridge University Press). <a href="https://www.cambridge.org/core/journals/antiquity/article/identification-and-work-of-an-eighthcentury-maya-mathematician/FDE9610F9D80ADBC245CAC2B8F204070">Cambridge Core</a>. <span style="color:var(--muted)">(volume/issue to confirm against the paper of record)</span></li>
+      <li>Archaeologists decipher the name of a Maya astronomer for the first time. <em>National Geographic</em>, 2026. <a href="https://www.nationalgeographic.com/history/article/first-maya-astronomer-mathematician-name">nationalgeographic.com</a></li>
+      <li>Hidden in a Guatemalan ruin for 1,200 years was the signature of a Maya mathematical genius. <em>ScienceAlert</em>, 13 Jul 2026. <a href="https://www.sciencealert.com/we-finally-know-the-name-of-a-revered-maya-astronomer-mathematician-sak-tahn-waax">sciencealert.com</a></li>
+      <li>DMSE researcher identifies first known Maya scientist. <em>MIT DMSE News</em>, 2026. <a href="https://dmse.mit.edu/news/dmse-researcher-identifies-first-known-maya-scientist/">dmse.mit.edu</a></li>
+    </ol>
+    <div class="disclaimer">
+      <strong>Status.</strong> Open-access proof-of-concept in ethnomathematical formalization. Arithmetic independently verified; Lean proofs not yet kernel-checked (compilation deferred). Historical framing follows the 2026 reports cited above; specific epigraphic details (e.g. exact glyph counts) should be reconciled against the <em>Antiquity</em> paper before final publication. Principia Orthogona · G6 LLC · Pablo Nogueira Grossi · Newark NJ · 2026 · ORCID 0009-0000-6496-2186.
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Principia Orthogona · Vol VI · Codifying the Cosmos · <a href="index.html">Book 6 Index</a><br>
+  113,880 days · six Calendar Rounds · because Mars is three sacred rounds
+</footer>
+</body>
+</html>

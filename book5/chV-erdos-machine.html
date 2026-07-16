@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Machine Collaborator — Two Erdős Problems, Two Kinds of "Solved" · Vol V</title>
+<meta name="description" content="In 2026 two Erdős problems were resolved with AI. One (the planar unit-distance problem, OpenAI) is a brilliant human-checked construction; the other (Erdős #728, GPT-5.2 Pro + Aristotle) is a kernel-checked Lean proof. The difference is the whole thesis of The Seed: solved-because-checked-by-humans versus solved-because-checked-by-the-kernel.">
+<script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#04040a;--surface:#0c0d16;--card:#10111c;--gold:#c9a84c;--teal:#0ABAB5;--red:#e05a3a;--green:#50c878;--text:#e8e4d8;--muted:#6b6757;--rule:rgba(201,168,76,0.18);--serif:'Noto Serif',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:18px;line-height:1.85;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.7rem 2rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.7rem;}
+.nav-brand{font-family:var(--mono);font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--teal);text-decoration:none;opacity:.85;}
+.nav-links{display:flex;gap:1.2rem;flex-wrap:wrap;}
+.nav-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;opacity:.78;}
+.nav-links a:hover{opacity:1;color:var(--gold);}
+.hero{padding:4.5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 45% at 50% 40%,rgba(201,168,76,.05) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--teal);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:1.6rem;}
+.hero h1{font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:400;letter-spacing:.03em;color:var(--gold);margin-bottom:.5rem;line-height:1.15;}
+.hero .small{display:block;font-size:.4em;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.9rem;}
+.hero-pt{font-size:1rem;color:rgba(232,228,216,.82);max-width:660px;margin:1.2rem auto 0;font-style:italic;line-height:1.75;}
+.hero-en{font-size:.86rem;color:var(--muted);max-width:660px;margin:.5rem auto 0;font-style:italic;line-height:1.65;}
+.main{max-width:880px;margin:0 auto;padding:3rem 2rem 5rem;}
+.section-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:.6rem;}
+.section-h2{font-size:clamp(1.15rem,2.5vw,1.6rem);font-weight:400;color:var(--gold);margin-bottom:1.1rem;letter-spacing:.03em;}
+.block{margin-bottom:3rem;}
+.main p{margin-bottom:1.2rem;color:rgba(232,228,216,.9);}
+.main em{color:var(--gold);font-style:normal;}
+.lede{font-size:1.12rem;line-height:1.8;color:var(--text);border-left:3px solid var(--gold);padding-left:1.4rem;margin-bottom:2rem;}
+.parts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.6rem 0;}
+.parts > div{background:var(--card);padding:1.3rem 1.4rem;}
+.parts h4{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.7rem;}
+.parts .p1 h4{color:var(--red);} .parts .p2 h4{color:var(--green);}
+.parts p{font-size:.88rem;margin-bottom:.5rem;color:rgba(232,228,216,.85);}
+.parts .tag{font-family:var(--mono);font-size:.6rem;color:var(--muted);}
+pre{background:#0a0b12;border:1px solid var(--rule);border-radius:6px;padding:1.1rem 1.3rem;margin:1.2rem 0;overflow-x:auto;font-family:var(--mono);font-size:.76rem;line-height:1.65;color:#cdd3e0;}
+pre .k{color:var(--teal);} pre .c{color:var(--muted);font-style:italic;} pre .n{color:var(--gold);}
+.callout{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--teal);padding:1.2rem 1.5rem;margin:1.5rem 0;}
+.callout .lab{font-family:var(--mono);font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem;display:block;}
+.callout p{font-size:.92rem;margin-bottom:.5rem;}.callout p:last-child{margin-bottom:0;}
+.honest{background:var(--surface);border:1px solid rgba(224,90,58,.3);border-left:3px solid var(--red);padding:1.2rem 1.5rem;margin:1.5rem 0;}
+.honest .lab{font-family:var(--mono);font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:.6rem;display:block;}
+.honest p{font-size:.9rem;color:rgba(232,228,216,.84);margin-bottom:.5rem;}.honest p:last-child{margin-bottom:0;}
+ol.refs{margin:1rem 0 0 1.2rem;font-size:.85rem;color:rgba(232,228,216,.8);line-height:1.7;}
+ol.refs a{color:var(--gold);text-decoration:none;}
+.disclaimer{font-size:.78rem;color:var(--muted);line-height:1.7;border-top:1px solid var(--rule);margin-top:2.5rem;padding-top:1.3rem;}
+.chapter-nav{background:var(--surface);border-top:1px solid var(--rule);padding:1rem 2rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.ch-nav-link{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;}
+.ch-nav-link:hover{color:var(--gold);}
+footer{text-align:center;padding:2.5rem 2rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+@media(max-width:640px){.parts{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../series-hub.html" class="nav-brand">⚜ PRINCIPIA ORTHOGONA ⚜</a>
+  <div class="nav-links">
+    <a href="index.html">Vol V · The Seed</a>
+    <a href="../book7/ch-erdos.html">Vol VII · Erdős</a>
+    <a href="../series-hub.html">Series Hub</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">G⁵ · Vol V · The Seed · Formal vs. Informal</div>
+  <h1>The Machine Collaborator<span class="small">Two Erdős Problems · Two Kinds of "Solved"</span></h1>
+  <p class="hero-pt">Em 2026, dois problemas de Erdős foram resolvidos com auxílio de IA. Um é uma construção brilhante, conferida por humanos; o outro é uma prova em Lean, conferida pelo núcleo (kernel). A diferença é a própria tese de <em>Complete Completeness</em>.</p>
+  <p class="hero-en">Two Erdős problems, both "solved by AI" in 2026 — but "solved" means two different things, and the difference is exactly what this volume is about. <span style="color:var(--muted)">(Body in English; PT localization pending for the IMPA edition.)</span></p>
+</section>
+
+<div class="main">
+
+  <div class="block">
+    <span class="section-label">The distinction</span>
+    <h2 class="section-h2">Checked by whom?</h2>
+    <p class="lede">
+      This volume's thesis is that a result is trustworthy in proportion to <em>what checked it</em> —
+      and its highest standard is the Lean kernel: zero axioms beyond Mathlib, zero <code>sorry</code>.
+      In 2026 two long-open Erdős problems fell with AI assistance. They make a perfect pair, because
+      they sit on opposite sides of exactly that line: one is <em>solved-because-brilliant-humans-checked-it</em>,
+      the other is <em>solved-because-the-kernel-checked-it</em>.
+    </p>
+    <div class="parts">
+      <div class="p1">
+        <h4>Part 1 · The construction</h4>
+        <p>Planar unit-distance problem (Erdős, 1946). An OpenAI reasoning model beat the square grid.</p>
+        <p class="tag">verified by expert humans · peer review pending · not yet formalized</p>
+      </div>
+      <div class="p2">
+        <h4>Part 2 · The formalization</h4>
+        <p>Erdős #728. GPT-5.2 Pro + Aristotle (Harmonic) produced a Lean proof, kernel-checked.</p>
+        <p class="tag">machine-checked in Lean · the Seed standard · 0 sorry</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <span class="section-label">Part 1 · the construction</span>
+    <h2 class="section-h2">Beating the grid — unit distances</h2>
+    <p>
+      Erdős's 1946 question: place $n$ points in the plane; how many pairs can be exactly distance $1$
+      apart? For nearly eighty years the square grid was believed essentially optimal. In May 2026 an
+      OpenAI reasoning model disproved that, exhibiting an infinite family of constructions — built from
+      algebraic number theory — that achieve $n^{1+\delta}$ unit-distance pairs, a genuine polynomial
+      improvement. Will Sawin (Princeton) refined the exponent to $\delta = 0.014$. The argument was
+      checked by Timothy Gowers, Noga Alon, and others; formal journal peer review was still in progress.
+    </p>
+    <div class="honest">
+      <span class="lab">Its epistemic status</span>
+      <p>This is a real advance — publishable and celebrated even if a human had done it. But its truth rests on <strong>expert human checking</strong>, not machine verification. It has not been formalized, and formalizing this particular construction in Lean would itself be a substantial research project (the number-theoretic machinery is deep). "Solved," here, is the classical sense: trusted because the right people read it and believe it.</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <span class="section-label">Part 2 · the formalization</span>
+    <h2 class="section-h2">Kernel-checked — Erdős #728</h2>
+    <p>
+      The other 2026 result is the one this volume actually cares about, because its output is a
+      <em>proof a machine can certify</em>. Erdős Problem #728 concerns a delicate factorial-divisibility
+      statement: for any constants $0 < C_1 < C_2$ and $0 < \varepsilon < \tfrac12$, there are infinitely
+      many triples $(a,b,n)$ with $\varepsilon n \le a,b \le (1-\varepsilon)n$ such that
+      $a!\,b! \mid n!\,(a+b-n)!$ and $C_1 \log n < a+b-n < C_2 \log n$.
+    </p>
+    <p>
+      It was resolved by a pipeline of GPT-5.2 Pro (OpenAI) and <em>Aristotle</em> (Harmonic), operated by
+      Kevin Barreto, and announced on 4 January 2026 — reported as the first Erdős problem regarded as
+      <em>fully resolved autonomously</em> by an AI system. Crucially, the deliverable was not prose but a
+      <strong>Lean proof</strong>. The strategy routes through <em>Kummer's theorem</em> — which turns the
+      $p$-adic valuation of a binomial-type quantity into a count of carries in base-$p$ addition — and
+      then a counting argument that finds integers whose base-$p$ expansions are "carry-rich but
+      spike-free," forcing the required divisibility for every prime $p \le 2k$.
+    </p>
+    <p>The statement, rendered illustratively in Lean (this is a paraphrase of the theorem, <em>not</em> Aristotle's proof — see arXiv:2601.07421 for the real artifact):</p>
+<pre><span class="c">-- Illustrative rendering of the STATEMENT only. Not the Aristotle proof.</span>
+<span class="c">-- Source of record: arXiv:2601.07421.</span>
+<span class="k">theorem</span> erdos_728 (C₁ C₂ ε : ℝ) (hC : <span class="n">0</span> &lt; C₁ ∧ C₁ &lt; C₂) (hε : <span class="n">0</span> &lt; ε ∧ ε &lt; <span class="n">1</span>/<span class="n">2</span>) :
+    { t : ℕ × ℕ × ℕ |
+        <span class="k">let</span> (a, b, n) := t
+        ε * n ≤ a ∧ a ≤ (<span class="n">1</span> - ε) * n ∧ ε * n ≤ b ∧ b ≤ (<span class="n">1</span> - ε) * n ∧
+        a ! * b ! ∣ n ! * (a + b - n)! ∧
+        C₁ * Real.log n &lt; (a + b - n : ℝ) ∧ (a + b - n : ℝ) &lt; C₂ * Real.log n }.Infinite := <span class="c">/- Aristotle's proof -/</span></pre>
+    <div class="callout">
+      <span class="lab">Why this one belongs in The Seed</span>
+      <p>Part 1 is trusted because Gowers read it. Part 2 is trusted because the <em>kernel</em> read it — the same standard this volume holds itself to (0 axioms beyond Mathlib, 0 sorry). The frontier worth marking isn't "AI does mathematics"; it is "AI produces proofs a kernel can certify." #728 is the first Erdős problem to cross that line, and it is the machine analogue of the series proving itself.</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <span class="section-label">The collaborator</span>
+    <h2 class="section-h2">A new node in the Erdős graph</h2>
+    <p>
+      Erdős measured mathematics by collaboration — the famous graph of who has written with whom. What
+      2026 adds is a new <em>kind</em> of node: a machine that does not merely assist but returns a
+      certified proof. It is fitting that the first such node attaches to an Erdős problem. The man who
+      dreamed of "The Book" — the transfinite volume of the most perfect proofs — now has proofs written
+      into a book a machine can read and check line by line. The portrait of the man is in
+      <a href="../book7/ch-erdos.html" style="color:var(--gold);">Vol VII · Erdős</a>; this chapter is what
+      became of his problems when the collaborator stopped being human.
+    </p>
+  </div>
+
+  <div class="block">
+    <span class="section-label">References &amp; status</span>
+    <ol class="refs">
+      <li>Resolution of Erdős Problem #728: a writeup of Aristotle's Lean proof. <em>arXiv</em>:2601.07421. <a href="https://arxiv.org/abs/2601.07421">arxiv.org/abs/2601.07421</a></li>
+      <li>OpenAI reasoning model &amp; the planar unit-distance problem (2026); exponent $\delta=0.014$ (W. Sawin). <a href="https://www.scientificamerican.com/article/ai-just-solved-an-80-year-old-erdos-problem-and-mathematicians-are-amazed/">Scientific American</a> · <a href="https://techcrunch.com/2026/05/20/openai-claims-it-solved-an-80-year-old-math-problem-for-real-this-time/">TechCrunch</a></li>
+      <li>Erdős Problems database — problem #728 (Bloom). <span style="color:var(--muted)">Confirm the exact statement against the database of record.</span></li>
+    </ol>
+    <div class="disclaimer">
+      <strong>Status.</strong> Part 1's construction is human-verified with peer review pending and is not formalized; Part 2's Lean proof is machine-checked per the arXiv writeup, which is the source of record — the Lean shown here is an illustrative paraphrase of the <em>statement</em>, not the proof, and has not been compiled in this document. Facts drawn from the 2026 reports cited; specifics should be reconciled against the primary sources. Principia Orthogona · Vol V · G6 LLC · Pablo Nogueira Grossi · Newark NJ · 2026 · ORCID 0009-0000-6496-2186.
+    </div>
+  </div>
+
+</div>
+
+<div class="chapter-nav">
+  <a href="index.html" class="ch-nav-link">← Vol V · The Seed</a>
+  <a href="../book7/ch-erdos.html" class="ch-nav-link">Vol VII · Erdős, the man →</a>
+</div>
+
+<footer>
+  Principia Orthogona · Vol V · The Machine Collaborator · <a href="index.html">Book 5 Index</a><br>
+  solved-because-a-human-checked-it · vs · solved-because-the-kernel-checked-it
+</footer>
+</body>
+</html>
