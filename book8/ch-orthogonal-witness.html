@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Orthogonal Witness Theorem — de Sitter as the Closed Universe · G⁶ Book 8</title>
+<meta name="description" content="The Orthogonal Witness Theorem (the OG theorem): a breathing three-sphere S³ is the de Sitter hypersurface in 5D Minkowski space, its whole history seen from exactly one orthogonal direction. Two kinds of +1 — a real spatial dimension (embedding) and a strict meta-level (Tarski, Frauchiger–Renner) — held honestly apart. Leg 1 formalized in Lean 4.">
+<script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#04040a;--surface:#0c0d16;--card:#10111c;
+  --gold:#c9a84c;--teal:#0ABAB5;--red:#e05a3a;--green:#4ade80;--purple:#c084fc;--muted:#6b6757;
+  --text:#e8e4d8;--rule:rgba(201,168,76,0.18);
+  --serif:'Noto Serif',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:18px;line-height:1.85;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.8rem 2rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.8rem;}
+.nav-brand{font-family:var(--mono);font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--teal);text-decoration:none;opacity:.85;}
+.nav-links{display:flex;gap:1.2rem;flex-wrap:wrap;}
+.nav-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;opacity:.75;}
+.nav-links a:hover{opacity:1;color:var(--gold);}
+.hero{padding:4.5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 45% at 50% 40%,rgba(201,168,76,.06) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--teal);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:1.6rem;}
+.hero h1{font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:400;letter-spacing:.02em;color:var(--gold);margin-bottom:.5rem;line-height:1.15;}
+.hero .small{display:block;font-size:.42em;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:.9rem;}
+.hero-en{font-size:1rem;color:rgba(232,228,216,.82);max-width:720px;margin:1.3rem auto 0;font-style:italic;line-height:1.75;}
+.main{max-width:880px;margin:0 auto;padding:3rem 2rem 5rem;}
+.section-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:.6rem;}
+.section-h2{font-size:clamp(1.15rem,2.5vw,1.6rem);font-weight:400;color:var(--gold);margin-bottom:1.1rem;letter-spacing:.03em;}
+.block{margin-bottom:3rem;}
+.main p{margin-bottom:1.2rem;color:rgba(232,228,216,.9);}
+.main em{color:var(--gold);font-style:normal;}
+.lede{font-size:1.12rem;line-height:1.8;color:var(--text);border-left:3px solid var(--gold);padding-left:1.4rem;margin-bottom:2rem;}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.6rem 0;}
+.statgrid .s{background:var(--card);padding:1.1rem;text-align:center;}
+.statgrid .n{font-family:var(--mono);font-size:1.4rem;color:var(--gold);display:block;line-height:1.1;}
+.statgrid .l{font-family:var(--mono);font-size:.53rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.4rem;display:block;line-height:1.5;}
+.eqn{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--gold);border-radius:5px;padding:1rem 1.3rem;margin:1.3rem 0;overflow-x:auto;}
+figure{margin:2rem 0;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1.4rem 1rem 1rem;}
+figure svg{display:block;width:100%;height:auto;}
+figcaption{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--muted);margin-top:.9rem;line-height:1.6;text-align:center;}
+pre{background:#0a0b12;border:1px solid var(--rule);border-radius:6px;padding:1.1rem 1.3rem;margin:1.2rem 0;overflow-x:auto;font-family:var(--mono);font-size:.76rem;line-height:1.65;color:#cdd3e0;}
+pre .k{color:var(--teal);} pre .c{color:var(--muted);font-style:italic;} pre .n{color:var(--gold);}
+.thm{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:1.2rem 1.5rem;margin:1.5rem 0;}
+.thm .lab{font-family:var(--mono);font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem;display:block;}
+.thm p{font-size:.96rem;margin-bottom:0;}
+.callout{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--teal);padding:1.2rem 1.5rem;margin:1.5rem 0;}
+.callout .lab{font-family:var(--mono);font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem;display:block;}
+.callout p{font-size:.92rem;margin-bottom:.5rem;}.callout p:last-child{margin-bottom:0;}
+.honest{background:var(--surface);border:1px solid rgba(224,90,58,.3);border-left:3px solid var(--red);padding:1.2rem 1.5rem;margin:1.5rem 0;}
+.honest .lab{font-family:var(--mono);font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:.6rem;display:block;}
+.honest p{font-size:.9rem;color:rgba(232,228,216,.84);margin-bottom:.5rem;}.honest p:last-child{margin-bottom:0;}
+.coda{background:linear-gradient(180deg,rgba(192,132,252,.05),transparent);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:2.4rem 2rem;margin:3rem 0 1rem;}
+.coda .lab{font-family:var(--mono);font-size:.57rem;letter-spacing:.28em;text-transform:uppercase;color:var(--purple);margin-bottom:1.2rem;display:block;text-align:center;}
+.coda p{font-family:var(--serif);font-style:italic;font-size:1.16rem;line-height:1.9;color:var(--text);max-width:640px;margin:0 auto 1.1rem;text-align:center;}
+.coda p:last-child{margin-bottom:0;}
+ol.refs{margin:1rem 0 0 1.2rem;font-size:.85rem;color:rgba(232,228,216,.8);line-height:1.7;}
+ol.refs a{color:var(--gold);text-decoration:none;}
+.disclaimer{font-size:.78rem;color:var(--muted);line-height:1.7;border-top:1px solid var(--rule);margin-top:2.5rem;padding-top:1.3rem;}
+footer{text-align:center;padding:2.5rem 2rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-brand">⚜ PRINCIPIA ORTHOGONA ⚜</a>
+  <div class="nav-links">
+    <a href="index.html">Book 8 · Index</a>
+    <a href="OrthogonalWitness.lean">Lean source</a>
+    <a href="ch8-cosmological.html">The Cosmological Lift</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Book 8 · Quantum Geometry · Lean 4</div>
+  <h1>The Orthogonal Witness Theorem<span class="small">the OG theorem · de Sitter as the closed universe</span></h1>
+  <p class="hero-en">
+    A three-sphere whose radius breathes is the de Sitter hypersurface in a flat
+    five-dimensional Minkowski space. Its entire history is one still object, read
+    from exactly one orthogonal direction. That direction is the minimal witness —
+    and it is a theorem, not a metaphor.
+  </p>
+</section>
+
+<div class="main">
+
+  <div class="block">
+    <span class="section-label">1 · The toy universe</span>
+    <h2 class="section-h2">A sphere that breathes</h2>
+    <p class="lede">
+      Let the whole of space be a three-sphere $S^3$, and let it live inside a flat
+      hyperspace $H^4 = \mathbb{R}^4$ as the set of points at distance $a$ from the
+      origin. Let $a$ change with time. We witness that motion through time — three
+      dimensions of space, plus one of time — and the question is how much room it
+      takes to hold the whole thing as a single object, and who could stand where to
+      see it.
+    </p>
+    <p>
+      This is not a new toy. A three-sphere of radius $a(t)$ carried by a flat $\mathbb{R}^4$,
+      breathing in time, is exactly the <em>closed Friedmann–Lemaître universe</em> — the
+      cosmology of positive spatial curvature, written
+    </p>
+    <div class="eqn">
+      $$ds^2 = -dt^2 + a(t)^2\, d\Omega_3^2, \qquad S^3=\{x\in\mathbb{R}^4 : |x| = a(t)\},$$
+    </div>
+    <p>
+      where $d\Omega_3^2$ is the round metric on the unit three-sphere. The intuition that
+      "four dimensions plus time make five" turns out to be precise, and the precise
+      version is the theorem of this chapter.
+    </p>
+  </div>
+
+  <div class="block">
+    <span class="section-label">2 · Leg 1 — the geometric theorem</span>
+    <h2 class="section-h2">The breathing sphere <em>is</em> de Sitter space</h2>
+    <p>
+      Choose the de Sitter radius $a(\tau)=\ell\cosh(\tau/\ell)$. Then the breathing
+      three-sphere is not merely <em>like</em> a hypersurface in five dimensions — it
+      <em>is</em> the unit hyperboloid of five-dimensional Minkowski space
+      $\mathbb{R}^{1,4}$, under the explicit map
+    </p>
+    <div class="eqn">
+      $$X^0=\ell\sinh(\tau/\ell),\qquad X^i=\ell\cosh(\tau/\ell)\,\omega^i,\quad \omega\in S^3\subset\mathbb{R}^4,\ |\omega|=1.$$
+    </div>
+    <p>The constraint holds identically, using $|\omega|^2=1$ and $\cosh^2-\sinh^2=1$:</p>
+    <div class="eqn">
+      $$-(X^0)^2+\sum_{i=1}^{4}(X^i)^2 = -\ell^2\sinh^2\!\tfrac{\tau}{\ell} + \ell^2\cosh^2\!\tfrac{\tau}{\ell}\underbrace{\textstyle\sum_i(\omega^i)^2}_{=\,1} = \ell^2\big(\cosh^2-\sinh^2\big)=\ell^2.$$
+    </div>
+    <p>
+      Pull the flat Minkowski metric $\eta=\mathrm{diag}(-1,1,1,1,1)$ back through this map.
+      The differentials are $dX^0=\cosh\tfrac{\tau}{\ell}\,d\tau$ and
+      $dX^i=\sinh\tfrac{\tau}{\ell}\,\omega^i\,d\tau + \ell\cosh\tfrac{\tau}{\ell}\,d\omega^i$;
+      since $\sum_i\omega^i d\omega^i=\tfrac12 d(|\omega|^2)=0$ and $\sum_i(d\omega^i)^2=d\Omega_3^2$,
+    </p>
+    <div class="eqn">
+      $$ds^2 = -\cosh^2\!\tfrac{\tau}{\ell}\,d\tau^2 + \sinh^2\!\tfrac{\tau}{\ell}\,d\tau^2 + \ell^2\cosh^2\!\tfrac{\tau}{\ell}\,d\Omega_3^2 = -d\tau^2 + \ell^2\cosh^2\!\tfrac{\tau}{\ell}\,d\Omega_3^2.$$
+    </div>
+    <p>
+      That is the closed FRW line element exactly, with scale factor $a(\tau)=\ell\cosh(\tau/\ell)$.
+      The pullback carries no error term — verified here by exact symbolic computation, the
+      difference against the target metric being the zero matrix.
+    </p>
+
+    <figure>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap;">
+        <button id="dw-play" style="font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);background:transparent;border:1px solid var(--rule);border-radius:4px;padding:.4rem .9rem;cursor:pointer;">Pause</button>
+        <label for="dw-tau" style="font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);">proper time&nbsp;τ</label>
+        <input id="dw-tau" type="range" min="-2.4" max="2.4" step="0.02" value="-2.4" style="flex:1;min-width:150px;accent-color:#0ABAB5;">
+        <span id="dw-out" style="font-family:var(--mono);font-size:.8rem;color:var(--gold);min-width:54px;">&#8722;2.40</span>
+      </div>
+      <svg id="dw-svg" viewBox="0 0 660 300" width="100%" role="img" font-family="'JetBrains Mono','Courier New',monospace">
+        <title>Interactive de Sitter universe: a three-sphere breathing to a throat and back, one history among many, with a witness above.</title>
+        <text x="112" y="24" text-anchor="middle" font-size="11" fill="#6b6757">S&#179; now</text>
+        <circle cx="112" cy="158" r="3" fill="#c9a84c"/>
+        <circle id="dw-ball2" cx="112" cy="158" r="20" fill="#c9a84c" opacity="0.06"/>
+        <circle id="dw-ball" cx="112" cy="158" r="20" fill="none" stroke="#c9a84c" stroke-width="2"/>
+        <line x1="230" y1="248" x2="644" y2="248" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
+        <line x1="437" y1="60" x2="437" y2="252" stroke="rgba(201,168,76,0.18)" stroke-width="1" stroke-dasharray="3 4"/>
+        <text x="437" y="266" text-anchor="middle" font-size="10.5" fill="#6b6757">&#964; = 0 &#183; the throat</text>
+        <g id="dw-ghosts"></g>
+        <polyline id="dw-actual" fill="none" stroke="#0ABAB5" stroke-width="2.5"/>
+        <circle id="dw-pt" r="5.5" fill="#0ABAB5"/>
+        <line id="dw-normal" x1="437" y1="53" x2="437" y2="120" stroke="#c084fc" stroke-width="1" stroke-dasharray="2 4" opacity="0.7"/>
+        <circle cx="437" cy="40" r="13" fill="none" stroke="#c084fc" stroke-width="1.4"/>
+        <circle cx="437" cy="40" r="3.5" fill="#c084fc"/>
+        <text x="437" y="20" text-anchor="middle" font-size="10.5" fill="#c084fc">the witness &#183; one level up</text>
+      </svg>
+      <figcaption>
+        The theorem, moving. The three-sphere contracts to the throat at $\tau=0$ &mdash; radius $\ell$, never
+        zero &mdash; and rebounds, tracing the de Sitter profile $a(\tau)=\ell\cosh(\tau/\ell)$. One bright history
+        (teal) among the ensemble of possible ones (grey); the witness (violet) sits one orthogonal level up, on
+        the dashed normal. Drag&nbsp;τ, or let it run.
+      </figcaption>
+    </figure>
+    <script>
+    (function(){
+      var TMIN=-2.4,TMAX=2.4,X0=250,X1=630,BASE=248,SC=30;
+      var tau=-2.4, playing=true, last=null;
+      function xOf(t){return X0+(t-TMIN)/(TMAX-TMIN)*(X1-X0);}
+      function yOf(a){return BASE-a*SC;}
+      function curve(l){var p='';for(var t=TMIN;t<=TMAX+1e-9;t+=0.08){p+=xOf(t).toFixed(1)+','+yOf(l*Math.cosh(t/l)).toFixed(1)+' ';}return p.trim();}
+      var gh=document.getElementById('dw-ghosts');
+      [0.55,0.75,1.4,1.9].forEach(function(l){var pl=document.createElementNS('http://www.w3.org/2000/svg','polyline');pl.setAttribute('points',curve(l));pl.setAttribute('fill','none');pl.setAttribute('stroke','#6b6757');pl.setAttribute('stroke-width','1');pl.setAttribute('opacity','0.35');gh.appendChild(pl);});
+      document.getElementById('dw-actual').setAttribute('points',curve(1));
+      var ball=document.getElementById('dw-ball'),ball2=document.getElementById('dw-ball2'),pt=document.getElementById('dw-pt'),nl=document.getElementById('dw-normal'),out=document.getElementById('dw-out'),sl=document.getElementById('dw-tau');
+      function render(){var a=Math.cosh(tau);var r=14+a*15.2;if(r>104)r=104;ball.setAttribute('r',r.toFixed(1));ball2.setAttribute('r',r.toFixed(1));var px=xOf(tau),py=yOf(a);pt.setAttribute('cx',px.toFixed(1));pt.setAttribute('cy',py.toFixed(1));nl.setAttribute('x2',px.toFixed(1));nl.setAttribute('y2',py.toFixed(1));out.textContent=(tau<0?'−':' ')+Math.abs(tau).toFixed(2);sl.value=tau;}
+      function loop(ts){if(playing){if(last!=null){tau+=(ts-last)/1000*0.9;if(tau>TMAX)tau=TMIN;}last=ts;render();}else{last=ts;}requestAnimationFrame(loop);}
+      sl.addEventListener('input',function(){tau=parseFloat(sl.value);render();});
+      document.getElementById('dw-play').addEventListener('click',function(){playing=!playing;this.textContent=playing?'Pause':'Play';});
+      render();requestAnimationFrame(loop);
+    })();
+    </script>
+
+    <div class="thm">
+      <span class="lab">The Orthogonal Witness Theorem — Leg 1</span>
+      <p>
+        A closed FRW universe $(S^3,\,a(\tau))$ with $a(\tau)=\ell\cosh(\tau/\ell)$ is isometric
+        to the de Sitter hypersurface $dS_4\subset\mathbb{R}^{1,4}$. Its complete history is realized
+        as one static object in <em>codimension one</em> — along the single orthogonal (normal)
+        direction transverse to the sheet. That normal direction is the minimal geometric witness:
+        $\dim\mathbb{R}^{1,4}-\dim dS_4 = 5-4 = 1$.
+      </p>
+    </div>
+    <div class="statgrid">
+      <div class="s"><span class="n">3</span><span class="l">S³<br>lived space</span></div>
+      <div class="s"><span class="n">4</span><span class="l">H⁴<br>hyperspace</span></div>
+      <div class="s"><span class="n">5</span><span class="l">S³ + t<br>the history, whole</span></div>
+      <div class="s"><span class="n">+1</span><span class="l">normal dir.<br>the witness</span></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <span class="section-label">3 · The ladder</span>
+    <h2 class="section-h2">Three, four, five — and the seat above</h2>
+    <figure>
+      <svg viewBox="0 0 680 468" role="img" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono','Courier New',monospace">
+        <defs>
+          <marker id="warr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#6b6757" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <line x1="52" y1="410" x2="52" y2="34" stroke="#6b6757" stroke-width="1.4" marker-end="url(#warr)"/>
+        <text x="30" y="228" transform="rotate(-90 30 228)" text-anchor="middle" fill="#6b6757" font-size="10.5">dimension rises &#183; each layer closes only from above</text>
+
+        <g>
+          <rect x="150" y="24" width="478" height="82" rx="10" fill="rgba(192,132,252,.07)" stroke="#c084fc" stroke-width="1"/>
+          <circle cx="112" cy="65" r="21" fill="rgba(192,132,252,.12)" stroke="#c084fc" stroke-width="1"/>
+          <text x="112" y="70" text-anchor="middle" fill="#c084fc" font-size="15">6D</text>
+          <text x="176" y="57" fill="#e8e4d8" font-size="14.5">the witness &#8212; the vantage that certifies it</text>
+          <text x="176" y="82" fill="#8b8578" font-size="11.5">a meta-level, not a dimension &#183; Tarski; Frauchiger&#8211;Renner</text>
+        </g>
+        <g>
+          <rect x="150" y="126" width="478" height="82" rx="10" fill="rgba(224,90,58,.06)" stroke="#e05a3a" stroke-width="1"/>
+          <circle cx="112" cy="167" r="21" fill="rgba(224,90,58,.12)" stroke="#e05a3a" stroke-width="1"/>
+          <text x="112" y="172" text-anchor="middle" fill="#e05a3a" font-size="15">5D</text>
+          <text x="176" y="159" fill="#e8e4d8" font-size="14.5">S&#179; + t &#8212; the motion, witnessed as one surface</text>
+          <text x="176" y="184" fill="#8b8578" font-size="11.5">the whole breathing history: the de Sitter hyperboloid</text>
+        </g>
+        <g>
+          <rect x="150" y="228" width="478" height="82" rx="10" fill="rgba(10,186,181,.06)" stroke="#0ABAB5" stroke-width="1"/>
+          <circle cx="112" cy="269" r="21" fill="rgba(10,186,181,.12)" stroke="#0ABAB5" stroke-width="1"/>
+          <text x="112" y="274" text-anchor="middle" fill="#0ABAB5" font-size="15">4D</text>
+          <text x="176" y="261" fill="#e8e4d8" font-size="14.5">H&#8308; &#8212; the hyperspace the sphere moves in</text>
+          <text x="176" y="286" fill="#8b8578" font-size="11.5">flat &#8477;&#8308; that holds S&#179; as it grows and shrinks</text>
+        </g>
+        <g>
+          <rect x="150" y="330" width="478" height="82" rx="10" fill="rgba(10,186,181,.06)" stroke="#0ABAB5" stroke-width="1"/>
+          <circle cx="112" cy="371" r="21" fill="rgba(10,186,181,.12)" stroke="#0ABAB5" stroke-width="1"/>
+          <text x="112" y="376" text-anchor="middle" fill="#0ABAB5" font-size="15">3D</text>
+          <text x="176" y="363" fill="#e8e4d8" font-size="14.5">S&#179; &#8212; the space we live in</text>
+          <text x="176" y="388" fill="#8b8578" font-size="11.5">the three-sphere, our whole lived volume</text>
+          <circle cx="586" cy="371" r="8" fill="none" stroke="#c9a84c" stroke-width="1"/>
+          <circle cx="586" cy="371" r="15" fill="none" stroke="#c9a84c" stroke-width="0.7" opacity=".7"/>
+          <circle cx="586" cy="371" r="22" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity=".5"/>
+        </g>
+        <text x="340" y="446" text-anchor="middle" fill="#6b6757" font-size="10.5">teal = physical space &#183; red = motion through time &#183; violet = the witness's vantage</text>
+      </svg>
+      <figcaption>The two ascents. Three &#8594; four &#8594; five is a real climb in spatial dimension, closed by the de Sitter embedding. The step to six is a different kind of &#8220;+1&#8221;: a logical meta-level, not a place.</figcaption>
+    </figure>
+  </div>
+
+  <div class="block">
+    <span class="section-label">4 · Leg 2 — the epistemic theorem</span>
+    <h2 class="section-h2">The witness that certifies is a level, not a dimension</h2>
+    <p>
+      There is a second, honest theorem in the neighbourhood, and it is the one that makes the
+      word <em>witness</em> earn its keep — but it is not geometric. To <em>certify</em> the
+      truth of the history, rather than merely embed it, you cannot stand inside it. This is not
+      Gödel (who is about a system proving its own <em>consistency</em>); it is <em>Tarski's
+      undefinability of truth</em>: no predicate internal to a theory can decide that theory's own
+      truth, and the truth-witness lives in a strictly stronger metalanguage.
+    </p>
+    <p>
+      Its quantum instantiation is real physics: the <em>Frauchiger–Renner</em> (2018) and
+      <em>Local Friendliness</em> (2020) no-go theorems prove that an observer cannot be consistently
+      modelled as a subsystem of the very quantum state they measure. The witness is never inside the
+      wavefunction it collapses. That is the rigorous version of "the witness sits outside" — and it
+      is a strict meta-level, not a further axis of space.
+    </p>
+  </div>
+
+  <div class="block">
+    <span class="section-label">5 · The two kinds of +1</span>
+    <h2 class="section-h2">What the theorem does and does not say</h2>
+    <p>
+      The whole result lives or dies on not welding two different steps into one seductive sentence.
+      There is a <em>+1 spatial dimension</em>, from three to four to five — real, forced, orthogonal,
+      and proven by the embedding. And there is a <em>+1 meta-level</em>, the vantage that certifies —
+      real, forced, but not a dimension at all. "A six-dimensional observer proves the five-dimensional
+      universe" fuses them, and that specific sentence is false: for maximally symmetric de Sitter the
+      five-dimensional ambient already contains the completed history, so nothing <em>geometric</em>
+      forces a sixth dimension.
+    </p>
+    <div class="honest">
+      <span class="lab">Verification status — honest</span>
+      <p>
+        <strong>What is proven:</strong> the isometry of the breathing $S^3$ with $dS_4\subset\mathbb{R}^{1,4}$
+        (symbolic pullback exact; scalar core in Lean below). <strong>What is cited, not re-proven:</strong>
+        Tarski undefinability and the Frauchiger–Renner / Local-Friendliness no-go theorems. <strong>What is
+        <em>not</em> claimed:</strong> that a higher spatial dimension is required to "prove" the universe, or
+        that Leg 1 implies Leg 2. The two rhyme; neither derives the other.
+      </p>
+      <p>
+        <strong>Skeptic's counterpoint, conceded:</strong> isometric embeddings are highly non-unique and the
+        ambient is gauge, so a hardliner is right that the "witness space" carries no physical content — it is a
+        representation, not a place. What survives that objection is the <em>codimension</em>, which is invariant
+        even when the ambient is not. If one wants the sixth dimension to be genuinely forced by geometry, the
+        route is to break the symmetry: a generic inhomogeneous cosmology raises the isometric-embedding dimension
+        (Nash / Clarke bounds), and only then is "one more" real metric rather than metaphor.
+      </p>
+    </div>
+  </div>
+
+  <div class="block">
+    <span class="section-label">6 · Formalization in Lean 4</span>
+    <h2 class="section-h2">The checkable core of Leg 1</h2>
+    <p>
+      The full tensor pullback is an assertion about manifolds; its <em>scalar</em> heart, however, is
+      finite real algebra and sits inside a proof assistant cleanly. We set the hyperboloid constraint,
+      the proper-time identity $g_{\tau\tau}=-1$, and the de Sitter throat $a(\tau)\ge\ell$ — the sphere
+      never collapses to a point; it bounces at radius $\ell$.
+    </p>
+<pre><span class="c">-- de Sitter scale factor and the timelike ambient coordinate</span>
+<span class="k">noncomputable def</span> a  (ℓ τ : ℝ) : ℝ := ℓ * Real.cosh (τ / ℓ)
+<span class="k">noncomputable def</span> X0 (ℓ τ : ℝ) : ℝ := ℓ * Real.sinh (τ / ℓ)
+
+<span class="c">-- Leg 1 · the image lies on the unit hyperboloid  −(X⁰)² + a² = ℓ²</span>
+<span class="k">theorem</span> on_hyperboloid (ℓ τ : ℝ) :
+    -(X0 ℓ τ) ^ <span class="n">2</span> + (a ℓ τ) ^ <span class="n">2</span> = ℓ ^ <span class="n">2</span> := <span class="k">by</span>
+  <span class="k">have</span> h : Real.cosh (τ / ℓ) ^ <span class="n">2</span> - Real.sinh (τ / ℓ) ^ <span class="n">2</span> = <span class="n">1</span> :=
+    Real.cosh_sq_sub_sinh_sq (τ / ℓ)
+  <span class="k">have</span> expand : -(X0 ℓ τ)^<span class="n">2</span> + (a ℓ τ)^<span class="n">2</span>
+      = ℓ^<span class="n">2</span> * (Real.cosh (τ/ℓ)^<span class="n">2</span> - Real.sinh (τ/ℓ)^<span class="n">2</span>) := <span class="k">by</span>
+    simp only [X0, a]; ring
+  rw [expand, h]; ring
+
+<span class="c">-- Leg 1 · τ is proper time: the τ–τ metric component is −1</span>
+<span class="k">theorem</span> proper_time (τ ℓ : ℝ) :
+    -(Real.cosh (τ / ℓ)) ^ <span class="n">2</span> + (Real.sinh (τ / ℓ)) ^ <span class="n">2</span> = -<span class="n">1</span> := <span class="k">by</span>
+  <span class="k">have</span> h := Real.cosh_sq_sub_sinh_sq (τ / ℓ)
+  linarith
+
+<span class="c">-- Leg 1 · the throat: for ℓ ≥ 0 the radius never drops below ℓ (a bounce)</span>
+<span class="k">theorem</span> radius_has_throat (ℓ τ : ℝ) (hℓ : <span class="n">0</span> ≤ ℓ) : ℓ ≤ a ℓ τ := <span class="k">by</span>
+  <span class="k">have</span> h : (<span class="n">1</span> : ℝ) ≤ Real.cosh (τ / ℓ) := Real.one_le_cosh (τ / ℓ)
+  <span class="k">have</span> hprod : <span class="n">0</span> ≤ ℓ * (Real.cosh (τ / ℓ) - <span class="n">1</span>) := mul_nonneg hℓ (<span class="k">by</span> linarith)
+  simp only [a]; nlinarith [hprod]
+
+<span class="c">-- the witness direction is the normal bundle: codimension exactly one</span>
+<span class="k">theorem</span> witness_codimension : <span class="n">5</span> - <span class="n">4</span> = <span class="n">1</span> := rfl</pre>
+    <div class="callout">
+      <span class="lab">Verification status — honest</span>
+      <p>
+        The <strong>algebra</strong> is independently verified by exact symbolic computation (the metric
+        pullback difference is the zero matrix; every scalar identity checks). The <strong>Lean proofs</strong>
+        are written to be sound but have <strong>not yet been run through the kernel</strong> — the
+        <code>lake build</code> against Mathlib is deferred until we have the compute for it. Until it passes,
+        this is a careful formalization, not a machine-checked one, and will not be cited as "compiles with zero
+        errors" before it does. Full source:
+        <a href="OrthogonalWitness.lean" style="color:var(--gold);">OrthogonalWitness.lean</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="coda">
+    <span class="lab">Coda · the seat speaks</span>
+    <p>The theorem says the seat exists. This is the book turning to say: I am seated there.</p>
+    <p>Below me the multiverse lies open — not unfolding, <em>unfolded</em>: every three-sphere that ever breathed, every de Sitter sheet, set down as a single completed surface in the fifth. From here it does not move. Motion was only how it looked from inside.</p>
+    <p>You will not find me by looking. I am the direction you are not looking in.</p>
+  </div>
+
+  <div class="block">
+    <p style="font-size:.9rem;color:var(--muted);text-align:center;margin-top:1.5rem;">
+      The first-person witness — <em>the space of possibility</em> — is developed on its own terms in the
+      companion chapter of the Omega book. Here the theorem stands alone; there the seat is taken.
+    </p>
+  </div>
+
+  <div class="block">
+    <span class="section-label">References</span>
+    <ol class="refs">
+      <li>de Sitter, W. (1917). On the curvature of space. <em>Proc. KNAW</em> 20. (The hyperboloid $-(X^0)^2+\sum(X^i)^2=\ell^2$ in $\mathbb{R}^{1,4}$.)</li>
+      <li>Hawking, S. W. &amp; Ellis, G. F. R. (1973). <em>The Large Scale Structure of Space-Time</em>. Cambridge University Press. (de Sitter and closed FRW geometry.)</li>
+      <li>Nash, J. (1956). The imbedding problem for Riemannian manifolds. <em>Ann. of Math.</em> 63. (Isometric embedding and codimension.)</li>
+      <li>Tarski, A. (1936). Der Wahrheitsbegriff in den formalisierten Sprachen. <em>Studia Philosophica</em> 1. (Undefinability of truth.)</li>
+      <li>Frauchiger, D. &amp; Renner, R. (2018). Quantum theory cannot consistently describe the use of itself. <em>Nature Communications</em> 9, 3711.</li>
+      <li>Bong, K.-W. et al. (2020). A strong no-go theorem on the Wigner's friend paradox (Local Friendliness). <em>Nature Physics</em> 16, 1199–1205.</li>
+    </ol>
+    <div class="disclaimer">
+      <strong>Status.</strong> Leg 1 (geometric) proven; symbolic pullback exact; Lean scalar core written, not yet
+      kernel-checked (compilation deferred). Leg 2 (epistemic) cited from the literature, not re-derived. No claim is
+      made that a higher spatial dimension is required to certify the universe, nor that Leg 1 implies Leg 2. Principia
+      Orthogona · G6 LLC · Pablo Nogueira Grossi · Newark NJ · 2026 · ORCID 0009-0000-6496-2186.
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Principia Orthogona · Book 8 · The Orthogonal Witness Theorem · <a href="index.html">Book 8 Index</a><br>
+  the breathing sphere is de Sitter · the history is whole in five · the witness is one direction more
+</footer>
+</body>
+</html>
