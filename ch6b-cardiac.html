@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 6b — Cardiac | Book 3: The Mini-Beast</title>
+<meta name="description" content="Chapter 6b of Book 3 (The Mini-Beast): the sinoatrial node as a dm³ system. Sinus rhythm as the limit cycle, sympathovagal balance as the contact variable, and τ = 2 as the HRV decompensation threshold. Recovered chapter; honest status ledger included.">
+<script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --teal:#0ABAB5;--teal-bright:#5de8e2;--teal-soft:#b8e8df;--dark:#030a08;--surface:#0a1714;--surface2:#0d1d18;
+  --text:#d4ede4;--text-dim:#9ecfc4;--rule:rgba(10,186,181,0.20);--red:#e05a3a;--gold:#f9c74f;
+  --serif:'EB Garamond','Iowan Old Style','Palatino',Georgia,serif;--mono:'JetBrains Mono','SF Mono','Menlo',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--dark);color:var(--text);font-family:var(--serif);font-size:18px;line-height:1.75;}
+nav{position:sticky;top:0;z-index:100;background:rgba(3,10,8,0.96);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.nav-series{font-family:var(--serif);font-size:.78rem;letter-spacing:.22em;color:var(--teal-bright);text-decoration:none;}
+.nav-links{display:flex;gap:.9rem;flex-wrap:wrap;}
+.nav-links a{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;color:var(--text-dim);text-decoration:none;text-transform:uppercase;}
+.nav-links a:hover,.nav-links a.here{color:var(--teal-bright);}
+.wrap{max-width:820px;margin:0 auto;padding:3.2rem 2rem 4rem;}
+.kicker{font-family:var(--mono);font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem;}
+h1{font-size:clamp(2rem,5vw,3rem);font-weight:500;line-height:1.1;color:var(--teal-bright);margin-bottom:.5rem;letter-spacing:.01em;}
+.sub{font-style:italic;color:var(--text-dim);font-size:1.15rem;margin-bottom:2.4rem;}
+h2{font-size:1.4rem;font-weight:500;color:var(--teal-bright);margin:2.6rem 0 1rem;letter-spacing:.01em;}
+p{margin-bottom:1.1rem;}
+em{color:var(--gold);font-style:italic;}
+.lede{font-size:1.16rem;border-left:2px solid var(--teal);padding-left:1.3rem;color:var(--text);margin-bottom:2rem;}
+.eqn{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--teal);border-radius:5px;padding:1rem 1.3rem;margin:1.4rem 0;overflow-x:auto;}
+.callout{background:var(--surface2);border:1px solid var(--rule);border-left:3px solid var(--gold);border-radius:5px;padding:1.1rem 1.4rem;margin:1.6rem 0;}
+.callout .lab{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.5rem;}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.9rem;}
+th,td{border:1px solid var(--rule);padding:.55rem .7rem;text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);background:rgba(10,186,181,.05);}
+td{color:var(--text-dim);}
+.status-table td:nth-child(2){font-family:var(--mono);font-size:.78rem;color:var(--teal-bright);white-space:nowrap;}
+.status-table td:nth-child(2):first-letter{text-transform:uppercase;}
+.recovered{background:rgba(224,90,58,.06);border:1px solid rgba(224,90,58,.3);border-left:3px solid var(--red);border-radius:5px;padding:1.1rem 1.4rem;margin:1.6rem 0;font-size:.9rem;color:var(--text-dim);}
+.recovered .lab{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:.5rem;}
+.chapter-nav{max-width:820px;margin:1rem auto 0;padding:0 2rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.chapter-nav a{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;color:var(--text-dim);text-decoration:none;padding:.5rem .8rem;border:1px solid var(--rule);border-radius:4px;}
+.chapter-nav a:hover{background:rgba(10,186,181,.1);color:var(--teal-bright);}
+footer{text-align:center;padding:2.6rem 2rem;color:var(--text-dim);font-size:.82rem;border-top:1px solid var(--rule);margin-top:2rem;}
+.fleur-footer{color:var(--teal);}
+.disclaimer{font-size:.78rem;color:var(--text-dim);opacity:.8;line-height:1.7;border-top:1px solid var(--rule);margin-top:2.5rem;padding-top:1.3rem;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/geometry/index.html" class="nav-series">⚜ PRINCIPIA ORTHOGONA ⚜</a>
+  <div class="nav-links">
+    <a href="/geometry/ch4-neural.html">Ch 4</a>
+    <a href="/geometry/ch5-immune.html">Ch 5</a>
+    <a href="/geometry/ch6-resonance.html">Ch 6a</a>
+    <a href="/geometry/ch6b-cardiac.html" class="here">Ch 6b</a>
+    <a href="/geometry/ch7-topological-orthogenesis.html">Ch 7</a>
+    <a href="/geometry/index.html">Index</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="kicker">Book 3 · The Mini-Beast · Part I · Biology · Chapter 6b</div>
+  <h1>Cardiac</h1>
+  <div class="sub">The Operator Chain in Heart Rhythm — the sinoatrial node as a dm³ system</div>
+
+  <div class="recovered">
+    <span class="lab">Editorial note — recovered chapter</span>
+    This chapter was written but never given its own page: the file <code>ch6-resonance.html</code> was taken by
+    the <em>acoustic</em> resonance chapter (Cymatics, the Hypogeum, Schumann), and the cardiac material — sharing
+    the word &ldquo;resonance&rdquo; in its working title — was left inside the monolithic <code>vol3-minibeast.html</code>.
+    It is restored here as <strong>Chapter 6b</strong>, with acoustic Resonance kept as 6a. Content is reconstructed
+    faithfully from the surviving text; nothing has been added to the claims.
+  </div>
+
+  <p class="lede">
+    The cardiac pacemaker — the sinoatrial (SA) node — is one of the cleanest biological realizations of a dm³ system.
+    The limit cycle is the <em>sinus rhythm</em>; the contact variable $z$ is <em>autonomic balance</em> (the
+    sympathovagal ratio); and the embodiment threshold $\tau = 2$ is the heart-rate-variability ratio at which
+    decompensation becomes likely.
+  </p>
+
+  <h2>The SA node as an operator chain</h2>
+  <p>
+    The same generative chain that runs through the rest of Book 3 &mdash; $G = U \circ F \circ K \circ C$ &mdash;
+    instantiates here in the heart. The pacemaker current drives a stable oscillation; autonomic input (sympathetic
+    and parasympathetic tone) sets the working point; and the fold operator $F$ governs the transition from a healthy,
+    variable rhythm to a rigid or chaotic one. In the model&#8217;s three-dimensional contact phase space the sinus
+    node&#8217;s firing pattern is the attractor $\Gamma$, and heart-rate variability is its stochastic extension.
+  </p>
+  <div class="eqn">
+    $$\text{limit cycle}=\text{sinus rhythm},\qquad z=\frac{\text{sympathetic}}{\text{vagal}}\ \text{tone},\qquad \tau=2\ \text{(HRV decompensation threshold)}.$$
+  </div>
+
+  <h2>Parameters</h2>
+  <p>The chapter carries the same invariant triple $(T^\ast,\ \mu_{\max},\ \tau)$ that every other Book 3 system does, in the cardiac medium:</p>
+  <table>
+    <tr><th>Quantity</th><th>Value</th><th>Meaning</th></tr>
+    <tr><td>$\mu_{\max}$</td><td>&approx; &minus;0.29</td><td>Leading Lyapunov / stability margin of the sinus limit cycle</td></tr>
+    <tr><td>$\omega$</td><td>&approx; 1.0 Hz</td><td>Pacemaker frequency (≈ 60 bpm resting)</td></tr>
+    <tr><td>$\tau$</td><td>2</td><td>Embodiment / decompensation threshold — the shared invariant across all seven Book 3 systems</td></tr>
+  </table>
+  <p>
+    The recurrence of $\tau = 2$ &mdash; the same value found in tubulin, neural, immune and the other instantiations
+    &mdash; is the point: it is <em>not</em> a free parameter fitted per system, but a common threshold the framework
+    predicts each medium should exhibit.
+  </p>
+
+  <h2>Falsifiable Prediction 3</h2>
+  <div class="callout">
+    <span class="lab">Prediction — cardiac decompensation</span>
+    <p>For patients with autonomic dysregulation, the dm³ framework predicts that the stochastic criterion
+    $\sigma/\tau > 1$ will <strong>precede clinical decompensation by a computable lead time</strong> &mdash; i.e. the
+    variability of the sympathovagal drive crossing the embodiment threshold is an early warning, ahead of overt
+    failure. The criterion is testable against prospective HRV cohort data.</p>
+  </div>
+  <p>
+    This is stated as a prediction, not a validated result. It is falsifiable in the strict sense &mdash; a cohort in
+    which $\sigma/\tau > 1$ carries no predictive lead over clinical decompensation would refute it.
+  </p>
+
+  <h2>Status — what is and is not established</h2>
+  <p>Following the same axiom/sorry ledger convention as the rest of the series, here is the honest accounting for this chapter:</p>
+  <table class="status-table">
+    <tr><th>Statement</th><th>Status</th><th>Notes</th></tr>
+    <tr><td>One-mode limit-cycle model of the SA node</td><td>derived</td><td>Formal reduction of the operator chain to a single oscillatory mode; sinus rhythm as the attractor $\Gamma$</td></tr>
+    <tr><td>$\tau = 2$ as the HRV decompensation threshold</td><td>proposed</td><td>Consistent with the shared $\tau=2$ invariant across Book 3; motivated, not clinically validated here</td></tr>
+    <tr><td>Rigorous center-manifold reduction</td><td>not done</td><td>Needs an invariant-manifold theorem controlling the neglected autonomic modes &mdash; this chapter uses the formal one-mode ansatz only</td></tr>
+    <tr><td>Lean / AXLE formalization</td><td>not started</td><td>No scaffold file yet &mdash; planned, follows the same axiom/sorry ledger convention as the rest of the series</td></tr>
+    <tr><td>Clinical validation of Prediction 3</td><td>not done</td><td>Requires a prospective HRV cohort; the $\sigma/\tau>1$ criterion is falsifiable but untested in this chapter</td></tr>
+  </table>
+
+  <h2>What this does and does not show</h2>
+  <p>
+    It shows that the cardiac pacemaker fits the same operator-chain grammar as the rest of Book 3, with a clean
+    physiological reading for every term and a single falsifiable clinical prediction. It does <em>not</em> show a
+    proved center-manifold reduction, a machine-checked formalization, or any clinical validation &mdash; those are
+    named above as open, not glossed. The chapter&#8217;s value is the mapping and the prediction it exposes to test,
+    held to the same standard as everything else in the Mini-Beast.
+  </p>
+
+  <div class="disclaimer">
+    <strong>Note.</strong> This is a theoretical modeling chapter, not medical guidance. The decompensation criterion
+    is a research prediction awaiting prospective validation. Recovered and set as Chapter 6b from content in
+    <code>vol3-minibeast.html</code>. Principia Orthogona · Book 3 · Pablo Nogueira Grossi · G6 LLC · Newark NJ · 2026 · ORCID 0009-0000-6496-2186 · CC BY-NC-ND 4.0.
+  </div>
+</div>
+
+<div class="chapter-nav">
+  <a href="ch6-resonance.html">← Chapter 6a · Resonance</a>
+  <a href="ch7-topological-orthogenesis.html">Chapter 7 · Topological Orthogenesis →</a>
+</div>
+
+<footer>
+  <span class="fleur-footer">⚜</span>
+  Book 3: The Mini-Beast &nbsp;·&nbsp; G = U ∘ F ∘ K ∘ C &nbsp;·&nbsp; Chapter 6b of 17
+  <span class="fleur-footer">⚜</span>
+</footer>
+</body>
+</html>
