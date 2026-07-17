@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Audit a Mathematical Claim — Principia Orthogona, Book 6</title>
+<meta name="description" content="A method for auditing formal and quantitative claims, distilled from auditing this corpus's own work: read for the math, find the derivation/data/code, beware the phantoms, tell a coarse closed form from a real solve, smell the fitted correction, check the model closes — and when the generating math is missing, rebuild it and be baffled until it is there.">
+<style>
+  :root { --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Georgia, 'Times New Roman', serif; background: var(--cream); color: var(--navy); }
+  main { max-width: 760px; margin: 0 auto; padding: 64px 40px 80px; }
+  .eyebrow { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+  .op-chain { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; margin-bottom: 44px; }
+  .op-chain .active { color: var(--gold); font-weight: bold; }
+  .op-chain a { color: inherit; text-decoration: none; }
+  .op-chain a:hover { color: var(--gold); }
+  h1 { font-size: 32px; font-weight: normal; text-align: center; margin: 0 0 6px; line-height: 1.25; }
+  .value-line { text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13.5px; color: #6b7280; margin-bottom: 28px; }
+  .gold-rule { height: 1px; width: 120px; margin: 0 auto 32px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  h2 { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); border-bottom: 1px solid var(--smoke); padding-bottom: 8px; margin: 44px 0 16px; }
+  h2 .n { color: var(--navy); }
+  p { font-size: 16.5px; line-height: 1.75; margin: 0 0 20px; }
+  code { font-family: 'SF Mono', Menlo, monospace; font-size: 0.85em; background: var(--smoke); padding: 1px 5px; border-radius: 3px; }
+  table.status-table { width: 100%; border-collapse: collapse; margin: 16px 0 28px; font-size: 14.5px; }
+  table.status-table th, table.status-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--smoke); vertical-align: top; }
+  table.status-table th { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #9ca3af; }
+  table.status-table td:first-child { font-family: 'Helvetica Neue', Arial, sans-serif; font-weight: bold; white-space: nowrap; }
+  .numeric-check { background: #0f1830; color: #d7dcea; border-radius: 4px; padding: 16px 20px; font-family: 'SF Mono', Menlo, monospace; font-size: 12.5px; line-height: 1.7; margin: 20px 0 28px; overflow-x: auto; white-space: pre; }
+  .verdict { background: #fbf7ec; border: 1px solid var(--gold); border-radius: 4px; padding: 18px 22px; margin: 24px 0 28px; font-size: 15.5px; line-height: 1.7; }
+  .verdict .lbl { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #a5843a; display: block; margin-bottom: 8px; }
+  .caveat { font-size: 15.5px; line-height: 1.75; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 18px; margin: 24px 0 32px; }
+  .prevnext { display: flex; justify-content: space-between; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; padding-top: 24px; margin-top: 44px; border-top: 1px solid var(--smoke); }
+  .prevnext a { color: inherit; text-decoration: none; }
+  .prevnext a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+<main>
+
+  <div class="eyebrow">Principia Orthogona &nbsp;·&nbsp; Book 6 &nbsp;·&nbsp; Working Papers · Mathematics &amp; Formal Proofs</div>
+
+  <div class="op-chain">
+    <a href="ch-criticality-bridge-audit.html">WP-24 Criticality Bridge</a>
+    <span>→</span>
+    <a href="wp28-circadian-trader-audit.html">WP-28 The Circadian Trader</a>
+    <span>→</span>
+    <span class="active">WP-30 How to Audit</span>
+  </div>
+
+  <h1>How to Audit a Mathematical Claim</h1>
+  <div class="value-line">a method, distilled from auditing this corpus's own work — read for the math, and stay baffled until it is there</div>
+
+  <div class="gold-rule"></div>
+
+  <p>
+    The two audits before this one each caught a single bad claim. This one is the general
+    method behind them, written as a lesson, because the individual audits — grepping a file,
+    quoting a missing citation — read a little comically on their own. The discipline underneath
+    is simple and it is the same discipline that produced everything sound in this series:
+    <em>do the math, then write the claim — in that order</em>. What follows is how to check
+    whether someone (including yourself) did.
+  </p>
+
+  <h2><span class="n">1.</span> &nbsp;Don't trust the label</h2>
+  <p>
+    A green <code>Lean 4 · 0 sorry</code> tag, a status cell that says <code>Proved</code>, a DOI
+    in the reference list — these are <em>claims about evidence</em>, not evidence. The row that
+    started WP-28 sat in a five-domain table wearing the same styling as two machine-checked rows.
+    Styling is free. The audit's only move is to stop reading the label and go find the thing it
+    points at.
+  </p>
+
+  <h2><span class="n">2.</span> &nbsp;Read the paper — don't grep it</h2>
+  <p>
+    This is the confession, and it is why this paper exists. A full-text search tells you
+    <em>where a word appears</em>; only reading tells you <em>whether the math is there</em>.
+    WP-28 grepped <code>GameTheory_Full_Pack.html</code> for "circadian" and found two hits, which
+    was enough to flag the one bad row — but it missed that the same paper genuinely
+    <em>derives</em> its network-game threshold and openly self-flags the circadian row as
+    unsourced. Grep is a smoke detector. It is not a reading. Read the model, the assumptions, and
+    the step where the number is produced.
+  </p>
+
+  <h2><span class="n">3.</span> &nbsp;Find the three things every real result has</h2>
+  <p>
+    A <strong>derivation</strong> (the math that yields the number), a <strong>dataset</strong>
+    (if it is empirical), and <strong>reproducible code</strong> (if it is numerical). If any of
+    the three is "cited elsewhere," follow the citation until it touches ground. A result missing
+    all three is not a weak result; it is a placeholder that looks like one.
+  </p>
+
+  <h2><span class="n">4.</span> &nbsp;Beware the phantoms</h2>
+  <p>
+    Three specific shapes of nothing, each dressed as something:
+  </p>
+  <table class="status-table">
+    <tr><th>Phantom</th><th>What it looks like</th><th>Seen here</th></tr>
+    <tr><td>Phantom code</td><td>a script named as the source of a number, absent from the repo</td><td><code>value_iteration_midstream.py</code> — cited for σ* ≈ 1/3, nowhere on disk</td></tr>
+    <tr><td>Phantom citation</td><td>a concept-DOI that always resolves to <em>the latest deposit</em>, so it never 404s and never points anywhere specific</td><td>"Appendix A, Grossi (2026a)" → the series concept DOI; the appendix "not yet written"</td></tr>
+    <tr><td>Phantom row</td><td>a number with no model, data, or citation, riding a convergence table as an independent confirmation</td><td>the "circadian trader" g₃₃ ≈ 1/3 (the paper itself labels it Unsourced)</td></tr>
+  </table>
+
+  <h2><span class="n">5.</span> &nbsp;A closed form is not a real solve</h2>
+  <p>
+    A clean formula is often a <em>coarse</em> approximation. The network-game paper gives an
+    analytical threshold σ* = √(b/a) ≈ 0.665 and a numerical one σ* ≈ 0.33; the same corpus's
+    stability radius ε₀ = 1/3 is the coarse symmetric Grönwall estimate that
+    <a href="../book4/ch10.html">Book 4, Ch 10</a> refines to r* ≈ 0.776. Neither closed form is a
+    lie — they are the first term. Report both, and say which one is the coarse bound and which is
+    the real solve.
+  </p>
+
+  <h2><span class="n">6.</span> &nbsp;Smell the fitted correction</h2>
+  <p>
+    When a "correction factor" is <em>exactly</em> what maps the closed form onto the target
+    constant, be suspicious. The paper closes the 0.665 → 0.33 gap with ψ ≈ 0.50, narrated as two
+    effects each contributing "~25%." A total that is precisely the number needed, split into equal
+    halves, is the fingerprint of a result reverse-engineered to its answer and decorated
+    afterward. A genuine correction is computed independently and lands where it lands.
+  </p>
+
+  <h2><span class="n">7.</span> &nbsp;Check that the model closes</h2>
+  <p>
+    Chase the equations to their boundary. The analytical threshold needs "V earns rent at σ = 0"
+    (a constant b &gt; 0) — yet the payoff as written, R_V = βσ(1−γ)·min(v,1)·|I| − v²/2, is
+    <em>identically zero</em> at σ = 0. The mechanism that produces the whole result is off the
+    page. A claim whose generating math is incomplete on the page cannot be reproduced <em>or</em>
+    refuted — it can only be rebuilt.
+  </p>
+
+  <h2><span class="n">8.</span> &nbsp;When the math is missing, rebuild it — fresh</h2>
+  <p>
+    A fresh build always works in your favor: you can run it, and sometimes you improve on the
+    original. Rather than hunt the phantom script, we rebuilt the value iteration from the stated
+    payoffs, with every missing piece named in the open (the AR(1) imbalance dynamics; V's
+    baseline rent b₀). It runs — and it turns the vague "invariant" into a precise statement:
+  </p>
+  <div class="numeric-check">E[pi_J] = a * sigma^2   (a constant across sigma  ->  J really is convex in volatility)
+  sigma=0.2   a = 9.493
+  sigma=0.3   a = 9.493
+  sigma=0.4   a = 9.493
+
+option-value coefficient  a = 9.49       (pinned by the stated dynamics)
+crossing:  sigma* = sqrt(b0 / a)         b0 = V's rent at sigma=0  (NOT on the page)
+
+  sigma* = 0.333   <=>   b0 = 1.05
+  sigma* = 0.665   <=>   b0 = 4.20</div>
+  <p>
+    So the coefficient <em>a</em> is nailed down by the model; σ* is a one-parameter family in the
+    unstated rent b₀; and "1/3" and "0.665" are simply two points on that curve, each chosen by a
+    number no one wrote down. The ψ ≈ 0.5 "correction" is the gap between two guesses of b₀. The
+    reproducible build is committed as <code>value_iteration_midstream.py</code> — the phantom is
+    now a real file, and the honest claim it supports is: σ* = √(b₀/a), a ≈ 9.5, and b₀ must be
+    measured.
+  </p>
+
+  <h2><span class="n">9.</span> &nbsp;The verdicts</h2>
+  <table class="status-table">
+    <tr><th>Verdict</th><th>Meaning</th></tr>
+    <tr><td>Proved</td><td>math present and reproduced (ideally kernel-checked)</td></tr>
+    <tr><td>Derived, coarse</td><td>a closed form that a numerical solve refines — keep both, label them</td></tr>
+    <tr><td>Cited elsewhere</td><td>the backing exists but off-page; follow it to ground before believing it</td></tr>
+    <tr><td>Underdetermined</td><td>the result depends on a quantity the source never states (σ* here)</td></tr>
+    <tr><td>Fitted</td><td>a free factor chosen to hit a target, then narrated as a mechanism</td></tr>
+    <tr><td>Unsourced</td><td>no derivation, data, or citation found — the honest label for a phantom</td></tr>
+  </table>
+
+  <div class="verdict">
+    <span class="lbl">The bafflement principle</span>
+    When the generating math is missing, be baffled — and say so out loud. A number without a
+    derivation is not a small gap to be smoothed over with a caveat; it is the entire thing
+    absent. This series does its own math many times over before it is willing to write a claim
+    down, and it catches its own errors in public — a scribal slip in Plimpton 322, a vacuous Lean
+    hypothesis, a threshold that was really a free parameter. Auditing your own work is not
+    weakness. It is the immune system.
+  </div>
+
+  <div class="caveat">
+    A note on tone: none of this requires assuming bad faith. Most phantoms are honest
+    work-in-progress that got typeset as if finished — a placeholder that borrowed the styling of a
+    result. The audit's job is not to accuse; it is to restore the label to the truth, and, where
+    it can, to rebuild the missing math so the claim can finally stand on it.
+  </div>
+
+  <div class="prevnext">
+    <a href="wp28-circadian-trader-audit.html">← WP-28 · The Circadian Trader</a>
+    <a href="../GameTheory_Full_Pack.html">The audited paper →</a>
+  </div>
+
+</main>
+</body>
+</html>
