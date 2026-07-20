@@ -870,16 +870,51 @@
     but are forced by the boundary structure of the contact distribution.
   </p>
 
-  <div class="thm-box lemma-box">
-    <div class="thm-label"><span class="thm-num">Lemma 5.3</span> Distributional Commutator</div>
+  <div class="thm-box lemma-box" style="border-left:4px solid #c0392b">
+    <div class="thm-label"><span class="thm-num">Correction notice</span> (2026-07-18)</div>
     <div class="thm-body">
-      Let K = multiplication by θ(η* − η) (Heaviside projection) and
-      F = Nemytskii operator Fψ = ψ + λ|ψ|²ψ on L²([0,1]).
-      In 𝒟′([0,1]):
-      [K, F]ψ = KFψ − FKψ = −λ|ψ(η*)|²ψ(η*) · δ(η − η*)
-      as a distribution supported at {η*}, for any ψ ∈ C⁰([0,1]) with ψ(η*) ≠ 0.
+      <strong>This lemma previously asserted the opposite of what is true, and the
+      error propagated.</strong> The earlier statement claimed
+      [K, F]ψ = −λ|ψ(η*)|²ψ(η*)·δ(η − η*) ≠ 0 for K a Heaviside gate and F the
+      <em>pointwise</em> Nemytskii fold. That is false: a 0/1 gate commutes with a
+      pointwise map <em>exactly</em>, for every state, and the δ term does not exist.
+      Its own proof below (steps 2–3) derives KFψ = FKψ; the old step 4 introduced
+      the δ from nowhere. The lemma is restated correctly here. Downstream chapters
+      that inherited the false version are tracked in the repository ledger.
     </div>
   </div>
+
+  <div class="thm-box lemma-box">
+    <div class="thm-label"><span class="thm-num">Lemma 5.3</span> Locus of Non-Commutativity</div>
+    <div class="thm-body">
+      Let K = multiplication by θ(η* − η) (Heaviside projection) on L²([0,1]).
+      <ol style="margin:0.4em 0 0 1.2em">
+        <li><strong>The gate commutes with any pointwise fold.</strong>
+          Let F<sub>onsite</sub> be the Nemytskii operator
+          F<sub>onsite</sub>ψ = ψ + λ|ψ|²ψ. Then [K, F<sub>onsite</sub>] = 0
+          identically — everywhere, for every ψ, with no boundary term.</li>
+        <li><strong>Non-commutativity requires transport.</strong>
+          Let F<sub>coupling</sub> be any operator that moves amplitude between
+          distinct points of [0,1] (a hopping, diffusion, or non-local coupling term).
+          Then [F<sub>coupling</sub>, F<sub>onsite</sub>] ≠ 0 in general, and for the
+          full fold F = F<sub>coupling</sub> ∘ F<sub>onsite</sub> we have
+          [K, F] ≠ 0.</li>
+      </ol>
+      <p style="margin:0.5em 0 0">
+        Order-dependence is carried by whichever operator transports amplitude
+        <em>between</em> sites — never by a gate acting pointwise.
+      </p>
+    </div>
+  </div>
+
+  <p style="font-size:0.92em;opacity:0.85">
+    <strong>Machine-checked.</strong> Both parts are verified in Lean 4 (v4.33,
+    <code>#print axioms</code> clean — <code>[propext, Classical.choice,
+    Quot.sound]</code>, no <code>sorryAx</code>) in
+    <code>TOTOGT/io → zeolite_operator_order/ZeoliteCommutation.lean</code> as
+    <code>gate_commutes</code>, <code>coupling_not_commute</code>, and
+    <code>gate_fold_not_commute</code>.
+  </p>
   <div class="proof">
     <span class="proof-label">Proof.</span>
     <ol>
@@ -901,14 +936,23 @@
         Since θ² = θ: FKψ = θ(η*−η)(ψ + λ|ψ|²ψ).
       </li>
       <li>
-        <strong>Pointwise comparison.</strong>
-        On [0,η*) and (η*,1], KFψ = FKψ.
-        At η = η*, K introduces a jump while F sees the full value ψ(η*):
-        the commutator picks up the boundary contribution
-        [K,F]ψ = (KF − FK)ψ = −λ|ψ(η*)|²ψ(η*)·δ(η−η*).
+        <strong>Part (i) — the two agree everywhere.</strong>
+        Steps 2 and 3 produced the same expression, θ(η*−η)(ψ + λ|ψ|²ψ).
+        So KFψ = FKψ on all of [0,1], including at η = η*: there is no jump to
+        exploit, because F is pointwise and F(0) = 0, so wherever the gate is 0
+        both compositions return 0, and wherever it is 1 both return Fψ.
+        Hence [K, F<sub>onsite</sub>] = 0. <em>(The earlier version of this proof
+        stopped one line short of this conclusion and asserted a δ term instead.)</em>
       </li>
       <li>
-        <strong>Nonvanishing.</strong> ψ(η*) ≠ 0 by hypothesis, so the coefficient is nonzero. <span class="qed">□</span>
+        <strong>Part (ii) — where the non-commutativity actually lives.</strong>
+        Let F<sub>coupling</sub> transport amplitude between points, e.g. the
+        discrete hopping (F<sub>c</sub>v)<sub>n</sub> = v<sub>n−1</sub> + v<sub>n+1</sub>.
+        A nonlinear map does not distribute over a sum: cubing-then-summing gives
+        1³ + 1³ = 2, while summing-then-cubing gives (1+1)³ = 8, a commutator of
+        −6 ≠ 0. Since the gate zeroes some sites, it changes what the coupling has
+        to transport, so [K, F<sub>coupling</sub> ∘ F<sub>onsite</sub>] ≠ 0.
+        <span class="qed">□</span>
       </li>
     </ol>
   </div>
@@ -1344,10 +1388,10 @@
         <tr>
           <td>2</td>
           <td>Distribution Theory</td>
-          <td>𝒟′([0,1]); δ(η−η*)</td>
-          <td>33 boundary terms; unavoidable in 𝒟′</td>
-          <td>Confirms constraints are not finite-dim. artifact</td>
-          <td class="status-proved">✓ Proved</td>
+          <td>𝒟′([0,1]); transport coupling</td>
+          <td>Gate commutes with pointwise fold; [K,F] ≠ 0 only via coupling</td>
+          <td>Corrected 2026-07-18 — the δ boundary term does not exist</td>
+          <td class="status-proved">✓ Kernel-checked (Lean 4)</td>
         </tr>
         <tr>
           <td>3</td>
