@@ -117,6 +117,7 @@ const CHAPTERS = [
   { href:"chV-sorrys.html",    label:"Ch 3" },
   { href:"chV-g6.html",        label:"Ch G⁶" },
   { href:"chV-axle.html",      label:"AXLE" },
+  { href:"chV-saturn-smoke.html", label:"Saturn·Smoke" },
   { href:"chV-seed.html",      label:"The Seed" },
 ];
 

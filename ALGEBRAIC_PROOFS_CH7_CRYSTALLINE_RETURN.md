@@ -119,18 +119,52 @@ Step 4 — Hill coefficient n = 2π/√3.
 
 Step 5 — F is the hexagonal fixed point operator.
 
-  Define K = θ(r₀ − r) (radial gate at the hexagonal radius r₀). Then:
-    K[ψ](r) = 0 for r > r₀ (eliminates sub-threshold amplitude)
-    F[K[ψ]](r,θ) = K[ψ] + λ|K[ψ]|² K[ψ] = ψ_hex + nonlinear correction
+  CORRECTION (2026-07-20). An earlier version of this step asserted that a
+  RADIAL GATE K = θ(r₀ − r) fails to commute with a POINTWISE fold
+  F[ψ] = ψ + λ|ψ|²ψ, "by the commutator lemma." That is false: a radial 0/1
+  gate and a pointwise (Nemytskii) map act sitewise and commute exactly, for
+  every state — there is no [K,F] ≠ 0 at r = r₀. See ~/geometry/CLAUDE.md,
+  "KNOWN DEFECT: the false commutator lemma." The order-dependence that produces
+  the hexagon is real, but it is carried by the ANGULAR COUPLING term of the
+  Hamiltonian — the b·r⁶cos(6θ) term that redistributes amplitude among the six
+  angular positions θ_k = kπ/3 — not by the radial gate.
 
-  At the fixed point of F in the D₆-symmetric subspace:
-    F[ψ*] = ψ* implies |ψ*(r₀,θ_k)|² = constant for all k = 0,...,5
-    i.e. ψ* is the uniform hexagonal wavepacket sum Σₖ δ(r−r₀)δ(θ−kπ/3).
+  Corrected statement. Split the fold as F = F_ang ∘ F_onsite, where F_onsite is
+  the pointwise nonlinearity ψ + λ|ψ|²ψ and F_ang is the angular coupling that
+  moves amplitude between neighbouring sextants (the cos(6θ) term).
 
-  By the commutator lemma, [K,F] ≠ 0 at r = r₀, ensuring the operator ORDER
-  matters: only C→K→F→U produces the hexagonal fixed point.
-  The alternative order C→F→K→U produces a non-hexagonal intermediate state
-  that does not converge to D₆ symmetry under U.
+    (i)  The radial gate commutes exactly with F_onsite, for every state.
+    (ii) F_ang does NOT commute with F_onsite (a nonlinear map does not
+         distribute over the angular sum), so the full fold F is order-sensitive.
+    (iii) The uniform six-fold state ψ_hex = Σₖ δ(r−r₀)δ(θ−kπ/3) is the fixed
+          point of F_ang in the D₆-symmetric subspace, and is invariant under the
+          sixfold rotation R : θ ↦ θ + π/3.
+
+  Parts (i)–(iii) are kernel-checked in Lean 4 for the finite six-sextant model,
+  verified 2026-07-20 under Lean v4.14.0 + Mathlib (SaturnHexagon.lean):
+
+    gate_commutes_onsite     the radial gate commutes with the pointwise fold,
+                             for EVERY state                          [VERIFIED]
+    angCoupling_not_commute  angular coupling does NOT commute with the
+                             on-site nonlinearity (1³+1³ = 2 vs (1+1)³ = 8)
+                                                                      [VERIFIED]
+    rot_commutes_coupling    the sixfold rotation R commutes with the angular
+                             coupling — the D₆ symmetry of the mechanism
+                                                                      [VERIFIED]
+    hex_rotation_invariant   the uniform hexagon is invariant under R  [VERIFIED]
+    hex_coupling_uniform     the coupling preserves uniformity: each sextant
+                             receives 2c from its two neighbours      [VERIFIED]
+
+  All five report #print axioms = [propext, Classical.choice, Quot.sound];
+  no sorryAx.
+
+  Order-dependence is carried by whichever operator moves amplitude BETWEEN
+  sextants — never by the radial gate acting pointwise. Only C→F→U (with F
+  carrying its angular coupling) converges to the D₆ fixed point.
+
+  What survives unchanged: the D₆ / wavenumber-6 conclusion of Ch7-T1, the
+  empirical confirmations below, and Steps 1–4. What was replaced is the
+  mechanism asserted in Step 5, not the result.
 
 Conclusion:
   (a)–(d) all follow from Steps 2–5.
