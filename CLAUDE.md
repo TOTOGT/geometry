@@ -169,10 +169,37 @@ version. D4 in particular chains D3's K,F to D2's K,F, and D2 (ch18) is a carrie
 None reproduces the derivation. Projections *are* idempotent; that fact is not
 the defect. The defect is only ever: gate + **pointwise** fold → asserted δ.
 
-### Cluster 4 — BACKGROUND. 82 files total match non-commutativity language.
-The remainder (HVEH/, book7/, omega/, dark-matter monograph, etc.) use the
-vocabulary without reproducing the derivation. Expected to be fine. Sweep last,
-and only to confirm.
+### Cluster 1b — CARRIERS FOUND ON THE SECOND PASS (2026-07-20)
+The first sweep grepped for the literal string `λ|ψ|²ψ` and therefore missed
+files that assert the δ using different notation. A signature-based rescan
+(δ boundary term, in any notation) surfaced these. **None repaired yet.**
+
+| File | Note |
+|---|---|
+| `ALGEBRAIC_PROOFS_ALL_7_THEOREMS.md` | **Stale duplicate.** Superseded in `TOTOGT/io` by `OPERATOR_ORDER_DERIVATIONS_AND_STATUS.md`. Per the no-duplicates rule: **delete, do not edit.** |
+| `HVEH/distribution-theory.html` + `HVEH/proofs/distribution-theory.html` | Same content, two paths — one repair, applied twice |
+| `HVEH/ch06b.html` | asserts the δ |
+| `book4/ch06b.html` + `book4/ch06b-elojo.html` | Same content, two paths |
+
+So ~5 unique documents remain, not 70.
+
+### Cluster 4 — BACKGROUND. 47 files match non-commutativity vocabulary only.
+No fold, no gate, no δ, no commutator citation. Expected clean. Sweep last, and
+only to confirm.
+
+### How to rescan (use the SIGNATURE, not the vocabulary)
+The first sweep undercounted because it matched one literal glyph string. Scan
+for the *asserted boundary term* in any notation, then tier:
+
+```bash
+grep -rlE 'δ\(\s*[ηr]\s*[−-]\s*[ηr]' . --include=*.html --include=*.md --include=*.tex
+```
+
+Tier A = δ asserted · B = pointwise fold + gate/commutator · C = cites `[K,F]`
+or "the commutator lemma" · D = vocabulary only. Expect false positives in A
+from this file and from any *repaired* file, since corrections quote the claim
+they retire — check whether the match sits inside a correction notice before
+treating it as a carrier.
 
 **The true count of affected published records is not yet established.** Do not
 write a number into any document until each file has been opened. Overstating the
@@ -229,3 +256,17 @@ for a worked example of a corrected document.
 6. **Update this ledger** when you settle a file — mark it fixed, or move it out
    of triage. A future session will trust this table; leaving it stale recreates
    the original problem in a new place.
+7. **A caveat may only be removed by the same edit that verifies the thing it
+   hedges — never as tidying.** This is the corpus's most frequent failure mode,
+   observed four separate times on 2026-07-18/20:
+   - zeolite Theorem 1: "left to the distributional-calculus literature" deleted,
+     the false δ asserted in its place;
+   - Ch M: a Nobel date stated flatly, off by 26 years;
+   - the wildfire toxicity multiplier: a coarse-fraction result silently
+     transferred to PM2.5;
+   - the Maya reference: "(volume/issue to confirm)" removed while an
+     unconfirmed volume/issue was added.
+
+   In each case the original author *knew* something was uncertain and said so,
+   and a later pass cleaned up the flag instead of resolving the uncertainty.
+   If you cannot verify it, leave the hedge exactly where it is.
