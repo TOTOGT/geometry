@@ -166,6 +166,35 @@ Step 5 — F is the hexagonal fixed point operator.
   empirical confirmations below, and Steps 1–4. What was replaced is the
   mechanism asserted in Step 5, not the result.
 
+  ────────────────────────────────────────────────────────────────────────
+  WORKED EXAMPLE → NEXT OPEN PROBLEMS (for the camarada)
+  ────────────────────────────────────────────────────────────────────────
+  SaturnHexagon.lean is the worked example: five theorems, kernel-clean, on a
+  fixed six-sextant ring. It shows the METHOD. Two frontiers open from it, at
+  two difficulty levels — full credit for a proof OR a proof that it fails.
+
+  (A) TRACTABLE, Lean-checkable this term.
+      Generalise the six-sextant model to N sextants (D_N symmetry). State and
+      machine-check, for a parameterised `Fin N`:
+        · rot_N commutes with the N-neighbour angular coupling   (generalises
+          rot_commutes_coupling);
+        · the uniform state is preserved in form by the coupling (generalises
+          hex_coupling_uniform).
+      Finite, decidable; `fin_cases` for fixed N, induction for general N.
+      Style warning: pattern-match on `Fin N`, NOT `![…]` — the vector form
+      fails silently into `sorry` past the low indices (learned 2026-07-20).
+
+  (B) HARD, genuinely open — the SELECTION question.
+      The theorems show D₆ is CONSISTENT (the hexagon is a fixed point). They
+      do NOT show it is SELECTED — why does Saturn choose wavenumber 6 rather
+      than 5 or 7? That requires the STABILITY of the fixed point, not just its
+      existence: the transverse Lyapunov spectrum of the angular coupling under
+      the real Hamiltonian, and whether n = 6 uniquely minimises it for
+      Saturn's rotation rate and jet width. This is a real dynamical-systems
+      problem; a partial result (a stability criterion, even numerical) is
+      publishable. Existence is proved above; selection is the open frontier.
+  ────────────────────────────────────────────────────────────────────────
+
 Conclusion:
   (a)–(d) all follow from Steps 2–5.
   The hexagonal geometry is the unique stable output of F on D₆-symmetric Ω.

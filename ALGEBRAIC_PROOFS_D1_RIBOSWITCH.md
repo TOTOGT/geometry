@@ -99,39 +99,99 @@ Now the commutator:
   [K, F]ψ = KFψ − FKψ
            = [θψ + λθ|ψ|²ψ] − [θψ + λθ|ψ|²ψ]
 
-This appears to vanish — but the issue is the region η ∈ (η*, 1] (the ON region).
+This vanishes — exactly, and it should.
 
-Take ψ(η) supported on ALL of Ω (not just Ω_OFF). For η > η*:
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │ CORRECTION (2026-07-20). The two expressions above are identical, so │
+  │ [K,F]ψ = 0 for this K and F. An earlier version of this proof wrote  │
+  │ "This appears to vanish — but the issue is the region η ∈ (η*,1]" and│
+  │ then produced a boundary term −λ|ψ(η*)|²ψ(η*)·δ(η−η*) from            │
+  │ d/dη θ = −δ. That step is invalid: the commutator is an algebraic    │
+  │ difference of two multiplication operators, not a derivative of θ,   │
+  │ so no δ arises. A 0/1 gate commutes EXACTLY with a pointwise         │
+  │ (Nemytskii) fold. See ~/geometry/CLAUDE.md, "KNOWN DEFECT," and the  │
+  │ kernel-verified refutation TOTOGT/io → ZeoliteCommutation.lean       │
+  │ (gate_commutes). The proof below is rebuilt on the correct operator. │
+  └─────────────────────────────────────────────────────────────────────┘
 
-  KFψ|_{η > η*} = θ(η* − η)[Fψ] = 0  (θ = 0 for η > η*)
-  FKψ|_{η > η*} = F[θ(η* − η)ψ]|_{η > η*}
+Where the non-commutativity actually lives.
 
-For η > η*, the ON region:
+  The pointwise fold F[ψ] = ψ + λ|ψ|²ψ acts on each η independently, so it
+  cannot break commutation with a local gate. But the riboswitch fold is NOT
+  purely local. The switch works by BASE-PAIRING: the aptamer stem and the
+  Shine-Dalgarno (SD) sequence compete to pair with the same downstream
+  nucleotides. That is a NON-LOCAL coupling along the chain — it links a
+  nucleotide at position η to a partner at a distant position η′, moving
+  amplitude between them.
 
-  FKψ(η)|_{η > η*} = F[0] = 0
+  Write the fold as F = F_pair ∘ F_onsite, where F_onsite is the pointwise
+  term above and F_pair is the base-pairing coupling:
 
-But at the boundary η → η*⁻ vs η → η*⁺, the Heaviside creates a distributional
-boundary term. Formally:
+    (F_pair ψ)(η) = ψ(η) + g · ψ(η′(η))     [η′ = the Watson–Crick partner of η]
 
-  d/dη θ(η* − η) = −δ(η − η*)
+  F_pair transports amplitude between paired positions. The gate K = θ(η*−η)
+  keeps η < η* and zeroes η > η*; if η < η* but its partner η′ > η*, then
+  gate-then-pair and pair-then-gate give different states, because the gate
+  changes which partners are still present to pair with.
 
-The commutator near η = η* is:
+  Statement, corrected:  ∃ ψ ∈ L²(Ω),  [K, F_pair]ψ ≠ 0.
 
-  [K, F]ψ ≈ −λ · δ(η − η*) · |ψ(η*)|² ψ(η*)
+  Finite witness (3-site chain, partner of site 0 is site 2, gate keeps 0,1):
+    (K∘F_pair)ψ at site 0  uses ψ(2) BEFORE the gate removes it;
+    (F_pair∘K)ψ at site 0  finds ψ(2) already zeroed.
+  These differ whenever ψ(2) ≠ 0 — the same structure kernel-checked as
+  coupling_not_commute / gate_fold_not_commute in ZeoliteCommutation.lean.
 
-Choose ψ such that ψ(η*) ≠ 0.  Then:
+Biological interpretation (unchanged in substance):
+  Order-dependence is real and is concentrated at the aptamer/SD junction,
+  the Whitney A₁ fold point η* = κ*_ribo/κ_max. It is carried by the
+  base-pairing coupling — the operator that moves amplitude between distant
+  nucleotides — NOT by the local aperture gate acting alone. This encodes the
+  physical irreversibility of the conformational switch: once the SD sequence
+  is sequestered or freed, the order in which gating and pairing occurred
+  decides the outcome.
 
-  [K, F]ψ = −λ|ψ(η*)|²ψ(η*) · δ(η − η*)  ≠  0
+Conclusion:  [K_ribo, F_ribo] ≠ 0 once F carries its base-pairing coupling.  ∎
 
-This is a nonzero distribution (Dirac delta at the fold point η*).
+────────────────────────────────────────────────────────────────────────────
+WORKED EXAMPLE — and what it hands you
+────────────────────────────────────────────────────────────────────────────
+The 3-site witness above is small enough to be MACHINE-CHECKED end to end. The
+same skeleton is verified in the Lean kernel in TOTOGT/io → ZeoliteCommutation
+.lean (`gate_commutes`, `coupling_not_commute`, `gate_fold_not_commute`), with
+`#print axioms` clean — no `sorryAx`. That file is your template: four `def`s
+(gate, onsite, coupling, a witness state) and three short theorems. If you can
+read it, you can adapt it.
 
-Biological interpretation:
-  The commutator is concentrated at η = η* = κ*_ribo/κ_max — exactly the
-  Whitney A₁ fold point. K and F fail to commute precisely at the bifurcation
-  threshold. Their non-commutativity encodes the physical irreversibility of
-  the conformational switch.
+This result is therefore a WORKED EXAMPLE, not the assignment. The assignment
+is the next open problem, which this now makes reachable:
 
-Conclusion:  [K_ribo, F_ribo] ≠ 0  ∎
+  OPEN PROBLEM D1-T1′ (open · for the camarada · full credit for a proof OR a
+  proof that it fails).
+  The witness settles the 3-site chain. State and machine-check the general
+  claim for an N-site chain: let K be the aperture gate keeping sites {0,…,m},
+  and F_pair the base-pairing coupling that maps each site to its Watson–Crick
+  partner π(η). Prove in Lean, for a parameterised `Fin N`:
+
+     (∃ η ≤ m with π(η) > m and ψ(π(η)) ≠ 0)  ⟹  [K, F_pair]ψ ≠ 0,
+
+  and conversely that [K, F_pair] = 0 when no pair crosses the gate. The first
+  direction generalises `gate_fold_not_commute`; the second generalises
+  `gate_commutes`. Both are finite, decidable, and within reach of `fin_cases`
+  / `decide` for fixed N, or induction for general N.
+
+  Why it is worth doing: it turns "order-dependence is carried by the coupling
+  that crosses the gate" from a sentence into a theorem with an explicit
+  crossing condition — the biological content being exactly which aptamer/SD
+  pairings straddle the fold point η*. A negative result (finding the condition
+  is stronger than stated) is equally publishable.
+
+  NOTE ON STYLE (learned the hard way, 2026-07-20): define the operators by
+  explicit pattern match on `Fin N`, not `![…]` vector notation — Mathlib's
+  `Matrix.cons_val` simp lemmas do not chain past the low indices on a `Fin N`
+  literal, and the vector form fails silently into `sorry`. The kernel catches
+  it; `#print axioms` is how you know.
+────────────────────────────────────────────────────────────────────────────
 
 ================================================================================
 THEOREM D1-2: OFF-LOCK ORDER C→K→F→U SUPPRESSES P_ON
@@ -518,9 +578,14 @@ Experimental protocol:
 SUMMARY: ALL 6 THEOREMS PROVEN ALGEBRAICALLY
 ================================================================================
 
-D1-T1: [K_ribo, F_ribo] ≠ 0
-  ✓ Commutator = −λ|ψ(η*)|²ψ(η*) · δ(η − η*)  [nonzero at fold point]
-  ✓ Non-commutativity localised at Whitney A₁ bifurcation η = η* = κ*_ribo/κ_max
+D1-T1: [K_ribo, F_ribo] ≠ 0  (once F carries its base-pairing coupling)
+  ✓ Corrected 2026-07-20: the pointwise fold COMMUTES with the gate exactly;
+    order-dependence is carried by the non-local base-pairing coupling F_pair
+    (aptamer/SD), which moves amplitude between distant nucleotides.
+  ✗ WITHDRAWN: the δ(η−η*) boundary term. No δ arises from a commutator of
+    two multiplication operators. See Theorem D1-1 correction notice.
+  ✓ Non-commutativity localised at the aptamer/SD junction (Whitney A₁ fold
+    point η = η* = κ*_ribo/κ_max), carried by transport not by the gate.
 
 D1-T2: C→K→F→U order → P_ON = 0  (OFF-lock)
   ✓ K zeros amplitude at η ≥ η* before F fires
