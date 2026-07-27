@@ -6,7 +6,7 @@ Let me extract the exact href links from both files to know precisely what's lin
 |---|---|
 | Ch.6 Falsifiable Predictions → `ch6-falsifiable.html` | Ch.6 Resonance → `ch6-resonance.html` |
 | Ch.7 Complete Circuit → `ch7-complete-circuit.html` | Ch.7 Crystalline → `ch7-crystalline.html` |
-| Ch.T Tubulin → `sample-chapter-tubulin.html` | Ch.7b Topological Orth. → `ch7-topological-orthogenesis.html` |
+| Ch.T Tubulin → `chT-tubulin.html` | Ch.7b Topological Orth. → `ch7-topological-orthogenesis.html` |
 | Ch.W Wigner Crystal → `wigner-fractal.html` | Ch.8 Nested Infinities → `ch8-nested-infinities.html` |
 | Collatz → `spectral-radius-v2.html` | Collatz → `chH-collatz.html` |
 | Sim → `sim-lyapunov.html` | removed |
