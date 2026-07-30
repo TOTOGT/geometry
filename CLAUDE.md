@@ -150,7 +150,38 @@ explicitly living document (see ISBN map above), so it can be revised without a
 print run. That makes it the cheapest cluster to repair and the most urgent, since
 it is the one that presents the lemma as the book's spine.
 
-### Cluster 2 — INHERITORS. Cite chain-level 5.3 only; probably fine, verify once each.
+### Cluster 2 — **VERIFIED 2026-07-29. ch19 and ch20 CLEAN, no edit needed. research-status.html has two housekeeping defects (not the δ).**
+
+- **`ch19-enzyme-noncommutativity.html` (D3) — CLEAN.** Theorem 19.1's gate is
+  `Kψ = θ(c* − |c(ψ) − c_bound|)ψ` — threshold-**state-dependent**, and F changes
+  `c(ψ)`. Same structurally sound form as the repaired Theorem 18.1: a gate whose
+  argument the fold rewrites. No δ asserted anywhere; cites the abstract Vol I §5
+  statement only. The chapter even states outright that "Theorem 5.3 does not
+  require K and F to act on separable structures."
+  **Watch item, not a defect:** its fold is written `Fψ = ψ + λ·R(ψ)`, which has
+  the *same shape* as the false pointwise fold. It is sound only because `R(ψ)`
+  is a conformational operator acting non-locally, not `|ψ|²ψ`. If a later pass
+  ever "simplifies" R to a pointwise map, this chapter becomes a carrier. Leave
+  R symbolic.
+- **`ch20-saf-noncommutativity.html` (D4) — CLEAN, and stronger than the ledger
+  assumed.** It does not inherit a mechanism; it sharpens the claim into a
+  controllability statement — if K and F are co-located with no separation in
+  space, time, or catalyst identity, `[K,F]` is not merely nonzero but
+  *uncontrolled*. The worry that D4 chains through D2 is resolved: ch18's
+  Theorem 18.1 was itself found sound, so the chain rests on nothing false.
+- **`research-status.html` — two defects, both housekeeping.**
+  1. It cites `ALGEBRAIC_PROOFS_ALL_7_THEOREMS.md §4.4` as the paper of record for
+     the MAIN selectivity theorem — the file Cluster 1b marks *delete, do not
+     edit*. Deleting it as instructed would leave a dangling citation here and in
+     `ALGEBRAIC_PROOFS_CH7_CRYSTALLINE_RETURN.md`. **Repoint both to
+     `TOTOGT/io → OPERATOR_ORDER_DERIVATIONS_AND_STATUS.md` before deleting.**
+  2. Its Theorem 5.3 row describes the Lean status as "1 disclosed sorry —
+     `CatGT_PROOFS_COMPLETE.lean` — NonCommutativity, **boundary-discontinuity**".
+     That lemma name is a possible δ residue in the Lean layer. The file lives in
+     `TOTOGT/io`, not this repo, so it was **not** inspected — `[OPEN]`, check it
+     there before citing this row.
+
+### Cluster 2 original note — cite chain-level 5.3 only; probably fine, verify once each.
 `ch19-enzyme-noncommutativity.html` (D3) · `ch20-saf-noncommutativity.html` (D4) ·
 `research-status.html`
 
@@ -176,14 +207,46 @@ files that assert the δ using different notation. A signature-based rescan
 
 | File | Note |
 |---|---|
-| `ALGEBRAIC_PROOFS_ALL_7_THEOREMS.md` | **Stale duplicate.** Superseded in `TOTOGT/io` by `OPERATOR_ORDER_DERIVATIONS_AND_STATUS.md`. Per the no-duplicates rule: **delete, do not edit.** |
-| `HVEH/distribution-theory.html` + `HVEH/proofs/distribution-theory.html` | Same content, two paths — one repair, applied twice |
-| `HVEH/ch06b.html` | asserts the δ |
-| `book4/ch06b.html` + `book4/ch06b-elojo.html` | Same content, two paths |
+| `ALGEBRAIC_PROOFS_ALL_7_THEOREMS.md` | **Stale duplicate**, superseded in `TOTOGT/io` by `OPERATOR_ORDER_DERIVATIONS_AND_STATUS.md`. The earlier note here said "delete, do not edit." **DECISION 2026-07-29 (author, explicit): do NOT delete.** The file stays. Consequence: the citations to it from `research-status.html` and `ALGEBRAIC_PROOFS_CH7_CRYSTALLINE_RETURN.md` are no longer dangling-reference risks and need no repointing. But the file **still carries the false δ** and is still superseded, so it must not be cited as the paper of record going forward, and anyone reading it needs to know. **DONE 2026-07-29:** correction notice added at the head — retained-but-superseded, "DO NOT CITE", pointing to `OPERATOR_ORDER_DERIVATIONS_AND_STATUS.md`; Theorem 1's `✓` replaced with a dated `✗ WITHDRAWN` naming the DNLS `J` hopping term as the recoverable route and flagging that Theorems 4 and 7 chain through it; the self-awarded "10/10" and the 9/10→10/10 sentence neutralised. |
+| `HVEH/distribution-theory.html` + `HVEH/proofs/distribution-theory.html` | **YES — 2026-07-29.** Both paths repaired (byte-identical, md5 `5c126293`). This one is *not* the commutator error — the distributional identity `d/dr H(r−r*) = δ(r−r*)` here is **true**. The defect was three inferences drawn from it: (i) the page claimed the δ "is not an artifact of the model" when it is precisely an artifact of the assumed discontinuity (smooth the shear layer to width ℓ and you get a bounded bump of height ~1/ℓ, no δ); (ii) it called δ an energy density, never derived; (iii) it claimed thermodynamic one-wayness "without invoking entropy" — impossible, since distributional differentiation is time-symmetric. **Engineering conclusion survives on different grounds:** hysteresis via the subcritical fold (Proof III's territory), with the shutdown-vs-startup setpoint gap now tagged `[OPEN]` and flagged as requiring measurement on a physical basin. Claims retagged `[VERIFIED — textbook]` / `[MODEL]` / `[OPEN]`. **Note the new failure mode: a true lemma with false inferences hung off it.** The signature grep for an asserted δ will not catch this class — scan also for "proves irreversibility", "without invoking entropy", and "not an artifact". |
+| `HVEH/ch06b.html` | **YES — 2026-07-29.** Only the Proof II summary card was affected ("Differentiating the gate H(r − r*) yields an unavoidable δ(r − r*) boundary term: the transition is one-way"). Retitled "Sharp-interface idealization" and restated to match the repaired Proof II page. Tagged `[MODEL]`. Proof I and III–VII cards untouched. |
+| `book4/ch06b.html` + `book4/ch06b-elojo.html` | **ALREADY REPAIRED — 2026-07-26** (this ledger row was stale; corrected 2026-07-29 after verification). Both paths byte-identical, md5 `c96aa1cf`. Proof II card retitled "Transport term, not a gate derivative", `[MODEL]`-tagged, with a dated correction note in the Synthesis section attributing order-dependence to the advective vortex-transport term inside F. **Consistency note:** that repair and the 2026-07-29 Proof II repair are compatible but emphasize different mechanisms — advective transport is what makes `[K,F] ≠ 0` (order-dependence); the subcritical fold is what makes the transition hysteretic (path-dependence); viscous dissipation is what makes it thermodynamically irreversible. Three distinct claims that the original conflated into one δ. Keep them distinct when editing either file. |
 
 So ~5 unique documents remain, not 70.
 
-### Cluster 4 — BACKGROUND. 47 files match non-commutativity vocabulary only.
+### Cluster 1c — PROOF I. Found by the Cluster 4 sweep, 2026-07-29. **REPAIRED, 11 files.**
+
+**The first two repair passes fixed Proof II and left Proof I asserting the same
+thing in words.** `HVEH/operator-algebra.html` said the commutator is "nonzero,
+*localizing at the fold point*" — a commutator concentrated at one radius is the
+δ(r − r*) claim with the symbol removed, which is exactly why the signature grep
+never caught it. The page used "proof"/"provable" 18 times and contained **no
+derivation at all**: no KFψ/FKψ expansion, no steps (violating rules 1 and 3).
+
+Worse, its K is *fixed* geometry — sills and vanes, a static mask. A static gate
+composed with a pointwise map commutes exactly (`gate_commutes`), so as written
+the page asserted the false lemma outright.
+
+**Conclusion survives; the reason was wrong.** F is advective — vortex tightening
+moves vorticity *between* radii, so F is not sitewise and a static radial gate
+genuinely fails to commute with it (`coupling_not_commute`). Same mechanism the
+2026-07-26 book4 note identified. The repaired page now shows the one-line
+commuting argument for the pointwise case, then the transport argument for why the
+real F escapes it, tagged `[MODEL]` for the continuum claim with thresholds `[OPEN]`.
+
+Files corrected (all 11, HTML verified): `HVEH/operator-algebra.html` +
+`HVEH/proofs/operator-algebra.html` (identical source, md5 `0c5b00aa`) ·
+`HVEH/index.html` · `HVEH/proofs/index.html` · `HVEH/ch06b.html` · `HVEH/ch08.html` ·
+`book4/index.html` · `book4/ch06b.html` · `book4/ch06b-elojo.html` ·
+`book4/ch08.html` · `book4/ch08-harrison.html`.
+
+**Lesson for the ledger: repair the whole proof family, not the named file.** The
+defect migrated to the adjacent proof and to code comments (`// Proof I —
+commutator localises at the fold` inside `.eq` blocks in three ch08 files). Add to
+the rescan: `locali[sz]\w* at the fold`, and check summary cards and code comments,
+not just prose.
+
+### Cluster 4 — BACKGROUND. Swept 2026-07-29: 79 files touch the vocabulary. Tier A = 10, **zero unaccounted**; Tier B = 0; Tier C = 21 (Proof I family now repaired); Tier D = 48 vocabulary-only, matching the estimate below.
 No fold, no gate, no δ, no commutator citation. Expected clean. Sweep last, and
 only to confirm.
 

@@ -66,18 +66,36 @@
 <section class="proof-hero">
   <div class="proof-eyebrow">Proof I of VII</div>
   <h1>Operator Algebra</h1>
-  <div class="subtitle">Non-commutativity of K and F</div>
+  <div class="subtitle">Non-commutativity of K and F — carried by transport, not by the gate</div>
   <div class="thesis-block">The curvature gate K and the fold amplifier F do not commute. This is not a design preference — it is a provable algebraic fact that determines which physical outcome is reachable.</div>
+</section>
+<section style="padding:2rem 8%;border-bottom:1px solid var(--rule)">
+  <div style="background:rgba(192,57,43,0.07);border-left:3px solid #c0392b;padding:1.25rem 1.75rem;border-radius:0 4px 4px 0;max-width:900px">
+    <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#e0776a;margin-bottom:0.75rem">Correction notice &mdash; 2026-07-29</div>
+    <div style="font-size:0.95rem;color:#d8b8b2;line-height:1.8">
+      This page previously stated that the commutator is &ldquo;nonzero, <em>localizing at the fold point</em>&rdquo; and called the result &ldquo;a provable algebraic fact.&rdquo; <strong>Both the localization claim and the word &ldquo;proof&rdquo; are withdrawn as used.</strong>
+      <br><br>
+      <strong>The localization was never derived.</strong> A commutator concentrated at a single radius is the same content as the &delta;(r&nbsp;&minus;&nbsp;r*) boundary term withdrawn from <a href="distribution-theory.html" style="color:var(--teal-2)">Proof II</a> &mdash; written in words instead of symbols, which is why it survived the first repair sweep.
+      <br><br>
+      <strong>It also attributed the effect to the wrong operator.</strong> K here is <em>fixed</em> geometry &mdash; sills and vanes, a static mask. A static gate composed with a <em>pointwise</em> map commutes exactly, for every state; that is the kernel-checked refutation in <code>TOTOGT/io &rarr; ZeoliteCommutation.lean</code> (<code>gate_commutes</code>). Nothing about a gate &ldquo;at the fold&rdquo; can generate non-commutativity.
+      <br><br>
+      <strong>The conclusion survives, and the corrected reason is stated below:</strong> F is advective. Vortex tightening moves vorticity <em>between radii</em>, so F does not act sitewise, and a static radial gate genuinely fails to commute with it (<code>coupling_not_commute</code> in the same file). Order-dependence is carried by whichever operator moves amplitude between locations &mdash; never by a gate acting alone. This page contains a reasoned argument, not a machine-checked proof of the continuum statement.
+    </div>
+  </div>
 </section>
 <section class="proof-body-section">
   <div class="prose"><p>The HVEH basin contains two operators acting on the incoming flow field: <strong>K</strong>, the curvature gate (basin sills and vanes that enforce safe flow geometry), and <strong>F</strong>, the fold operator (the nonlinear self-amplification that drives vortex tightening).</p>
-<p>In standard linear systems, operator order is irrelevant. Here it is not. The commutator [K, F] = KF − FK measures the failure of the two operators to commute — and it is nonzero, localizing at the fold point where the flow transitions from laminar inflow to helical rotation.</p>
+<p>In standard linear systems, operator order is irrelevant. Here it is not. The commutator [K, F] = KF − FK measures the failure of the two operators to commute, and it is nonzero — but for a specific reason worth stating precisely, because the obvious reason is wrong.</p>
+<p><strong>Why a gate alone is not enough.</strong> Write K as multiplication by a radial mask χ(r) and suppose F acted pointwise, F[v](r) = f(v(r)) with f(0) = 0. Then K(F(v)) = χ·f(v) and F(K(v)) = f(χv); where χ = 1 both equal f(v), where χ = 0 both equal 0. They agree everywhere, so [K,F] = 0. <em>A static gate composed with a sitewise map always commutes.</em> No amount of steepness at r* changes this.</p>
+<p><strong>What actually breaks the symmetry.</strong> F is not pointwise. Vortex tightening is advective: it transports vorticity <em>between</em> radii, so F[v](r) depends on v at radii other than r. Gate-then-transport and transport-then-gate now differ, because the second moves amplitude across the mask boundary that the first had already zeroed. The non-commutativity is a property of <em>transport</em>, not of the gate and not of any concentration at the fold.</p>
 <p>Applying F before K amplifies the vortex before geometry is locked, driving the system into a chaotic or cavitating state. Applying K before F locks the geometry first, then lets nonlinear amplification build on a stable foundation. The stable energy-producing attractor is only reachable via the correct sequence.</p>
-<p>This is a derivable algebraic consequence — not a tuning parameter, not an empirical finding. The design specification <em>follows from the proof</em>.</p></div>
+<p>The ordering law is therefore a consequence of the transport term, not a tuning parameter. <strong>Status:</strong> the finite-dimensional statement — a static gate commutes with a sitewise map, and fails to commute with an inter-site coupling — is machine-checked (<code>gate_commutes</code>, <code>coupling_not_commute</code>). The continuum claim for this basin is <em>[MODEL]</em>: argued here, not formalized. The commissioning sequence below follows from the model and from the hysteresis in <a href="catastrophe-theory.html">Proof III</a>, and the quantitative thresholds remain <em>[OPEN]</em> pending measurement.</p></div>
   <div class="math-panel">
     <div class="math-title">Key relations</div>
     <table class="math-table"><tr><td>Operator sequence</td><td>G = U ∘ F ∘ K ∘ C</td></tr>
 <tr><td>Commutator</td><td>[K, F] = KF − FK ≠ 0</td></tr>
+<tr><td>Source of ≠ 0</td><td>advective transport inside F (not the gate)</td></tr>
+<tr><td>If F were pointwise</td><td>[K, F] = 0 exactly — kernel-checked</td></tr>
 <tr><td>Wrong order</td><td>F ∘ K  →  chaotic attractor</td></tr>
 <tr><td>Correct order</td><td>K ∘ F  →  stable helical attractor Γ</td></tr></table>
     <div class="svg-wrap"><svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px">
@@ -98,7 +116,7 @@
   <text x="368" y="103" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#e1f5ee">Γ</text>
   <text x="368" y="150" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#1d9e75">stable vortex</text>
   <text x="240" y="25" text-anchor="middle" font-family="'Courier New',monospace" font-size="11" fill="#5dcaa5">[K, F] = KF − FK ≠ 0</text>
-  <text x="240" y="42" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#3d7060">non-commutativity localizes at the fold point</text>
+  <text x="240" y="42" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#3d7060">order-dependence carried by transport in F</text>
   <line x1="80" y1="175" x2="185" y2="175" stroke="#6b4040" stroke-width="1" stroke-dasharray="4 3"/>
   <text x="150" y="170" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#6b4040">F first →</text>
   <line x1="290" y1="175" x2="340" y2="175" stroke="#6b4040" stroke-width="1" stroke-dasharray="4 3"/>
@@ -108,7 +126,7 @@
 </section>
 <section class="consequence-section">
   <div class="consequence-label">Engineering consequence</div>
-  <div class="consequence-text">Basin vane geometry must be fully established before inflow velocity is allowed to exceed the vortex amplification threshold. This determines sill height, inlet angle, and commissioning sequence for every HVEH installation.</div>
+  <div class="consequence-text">Basin vane geometry should be fully established before inflow velocity is allowed to exceed the vortex amplification threshold — commission the geometry, then the flow. <strong>The ordering is a model result; the numbers are not.</strong> Sill height, inlet angle and the amplification threshold itself are <em>[OPEN]</em> and must come from measurement or CFD on a specific basin, not from this page.</div>
 </section>
 <div class="proof-nav-footer">
   <a class="pnf-link" href="index.html">← Index</a>

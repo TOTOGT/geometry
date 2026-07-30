@@ -618,10 +618,15 @@ Predictions P1–P3: Algebraically derived, each with explicit pass/fail criteri
   P3: Hill coefficient n ≈ 3.64.0 ± 0.4; Coherence Bridge KS p > 0.05
 
 ================================================================================
-MATHEMATICAL RIGOR SCORE: 10/10
+CLAIM STATUS  (was: "MATHEMATICAL RIGOR SCORE: 10/10" — withdrawn 2026-07-29)
 ================================================================================
 
-All theorems have:
+The self-awarded score is removed. No document scores its own rigor
+(~/geometry/CLAUDE.md, rule 3). It survived the 2026-07-20 δ repair of this
+file, which corrected the derivation and left the grade behind.
+
+Nothing below is machine-checked. Read the items as what this document
+contains, not as a certification of it:
   ✓ Explicit algebraic proofs from first principles
   ✓ Operator definitions (K, F, C, U) in L²(Ω) with biological interpretations
   ✓ Quantitative predictions (n=2, R²>0.90, ρ>0.80, KS p>0.05)

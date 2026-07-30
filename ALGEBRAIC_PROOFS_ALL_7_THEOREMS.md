@@ -1,4 +1,32 @@
 ================================================================================
+!!  CORRECTION NOTICE — 2026-07-29.  RETAINED BUT SUPERSEDED.  DO NOT CITE.  !!
+================================================================================
+
+This document is kept for the record. It is NOT the paper of record and must
+not be cited as one. Supersedes it:
+
+    TOTOGT/io -> zeolite_operator_order/OPERATOR_ORDER_DERIVATIONS_AND_STATUS.md
+
+Two defects, both known and both left in place here deliberately so the record
+shows what was claimed:
+
+1. THEOREM 1 IS FALSE AS DERIVED. Its non-commutativity is obtained "via
+   boundary effects" — a delta boundary term from a fixed 0/1 gate acting on a
+   pointwise fold. Those two operators commute EXACTLY, for every state. There
+   is no boundary term. Kernel-checked refutation: TOTOGT/io ->
+   ZeoliteCommutation.lean (gate_commutes). The conclusion [K,F] != 0 is
+   recoverable, but only from the J hopping term of the DNLS equation — the
+   inter-site coupling that moves amplitude between sites — never from a gate
+   acting pointwise. Theorems 4 and 7 chain through Theorem 1 and inherit the
+   defect. See ~/geometry/CLAUDE.md, "KNOWN DEFECT: the false commutator lemma."
+
+2. THIS DOCUMENT SCORES ITS OWN RIGOR. "MATHEMATICAL RIGOR SCORE: 10/10",
+   the 9/10 -> 10/10 claim, the journal list, and the bare ∎ on each of seven
+   sketches all violate rules 1 and 3. No claim here has been machine-checked.
+
+Retention decision: author, explicit, 2026-07-29 — do not delete this file.
+
+================================================================================
 ALGEBRAIC PROOFS: OPERATOR FIRING ORDER IN ZEOLITE SELECTIVITY
 ================================================================================
 
@@ -582,7 +610,9 @@ SUMMARY: ALL 7 THEOREMS PROVEN ALGEBRAICALLY
 ================================================================================
 
 Theorem 1: [K, F] ≠ 0
-  ✓ Commutator computed explicitly; non-commutativity proven via boundary effects
+  ✗ WITHDRAWN 2026-07-29 — "proven via boundary effects" is false; a fixed gate
+    and a pointwise fold commute exactly. Conclusion may survive via the DNLS
+    J hopping term; this derivation does not. Theorems 4 and 7 chain through it.
 
 Theorem 2: C→K→F→U ⟹ S ≈ 0
   ✓ Step-by-step wavefunction evolution; K eliminates aromatic space before F
@@ -604,7 +634,7 @@ Theorem 7: S ↔ Order bijection
   ✓ Proved via dichotomy, continuity, monotonicity; selectivity uniquely identifies order
 
 ================================================================================
-MATHEMATICAL RIGOR SCORE: 10/10 ✓
+[SELF-AWARDED RIGOR SCORE WITHDRAWN 2026-07-29 — see correction notice at head]
 ================================================================================
 
 All theorems now have:
@@ -614,7 +644,7 @@ All theorems now have:
   ✓ Falsification criteria (testable against experiment)
   ✓ Clear logical flow (lemmata → main results)
 
-This elevates the work from "9/10 (statements + strategies)" to "10/10 (proven)".
+[Withdrawn 2026-07-29: a document may not grade itself, and Theorem 1 is false as derived.]
 
 The proofs are suitable for publication in:
   - Catalysis Today (applied mathematics + experiment)
