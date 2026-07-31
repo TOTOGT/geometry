@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-37 · Arriving With a Corpus — Principia Orthogona Vol VI</title>
+<meta name="description" content="WP-37 · A pre-flight note for the incoming student of a professional RAG course (MIT xPRO or equivalent): what to bring, what to build before week one, and the four questions that separate a demo from a system.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;color:#918a76}
+.topnav a{color:var(--gold2);text-decoration:none}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.05rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.6rem 0 .3rem}
+h2{font-size:1.42rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.05rem;font-weight:600;color:var(--ink2);margin:1.6rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.02rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.2rem 1.4rem;font-style:italic;margin-bottom:1.4rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-value{background:#f7ecd6;color:#7a5410;border:1px solid #ddc48c}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.1rem 1.3rem;margin:1.4rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}.box.warn .lab{color:#8a5a10}
+.box.key{background:#eef4ee;border-color:#a9c8a8;border-left:4px solid var(--accent3)}.box.key .lab{color:var(--accent3)}
+pre{background:#1e1e2e;color:#cdd6f4;padding:1rem 1.2rem;margin:1.1rem 0;overflow-x:auto;font-family:var(--mono);font-size:.76rem;line-height:1.75}
+code{font-family:var(--mono);font-size:.88em;background:#e6e0d2;padding:.05rem .3rem}
+pre code{background:none;padding:0;color:inherit}
+table{width:100%;border-collapse:collapse;margin:1.3rem 0;font-size:.86rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.5rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+td.mono{font-family:var(--mono);font-size:.78rem;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 1rem 1.4rem}
+li{margin-bottom:.4rem}
+.check{list-style:none;margin-left:.2rem}
+.check li{padding-left:1.6rem;position:relative}
+.check li::before{content:"☐";position:absolute;left:0;font-family:var(--mono);color:var(--accent)}
+footer{background:var(--ink2);padding:2.4rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <span><a href="../index.html">⚜ PRINCIPIA ORTHOGONA</a> · <a href="index.html">Vol VI · Roots</a> · WP-37</span>
+  <span><a href="https://totogt.github.io/AXLE/AULA/rag-course/site/">AULA RAG course</a> · <a href="https://totogt.github.io/AXLE/AULA/rag-course/site/reference-implementation.html">Reference implementation</a></span>
+</div>
+
+<div class="wp-head">
+  <div class="wp-kicker">Vol VI · Roots · WP-37 · Pedagogy &amp; Practice · Live</div>
+  <h1>Arriving With <em>a Corpus</em></h1>
+  <div class="subtitle">A pre-flight note for the incoming student of a professional RAG course</div>
+  <div class="metagrid">
+    <div><strong>Author</strong>Pablo Nogueira Grossi<br>G6 LLC · Newark, NJ</div>
+    <div><strong>Written for</strong>MIT xPRO RAG &amp; Context<br>Engineering, cohort of 12 Aug 2026</div>
+    <div><strong>Format</strong>8 weeks + orientation<br>90-min live session · ~10 h/week</div>
+    <div><strong>Read before</strong>Week 1 — ideally two<br>weeks before</div>
+    <div><strong>Companion</strong>AXLE-RAG reference<br>implementation (MIT licence)</div>
+    <div><strong>Status</strong>Working note · v1.0<br>July 2026</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<p class="lede">A paid, cohort-based RAG course gives you eight weeks of expert
+attention. What you get out of it is decided almost entirely by something you
+control before day one: whether you arrive with a real corpus and a real
+question, or wait to be handed a tidy one.</p>
+
+<div class="taglegend">
+  <span><span class="tag t-data">DATA</span> observed</span>
+  <span><span class="tag t-model">MODEL</span> reasoned</span>
+  <span><span class="tag t-open">OPEN</span> not established</span>
+  <span><span class="tag t-value">VALUE PREMISE</span> a choice, stated</span>
+</div>
+
+<div class="box warn">
+  <span class="lab">What this note does not claim</span>
+  <p style="margin-bottom:0">It does not describe any specific provider's
+  syllabus, and it is not affiliated with, endorsed by, or reviewed by MIT, MIT
+  xPRO, or any other institution. Programmes differ and change. What follows is
+  written from building retrieval systems and from teaching the material, and it
+  should be read as one practitioner's preparation advice — checked against your
+  own syllabus, not substituted for it. <span class="tag t-value">VALUE PREMISE</span></p>
+</div>
+
+<div class="eyebrow">§ 1 · The one decision that matters</div>
+<h2>Bring your own corpus</h2>
+
+<p>Every RAG curriculum needs a document collection to work on, and most supply
+one: a tidy set of clean articles where chunking is uncontroversial, metadata is
+uniform, and the questions have answers. You will learn the techniques. You will
+not meet the problems.</p>
+
+<p>Real corpora are heterogeneous, contradictory, badly formatted, and partly
+wrong. They mix PDFs with HTML with spreadsheets. They contain two documents that
+disagree about the same number. They have a version-two that supersedes a
+version-one nobody deleted. <strong>Those are the problems that define the
+job</strong>, and you only meet them if the corpus is yours.
+<span class="tag t-model">MODEL</span></p>
+
+<div class="box key">
+  <span class="lab">Choose it now, on these criteria</span>
+  <ul style="margin-bottom:0">
+    <li><strong>You care about the answers.</strong> You will read a thousand retrieved passages. Boredom is a real failure mode.</li>
+    <li><strong>You can judge correctness unaided.</strong> If you cannot tell a good answer from a plausible one, you cannot evaluate, and Week 5 becomes theatre.</li>
+    <li><strong>It is messy.</strong> Mixed formats, inconsistent structure, at least one internal contradiction you already know about.</li>
+    <li><strong>100–5,000 documents.</strong> Below that, retrieval is unnecessary; far above, infrastructure eats the eight weeks.</li>
+    <li><strong>You may legally use it.</strong> Settle this in week zero, not week eight.</li>
+  </ul>
+</div>
+
+<p>Good candidates: your firm's contracts or SOPs; a regulatory corpus in your
+field; your own writing across a decade; a public dataset in a domain where you
+are the expert. Bad candidates: Wikipedia, arXiv abstracts, anything already used
+in a tutorial — you will be comparing yourself to a solved problem.</p>
+
+<div class="eyebrow">§ 2 · Build before week one</div>
+<h2>Three hours that change the whole course</h2>
+
+<p>Not to get ahead. To arrive with questions rather than a blank page.</p>
+
+<h3>1 · A keyword baseline you wrote yourself</h3>
+<p>Implement BM25 — or use a stock implementation, but read it. Fifty lines.
+Then run twenty real questions through it and read what comes back. You will
+form opinions about your corpus that no lecture can give you, and every later
+technique gets measured against this.</p>
+
+<div class="box thm">
+  <span class="lab">The discipline that survives the course</span>
+  <p style="margin-bottom:0"><strong>Never adopt a technique that has not beaten
+  your baseline on your data.</strong> Embeddings, rerankers, query expansion,
+  agents — each is a hypothesis. The industry's default failure is a stack of
+  unexamined layers, each added because a conference talk recommended it. A
+  keyword baseline you trust is the instrument that keeps you honest for the
+  next decade. <span class="tag t-model">MODEL</span></p>
+</div>
+
+<h3>2 · Twenty questions with known answers</h3>
+<p>Write them by hand, before you have a system to flatter. Include five you
+believe the corpus <em>cannot</em> answer — the refusal cases are the ones that
+separate an engineer from a demo-builder, and they are the first thing that gets
+skipped when a deadline arrives.</p>
+
+<h3>3 · One deliberate contradiction</h3>
+<p>Find, or plant, a case where two documents disagree about a fact. Keep it in a
+file. When the course reaches evaluation, ask your system that question and watch
+what it does. Most systems pick the higher-ranked passage and answer with
+confidence. That behaviour is the single most consequential defect in deployed
+RAG, and you want to have seen it in your own system, early.
+<span class="tag t-data">DATA</span></p>
+
+<div class="eyebrow">§ 3 · Four questions</div>
+<h2>Ask these in every module</h2>
+
+<table>
+  <thead><tr><th>#</th><th>Question</th><th>Why it earns its place</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">Q1</td><td><strong>What does this beat, and by how much, on my data?</strong></td>
+        <td>Converts a technique from fashion into a measurement. If nobody can answer it, the technique is unproven, not wrong.</td></tr>
+    <tr><td class="mono">Q2</td><td><strong>What does it cost — latency, dollars, complexity?</strong></td>
+        <td>A reranker that adds 400 ms and 3% accuracy is a good trade in research and a bad one in a chat interface. The right answer depends on a budget nobody states aloud.</td></tr>
+    <tr><td class="mono">Q3</td><td><strong>How does it fail, and will I notice?</strong></td>
+        <td>Silent degradation is the dangerous kind. A system that returns nothing is debuggable; one that returns confident nonsense is not.</td></tr>
+    <tr><td class="mono">Q4</td><td><strong>What happens when the source document changes?</strong></td>
+        <td>Almost never covered, and it is most of the operational life of the system. See §5.</td></tr>
+  </tbody>
+</table>
+
+<p>Ask them out loud. Cohort courses reward the student who makes the instructor
+defend a claim, and the rest of the cohort benefits from the answer. This is the
+part of a live programme you cannot get from a video.
+<span class="tag t-value">VALUE PREMISE</span></p>
+
+<div class="eyebrow">§ 4 · The trap</div>
+<h2>Framework defaults are somebody else's answer</h2>
+
+<p><code>chunk_size=512, overlap=50, k=5</code>. These numbers appear in nearly
+every tutorial. They are not wrong; they are <em>someone else's tuning on
+someone else's corpus</em>, frozen into a default and repeated until it looked
+like knowledge.</p>
+
+<p>Your corpus has a natural unit. Legal contracts have clauses. Research papers
+have claims. Transcripts have turns. Code has functions. Chunking on a token
+count cuts across every one of them — and the specific damage is that a
+qualifier gets separated from the statement it qualifies. Retrieve the sentence
+"the boundary is 0.776" without the adjacent sentence that says the value is not
+yet established, and your system has manufactured certainty out of a
+correctly-hedged source. <span class="tag t-model">MODEL</span></p>
+
+<p>So run the experiment the tutorials skip: chunk your corpus three ways —
+fixed-size, structural, and one hybrid — and measure. It is an afternoon. It
+routinely matters more than the embedding model, and it is the cheapest
+lesson in the course.</p>
+
+<div class="eyebrow">§ 5 · What courses rarely cover</div>
+<h2>Four things that decide whether the system survives</h2>
+
+<h3>Provenance</h3>
+<p>Retrieval usually returns text. Retrieval <em>should</em> return text plus its
+status: where it came from, how confident the source was, whether it has been
+superseded. A corpus whose claims carry explicit status lets the generator be
+bound by a contract — never present an unestablished claim as established,
+never state a number absent from context, report conflicts rather than silently
+resolving them. Most corpora lack that metadata; adding even a crude version
+of it is high-leverage. <span class="tag t-model">MODEL</span></p>
+
+<h3>Invalidation</h3>
+<p>A source document changes. Which of your answers are now wrong? Systems that
+cannot answer this are search boxes with a language model attached. The fix is a
+dependency graph: claims depend on facts, facts on documents, so a change
+propagates a closure of things now stale. This is <code>make</code>, applied to
+knowledge, and it is the difference between a project and a system.
+<span class="tag t-model">MODEL</span></p>
+
+<h3>Refusal</h3>
+<p>The most valuable behaviour in production is declining to answer. It is also
+the least demoed, because a refusal makes a bad screenshot. Decide early what
+your system does when retrieval returns nothing relevant, when passages conflict,
+and when the question is outside the corpus. Then test those paths as
+deliberately as the happy one.</p>
+
+<h3>Operations</h3>
+<p>Who re-indexes when documents change? What breaks when the embedding model
+version rolls? What does the handoff look like when the person who built it is
+unavailable and someone else must fix it at 4pm on a Friday? None of this is
+glamorous and all of it is the job. <span class="tag t-data">DATA</span></p>
+
+<div class="eyebrow">§ 6 · Capstone</div>
+<h2>Build the thing you will keep using</h2>
+
+<p>The strongest capstones are not the most technically ambitious. They are the
+ones whose author still runs them in month four. If your system answers a
+question you actually have, you will keep maintaining it, and maintenance is
+where the remaining 80% of the learning lives.</p>
+
+<p>Two habits worth carrying out of the course:</p>
+<ul>
+  <li><strong>Keep a decision log.</strong> One line per design choice, with the
+  number that justified it. In six months you will not remember why <code>k=8</code>,
+  and neither will anyone reviewing your work. This is also, precisely, what makes
+  a capstone defensible under questioning.</li>
+  <li><strong>Write the limits down.</strong> Every system has queries it handles
+  badly. A README that names them is worth more to a reader than one that claims
+  none exist — and a reviewer who finds an unlisted failure trusts everything else
+  less. <span class="tag t-value">VALUE PREMISE</span></li>
+</ul>
+
+<div class="eyebrow">§ 7 · Checklist</div>
+<h2>Before week one</h2>
+
+<ul class="check">
+  <li>Corpus chosen; licence and permission settled</li>
+  <li>Corpus in one folder, one format-per-type, actually parseable</li>
+  <li>Twenty questions written by hand, five of them unanswerable</li>
+  <li>One known contradiction identified and saved</li>
+  <li>BM25 baseline running; twenty questions scored</li>
+  <li>Git repository initialised; first commit is the baseline</li>
+  <li>Local model runnable offline (Ollama or equivalent), so a network outage costs nothing</li>
+  <li>Decision log file created — empty is fine, existing is the point</li>
+</ul>
+
+<p>Eight items, one weekend. The student who arrives with these has already had
+the argument with their own data that the course is designed to provoke — and
+spends eight weeks going deeper instead of catching up.</p>
+
+<div class="box key">
+  <span class="lab">If you already maintain a corpus</span>
+  <p style="margin-bottom:0">Some students arrive with a body of documents they
+  already own — a research corpus, a firm's contract library, a decade of case
+  files. If that is you, most of the checklist is already satisfied and the
+  preparation shifts: spend the fortnight finding the <em>contradictions</em>
+  instead. Run a crude sweep for the same quantity stated two different ways,
+  the same document cited under two identifiers, a claim asserted flatly in one
+  file and hedged in another. Arrive knowing three real defects in your own
+  material. Those become your evaluation cases, and they are worth more than any
+  synthetic benchmark the programme could hand you.
+  <span class="tag t-value">VALUE PREMISE</span></p>
+</div>
+
+<div class="eyebrow">§ 8 · Companion</div>
+<h2>A worked example you can read in a sitting</h2>
+
+<p>AXLE-RAG is a small retrieval system over a live research corpus: claim-level
+chunking, BM25 with provenance weighting, a refusal contract, a defect audit, and
+a dependency graph for invalidation. Roughly 1,100 lines, standard library only,
+no API key and no network. It is MIT-licensed and deliberately small enough to
+read rather than merely run.</p>
+
+<p>It is offered as a second worked example, not a better one. Its most useful
+output is not an answer: run over its own corpus it reported one physical
+constant asserted at four different values across four files — a defect that had
+previously taken a full working session to find by hand.
+<span class="tag t-data">DATA</span></p>
+
+<p><a href="https://totogt.github.io/AXLE/AULA/rag-course/site/reference-implementation.html">Reference implementation →</a></p>
+
+<div class="box">
+  <span class="lab">One sentence to carry in</span>
+  <p style="margin-bottom:0">Retrieval is easy; knowing whether it worked is the
+  engineering. Everything in a good course serves that second sentence — and the
+  corpus you bring decides whether you get to practise it.</p>
+</div>
+
+</div>
+
+<footer>
+  <div class="fwrap">
+    <div>
+      <strong style="color:var(--gold2)">WP-37 · Arriving With a Corpus</strong><br>
+      Principia Orthogona · Vol VI · Roots<br>
+      G6 LLC · Pablo Nogueira Grossi · Newark NJ · 2026<br>
+      ORCID 0009-0000-6496-2186 · <a href="mailto:g6llc@proton.me">g6llc@proton.me</a><br>
+      Series DOI <a href="https://doi.org/10.5281/zenodo.19117399">10.5281/zenodo.19117399</a>
+    </div>
+    <div class="disc">
+      <strong style="color:var(--gold2)">Notice</strong><br>
+      Independent working note; not peer-reviewed. Not affiliated with, endorsed
+      by, or reviewed by MIT, MIT xPRO, or any other institution; no relationship
+      is asserted or implied. Course structures vary — check your own syllabus.
+      CC BY 4.0 · © 2026 Pablo Nogueira Grossi — G6 LLC.
+    </div>
+  </div>
+</footer>
+</body>
+</html>

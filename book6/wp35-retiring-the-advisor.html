@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-35 · Retiring the Advisor — Principia Orthogona Vol VI</title>
+<meta name="description" content="WP-35 · Retiring the Advisor: the base case for closing the Forced Urgency Gap one city at a time. Companion to WP-32. Newark + NYC pilot, four-channel FUG Index, claim-tagged. doi:10.5281/zenodo.21710763">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+/* nav */
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav span{color:#918a76}
+.topnav .crumbs{color:#8f8878}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+/* head */
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.05rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.metagrid a{color:var(--accent2)}
+.doi{display:inline-block;margin-top:1rem;font-family:var(--mono);font-size:.72rem;background:#eaf0f6;border:1px solid #b3c6d6;padding:.25rem .6rem;color:var(--accent2);text-decoration:none}
+.doi:hover{background:var(--paper2)}
+/* body */
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.6rem 0 .3rem}
+h2{font-size:1.42rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.05rem;font-weight:600;color:var(--ink2);margin:1.6rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.02rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.2rem 1.4rem;font-style:italic;margin-bottom:1.4rem}
+/* claim tags */
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-value{background:#f7ecd6;color:#7a5410;border:1px solid #ddc48c}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+/* boxes */
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.1rem 1.3rem;margin:1.4rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.9rem 1.2rem;margin:1.2rem 0;overflow-x:auto;color:var(--accent2)}
+/* table */
+table{width:100%;border-collapse:collapse;margin:1.3rem 0;font-size:.86rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+td.mono{font-family:var(--mono);font-size:.78rem}
+tr:hover td{background:var(--paper2)}
+/* chain */
+.chain{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin:1.3rem 0}
+@media(max-width:620px){.chain{grid-template-columns:1fr 1fr}}
+.op{padding:.9rem .7rem;color:#fff;text-align:center}
+.op b{display:block;font-family:var(--mono);font-size:1.5rem}
+.op i{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.11em;text-transform:uppercase;font-style:normal;opacity:.85;margin:.15rem 0 .35rem}
+.op span{font-size:.76rem;line-height:1.4;font-style:italic;opacity:.94}
+.op1{background:#17435f}.op2{background:#7a3410}.op3{background:#2f5c33}.op4{background:#16564a}
+/* refs */
+ol.refs{padding-left:1.4rem;font-size:.84rem;line-height:1.62}
+ol.refs li{margin-bottom:.45rem}
+ol.refs a{color:var(--accent2)}
+/* footer */
+footer{background:var(--ink2);color:#8f8878;padding:2.4rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <span class="crumbs"><a href="../index.html">⚜ PRINCIPIA ORTHOGONA</a> · <a href="index.html">Vol VI · Roots</a> · WP-35</span>
+  <span class="meta"><a href="wp32-forced-urgency-gap.html">← WP-32 · The Forced Urgency Gap</a> · <a href="wp31-calibration-pipeline.html">WP-31 · Calibration Pipeline</a></span>
+</div>
+
+<div class="wp-head">
+  <div class="wp-kicker">Vol VI · Roots · WP-35 · Applied Economics &amp; Municipal Policy · Live</div>
+  <h1>Retiring the <em>Advisor</em></h1>
+  <div class="subtitle">The base case for closing the Forced Urgency Gap — one city at a time</div>
+  <div class="metagrid">
+    <div><strong>Author</strong>Pablo Nogueira Grossi<br>G6 LLC · Newark, NJ</div>
+    <div><strong>Parent paper</strong>WP-32 · The Forced Urgency Gap<br>doi:10.5281/zenodo.21561819</div>
+    <div><strong>Status</strong>Working paper · v1.0 · July 2026<br>Not peer-reviewed</div>
+    <div><strong>Formal core</strong>Inherited: ForcedUrgency.lean<br>6 theorems · no sorryAx</div>
+    <div><strong>Pilot</strong>Newark, NJ + New York, NY<br>Four-channel index</div>
+  </div>
+  <a class="doi" href="https://doi.org/10.5281/zenodo.21710763">doi.org/10.5281/zenodo.21710763</a>
+</div>
+
+<div class="wrap">
+
+<p class="lede">If the binding variable in household loss is contractual liquidity rather than
+information or preference, then the advisory layer — financial advisors priced on assets,
+policy advisors priced on reports — is structurally unable to close the gap. Advice moves
+beliefs. The loss lives in the contract. This paper draws the commercial conclusion of
+WP-32 and states it precisely enough to be falsified.</p>
+
+<div class="taglegend">
+  <span><span class="tag t-data">DATA</span> observed</span>
+  <span><span class="tag t-model">MODEL</span> derived in-framework</span>
+  <span><span class="tag t-open">OPEN</span> not yet established</span>
+  <span><span class="tag t-value">VALUE PREMISE</span> explicit normative choice</span>
+  <span><span class="tag t-assume">ASSUMPTION</span> planning figure, not forecast</span>
+</div>
+
+<div class="eyebrow">§ 1 · Inherited</div>
+<h2>What WP-32 established</h2>
+<p>When a household's liquidity state is unobserved, contractually forced sales — margin,
+redemption, and loan-to-value triggers — are observationally equivalent to preference-driven
+panic. The estimated loss-aversion coefficient is therefore a mixture of preference and
+compulsion whose compulsion share peaks in exactly the crisis states where the coefficient
+is applied. <span class="tag t-model">MODEL</span></p>
+
+<div class="box thm">
+  <span class="lab">Amplification (WP-32 §4, kernel-verified)</span>
+  <p style="margin:0">Forced supply absorbed by unconstrained buyers at harvest coefficient ρ gives
+  cumulative displacement</p>
+  <div class="eq" style="margin:.7rem 0 .4rem">A = 1 / (1 − ρ)</div>
+  <p style="margin:0;font-size:.86rem;color:var(--dim)">Concentration ratchets monotonically.
+  Six theorems machine-checked in Lean 4 / Mathlib (v4.33.0-rc1); <code>#print axioms</code> →
+  <code>[propext, Classical.choice, Quot.sound]</code>, no <code>sorryAx</code>.</p>
+</div>
+
+<p>AI labour displacement is an urgency shock of the same class, reducing “will the transition
+compress or explode the wealth distribution?” to two measurable coefficients — the contract
+share and ρ — rather than to sentiment. <span class="tag t-model">MODEL</span> The empirical
+values of ρ, the identification-failure magnitude, and the buffer-depletion lag remain
+unestimated. <span class="tag t-open">OPEN</span></p>
+
+<div class="eyebrow">§ 2 · The argument</div>
+<h2>Why the advisor cannot close the gap</h2>
+<p>The advisory industry sells information and judgment. But if the identification result holds,
+the household that sells at the bottom is not mistaken — it is <em>bound</em>. No improvement in
+beliefs relaxes a margin call, a redemption gate, or an LTV trigger. Advice operates on the
+preference term of the mixture; the loss lives in the compulsion term.
+<span class="tag t-model">MODEL</span></p>
+
+<p>The empirical advice literature is unkind to the advisory value proposition on its own terms:
+audit studies find advisers reinforce rather than de-bias client error;<sup>[13]</sup>
+administrative data find adviser fixed effects dominate client customization;<sup>[14]</sup> and
+the “money doctors” model explains the industry's persistence as trust provision, not outcome
+improvement.<sup>[15]</sup> <span class="tag t-data">DATA</span> None of those papers draw this
+paper's conclusion; the base case reads them as license, not as proof.</p>
+
+<p>The municipal version is the same failure at institutional scale. Cities buy reports about
+affordability while the deed records, dockets, and premium schedules that constitute the
+compulsion term go unmeasured. Rutgers CLiME found ~47% of Newark's 1–4-unit residential sales
+(2017–2020) went to institutional buyers — the highest rate in the nation, up from under 20% in
+2010.<sup>[2]</sup> <span class="tag t-data">DATA</span> That finding was produced by
+researchers, not by any of the city's paid advisory relationships.</p>
+
+<div class="box warn">
+  <span class="lab">Author's note on provenance</span>
+  <p style="margin:0">The author worked inside the machinery described — international banking at
+  JPMorgan and Banco do Brasil — before formalizing the amplification mathematics. This is stated
+  as provenance, not evidence: the margin, redemption, and LTV triggers named above are standard
+  contract terms observable by any practitioner, and the formal results stand independently of
+  biography.</p>
+</div>
+
+<p><strong>Thesis.</strong> Retire the advisor; replace advice with measurement and mechanism.
+Measurement: an index that prices the gap. Mechanism: interventions that act on contracts —
+bridge liquidity at the moment of urgency, trigger redesign, tempo limits on dockets — not on
+beliefs. <span class="tag t-value">VALUE PREMISE</span> We hold that a household's outcome
+should not depend on the patience it cannot afford.</p>
+
+<div class="eyebrow">§ 3 · The product</div>
+<h2>The FUG Index — four channels</h2>
+<p>A per-city diagnostic, each channel computed from public data, normalized to
+<strong>dollars per median household per year</strong>. A mayor should be able to say: forced
+urgency costs the median Newark renter $X annually, and here is the cheapest lever.</p>
+
+<table>
+  <thead><tr><th>Channel</th><th>Mechanism</th><th>Primary data</th><th>Lit.</th></tr></thead>
+  <tbody>
+    <tr><td><strong>1 · Ownership concentration</strong></td><td>deed transfer to LLCs; institutional share of stock</td><td class="mono">county deeds · ACRIS · PLUTO</td><td>[2][17][18]</td></tr>
+    <tr><td><strong>2 · Displacement velocity</strong></td><td>filing tempo as rent-collection tactic</td><td class="mono">Eviction Lab · OCA · NJ courts</td><td>[19][20][21]</td></tr>
+    <tr><td><strong>3 · Risk repricing</strong></td><td>premium growth vs. income; non-renewals</td><td class="mono">NAIC/DOBI · HMDA · FDIC</td><td>[25]</td></tr>
+    <tr><td><strong>4 · Platform extraction</strong></td><td>fee share of formerly peer-to-peer trade; STR conversion</td><td class="mono">fee schedules · Inside Airbnb · LL18 registry</td><td>[22][23][24][29][30]</td></tr>
+  </tbody>
+</table>
+
+<p>The composite weighting — by estimated dollars extracted, so the index reads in currency —
+is the methodological contribution and is not yet fixed. <span class="tag t-open">OPEN</span>
+The index is to the Forced Urgency Gap what a thermometer is to fever: it does not cure, but it
+converts dispute into measurement, and measurement into procurement.</p>
+
+<h3>Where the operator chain enters</h3>
+<div class="chain">
+  <div class="op op1"><b>C</b><i>Compress</i><span>Reduce the city to the four measured channels.</span></div>
+  <div class="op op2"><b>K</b><i>Threshold</i><span>The contractual trigger: margin, LTV, renewal date, filing.</span></div>
+  <div class="op op3"><b>F</b><i>Fold</i><span>Forced supply meets patient capital — the irreversible transfer.</span></div>
+  <div class="op op4"><b>U</b><i>Unfold</i><span>Publish the scorecard; the measurement re-enters the city.</span></div>
+</div>
+<p style="font-size:.86rem;color:var(--dim)">Stated as a structural reading, not a numerical
+claim. Per WP-29 and WP-31, no coefficient of the index is asserted to equal any dimensionless
+constant of the series (ε₀, r★, τ), and none is fitted to one.
+<span class="tag t-open">OPEN</span></p>
+
+<div class="eyebrow">§ 4 · Prior art</div>
+<h2>Redlining, gentrification, affordability</h2>
+<p>Three questions arrive before any other. Each is a test the index has to pass, and one of
+them is where a channel either earns its place or collapses.</p>
+
+<h3>Redlining — the ancestor, and the reason channel 3 exists</h3>
+<p>The Forced Urgency Gap is not a new mechanism. Its clearest historical instance is
+redlining: from 1935 the Home Owners' Loan Corporation graded neighbourhoods in some 239
+cities, and the grade — not the borrower — set the terms of credit.<sup>[33]</sup> Causal work
+on the HOLC boundaries finds effects on segregation, homeownership, house values and credit
+access persisting for decades on the wrong side of a line drawn once.<sup>[34][35]</sup>
+<span class="tag t-data">DATA</span> Newark was among the graded cities, and the map is legible
+in its housing stock today.</p>
+<p>Read in this paper's terms, redlining <em>manufactured</em> the compulsion term. It did not
+change what households preferred; it changed what contracts were available to them, and
+therefore what they were forced to accept. The Fair Housing Act (1968), HMDA (1975) and the
+CRA (1977) outlawed the explicit map. They did not outlaw the mechanism.</p>
+<div class="box warn">
+  <span class="lab">The claim channel 3 must survive</span>
+  <p style="margin:0">Channel 3 — insurance non-renewal, premium growth outrunning income,
+  lending-denial spreads by tract — is <em>redlining's actuarial descendant</em>: the same
+  spatial sorting, re-derived from risk models rather than declared by race, and lawful
+  precisely because the criterion changed.<span class="tag t-model">MODEL</span> Evidence that
+  algorithmic underwriting reproduces disparate pricing without any explicit protected
+  characteristic supports the reading;<sup>[37]</sup> climate-driven non-renewal is now redrawing
+  the same kind of map on a different peril.<sup>[25]</sup> <span class="tag t-data">DATA</span>
+  <strong>But this must be tested, not assumed.</strong> If channel 3's tract-level pattern turns
+  out to be fully explained by measured hazard exposure with no residual sorting, the
+  redlining-descendant framing is wrong and should be withdrawn from the index — the same
+  standard WP-30 applied to the autophagy anchor. <span class="tag t-open">OPEN</span></p>
+</div>
+
+<h3>Gentrification — a different thing, and Newark proves it</h3>
+<p>The obvious objection is that this is a gentrification index with new vocabulary. It is not,
+and the distinction is load-bearing.</p>
+<p>Gentrification research studies neighbourhood change driven by in-movers with higher incomes,
+and its displacement estimates are genuinely contested — Freeman and Braconi found lower
+mobility rates in gentrifying New York neighbourhoods,<sup>[38]</sup> later work using
+credit-panel data finds more nuanced and sometimes opposite results,<sup>[39][40]</sup> and the
+field has been criticised for losing sight of displacement
+altogether.<sup>[41]</sup> <span class="tag t-data">DATA</span></p>
+<p>The Forced Urgency Gap is orthogonal to that debate, because <strong>extraction does not
+require gentrification.</strong> Newark's ~47% institutional share arose in a market with low
+prices and disinvestment, not in-migrating affluence.<sup>[2]</sup> Value moved without the
+neighbourhood being "discovered." <span class="tag t-model">MODEL</span> Desmond and Wilmers
+make the general version of this point directly: landlords' profit margins are <em>higher</em>
+in poor neighbourhoods than in rich ones — exploitation is not a by-product of desirability, it
+is a function of tenants' lack of alternatives.<sup>[36]</sup>
+<span class="tag t-data">DATA</span></p>
+<p>Operationally this becomes a discriminant test. The index must be able to separate:</p>
+<table>
+  <thead><tr><th>Pattern</th><th>Prices</th><th>In-movers</th><th>FUG channels active</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Classic gentrification</strong></td><td class="mono">rising</td><td class="mono">higher-income</td><td class="mono">2, 4</td></tr>
+    <tr><td><strong>Extraction without gentrification</strong> (Newark type)</td><td class="mono">flat / low</td><td class="mono">none — ownership changes, occupancy doesn't</td><td class="mono">1, 2, 3</td></tr>
+    <tr><td><strong>Tourist conversion</strong></td><td class="mono">rising</td><td class="mono">transient, not resident</td><td class="mono">4, 1</td></tr>
+  </tbody>
+</table>
+<p>If the index cannot tell these apart on Newark and NYC data, it is a gentrification proxy and
+adds nothing. That is failure mode (1) in §7, stated concretely.
+<span class="tag t-open">OPEN</span></p>
+
+<h3>Affordability — level versus asymmetry</h3>
+<p>The standard instrument is cost burden: housing above 30% of income, a threshold whose
+lineage runs through the 1969 Brooke Amendment's 25% and its 1981 revision to 30%, and which
+has been criticised for decades — residual-income approaches show the same ratio implies very
+different hardship at different income levels.<sup>[42][43]</sup>
+<span class="tag t-data">DATA</span></p>
+<p>Cost burden measures the <em>level</em> of housing cost. The Forced Urgency Gap measures the
+<em>asymmetry</em> that determines who pays what for the same unit. Two households in identical
+apartments, at identical rents, face different effective prices once one of them cannot survive
+a two-week income gap: that one pays late fees, accepts a filing on their record, renews on
+worse terms, or sells at the bottom. Cost burden records none of it.
+<span class="tag t-model">MODEL</span></p>
+<div class="box">
+  <span class="lab">Methodological consequence</span>
+  <p style="margin:0">Cost burden (ACS) enters the pilot as a <strong>control, not a component</strong>.
+  If the FUG composite is merely a rescaling of tract-level cost burden or poverty rate, it is
+  redundant and should be abandoned. The index earns its existence only in the residual — the
+  part of extraction that burden and poverty measures do not already explain.
+  <span class="tag t-open">OPEN</span></p>
+</div>
+
+<div class="eyebrow">§ 5 · Deployment</div>
+<h2>One city at a time</h2>
+<p><strong>Newark first.</strong> <span class="tag t-value">VALUE PREMISE</span> Home
+jurisdiction; a Mayors for a Guaranteed Income member; the national extreme case per CLiME.
+Fix the root at home, publish the scorecard with a DOI, let the case study travel.</p>
+<p><strong>NYC second.</strong> The data-rich contrast case: ACRIS, HPD, eviction filings, and
+Local Law 18's short-term-rental removal (2023) as a natural experiment already archived by
+Inside Airbnb. <span class="tag t-data">DATA</span></p>
+<p><strong>Then the network, not the RFP.</strong> Distribution through coalitions that already
+convene the buyers: GARE (450+ member jurisdictions), MGI (50+ cities), What Works Cities.
+<span class="tag t-data">DATA</span> The procurement channel opens once two published
+scorecards constitute past performance. International expansion to <em>n</em> economies where
+financialized housing is a recognized problem, municipal diagnostics are procured, and language
+access is real — U.S., Brazil (EN/PT bilingual operation), U.K., Canada.
+<span class="tag t-assume">ASSUMPTION</span></p>
+
+<div class="box">
+  <span class="lab">A note on what the market size means</span>
+  <p style="margin:0">That 450 U.S. jurisdictions can be enumerated as targets in minutes is not
+  a commercial triumph; it is the diagnosis. A gap this easy to map is a gap that has generalized
+  to the whole map. We therefore refuse the pitch-deck reading of the TAM: the correct reading is
+  an indictment, and the correct success metric is not cities acquired but cities in which the
+  index reads <em>lower</em> on re-audit. A consultancy wants its problem to persist; this company
+  states in advance that its terminal state is its own irrelevance — the same standard applied to
+  the advisors it retires. <span class="tag t-value">VALUE PREMISE</span></p>
+</div>
+
+<div class="eyebrow">§ 6 · Base case</div>
+<h2>Scenarios, not forecasts</h2>
+<p>Every figure below is a planning assumption. <span class="tag t-assume">ASSUMPTION</span></p>
+<table>
+  <thead><tr><th></th><th>Year 1</th><th>Year 2</th><th>Year 3</th></tr></thead>
+  <tbody>
+    <tr><td>Cities under audit</td><td class="mono">2 (Newark, NYC)</td><td class="mono">8–12</td><td class="mono">25–40 (+2 intl.)</td></tr>
+    <tr><td>Price per audit</td><td class="mono">$0–25k (pilot)</td><td class="mono">$25k</td><td class="mono">$25–50k</td></tr>
+    <tr><td>Revenue</td><td class="mono">$0–50k</td><td class="mono">$200–300k</td><td class="mono">$0.8–1.6M</td></tr>
+    <tr><td>Headcount</td><td class="mono">1 + AI tooling</td><td class="mono">2–3</td><td class="mono">4–6</td></tr>
+  </tbody>
+</table>
+<p>The cost structure is the argument: the pipeline is open data plus reproducible code, so the
+marginal cost of city <em>k</em>+1 falls toward data cleaning. The firm stays small by design —
+the product replaces advisory headcount rather than accumulating it. WP-32's AI-transition claim
+applies reflexively: this firm is itself an instance of advisory labour displaced by measurement
+tooling, and says so. <span class="tag t-value">VALUE PREMISE</span></p>
+
+<div class="eyebrow">§ 7 · Falsification</div>
+<h2>What would sink the base case</h2>
+<p><strong>(1) Channels fail to separate.</strong> If city scores are dominated by a single
+channel everywhere, the diagnostic collapses into existing single-issue tools (STR compliance
+vendors, disparity studies) and has no reason to exist.
+<span class="tag t-open">OPEN</span></p>
+<p><strong>(2) ρ estimated near zero.</strong> If absorption of forced supply is diffuse rather
+than concentrated, the ratchet weakens and the mechanism claim loses its edge.
+<span class="tag t-open">OPEN</span></p>
+<p><strong>(3) No willingness to pay.</strong> If the networks circulate the free method and no
+procurement follows, the company becomes a standard rather than a business.
+<span class="tag t-open">OPEN</span> We regard (3) as an acceptable failure mode: the standard
+still closes the gap. <span class="tag t-value">VALUE PREMISE</span></p>
+
+<div class="eyebrow">§ 8 · Position</div>
+<h2>Where this sits in the literature</h2>
+<p><strong>Fire sales and forced selling.</strong> Liquidation below fundamental value when
+natural buyers are themselves constrained is Shleifer–Vishny;<sup>[3][4]</sup> amplification
+through collateral constraints is Kiyotaki–Moore;<sup>[5]</sup> the liquidity spiral is
+Brunnermeier–Pedersen.<sup>[6]</sup> The household analogue is measured directly: Campbell,
+Giglio and Pathak find forced sales transact at substantial discounts, foreclosure on the order
+of a quarter of value.<sup>[7]</sup> <span class="tag t-data">DATA</span> WP-32's ρ is the
+buyer-side complement of those seller-side discounts.</p>
+
+<p><strong>Behavioural attribution and its limits.</strong> Prospect theory<sup>[8]</sup> and the
+disposition effect<sup>[9]</sup> made loss aversion the default explanation of selling;
+DellaVigna documents how far the coefficient travels.<sup>[10]</sup> WP-32 does not claim the
+literature is wrong — it claims the estimator is contaminated in crisis states.
+<span class="tag t-model">MODEL</span></p>
+
+<p><strong>Household liquidity.</strong> Kaplan–Violante–Weidner's wealthy hand-to-mouth
+shows large populations are liquidity-constrained despite positive net worth — exactly the
+population for whom compulsion masquerades as preference.<sup>[11]</sup> Mian–Sufi document the
+household-leverage channel of 2007–09;<sup>[12]</sup> Mullainathan–Shafir supply the mechanism
+by which urgency itself degrades decisions, independent of information.<sup>[16]</sup>
+<span class="tag t-data">DATA</span></p>
+
+<p><strong>The extraction channels.</strong> Institutional acquisition: Fields on the
+construction of single-family rentals as an asset class,<sup>[17]</sup> Aalbers on
+financialization,<sup>[18]</sup> Raymond et al. on corporate landlords' elevated eviction-filing
+rates,<sup>[19]</sup> CLiME on Newark.<sup>[2]</sup> Evictions as tempo: Desmond<sup>[20]</sup>
+and the Collinson et al. quasi-experimental estimates of eviction's causal harms.<sup>[21]</sup>
+Platforms: Barron–Kung–Proserpio identify causal effects of short-term-rental supply on rents and
+prices,<sup>[22]</sup> with Barcelona confirmation;<sup>[23]</sup> Hati et al. map a decade of the
+stakeholder literature;<sup>[29]</sup> Gold assesses community costs and statutory
+responses;<sup>[30]</sup> two-sided-market theory explains why the fees
+persist.<sup>[24]</sup> Insurance: Keys–Mulder on climate-driven premium escalation and
+non-renewal.<sup>[25]</sup> AI displacement: Acemoglu–Restrepo<sup>[26]</sup> and
+Autor.<sup>[27]</sup> <span class="tag t-data">DATA</span></p>
+
+<p>The synthesis claim — that these are one mechanism, urgency asymmetry converted to price,
+observable through one index — is the contribution, and it stays
+<span class="tag t-open">OPEN</span> until the Newark and NYC scorecards exist.</p>
+
+<div class="eyebrow">§ 9 · Corpus</div>
+<h2>Relation to the series</h2>
+<p>Parent: <a href="wp32-forced-urgency-gap.html">WP-32 · The Forced Urgency Gap</a>
+(doi:10.5281/zenodo.21561819; concept DOI 21561818), including <code>ForcedUrgency.lean</code>
+(MIT). Method discipline: <a href="wp31-calibration-pipeline.html">WP-31 · The Calibration
+Pipeline</a> governs any move from a dimensionless fixed point to a fitted function of measured
+data — the index construction is bound by it. Audit standard:
+<a href="wp29-numerology-sweep.html">WP-29</a>, <a href="wp30-the-missing-anchor.html">WP-30</a>.
+Ethical frame: <a href="wp27-ethics-of-algebra.html">WP-27 · The Ethics of Algebra</a> — correctly
+done mathematics has no ethics of its own, only who decides how it is applied and to whom. This
+paper contains no new formal results; its role is to state the commercial consequence of WP-32
+precisely enough to be falsified.</p>
+
+<div class="eyebrow">References</div>
+<h2>Sources</h2>
+<ol class="refs">
+  <li>P. N. Grossi. <em>The Forced Urgency Gap: Why loss aversion is not identified in the states that matter — and what it means for an AI labor transition.</em> G6 LLC, 2026. <a href="https://doi.org/10.5281/zenodo.21561819">doi:10.5281/zenodo.21561819</a></li>
+  <li>D. D. Troutt, K. Nelson. <em>Who Owns Newark? Transferring Wealth from Newark Homeowners to Corporate Buyers.</em> Rutgers CLiME, May 2022.</li>
+  <li>A. Shleifer, R. Vishny. Liquidation values and debt capacity. <em>Journal of Finance</em> 47(4), 1992.</li>
+  <li>A. Shleifer, R. Vishny. Fire sales in finance and macroeconomics. <em>JEP</em> 25(1), 2011.</li>
+  <li>N. Kiyotaki, J. Moore. Credit cycles. <em>JPE</em> 105(2), 1997.</li>
+  <li>M. Brunnermeier, L. Pedersen. Market liquidity and funding liquidity. <em>RFS</em> 22(6), 2009.</li>
+  <li>J. Campbell, S. Giglio, P. Pathak. Forced sales and house prices. <em>AER</em> 101(5), 2011.</li>
+  <li>D. Kahneman, A. Tversky. Prospect theory. <em>Econometrica</em> 47(2), 1979.</li>
+  <li>T. Odean. Are investors reluctant to realize their losses? <em>Journal of Finance</em> 53(5), 1998.</li>
+  <li>S. DellaVigna. Psychology and economics: evidence from the field. <em>JEL</em> 47(2), 2009.</li>
+  <li>G. Kaplan, G. Violante, J. Weidner. The wealthy hand-to-mouth. <em>Brookings Papers on Economic Activity</em>, Spring 2014.</li>
+  <li>A. Mian, A. Sufi. <em>House of Debt.</em> University of Chicago Press, 2014.</li>
+  <li>S. Mullainathan, M. Noeth, A. Schoar. The market for financial advice: an audit study. NBER WP 17929, 2012.</li>
+  <li>S. Foerster, J. Linnainmaa, B. Melzer, A. Previtero. Retail financial advice: does one size fit all? <em>Journal of Finance</em> 72(4), 2017.</li>
+  <li>N. Gennaioli, A. Shleifer, R. Vishny. Money doctors. <em>Journal of Finance</em> 70(1), 2015.</li>
+  <li>S. Mullainathan, E. Shafir. <em>Scarcity.</em> Times Books, 2013.</li>
+  <li>D. Fields. Constructing a new asset class. <em>Economic Geography</em> 94(2), 2018.</li>
+  <li>M. Aalbers. <em>The Financialization of Housing.</em> Routledge, 2016.</li>
+  <li>E. L. Raymond et al. From foreclosure to eviction. <em>Cityscape</em> 20(3), 2018.</li>
+  <li>M. Desmond. <em>Evicted.</em> Crown, 2016.</li>
+  <li>R. Collinson et al. Eviction and poverty in American cities. <em>QJE</em> 139(1), 2024.</li>
+  <li>K. Barron, E. Kung, D. Proserpio. The effect of home-sharing on house prices and rents. <em>Marketing Science</em> 40(1), 2021.</li>
+  <li>M. Garcia-López et al. Do short-term rental platforms affect housing markets? <em>JUE</em> 119, 2020.</li>
+  <li>JC. Rochet, J. Tirole. Platform competition in two-sided markets. <em>JEEA</em> 1(4), 2003.</li>
+  <li>B. Keys, P. Mulder. Property insurance and disaster risk. NBER WP 32579, 2024.</li>
+  <li>D. Acemoglu, P. Restrepo. Automation and new tasks. <em>JEP</em> 33(2), 2019.</li>
+  <li>D. Autor. Why are there still so many jobs? <em>JEP</em> 29(3), 2015.</li>
+  <li>Government Alliance on Race and Equity — 450+ member jurisdictions. <a href="https://racialequityalliance.org">racialequityalliance.org</a></li>
+  <li>S. R. H. Hati et al. A decade of systematic literature review on Airbnb. <em>Heliyon</em> 7(10), 2021. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8561316/">PMC8561316</a></li>
+  <li>A. E. Gold. Community consequences of Airbnb. <em>Washington Law Review</em> 94(4), 2019.</li>
+  <li>J. Bivens. The economic costs and benefits of Airbnb. Economic Policy Institute, 2019.</li>
+  <li>Inside Airbnb — open per-city listing data. <a href="https://insideairbnb.com">insideairbnb.com</a> · NYC Local Law 18 (2023).</li>
+  <li>R. Rothstein. <em>The Color of Law: A Forgotten History of How Our Government Segregated America.</em> Liveright, 2017.</li>
+  <li>D. Aaronson, D. Hartley, B. Mazumder. The effects of the 1930s HOLC "redlining" maps. <em>American Economic Journal: Economic Policy</em> 13(4), 2021.</li>
+  <li>J. W. Faber. We built this: consequences of New Deal era intervention in America's racial geography. <em>American Sociological Review</em> 85(5), 2020.</li>
+  <li>M. Desmond, N. Wilmers. Do the poor pay more for housing? Exploitation, profit, and risk in rental markets. <em>American Journal of Sociology</em> 124(4), 2019.</li>
+  <li>R. Bartlett, A. Morse, R. Stanton, N. Wallace. Consumer-lending discrimination in the FinTech era. <em>Journal of Financial Economics</em> 143(1), 2022.</li>
+  <li>L. Freeman, F. Braconi. Gentrification and displacement: New York City in the 1990s. <em>Journal of the American Planning Association</em> 70(1), 2004.</li>
+  <li>L. Ding, J. Hwang, E. Divringi. Gentrification and residential mobility in Philadelphia. <em>Regional Science and Urban Economics</em> 61, 2016.</li>
+  <li>J. Hwang, J. Lin. What have we learned about the causes of recent gentrification? <em>Cityscape</em> 18(3), 2016.</li>
+  <li>T. Slater. The eviction of critical perspectives from gentrification research. <em>International Journal of Urban and Regional Research</em> 30(4), 2006.</li>
+  <li>M. E. Stone. <em>Shelter Poverty: New Ideas on Housing Affordability.</em> Temple University Press, 1993.</li>
+  <li>U.S. Department of Housing and Urban Development — cost-burden standard (30% of income); Brooke Amendment, 1969 (25%), revised 1981.</li>
+</ol>
+
+</div>
+
+<footer>
+  <div class="fwrap">
+    <div>
+      <strong style="color:var(--gold2)">WP-35 · Retiring the Advisor</strong><br>
+      Principia Orthogona · Vol VI · Roots<br>
+      G6 LLC · Pablo Nogueira Grossi · Newark NJ · 2026<br>
+      ORCID 0009-0000-6496-2186 · <a href="mailto:g6llc@proton.me">g6llc@proton.me</a><br>
+      Series DOI <a href="https://doi.org/10.5281/zenodo.19117399">10.5281/zenodo.19117399</a> ·
+      This paper <a href="https://doi.org/10.5281/zenodo.21710763">10.5281/zenodo.21710763</a>
+    </div>
+    <div class="disc">
+      <strong style="color:var(--gold2)">Disclaimer</strong><br>
+      Independent working paper; not peer-reviewed. Revenue figures are illustrative planning
+      assumptions, not projections or offers. Nothing here is investment, legal, or financial
+      advice. CC BY 4.0 · © 2026 Pablo Nogueira Grossi — G6 LLC.
+    </div>
+  </div>
+</footer>
+</body>
+</html>
