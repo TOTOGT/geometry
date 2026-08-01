@@ -9,7 +9,7 @@ DOI    : 10.5281/zenodo.19117400
 
 Blade geometry
 --------------
-Active zone    : r* ≤ r ≤ 1.0  (normalised)   r* = 0.773
+Active zone    : r* ≤ r ≤ 1.0  (normalised)   r* = 0.77594059
 Core zone      : 0 ≤ r < r*    — no blades (vortex stability, Rankine core)
 Pitch equation : tan φ(r) = r   (annihilates contact form α = dz − r²dθ at each r)
 Chord scaling  : C(r) = C_tip × R_outer / r   (wider inward, constant solidity)
@@ -28,14 +28,14 @@ Axial scale relation
 Z_physical = r² × θ × R_z      (integrates the contact condition dz = r² dθ)
 R_z = L_axial / θ_sweep = 0.9 / π  ≈  0.2865 m/rad
 
-At r* = 0.773: Z_inner = 0.773² × π × R_z  ≈  0.538 m
+At r* = 0.77594059: Z_inner = r*² × π × R_z  ≈  0.542 m
 At r  = 1.00 : Z_outer =    1² × π × R_z   =  0.900 m
 
 CFD validation criteria (Phase 2 pass gates)
 -------------------------------------------
   1.  T_z · ω / (F_z · U_z)  >>  1     (torque dominates over thrust)
-  2.  Tangential velocity collapses to near-zero for 0.773 ≤ r ≤ 1.0 downstream
-  3.  No vortex core breakdown at r < 0.773   (Rankine core stays coherent)
+  2.  Tangential velocity collapses to near-zero for r* ≤ r ≤ 1.0 downstream
+  3.  No vortex core breakdown at r < r*      (Rankine core stays coherent)
 
 Hardware (Phase 3)
 ------------------
@@ -59,7 +59,7 @@ import sys
 
 # ── Physical parameters ───────────────────────────────────────────────────────
 R_OUTER     = 0.60          # m  outer blade radius
-R_STAR      = 0.773         # normalised inner boundary of active zone
+R_STAR      = 0.77594059    # normalised inner boundary (certified: certify_rstar.py, DOP853)
 N_BLADES    = 3
 THETA_SWEEP = np.pi         # rad  180° helical sweep per blade
 L_AXIAL     = 0.90          # m  desired axial span at outer tip
