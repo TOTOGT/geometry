@@ -24,8 +24,66 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 - If a volume does not have its own ISBN assigned yet (e.g. Vol VI), use the
   **G5 Complete Completeness eBook ISBN 979-8-9954416-5-6** as the canonical fallback.
   G5 is all-encompassing — it adds what comes out by default.
-- Series root DOI: **10.5281/zenodo.19117399** — use this for cross-volume citations.
-- Vol I individual DOI: 10.5281/zenodo.19117400
+- **10.5281/zenodo.19117399 is Vol I's *concept* DOI — it is NOT a series DOI.**
+  Corrected 2026-08-01, checked against the Zenodo API. A concept DOI resolves to
+  whichever version was deposited most recently: today it lands on Vol I v6,
+  10.5281/zenodo.21146416 (2026-07-02). Citing it for anything other than Vol I
+  sends the reader to the wrong document; citing it *for* Vol I pins nothing,
+  because the target moves on every deposit.
+  This line previously read "Series root DOI — use this for cross-volume
+  citations." That instruction is what put a phantom citation into the JOMO
+  game-theory pack and kept it there from June to August. Do not restore it.
+- **Cross-volume / series-wide pointer:** the Zenodo community
+  <https://zenodo.org/communities/principia-orthogona> — "Principia Orthogona —
+  Generative Contact Mechanics", public, 6 records. **There is no series-level
+  DOI.** If you need one thing to point at for the series as a whole, point at
+  the community, or at the Opus Map (`book4/living-book.html`).
+- **Vol I DOIs:** concept 10.5281/zenodo.19117399 · v1 (first deposit)
+  10.5281/zenodo.19117400, 2026-03-17 · current v6 10.5281/zenodo.21146416,
+  2026-07-02.
+- **Positional Dominance / network games has its own concept DOI** —
+  10.5281/zenodo.21013065 → v1 10.5281/zenodo.21013066 (June 2026),
+  v2 10.5281/zenodo.21753025 (August 2026). **Cite v2.** v1's analytical
+  threshold is superseded; see `book6/wp38-positional-dominance.html`.
+- **Rule:** cite a *version* DOI whenever the claim depends on what the text
+  actually says. Cite a *concept* DOI only when you explicitly mean "whatever is
+  current", and say so in the citation. Never label a concept DOI as the series.
+
+### Blast radius of the phantom series DOI — OPEN, opened 2026-08-01
+
+`19117399` appears in **127 files** in this repo. That number is a `grep` count,
+not an audit: no file below has been opened except the two AXLE pack copies and
+`CLAUDE.md` itself. Do not quote the tier counts as findings — they are a
+mechanical classification of the 110 characters preceding each match, nothing
+more, and the same overstatement rule applies here as to the commutator ledger.
+
+| Tier | Mechanical count | What it looks like | Why it matters |
+|---|---|---|---|
+| A | 48 files | preceded by the word "series" — e.g. `<span class="badge">Series DOI 19117399</span>` in `book6/ch-multiagent-biological-transitions.html`, `book6/ch-immune-maintenance.html`; "Zenodo series:" in footers | Factually wrong label. Highest priority — it is the exact phrasing that propagated into the JOMO pack. |
+| B | 76 files | bare `DOI: 10.5281/zenodo.19117399` in a footer or byline | Reads as *that page's* DOI. Points the reader at Vol I. |
+| C | 2 files | in explicit Vol I context | Right document, but unpinned — resolves to whatever Vol I version is newest. |
+| D | 1 file | already says "concept" | Probably fine; confirm and leave. |
+
+Repair, when it is done, is per-file and minimal:
+
+- Tier A → the community URL `https://zenodo.org/communities/principia-orthogona`,
+  or drop the line. Never "Series DOI".
+- Tier B → the DOI of the work the page is actually about; if the page has no
+  deposit, the community URL.
+- Tier C → keep, but add "(concept DOI — resolves to the current version of
+  Vol I)", or pin to a version DOI if the surrounding claim depends on the text.
+
+**Settled so far:** `AXLE → GameTheory_Full_Pack.html` and
+`AXLE → NetworkGamesJOMO/GameTheory_Full_Pack.html` (hero + footer + both
+reference notices, 2026-08-01) · this file. Everything else is untouched.
+`geometry → GameTheory_Full_Pack.html` at the repo root is a **stale third copy**
+of the AXLE pack — it still carries the phantom DOI *and* the pre-2026-08-01
+canvas defects. Fix or delete it; do not leave three copies drifting.
+
+**Upstream:** `~/Desktop/dnls/CLAUDE.md` is named here as the canonical house
+rules and was not reachable in the session that opened this entry. If it carries
+the same "Series root DOI" line, it is the real source and must be corrected
+there too, or this defect returns.
 
 ## Hardback constraint
 
