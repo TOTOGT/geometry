@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 · Compression | Book 3: The Mini-Beast | Principia Orthogona</title>
+<meta name="description" content="Compress your own writing. Apply C to a paragraph and report the ratio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=DM+Mono:wght@300;400;500&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#0a0a0f; --paper:#f5f0e8;
+    --gold:#c8a84b; --gold-dim:#8a6f2e; --gold-bright:#f0c96a;
+    --silver:#9ba8b8; --crimson:#8b1a2a; --teal:#1a6b6b; --teal-bright:#2eb8b8;
+    --margin:clamp(1.5rem,5vw,5rem); --col:min(74ch,100%);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink);color:var(--paper);
+    font-family:'Cormorant Garamond',Georgia,serif;
+    font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.75;overflow-x:hidden}
+  #starfield{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .star{position:absolute;border-radius:50%;background:#fff;
+    animation:twinkle var(--dur,3s) ease-in-out infinite;animation-delay:var(--delay,0s);opacity:.3}
+  @keyframes twinkle{0%,100%{opacity:.1;transform:scale(1)}50%{opacity:.8;transform:scale(1.4)}}
+
+  .mono,.math-display,.eqline,table,.badge,.op,.chapter-label,nav,footer,.tag
+    {font-family:'DM Mono',ui-monospace,monospace;font-variant-ligatures:none}
+
+  nav{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;
+    gap:.5rem 1.25rem;padding:.75rem var(--margin);background:rgba(10,10,15,.88);
+    backdrop-filter:blur(10px);border-bottom:1px solid rgba(200,168,75,.18);
+    font-size:.62rem;letter-spacing:.18em;text-transform:uppercase}
+  nav a{color:var(--silver);text-decoration:none;transition:color .25s}
+  nav a:hover{color:var(--gold-bright)}
+  .nav-series{color:var(--gold)!important;letter-spacing:.3em;margin-right:auto}
+  .nav-links{display:flex;flex-wrap:wrap;gap:.5rem .9rem}
+
+  main{position:relative;z-index:1}
+
+  .hero{min-height:86svh;display:grid;place-items:center;padding:var(--margin);
+    text-align:center;position:relative}
+  .hero-canvas-wrap{position:absolute;inset:0;display:grid;place-items:center;opacity:.16}
+  #heroCanvas{width:100%;height:100%}
+  .hero-content{position:relative;z-index:2;max-width:62ch}
+  .chapter-label{font-size:.7rem;letter-spacing:.35em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:2.2rem;opacity:0;animation:fadeUp 1s ease forwards .3s}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,6vw,4.8rem);
+    font-weight:400;line-height:1.07;letter-spacing:-.02em;margin-bottom:1.4rem;
+    opacity:0;animation:fadeUp 1s ease forwards .6s}
+  .hero h1 em{font-style:italic;color:var(--gold)}
+  .hero-sub{font-size:clamp(1rem,2vw,1.32rem);font-style:italic;color:var(--silver);
+    max-width:56ch;margin:0 auto 2.2rem;opacity:0;animation:fadeUp 1s ease forwards .9s}
+  .hero-eq{font-family:'DM Mono',monospace;font-size:clamp(.82rem,1.5vw,1rem);
+    color:var(--gold-bright);letter-spacing:.06em;margin-bottom:1.9rem;
+    opacity:0;animation:fadeUp 1s ease forwards 1.05s}
+  .meta-badges{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:.5rem;
+    opacity:0;animation:fadeUp 1s ease forwards 1.2s}
+  .badge{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--silver);
+    border:1px solid var(--gold-dim);border-radius:2px;padding:.4rem .7rem}
+  .badge b{color:var(--gold-bright);font-weight:500}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  .rule{width:min(74ch,100%);margin:0 auto;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);opacity:.5}
+
+  .section{width:var(--col);margin:0 auto;padding:clamp(2.6rem,6vw,5rem) var(--margin)}
+  .section h2{font-family:'DM Serif Display',serif;font-size:clamp(1.55rem,3.2vw,2.5rem);
+    font-weight:400;line-height:1.16;margin-bottom:1.6rem}
+  .section h2 span{color:var(--gold);font-family:'DM Mono',monospace;font-size:.5em;
+    letter-spacing:.22em;display:block;margin-bottom:.6rem;text-transform:uppercase}
+  .section p{margin-bottom:1.15rem}
+  .section p+p{text-indent:1.5em}
+  .lead{font-size:1.1em;color:#ece5d8}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  .pullquote{width:var(--col);margin:0 auto;padding:clamp(1.8rem,4.5vw,3.2rem) var(--margin);
+    font-family:'DM Serif Display',serif;font-style:italic;
+    font-size:clamp(1.25rem,2.8vw,1.95rem);line-height:1.36;color:var(--gold);text-align:center}
+
+  .math-display{text-align:center;font-size:clamp(.9rem,2vw,1.2rem);color:var(--gold-bright);
+    background:rgba(200,168,75,.05);border:1px solid rgba(200,168,75,.22);border-radius:3px;
+    padding:1.5rem 1rem;margin:1.9rem 0;letter-spacing:.04em;line-height:2.05;overflow-x:auto}
+  .math-display small{display:block;font-size:.6em;color:var(--silver);letter-spacing:.16em;
+    text-transform:uppercase;margin-top:.85rem}
+  .eqline{display:block;white-space:nowrap}
+  .mono{color:var(--gold-bright);font-size:.9em}
+
+  .box{border:1px solid rgba(200,168,75,.26);border-radius:3px;padding:1.4rem 1.5rem;margin:1.9rem 0;
+    background:rgba(200,168,75,.035)}
+  .box.thm{border-color:rgba(46,184,184,.35);background:rgba(26,107,107,.09)}
+  .box.fals{border-color:rgba(139,26,42,.5);background:rgba(139,26,42,.08)}
+  .box .tag{display:block;font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:.75rem}
+  .box.thm .tag{color:var(--teal-bright)}
+  .box.fals .tag{color:#d4707f}
+  .box h3{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.18rem;margin-bottom:.7rem}
+  .box p{margin-bottom:.85rem}
+  .box p:last-child{margin-bottom:0}
+  .box ol,.box ul{margin:.4rem 0 .2rem 1.3rem}
+  .box li{margin-bottom:.6rem}
+
+  table{width:100%;border-collapse:collapse;margin:1.7rem 0;font-size:.72rem;letter-spacing:.02em}
+  caption{caption-side:top;text-align:left;font-family:'DM Mono',monospace;font-size:.58rem;
+    letter-spacing:.24em;text-transform:uppercase;color:var(--gold);padding-bottom:.7rem}
+  th,td{border-bottom:1px solid rgba(155,168,184,.18);padding:.6rem .55rem;text-align:left;vertical-align:top}
+  th{color:var(--gold);font-weight:500;letter-spacing:.12em;text-transform:uppercase;font-size:.58rem;
+    border-bottom-color:rgba(200,168,75,.4)}
+  tbody tr:hover{background:rgba(200,168,75,.05)}
+  .tbl-wrap{overflow-x:auto}
+
+  .topic-card{border-left:2px solid var(--gold-dim);padding:.15rem 0 .15rem 1.35rem;margin:2.1rem 0}
+  .topic-card h3{font-family:'DM Serif Display',serif;font-weight:400;
+    font-size:clamp(1.12rem,2.1vw,1.45rem);margin-bottom:.75rem;color:var(--gold-bright)}
+  .topic-card p+p{text-indent:1.5em}
+
+  .op-strip{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;width:var(--col);
+    margin:0 auto;padding:0 var(--margin) 1rem}
+  .op{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--silver);
+    border:1px solid rgba(155,168,184,.28);border-radius:2px;padding:.45rem .8rem}
+  .op.active{color:var(--ink);background:var(--gold);border-color:var(--gold);font-weight:500}
+
+  .levels{display:grid;gap:.7rem;margin:1.6rem 0}
+  .level{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:start;
+    border:1px solid rgba(155,168,184,.2);border-radius:3px;padding:.85rem 1rem}
+  .level b{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--gold);white-space:nowrap;padding-top:.25rem}
+  .level span{font-size:.95rem;line-height:1.6}
+
+  ul.bridges{list-style:none;margin:1.4rem 0 0;padding:0}
+  ul.bridges li{border-left:2px solid var(--teal);padding:.15rem 0 .15rem 1.15rem;margin-bottom:1.35rem}
+  ul.bridges a{display:block;font-family:'DM Serif Display',serif;font-size:1.05rem;
+    color:var(--gold-bright);text-decoration:none;margin-bottom:.25rem}
+  ul.bridges a:hover{color:var(--paper);text-decoration:underline}
+  ul.bridges span{display:block;font-size:.95rem;color:var(--silver);line-height:1.6}
+
+  .chapter-nav{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;
+    width:var(--col);margin:0 auto;padding:clamp(2.2rem,5vw,4rem) var(--margin)}
+  .chapter-nav a{flex:1 1 240px;text-decoration:none;color:var(--paper);
+    border:1px solid rgba(200,168,75,.28);border-radius:3px;padding:1.05rem 1.25rem;
+    transition:border-color .25s,background .25s}
+  .chapter-nav a:hover{border-color:var(--gold);background:rgba(200,168,75,.06)}
+  .chapter-nav .dir{display:block;font-family:'DM Mono',monospace;font-size:.56rem;
+    letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}
+  .chapter-nav .ttl{font-family:'DM Serif Display',serif;font-size:1rem;line-height:1.3}
+  .chapter-nav .next{text-align:right}
+
+  footer{border-top:1px solid rgba(200,168,75,.18);padding:2.4rem var(--margin) 3.4rem;
+    text-align:center;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--silver);line-height:2.1}
+  footer a{color:var(--gold);text-decoration:none}
+  footer a:hover{color:var(--gold-bright)}
+
+  @media (max-width:640px){.nav-links{display:none}.section p+p{text-indent:0}
+    .level{grid-template-columns:1fr;gap:.3rem}}
+</style>
+</head>
+<body>
+<div id="starfield"></div>
+<nav>
+  <a href="/geometry/index.html" class="nav-series">&#9884; PRINCIPIA ORTHOGONA &#9884;</a>
+  <div class="nav-links">
+    <a href="/geometry/journey.html">Journey Map</a>
+    <a href="/geometry/ch00-student-edition.html">Ch 0</a>
+    <a href="/geometry/ch01-one-equation.html">Ch 1</a>
+    <a href="/geometry/ch01-dm3-framework.html">dm&sup3; Framework</a>
+    <a href="/geometry/ch02-biological.html">Biological</a>
+    <a href="/geometry/ch03-plasma.html">Plasma</a>
+    <a href="/geometry/ch04-markets.html">Market</a>
+    <a href="/geometry/ch06-pedagogy.html">Pedagogy</a>
+    <a href="/geometry/ch-d2-academic.html">D2 Paper</a>
+  </div>
+  <a href="/geometry/living-book.html">Living Book</a>
+  <a href="/geometry/series-hub.html">Series &#8599;</a>
+</nav>
+<main>
+
+<section class="hero">
+  <div class="hero-canvas-wrap"><canvas id="heroCanvas"></canvas></div>
+  <div class="hero-content">
+    <p class="chapter-label">Book 3 &middot; The Mini-Beast &middot; Chapter 26 of 42</p>
+    <h1>Week 2 <em>·</em> Compression</h1>
+    <p class="hero-sub">Compress your own writing. Apply C to a paragraph and report the ratio.</p>
+    <p class="hero-eq">C: x ↦ αx</p>
+    <div class="meta-badges">
+      <span class="badge">Sigil <b>C</b></span>
+      <span class="badge">Operator <b>U</b></span>
+      <span class="badge">CEFR <b>A2-B1</b></span>
+      <span class="badge">Week <b>2</b></span>
+    </div>
+  </div>
+</section>
+
+<div class="op-strip"><span class="op">C &middot; Compression</span><span class="op">K &middot; Threshold</span><span class="op">F &middot; Fold</span><span class="op active">U &middot; Unfolding</span><span class="op">G &middot; Generation</span></div>
+<div class="rule"></div>
+<section class="section reveal"><h2><span>The Task</span>Apply C to Your Own Paragraph</h2><p><span class="lead">Take a paragraph you have written. Compress it and report the ratio. That is the whole assignment, and it is the only quantitative writing metric in this program that is not a proxy for length.</span></p><p>Write the original, then the compression, then the number: <span class="mono">&lambda; = (compressed length) / (original length)</span>. Report all three. The number without the two texts is unfalsifiable.</p></section><div class="math-display"><span class="eqline">C : x &#8614; &lambda;x,   &lambda; &lt; 1</span><small>week 2 &middot; the compression operator, applied to your own writing</small></div><div class="rule"></div><section class="section reveal"><h2><span>Lossy and Lossless</span>Know Which One You Did</h2><div class="topic-card"><h3>Lossless compression</h3><p>Same claims, fewer words. Removing hedges, collapsing nominalisations, deleting sentences that restate the previous sentence. Nothing a reader could have extracted from the original is now unavailable. Typical achievable ratio for first-draft academic prose: <span class="mono">&lambda; &asymp; 0.6&ndash;0.7</span>, with no loss anyone can name.</p></div><div class="topic-card"><h3>Lossy compression</h3><p>Claims removed, not just words. This is legitimate and often correct &mdash; the first draft usually contains claims that do not belong &mdash; but it must be declared. A ratio of 0.3 obtained by deleting a paragraph is a different operation from a ratio of 0.6 obtained by tightening one.</p></div><div class="topic-card"><h3>Why the distinction is the assignment</h3><p>A student who reports <span class="mono">&lambda;</span> without saying which kind has not yet done the <span class="mono">C</span> operator; they have done editing. Compression in this framework is <em>reduction to seed</em> &mdash; the smallest object from which the original can be regrown. What survives compression is what the paragraph was actually about.</p></div></section><div class="rule"></div><section class="section reveal"><h2><span>Why This Number Matters Later</span>&lambda; Is Not Only a Writing Metric</h2><p>The compression ratio is not confined to the pedagogical layer. It appears in an observable: the fractal dimension left behind by a fold is</p><div class="math-display"><span class="eqline">d_f = 1 + log|&mu;_max| / log &lambda;</span><small>&lambda; &asymp; 0.6 and &mu;_max = &minus;0.42 give d_f &asymp; 1.43 in the plasma room</small></div><p>The same quantity you are measuring on your own paragraph is the quantity that fixes the fractal structure of a magnetotail current sheet. That is either the most interesting sentence in the course or an overreach, and week 2 is early enough that you should hold it lightly. What is defensible now: the operator is the same operator, and the ratio is defined the same way in both.</p></section><section class="section reveal"><h2><span>Compression-Driven Revision</span>The Practice</h2><ol><li>Write the draft without compressing. Compression during drafting suppresses claims before they are visible.</li><li>Compress once, aggressively, and record <span class="mono">&lambda;</span>.</li><li>Regrow from the compressed version without consulting the original.</li><li>Compare. What did not come back was not load-bearing. What came back differently is where your actual argument is.</li></ol><p><b>Deliverable.</b> Original, compression, <span class="mono">&lambda;</span>, lossy-or-lossless declaration, and one sentence on what did not survive regrowth.</p></section><section class="section reveal"><h2><span>Bridges</span>Where This Connects</h2><ul class="bridges"><li><a href="/geometry/ch2.html">Week 2 &middot; Generative Matrix</a><span>The Book 3 chapter paired with this week.</span></li><li><a href="/geometry/ch03-operator-sequence.html">Ch 3 &middot; The Operator Sequence</a><span>Where C is defined and its place in the composition is fixed.</span></li><li><a href="/geometry/ch11-plasma-transition.html">Ch 11 &middot; Plasma &middot; The Generative Transition</a><span>Where &lambda; reappears as an observable, in Theorem 3.4.</span></li></ul></section>
+<div class="rule"></div>
+<div class="chapter-nav"><a href="ch1-seed.html"><span class="dir">&larr; Previous</span><span class="ttl">Week 1 · Seed</span></a><a class="next" href="ch2-allostatic.html"><span class="dir">Next &rarr;</span><span class="ttl">Week 3 · Allostatic Load</span></a></div>
+<footer>
+  <p>
+    PRINCIPIA ORTHOGONA &middot; VOL III &middot; THE MINI-BEAST &middot; &copy; 2026 G6 LLC &middot; PABLO NOGUEIRA GROSSI &middot; NEWARK NJ<br>
+    ISBN 979-8-9954416-6-3 (eBook PDF) &middot; ORCID 0009-0000-6496-2186 &middot;
+    MSC 2020: 37C10, 37C75, 53D10, 92C20, 91B55, 53Z99<br>
+    <a href="https://zenodo.org/communities/principia-orthogona">ZENODO COMMUNITY</a> &middot;
+    <a href="https://github.com/TOTOGT/DM3-lab">GITHUB</a> &middot;
+    <a href="/geometry/journey.html">JOURNEY MAP</a> &middot;
+    <a href="mailto:g6llc@proton.me">G6LLC@PROTON.ME</a>
+  </p>
+</footer>
+</main>
+<script>
+(function(){var sf=document.getElementById('starfield');
+for(var i=0;i<140;i++){var s=document.createElement('div');s.className='star';
+var z=Math.random()*2.4+0.5;
+s.style.cssText='width:'+z+'px;height:'+z+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--dur:'+(2+Math.random()*4)+'s;--delay:'+(Math.random()*4)+'s;';
+sf.appendChild(s);}})();
+(function(){var c=document.getElementById('heroCanvas');if(!c)return;
+var ctx=c.getContext('2d'),r,t=0;
+function size(){var b=c.getBoundingClientRect(),d=window.devicePixelRatio||1;
+c.width=b.width*d;c.height=b.height*d;ctx.setTransform(d,0,0,d,0,0);return b;}
+r=size();window.addEventListener('resize',function(){r=size();});
+(function loop(){ctx.clearRect(0,0,r.width,r.height);
+var cx=r.width/2,cy=r.height/2,sc=Math.min(r.width,r.height)*0.32;
+ctx.strokeStyle='#c8a84b';ctx.lineWidth=1.4;ctx.beginPath();
+for(var i=0;i<=420;i++){var a=(i/420)*Math.PI*2,x=cx+Math.sin(a)*sc,y=cy+Math.sin(a)*Math.cos(a)*sc;
+i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+ctx.stroke();
+var a2=t,px=cx+Math.sin(a2)*sc,py=cy+Math.sin(a2)*Math.cos(a2)*sc;
+ctx.fillStyle='#f0c96a';ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.fill();
+t+=0.008;requestAnimationFrame(loop);})();})();
+(function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){
+if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});})();
+</script>
+</body>
+</html>

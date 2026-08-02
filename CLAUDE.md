@@ -41,6 +41,39 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 - **Vol I DOIs:** concept 10.5281/zenodo.19117399 · v1 (first deposit)
   10.5281/zenodo.19117400, 2026-03-17 · current v6 10.5281/zenodo.21146416,
   2026-07-02.
+- **10.5281/zenodo.19117400 is real, valid, and checked against the Zenodo API
+  (2026-08-02).** It is Vol I's v1 deposit and it is genuinely the origin
+  point of the project: it bundles the first four Principia Orthogona / GCM
+  papers (Vol I "Mathematics of Generative Transitions," Vol II "Contact
+  Realization," "Generative Contact Mechanics," and "The dm3 Operator" toy
+  model). If a page ever wants to point students at *where the series
+  started*, this is the correct DOI for that purpose — cite it explicitly as
+  the origin/founding deposit. What it is **not** is Book 3's DOI: it has
+  nothing about the Mini-Beast, the D1–D4 domains, or the pilot. Book 3 has no
+  standalone deposit yet (see `minibeast-pilot.html` fix, 2026-08-02, below).
+  **The four founding papers do now also have their own later deposits — but
+  none of the four is a clean substitute for "the origin," each for a
+  different reason, checked against the Zenodo API 2026-08-02:**
+  - Vol I: concept 10.5281/zenodo.19117399 → currently v6
+    10.5281/zenodo.21146416 (July 2026). Heavily revised since v1 — new
+    theorems, closed proofs, changed assumptions. Citing this today gets the
+    *current* Vol I text, not the original.
+  - Vol II ("Contact Realization"): 10.5281/zenodo.19379473. Clean, single
+    version, April 2026 — the one paper of the four with an unambiguous
+    standalone DOI.
+  - "Generative Contact Mechanics": concept 10.5281/zenodo.19122167 →
+    currently v2 10.5281/zenodo.20230610. v2's file list oddly re-bundles
+    *all four* original PDFs again (same md5s as the v1 bundle) — looks like
+    an accidental re-upload on the author's end, not a clean single-paper
+    citation. Needs a Zenodo-side cleanup by the author before it's citable
+    as "just this paper"; not something to fix from this repo.
+  - "The dm3 Operator" toy model: 10.5281/zenodo.19379385. Clean, single
+    version, April 2026.
+
+  **Rule:** for "where the series started," cite 19117400 alone — it is the
+  only one of these that is actually frozen at the origin state. Do not
+  substitute the four individual DOIs above for that purpose; two of them no
+  longer represent what was originally there.
 - **Positional Dominance / network games has its own concept DOI** —
   10.5281/zenodo.21013065 → v1 10.5281/zenodo.21013066 (June 2026),
   v2 10.5281/zenodo.21753025 (August 2026). **Cite v2.** v1's analytical
@@ -75,10 +108,62 @@ Repair, when it is done, is per-file and minimal:
 
 **Settled so far:** `AXLE → GameTheory_Full_Pack.html` and
 `AXLE → NetworkGamesJOMO/GameTheory_Full_Pack.html` (hero + footer + both
-reference notices, 2026-08-01) · this file. Everything else is untouched.
-`geometry → GameTheory_Full_Pack.html` at the repo root is a **stale third copy**
-of the AXLE pack — it still carries the phantom DOI *and* the pre-2026-08-01
-canvas defects. Fix or delete it; do not leave three copies drifting.
+reference notices, 2026-08-01) · `geometry → GameTheory_Full_Pack.html`
+(2026-08-02) · `book6/wp38-positional-dominance.html` footer (2026-08-01) ·
+this file. All three copies of the pack now agree. Everything else is untouched.
+`minibeast-pilot.html` footer (2026-08-02, not a tiered case above but same
+mechanism: it cited `10.5281/zenodo.19117400`, checked against the Zenodo API
+and confirmed to be Vol I's v1 deposit, not Book 3's — swapped for the
+community URL since Book 3 has no deposit of its own. See the DOI note above.
+
+### SECOND FAILURE MODE — mis-correction into a phantom *absence* (found 2026-08-02)
+
+The grep for `19117399` does **not** find every affected file, because a file can
+be "corrected" out of the phantom DOI and into a worse claim. The root copy of
+the pack had already been edited by someone, and both reference entries read:
+
+> *No standalone Zenodo record found under this title.*
+
+**False.** The record exists — v1 `10.5281/zenodo.21013066`, v2
+`10.5281/zenodo.21753025`, concept `10.5281/zenodo.21013065`. Checked against
+the Zenodo API. Entry (2026b) went further: "not yet deposited, or not yet
+written." It is neither; it is the ADDENDUM inside the parent record and carries
+the parent's DOI.
+
+The mechanism: searching on `19117399` lands on Vol. I, so the checker concluded
+*the paper was never deposited* rather than *this DOI belongs to another work*.
+**A phantom citation produced a phantom absence.** The correction inverted the
+error instead of resolving it, and removed the searchable string on its way out.
+
+Consequences for the rescan:
+
+- Add to the sweep: `No standalone Zenodo record`, `no Zenodo record found`,
+  `not yet deposited`, `not yet written`, `phantom-DOI`, `treat .* as unsourced`.
+- A file with **zero** occurrences of `19117399` is not thereby clean.
+- Before writing "no record exists" anywhere, query the Zenodo API for the
+  *title*, not the DOI. Absence of a deposit is a positive claim and needs the
+  same evidence as a citation.
+- That edit was **uncommitted** in the working tree, so `git grep` on HEAD would
+  not have found it either. Sweep the working tree, not just the committed tree.
+
+Two files assert absence or unsourcedness elsewhere and have **not** been read:
+`book6/wp30-how-to-audit.html`, `research-status.html`. `[OPEN]`
+
+### WP-38 — open items carried forward (2026-08-02)
+
+1. **Two broken formulas** remain in Figures 1–3 (`data-mjx-error="Misplaced &"`
+   — matplotlib mathtext choking on a literal `&`). No generator exists for those
+   three; Figure 4's is now committed as `book6/wp38-fig4.py` and is the pattern
+   to follow. Verify any figure edit by rasterising the SVG **as embedded in the
+   page**, not the standalone file — the 2026-08-02 breakage was in the embed
+   (unnamespaced `clip-path="url(#…)"`), and the standalone file was fine.
+2. **Otium is in two places at once** — §9 of WP-38 *and* a separate file in the
+   unpublished deposit. Resolve before publishing `10.5281/zenodo.21752834`.
+3. **c_K discrepancy `[OPEN]`** — inverting σ* = 0.33 through the corrected
+   structural model gives c_K = 0.669, hence b = 44.6, against v2's b = 1.208.
+   A factor of ~37. This is v2 §3.3's own identification test run from the
+   structural side, and it does not come out clean. Do not describe either
+   record as calibrated until it is resolved.
 
 **Upstream:** `~/Desktop/dnls/CLAUDE.md` is named here as the canonical house
 rules and was not reachable in the session that opened this entry. If it carries
