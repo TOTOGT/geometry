@@ -636,9 +636,9 @@ footer a:hover { color: var(--kappa2); }
 <p>For 0 &lt; x &lt; 1, k(x) is negative, so η<sup>−k</sup> exceeds unity and concentrates mass inward. The maximum concentration is at x = ε₀, where it sits in [2.3, 2.8] after normalising both profiles to enclose the same total mass within r<sub>c</sub>. This is Theorem T₁.</p>
 
 <div class="box theorem">
-  <div class="box-label">Theorem T₁ · Tribonacci concentration <span class="status-proved">PROVED</span></div>
+  <div class="box-label">Theorem T₁ · Tribonacci concentration <span class="status-proved">PARTIAL</span></div>
   <p>For the contact-geometric and CDM profiles renormalised at r<sub>c</sub>, the ratio 𝓡(r) = ρ<sub>contact</sub>(r) / ρ<sub>CDM</sub>(r) achieves its maximum near r = ε₀ r<sub>c</sub>, with 𝓡(ε₀ r<sub>c</sub>) ∈ [2.3, 2.8].</p>
-  <p style="margin-top:.4rem;">Numerically: 𝓡(ε₀ r<sub>c</sub>) ≈ 2.62. Formally verified in <span class="math">DarkMatter_MachineVerified.lean</span>, lemma L8.</p>
+  <p style="margin-top:.4rem;">Numerically: 𝓡(ε₀ r<sub>c</sub>) ≈ 2.62 <span style="color:#c084fc">[NUMERICAL — by profile integration]</span>. <strong>Status (corrected 2026-08):</strong> the concentration <em>mechanism</em> is machine-verified with 0 sorry in <span class="math">TribonacciMeasure.lean</span> — η is the Tribonacci constant, η &gt; 1, and the weight η<sup>−k</sup> is positive and strictly decreasing, so interior mass concentrates. The specific density-ratio lemma (L8) is formalized in <span class="math">DarkMatter_MachineVerified.lean</span>, but that file is a <strong>[PARTIAL]</strong> proof template — 7 sorrys, 5 standing axioms, L8 not yet closed — so the value 𝓡 ≈ 2.62 itself is numerical, not kernel-proved.</p>
 </div>
 
 <div class="figure">
@@ -1204,7 +1204,7 @@ footer a:hover { color: var(--kappa2); }
 
 <h2 class="sec"><span>§9 &nbsp; Formal Verification</span><span class="sec-no">9 / 10</span></h2>
 
-<p>The key mechanism η<sup>−k(ε₀)</sup> &gt; 1 is machine-verified in Lean 4 under <span style="color:var(--halo);font-family:'Courier New',monospace">DarkMatter_MachineVerified.lean</span> in the AXLE repository. The chain of certified lemmas:</p>
+<p><strong>Status (corrected 2026-08):</strong> the earlier "machine-verified, zero sorry" claim was inaccurate — and so was a first correction that said the file was missing. The file <span style="color:var(--halo);font-family:'Courier New',monospace">DarkMatter_MachineVerified.lean</span> <strong>does exist</strong>, but it is a <strong>[PARTIAL]</strong> proof template carrying <strong>7 sorrys and 5 standing axioms</strong> (its own "FULLY VERIFIED" header overstates). What <em>is</em> genuinely machine-verified — 0 sorry, no custom axioms — is the underlying mechanism in <span class="math" style="color:var(--halo)">TribonacciMeasure.lean</span>: the Tribonacci constant satisfies η &gt; 1 (<code>η_gt_one</code>) and η³ = η² + η + 1 (<code>η_characteristic</code>), and the weight η<sup>−k</sup> is strictly decreasing (<code>weight_strictAnti</code>) — which is exactly why interior mass concentrates. The density-ratio steps L5, L7 and L8 in the table below remain <strong>[OPEN]</strong> template steps until their sorrys are closed and <code>#print axioms</code> is clean.</p>
 
 <table class="dm-table">
   <thead>
@@ -1217,12 +1217,13 @@ footer a:hover { color: var(--kappa2); }
     <tr><td>L4</td><td class="num">−k(ε₀) &gt; 0</td><td><span style="color:var(--proved);font-family:'Courier New',monospace;font-size:.65rem">PROVED</span></td></tr>
     <tr><td>L5</td><td class="num">aᵗ &gt; 1 for a &gt; 1, t &gt; 0</td><td><span style="color:var(--proved);font-family:'Courier New',monospace;font-size:.65rem">PROVED</span></td></tr>
     <tr><td>L6</td><td class="num">η<sup>−k(ε₀)</sup> &gt; 1 &nbsp; KEY</td><td><span style="color:var(--proved);font-family:'Courier New',monospace;font-size:.65rem">PROVED via L1–L5</span></td></tr>
-    <tr><td>L7</td><td class="num">η<sup>−k(ε₀)</sup> ≈ 3 numerically</td><td><span style="color:var(--proved);font-family:'Courier New',monospace;font-size:.65rem">VERIFIED</span></td></tr>
-    <tr><td>L8</td><td class="num">ρ_contact/ρ_CDM &gt; 1 on interior</td><td><span style="color:var(--proved);font-family:'Courier New',monospace;font-size:.65rem">PROVED via L6</span></td></tr>
+    <tr><td>L6</td><td class="num" style="color:var(--proved)">η<sup>−k(ε₀)</sup> &gt; 1 &nbsp; MECHANISM</td><td><span style="color:var(--proved);font-family:'Courier New',monospace;font-size:.65rem">PROVED · 0 sorry (TribonacciMeasure.lean)</span></td></tr>
+    <tr><td>L7</td><td class="num">η<sup>−k(ε₀)</sup> ≈ 3 numerically</td><td><span style="color:#e0aa3a;font-family:'Courier New',monospace;font-size:.65rem">OPEN · numerical (sorry)</span></td></tr>
+    <tr><td>L8</td><td class="num">ρ_contact/ρ_CDM &gt; 1 on interior</td><td><span style="color:#e05a3a;font-family:'Courier New',monospace;font-size:.65rem">OPEN · suspect (2 sorry)</span></td></tr>
   </tbody>
 </table>
 
-<p>The closure pass of June 25, 2026 — documented in <a href="https://github.com/TOTOGT/AXLE/tree/main/NASA/MoonBase/proofs" target="_blank" style="color:var(--gold)">sorry_closures.pdf</a> — discharged all related open obligations. Companion human-readable proofs are pinned to the AXLE repository for independent audit, with explicit counterexamples to the five theorem statements that were false as originally written.</p>
+<p><strong>Honest closure status (2026-08).</strong> The mechanism <strong>L1–L6</strong> (η<sup>−k(ε₀)</sup> &gt; 1) is the closeable core: the four constant "axioms" are just <code>norm_num</code> on the literals (η = 1.839…, ε₀ = 1/3) and the single <code>rpow</code> step is a standard Mathlib lemma, so with those discharged L6 is sorry-free and axiom-free — the same fact <code>TribonacciMeasure.lean</code> already carries at 0 sorry (draft patch: <code>DarkMatter_closures_DRAFT.lean</code>). What is <em>not</em> closed: <strong>L7</strong> (a numerical approximation, not a logic lemma) and <strong>L8</strong> (suspect — the interior goal x<sup>2.5</sup>·η<sup>−k</sup> &gt; 1 does not follow for 0 &lt; x &lt; 1, so it needs a quantitative bound or a corrected exponent). As the file itself notes, several theorem statements were false as first written; those must be fixed, not asserted, before any deposit.</p>
 
 <!-- CTA monograph -->
 <div class="cta-monograph">
