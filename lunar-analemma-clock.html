@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lunar Analemma Clock · Principia Orthogona</title>
+<style>
+  :root{
+    --void:#05070d; --panel:#0b0f1a; --gold:#c9a84c; --gold2:#e8c96a;
+    --silver:#dfe6f0; --moon:#e9edf5; --dim:#5a6070; --line:rgba(201,168,76,.18);
+    --serif:Georgia,'Times New Roman',serif; --mono:'JetBrains Mono','Courier New',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:radial-gradient(ellipse 80% 60% at 50% 30%,#0a1020 0%,var(--void) 70%);
+       color:var(--silver);font-family:var(--serif);min-height:100vh;
+       display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;}
+  .eyebrow{font-family:var(--mono);font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;}
+  h1{font-size:clamp(1.4rem,3.2vw,2rem);font-weight:400;color:var(--gold2);letter-spacing:.02em;margin-bottom:1.4rem;text-align:center;}
+  .clock-wrap{position:relative;width:min(92vw,440px);aspect-ratio:1;}
+  svg{width:100%;height:100%;overflow:visible;}
+  .stars circle{fill:#fff;}
+  .time-line{font-family:var(--mono);text-align:center;margin-top:1.5rem;}
+  #digital{font-size:clamp(1.8rem,6vw,2.8rem);color:var(--moon);letter-spacing:.06em;font-weight:700;}
+  #date{font-size:.8rem;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-top:.2rem;}
+  .readout{display:flex;flex-wrap:wrap;gap:1px;background:var(--line);border:1px solid var(--line);
+           margin-top:1.4rem;width:min(92vw,440px);}
+  .cell{background:var(--panel);flex:1;min-width:100px;padding:.7rem .9rem;text-align:center;}
+  .cell .k{font-family:var(--mono);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);}
+  .cell .v{font-family:var(--mono);font-size:1rem;color:var(--gold2);margin-top:.25rem;}
+  .note{max-width:min(92vw,440px);font-size:.74rem;line-height:1.6;color:var(--dim);margin-top:1.4rem;text-align:left;}
+  .note code{color:var(--gold);font-family:var(--mono);font-size:.72rem;}
+  .note strong{color:#8fa3bd;}
+</style>
+</head>
+<body>
+  <div class="eyebrow">Principia Orthogona · Analemma = Lemniscate</div>
+  <h1>Lunar Analemma Clock</h1>
+
+  <div class="clock-wrap">
+    <svg id="clock" viewBox="-220 -220 440 440" aria-label="Lunar analemma clock">
+      <defs>
+        <radialGradient id="moonGrad" cx="38%" cy="36%" r="70%">
+          <stop offset="0%" stop-color="#ffffff"/><stop offset="70%" stop-color="#e9edf5"/><stop offset="100%" stop-color="#aab4c6"/>
+        </radialGradient>
+        <filter id="soft"><feGaussianBlur stdDeviation="1.1"/></filter>
+      </defs>
+
+      <g class="stars" id="stars"></g>
+
+      <!-- 24-hour tick ring (the civil-time clock) -->
+      <circle cx="0" cy="0" r="196" fill="none" stroke="var(--line)" stroke-width="1"/>
+      <g id="ticks"></g>
+      <!-- hour hand as a slim gold ray -->
+      <line id="hourHand" x1="0" y1="0" x2="0" y2="-150" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" opacity="0.85"/>
+
+      <!-- The lunar analemma: a Gerono lemniscate -->
+      <path id="analemma" fill="none" stroke="var(--gold)" stroke-width="1.4" opacity="0.55" stroke-dasharray="2 4"/>
+
+      <!-- central Moon showing current phase -->
+      <g id="centerMoon"></g>
+
+      <!-- Moon marker riding the analemma -->
+      <g id="marker"></g>
+    </svg>
+  </div>
+
+  <div class="time-line">
+    <div id="digital">--:--:--</div>
+    <div id="date">— — —</div>
+  </div>
+
+  <div class="readout">
+    <div class="cell"><div class="k">Phase</div><div class="v" id="phaseName">—</div></div>
+    <div class="cell"><div class="k">Lunar age</div><div class="v" id="age">—</div></div>
+    <div class="cell"><div class="k">Illumination</div><div class="v" id="illum">—</div></div>
+    <div class="cell"><div class="k">Next full</div><div class="v" id="nextFull">—</div></div>
+  </div>
+
+  <p class="note">
+    <strong>How to read it.</strong> The gold ray is a normal 24-hour hand (civil time, midnight up).
+    The dashed figure-8 is the lunar analemma, drawn as a <strong>Gerono lemniscate</strong> — the
+    corpus's analemma form (<code>GeronoLemniscate.lean</code>, <code>LunarAnalemma.lean</code>).
+    The small Moon rides it once per <strong>synodic month</strong> (29.5306 d), sitting at today's
+    lunar age; its lit face is the true phase.<br><br>
+    <strong>Honest note.</strong> The phase, age and illumination are <em>computed</em> from the date
+    (epoch: new moon 2000-01-06 18:14 UT). The analemma <em>shape</em> here is the lemniscate model,
+    not a latitude-and-time sky trace — the real sky-traced lunar analemma needs an ephemeris and your
+    observing location, and shifts every month. [MODEL curve · [VERIFIED] phase math]
+  </p>
+
+<script>
+(function(){
+  const SYN = 29.530588853;                 // synodic month (days)
+  const REF = 2451550.1;                    // JD of 2000-01-06 18:14 UT new moon
+  const D2R = Math.PI/180;
+  const svgNS = "http://www.w3.org/2000/svg";
+
+  const toJD = d => d.getTime()/86400000 + 2440587.5;
+  const norm = (x,m) => ((x % m) + m) % m;
+
+  // ---- starfield ----
+  const stars = document.getElementById('stars');
+  for(let i=0;i<70;i++){
+    const c=document.createElementNS(svgNS,'circle');
+    const a=Math.random()*2*Math.PI, r=60+Math.random()*150;
+    c.setAttribute('cx',(Math.cos(a)*r).toFixed(1));
+    c.setAttribute('cy',(Math.sin(a)*r).toFixed(1));
+    c.setAttribute('r',(Math.random()*0.9+0.2).toFixed(2));
+    c.setAttribute('opacity',(0.2+Math.random()*0.6).toFixed(2));
+    stars.appendChild(c);
+  }
+
+  // ---- 24h ticks ----
+  const ticks=document.getElementById('ticks');
+  for(let h=0;h<24;h++){
+    const ang=(h/24)*2*Math.PI - Math.PI/2;
+    const r1=196, r2=(h%6===0)?178:188;
+    const l=document.createElementNS(svgNS,'line');
+    l.setAttribute('x1',(Math.cos(ang)*r1).toFixed(1)); l.setAttribute('y1',(Math.sin(ang)*r1).toFixed(1));
+    l.setAttribute('x2',(Math.cos(ang)*r2).toFixed(1)); l.setAttribute('y2',(Math.sin(ang)*r2).toFixed(1));
+    l.setAttribute('stroke','var(--gold)'); l.setAttribute('stroke-width',(h%6===0)?1.4:0.7);
+    l.setAttribute('opacity',(h%6===0)?0.7:0.35);
+    ticks.appendChild(l);
+  }
+
+  // ---- Gerono lemniscate analemma path: (x = A sinθ cosθ, y = B cosθ), vertical figure-8 ----
+  const A=120, B=150, LEAN=0.18;            // width, height, slight lean (evokes real analemma)
+  function lemPoint(theta){
+    // theta: 0..2π maps to one synodic loop
+    const x = A*Math.sin(theta)*Math.cos(theta);
+    const y = B*Math.cos(theta);
+    return { x: x + LEAN*y, y: y };         // small shear so it leans like the sky trace
+  }
+  let dpath="";
+  for(let i=0;i<=240;i++){
+    const th=(i/240)*2*Math.PI, p=lemPoint(th);
+    dpath += (i===0?"M":"L") + p.x.toFixed(1) + " " + p.y.toFixed(1) + " ";
+  }
+  document.getElementById('analemma').setAttribute('d', dpath.trim()+" Z");
+
+  // ---- draw a moon disc with phase terminator into a <g> ----
+  function drawMoon(g, cx, cy, R, illum, waxing){
+    g.innerHTML="";
+    const base=document.createElementNS(svgNS,'circle');
+    base.setAttribute('cx',cx); base.setAttribute('cy',cy); base.setAttribute('r',R);
+    base.setAttribute('fill','#12161f'); base.setAttribute('stroke','var(--line)'); base.setAttribute('stroke-width','1');
+    g.appendChild(base);
+    // lit region: build via two arcs; terminator ellipse x-radius = R*|cos(phaseAngle)|
+    const lit=document.createElementNS(svgNS,'path');
+    const k=(1-2*illum);                    // -1(full)..+1(new); terminator half-width factor
+    const rx=Math.abs(k)*R;
+    // large-arc lit limb on the correct side (waxing = right lit)
+    const outerSweep = waxing?1:0;
+    const innerSweep = (k<0)? (waxing?1:0) : (waxing?0:1);
+    const top=`${cx} ${cy-R}`, bot=`${cx} ${cy+R}`;
+    lit.setAttribute('d',
+      `M ${top} A ${R} ${R} 0 0 ${outerSweep} ${bot} A ${rx} ${R} 0 0 ${innerSweep} ${top} Z`);
+    lit.setAttribute('fill','url(#moonGrad)');
+    if(illum>0.995){ // full
+      lit.setAttribute('d',`M ${cx} ${cy-R} A ${R} ${R} 0 1 1 ${cx} ${cy+R} A ${R} ${R} 0 1 1 ${cx} ${cy-R} Z`);
+    }
+    if(illum<0.01){ lit.setAttribute('opacity','0'); }
+    g.appendChild(lit);
+    const rim=document.createElementNS(svgNS,'circle');
+    rim.setAttribute('cx',cx); rim.setAttribute('cy',cy); rim.setAttribute('r',R);
+    rim.setAttribute('fill','none'); rim.setAttribute('stroke','rgba(233,237,245,.25)'); rim.setAttribute('stroke-width','0.8');
+    g.appendChild(rim);
+  }
+
+  function phaseName(age){
+    const f=age/SYN;
+    if(age<1.0||age>SYN-1.0) return "New";
+    if(Math.abs(f-0.25)<0.02) return "First ¼";
+    if(Math.abs(f-0.5)<0.03) return "Full";
+    if(Math.abs(f-0.75)<0.02) return "Last ¼";
+    if(f<0.25) return "Waxing cres.";
+    if(f<0.5)  return "Waxing gibb.";
+    if(f<0.75) return "Waning gibb.";
+    return "Waning cres.";
+  }
+
+  const centerMoon=document.getElementById('centerMoon');
+  const marker=document.getElementById('marker');
+  const hourHand=document.getElementById('hourHand');
+  const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function tick(){
+    const now=new Date();
+    // civil time
+    const hh=String(now.getHours()).padStart(2,'0');
+    const mm=String(now.getMinutes()).padStart(2,'0');
+    const ss=String(now.getSeconds()).padStart(2,'0');
+    document.getElementById('digital').textContent=`${hh}:${mm}:${ss}`;
+    document.getElementById('date').textContent=`${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+
+    // 24h hand (midnight up): fraction of day
+    const dayFrac=(now.getHours()+now.getMinutes()/60+now.getSeconds()/3600)/24;
+    const ang=dayFrac*2*Math.PI - Math.PI/2;
+    hourHand.setAttribute('x2',(Math.cos(ang)*150).toFixed(1));
+    hourHand.setAttribute('y2',(Math.sin(ang)*150).toFixed(1));
+
+    // lunar phase
+    const age=norm(toJD(now)-REF, SYN);
+    const illum=(1-Math.cos(2*Math.PI*age/SYN))/2;
+    const waxing=age<SYN/2;
+
+    drawMoon(centerMoon, 0, 0, 34, illum, waxing);
+
+    // marker position on the lemniscate at θ = 2π·(age/SYN)
+    const th=2*Math.PI*(age/SYN);
+    const p=lemPoint(th);
+    drawMoon(marker, p.x, p.y, 11, illum, waxing);
+
+    // readouts
+    document.getElementById('phaseName').textContent=phaseName(age);
+    document.getElementById('age').textContent=age.toFixed(1)+' d';
+    document.getElementById('illum').textContent=Math.round(illum*100)+'%';
+    const toFull = norm(SYN/2 - age, SYN);
+    document.getElementById('nextFull').textContent=toFull.toFixed(1)+' d';
+  }
+  tick(); setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
