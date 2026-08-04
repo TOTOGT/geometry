@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ångstrom Topogenesis — Principia Orthogona Vol VIII</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1c22;
+  --ink2: #2d3142;
+  --paper: #f7f4ee;
+  --paper2: #ede9e0;
+  --paper3: #e4dfd4;
+  --accent: #8b3a0f;
+  --accent2: #1a4d6e;
+  --accent3: #3d6b3f;
+  --rule: #c8c0b0;
+  --dim: #7a7060;
+  --serif: 'EB Garamond', Georgia, serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+  --angstrom: #a67c52;
+  --braid-gold: #c9a84c;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--paper); color:var(--ink); font-family:var(--serif); font-size:19px; line-height:1.72; counter-reset:figure theorem; }
+
+/* RUNNING HEAD */
+.rh { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(247,244,238,0.93); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule); padding:0.5rem 2.5rem; display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.63rem; color:var(--dim); letter-spacing:0.07em; }
+.rh a { color:var(--accent); text-decoration:none; }
+
+/* CHAPTER OPEN */
+.ch-open { max-width:960px; margin:0 auto; padding:7rem 3rem 3rem; border-bottom:2px solid var(--ink2); background:linear-gradient(to bottom, rgba(166,124,82,0.03) 0%, rgba(201,168,76,0.0) 100%); }
+.ch-num { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.18em; color:var(--dim); text-transform:uppercase; margin-bottom:1rem; }
+.ch-title { font-size:clamp(2rem,4.5vw,3.6rem); font-weight:500; line-height:1.1; color:var(--ink2); max-width:800px; margin-bottom:1.5rem; }
+.ch-title em { font-style:italic; color:var(--angstrom); }
+.ch-meta { display:flex; gap:2rem; flex-wrap:wrap; padding:1rem 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin-bottom:1.5rem; }
+.meta { font-family:var(--mono); font-size:0.62rem; color:var(--dim); letter-spacing:0.06em; }
+.meta strong { color:var(--ink); font-weight:500; }
+.ch-abs { max-width:640px; font-size:0.96rem; color:var(--ink2); line-height:1.68; padding:1.25rem 1.25rem 1.25rem 1.5rem; border-left:3px solid var(--angstrom); background:var(--paper2); font-style:italic; }
+
+/* TOC */
+.toc-wrap { padding:2rem 3rem 0; max-width:960px; margin:0 auto; }
+.toc-wrap h4 { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.14em; color:var(--dim); text-transform:uppercase; margin-bottom:0.6rem; }
+.toc { list-style:none; counter-reset:toc; }
+.toc li { counter-increment:toc; display:flex; gap:0.5rem; padding:0.18rem 0; font-size:0.88rem; }
+.toc li::before { content:counter(toc)"."; font-family:var(--mono); font-size:0.6rem; color:var(--angstrom); min-width:1.4rem; padding-top:0.15em; }
+.toc a { color:var(--ink2); text-decoration:none; border-bottom:1px dotted var(--rule); }
+.toc a:hover { color:var(--angstrom); }
+
+/* BODY GRID */
+.body-wrap { max-width:960px; margin:0 auto; padding:3rem 3rem 5rem; display:grid; grid-template-columns:1fr 240px; gap:0 3.5rem; }
+.main { min-width:0; }
+.side { position:sticky; top:3.5rem; font-size:0.8rem; align-self:start; }
+
+/* HEADINGS */
+.sec-num { font-family:var(--mono); font-size:0.6rem; color:var(--angstrom); letter-spacing:0.14em; text-transform:uppercase; margin-top:3.5rem; margin-bottom:0.25rem; }
+h2.sec { font-size:1.5rem; font-weight:500; color:var(--ink2); border-bottom:1px solid var(--rule); padding-bottom:0.35rem; margin-bottom:1rem; }
+h3.sub { font-size:1.1rem; font-weight:500; font-style:italic; color:var(--ink2); margin:1.8rem 0 0.6rem; }
+p { margin-bottom:0.95rem; }
+p+p { text-indent:1.4em; }
+
+/* MATH */
+.eq { font-family:var(--mono); font-size:0.86rem; background:var(--paper2); border:1px solid var(--rule); border-left:3px solid var(--angstrom); padding:1rem 1.4rem; margin:1.4rem 0; overflow-x:auto; line-height:2.1; color:var(--angstrom); }
+.eq .cm { color:var(--dim); font-size:0.75rem; }
+
+/* ENVIRONMENTS */
+.env { border:1px solid var(--rule); padding:1.1rem 1.4rem; margin:1.6rem 0; background:var(--paper2); }
+.env::before { display:block; font-family:var(--mono); font-size:0.6rem; letter-spacing:0.11em; text-transform:uppercase; margin-bottom:0.55rem; counter-increment:theorem; }
+.thm::before { content:"Theorem "counter(theorem); color:var(--angstrom); }
+.dfn::before { content:"Definition "counter(theorem); color:var(--accent2); }
+.rem::before { content:"Remark "counter(theorem); color:var(--accent3); }
+.env p { font-style:italic; margin-bottom:0; }
+.env p+p { text-indent:0; margin-top:0.45rem; }
+
+/* FIGURES */
+.fig { margin:2.2rem 0; counter-increment:figure; }
+.fig-inner { background:var(--paper2); border:1px solid var(--rule); padding:1.25rem; display:flex; justify-content:center; align-items:center; }
+.fig-cap { margin-top:0.5rem; font-size:0.83rem; color:var(--dim); line-height:1.5; }
+.fig-cap b { font-family:var(--mono); font-size:0.67rem; color:var(--ink2); }
+.fig-cap b::before { content:"Figure "counter(figure)". "; }
+
+/* BRAID BOX */
+.braid-box { background:rgba(166,124,82,0.08); border:1px solid rgba(166,124,82,0.25); padding:1.5rem 1.8rem; margin:2rem 0; border-radius:4px; }
+.braid-label { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.2em; color:var(--angstrom); text-transform:uppercase; margin-bottom:0.8rem; }
+.braid-eq { font-family:var(--mono); font-size:0.95rem; color:var(--ink2); margin:0.5rem 0; }
+
+/* SIDE-BY-SIDE */
+.side-by-side { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin:2rem 0; }
+.sbs-col { display:flex; flex-direction:column; gap:1rem; }
+.sbs-label { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.18em; color:var(--dim); text-transform:uppercase; margin-bottom:0.5rem; }
+.sbs-head { font-size:1.1rem; font-weight:600; color:var(--ink2); }
+
+/* SIDENOTES */
+.sn { border-left:2px solid var(--rule); padding:0.7rem 0 0.7rem 0.9rem; margin-bottom:1.3rem; color:var(--dim); font-size:0.78rem; line-height:1.5; }
+.sn strong { font-family:var(--mono); font-size:0.67rem; color:var(--ink); display:block; margin-bottom:0.25rem; letter-spacing:0.04em; }
+.sn a { color:var(--angstrom); text-decoration:none; }
+
+/* INTERACTIVE */
+.interactive { background:var(--ink2); color:#c0c8d8; padding:2rem; margin:2rem 0; border:1px solid rgba(166,124,82,0.2); border-radius:4px; }
+.int-label { font-family:var(--mono); font-size:0.63rem; letter-spacing:0.14em; color:#a67c52; text-transform:uppercase; margin-bottom:0.8rem; }
+.int-h { font-family:var(--serif); font-size:1.3rem; font-weight:400; color:#eef0f5; margin-bottom:1rem; }
+canvas { display:block; width:100%; background:#060810; margin:1rem 0; border:1px solid rgba(166,124,82,0.2); border-radius:3px; }
+.int-ctrl { display:flex; flex-direction:column; gap:0.6rem; margin-top:1rem; }
+.int-ctrl label { font-family:var(--mono); font-size:0.6rem; color:#5a6080; letter-spacing:0.05em; text-transform:uppercase; }
+.int-ctrl input { accent-color:#a67c52; cursor:pointer; }
+.int-out { display:grid; grid-template-columns:repeat(2,1fr); gap:0.5rem; margin-top:1rem; }
+.out-box { background:#060810; padding:0.7rem 1rem; border:1px solid rgba(166,124,82,0.15); border-radius:3px; }
+.out-l { font-family:var(--mono); font-size:0.56rem; color:#3a4050; letter-spacing:0.05em; text-transform:uppercase; }
+.out-v { font-family:var(--mono); font-size:0.95rem; color:#a67c52; margin-top:0.15rem; font-weight:600; }
+
+/* FOOTER */
+footer { background:var(--ink2); color:#5a6080; padding:3rem; }
+.ft-grid { max-width:960px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; padding-bottom:2rem; border-bottom:1px solid rgba(255,255,255,0.06); margin-bottom:1.4rem; }
+footer h4 { font-family:var(--mono); font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:#a67c52; margin-bottom:0.7rem; }
+footer p { line-height:1.65; margin-bottom:0.2rem; font-size:0.82rem; }
+footer a { color:#5a6080; text-decoration:none; display:block; margin-bottom:0.2rem; font-size:0.82rem; transition:color .15s; }
+footer a:hover { color:#a67c52; }
+
+/* RESPONSIVE */
+@media(max-width:860px){ .body-wrap{grid-template-columns:1fr;} .side{position:static;} .side-by-side{grid-template-columns:1fr;} }
+
+.f { opacity:0; transform:translateY(12px); transition:opacity .6s ease,transform .6s ease; }
+.f.in { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="rh">
+  <span><a href="https://totogt.github.io/geometry">Principia Orthogona</a> · G6 LLC · 2026</span>
+  <span>Volume VIII · Ångstrom Topogenesis · <a href="index.html">Book 8 Index →</a></span>
+</div>
+
+<!-- ═══════════════════ CHAPTER OPEN ═══════════════════ -->
+<div class="ch-open">
+  <div class="ch-num">Principia Orthogona · Volume VIII · Bridge Chapter · Quantum to Observable</div>
+  <h1 class="ch-title">Ångstrom Topogenesis:<br>Where k-nacci Meets the <em>Braid Group</em></h1>
+  <div class="ch-meta">
+    <div class="meta"><strong>Context</strong><br>Between Q.0 (quantum k-nacci) and Q.2 (polylaminin)</div>
+    <div class="meta"><strong>Scale</strong><br>10⁻¹⁰ m · atoms · observable via X-ray crystallography</div>
+    <div class="meta"><strong>Audience</strong><br>Advanced Undergraduate · Graduate</div>
+    <div class="meta"><strong>Prequisites</strong><br>Chapter 7 (Topological Orthogenesis) · Q.0 (k-nacci recurrence)</div>
+  </div>
+  <div class="ch-abs">At the ångstrom scale (10⁻¹⁰ m), atoms cannot arrange themselves in arbitrary patterns. The spectral radii η_k from Q.0 act like Yang-Baxter gates: they are thresholds atoms cannot cross. Electrons cannot occupy states with energy outside the allowed ladder. When atoms build structures, they follow the braided paths the spectral constraints permit—not out of intention (like Ch.7 argues) but because they have nowhere else to go. Crystal lattices are frozen traces of k-nacci topology. X-ray crystallography reveals the braid. This chapter grounds quantum theory in observable atomic structure.</div>
+  <div class="toc-wrap" style="padding:1.5rem 0 0;">
+    <h4>Contents</h4>
+    <ol class="toc">
+      <li><a href="#s1">The Braid Group as Constraint: Atoms Cannot Undo</a></li>
+      <li><a href="#s2">Spectral Radii as Yang-Baxter Gates</a></li>
+      <li><a href="#s3">Crystal Lattices as Topological Traces</a></li>
+      <li><a href="#s4">Bonding as Order-Dependent (Non-Abelian) Path</a></li>
+      <li><a href="#s5">Interactive: Constrained Assembly</a></li>
+      <li><a href="#s6">X-ray Crystallography: Reading the Braid</a></li>
+      <li><a href="#s7">Three Observational Tests</a></li>
+      <li><a href="#s8">Bridge to Q.2 (Polylaminin)</a></li>
+      <li><a href="#s9">References</a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ═══════════════════ BODY ═══════════════════ -->
+<div class="body-wrap">
+<div class="main">
+
+<!-- §1 THE BRAID GROUP AS CONSTRAINT -->
+<div class="sec-num" id="s1">§ 1</div>
+<h2 class="sec">The Braid Group as Constraint: Atoms Cannot Undo</h2>
+
+<p>In Chapter 7 of Book 3, we learned that topological orthogenesis is form generated under constraint. There is no intention. A shell does not reach toward its shape; it runs out of alternatives. Waddington's epigenetic landscape shows development running in valleys, buffered against perturbation, directional without being goal-seeking.</p>
+
+<p>At the ångstrom scale, the constraints are encoded in the braid group. Two atoms that exchange positions cannot simply exchange back without cost—because the electron cloud braids around them in non-abelian ways.</p>
+
+<div class="dfn env f">
+  <p><strong>Non-Abelian Exchange.</strong> When two atoms at ångstrom scale exchange positions, their electron clouds must braid around each other. The braid operation σᵢ is not its own inverse: σᵢσᵢ⁻¹ = 1 in abelian systems (smooth space), but at quantum scale the braiding is topologically protected. The Yang-Baxter relation σᵢσᵢ₊₁σᵢ = σᵢ₊₁σᵢσᵢ₊₁ holds: the order in which three adjacent atoms exchange matters, and no simple reversal erases it.</p>
+</div>
+
+<p>This is the statement: <strong>atoms have no way back</strong>. Once a structure is braided, the topology is locked in. The braid is irreversible.</p>
+
+<p>Crystal growth is a sequence of braid operations. Each atom that attaches adds a new strand to the growing braid. The rules of the braid group determine which configurations are allowed. Chemistry is braiding, and thermodynamics is the statistics of braid traces.</p>
+
+<div class="sn">
+  <strong>Connection to Chapter 7:</strong> The G operator (G = U ∘ F ∘ K ∘ C) generates an irreversible braid. K is the threshold (Yang-Baxter gate), F is the fold (the crossing), C is compression. The chain U ∘ F ∘ K ∘ C is the complete braiding operation that locks in form.
+</div>
+
+<!-- §2 SPECTRAL RADII AS YANG-BAXTER GATES -->
+<div class="sec-num" id="s2">§ 2</div>
+<h2 class="sec">Spectral Radii as Yang-Baxter Gates</h2>
+
+<p>From Q.0, we know the spectral radii η_k form a hierarchy: η₂ = φ ≈ 1.618, η₃ ≈ 1.839, η₄ ≈ 1.928, converging to 2. These are eigenvalues of the recurrence relation, the growth rates at the Planck scale.</p>
+
+<p>At the ångstrom scale, these same η_k appear as the <strong>energy thresholds</strong> for allowed electron states. The K operator (threshold, curvature) acts on electrons exactly like a Yang-Baxter gate acts on braid strands:</p>
+
+<div class="braid-box">
+  <div class="braid-label">Spectral Radius as Threshold Gate</div>
+  <div class="braid-eq">
+    Electron energy allowed: E ∈ [−2η_k, +2η_k]
+    <br/><br/>
+    Outside this band: E &lt; −2η_k or E &gt; +2η_k
+    <br/>
+    ⟹ no electron state exists (forbidden, topologically protected)
+    <br/><br/>
+    The K operator: enforces this threshold
+  </div>
+</div>
+
+<p>An electron cannot exist with energy outside the bands. It is topologically forbidden, just as a braid cannot achieve a configuration that violates the Yang-Baxter relation. The threshold is not a barrier that can be overcome with energy; it is a structural impossibility.</p>
+
+<p>Atoms at the ångstrom scale assemble themselves subject to this constraint. Electrons fill states in order of energy, but only states within the η_k bands are available. When two atoms are brought together, their electron clouds must arrange in a braided pattern that respects the spectral threshold. The resulting bond is the minimal braid that does so.</p>
+
+<div class="sn">
+  <strong>Why atoms bond at all:</strong> Not because they "want to." Because when two atoms approach, the allowed electron states force them into a configuration (the bond) where energy is lower. The bond is the path the electrons have no choice but to take.
+</div>
+
+<!-- §3 CRYSTAL LATTICES AS TOPOLOGICAL TRACES -->
+<div class="sec-num" id="s3">§ 3</div>
+<h2 class="sec">Crystal Lattices as Topological Traces</h2>
+
+<p>A crystal is a periodic array of atoms. The periodicity is not accidental. It is the result of building braids under the constraint of the spectral thresholds η_k.</p>
+
+<p>Each repeating unit (the unit cell) is a frozen braid. The symmetry group of the crystal is the quotient of the braid group by the allowed topological operations that leave the pattern unchanged.</p>
+
+<div class="side-by-side">
+  <div class="sbs-col">
+    <div class="sbs-label">Braid Group Perspective</div>
+    <div class="sbs-head">Non-abelian operations σᵢ</div>
+    <p style="font-size:0.9rem;margin-top:0.5rem;">Each atom attachment is a braid crossing. The Yang-Baxter relation constrains which crossings can be adjacent. The symmetry of the resulting lattice is the symmetry of the braiding pattern.</p>
+  </div>
+  <div class="sbs-col">
+    <div class="sbs-label">Crystallographic Perspective</div>
+    <div class="sbs-head">Space group symmetries</div>
+    <p style="font-size:0.9rem;margin-top:0.5rem;">The 230 space groups in 3D (or 17 wallpaper groups in 2D) enumerate all topologically distinct ways atoms can braid in periodic patterns. Each space group realizes a different braid quotient.</p>
+  </div>
+</div>
+
+<p>The two perspectives are the same. A crystal structure is a braid group quotient. The constraints from η_k determine which braids are energetically accessible. The stable crystal is the braid that minimizes free energy while respecting the spectral thresholds.</p>
+
+<div class="eq">
+Crystal structure = Topological trace of allowed k-nacci braids
+<br/>
+Space group = Quotient of braid group by spectral constraints
+<br/>
+Unit cell = Fundamental domain of the braid quotient
+</div>
+
+<!-- §4 BONDING AS ORDER-DEPENDENT PATH -->
+<div class="sec-num" id="s4">§ 4</div>
+<h2 class="sec">Bonding as Order-Dependent (Non-Abelian) Path</h2>
+
+<p>Chemical bonding is not a simple pairing of electrons. It is a process unfolding in time, where the order of atomic approach matters. The sequence determines the bond.</p>
+
+<p>Consider two atoms A and B approaching each other in a crystal:</p>
+
+<ul style="margin:1.5rem 0 1.5rem 2rem;line-height:1.8;">
+<li><strong>Path 1:</strong> A approaches B along the [100] direction first, then C approaches along [010]. The resulting three-atom complex has one braid topology.</li>
+<li><strong>Path 2:</strong> C approaches B along [010] first, then A approaches along [100]. The electrons braid in a different order. The result is a different bonding pattern.</li>
+</ul>
+
+<p>These paths are not equivalent: σ₁σ₂ ≠ σ₂σ₁ in general (non-abelian). The order of assembly determines the bond structure. In nature, the system takes the path that minimizes free energy—but that path is constrained by the braid group structure. Not all paths are topologically allowed.</p>
+
+<p>This is why crystal growth produces specific, reproducible structures. The atoms are not "trying" to form a symmetric crystal. They are simply braiding in the only ways the spectral constraints permit, and those ways happen to have high symmetry.</p>
+
+<div class="sn">
+  <strong>Key insight:</strong> Order-dependence is topological, not dynamical. It is not about how fast the atoms move; it is about which braids are possible. This is why the same crystal structure appears across different temperatures, pressures, and growth rates (up to defects). The braid is enforced by topology.
+</div>
+
+<!-- §5 INTERACTIVE: CONSTRAINED ASSEMBLY -->
+<div class="sec-num" id="s5">§ 5</div>
+<h2 class="sec">Interactive: Constrained Assembly</h2>
+
+<p>Below, watch atoms assemble under spectral constraints. The grid shows the allowed energy bands (the η_k thresholds). Atoms can only occupy states within these bands. As you add atoms, see how their electron clouds braid to find allowed configurations.</p>
+
+<div class="interactive">
+  <div class="int-label">Atomic Assembly Under Spectral Constraint</div>
+  <div class="int-h">Watching atoms braid under η_k thresholds</div>
+
+  <canvas id="assemblyCanvas" width="640" height="320"></canvas>
+
+  <div class="int-ctrl">
+    <label>Number of atoms: <span id="atomCountVal">3</span></label>
+    <input type="range" id="atomCount" min="2" max="8" value="3" step="1">
+  </div>
+  <div class="int-ctrl">
+    <label>Spectral band (η_k)</label>
+    <select id="etaSelect" style="padding:0.35rem;font-family:var(--mono);border:1px solid rgba(166,124,82,.3);background:#0e1018;color:#a67c52;cursor:pointer;">
+      <option value="2">η₂ = φ ≈ 1.618 (Fibonacci)</option>
+      <option value="3" selected>η₃ ≈ 1.839 (Tribonacci)</option>
+      <option value="4">η₄ ≈ 1.928 (Tetranacci)</option>
+    </select>
+  </div>
+
+  <div class="int-out">
+    <div class="out-box">
+      <div class="out-l">Configuration energy</div>
+      <div class="out-v" id="configEnergy">−15.2 eV</div>
+    </div>
+    <div class="out-box">
+      <div class="out-l">Electrons in allowed states</div>
+      <div class="out-v" id="electronsAllowed">12/12</div>
+    </div>
+    <div class="out-box">
+      <div class="out-l">Forbidden crossings</div>
+      <div class="out-v" id="forbiddenCount">0</div>
+    </div>
+    <div class="out-box">
+      <div class="out-l">Symmetry class</div>
+      <div class="out-v" id="symmetryClass">C₃ᵥ</div>
+    </div>
+  </div>
+</div>
+
+<!-- §6 X-RAY CRYSTALLOGRAPHY: READING THE BRAID -->
+<div class="sec-num" id="s6">§ 6</div>
+<h2 class="sec">X-ray Crystallography: Reading the Braid</h2>
+
+<p>X-ray crystallography is the experimental technique that reveals the braided structure of crystals. Coherent X-rays diffract from the periodic electron density; the diffraction pattern (Bragg peaks) encodes the reciprocal lattice. The reciprocal lattice is dual to the real-space braid structure.</p>
+
+<div class="dfn env f">
+  <p><strong>Bragg's Law and the Reciprocal Lattice.</strong> When X-rays at wavelength λ scatter from planes separated by spacing d at angle θ, constructive interference occurs when 2d sin(θ) = nλ. The collection of all allowed (n, d, θ) combinations forms the reciprocal lattice. Each reciprocal lattice point corresponds to a Bragg peak.</p>
+</div>
+
+<p>The key insight: the reciprocal lattice reflects the k-nacci hierarchy. Peaks at reciprocal distances related by factors of η_k indicate constraints from the spectral thresholds. Where η_k acts as a Yang-Baxter gate, the diffraction pattern shows forbidden reflections (dark spots in a pattern that would otherwise be regular).</p>
+
+<p>For example, in a crystal with η₃ ≈ 1.839 as the dominant spectral constraint, certain Bragg peaks that would appear in a simple cubic lattice are systematically absent. These "systematic absences" are called selection rules, and they encode the symmetry (the braid quotient) of the crystal.</p>
+
+<div class="sn">
+  <strong>Experimental anchor:</strong> The CIF (Crystallographic Information File) database at the CCDC (Cambridge Crystallographic Data Centre) contains 1.2 million+ crystal structures, all refined from X-ray data. In every entry, the peak absences reveal the braid structure. The space group is the braid quotient.
+</div>
+
+<!-- §7 THREE OBSERVATIONAL TESTS -->
+<div class="sec-num" id="s7">§ 7</div>
+<h2 class="sec">Three Observational Tests</h2>
+
+<p>If k-nacci spectral constraints really govern crystal structure, three predictions should hold:</p>
+
+<div class="env thm f">
+  <p><strong>Test 1: Spectral Bands Control Bonding Angles.</strong> In a crystal, the bond angles between nearest-neighbor atoms should cluster around values determined by the η_k thresholds. Measure the bond angle distribution in a large set of crystals (from CIF database). Prediction: the histogram should show peaks at specific angles, with gaps where η_k forbids bonding. (Can be tested immediately against 1.2M+ known structures.)</p>
+</div>
+
+<div class="env thm f">
+  <p><strong>Test 2: Systematic Absences Follow η_k Hierarchy.</strong> In X-ray diffraction data, the distribution of forbidden reflections (peak absences) should correlate with which η_k band dominates the electronic structure. Crystals with dominant η₂ (Fibonacci) bonding should show different selection rule patterns than η₃-dominated structures. (Testable by clustering CIF data by space group and comparing to electronic band calculations.)</p>
+</div>
+
+<div class="env thm f">
+  <p><strong>Test 3: Crystal Stability Respects Braid Quotient.</strong> When a crystal structure is perturbed (heating, compression), it should either relax back to the same space group or undergo a phase transition to a different space group that respects a different braid quotient. It should not reach intermediate states. (Testable via high-temperature X-ray diffraction and phase diagrams.)</p>
+</div>
+
+<!-- §8 BRIDGE TO Q.2 (POLYLAMININ) -->
+<div class="sec-num" id="s8">§ 8</div>
+<h2 class="sec">Bridge to Q.2: From Crystals to Biomolecules</h2>
+
+<p>Crystals are periodic. Biomolecules like polylaminin are not. Yet the same k-nacci topology governs both.</p>
+
+<p>Polylaminin is a protein with a branching structure that follows the Tribonacci recurrence (η₃ ≈ 1.839). The Hausdorff dimension of its structure is d_H = log b / log η₃, where b is the branching factor. This is the same formula that appears in random fractals and self-similar sets.</p>
+
+<p>The key: polylaminin self-assembles into this structure not because molecules "know" about fractals. They assemble along the paths allowed by the spectral constraints on atomic bonding. The result is a fractal, because fractals are the natural trace of hierarchical, order-dependent braiding.</p>
+
+<p><strong>Q.2 will show:</strong> polylaminin's three-dimensional structure, its Hausdorff dimension, and its multifractal singularity spectrum f(α). All of these emerge from the same k-nacci constraint that governs crystal symmetries, just applied to a non-periodic structure.</p>
+
+<!-- §9 REFERENCES -->
+<div class="sec-num" id="s9">§ 9</div>
+<h2 class="sec">References and Data Sources</h2>
+
+<p style="margin-bottom:0.5rem;"><strong>Braid groups and topological protection:</strong></p>
+<ul style="margin-left:2rem;margin-bottom:1.5rem;">
+<li style="margin-bottom:0.3rem;">Birman, J. S. (1974). <em>Braids, Links, and Mapping Class Groups.</em> Princeton University Press.</li>
+<li style="margin-bottom:0.3rem;">Kauffman, L. H. (1991). <em>Knots and Physics.</em> World Scientific. (Knot theory, Yang-Baxter equation.)</li>
+</ul>
+
+<p style="margin-bottom:0.5rem;"><strong>Crystal structures and X-ray crystallography:</strong></p>
+<ul style="margin-left:2rem;margin-bottom:1.5rem;">
+<li style="margin-bottom:0.3rem;">Cambridge Crystallographic Data Centre (CCDC). <em>CIF Database:</em> <a href="https://www.ccdc.cam.ac.uk" style="color:var(--angstrom);text-decoration:underline;">https://www.ccdc.cam.ac.uk</a> (1.2M+ crystal structures, downloadable CIF files, tools for statistical analysis.)</li>
+<li style="margin-bottom:0.3rem;">International Tables for Crystallography (2006). <em>Volume A: Space Group Symmetries.</em> IUCr. (The 230 space groups, selection rules for systematic absences.)</li>
+<li style="margin-bottom:0.3rem;">Bragg, W. H., & Bragg, W. L. (1913). "The reflection of X-rays by crystals." <em>Proceedings of the Royal Society of London</em>, Series A, 88, 428–438.</li>
+</ul>
+
+<p style="margin-bottom:0.5rem;"><strong>Electronic structure and band theory:</strong></p>
+<ul style="margin-left:2rem;">
+<li style="margin-bottom:0.3rem;">Ashcroft, N. W., & Mermin, N. D. (1976). <em>Solid State Physics.</em> Holt, Rinehart and Winston. (Chapters on band structure, density of states, Fermi surfaces.)</li>
+<li style="margin-bottom:0.3rem;">Polylaminin reference: Zenodo 10.5281/zenodo.20230633. "Polylaminin, Microtubules, and the k-nacci Spine."</li>
+</ul>
+
+</div>
+<!-- END MAIN -->
+
+<div class="side">
+  <div class="sn">
+    <strong>Key claim:</strong> Crystal symmetry emerges from k-nacci spectral constraints. Atoms braid because they must; the braid produces the space group.
+  </div>
+  <div class="sn">
+    <strong>Three tests:</strong> Bond angle clustering, systematic absence patterns, phase stability all follow η_k hierarchy. Testable against 1.2M+ known crystal structures immediately.
+  </div>
+  <div class="sn">
+    <strong>Next:</strong> Q.2 shows how the same topology, applied to non-periodic polylaminin, produces fractals with Hausdorff dimension d_H = log b / log η₃.
+  </div>
+</div>
+
+</div>
+<!-- END BODY-WRAP -->
+
+<footer>
+  <div class="ft-grid">
+    <div>
+      <h4>Bridge Chapter</h4>
+      <p>Connects Q.0 (quantum k-nacci recurrence) to observable atomic structure via Book 3 Ch.7 (topological orthogenesis and braid groups).</p>
+      <p><a href="ch-q0-quantum-knacci.html">Q.0 · Quantum k-nacci</a> · <a href="index.html">Book 8 Index</a> · <a href="../ch7-topological-orthogenesis.html">Ch.7 Topological Orthogenesis</a></p>
+    </div>
+    <div>
+      <h4>This Chapter</h4>
+      <p><a href="#s1">§1 Braid Constraint</a></p>
+      <p><a href="#s2">§2 Yang-Baxter Gates</a></p>
+      <p><a href="#s3">§3 Crystal Lattices</a></p>
+      <p><a href="#s4">§4 Order-Dependent Bonding</a></p>
+    </div>
+    <div>
+      <h4>Data & Resources</h4>
+      <p><a href="https://www.ccdc.cam.ac.uk">CCDC CIF Database</a> (1.2M+ structures)</p>
+      <p><a href="https://github.com/TOTOGT/geometry">GitHub Repo</a></p>
+      <p>CC BY 4.0 · 2026</p>
+    </div>
+  </div>
+  <div class="ft-copy">
+    <span>© 2026 Pablo Nogueira Grossi / G6 LLC</span>
+    <span><a href="mailto:g6llc@proton.me">g6llc@proton.me</a></span>
+  </div>
+</footer>
+
+<!-- ═══════════════════ INTERACTIVE SCRIPTS ═══════════════════ -->
+<script>
+const etaValues = { 2: 1.618, 3: 1.839, 4: 1.928 };
+const etaLabels = { 2: 'φ', 3: 'T', 4: 'Te' };
+
+// Assembly canvas
+const canvas = document.getElementById('assemblyCanvas');
+const ctx = canvas.getContext('2d');
+const atomCountSlider = document.getElementById('atomCount');
+const etaSelect = document.getElementById('etaSelect');
+
+function drawAssembly() {
+  const n = parseInt(atomCountSlider.value);
+  const eta = parseFloat(etaSelect.value);
+  const etaNum = etaValues[eta];
+
+  document.getElementById('atomCountVal').textContent = n;
+
+  // Clear
+  ctx.fillStyle = '#060810';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Draw energy band (η_k constraint)
+  const bandHeight = etaNum * 60;
+  ctx.fillStyle = 'rgba(166, 124, 82, 0.1)';
+  ctx.fillRect(0, 160 - bandHeight/2, canvas.width, bandHeight);
+  ctx.strokeStyle = 'rgba(166, 124, 82, 0.3)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(0, 160 - bandHeight/2, canvas.width, bandHeight);
+
+  // Label
+  ctx.fillStyle = '#a67c52';
+  ctx.font = '11px JetBrains Mono';
+  ctx.textAlign = 'right';
+  ctx.fillText('Allowed: E ∈ [−' + etaNum.toFixed(2) + ', +' + etaNum.toFixed(2) + ']', canvas.width - 10, 20);
+
+  // Draw atoms in assembly configuration
+  let positions = [];
+  for (let i = 0; i < n; i++) {
+    const angle = (i / n) * Math.PI * 1.5;
+    const r = 80 + i * 15;
+    const x = 320 + r * Math.cos(angle);
+    const y = 160 + r * Math.sin(angle);
+    positions.push({x, y, index: i});
+  }
+
+  // Draw bonds (braids)
+  ctx.strokeStyle = 'rgba(166, 124, 82, 0.4)';
+  ctx.lineWidth = 1.5;
+  for (let i = 0; i < n-1; i++) {
+    const p1 = positions[i];
+    const p2 = positions[i+1];
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    // Braid curve (non-linear to show order-dependence)
+    const midX = (p1.x + p2.x) / 2;
+    const midY = (p1.y + p2.y) / 2;
+    ctx.quadraticCurveTo(midX + 15 * Math.sin(i * 0.8), midY, p2.x, p2.y);
+    ctx.stroke();
+  }
+
+  // Draw atoms
+  for (let pos of positions) {
+    // Check if in allowed band
+    const inBand = Math.abs(pos.y - 160) < bandHeight/2;
+    ctx.fillStyle = inBand ? '#a67c52' : 'rgba(166, 124, 82, 0.3)';
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, 8, 0, 2*Math.PI);
+    ctx.fill();
+
+    if (inBand) {
+      ctx.strokeStyle = '#c9a84c';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  }
+
+  // Update outputs
+  const energy = (-15.2 + (n-3) * 2.1).toFixed(1);
+  document.getElementById('configEnergy').textContent = energy + ' eV';
+  document.getElementById('electronsAllowed').textContent = (n*4) + '/' + (n*4);
+  document.getElementById('forbiddenCount').textContent = inBand ? '0' : (n-2);
+
+  const symClasses = ['C₁', 'C₂ᵥ', 'C₃ᵥ', 'D₂ₕ', 'D₃ₕ', 'D₄ₕ'];
+  document.getElementById('symmetryClass').textContent = symClasses[Math.min(n-2, 5)];
+}
+
+atomCountSlider.addEventListener('input', drawAssembly);
+etaSelect.addEventListener('change', drawAssembly);
+drawAssembly();
+
+// Fade in
+setTimeout(() => {
+  document.querySelectorAll('.f').forEach(el => el.classList.add('in'));
+}, 100);
+</script>
+
+</body>
+</html>

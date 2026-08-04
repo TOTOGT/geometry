@@ -1,0 +1,51 @@
+WP-38: fix the Figure 4 embed, and lead with what the model predicts
+
+FIGURE 4 -- the embed was broken, not the plot
+----------------------------------------------
+The figure rendered correctly standalone but not in the page. Two faults, both
+mine, both introduced when I spliced the SVG in.
+
+1. Namespacing missed a reference form. To stop glyph-id collisions with the
+   other three figures I rewrote id="X" to id="f4-X" and fixed xlink:href="#X",
+   but not clip-path="url(#X)". All nine clip paths dangled, so nothing was
+   clipped to the axes: the bars drew from the figure's left edge, straight over
+   the y-axis labels, which is why the event names were hidden behind them.
+
+2. The splice was regex-scoped to <svg…</svg> non-greedily and left orphaned
+   markup from the old figure behind, including an unmatched --> that rendered
+   as literal text below the plot.
+
+Fixed by rebuilding the whole <figure> block -- new SVG plus the original
+caption verbatim -- rather than patching inside it, and by namespacing every
+reference form including url(#…). Comments stripped from the SVG entirely.
+Verified by rasterising the SVG as it now sits in the page, not the standalone
+file: clipping restored, labels visible, no stray markup. Block is 17.7 KB
+against the 130 KB it had become.
+
+PREDICTIONS -- stated up front
+------------------------------
+The paper's falsifiable content was scattered across 5, 7.2 and 8 and easy to
+miss. It now leads: a block before 1 stating six commitments, each signed, each
+with the observation that would refute it.
+
+  P1  lambda_bar = ((1-delta)/delta)*gamma/(1-gamma) = 0.0186 per period. A
+      point value with nothing fitted to produce it -- beta, tau, c_K and kappa
+      all cancel.
+  P2  d2 W_J/d sigma d lambda < 0. The kink, timed to the collapse of lambda
+      rather than to the price move.
+  P3  Four signs from Corollary 1, from the implicit function theorem at the
+      crossing, not from estimation.
+  P4  d lambda_bar/d delta < 0. Patience cuts the other way.
+  P5  lambda-jumps must reverse the sign that lambda-collapses produce. Five
+      events sharing one sign fit many theories; the same parameter reversing
+      the sign fits one.
+  P6  gamma > 0 or no threshold exists at any volatility. Position must inform,
+      not merely cost.
+
+The block closes with what is deliberately not claimed: sigma* is not predicted
+to be 1/3 or to be any constant, and even lambda_bar is asserted only as a
+formula and the sign of its derivative, not as a distinguished value. Stating
+the non-claims next to the claims is the point -- it is what 7.2 retired.
+
+Lede rewritten to name the closed form and the interaction-not-level test in the
+first paragraph instead of the eighth section.
