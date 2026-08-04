@@ -119,6 +119,8 @@ const CHAPTERS = [
   { href:"chV-axle.html",      label:"AXLE" },
   { href:"chV-saturn-smoke.html", label:"Saturn·Smoke" },
   { href:"chV-seed.html",      label:"The Seed" },
+  { href:"chV-erdos-machine.html", label:"Erdős" },
+  { href:"GTCT_V_Student_Edition.html", label:"Student Ed." },
 ];
 
 const STORAGE_KEY = 'po_lang';
