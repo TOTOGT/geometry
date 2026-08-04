@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter Zero · Foundations · Principia Orthogona</title>
+<style>
+  :root {
+    --dark: #0a0a0f;
+    --surface: #111118;
+    --gold: #c9a84c;
+    --gold-dim: #8a6f2e;
+    --text: #e8e4d8;
+    --text-dim: #9994a0;
+    --c-color: #4a9eff;
+    --k-color: #e05a3a;
+    --f-color: #50c878;
+    --u-color: #c084fc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Georgia', serif;
+    font-size: 18px;
+    line-height: 1.75;
+  }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10, 10, 15, 0.96);
+    border-bottom: 1px solid var(--gold-dim);
+    padding: 0.6rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 0.5rem;
+  }
+
+  .nav-logo {
+    font-family: 'Georgia', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 1.5rem; font-size: 0.8rem; }
+  .nav-links a { color: var(--text-dim); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--gold); }
+
+  .hero {
+    background: linear-gradient(160deg, #08070f 0%, #0f0e1c 50%, #08070f 100%);
+    border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(74, 158, 255, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 50% 20%, rgba(245, 216, 122, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 80% 60%, rgba(192, 132, 252, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .series-label {
+    font-size: 0.7rem; letter-spacing: 0.3em; color: var(--text-dim);
+    text-transform: uppercase; margin-bottom: 1.5rem; position: relative;
+  }
+
+  .book-title {
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    font-weight: 400; letter-spacing: 0.06em;
+    color: var(--text); line-height: 1.1;
+    position: relative; margin-bottom: 0.8rem;
+  }
+
+  .book-subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    color: var(--text-dim); font-style: italic;
+    max-width: 600px; margin: 0 auto 1.5rem; position: relative;
+  }
+
+  .content-wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 3rem 2rem 4rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--gold);
+    margin: 3rem 0 1rem;
+    letter-spacing: 0.06em;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 2rem 0 0.7rem;
+  }
+
+  p { margin-bottom: 1.2rem; }
+
+  .gold-rule {
+    border: none;
+    border-top: 1px solid var(--gold-dim);
+    margin: 2.5rem 0;
+    opacity: 0.4;
+  }
+
+  .op-intro {
+    background: rgba(201, 168, 76, 0.06);
+    border: 1px solid rgba(201, 168, 76, 0.2);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: 4px;
+  }
+
+  .op-intro-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+
+  .op-intro-title {
+    font-size: 1.2rem;
+    color: var(--text);
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+  }
+
+  .op-intro-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+
+  .example-box {
+    background: rgba(201, 168, 76, 0.04);
+    border-left: 3px solid rgba(201, 168, 76, 0.3);
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 2px;
+  }
+
+  .example-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .verify-box {
+    background: rgba(80, 200, 120, 0.08);
+    border: 1px solid rgba(80, 200, 120, 0.25);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: 4px;
+  }
+
+  .verify-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #50c878;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+
+  code {
+    font-family: 'Courier New', monospace;
+    background: rgba(201, 168, 76, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+    color: var(--gold);
+    font-size: 0.95em;
+  }
+
+  .chapter-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  .chapter-nav a {
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    padding: 0.5rem 1rem;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .chapter-nav a:hover {
+    background: rgba(201, 168, 76, 0.08);
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .fleur { text-align: center; color: var(--gold-dim); font-size: 1.2rem; margin: 2rem 0; opacity: 0.5; }
+
+  /* Color helpers */
+  .c-tag { color: var(--c-color); font-weight: 600; }
+  .k-tag { color: var(--k-color); font-weight: 600; }
+  .f-tag { color: var(--f-color); font-weight: 600; }
+  .u-tag { color: var(--u-color); font-weight: 600; }
+
+  @media (max-width: 600px) {
+    .content-wrap { padding: 2rem 1.5rem; }
+    h2 { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/geometry/index.html" class="nav-logo">⚜ PRINCIPIA ORTHOGONA ⚜</a>
+  <div class="nav-links">
+    <a href="/geometry/chapter-zero.html">Chapter Zero</a>
+    <a href="/geometry/prelude.html">Prelude</a>
+    <a href="/geometry/series-hub.html">Series Hub</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="series-label">Principia Orthogona · Foundation</div>
+  <h1 class="book-title">Chapter Zero</h1>
+  <p class="book-subtitle">What You Need to Know Before Any Other Chapter</p>
+  <p style="color: var(--text-dim); margin-top: 1.5rem; font-size: 0.95rem;">
+    If a book makes no sense, it is often not because the book is hard.<br>
+    It is because something came before that book—something smaller, simpler—that was skipped.
+  </p>
+</section>
+
+<div class="content-wrap">
+
+<p>This chapter is for you if:</p>
+<p style="margin-left: 1.5rem; color: var(--text-dim);">
+• You've read something in this series and felt lost<br>
+• You learned math in English-as-a-Second-Language class, not in a math class<br>
+• Someone says "2 + 2" and you're not sure what they're asking<br>
+• You want to understand but the words keep getting in the way
+</p>
+
+<p>This is not remedial. You are not behind. What's below is simply the four foundational ideas that every other chapter in this series assumes you already know. Once you have these four, everything else becomes reachable.</p>
+
+<hr class="gold-rule">
+<h2>The Four Foundations</h2>
+
+<p>Every chapter in Books 3, 8, and 9 uses four operators: <span class="c-tag">C</span>, <span class="k-tag">K</span>, <span class="f-tag">F</span>, and <span class="u-tag">U</span>. These operators describe how things work, grow, change, and repeat. But before you meet the operators themselves, you need to understand four simpler ideas that make those operators possible.</p>
+
+<div class="fleur">✦</div>
+
+<h2>1. What is a Variable?</h2>
+
+<p><strong>A variable is a name for something that can change.</strong></p>
+
+<p>When we write <code>x = 5</code>, we are not solving a puzzle. We are saying: "Let's call this thing <code>x</code>. Right now, it has the value 5." The <code>x</code> is the name. The 5 is the value it holds today.</p>
+
+<p>Variables matter because <span class="c-tag">compression (C)</span> works by using names. A single rule, written once, can then apply to many things. That is what a variable does.</p>
+
+<div class="example-box">
+  <div class="example-label">Example: A Heartbeat</div>
+  <p>Your heart pumps blood. Each pump is one beat. Let's call the number of beats per minute <code>bpm</code>.</p>
+  <p>Right now, your bpm might be 72. Later, it might be 85 during exercise. The <code>bpm</code> is the name (the variable). The 72 and 85 are the values it takes at different times.</p>
+  <p>We don't have to say "72 beats per minute" and "85 beats per minute" separately. We can write one rule using <code>bpm</code>, and it works for all heartbeats, all people, all times.</p>
+</div>
+
+<div class="verify-box">
+  <div class="verify-label">Check It Yourself</div>
+  <p><strong>What is a variable?</strong> It's a name for something that can be different at different times or in different situations.</p>
+  <p><strong>Example:</strong> Let <code>T</code> = temperature in the room. When you enter, <code>T</code> might be 20°C. When you turn on the heat, <code>T</code> becomes 22°C. Same variable <code>T</code>. Different values.</p>
+</div>
+
+<hr class="gold-rule">
+
+<h2>2. What Does = Mean?</h2>
+
+<p><strong>The equals sign (=) means "these two things have the same value, right now."</strong></p>
+
+<p>When you write <code>2 + 2 = 4</code>, you are saying: "If I count 2 things, then count 2 more things, I end up with 4 things total. The left side and the right side describe the same amount."</p>
+
+<p>Equals is not a machine that produces an answer. It is a statement that can be true or false. You can check whether it's true by counting, measuring, or calculating.</p>
+
+<div class="example-box">
+  <div class="example-label">Example: A Bank Account</div>
+  <p>You have 100 dollars. You earn 50 more dollars. Now you have 150 dollars.</p>
+  <p>We write: <code>100 + 50 = 150</code></p>
+  <p>This is not a question. It's a statement. We're saying: "100 dollars plus 50 dollars is the same as having 150 dollars." It's true because you can count the money and verify it.</p>
+</div>
+
+<div class="verify-box">
+  <div class="verify-label">Check It Yourself</div>
+  <p><strong>Is this true?</strong> <code>3 + 3 = 6</code></p>
+  <p>Count: ooo + ooo = oooooo. Three circles, plus three circles, gives six circles. True.</p>
+  <p><strong>Is this true?</strong> <code>3 + 3 = 7</code></p>
+  <p>Count: ooo + ooo = oooooo. That's six, not seven. False.</p>
+</div>
+
+<hr class="gold-rule">
+
+<h2>3. What is an Operation?</h2>
+
+<p><strong>An operation is a way to transform something into something else, and you can check that the transformation happened.</strong></p>
+
+<p>Addition is an operation: it takes two numbers and combines them into one. Multiplication is an operation: it takes two numbers and multiplies them. Folding is an operation: it takes a piece of paper and folds it. In every case, you can see or count or measure the result.</p>
+
+<p>This is what <span class="f-tag">F (the fold operator)</span> means: a change that you can verify happened. It's not invisible. You can check it.</p>
+
+<div class="example-box">
+  <div class="example-label">Example: Squaring a Number</div>
+  <p>Take a number. Multiply it by itself. That's the operation of squaring.</p>
+  <p><code>3 × 3 = 9</code></p>
+  <p>You can verify this: count three rows of three dots, and you get nine dots in a square.</p>
+  <p><code>●●●</code><br><code>●●●</code><br><code>●●●</code> = 9 dots arranged in a square.</p>
+</div>
+
+<div class="verify-box">
+  <div class="verify-label">Check It Yourself</div>
+  <p><strong>What is 5 × 5?</strong></p>
+  <p>Draw five rows of five dots. Count them. You should get 25.</p>
+  <p><strong>Why can you check this?</strong> Because the operation (multiplying) produces something visible (a square of dots) that you can count.</p>
+</div>
+
+<hr class="gold-rule">
+
+<h2>4. Why Do Powers Matter?</h2>
+
+<p><strong>A power tells you how many times to repeat an operation.</strong></p>
+
+<p>When we write <code>2³</code> (2 to the power of 3), we mean: "Multiply 2 by itself 3 times: <code>2 × 2 × 2 = 8</code>"</p>
+
+<p>Powers matter because <span class="u-tag">scale (U)</span> works by repetition. If something grows by doubling each time, you can describe that growth as powers of 2. If something splits into 4 copies each generation, that's powers of 4. The same structure at different scales.</p>
+
+<div class="example-box">
+  <div class="example-label">Example: Bacterial Growth</div>
+  <p>One bacterium divides into 2. Each of those divides into 2. Now you have 4. Each of those divides into 2. Now you have 8.</p>
+  <p>After 1 division: <code>2¹ = 2</code><br>
+  After 2 divisions: <code>2² = 4</code><br>
+  After 3 divisions: <code>2³ = 8</code></p>
+  <p>One rule (each bacterium splits into 2), applied over and over, generates the whole sequence.</p>
+</div>
+
+<div class="verify-box">
+  <div class="verify-label">Check It Yourself</div>
+  <p><strong>What is <code>3²</code>?</strong> That means 3 × 3 = 9.</p>
+  <p><strong>What is <code>3³</code>?</strong> That means 3 × 3 × 3. First, 3 × 3 = 9. Then, 9 × 3 = 27.</p>
+  <p><strong>Why does this matter?</strong> If something triples in size every year, you can describe it as powers of 3. It's a compressed way to describe repetition.</p>
+</div>
+
+<div class="fleur">✦</div>
+
+<h2>Now You're Ready</h2>
+
+<p>These four ideas—variables, equals, operations, and powers—are the floor that every other chapter stands on. You have now heard them in the clearest possible way, grounded in things you can count and verify with your own eyes.</p>
+
+<p>The Prelude to Book 3 will introduce the four operators (C, K, F, U) and show you how they work. But now you know that:</p>
+
+<ul style="margin: 1.5rem 0 1.5rem 2rem; line-height: 1.9;">
+  <li><span class="c-tag">C (Compression)</span> uses variables to describe one rule that applies to many things</li>
+  <li><span class="k-tag">K (Threshold)</span> uses equals to say when something has reached a critical point</li>
+  <li><span class="f-tag">F (Fold)</span> uses operations to make transformations visible and verifiable</li>
+  <li><span class="u-tag">U (Scale)</span> uses powers to show the same pattern at different sizes</li>
+</ul>
+
+<p>Everything from here forward builds on these four. Nothing in this series will ask you to trust something you cannot verify. Every claim, every equation, every transformation—you can check it yourself. That is the entire promise of this work.</p>
+
+<div class="op-intro" style="margin-top: 3rem;">
+  <div class="op-intro-label">What's Next?</div>
+  <div class="op-intro-title">Read the Prelude</div>
+  <p style="font-size: 0.95rem; color: var(--text-dim); line-height: 1.7;">
+    You're ready now. Go to the Prelude of Book 3 (The Mini-Beast), where you'll meet the four operators in full color. They're the same operators you just heard about—just expanded into the complete framework that runs everything this series discusses.
+  </p>
+  <a href="/geometry/prelude.html" style="display: inline-block; margin-top: 1rem; color: var(--gold); text-decoration: none; border: 1px solid var(--gold); padding: 0.5rem 1rem; border-radius: 2px; font-size: 0.85rem; letter-spacing: 0.08em;">Read the Prelude →</a>
+</div>
+
+<div class="verify-box" style="margin-top: 2rem; border-color: rgba(80, 200, 120, 0.4); background: rgba(80, 200, 120, 0.12);">
+  <div class="verify-label">Found a Mistake?</div>
+  <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text);">
+    <strong>Good catch.</strong> We left mistakes for the best students to find. If you spot an error—a typo, a wrong calculation, a confusing explanation—that's evidence you understand the material deeply enough to know when something doesn't fit.
+  </p>
+  <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text); margin-top: 0.8rem;">
+    <strong>Here's how to get credit:</strong> Open a <a href="https://github.com/TOTOGT" target="_blank" style="color: #50c878; border-bottom: 1px solid #50c878; text-decoration: none;">GitHub Pull Request</a> with your fix. Include what was wrong and what the correction should be. Link to the relevant chapter. We'll review it, merge it, and give you credit in the acknowledgments.
+  </p>
+  <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.8rem; font-style: italic;">
+    This is not extra credit. Finding and fixing errors is part of the work. You become a co-author the moment you correct something real.
+  </p>
+</div>
+
+</div>
+
+<div class="chapter-nav">
+  <a href="/geometry/index.html">← Home</a>
+  <a href="/geometry/prelude.html">Prelude →</a>
+</div>
+
+<footer>
+  Principia Orthogona · Chapter Zero · Foundation<br>
+  © 2026 Pablo Nogueira Grossi · G6 LLC
+</footer>
+
+</body>
+</html>
