@@ -638,7 +638,7 @@ footer a:hover { color: var(--kappa2); }
 <div class="box theorem">
   <div class="box-label">Theorem T₁ · Tribonacci concentration <span class="status-proved">PARTIAL</span></div>
   <p>For the contact-geometric and CDM profiles renormalised at r<sub>c</sub>, the ratio 𝓡(r) = ρ<sub>contact</sub>(r) / ρ<sub>CDM</sub>(r) achieves its maximum near r = ε₀ r<sub>c</sub>, with 𝓡(ε₀ r<sub>c</sub>) ∈ [2.3, 2.8].</p>
-  <p style="margin-top:.4rem;">Numerically: 𝓡(ε₀ r<sub>c</sub>) ≈ 2.62 <span style="color:#c084fc">[NUMERICAL — by profile integration]</span>. <strong>Status (corrected 2026-08):</strong> the concentration <em>mechanism</em> is machine-verified with 0 sorry in <span class="math">TribonacciMeasure.lean</span> — η is the Tribonacci constant, η &gt; 1, and the weight η<sup>−k</sup> is positive and strictly decreasing, so interior mass concentrates. The specific density-ratio lemma (L8) is formalized in <span class="math">DarkMatter_MachineVerified.lean</span>, but that file is a <strong>[PARTIAL]</strong> proof template — 7 sorrys, 5 standing axioms, L8 not yet closed — so the value 𝓡 ≈ 2.62 itself is numerical, not kernel-proved.</p>
+  <p style="margin-top:.4rem;">Numerically: 𝓡(ε₀ r<sub>c</sub>) ≈ 2.62 <span style="color:#c084fc">[NUMERICAL — by profile integration]</span>. <strong>Status (corrected 2026-08):</strong> the concentration <em>mechanism</em> is machine-verified with 0 sorry in <span class="math">TribonacciMeasure.lean</span> — theorems <code>η_gt_one</code> (η &gt; 1), <code>η_characteristic</code> (η³ = η² + η + 1), and <code>weight_strictAnti</code> (η<sup>−k</sup> strictly decreasing), so interior mass concentrates. The specific density-ratio lemma L8 (<code>density_ratio_interior</code>) is formalized in <span class="math">DarkMatter_MachineVerified.lean</span>, but that file is a <strong>[PARTIAL]</strong> proof template — 7 sorrys, 5 standing axioms, L8 not yet closed — so the value 𝓡 ≈ 2.62 itself is numerical, not kernel-proved.</p>
 </div>
 
 <div class="figure">
@@ -1224,6 +1224,27 @@ footer a:hover { color: var(--kappa2); }
 </table>
 
 <p><strong>Honest closure status (2026-08).</strong> The mechanism <strong>L1–L6</strong> (η<sup>−k(ε₀)</sup> &gt; 1) is the closeable core: the four constant "axioms" are just <code>norm_num</code> on the literals (η = 1.839…, ε₀ = 1/3) and the single <code>rpow</code> step is a standard Mathlib lemma, so with those discharged L6 is sorry-free and axiom-free — the same fact <code>TribonacciMeasure.lean</code> already carries at 0 sorry (draft patch: <code>DarkMatter_closures_DRAFT.lean</code>). What is <em>not</em> closed: <strong>L7</strong> (a numerical approximation, not a logic lemma) and <strong>L8</strong> (suspect — the interior goal x<sup>2.5</sup>·η<sup>−k</sup> &gt; 1 does not follow for 0 &lt; x &lt; 1, so it needs a quantitative bound or a corrected exponent). As the file itself notes, several theorem statements were false as first written; those must be fixed, not asserted, before any deposit.</p>
+
+<div style="margin:1.6rem 0;">
+  <div style="font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--halo);margin-bottom:.45rem;">The verified core, inline · TribonacciMeasure.lean · 0 sorry · 0 custom axioms</div>
+  <pre style="background:#080b12;border:1px solid #24352c;border-left:3px solid var(--proved,#8fd13f);border-radius:6px;padding:1rem 1.2rem;overflow-x:auto;font-family:'Courier New',monospace;font-size:.72rem;line-height:1.6;color:#dfe9e2;"><span style="color:#6b8f7a">/-- η: the real root of x³ − x² − x − 1 = 0 in [1,2], via the IVT. -/</span>
+<span style="color:#c084fc">noncomputable def</span> η : ℝ := η_exists.choose
+
+<span style="color:#6b8f7a">/-- η³ = η² + η + 1  (characteristic equation). -/</span>
+<span style="color:#c084fc">theorem</span> <span style="color:#8fd13f">η_characteristic</span> : η ^ 3 = η ^ 2 + η + 1 := η_spec.2.2
+
+<span style="color:#6b8f7a">/-- η &gt; 1  (η = 1 would force 1 = 3 in the characteristic eq). -/</span>
+<span style="color:#c084fc">theorem</span> <span style="color:#8fd13f">η_gt_one</span> : 1 &lt; η := <span style="color:#c084fc">by</span>
+  rcases η_spec.1.eq_or_lt <span style="color:#c084fc">with</span> h | h
+  · exfalso; <span style="color:#c084fc">have</span> hchar := η_spec.2.2; rw [← h] <span style="color:#c084fc">at</span> hchar; norm_num <span style="color:#c084fc">at</span> hchar
+  · exact h
+
+<span style="color:#6b8f7a">/-- weight k = η⁻ᵏ is strictly decreasing (η⁻¹ ∈ (0,1) since η &gt; 1). -/</span>
+<span style="color:#c084fc">theorem</span> <span style="color:#8fd13f">weight_strictAnti</span> : StrictAnti weight := <span style="color:#c084fc">by</span>
+  intro a b hab; simp only [weight]
+  apply pow_lt_pow_of_lt_one (le_of_lt (inv_pos.mpr η_pos)) (inv_lt_one η_gt_one) hab</pre>
+  <div style="font-size:.72rem;color:#8fa89b;margin-top:.45rem;">Source: <code>TribonacciMeasure.lean</code> — η built via <code>intermediate_value_Icc</code>; full file 129 lines, 0 sorry, 0 custom axioms. Reproduced here so the claim carries its own proof: no external repo path to break. (L7/L8 above are <em>not</em> reproduced because they are not closed.)</div>
+</div>
 
 <!-- CTA monograph -->
 <div class="cta-monograph">
