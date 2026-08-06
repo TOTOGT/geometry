@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP45 · Dividing Unity · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['\\(','\\)']],
+    displayMath: [['\\[','\\]']],
+    tags: 'ams'
+  }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+:root {
+  --void: #04040a;
+  --surface: #0c0d16;
+  --gold: #c9a84c;
+  --teal: #0ABAB5;
+  --red: #e74c3c;
+  --green: #50c878;
+  --purple: #7b68ee;
+  --orange: #e08030;
+  --text: #e8e4d8;
+  --muted: #6b6757;
+  --rule: rgba(201,168,76,0.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Serif',Georgia,serif;background:var(--void);color:var(--text);font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:100;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.5rem;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+
+.strip{background:var(--surface);border-bottom:1px solid var(--rule);padding:0.5rem 2rem;display:flex;gap:1.5rem;font-size:0.75rem;font-family:'JetBrains Mono',monospace;flex-wrap:wrap;}
+.strip a{color:var(--muted);text-decoration:none;transition:color .2s;}
+.strip a:hover{color:var(--gold);}
+.strip .active{color:var(--teal);}
+
+.hero{text-align:center;padding:5rem 2rem 3rem;border-bottom:1px solid var(--rule);}
+.wp-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:400;letter-spacing:.03em;color:var(--gold);margin-bottom:.5rem;line-height:1.25;}
+.hero .subtitle{font-size:1rem;color:rgba(232,228,216,.75);max-width:820px;margin:1rem auto;line-height:1.75;}
+.hero .meta{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:1.5rem;}
+
+.container{max-width:860px;margin:0 auto;padding:4rem 2rem;}
+h2{font-size:1.45rem;color:var(--gold);margin-top:3rem;margin-bottom:1.2rem;letter-spacing:.02em;}
+h3{font-size:1.1rem;color:var(--teal);margin-top:2rem;margin-bottom:.9rem;}
+h4{font-size:.95rem;color:var(--gold);margin-top:1.5rem;margin-bottom:.6rem;font-weight:600;}
+p{margin-bottom:1.3rem;}
+ul,ol{margin-left:2rem;margin-bottom:1.3rem;}
+li{margin-bottom:.6rem;}
+
+.block{background:var(--surface);border-left:3px solid var(--teal);padding:1.4rem 1.6rem;margin:2rem 0;}
+.block-gold{border-left-color:var(--gold);background:rgba(201,168,76,.05);}
+.block-red{border-left-color:var(--red);background:rgba(231,76,60,.05);}
+.block-purple{border-left-color:var(--purple);background:rgba(123,104,238,.06);}
+.block-green{border-left-color:var(--green);background:rgba(80,200,120,.05);}
+
+.eq{background:var(--surface);border:1px solid var(--rule);padding:1.2rem 1.6rem;margin:1.8rem 0;overflow-x:auto;text-align:center;font-size:1.05rem;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:.2rem .55rem;border:1px solid;display:inline-block;margin-right:.4rem;vertical-align:middle;}
+.tag-v{color:var(--green);border-color:var(--green);}
+.tag-m{color:var(--gold);border-color:var(--gold);}
+.tag-o{color:var(--red);border-color:var(--red);}
+
+.pull{font-size:1.35rem;color:var(--gold);font-style:italic;border-left:4px solid var(--gold);padding:1rem 1.5rem;margin:2.5rem 0;line-height:1.6;}
+
+/* dozenal grid */
+.doz-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:2px;margin:2rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;text-align:center;}
+.doz-cell{padding:.5rem .2rem;border:1px solid rgba(201,168,76,.12);color:var(--muted);}
+.doz-cell.div{background:rgba(201,168,76,.12);color:var(--gold);font-weight:700;}
+.doz-cell.prime{background:rgba(10,186,181,.08);color:var(--teal);}
+
+/* fraction matrix */
+table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.88rem;}
+th,td{padding:.7rem .9rem;text-align:center;border:1px solid var(--rule);}
+th{background:var(--surface);color:var(--gold);font-weight:600;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+td.frac{text-align:left;color:var(--text);font-family:'JetBrains Mono',monospace;}
+.yes{color:var(--green);font-size:1rem;}
+.no{color:rgba(107,103,87,.4);font-size:1rem;}
+.first{color:var(--teal);font-size:1rem;font-weight:700;}
+tr:nth-child(even){background:rgba(12,13,22,.5);}
+
+/* dodecagon */
+.dodecagon-wrap{text-align:center;margin:2rem 0;}
+.dodecagon-wrap svg{max-width:360px;width:100%;}
+
+/* constant table */
+.const-table th{color:var(--teal);}
+
+.series-note{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);border-top:1px solid var(--rule);margin-top:3rem;padding-top:1rem;line-height:1.9;}
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);}
+footer a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">Principia Orthogona · Book 6</a>
+  <div class="nav-links">
+    <a href="index.html">Book 6</a>
+    <a href="g6-crystal.html">G6 Crystal</a>
+    <a href="../book4/living-book.html">Opus Map</a>
+  </div>
+</nav>
+
+<div class="strip">
+  <a href="wp44-catastrophe-manifold.html">← WP44 · Catastrophe Manifold</a>
+  <span style="color:var(--muted);">·</span>
+  <span class="active">WP45 · Dividing Unity</span>
+  <span style="color:var(--muted);">·</span>
+  <a href="wp46-prime-ladder.html">WP46 · Prime Ladder →</a>
+</div>
+
+<div class="hero">
+  <div class="wp-label">Working Paper 45 · Principia Orthogona Vol VI</div>
+  <h1>Dividing Unity</h1>
+  <p class="subtitle">Why base 12 is the minimal sufficient arithmetic · the dozenal polygon · what changes when we stop counting on decimal fingers</p>
+  <p class="meta">Pablo Nogueira Grossi · August 2026 · Preceded by: <a href="wp44-catastrophe-manifold.html" style="color:var(--gold);">WP44 · Catastrophe Manifold</a></p>
+</div>
+
+<div class="container">
+
+<!-- §1 -->
+<h2>§1 · The Oldest Question in Arithmetic</h2>
+
+<p>Before algebra, before geometry, before zero — there was division. Take a whole. Cut it into equal parts. Which cuts are clean? Which leave an infinite tail of remainders?</p>
+
+<p>This is not an abstract question. A mason cutting stone, a merchant dividing goods, a calendar maker splitting a year — all of them need divisions that terminate. A fraction that does not terminate in your base is a division you cannot complete. You have to stop somewhere and accept the error.</p>
+
+<p>Decimal arithmetic — base 10 — is a historical accident of anatomy. Ten fingers. Two prime factors: 2 and 5. That is all it buys you. One third is 0.333… in base 10 — a fraction that never closes. So is one seventh, one ninth, one eleventh. More than half of the simple fractions of everyday measurement are non-terminating in the base we inherited.</p>
+
+<div class="pull">The question is not which base is most familiar. The question is which base costs the least precision.</div>
+
+<!-- §2 -->
+<h2>§2 · What Makes a Fraction Terminate</h2>
+
+<p>A fraction \(1/n\) terminates in base \(b\) if and only if every prime factor of \(n\) is also a prime factor of \(b\). This is the complete criterion.</p>
+
+<div class="eq">
+\[
+\frac{1}{n} \text{ terminates in base } b \iff \text{prime}(n) \subseteq \text{prime}(b)
+\]
+</div>
+
+<p>In base 10: prime(10) = {2, 5}. So 1/3 does not terminate (3 ∉ {2,5}). 1/6 = 1/(2·3) does not terminate. 1/7, 1/9, 1/11, 1/13 — all non-terminating. The base 10 arithmetic we use daily cannot cleanly express the thirds, sixths, sevenths, and ninths that appear constantly in geometry, music, and physical measurement.</p>
+
+<p>Base 12: prime(12) = {2, 3}. Adding the factor 3 is the single change that matters most. Now 1/3 terminates as <span style="font-family:'JetBrains Mono',monospace;color:var(--teal);">0;4</span> (dozenal notation), 1/4 as <span style="font-family:'JetBrains Mono',monospace;color:var(--teal);">0;3</span>, 1/6 as <span style="font-family:'JetBrains Mono',monospace;color:var(--teal);">0;2</span>. The six denominators that appear most in physical division — 2, 3, 4, 6, 8, 12 — all terminate cleanly.</p>
+
+<div class="block block-gold">
+  <strong style="color:var(--gold);">Dozenal notation.</strong> The radix point in base 12 is written with a semicolon: <strong>0;4</strong> means four twelfths. Digits beyond 9 are A = ten and B = eleven. So twelve itself is written <strong>10</strong>, two dozen is <strong>20</strong>, one gross (144) is <strong>100</strong>.
+</div>
+
+<!-- §3 — Divisors of 12 -->
+<h2>§3 · Twelve Divisors</h2>
+
+<p>Twelve has six divisors: 1, 2, 3, 4, 6, 12. No number smaller than 12 has six divisors. This is the minimum — the smallest base that simultaneously contains the arithmetic of halves, thirds, quarters, and sixths.</p>
+
+<div class="doz-grid" id="doz-grid"></div>
+
+<p>The six divisors of 12 are precisely the denominators that matter in practical measurement: the half note and the whole, the compass rose (N/S/E/W plus the diagonals), the hour and the clock face, the egg carton, the inch ruler. These are not coincidences — they are the consequence of living in a geometry where circles divide naturally into halves, thirds, and quarters, and 12 = LCM(1, 2, 3, 4) is the smallest integer divisible by all four.</p>
+
+<div class="eq">
+\[
+12 = \text{LCM}(1,\,2,\,3,\,4) = 2^2 \times 3
+\]
+</div>
+
+<p>That is the arithmetic identity at the base of base 12. It is not a coincidence of history. It is the minimal closure of the four most basic divisions of unity.</p>
+
+<!-- §4 — Termination matrix -->
+<h2>§4 · What Each Base Buys</h2>
+
+<p>The table below shows which simple fractions terminate in base 10 (decimal) versus base 12 (dozenal). A highlighted ✓ marks the first base where each fraction terminates.</p>
+
+<table>
+<thead>
+<tr>
+  <th>fraction</th>
+  <th>factors</th>
+  <th>base 10</th>
+  <th>base 12</th>
+  <th>decimal form</th>
+  <th>dozenal form</th>
+</tr>
+</thead>
+<tbody>
+<tr><td class="frac">1/2</td><td class="frac">2</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td>0.5</td><td>0;6</td></tr>
+<tr><td class="frac">1/3</td><td class="frac">3</td><td><span class="no">—</span></td><td><span class="first">✓</span></td><td>0.333…</td><td style="color:var(--teal);">0;4</td></tr>
+<tr><td class="frac">1/4</td><td class="frac">2²</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td>0.25</td><td>0;3</td></tr>
+<tr><td class="frac">1/5</td><td class="frac">5</td><td><span class="yes">✓</span></td><td><span class="no">—</span></td><td>0.2</td><td>0;2497…</td></tr>
+<tr><td class="frac">1/6</td><td class="frac">2·3</td><td><span class="no">—</span></td><td><span class="first">✓</span></td><td>0.1666…</td><td style="color:var(--teal);">0;2</td></tr>
+<tr><td class="frac">1/7</td><td class="frac">7</td><td><span class="no">—</span></td><td><span class="no">—</span></td><td>0.142857…</td><td>0;186A35…</td></tr>
+<tr><td class="frac">1/8</td><td class="frac">2³</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td>0.125</td><td>0;16</td></tr>
+<tr><td class="frac">1/9</td><td class="frac">3²</td><td><span class="no">—</span></td><td><span class="first">✓</span></td><td>0.111…</td><td style="color:var(--teal);">0;14</td></tr>
+<tr><td class="frac">1/10</td><td class="frac">2·5</td><td><span class="yes">✓</span></td><td><span class="no">—</span></td><td>0.1</td><td>0;12497…</td></tr>
+<tr><td class="frac">1/11</td><td class="frac">11</td><td><span class="no">—</span></td><td><span class="no">—</span></td><td>0.0909…</td><td>0;1111…</td></tr>
+<tr><td class="frac">1/12</td><td class="frac">2²·3</td><td><span class="no">—</span></td><td><span class="first">✓</span></td><td>0.0833…</td><td style="color:var(--teal);">0;1</td></tr>
+</tbody>
+</table>
+
+<p>Base 12 gains: 1/3, 1/6, 1/9, 1/12 — all multiples of three. Base 10 gains 1/5 and 1/10. For geometry, physics, and music, the gains from base 12 outweigh those from base 10 by a significant margin. The fifth (1/5) and tenth (1/10) matter in decimal coinage. The third (1/3) and sixth (1/6) matter everywhere else.</p>
+
+<!-- §5 — The dodecagon -->
+<h2>§5 · The Dozenal Polygon</h2>
+
+<p>The regular twelve-sided polygon — the dodecagon — is the geometric expression of base 12. It is the polygon whose symmetry group is generated by a 30° rotation, and it contains, as inscribed regular polygons, every shape whose divisibility lives in base 12.</p>
+
+<div class="dodecagon-wrap">
+<svg viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg">
+  <!-- circle -->
+  <circle cx="0" cy="0" r="100" fill="none" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+  <!-- dodecagon vertices and edges -->
+  <polygon points="100,0 86.6,-50 50,-86.6 0,-100 -50,-86.6 -86.6,-50 -100,0 -86.6,50 -50,86.6 0,100 50,86.6 86.6,50"
+    fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="1.5"/>
+  <!-- inscribed square (vertices 0,3,6,9) -->
+  <polygon points="100,0 0,-100 -100,0 0,100"
+    fill="none" stroke="rgba(10,186,181,0.5)" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- inscribed hexagon (vertices 0,2,4,6,8,10) -->
+  <polygon points="100,0 50,-86.6 -50,-86.6 -100,0 -50,86.6 50,86.6"
+    fill="none" stroke="rgba(123,104,238,0.5)" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- inscribed triangle (vertices 0,4,8) -->
+  <polygon points="100,0 -50,-86.6 -50,86.6"
+    fill="none" stroke="rgba(224,128,48,0.5)" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- vertices -->
+  <circle cx="100" cy="0" r="3.5" fill="var(--gold)"/>
+  <circle cx="86.6" cy="-50" r="3.5" fill="var(--gold)"/>
+  <circle cx="50" cy="-86.6" r="3.5" fill="var(--gold)"/>
+  <circle cx="0" cy="-100" r="3.5" fill="var(--gold)"/>
+  <circle cx="-50" cy="-86.6" r="3.5" fill="var(--gold)"/>
+  <circle cx="-86.6" cy="-50" r="3.5" fill="var(--gold)"/>
+  <circle cx="-100" cy="0" r="3.5" fill="var(--gold)"/>
+  <circle cx="-86.6" cy="50" r="3.5" fill="var(--gold)"/>
+  <circle cx="-50" cy="86.6" r="3.5" fill="var(--gold)"/>
+  <circle cx="0" cy="100" r="3.5" fill="var(--gold)"/>
+  <circle cx="50" cy="86.6" r="3.5" fill="var(--gold)"/>
+  <circle cx="86.6" cy="50" r="3.5" fill="var(--gold)"/>
+  <!-- labels -->
+  <text x="113" y="5" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">0</text>
+  <text x="90" y="-55" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">1</text>
+  <text x="54" y="-90" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">2</text>
+  <text x="3" y="-106" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">3</text>
+  <text x="-65" y="-90" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">4</text>
+  <text x="-100" y="-55" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">5</text>
+  <text x="-116" y="5" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">6</text>
+  <text x="-100" y="62" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">7</text>
+  <text x="-64" y="98" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">8</text>
+  <text x="3" y="115" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">9</text>
+  <text x="54" y="98" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">A</text>
+  <text x="90" y="62" fill="rgba(201,168,76,.6)" font-size="10" font-family="monospace">B</text>
+  <!-- legend -->
+  <text x="-108" y="-112" fill="rgba(10,186,181,.7)" font-size="9" font-family="monospace">□ square (step 3)</text>
+  <text x="-108" y="-100" fill="rgba(123,104,238,.7)" font-size="9" font-family="monospace">⬡ hexagon (step 2)</text>
+  <text x="-108" y="-88" fill="rgba(224,128,48,.7)" font-size="9" font-family="monospace">△ triangle (step 4)</text>
+</svg>
+</div>
+
+<p>The dodecagon contains:</p>
+<ul>
+  <li>An inscribed <strong style="color:var(--teal);">square</strong> (every 3rd vertex, step size 3). Side = \(\sqrt{2}\), apothem = \(\frac{\sqrt{2}}{2} = 0.5\sqrt{2}\). The apothem of this square — \(0.5\sqrt{2}\) — is the first geometric constant to which dozenal notation gives a simple relationship: it is exactly half the diagonal of a unit square.</li>
+  <li>An inscribed <strong style="color:var(--purple);">hexagon</strong> (every 2nd vertex, step 2). Side = 1 = radius. This is the basis of the G6 Crystal hexagonal symmetry.</li>
+  <li>An inscribed <strong style="color:var(--orange);">triangle</strong> (every 4th vertex, step 4). Side = \(\sqrt{3}\).</li>
+</ul>
+
+<p>All three inscribed polygons — the shapes that arise in crystallography, tiling, and the geometry of close-packing — live naturally inside the dozenal polygon. There is no coincidence here. The dodecagon is the base-12 object; its inscribed polygons are the divisors of twelve, expressed geometrically.</p>
+
+<!-- §6 — PO constants in dozenal -->
+<h2>§6 · Principia Orthogona Constants in Dozenal</h2>
+
+<p>The dm³ framework rests on a small set of critical thresholds. In base 10, most of them are non-terminating. In base 12, several clean up immediately — because the geometry of the system is built on thirds and halves, not fifths.</p>
+
+<table class="const-table">
+<thead>
+<tr>
+  <th>constant</th>
+  <th>meaning</th>
+  <th>decimal</th>
+  <th>dozenal</th>
+  <th>note</th>
+</tr>
+</thead>
+<tbody>
+<tr><td><em>ε</em>₀ = 1/3</td><td>fold singularity (F-operator)</td><td>0.333…</td><td style="color:var(--teal);font-family:'JetBrains Mono',monospace;"><strong>0;4</strong></td><td>terminates in one digit</td></tr>
+<tr><td><em>τ</em> = 2</td><td>global attractor (dm³)</td><td>2</td><td>2</td><td>same in all bases</td></tr>
+<tr><td>μ<sub>max</sub> = −2</td><td>Lyapunov bound</td><td>−2</td><td>−2</td><td>same in all bases</td></tr>
+<tr><td>1/6</td><td>one-sixth threshold (hex symmetry)</td><td>0.1666…</td><td style="color:var(--teal);font-family:'JetBrains Mono',monospace;"><strong>0;2</strong></td><td>terminates</td></tr>
+<tr><td>1/4</td><td>quarter-turn (rotation gate)</td><td>0.25</td><td style="color:var(--teal);font-family:'JetBrains Mono',monospace;"><strong>0;3</strong></td><td>terminates (shorter)</td></tr>
+<tr><td>1/12</td><td>one dodecal step</td><td>0.0833…</td><td style="color:var(--teal);font-family:'JetBrains Mono',monospace;"><strong>0;1</strong></td><td>terminates in one digit</td></tr>
+<tr><td>72 (E₆ roots)</td><td>minimal vectors, E₆ lattice</td><td>72</td><td style="color:var(--teal);font-family:'JetBrains Mono',monospace;"><strong>60</strong></td><td>six dozens exactly</td></tr>
+<tr><td>51840 (|W(E₆)|)</td><td>Weyl group order</td><td>51,840</td><td style="color:var(--teal);font-family:'JetBrains Mono',monospace;"><strong>26,000</strong></td><td>26 gross exactly</td></tr>
+</tbody>
+</table>
+
+<p>The fold singularity \(\varepsilon_0 = 1/3\) — the central constant of the dm³ F-operator — which produces an infinite decimal expansion in base 10, is exactly <strong style="color:var(--teal);">0;4</strong> in dozenal. One keystroke. The geometry was always dozenal; the base-10 notation was obscuring it.</p>
+
+<p>More telling: 72 (the number of minimal vectors in the E₆ root lattice) is <strong style="color:var(--teal);">60</strong> in dozenal — six dozens, written with the same two-digit elegance that Babylonians used for their base-60 sexagesimal system. The Weyl group order 51840 is <strong style="color:var(--teal);">26,000</strong> — twenty-six gross, perfectly divisible by 12³.</p>
+
+<!-- §7 — Why not base 10 -->
+<h2>§7 · What We Lost</h2>
+
+<p>The shift to base 10 is recent in the history of measurement. The Babylonians used base 60. The Romans used twelfths — <em>uncia</em>, the twelfth of an <em>as</em>, is the origin of both "inch" and "ounce." The English foot is twelve inches. The dozen and the gross (twelve squared = 144) persisted in commerce long after decimal notation arrived in Europe, precisely because they are more useful for division.</p>
+
+<p>We did not lose base 12 because it was worse. We lost it because the French Revolution standardized the decimal metric system in 1795, and administrative uniformity won over arithmetic convenience. The meter is easier to define; the foot is easier to divide.</p>
+
+<div class="block block-green">
+  <strong style="color:var(--green);">What changes in practice.</strong> Nothing in the physics changes. The constants are the same. The operators are the same. What changes is the notational cost: the number of digits required to express a calculation without rounding. In base 12, \(\varepsilon_0\) does not accumulate rounding error. In base 10, it does so from the first digit.
+</div>
+
+<!-- §8 — The next step -->
+<h2>§8 · The Next Question</h2>
+
+<p>Base 12 is the minimal sufficient base — the smallest number that terminates halves, thirds, and quarters. But "minimal sufficient" raises a natural question: what comes next? If we add the factor 5, we get base 60. If we add 7, we get base 420. If we keep extending — adding one prime at a time — we climb a ladder.</p>
+
+<p>Each rung of that ladder is a different arithmetic universe. Each adds exactly one new prime to the terminating set, at the cost of an increasingly large base. The trade-off sharpens quickly: the marginal value of each new prime falls, but the base grows without bound.</p>
+
+<p>The Prime Ladder — and what you find at the top — is the subject of WP46.</p>
+
+<div class="block block-gold" style="margin-top:2.5rem;">
+  <strong style="color:var(--gold);">Series context.</strong>
+  This paper establishes the dozenal foundation for the number-theoretic chapters. WP44 showed that the dm³ constants arise from Disaster Theory geometry. WP45 shows the same constants expressed naturally in base 12. WP46 extends this into the full prime ladder — the question of what arithmetic completeness looks like as you ascend.
+</div>
+
+<div class="series-note">
+  <div style="margin-bottom:.4rem;color:var(--gold);">WP45 — Principia Orthogona · Dividing Unity · number theory series</div>
+  <div>Series: <a href="wp44-catastrophe-manifold.html" style="color:var(--teal);">WP44</a> · <strong>WP45 (here)</strong> · <a href="wp46-prime-ladder.html" style="color:var(--teal);">WP46 →</a></div>
+  <div style="margin-top:.4rem;">Zenodo community: <a href="https://zenodo.org/communities/principia-orthogona" style="color:var(--gold);">zenodo.org/communities/principia-orthogona</a></div>
+</div>
+
+</div><!-- .container -->
+
+<footer>
+  <a href="index.html">Book 6 Index</a> · <a href="g6-crystal.html">G6 Crystal</a> · <a href="../book4/living-book.html">Opus Map</a>
+  <br><br>
+  © Pablo Nogueira Grossi · Principia Orthogona · 2026
+</footer>
+
+<script>
+// Dozenal divisor grid
+const grid = document.getElementById('doz-grid');
+for(let i=1;i<=12;i++){
+  const d=document.createElement('div');
+  d.className='doz-cell'+(12%i===0?' div':[2,3,5,7,11].includes(i)?' prime':'');
+  d.textContent=i===10?'A':i===11?'B':i===12?'10':i;
+  grid.appendChild(d);
+}
+const legend=document.createElement('div');
+legend.style.cssText='grid-column:1/-1;padding:.5rem;font-size:.7rem;color:var(--muted);text-align:left;border:none;background:none;';
+legend.innerHTML='<span style="color:var(--gold);">■</span> divisor of 12 &nbsp;·&nbsp; <span style="color:var(--teal);">■</span> prime &nbsp;·&nbsp; <span style="color:var(--muted);">■</span> other';
+grid.appendChild(legend);
+</script>
+
+</body>
+</html>
