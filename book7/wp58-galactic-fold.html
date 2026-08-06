@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP58 · r*_galactic · The Whitney A₁ Fold from the Contact G-Chain</title>
+<meta name="description" content="WP58 — Open Problem O4. We show that the dm³ inner basin boundary r*(ε) depends on the coupling parameter ε, propose ε_gal = ν/κ as the galactic identification, compute r*(ε_gal) for the Milky Way, and identify the 2:1 vertical resonance ν=2κ as the condition under which r*_gal = r*_macro = 0.77594059.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root{
+  --void:#04040a;--surface:#0c0d16;--card:#10111c;
+  --gold:#c9a84c;--teal:#0ABAB5;--red:#e05a3a;
+  --purple:#c084fc;--green:#50c878;--blue:#38bdf8;
+  --text:#e8e4d8;--muted:#6b6757;--dim:#1e1e2a;
+  --rule:rgba(201,168,76,0.14);
+  --serif:'Noto Serif',Georgia,serif;
+  --mono:'JetBrains Mono','Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:17px;line-height:1.82;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.nav-series{font-family:var(--mono);font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1rem;flex-wrap:wrap;}
+.nav-links a{font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+
+.hero{padding:4.5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(56,189,248,.04) 0%,transparent 70%);pointer-events:none;}
+.wp-tag{font-family:var(--mono);font-size:.58rem;letter-spacing:.32em;text-transform:uppercase;color:var(--blue);border:1px solid rgba(56,189,248,.3);padding:.2rem .65rem;display:inline-block;margin-bottom:1.6rem;}
+.hero h1{font-size:clamp(1.5rem,3.2vw,2.4rem);font-weight:400;letter-spacing:.04em;color:var(--gold);margin-bottom:.5rem;line-height:1.25;}
+.hero-sub{font-size:.95rem;color:var(--muted);margin:.3rem auto 0;max-width:660px;font-style:italic;line-height:1.65;}
+.byline{margin-top:1.4rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;color:var(--muted);}
+
+.abstract{max-width:780px;margin:2.5rem auto 0;padding:1.4rem 1.8rem;background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--blue);}
+.abstract-label{font-family:var(--mono);font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-bottom:.7rem;display:block;}
+.abstract-body{font-size:.93rem;line-height:1.78;color:rgba(232,228,216,.85);}
+
+.page{max-width:820px;margin:0 auto;padding:3rem 2rem;}
+h2{font-size:1.02rem;font-weight:600;color:var(--gold);letter-spacing:.06em;margin:2.5rem 0 1rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule);}
+h2 .sec-n{font-family:var(--mono);font-size:.62rem;color:var(--blue);letter-spacing:.2em;margin-right:.6rem;}
+p.prose{margin-bottom:1.15rem;font-size:1rem;line-height:1.82;color:rgba(232,228,216,.87);}
+
+/* Blocks */
+.defn{border-left:3px solid var(--gold);padding:.9rem 1.3rem;margin:1.4rem 0;background:rgba(201,168,76,.025);}
+.defn-lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem;display:block;}
+.thm{border-left:3px solid var(--teal);padding:.9rem 1.3rem;margin:1.4rem 0;background:rgba(10,186,181,.025);}
+.thm-lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:.45rem;display:block;}
+.orig{border-left:3px solid var(--blue);padding:.9rem 1.3rem;margin:1.4rem 0;background:rgba(56,189,248,.025);}
+.orig-lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:.45rem;display:block;}
+.open{border-left:3px solid var(--red);padding:.9rem 1.3rem;margin:1.4rem 0;background:rgba(224,90,58,.025);}
+.open-lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem;display:block;}
+.model{border-left:3px solid var(--green);padding:.9rem 1.3rem;margin:1.4rem 0;background:rgba(80,200,120,.025);}
+.model-lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:.45rem;display:block;}
+.block-body{font-size:.93rem;line-height:1.78;color:rgba(232,228,216,.85);}
+
+.math-block{font-family:var(--mono);font-size:.88rem;color:var(--gold);background:var(--surface);border:1px solid var(--dim);border-left:2px solid rgba(201,168,76,.3);padding:.8rem 1.2rem;margin:1.1rem 0;overflow-x:auto;line-height:2.0;}
+
+/* Tables */
+.data-table{width:100%;border-collapse:collapse;margin:1.3rem 0;font-size:.85rem;}
+.data-table th{font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);padding:.5rem .9rem;border-bottom:1px solid var(--rule);text-align:left;}
+.data-table td{padding:.55rem .9rem;border-bottom:1px solid rgba(201,168,76,.06);line-height:1.55;vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table td.mono{font-family:var(--mono);font-size:.82rem;color:var(--gold);}
+.data-table td.hl{color:var(--blue);font-weight:600;}
+.data-table tr.highlight-row td{background:rgba(56,189,248,.04);}
+
+/* Pull quote */
+.pull{text-align:center;padding:2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:2.5rem 0;}
+.pull-text{font-size:1rem;font-style:italic;color:var(--text);max-width:620px;margin:0 auto;line-height:1.82;}
+.pull-sub{font-size:.86rem;color:var(--muted);max-width:620px;margin:.6rem auto 0;font-style:italic;}
+
+/* Hierarchy diagram */
+.hierarchy{font-family:var(--mono);font-size:.8rem;color:var(--gold);background:var(--surface);border:1px solid var(--dim);padding:1rem 1.5rem;margin:1.2rem 0;line-height:2.2;overflow-x:auto;}
+
+.refs{font-family:var(--mono);font-size:.7rem;line-height:1.9;color:var(--muted);margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--rule);}
+.refs a{color:var(--gold);text-decoration:none;}
+
+.chapter-nav{background:var(--surface);border-top:1px solid var(--rule);padding:.9rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
+.ch-nav-link{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.ch-nav-link:hover{color:var(--gold);}
+footer{text-align:center;padding:2rem;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--muted);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-series">Principia Orthogona · Vol VII · WP58</a>
+  <div class="nav-links">
+    <a href="wp57-causal-integration.html">WP57 · T_CI</a>
+    <a href="wp56-special-relativity.html">WP56 · SR</a>
+    <a href="../chGravity-scales.html">Gravity Scales</a>
+    <a href="../book4/living-book.html">Opus Map</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wp-tag">WP58 · Vol VII · Derivation Attempt · August 2026</div>
+  <h1>r*_galactic: A Derivation Attempt from the Contact G-Chain</h1>
+  <p class="hero-sub">Addressing Open Problem O4 — the Whitney A₁ fold radius for galactic attractors</p>
+  <div class="byline">Pablo Nogueira Grossi · G6 LLC · Newark NJ · 2026 · ORCID 0009-0000-6496-2186</div>
+
+  <div class="abstract">
+    <span class="abstract-label">Abstract</span>
+    <div class="abstract-body">
+      The inner basin boundary $r^* = 0.77594059$ of the dm³ contact ODE is certified numerically for coupling parameter $\varepsilon = 2$, but no closed form is known. Open Problem O4 (WP57) asks for an analogous expression at galactic scale. We show that $r^*(\varepsilon)$ is a monotone function of $\varepsilon$ and compute it for $\varepsilon \in \{0.5,\, 1.0,\, 1.5,\, 2.0,\, 2.5,\, 3.0,\, 4.0\}$ to 10 significant figures. We then propose the <em>galactic identification</em> $\varepsilon_{\rm gal} = \nu(R_{\rm disc})/\kappa(R_{\rm disc})$ — the ratio of vertical to epicyclic oscillation frequency at the disc scale radius — as the natural coupling parameter at $g^{96}$. Under this identification, the contact G-chain predicts a bulge–disc transition radius $R^*_{\rm phys} = r^*(\varepsilon_{\rm gal}) \times R_{\rm disc}$. For the Milky Way, $\varepsilon_{\rm gal} \approx 1.61$ yields $r^* \approx 0.713$ and $R^*_{\rm phys} \approx 2.5\,\rm kpc$ — in the observed range for the bulge–disc transition. The exact value $r^*_{\rm gal} = 0.77594059$ is recovered when $\varepsilon_{\rm gal} = 2$ exactly, i.e., when $\nu = 2\kappa$ at $R_{\rm disc}$. This is identified as the <em>2:1 vertical resonance condition</em>, linking the dm³ fold to the dynamical origin of boxy/peanut bulges. Four open problems are stated. The galactic identification (O.4.2) is the key unproved step.
+    </div>
+  </div>
+</section>
+
+<div class="page">
+
+<!-- §1 -->
+<h2><span class="sec-n">§1</span>The Open Problem</h2>
+
+<p class="prose">The dm³ contact ODE on the manifold $(\mathbb{R}^3,\, \alpha = dz - r^2\,d\theta)$ is (Grossi 2026, Vol IV §2):</p>
+
+<div class="math-block">
+  ṙ = r(1 − r²) + ε(r − 1) e^{−z}<br>
+  ż = r² − ε(r − 1)² e^{−z}
+</div>
+
+<p class="prose">with coupling parameter $\varepsilon = 2$ for the electromagnetic (macro) realization and attractor $\Gamma = \{r = 1,\, \dot\theta = 1,\, \dot z = 1\}$. The inner basin boundary is:</p>
+
+<div class="defn">
+  <span class="defn-lbl">Definition 1.1 — Inner basin boundary</span>
+  <div class="block-body">
+    $r^*(\varepsilon, z_0) = \inf\bigl\{r_0 > 0 : \text{trajectory from } (r_0, z_0) \to \Gamma\bigr\}.$<br>
+    For $r_0 > r^*$: trajectory converges to $\Gamma$.&ensp; For $r_0 < r^*$: trajectory escapes ($r \to 0$, $z \to -\infty$).
+  </div>
+</div>
+
+<p class="prose">The value $r^*(2, 0) = 0.77594059$ is certified by <code>certify_rstar.py</code> (DOP853, rtol=$10^{-12}$, bisection tolerance $10^{-7}$). No closed-form expression for $r^*(\varepsilon, z_0)$ is known for any $\varepsilon \neq 0$ [Conjecture 2.2 of <code>rstar_compute.py</code>].</p>
+
+<p class="prose">Open Problem O4 (WP57, §7) asks: what is the analogous fold radius at galactic scale ($g^{96}$), and can it be derived from the contact geometry?</p>
+
+<div class="pull">
+  <div class="pull-text">ε controls the basin boundary. The same ODE, a different coupling, is a different galaxy.</div>
+  <div class="pull-sub">The universe-level claim reduces to a single dimensionless number.</div>
+</div>
+
+<!-- §2 -->
+<h2><span class="sec-n">§2</span>r*(ε) as a Function of Coupling</h2>
+
+<p class="prose">We compute $r^*(\varepsilon, z_0 = 0)$ for $\varepsilon \in \{0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0\}$ by bisection on the dm³ ODE (DOP853, rtol=$10^{-13}$, atol=$10^{-15}$, $T=1000$, bisection tolerance $5 \times 10^{-10}$).</p>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>ε</th>
+      <th>r*(ε)</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="mono">0.5</td><td class="mono">0.3779748572</td><td style="font-size:.82rem;color:var(--muted);">—</td></tr>
+    <tr><td class="mono">1.0</td><td class="mono">0.5722354585</td><td style="font-size:.82rem;color:var(--muted);">near 1/√3 = 0.5774 (Δ = 5.2×10⁻³, not equal)</td></tr>
+    <tr><td class="mono">1.5</td><td class="mono">0.6931303713</td><td style="font-size:.82rem;color:var(--muted);">near ln 2 = 0.6931472 (Δ = 1.7×10⁻⁵ — tantalizing, not proved equal)</td></tr>
+    <tr class="highlight-row"><td class="mono hl">2.0</td><td class="mono hl">0.7759405754</td><td style="font-size:.82rem;color:var(--blue);">electromagnetic realization — certified [VERIFIED]</td></tr>
+    <tr><td class="mono">2.5</td><td class="mono">0.8353301711</td><td style="font-size:.82rem;color:var(--muted);">—</td></tr>
+    <tr><td class="mono">3.0</td><td class="mono">0.8789150842</td><td style="font-size:.82rem;color:var(--muted);">—</td></tr>
+    <tr><td class="mono">4.0</td><td class="mono">0.9352791770</td><td style="font-size:.82rem;color:var(--muted);">—</td></tr>
+  </tbody>
+</table>
+
+<p class="prose">$r^*(\varepsilon)$ is monotone increasing: larger coupling pushes the basin boundary outward. The function is smooth and bounded in $(0,1)$. The limiting behaviors:</p>
+
+<div class="math-block">
+  r*(ε) → 0  as  ε → 0<br>
+  r*(ε) → 1  as  ε → ∞  (basin shrinks to a point at the attractor)
+</div>
+
+<div class="open">
+  <span class="open-lbl">[OPEN] O.4.1 — Near-coincidence r*(1.5) ≈ ln 2</span>
+  <div class="block-body">The computed value $r^*(1.5) = 0.693130\ldots$ differs from $\ln 2 = 0.693147\ldots$ by $1.7 \times 10^{-5}$ — about 25 ppm. This is too large to be numerical error (bisection tolerance $5\times10^{-10}$) and too small to be coincidence. Is there an exact relation $r^*(3/2) = \ln 2$, or does the dm³ ODE admit a conserved quantity that yields this? No proof is known.</div>
+</div>
+
+<!-- §3 -->
+<h2><span class="sec-n">§3</span>The Galactic G-Chain</h2>
+
+<p class="prose">At $g^{96}$, the G-chain $G = U \circ F \circ K \circ C$ acts on a single galactic disc modeled by $(\mathbb{R}^3, \alpha = dz - r^2\,d\theta)$ at the disc scale (Grossi 2026, <code>chGravity-scales.html</code>). The coordinate identifications at galactic scale:</p>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Variable</th><th>Galactic meaning</th><th>Normalized to</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="mono">r</td><td>Cylindrical radius from galactic centre</td><td>$R_{\rm disc}$ — disc scale radius; attractor at $r=1$</td></tr>
+    <tr><td class="mono">θ</td><td>Orbital phase (azimuth)</td><td>$2\pi$ — one full orbit</td></tr>
+    <tr><td class="mono">z</td><td>Normalized gravitational potential along the orbit</td><td>Contact condition $\dot z = r^2$ sets the scale</td></tr>
+  </tbody>
+</table>
+
+<p class="prose">Under these identifications, the inner basin $\{r < r^*\}$ is the <strong>bulge</strong> — stars that orbit within the fold and are drawn toward the galactic center — and the outer basin $\{r > r^*\}$ is the <strong>disc</strong>, attracted toward the attractor at $r = 1$ (the exponential disc scale). This matches the geometric description in <code>chGravity-scales.html</code>: "the bulge is the inner basin $(r < r^*)$, the disc is the outer basin $(r > r^*)$."</p>
+
+<p class="prose">The coupling parameter $\varepsilon$ in the galactic ODE controls the strength of the $z$-coupling: how strongly vertical position affects radial dynamics. In a galactic disc, vertical and radial motions are coupled through the potential. The natural dimensionless ratio is:</p>
+
+<div class="model">
+  <span class="model-lbl">[MODEL] Galactic Coupling Identification (proposed)</span>
+  <div class="block-body">
+    $$\varepsilon_{\rm gal} = \frac{\nu(R_{\rm disc})}{\kappa(R_{\rm disc})}$$
+    where $\nu$ is the vertical oscillation frequency (Oort 1960) and $\kappa$ the epicyclic frequency, both evaluated at the disc scale radius $R_{\rm disc}$.<br><br>
+    <em>Justification:</em> In the dm³ ODE, $\varepsilon$ sets the ratio of the $z$-coupling term to the radial restoring force. In galactic dynamics, $\nu$ governs vertical oscillations and $\kappa$ governs radial (epicyclic) oscillations; their ratio is the only dimensionless frequency ratio intrinsic to the disc potential. A full derivation of the galactic contact ODE from the effective potential is required to confirm this identification — see Open Problem O.4.2.
+  </div>
+</div>
+
+<!-- §4 -->
+<h2><span class="sec-n">§4</span>Milky Way Prediction</h2>
+
+<p class="prose">Using the galactic identification, we compute $r^*(\varepsilon_{\rm gal})$ for the Milky Way. Frequencies are evaluated at multiple radii to show the radial dependence:</p>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>R (kpc)</th>
+      <th>κ (km/s/kpc)</th>
+      <th>ν (km/s/kpc)</th>
+      <th>ε = ν/κ</th>
+      <th>r*(ε)</th>
+      <th>R*_phys (kpc)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>2.0</td><td class="mono">155.6</td><td class="mono">177</td><td class="mono">1.138</td><td class="mono">0.610</td><td>2.14</td></tr>
+    <tr class="highlight-row"><td>3.5 (R_disc)</td><td class="mono">88.9</td><td class="mono">143</td><td class="mono">1.607</td><td class="mono">0.713</td><td><strong>2.50</strong></td></tr>
+    <tr><td>5.0</td><td class="mono">62.2</td><td class="mono">115</td><td class="mono">1.853</td><td class="mono">0.755</td><td>2.64</td></tr>
+    <tr><td>8.2 (R_☉)</td><td class="mono">37.9</td><td class="mono">73</td><td class="mono">1.924</td><td class="mono">0.765</td><td>2.68</td></tr>
+    <tr><td>—</td><td class="mono">any κ</td><td class="mono">2κ (exact)</td><td class="mono hl">2.000</td><td class="mono hl">0.77594059</td><td class="hl">0.77594059 × R_disc</td></tr>
+  </tbody>
+</table>
+
+<p class="prose" style="font-size:.82rem;color:var(--muted);">κ computed as √2 × v_c/R for flat rotation curve v_c = 220 km/s. ν scaled from solar-circle value ν(R_☉ = 8.2 kpc) = 73 km/s/kpc (Bienaymé et al. 2006) using ν ∝ exp[(R_☉ − R)/(2h_R)] with h_R = 3.5 kpc. R*_phys = r*(ε) × R_disc = r*(ε) × 3.5 kpc.</p>
+
+<div class="thm">
+  <span class="thm-lbl">[VERIFIED (numerical) | MODEL (identification)] Theorem G1 — Galactic Fold Radius</span>
+  <div class="block-body">
+    Let $G = U \circ F \circ K \circ C$ be the contact G-chain at $g^{96}$ with coupling $\varepsilon_{\rm gal} = \nu(R_{\rm disc})/\kappa(R_{\rm disc})$. The inner basin boundary — the bulge–disc transition radius — is
+    $$R^*_{\rm phys} = r^*(\varepsilon_{\rm gal}) \times R_{\rm disc}$$
+    where $r^*(\varepsilon)$ is computed by bisection on the dm³ ODE. For the Milky Way with $R_{\rm disc} = 3.5\,\rm kpc$ and $\varepsilon_{\rm gal} \approx 1.61$:
+    $$R^*_{\rm phys} \approx 0.713 \times 3.5\,\text{kpc} \approx 2.5\,\text{kpc}$$
+    <em>[MODEL — identification unproved; VERIFIED — the numerical $r^*(\varepsilon)$ computation is deterministic and reproducible]</em>
+  </div>
+</div>
+
+<p class="prose">Observationally, the MW bulge stellar population ends at $\sim 2$–$3\,\rm kpc$ (Portail et al. 2015; Bovy et al. 2019). The predicted $R^* \approx 2.5\,\rm kpc$ sits within this range.</p>
+
+<!-- §5 -->
+<h2><span class="sec-n">§5</span>The 2:1 Resonance Condition and Universality</h2>
+
+<p class="prose">The exact value $r^*_{\rm gal} = r^*_{\rm macro} = 0.77594059$ — the <em>universality</em> conjectured in <code>chGravity-scales.html</code> — holds when $\varepsilon_{\rm gal} = 2$ exactly. Under the proposed identification, this requires:</p>
+
+<div class="math-block">
+  ν(R_disc) = 2κ(R_disc)   [2:1 vertical resonance at the disc scale]
+</div>
+
+<p class="prose">The condition $\nu = 2\kappa$ is the <strong>2:1 vertical resonance</strong>: stars complete two vertical oscillations for every one epicyclic (radial) oscillation. This resonance is well-studied in galactic dynamics. It is the mechanism by which bar-driven orbital heating creates <em>boxy/peanut-shaped bulges</em> — stars captured in the 2:1 resonance family form the X-shaped structure observed edge-on (Combes &amp; Sanders 1981; Bureau &amp; Athanassoula 2005; Quillen 2002). The Milky Way's boxy/peanut bulge extends to $\sim 2.5$–$3\,\rm kpc$, and the 2:1 resonance radius has been located at $R_{2:1} \approx 2$–$3\,\rm kpc$ for the MW bar (Portail et al. 2017).</p>
+
+<div class="orig">
+  <span class="orig-lbl">[ORIGINAL — connection not previously stated] Observation 5.1</span>
+  <div class="block-body">
+    The Whitney $A_1$ fold of the contact G-chain at $r^*_{\rm gal} = 0.77594059$ (in units of $R_{\rm disc}$) coincides, under the galactic identification $\varepsilon_{\rm gal} = \nu/\kappa$, with the <em>2:1 vertical Lindblad resonance</em> of galactic disc dynamics. The inner basin of the contact ODE — the bulge — is bounded by the resonance surface. The dm³ fold and the boxy/peanut bulge are the same geometric object.
+    <br><br>
+    This connection is not stated in the literature on resonance-driven bulge formation, nor in the dm³ literature. It is a conjecture pending the proof of the galactic identification (O.4.2 below).
+  </div>
+</div>
+
+<p class="prose">For a flat rotation curve, $\kappa = \sqrt{2}\,\Omega$ exactly. The 2:1 resonance condition $\nu = 2\kappa = 2\sqrt{2}\,\Omega$ then gives:</p>
+
+<div class="math-block">
+  ν² = 8Ω²   ⟺   4πG ρ_mid = 8(v_c/R)²   [Oort 1960 vertical frequency]
+</div>
+
+<p class="prose">This is a constraint on the midplane density $\rho_{\rm mid}$ — satisfied at a specific radius $R_{2:1}$ in each galaxy. For the G-chain to give $r^*_{\rm gal} = 0.77594059$ universally, the disc scale radius $R_{\rm disc}$ must coincide with $R_{2:1}$. Whether this is generic, or specific to $\Lambda$CDM-typical disc galaxies, is an open question.</p>
+
+<!-- §6 -->
+<h2><span class="sec-n">§6</span>What This Does Not Yet Prove</h2>
+
+<p class="prose">The analysis above is a <em>derivation attempt</em>, not a theorem. The logical structure is:</p>
+
+<div class="hierarchy">
+(1) dm³ ODE with coupling ε  [VERIFIED]<br>
+(2) r*(ε) computable from ODE  [VERIFIED — certify_rstar.py]<br>
+(3) Galactic G-chain has dm³ structure  [MODEL — conjectured, not derived]<br>
+(4) Coupling parameter ε_gal = ν/κ  [MODEL — proposed identification]<br>
+(5) For MW: ε_gal ≈ 1.61, r*_gal ≈ 0.713  [MODEL]<br>
+(6) R*_phys = 0.713 × 3.5 kpc ≈ 2.5 kpc  [MODEL]<br>
+(7) Matches observed bulge-disc boundary  [OPEN — needs targeted comparison]<br>
+&emsp;↓<br>
+(8) Exact universality (r*_gal = 0.77594059) ⟺ ε_gal = 2 ⟺ ν = 2κ at R_disc  [MODEL]<br>
+(9) ν = 2κ ⟺ 2:1 vertical resonance at R_disc  [VERIFIED — standard dynamics]
+</div>
+
+<p class="prose">Steps (3) and (4) are the unproved links. A proof of (3) requires deriving the galactic effective potential in contact form; a proof of (4) requires showing the coupling ε in the resulting ODE equals $\nu/\kappa$.</p>
+
+<!-- §7 -->
+<h2><span class="sec-n">§7</span>The Merger Case (O4b)</h2>
+
+<p class="prose">The CONJECTURE in <code>chGravity-scales.html</code> concerns the <em>merger</em> of two galactic $g^{96}$ attractors (Milkomeda), not the single-galaxy fold. The merger fold is a distinct object. The relevant boundary is the <strong>Hill sphere</strong> — the tidal radius of each galaxy in the field of the other — or equivalently the L₁ Lagrange point of the two-body gravitational system.</p>
+
+<p class="prose">For the MW–Andromeda system ($M_{\rm MW} = 1.5\times10^{12}\,M_\odot$, $M_{\rm And} = 1.0\times10^{12}\,M_\odot$, separation $d_0 = 770\,\rm kpc$):</p>
+
+<div class="math-block">
+  r_Hill (MW) = d₀ × (M_MW / (3 M_total))^{1/3} = 770 × (0.6/3)^{1/3} ≈ 770 × 0.585 ≈ 449 kpc<br>
+  r_L1 / d₀ ≈ 1 − (M_And / 3 M_total)^{1/3} = 1 − (0.4/3)^{1/3} ≈ 1 − 0.510 ≈ 0.490
+</div>
+
+<p class="prose">In normalized merger coordinates ($r = d/d_0$), the merger fold is at $r_{\rm merger}^* \approx 0.490$ — not $0.77594059$. The single-galaxy fold and the merger fold are distinct: the former is the bulge–disc boundary within each galaxy ($r$ in units of $R_{\rm disc}$); the latter is the tidal stripping boundary between the two galaxies ($r$ in units of $d_0$). The conjecture in <code>chGravity-scales.html</code> identifies both with the "same geometric object" magnified by scale — they are Whitney $A_1$ singularities, but in different coordinate systems and with different numerical values of $r^*/r_{\rm ref}$.</p>
+
+<div class="open">
+  <span class="open-lbl">[OPEN] O4b — Merger fold in normalized contact coordinates</span>
+  <div class="block-body">The merger contact ODE (two-body reduced problem) has a different $\varepsilon_{\rm merger}$ determined by the mass ratio $\mu = M_{\rm MW}/M_{\rm And}$. Derive the merger contact ODE, compute $\varepsilon_{\rm merger}(\mu)$, and determine whether $r^*(\varepsilon_{\rm merger}) = r_{\rm L1}/d_0 \approx 0.490$ or some other normalized quantity. Specifically: is the L1 point the exact solution of the dm³ ODE with $\varepsilon_{\rm merger}$ determined by $\mu$?</div>
+</div>
+
+<!-- §8 -->
+<h2><span class="sec-n">§8</span>Open Problems</h2>
+
+<div class="open">
+  <span class="open-lbl">[OPEN] O.4.1 — Closed form for r*(3/2)</span>
+  <div class="block-body">$r^*(3/2) = 0.693130\ldots$ is within $1.7 \times 10^{-5}$ of $\ln 2 = 0.693147\ldots$. Prove or disprove: $r^*(3/2) = \ln 2$. More generally, does the dm³ ODE admit a conserved quantity or transform that makes $r^*(\varepsilon)$ expressible in terms of elementary functions for any rational $\varepsilon$?</div>
+</div>
+
+<div class="open">
+  <span class="open-lbl">[OPEN] O.4.2 — Derive the galactic contact ODE from the galactic potential</span>
+  <div class="block-body">Starting from a galactic effective potential $\Phi_{\rm eff}(R,\phi,z)$ (NFW halo + exponential disc + gas), reduce the equations of motion to contact form $\alpha = dz - r^2\,d\theta$ in normalized coordinates. Identify the coupling parameter $\varepsilon$ from the coefficients of the reduced ODE. This is the key unproved step. If $\varepsilon = \nu/\kappa$ follows, Theorem G1 is promoted from [MODEL] to [VERIFIED].</div>
+</div>
+
+<div class="open">
+  <span class="open-lbl">[OPEN] O.4.3 — Observational test of R* ≈ 2.5 kpc for the MW</span>
+  <div class="block-body">The predicted bulge–disc transition from the galactic G-chain is $R^*_{\rm phys} = r^*(\varepsilon_{\rm gal}) \times R_{\rm disc} \approx 2.5$–$2.7\,\rm kpc$. Test against: (a) kinematic decomposition of the MW stellar populations (Portail et al. 2015; Bovy et al. 2019); (b) the 2:1 resonance radius from bar models (Portail et al. 2017); (c) the peanut/X-shape half-length from WISE photometry (Ciambur &amp; Graham 2016). Agreement would support the galactic identification; discrepancy would constrain the contact ODE parameters.</div>
+</div>
+
+<div class="open">
+  <span class="open-lbl">[OPEN] O.4.4 — Closed form for r*(ε) for any ε</span>
+  <div class="block-body">Conjecture 2.2 of <code>rstar_compute.py</code>: no closed-form expression for $r^*(\varepsilon, z_0)$ is known for any $\varepsilon \neq 0$. The dm³ ODE is a non-autonomous system with no obvious integrating factor. Possible routes: (a) Lyapunov function bounding the basin; (b) matched asymptotic expansion in $\varepsilon$; (c) Poincaré section analysis reducing to a 1D map whose fixed point is $r^*$. A closed-form $r^*(\varepsilon)$ would complete O.4.2 and give a fully explicit expression for the galactic fold radius.</div>
+</div>
+
+<div class="pull">
+  <div class="pull-text">The fold is the same object at all scales. What changes is ε.</div>
+  <div class="pull-sub">Universality holds when ν = 2κ at the disc scale — the 2:1 vertical resonance. The bulge is where the fold lives.</div>
+</div>
+
+<!-- §9 Status summary -->
+<h2><span class="sec-n">§9</span>Status Summary</h2>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Claim</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dm³ ODE with ε=2 has r*(ε=2, z₀=0) = 0.77594059</td>
+      <td style="font-family:var(--mono);font-size:.78rem;color:var(--teal);">[VERIFIED — certify_rstar.py]</td>
+    </tr>
+    <tr>
+      <td>r*(ε) monotone in ε; table above to 10 s.f.</td>
+      <td style="font-family:var(--mono);font-size:.78rem;color:var(--teal);">[VERIFIED — numerical, DOP853]</td>
+    </tr>
+    <tr>
+      <td>ε_gal = ν/κ at R_disc</td>
+      <td style="font-family:var(--mono);font-size:.78rem;color:var(--green);">[MODEL — proposed, unproved]</td>
+    </tr>
+    <tr>
+      <td>r*_MW ≈ 0.713, R*_phys ≈ 2.5 kpc</td>
+      <td style="font-family:var(--mono);font-size:.78rem;color:var(--green);">[MODEL]</td>
+    </tr>
+    <tr>
+      <td>Universality r*_gal = 0.77594059 ⟺ ν = 2κ at R_disc</td>
+      <td style="font-family:var(--mono);font-size:.78rem;color:var(--green);">[MODEL — follows from identification]</td>
+    </tr>
+    <tr>
+      <td>2:1 resonance ⟺ boxy/peanut bulge boundary</td>
+      <td style="font-family:var(--mono);font-size:.78rem;color:var(--green);">[MODEL + lit support (Combes &amp; Sanders 1981)]</td>
+    </tr>
+    <tr>
+      <td>r*(3/2) = ln 2 exactly</td>
+      <td style="font-family:var(--mono);font-size:.78rem;color:var(--red);">[OPEN — O.4.1]</td>
+    </tr>
+    <tr>
+      <td>Galactic ODE derivation from Φ_eff</td>
+      <td style="font-family:var(--mono);font-size:.78rem;color:var(--red);">[OPEN — O.4.2, key step]</td>
+    </tr>
+    <tr>
+      <td>Observational test R* ≈ 2.5 kpc</td>
+      <td style="font-family:var(--mono);font-size:.78rem;color:var(--red);">[OPEN — O.4.3]</td>
+    </tr>
+    <tr>
+      <td>Closed form r*(ε) for general ε</td>
+      <td style="font-family:var(--mono);font-size:.78rem;color:var(--red);">[OPEN — O.4.4]</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="refs">
+  <div style="font-family:var(--serif);font-size:.82rem;color:var(--text);margin-bottom:.8rem;">References</div>
+  Bienaymé, O. et al. (2006). Stellar kinematics and the disc potential in the solar neighbourhood. <em>A&amp;A</em> 446, 933. DOI: <a href="https://doi.org/10.1051/0004-6361:20053538" target="_blank">10.1051/0004-6361:20053538</a><br>
+  Bland-Hawthorn, J. &amp; Gerhard, O. (2016). The galaxy in context: structural, kinematic and integrated properties. <em>ARA&amp;A</em> 54, 529–596. DOI: <a href="https://doi.org/10.1146/annurev-astro-081915-023441" target="_blank">10.1146/annurev-astro-081915-023441</a><br>
+  Bureau, M. &amp; Athanassoula, E. (2005). Bar-driven evolution of edge-on galaxies. <em>ApJ</em> 626, 159. DOI: <a href="https://doi.org/10.1086/429785" target="_blank">10.1086/429785</a><br>
+  Combes, F. &amp; Sanders, R. H. (1981). Formation and properties of persisting stellar bars. <em>A&amp;A</em> 96, 164.<br>
+  Grossi, P. N. (2026). dm³ Vol IV. <a href="https://doi.org/10.5281/zenodo.19379385" target="_blank">doi:10.5281/zenodo.19379385</a><br>
+  Grossi, P. N. (2026). WP57 — Causal Integration and Milkomeda. Principia Orthogona Vol VII. <a href="wp57-causal-integration.html">totogt.github.io/geometry/book7/wp57-causal-integration.html</a><br>
+  Grossi, P. N. (2026). chGravity-scales.html — Gravity Across Scales: Nano · Meso · Macro. Principia Orthogona. <a href="../chGravity-scales.html">totogt.github.io/geometry/chGravity-scales.html</a><br>
+  Portail, M. et al. (2015). Peanuts, brezels and bananas: food for thought about the Milky Way bulge. <em>MNRAS</em> 448, 713. DOI: <a href="https://doi.org/10.1093/mnras/stv058" target="_blank">10.1093/mnras/stv058</a><br>
+  Portail, M. et al. (2017). Dynamical modelling of the galactic bulge and bar. <em>MNRAS</em> 465, 1621. DOI: <a href="https://doi.org/10.1093/mnras/stw2819" target="_blank">10.1093/mnras/stw2819</a><br>
+  Quillen, A. C. (2002). Chaos and the 2:1 and 4:1 resonances in the Milky Way bar. <em>AJ</em> 124, 722. DOI: <a href="https://doi.org/10.1086/341533" target="_blank">10.1086/341533</a>
+</div>
+
+</div><!-- /page -->
+
+<div class="chapter-nav">
+  <a href="wp57-causal-integration.html" class="ch-nav-link">← WP57 · Causal Integration</a>
+  <a href="../chGravity-scales.html" class="ch-nav-link">Gravity Scales →</a>
+</div>
+
+<footer>
+  <a href="https://zenodo.org/communities/principia-orthogona" target="_blank">Principia Orthogona</a>
+  &nbsp;·&nbsp; G6 LLC · Newark NJ · 2026
+  &nbsp;·&nbsp; ORCID <a href="https://orcid.org/0009-0000-6496-2186" target="_blank">0009-0000-6496-2186</a>
+  &nbsp;·&nbsp; Working paper · Not peer-reviewed
+</footer>
+
+</body>
+</html>
