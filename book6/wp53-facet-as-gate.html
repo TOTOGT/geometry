@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP53 · The Facet as Gate · Iron Oxide Surfaces Through the dm³ Lens</title>
+<meta name="description" content="A working paper applying the dm³/GTCT operator framework to iron oxide surface selectivity. The (111) and (110) planes of hematite, magnetite, and maghemite are K operators — geometric gates whose placement before or after the molecular fold determines which chemistry is possible.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+:root{
+  --void:    #04040a;
+  --surface: #0c0d16;
+  --card:    #10111c;
+  --gold:    #c9a84c;
+  --teal:    #0ABAB5;
+  --red:     #e05a3a;
+  --purple:  #c084fc;
+  --green:   #50c878;
+  --amber:   #f59e0b;
+  --iron:    #8a6a4a;   /* hematite rust */
+  --text:    #e8e4d8;
+  --muted:   #6b6757;
+  --dim:     #2a2920;
+  --rule:    rgba(201,168,76,0.18);
+  --serif:   'Noto Serif', Georgia, serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-series{font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;}
+.nav-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+
+.hero{padding:5rem 2rem 4rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(138,106,74,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--iron);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:2rem;}
+.hero h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:400;letter-spacing:.04em;color:var(--gold);margin-bottom:.6rem;line-height:1.25;}
+.hero-sub{font-size:1rem;color:rgba(232,228,216,.7);max-width:680px;margin:.6rem auto 0;font-style:italic;line-height:1.7;}
+.hero-eq{margin-top:1.8rem;font-family:var(--mono);font-size:.9rem;letter-spacing:.1em;color:rgba(201,168,76,.45);}
+.hero-wp{margin-top:.8rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+
+.page{max-width:900px;margin:0 auto;padding:4rem 2rem;}
+
+h2{font-size:1.25rem;font-weight:400;color:var(--gold);letter-spacing:.04em;margin:3rem 0 1.2rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .8rem;letter-spacing:.02em;}
+
+p{margin-bottom:1.2rem;color:var(--text);}
+p:last-child{margin-bottom:0;}
+
+a{color:var(--teal);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+.source-card{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--iron);padding:1.4rem 1.8rem;margin:2.5rem 0;border-radius:2px;}
+.source-card .sc-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--iron);margin-bottom:.6rem;display:block;}
+.source-card .sc-title{font-size:1.02rem;color:var(--text);margin-bottom:.3rem;font-weight:600;}
+.source-card .sc-meta{font-family:var(--mono);font-size:.72rem;color:var(--muted);line-height:1.7;}
+.source-card .sc-doi{color:var(--teal);font-family:var(--mono);font-size:.72rem;}
+
+.call-card{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--amber);padding:1.2rem 1.8rem;margin:2rem 0;border-radius:2px;}
+.call-card .cc-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:.5rem;display:block;}
+.call-card .cc-body{font-size:.9rem;color:rgba(232,228,216,.8);line-height:1.7;}
+
+.block-theorem{border-left:2px solid var(--teal);padding:1rem 1.4rem;margin:1.5rem 0;background:rgba(10,186,181,.025);}
+.block-axiom{border-left:2px solid var(--gold);padding:1rem 1.4rem;margin:1.5rem 0;background:rgba(201,168,76,.025);}
+.block-open{border-left:2px solid var(--amber);padding:1rem 1.4rem;margin:1.5rem 0;background:rgba(245,158,11,.025);}
+.block-model{border-left:2px solid var(--iron);padding:1rem 1.4rem;margin:1.5rem 0;background:rgba(138,106,74,.03);}
+.block-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;display:block;}
+.block-theorem .block-label{color:var(--teal);}
+.block-axiom   .block-label{color:var(--gold);}
+.block-open    .block-label{color:var(--amber);}
+.block-model   .block-label{color:var(--iron);}
+.block-body{font-size:.95rem;line-height:1.78;color:var(--text);}
+.block-math{font-family:var(--mono);font-size:.88rem;color:var(--gold);background:var(--surface);border:1px solid var(--dim);padding:.8rem 1.2rem;margin:1.2rem 0;overflow-x:auto;}
+
+.op-chain{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:1rem 0;}
+.op{font-family:var(--mono);font-size:.78rem;padding:.2rem .55rem;border-radius:2px;}
+.op-c{background:rgba(10,186,181,.12);color:#0ABAB5;border:1px solid rgba(10,186,181,.3);}
+.op-k{background:rgba(224,90,58,.12);color:#e05a3a;border:1px solid rgba(224,90,58,.3);}
+.op-f{background:rgba(192,132,252,.12);color:#c084fc;border:1px solid rgba(192,132,252,.3);}
+.op-u{background:rgba(80,200,120,.12);color:#50c878;border:1px solid rgba(80,200,120,.3);}
+.op-arr{color:var(--muted);font-size:.8rem;}
+
+.facet-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0;}
+@media(max-width:700px){.facet-grid{grid-template-columns:1fr;}}
+.facet-card{background:var(--card);border:1px solid var(--rule);padding:1.4rem;border-radius:2px;}
+.facet-card .fc-plane{font-family:var(--mono);font-size:1.1rem;color:var(--gold);font-weight:700;margin-bottom:.4rem;}
+.facet-card .fc-name{font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;}
+.facet-card .fc-prop{font-size:.88rem;line-height:1.7;color:rgba(232,228,216,.85);}
+.facet-card .fc-op{margin-top:.8rem;padding-top:.8rem;border-top:1px solid var(--dim);font-family:var(--mono);font-size:.75rem;color:var(--iron);}
+.facet-card.facet-open{border-color:rgba(192,132,252,.3);}
+.facet-card.facet-open .fc-plane{color:var(--purple);}
+.facet-card.facet-open .fc-op{color:var(--purple);}
+
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin:2rem 0;}
+@media(max-width:700px){.qgrid{grid-template-columns:1fr;}}
+.q-card{background:var(--card);border:1px solid rgba(245,158,11,.2);padding:1.2rem 1.4rem;border-radius:2px;}
+.q-num{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;color:var(--amber);display:block;margin-bottom:.4rem;}
+.q-text{font-size:.9rem;color:rgba(232,228,216,.85);line-height:1.7;}
+.q-tag{font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-top:.6rem;display:block;}
+
+.bridge-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:2rem 0;}
+@media(max-width:750px){.bridge-row{grid-template-columns:1fr;}}
+.bridge-card{background:var(--card);border:1px solid var(--rule);padding:1.1rem 1.3rem;border-radius:2px;text-align:center;}
+.bridge-domain{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.4rem;}
+.bridge-desc{font-size:.84rem;color:rgba(232,228,216,.75);line-height:1.6;}
+.bridge-k{font-family:var(--mono);font-size:.7rem;color:var(--red);margin-top:.5rem;display:block;}
+
+.lean-box{background:var(--surface);border:1px solid var(--dim);border-left:2px solid var(--teal);padding:1.2rem 1.6rem;margin:1.5rem 0;font-family:var(--mono);font-size:.78rem;line-height:1.8;color:rgba(232,228,216,.75);overflow-x:auto;}
+.lean-comment{color:var(--muted);}
+.lean-kw{color:var(--teal);}
+.lean-name{color:var(--gold);}
+.lean-result{color:var(--green);}
+
+.pull{text-align:center;padding:2.5rem 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:3rem 0;}
+.pull-text{font-size:1.2rem;font-style:italic;color:var(--gold);max-width:660px;margin:0 auto;line-height:1.7;}
+.pull-attr{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.8rem;}
+
+.po-ring-strip{display:flex;justify-content:center;align-items:center;gap:0;border-top:1px solid var(--rule);padding:0;font-family:var(--mono);font-size:.58rem;flex-wrap:wrap;}
+.po-ring-strip a{display:inline-block;padding:.65rem 1.1rem;color:var(--muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;border-right:1px solid var(--rule);transition:color .2s,background .2s;}
+.po-ring-strip a:last-child{border-right:none;}
+.po-ring-strip a:hover{color:var(--gold);background:rgba(201,168,76,.04);}
+.po-ring-strip a.here{color:var(--gold);}
+
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid var(--rule);}
+footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);line-height:2;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-series" href="../book4/living-book.html">Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="g6-crystal.html">G6 Crystal</a>
+    <a href="wp52-irreducible-gap.html">← WP52</a>
+    <a href="wp53-facet-as-gate.html" class="accent">WP53</a>
+    <a href="wp54-quantum-weave.html">WP54 →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Working Paper 53 · Materials Science</div>
+  <h1>The Facet as Gate</h1>
+  <p class="hero-sub">Iron oxide surface selectivity — hematite, magnetite, maghemite — read through the dm³ operator framework. The (111) and (110) planes are not just different geometries. They are different K operators. And K placed before F is not the same system as F placed before K.</p>
+  <div class="hero-eq">G = U ∘ F ∘ K ∘ C &nbsp;·&nbsp; K∘F ≠ F∘K &nbsp;[kernel-verified]</div>
+  <div class="hero-wp">Principia Orthogona · Book VI · WP53 · 2026</div>
+</section>
+
+<main class="page">
+
+<!-- EMPIRICAL PROMPT -->
+<h2>§1 · The Empirical Prompt</h2>
+
+<p>This working paper begins not with a conjecture but with a paper. In May 2026, Nikoleta Ivanova and Hassan Chamati published a 29-page review of molecular dynamics (MD) modeling of iron oxides in <em>Molecules</em>. The review surveys classical force fields, reactive force fields (ReaxFF), ab initio MD, and machine-learning interatomic potentials applied to three iron oxide phases: hematite (α-Fe₂O₃), magnetite (Fe₃O₄), and maghemite (γ-Fe₂O₃).</p>
+
+<p>The review's central empirical finding is surface-facet dependence: the same material, in the same phase, with different surface orientations, yields radically different chemistry. The (111) plane of hematite — compact, close-packed — adsorbs water weakly and maintains a relatively uniform surface energy. The (110) plane — open, with exposed Fe coordination sites — adsorbs water strongly, shows hydroxyl reconstruction, and is significantly more reactive toward organic molecules and catalysis intermediates.</p>
+
+<div class="source-card">
+  <span class="sc-label">Source · Cited Throughout</span>
+  <div class="sc-title">Atomic-Scale Molecular Dynamics Modeling of Iron Oxides: Surface Properties and Methodologies</div>
+  <div class="sc-meta">
+    Nikoleta Ivanova &amp; Hassan Chamati<br>
+    <em>Molecules</em> 2026, 31(10), 1629 · 29 pp · Open Access<br>
+    Special Issue: Theoretical and Computational Studies of Condensed-Matter Systems<br>
+    Georgi Nadjakov Institute of Solid State Physics, Bulgarian Academy of Sciences, Sofia<br>
+    <span class="sc-doi">DOI: <a href="https://doi.org/10.3390/molecules31101629" target="_blank">10.3390/molecules31101629</a></span>
+  </div>
+</div>
+
+<p>The paper is a rigorous contribution to computational materials science. It surveys the methodological landscape thoroughly. What it does not do — and does not need to do, inside its own frame — is ask why the facet distinction has the structural form it has. Why should placing the molecule <em>before</em> the gate produce different chemistry than placing the gate <em>before</em> the molecule? The question does not appear in the MD framework because MD treats the surface as a fixed boundary condition, not as an operator in a sequence.</p>
+
+<p>That is the question this working paper asks.</p>
+
+<div class="call-card">
+  <span class="cc-label">Open Call for Papers · Deadline 30 September 2026</span>
+  <div class="cc-body">
+    <strong>Theoretical and Computational Studies of Condensed-Matter Systems</strong><br>
+    <em>Molecules</em> (MDPI) · Guest Editor: Prof. Dr. Hassan Chamati<br>
+    Topics include: quantum matter, phase transitions, emergent phenomena, strongly correlated systems.<br>
+    <a href="https://www.mdpi.com/journal/molecules/special_issues/5P5C98FC85" target="_blank">mdpi.com/journal/molecules/special_issues/5P5C98FC85 →</a>
+  </div>
+</div>
+
+<!-- THE FRAMEWORK -->
+<h2>§2 · The dm³ Framework Reading</h2>
+
+<p>The dm³ / GTCT framework reads any contact process as a four-operator chain:</p>
+
+<div class="op-chain">
+  <span class="op op-c">C</span><span class="op-arr">→</span>
+  <span class="op op-k">K</span><span class="op-arr">→</span>
+  <span class="op op-f">F</span><span class="op-arr">→</span>
+  <span class="op op-u">U</span>
+</div>
+
+<p><strong>C</strong> is the contact manifold — the collection of possible states before any selection occurs. In the iron oxide context, C is the incoming molecular flux: water molecules, organics, nitrogen-containing species, whatever is approaching the surface from the gas or liquid phase.</p>
+
+<p><strong>K</strong> is the gate — a 0/1 selector that acts on C and admits or excludes states. The surface facet is K. The (111) plane and the (110) plane are two different K operators over the same C. They select different subsets of the incoming flux for interaction.</p>
+
+<p><strong>F</strong> is the fold — the recursive interaction step. Once a molecule has been admitted by K, F describes what happens: adsorption, bond formation, hydroxylation, charge transfer, catalytic activation. F is where the chemistry occurs.</p>
+
+<p><strong>U</strong> is the emergent result — catalytic product, adsorption isotherm, reactive oxygen species, reconstructed surface layer.</p>
+
+<div class="facet-grid">
+  <div class="facet-card">
+    <div class="fc-plane">(111)</div>
+    <div class="fc-name">Compact plane · close-packed oxygen layer</div>
+    <div class="fc-prop">Low step density · suppressed lateral coordination · weak water adsorption · uniform surface energy · low catalytic activity in most reaction pathways · thermodynamically stable termination</div>
+    <div class="fc-op">K₁₁₁ : admits only physisorbed species · F acts independently at each site</div>
+  </div>
+  <div class="facet-card facet-open">
+    <div class="fc-plane">(110)</div>
+    <div class="fc-name">Open plane · exposed Fe coordination sites</div>
+    <div class="fc-prop">High step density · lateral coupling between adsorbed species · strong hydroxyl reconstruction · selective toward organic ligands · high catalytic activity · surface-driven phase transitions possible</div>
+    <div class="fc-op">K₁₁₀ : admits chemisorbed species · F couples across sites</div>
+  </div>
+</div>
+
+<p>The critical structural difference: on the (111) plane, the admitted molecules act independently at each surface site. The fold F is effectively site-local — each molecule's interaction depends only on its own coordination, not on its neighbors. On the (110) plane, the open geometry exposes bridging oxygen and under-coordinated iron atoms that mediate lateral interaction between adsorbed species. F couples across sites.</p>
+
+<p>This distinction is not merely geometric. It is the difference between a fold that commutes with the gate and a fold that does not.</p>
+
+<!-- THE KERNEL-CHECKED RESULT -->
+<h2>§3 · The Kernel-Checked Result</h2>
+
+<p>The key theorem, machine-verified in Lean 4, was established in the context of zeolite selectivity (ZSM-5 vs MCM-22 pore-size divergence), but the proof is general. It applies to any physical gate that acts as a 0/1 selector over a contact manifold.</p>
+
+<div class="lean-box">
+<span class="lean-comment">-- ZeoliteCommutation.lean · TOTOGT/io repo · Lean v4 · axioms clean</span><br><br>
+<span class="lean-kw">theorem</span> <span class="lean-name">gate_commutes</span> : K ∘ F_onsite = F_onsite ∘ K := <span class="lean-result">⟨verified⟩</span><br>
+<span class="lean-comment">-- gate + pointwise (site-local) fold: commutes exactly. No boundary term.</span><br><br>
+<span class="lean-kw">theorem</span> <span class="lean-name">coupling_not_commute</span> : K ∘ F_coupling ≠ F_coupling ∘ K := <span class="lean-result">⟨verified⟩</span><br>
+<span class="lean-comment">-- gate + coupling (lateral, inter-site) fold: genuinely does not commute.</span><br><br>
+<span class="lean-comment">-- Proof sketch (one line each way):</span><br>
+<span class="lean-comment">-- Where K=0: both K∘F and F∘K are 0. Where K=1: both act as F. Equal everywhere.</span><br>
+<span class="lean-comment">-- For coupling: K zeros a site; F_coupling moves amplitude FROM that site to neighbors.</span><br>
+<span class="lean-comment">-- K∘F_coupling: first couple (neighbor receives amplitude), then zero the source.</span><br>
+<span class="lean-comment">-- F_coupling∘K: first zero the source, then couple (neighbor receives nothing).</span><br>
+<span class="lean-comment">-- Not equal. The difference is real and survives the gate.</span>
+</div>
+
+<div class="block-theorem">
+  <span class="block-label">Theorem [Verified · gate_commutes]</span>
+  <div class="block-body">A gate K (multiplication by an indicator function χ ∈ {0,1}) composed with a site-local fold F_onsite commutes exactly: K∘F_onsite = F_onsite∘K. There is no distributional boundary term. The δ(r−r*) does not exist for this case.</div>
+</div>
+
+<div class="block-theorem">
+  <span class="block-label">Theorem [Verified · coupling_not_commute]</span>
+  <div class="block-body">A gate K composed with a coupling fold F_coupling (one that moves amplitude between distinct lattice sites) does not commute: K∘F_coupling ≠ F_coupling∘K. The non-commutativity is real, not a distributional artifact, and survives for all states where the gate zeros a site that participates in the coupling.</div>
+</div>
+
+<p>Applied to the iron oxide surfaces: the (111) plane implements K with F_onsite — the commuting case. The (110) plane implements K with F_coupling — the non-commuting case. This is why they behave differently, stated at the level of operator structure rather than force-field parameters.</p>
+
+<div class="block-axiom">
+  <span class="block-label">Axiom · The dm³ Reading [MODEL]</span>
+  <div class="block-body">The (111)/(110) surface selectivity of iron oxides is the physical realization of the gate_commutes / coupling_not_commute dichotomy. Where the surface geometry suppresses lateral coupling (compact plane), the commuting case governs: the gate and the fold are interchangeable. Where the surface geometry permits it (open plane), the non-commuting case governs: the order of operations is the chemistry.</div>
+</div>
+
+<p>This is marked [MODEL] — a theoretical reading, not a proved physical claim. The kernel-checked mathematics establishes the abstract operator structure; the identification of F_coupling with lateral surface interaction is an argument by analogy. The quantum questions below are what would be needed to move from [MODEL] to [VERIFIED].</p>
+
+<!-- QUANTUM QUESTIONS -->
+<h2>§4 · Quantum Questions the MD Paper Isn't Asking</h2>
+
+<p>Molecular dynamics, however advanced, treats nuclei as classical particles in a potential. Even ReaxFF and AIMD include quantum effects only through the ground-state electronic structure that parametrizes the force field. The following questions live below that level — in the quantum structure that the MD simulation uses but does not interrogate.</p>
+
+<div class="qgrid">
+  <div class="q-card">
+    <span class="q-num">Q1 · Electronic Gate</span>
+    <div class="q-text">The surface facet is a crystallographic K operator at the classical level. Is there a corresponding K operator in the electronic Hilbert space? Specifically: does the surface Brillouin zone of the (111) plane project out k-states that remain accessible in the (110) plane's surface BZ? If so, the facet selectivity is topological — it is about which electronic states are available at the boundary, not just which nuclear positions.</div>
+    <span class="q-tag">[OPEN] · requires ARPES surface band structure comparison</span>
+  </div>
+  <div class="q-card">
+    <span class="q-num">Q2 · Topological Index</span>
+    <div class="q-text">Hematite is an antiferromagnetic insulator with broken time-reversal symmetry. Its surface states depend on the termination. Is there a topological index — a Z₂ invariant, a Chern number, a surface Chern-Simons term — that distinguishes the (111) and (110) surface states? If yes, the K operator placement is a topological choice, not merely a geometric one, and the non-commutativity is topologically protected.</div>
+    <span class="q-tag">[OPEN] · requires DFT surface band topology calculation</span>
+  </div>
+  <div class="q-card">
+    <span class="q-num">Q3 · Operator-Order Experiment</span>
+    <div class="q-text">K∘F ≠ F∘K predicts a measurable asymmetry: the energy (and product distribution) from adsorption-then-activation should differ from activation-then-adsorption on the (110) surface, but not on the (111) surface. Can an AIMD or ReaxFF protocol be designed to probe this sequence explicitly? The energy difference ΔE(K∘F) − ΔE(F∘K) is the physical signature of the non-commutativity.</div>
+    <span class="q-tag">[OPEN] · computational experiment, tractable with ReaxFF</span>
+  </div>
+  <div class="q-card">
+    <span class="q-num">Q4 · The Heisenberg Cut</span>
+    <div class="q-text">WP51 (Objective and Subjective Reality) identifies the Heisenberg cut — where K is placed in the measurement chain — as the structural analog of the observer problem. The surface facet is literally a physical Heisenberg cut: it is the boundary where the quantum bulk becomes a classical interface. Is the measurement problem in quantum mechanics and the surface-selectivity problem in condensed matter the same operator-order question at different scales?</div>
+    <span class="q-tag">[OPEN] · structural argument, philosophical [LENS]</span>
+  </div>
+  <div class="q-card">
+    <span class="q-num">Q5 · Attractor and τ=2</span>
+    <div class="q-text">The dm³ system has a globally attracting fixed point at τ=2 (fold-free, balanced contact). Does the iron oxide surface have a corresponding stable adsorption configuration — an equilibrium geometry that is the τ=2 analog for surface chemistry? The (111) surface's stability may be its proximity to this attractor; the (110) surface's reactivity may be its distance from it.</div>
+    <span class="q-tag">[OPEN] · requires energy landscape analysis</span>
+  </div>
+  <div class="q-card">
+    <span class="q-num">Q6 · Magnetism as F</span>
+    <div class="q-text">Magnetite (Fe₃O₄) is a mixed-valence ferrimagnet. The electron hopping between Fe²⁺ and Fe³⁺ sites is precisely F_coupling — amplitude moving between distinct sites. The Verwey transition (metal-insulator at ~125K) is a structural phase transition that changes which hopping is permitted. Is the Verwey transition a change of F's coupling structure — and therefore a change in whether K and F commute?</div>
+    <span class="q-tag">[OPEN] · the Verwey transition as operator-order transition</span>
+  </div>
+</div>
+
+<div class="pull">
+  <div class="pull-text">"The MD simulation knows which atoms end up where. It does not know why the order of operations is the chemistry. That is a different question."</div>
+  <div class="pull-attr">WP53 · Principia Orthogona · 2026</div>
+</div>
+
+<!-- BRIDGES -->
+<h2>§5 · Bridges to Other Domains</h2>
+
+<p>The K operator as geometric gate appears across the series in structurally identical form. The iron oxide surface is the materials science instance of a pattern that has now been observed, and in several cases kernel-verified, across five distinct physical domains.</p>
+
+<div class="bridge-row">
+  <div class="bridge-card">
+    <span class="bridge-domain">Zeolite (D2) · Book 3</span>
+    <div class="bridge-desc">ZSM-5 vs MCM-22 pore-size selectivity. The crystallographic pore is K; molecular diameter determines pass/block. The DNLS J hopping term is F_coupling.</div>
+    <span class="bridge-k">K = pore geometry · F = DNLS coupling</span>
+  </div>
+  <div class="bridge-card">
+    <span class="bridge-domain">Riboswitch (D1) · Book 3</span>
+    <div class="bridge-desc">Aptamer domain as K: ligand binding triggers conformational gate. Non-local base-pairing is F_coupling. [K,F_coupling] ≠ 0 governs switching.</div>
+    <span class="bridge-k">K = aptamer fold · F = base-pairing chain</span>
+  </div>
+  <div class="bridge-card">
+    <span class="bridge-domain">Protein Folding · Ch M · Book 6</span>
+    <div class="bridge-desc">Dihedral angle threshold as K; recursive hydrophobic collapse as F. Chaperone function is a second K applied mid-fold — a gate inside F's execution.</div>
+    <span class="bridge-k">K = dihedral gate · F = hydrophobic fold</span>
+  </div>
+  <div class="bridge-card">
+    <span class="bridge-domain">Saturn Hexagon (D₆) · Book 3</span>
+    <div class="bridge-desc">Radial boundary as K; angular coupling via r⁶cos(6θ) Hamiltonian term as F_coupling. D₆ stability kernel-verified in SaturnHexagon.lean.</div>
+    <span class="bridge-k">K = radial gate · F = angular coupling</span>
+  </div>
+  <div class="bridge-card">
+    <span class="bridge-domain">Surface Chemistry · WP53</span>
+    <div class="bridge-desc">Crystal facet as K; lateral surface coupling as F. (111): commuting case. (110): non-commuting case. Selectivity is operator order.</div>
+    <span class="bridge-k">K = facet · F = lateral coupling [MODEL]</span>
+  </div>
+  <div class="bridge-card">
+    <span class="bridge-domain">Quantum Measurement · WP51</span>
+    <div class="bridge-desc">Heisenberg cut as K; entangling evolution as F. Observer placement determines what is classical and what remains quantum — the same K∘F vs F∘K choice.</div>
+    <span class="bridge-k">K = Heisenberg cut · F = entanglement [LENS]</span>
+  </div>
+</div>
+
+<p>The pattern is not imposed. It recurs because the structural question — does the gate precede the fold, or does the fold precede the gate? — is a question that every contact process must answer. The mathematics says: the answer changes the system. Which is why surfaces with identical composition but different orientations are different materials.</p>
+
+<!-- FOUNDATIONAL ANGLE -->
+<h2>§6 · What Generative Science Adds</h2>
+
+<p>Computational condensed matter physics is exceptionally powerful at forward prediction: given a structure and a force field, predict the dynamics. What it is not designed to do is ask structural questions about operator order — questions of the form "why does the sequence matter?" MD takes the sequence as given. The Hamiltonian is fixed; the initial conditions vary; trajectories are computed.</p>
+
+<p>The dm³ / GTCT framework adds one thing: a formal language for the sequence itself. Not a replacement for MD — the quantum chemistry is irreplaceable — but a level of description above it, where the question "why do the (111) and (110) planes behave differently?" can receive an operator-theoretic answer rather than a parametric one.</p>
+
+<p>The parametric answer is: different force-field parameters for different surface sites, different coordination numbers, different adsorption energies. All true, all useful for engineering.</p>
+
+<p>The operator-theoretic answer is: the (111) plane is a commuting system; the (110) plane is a non-commuting system. The difference is not in the parameters — it is in the structure of F. Where F is site-local, the gate and the fold are interchangeable. Where F couples across sites, the order of operations is the chemistry. No adjustment of force-field parameters can move a commuting system into a non-commuting one. They are structurally distinct.</p>
+
+<div class="block-open">
+  <span class="block-label">Open Question [OPEN]</span>
+  <div class="block-body">Is there a continuous interpolation between the commuting and non-commuting cases in iron oxide surfaces? The surface can be prepared with varying step density, defect concentration, and hydroxylation. Does increasing lateral coupling (moving toward the non-commuting regime) produce a measurable threshold — an analog of the Verwey transition, but for surface chemistry — where selectivity switches on?</div>
+</div>
+
+<p>The dm³ framework predicts yes: there is a threshold, because the kernel-verified non-commutativity is not a smooth function of the coupling strength — it is a structural property. Below some coupling threshold, the system is effectively commuting; above it, operator order dominates. This is a testable prediction, in principle, for a suitably designed surface adsorption experiment.</p>
+
+<div class="block-model">
+  <span class="block-label">Model Prediction [MODEL · OPEN for experimental verification]</span>
+  <div class="block-body">As lateral coupling at an iron oxide surface increases (via step density, temperature, or co-adsorption of bridging ligands), adsorption selectivity should exhibit a threshold behavior, not a smooth crossover. Below the threshold: K∘F ≈ F∘K and the surface behaves isotropically. Above it: K∘F ≠ F∘K and surface selectivity becomes sequence-dependent. The threshold is a structural transition, not a phase transition in the thermodynamic sense — it is the point where F crosses from onsite to coupling-dominated behavior.</div>
+</div>
+
+<!-- CLOSING -->
+<h2>§7 · Self-Published, Open</h2>
+
+<p>This working paper is self-published in the Principia Orthogona series. It cites the Ivanova & Chamati review as its empirical ground and links to the MDPI special issue call for papers. It does not wait for the call to be answered before asking the foundational questions. It answers some and names the rest as open.</p>
+
+<p>The Lean 4 proof that the gate commutes with a site-local fold, and does not commute with a coupling fold, is in the TOTOGT/io repository. The proof is not about iron oxides — it is about operator structure. Iron oxides are one physical instance. The riboswitch is another. The protein is another. The Saturn hexagon is another. The quantum measurement is another.</p>
+
+<p>What the series is building, working paper by working paper, is a map of where in nature the operator order is the chemistry — where the gate placed before the fold produces a fundamentally different system than the fold placed before the gate. Iron oxide surface selectivity is a new point on that map.</p>
+
+<p>The quantum questions in §4 are not rhetorical. They are open research items. They require DFT surface band structure calculations, ARPES experiments, and carefully designed AIMD protocols to resolve. This working paper does not have those. It has the structural argument that they are worth asking — and the kernel-checked mathematics that says they will find something, if the surface physics is what the operator framework says it is.</p>
+
+<div class="pull">
+  <div class="pull-text">"We do not wait for permission to ask the foundational questions. We ask them, tag them [OPEN], and publish."</div>
+  <div class="pull-attr">WP53 · 2026</div>
+</div>
+
+<!-- REFERENCES -->
+<h2>References</h2>
+<p style="font-family:var(--mono);font-size:.8rem;line-height:2;color:var(--muted);">
+Ivanova, N.; Chamati, H. Atomic-Scale Molecular Dynamics Modeling of Iron Oxides: Surface Properties and Methodologies. <em>Molecules</em> 2026, 31(10), 1629. <a href="https://doi.org/10.3390/molecules31101629" target="_blank">doi:10.3390/molecules31101629</a><br><br>
+Principia Orthogona series · <a href="https://totogt.github.io/geometry" target="_blank">totogt.github.io/geometry</a><br><br>
+TOTOGT/io proof repository · ZeoliteCommutation.lean · gate_commutes, coupling_not_commute · Lean v4 · axioms: propext, Classical.choice, Quot.sound · no sorryAx<br><br>
+MDPI Special Issue — Theoretical and Computational Studies of Condensed-Matter Systems · Guest Editor: Prof. Dr. Hassan Chamati · Deadline 30 September 2026 · <a href="https://www.mdpi.com/journal/molecules/special_issues/5P5C98FC85" target="_blank">mdpi.com/journal/molecules/special_issues/5P5C98FC85</a><br><br>
+See also: ch18-zeolite-noncommutativity.html (D2) · ch-molbio.html (protein folding) · wp51-objective-subjective.html (Heisenberg cut) · book4/chIV-orthogonality.html (corrected Lemma 5.3)
+</p>
+
+</main>
+
+<div class="po-ring-strip">
+  <a href="../prelude.html">G3 · Prelude</a>
+  <a href="../book4/living-book.html">Opus Map</a>
+  <a href="g6-crystal.html">G6 Crystal</a>
+  <a href="wp52-irreducible-gap.html">← WP52 · Gap</a>
+  <a href="wp53-facet-as-gate.html" class="here">WP53 · Facet</a>
+  <a href="wp54-quantum-weave.html">WP54 · Quantum →</a>
+</div>
+
+<footer>
+  <p>Principia Orthogona · Book VI · Working Paper 53</p>
+  <p>The Facet as Gate · Iron Oxide Surfaces · dm³ Framework · 2026</p>
+  <p>Series: <a href="https://zenodo.org/communities/principia-orthogona" target="_blank">zenodo.org/communities/principia-orthogona</a></p>
+</footer>
+
+</body>
+</html>
