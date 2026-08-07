@@ -85,6 +85,13 @@ p.prose{margin-bottom:1.15rem;font-size:1rem;line-height:1.82;color:rgba(232,228
 .ch-nav-link:hover{color:var(--gold);}
 footer{text-align:center;padding:2rem;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--muted);border-top:1px solid var(--rule);}
 footer a{color:var(--gold);text-decoration:none;}
+.dbox{margin:2rem 0;background:var(--card);border:1px solid var(--rule);border-top:2px solid rgba(201,168,76,.35);padding:1.1rem 1rem 1rem;}
+.dbox canvas{display:block;margin:0 auto;max-width:100%;}
+.dcap{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);text-align:center;margin-top:.6rem;line-height:1.7;}
+.dctrl{display:flex;align-items:center;gap:.8rem;justify-content:center;margin-top:.7rem;flex-wrap:wrap;}
+.dctrl label{font-family:var(--mono);font-size:.7rem;color:var(--text);}
+.dctrl input[type=range]{width:220px;accent-color:var(--gold);}
+.dctrl .dstat{font-family:var(--mono);font-size:.7rem;color:var(--blue);background:rgba(56,189,248,.07);padding:.12rem .45rem;border:1px solid rgba(56,189,248,.2);}
 </style>
 </head>
 <body>
@@ -179,6 +186,54 @@ footer a{color:var(--gold);text-decoration:none;}
   <span class="open-lbl">[OPEN] O.4.1 — Near-coincidence r*(1.5) ≈ ln 2</span>
   <div class="block-body">The computed value $r^*(1.5) = 0.693130\ldots$ differs from $\ln 2 = 0.693147\ldots$ by $1.7 \times 10^{-5}$ — about 25 ppm. This is too large to be numerical error (bisection tolerance $5\times10^{-10}$) and too small to be coincidence. Is there an exact relation $r^*(3/2) = \ln 2$, or does the dm³ ODE admit a conserved quantity that yields this? No proof is known.</div>
 </div>
+
+<div class="dbox">
+<canvas id="rstar-chart" width="500" height="240"></canvas>
+<p class="dcap">Fig. 1 — r*(ε): basin boundary as a function of coupling strength ε = ν/κ · bisection on dm³ ODE (DOP853) · green: MW at ε ≈ 1.61 · blue: 2:1 resonance at ε = 2</p>
+</div>
+<script>
+(function(){
+  var cv=document.getElementById('rstar-chart');
+  var ctx=cv.getContext('2d');
+  var W=cv.width,H=cv.height,L=52,R=18,T=18,B=36,PW=W-L-R,PH=H-T-B;
+  var E=[0,.3,.5,1,1.5,2,2.5,3,4,4.5];
+  var S=[0,.13,.378,.572,.693,.776,.835,.879,.935,.952];
+  var tx=function(e){return L+e/4.5*PW;};
+  var ty=function(r){return T+PH*(1-r);};
+  ctx.fillStyle='#0c0d16';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(100,95,80,.2)';ctx.lineWidth=.5;
+  [.5,1,1.5,2,2.5,3,3.5,4].forEach(function(e){ctx.beginPath();ctx.moveTo(tx(e),T);ctx.lineTo(tx(e),T+PH);ctx.stroke();});
+  [.2,.4,.6,.8,1].forEach(function(r){ctx.beginPath();ctx.moveTo(L,ty(r));ctx.lineTo(L+PW,ty(r));ctx.stroke();});
+  [[2,'rgba(56,189,248,.4)'],[1.607,'rgba(80,200,120,.35)']].forEach(function(p){
+    ctx.setLineDash([5,3]);ctx.strokeStyle=p[1];ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(tx(p[0]),T);ctx.lineTo(tx(p[0]),T+PH);ctx.stroke();ctx.setLineDash([]);
+  });
+  ctx.setLineDash([2,4]);ctx.strokeStyle='rgba(150,140,120,.3)';ctx.lineWidth=.7;
+  ctx.beginPath();ctx.moveTo(L,ty(1));ctx.lineTo(L+PW,ty(1));ctx.stroke();ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(tx(0),T+PH);
+  E.forEach(function(e,i){ctx.lineTo(tx(e),ty(S[i]));});
+  ctx.lineTo(tx(4.5),T+PH);ctx.closePath();ctx.fillStyle='rgba(201,168,76,.08)';ctx.fill();
+  ctx.beginPath();E.forEach(function(e,i){i===0?ctx.moveTo(tx(e),ty(S[i])):ctx.lineTo(tx(e),ty(S[i]));});
+  ctx.strokeStyle='#c9a84c';ctx.lineWidth=2.5;ctx.stroke();
+  [{e:1.607,r:.713,c:'#50c878',lb:'MW  ε ≈ 1.61'},{e:2,r:.776,c:'#38bdf8',lb:'2:1 resonance  ε = 2'}].forEach(function(d){
+    ctx.beginPath();ctx.arc(tx(d.e),ty(d.r),5.5,0,2*Math.PI);ctx.fillStyle=d.c;ctx.fill();
+    ctx.fillStyle=d.c;ctx.font='bold 10px JetBrains Mono,monospace';ctx.fillText(d.lb,tx(d.e)+8,ty(d.r)-4);
+  });
+  ctx.fillStyle='rgba(56,189,248,.7)';ctx.font='10px JetBrains Mono,monospace';ctx.fillText('r* = 0.77594',tx(2)+8,ty(.776)+14);
+  [.5,1,1.5,2.5,3,4].forEach(function(e){
+    var r=S[E.indexOf(e)]||0;
+    ctx.beginPath();ctx.arc(tx(e),ty(r),3.5,0,2*Math.PI);ctx.fillStyle='rgba(201,168,76,.6)';ctx.fill();
+  });
+  ctx.strokeStyle='rgba(201,168,76,.6)';ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(L,T);ctx.lineTo(L,T+PH);ctx.moveTo(L,T+PH);ctx.lineTo(L+PW,T+PH);ctx.stroke();
+  ctx.fillStyle='rgba(180,175,160,.75)';ctx.font='10px JetBrains Mono,monospace';
+  [.5,1,1.5,2,2.5,3,3.5,4].forEach(function(e){ctx.fillText(e.toFixed(1),tx(e)-10,T+PH+15);});
+  [.2,.4,.6,.8].forEach(function(r){ctx.fillText(r.toFixed(1),L-30,ty(r)+4);});
+  ctx.fillStyle='#c9a84c';ctx.font='12px Noto Serif,Georgia,serif';
+  ctx.fillText('ε = ν / κ',L+PW/2-25,H-4);
+  ctx.save();ctx.translate(13,T+PH/2+15);ctx.rotate(-Math.PI/2);ctx.fillText('r*(ε)',0,0);ctx.restore();
+})();
+</script>
 
 <!-- §3 -->
 <h2><span class="sec-n">§3</span>The Galactic G-Chain</h2>
@@ -558,6 +613,80 @@ footer a{color:var(--gold);text-decoration:none;}
     <tr><td>Single isolated resonance ℓν = mκ</td><td>resonance overlap → chaos</td><td>yes if violated</td></tr>
   </tbody>
 </table>
+
+<div class="dbox">
+<canvas id="phase-cv" width="560" height="400"></canvas>
+<div class="dctrl">
+  <label>ε = <strong id="phase-eps-lb">2.00</strong></label>
+  <input type="range" id="phase-eps" min="0.3" max="4.0" step="0.05" value="2.0">
+  <span class="dstat">r* ≈ <span id="phase-rstar-lb">0.77594</span></span>
+</div>
+<p class="dcap">Fig. 2 — Interactive phase portrait of the dm³ ODE · drag ε slider to move r* · Blue: disc basin (converges to attractor r = 1) · Red: escape basin (r → 0) · Yellow dashes: ṙ = 0 nullcline · Orange: saddle at r₁ = 2cos(3π/7) whose stable manifold crosses z = 0 at r* · Red dot: r* basin boundary</p>
+</div>
+<script>
+(function(){
+  var cv=document.getElementById('phase-cv');
+  if(!cv)return;
+  var ctx=cv.getContext('2d');
+  var W=cv.width,H=cv.height;
+  var sl=document.getElementById('phase-eps');
+  var lb=document.getElementById('phase-eps-lb');
+  var rb=document.getElementById('phase-rstar-lb');
+  var L=52,R=20,T=22,B=42,PW=W-L-R,PH=H-T-B;
+  var rMin=.01,rMax=2.2,zMin=-2,zMax=5.5;
+  var tx=function(r){return L+(r-rMin)/(rMax-rMin)*PW;};
+  var ty=function(z){return T+PH*(1-(z-zMin)/(zMax-zMin));};
+  function ode(r,z,e){var ez=Math.exp(-Math.min(z,30));return[r*(1-r*r)+e*(r-1)*ez,r*r-e*(r-1)*(r-1)*ez];}
+  function rk4(r,z,e,dt){var a=ode(r,z,e);var b=ode(r+dt/2*a[0],z+dt/2*a[1],e);var f=ode(r+dt/2*b[0],z+dt/2*b[1],e);var h=ode(r+dt*f[0],z+dt*f[1],e);return[r+dt/6*(a[0]+2*b[0]+2*f[0]+h[0]),z+dt/6*(a[1]+2*b[1]+2*f[1]+h[1])];}
+  function cls(r,z,e){var dt=.05,s;for(var i=0;i<350;i++){if(r<.005||z<-20)return 0;if(Math.abs(r-1)<.008&&z>0)return 1;s=rk4(r,z,e,dt);r=s[0];z=s[1];}return Math.abs(r-1)<.08?1:0;}
+  var ET=[.3,.5,1,1.5,2,2.5,3,4];
+  var RT=[.14,.378,.572,.693,.776,.835,.879,.935];
+  function rsi(e){if(e<=ET[0])return RT[0]*e/ET[0];if(e>=ET[7])return RT[7]+(1-RT[7])*(e-4)/5;for(var i=0;i<7;i++)if(e>=ET[i]&&e<=ET[i+1])return RT[i]+(e-ET[i])/(ET[i+1]-ET[i])*(RT[i+1]-RT[i]);return.776;}
+  function draw(eps){
+    ctx.fillStyle='#04040a';ctx.fillRect(0,0,W,H);
+    var GW=90,GH=65,img=ctx.createImageData(W,H),s,px0,px1,py0,py1,ii,R2,G2,B2;
+    for(var gx=0;gx<GW;gx++)for(var gy=0;gy<GH;gy++){
+      var r0=rMin+(gx+.5)/GW*(rMax-rMin),z0=zMax-(gy+.5)/GH*(zMax-zMin);
+      var cv2=cls(r0,z0,eps);
+      px0=Math.floor(L+gx/GW*PW);px1=Math.floor(L+(gx+1)/GW*PW);
+      py0=Math.floor(T+gy/GH*PH);py1=Math.floor(T+(gy+1)/GH*PH);
+      R2=cv2?8:68;G2=cv2?52:10;B2=cv2?80:22;
+      for(var px=px0;px<px1;px++)for(var py=py0;py<py1;py++){ii=4*(py*W+px);img.data[ii]=R2;img.data[ii+1]=G2;img.data[ii+2]=B2;img.data[ii+3]=255;}
+    }
+    ctx.putImageData(img,0,0);
+    [[.3,0],[.5,0],[.65,0],[.72,0],[.83,0],[1.1,0],[1.3,0],[1.7,0],[.4,-1],[1,-1.5]].forEach(function(p){
+      var r=p[0],z=p[1],conv=false,ns;
+      ctx.beginPath();ctx.moveTo(tx(r),ty(z));
+      for(var i=0;i<700;i++){ns=rk4(r,z,eps,.025);r=ns[0];z=ns[1];if(r<.002||z<zMin-.5)break;var cx=tx(r),cy=ty(z);(cx>=L&&cx<=W-R&&cy>=T&&cy<=H-B)?ctx.lineTo(cx,cy):ctx.moveTo(cx,cy);if(Math.abs(r-1)<.004&&z>0){conv=true;break;}}
+      ctx.strokeStyle=conv?'rgba(80,200,220,.6)':'rgba(225,85,45,.6)';ctx.lineWidth=1.3;ctx.stroke();
+    });
+    ctx.strokeStyle='rgba(100,95,80,.2)';ctx.lineWidth=.5;
+    [.5,1,1.5,2].forEach(function(r){ctx.beginPath();ctx.moveTo(tx(r),T);ctx.lineTo(tx(r),T+PH);ctx.stroke();});
+    [-1,0,1,2,3,4,5].forEach(function(z){ctx.beginPath();ctx.moveTo(L,ty(z));ctx.lineTo(L+PW,ty(z));ctx.stroke();});
+    ctx.beginPath();var fn=true;
+    for(var i=0;i<500;i++){var r=.02+i/500*(rMax-.04);if(Math.abs(r-1)<.022){fn=true;continue;}var z=Math.log(eps/(r*(1+r)));if(z<zMin||z>zMax){fn=true;continue;}fn?(ctx.moveTo(tx(r),ty(z)),fn=false):ctx.lineTo(tx(r),ty(z));}
+    ctx.strokeStyle='rgba(255,210,0,.55)';ctx.lineWidth=1.2;ctx.setLineDash([5,4]);ctx.stroke();ctx.setLineDash([]);
+    ctx.strokeStyle='rgba(201,168,76,.35)';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(L,ty(0));ctx.lineTo(L+PW,ty(0));ctx.stroke();
+    ctx.strokeStyle='rgba(10,186,181,.85)';ctx.lineWidth=1.8;ctx.setLineDash([8,4]);ctx.beginPath();ctx.moveTo(tx(1),T);ctx.lineTo(tx(1),T+PH);ctx.stroke();ctx.setLineDash([]);
+    var r1=2*Math.cos(3*Math.PI/7),zs=Math.log(eps/(r1*(1+r1)));
+    if(zs>=zMin&&zs<=zMax){ctx.beginPath();ctx.arc(tx(r1),ty(zs),6,0,2*Math.PI);ctx.fillStyle='#FF8800';ctx.fill();ctx.fillStyle='#FF8800';ctx.font='10px JetBrains Mono,monospace';ctx.fillText('saddle  2cos(3π/7)',tx(r1)+8,ty(zs)+4);}
+    var rs=rsi(eps);if(rb)rb.textContent=rs.toFixed(5);
+    ctx.beginPath();ctx.arc(tx(rs),ty(0),7,0,2*Math.PI);ctx.fillStyle='#FF3355';ctx.fill();ctx.strokeStyle='#FF6688';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle='#FF3355';ctx.font='bold 10px JetBrains Mono,monospace';ctx.fillText('r*≈'+rs.toFixed(4),tx(rs)+9,ty(0)-6);
+    ctx.strokeStyle='rgba(201,168,76,.6)';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(L,T);ctx.lineTo(L,T+PH);ctx.moveTo(L,T+PH);ctx.lineTo(L+PW,T+PH);ctx.stroke();
+    ctx.fillStyle='rgba(180,175,160,.75)';ctx.font='10px JetBrains Mono,monospace';
+    [.5,1,1.5,2].forEach(function(r){ctx.fillText(r.toFixed(1),tx(r)-11,T+PH+15);});
+    [-1,0,1,2,3,4,5].forEach(function(z){ctx.fillText(z.toString(),L-26,ty(z)+4);});
+    ctx.fillStyle='#c9a84c';ctx.font='12px Noto Serif,Georgia,serif';ctx.fillText('r = R / R_disc',L+PW/2-60,H-6);
+    ctx.save();ctx.translate(13,T+PH/2+20);ctx.rotate(-Math.PI/2);ctx.fillText('z  (contact clock)',0,0);ctx.restore();
+    ctx.fillStyle='rgba(10,186,181,.8)';ctx.font='10px JetBrains Mono,monospace';ctx.fillText('attractor  r = 1',tx(1.02),T+13);
+    ctx.fillStyle='#c9a84c';ctx.font='11px JetBrains Mono,monospace';ctx.fillText('ε = '+eps.toFixed(2),L+4,T+13);
+  }
+  var timer=null;
+  sl.addEventListener('input',function(){var e=parseFloat(this.value);lb.textContent=e.toFixed(2);clearTimeout(timer);timer=setTimeout(function(){draw(e);},60);});
+  setTimeout(function(){draw(2.0);},150);
+})();
+</script>
 
 <!-- §10 Status summary -->
 <h2><span class="sec-n">§10</span>Status Summary</h2>
