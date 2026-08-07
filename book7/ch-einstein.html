@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Albert Einstein · ds² = −c²dt² + dx² · Principia Orthogona Vol VII</title>
-<meta name="description" content="Einstein gravou c na estrutura do espaço-tempo. A simultaneidade cai. A razão de troca c entre espaço e tempo torna-se dinâmica (GR). Além da GR: o espaço TORNA-SE tempo no horizonte de Schwarzschild. A ponte de Einstein-Rosen.">
+<meta name="description" content="Einstein gravou c na estrutura do espaço-tempo. A simultaneidade cai. A razão de troca deixa de ser fixa (GR). A kilonova GW170817 — uma das maiores explosões do universo — confirmou: gravidade e luz chegaram a 1,7 segundos uma da outra. c é uma.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -286,9 +286,199 @@ footer a{color:var(--gold);text-decoration:none;}
 
 <!-- §VI — GW170817 -->
 <div class="section-strip"><span class="sl">Seção VI · Section VI</span><div class="st">GW170817 · 17 Agosto 2017 · A Variedade Fala · The Manifold Speaks</div></div>
+
+<!-- kilonova animation -->
+<div style="display:flex;justify-content:center;padding:1.5rem 1rem 0.5rem;background:#0d0d12;">
+  <div style="position:relative;width:100%;max-width:700px;">
+    <canvas id="kilonova-cv" width="700" height="340"
+      style="width:100%;border-radius:8px;border:1px solid #2a2a3a;display:block;background:#050508;"></canvas>
+    <div style="text-align:center;font-family:monospace;font-size:.65rem;letter-spacing:.12em;color:#6b7280;margin-top:.5rem;text-transform:uppercase;">
+      GW170817 · Kilonova · Auréola gravitacional + luz · 130 milhões de anos-luz
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const cv = document.getElementById('kilonova-cv');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const cx = W/2, cy = H/2;
+
+  let t = 0;
+  // phases: 0=spiral, 1=flash, 2=expand
+  let phase = 0, flashT = 0;
+  const rings = []; // {r, alpha, type}
+  let goldParticles = [];
+  let starAngle = 0;
+
+  function spawnGold() {
+    for (let i = 0; i < 60; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = 1.2 + Math.random() * 3;
+      goldParticles.push({
+        x: cx, y: cy,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp,
+        life: 1,
+        color: Math.random() > 0.5 ? '#fbbf24' : '#e5e7eb',
+        size: 1 + Math.random() * 2.5
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // starfield bg
+    ctx.fillStyle = '#050508';
+    ctx.fillRect(0, 0, W, H);
+
+    // background stars
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    const stars = [[50,30],[120,80],[200,20],[350,15],[480,55],[600,25],[650,90],
+                   [80,180],[160,260],[300,300],[500,280],[620,180],[40,310]];
+    stars.forEach(([x,y]) => { ctx.beginPath(); ctx.arc(x,y,0.8,0,Math.PI*2); ctx.fill(); });
+
+    if (phase === 0) {
+      // spiral inward
+      const orbitR = Math.max(4, 55 - t * 0.18);
+      const s1x = cx + Math.cos(starAngle) * orbitR;
+      const s1y = cy + Math.sin(starAngle) * orbitR;
+      const s2x = cx - Math.cos(starAngle) * orbitR;
+      const s2y = cy - Math.sin(starAngle) * orbitR;
+
+      // glow
+      [s1x,s1y,s2x,s2y].forEach((v,i) => {
+        if (i%2===0) {
+          const grd = ctx.createRadialGradient(v,([s1x,s1y,s2x,s2y])[i+1],0,v,([s1x,s1y,s2x,s2y])[i+1],orbitR*0.7);
+          grd.addColorStop(0,'rgba(34,211,238,0.25)');
+          grd.addColorStop(1,'rgba(34,211,238,0)');
+          ctx.fillStyle = grd;
+          ctx.beginPath();
+          ctx.arc(v,([s1x,s1y,s2x,s2y])[i+1],orbitR*0.7,0,Math.PI*2);
+          ctx.fill();
+        }
+      });
+
+      // stars
+      ctx.fillStyle = '#22d3ee'; ctx.beginPath(); ctx.arc(s1x,s1y,5,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#a78bfa'; ctx.beginPath(); ctx.arc(s2x,s2y,5,0,Math.PI*2); ctx.fill();
+
+      // label
+      ctx.fillStyle = '#6b7280'; ctx.font = '10px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('duas estrelas mortas · espiralizando', cx, H - 18);
+
+      starAngle += 0.04 + (t * 0.0006);
+      t++;
+      if (orbitR <= 5) { phase = 1; flashT = 0; spawnGold(); }
+
+    } else if (phase === 1) {
+      // flash
+      const fr = flashT * 8;
+      const grd = ctx.createRadialGradient(cx,cy,0,cx,cy,fr+20);
+      grd.addColorStop(0,'rgba(255,255,255,' + Math.max(0,1-flashT/18) + ')');
+      grd.addColorStop(0.3,'rgba(251,191,36,' + Math.max(0,0.8-flashT/18) + ')');
+      grd.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle = grd;
+      ctx.beginPath(); ctx.arc(cx,cy,fr+60,0,Math.PI*2); ctx.fill();
+
+      // KILONOVA label
+      ctx.fillStyle = 'rgba(255,255,255,' + Math.min(1, flashT/8) + ')';
+      ctx.font = 'bold 22px Georgia';
+      ctx.textAlign = 'center';
+      ctx.fillText('kilonova', cx, cy - 10);
+      ctx.font = '11px monospace';
+      ctx.fillStyle = 'rgba(251,191,36,' + Math.min(1, flashT/8) + ')';
+      ctx.fillText('forjando ouro · platina · elementos pesados', cx, cy + 14);
+
+      flashT++;
+      if (flashT === 1) {
+        // spawn first rings
+        rings.push({r:2, alpha:1, type:'gw', speed:1.8});
+        rings.push({r:2, alpha:0.7, type:'gw', speed:1.5});
+        rings.push({r:2, alpha:0.5, type:'gw', speed:1.2});
+      }
+      if (flashT > 28) {
+        phase = 2;
+        rings.push({r:4, alpha:0.9, type:'light', speed:1.8});
+      }
+
+    } else {
+      // expand phase
+      // gold particles
+      goldParticles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        p.life -= 0.012;
+        p.vx *= 0.98; p.vy *= 0.98;
+        if (p.life > 0) {
+          ctx.globalAlpha = p.life * 0.8;
+          ctx.fillStyle = p.color;
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      });
+      goldParticles = goldParticles.filter(p => p.life > 0);
+
+      // kilonova remnant glow
+      const g = ctx.createRadialGradient(cx,cy,0,cx,cy,18);
+      g.addColorStop(0,'rgba(251,191,36,0.5)'); g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fill();
+
+      // rings
+      rings.forEach(ring => {
+        ring.r += ring.speed;
+        ring.alpha -= 0.003;
+        if (ring.r > 2 && ring.alpha > 0) {
+          ctx.beginPath();
+          ctx.arc(cx, cy, ring.r, 0, Math.PI * 2);
+          if (ring.type === 'gw') {
+            ctx.strokeStyle = `rgba(34,211,238,${ring.alpha * 0.85})`;
+            ctx.lineWidth = 1.5;
+          } else {
+            ctx.strokeStyle = `rgba(251,191,36,${ring.alpha * 0.9})`;
+            ctx.lineWidth = 1.2;
+          }
+          ctx.stroke();
+        }
+      });
+
+      // spawn new GW rings periodically
+      if (Math.floor(t) % 38 === 0) {
+        rings.push({r:2, alpha:0.7, type:'gw', speed:1.8});
+      }
+
+      // labels when rings are big enough
+      const bigGW = rings.find(r => r.type==='gw' && r.r > 80 && r.r < 160);
+      const bigL  = rings.find(r => r.type==='light' && r.r > 60);
+      if (bigGW) {
+        ctx.fillStyle = 'rgba(34,211,238,0.7)';
+        ctx.font = '10px monospace'; ctx.textAlign = 'left';
+        ctx.fillText('auréola gravitacional', cx + bigGW.r * 0.65, cy - bigGW.r * 0.65);
+      }
+      if (bigL && bigL.r > 90) {
+        ctx.fillStyle = 'rgba(251,191,36,0.7)';
+        ctx.font = '10px monospace'; ctx.textAlign = 'right';
+        ctx.fillText('luz · raios gama', cx - bigL.r * 0.65, cy + bigL.r * 0.65);
+      }
+
+      // caption bottom
+      ctx.fillStyle = '#4b5563'; ctx.font = '10px monospace'; ctx.textAlign = 'center';
+      ctx.fillText('ambas a c · chegaram a 1,7 segundos uma da outra · Δc/c < 10⁻¹⁵', cx, H - 14);
+
+      t++;
+      // loop
+      if (rings.every(r => r.r > W * 0.78 || r.alpha <= 0)) {
+        rings.length = 0; goldParticles = []; t = 0; phase = 0; starAngle = 0;
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
 <div class="page"><div class="bilingual">
   <div><div class="col-hd pt-col">🇧🇷 Português — Primário</div>
-    <p class="prose">Em 17 de agosto de 2017, dois neutrons mortos — duas estrelas de nêutrons com cerca de 1,4 massas solares cada — colidiram a 130 milhões de anos-luz de distância. A colisão gerou simultaneamente duas coisas: ondas gravitacionais (a variedade de Minkowski rippling — a métrica $g_{\mu\nu}$ em oscilação) e raios gama (ondas eletromagnéticas — fix($G_{EM}$)).</p>
+    <p class="prose">Em 17 de agosto de 2017, duas estrelas mortas — duas estrelas de nêutrons com cerca de 1,4 massas solares cada — colidiram a 130 milhões de anos-luz de distância. O que aconteceu foi uma <strong>kilonova</strong>: uma das explosões mais violentas do universo. As duas estrelas colidem, explodem, e nos detritos incandescentes forjam ouro e platina — elementos mais pesados que o ferro só se formam nestas condições extremas, quando núcleons colidem a velocidades relativísticas. A kilonova é a fonte. A explosão gerou simultaneamente duas coisas: uma auréola na geometria do espaço-tempo — uma esfera de ondulação expandindo a c, a métrica $g_{\mu\nu}$ em oscilação, que chamamos onda gravitacional — e raios gama, ou seja, luz (ondas eletromagnéticas — fix($G_{EM}$)).</p>
     <p class="prose">Os dois sinais viajaram 130 milhões de anos-luz — $1{,}23 \times 10^{24}$ metros — através do espaço-tempo. Chegaram ao LIGO e Fermi com 1,7 segundos de diferença. Um universo de diferença para dois objetos viajando a $3 \times 10^8$ m/s durante 130 milhões de anos? Não: 1,7 segundos em $1{,}23 \times 10^{24}$ metros equivale a uma diferença de velocidade de no máximo $1$ parte em $10^{15}$.</p>
     <div class="block-thm">
       <span class="block-lbl">Teorema Observacional · GW170817 · [VERIFICADO — Abbott et al. 2017, PRL 119 161101]</span>
@@ -299,7 +489,7 @@ footer a{color:var(--gold);text-decoration:none;}
     <p class="prose">Este é o resultado que confirma a cadeia inteira: Maxwell encontrou $c$ como velocidade do atrator eletromagnético. Einstein inscreveu $c$ na métrica da variedade. GW170817 mostrou que as ondas gravitacionais — perturbações da própria métrica — viajam à mesma velocidade do atrator. A variedade é uma. $c$ é uma propriedade topológica, não do meio.</p>
   </div>
   <div><div class="col-hd">🇺🇸 English</div>
-    <p class="prose">On August 17, 2017, two dead stars — two neutron stars of about 1.4 solar masses each — collided 130 million light-years away. The collision simultaneously generated two things: gravitational waves (the Minkowski manifold rippling — the metric $g_{\mu\nu}$ oscillating) and gamma rays (electromagnetic waves — fix($G_{EM}$)).</p>
+    <p class="prose">On August 17, 2017, two dead stars — two neutron stars of about 1.4 solar masses each — collided 130 million light-years away. What happened was a <strong>kilonova</strong>: one of the most violent explosions in the universe. The two stars collide, explode, and in the incandescent debris forge gold and platinum — elements heavier than iron only form under these extreme conditions, when nucleons collide at relativistic speeds. The kilonova is the source. That explosion simultaneously generated two things: an aureole in the geometry of spacetime — a sphere of ripple expanding at c, the metric $g_{\mu\nu}$ oscillating, which we call a gravitational wave — and gamma rays (electromagnetic waves — fix($G_{EM}$)).</p>
     <p class="prose">Both signals traveled 130 million light-years — $1.23 \times 10^{24}$ meters — through spacetime. They arrived at LIGO and Fermi 1.7 seconds apart. A universe of difference for two objects traveling at $3 \times 10^8$ m/s for 130 million years? No: 1.7 seconds over $1.23 \times 10^{24}$ meters corresponds to a speed difference of at most 1 part in $10^{15}$.</p>
     <div class="block-thm">
       <span class="block-lbl">Observational Theorem · GW170817 · [VERIFIED — Abbott et al. 2017, PRL 119 161101]</span>
