@@ -170,6 +170,36 @@ rules and was not reachable in the session that opened this entry. If it carries
 the same "Series root DOI" line, it is the real source and must be corrected
 there too, or this defect returns.
 
+### KNOWN DEFECT: Neimark–Sacker row overclaims "proved" — REPAIRED 2026-08-07
+
+**The false claim:** `vol2-toymodel.html` Theorem C and `vol2-contact.html` Proposition 5.1
+assert that the dm³ toy model undergoes a Neimark–Sacker (A₂) bifurcation at detuning
+|Δ| = Δ*, and label this "proved ✓ · full Lean 4 verification."
+
+**Why it is false:** The dm³ ODE (r, θ, z) linearised around the attractor Γ = {r=1}
+gives a triangular 2×2 Jacobian J(z) = [[-2(1−e^{−z}), 0], [2, 0]] with eigenvalues
+λ₁ = −2(1−e^{−z}) and λ₂ = 0 — both real at every z. Verified by direct computation
+(Python, 2026-08-07). A Neimark–Sacker bifurcation requires a complex-conjugate
+eigenvalue pair crossing the unit circle (discrete) or imaginary axis (continuous);
+that structure is absent from the 3-equation system. No Lean file for this claim exists.
+
+**Salvageable part:** The table note "Rank-1, 2nd angular direction" and the detuning
+parameter Δ = ω₂ − 1 correctly point at the DNLS extension. The NS mechanism is the
+modulational instability (MI) of the DNLS plane-wave solution, onset at
+λ_c = −2J/|A|², with BdG spectrum ω²(q) = ε(q)·[ε(q) + 2λ|A|²], ε(q) = 2J(1−cos q).
+The Jordan wall ω²=0 at ε(q*) = −2λ|A|² is the Krein-signature flip. This is
+mathematically correct but requires DNLS, not the bare dm³ ODE.
+
+**Repair (done 2026-08-07):**
+- `vol2-toymodel.html`: NS table row tagged [MODEL]; closing paragraph corrected —
+  "full Lean 4 verification" removed, [OPEN] added for the NS row specifically.
+- `vol2-contact.html` (root + `book2/` copy): "proved ✓" badge qualified with
+  "[MODEL] pending DNLS extension"; Proposition 5.1 box reworded; correction notice added.
+- This CLAUDE.md entry.
+
+**Status:** `[OPEN]` — the NS/A₂ correspondence remains unproved for the bare dm³ system.
+The correct proof target is the DNLS MI threshold; no Lean file yet exists for it.
+
 ## Hardback constraint
 
 The **Complete Completeness hardback** (G5 print, ISBN 979-8-9954416-4-9) must stay
