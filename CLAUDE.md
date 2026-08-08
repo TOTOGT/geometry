@@ -165,6 +165,45 @@ Two files assert absence or unsourcedness elsewhere and have **not** been read:
    structural side, and it does not come out clean. Do not describe either
    record as calibrated until it is resolved.
 
+   **Diagnostic computed 2026-08-07** (Python, scipy.stats.norm, reproducible).
+   Calibration used: δ = 0.985, γ = 0.55, κ = √(2/π), A_V = β(1−γ)κ = 3.051,
+   σ̄ = 0.33, K determined by Kβσ̄·g(0.72) = 1.1577 (from the page's own text).
+   All three expressions for the structural parameters agree:
+
+   | Quantity | From crossing | From Π_J″ | V2 deposit | Factor |
+   |----------|--------------|-----------|-----------|--------|
+   | c_K      | 0.6577       | 0.6689    | 0.01812   | ×36    |
+   | b = c_K/(1−δ) | 43.85   | 44.59     | 1.208     | ×36    |
+   | a = b/σ*²    | 402.6    | 409.5     | 11.09     | ×37    |
+
+   The structural inversion is self-consistent: √(b/a) = 0.327 ≈ 0.33 ✓.
+   The discrepancy is not a rounding artifact — it is structural.
+
+   **What v2's b = 1.208 implies for the model.**  With c_K_v2 = 0.01812:
+   ΔΠ(σ̄) = Kβσ̄·g(0.72) − c_K_v2 − Π_V(σ̄) = 1.1577 − 0.0181 − 0.5 = +0.640 > 0.
+   J already dominates V at the saturation point. There is no crossing at or above
+   σ̄. Condition C' (which requires c_K ≥ 0.6577 for the root to lie in [σ̄, ∞))
+   is violated. The threshold σ* = 0.33 must therefore fall *below* σ̄, in the
+   regime where Π_V is quadratic (not affine) and uniqueness is [OPEN] (the paper
+   states this explicitly in Proposition 1′). This is not internally inconsistent
+   — it just means the paper's own uniqueness proof does not cover the calibrated
+   case, and the quantitative results (σ* = 1/3 and related claims) rest on
+   numerical simulations, not the proved theorem.
+
+   **Resolution path.**  Two tasks remain before calling either record calibrated:
+   (a) Obtain an independent empirical estimate of c_K (annual carry cost as a
+   fraction of asset value) for the five events studied. If c_K ≈ 0.02 (≈ 2%/yr,
+   consistent with pipeline O&amp;M or storage insurance at market rates), the
+   structural model needs its below-saturation Π_V formula to produce a unique
+   threshold, and the uniqueness proof gap must be closed. If c_K ≈ 0.66 (≈ 66%
+   of a period's asset value), the structural model already has σ* at σ̄ and no
+   gap. The factor of 37 in the parameter implies the two interpretations are not
+   close; one must be wrong.
+   (b) Identify where v2's quadratic coefficient a ≈ 11 came from. Structural
+   gives a ≈ 409; if v2 evaluated Π_J″ at the wrong σ (e.g. σ ≈ 1.5 where
+   Π_J″ ≈ 0.167 and a ≈ 11), that would explain the discrepancy. Check the v2
+   Zenodo deposit (10.5281/zenodo.21013066) §3.3 for the explicit computation.
+
 **Upstream:** `~/Desktop/dnls/CLAUDE.md` is named here as the canonical house
 rules and was not reachable in the session that opened this entry. If it carries
 the same "Series root DOI" line, it is the real source and must be corrected
