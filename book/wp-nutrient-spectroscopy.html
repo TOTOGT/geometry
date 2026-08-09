@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading Nutrients by Their Light — Spectroscopic Classification of Phytonutrients (Working Paper) · Principia Orthogona</title>
+<meta name="description" content="A working paper on the real spectroscopy behind phytonutrient classification: why color is chemistry, how absorption spectra map to phytochemical classes, and how DRIFTS/NIR quantify nutrients non-destructively. Claims tagged VERIFIED / MODEL / OPEN.">
+<style>
+  :root{
+    --navy:#1a2744; --gold:#c9a84c; --gold2:#e8d49a; --cream:#faf7f0; --smoke:#f0ece4;
+    --ink:#2a2420; --dim:#6b6350; --rule:rgba(201,168,76,0.20);
+    --uv:#7c3aed; --violet:#6d28d9; --blue:#1d4ed8; --cyan:#0891b2; --green:#15803d;
+    --yellow:#a16207; --orange:#c2410c; --red:#b91c1c; --ir:#7f1d1d;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:Georgia,serif;background:var(--cream);color:var(--ink);font-size:16.5px;line-height:1.85;}
+  nav{background:var(--navy);padding:.65rem 2rem;display:flex;gap:1.2rem;flex-wrap:wrap;align-items:center;position:sticky;top:0;z-index:50;}
+  nav a{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.14em;color:rgba(201,168,76,.6);text-decoration:none;text-transform:uppercase;}
+  nav a:hover{color:var(--gold);}
+  .hero{background:var(--navy);color:var(--cream);padding:4.5rem 2rem 3.5rem;text-align:center;border-bottom:2px solid var(--gold);}
+  .eyebrow{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:1.2rem;}
+  .hero h1{font-size:clamp(1.6rem,3.4vw,2.5rem);font-weight:300;line-height:1.2;margin-bottom:.5rem;}
+  .hero h1 strong{font-weight:700;color:var(--gold);}
+  .hero-sub{font-size:.98rem;color:rgba(250,247,240,.62);font-style:italic;max-width:640px;margin:1rem auto 0;}
+  .page{max-width:900px;margin:0 auto;padding:3.5rem 2rem 6rem;}
+  h2{font-size:1.5rem;font-weight:700;color:var(--navy);margin:2.6rem 0 .4rem;line-height:1.25;}
+  h2 .n{font-family:'Courier New',monospace;font-size:.9rem;color:var(--gold);margin-right:.5rem;}
+  p{margin:0 0 1.1rem;}
+  strong{color:var(--navy);}
+  a{color:#9a7c28;}
+  .lede{font-size:1.12rem;color:var(--ink);border-left:3px solid var(--gold);padding-left:1.1rem;margin:0 0 2rem;font-style:italic;}
+  .tag{font-family:'Courier New',monospace;font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:.12rem .45rem;border-radius:3px;vertical-align:middle;white-space:nowrap;}
+  .v{background:#e4f0e4;color:#15803d;} .m{background:#e7edf6;color:#1d4ed8;} .o{background:#f6efe0;color:#a16207;}
+  .box{background:#fff;border:1px solid var(--rule);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:1rem 1.3rem;margin:1.6rem 0;}
+  .box.warn{border-left-color:var(--orange);}
+  table{width:100%;border-collapse:collapse;font-size:.92rem;margin:1.4rem 0;background:#fff;}
+  th{background:var(--navy);color:var(--gold);text-align:left;padding:.5rem .7rem;font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;}
+  td{padding:.5rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top;}
+  .swatch{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:.4rem;vertical-align:middle;}
+  /* spectrum bar */
+  .spectrum{display:flex;height:34px;border-radius:5px;overflow:hidden;margin:1.4rem 0 .4rem;border:1px solid var(--rule);}
+  .spectrum div{flex:1;display:flex;align-items:center;justify-content:center;font-family:'Courier New',monospace;font-size:.5rem;color:rgba(255,255,255,.9);letter-spacing:.04em;}
+  .spec-cap{font-size:.78rem;color:var(--dim);text-align:center;margin-bottom:1.6rem;}
+  .foot{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--rule);font-size:.85rem;color:var(--dim);}
+  .foot a{color:var(--gold);}
+  /* ── toggle button ── */
+  .xray-btn{margin-left:auto;font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--navy);background:var(--gold);border:none;border-radius:20px;
+    padding:.4rem .95rem;cursor:pointer;transition:background .2s,color .2s;}
+  .xray-btn:hover{background:var(--gold2);}
+  /* ── X-RAY (dark / instrument) MODE ── */
+  body.xray{background:#0a0e15;color:#c4cdda;}
+  body.xray .hero{background:radial-gradient(120% 130% at 50% -15%,rgba(124,58,237,.20),transparent 62%),#070b12;}
+  body.xray h2{color:var(--gold2);}
+  body.xray h2 .n{color:var(--gold);}
+  body.xray strong{color:var(--gold2);}
+  body.xray a{color:var(--gold2);}
+  body.xray p{color:#c4cdda;}
+  body.xray .lede{color:#d2dae7;}
+  body.xray .box{background:#111826;border-color:rgba(201,168,76,.26);}
+  body.xray .box.warn{border-left-color:var(--orange);}
+  body.xray table{background:#0f1622;}
+  body.xray td{color:#cbd4e2;border-bottom-color:rgba(201,168,76,.14);}
+  body.xray .swatch{box-shadow:0 0 8px currentColor;}
+  body.xray .spectrum{box-shadow:0 0 26px rgba(124,58,237,.38),0 0 64px rgba(29,78,216,.16);border-color:rgba(201,168,76,.35);}
+  body.xray .spectrum div{text-shadow:0 0 6px rgba(0,0,0,.6);}
+  body.xray .spec-cap,body.xray .foot{color:#8a94a6;}
+  body.xray .foot{border-top-color:rgba(201,168,76,.2);}
+  body.xray .xray-btn{background:transparent;color:var(--gold2);border:1px solid rgba(201,168,76,.5);}
+  body.xray .xray-btn:hover{background:rgba(201,168,76,.14);}
+  @media(prefers-reduced-motion:no-preference){body{transition:background .35s ease,color .35s ease;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../series-hub.html">◄ Principia Orthogona</a>
+  <a href="ch-nutrient-spectrum.html">Nutrient Spectrum</a>
+  <a href="ch-nutrient-predictions.html">Prediction Registry</a>
+  <button id="xray" class="xray-btn" aria-pressed="false" title="See the structure beneath the label">⚛&nbsp;&nbsp;X-ray view</button>
+</nav>
+
+<div class="hero">
+  <span class="eyebrow">Working Paper · Food Science &amp; Spectroscopy</span>
+  <h1>Reading Nutrients by <strong>Their Light</strong></h1>
+  <p class="hero-sub">A working paper on the real spectroscopy behind phytonutrient classification — why color <em>is</em> chemistry, and how the same instruments that fingerprint fuel can fingerprint food. Every claim tagged.</p>
+  <p style="font-family:'Courier New',monospace;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);margin-top:1.4rem;opacity:.9;">▸ Switch to X-ray view — read the food by its structure, not its label. Less about the ingredient list; more about living better.</p>
+</div>
+
+<div class="page">
+
+  <p class="lede">The oldest nutrition advice — “eat the rainbow” — turns out to be a spectroscopy instruction. A plant pigment’s colour is a direct read-out of its molecular structure, and that structure is its phytochemical class. This paper separates what the light actually tells us <span class="tag v">Verified</span> from the organizing metaphor built on top of it <span class="tag m">Model</span> and the health claims that are not yet earned <span class="tag o">Open</span>.</p>
+
+  <h2><span class="n">1</span>Colour is chemistry <span class="tag v">Verified — textbook</span></h2>
+  <p>A pigment’s colour is what it does <em>not</em> absorb. Molecules with extended chains of alternating double bonds (conjugated π-systems) absorb visible light; the longer the conjugation, the longer the absorbed wavelength (λ<sub>max</sub>), and the redder the pigment appears. This is Beer–Lambert absorption applied to real food molecules — the same physics in every spectrophotometer.</p>
+  <p>So the visible-to-UV spectrum is not a metaphor for a nutrient classification; it <em>is</em> one. The major dietary pigment classes sort cleanly by λ<sub>max</sub>:</p>
+
+  <div class="spectrum">
+    <div style="background:var(--uv)">UV</div>
+    <div style="background:var(--violet)">400</div>
+    <div style="background:var(--blue)">450</div>
+    <div style="background:var(--cyan)">490</div>
+    <div style="background:var(--green)">530</div>
+    <div style="background:var(--yellow)">570</div>
+    <div style="background:var(--orange)">620</div>
+    <div style="background:var(--red)">680</div>
+    <div style="background:var(--ir)">IR</div>
+  </div>
+  <p class="spec-cap">Absorbed wavelength (nm), ultraviolet → infrared. A pigment appears the <em>complementary</em> colour to the band it absorbs.</p>
+
+  <table>
+    <thead><tr><th>Pigment class</th><th>Absorbs (λmax, approx.)</th><th>Appears</th><th>Structure</th></tr></thead>
+    <tbody>
+      <tr><td>Flavonoids / flavonols (e.g. quercetin)</td><td>~330–370 nm (UV)</td><td><span class="swatch" style="background:#eee;border:1px solid #ccc"></span>colourless–pale</td><td>polyphenol</td></tr>
+      <tr><td>Chlorophylls a/b</td><td>~430 &amp; ~660 nm (blue + red)</td><td><span class="swatch" style="background:var(--green)"></span>green</td><td>Mg-porphyrin</td></tr>
+      <tr><td>Carotenoids (β-carotene, lutein)</td><td>~450–470 nm (blue)</td><td><span class="swatch" style="background:var(--orange)"></span>yellow–orange</td><td>conjugated polyene</td></tr>
+      <tr><td>Lycopene</td><td>~470–505 nm (longer conjugation)</td><td><span class="swatch" style="background:var(--red)"></span>red</td><td>conjugated polyene (11 C=C)</td></tr>
+      <tr><td>Anthocyanins (flavonoid)</td><td>~510–540 nm, pH-dependent</td><td><span class="swatch" style="background:var(--violet)"></span>red–purple–blue</td><td>flavylium polyphenol</td></tr>
+      <tr><td>Betalains (beet)</td><td>~480 &amp; ~535 nm</td><td><span class="swatch" style="background:#a21caf"></span>magenta</td><td>betalamic-acid conjugate</td></tr>
+    </tbody>
+  </table>
+  <p class="box">λ<sub>max</sub> values are solvent- and pH-dependent and given here as textbook approximations; pin exact figures to a reference (or measure them) before any are quoted as firm. The <em>ordering</em> — more conjugation → redder — is robust.</p>
+
+  <h2><span class="n">2</span>“Eat the rainbow” — a real basis, an honest limit</h2>
+  <p><span class="tag v">Verified</span> The mapping <em>colour band → pigment class → phytochemical family</em> is genuine chemistry: a purple food is telling you it carries anthocyanins; a deep-orange one, carotenoids. Colour diversity is a fair proxy for phytochemical diversity.</p>
+  <p><span class="tag o">Open</span> What colour diversity does <em>not</em> establish is a causal health benefit per pigment. The evidence that eating a variety of plants is good for you is largely epidemiological and associational — strong as a dietary heuristic, weak as “this purple compound treats that condition.” This paper makes no therapeutic claim; a colourful diet is food, not medicine, and any specific health effect stays <span class="tag o">Open</span> until a trial closes it.</p>
+
+  <h2><span class="n">3</span>Beyond colour: the functional-group fingerprint <span class="tag v">Verified — analytical chemistry</span></h2>
+  <p>UV-Vis reads pigments. But most nutrients — fats, proteins, sugars, fibre, moisture — are colourless, and they are read further down the spectrum. <strong>Infrared (FTIR, and DRIFTS — diffuse-reflectance IR, the same method used here to characterise fuels)</strong> and <strong>near-infrared (NIR)</strong> spectroscopy fingerprint molecular <em>bonds</em>: C–H, O–H, N–H, C=O. From those bands, composition — fat / protein / moisture / carbohydrate — can be quantified <em>non-destructively, in seconds, without reagents.</em></p>
+  <p>NIR compositional analysis is standard, validated practice across the food and agriculture industries. The point that matters for this programme: the spectroscopy G6 already runs on biomass-to-fuel is the <em>same toolset</em> that screens a formulated food for its nutrient and moisture profile — one instrument, two tracks.</p>
+  <div class="box">
+    <p style="margin:0"><strong>Application hook.</strong> A DRIFTS/NIR screen of a formulated bar gives rapid, in-line read-outs of moisture (hence shelf-stability) and macro-composition — cheap quality control that needs no wet chemistry. This is the concrete, fundable slice: the same NJIT core-facility spectroscopy, pointed at food instead of fuel.</p>
+  </div>
+
+  <h2><span class="n">4</span>Crystal — food is a crystallization problem <span class="tag v">Verified — food science</span></h2>
+  <p>Below the pigments, much of a food’s texture, gloss, snap and shelf-life is set by <em>which crystals form, and in which polymorph.</em> The clearest case sits right in the bar: <strong>cocoa butter is polymorphic</strong> — it can solidify into six distinct crystal forms, and only <strong>Form V</strong> gives chocolate its gloss and clean snap. Tempering <em>is</em> the controlled seeding of that one crystal form; skip it and you get the dull, streaky “bloom” of the wrong polymorph. Sugar (grainy vs. smooth), honey’s glucose crystallizing out (why raw honey granulates), starch’s semi-crystalline granules (gelatinization and the retrogradation that stales bread), and ice-crystal size in anything frozen are all crystallography. For a honey–nut–cocoa bar, the crystal state of the fat and the sugar <em>is</em> the texture and much of the stability. It resonates with the series’ crystal-lattice chapters — except here the lattice is edible and the claim is textbook.</p>
+
+  <h2><span class="n">5</span>Phyllotaxis — the plant’s geometry <span class="tag v">Verified — geometry</span> <span class="tag m">Model — nutrition link</span></h2>
+  <p><span class="tag v">Verified</span> Many edible plants arrange their parts by the golden angle (~137.5°): the Fibonacci spirals of a sunflower head, a pinecone, a pineapple, the florets of Romanesco. That is real botany and the real mathematics of the series’ φ chapter — the golden angle packs seeds and leaves to minimise overlap and maximise light capture.</p>
+  <p><span class="tag m">Model</span> The nutritional link is indirect, and I tag it as such. The geometry optimises the plant’s <em>photosynthesis and seed-packing</em> — its capacity to make and store nutrients densely — not a property of the food once it’s on your plate. Eating a spiral doesn’t transfer the spiral’s virtue. The honest statement: the same golden-angle packing that fills a sunflower head is <em>why</em> it is a dense store of oil and protein — geometry as the reason for the density, not a nutrient in itself.</p>
+
+  <h2><span class="n">6</span>Fractality — surface area is the nutrient interface <span class="tag v">Verified — structure</span> <span class="tag m">Model — nutrition link</span></h2>
+  <p><span class="tag v">Verified</span> Self-similar branching recurs wherever biology must pack maximal surface area into finite volume: Romanesco broccoli is a near-perfect natural fractal; roots, leaf venation, lungs, and the intestinal <strong>villi and microvilli</strong> that absorb your food are all fractal-like.</p>
+  <p><span class="tag m">Model</span> The link to nutrition is real but <em>specific</em>: fractal branching maximises the <strong>surface area of exchange</strong>. In the gut, villi multiply absorptive area by orders of magnitude; in food, surface area sets digestion and dissolution rate (a powder digests faster than a block — the same mass, more interface). What is <em>not</em> supported is any claim that a fractal-<em>shaped</em> food is “more nutritious” by virtue of its self-similarity. The defensible statement is about surface area and kinetics, not a mystical property of the shape.</p>
+
+  <h2><span class="n">7</span>The classification layer <span class="tag m">Model</span></h2>
+  <p>Organising nutrients along a single spectral axis — a “periodic table of nutrients” read off their light — is an <em>organizing model</em>, not a physical law. It is useful for teaching and for structuring a screening pipeline, and it rests on the verified spectroscopy of §§1–3. The dm³ contact-geometric framing sits here, as the modelling layer, and is tagged <span class="tag m">Model</span> throughout — the absorption chemistry underneath it is what carries the weight.</p>
+
+  <h2><span class="n">8</span>What this is — and isn’t</h2>
+  <p><span class="tag v">Verified</span> The physics (Beer–Lambert, conjugation → λ<sub>max</sub>), the pigment assignments, the crystallization and polymorphism of fats and sugars, the golden-angle geometry of phyllotaxis, and the DRIFTS/NIR compositional methods are all established science. <span class="tag m">Model</span> The single-spectral-axis “nutrient spectrum,” and the <em>nutritional</em> readings of phyllotaxis and fractality, are organizing models built on that verified base. <span class="tag o">Open</span> Health-outcome claims from colour, shape, or diversity are associational and not settled. No claim here is therapeutic, and none is stated as proven beyond what a spectrophotometer, or a citation, actually supports.</p>
+
+  <div class="foot">
+    <p>Working paper · Principia Orthogona nutrition track · companion to
+      <a href="ch-nutrient-spectrum.html">Nutrient Spectrum</a> and
+      <a href="ch-nutrient-predictions.html">dm³ Nutrient Prediction Registry</a>.</p>
+    <p><strong>Sources (standard references, to cite explicitly before print):</strong> Beer–Lambert absorption law; carotenoid / chlorophyll / anthocyanin absorption maxima (food-chemistry texts, e.g. Belitz–Grosch–Schieberle, <em>Food Chemistry</em>); near-infrared spectroscopy for food composition (Williams &amp; Norris, <em>Near-Infrared Technology in the Agricultural and Food Industries</em>). Exact λ<sub>max</sub> figures are solvent/pH-dependent — verify or measure before quoting as firm.</p>
+    <p style="font-style:italic;color:#9aa;">© 2026 Pablo Nogueira Grossi · G6 LLC · Newark, NJ. Claims tagged VERIFIED / MODEL / OPEN per house rule; nothing herein is medical advice.</p>
+  </div>
+</div>
+<script>
+(function(){
+  var btn=document.getElementById('xray');
+  function set(on){
+    document.body.classList.toggle('xray',on);
+    btn.innerHTML = on ? '☼&nbsp;&nbsp;Plain view' : '⚛&nbsp;&nbsp;X-ray view';
+    btn.setAttribute('aria-pressed', on ? 'true':'false');
+    try{ localStorage.setItem('nutri-xray', on?'1':'0'); }catch(e){}
+  }
+  var saved='0'; try{ saved=localStorage.getItem('nutri-xray')||'0'; }catch(e){}
+  set(saved==='1');
+  btn.addEventListener('click',function(){ set(!document.body.classList.contains('xray')); });
+})();
+</script>
+</body>
+</html>
