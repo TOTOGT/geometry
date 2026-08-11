@@ -3,59 +3,304 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>John Hopfield · Book 7: Scientist Gallery · Principia Orthogona</title>
-
+<title>John Hopfield: Kinetic Proofreading, the Energy Function, and the Real Cost of a Lyapunov Guarantee · G7</title>
+<meta name="description" content="John Hopfield's two results, eight years apart: kinetic proofreading (1974), an irreversible step that squares a discrimination error rate at the cost of dissipated energy, and the Hopfield network (1982), whose symmetric-weight energy function is a genuine, provable Lyapunov descent. Read against WP-31C/D: what it costs a real biological switch not to have that symmetry.">
 <style>
-:root{--navy:#1a2744;--gold:#c9a84c;--cream:#faf7f0;--smoke:#f0ece4;--mid:#2e4070;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Georgia',serif;background:var(--navy);color:var(--cream);line-height:1.7;}
-nav{background:rgba(10,22,40,.95);padding:0 2rem;height:52px;display:flex;align-items:center;
-    justify-content:space-between;border-bottom:1px solid rgba(201,168,76,.15);position:sticky;top:0;z-index:100;}
-.nav-brand{color:var(--gold);font-family:sans-serif;font-size:.8rem;letter-spacing:.2em;text-decoration:none;}
-.nav-links{display:flex;gap:1rem;}
-.nav-links a{color:rgba(255,255,255,.5);font-size:.75rem;text-decoration:none;letter-spacing:.05em;}
-.nav-links a:hover{color:var(--gold);}
-.hero{text-align:center;padding:4rem 2rem 3rem;border-bottom:1px solid rgba(201,168,76,.15);}
-.eyebrow{font-family:sans-serif;font-size:.72rem;letter-spacing:.25em;color:rgba(201,168,76,.6);margin-bottom:1rem;text-transform:uppercase;}
-h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:400;color:var(--cream);margin-bottom:.5rem;}
-.subtitle{font-style:italic;color:rgba(255,255,255,.55);font-size:1rem;margin-bottom:1.5rem;}
-.gold-rule{width:60px;height:1px;background:var(--gold);margin:1.5rem auto;opacity:.5;}
-.body{max-width:760px;margin:0 auto;padding:3rem 2rem 5rem;}
-.body p{color:rgba(255,255,255,.7);margin-bottom:1.2rem;font-size:1rem;}
-.stub-note{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);
-           padding:1.5rem 2rem;text-align:center;margin:2rem 0;}
-.stub-note p{color:rgba(201,168,76,.8);font-size:.9rem;margin:0;}
-footer{background:rgba(10,22,40,.9);border-top:1px solid rgba(201,168,76,.1);
-       padding:1.5rem 2rem;text-align:center;font-family:sans-serif;font-size:.72rem;color:rgba(255,255,255,.3);}
-footer a{color:rgba(201,168,76,.5);text-decoration:none;}
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none;
+             transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+      border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .04em; line-height: 1.15;
+         margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 640px; margin: 0 auto 1.5rem; }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .08em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem;
+   border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+em { font-style: italic; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-math { background: rgba(17, 17, 24, 0.9); border: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; font-family: 'Courier New', monospace;
+            line-height: 1.7; overflow-x: auto; font-size: .9rem; white-space: pre; }
+.block-axiom { background: rgba(201, 168, 76, 0.08); border-left: 3px solid var(--gold);
+             padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-theorem { background: rgba(74, 158, 255, 0.08); border-left: 3px solid var(--op-c);
+               padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry { background: rgba(255, 159, 64, 0.08); border-left: 3px solid var(--amber);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry strong { color: var(--amber); }
+.op-chain { display: inline-flex; align-items: center; gap: .3rem; flex-wrap: wrap;
+          font-family: 'Courier New', monospace; font-size: 1rem;
+          margin: 1rem 0; padding: 1rem; background: rgba(0,0,0,0.3);
+          border-radius: 3px; }
+.op { display: inline-flex; align-items: center; justify-content: center;
+    width: 2.2rem; height: 2.2rem; border-radius: 50%; font-weight: 600;
+    font-size: .9rem; flex-shrink:0; }
+.op-c { background: rgba(96, 165, 250, 0.2); color: var(--op-c); border: 1px solid var(--op-c); }
+.op-k { background: rgba(167, 139, 250, 0.2); color: var(--op-k); border: 1px solid var(--op-k); }
+.op-f { background: rgba(244, 114, 182, 0.2); color: var(--op-f); border: 1px solid var(--op-f); }
+.op-u { background: rgba(52, 211, 153, 0.2); color: var(--op-u); border: 1px solid var(--op-u); }
+.op-arr { color: var(--dim); margin: 0 .2rem; font-size: .8rem; }
+.pull-wrap { background: rgba(201, 168, 76, 0.08); border-left: 4px solid var(--gold);
+           padding: 2rem; margin: 3rem 0; border-radius: 2px; font-style: italic;
+           line-height: 1.85; }
+.pull-cite { font-size: .85rem; color: var(--dim); display: block; margin-top: 1rem; font-style: normal; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .9rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .8rem; }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none;
+          transition: color .2s; }
+.ch-nav a:hover { color: var(--gold); }
 </style>
-
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 </head>
 <body>
+
 <nav>
-  <a href="../series-hub.html" class="nav-brand">⚜ Principia Orthogona</a>
+  <a href="../living-book.html" class="nav-logo">⚜ Principia Orthogona · G1–G7</a>
   <div class="nav-links">
-    <a href="index.html">Book 7</a>
-    <a href="the-scientists.html">Gallery</a>
-    <a href="../index.html">Book 3</a>
-    <a href="../series-hub.html">Series Hub</a>
+    <a href="../book5/index.html">G5</a>
+    <a href="../book6/index.html">G6</a>
+    <a href="index.html">G7</a>
+    <a href="../omega/omega-point-index.html">Omega Point</a>
   </div>
 </nav>
+
 <div class="hero">
-  <div class="eyebrow">Book 7 · Scientist Gallery · dm³</div>
-  <h1>John Hopfield</h1>
-  <div class="subtitle">Hopfield networks · associative memory · energy landscapes as dm³ attractor basins · Nobel 2024</div>
-  <div class="gold-rule"></div>
+  <div class="hero-eyebrow">G7 · The Scientist Gallery · Attribution Series</div>
+  <h1>John J. Hopfield</h1>
+  <p class="hero-sub">Two results, eight years apart, one mathematics: an irreversible step that squares a discrimination error, and a symmetric coupling that turns a network into a provable descent. Nobel Prize in Physics, 2024.</p>
 </div>
-<div class="body">
-  <div class="stub-note"><p>Chapter in preparation · Content coming soon</p></div>
-  <p>This chapter traces the dm³ operator chain G = U ∘ F ∘ K ∘ C through the life and work of <strong>John Hopfield</strong>.</p>
-  <p>Hopfield networks · associative memory · energy landscapes as dm³ attractor basins · Nobel 2024.</p>
-  <p>Every scientist in this gallery represents one complete traversal of the generative chain: compression of a problem (C), threshold crossing (K), singularity and bifurcation (F), and stabilisation at a new attractor (U). The output — a theorem, a discovery, a proof — is G.</p>
+
+<div class="page">
+
+  <div class="section-label">Part I · 1974 · Kinetic Proofreading</div>
+
+  <h2>The Error a Cell Cannot Afford</h2>
+  <p class="block-prose">
+    In 1974, working from the Division of Chemistry and Biology at Caltech, Hopfield asked a
+    question that sounds like bookkeeping and turns out to be thermodynamics: how does a
+    ribosome, choosing a tRNA to match a codon, or a DNA polymerase, choosing the next
+    nucleotide, achieve error rates of roughly one in 10,000 to one in 100,000 — when the
+    underlying chemistry, binding free energies of correct versus incorrect substrates that
+    differ by only a few hydrogen bonds, should only be able to discriminate to about one part
+    in a few hundred at equilibrium? Something is squeezing more accuracy out of the same
+    binding-energy difference than equilibrium thermodynamics allows for free.
+  </p>
+  <p class="block-prose">
+    Hopfield's answer, published as <em>"Kinetic Proofreading: A New Mechanism for Reducing
+    Errors in Biosynthetic Processes Requiring High Specificity"</em> (<em>PNAS</em> 71(10),
+    4135&ndash;4139, 1974), is that the cell doesn't beat equilibrium — it refuses to let the
+    reaction reach equilibrium at all. Insert one additional, effectively irreversible step
+    between initial binding and final incorporation — for a ribosome, GTP hydrolysis on EF-Tu
+    before peptide-bond formation — and every substrate, correct or incorrect, has to survive
+    a second independent chance to fall off before the reaction can complete. Since the
+    incorrect substrate dissociates faster at every stage (that's what "incorrect" means
+    kinetically), a second independent discrimination step multiplies the two error
+    probabilities together, rather than averaging them. One irreversible checkpoint,
+    approximately squares the accuracy.
+  </p>
+
+  <div class="block-math">Equilibrium discrimination (one binding step):
+  error rate  ~  f0                (set by &Delta;G of correct vs incorrect binding)
+
+Kinetic proofreading (N independent irreversible checkpoints):
+  error rate  ~  f0^(N+1)          (each checkpoint re-applies the same odds)
+
+The gain is bought, not given: each checkpoint spends one high-energy bond
+(here, one GTP) whether the substrate turns out correct or not. Fidelity is
+traded directly against dissipation and against speed.</div>
+
+  <div class="block-axiom">
+    <span class="block-label">The K operator, made of nonequilibrium</span>
+    <div class="block-body">
+      In this series' vocabulary, the irreversible hydrolysis step is a gate — a K operator —
+      but it is a gate unlike the ones this gallery usually draws (a threshold crossed, a sign
+      flipped once and for all). It is a gate that gets re-applied, identically, at every
+      checkpoint, and that only works because it destroys the possibility of going back. A
+      reversible step cannot proofread: if the system can return to where it started, thermal
+      equilibrium is exactly the ceiling kinetic proofreading exists to beat. The K here is
+      irreversibility itself, spent as a resource.
+    </div>
+  </div>
+
+  <p class="block-prose">
+    This is not a footnote to today's autophagy working papers — it is the same genre of fact.
+    <a href="../book6/wp31d-topological-mismatch-bifurcation-loss.html">WP-31D</a> logged
+    u&#8320; &asymp; 0.01 s&#8315;&sup1; as the one primary-source rate constant recovered from
+    Szyma&#324;ska et al.'s ULK1/AMPK/mTORC1 model — a lumped dephosphorylation rate governing how
+    fast an activating phosphorylation reverses. Kinetic proofreading is the 1974 ancestor of that
+    same question: not just <em>what</em> gets phosphorylated, but whether the step that undoes it
+    is fast, slow, or effectively one-way, and what that irreversibility buys or costs the system
+    that depends on it.
+  </p>
+
+  <div class="section-label">Part II · 1982 · The Energy Function</div>
+
+  <h2>A Network That Cannot Help But Descend</h2>
+  <p class="block-prose">
+    Eight years later, now at Bell Laboratories and Caltech, Hopfield asked a differently shaped
+    question with the same underlying instinct: not <em>how does a biological system beat noise</em>,
+    but <em>what has to be true of a network for its dynamics to be provably well-behaved at all</em>.
+    <em>"Neural Networks and Physical Systems with Emergent Collective Computational Abilities"</em>
+    (<em>PNAS</em> 79(8), 2554&ndash;2558, 1982) proposed a network of N binary units
+    $S_i \in \{-1,+1\}$, densely interconnected with weights $W_{ij}$, updated asynchronously by a
+    simple threshold rule:
+  </p>
+  <div class="block-math">S_i  ->  sign( sum_j  W_ij * S_j  -  theta_i )      (one unit at a time, asynchronous)
+
+Energy:   E = - (1/2) * sum_i sum_j  W_ij * S_i * S_j  +  sum_i theta_i * S_i</div>
+  <div class="block-theorem">
+    <span class="block-label">The one condition that makes it work</span>
+    <div class="block-body">
+      If the coupling is <strong>symmetric</strong> ($W_{ij} = W_{ji}$) and has <strong>no
+      self-coupling</strong> ($W_{ii} = 0$), then every single-unit update can only decrease $E$
+      or leave it unchanged &mdash; never increase it. $E$ is a genuine Lyapunov function for the
+      whole network: it is bounded below (the state space is finite, $\{-1,+1\}^N$), it strictly
+      decreases along any state-changing update, and the dynamics therefore has nowhere to go but
+      into a fixed point. There is no proof of convergence bolted on afterward &mdash; the
+      symmetry condition <em>is</em> the proof, in one line of algebra.
+    </div>
+  </div>
+  <p class="block-prose">
+    The payoff is content-addressable memory: store a set of patterns as local minima of $E$ by
+    choosing $W_{ij}$ via a Hebbian-style outer-product rule, and any input state, however
+    corrupted, rolls downhill to the nearest stored pattern. The stored memory is not written to
+    an address and looked up; it is a basin, and the network finding it is nothing more exotic than
+    $E$ doing what a Lyapunov function is built to do.
+  </p>
+
+  <div class="op-chain">
+    <span class="op op-c">C</span><span class="op-arr">=</span>corrupted input pattern<span class="op-arr">&nbsp;&nbsp;</span>
+    <span class="op op-k">K</span><span class="op-arr">=</span>threshold $\theta_i$<span class="op-arr">&nbsp;&nbsp;</span>
+    <span class="op op-f">F</span><span class="op-arr">=</span>symmetric $W_{ij}$, energy descent<span class="op-arr">&nbsp;&nbsp;</span>
+    <span class="op op-u">U</span><span class="op-arr">=</span>recovered memory, a local min of E
+  </div>
+
+  <h2>What the Symmetry Actually Buys</h2>
+  <p class="block-prose">
+    It is worth being precise about what "symmetric" is doing, because the same question — is the
+    coupling symmetric or not — is exactly the fork this series ran into today, in a completely
+    different system. A symmetric, self-coupling-free network is, in the language this gallery has
+    used elsewhere, a <strong>gradient system</strong>: its dynamics are literally $\Delta S$
+    following $-\nabla E$ on the discrete cube. Gradient systems cannot oscillate. There is no room
+    for a limit cycle in a landscape that only goes downhill. Hopfield did not discover that his
+    network happened not to oscillate — he built the symmetry in specifically so that it
+    <em>could not</em>, and then collected content-addressable memory as the reward for that
+    constraint.
+  </p>
+
+  <div class="pull-wrap">
+    <p>Real biological switches are almost never handed that symmetry for free. A kinase that
+    activates a phosphatase, which in turn inhibits the kinase, is coupling every bit as real as
+    Hopfield's $W_{ij}$ — but there is no thermodynamic law requiring $W_{12}=W_{21}$ between two
+    different enzymatic reactions running at two different rates through two different active
+    sites. Evolution had no reason to build a symmetric network, and generically it didn't.</p>
+    <cite class="pull-cite">— on why the ULK1&ndash;AMPK&ndash;mTORC1 switch is not a Hopfield net</cite>
+  </div>
+
+  <p class="block-prose">
+    That is precisely the finding of
+    <a href="../book6/wp31d-topological-mismatch-bifurcation-loss.html">WP-31D</a>, worked out the
+    same day this chapter was drafted. A reduced three-node model of the AMPK&ndash;mTORC1&ndash;ULK1
+    autophagy switch was built with AMPK as an uncoupled driver &mdash; no return edge from ULK1
+    back to AMPK. That omission happens to make the reduced Jacobian block-triangular, which forces
+    its $(M,U)$ sub-block into the same position Hopfield's symmetric $W_{ij}$ occupies: a
+    $2\times2$ matrix with nonnegative off-diagonal entries is guaranteed real eigenvalues by the
+    discriminant of the quadratic formula alone, the same unconditional guarantee that rules out
+    oscillation in a cooperative planar system. The real, published model
+    (Szyma&#324;ska et al. 2015) restores exactly the edge the reduced model dropped &mdash; ULK1
+    phosphorylating AMPK, closing $A \to U \to A$ into an actual loop &mdash; and that one restored
+    coupling is what turns a system that cannot oscillate into a real relaxation oscillator, complete
+    with SNIC and Hopf bifurcations. Hopfield's 1982 result and WP-31D's 2026 result are the same
+    fact, read from opposite ends: symmetric coupling forbids oscillation and buys you a provable
+    convergence theorem; the moment real biology closes the missing loop, that guarantee is exactly
+    what you lose, and what you get back is dynamics — pulses of autophagy alternating with pulses
+    of protein synthesis, not a single fixed memory.
+  </p>
+
+  <div class="section-label">Part III · 2024 · Recognition</div>
+  <h2>The Nobel Prize in Physics</h2>
+  <p class="block-prose">
+    On 8 October 2024, the Royal Swedish Academy of Sciences awarded the Nobel Prize in Physics
+    jointly to <strong>John J. Hopfield</strong> (Princeton University) and
+    <strong>Geoffrey E. Hinton</strong> (University of Toronto) &ldquo;for foundational discoveries
+    and inventions that enable machine learning with artificial neural networks.&rdquo; The
+    citation reaches back explicitly to the 1982 associative-memory network: Hinton's Boltzmann
+    machine, the next link in the chain that leads to modern deep learning, is built directly on
+    top of the energy-function idea Hopfield borrowed from the physics of interacting spins. It is,
+    among other things, an unusually direct case of a biophysicist's mathematics — built to explain
+    memory, and before that, to explain how a cell avoids a mistranslated protein — becoming a
+    physics prize fifty years after the first paper and forty-two years after the second.
+  </p>
+
+  <h2>References</h2>
+  <table class="refs">
+    <tr><td>Hopfield 1974</td><td>Kinetic Proofreading: A New Mechanism for Reducing Errors in Biosynthetic Processes Requiring High Specificity. <em>PNAS</em> 71(10), 4135&ndash;4139. doi:10.1073/pnas.71.10.4135</td></tr>
+    <tr><td>Hopfield 1982</td><td>Neural Networks and Physical Systems with Emergent Collective Computational Abilities. <em>PNAS</em> 79(8), 2554&ndash;2558. doi:10.1073/pnas.79.8.2554</td></tr>
+    <tr><td>Nobel 2024</td><td>The Nobel Prize in Physics 2024, awarded jointly to John J. Hopfield and Geoffrey E. Hinton. nobelprize.org/prizes/physics/2024</td></tr>
+    <tr><td>WP-31C/D</td><td><a href="../book6/wp31c-autophagy-calibration-case-study.html">book6/wp31c</a>, <a href="../book6/wp31d-topological-mismatch-bifurcation-loss.html">book6/wp31d</a> &mdash; the same-day case study this chapter cross-references.</td></tr>
+  </table>
+
 </div>
+
+<div class="ch-nav">
+  <a href="index.html">← Back to G7 Index</a>
+  <a href="ch-waddington.html">Next: C.H. Waddington →</a>
+</div>
+
 <footer>
   <a href="index.html">Book 7</a> · <a href="../series-hub.html">Series Hub</a> · <a href="../chapters-diagram.html">All Chapters</a><br>
-  © 2026 Pablo Nogueira Grossi · G6 LLC · g6llc@proton.me · +1 (646) 342-3751
+  © 2026 Pablo Nogueira Grossi · G6 LLC · Newark, New Jersey · CC BY 4.0
 </footer>
 </body>
 </html>
