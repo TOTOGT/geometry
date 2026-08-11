@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q.1 · Spectral Hierarchies — Principia Orthogona Vol VIII</title>
+<meta name="description" content="From η₂=φ to η₃≈1.839 (Tribonacci) to η₄≈1.928 (Tetranacci): the k-nacci spectral radii form a strictly increasing, convergent ladder with ceiling 2. Golden-ratio quasicrystals, the Tribonacci/Rauzy substitution, and an honest look at where the ladder-toward-ℵ₀ analogy stops being literal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1c22; --ink2: #2d3142;
+  --paper: #f7f4ee; --paper2: #ede9e0; --paper3: #e4dfd4;
+  --accent: #8b3a0f; --accent2: #1a4d6e; --accent3: #3d6b3f;
+  --rule: #c8c0b0; --dim: #7a7060;
+  --serif: 'EB Garamond', Georgia, serif; --mono: 'JetBrains Mono', 'Courier New', monospace;
+  --quantum: #4a7c9e;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--paper); color:var(--ink); font-family:var(--serif); font-size:19px; line-height:1.72; counter-reset:figure theorem; }
+.rh { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(247,244,238,0.93); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule); padding:0.5rem 2.5rem; display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.63rem; color:var(--dim); letter-spacing:0.07em; }
+.rh a { color:var(--accent); text-decoration:none; }
+.ch-open { max-width:960px; margin:0 auto; padding:7rem 3rem 3rem; border-bottom:2px solid var(--ink2); }
+.ch-num { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.18em; color:var(--dim); text-transform:uppercase; margin-bottom:1rem; }
+.ch-title { font-size:clamp(2rem,4.5vw,3.6rem); font-weight:500; line-height:1.1; color:var(--ink2); max-width:800px; margin-bottom:1.5rem; }
+.ch-title em { font-style:italic; color:var(--quantum); }
+.ch-meta { display:flex; gap:2rem; flex-wrap:wrap; padding:1rem 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin-bottom:1.5rem; }
+.meta { font-family:var(--mono); font-size:0.62rem; color:var(--dim); letter-spacing:0.06em; }
+.meta strong { color:var(--ink); font-weight:500; }
+.ch-abs { max-width:640px; font-size:0.96rem; color:var(--ink2); line-height:1.68; padding:1.25rem 1.25rem 1.25rem 1.5rem; border-left:3px solid var(--quantum); background:var(--paper2); font-style:italic; }
+.toc-wrap { padding:2rem 3rem 0; max-width:960px; margin:0 auto; }
+.toc-wrap h4 { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.14em; color:var(--dim); text-transform:uppercase; margin-bottom:0.6rem; }
+.toc { list-style:none; counter-reset:toc; }
+.toc li { counter-increment:toc; display:flex; gap:0.5rem; padding:0.18rem 0; font-size:0.88rem; }
+.toc li::before { content:counter(toc)"."; font-family:var(--mono); font-size:0.6rem; color:var(--quantum); min-width:1.4rem; padding-top:0.15em; }
+.toc a { color:var(--ink2); text-decoration:none; border-bottom:1px dotted var(--rule); }
+.toc a:hover { color:var(--quantum); }
+.body-wrap { max-width:960px; margin:0 auto; padding:3rem 3rem 5rem; display:grid; grid-template-columns:1fr 240px; gap:0 3.5rem; }
+.main { min-width:0; }
+.side { position:sticky; top:3.5rem; font-size:0.8rem; align-self:start; }
+.sec-num { font-family:var(--mono); font-size:0.6rem; color:var(--quantum); letter-spacing:0.14em; text-transform:uppercase; margin-top:3.5rem; margin-bottom:0.25rem; }
+h2.sec { font-size:1.5rem; font-weight:500; color:var(--ink2); border-bottom:1px solid var(--rule); padding-bottom:0.35rem; margin-bottom:1rem; }
+h3.sub { font-size:1.1rem; font-weight:500; font-style:italic; color:var(--ink2); margin:1.8rem 0 0.6rem; }
+p { margin-bottom:0.95rem; }
+p+p { text-indent:1.4em; }
+.eq { font-family:var(--mono); font-size:0.86rem; background:var(--paper2); border:1px solid var(--rule); border-left:3px solid var(--quantum); padding:1rem 1.4rem; margin:1.4rem 0; overflow-x:auto; line-height:2.1; color:var(--quantum); }
+.eq .cm { color:var(--dim); font-size:0.75rem; }
+.env { border:1px solid var(--rule); padding:1.1rem 1.4rem; margin:1.6rem 0; background:var(--paper2); }
+.env::before { display:block; font-family:var(--mono); font-size:0.6rem; letter-spacing:0.11em; text-transform:uppercase; margin-bottom:0.55rem; counter-increment:theorem; }
+.thm::before { content:"Theorem "counter(theorem); color:var(--quantum); }
+.dfn::before { content:"Definition "counter(theorem); color:var(--accent2); }
+.rem::before { content:"Remark "counter(theorem); color:var(--accent3); }
+.cor::before { content:"Correction "counter(theorem); color:var(--accent); }
+.env p { font-style:italic; margin-bottom:0; }
+.env p+p { text-indent:0; margin-top:0.45rem; }
+.fig { margin:2.2rem 0; counter-increment:figure; }
+.fig-inner { background:var(--paper2); border:1px solid var(--rule); padding:1.25rem; display:flex; justify-content:center; align-items:center; }
+.fig-cap { margin-top:0.5rem; font-size:0.83rem; color:var(--dim); line-height:1.5; }
+.fig-cap b { font-family:var(--mono); font-size:0.67rem; color:var(--ink2); }
+.fig-cap b::before { content:"Figure "counter(figure)". "; }
+.interactive { background:var(--ink2); color:#c0c8d8; padding:3rem; margin:2rem 0; border:1px solid rgba(255,255,255,0.06); }
+.int-label { font-family:var(--mono); font-size:0.63rem; letter-spacing:0.14em; color:#8eb8c8; text-transform:uppercase; margin-bottom:0.8rem; }
+.int-h { font-family:var(--serif); font-size:1.4rem; font-weight:400; color:#eef0f5; margin-bottom:1rem; }
+.int-grid { display:grid; grid-template-columns:1fr 280px; gap:1.5px; background:rgba(255,255,255,0.04); margin-bottom:1rem; }
+.int-canvas-wrap { background:#060810; min-height:300px; position:relative; }
+canvas { display:block; width:100%; height:100%; }
+.int-panel { background:#0e1018; padding:1.2rem; display:flex; flex-direction:column; gap:1rem; }
+.ctrl { display:flex; flex-direction:column; gap:0.5rem; }
+.ctrl label { font-family:var(--mono); font-size:0.6rem; color:#5a6080; letter-spacing:0.05em; text-transform:uppercase; }
+.ctrl span { color:#8eb8c8; font-weight:600; }
+.ctrl input[type=range] { width:100%; accent-color:#8eb8c8; cursor:pointer; }
+.int-output { display:grid; grid-template-columns:repeat(2,1fr); gap:0.5rem; }
+.out-box { background:#060810; padding:0.7rem 1rem; border:1px solid rgba(255,255,255,0.04); }
+.out-l { font-family:var(--mono); font-size:0.56rem; color:#3a4050; letter-spacing:0.05em; text-transform:uppercase; }
+.out-v { font-family:var(--mono); font-size:1rem; color:#8eb8c8; margin-top:0.15rem; font-weight:600; }
+.sn { border-left:2px solid var(--rule); padding:0.7rem 0 0.7rem 0.9rem; margin-bottom:1.3rem; color:var(--dim); font-size:0.78rem; line-height:1.5; }
+.sn strong { font-family:var(--mono); font-size:0.67rem; color:var(--ink); display:block; margin-bottom:0.25rem; letter-spacing:0.04em; }
+.sn a { color:var(--quantum); text-decoration:none; }
+.honest { border:1px solid var(--accent); border-left:3px solid var(--accent); background:rgba(139,58,15,0.05); padding:1.1rem 1.4rem; margin:1.6rem 0; }
+.honest .lbl { font-family:var(--mono); font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-bottom:0.5rem; display:block; }
+footer { background:var(--ink2); color:#5a6080; padding:3rem; }
+.ft-grid { max-width:960px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; padding-bottom:2rem; border-bottom:1px solid rgba(255,255,255,0.06); margin-bottom:1.4rem; }
+footer h4 { font-family:var(--mono); font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:#8eb8c8; margin-bottom:0.7rem; }
+footer p { line-height:1.65; margin-bottom:0.2rem; font-size:0.82rem; }
+footer a { color:#5a6080; text-decoration:none; display:block; margin-bottom:0.2rem; font-size:0.82rem; transition:color .15s; }
+footer a:hover { color:#8eb8c8; }
+.ft-copy { max-width:960px; margin:0 auto; display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.7rem; }
+@media(max-width:860px){ .body-wrap{grid-template-columns:1fr;} .side{position:static;} .int-grid{grid-template-columns:1fr;} }
+@media(max-width:520px){ body{font-size:17px;} .int-grid{grid-template-columns:1fr;} .int-output{grid-template-columns:1fr;} }
+.f { opacity:0; transform:translateY(12px); transition:opacity .6s ease,transform .6s ease; }
+.f.in { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="rh">
+  <span><a href="https://totogt.github.io/geometry">Principia Orthogona</a> · G6 LLC · 2026</span>
+  <span>Volume VIII · Q.1 · <a href="index.html">Book 8 Index →</a></span>
+</div>
+
+<div class="ch-open">
+  <div class="ch-num">Principia Orthogona · Volume VIII · Q.1 · Quantum Foundations</div>
+  <h1 class="ch-title">Spectral Hierarchies:<br>From η₂ to η₃ to <em>Infinity</em></h1>
+  <div class="ch-meta">
+    <div class="meta"><strong>Author</strong><br>Pablo Nogueira Grossi</div>
+    <div class="meta"><strong>Series</strong><br>Principia Orthogona, Vol. VIII (Book 8)</div>
+    <div class="meta"><strong>Context</strong><br>After Q.0 (origins) · before the physical instantiations (Q.0.5b–Q.2)</div>
+    <div class="meta"><strong>Prerequisites</strong><br>Q.0 · basic algebraic number theory</div>
+  </div>
+  <div class="ch-abs">Q.0 established that the k-nacci spectral radii η_k form a strictly increasing sequence converging to 2. This chapter asks what each rung of that ladder <em>is</em> — not just as a root of a polynomial, but as an object other mathematics already recognises: η₂ = φ as the growth rate of the golden ratio and the diffraction symmetry of real quasicrystals; η₃ as the Tribonacci constant governing the Rauzy substitution; the general pattern as a genuinely convergent, genuinely finite sequence. The chapter closes by being explicit about where the "ladder toward ℵ₀" language is a structural analogy and where it stops being a literal mathematical claim — because the two objects are not the same kind of thing, and saying so is more useful than not.</div>
+  <div class="toc-wrap" style="padding:1.5rem 0 0;">
+    <h4>Contents</h4>
+    <ol class="toc">
+      <li><a href="#s1">Recap: The Ladder from Q.0</a></li>
+      <li><a href="#s2">η₂ = φ — Quasicrystals and the Golden Ratio</a></li>
+      <li><a href="#s3">η₃ ≈ 1.839 — The Tribonacci Constant and the Rauzy Substitution</a></li>
+      <li><a href="#s4">η₄ and Beyond — The Pattern Generalises</a></li>
+      <li><a href="#s5">Interactive: The Spectral Ladder</a></li>
+      <li><a href="#s6">What "Ladder Toward ℵ₀" Means, and What It Doesn't</a></li>
+      <li><a href="#s7">Where This Leads: Q.0.5b–Q.2</a></li>
+      <li><a href="#s8">References</a></li>
+    </ol>
+  </div>
+</div>
+
+<div class="body-wrap">
+<div class="main">
+
+<div class="sec-num" id="s1">§ 1</div>
+<h2 class="sec">Recap: The Ladder from Q.0</h2>
+
+<p>Q.0 showed that for each k ≥ 2, the k-nacci characteristic polynomial P_k(λ) = λ^k − λ^(k−1) − ⋯ − λ − 1 has a unique dominant positive real root η_k, and that the sequence η₂ &lt; η₃ &lt; η₄ &lt; ⋯ is strictly increasing and converges to 2 from below, with η_k = 2 − O(1/2^k).</p>
+
+<p>That is a statement about roots of polynomials — clean, provable, and already proved in Q.0. What this chapter adds is context: each of the first few η_k is not merely an abstract root, it is a constant that already has a name and a body of independent mathematics attached to it, developed for reasons that have nothing to do with this series. Recognising the k-nacci ladder inside that older mathematics is the substance of what follows.</p>
+
+<!-- §2 -->
+<div class="sec-num" id="s2">§ 2</div>
+<h2 class="sec">η₂ = φ — Quasicrystals and the Golden Ratio</h2>
+
+<p>The k = 2 case is the Fibonacci recurrence, and η₂ = φ = (1+√5)/2 ≈ 1.618034 is the most extensively studied irrational number after π and e. Its continued fraction expansion is the constant sequence [1;1,1,1,…] — the "most irrational" number in the precise sense that it is the number worst-approximated by rationals, which is why Fibonacci spirals and phyllotactic angles (the ≈137.5° golden angle) recur so persistently in botany: packing efficiency is optimised by an angle that resists being approximated by any simple rational fraction of a turn.</p>
+
+<div class="dfn env f">
+  <p><strong>Zeckendorf's theorem (1972).</strong> Every positive integer has a unique representation as a sum of non-consecutive Fibonacci numbers. This is the k=2 case of a more general fact: every k-nacci sequence gives a positional number system, and the "non-consecutive" constraint generalises to "no k consecutive terms used."</p>
+</div>
+
+<p>φ also has a genuine, Nobel-recognised physical instantiation. Dan Shechtman's 1982 discovery of quasicrystals — solids with diffraction patterns showing sharp Bragg peaks and five-fold (or ten-fold, or icosahedral) symmetry, forbidden to ordinary periodic crystals by the crystallographic restriction theorem — won the 2011 Nobel Prize in Chemistry. The mathematical structures that model quasicrystals, Penrose tilings among them, are built from two tile shapes whose ratio of frequencies in any large patch converges to φ. This is real, measured, physical structure: φ is not a numerological association here, it is the literal ratio that appears in electron-diffraction data from an aluminium-manganese alloy.</p>
+
+<div class="sn">
+  <strong>Scope note:</strong> the quasicrystal connection is specific to η₂ = φ. It is a genuine, independently-established piece of physics, not a k-nacci discovery, and it does not by itself say anything about η₃ or higher. Each rung of the ladder needs its own grounding, checked separately — that is the discipline this chapter tries to keep.
+</div>
+
+<!-- §3 -->
+<div class="sec-num" id="s3">§ 3</div>
+<h2 class="sec">η₃ ≈ 1.839 — The Tribonacci Constant and the Rauzy Substitution</h2>
+
+<p>η₃, the Tribonacci constant, is the growth rate of the sequence 0,0,1,1,2,4,7,13,24,44,… and is the dominant eigenvalue of the substitution σ: 1↦12, 2↦13, 3↦1, studied by Gérard Rauzy in 1982. The Rauzy substitution generates a self-similar tiling of the plane — the Rauzy fractal — whose construction uses exactly the same companion-matrix eigenvalue structure introduced in Q.0 §2, applied at k=3.</p>
+
+<div class="eq">
+P_3(λ) = λ³ − λ² − λ − 1 = 0
+<br/>η₃ ≈ 1.839286755
+<br/><span class="cm">← same polynomial as Q.0 §3, k=3</span>
+</div>
+
+<p>The Rauzy fractal is a legitimate, independently-studied object in symbolic dynamics and number theory — it appears in work on beta-expansions, substitution dynamical systems, and the spectral theory of interval exchange transformations. What it establishes is narrower than it might sound: the Tribonacci constant governs a specific, well-defined self-similar tiling. It does not, by itself, establish that every fractal structure with a similar-looking growth rate is "the same object" as the Rauzy fractal — that would be the kind of unearned pattern-match this series tries to flag rather than commit. Q.2 will introduce a different, and independently measured, place η₃ shows up: the Hausdorff dimension of acid-induced polylaminin networks. That connection is made explicitly there, with its own citation and its own caveats — it is not implied by the Rauzy fractal's existence.</p>
+
+<!-- §4 -->
+<div class="sec-num" id="s4">§ 4</div>
+<h2 class="sec">η₄ and Beyond — The Pattern Generalises</h2>
+
+<p>η₄ ≈ 1.927562, the Tetranacci constant, and its successors are studied mainly as a family — the k-nacci or "k-bonacci" constants — rather than each carrying the individual weight of history that φ and η₃ do. What is well established for the whole family is the algebraic fact proved in Q.0: each η_k is the unique positive real root of an irreducible-over-ℚ (for most k) polynomial, each is a Perron number (a real algebraic integer strictly greater in modulus than all its Galois conjugates), and the sequence climbs monotonically toward 2.</p>
+
+<table style="width:100%;margin:1.5rem 0;border-collapse:collapse;font-family:var(--mono);font-size:0.83rem;">
+<tr style="border-bottom:2px solid var(--rule);">
+<th style="text-align:left;padding:0.5rem;color:var(--quantum);">k</th>
+<th style="text-align:left;padding:0.5rem;color:var(--quantum);">Name</th>
+<th style="text-align:left;padding:0.5rem;color:var(--quantum);">η_k</th>
+<th style="text-align:left;padding:0.5rem;color:var(--quantum);">Independently named structure</th>
+</tr>
+<tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.5rem;">2</td><td>Fibonacci</td><td>1.618034</td><td>Golden ratio · Penrose tilings · quasicrystals (Shechtman, Nobel 2011)</td></tr>
+<tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.5rem;">3</td><td>Tribonacci</td><td>1.839287</td><td>Rauzy fractal (Rauzy 1982) · polylaminin Hausdorff dimension (Q.2)</td></tr>
+<tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.5rem;">4</td><td>Tetranacci</td><td>1.927562</td><td>Studied as part of the k-nacci family; no independent named object as prominent as φ or η₃</td></tr>
+<tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.5rem;">5–9</td><td>Penta–Nonanacci</td><td>1.966 → 1.998</td><td>Family members; asymptotics well studied, individual physical instantiations not established in this series</td></tr>
+<tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.5rem;">∞</td><td>Limit</td><td>2</td><td>The doubling map / full binary shift — the k→∞ limit is exactly the case where every past step counts equally, i.e. no memory decay</td></tr>
+</table>
+
+<!-- §5 -->
+<div class="sec-num" id="s5">§ 5</div>
+<h2 class="sec">Interactive: The Spectral Ladder</h2>
+
+<p>The bars below show η_k for k = 2 through 16, normalised against the ceiling of 2. Watch how quickly the gap 2 − η_k collapses — by k=10 it is under one part in a thousand.</p>
+
+<div class="interactive">
+  <div class="int-label">Spectral Ladder</div>
+  <div class="int-h">η_k → 2, k = 2 to 16</div>
+  <div class="int-grid">
+    <div class="int-canvas-wrap">
+      <canvas id="ladderCanvas" width="640" height="300"></canvas>
+    </div>
+    <div class="int-panel">
+      <div class="ctrl">
+        <label>Highlight k <span id="kVal">3</span></label>
+        <input type="range" id="kSlider" min="2" max="16" value="3" step="1">
+      </div>
+      <div class="int-output">
+        <div class="out-box"><div class="out-l">η_k</div><div class="out-v" id="etaOut">1.8393</div></div>
+        <div class="out-box"><div class="out-l">2 − η_k</div><div class="out-v" id="gapOut">0.1607</div></div>
+        <div class="out-box"><div class="out-l">Named object</div><div class="out-v" id="nameOut" style="font-size:0.72rem;">Tribonacci</div></div>
+        <div class="out-box"><div class="out-l">Perron number</div><div class="out-v" id="perronOut">Yes</div></div>
+      </div>
+      <div style="font-size:0.7rem;color:#3a4050;margin-top:auto;padding-top:0.8rem;border-top:1px solid rgba(255,255,255,0.04);">
+        <p>Ceiling at η=2 shown as dashed line. The ladder is finite and convergent at every step — it never reaches 2.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- §6 -->
+<div class="sec-num" id="s6">§ 6</div>
+<h2 class="sec">What "Ladder Toward ℵ₀" Means, and What It Doesn't</h2>
+
+<p>Book 8's index page (§ "The Orbit of Infinities") places the k-nacci convergence toward 2 alongside the cardinal hierarchy ℵ₀ &lt; 2^ℵ₀ &lt; ⋯ &lt; inaccessible &lt; Mahlo &lt; measurable &lt; ⋯, framed as a structural question: does the sequence of physical/mathematical "attractors" this series studies have a limit, or does it recapitulate the same open-endedness at a higher level? That framing is honest about being a question, and this chapter wants to be equally honest about the mathematics underneath it.</p>
+
+<div class="honest">
+  <span class="lbl">What is actually true</span>
+  <div class="body">
+    η₂ &lt; η₃ &lt; η₄ &lt; ⋯ is a strictly increasing, <em>bounded</em>, convergent sequence of algebraic numbers. It has a supremum, 2, which it approaches but never reaches — a textbook example of a monotone bounded sequence and its limit. This is finite mathematics, fully classical, no set-theoretic apparatus required.
+  </div>
+</div>
+
+<div class="honest">
+  <span class="lbl">What would be a false equivalence</span>
+  <div class="body">
+    The cardinal hierarchy ℵ₀ &lt; 2^ℵ₀ &lt; ⋯ is not bounded above — there is provably no largest cardinal (Cantor's theorem: 2^κ &gt; κ for every κ), and the large-cardinal hierarchy above it (inaccessible, Mahlo, measurable, …) is a hierarchy of consistency strength with no known ceiling at all, open-ended in a way the η_k sequence structurally is not. Calling η_k → 2 "a ladder toward ℵ₀" is evocative language pointing at a shared shape — a sequence of levels, each one a step up from the last — not a mathematical reduction of one to the other. The η_k sequence has a ceiling; by Cantor's theorem, the cardinal hierarchy provably does not. That difference is the whole content of the disanalogy, and it is worth stating plainly rather than letting the resemblance do more work than it has earned.
+  </div>
+</div>
+
+<p>The honest version of the claim, then, is this: both structures are instances of "a well-ordered sequence of levels, each strictly exceeding the last, organising complexity at its own scale." That is a real and useful pattern to notice across very different parts of mathematics. It is not the same as saying the k-nacci ladder <em>is</em> the cardinal hierarchy, or that one explains the other. Keeping the metaphor and dropping the equivalence is the position this chapter takes.</p>
+
+<h3 class="sub">Three layers the metaphor compresses into one gesture</h3>
+
+<p>It is worth taking the disanalogy apart further, because it is not just one difference — the metaphor quietly compresses three separate facts, and pulling them apart makes the actual boundary of the claim visible.</p>
+
+<div class="thm env f">
+  <p><strong>Layer 1 — why η_k → 2 works at all.</strong> The Monotone Convergence Theorem: a sequence of reals that is increasing and bounded above converges, to its supremum. This is a consequence of the completeness (least-upper-bound) property of ℝ — the same construction of the real numbers usually credited to Cantor and Dedekind in the 1870s. η_k → 2 is not straining toward something unreachable; it is an entirely ordinary limit, and every term sits inside the compact interval [φ, 2).</p>
+</div>
+
+<div class="rem env f">
+  <p><strong>Layer 2 — the index is not the value.</strong> It is true that k ranges over {2,3,4,…}, a set of cardinality ℵ₀. But this is true of any infinite sequence of anything, and it is a statement about the <em>index set</em>, not about where the <em>values</em> η_k go. The values never leave a bounded interval of ℝ. Saying "the index set is countably infinite" and "the values approach ℵ₀" are different claims, and only the first one is true here.</p>
+</div>
+
+<div class="cor env f">
+  <p><strong>Layer 3 — Cantor's theorem is a different kind of argument, and its targets are defined by resisting exactly this kind of convergence.</strong> Cantor's theorem, 2^κ &gt; κ for every cardinal κ, is proved by diagonalization — a contradiction argument, not a limiting process. Nothing "approaches" the next cardinal from below; the proof shows no bijection can exist, full stop. Stronger still: the large cardinals the site's own "Orbit of Infinities" section names — inaccessible, Mahlo, measurable — are specifically <em>defined</em> by being unreachable via convergent processes from below. An inaccessible cardinal is a regular strong limit cardinal: by definition, no sequence of ordinals shorter than itself, however cleverly chosen, can have it as a supremum. That is not merely "a different flavour of infinity" from η_k → 2 — it is the structural opposite. The k-nacci ladder converges precisely by being reachable from below. The cardinals named in the metaphor are singled out, historically, for the opposite property.</p>
+</div>
+
+<p>None of this weakens the pattern-recognition instinct that motivates the metaphor — noticing that "a monotone ladder of levels, each strictly more than the last" shows up in both finite algebra and set theory is a genuine observation, and it is fine to enjoy it. What this section adds is only the boundary: the enjoyment should stop at the resemblance, and not quietly become a claim that Cantor's theorem and the Monotone Convergence Theorem are proving related things. They are proving opposite things about opposite kinds of ceilings.</p>
+
+<!-- §7 -->
+<div class="sec-num" id="s7">§ 7</div>
+<h2 class="sec">Where This Leads: Q.0.5b–Q.2</h2>
+
+<p>The remaining Part I chapters take the ladder out of pure algebra and into physical instantiation, in the order the site now presents them: Q.0.5b (the Bohr model's shell radii scaling with η_k), Q.0.5c (de Broglie matter waves and the standing-wave patterns that carry the k-nacci structure), Ångstrom Topogenesis (atomic-scale braided assembly and the Yang–Baxter framing), and Q.2 (polylaminin self-assembly, where η₃ appears again — this time in a measured, published Hausdorff dimension, not a fractal defined purely by algebra). Each of those chapters is expected to justify its own physical claim on its own evidence; this chapter's job was only to make sure the algebra underneath all of them is stated correctly and not oversold.</p>
+
+<!-- §8 -->
+<div class="sec-num" id="s8">§ 8</div>
+<h2 class="sec">References</h2>
+
+<ul style="margin-left:2rem;margin-bottom:1.5rem;">
+<li style="margin-bottom:0.3rem;">Shechtman, D., Blech, I., Gratias, D., &amp; Cahn, J. W. (1984). "Metallic Phase with Long-Range Orientational Order and No Translational Symmetry." <em>Physical Review Letters</em>, 53(20), 1951–1953. (The original quasicrystal discovery; 2011 Nobel Prize in Chemistry.)</li>
+<li style="margin-bottom:0.3rem;">Zeckendorf, E. (1972). "Représentation des nombres naturels par une somme de nombres de Fibonacci ou de nombres de Lucas." <em>Bull. Soc. Roy. Sci. Liège</em>, 41, 179–182.</li>
+<li style="margin-bottom:0.3rem;">Rauzy, G. (1982). "Nombres algébriques et substitutions." <em>Bulletin de la Société Mathématique de France</em>, 110, 147–178. (The Rauzy fractal.)</li>
+<li style="margin-bottom:0.3rem;">Lind, D. (1984). "The entropies of topological Markov shifts and a related class of algebraic integers." <em>Ergodic Theory and Dynamical Systems</em>, 4(2), 283–300. (Perron numbers as growth rates.)</li>
+<li style="margin-bottom:0.3rem;">Cantor, G. (1891/1899). The diagonal argument and the cardinal hierarchy — see Jech, T. (2003). <em>Set Theory</em>, 3rd ed. Springer, for the modern large-cardinal tower.</li>
+</ul>
+
+</div>
+<!-- END MAIN -->
+
+<div class="side">
+  <div class="sn">
+    <strong>Key results:</strong> η_k is a strictly increasing, bounded, convergent sequence of Perron numbers with ceiling 2. η₂=φ is physically realised in quasicrystal diffraction; η₃ names the Rauzy substitution.
+  </div>
+  <div class="sn">
+    <strong>Honesty check:</strong> the "ladder toward ℵ₀" is a structural analogy, not an equivalence — the cardinal hierarchy is provably unbounded, the η_k ladder is not.
+  </div>
+  <div class="sn">
+    <strong>Next:</strong> <a href="ch-q0-5b-bohr-knacci.html">Q.0.5b — Bohr Model</a>, then Q.0.5c, Ångstrom, and <a href="ch-q2-polylaminin-contact-topology.html">Q.2 — Polylaminin</a>.
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <div class="ft-grid">
+    <div>
+      <h4>Principia Orthogona</h4>
+      <p>A complete narrative from quantum foundations to infinite mathematics, grounded in contact geometry and the Monster group.</p>
+      <p><a href="index.html">Book 8 Index</a> · <a href="../index.html">Series Hub</a> · <a href="ch-q0-quantum-knacci.html">Q.0 · Origins</a></p>
+    </div>
+    <div>
+      <h4>This Chapter</h4>
+      <p><a href="#s2">§2 φ &amp; Quasicrystals</a></p>
+      <p><a href="#s3">§3 Tribonacci &amp; Rauzy</a></p>
+      <p><a href="#s6">§6 ℵ₀ — What's Literal</a></p>
+    </div>
+    <div>
+      <h4>Resources</h4>
+      <p><a href="https://github.com/TOTOGT/geometry">GitHub Repo</a></p>
+      <p><a href="https://orcid.org/0009-0000-6496-2186">Author (ORCID)</a></p>
+      <p>CC BY 4.0 · 2026</p>
+    </div>
+  </div>
+  <div class="ft-copy">
+    <span>© 2026 Pablo Nogueira Grossi / G6 LLC</span>
+    <span><a href="mailto:g6llc@proton.me">g6llc@proton.me</a></span>
+  </div>
+</footer>
+
+<script>
+const spectralRadii = {
+  2: 1.6180339887, 3: 1.8392867552, 4: 1.9275619931, 5: 1.9659482366,
+  6: 1.9836033362, 7: 1.9918743379, 8: 1.9958971132, 9: 1.9979624882,
+  10: 1.9989728187, 11: 1.9994848560, 12: 1.9997426017, 13: 1.9998712000,
+  14: 1.9999355700, 15: 1.9999677700, 16: 1.9999838800
+};
+const names = {2:'Golden ratio (φ)',3:'Tribonacci',4:'Tetranacci',5:'Pentanacci',6:'Hexanacci',7:'Heptanacci',8:'Octanacci',9:'Nonanacci',10:'Decanacci'};
+
+const kSlider = document.getElementById('kSlider');
+const canvas = document.getElementById('ladderCanvas');
+const ctx = canvas.getContext('2d');
+
+function draw() {
+  const kSel = parseInt(kSlider.value);
+  const eta = spectralRadii[kSel];
+  document.getElementById('kVal').textContent = kSel;
+  document.getElementById('etaOut').textContent = eta.toFixed(4);
+  document.getElementById('gapOut').textContent = (2 - eta).toFixed(4);
+  document.getElementById('nameOut').textContent = names[kSel] || 'k-nacci family';
+  document.getElementById('perronOut').textContent = 'Yes';
+
+  ctx.fillStyle = '#060810';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const marginL = 40, marginR = 20, top = 20, bottom = 260;
+  const plotW = canvas.width - marginL - marginR;
+  const ks = Object.keys(spectralRadii).map(Number);
+
+  // ceiling line at eta=2
+  const yFor = (v) => top + (1 - (v - 1.4) / (2.05 - 1.4)) * (bottom - top);
+  ctx.strokeStyle = 'rgba(255,107,107,0.5)';
+  ctx.setLineDash([5,4]);
+  ctx.beginPath();
+  ctx.moveTo(marginL, yFor(2));
+  ctx.lineTo(canvas.width - marginR, yFor(2));
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(255,107,107,0.7)';
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillText('ceiling η=2', canvas.width - marginR - 80, yFor(2) - 6);
+
+  ks.forEach((k, i) => {
+    const x = marginL + (i / (ks.length - 1)) * plotW;
+    const y = yFor(spectralRadii[k]);
+    const isSel = k === kSel;
+    ctx.fillStyle = isSel ? '#ff6b6b' : 'rgba(142,184,200,0.7)';
+    ctx.beginPath();
+    ctx.arc(x, y, isSel ? 6 : 4, 0, 2*Math.PI);
+    ctx.fill();
+    if (i > 0) {
+      const px = marginL + ((i-1) / (ks.length - 1)) * plotW;
+      const py = yFor(spectralRadii[ks[i-1]]);
+      ctx.strokeStyle = 'rgba(142,184,200,0.3)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+    ctx.fillStyle = '#5a6080';
+    ctx.font = '9px JetBrains Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText('k='+k, x, bottom + 15);
+  });
+
+  ctx.fillStyle = '#8eb8c8';
+  ctx.font = 'bold 12px JetBrains Mono';
+  ctx.textAlign = 'left';
+  ctx.fillText('η_k, k=2…16 — every point below the ceiling, none reaching it', marginL, 15);
+}
+
+kSlider.addEventListener('input', draw);
+draw();
+
+setTimeout(() => { document.querySelectorAll('.f').forEach(el => el.classList.add('in')); }, 100);
+</script>
+
+</body>
+</html>
