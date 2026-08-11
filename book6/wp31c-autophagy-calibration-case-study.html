@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executing the Calibration Pipeline: Autophagy as a Worked Case — Principia Orthogona, Book 6</title>
+<meta name="description" content="A worked example of WP-31's four-stage calibration pipeline, run on the AMPK–mTORC1–ULK1 autophagy switch WP-30 left open: CRNT deficiency (delta=2, verified by explicit graph construction), Hirsch/Markus–Thieme monotone-cascade convergence (verified against the real computed Jacobian, not its symbolic form), and a numerical eigenvalue continuation sweep showing no integer clustering at mu=-2 or -3.">
+<style>
+  :root { --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Georgia, 'Times New Roman', serif; background: var(--cream); color: var(--navy); }
+  main { max-width: 760px; margin: 0 auto; padding: 64px 40px 80px; }
+  .eyebrow { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+  .op-chain { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; margin-bottom: 44px; }
+  .op-chain .active { color: var(--gold); font-weight: bold; }
+  .op-chain a { color: inherit; text-decoration: none; }
+  .op-chain a:hover { color: var(--gold); }
+  h1 { font-size: 32px; font-weight: normal; text-align: center; margin: 0 0 6px; line-height: 1.25; }
+  .value-line { text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13.5px; color: #6b7280; margin-bottom: 28px; }
+  .gold-rule { height: 1px; width: 120px; margin: 0 auto 32px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  h2 { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); border-bottom: 1px solid var(--smoke); padding-bottom: 8px; margin: 44px 0 16px; }
+  h2 .n { color: var(--navy); }
+  p { font-size: 16.5px; line-height: 1.75; margin: 0 0 20px; }
+  code { font-family: 'SF Mono', Menlo, monospace; font-size: 0.85em; background: var(--smoke); padding: 1px 5px; border-radius: 3px; }
+  table.status-table { width: 100%; border-collapse: collapse; margin: 16px 0 28px; font-size: 14.5px; }
+  table.status-table th, table.status-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--smoke); vertical-align: top; }
+  table.status-table th { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #9ca3af; }
+  table.status-table td:first-child { font-family: 'Helvetica Neue', Arial, sans-serif; font-weight: bold; white-space: nowrap; }
+  .numeric-check { background: #0f1830; color: #d7dcea; border-radius: 4px; padding: 16px 20px; font-family: 'SF Mono', Menlo, monospace; font-size: 12.5px; line-height: 1.7; margin: 20px 0 28px; overflow-x: auto; white-space: pre; }
+  .verdict { background: #fbf7ec; border: 1px solid var(--gold); border-radius: 4px; padding: 18px 22px; margin: 24px 0 28px; font-size: 15.5px; line-height: 1.7; }
+  .verdict .lbl { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #a5843a; display: block; margin-bottom: 8px; }
+  .caveat { font-size: 15.5px; line-height: 1.75; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 18px; margin: 24px 0 32px; }
+  .prevnext { display: flex; justify-content: space-between; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; padding-top: 24px; margin-top: 44px; border-top: 1px solid var(--smoke); }
+  .prevnext a { color: inherit; text-decoration: none; }
+  .prevnext a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+<nav style="background:#0f1a30;padding:0 1.5rem;display:flex;gap:1.2rem;align-items:center;min-height:50px;position:sticky;top:0;z-index:100;flex-wrap:wrap;font-family:system-ui,-apple-system,'Segoe UI',sans-serif">
+  <a href="../impa-portal.html" style="color:#c9a84c;font-weight:600;letter-spacing:.15em;text-transform:uppercase;font-size:.8rem;text-decoration:none">Principia Orthogona</a>
+  <a href="../living-book.html" style="color:#aaa;font-size:.8rem;text-decoration:none;letter-spacing:.05em">Living Book</a>
+  <a href="../series-hub.html" style="color:#aaa;font-size:.8rem;text-decoration:none;letter-spacing:.05em">Series</a>
+  <a href="index.html" style="color:#aaa;font-size:.8rem;text-decoration:none;letter-spacing:.05em">Book 6</a>
+  <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" style="color:#aaa;font-size:.8rem;text-decoration:none;letter-spacing:.05em">Zenodo &#8599;</a>
+</nav>
+<div style="background:#1a2744;color:#e8d49a;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:.75rem;text-align:center;padding:.7rem;letter-spacing:.05em">Book 6 &middot; Industry &amp; Applied Domains &nbsp;&middot;&nbsp; <a href="index.html" style="color:#c9a84c;text-decoration:none">Book 6 index</a> &rarr; <a href="../series-hub.html" style="color:#c9a84c;text-decoration:none">Series hub</a> &nbsp;&middot;&nbsp; <a href="../vol1-mathematics.html" style="color:#c9a84c;text-decoration:none">&#8617; Vol I</a></div>
+
+<main>
+
+  <div class="eyebrow">Principia Orthogona &nbsp;·&nbsp; Book 6 &nbsp;·&nbsp; Working Papers · Mathematics &amp; Formal Proofs</div>
+
+  <div class="op-chain">
+    <a href="wp31-calibration-pipeline.html">WP-31 The Calibration Pipeline</a>
+    <span>→</span>
+    <a href="wp30-how-to-audit.html">WP-31B How to Audit</a>
+    <span>→</span>
+    <span class="active">WP-31C Executing the Pipeline</span>
+  </div>
+
+  <h1>Executing the Calibration Pipeline: Autophagy as a Worked Case</h1>
+  <div class="value-line">running WP-31's four-stage checklist (Operationalize &rarr; Estimate &rarr; Validate &rarr; Iterate) on the question WP-30 left open, forward from measured biology instead of backward from a target constant</div>
+
+  <div class="gold-rule"></div>
+
+  <p>
+    WP-30 withdrew a claim: that the dimensionless eigenvalue &mu; = &minus;2 could be rescaled
+    by a real mTORC1 kinase time constant into a physical rate, &mu;_max &asymp; &minus;0.41 s&sup1;&#8315;.
+    The number didn't survive contact with its own sources. WP-31 generalized the failure into a
+    checklist. This paper runs that checklist against the same system &mdash; the AMPK&ndash;mTORC1&ndash;ULK1
+    autophagy switch &mdash; starting over, forward from measured biology instead of backward from
+    a target constant. It reports what cleared, what didn't, and what is still missing before any
+    number here can be called a calibration rather than an illustration.
+  </p>
+
+  <h2><span class="n">1.</span>&nbsp;Operationalize</h2>
+  <p>
+    <strong>What it requires (per WP-31):</strong> name a real, measurable proxy for the abstract
+    quantity before doing any arithmetic on it.
+  </p>
+  <p>
+    Instead of picking a single kinase time constant off a review article, the abstract operator
+    was mapped onto an actual published mechanistic model of the pathway &mdash; the
+    mutual-inhibition ODE network for active AMPK, mTORC1, and ULK1 fractions
+    (Szyma&#324;ska, Martin, MacKeigan, Hlavacek &amp; Lipniacki, <em>PLOS ONE</em> 10(3): e0116550,
+    2015, "Computational Analysis of an Autophagy/Translation Switch Based on Mutual Inhibition of
+    MTORC1 and ULK1"; Kapuy et al., <em>FEBS Open Bio</em> 2014, on the same mTOR&ndash;ULK1
+    bistable switch under ER stress). The observable is no longer "a time constant" &mdash; it is
+    the Jacobian spectrum of a named, published, mass-action-derived dynamical system, evaluated
+    at its own steady state.
+  </p>
+  <p>
+    The reaction network was built explicitly at the complex level (active species A, M, U and
+    inactive pools A<sub>i</sub>, M<sub>i</sub>, U<sub>i</sub>, three conservation laws), and its
+    topology was checked independently rather than by hand:
+  </p>
+  <div class="numeric-check">n (complexes)                 = 9
+l (linkage classes)           = 4
+s (stoichiometric subspace)   = 3
+delta = n - l - s             = 2</div>
+  <p>
+    verified by explicit graph construction (complexes as species-count vectors, linkage classes
+    as connected components of the reaction graph, s as the rank of the reaction-vector matrix)
+    &mdash; not asserted. An earlier draft of this same network mis-stated l = 3 by treating the
+    shared zero-complex and the shared M+U complex as separate vertices; rebuilding the graph and
+    computing connected components directly caught the error and corrected it to l = 4, &delta; = 2.
+  </p>
+  <div class="verdict">
+    <span class="lbl">Cleared</span>
+    A named observable exists, it comes from published models of the actual pathway (not an
+    invented normal form), and its topological invariant (&delta; = 2) was independently computed,
+    not taken on faith.
+  </div>
+
+  <h2><span class="n">2.</span>&nbsp;Estimate</h2>
+  <p>
+    <strong>What it requires:</strong> fit the parameter vector &theta; against real data by a
+    stated loss, not cite a number.
+  </p>
+  <p>
+    A Jacobian was derived analytically from the active-fraction ODEs and evaluated numerically
+    across a stress sweep S &isin; [0.1, 5.0] using <code>scipy.optimize.root</code> for the
+    steady state and <code>numpy.linalg.eigvals</code> for the spectrum, at 50-point resolution.
+    This step is honest about the loss function only because there wasn't one &mdash; the rate
+    constants used,
+  </p>
+  <div class="numeric-check">(k_a1, k_a2, k_m1, k_m2, k_m3, k_u1, k_u2) = (1.5, 0.5, 1.0, 2.0, 2.5, 3.0, 1.8)  [min^-1, illustrative]</div>
+  <p>
+    are <strong>illustrative placeholders</strong>, not fit to any measured kinase or phosphatase
+    rate. They were chosen to be generic (produce a stable, non-degenerate steady state), not
+    estimated.
+  </p>
+  <div class="verdict">
+    <span class="lbl">Did not clear</span>
+    This is the failure mode WP-31 names as "citing a number instead of deriving it," one level
+    more honest than WP-30's version only in that the placeholder status is stated up front rather
+    than dressed as a physiological citation. Candidate primary sources exist for a real fit and
+    were not yet used &mdash; see WP-31D, which found the deeper reason this step needs to be
+    redone rather than merely re-run with better numbers.
+  </div>
+
+  <h2><span class="n">3.</span>&nbsp;Validate</h2>
+  <p>
+    <strong>What it requires:</strong> test the fitted function out of sample.
+  </p>
+  <p>
+    With illustrative (not fitted) parameters, there is no out-of-sample claim to validate. What
+    was checked instead &mdash; a weaker but real thing &mdash; is internal consistency of the
+    model itself:
+  </p>
+  <table class="status-table">
+    <tr><th>Check</th><th>Method</th><th>Result</th></tr>
+    <tr><td>Trajectory convergence</td><td>Direct time-domain simulation (<code>scipy.integrate.solve_ivp</code>) from five widely separated initial conditions at fixed S</td><td>Converges to a single point with zero tail variance in every case &mdash; no oscillation, no path-dependence</td></tr>
+    <tr><td>Driver fixed point</td><td>Closed-form A*(S) = k<sub>a1</sub>S/(k<sub>a1</sub>S+k<sub>a2</sub>) checked against the numerically solved root at three stress values</td><td>Matched to six decimal places</td></tr>
+    <tr><td>Cooperativity</td><td>Sign transformation K = diag(+1,&minus;1,+1) applied to the actual computed Jacobian (not its symbolic sign pattern) at four stress levels</td><td>All off-diagonal entries of the transformed matrix confirmed &ge; 0 in every case; loop-gain product J&#8322;&#8323;J&#8323;&#8322; confirmed positive (&asymp;0.78&ndash;0.84) throughout</td></tr>
+  </table>
+  <div class="verdict">
+    <span class="lbl">Partially cleared</span>
+    Internal consistency is real evidence the model behaves the way its own derivation claims it
+    should. It is not the same as validating against held-out physiological data, which Stage 2's
+    gap makes impossible for now.
+  </div>
+
+  <h2><span class="n">4.</span>&nbsp;Iterate</h2>
+  <p>Not reached. There is no fitted &theta; yet to refit.</p>
+
+  <h2><span class="n">5.</span>&nbsp;What is actually established, versus what looked established</h2>
+  <table class="status-table">
+    <tr><th>Claim</th><th>Status</th></tr>
+    <tr><td>&delta; = 2 for the AMPK&ndash;mTORC1&ndash;ULK1 network (open, active/inactive formulation)</td><td><strong>Established</strong> &mdash; computed twice, independently, by explicit graph construction</td></tr>
+    <tr><td>Feinberg's Deficiency One Theorem certifies multistability parameter-free</td><td><strong>False for this network</strong> &mdash; &delta; &ne; 1, theorem doesn't apply; multistability is topologically permitted, not forced</td></tr>
+    <tr><td>The (M,U) subsystem is cooperative and forbids limit cycles</td><td><strong>Established</strong> &mdash; Hirsch (1982, 1985), verified against the real numerical Jacobian</td></tr>
+    <tr><td>The full 3D cascade inherits that no-cycle result</td><td><strong>Established for generic parameter sets</strong> &mdash; Markus (1956)/Thieme (1992) asymptotic-autonomy transfer</td></tr>
+    <tr><td>&lambda;_max(S) clusters near integers (&minus;2, &minus;3)</td><td><strong>False</strong> &mdash; full-resolution scan gives &lambda;_max(S) &isin; [&minus;0.65, &minus;2.82] min&#8315;&sup1;, smooth and continuous in S</td></tr>
+    <tr><td>&mu;_max &asymp; &minus;0.41 s&#8315;&sup1; is a physiological calibration of the dimensionless &minus;2</td><td><strong>Withdrawn in WP-30; not re-established here</strong> &mdash; no valid path from &minus;2 to a unit-bearing constant was found this time either</td></tr>
+    <tr><td>&Sigma; C<sub>i</sub><sup>J</sup> = 1 (Kacser&ndash;Burns / Heinrich&ndash;Rapoport) is a genuine parameter-free invariant of metabolic networks</td><td><strong>True</strong>, and worth keeping as the corpus's reference case for what a real dimensionless biological invariant looks like &mdash; it is not &minus;2, &minus;3, or &minus;0.41</td></tr>
+  </table>
+
+  <div class="verdict">
+    <span class="lbl">Standing status</span>
+    Stage 1 (Operationalize) and the internal-consistency half of Stage 3 (Validate) are done
+    properly &mdash; named observable, independently verified topology, independently verified
+    dynamics. Stage 2 (Estimate) is still open: every rate constant in the numerical work above is
+    illustrative, not fit to a primary source. No physiological anchor for &mu; = &minus;2 or
+    &minus;3 was recovered by this exercise, and that is a finding, not a gap in the exercise
+    &mdash; the honest result of building forward from real network structure is a continuous,
+    parameter-dependent spectrum, not a return to the retracted constant by a more careful road.
+  </div>
+
+  <p class="caveat">
+    Path forward, if continued: pull actual fitted rate constants from Szyma&#324;ska et al.'s
+    supplement and/or von B&uuml;low &amp; Hummer's reported ATG2 transfer kinetics, rerun Stage 2
+    as a real least-squares or MLE fit against a stated observable, and only then treat Stage 3 as
+    a genuine validation. <a href="wp31d-topological-mismatch-bifurcation-loss.html">WP-31D</a>
+    picks this up directly and finds the reduced model's own topology, not just its parameters,
+    was unfit for the question.
+  </p>
+
+  <p class="caveat">
+    All numerical claims above &mdash; the deficiency graph computation, the Jacobian
+    sign/cooperativity check against real computed values, the eigenvalue continuation sweep, and
+    the five-initial-condition time-domain simulation &mdash; were executed directly (Python 3,
+    NumPy/SciPy/NetworkX) rather than derived by hand, in keeping with
+    <a href="wp30-how-to-audit.html">WP-31B</a>'s own standard of tracing claims to a checkable
+    source before publishing them.
+  </p>
+
+  <div class="prevnext">
+    <a href="wp30-how-to-audit.html">&larr; WP-31B &middot; How to Audit</a>
+    <a href="wp31d-topological-mismatch-bifurcation-loss.html">WP-31D &middot; Topological Mismatch &rarr;</a>
+  </div>
+
+</main>
+<footer style="background:#0f1a30;color:#888;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:.78rem;text-align:center;padding:2rem 1.5rem;line-height:1.9;margin-top:3rem">
+  <div style="margin-bottom:.7rem"><a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" aria-label="G6 LLC — grossi-ops"><img src="g6-mark.svg" alt="G6 LLC" width="40" height="46" style="height:44px;width:auto;vertical-align:middle;display:inline-block;border:0"></a></div>
+  <div style="margin-bottom:.5rem">
+    <a href="../impa-portal.html" style="color:#aaa;text-decoration:none">Principia Orthogona</a> &middot;
+    <a href="index.html" style="color:#aaa;text-decoration:none">Book 6</a> &middot;
+    <a href="../series-hub.html" style="color:#aaa;text-decoration:none">Series Hub</a> &middot;
+    <a href="https://totogt.github.io/AXLE/" target="_blank" style="color:#aaa;text-decoration:none">AXLE</a> &middot;
+    <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" style="color:#aaa;text-decoration:none">Zenodo &#8599;</a>
+  </div>
+  &copy; 2026 Pablo Nogueira Grossi / <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> &middot; Newark, New Jersey &middot; CC BY 4.0<br>
+  Book 6 &middot; Industry &amp; Applied Domains &middot; Principia Orthogona
+</footer>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topological Mismatch and Bifurcation Loss in Autophagy Model Reductions — Principia Orthogona, Book 6</title>
+<meta name="description" content="How a monotonicity-preserving simplification of the AMPK-mTORC1-ULK1 switch quietly deleted the biology's only mechanism for oscillation. Audits the reduced 3-ODE surrogate against the primary BNGL architecture of Szymanska et al. (2015), documents the topological mechanism of the erased limit cycles, and logs u0 ~ 0.01 s^-1 as the corpus's first primary-source rate constant.">
+<style>
+  :root { --navy: #1a2744; --gold: #c9a84c; --cream: #faf7f0; --smoke: #f0ece4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Georgia, 'Times New Roman', serif; background: var(--cream); color: var(--navy); }
+  main { max-width: 760px; margin: 0 auto; padding: 64px 40px 80px; }
+  .eyebrow { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+  .op-chain { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; margin-bottom: 44px; }
+  .op-chain .active { color: var(--gold); font-weight: bold; }
+  .op-chain a { color: inherit; text-decoration: none; }
+  .op-chain a:hover { color: var(--gold); }
+  h1 { font-size: 32px; font-weight: normal; text-align: center; margin: 0 0 6px; line-height: 1.25; }
+  .value-line { text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13.5px; color: #6b7280; margin-bottom: 28px; }
+  .gold-rule { height: 1px; width: 120px; margin: 0 auto 32px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  h2 { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); border-bottom: 1px solid var(--smoke); padding-bottom: 8px; margin: 44px 0 16px; }
+  h2 .n { color: var(--navy); }
+  p { font-size: 16.5px; line-height: 1.75; margin: 0 0 20px; }
+  code { font-family: 'SF Mono', Menlo, monospace; font-size: 0.85em; background: var(--smoke); padding: 1px 5px; border-radius: 3px; }
+  table.status-table { width: 100%; border-collapse: collapse; margin: 16px 0 28px; font-size: 14.5px; }
+  table.status-table th, table.status-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--smoke); vertical-align: top; }
+  table.status-table th { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #9ca3af; }
+  table.status-table td:first-child { font-family: 'Helvetica Neue', Arial, sans-serif; font-weight: bold; white-space: nowrap; }
+  .numeric-check { background: #0f1830; color: #d7dcea; border-radius: 4px; padding: 16px 20px; font-family: 'SF Mono', Menlo, monospace; font-size: 12.5px; line-height: 1.7; margin: 20px 0 28px; overflow-x: auto; white-space: pre; }
+  .verdict { background: #fbf7ec; border: 1px solid var(--gold); border-radius: 4px; padding: 18px 22px; margin: 24px 0 28px; font-size: 15.5px; line-height: 1.7; }
+  .verdict .lbl { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #a5843a; display: block; margin-bottom: 8px; }
+  .caveat { font-size: 15.5px; line-height: 1.75; color: #4b5563; border-left: 2px solid var(--gold); padding-left: 18px; margin: 24px 0 32px; }
+  .prevnext { display: flex; justify-content: space-between; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; padding-top: 24px; margin-top: 44px; border-top: 1px solid var(--smoke); }
+  .prevnext a { color: inherit; text-decoration: none; }
+  .prevnext a:hover { color: var(--gold); }
+  .diagram { background: #0f1830; color: #d7dcea; border-radius: 4px; padding: 16px 20px; font-family: 'SF Mono', Menlo, monospace; font-size: 12px; line-height: 1.6; margin: 20px 0 28px; overflow-x: auto; white-space: pre; }
+</style>
+</head>
+<body>
+<nav style="background:#0f1a30;padding:0 1.5rem;display:flex;gap:1.2rem;align-items:center;min-height:50px;position:sticky;top:0;z-index:100;flex-wrap:wrap;font-family:system-ui,-apple-system,'Segoe UI',sans-serif">
+  <a href="../impa-portal.html" style="color:#c9a84c;font-weight:600;letter-spacing:.15em;text-transform:uppercase;font-size:.8rem;text-decoration:none">Principia Orthogona</a>
+  <a href="../living-book.html" style="color:#aaa;font-size:.8rem;text-decoration:none;letter-spacing:.05em">Living Book</a>
+  <a href="../series-hub.html" style="color:#aaa;font-size:.8rem;text-decoration:none;letter-spacing:.05em">Series</a>
+  <a href="index.html" style="color:#aaa;font-size:.8rem;text-decoration:none;letter-spacing:.05em">Book 6</a>
+  <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" style="color:#aaa;font-size:.8rem;text-decoration:none;letter-spacing:.05em">Zenodo &#8599;</a>
+</nav>
+<div style="background:#1a2744;color:#e8d49a;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:.75rem;text-align:center;padding:.7rem;letter-spacing:.05em">Book 6 &middot; Industry &amp; Applied Domains &nbsp;&middot;&nbsp; <a href="index.html" style="color:#c9a84c;text-decoration:none">Book 6 index</a> &rarr; <a href="../series-hub.html" style="color:#c9a84c;text-decoration:none">Series hub</a> &nbsp;&middot;&nbsp; <a href="../vol1-mathematics.html" style="color:#c9a84c;text-decoration:none">&#8617; Vol I</a></div>
+
+<main>
+
+  <div class="eyebrow">Principia Orthogona &nbsp;·&nbsp; Book 6 &nbsp;·&nbsp; Working Papers · Mathematics &amp; Formal Proofs</div>
+
+  <div class="op-chain">
+    <a href="wp31c-autophagy-calibration-case-study.html">WP-31C Executing the Pipeline</a>
+    <span>→</span>
+    <span class="active">WP-31D Topological Mismatch</span>
+  </div>
+
+  <h1>Topological Mismatch and Bifurcation Loss in Autophagy Model Reductions</h1>
+  <div class="value-line">how a monotonicity-preserving simplification of the AMPK&ndash;mTORC1&ndash;ULK1 switch quietly deleted the biology's only mechanism for oscillation &mdash; and what one real, primary-source rate constant looks like once it's actually checked against its source</div>
+
+  <div class="gold-rule"></div>
+
+  <p>
+    WP-31 established a four-stage calibration pipeline specifically to prevent the failure WP-30
+    documented: an abstract eigenvalue rescaled into a unit-bearing number by a citation that
+    didn't hold up. This paper reports a different failure mode, caught while attempting to
+    <em>complete</em> Stage 2 honestly rather than skip it.
+  </p>
+  <p>
+    <a href="wp31c-autophagy-calibration-case-study.html">WP-31C</a> built a three-species reduced
+    ODE model of the AMPK&ndash;mTORC1&ndash;ULK1 switch, verified it computationally, and used it
+    to argue the pathway cannot sustain oscillation for any generic parameter choice. That
+    conclusion is correct &mdash; for the model as built. It is not a fact about the actual
+    biology. The published, peer-reviewed model of this exact network
+    (Szyma&#324;ska et al., <em>PLOS ONE</em> 2015) contains a feedback edge the reduced model
+    omitted, and that edge is precisely what the real system uses to oscillate. The omission was
+    structural, not numerical: no choice of rate constants could have produced oscillation in the
+    reduced topology, because the topology itself forbids it.
+  </p>
+
+  <h2><span class="n">1.</span>&nbsp;What the reduced model actually proved</h2>
+  <p>The three-variable active-fraction system</p>
+  <div class="numeric-check">dA/dt = k_a1*S*(1-A) - k_a2*A
+dM/dt = k_m1*(1-M) - k_m2*M*A - k_m3*M*U
+dU/dt = k_u1*(1-U)*A - k_u2*U*M</div>
+  <p>was analyzed in full, and every claim below was checked computationally against the model as actually specified:</p>
+  <table class="status-table">
+    <tr><th>Result</th><th>Method</th></tr>
+    <tr><td>CRNT topology: &delta; = 2</td><td>Explicit graph construction (n=9 complexes, l=4 linkage classes, s=3 stoichiometric rank) &mdash; an earlier hand count had mis-stated l=3 by missing a shared complex</td></tr>
+    <tr><td>Cooperativity</td><td>K = diag(+1,&minus;1,+1) applied to the actual computed Jacobian at S &isin; {0.1, 1.0, 2.5, 5.0}; all off-diagonal entries confirmed &ge; 0; loop-gain J&#8322;&#8323;J&#8323;&#8322; confirmed positive (&asymp;0.78&ndash;0.84)</td></tr>
+    <tr><td>No oscillation</td><td>Hirsch (1982, 1985) + Markus (1956)/Thieme (1992); verified directly by simulation from five widely separated initial conditions, all converging to the identical fixed point with zero tail variance</td></tr>
+    <tr><td>No integer clustering</td><td>Numerical continuation, S &isin; [0.1, 5.0], 50-point resolution: &lambda;_max(S) &isin; [&minus;0.65, &minus;2.82] min&#8315;&sup1;, smooth and monotonic</td></tr>
+  </table>
+  <p>
+    Every one of these results is correct as a statement about the model that was built. The error
+    is upstream of all of them: the model itself is not a reduction of the published biology, it
+    is a different, simpler topology that happens to share three variable names with it.
+  </p>
+
+  <h2><span class="n">2.</span>&nbsp;Topological mechanism of the bifurcation loss</h2>
+  <p>
+    The block structure of the surrogate Jacobian makes the loss mechanical, not just qualitative.
+    With A ordered first, the matrix is <strong>lower</strong> block triangular: the zero entries
+    sit above the diagonal (A's equation has no dependence on M or U), while the coupling sits
+    below it (A still drives M and U). For any block-triangular matrix, the spectrum decomposes as
+    the union of the diagonal blocks' spectra:
+  </p>
+  <div class="numeric-check">sigma(J_surrogate) = {-1/tau_A}  U  sigma(J_(M,U))</div>
+  <p>
+    and J<sub>(M,U)</sub>, the 2&times;2 cooperative block, is forced to have <strong>real</strong>
+    eigenvalues unconditionally &mdash; not merely generically. For any 2&times;2 matrix
+    (a b; c d) with b,c &ge; 0 (the cooperative sign pattern), the eigenvalues are
+    [(a+d) &plusmn; &radic;((a&minus;d)&sup2;+4bc)] / 2, and the discriminant (a&minus;d)&sup2;+4bc
+    is a sum of two nonnegative terms, hence never negative. No complex-conjugate pair can appear
+    &mdash; a more elementary and more airtight statement than the general Metzler/Perron&ndash;Frobenius
+    result (which only guarantees a real <em>leading</em> eigenvalue for n&ge;3, not reality of the
+    whole spectrum). Since a Hopf bifurcation requires exactly a complex-conjugate pair crossing
+    the imaginary axis, the decoupled block cannot produce one at any parameter value, by this
+    discriminant alone.
+  </p>
+  <div class="diagram">  Surrogate Graph (WP-31C):             Primary Graph (Szymanska 2015):
+
+      [ AMPK (A) ]                         [ AMPK (A) ]
+           |                                 ^     |
+           v                                u2|     |
+     +-----+-----+                           |     v
+     v           v                         +-+-----+---+
+  [ mTORC1 ] --> [ ULK1 ]               [ mTORC1 ] &lt;--&gt; [ ULK1 ]
+
+   (feedforward, acyclic at A)             (closed loop through A)
+   J_01 = J_02 = 0 -&gt; real spectrum only    J_02 != 0 -&gt; complex pairs possible</div>
+  <p>
+    Restoring the feedback edge (J<sub>02</sub> &prop; u<sub>2</sub>, the ULK1&rarr;AMPK
+    dephosphorylation/phosphorylation pair u<sub>2</sub>, p<sub>6</sub>) breaks the block-triangular
+    structure entirely. The result is a genuine 3&times;3 coupled system with no forced block
+    decomposition, and the discriminant argument no longer applies &mdash; complex-conjugate
+    eigenvalue pairs are permitted, which is exactly what a Hopf bifurcation requires and exactly
+    what Szyma&#324;ska et al. report. The mechanism is not subtle: one nonzero entry, J<sub>02</sub>,
+    is the entire difference between a spectrum that is provably always real and one that is free
+    to cross into the complex plane.
+  </p>
+
+  <h2><span class="n">3.</span>&nbsp;What the published model actually contains</h2>
+  <p>
+    Szyma&#324;ska, Martin, MacKeigan, Hlavacek &amp; Lipniacki (<em>PLOS ONE</em> 10(3): e0116550,
+    2015) built a rule-based (BioNetGen/BNGL) mechanistic model of the same three-node circuit,
+    fit and analyzed in the original paper. Two structural features are stated directly in the text
+    and are absent from the reduced model above.
+  </p>
+  <p>
+    <strong>A closed feedback loop, not a cascade.</strong> The published network includes
+    "negative feedback from ULK1 to AMPK," mediated by ULK1-dependent phosphorylation of sites in
+    the AMPK &alpha; subunit, governed by rate constants the authors name u<sub>2</sub>
+    (dephosphorylation of those sites) and p<sub>6</sub> (the phosphorylation itself). With the
+    feedback loop active, the system is a genuine relaxation oscillator, transitioning through a
+    <strong>saddle-node-on-invariant-circle (SNIC) bifurcation</strong> and both
+    <strong>subcritical and supercritical Hopf bifurcations</strong> as AMPK* or rapamycin* level
+    varies &mdash; real limit cycles, sustained across a broad region of input space (their Fig. 5).
+    Removing the feedback edge, as the reduced model does, removes the only mechanism the real
+    system has for oscillating. It does not reveal that the real system doesn't oscillate; it
+    constructs a different system that structurally can't.
+  </p>
+  <p>
+    <strong>A nonlinearity the reduced model also lacks.</strong> The authors state that simple
+    mutual inhibition is not sufficient to produce switching at all: "multi-site phosphorylation of
+    RPTOR by ULK1 provides the nonlinearity needed for mutual inhibition to give rise to
+    hysteretic switching." The reduced model's M&ndash;U coupling is plain bilinear mass action
+    with no multisite cooperativity.
+  </p>
+  <div class="verdict">
+    <span class="lbl">Diagnostic verdict</span>
+    Forcing Szyma&#324;ska's fitted rate constants into the reduced 3-node Jacobian would not have
+    been a real test of anything. The surrogate cannot oscillate regardless of which numbers are
+    supplied, because the missing feedback edge &mdash; not the kinetic rates &mdash; is what the
+    real oscillation depends on. Any Monte Carlo uncertainty propagation run on that Jacobian,
+    however carefully executed, would have produced a confident, precise, and meaningless answer.
+  </div>
+
+  <h2><span class="n">4.</span>&nbsp;The one number that did clear</h2>
+  <p>
+    Buried in the published discussion of parameter sensitivity, stated as plain text rather than
+    locked in a table image, is this:
+  </p>
+  <div class="verdict">
+    <span class="lbl">Szyma&#324;ska et al. 2015, in text</span>
+    "the value of u<sub>0</sub> sets the system's characteristic response time
+    (1/u<sub>0</sub> = 100 s)"
+  </div>
+  <p>
+    u<sub>0</sub> is the paper's lumped dephosphorylation rate constant &mdash; the single
+    parameter, by the authors' own sensitivity analysis, that the network's overall response
+    timescale depends on most strongly. That gives u<sub>0</sub> &asymp; 0.01 s&#8315;&sup1;,
+    directly stated by the primary source, for the dominant relaxation rate of the actual
+    AMPK&ndash;mTORC1&ndash;ULK1 switch.
+  </p>
+  <p>
+    This is logged here as the first rate constant in this corpus's autophagy material that traces
+    cleanly from claim to source with no arithmetic gap and no ambiguity about which paper it came
+    from &mdash; the failure mode that sank WP-30's &tau;_mTOR figures (two files, two numbers,
+    neither traceable) does not reproduce here.
+  </p>
+  <p class="caveat">
+    It is <em>not</em> being proposed as a replacement anchor for &mu; = &minus;2 or &minus;3.
+    1/u<sub>0</sub> = 100 s is a real system response time on a real switch; it is three to four
+    orders of magnitude away from a single-digit second, consistent with the hours-scale timescales
+    the broader ULK1/mTORC1 literature survey already indicated. It does not connect to the
+    dimensionless &minus;2 or &minus;3 by any relation established in this corpus, and no such
+    relation is claimed. The other 21 parameters in the model's Table 1 remain unrecovered &mdash;
+    PLOS renders that table as a raster image, not machine-readable text.
+  </p>
+
+  <h2><span class="n">5.</span>&nbsp;Standing status</h2>
+  <table class="status-table">
+    <tr><th>Item</th><th>Status</th></tr>
+    <tr><td>Reduced 3-ODE model: &delta;=2, no limit cycles, continuous non-integer spectrum</td><td><strong>Verified</strong>, for the model as built</td></tr>
+    <tr><td>Reduced 3-ODE model as a stand-in for the published network</td><td><strong>False.</strong> Missing the ULK1&rarr;AMPK feedback edge (u<sub>2</sub>, p<sub>6</sub>) that produces the real SNIC/Hopf oscillations, and the multisite RPTOR nonlinearity required for switching at all</td></tr>
+    <tr><td>u<sub>0</sub> &asymp; 0.01 s&#8315;&sup1; (&tau;=100 s), Szyma&#324;ska et al. 2015</td><td><strong>Established</strong> as a primary-source, traceable, unit-bearing rate constant. Not connected to &mu;=&minus;2/&minus;3</td></tr>
+    <tr><td>Full 22-parameter set (Table 1)</td><td><strong>Not yet recovered</strong> &mdash; locked in a raster table image; S1 File (BNGL source) is the correct target</td></tr>
+    <tr><td>&mu;_max physiological calibration</td><td><strong>Still not established</strong>, and this paper does not attempt to re-establish it</td></tr>
+  </table>
+
+  <p class="caveat">
+    Path forward: pull S1 File (the BNGL model specification) to recover the full parameter table
+    in machine-readable form and confirm u<sub>0</sub>, u<sub>2</sub>, p<sub>6</sub>, and the
+    multisite RPTOR rules exactly as specified; then rebuild the reduced ODE model to actually
+    contain the feedback edge and the nonlinearity before fitting anything to it &mdash; a
+    corrected topology first, a parameter fit second, in that order. Fitting real numbers to the
+    wrong graph is not a smaller error than fitting wrong numbers to the right graph; it produces
+    a result that looks quantitative while answering a question nobody asked.
+  </p>
+
+  <p class="caveat">
+    All numerical and structural claims in &sect;1&ndash;2 were executed directly (Python 3,
+    NumPy/SciPy/NetworkX) against the model as specified, not derived by hand. All claims in
+    &sect;3&ndash;4 were checked against the primary source text of Szyma&#324;ska et al. (2015),
+    retrieved directly, rather than taken from a secondary summary. Method per
+    <a href="wp30-how-to-audit.html">WP-31B</a>.
+  </p>
+
+  <div class="prevnext">
+    <a href="wp31c-autophagy-calibration-case-study.html">&larr; WP-31C &middot; Executing the Pipeline</a>
+    <a href="wp32-forced-urgency-gap.html">WP-32 &middot; The Forced Urgency Gap &rarr;</a>
+  </div>
+
+</main>
+<footer style="background:#0f1a30;color:#888;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:.78rem;text-align:center;padding:2rem 1.5rem;line-height:1.9;margin-top:3rem">
+  <div style="margin-bottom:.7rem"><a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" aria-label="G6 LLC — grossi-ops"><img src="g6-mark.svg" alt="G6 LLC" width="40" height="46" style="height:44px;width:auto;vertical-align:middle;display:inline-block;border:0"></a></div>
+  <div style="margin-bottom:.5rem">
+    <a href="../impa-portal.html" style="color:#aaa;text-decoration:none">Principia Orthogona</a> &middot;
+    <a href="index.html" style="color:#aaa;text-decoration:none">Book 6</a> &middot;
+    <a href="../series-hub.html" style="color:#aaa;text-decoration:none">Series Hub</a> &middot;
+    <a href="https://totogt.github.io/AXLE/" target="_blank" style="color:#aaa;text-decoration:none">AXLE</a> &middot;
+    <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" style="color:#aaa;text-decoration:none">Zenodo &#8599;</a>
+  </div>
+  &copy; 2026 Pablo Nogueira Grossi / <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> &middot; Newark, New Jersey &middot; CC BY 4.0<br>
+  Book 6 &middot; Industry &amp; Applied Domains &middot; Principia Orthogona
+</footer>
+</body>
+</html>
