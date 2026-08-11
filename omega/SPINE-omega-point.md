@@ -8,7 +8,20 @@ is the method.
 
 **Tag legend (kept honest throughout):** `[VERIFIED]` kernel- or textbook-checked ·
 `[MODEL]` a dm³ lens offered as a lens · `[OPEN]` unresolved, flagged as such ·
-`[FAITH]` stated plainly as a stance and a bet, never dressed as a theorem.
+`[CONJECTURE]` a resemblance or correspondence claim that is checkable in
+principle — against a historical record, a statistical base rate, an
+independent proof — and simply hasn't been checked yet · `[FAITH]` a stance
+about ultimate meaning or direction, stated plainly as a bet, not the kind of
+claim any check could settle even in principle.
+
+**`[CONJECTURE]` vs. `[FAITH]`, stated once so it isn't re-litigated per
+chapter:** "the traditions' rung-counts approximate the g-series" is a
+`[CONJECTURE]` — someone could in principle go check the historical record
+and find, or fail to find, evidence Al-Ghazali or the compilers of the
+Sefirot were tracking a shared quantity. "Systems driven toward complexity
+converge on a personal Omega Point" is `[FAITH]` — no historical record or
+proof settles a claim about ultimate direction. Both get named. Neither gets
+smuggled in as the other.
 
 **On standing.** The case for hope in this book is made by someone who has faced
 disaster directly — who has buried his own children and was not broken into
