@@ -10,20 +10,30 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 ## Series ISBN & format map
 
-| Volume | Title | Format | ISBN |
-|--------|-------|--------|------|
-| G1 · Vol I | GOMC Science | Print + eBook | 979-8-9954416-0-1 (print) · 979-8-9954416-1-8 (eBook) |
-| G2 · Vol II | TOGT | Print + eBook | — |
-| G3 · Vol III | The Mini-Beast | **eBook ONLY** | 979-8-9954416-6-3 (eBook PDF) |
-| G4 · Vol IV | GTCT Dimensional Theory | — (no ISBN yet) | use G5 eBook ISBN as fallback |
-| G5 · Vol V | Complete Completeness · The Seed | Print + eBook | 979-8-9954416-0-1 (paperback, registered) · 979-8-9954416-1-8 (eBook) · 979-8-9954416-4-9 (hardback ≤666pp, reserved) |
+**Canonical source: `~/Desktop/MATHS for life/isbn_metadata.json`.** It is the only copy
+that carries `bowker_status`, so it is the only copy that can tell you whether a number is
+*registered* or merely *reserved*. Do not restate the numbers anywhere else. The table that
+used to sit here drifted out of sync with the registry and put an **unallocated reserve
+number** into 87 book6 footers and 19 other files as though it were a real one. Read the JSON.
+
+| ISBN | Allocated to | Bowker status |
+|------|--------------|---------------|
+| 979-8-9954416-0-1 | Complete Completeness · G5 · Paperback | **REGISTERED** |
+| 979-8-9954416-6-3 | Book 3 · Mini-Beast · eBook PDF | INCOMPLETE — **register now**, only actively distributed product |
+| 979-8-9954416-1-8 | Complete Completeness · G5 · eBook | INCOMPLETE — HOLD |
+| 979-8-9954416-4-9 | Complete Completeness · G5 · Hardback (≤666pp) | INCOMPLETE — HOLD |
+| 2-5 · 3-2 · **5-6** · 7-0 · **8-7** · 9-4 | **unallocated reserve — no group, no format** | INCOMPLETE — HOLD |
 
 **Critical rules:**
 - Book 3 (Vol III, The Mini-Beast) is **eBook only**. Never add a print ISBN to it.
   Never list it as available in print. It is a living document, updated as the pilot expands.
-- If a volume does not have its own ISBN assigned yet (e.g. Vol VI), use the
-  **G5 Complete Completeness eBook ISBN 979-8-9954416-5-6** as the canonical fallback.
-  G5 is all-encompassing — it adds what comes out by default.
+- **A volume without its own registered ISBN gets no ISBN line at all.** There is no such
+  thing as a "fallback ISBN" — that instruction was wrong and is withdrawn. Point at the
+  Zenodo community instead. Vols II, IV, VI and VII have no allocation of their own; do not
+  borrow one from a volume that does.
+- **Print ISBNs are reserved, not active.** The registry's own note: *"Print ISBNs reserved —
+  paper books not for sale until further notice."* A print ISBN in a web footer advertises a
+  product that does not exist. Do not add one.
 - **10.5281/zenodo.19117399 is Vol I's *concept* DOI — it is NOT a series DOI.**
   Corrected 2026-08-01, checked against the Zenodo API. A concept DOI resolves to
   whichever version was deposited most recently: today it lands on Vol I v6,
@@ -295,6 +305,41 @@ n-bonacci polynomials are **provably not** matroid characteristic polynomials
 (χ_M(1) = 0 for any matroid; p_n(1) = 1 − n ≠ 0), and their coefficient
 log-concavity is degenerate (|coeffs| ≡ 1, inequality saturated). The adjacency is
 real; the overlap is not. Do not claim otherwise in either direction.
+
+### KNOWN DEFECT: the Vol IV footer block copied into Book 7 — REPAIRED 2026-08-12
+
+Book 7's chapter footers were built by copying a Book 4 footer wholesale. The copy carried
+three wrong facts at once, and they travelled together because nobody read the block, only
+duplicated it:
+
+| Line in the footer | What was wrong |
+|---|---|
+| `Principia Orthogona · Vol IV · GTCT T1 · Edição IMPA` | Book 7 is **Vol VII**. Wrong volume on 5 chapters. |
+| `ISBN 979-8-9954416-8-7` | An **unallocated reserve** number (see the registry above). It is not Vol IV's and never was; `Bowker_ISBN_Registration_Guide.md` and `3M_README.md` label it "IMPA Edition · Hardback" aspirationally, but `isbn_metadata.json` has it on HOLD with no group and no format. Entered the repo 2026-06-03 in commit `24ea940`. |
+| `doi:10.5281/zenodo.19117399` | Vol I's **concept** DOI — the Tier B defect already open above. 15 Book 7 files. |
+
+Five of those footers additionally labelled it **"Series DOI"** (Tier A — the exact phrasing
+that propagated into the JOMO pack). `ch-hawking.html` cited `19117400` instead, which is
+Vol I's v1 founding deposit — right that it is a real DOI, wrong that it is Hawking's.
+
+**Also found and fixed:** `ch-symplectic.html` and `ch-tropical.html` had a Python **list
+repr of the chapter body** dumped into the footer's title slot (`Vol VII · ['<div class=...`)
+— a generator bug, rendering as visible garbage on the live site.
+
+**Repair (done 2026-08-12):** all 16 Book 7 footers now carry `Vol VII · The Scientist
+Gallery` and point at the Zenodo community rather than any DOI. No ISBN line — Vol VII has
+neither a deposit nor an allocation. The `ISBN fallback 979-8-9954416-5-6` line was removed
+from `ch-huh.html` for the same reason.
+
+**Still open:** book6's 87 footers and the other 18 files still carry `979-8-9954416-5-6`
+labelled as the "G5 Complete Completeness eBook ISBN". Per the registry, G5's eBook is
+`979-8-9954416-1-8`; `5-6` is unallocated. Not swept — same rule as the commutator ledger,
+the count is a grep and not an audit.
+
+**Also completed 2026-08-12:** the nine Book 7 files that had no `<footer>` at all
+(`ch-cross-staff-and-ledger`, `ch-keplers-correspondents`, `ch-levi`, `ch-metchnikoff`,
+`ch-pasteur`, `tutor-card-ada/curie/dirac`, `ulam-dual`) were given one. Book 6 and Book 7
+are now at 87/87 and 52/52.
 
 ## Hardback constraint
 
