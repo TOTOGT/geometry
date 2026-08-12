@@ -392,8 +392,39 @@ Any new content added to G5 must be measured against this constraint before incl
 - Spiral map: `book4/living-book.html` — the G1–G5 hub
 - Standard typography: follow `prelude.html` (Georgia 18px, line-height 1.75, #e8e4d8)
 
+## File indexes — generated, never hand-maintained
+
+`master-index.html` + `index-<folder>.html` (16 pages, repo root) are produced by
+`tools/build_indexes.py` from a filesystem crawl. **Re-run it after adding or moving any
+page**; do not hand-edit the output.
+
+```bash
+python3 tools/build_indexes.py     # 630 files, 74 orphaned as of 2026-08-12
+```
+
+An index that says *"this file is orphaned"* is a positive claim someone will act on, so it
+gets the same treatment as any other derived fact here: recomputed, not remembered. The
+first hand-generated version was already stale on delivery (missing `ch-huh.html` and
+`wp59-root-language-sweep.html`) and had a **13% error rate on the orphan tag** — 10 of 76
+wrong. Four failure modes, all now handled in the crawler and all worth knowing because they
+recur in any link checker written for this repo:
+
+1. **The generated indexes must be excluded as link sources.** `master-index.html` links to
+   every file; count it and the orphan column reads zero forever.
+2. **Resolve by path, not basename.** `ch-tatiana.html` and `ch6-resonance.html` each exist
+   twice (root *and* a subfolder). Basename matching credits links to the wrong copy — it
+   marked `ch-tatiana.html` linked and `book7/ch-tatiana.html`'s inbound links vanished.
+3. **Site-absolute hrefs count.** `ch07-four-orbits.html` is linked as
+   `/geometry/ch07-four-orbits.html` and was reported orphaned.
+4. **Some nav is built in JavaScript.** `.html` literals inside `<script>` are real links
+   (`omega/trinity-father.html`, `wk02-compression.html`, `wk06-threshold.html`).
+
+Titles are unescaped from `<title>` and re-escaped exactly once; the original double-escaped
+them, rendering a literal `&middot;` on every affected row.
+
 ## What NOT to do
 
+- Do not hand-edit `master-index.html` or `index-*.html` — regenerate them
 - Do not add a print ISBN to Book 3 / Vol III pages
 - Do not create a `book5/` directory without user instruction
 - Do not merge or deduplicate the shadow pages (ch7-topological-orthogenesis.html,
