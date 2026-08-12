@@ -336,6 +336,42 @@ labelled as the "G5 Complete Completeness eBook ISBN". Per the registry, G5's eB
 `979-8-9954416-1-8`; `5-6` is unallocated. Not swept — same rule as the commutator ledger,
 the count is a grep and not an audit.
 
+**Second pass, same day — the defect was not confined to `<footer>`.** Sweeping whole files
+rather than footer blocks found the same three errors in hero strips, chapter-header bylines,
+figure captions and a Lean code comment. Repaired: `ch-lattes`, `ch-tatiana`, `ch-thoreau`
+(hero strips citing `19117399` as the page's own DOI) · `the-scientists` (×2, `979-8-9954416-6-3`
+labelled **"Series ISBN"** — it is Book 3's eBook ISBN, there is no series ISBN) ·
+`ch-dirac`, `ch-faraday`, `ch-hawking` (chapter-header bylines; `ch-faraday` also inside a
+Lean comment) · `ch-lattes` figure caption pinned to Vol I v6 `10.5281/zenodo.21146416`
+instead of the concept DOI · `ch-huh` prose, which still asserted the now-withdrawn
+"Vol VII uses the Vol VI eBook ISBN 5-6 as fallback" rule.
+
+**Deliberately left alone:** `book7/jacobian-verification.html` and
+`book7/wp59-dark-matter-lensing.html` both cite `19117399` *explicitly labelled as the
+concept DOI* and give the current version DOI alongside. That is the prescribed form, not
+a defect. A grep hit is not a finding — open the file.
+
+**Migrated chapters keep their lineage.** `ch-ada`, `ch-curie`, `chcurie`, `ch-dirac` and
+`ch-hawking` began life as Book 4 chapters and moved into Book 7 when the biographies became
+their own book. Their hero strips now read `Vol VII · Scientist Gallery · originalmente
+Vol IV, submetido ao IMPA` — where it lives now, and where it came from. The `Vol IV` nav
+links (`../book4/index.html`) and the "GTCT Vol IV, Ch 5" citations are **correct** and must
+not be swept; they genuinely point at Book 4.
+
+### KNOWN DEFECT: two Book 7 chapters shipped empty — REPAIRED 2026-08-12
+
+`ch-symplectic.html` and `ch-tropical.html` rendered as **blank chapters** on the live site:
+h1, nav and footer only, zero body. The generator swapped two arguments — the chapter title
+was iterated character-per-line into the body slot (20 lines each reading `G`, `e`, `o`, …),
+and the body, a Python list of five HTML block strings, was `str()`-dumped into the
+`<span class="ch-nav-mid">` slot and into the footer's title slot.
+
+Recovered by `ast.literal_eval` on the list literal (escaping resolves to single-backslash
+LaTeX, matching working siblings such as `ch-connes`), then writing each part back where it
+belonged. Both pages now carry their two bilingual sections, section strips, theorem blocks
+and pull quote; markup balanced, verified. **If any other chapter's body looks short, check
+for a `['<div` in a nav or footer slot before assuming the content was never written.**
+
 **Also completed 2026-08-12:** the nine Book 7 files that had no `<footer>` at all
 (`ch-cross-staff-and-ledger`, `ch-keplers-correspondents`, `ch-levi`, `ch-metchnikoff`,
 `ch-pasteur`, `tutor-card-ada/curie/dirac`, `ulam-dual`) were given one. Book 6 and Book 7
