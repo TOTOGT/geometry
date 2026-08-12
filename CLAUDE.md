@@ -249,7 +249,7 @@ mathematically correct but requires DNLS, not the bare dm³ ODE.
 **Status:** `[OPEN]` — the NS/A₂ correspondence remains unproved for the bare dm³ system.
 The correct proof target is the DNLS MI threshold; no Lean file yet exists for it.
 
-### KNOWN DEFECT: the root-language conflation — REPAIRED 2026-08-12 (WP-60)
+### KNOWN DEFECT: the root-language conflation — REPAIRED 2026-08-12 (WP-61)
 
 **A second costume for the WP-24 defect.** WP-24 refuted `q³ − 3q = (q−1)²(q+2)`
 (false by a constant, +2). It fixed the file it was pointed at. It did not ask
@@ -300,7 +300,7 @@ that means something else to everyone who owns it. Sweep for the vocabulary of t
 
 **Why it was found:** asking how a reader of combinatorial Hodge theory would see
 the ladder chapters. Written up as `book7/ch-huh.html` (Scientist Gallery) and
-`book6/wp60-root-language-sweep.html`. Established there, and worth keeping: the
+`book6/wp61-root-language-sweep.html`. Established there, and worth keeping: the
 n-bonacci polynomials are **provably not** matroid characteristic polynomials
 (χ_M(1) = 0 for any matroid; p_n(1) = 1 − n ≠ 0), and their coefficient
 log-concavity is degenerate (|coeffs| ≡ 1, inequality saturated). The adjacency is
