@@ -239,6 +239,63 @@ mathematically correct but requires DNLS, not the bare dm³ ODE.
 **Status:** `[OPEN]` — the NS/A₂ correspondence remains unproved for the bare dm³ system.
 The correct proof target is the DNLS MI threshold; no Lean file yet exists for it.
 
+### KNOWN DEFECT: the root-language conflation — REPAIRED 2026-08-12 (WP-59)
+
+**A second costume for the WP-24 defect.** WP-24 refuted `q³ − 3q = (q−1)²(q+2)`
+(false by a constant, +2). It fixed the file it was pointed at. It did not ask
+whether the *habit* — using "double root", "degenerate" and "critical point"
+interchangeably — had spread. It had.
+
+**The false claims, and the true forms.** All checked with SymPy, symbolic:
+
+| Claim as written | Status | True form |
+|---|---|---|
+| `V(q) = q³ − 3q` has a **double root at q = 1** | **FALSE** — V₃(1) = −2; roots are 0, ±√3 | `c = 3` is the unique coefficient with a **critical point** at q = 1. The double root belongs to `V − V(1) = V + 2 = (q−1)²(q+2)` |
+| `V_φ = q³ − φq` has a **degenerate double root** at `q* = √(φ/3)` | **FALSE twice** — q* is not a root (V_φ(q*) = −0.792) and is non-degenerate (V″ = 4.41) | q* is a **non-degenerate critical point**, and q* ≠ 1, so φ is subcritical |
+| η is the only n-bonacci constant giving that root | **FALSE** — no ρ_n equals 3; they increase to τ = 2 | the correspondence is **rank n = 3 ↔ coefficient c = 3**, integer to integer. `[OPEN]` whether that is more than small-integer coincidence |
+| `μ_max = −½ V″(1)·ε₀²`, and Vieta "product of roots = −2" | **FALSE** — the formula gives −1/3; the Vieta line is numerology | the correct linearisation `d/dr[r(1−r²)]\|₁ = −2` was already one line above. Both removed |
+
+**Key point, worth internalising:** a double root of `V − V(1)` at a critical
+point is *automatic* at every non-degenerate critical point of every cubic. It is
+not evidence of anything special about c = 3. What is special about c = 3 is the
+**location**, q = 1. `V″(1) = 6 ≠ 0` is the Whitney A₁ condition — non-degeneracy
+is the whole content, and "degenerate" asserts its opposite.
+
+**Refinement surfaced by the repair:** `∂ṙ/∂r|_{r=1} = −2 + 2e^{−z}`, and `ż = 1`
+on Γ, so `e^{−z} → 0`. **μ_max = −2 is the asymptotic transverse rate along Γ**,
+exact as z → ∞, not at finite z. The word "exactly" now carries that qualifier.
+
+**Files repaired (2026-08-12):** `ch-recurrence-ladder.html` (5 claims + 4 residual
+phrasings) · `chapters-pi-phi-mu-eta-delta-sigma-omega.html` (3 + 2) ·
+`ch-eta-dnls.html` (1). Each carries a dated CORRECTION NOTICE. **No conclusion was
+lost** — φ stays subcritical, c* = 3 stays the unique threshold, μ_max stays −2,
+the A₁ fold stays an A₁ fold.
+
+**Already correct, left alone:** `ch-recurrence-ladder.html`'s glossary
+(`V(q) + 2 = (q−1)²(q+2)`, with the +2 on the left) and Theorem μ.1 — both had been
+hand-repaired earlier. **Theorem C.1 was correct all along**: it states
+`V(1) = −2, V′(1) = 0, V″(1) = 6 ≠ 0`, which is precisely A₁. Only the prose
+around it drifted toward sounding stronger.
+
+**`[OPEN]` — flagged by signature, NOT yet read:** `chEps-gronwall.html`,
+`chRho-spectral.html`, `chH-collatz.html`, `chE-gtct.html`. A grep hit is not a
+finding; do not report these as defects until someone opens them.
+
+**New rule for the audit method:** when a claim borrows a technical term from a
+neighbouring field, check the term against *that field's* meaning, not against the
+surrounding argument. An argument can be internally consistent and still use a word
+that means something else to everyone who owns it. Sweep for the vocabulary of the
+*strongest* nearby claim: `degenerate`, `double root`, `singular`, `exact`,
+`canonical`, `unique`.
+
+**Why it was found:** asking how a reader of combinatorial Hodge theory would see
+the ladder chapters. Written up as `book7/ch-huh.html` (Scientist Gallery) and
+`book6/wp59-root-language-sweep.html`. Established there, and worth keeping: the
+n-bonacci polynomials are **provably not** matroid characteristic polynomials
+(χ_M(1) = 0 for any matroid; p_n(1) = 1 − n ≠ 0), and their coefficient
+log-concavity is degenerate (|coeffs| ≡ 1, inequality saturated). The adjacency is
+real; the overlap is not. Do not claim otherwise in either direction.
+
 ## Hardback constraint
 
 The **Complete Completeness hardback** (G5 print, ISBN 979-8-9954416-4-9) must stay
