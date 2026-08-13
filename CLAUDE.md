@@ -92,20 +92,47 @@ number** into 87 book6 footers and 19 other files as though it were a real one. 
   actually says. Cite a *concept* DOI only when you explicitly mean "whatever is
   current", and say so in the citation. Never label a concept DOI as the series.
 
-### Blast radius of the phantom series DOI — OPEN, opened 2026-08-01
+### Blast radius of the phantom series DOI — FOOTERS CLOSED 2026-08-12, BODIES OPEN
 
-`19117399` appears in **127 files** in this repo. That number is a `grep` count,
-not an audit: no file below has been opened except the two AXLE pack copies and
-`CLAUDE.md` itself. Do not quote the tier counts as findings — they are a
-mechanical classification of the 110 characters preceding each match, nothing
-more, and the same overstatement rule applies here as to the commutator ledger.
+**The 127 figure was wrong, and wrong in the direction that matters.** It came
+from grepping one pattern (`10.5281/zenodo.19117399`). Measured properly on
+2026-08-12 — both Vol I numbers, all three URL spellings — the real count is:
 
-| Tier | Mechanical count | What it looks like | Why it matters |
-|---|---|---|---|
-| A | 48 files | preceded by the word "series" — e.g. `<span class="badge">Series DOI 19117399</span>` in `book6/ch-multiagent-biological-transitions.html`, `book6/ch-immune-maintenance.html`; "Zenodo series:" in footers | Factually wrong label. Highest priority — it is the exact phrasing that propagated into the JOMO pack. |
-| B | 76 files | bare `DOI: 10.5281/zenodo.19117399` in a footer or byline | Reads as *that page's* DOI. Points the reader at Vol I. |
-| C | 2 files | in explicit Vol I context | Right document, but unpinned — resolves to whatever Vol I version is newest. |
-| D | 1 file | already says "concept" | Probably fine; confirm and leave. |
+| Measure | Files |
+|---|---|
+| Carry a Vol I DOI (`19117399` **or** `19117400`) | **225** |
+| …with it inside a `<footer>` | **189** — *repaired 2026-08-12* |
+| …with it only in the page body | 36 — **still open** |
+| …in both footer and body | 57 (bodies still open) |
+| Labelled "Series DOI" / "Zenodo series" (Tier A) | 6 in footers |
+
+**Three spellings, not one.** The undercount happened because the DOI appears as
+`10.5281/zenodo.19117399`, as `zenodo.org/records/19117400`, and as a bare
+`19117399` inside an anchor. Any future sweep must match all three, plus the
+`zenodo.org/doi/…` path form — see the failure note below.
+
+**Footers are done.** In a footer the number reads as *that page's own* DOI,
+which is wrong by construction regardless of the page's subject, so the repair
+is mechanical and was automated: 189 files, 181 anchors + 6 Tier-A labels + 6
+bare mentions, all → the community URL. Verified: 0 Vol I DOIs remain in any
+footer; every file diffed against HEAD for new defects.
+
+**Bodies are NOT done — 93 files.** An in-body mention may legitimately discuss
+Vol I. Those need the file opened and judged per the Tier rules below. Do not
+automate that pass.
+
+**Failure worth remembering:** the first sweep pattern missed
+`https://zenodo.org/doi/10.5281/zenodo.19117399`, so the bare-mention rule fired
+*inside the href attribute* and nested an `<a>` tag within a URL in
+`dm3-course-landing.html` and `dm3-courses-101-102-103.html`. Caught by the
+markup check, repaired the same pass. When rewriting URLs by regex, always match
+the anchor first and never let a fallback rule run inside an attribute.
+
+**It also escaped the repository.** Zenodo record `10.5281/zenodo.21431505`
+carries `DOI (series): 10.5281/zenodo.19117399` in its Description *and* an
+`Is part of` relation pointing at it — and OpenAIRE has indexed that relation.
+Correction drafted at `book6/ZENODO-21431505-metadata-correction.md`; **not
+deposited**, per rule 4.
 
 Repair, when it is done, is per-file and minimal:
 
