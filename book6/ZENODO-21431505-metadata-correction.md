@@ -91,6 +91,44 @@ every new Vol I deposit, so the relation silently changes meaning over time.
 
 ---
 
+## Verified 2026-08-12 from the record page — this record has BOTH DOIs
+
+| DOI | Kind | Resolves to |
+|---|---|---|
+| `10.5281/zenodo.21431504` | **concept** | always the latest version |
+| `10.5281/zenodo.21431505` | **version** (v1.0, 18 Jul 2026) | this text, frozen |
+
+This was not visible from the metadata block alone; it appears on the record page as
+*"Cite all versions? You can cite all versions by using the DOI 10.5281/zenodo.21431504."*
+
+**Consequence — the repository citation is correct.** `book5/chV-saturn-smoke.html`
+cites `21431505`, the **version** DOI. That is the right choice under the house rule:
+cite a version DOI whenever the claim depends on what the text actually says. Do not
+"upgrade" it to the concept DOI; that would repeat the `19117399` mistake in miniature.
+
+Record both numbers in `CLAUDE.md` so a later pass does not treat `21431504` as
+unknown, or mistake it for a second deposit.
+
+**Zenodo's own suggested citation** (APA, from the record page), for reference:
+
+> Nogueira Grossi, P. (2026). *Transamerican smoke: mixed-layer collapse and the locus
+> of order-dependence in surface exposure: The July 2026 Canadian wildfire episode over
+> New York* (Version 1.0). G6 LLC - Newark, NJ 07104.
+> https://doi.org/10.5281/zenodo.21431505
+
+The ABNT (NBR 6023) form of the same record, for the Vol V reference list:
+
+> NOGUEIRA GROSSI, Pablo. **Transamerican smoke**: mixed-layer collapse and the locus of
+> order-dependence in surface exposure: the July 2026 Canadian wildfire episode over New
+> York. Versão 1.0. Newark: G6 LLC, 2026. Preprint. DOI: 10.5281/zenodo.21431505.
+> Disponível em: https://doi.org/10.5281/zenodo.21431505. Acesso em: 12 ago. 2026.
+
+Also noted from the record page: **Citations — "No citations found"**, and the record
+is indexed in OpenAIRE. The OpenAIRE index carries the `IsPartOf` relation below, which
+is the reason the phantom-DOI correction matters beyond Zenodo itself.
+
+---
+
 ## Field 3 — Communities
 
 The record currently shows no community membership. If it is intended to sit in the
