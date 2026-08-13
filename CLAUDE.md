@@ -131,7 +131,7 @@ the anchor first and never let a fallback rule run inside an attribute.
 **It also escaped the repository.** Zenodo record `10.5281/zenodo.21431505`
 carries `DOI (series): 10.5281/zenodo.19117399` in its Description *and* an
 `Is part of` relation pointing at it — and OpenAIRE has indexed that relation.
-Correction drafted at `book6/ZENODO-21431505-metadata-correction.md`; **not
+Correction drafted at `book6/ZENODO-metadata-corrections.md`; **not
 deposited**, per rule 4.
 
 Repair, when it is done, is per-file and minimal:
@@ -403,6 +403,45 @@ for a `['<div` in a nav or footer slot before assuming the content was never wri
 (`ch-cross-staff-and-ledger`, `ch-keplers-correspondents`, `ch-levi`, `ch-metchnikoff`,
 `ch-pasteur`, `tutor-card-ada/curie/dirac`, `ulam-dual`) were given one. Book 6 and Book 7
 are now at 87/87 and 52/52.
+
+
+### KNOWN DEFECT: the Alterna name collision — RECORDED 2026-08-12
+
+**A third costume for the 5.3 mechanism — this time a *name*, not a number, and the
+false version came from outside.**
+
+`Alterna` = **WP-02**, `10.5281/zenodo.20710023`, *"Alternating Forms Vanish Beyond
+Dimension: A Mechanized Proof in Lean 4 with Application to Contact Integrability"*,
+deposited 16 June 2026. Verified against the Zenodo record 2026-08-12. Chapter now at
+`book6/wp02-alterna.html` — it previously had four inbound citations and **no page**,
+which is what let the name be filled with something else.
+
+| | Alterna (yours) | The impostor |
+|---|---|---|
+| Field | multilinear algebra | 2-adic number theory |
+| Statement | alternating *m*-linear map on rank-*n* module ≡ 0 when *m* > *n* | ∇ₖ v₂(3x+1) vanishes on alternating dyadic classes |
+| Status | **closed**, Lean 4, 12 lines, 0 sorry | **false** — its non-vanishing claim fails ∀ k ≥ 3 |
+
+The impostor was produced by an external LLM asked about this corpus. Its Claim A holds;
+its Claim B is false because by its own argument `v₂ = 1` on *both* residue classes.
+The salvageable true fact is elementary: **λ₃(x) = 1 ⟺ x ≡ 3 (mod 4)**, density ½ among
+odds — one mod-4 condition, no scale hierarchy.
+
+**Repaired in the same pass:** `ch15-complex-turn.html` Theorem 15.2 carried a stale
+`sorry` (Alterna had closed it two months earlier) **and** two corollaries that are false
+on parity — `(T_Γ M, J|_Γ)` as a complex vector bundle (rank 3, odd) and Γ as a complex
+submanifold (dim 1, odd). A *J*-invariant subspace is even-dimensional: `v, Jv`
+independent ⟹ dim ≥ 2. The vanishing is true; Newlander–Nirenberg does not follow from it.
+
+**Level 2 is where the mathematics is.** The deposit closes level 1 of a three-level
+integrability tower. Level 2 is `N_J` on the rank-2 contact distribution `ξ = ker α`,
+where `m = n = 2` and the inequality `m > n` **fails** — the dimension count is silent
+there and a real computation is needed. `[OPEN]`.
+
+**Rule added:** a claim can be hijacked by *name* as well as by number. When an external
+tool returns something bearing a corpus term, check the object, not the label — and
+prefer giving every deposited result its own page, because an unhoused DOI is an
+invitation.
 
 ## Hardback constraint
 

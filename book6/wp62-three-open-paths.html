@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-62 · Three Open Paths — Level 2 Closes Vacuously | Principia Orthogona, Book 6</title>
+<meta name="description" content="Level 2 of the Alterna integrability tower computed explicitly: N_J vanishes on ker alpha, but automatically, for any rank-2 distribution. The tower collapses. Plus what a basin certificate actually requires (interval arithmetic or SOS, with the field polynomialised), and the one falsifiable physical experiment the framework supports.">
+<script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{--navy:#1a2744;--gold:#c9a84c;--cream:#faf7f0;--smoke:#f0ece4;--red:#9b2226;--green:#2d6a4f}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Georgia,'Times New Roman',serif;background:var(--cream);color:var(--navy)}
+  main{max-width:760px;margin:0 auto;padding:64px 40px 40px}
+  .eyebrow{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .op-chain{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#9ca3af;margin-bottom:44px}
+  .op-chain .active{color:var(--gold);font-weight:bold}
+  .op-chain a{color:inherit;text-decoration:none}.op-chain a:hover{color:var(--gold)}
+  h1{font-size:32px;font-weight:normal;text-align:center;margin:0 0 6px;line-height:1.25}
+  .value-line{text-align:center;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13.5px;color:#6b7280;margin-bottom:28px}
+  .gold-rule{height:1px;width:120px;margin:0 auto 32px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+  h2{font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--smoke);padding-bottom:8px;margin:44px 0 16px}
+  h2 .n{color:var(--navy)}
+  h3{font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;letter-spacing:.5px;margin:26px 0 8px}
+  p{font-size:16.5px;line-height:1.75;margin:0 0 20px}
+  code{font-family:'SF Mono',Menlo,monospace;font-size:.85em;background:var(--smoke);padding:1px 5px;border-radius:3px}
+  table{width:100%;border-collapse:collapse;margin:16px 0 28px;font-size:14.5px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--smoke);vertical-align:top}
+  th{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:#9ca3af}
+  .numeric-check{background:#0f1830;color:#d7dcea;border-radius:4px;padding:16px 20px;font-family:'SF Mono',Menlo,monospace;font-size:12.5px;line-height:1.7;margin:20px 0 28px;overflow-x:auto;white-space:pre}
+  .verdict{background:#fbf7ec;border:1px solid var(--gold);border-radius:4px;padding:18px 22px;margin:24px 0 28px;font-size:15.5px;line-height:1.7}
+  .verdict .lbl{display:block;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+  .caveat{background:var(--smoke);border-radius:4px;padding:16px 20px;font-size:14.5px;line-height:1.7;margin:24px 0 28px;color:#4b5563}
+  .false{color:var(--red);font-weight:bold}.true{color:var(--green);font-weight:bold}
+  .prevnext{display:flex;justify-content:space-between;gap:16px;margin-top:56px;padding-top:20px;border-top:1px solid var(--smoke);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px}
+  .prevnext a{color:var(--gold);text-decoration:none}.prevnext a:hover{text-decoration:underline}
+  footer{background:#131c33;color:#8f8878;margin-top:64px;padding:34px 40px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12.5px;line-height:1.9}
+  footer a{color:var(--gold);text-decoration:none}footer strong{color:var(--gold)}
+  .fwrap{max-width:760px;margin:0 auto;display:flex;gap:40px;flex-wrap:wrap}
+  .fwrap>div{flex:1 1 300px}.disc{color:#6f6a5c}
+</style>
+</head>
+<body>
+<main>
+
+  <div class="eyebrow">Principia Orthogona &middot; Book 6 &middot; Working Papers &middot; Open Problems</div>
+
+  <div class="op-chain">
+    <a href="wp02-alterna.html">WP-02 Alterna</a> <span>&rarr;</span>
+    <a href="wp61-root-language-sweep.html">WP-61 Root Language</a> <span>&rarr;</span>
+    <span class="active">WP-62 Three Open Paths</span> <span>&rarr;</span>
+    <a href="wp63-chladni-realia-build.html">WP-63 Chladni Realia</a>
+  </div>
+
+  <h1>Three Open Paths</h1>
+  <div class="value-line">
+    level 2 computed &mdash; and it closes vacuously<br>
+    what a basin certificate costs &middot; the one experiment that can falsify the framework
+  </div>
+  <div class="gold-rule"></div>
+
+  <p>
+    <a href="wp02-alterna.html">WP-02</a> closes level 1 of a three-level integrability
+    tower and states that the deeper levels are open. This paper computes level 2, finds
+    the tower collapses, and then does what the audit papers have not: names the two
+    remaining problems <em>and the standard methods that solve them</em>.
+  </p>
+
+  <h2><span class="n">1.</span> &nbsp;Level 2, computed</h2>
+
+  <p>
+    On $M = \mathbb{R}^2_+ \times \mathbb{R}$ with $\alpha = dz - r^2 d\theta$, the contact
+    distribution $\xi = \ker\alpha$ has rank 2. A frame:
+  </p>
+
+  <div class="numeric-check">X1 = d_r                 alpha(X1) = 0
+X2 = d_theta + r^2 d_z   alpha(X2) = 0
+R  = d_z                 alpha(R)  = 1     <- Reeb field
+
+[X1,X2] = 2r * R         alpha([X1,X2]) = 2r != 0
+                         -> Frobenius FAILS: genuine contact structure</div>
+
+  <p>
+    Take the natural almost complex structure on $\xi$: $J X_1 = X_2$, $J X_2 = -X_1$.
+    Then, computing each bracket explicitly:
+  </p>
+
+  <div class="numeric-check">[JX1,JX2] = [X2,-X1] = [0, 0, 2r]
+[JX1, X2] = [X2, X2] = [0, 0, 0]
+[X1, JX2] = [X1,-X1] = [0, 0, 0]
+[X1, X2]             = [0, 0, 2r]
+
+N_J(X1,X2) = [JX1,JX2] - J[JX1,X2] - J[X1,JX2] - [X1,X2]
+           = 2rR       -    0      -    0      - 2rR
+           = 0                                    identically</div>
+
+  <div class="verdict">
+    <span class="lbl">Level 2 &middot; closed</span>
+    $N_J$ vanishes identically on $\xi = \ker\alpha$.
+  </div>
+
+  <h3>But it closes for no reason specific to dm&sup3;</h3>
+
+  <p>
+    Repeat the computation with $[X_1, X_2] = W$ <em>arbitrary</em>. The two middle terms are
+    $J[X_2,X_2]$ and $J[X_1,-X_1]$, both $J(0) = 0$. The outer terms are $[X_2,-X_1] = [X_1,X_2]$
+    and $-[X_1,X_2]$. They cancel for <strong>any</strong> $W$ whatsoever.
+  </p>
+  <p>
+    So $N_J(X_1, JX_1) = 0$ on <em>any</em> rank-2 distribution with any almost complex
+    structure. This is the distributional analogue of the classical fact that every almost
+    complex structure on a real 2-manifold is integrable: $N_J$ is alternating, rank 2 leaves
+    it a single independent component, and that component cancels.
+  </p>
+
+  <div class="verdict">
+    <span class="lbl">The tower collapses</span>
+    <table style="margin:8px 0 0">
+      <tr><td><strong>Level 1</strong></td><td>rank 1</td><td>closes because $m &gt; n$ &mdash; <em>trivial</em></td></tr>
+      <tr><td><strong>Level 2</strong></td><td>rank 2</td><td>closes because $N_J$ is alternating with one component &mdash; <em>trivial</em></td></tr>
+      <tr><td><strong>Level 3</strong></td><td>rank 3 ($= M$)</td><td><span class="false">impossible</span> &mdash; $M$ is odd-dimensional; no almost complex structure exists on it at all</td></tr>
+    </table>
+  </div>
+
+  <p>
+    No level of the tower carries information about dm&sup3;. That is not a defect in
+    <a href="wp02-alterna.html">WP-02</a>, which proves exactly what it claims &mdash; it is a
+    fact about what the Nijenhuis tensor can detect in these dimensions.
+  </p>
+
+  <h3>Where the obstruction actually lives</h3>
+
+  <p>
+    $\alpha([X_1,X_2]) = 2r \neq 0$. The failure of integrability here is
+    <strong>Frobenius</strong>, not Nijenhuis &mdash; and it is the defining property of a
+    contact structure, so it is a feature, not an obstruction to be removed. $N_J = 0$ produces
+    no complex leaf because <em>there is no leaf at all</em>: $\xi$ is nowhere integrable.
+    Newlander&ndash;Nirenberg requires an integrable $J$ on an even-dimensional <em>manifold</em>;
+    $\xi$ is a non-integrable <em>distribution</em>, so the hypothesis never applies. This is the
+    same parity/category confusion corrected in
+    <a href="../ch15-complex-turn.html">Ch 15</a> on 2026-08-12.
+  </p>
+
+  <div class="caveat">
+    <strong>What would be a real question.</strong> Not &ldquo;does $N_J$ vanish?&rdquo; but:
+    is there a <em>CR structure</em> on $(\,M, \xi, J)$, i.e. is the Levi form degenerate
+    anywhere? For a contact structure the Levi form is by definition non-degenerate, so the
+    answer is known and negative. If the series wants an integrability statement with content,
+    the object to study is the <strong>complexified contact bundle</strong>
+    $\xi \otimes \mathbb{C} = \xi^{1,0} \oplus \xi^{0,1}$ and whether $\xi^{1,0}$ is closed
+    under bracket &mdash; which for a contact 3-manifold is again automatic by rank. The honest
+    conclusion is that <em>complex-analytic integrability is not where the dm&sup3; content is</em>.
+  </div>
+
+  <h2><span class="n">2.</span> &nbsp;The basin: what is proved, and what a certificate costs</h2>
+
+  <h3>What is already proved</h3>
+  <p>
+    In the asymptotic limit $z \to \infty$ the transverse equation reduces to
+    $\dot\rho = -\rho(1+\rho)(2+\rho)$, with fixed points $\{0, -1, -2\}$. A 1-D autonomous
+    ODE has no fixed point strictly between $-1$ and $0$ or above $0$, so the basin of
+    $\rho = 0$ is <strong>exactly</strong> $(-1, \infty)$. That is elementary and complete.
+    Gr&ouml;nwall's $|\rho| &lt; 1/3$ is a strict sub-ball of it &mdash; conservative and correct
+    <em>for the reduced system</em> (see <a href="../chEps-gronwall.html">&epsilon;&#8320;</a>,
+    corrected 2026-08-12).
+  </p>
+
+  <h3>What is not</h3>
+  <div class="numeric-check">full 3-D system, bisection at rtol = 1e-13, atol = 1e-15
+  r* in [0.7759405755, 0.7759405755]     width ~ 1.1e-16
+  corpus value: 0.77594059
+
+note the 8th digit: this run gives ...4058, the corpus records ...4059.
+within the integrator's own uncertainty, but NOT established either way.</div>
+
+  <p>
+    This is a bisection on a numerical integrator. Every evaluation carries truncation and
+    rounding error that is <em>estimated</em>, not <em>bounded</em>. It is strong evidence and
+    it is not a proof. AXLE Issue #13 is correctly <span class="false">[OPEN]</span>.
+  </p>
+
+  <h3>Two mature methods that would close it</h3>
+
+  <p><strong>(a) Rigorous integration with interval arithmetic.</strong> Integrate an
+    <em>interval</em> of initial conditions with validated solvers &mdash; CAPD, or Arb's
+    ODE routines. If the enclosure of the image lands strictly inside a trapping region,
+    convergence is <em>proved</em> for every point in that interval. This yields $r_\star$ to
+    as many digits as one pays for, with an enclosure rather than an estimate. This is the
+    direct answer to the question already posed to Jinyun Yuan on
+    <a href="../for-brazil-china.html">the Brazil&ndash;China pointer page</a>: <em>&ldquo;what
+    does it take for a numerical basin certificate to be publishable as a certificate rather
+    than an illustration?&rdquo;</em>
+  </p>
+
+  <p><strong>(b) Lyapunov function via sum-of-squares.</strong> Seek $V \geq 0$ with
+    $\dot V &lt; 0$ on an annulus; the sublevel set $\{V &lt; c\}$ is then a certified subset of
+    the basin. This is an SDP, and it applies directly here because the field becomes
+    <em>polynomial</em> under the substitution $w = e^{-z} &gt; 0$:
+  </p>
+
+  <div class="numeric-check">r' = -r^3 + 2rw + r - 2w
+w' = 2r^2w^2 - r^2w - 4rw^2 + 2w^2        (w = e^-z,  w' = -w * zdot)
+
+polynomial in (r, w)  ->  SOSTOOLS / SumOfSquares.jl apply unmodified</div>
+
+  <p>
+    The polynomialisation is the whole trick and it is one substitution. Of everything open in
+    this corpus, this is the highest ratio of value to effort: a solved technique, an
+    off-the-shelf solver, and a result that converts the series' most-cited number from
+    &ldquo;located&rdquo; to &ldquo;bounded.&rdquo;
+  </p>
+
+  <h2><span class="n">3.</span> &nbsp;The one experiment that can falsify the framework</h2>
+
+  <p>
+    Everything above is mathematics about a model. The DNLS Peierls&ndash;Nabarro threshold is
+    the single place where the framework makes a prediction an instrument can refute.
+  </p>
+
+  <div class="numeric-check">H_site = -(gamma/2) P^2          all power on one waveguide
+H_bond = -C P - (gamma/4) P^2    power split over two
+
+dE_PN  = H_bond - H_site = (gamma/4) P^2 - C P
+P*     = 4C / gamma              <- self-trapping threshold
+
+CORRECTED 2026-08-12. An earlier version of this page used an illustrative
+gamma = 1 /(W mm) and reported P* ~ 2 W. That is wrong by five orders of
+magnitude. For real fused silica:
+
+  n2 = 2.6e-20 m^2/W, lambda = 1550 nm, A_eff = 50 um^2
+  gamma = 2 pi n2 / (lambda A_eff) = 2.1e-06 /(W mm)
+  C = 0.5 /mm  ->  P* = 4C/gamma = 9.5e5 W = 950 kW  PEAK
+
+reachable only with pulses: 200 fs at 80 MHz -> 190 nJ/pulse, ~15 W average,
+i.e. a mode-locked fs oscillator.</div>
+
+  <div class="caveat">
+    <strong>And the laser is not the blocker &mdash; the array is.</strong> The test needs 40&ndash;100
+    single-mode waveguides, evanescently coupled, spacing held to ~0.1 &micro;m along a Fibonacci or
+    Tribonacci substitution rule: fs-laser direct writing (a $300k&ndash;1M station) or a custom fab
+    run at $5&ndash;20k with weeks of lead time, plus sub-micron input coupling and an IR camera.
+    This is a funded-lab collaboration, not a bench experiment. The classroom-scale test that
+    <em>is</em> buildable &mdash; and that carries an exact prediction rather than a fitted one &mdash;
+    is <a href="wp63-chladni-realia-build.html">WP-63</a>.
+  </div>
+
+  <p>
+    Below $P^*$ the beam diffracts across the array; above it, the beam self-traps in a single
+    guide. The transition is sharp, visible, and single-shot.
+  </p>
+
+  <div class="verdict">
+    <span class="lbl">The comparative test</span>
+    Fabricate two arrays identically, differing only in the substitution rule setting the
+    waveguide spacing: <strong>Fibonacci</strong> ($\varphi \approx 1.618$) versus
+    <strong>Tribonacci</strong> ($\eta \approx 1.839$). Coupling $C$ is set by spacing, so the
+    thresholds separate. The dm&sup3; lab
+    (<a href="../ch-eta-dnls.html">Ch &eta;</a>) claims IPR retention $&gt;95\%$ on the
+    Tribonacci chain against $\approx 43\%$ on Fibonacci at $\lambda = 1.5$.
+    <br><br>
+    <strong>Prediction:</strong> $P^*_{\text{trib}} / P^*_{\text{fib}} = C_{\text{trib}} / C_{\text{fib}}$,
+    measurable to roughly 5%.
+    <br>
+    <strong>Falsified if:</strong> the thresholds coincide within error, or the ordering inverts.
+  </div>
+
+  <p>
+    This is the experiment to run first, because it is the only one whose failure would cost
+    the framework something. Everything else in this paper is internal bookkeeping.
+  </p>
+
+  <h2><span class="n">4.</span> &nbsp;Status</h2>
+
+  <table>
+    <thead><tr><th>Item</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Level 1 &mdash; $N_J$ on the Reeb direction</td><td><span class="true">CLOSED</span> (WP-02, Lean 4) &middot; trivial by $m &gt; n$</td></tr>
+      <tr><td>Level 2 &mdash; $N_J$ on $\xi = \ker\alpha$</td><td><span class="true">CLOSED</span> here, symbolically &middot; trivial by rank</td></tr>
+      <tr><td>Level 3 &mdash; integrable $J$ on $M$</td><td><span class="false">IMPOSSIBLE</span> &middot; $\dim M$ odd</td></tr>
+      <tr><td>$r_\star$ certified enclosure</td><td><span class="false">[OPEN]</span> &middot; AXLE #13 &middot; method named above</td></tr>
+      <tr><td>SOS Lyapunov certificate on $(r,w)$</td><td><span class="false">[OPEN]</span> &middot; directly attemptable</td></tr>
+      <tr><td>DNLS $P^*$ Fibonacci/Tribonacci comparison</td><td><span class="false">[OPEN]</span> &middot; not yet attempted</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caveat">
+    <strong>Method note.</strong> All symbolic results here were computed with SymPy and are
+    reproducible from the expressions printed on this page; the bisection used SciPy at
+    <code>rtol=1e-13</code>. The level-2 collapse is this paper's own analysis and is
+    <em>not</em> claimed to be in the WP-02 deposit. No claim on this page is machine-checked
+    in Lean; the level-2 computation is a natural next Lean target and is short.
+  </div>
+
+  <div class="prevnext">
+    <a href="wp02-alterna.html">&larr; WP-02 &middot; Alterna</a>
+    <a href="index.html">Book 6 index &rarr;</a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="fwrap">
+    <div>
+      <strong>WP-62 &middot; Three Open Paths</strong><br>
+      Principia Orthogona &middot; Vol VI &middot; Roots &middot; Working Papers<br>
+      G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; 2026<br>
+      ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a> &middot;
+      <a href="mailto:g6llc@proton.me">g6llc@proton.me</a><br>
+      Series <a href="https://zenodo.org/communities/principia-orthogona">Principia Orthogona community</a> &middot;
+      <a href="https://github.com/TOTOGT/AXLE">AXLE</a>
+    </div>
+    <div class="disc">
+      <strong>Notice</strong><br>
+      Independent working paper; not peer-reviewed. No DOI assigned as of 2026-08-12.
+      Level 2 closes but vacuously, and the paper says so rather than reporting a closure.
+      The basin result is numerical evidence, not a certificate; the 8th digit of $r_\star$
+      is not established. The DNLS comparison has not been performed.<br>
+      CC BY-NC-ND 4.0 &middot; &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

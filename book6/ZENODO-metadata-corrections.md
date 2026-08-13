@@ -1,4 +1,16 @@
-# Zenodo record 10.5281/zenodo.21431505 — metadata correction
+# Zenodo metadata corrections — DRAFTS, NOT DEPOSITED
+
+Two live records carry the phantom series DOI. Neither has been amended;
+amending a published record is the author's call (house rule 4).
+
+| Record | Title | Defects |
+|---|---|---|
+| `10.5281/zenodo.21431505` | Transamerican smoke | series DOI ×2 |
+| `10.5281/zenodo.20710023` | Alternating Forms Vanish Beyond Dimension (Alterna) | series DOI ×2, wrong ISBN |
+
+---
+
+## Record 1 — 10.5281/zenodo.21431505
 
 **Record:** *Transamerican smoke: mixed-layer collapse and the locus of order-dependence
 in surface exposure: The July 2026 Canadian wildfire episode over New York*
@@ -159,3 +171,68 @@ under the phantom-DOI ledger, noting that the blast radius included published
 metadata and not only repository files.
 
 *Drafted 2026-08-12 · checked against the Zenodo record the same day.*
+
+
+---
+
+## Record 2 — 10.5281/zenodo.20710023 (Alterna)
+
+**Record:** *Alternating Forms Vanish Beyond Dimension: A Mechanized Proof in Lean 4
+with Application to Contact Integrability*
+**Published:** 16 June 2026 · v1.0 · Preprint · CC BY 4.0 · G6 LLC
+**URL:** <https://zenodo.org/records/20710023>
+**Verified against the record:** 2026-08-12
+**Chapter:** `book6/wp02-alterna.html`
+
+### Defect 1 — the phantom series DOI, again
+
+Two places, same as record 1:
+
+- **Description**, final paragraph: `Series root: 10.5281/zenodo.19117399.`
+- **Related works**: `Is part of → Preprint: 10.5281/zenodo.19117399 (DOI)`
+
+`19117399` is Vol I's **concept** DOI. There is no series-level DOI. Replace the
+Description line with the community URL, and drop or retarget the relation exactly as
+set out for record 1 above.
+
+**This is the second live deposit carrying it.** The blast radius recorded in
+`CLAUDE.md` is therefore not confined to the repository — it reaches published,
+OpenAIRE-indexed metadata on at least two records. Any deposit made from a template
+containing that line should be checked before the next upload.
+
+### Defect 2 — wrong ISBN
+
+Description: `Part of the Principia Orthogona series (ISBN 979-8-9954416-6-3).`
+
+`979-8-9954416-6-3` is **Book 3's eBook ISBN** (Vol III, The Mini-Beast). This is a
+**Vol VI** working paper. Per the corrected registry, Vol VI has no ISBN allocation
+of its own, and a volume without a registered ISBN gets no ISBN line at all.
+
+**Replace with:** delete the ISBN clause. Keep `Part of the Principia Orthogona series`
+and point at the community.
+
+### Suggested replacement for the Description tail
+
+```
+Part of the Principia Orthogona series.
+Series: Zenodo community — Principia Orthogona
+https://zenodo.org/communities/principia-orthogona
+(There is no series-level DOI, and Vol VI has no ISBN allocation.)
+AXLE formal verification: github.com/TOTOGT/AXLE.
+```
+
+### Unchanged — verified correct, do not edit
+
+- Title, author, ORCID `0009-0000-6496-2186`, G6 LLC, CC BY 4.0, resource type Preprint
+- The entire abstract through *"...identifies precisely what the deeper levels require."*
+  That sentence is the paper's own honest scoping and should be preserved verbatim —
+  it is what distinguishes the deposit from the overclaim that grew around it in `ch15`.
+- File `alternating_vanishing_paper_v2.pdf`, md5 `191b5e6796834ed2948613065ed0290f`
+
+### Note for the record's own good
+
+The deposit closes **level 1** of a three-level integrability tower. Level 2
+($N_J$ on the rank-2 contact distribution $\xi = \ker\alpha$) is **not** reachable by
+the same dimension count — there $m = n = 2$ and the inequality $m > n$ fails. If a
+future version of this paper is deposited, saying so explicitly in the abstract would
+prevent the parity overclaim that `ch15` accumulated and that was corrected 2026-08-12.
