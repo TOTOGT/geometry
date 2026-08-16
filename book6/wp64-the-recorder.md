@@ -24,9 +24,23 @@ A note on scale: the tools in this case were primitive. What follows is therefor
 
 ## 1 · The case
 
-Between 2006 and 2009 the author was an analyst in Relationship Management and Securities Finance at a global investment bank, latterly subject-matter expert for an internal client-intelligence platform.
+Between 2006 and 2009 the author was an analyst in Relationship Management and Securities Finance at J.P. Morgan, latterly subject-matter expert for **Titan** — a client-facing business-intelligence tool which the author built and the bank deployed to its corporate clients `[documented]`.
 
-The assigned work was the production of performance-attribution reporting for large corporate clients: analyses of an entire market that identified where a client's performance had come from, and why. The instrument was a spreadsheet. **The reporting cycle took approximately one month of full-time labour per iteration** `[documented]`.
+**What Titan did had not been done.** Before it, a corporate client could not log in and look at its own accounts; visibility was mediated — it arrived as a report, produced by an analyst, on the institution's schedule `[documented]`. After it, clients ran the reports they needed **on demand, at the press of a button** `[documented]`.
+
+That is the same button, and the coincidence is the point. §1 above describes an analyst's month of labour collapsing to a keystroke on the *inside* of the firm. Titan is that collapse handed across the counter: the same function, the same button, now belonging to the client. The displacement was not that a machine replaced an analyst. It was that the work stopped being work at all, on both sides of the relationship at once.
+
+**And the residual labour was teaching clients to schedule it.** Time was spent showing them how to set the reports they had asked for to run on a timely basis — weekly, monthly, quarterly `[documented]`. This is worth stating precisely, because it is the last step and the least visible one. Scheduling is the final piece of judgement in the function: not *how* the report is produced, which the recorder had already captured, but *when* one is needed. Handing that over completed the transfer. The analyst's remaining work was instructing the client in the exercise of the last discretion the analyst still held — and being paid to do it, and regarding it, correctly, as good service.
+
+**What that removed was not a task but a seat.** The arrangement Titan replaced was a team of analysts sitting beside the relationship managers, researching and producing reports on request. Once clients could pull and schedule those reports themselves, that arrangement had no remaining function `[documented]`. This paper does not claim the corresponding headcount reduction — §7 lists the aggregate effect as unidentifiable from a single case and declines to assert it. What is claimed is narrower and harder to dispute: **the work the seat existed to do had stopped existing**, and it had stopped because it was written down.
+
+The author's own reading at the time is worth recording exactly, because it is the paper's thesis arriving as a mistake rather than as an argument. Having removed the research-and-reporting burden from the desk, he concluded that the freed capacity was *his*: now, at last, there would be time to do research `[documented]`. The inference was reasonable and it was backwards. Capacity released by specification does not accrue to the specifier. The function had been made portable, and a portable function does not need the person who made it portable — it needs nobody in particular. He read the outcome as liberation. The institution read the same fact as completion.
+
+It is also the same object as the rest of this corpus, arriving from the other side. *The Response Gap* argues for publishing a formula the counterparty is subject to but cannot see; Titan published a balance the client owned but could not see. Both are cases of **asymmetric legibility** — one party holding, as an operational convenience, information the other party has the stronger claim to.
+
+Titan matters to the argument twice over, and the second time is the one that generalises. Equivalent client-facing intelligence tools subsequently became standard across the industry `[modeled]` — an inference from their later market presence rather than from any knowledge of competitors' build decisions. And in a later role at the **New York branch of Banco do Brasil**, the author **purchased the same capability as a vendor product from BNY Mellon**, the institution with which the branch custodied its own assets `[documented]`. The specification did not merely eliminate the function that produced it. It escaped the firm, became a product, and was sold back to its own author.
+
+The assigned work was the production of performance-attribution reporting for large corporate clients: analyses of an entire market that identified where a client's performance had come from, and why. The instrument was a spreadsheet. **The reporting cycle took approximately one month of full-time labour per iteration** `[documented]`. The cycle was not one report: several clients and several reports were carried concomitantly within it `[documented]`.
 
 **What the work actually consisted of, however, was reading contracts.** Attribution requires knowing the terms under which value was shared, and those terms were frequently **piecewise**: above one threshold, a stated percentage payout; above a further threshold, a different payout entirely `[documented]`. Such a schedule is a step function. It has **discontinuities**, and near a boundary an arbitrarily small change in measured performance produces a large change in what is owed.
 
@@ -45,6 +59,8 @@ Four features of that history carry the paper.
 **The payback period was one iteration.** One month of labour to eliminate one month of recurring labour. Every subsequent cycle was pure return. That is not a marginal efficiency; it is a step change with break-even inside a single period — which is precisely why no approval process governs it. **The decision is small enough for one person to take alone**, and it was taken alone, hundreds of times.
 
 **The automation was recorded, not written.** The load-bearing detail. The author did not analyse the task, decompose it, and design a program to replicate it. **He pressed record and did his job.** The resulting code was a transcript.
+
+**And the transcription itself was free.** This is the sharpest form of the paper's claim and it should not be softened. Recording is coextensive with performing: *if it takes a minute to do, it takes a minute to record it* `[documented]`. The act of specification therefore carried **no marginal cost in labour at all** — not a month, not an hour, nothing beyond the cycle that was going to be worked regardless. What cost approximately a month was the *build*: turning the transcript into something that ran reliably `[documented]`. So the displacing act was not merely cheap relative to its return. It was, in isolation, free — and that is why nothing in the organisation could price it, budget for it, or notice it happening.
 
 **The increments were individually invisible.** No single act in that campaign was large enough to warrant review. Each was one analyst improving one report for one client — the most unremarkable thing that happens in an office. There was never a proposal, never a business case, never a meeting at which the elimination of a function was on the agenda, because at no point did anyone hold a unit of work large enough to be *called* that. **The aggregate was the specification of an entire professional function. The aggregate was never on anyone's desk** `[modeled]`.
 
@@ -65,6 +81,112 @@ On this reading, the function did not become automatable in the month the macro 
 The corollary is a diagnostic, and it is uncomfortable:
 
 > **If your work can be captured by a recorder, it has already been specified. The automation is a formality and its timing is arbitrary.**
+
+### 2.1 · How the recorder teaches the language
+
+The argument above assumes something a reader who has never used a macro recorder may not grant: that pressing record produces *source code a non-programmer can then read, modify and generalise*. It does, and the mechanism is worth setting out step by step, because the absence of a learning curve is load-bearing for §4 and §6B. Nobody was trained. Nobody needed to be.
+
+1. **Record.** In the Excel of the period, *Tools → Macro → Record New Macro*; in current versions, the *Developer* tab, or *View → Macros → Record Macro*. Excel then watches. You do your job — click cells, sort, filter, paste, format, save. You press stop.
+
+2. **Look at what it wrote.** `Alt+F11` opens the Visual Basic Editor. Under *Modules* is a `Sub` containing your actions, rendered as VBA statements. This is the moment that matters: the output is not an opaque recording. It is **legible source code in a real programming language**, and every line of it corresponds to something you personally just did.
+
+3. **Read it against your own memory.** You know what you did, so you can decode the code without a manual. You selected a cell and typed a number; the code says `Range("A1").Select` then `ActiveCell.FormulaR1C1 = "5"`. You sorted a column; there is a sort statement naming your column. The recorder is, in effect, **a dictionary from actions you already know to syntax you do not** — the only such dictionary most office workers ever need.
+
+4. **Step through it.** `F8` executes one line at a time with the worksheet visible beside the editor. The sheet moves as each line runs. Cause and effect are directly observable, which is a better feedback loop than most deliberate programming instruction provides.
+
+5. **Use it as a lookup.** This is the practitioner's real trick and it never stops being useful: when you do not know how to express something in code, *record yourself doing it by hand* and read what comes out. Need the syntax for a pivot table, a filter, a page setup? Record it once. The recorder answers questions about the object model on demand, in the exact dialect your version speaks.
+
+6. **Then generalise, and this is where transcription becomes a program.** The recording is literal and brittle: fixed cell addresses, one file, one month. You replace `Range("A1")` with a variable, wrap the repeated block in `For Each`, add an `If` for the case that differs, lift the filename into a parameter. Each edit is small, each is testable by running it, and none requires knowing anything not visible in the transcript you started from.
+
+The path from *doing the job* to *owning a program that does the job* therefore contains **no step at which a person must decide to become a programmer** `[modeled]`. There is no course, no budget line, no request for tooling, no moment at which anyone announces an intention to automate. There is an analyst who wanted to stop retyping things, and a facility built into the software he was already issued.
+
+This is the precise sense in which the displacing act is ungoverned. It is not that the organisation failed to supervise automation. It is that the automation was **indistinguishable from competent use of a spreadsheet**, which is what the analyst was hired to do.
+
+### 2.2 · The regress, and where this paper stops it
+
+The argument so far moves the displacing moment earlier than the literature puts it: not at automation but at specification. That move does not obviously terminate, and the objection should be made here rather than left for a reader to make `[modeled]`.
+
+By the same logic the moment recedes twice more:
+
+1. **At specification.** Output becomes a stable, repeatable sequence. The function is eliminated in principle; the build is downstream.
+2. **Earlier: at the decision to optimise.** Someone concluded this function *ought* to be made cheaper. Specification is then the execution of a decision already taken, and the decision is the displacing act.
+3. **Earlier still: when optimisation became the thing one solves for.** Once efficiency is the default frame through which work is seen, every specifiable function is already condemned in principle. Nothing remains to be decided — only scheduled. **All things have become optimisable**, and the elimination of any particular function is a matter of when someone gets to it.
+
+Each step back is valid, and each buys generality at the cost of something the paper needs. Step 3 is almost certainly true and almost entirely useless: it names a condition rather than an event. It cannot be dated, has no author, admits no counterfactual, and licenses no intervention. A claim that displacement began when modernity began explains every case and predicts none.
+
+The paper therefore stops at **step 1**, and the stopping rule is not arbitrary:
+
+> **Stop at the last point where an intervention remains conceivable.**
+
+Specification is the last rung with all four properties the argument requires: it is *datable* (a recording has a timestamp), *attributable* (one person pressed record), *observable in principle* (the transcript exists as an artefact), and *governable in principle* (an institution could, if it wished, require that transcription of a function be logged the way procurement is logged). Step 2 retains attribution but loses the artefact. Step 3 retains nothing.
+
+This is the same structure §5A describes in a different register. A threshold is invisible from inside the range where it does not bind; optimisation-as-frame never binds visibly because it has already been crossed everywhere, at all times, by everyone. That is precisely what makes it unavailable as a locus of governance — and precisely why the useful claim is the narrower one.
+
+The regress is recorded rather than resolved. If a reader prefers step 2 or step 3, the case in §1 is unaffected: the recording still happened, still cost nothing, and still eliminated the function. What changes is only whom one would ask to have done otherwise.
+
+### 2.3 · The neg-optimum
+
+Step 3 is ungovernable as a *decision* but it is not therefore beyond response. What it rules out is a corrective posed in its own terms. One cannot optimise one's way out of a condition in which everything has become optimisable; a better optimum is still an optimum. The response, if there is one, has to be the antithesis: a deliberate commitment to a position **off** the optimum, held on purpose, at a cost that is real and is the point `[modeled]`.
+
+Call it the **neg-optimum**: the margin a system holds precisely because it does not pay under the objective being maximised.
+
+The reason is structural rather than sentimental. Optimisation is a single-objective operator. A system has at minimum two objectives that do not commute — *output now* and *existence later* — and the operator only sees the first. An optimum is a point; a point has no neighbourhood. A system driven exactly onto it has, by construction, zero reserve against the perturbation it did not model. Every property that buys survival under perturbation — redundancy, duplication, idle capacity, slack, unallocated attention — is scored as waste by the operator, because waste is exactly what it is under the objective the operator can see. The measurement is not wrong. It is incomplete in the one dimension that determines whether there is a system next period.
+
+This is where the paper's own case supplies the sharpest instance, and it is not a general point about resilience `[documented]`.
+
+The analyst seat was slack. Sitting beside a relationship manager, researching, assembling reports by hand, it was the least defensible line under any efficiency review — heterogeneous, unmeasured, irreproducible, and exactly the shape of thing an optimising frame is built to find. Once reports could be scheduled, it was redundant capacity by the frame's own arithmetic.
+
+But that seat was also the only place in the institution where the transcription could have happened. Specification requires someone who holds the function in working memory, has the tool open, and has enough unassigned time to *play* with it — the verb §6B records the institution rejecting. A fully optimised desk has no such time by definition; unassigned time is the first thing an optimum removes. So the operation eliminates its own precondition:
+
+> **Optimisation consumes the slack in which the capacity to specify lives.** An organisation that has removed all of it cannot produce another Titan, and will not know that this is what it has decided.
+
+The failure is invisible from inside for the reason §5A gives: the loss appears as an absence of events, and an absence of events reads as stability. Nothing on the P&L records the tool that was not built.
+
+The neg-optimum is therefore not a plea against efficiency. It is the claim that a system which cannot articulate why it is holding a position it knows to be sub-optimal has lost the vocabulary in which its own continuation is expressible — the same failure §6B records at the level of a single word. *We do not play* is what an institution says when it has optimised away the category in which its next capability would have been built. The sentence was correct as description and catastrophic as policy, and nobody present could have told the difference `[modeled]`.
+
+What a neg-optimum would require in practice — how much slack, held where, justified to whom, and how to distinguish deliberate reserve from ordinary inefficiency — is not settled here and is recorded in §7 as open.
+
+### 2.4 · Self-regulation, and the damping term that is gone
+
+The obvious objection to §2.3 is that no reserve needs to be held deliberately, because the system regulates itself. Nature is self-regulating; markets are self-regulating; local optimisation by each agent produces a globally tolerable outcome that no agent intended. This is the invisible hand, and it is an optimisation argument — the strongest one there is.
+
+Two things should be separated before it is granted `[modeled]`.
+
+**First, the appeal to nature proves less than it appears to.** Nature does not *seek* self-regulation; that is teleology read backwards off a survivorship artifact. Configurations whose feedback was not self-regulating are not available for observation, having already terminated. What we call nature's homeostasis is the residue after the counterexamples removed themselves. So the intuition that self-regulation is the normal case is drawn from a sample constructed by the very failure mode in question — the same structure §5A describes, an absence of events read as stability. It is not evidence that any *particular* system before us is self-regulating. It is evidence only that the ones we can see so far were.
+
+**Second, self-regulation is dimension-specific, and the invisible hand's dimension is price.** Decentralised optimisation does supply genuine negative feedback there: excess demand raises price, which suppresses demand. The loop closes inside the market's own boundary and timescale, and the argument is sound. But cost reduction by displacement is a different loop with a different sign. Each firm that removes a function lowers its costs; rivals must follow or lose; and the restoring force is missing because the displaced party is not a counterparty to the transaction. Individually the move is rational and compulsory. In aggregate the population that is being removed as cost is the same population that appears on the other side of the ledger as demand.
+
+None of that is new, and the paper does not present it as new. It is the fallacy of composition applied to labour cost, and it has been stated repeatedly and better — underconsumption arguments in the classical literature, Keynes's paradox of thrift, Kalecki on the profit consequences of wage compression, Minsky on stability as the generator of instability `[documented]`. The concentration version is equally familiar: competition optimised hard enough produces concentration, and concentration removes the competitive pressure that was the regulating mechanism in the first place, so the optimiser consumes the feedback loop that legitimated it — §2.3's shape at market scale.
+
+What this paper adds is not the loop. It is a claim about the **damping term** `[modeled]`.
+
+Historically the displacement loop was rate-limited by capital. Removing a function required building a machine, and machines required investment, procurement, lead time, and a decision someone had to sign. That cost was friction, and friction is what kept a positive-feedback loop from running away: displacement could only proceed as fast as capital could be committed, which gave every other adjustment — retraining, new sectors, wage recovery, political response — a timescale to operate on. The classical optimism about technological unemployment is, read carefully, an argument about *relative rates*, and it was right for as long as the rates held.
+
+The claim of §1 and §2 is that specification has no capital cost. Transcription takes a minute, requires no approval, leaves no procurement record, and is indistinguishable from competent use of the tool. If the displacing act is specification rather than construction — and §2.1 gives the mechanism by which an ordinary user performs it without deciding to — then the friction term in that loop has gone to approximately zero while the loop's sign is unchanged.
+
+> The argument is not that the system will optimise itself out of existence because the loop is new. The loop is old and well described. It is that the term which used to damp it was the cost of building the machine, and the case in §1 is one instance in which that cost was a minute of a junior analyst's afternoon.
+
+Whether the damping was in fact load-bearing, and whether some other friction has replaced it, is exactly the question this paper cannot settle from a single case. It is stated so that it can be attacked. §7 records what evidence would count against it.
+
+### 2.5 · How low it goes
+
+If the loop is undamped, the natural question is where it stops. The question is usually asked as though there were a floor — some level of cost below which the thing cannot sensibly be pushed. There is no floor. **There is a boundary**, and the two are not alike `[modeled]`.
+
+An optimiser halts where the objective stops improving. It does not halt where a person would stop, because the considerations that would stop a person are not in the objective unless someone put them there. Cost therefore falls until it meets something that is *priced* — capital, litigation exposure, a regulatory penalty, a wage floor with an enforcement mechanism behind it, reputational damage that actually appears in revenue. Everything else is not a floor being approached. It is simply outside the boundary, and an optimiser does not slow down as it nears something it cannot see.
+
+So the answer to *how low* is: **to the edge of what is represented**, and no further, and no less. Push the boundary outward and the search stops earlier; leave it where it is and the search runs to it. This is a design fact about the objective, not a moral fact about the firm — which is why appeals to restraint have the poor track record they do, and why the effective interventions historically have been the ones that moved a cost *inside* the boundary rather than the ones that asked for forbearance.
+
+Two consequences are worth stating because they are uncomfortable in different directions.
+
+**The operator has no exemption.** Management is a specifiable function. Judgement exercised repeatedly against stable criteria is, by §2's own definition, a stable repeatable sequence, and the argument does not contain a clause protecting the people who commission it. The desk that could not name *play* was itself downstream of the same operator; the seat that removes seats is a seat. This is not a satisfying reversal and should not be enjoyed as one. It is the observation that the argument has no fixed point excluding its own author — the recorder in §1 specified his colleagues' function and, in the same act, the general method by which his own would later be specified.
+
+**The search undershoots its own floor.** Whatever genuine floor exists is made of the unspecifiable: real novelty, judgement under uncertainty that is not merely uncertainty about a known distribution, the unassigned attention §2.3 calls slack. That is exactly the material the optimiser scores lowest, because it is heterogeneous, unmeasured, and indefensible line by line. The search therefore does not converge on the floor from above. It consumes the floor on the way down and keeps going, and the overshoot is invisible for §5A's reason — what is lost is a distribution of events that now do not happen, and non-events do not appear anywhere.
+
+The case in §1 supplies the concrete terminus, and it is smaller than the argument might suggest `[documented]`. The residual human labour after Titan was not analysis. It was teaching clients to schedule the reports — weekly, monthly, quarterly. Scheduling was the last surviving act of judgement in the chain: everything upstream had been specified, and what remained was deciding *when*. Then that was written down too, as a recurrence rule.
+
+> The bottom of that particular search was a cron expression.
+
+The falsifiable version, for §7: if the account here is right, the terminal state of a specified function is not a smaller team but a schedule, and the observable signature is that the last role to disappear is the one that sets the cadence. If instead cadence-setting persists as durable employment across a range of specified functions, the claim is wrong in a way that matters.
 
 ## 3 · Displacement propagates through merit
 
@@ -238,6 +360,14 @@ This inverts the usual policy arithmetic in a way worth stating plainly. The cor
 
 ## 6B · Why procurement is governed and interpretation is not
 
+> The author described the activity to his relationship manager as **playing** with Excel. The verb was not well received. *It is a bank; we do not play.*
+
+The correction is worth recording because it was accurate about the institution and wrong about the method `[documented]`. Play is the precise term for what produces a working knowledge of the object model: unbounded exploration of a system's behaviour without a specified goal — record something, read what it emitted, step through it, record it a second way to see what changes. There is no other route on offer, and §2.1 sets out why: the recorder answers questions only if you ask it questions, and asking a system questions to see what it does is what play is.
+
+The institution had no category for the activity. Not a prohibited category and not an approved one — **none**. Reaching for the nearest available word, it found one that classifies the activity as not-work, and corrected the vocabulary. The activity continued unchanged, because nothing in the correction touched it. Only the word was forbidden.
+
+That is this section's thesis arriving as an anecdote rather than an argument, and it is the cleanest statement of it in the paper: **the most consequential act on that desk was unnameable in the institution's own vocabulary.** An organisation cannot govern what it cannot name, and it cannot name what its language marks as the opposite of work. The exchange is recorded without identifying the manager, who was speaking for the institution rather than for herself, and whose reading of the word was the conventional one.
+
 An institution that will not let a manager engage a supplier without three competing quotations will let a small number of senior people resolve, informally and without record, a question whose consequences exceed that engagement by orders of magnitude. §5A.3 records one such instance. The asymmetry is not hypocrisy and it is worth stating precisely, because the explanation determines the remedy.
 
 **Oversight attaches to legibility, not to consequence.** A procurement is legible: it has a price, a vendor, a date, a comparison class, and it fits on a form. A resolution at a fold has none of these. It has no unit, no tender, no natural register, and no obvious moment at which it becomes a *decision* rather than a conversation. Controls therefore bind on the *shape* of an act rather than its stakes — and the acts least resembling a purchase order attract the least scrutiny irrespective of what turns on them.
@@ -308,6 +438,18 @@ ORCID [0009-0000-6496-2186](https://orcid.org/0009-0000-6496-2186) · Code and f
 
 ## ⚠️ Author's note before deposit — decide these two
 
-**1. Naming.** This draft says *"a global investment bank"* and *"an internal client-intelligence platform"* rather than naming either. That is deliberate and I would keep it. The argument loses nothing — the mechanism is the subject and the employer is incidental — and naming a former employer alongside a claim about headcount reduction invites a dispute you have no reason to invite. Your CV already carries the institution; the paper does not need to.
+**1. Naming — RESOLVED 2026-08-16: named.** The draft previously said *"a global investment bank"* and *"an internal client-intelligence platform"*. The author has elected to name both: **J.P. Morgan** and **Titan**. The earlier recommendation here was to keep them anonymous, on the ground that the mechanism is the subject and the employer incidental, and that naming a former employer alongside a claim about headcount reduction invites an avoidable dispute. That recommendation is recorded rather than deleted, because the decision went the other way and the reader should be able to see that it was a decision.
 
-**2. The one factual check only you can make.** I have written the reporting cycle as *"approximately one month of full-time labour"* and the build as *"approximately one month."* If those are estimates rather than records, keep the word *approximately*. If you can date the build, say so — a dated build with a stated payback period is far stronger evidence and costs nothing to include.
+What naming attaches, all first-person and all already marked `[documented]`: that the signatories of contracts drafted by the named institution did not understand the mathematics of what they had agreed to (§1); that the party which drafted the threshold schedule chose where the boundaries sat (§1); and that the contracts modelled the institution's own exposure and not the client's (§5A.2). A second institution, **BNY Mellon**, is now named in §1 as the vendor from which the author later purchased the same capability; that sentence asserts only a purchase and a custody relationship, nothing about conduct.
+
+Two corrections were made in the course of naming, and both are recorded because both were errors of fact in the earlier draft. **Titan was mislabelled.** The draft called it *"an internal client-intelligence platform"*; it was client-facing — built by the author, deployed by the bank to its corporate clients. There was one system, not two. **The industry-adoption claim is marked `[modeled]`, not `[documented]`**, at the author's instruction: that equivalent tools became standard is an inference from their later market presence, not first-hand knowledge of competitors' build decisions. The earlier phrasing "all other banks copied it" asserted more than the evidence carries and has not been used.
+
+**Three institutions are now named, and one person deliberately is not.** J.P. Morgan (§1), BNY Mellon as vendor (§1), and the New York branch of Banco do Brasil as the later employer that bought the tool and custodied with BNY Mellon (§1). Against that, the relationship manager in §6B is unnamed and undescribed. The asymmetry is deliberate: institutions have press offices and counsel and can answer a working paper; a private individual quoted in a scene that does not flatter her has neither, did not choose to appear, and would be identifiable from name plus employer plus desk plus years. Her line is quoted because it is the institution speaking, which is exactly why the speaker does not need to be identified. The floor's ethnic composition and the author's own name at the time were offered during drafting and are omitted for the same reason — they carry no load in an argument about specification, and they sit adjacent to a claim about a person's competence.
+
+*Still open:* the exact legal entity — *J.P. Morgan* as written, versus JPMorgan Chase & Co. or a named subsidiary — has not been checked against employment records and should be before deposit. The same applies to the correct form for the Banco do Brasil branch.
+
+**2. The factual check — RESOLVED 2026-08-16, and it changed the argument.** The draft had the reporting cycle at *"approximately one month of full-time labour"* and the build at *"approximately one month."* The author's correction, recorded here in his own terms: the build was approximately a month; the cycle was approximately a month but carried *several clients and reports concomitantly*, not one; and the recording was never a separate cost at all, because *"if it takes me a minute to do it, it takes me a minute to record it."*
+
+That third point is not a caveat, it is a strengthening, and §1 has been rewritten to carry it. The paper previously implied specification cost roughly one cycle of labour. It cost **nothing**. Recording is coextensive with performing, so the transcription rode free on a cycle that was going to be worked anyway; only the build carried a price. A cost of zero explains the governance failure better than a cost of one month ever could — there is no threshold low enough to catch an act that consumes no budget, no time, and no headcount.
+
+*Still open:* the word **approximately** is retained throughout because these are recollections, not records. If the build can be dated from any surviving artefact, a dated build with a stated payback period remains stronger evidence than an estimate.
