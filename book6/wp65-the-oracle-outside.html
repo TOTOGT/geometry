@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP65 · The Oracle Outside the Work · Principia Orthogona</title>
+<meta name="description" content="Three things that looked like evidence and were not, caught by three different oracles. The degree-24 inverse Galois campaign as a worked example of the verification standard.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>
+MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']], tags: 'ams' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+:root {
+  --void:#04040a; --surface:#0c0d16; --gold:#c9a84c; --teal:#0ABAB5;
+  --red:#e74c3c; --green:#50c878; --purple:#7b68ee; --orange:#e08030;
+  --text:#e8e4d8; --muted:#6b6757; --rule:rgba(201,168,76,0.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Serif',Georgia,serif;background:var(--void);color:var(--text);
+     font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:100;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--rule);padding:.5rem 2rem;display:flex;align-items:center;
+    justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--gold);
+           text-decoration:none;letter-spacing:.1em;}
+.nav-links{display:flex;gap:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;}
+.nav-links a{color:var(--muted);text-decoration:none;}
+.nav-links a:hover{color:var(--gold);}
+.strip{padding:.5rem 2rem;display:flex;gap:1.5rem;font-size:.75rem;
+       font-family:'JetBrains Mono',monospace;flex-wrap:wrap;border-bottom:1px solid var(--rule);}
+.strip a{color:var(--muted);text-decoration:none;transition:color .2s;}
+.strip a:hover{color:var(--gold);}
+.strip .active{color:var(--teal);}
+.hero{text-align:center;padding:5rem 2rem 3rem;border-bottom:1px solid var(--rule);}
+.wp-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;
+          text-transform:uppercase;color:var(--teal);margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:400;letter-spacing:.03em;
+         color:var(--gold);margin-bottom:.5rem;line-height:1.25;}
+.hero .subtitle{font-size:1rem;color:rgba(232,228,216,.75);max-width:820px;margin:1rem auto;line-height:1.75;}
+.hero .meta{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);
+            letter-spacing:.1em;text-transform:uppercase;margin-top:1.5rem;}
+.hero .meta a{color:var(--gold);}
+.container{max-width:860px;margin:0 auto;padding:4rem 2rem;}
+h2{font-size:1.45rem;color:var(--gold);margin-top:3rem;margin-bottom:1.2rem;letter-spacing:.02em;}
+h3{font-size:1.1rem;color:var(--teal);margin-top:2rem;margin-bottom:.9rem;}
+p{margin-bottom:1.3rem;}
+ul,ol{margin-left:2rem;margin-bottom:1.3rem;}
+li{margin-bottom:.6rem;}
+code{font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--teal);
+     background:rgba(10,186,181,.08);padding:.08em .35em;border-radius:2px;}
+.block{background:var(--surface);border-left:3px solid var(--teal);padding:1.4rem 1.6rem;margin:2rem 0;}
+.block-gold{border-left-color:var(--gold);background:rgba(201,168,76,.05);}
+.block-red{border-left-color:var(--red);background:rgba(231,76,60,.05);}
+.block-green{border-left-color:var(--green);background:rgba(80,200,120,.05);}
+.block-purple{border-left-color:var(--purple);background:rgba(123,104,238,.06);}
+.block .lbl{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.18em;
+            text-transform:uppercase;color:var(--muted);display:block;margin-bottom:.7rem;}
+.block-gold .lbl{color:var(--gold);} .block-red .lbl{color:var(--red);}
+.block-green .lbl{color:var(--green);} .block-purple .lbl{color:var(--purple);}
+.eq{background:var(--surface);border:1px solid var(--rule);padding:1.2rem 1.6rem;margin:1.8rem 0;
+    overflow-x:auto;text-align:center;font-size:1.05rem;font-family:'JetBrains Mono',monospace;}
+.pull{font-size:1.35rem;color:var(--gold);font-style:italic;border-left:4px solid var(--gold);
+      padding:1rem 1.5rem;margin:2.5rem 0;line-height:1.6;}
+table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.86rem;}
+th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.12em;
+   text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--rule);
+   padding:.6rem .7rem;font-weight:400;}
+td{padding:.6rem .7rem;border-bottom:1px solid rgba(201,168,76,.08);vertical-align:top;}
+td.num{font-family:'JetBrains Mono',monospace;white-space:nowrap;color:var(--text);}
+.tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;
+     padding:.14rem .45rem;border-radius:2px;white-space:nowrap;display:inline-block;}
+.t-ok{background:rgba(80,200,120,.13);color:var(--green);border:1px solid rgba(80,200,120,.4);}
+.t-open{background:rgba(224,128,48,.13);color:var(--orange);border:1px solid rgba(224,128,48,.4);}
+.t-plan{background:rgba(123,104,238,.13);color:var(--purple);border:1px solid rgba(123,104,238,.4);}
+.t-bad{background:rgba(231,76,60,.13);color:var(--red);border:1px solid rgba(231,76,60,.4);}
+.fine{font-size:.85rem;color:var(--muted);}
+footer{border-top:1px solid var(--rule);padding:3rem 2rem;text-align:center;
+       font-size:.78rem;color:var(--muted);line-height:1.9;}
+footer a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">Principia Orthogona · Book 6</a>
+  <div class="nav-links">
+    <a href="index.html">Book 6</a>
+    <a href="g6-crystal.html">G6 Crystal</a>
+    <a href="../book4/living-book.html">Opus Map</a>
+  </div>
+</nav>
+
+<div class="strip">
+  <a href="wp64-the-recorder.md">← WP64 · The Recorder</a>
+  <span style="color:var(--muted);">·</span>
+  <span class="active">WP65 · The Oracle Outside the Work</span>
+  <span style="color:var(--muted);">·</span>
+  <span style="color:var(--muted);">WP66 →</span>
+</div>
+
+<div class="hero">
+  <div class="wp-label">Working Paper 65 · Principia Orthogona Vol VI</div>
+  <h1>The Oracle Outside the Work</h1>
+  <p class="subtitle">Three things that looked like evidence and were not · caught by three different
+  oracles · the degree-24 inverse Galois campaign as a worked example of what counts as checked</p>
+  <p class="meta">Pablo Nogueira Grossi · August 2026 · Companion to
+  <a href="../../AXLE/chGal-galois.html">Ch Gal · The Galois Group of the Ladder</a></p>
+</div>
+
+<div class="container">
+
+<h2>§1 · Three Things That Looked Like Evidence</h2>
+
+<p>
+  In August 2026 this project ran a two-day campaign against the degree-24 inverse Galois problem:
+  1,468 polynomials in seven submissions, every one accepted by an official Magma verifier that
+  nobody here controls. The mathematics is in
+  <a href="../../AXLE/chGal-galois.html">Chapter Gal</a>. This paper is about something the
+  campaign produced incidentally and which travels further than the mathematics did.
+</p>
+
+<p>
+  Three separate claims made during the work looked like evidence and were not. They failed in
+  three different ways, and each was caught by a different kind of oracle. Setting them side by
+  side is more useful than any of them individually, because the shape they share is the thing
+  worth teaching.
+</p>
+
+<table>
+  <thead><tr><th>Failure</th><th>What it looked like</th><th>Oracle that caught it</th></tr></thead>
+  <tbody>
+  <tr><td>Fabricated citation</td>
+      <td>A reference with complete bibliographic fields — title, journal, volume, pages, DOI</td>
+      <td>The publisher record, checked before commit</td></tr>
+  <tr><td>Inapplicable hypothesis</td>
+      <td>A correctly cited theorem, about irreducible trinomials</td>
+      <td>Noticing our trinomial is reducible by construction</td></tr>
+  <tr><td>Statistic read as measurement</td>
+      <td>195 distinct cycle-type spectra, correctly computed</td>
+      <td>An external verifier returning 31</td></tr>
+  </tbody>
+</table>
+
+<p>
+  The first is the familiar one and the easiest to guard against: check the record. The second is
+  harder, because the citation was real — the failure was in the fit between hypothesis and object,
+  and no bibliographic check detects that. The third is hardest, because nothing about it is
+  false. The 195 was computed correctly from real data. What was wrong was the word attached
+  to it.
+</p>
+
+<div class="pull">
+  A number that carries an unstated modelling assumption is the same species of claim as a green
+  badge over a <code>sorry</code>. It looks like evidence. It is a summary of a belief.
+</div>
+
+<h2>§2 · Method — Two Ways to Build a Field to Order</h2>
+
+<p>
+  The inverse problem asks for a polynomial realising a prescribed group. Degree 24 admits two
+  usable constructions, and the difference between them turned out to matter more than either
+  individually.
+</p>
+
+<h3>Composita</h3>
+
+<p>
+  Since \(24 = 2\cdot 12 = 3\cdot 8 = 4\cdot 6 = 2\cdot 2\cdot 6 = 2\cdot 3\cdot 4\), a field can be
+  assembled from smaller ones. A compositum of linearly disjoint subfields contains both, so its
+  group is <b>imprimitive by construction</b> — exactly the region a random search never visits,
+  since random polynomials land in \(S_{24}\) or \(A_{24}\). The minimal polynomial of a sum of
+  generators comes from Newton power sums, exactly, with no resultants:
+</p>
+
+<div class="eq">s_k = Σ_m C(k,m) · p_m(f) · p_(k−m)(g)</div>
+
+<h3>Towers</h3>
+
+<p>
+  A tower is not a compositum. Take \(K_{12}\) <b>totally real</b> of degree 12 and
+  \(\alpha \in K_{12}\) negative at exactly \(j\) of its twelve real places. In
+  \(K_{24} = K_{12}(\sqrt{\alpha})\) the \(12-j\) positive places each split into two real places
+  and the \(j\) negative ones each give a complex conjugate pair:
+</p>
+
+<div class="eq">signature ( 2(12−j), j )      r = 24 − 2j      j = 0 … 12</div>
+
+<p>
+  One parameter sweeps the whole signature axis from a single base field. Choosing \(\alpha\) is
+  exact rather than a search: \(m\theta - k\) is negative precisely where \(\theta_i &lt; k/m\), so
+  placing \(k/m\) in the gap \((\theta_j, \theta_{j+1})\) gives exactly \(j\) negative places. The
+  minimal polynomial is \(g_\alpha(x^2)\) with \(g_\alpha = m^{12}g((x+k)/m)\) — integer arithmetic
+  throughout. Irreducibility is free: \(K_{12}\) totally real makes every square non-negative at
+  every real place, \(\alpha\) is negative somewhere, so \(\alpha\) is not a square and
+  \(g_\alpha(x^2)\) is irreducible. No factorization is performed or needed.
+</p>
+
+<p class="fine">
+  Neither construction is novel. Adjoining a square root with a prescribed sign vector is the
+  ordinary way to build a field of given signature, and \(g_\alpha(x^2)\) is the definition of the
+  minimal polynomial of a square root. What is contributed here is engineering — no traces, no
+  factorization — and it belongs in a reproducibility note, not an abstract.
+</p>
+
+<h2>§3 · Two Lemmas the Campaign Produced</h2>
+
+<div class="block block-gold">
+  <span class="lbl">Lemma 1 · signatures no compositum reaches</span>
+  <p style="margin-bottom:.7rem">
+    Across a generic compositum the signature multiplies: \(r = \prod r_i\) with \(r_i \le d_i\) and
+    \(r_i \equiv d_i \pmod 2\). Enumerating 2·12, 3·8, 4·6, 2·2·6, 2·3·4, 2·2·2·3 over all
+    parity-admissible constituent signatures gives reachable
+    \(r \in \{0,2,4,6,8,12,16,18,20,24\}\). The complement is exactly
+    \(r \in \{10, 14, 22\}\): 22 needs \(2\cdot 11\) or \(1\cdot 22\), and 11 and 22 each overshoot
+    or mis-parity every available \(d_i\); likewise 10 and 14.
+  </p>
+  <p class="fine" style="margin:0">
+    Stated for the generic primitive element — unreachability by the generic compositum, not a
+    theorem about every degree-24 field with a proper subfield.
+  </p>
+</div>
+
+<div class="block block-gold">
+  <span class="lbl">Lemma 2 · parity couples signature to group</span>
+  <p style="margin-bottom:.7rem">
+    Write \(N(\alpha) = \prod \sigma(\alpha)\) over the twelve real embeddings. Exactly \(j\)
+    factors are negative, so \(\operatorname{sign} N(\alpha) = (-1)^j\). Since
+    \(\sqrt{N(\alpha)} = \prod \sqrt{\sigma(\alpha)}\) always lies in the Galois closure, the square
+    class of \(N(\alpha)\) decides whether that element is rational — confining the twist module to
+    the index-2 kernel of the sum map — or generates a quadratic subfield not inherited from
+    \(K_{12}\). For odd \(j\), \(N(\alpha) &lt; 0\) and is never a square. Hence at
+    \(r \equiv 2 \pmod 4\) only one module class occurs, for every \(\alpha\), and the group is not
+    a free parameter.
+  </p>
+  <p class="fine" style="margin:0">
+    Verified on 2,443 \((K_{12}, m, k)\) triples: 2,443 confirm, 0 violate. The argument uses only
+    \(\alpha\)'s sign pattern, so it holds for every \(\alpha\), not only the linear family.
+  </p>
+</div>
+
+<p>
+  A free corollary: the constant term of the submitted degree-24 polynomial is exactly
+  \(a_0 = g_\alpha(0) = N(\alpha)\), because \(g_\alpha\) is monic of even degree. One integer
+  square-root test on the first coefficient reads the module class off the page.
+</p>
+
+<p>
+  Both are elementary — two lines each — and are stated as lemmas because that is what they are.
+  Calling them results would be the fourth failure mode in a paper about the first three.
+</p>
+
+<h2>§4 · What the Oracle Returned</h2>
+
+<p>
+  Seven submissions, 1,468 polynomials, all accepted. Every figure is verifier output.
+</p>
+
+<table>
+  <thead><tr><th>Submitted</th><th>Lines</th><th>Labels</th><th>Pairs</th><th>Construction</th></tr></thead>
+  <tbody>
+  <tr><td class="num">15 Aug</td><td class="num">588</td><td class="num">31</td><td class="num">39</td><td>composita, r ∈ {0,2,4,8}</td></tr>
+  <tr><td class="num">16 Aug</td><td class="num">450</td><td class="num">121</td><td class="num">213</td><td>composita, signature sweep</td></tr>
+  <tr><td class="num">16 Aug</td><td class="num">86</td><td class="num">10</td><td class="num">10</td><td>r = 20 composita</td></tr>
+  <tr><td class="num">16 Aug</td><td class="num">43</td><td class="num">7</td><td class="num">7</td><td>r = 20 tower</td></tr>
+  <tr><td class="num">16 Aug</td><td class="num">57</td><td class="num">16</td><td class="num">16</td><td>r = 16 tower</td></tr>
+  <tr><td class="num">16 Aug</td><td class="num">6</td><td class="num">3</td><td class="num">3</td><td>opposite square class</td></tr>
+  <tr><td class="num">16 Aug</td><td class="num">238</td><td class="num">5</td><td class="num">20</td><td>towers, r = 22/18/14/10</td></tr>
+  <tr><td class="num"><b>union</b></td><td class="num"><b>1468</b></td><td class="num"><b>159</b></td><td class="num"><b>304</b></td><td>—</td></tr>
+  </tbody>
+</table>
+
+<p>
+  The final row is Lemma 2 made visible. The 238-line tower submission returned exactly the 20
+  pairs predicted, but from only <b>five distinct labels</b> — the identical set at every one of
+  r = 22, 18, 14, 10. All four are odd \(j\), so all four were forced into one module class.
+  Sliding \(k/m\) moves the signature and leaves the group where it was. The prediction was right
+  about the count and blind to the reason.
+</p>
+
+<div class="block block-green">
+  <span class="lbl">The result that does not depend on interpretation</span>
+  <p style="margin:0">
+    Of 588 rows in the first submission, 201 fell on pairs already in the frozen LMFDB baseline.
+    112 of those rows were no-scored as <code>lmfdb_baseline_not_improved</code>; the other
+    <b>89 rows unlocked 16 distinct pairs</b> by exhibiting a strictly smaller exact
+    <code>nfdisc</code> than the baseline's, margins up to \(10^{14}\). 112 + 89 = 201, in rows;
+    16 in pairs. Sixteen cells of the degree-24 record now carry a smaller discriminant than they
+    did, verified by a pipeline this project does not control. No sampling assumption, no predicted
+    label, nothing that can later turn out to have been an estimate.
+  </p>
+</div>
+
+<h2>§5 · The Verification Standard, Stated Twice</h2>
+
+<p>
+  The series has one standard of claim, and the campaign showed it has two instantiations that
+  behave identically.
+</p>
+
+<div class="block">
+  <span class="lbl">Instantiation A · Lean 4</span>
+  <p style="margin:0">
+    A result counts as proved when <code>#print axioms</code> returns
+    <code>[propext, Classical.choice, Quot.sound]</code> and nothing else. If <code>sorryAx</code>
+    appears, the theorem is open regardless of what any README, badge, description or chapter says.
+  </p>
+</div>
+
+<div class="block">
+  <span class="lbl">Instantiation B · the competition verifier</span>
+  <p style="margin:0">
+    A polynomial counts when the official Magma pipeline returns <code>status = ok</code> with a
+    computed label and signature. Claimed labels, discriminants and metadata in a submission are
+    discarded by the evaluator, which computes its own — and presenting a baseline pair as new is
+    an explicit integrity violation in the rules.
+  </p>
+</div>
+
+<p>
+  Both are oracles the author cannot argue with, and that is the whole of their value. Note what
+  the second one does that the first does not: it also catches errors of <em>interpretation</em>.
+  A Lean kernel will not tell you that your 195 spectra were 31 groups, because that claim was
+  never inside Lean. The competition verifier did, because the claim was inside its domain.
+</p>
+
+<div class="pull">
+  Pick the oracle whose domain contains the claim. An oracle outside the claim's domain
+  certifies nothing about it, however rigorous it is elsewhere.
+</div>
+
+<h2>§6 · Pedagogy — What to Teach From This</h2>
+
+<p>
+  The teachable content is not the Galois correspondence. It is a habit with three parts, and each
+  part corresponds to one of the failures in §1.
+</p>
+
+<ol>
+  <li><b>Check the record before the commit, not after.</b> A complete-looking set of
+  bibliographic fields is not a citation. The replacement reference proposed during this work had
+  title, journal, volume, pages and DOI, and described no such article; only the authors and the
+  year were right.</li>
+  <li><b>Check the fit, not just the source.</b> A correctly cited theorem about irreducible
+  trinomials says nothing about a trinomial that is reducible by construction. This is invisible to
+  every bibliographic tool and visible to anyone who reads the hypothesis.</li>
+  <li><b>Name the unit of every number you report.</b> "195 distinct spectra" was true. "195 is a
+  lower bound on distinct groups" was false, and the gap between them is the difference between a
+  sampled invariant and an exact one. Reporting rows where the reader expects pairs is the same
+  error at smaller scale — this paper's §4 states 112 + 89 = 201 in rows and 16 in pairs precisely
+  because an earlier draft mixed them and produced a number that did not reconcile.</li>
+</ol>
+
+<p>
+  For a 16-week course the natural placement is late — after students have produced something of
+  their own to be wrong about. The exercise that works is not "find the error in this argument"
+  but "state the unit of every number in your own last write-up." The first is a puzzle; the
+  second is the habit.
+</p>
+
+<h2>§7 · Cross-Reference — Where This Lands</h2>
+
+<p>
+  The campaign's output is distributed across four repositories. This table is the map, and it is
+  the authoritative statement of what exists versus what is planned.
+</p>
+
+<table>
+  <thead><tr><th>Destination</th><th>Content</th><th>Status</th></tr></thead>
+  <tbody>
+  <tr><td><code>AXLE/chGal-galois.html</code></td>
+      <td>Ch Gal · The Galois Group of the Ladder — the mathematics, Recurrence Ladder chapter</td>
+      <td><span class="tag t-ok">WRITTEN</span></td></tr>
+  <tr><td><code>book6/wp65-…</code> (this paper)</td>
+      <td>The verification standard and the three failure modes</td>
+      <td><span class="tag t-ok">WRITTEN</span></td></tr>
+  <tr><td><code>AXLE/chapters.html</code></td>
+      <td>A Γ card on the Recurrence Ladder, between η and Δ</td>
+      <td><span class="tag t-plan">TO ADD</span></td></tr>
+  <tr><td><code>geometry/</code> galois page</td>
+      <td>Technical page: Lean status, IGP24 results, corrections ledger</td>
+      <td><span class="tag t-open">NEEDS EDIT</span> — two inconsistencies listed below</td></tr>
+  <tr><td>Lean · <code>NBonacci.lean</code></td>
+      <td><code>nBonacci_action_injective</code> closed; surjectivity open; primitivity absent from Mathlib</td>
+      <td><span class="tag t-open">1 SORRY</span></td></tr>
+  <tr><td>Zenodo · new deposit</td>
+      <td>The 16 discriminant records + construction note + producing scripts</td>
+      <td><span class="tag t-plan">TO DEPOSIT</span></td></tr>
+  <tr><td>Ch Δ · Tetranacci, Ch Ω · Hexabonacci</td>
+      <td>Consume Γ: composite \(n\), where the obstruction bites</td>
+      <td><span class="tag t-plan">TO CROSS-LINK</span></td></tr>
+  <tr><td>Ch φ, Ch η, Ch Σ</td>
+      <td>Consume Γ: prime \(n\), where the group closes</td>
+      <td><span class="tag t-plan">TO CROSS-LINK</span></td></tr>
+  </tbody>
+</table>
+
+<div class="block block-red">
+  <span class="lbl">Carried forward — two defects on the geometry galois page</span>
+  <ol style="margin:0 0 0 1.2rem">
+    <li>The standard-of-claim section describes tower rows as <code>NOT YET RETURNED</code> while
+    the results table tags them <code>PENDING</code>. One tag, two names, in the section that is
+    specifically about labelling unverified things carefully. Pick one.</li>
+    <li>The baseline figures were stated as 201 / 112 / 16 without units, and 112 + 16 ≠ 201. The
+    reconciliation is in §4 above: 201 and 112 and 89 are rows, 16 is pairs. Restate on the page in
+    a single unit.</li>
+  </ol>
+</div>
+
+<h2>§8 · Open, and What Would Close It</h2>
+
+<p>
+  The <b>Lean obligation</b> is precise. Surjectivity of the n-bonacci Galois action needs
+  primitivity; primitivity for trinomials is Movahhedi–Salinier (1996) and
+  Cohen–Movahhedi–Salinier (1997, 1999), which are not in Mathlib; and before that, the transfer
+  from the reducible trinomial \(X^{n+1} - 2X^n + 1\) back to \(p_n\) is a reduction argument that
+  has not been written. Two obligations, in that order. Neither is closed by a tactic search.
+</p>
+
+<p>
+  The <b>novelty question</b> is unresolved and gates only one item. The quantified clustering
+  correction — the size of the overcount, the \(S/\sqrt{n}\) scaling, the corrected threshold
+  validated against returned labels — is the one thing here with genuine novelty risk. The
+  qualitative caveat is classical; Dedekind gives containment only. Before any novelty claim
+  attaches, the search has to run: zbMATH Open and MathSciNet, plus the Klüners–Malle database
+  papers and the LMFDB Galois-group methodology notes, since anyone building those tables at scale
+  met this and may have written the correction down without publishing it as a result.
+</p>
+
+<p>
+  The <b>sixteen discriminant records do not depend on that outcome.</b> They are a fact about the
+  mathematical record, externally verified, and they are the artifact to ship first — as a data
+  deposit with the producing scripts, not as a paper.
+</p>
+
+<div class="pull">
+  If the methods note turns out to be known, the records remain.
+  Ship the thing that does not depend on anyone's literature.
+</div>
+
+<p class="fine">
+  Reproducibility, per house rule: every numerical claim in §§3–4 traces to a producing script in
+  the campaign folder and, where the claim is about verifier output, to the competition's own
+  results CSVs — which are the primary record and are not reproduced from this end. The parity law
+  traces to the 2,443-triple check; the clustering correction to the recluster script calibrated
+  against the returned label files.
+</p>
+
+</div>
+
+<footer>
+  Principia Orthogona · Book 6 · Working Paper 65<br>
+  Pablo Nogueira Grossi · G6 LLC · Newark NJ ·
+  ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a><br>
+  Series record: <a href="https://zenodo.org/communities/principia-orthogona">Zenodo · Principia Orthogona</a><br>
+  Code MIT · prose CC BY-NC-ND 4.0 · independent research, not peer-reviewed.
+</footer>
+
+</body>
+</html>
