@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP69 · The Fold Is a Coordinate · Principia Orthogona</title>
+<meta name="description" content="The gate parameter is the Reeb flow. Formalising a result the series had already used: K and the fold locus differ by a strict contactomorphism, so state and control enter only through one invariant. Includes the exact off-cycle equilibria of the dm3 toy model — roots of the heptagonal cubic — and an identification of the certified basin boundary r* as a stable manifold.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>
+MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']], tags: 'ams' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+:root {
+  --void:#04040a; --surface:#0c0d16; --gold:#c9a84c; --teal:#0ABAB5;
+  --red:#e74c3c; --green:#50c878; --purple:#7b68ee; --orange:#e08030;
+  --text:#e8e4d8; --muted:#6b6757; --rule:rgba(201,168,76,0.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Serif',Georgia,serif;background:var(--void);color:var(--text);
+     font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:100;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--rule);padding:.5rem 2rem;display:flex;align-items:center;
+    justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--gold);
+           text-decoration:none;letter-spacing:.1em;}
+.nav-links{display:flex;gap:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;}
+.nav-links a{color:var(--muted);text-decoration:none;}
+.nav-links a:hover{color:var(--gold);}
+.strip{padding:.5rem 2rem;display:flex;gap:1.5rem;font-size:.75rem;
+       font-family:'JetBrains Mono',monospace;flex-wrap:wrap;border-bottom:1px solid var(--rule);}
+.strip a{color:var(--muted);text-decoration:none;transition:color .2s;}
+.strip a:hover{color:var(--gold);}
+.strip .active{color:var(--teal);}
+.hero{text-align:center;padding:5rem 2rem 3rem;border-bottom:1px solid var(--rule);}
+.wp-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;
+          text-transform:uppercase;color:var(--teal);margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:400;letter-spacing:.03em;
+         color:var(--gold);margin-bottom:.5rem;line-height:1.25;}
+.hero .subtitle{font-size:1rem;color:rgba(232,228,216,.75);max-width:820px;margin:1rem auto;line-height:1.75;}
+.hero .meta{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);
+            letter-spacing:.1em;text-transform:uppercase;margin-top:1.5rem;}
+.hero .meta a{color:var(--gold);}
+.container{max-width:860px;margin:0 auto;padding:4rem 2rem;}
+h2{font-size:1.45rem;color:var(--gold);margin-top:3rem;margin-bottom:1.2rem;letter-spacing:.02em;}
+h3{font-size:1.1rem;color:var(--teal);margin-top:2rem;margin-bottom:.9rem;}
+p{margin-bottom:1.3rem;}
+ul,ol{margin-left:2rem;margin-bottom:1.3rem;}
+li{margin-bottom:.6rem;}
+code{font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--teal);
+     background:rgba(10,186,181,.08);padding:.08em .35em;border-radius:2px;}
+a{color:var(--gold);}
+.block{background:var(--surface);border-left:3px solid var(--teal);padding:1.4rem 1.6rem;margin:2rem 0;}
+.block-gold{border-left-color:var(--gold);background:rgba(201,168,76,.05);}
+.block-red{border-left-color:var(--red);background:rgba(231,76,60,.05);}
+.block-green{border-left-color:var(--green);background:rgba(80,200,120,.05);}
+.block-purple{border-left-color:var(--purple);background:rgba(123,104,238,.06);}
+.block .lbl{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.18em;
+            text-transform:uppercase;color:var(--muted);display:block;margin-bottom:.7rem;}
+.block-gold .lbl{color:var(--gold);} .block-red .lbl{color:var(--red);}
+.block-green .lbl{color:var(--green);} .block-purple .lbl{color:var(--purple);}
+.eq{background:var(--surface);border:1px solid var(--rule);padding:1.2rem 1.6rem;margin:1.8rem 0;
+    overflow-x:auto;text-align:center;font-size:1.05rem;font-family:'JetBrains Mono',monospace;}
+.pull{font-size:1.35rem;color:var(--gold);font-style:italic;border-left:4px solid var(--gold);
+      padding:1rem 1.5rem;margin:2.5rem 0;line-height:1.6;}
+table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.86rem;}
+th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.12em;
+   text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--rule);
+   padding:.6rem .7rem;font-weight:400;}
+td{padding:.6rem .7rem;border-bottom:1px solid rgba(201,168,76,.08);vertical-align:top;}
+td.num{font-family:'JetBrains Mono',monospace;white-space:nowrap;color:var(--text);}
+td.c{text-align:center;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;
+     padding:.14rem .45rem;border-radius:2px;white-space:nowrap;display:inline-block;}
+.t-ok{background:rgba(80,200,120,.13);color:var(--green);border:1px solid rgba(80,200,120,.4);}
+.t-open{background:rgba(224,128,48,.13);color:var(--orange);border:1px solid rgba(224,128,48,.4);}
+.t-plan{background:rgba(123,104,238,.13);color:var(--purple);border:1px solid rgba(123,104,238,.4);}
+.t-bad{background:rgba(231,76,60,.13);color:var(--red);border:1px solid rgba(231,76,60,.4);}
+.x{color:var(--red);font-family:'JetBrains Mono',monospace;font-weight:700;}
+.o{color:var(--green);font-family:'JetBrains Mono',monospace;font-weight:700;}
+.fine{font-size:.85rem;color:var(--muted);}
+footer{border-top:1px solid var(--rule);padding:3rem 2rem;text-align:center;
+       font-size:.78rem;color:var(--muted);line-height:1.9;}
+footer a{color:var(--gold);text-decoration:none;}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem;margin:2rem 0;}
+.tile{background:var(--surface);border:1px solid var(--rule);padding:1.1rem 1.2rem;}
+.tile .v{font-family:'JetBrains Mono',monospace;font-size:1.4rem;color:var(--gold);
+         line-height:1.2;display:block;margin-bottom:.5rem;}
+.tile .l{font-size:.83rem;line-height:1.55;color:var(--text);display:block;}
+.tile .n{font-size:.72rem;color:var(--muted);display:block;margin-top:.4rem;
+         font-family:'JetBrains Mono',monospace;}
+.es{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.06em;
+    padding:.1rem .35rem;border-radius:2px;background:rgba(107,103,87,.18);color:var(--muted);}
+.es-open{background:rgba(224,128,48,.2);color:var(--orange);}
+.es-proved{background:rgba(80,200,120,.18);color:var(--green);}
+.es-num{background:rgba(10,186,181,.15);color:var(--teal);}
+ol.refs{font-size:.83rem;color:var(--text);line-height:1.7;}
+ol.refs li{margin-bottom:.5rem;}
+.refhead{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.14em;
+         text-transform:uppercase;color:var(--teal);margin:2rem 0 .8rem;}
+.env-box{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--gold);
+         padding:1.2rem 1.5rem;margin:1.6rem 0;}
+.env-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.08em;
+           color:var(--gold);margin-bottom:.6rem;font-weight:700;}
+.env-proof{font-size:.9rem;color:rgba(232,228,216,.78);margin-top:.6rem;padding-top:.6rem;
+           border-top:1px solid var(--rule);}
+figure{margin:2.4rem 0;}
+figure img{width:100%;display:block;border:1px solid var(--rule);}
+figcaption{font-size:.82rem;color:var(--muted);margin-top:.7rem;line-height:1.65;}
+pre{background:var(--surface);border:1px solid var(--rule);padding:1rem 1.2rem;overflow-x:auto;
+    font-family:'JetBrains Mono',monospace;font-size:.76rem;line-height:1.6;color:rgba(232,228,216,.85);
+    margin:1.4rem 0;}
+@media (max-width:640px){
+  nav,.strip,.hero,footer{padding-left:1.1rem;padding-right:1.1rem;}
+  .container{padding:2.5rem 1.1rem;} body{font-size:16px;} table{font-size:.78rem;}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-brand">Principia Orthogona · Book 6</a>
+  <div class="nav-links">
+    <a href="index.html">Book 6</a>
+    <a href="g6-crystal.html">G6 Crystal</a>
+    <a href="../book4/living-book.html">Opus Map</a>
+  </div>
+</nav>
+<div class="strip">
+  <a href="wp68-what-fossilises.html">← WP68 · What Fossilises</a>
+  <span style="color:var(--muted);">·</span>
+  <span class="active">WP69 · The Fold Is a Coordinate</span>
+</div>
+<div class="hero">
+  <div class="wp-label">Working Paper 69 · Principia Orthogona Vol VI · DRAFT — pending author's check</div>
+  <h1>The Fold Is a Coordinate</h1>
+  <p class="subtitle">The gate parameter is the Reeb flow. WP43 and WP44 have been using this result
+  since it was worked out; what was missing was not the mathematics but the write-up, and the
+  cost of leaving it unwritten was that the claim could not be cited, sharpened, or attacked.
+  This paper supplies the formalisation: an exact identity, a gauge theorem, a moduli count,
+  and a numerical verification to thirteen digits — plus two results the formalisation turned up
+  on the way, including an exact algebraic address for the toy model's basin boundary
+  \(r_\star\), which Volume II's invariant table still lists as <em>argued</em>.</p>
+  <p class="meta">Pablo Nogueira Grossi · G6 LLC, Newark NJ · August 2026 · Formalises the result
+  used by <a href="wp43-immediate-action.html">WP43</a>, <a href="wp44-catastrophe-manifold.html">WP44</a> §1 and §7,
+  <a href="wp68-what-fossilises.html">WP68</a> §2 · Corrects <a href="../vol2-toymodel.html">Vol II toy-model</a> §7</p>
+</div>
+<div class="container">
+
+<div class="block block-gold">
+  <span class="lbl">Abstract</span>
+  <p>
+    On the contact manifold \((M,\alpha)\) with \(\alpha = dz - r^2 d\theta\), the Reeb field is
+    \(R=\partial_z\), and its flow is a strict contactomorphism. The dm³ gate multiplier
+    \(\hat\gamma\) — Volume II's \(\gamma\) in \(H_{\mathrm{diss}} = -\gamma V e^{-\beta z}\),
+    normalised — enters the normal form only through the combination \(\hat\gamma e^{-\beta z}\).
+    Therefore the family \(\{X_{\hat\gamma}\}\) is a <em>single orbit of the Reeb flow</em>:
+    \(\hat\gamma\) is a gauge potential, not a modulus, and the state and the control enter the
+    dynamics only through the one invariant \(\zeta = z - \beta^{-1}\ln\hat\gamma\).
+    That is the precise content of "the controls are coordinates on the manifold itself"
+    <span class="es es-proved">[proved]</span>.
+  </p>
+  <p>
+    Three consequences follow without further hypotheses. The fold locus sits at
+    \(z^\star = \beta^{-1}\ln\hat\gamma\), with \(\lambda'(z^\star)=\mu_{\max}\beta \neq 0\), so the
+    \(A_1\) transversality of Vol I Theorem 5.5 is explicit rather than generic
+    <span class="es es-proved">[proved]</span>. The gauge-reduced system carries exactly
+    <em>one</em> dimensionless modulus, \(\Lambda = \beta\omega/|\mu_{\max}|\): the canonical triple of
+    ch05 collapses to a single number once the gauge is fixed <span class="es es-proved">[proved]</span>.
+    And acting on the gate does not move the state — it moves the <em>basin</em>, which is a sharper
+    and more defensible reading of WP43's mandate than the one WP43 currently gives
+    <span class="es es-proved">[proved]</span>.
+  </p>
+  <p style="margin-bottom:0">
+    Two results arrived unbidden. The dm³ toy model's off-cycle equilibria are exactly
+    \(r = 2\cos(k\pi/7)\), \(k=1,3,5\) — the roots of the heptagonal cubic \(r^3-r^2-2r+1\), discriminant
+    \(49\) — and all three are saddles, provably, by Descartes' rule applied to the minimal polynomial
+    of their determinants <span class="es es-proved">[proved]</span>. Volume II's certified basin
+    boundary \(r_\star\) is the intersection of the inner saddle's stable manifold with \(\{z=0\}\);
+    recomputed two independent ways it is \(0.7759405755\), and the outer boundary — not previously
+    reported — is \(6.8592213690\) <span class="es es-num">[numerical]</span>. §8 gives the ledger of
+    what is proved, what is numerical, and the one physical premise §7 still rests on.
+  </p>
+</div>
+
+<h2>§1 · What Was Actually Outstanding</h2>
+<p>
+  The draft that preceded this one described <a href="wp44-catastrophe-manifold.html">WP44</a> §1's
+  claim as having been "asserted without proof." That was the wrong diagnosis and it is worth
+  correcting in the record, because the wrong diagnosis produces the wrong repair. The claim was
+  worked out — the Reeb identification, the \(\hat\gamma\)-as-translation observation, the
+  \(\zeta\) combination — and then used, at speed, in a stretch of the series that was not in a
+  formalising mood. What did not happen was the write-up. Nothing was assumed; something was left
+  unwritten.
+</p>
+<p>
+  The distinction matters operationally. An unproved assertion has to be defended or withdrawn.
+  An unwritten derivation has to be <em>written</em>, and the cost of not writing it is a specific
+  one: for two papers the result could not be cited by name, could not be sharpened past the
+  sentence it was first stated in, and — the part that actually bit — could not be attacked, which
+  is how the sentence in WP43 came to be stronger than the mathematics warrants. §6 fixes that
+  overreach, and it could only be found by doing the write-up.
+</p>
+<p>
+  So: what follows is a formalisation, not a rescue. Three papers cite it.
+  <a href="wp44-catastrophe-manifold.html">WP44</a> §1 states it as a theory-card contrast with
+  Thom — Thom keeps controls in an external plane; on a contact manifold they are coordinates on
+  the manifold itself. <a href="wp43-immediate-action.html">WP43</a>'s August 2026 addendum leans
+  on it for the mandate. <a href="wp68-what-fossilises.html">WP68</a> §2 defers to it explicitly.
+  All three are now discharged, one of them with an amendment.
+</p>
+
+<h2>§2 · Standing Machinery</h2>
+<p>Everything below is built from three things already on record, cited exactly as they stand.</p>
+
+<div class="env-box">
+  <div class="env-label">(M1) · ch05 · the dm³ contact normal form</div>
+  <p style="margin:0">On \(M=\mathbb{R}^2_{>0}\times\mathbb{R}\) with \(\alpha = dz - r^2 d\theta\),
+  in a tubular neighbourhood of \(\Gamma\), with \(\rho = r-1\):</p>
+  <div class="eq" style="margin:1rem 0 .4rem">
+  \[\dot\rho = \mu_{\max}(1-e^{-\beta z})\rho + O(\rho^2),\quad
+    \dot\theta = \omega + O(\rho),\quad
+    \dot z = \omega - |\mu_{\max}|\rho^2 e^{-\beta z} + O(\rho^3).\]
+  </div>
+  <p class="fine" style="margin:0">Canonical invariants \((\mu_{\max},\omega,\beta)\), with
+  \(\mu_{\max}<0\) in every orbit on record and \(1.6\le\beta\le 2.4\) empirically.
+  <b>Note on notation:</b> the drift term in \(\dot z\) is \(\omega\), the angular frequency —
+  not a free constant \(\dot z_0\). The earlier draft of this paper wrote \(\dot z_0\); ch05 and
+  Vol II §2.3 both write \(\omega\), and §5 below shows why that identification is not cosmetic:
+  it is what makes \(\Lambda\) a ratio of the three canonical invariants and nothing else.</p>
+</div>
+
+<div class="env-box">
+  <div class="env-label">(M2) · Vol II Theorem A / Prop. 2.1 · the contact Hamiltonian of the fold</div>
+  <p style="margin:0">The fold impulse \(p^+-p^-=\mu\mathbf n\) corresponds to the contact
+  Hamiltonian correction \(H_{\mathrm{diss}}(x,z) = -\gamma V(x)e^{-\beta z}\), with \(V\) the
+  Lyapunov function vanishing on \(\Gamma\).</p>
+  <p class="fine" style="margin:.5rem 0 0">Vol II carries this as a ★★★★ <code>sorry</code>. §3–§6
+  below do <b>not</b> depend on Theorem A being closed: they use only the <em>form</em> of
+  \(H_{\mathrm{diss}}\), which §3 verifies directly by computation. §7 does depend on the
+  identification of \(\gamma\) with a physical gate, and says so.</p>
+</div>
+
+<div class="env-box">
+  <div class="env-label">(M3) · Vol II §4.3 · the exact toy system</div>
+  <div class="eq" style="margin:.6rem 0 .4rem">
+  \[\dot r = r(1-r^2)+2(r-1)e^{-z},\qquad \dot\theta = 1,\qquad \dot z = r^2-2(r-1)^2e^{-z},\]
+  </div>
+  <p style="margin:0" class="fine">with \((\mu_{\max},\omega,\beta)=(-2,1,1)\), \(T^*=2\pi\),
+  \(\tau=2\), \(\varepsilon_0=1/3\). This is the only place in the framework where every claim can
+  be checked to the last digit, and §6 uses it that way.</p>
+</div>
+
+<h2>§3 · Lemma 1 — The Dissipation <em>Is</em> the Reeb Component</h2>
+<p>
+  Every vector field \(X\) on a contact manifold splits canonically as
+  \(X = X_\xi + \alpha(X)\,R\), where \(X_\xi \in \xi = \ker\alpha\) and \(R\) is the Reeb field.
+  The splitting is not a choice: \(\xi\) and \(R\) are both determined by \(\alpha\). So there is a
+  well-defined question — what is the Reeb component of the dm³ field? — with a computable answer.
+</p>
+<div class="env-box">
+  <div class="env-label">Lemma 1</div>
+  <p style="margin:0">For \(\alpha = dz - r^2d\theta\) on \(M\): (i) the Reeb field is
+  \(R = \partial_z\); (ii) for the dm³ toy field \(X\),</p>
+  <div class="eq" style="margin:.9rem 0">\[\alpha(X) \;=\; \dot z - r^2\dot\theta \;=\; -2(r-1)^2e^{-z}
+  \;=\; H_{\mathrm{diss}}\Big|_{\gamma=2,\;V=(r-1)^2,\;\beta=1}.\]</div>
+  <p style="margin:0">That is: the dm³ dissipation is <em>exactly</em> the Reeb component of the flow,
+  with no remainder and no limit taken.</p>
+  <p class="env-proof">
+  (i) \(\alpha(\partial_z)=1\); \(d\alpha = -2r\,dr\wedge d\theta\), so
+  \(\iota_{\partial_z}d\alpha = 0\). Both Reeb conditions hold, and
+  \(\mathcal L_{\partial_z}\alpha = d(\iota_{\partial_z}\alpha)+\iota_{\partial_z}d\alpha = d(1)+0 = 0\),
+  so the Reeb flow is a <em>strict</em> contactomorphism, not merely a contactomorphism.
+  (ii) Direct substitution of (M3): \(\dot z - r^2\dot\theta = (r^2-2(r-1)^2e^{-z}) - r^2\cdot 1\).
+  Verified symbolically <span class="es es-proved">[proved]</span>.
+  For the general normal form (M1) the same computation gives
+  \(\alpha(X) = -|\mu_{\max}|\rho^2 e^{-\beta z} + O(\rho)\), the \(O(\rho)\) being the truncation
+  of \(r^2\omega\) to \(\omega\) in \(\dot z\).</p>
+</div>
+<p>
+  Lemma 1 is the hinge. It says the gate and the fold do not merely both happen to involve \(z\):
+  the exponential gating term is the flow's component along the one distinguished direction the
+  contact form defines. There is exactly one such direction, and it is one-dimensional. Whatever
+  else is true, the control and the approach to the fold are competing for the same single channel.
+</p>
+
+<h2>§4 · Theorem 1 — The Gate Is the Reeb Flow</h2>
+<p>
+  Reinstate the gate multiplier that (M1) suppresses. Write \(\mu = |\mu_{\max}|\) and
+  \(\hat\gamma = \gamma/\mu\), so that \(\hat\gamma = 1\) recovers ch05 exactly. Because both
+  exponential terms in (M1) descend from the single Hamiltonian \(H_{\mathrm{diss}}\) of (M2),
+  \(\hat\gamma\) multiplies both:
+</p>
+<div class="eq">
+\[\dot\rho = -\mu\bigl(1-\hat\gamma e^{-\beta z}\bigr)\rho,\qquad
+  \dot\theta = \omega,\qquad
+  \dot z = \omega - \mu\,\hat\gamma\,\rho^2 e^{-\beta z}.\]
+</div>
+<p class="fine">
+  That \(\hat\gamma\) enters both places with the same coefficient is checkable, not assumed:
+  in the toy system (M3) the gate coefficient is \(2\) in \(\dot r\) and \(2\) in \(\dot z\), and
+  both equal \(|\mu_{\max}|\). If a physical mechanism moved the two independently, Theorem 1 would
+  fail — see §9, falsifier F1.
+</p>
+<div class="env-box">
+  <div class="env-label">Theorem 1 · Reeb gauge</div>
+  <p style="margin:0">Let \(T_a: (\rho,\theta,z)\mapsto(\rho,\theta,z+a)\) be the time-\(a\) Reeb flow.
+  Then \((T_a)_* X_{\hat\gamma} = X_{\hat\gamma e^{\beta a}}\). Consequently:</p>
+  <ol style="margin-top:.8rem;margin-bottom:0">
+    <li>The family \(\{X_{\hat\gamma}\}_{\hat\gamma>0}\) is a <b>single orbit</b> of the
+    strict-contactomorphism group generated by \(R=\partial_z\). No contact invariant distinguishes
+    \(X_{\hat\gamma}\) from \(X_{\hat\gamma'}\): \(\hat\gamma\) is a gauge potential, not a modulus.</li>
+    <li>The fold locus — where the transverse linearisation degenerates — sits at
+    \(\;z^\star(\hat\gamma) = \beta^{-1}\ln\hat\gamma\).</li>
+    <li>State and control enter the dynamics <b>only</b> through
+    \(\;\zeta = z - \beta^{-1}\ln\hat\gamma\), in which the system is exactly the \(\hat\gamma=1\)
+    normal form plus one term:</li>
+  </ol>
+  <div class="eq" style="margin:1rem 0 .3rem">
+  \[\dot\rho = -\mu(1-e^{-\beta\zeta})\rho,\qquad
+    \dot\zeta = \omega - \mu\rho^2 e^{-\beta\zeta} \;-\; \frac{1}{\beta}\frac{d\ln\hat\gamma}{dt}.\]
+  </div>
+  <p class="env-proof">
+  \(T_a^*\alpha = d(z+a)-r^2d\theta = \alpha\), so \(T_a\) is strict (Lemma 1(i)). Under
+  \(z' = z+a\), \(\hat\gamma e^{-\beta z} = (\hat\gamma e^{\beta a})e^{-\beta z'}\), which is (1).
+  (2): \(\lambda(z) = \mu_{\max}(1-\hat\gamma e^{-\beta z}) = 0 \iff \hat\gamma e^{-\beta z}=1\).
+  (3): substituting \(z = \zeta + \beta^{-1}\ln\hat\gamma\) gives
+  \(\hat\gamma e^{-\beta z} = e^{-\beta\zeta}\) identically, and the extra term is
+  \(\dot\zeta = \dot z - \beta^{-1}\,d(\ln\hat\gamma)/dt\). All three verified symbolically
+  <span class="es es-proved">[proved]</span>.</p>
+</div>
+<p>
+  <b>This is WP44 §1's claim, and it is now a theorem.</b> Thom's controls live in a factor
+  \(\mathcal X\times\mathcal C\) and can be varied while the state stands still. Here the control
+  direction and a state coordinate are the <em>same</em> one-dimensional direction — the Reeb line —
+  and "vary \(\hat\gamma\)" and "translate \(z\)" are two names for one operation.
+</p>
+<div class="block block-purple">
+  <span class="lbl">Corollary 1.1 · what is and is not observable</span>
+  <p style="margin:0">The <em>level</em> of \(\hat\gamma\) is not observable: no measurement on the
+  reduced dynamics can determine it. Only \(\Delta\ln\hat\gamma\) is, and it enters as a displacement
+  \(\Delta\zeta = -\beta^{-1}\Delta\ln\hat\gamma\). <b>Margin bought is logarithmic in gate strength.</b>
+  Halving \(\hat\gamma\) buys \(\beta^{-1}\ln 2\) of \(\zeta\) — the same amount as halving it again,
+  and again.</p>
+</div>
+<div class="block block-green">
+  <span class="lbl">Corollary 1.2 · \(A_1\) transversality is explicit</span>
+  <p style="margin:0">\(\lambda'(z^\star) = \mu_{\max}\beta \neq 0\). Vol I Theorem 5.5 asserts
+  fold-locus transversality generically; here the transversality constant is one of the canonical
+  invariants times another. The fold is \(A_1\) with a computable non-degeneracy, which is what
+  <a href="../chF-catastrophe.html">chF</a>'s Proof 4 needs and had only by genericity.</p>
+</div>
+<p class="fine">
+  On Darboux, which the earlier draft flagged as the objection to beat: Darboux trivialises
+  \(\alpha\) and would trivialise "the fold sits at \(z=0\)" if that were the claim. It is not.
+  The claim is about a <em>group action on a family</em> — that a specific one-parameter family of
+  vector fields is one orbit of a specific one-parameter group. Darboux says nothing about that,
+  and the Reeb field, unlike \(\xi\) alone, is pinned by \(\alpha\) rather than by the contact
+  structure. The content survives the objection intact.
+</p>
+
+<h2>§5 · Theorem 2 — One Modulus</h2>
+<p>
+  Having removed \(\hat\gamma\) as gauge, ask what is left. Rescale time by the relaxation rate and
+  \(\zeta\) by the fold sharpness: \(\tau = \mu t\), \(\tilde\zeta = \beta\zeta\),
+  \(\tilde\rho = \rho\sqrt\beta\).
+</p>
+<div class="env-box">
+  <div class="env-label">Theorem 2 · the canonical triple collapses to one number</div>
+  <div class="eq" style="margin:.4rem 0 .8rem">
+  \[\frac{d\tilde\rho}{d\tau} = -\bigl(1-e^{-\tilde\zeta}\bigr)\tilde\rho,
+    \qquad
+    \frac{d\tilde\zeta}{d\tau} = \Lambda - \tilde\rho^{\,2}e^{-\tilde\zeta},
+    \qquad
+    \boxed{\;\Lambda \;=\; \frac{\beta\,\omega}{|\mu_{\max}|}\;}\]
+  </div>
+  <p style="margin:0">The gauge-reduced dm³ system near \(\Gamma\) has exactly one dimensionless
+  modulus. Two dm³ systems with the same \(\Lambda\) are equivalent near \(\Gamma\) whatever their
+  \((\mu_{\max},\omega,\beta)\) individually are.</p>
+  <p class="env-proof">Direct substitution <span class="es es-proved">[proved]</span>.
+  \(\Lambda\) is the number of gate e-foldings the drift covers per relaxation time. Toy model:
+  \(\Lambda = 1\cdot 1/2 = 1/2\).</p>
+</div>
+<p>
+  This is a real reduction and it has a cost worth naming. ch05 sells \((\mu_{\max},\omega,\beta)\)
+  as "the canonical invariants — identifying a new system means measuring three numbers." After
+  gauge reduction only the combination \(\beta\omega/|\mu_{\max}|\) is invariant; the other two
+  degrees of freedom are absorbed by rescaling time and \(\zeta\). ch05's three numbers are three
+  <em>measurements</em>, and they are the right three to make, but they are not three independent
+  invariants of the reduced system. That \(\omega\) appears in \(\Lambda\) at all is due entirely to
+  the \(\dot z\) drift being \(\omega\) rather than a free constant — the notational point flagged
+  in (M1).
+</p>
+
+<h2>§6 · Theorem 3 — The Gate Moves the Basin, Not the State</h2>
+<p>
+  Here the formalisation contradicts something WP43 currently says, so it is worth being slow.
+  WP43's addendum reads: "delay does not hold the system at a fixed distance from the fold." The
+  natural reading — that the system drifts toward the fold and delay costs you that drift — is
+  <b>false</b> for this system, and Theorem 2 shows why in one line: near \(\Gamma\),
+  \(\tilde\rho\to 0\) and \(d\tilde\zeta/d\tau \to \Lambda > 0\). Margin <em>accumulates</em>.
+  That is Vol II's whole post-fold stabilisation story, and it cannot be given up.
+</p>
+<div class="env-box">
+  <div class="env-label">Theorem 3 · the correct form of the mandate</div>
+  <ol style="margin:0">
+    <li>There is no equilibrium on \(\{\tilde\rho = 0\}\): the system never rests near the cycle,
+    it climbs away from the fold at rate \(\Lambda\).</li>
+    <li>The fold is approached only from the region
+    \(\mathcal D = \{\tilde\rho^{\,2}e^{-\tilde\zeta} > \Lambda\}\) — large amplitude, not long waiting.
+    The mandate is a <b>basin</b> statement.</li>
+    <li>The reduced system's only equilibria are \((\tilde\rho,\tilde\zeta) = (\pm\sqrt\Lambda, 0)\),
+    sitting <em>exactly on the fold locus</em>, with
+    \(J = \begin{pmatrix} 0 & -\sqrt\Lambda\\ -2\sqrt\Lambda & \Lambda\end{pmatrix}\),
+    \(\det J = -2\Lambda < 0\): saddles, eigenvalues
+    \(\tfrac12\bigl(\Lambda \pm \sqrt{\Lambda^2+8\Lambda}\bigr)\).</li>
+    <li>Because \(\hat\gamma\) is gauge (Theorem 1), acting on the gate does not move the state
+    relative to the basin boundary by moving the state — it <b>translates the basin</b> along the
+    Reeb direction. Holding \(\hat\gamma\) constant has no invariant effect at all.</li>
+  </ol>
+  <p class="env-proof">All four verified symbolically <span class="es es-proved">[proved]</span>.
+  The saddle-on-the-fold in (3) sits at \(|\rho| = \sqrt{\omega/(\beta|\mu_{\max}|)}\), which for
+  the toy is \(0.7071\) — outside the \(O(\rho^2)\) validity of the truncation. §6.1 does it exactly
+  instead, and the truncation turns out to be off by 12–27%, as one would expect at that amplitude.</p>
+</div>
+
+<h3>§6.1 · The exact toy model: two heptagonal saddles</h3>
+<p>
+  Do not truncate. Equilibria of (M3) off \(\Gamma\) require \(\dot z = 0\), giving
+  \(e^{-z} = r^2/\bigl(2(r-1)^2\bigr)\); substituting into \(\dot r = 0\) and clearing denominators
+  gives \(r\cdot(r^3-r^2-2r+1) = 0\).
+</p>
+<div class="env-box">
+  <div class="env-label">Proposition 4 · the equilibria are heptagonal, and all are saddles</div>
+  <p style="margin:0">The off-cycle equilibria of the dm³ toy model are exactly
+  \(r = 2\cos(k\pi/7)\), \(k = 1,3,5\) — the three roots of \(r^3-r^2-2r+1\), whose discriminant is
+  \(49 = 7^2\) and whose splitting field is \(\mathbb{Q}(\cos 2\pi/7)\), the real cyclotomic field of
+  conductor 7. Two lie in \(M = \mathbb{R}^2_{>0}\times\mathbb{R}\). Each is a hyperbolic saddle.</p>
+  <p class="env-proof">
+  <b>Trace and determinant in closed form.</b> At an equilibrium,
+  \(\operatorname{tr}J = 1-2r^2+r^2/(r-1)^2\) and
+  \(\det J = r^2\bigl(r^2-2r-(r-1)^2(3r^2-1)\bigr)/(r-1)^2\). Reduced modulo the cubic,
+  the traces are the roots of \(x^3+x^2-2x-1\) — the minimal polynomial of \(2\cos(2\pi/7)\), so
+  <em>the trace map permutes the Galois orbit</em> — and the determinants are the roots of
+  \(x^3+35x^2+147x+49\). All coefficients of that polynomial are positive, so by Descartes' rule it
+  has no positive root and \(0\) is not a root: <b>all three determinants are strictly negative,
+  hence all three equilibria are saddles</b>. No sinks, no sources, no spirals
+  <span class="es es-proved">[proved]</span>.</p>
+</div>
+<table>
+  <thead><tr><th></th><th>\(S_-\) (inner)</th><th>\(S_+\) (outer)</th><th>third root</th></tr></thead>
+  <tbody>
+  <tr><td>\(r\)</td><td class="num">\(2\cos\frac{3\pi}{7}=0.4450418679\)</td><td class="num">\(2\cos\frac{\pi}{7}=1.8019377358\)</td><td class="num">\(2\cos\frac{5\pi}{7}=-1.2469796037\)</td></tr>
+  <tr><td>\(z=\ln\frac{2(r-1)^2}{r^2}\)</td><td class="num">\(+1.1345958011\)</td><td class="num">\(-0.9260266515\)</td><td class="num">— (outside \(M\))</td></tr>
+  <tr><td>\(\operatorname{tr}J\)</td><td class="num">\(+1.2469796037\)</td><td class="num">\(-0.4450418679\)</td><td class="num">\(-1.8019377358\)</td></tr>
+  <tr><td>\(\det J\)</td><td class="num">\(-0.3646655852\)</td><td class="num">\(-30.1835877730\)</td><td class="num">\(-4.4517466418\)</td></tr>
+  <tr><td>eigenvalues</td><td class="num">\(+1.49147893,\;-0.24449932\)</td><td class="num">\(-5.72098466,\;+5.27594279\)</td><td class="num">—</td></tr>
+  </tbody>
+</table>
+<p class="fine">
+  \(e^{z}\) at the equilibria has minimal polynomial \(x^3-10x^2+24x-8\); the equilibrium data
+  therefore lives entirely in the cubic field of the regular heptagon. Whether that is structural or
+  an accident of the toy model's specific coefficients is open — see §9, F4. The truncated normal
+  form of Theorem 3(3) predicts the saddles at \(\rho = \pm 0.7071\); the exact values are
+  \(\rho = +0.8019\) and \(\rho = -0.5550\), errors of \(-12\%\) and \(+27\%\), consistent with
+  \(O(\rho)\) relative error at \(|\rho|\approx 0.6\text{–}0.8\).
+</p>
+
+<h3>§6.2 · \(r_\star\) is a stable manifold</h3>
+<p>
+  Vol II's invariant table lists "critical ratio \(r^*\approx 0.776\) — <em>argued</em> — inner/outer
+  basin boundary (certified 0.77594059)", and ch05 notes the gap from the Grönwall estimate
+  \(\varepsilon_0 = 1/3\) is not a matter of sharpness. Proposition 4 identifies the object:
+</p>
+<div class="env-box">
+  <div class="env-label">Proposition 5 · the basin boundary on \(\{z=0\}\)</div>
+  <p style="margin:0">The inner basin boundary is
+  \(W^s(S_-)\cap\{z=0\}\) and the outer is \(W^s(S_+)\cap\{z=0\}\):</p>
+  <div class="eq" style="margin:.9rem 0 .3rem">
+  \[r_\star = 0.7759405755023\ldots,\qquad r_{\star\star} = 6.8592213690\ldots\]
+  </div>
+  <p class="env-proof">
+  Computed two independent ways that agree: (a) bisection of the forward flow's fate from
+  \((r_0,0)\); (b) backward integration along the stable eigendirection at each saddle to the level
+  \(z=0\). Route (b) is the well-conditioned one — transverse errors contract in backward time —
+  and is stable across \(\varepsilon\in[10^{-12},10^{-8}]\) and \(\texttt{rtol}\in[3\!\times\!10^{-14},10^{-12}]\).
+  Double precision, DOP853 <span class="es es-num">[numerical]</span>, not certified.
+  <b>Correction:</b> Vol II's eighth digit appears to be off — this computation gives
+  \(0.77594058\), not \(0.77594059\). The outer boundary \(r_{\star\star}\) does not appear in
+  Vol II at all; the Grönwall bound \((2/3,4/3)\) is conservative on the inner side by \(0.11\) and
+  on the outer side by a factor of \(5.1\).</p>
+</div>
+
+<figure>
+  <img src="wp69-fig1.png" alt="Two panels. Left: phase portrait in (r,z) of the exact dm3 toy model showing the limit cycle at r=1, the two saddle equilibria at r=2cos(3pi/7) and r=2cos(pi/7), their stable manifolds, and the basin interval on z=0 between r*=0.776 and r**=6.859. Right: the transverse eigenvalue lambda(z) for three gate strengths, showing the fold locus sliding along z as beta^-1 ln gamma-hat.">
+  <figcaption><b>Figure 1.</b> <b>(a)</b> The exact toy system (M3). Gold and violet: the stable
+  manifolds of \(S_-\) and \(S_+\); their intersections with \(\{z=0\}\) (squares) are
+  \(r_\star\) and \(r_{\star\star}\). Teal trajectories converge to \(\Gamma\), red ones escape.
+  <b>(b)</b> Theorem 1 in one picture: changing \(\hat\gamma\) slides \(\lambda(z)\) rigidly along
+  \(z\), moving the fold locus to \(\beta^{-1}\ln\hat\gamma\). The three curves are one curve, seen
+  from three points of the Reeb flow.</figcaption>
+</figure>
+
+<h3>§6.3 · Verification of Theorem 1 in the exact system, to thirteen digits</h3>
+<p>
+  Theorem 1 is proved for the normal form. It should also hold for the exact, untruncated toy
+  system, and that is a strong numerical test — one that could easily have failed if the
+  \(\hat\gamma\)-in-both-terms structure were an artifact of the truncation. Run the gated exact
+  system \(\dot r = r(1-r^2)+2\hat\gamma(r-1)e^{-z}\), \(\dot z = r^2-2\hat\gamma(r-1)^2e^{-z}\)
+  and bisect its basin boundary on \(\{z=0\}\). Theorem 1 predicts this equals the <em>single,
+  gate-independent</em> separatrix \(W^s(S_-)\) read at level \(\zeta = -\beta^{-1}\ln\hat\gamma\).
+</p>
+<table>
+  <thead><tr><th>\(\hat\gamma\)</th><th>gated system, bisected</th><th>\(W^s(S_-)\) read at \(\zeta=-\ln\hat\gamma\)</th><th>difference</th></tr></thead>
+  <tbody>
+  <tr><td class="num">0.5</td><td class="num">0.5722354584</td><td class="num">0.5722354584</td><td class="num">6.8×10⁻¹⁴</td></tr>
+  <tr><td class="num">1.0</td><td class="num">0.7759405755</td><td class="num">0.7759405755</td><td class="num">3.7×10⁻¹⁴</td></tr>
+  <tr><td class="num">2.0</td><td class="num">0.9352791771</td><td class="num">0.9352791771</td><td class="num">1.7×10⁻¹³</td></tr>
+  </tbody>
+</table>
+<p>
+  The gate is a Reeb translation in the exact system, to within integrator tolerance. And the
+  operational reading is stark: <b>doubling the gate moves the basin boundary from \(0.776\) to
+  \(0.935\)</b> — closing three-quarters of the remaining margin below \(\Gamma\) — while halving it
+  opens the basin down to \(0.572\). The local sensitivity is \(dr_\star/d\zeta = -0.2774\)
+  at \(\zeta=0\) <span class="es es-num">[numerical]</span>, and the response is logarithmic in
+  \(\hat\gamma\), per Corollary 1.1.
+</p>
+<div class="block block-red">
+  <span class="lbl">Amendment to WP43</span>
+  <p style="margin:0">
+    WP43's "delay does not hold the system at a fixed distance from the fold" should be replaced.
+    What is true, and provable, is: <b>the gate translates the basin; a state at fixed amplitude
+    finds the boundary moving toward it as the gate strengthens, and the margin bought back is
+    logarithmic in gate strength.</b> That is a stronger argument for acting early, not a weaker
+    one — early action is cheap in \(\ln\hat\gamma\), late action is not — but it is a different
+    argument, and the current wording claims a drift toward the fold that Theorem 2 rules out near
+    \(\Gamma\). WP43 should be edited before this paper is cited in support of it.
+  </p>
+</div>
+
+<h2>§7 · The Observation Map, and the One Premise Left</h2>
+<p>
+  Theorem 1 fixes the fold at \(\zeta = 0\) in the reduced dynamics and at
+  \(z^\star(K) = \beta^{-1}\ln\hat\gamma(K)\) in the physical \(z\)-chart. The Reeb translation is a
+  symmetry of the reduced <em>family</em>, so no measurement on the reduced dynamics can recover
+  \(\hat\gamma\). But \(\Delta T\) is not a measurement on the reduced dynamics — it is attached to
+  the ambient physical system, and the map \(\Psi\) from normal-form coordinates to observables is
+  what pins \(z\) to physical units. \(\Psi\) breaks the gauge, and that breaking is precisely what
+  makes a threshold shift measurable at all.
+</p>
+<div class="env-box">
+  <div class="env-label">Theorem 5 · the threshold is logarithmic in the gate</div>
+  <p style="margin:0">Assume <b>(P)</b>: \(K\) enters the dm³ reduction only through the gate
+  multiplier \(\gamma\). Then</p>
+  <div class="eq" style="margin:.9rem 0 .3rem">
+  \[\Delta T_{\mathrm{crit}}(K) \;=\; \Psi\bigl(z^\star(K)\bigr),
+    \qquad
+    \Delta T_{\mathrm{crit}}(K) - \Delta T_{\mathrm{crit}}(K_0)
+    \;=\; \frac{c_\Psi}{\beta}\,\ln\!\frac{\hat\gamma(K)}{\hat\gamma(K_0)} \;+\; O(\Delta z^{\star 2}),\]
+  </div>
+  <p style="margin:0" class="fine">with \(c_\Psi = \partial\Psi/\partial z\) at the fold. The
+  \(K\)-dependence of \(\Psi\) is <b>forced</b>, and its functional form is <b>predicted</b>.</p>
+</div>
+<p>
+  This is what the earlier draft could not do. There, "K is an argument of \(\Psi\)" was read off
+  WP66's measurement as evidence — an inference from two data points to a structural claim. Here it
+  is a consequence of Theorem 1 <em>given (P)</em>, and WP66's numbers become a <b>test</b> of a
+  predicted log law rather than the support for the claim. That is a real change in the direction of
+  the argument, and it moves the exposed surface from something vague ("is K an argument of some
+  map?") to something a modeller can check ("does land-use enter the reduction as a multiplier on
+  the gating term, or somewhere else?").
+</p>
+<div class="tiles">
+  <div class="tile"><span class="v">2.15 °C</span><span class="l">WP66's measured shift: \(3.7\text{–}4.0\) under a halt against \(1.5\text{–}1.9\) under continued clearing. Interval arithmetic gives the shift as \([1.8,\,2.5]\) °C, midpoints \(2.15\).</span><span class="n">→ \(|c_\Psi|\beta^{-1}\ln R = 1.8\text{–}2.5\)</span></div>
+  <div class="tile"><span class="v">2.9–6.0</span><span class="l">Combining with ch05's empirical band \(1.6\le\beta\le2.4\): \(|c_\Psi|\ln R \in [2.88,\,6.00]\) °C, where \(R\) is the gate ratio between the two regimes. A cross-constraint linking WP66's climate measurement to Book 3's fold-sharpness band.</span><span class="n">→ two independent measurements, one bracket</span></div>
+  <div class="tile"><span class="v">3</span><span class="l">Regimes needed to test the log law. WP66 supplies two, which fix one product and cannot distinguish log-linear from anything else. A third \(K\)-regime is the whole experiment.</span><span class="n">→ the cheapest decisive test in the arc</span></div>
+</div>
+<div class="block block-red">
+  <span class="lbl">What premise (P) is, and is not</span>
+  <p style="margin:0">
+    (P) is a physical identification, not a theorem, and this paper does not prove it. But it is a
+    much smaller and more checkable thing than what the earlier draft leaned on. It says: the
+    Andes–Amazon moisture corridor acts on the dm³ reduction the way \(\gamma\) does — as a
+    multiplier on the \(e^{-\beta z}\) gating term — rather than shifting \(\omega\), \(\beta\), or
+    \(\mu_{\max}\) independently. That is exactly the object
+    <a href="wp66-the-wall-already-standing.html">WP66</a> §7.2's Open Problem O1 would settle:
+    numerical continuation in a coupled model with interactive vegetation, verifying the fold occurs
+    at the predicted ratio. <b>WP69 does not close O1.</b> It reduces its role from "the support for
+    Step 3" to "the check on premise (P)", and it hands O1 a sharper target than it had: not just
+    <em>does the fold move</em>, but <em>does it move logarithmically, with slope
+    \(c_\Psi/\beta\)</em>.
+  </p>
+</div>
+
+<h2>§8 · Ledger</h2>
+<table>
+  <thead><tr><th>Result</th><th>Status</th><th>Depends on</th></tr></thead>
+  <tbody>
+  <tr><td>Lemma 1 · \(R=\partial_z\); \(\alpha(X)=H_{\mathrm{diss}}\) exactly</td><td><span class="tag t-ok">PROVED</span></td><td>(M3) only — computation</td></tr>
+  <tr><td>Thm 1 · gate family = one Reeb orbit; \(\hat\gamma\) is gauge</td><td><span class="tag t-ok">PROVED</span></td><td>(M1), form of (M2)</td></tr>
+  <tr><td>Thm 1(2) · fold at \(z^\star=\beta^{-1}\ln\hat\gamma\); Cor 1.2 transversality</td><td><span class="tag t-ok">PROVED</span></td><td>(M1)</td></tr>
+  <tr><td>Thm 2 · single modulus \(\Lambda=\beta\omega/|\mu_{\max}|\)</td><td><span class="tag t-ok">PROVED</span></td><td>(M1) + Thm 1</td></tr>
+  <tr><td>Thm 3 · no rest near \(\Gamma\); mandate is a basin statement</td><td><span class="tag t-ok">PROVED</span></td><td>Thm 2</td></tr>
+  <tr><td>Prop 4 · equilibria at \(2\cos(k\pi/7)\); all saddles</td><td><span class="tag t-ok">PROVED</span></td><td>(M3) — exact algebra</td></tr>
+  <tr><td>Prop 5 · \(r_\star=0.7759405755\), \(r_{\star\star}=6.8592213690\)</td><td><span class="tag t-plan">NUMERICAL</span></td><td>double precision, 2 routes</td></tr>
+  <tr><td>§6.3 · Thm 1 verified in the exact system to \(10^{-13}\)</td><td><span class="tag t-plan">NUMERICAL</span></td><td>double precision</td></tr>
+  <tr><td>Thm 5 · \(\Delta T_{\mathrm{crit}}\) log-linear in gate</td><td><span class="tag t-open">CONDITIONAL ON (P)</span></td><td>Thm 1 + premise (P)</td></tr>
+  <tr><td>Premise (P) · \(K\) enters only through \(\gamma\)</td><td><span class="tag t-bad">OPEN — is O1</span></td><td>—</td></tr>
+  <tr><td>Vol II Theorem A (★★★★ sorry)</td><td><span class="tag t-open">OPEN, upstream</span></td><td>not used by §3–§6</td></tr>
+  </tbody>
+</table>
+<p class="fine">
+  The load-bearing distinction: §3–§6 hold whatever climate science says — they are facts about the
+  normal form and about an explicit ODE. §7 is the only place a physical premise enters, and it
+  enters at exactly one point, named.
+</p>
+
+<h2>§9 · Falsifiability</h2>
+<ol>
+  <li><b>F1 — Theorem 1 dies if the gate splits.</b> \(\hat\gamma\) must multiply the exponential
+  term in \(\dot\rho\) and in \(\dot z\) with the same coefficient; that is what makes the family a
+  Reeb orbit. If a mechanism moves the two independently, the ratio becomes a second modulus and
+  \(\hat\gamma\) stops being gauge. Checkable in any candidate dm³ instantiation
+  <span class="es es-proved">[decidable]</span>.</li>
+  <li><b>F2 — Theorems 1–2 die if \(\dot z\) decouples from \(\rho\).</b> Unchanged from the earlier
+  draft, and still the cleanest structural falsifier <span class="es">[documented]</span>.</li>
+  <li><b>F3 — Theorem 5 dies at O1.</b> If the coupled-model continuation reproduces a threshold
+  shift of the observed size without land-use entering as a gate multiplier — or reproduces one that
+  is not logarithmic in gate strength — premise (P) fails and §7 does not survive
+  <span class="es es-open">[open]</span>.</li>
+  <li><b>F4 — Proposition 4's heptagon may be a coincidence.</b> The cubic \(r^3-r^2-2r+1\) comes
+  from the toy model's specific coefficient \(2\). Perturb it to \(\dot r = r(1-r^2)+g(r-1)e^{-z}\),
+  \(\dot z = r^2 - g(r-1)^2e^{-z}\) and the equilibrium cubic moves; if the heptagonal structure is
+  structural rather than accidental it should reappear as the distinguished value of \(g\), and if
+  it does not, Prop 4 is a fact about one ODE and not about dm³ <span class="es es-open">[open]</span>.</li>
+  <li><b>F5 — Prop 5's digits are checkable and one of them disagrees.</b> Vol II's certified
+  \(0.77594059\) against this paper's \(0.7759405755\). Someone should settle the eighth digit with
+  interval arithmetic or a validated integrator <span class="es es-open">[open]</span>.</li>
+</ol>
+
+<h2>§10 · Cross-Reference</h2>
+<table>
+  <thead><tr><th>Destination</th><th>Content</th><th>Status</th></tr></thead>
+  <tbody>
+  <tr><td><code>wp43-immediate-action.html</code></td><td>Amend the drift wording per §6.3's amendment box, <em>then</em> replace "See WP69 (forthcoming)" with a link to §6</td><td><span class="tag t-bad">EDIT REQUIRED</span></td></tr>
+  <tr><td><code>wp44-catastrophe-manifold.html</code> §1, §7.2</td><td>Replace both "(WP69, forthcoming)" citations with §4 (Theorem 1). The Thom contrast in §1 is now literally correct rather than programmatic</td><td><span class="tag t-plan">PENDING REVIEW</span></td></tr>
+  <tr><td><code>wp66-the-wall-already-standing.html</code> §7.2</td><td>O1 is now the check on premise (P), with a sharper target: the log law and its slope \(c_\Psi/\beta\)</td><td><span class="tag t-plan">PENDING REVIEW</span></td></tr>
+  <tr><td><code>wp68-what-fossilises.html</code> §2</td><td>Resolve the forward reference. §2's deferred question — is the locus fixed or does it move — answers: it moves, by \(\beta^{-1}\ln\hat\gamma\), and only by that</td><td><span class="tag t-plan">PENDING REVIEW</span></td></tr>
+  <tr><td><code>../vol2-toymodel.html</code> §7</td><td>Invariant table: \(r^*\) upgraded from <em>argued</em> to <em>identified</em> — it is \(W^s(S_-)\cap\{z=0\}\); add \(r^{**}=6.8592213690\); reconcile the eighth digit</td><td><span class="tag t-bad">CORRECTION</span></td></tr>
+  <tr><td><code>../vol2-contact.html</code></td><td>Theorem 1 as a Theorem D. It is independent of Theorem A's open <code>sorry</code> and is a candidate for Lean before Theorem A is</td><td><span class="tag t-plan">PROPOSED</span></td></tr>
+  <tr><td><code>../ch05-contact-normal-form.html</code></td><td>Note that the stated form fixes the gauge \(\hat\gamma=1\) silently, and that after gauge reduction the canonical triple carries one invariant, \(\Lambda\)</td><td><span class="tag t-plan">PENDING REVIEW</span></td></tr>
+  <tr><td><code>../chF-catastrophe.html</code> §3</td><td>Proof 4's genericity can be upgraded: Cor 1.2 gives the \(A_1\) non-degeneracy constant explicitly as \(\mu_{\max}\beta\)</td><td><span class="tag t-plan">PENDING REVIEW</span></td></tr>
+  </tbody>
+</table>
+<p class="fine">Nothing in this table has been applied. Two rows are corrections to published files and
+should be looked at before anything else here is used.</p>
+
+<h2>§11 · Summary</h2>
+<p>
+  The gate is the Reeb flow. That single sentence carries the whole thing: the control parameter and
+  a state coordinate are the same one-dimensional direction, so "acting on \(K\)" and "translating
+  the fold" are one operation, and the state and the control enter the dynamics only through
+  \(\zeta = z-\beta^{-1}\ln\hat\gamma\). Thom's external control plane is not merely a different
+  choice here — it is unavailable, because the manifold has no such factor to put it in.
+</p>
+<p>
+  Writing it down cost three things and bought four. It cost an amendment to WP43, whose drift
+  wording claims something Theorem 2 forbids; a correction to Vol II's eighth digit; and the
+  admission that ch05's three canonical invariants carry one invariant after gauge reduction, not
+  three. It bought an explicit \(A_1\) transversality constant, a single modulus
+  \(\Lambda = \beta\omega/|\mu_{\max}|\), an exact algebraic address for the toy model's equilibria
+  and its basin boundary, and — the one that matters for the climate arc — a predicted functional
+  form for the threshold shift, which converts WP66's measurement from the argument's support into
+  its test.
+</p>
+<div class="pull">
+  The mathematics was already done. What was missing was the part that lets other people take it
+  away from you — and, as it turned out, the part that shows where you had reached too far.
+</div>
+
+<h2>Appendix · Reproducibility</h2>
+<p class="fine">
+  All symbolic claims verified in SymPy; all numerics in SciPy DOP853 at
+  \(\texttt{rtol}\le 10^{-12}\), \(\texttt{atol}\le 10^{-15}\), cross-checked at two tolerances and
+  two independent methods where stated. The companion script
+  <code>wp69-verify.py</code> reproduces every number in this paper — Prop 4's cubic and its
+  trace/determinant minimal polynomials, Prop 5's two boundaries, and §6.3's thirteen-digit agreement —
+  and prints them in the order they appear above.
+</p>
+<pre>$ python3 wp69-verify.py
+[1] equilibrium cubic          r^3 - r^2 - 2r + 1,  disc = 49
+[2] roots                      2cos(pi/7), 2cos(3pi/7), 2cos(5pi/7)
+[3] trace minpoly              x^3 + x^2 - 2x - 1      (= minpoly of 2cos(2pi/7))
+[4] det   minpoly              x^3 + 35x^2 + 147x + 49 (all roots negative -> all saddles)
+[5] alpha(X) - H_diss          0
+[6] Reeb                       d_z ,  L_{d_z} alpha = 0
+[7] r_star                     0.7759405755023
+[8] r_starstar                 6.8592213690
+[9] gauge check, ghat=1/2,1,2  max |gated bisection - W^s level| = 1.7e-13</pre>
+
+<h2>References</h2>
+<div class="refhead">This series</div>
+<ol class="refs">
+  <li><a href="wp43-immediate-action.html">WP43 · The Gate Cannot Wait</a> — the mandate; §6.3 above proposes an amendment to its drift wording.</li>
+  <li><a href="wp44-catastrophe-manifold.html">WP44 · Disaster Theory and the Climate Catastrophe Manifold</a> §1 (the claim now proved as Theorem 1), §3, §7.2 (O1).</li>
+  <li><a href="wp66-the-wall-already-standing.html">WP66 · The Wall Already Standing</a> §6 (the 1.5–1.9 °C / 3.7–4.0 °C measurement, now a test of §7's log law), §7.2 (O1 as the check on premise (P)).</li>
+  <li><a href="wp68-what-fossilises.html">WP68 · What Fossilises</a> §2 — the deferred question, answered in §4.</li>
+  <li><a href="wp39-smoke-transamerican.html">WP39</a> — Theorem T2, \(K\circ F \neq F\circ K\).</li>
+</ol>
+<div class="refhead">The geometric machinery</div>
+<ol class="refs" start="6">
+  <li><a href="../vol1-mathematics.html">Volume I · vol1-mathematics.html</a> — Theorem 9.1, NF3, Theorem 5.5 (fold-locus transversality, made explicit in Cor 1.2).</li>
+  <li><a href="../vol2-contact.html">Volume II · vol2-contact.html</a> — Theorem A (\(H_{\mathrm{diss}} = -\gamma Ve^{-\beta z}\), ★★★★ open; not load-bearing for §3–§6), §2.3 (the normal form), §4.3 (the exact equations).</li>
+  <li><a href="../vol2-toymodel.html">Volume II toy model · vol2-toymodel.html</a> §7 — the canonical invariant table, including \(r^*\) "argued"; corrected and completed in §6.2.</li>
+  <li><a href="../ch05-contact-normal-form.html">ch05-contact-normal-form.html</a> — the domain-agnostic normal form, the \((\mu_{\max},\omega,\beta)\) triple, the \(\beta\in[1.6,2.4]\) band, and the Darboux caveat addressed in §4.</li>
+  <li><a href="../chF-catastrophe.html">chF-catastrophe.html</a> §3 — Proof 4, the Legendrian front argument; Cor 1.2 supplies its missing constant.</li>
+  <li><a href="../book4/ch11-catgt.html">book4/ch11-catgt.html</a> — the same \(\alpha = dz - r^2d\theta\) in zeolite catalysis; cross-domain evidence that the coupling of §4 is a property of the form.</li>
+</ol>
+<div class="refhead">External</div>
+<ol class="refs" start="12">
+  <li>Thom, R. (1972). <em>Stabilité structurelle et morphogénèse.</em> — the external-control plane Theorem 1 argues past.</li>
+  <li>Arnol'd, V. I. (1990). <em>Singularities of Caustics and Wave Fronts.</em> Kluwer.</li>
+  <li>Geiges, H. (2008). <em>An Introduction to Contact Topology.</em> CUP. — Reeb fields, contact Hamiltonians, the strict/conformal distinction used in Lemma 1.</li>
+  <li>Darboux, G. (1882). Sur le problème de Pfaff. <em>Bull. Sci. Math.</em> — the local triviality §4 argues past rather than around.</li>
+  <li>Washington, L. C. (1997). <em>Introduction to Cyclotomic Fields</em>, 2nd ed. Springer. — \(\mathbb{Q}(\cos 2\pi/7)\), conductor 7, discriminant 49; the field Prop 4 lands in.</li>
+</ol>
+</div>
+<footer>
+  <p>
+    <b>Principia Orthogona · Book 6 · Working Paper 69 · DRAFT</b><br>
+    Pablo Nogueira Grossi · G6 LLC, Newark NJ · August 2026<br>
+    Not yet linked from <a href="index.html">Book 6 Index</a>. Two rows of §10 are corrections to
+    published files — read those first.<br>
+    <a href="wp68-what-fossilises.html">← WP68</a> ·
+    <a href="index.html">Book 6 Index</a>
+  </p>
+</footer>
+</body>
+</html>
