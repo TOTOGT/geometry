@@ -780,3 +780,159 @@ for a worked example of a corrected document.
    In each case the original author *knew* something was uncertain and said so,
    and a later pass cleaned up the flag instead of resolving the uncertainty.
    If you cannot verify it, leave the hedge exactly where it is.
+
+---
+
+# OPEN TODO: Book 3's ISBN is on pages that are not Book 3 (opened 2026-08-17)
+
+**Not swept. Do not sweep it in passing.** Logged here so it is settled deliberately,
+the way the DOI cluster was, rather than by a confident pass over 76 files. The last
+confident ISBN pass is the one that put an unallocated reserve number into 87 book6
+footers and 19 other files as though it were real; that is the failure this entry exists
+to avoid repeating.
+
+## Measured 2026-08-17 (all spellings: hyphenated, unhyphenated, loose-hyphen regex)
+
+| Measure | Files |
+|---|---|
+| HTML files carrying `979-8-9954416-6-3` | **76** |
+| …using the unhyphenated form `9798995441663` | 0 — only one spelling is in use |
+| …on Book 3 / Vol III pages, where it is **correct** | 41 |
+| …on other pages, **needs review** | **35** |
+| …explicitly labelled "Series ISBN" | **3** — wrong by construction |
+| …inside a `<footer>` | 54 |
+| …body-only | 22 |
+
+`979-8-9954416-6-3` is **Book 3 · Mini-Beast · eBook PDF**. It is not a series number.
+On a page belonging to any other volume it asserts an allocation that does not exist,
+and the rule above is unambiguous: *a volume without its own registered ISBN gets no
+ISBN line at all — do not borrow one from a volume that does.*
+
+## Already settled
+
+- `book6/on-publication.html` — **fixed 2026-08-17.** Footer read `Series ISBN
+  979-8-9954416-6-3` on a Vol VI page whose own provenance notice states Vol VI has no
+  ISBN allocation. Line removed; footer now points at the Zenodo community only. The
+  same edit removed `10.5281/zenodo.19117399 (series root)` from the hero, per the
+  standing instruction not to restore that label.
+
+## Still open in book6
+
+- `book6/wp02-alterna.html`
+
+Settled since: `book6/index.html` — **fixed 2026-08-17.** Carried it twice, in the
+hero strip and the footer, both labelled "Series ISBN", three lines above the notice
+stating Vol VI has no allocation. Both removed; 0 occurrences remain in the file.
+
+## The repair, when it is taken up
+
+1. Classify before editing. A Book 3 / Vol III page keeps the number — 41 of the 76 are
+   legitimate and must not be touched. Automated removal would strip Book 3's only
+   registered-in-progress identifier from its own pages.
+2. On any non-Book-3 page, delete the ISBN line entirely. Do not substitute another
+   volume's number, and do not invent a "series ISBN" — there isn't one. Point at
+   <https://zenodo.org/communities/principia-orthogona>.
+3. The 3 files labelled "Series ISBN" are the highest priority regardless of volume:
+   the label is false even where the number is right.
+4. Update this ledger in the same session, per rule 6.
+
+---
+
+# OPEN TODO: `book6/on-publication.html` — remaining content review (opened 2026-08-17)
+
+Three defects fixed 2026-08-17; the rest of the page is unreviewed. Fixed:
+
+- **§7 pull-quote asserted that a wrong argument will not compile.** False, and refuted
+  by the corpus's own work: `AXLE/CatGT/CatGT_Main.lean` documents four theorems that
+  compiled while being vacuously true (`: True`, `: 1 = 1`, `: ∃ shape, True`) and were
+  replaced. Compilation certifies validity *given the statement*; it cannot certify that
+  the statement says what was meant. Rewritten to state the three-way distinction —
+  kernel-checked, sorry-free, non-vacuous — which is the same split the theorem registry
+  at `sluing.github.io/neuro/SBM/1080.html` already publishes as Tier 1 / 2 / 3.
+- **§6 scored its own rigor** ("a strictly higher standard than single-blind review"),
+  against house rule 3. Now scoped: stronger for the formalised fragment, merely open for
+  the cross-domain synthesis, laminin work and therapeutic corridors, which are stated as
+  remaining unrefereed.
+- **§5 listed Einstein and Shannon as precedents for self-publication.** Both were
+  journal-published — *Annalen der Physik* 1905 and the *Bell System Technical Journal*
+  1948 — and Ramanujan published conventionally besides circulating notebooks. Only
+  Perelman withheld outright. Corrected in place per rule 5 rather than cut, with the
+  narrower shared claim stated explicitly.
+
+- **§2 claimed `polylaminin` as this corpus's coinage.** It is not. Polylaminin is
+  Tatiana Coelho-Sampaio's (UFRJ), published in *The FASEB Journal* in 2010 — Menezes et
+  al., *"Polylaminin, a polymeric form of laminin, promotes regeneration after spinal cord
+  injury"*, PMID 20643907 — sixteen years before this page listed it among terms that "do
+  not appear in prior literature". Corrected with explicit attribution: the contact-geometric
+  reading is new, the molecule and its name are not. **Check the rest of the corpus for the
+  same pattern** — any term listed as a neologism that belongs to another researcher is the
+  most damaging class of error on these pages, because it is both false and discourteous.
+- **§6 wrongly listed the laminin work as unrefereed** (my error, introduced earlier the
+  same day while fixing rule-3 self-scoring). The polylaminin science is published and
+  regulator-reviewed: FASEB J 2010, Front. Vet. Sci. 2025 (doi:10.3389/fvets.2025.1592687),
+  and ANVISA authorised a Phase I trial in January 2026. Only the dm³ reading laid over it
+  is unrefereed. **Rule for this corpus: never describe externally published collaborator
+  or third-party science as unrefereed in order to sound modest about our own layer.**
+  Scope the modesty to the layer we actually added.
+
+
+# OPEN DEFECT: polilaminina claims across the corpus (opened + partly fixed 2026-08-17)
+
+**A preprint result was labelled as ANVISA trial data.** `vol3-minibeast.html` and
+`book3/index.html` both read *"ANVISA Phase I clinical data (January 2026): 6 of 8
+patients…"*. That conflates two different things: the 6-of-8 figure is a **2024 pre-trial
+pilot**, reported as a medRxiv preprint (10.1101/2024.02.19.24301010) and **not
+peer-reviewed**; ANVISA's Phase I is a **5-patient** safety trial authorised January 2026
+that has **not reported**. Both fixed, tagged `[PRELIMINARY — not peer-reviewed]`.
+
+**Status, checked 2026-08-17.** Polilaminina is **not registered or approved** in Brazil.
+It is simultaneously reaching patients: 33 authorised under ANVISA's *Programa de Uso
+Compassivo* (sponsor Cristália donating doses) against 59 judicial decisions as of
+11 March 2026, later reported at 38; HUOP Paraná among the administering hospitals.
+**No law or regulation was changed** — ANVISA says so explicitly. Compassionate use is
+the pathway that exists *because* a product is unapproved; citing it as evidence of
+approval inverts its meaning.
+
+**Precedent to keep straight.** Congress *did* once pass such a law, for a different
+compound: Lei 13.269/2016 authorised fosfoetanolamina sintética without ANVISA
+registration. AMB challenged it (ADI 5501); the STF suspended it 19 May 2016 and later
+ruled it unconstitutional — safety review is ANVISA's technical competence, not
+Congress's by abstract statute — and trials found no benefit. There is no such law for
+polilaminina. Do not let the two stories merge.
+
+**Rule.** Any clinical claim on these pages carries its evidence tier in the sentence:
+peer-reviewed / preprint / trial-authorised / compassionate-use. A regulatory verb
+("approved", "authorised", "registered") without its object is a defect.
+
+## Still to review on that page
+
+1. **§2's central claim is untested.** "The words exist because the framework required
+   them" is asserted, not shown. One worked example — a term that cannot be expressed in
+   existing vocabulary without a paragraph of circumlocution — would carry the section.
+   Without it the paragraph asks the reader for exactly the trust it says reviewers
+   withhold.
+2. **§4's "five and thirty years" is unsourced.** Either cite the bibliometrics or mark
+   it `[MODEL]` per rule 2.
+3. **§5 still leads with Perelman.** Accurate, but it is the comparison most likely to
+   make a hostile reader file the corpus under the failure mode the author already guards
+   against. Worth deciding deliberately, not by inertia.
+4. **§3 lists scope but not competence.** It says no reviewer pool spans the material; it
+   does not say who *has* checked which parts. A short "what has been externally checked,
+   and by whom or by what" line would answer the obvious question.
+
+# OPEN TODO: maths and remaining defects, book6 (opened 2026-08-17)
+
+Not started — logged so it is scoped rather than swept.
+
+- **4 dead links remain in `book6/`** after the 2026-08-17 sweep (9 were repaired: 3
+  wrong-path cross-volume links to `book7/`, 1 rename, 2 planned-chapter navs disabled,
+  3 misc). The 4 survivors point at files that exist nowhere on disk and need a decision,
+  not a redirect: `heat-equation/heat_equation_monograph.pdf`
+  (`ch-elliptic-poisson-foundations.html`), `../../AXLE/HeatEquation_Step1.lean` and
+  `../../AXLE/HelixToyModel.lean` (`index.html`),
+  `../applications/stjohns-meco/aula-index.html` (`wp63-chladni-realia-build.html`).
+- **`ch04-why-proofs.html` and `ch05-self-organization.html` are badged Planned in the
+  index but were linked from chapter navs** — now rendered as disabled spans marked
+  "planned". If either gets written, restore the anchors.
+- The false commutator lemma ledger above is unaffected by any of this work; nothing in
+  this session touched an operator-order argument.
