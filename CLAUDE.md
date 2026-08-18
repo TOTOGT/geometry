@@ -1503,3 +1503,46 @@ The engineered anyon experiments reproduce that pattern one level down; the FQHE
 Lombardi but a question about where her argument's boundary lies.** Any such paper must meet
 the obvious counter head-on: the FQHE invariant is also read in, through the choice of
 Chern–Simons effective theory.
+
+# FIXED: the map/point confusion, swept (2026-08-18)
+
+Chapter 7's braid-group error turned out not to be isolated. Sweeping the corpus for claims of
+the form *"G is <something>"* and *"… = G"* surfaced 93 candidate files; almost all are correct
+(*"G is a contraction"*, *"x* = G(x*)"*, *"G is a contactomorphism"* — all statements about a
+self-map, all fine). Three carried the same underlying confusion as Chapter 7: **G is a map on
+X; a point of X is not a map, and a map is not a point.**
+
+1. **`book5/chV-banach.html`** wrote the volume-convergence claim as
+   **`G⁵ = G(G(G(G(G)))) = x*`**. Three errors stacked: `G(G(…))` feeds G to itself when its
+   argument must be a point of X; `G⁵` is the fifth *iterate*, a map, not a nested application;
+   and the whole thing is then set equal to `x*`, a point. Now
+   `G^∘5 = G∘G∘G∘G∘G`, with `x* = limₙ G^∘n(v₀)`.
+   The decisive detail: **§2 of that same page already states Banach correctly** —
+   *"a sequência x₀, G(x₀), G(G(x₀)), …"* — so the page contradicted itself, and the correct
+   form was sitting two sections away.
+
+2. **`ch8-nested-infinities.html`** had `G(G(G(…))) = G∞` and *"The surreal construction is G
+   applied to G."* Now `G^∘n(v₀) → G∞`, and *G applied to its own output — not to itself*,
+   which is what the surreal-day construction actually describes and what the rest of that
+   paragraph already says. Note `G ∘ G` elsewhere on the page was always correct, and
+   `G(G∞) = G∞` is fine provided G∞ ∈ X.
+
+3. **`ch6-resonance.html`** defined G correctly and then slid: *"G is the learner … G is the
+   practitioner … G is what a person becomes."* **The practitioner is x*, not G.** The corpus
+   writes x* = G(x*) everywhere; the person is the fixed point, G is the process that produces
+   one. Also corrected: *"it is what the sequence produces"* — the sequence produces x*, not G.
+   And *"Resonance is not a metaphor for learning. It is the physical instance of the same
+   operator structure"* is now stated as a reading and tagged `[MODEL]`, per rule 2.
+
+**The pattern worth remembering.** Every instance had the correct statement nearby — the same
+page, sometimes the same paragraph. The error is not ignorance of the definitions; it is
+prose drifting off them while the mathematics stays put a few lines away. When re-reading the
+chain in any new domain, carry the Vol I §3 signatures into the passage rather than glossing
+the operators in that domain's vocabulary.
+
+**Not fixed, deliberately:** `book4/ch6-resonance.html` still carries the pre-fix text. It is
+one of the seven competing variants awaiting the author's decision (see the variant table
+above); editing an orphan copy of a page whose fate is undecided would make that decision
+harder, not easier. `book6/wp55-the-fixed-point.html` uses **G for the Gödel sentence**, an
+unrelated symbol; not an error, but the collision is worth knowing about before any future
+sweep matches on `G is …`.
