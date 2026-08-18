@@ -1763,3 +1763,57 @@ Correcting a footer on that basis would be reasonable. Removing an ISBN from a p
 prices a product and links to Gumroad is not something to do from a source known to have been
 wrong before. **This needs the registry, or the author.** If the numbers are right and the
 table is stale, the table is what should change.
+
+# ISBN registry read at last — Book IV corrected, and the registry itself has two bugs (2026-08-18)
+
+**The path in this file is wrong.** The registry is not at `~/Desktop/MATHS for life/`. It is at
+**`~/Documents/Claude/Projects/MATHS for life/isbn_metadata.json`**, alongside
+`Bowker_ISBN_Registration_Guide.md` and `isbn_registration.py`. Correct the path above before
+the next session repeats the hunt.
+
+## The registry confirms every Book IV finding
+
+Verbatim `action` fields for the numbers Book IV was using:
+
+| ISBN | bowker_status | registry says it is for |
+|---|---|---|
+| 979-8-9954416-2-5 | INCOMPLETE — HOLD | *"Reserve for Vol VI or 40-language edition."* |
+| 979-8-9954416-4-9 | INCOMPLETE — HOLD | G5 **Hardback**, print — *"Activate on print."* 666 pp max |
+| 979-8-9954416-5-6 | INCOMPLETE — HOLD | *"Reserve for first major translation or Vol II."* |
+| 979-8-9954416-8-7 | INCOMPLETE — HOLD | *"Free."* — assigned to nothing |
+| 979-8-9954416-6-3 | INCOMPLETE — **register now** | Book 3 · Mini-Beast · eBook PDF, $19.99 |
+| 979-8-9954416-0-1 | **REGISTERED** | G5 Paperback — *"Print. NOT for sale until further notice."* |
+
+And the file's own header: *"Only complete/register an ISBN when the product is live and being
+distributed. Everything marked HOLD stays INCOMPLETE in Bowker until needed."*
+
+**Fixed: 10 ISBN lines removed** from citations and footers across nine files —
+`ch02`, `ch10` (Vol I cited with 2-5, Vol II with 4-9), `hub` (5-6 labelled "G5 eBook" when G5
+eBook is 1-8), `chTau-tartaruga` (5-6), `chE-gtct` (Book 3's 6-3 on a GTCT page), and
+`ch-hawking`, `ch15-complex-turn`, `chIV-axioms`, `chIV-field` (8-7, assigned to nothing).
+Per the rule above, a volume without its own registered ISBN gets **no ISBN line**, not a
+borrowed one. *(`chIV-field.html` has a stray `</div>` — pre-existing, confirmed in `HEAD`.)*
+
+## Two bugs in the registry itself — fix upstream or this recurs
+
+1. **`979-8-9954416-1-8` carries `format_note: "All-encompassing eBook. Default ISBN for any
+   volume without its own."`** This is the withdrawn fallback-ISBN instruction, still live in
+   the canonical source. It is almost certainly **the upstream origin of the borrowed-ISBN
+   defect** — the one that put an unallocated number into 87 book6 footers and 19 other files.
+   Every downstream correction made in this repo is undone the moment someone consults the
+   registry and follows that note. It should be deleted there, not just contradicted here.
+2. **`979-8-9954416-6-3` carries `distribution: "Gumroad · Zenodo doi:10.5281/zenodo.19117400"`.**
+   That DOI is Vol I's v1 founding deposit, established on 2026-08-02; Book 3 has no standalone
+   deposit at all. The registry is asserting a Zenodo record for Book 3 that is a different
+   volume's.
+
+## OPEN — the storefront
+
+`book4/ch02.html` and `book4/ch10.html` still price three products at **$47 with Buy on
+Gumroad** under **2-5**, **4-9** and **5-6** — all three `INCOMPLETE — HOLD` in Bowker, i.e.
+not registered to anything, and 4-9 is a print ISBN whose own note reads *"Activate on print"*
+against a registry header saying paper books are not for sale.
+
+Untouched deliberately. If those products are genuinely for sale the fix is to **register
+ISBNs for them**, not to strip the numbers off the page; if they are not for sale, the price
+and the buy button are the problem, not the ISBN. Either way it is a commercial decision.
