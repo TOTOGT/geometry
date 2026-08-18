@@ -82,6 +82,11 @@ def discover() -> list[str]:
         rel = p.relative_to(ROOT).as_posix()
         if rel.startswith(".git/") or "/.git/" in rel:
             continue
+        # _to_delete/ holds files retired by hand; device_bash cannot unlink, so they
+        # sit on disk until the author removes the folder. They are gitignored and are
+        # not part of the site — indexing them reports retired pages as live orphans.
+        if rel.startswith("_to_delete/") or "/_to_delete/" in rel:
+            continue
         if rel in skip:
             continue
         out.append(rel)
