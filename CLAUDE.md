@@ -1307,3 +1307,69 @@ Volume I, which has no allocation and per the rule above gets no ISBN line at al
    concept DOI; there is no series DOI. This is the defect the ISBN/DOI section at the top of
    this file already documents, and it is by far the largest remaining citation problem in
    the repo. It was not touched today.
+
+# Reachability audit, redone properly (2026-08-18)
+
+The per-book orphan counts from the first pass were wrong in the same way the Volume I
+inbound-link count was wrong: they compared a directory's files against links **from that
+directory's own index**. `book4/index.html` is a 1.7 KB stub that links only
+`contents.html`, so the method reported *50 orphans of 51* for book4. Those 50 pages are
+reachable — through `book4/contents.html` and `living-book.html`.
+
+**Correct method: breadth-first reachability from `index.html`**, resolving by path, honouring
+`/geometry/` site-absolute hrefs, and following `.html` literals inside `<script>` (audit
+rule 4 above). Result:
+
+| measure | reachable | unreachable |
+|---|---|---|
+| counting the generated indexes as link sources | 633 / 636 | 3 |
+| **excluding them (audit rule 1)** | **577 / 636** | **59** (2.0 MB) |
+
+**The gap between those two rows is the whole point, and it is a trap.** Adding one link to
+`master-index.html` — which lists nearly every file — moves the headline number from 60 to 3
+without navigating anyone anywhere. Audit rule 1 at the top of this file predicted exactly
+this: *"count it and the orphan column reads zero forever."* It is now demonstrated. **The
+honest figure is 59.** Any future report that quotes a number near zero without saying
+whether generated indexes were excluded is measuring nothing.
+
+## Fixed
+
+1. **The generated-index system was an island.** `master-index.html` links all fifteen
+   `index-*.html` files, and *nothing in the live site linked to `master-index.html`* — its
+   fifteen inbound links all came from pages that were themselves unreachable. Root
+   `index.html`'s nav now carries **All Files → `/geometry/master-index.html`**. This is
+   worth doing on its own merits — the index was unusable — but see the trap above: it is
+   not an orphan fix.
+2. **Root `index.html` had the stranded-anchor defect too.** `Living Book` and `Series ↗`
+   sat outside `.nav-links`. Verified from the CSS, not assumed: root `index.html` has
+   `nav { display:flex }`, styles only `.nav-links a`, and has **no** global `a` rule and no
+   `nav a` rule — so both rendered as default blue underlined links. Moved inside, and
+   switched to `/geometry/` paths to match the rest of that nav.
+3. **`omega/index.html` and `contact/index.html` were not indexes.** Both were stale copies
+   of the site's **home page** — same title, *"O Princípio do Cajueiro · dm³ Soundworks"*,
+   and within a kilobyte of root `index.html`'s size. So `/geometry/omega/` served the
+   homepage instead of the Omega Point series, and this is what made the first audit report
+   omega as "1 linked of 42": `omega/index.html` was never omega's index. The real one is
+   `omega/omega-point-index.html`, and it is reachable.
+   Both are now small redirect pages — meta-refresh plus `rel=canonical` plus a visible
+   link, no JavaScript — `omega/` → `omega-point-index.html`, `contact/` → the home page
+   (that directory contains nothing else).
+
+   *Noted but not diagnosed:* the copies carry broken sentences against root — a bare `.`
+   where root reads `Forest Hill.`, and *"the walk from this building to will be a public
+   meditation trail"* where root reads *"to Forest Hill will be."* That looks like a
+   find-and-replace that deleted a phrase, but the copies are **older** (3 Aug vs 12 Aug),
+   so root filling the gaps is equally consistent. Do not repeat the damage theory as fact.
+
+## Open
+
+- **`_cajueiro-index-misplaced.html` is a third copy of the home page.** Left alone: it is
+  not at a directory URL, so it misleads no one, and its filename already says what it is.
+- **`master-index.html` is stale.** It does not list `course-hist201.html`,
+  `hist201-development-proposal.html` or `tutor-deck.html`, added in `2cf3906` after the
+  index was last generated. Whatever generates it needs re-running.
+- **59 pages remain genuinely unreachable**, 39 of them at root. Known clusters: duplicate
+  name-variants in `book4` (`ch06b-elojo` / `ch07-newark` / `ch08-harrison` /
+  `ch09-belleville` / `ch6-resonance` beside the reachable `ch06b` / `ch07` / `ch09`), three
+  copies of *The Law of Monsters* in `AMonster/` with no `index.html` at all, and
+  `book3/index.html` — Book III's own index has no way in.
