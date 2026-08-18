@@ -2162,3 +2162,163 @@ anchor removed with the dead button.
   page generator, not a defect. Check whether the match sits inside a backtick string.
 - The `href="../"` normalization bug recorded in the Book VI/VII sweep is still unfixed and
   still produces false positives.
+
+# The five open items from the HVEH/omega/AMonster sweep — closed (Aug 2026)
+
+All five were worked in one pass. What follows is what changed, what was *wrong in the
+previous entry*, and what is newly open.
+
+## CORRECTION to the entry above: there IS an IMPA portal, on DM3-lab
+
+The entry above says *"`impa-portal.html` is not an IMPA portal"* and implies none exists.
+**That was half right and the missing half matters.** Checked live:
+
+| URL | HTTP | Title |
+|---|---|---|
+| `totogt.github.io/DM3-lab/impa-portal.html` | 200 | **IMPA Edition — Purchase Portal · Principia Orthogona** (25 KB) |
+| `totogt.github.io/AXLE/impa-portal.html` | 200 | dm³ Soundworks · Chladni · Sacred Resonance (272 KB) |
+| `totogt.github.io/geometry/impa-portal.html` | 200 | dm³ Soundworks · Chladni · Sacred Resonance (272 KB) |
+
+So the real purchase portal is alive on **DM3-lab**, and the AXLE and geometry copies were
+**overwritten** at some point with the Seven Sound Machines page. Two of three copies clobbered,
+and this repo's copy is one of them. Note also that the surviving real one still carries
+*"IMPA Edition"* in its title — the edition name withdrawn here on 2026-08-18. That is another
+repo; rule 4 applies.
+
+**Do not "restore" geometry's copy from DM3-lab on the strength of this note.** Which page
+should be this repo's store is the author's call. What was fixed is only the *labelling*.
+
+## 1 · impa-portal labels — 117 rewrites, 0 hrefs touched
+
+`geometry/impa-portal.html` does carry the purchase apparatus (4 Gumroad links, 5 PayPal links
+including the exact `$213.24` eBook and `$263.36` hardcover amounts the storefronts quote), so
+it functions as a purchase portal. Only the word IMPA was untrue.
+
+- **84 anchor texts** on links to `impa-portal.html`: `IMPA Portal`→`Purchase Portal` (28) ·
+  `IMPA`→`Purchase` (26) · `Portal IMPA →`→`Portal de Compras →` (21, all on `lang="pt"`
+  Edição Brasil pages) · `⬡ AXLE Portal`→`⬡ Purchase Portal` (5) · plus 4 one-offs.
+- **31 non-anchor labels**: `AXLE · IMPA Portal`, `via the IMPA portal`, `Open the IMPA portal`,
+  the two `g6-opus-map.html` node labels, and 16 loose `IMPA Portal` strings.
+- **2 individually judged**: `chapters-diagram.html`'s card title `IMPA Purchase Portal` →
+  `Purchase Portal`; `livro3-brasil.html`'s `Portal IMPA (revisores)` → `Portal de Compras`.
+
+**Deliberately not changed:** `chapters-diagram.html`'s *"IMPA Portal — Patch"* card. It names
+the real file `_archive/impa-portal-patch.html`; it is a note about an artifact, not a claim
+that a portal exists. And **every filename stays**, per the 2026-08-18 precedent.
+
+**`⬡ AXLE Portal` was relabelled, not repointed.** There is no AXLE portal in this repo —
+`portal.html` is the *Student* Portal. Relabelling states what the target is; repointing would
+have been a guess about intent. If the intent was the AXLE site, that is a five-file change.
+
+## 2 · omega/ — seven orphans retired, and a trap worth remembering
+
+Retired to `_to_delete/superseded-copies/omega/`: `journey.html`,
+`omega-point-sample-logos.html`, `pitch-soundworks-clinic.html`, `trinity.html`,
+`trinity-son.html`, `trinity-spirit.html`, **and `trinity-father.html`** — the seventh turned up
+during the work: it is byte-for-byte the same page as root `trinity.html` (same title *"The
+Father — Genesis"*, same headings), just under a second filename. Root `trinity.html` **is** The
+Father; the triptych was never missing a panel.
+
+Before retiring, the one thing the omega copies had that root did not was carried over: the
+three root `trinity*.html` files now read `Principia Orthogona · Vol IX · Omega Point` instead
+of the generic `· totogt.github.io/geometry`.
+
+**The trap, recorded because it nearly shipped:** the inbound-link check searched for
+`href="omega/<file>"` and reported zero. It was wrong twice. `chapters-diagram.html` and
+`series-hub.html` *did* link `omega/trinity.html` — caught by a second assertion. And 26 more
+links inside `omega/` referenced the copies by **bare relative name** (`href="trinity.html"`),
+which no `omega/`-prefixed pattern can match; those only surfaced when the auditor reported 32
+new dead links *after* the move. All 26 were repointed to `../`.
+**Before moving a file, resolve every link in the repo and check whether it lands on that file.
+Do not pattern-match the path you expect callers to have written.**
+
+## 3 · HVEH/proofs/ — the worst thing in the sweep
+
+The eight `HVEH/proofs/` copies are gone; `HVEH/index.html`'s seven links now point at the
+maintained set beside it. The seven proof pages were a clean call — `HVEH/` is a strict superset,
+zero lines existed only in `proofs/`.
+
+`HVEH/proofs/index.html` was **not** just a footer difference. It predates commit `ea2a64e`
+("MODEL-tag engineering claims; retire expired grant/World Cup dates"), so the copy the hub
+actually linked still said:
+
+- *"reducing flood peaks by 20–50%"* — where the maintained copy says *"a modeled 20–50%
+  flood-peak reduction … **[MODEL — not yet built.]**"*
+- *"seven independent mathematical proofs **validating design claims**"* — vs *"proofs of the
+  operator framework (model-level) … the engineering design targets are modeled, not yet
+  validated by a built prototype"*
+- *"The FIFA World Cup Jersey Fan Hub … **is open for 39 days** … Forecasters **flag active**
+  flash flood risk"* — present tense, for a window that closed in July.
+
+**A page written for grant reviewers was making unqualified engineering claims about an unbuilt
+device, and it was the copy on the linked path.** This is the strongest argument in the repo for
+the no-duplicates rule: the honesty pass ran, and landed on the copy nobody reads.
+
+## 4 · The two buried pages — one real, one not
+
+- **Clay Energy is real and is now published** as `omega/ch-clay-energy.html` — a complete essay
+  (*"The tablets are already digitized. Almost no one has read them."*) on CDLI, ORACC, the
+  Electronic Babylonian Library and ETCSL, with a five-step how-to. Verified 404 at every
+  plausible URL beforehand, so nothing was being duplicated. Three of its four archive links
+  return 200; ORACC's host could not be reached from the container, but `http://oracc.org/`
+  301s to it, so the URL is canonical and only the scheme was stale (now `https`). It carries
+  its own disclaimer — *"Not affiliated with CDLI, ORACC, the Electronic Babylonian Library, or
+  the University of Oxford"* — which is the standard this repo is trying to hold. Linked from
+  `omega/ch-here-comes-everybody.html` and from the Ancient Transmission section of the index.
+- **Atratores was not buried content.** `HVEH/index` (extensionless, 51 KB) is a **stale copy of
+  a live site's homepage**: `grossi-ops.github.io/Atratores/` returns 200 at 34.4 KB with 57
+  working links, against the buried copy's 27.8 KB and 11 dead ones. Six of the seven files the
+  buried copy "lost" are served fine over there. Nothing was rescued because nothing was lost —
+  retired to `_to_delete/superseded-copies/`.
+- `omega/omega-point-v2-draft.html` is now **one** document instead of three (the original is
+  preserved in `_to_delete/superseded-copies/`). Of its two index drafts, the later was kept —
+  identified by its carrying the `prov-add`/`prov-foot` CSS that `2ef1664` introduced.
+
+## 5 · The two Omega Point indexes — merged, canonical is `omega/`
+
+**The earlier claim that they "each got a different half of the repairs" was wrong on the DOI
+half** — neither copy carries a Vol I DOI; both are clean. The real difference was content, and
+neither was a superset:
+
+- `omega/omega-point-index.html` had Gallery of Mathematical Mystics, The Ancient Transmission,
+  and Transmission Status. Root had none of the three.
+- Root had two chapter cards omega lacked: **Chapter Eleven · The Prevention Theorem** and
+  **Chapter Twelve · The Inner Pharmacy**.
+
+`omega/` wins: more content, sits with its 32 chapters, and every chapter reaches it through a
+bare relative `href="omega-point-index.html"` — against five root-level pages for the other.
+The two chapter cards were ported across (hrefs rebased), the section heading corrected from
+**"Ten Chapters" to "Twelve Chapters"** — it listed twelve — and root `omega-point-index.html`
+is now a redirect stub on the `omega/index.html` pattern, so the five root links and any
+bookmark still land. The superseded root copy is in `_to_delete/superseded-copies/`.
+
+## Verification
+
+128 HTML paths in the diff (15 retired). **107 have an identical parsed tag sequence and an
+identical href set** — the IMPA pass was pure label text, as intended. The six with real deltas
+are all accounted for: five omega chapters at ±2 hrefs (the `../` repoint) and the v2 draft at
+−476 tags (two documents removed). Auditor over all four sections: **zero dead links, zero parse
+defects, zero duplicate ids.** Indexes regenerated: 624 files, HVEH 18/0 orphaned (was 26 with
+duplicates).
+
+## Newly open — residue the 2026-08-18 IMPA pass left behind
+
+Relabelling the portal surfaced IMPA claims of a different kind. **None were touched**; each is
+a claim about the institution, not about a link target, and each needs the author.
+
+1. **`GTCT_V_Student_Edition.html` (and `book5/`): *"Licensed for educational use at IMPA and
+   partner programs."*** That is a licensing claim. It is either true or it has to go.
+2. **Edition names survived the rename.** `book6/index.html` still has *"IMPA Bilingual Edition"*
+   and *"IMPA distribution companion to Vol IV"*; `book1/vol2-dashboard.html`,
+   `book2/vol2-contact.html` and `vol2-contact.html` label Vol IV *"GTCT T1, IMPA"*.
+3. **`book4/ch10.html` still says *"Submitted to IMPA."*** IMPA replied and declined; the pass
+   that cleared 17 of these missed this one.
+4. `book4/chIV-axioms.html` and `chIV-axioms.html`: *"IMPA / Bienal SBM 2026"* — a venue claim.
+5. *"IMPA-style textbook"*, *"quarterly IMPA-style lectures"*, *"you will hear this even in IMPA
+   seminars"* — descriptive, probably fine, listed for completeness.
+6. **The `$199.99` Patron tier promises *"Complete print + eBook series, all volumes"*.** Print
+   is not for sale ("Print ISBNs reserved — paper books not for sale until further notice").
+   Only the *"via the IMPA portal"* clause was fixed; the print promise is a commercial decision.
+
+Still open from the previous entry, unchanged: `AMonster/MonstersLaw.html` vs `monsterlaw.html`
+(divergent case-differing drafts) and `dm3-lab-index.html`'s ISBN table.
