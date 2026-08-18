@@ -10,7 +10,7 @@
 :root {
   --navy: #0a1628; --navy-mid: #0e1e38; --gold: #c9a84c; --gold-light: #e8c97c;
   --cream: #f5f0e8; --text: #cdc3aa;
-  --ok: #6abf8a; --warn: #d6a84c; --gap: #d6604d; --none: #8899bb;
+  --ok: #6abf8a; --warn: #d6a84c; --gap: #d6604d; --none: #8899bb; --kernel: #59d3c4;
 }
 body { background: var(--navy); color: var(--text); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.05rem; line-height: 1.7; }
 nav { position: sticky; top: 0; background: rgba(10,22,40,0.97); border-bottom: 1px solid rgba(201,168,76,0.18); padding: 0.75rem 2.5rem; display:flex; align-items:center; gap:2rem; z-index:100; backdrop-filter: blur(10px); }
@@ -27,6 +27,7 @@ h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight:300; color: var(--gold-light
 .legend span { display:flex; align-items:center; gap:0.5rem; opacity:0.85; }
 .dot { width:9px; height:9px; border-radius:50%; display:inline-block; }
 .d-ok{background:var(--ok)} .d-warn{background:var(--warn)} .d-gap{background:var(--gap)} .d-none{background:var(--none)}
+.d-kernel{background:var(--kernel)}
 
 .thread-label { font-size:0.72rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--gold); opacity:0.6; margin: 2.5rem 0 1rem; padding-bottom:0.5rem; border-bottom:1px solid rgba(201,168,76,0.12); }
 .thread-label:first-child { margin-top: 0; }
@@ -44,6 +45,7 @@ a.ref:hover { text-decoration:underline; }
 .s-warn { color:var(--warn); border-color:rgba(214,168,76,0.4); }
 .s-gap { color:var(--gap); border-color:rgba(214,96,77,0.4); }
 .s-none { color:var(--none); border-color:rgba(136,153,187,0.4); }
+.s-kernel { color:var(--kernel); border-color:rgba(89,211,196,0.45); }
 .note { font-size:0.8rem; opacity:0.6; font-style:italic; margin-top:0.2rem; }
 
 .meta-block { background: rgba(201,168,76,0.04); border:1px solid rgba(201,168,76,0.12); padding:1.5rem 1.8rem; margin-bottom:2.5rem; font-size:0.92rem; }
@@ -79,10 +81,14 @@ footer a { color: var(--gold); text-decoration:none; }
 <div class="wrap">
 
   <div class="meta-block">
-    <strong>How to read this.</strong> "Lean status" reports what the Lean file's own header/comments claim, cross-checked against this session's reading of the source — not a fresh `lake build`. Where a file says "sorry-free," that's the file's own disclosure, current as of the commit noted. This page is manually maintained; it is not a live CI feed. Last updated 2026-07-12.
+    <strong>How to read this.</strong> "Lean status" reports what the Lean file's own header/comments claim, cross-checked against this session's reading of the source — not a fresh `lake build`. Where a file says "sorry-free," that's the file's own disclosure, current as of the commit noted. This page is manually maintained; it is not a live CI feed.
+    One tier is stronger than the file's own disclosure: <strong>kernel-audited</strong> means the
+    build was run and <code>#print axioms</code> inspected, so the claim rests on the kernel rather
+    than on a header comment. Last updated <strong>2026-08-18</strong>.
   </div>
 
   <div class="legend">
+    <span><i class="dot d-kernel"></i> kernel-audited (axioms printed)</span>
     <span><i class="dot d-ok"></i> sorry-free / proved</span>
     <span><i class="dot d-warn"></i> disclosed sorry (specific, scoped)</span>
     <span><i class="dot d-gap"></i> genuine logical gap, not just a sorry</span>
@@ -180,10 +186,63 @@ footer a { color: var(--gold); text-decoration:none; }
       <td><span class="status s-ok">"0 sorry" per living-book.html's own card</span><div class="note mono">AutophagyDm3.lean (dnls/criticality_paper/) — not re-read this session; status taken from the chapter card's own claim, flagging for a real re-check rather than silently trusting it</div></td>
       <td><a class="ref" href="chA-autophagy.html">chA-autophagy.html</a></td>
     </tr>
+
+    <tr>
+      <td><span class="claim">A 0/1 aperture gate <em>commutes exactly</em> with a pointwise fold, for every state — there is no boundary term</span>
+        <div class="note">Refutation. This is the <strong>false commutator lemma</strong>, previously asserted across the series as [K,F] ≠ 0 with a commutator ∝ δ(η−η*). Machine-checked to be false.</div></td>
+      <td class="mono">— (defect ledger, CLAUDE.md, opened 2026-07-18)</td>
+      <td><span class="status s-kernel">kernel-audited</span><div class="note mono">ZeoliteCommutation.lean (TOTOGT/io, Lean v4.33.0-rc1) — gate_commutes. 0 admits, 0 sorries; #print axioms → [propext, Classical.choice, Quot.sound]</div></td>
+      <td><a class="ref" href="ch18-zeolite-noncommutativity.html">ch18</a>, <a class="ref" href="book6/wp66-the-wall-already-standing.html">wp66 §2</a></td>
+    </tr>
+
+    <tr>
+      <td><span class="claim">Non-commutation appears exactly when the fold carries the coupling (transport) term: inter-site coupling does not commute with the on-site fold, and the gate does not commute with F = coupling ∘ onsite</span>
+        <div class="note">The dichotomy the zeolite argument actually rests on. Commutation proved universally; each non-commutation established by a single witness — the correct logical shape in each direction.</div></td>
+      <td class="mono">— (formalised directly)</td>
+      <td><span class="status s-kernel">kernel-audited</span><div class="note mono">ZeoliteCommutation.lean — coupling_not_commute (commutator −6 on a test state), gate_fold_not_commute</div></td>
+      <td><a class="ref" href="book6/wp66-the-wall-already-standing.html">wp66 §2</a>, <a class="ref" href="book6/wp67-the-deployment-that-already-happened.html">wp67 §5</a></td>
+    </tr>
+
+    <tr>
+      <td><span class="claim">Theorem 18.1 survives the refutation — its gate is state-dependent, K = θ(η*−d(ψ)) with F changing d(ψ)</span>
+        <div class="note">Scope limit stated in the source: the model is a three-site DNLS lattice with gate [v₀,0,v₂]. What is formalised is the algebra — a 0/1 aperture against pointwise versus transport-carrying operations — not the atmospheric box model or any meteorology.</div></td>
+      <td class="mono">ch18 §Theorem 18.1</td>
+      <td><span class="status s-none">not formalized</span><div class="note mono">the state-dependent-gate mechanism is not itself mechanized; only the fixed-gate algebra above is</div></td>
+      <td><a class="ref" href="ch18-zeolite-noncommutativity.html">ch18</a></td>
+    </tr>
   </table>
 
-  <div class="meta-block" style="margin-top:2rem;">
-    <strong>What this page is not:</strong> a complete map of the corpus. It covers the two threads touched in this session's work (the DNLS/Tribonacci paper family and the CatGT/zeolite operator-order family). Vol I's other structural theorems (5.1, 5.4, 5.5), the GTCT chain, the Wigner/Tubulin/Polylaminin/Spectral-Radius chapters, and Book 3's biological chapters (immune, circadian, neural, etc.) aren't audited here yet. Extend this table before trusting it as exhaustive.
+    <div class="thread-label">Thread 3 · Topological Orthogenesis (Ch 7) — audited 2026-08-18</div>
+  <table>
+    <tr><th>Claim</th><th>Paper</th><th>Lean</th><th>Chapter</th></tr>
+
+    <tr>
+      <td><span class="claim">β ∈ Bₙ, the braid accumulated by a chain of non-abelian anyons under the coherence rule, corresponds to G = U∘F∘K∘C</span>
+        <div class="note"><strong>Withdrawn as an identity.</strong> Vol I §3 fixes C : X→X_C, K : X_C→X_C, F : X_C→X_F, U : X_F→X, so G : X→X is a self-map of a Riemannian manifold; Bₙ is a discrete group with no metric, no normal field, no Morse Φ. Now stated as a stage-correspondence with the debt written out: exhibit X, X_C, X_F, n(s), κ* and Φ for a configuration space of n anyons.</div></td>
+      <td class="mono">— (chapter-original)</td>
+      <td><span class="status s-gap">open — not a theorem</span><div class="note mono">nothing formalized; clause (3) marked [OPEN] on the page, and the □ removed from the proof sketch per rule 3</div></td>
+      <td><a class="ref" href="ch7-topological-orthogenesis.html">ch7-topological-orthogenesis.html</a></td>
+    </tr>
+
+    <tr>
+      <td><span class="claim">Braiding is universal for topological quantum computation</span>
+        <div class="note">Model-dependent, and not a property of Bₙ. Fibonacci braiding is universal (Freedman–Larsen–Wang); <strong>Ising braiding is not</strong> — Clifford only, needing a supplementary non-topological gate. Google's 2023 superconducting realisation used projective <em>Ising</em> anyons, i.e. the case the clause does not cover.</div></td>
+      <td class="mono">— (literature)</td>
+      <td><span class="status s-none">not formalized</span></td>
+      <td><a class="ref" href="ch7-topological-orthogenesis.html">ch7 §Theorem 7.1</a></td>
+    </tr>
+
+    <tr>
+      <td><span class="claim">Order-dependence in an anyon chain is physical content rather than imposed structure</span>
+        <div class="note">Testable only against <em>emergent</em> topological order. Every non-abelian anyon experiment to date builds the braid from a gate list the experimenter chose, so order-dependence there holds by construction. FQHE is the control case: abelian braiding observed directly at ν = 1/3 in 2020; non-abelian at ν = 5/2 still open, with hedged time-domain-braiding evidence as of 2026-08-13 (arXiv:2608.12897).</div></td>
+      <td class="mono">— (experimental literature)</td>
+      <td><span class="status s-none">not formalized</span></td>
+      <td><a class="ref" href="ch7-topological-orthogenesis.html">ch7 §Limits of this reading</a></td>
+    </tr>
+  </table>
+
+<div class="meta-block" style="margin-top:2rem;">
+    <strong>What this page is not:</strong> a complete map of the corpus. It covers three threads (the DNLS/Tribonacci paper family, the CatGT/zeolite operator-order family, and Ch 7's topological reading). Vol I's other structural theorems (5.1, 5.4, 5.5), the GTCT chain, the Wigner/Tubulin/Polylaminin/Spectral-Radius chapters, and Book 3's biological chapters (immune, circadian, neural, etc.) aren't audited here yet. Extend this table before trusting it as exhaustive.
   </div>
 
 </div>
