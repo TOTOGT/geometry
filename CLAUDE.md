@@ -936,3 +936,37 @@ Not started — logged so it is scoped rather than swept.
   "planned". If either gets written, restore the anchors.
 - The false commutator lemma ledger above is unaffected by any of this work; nothing in
   this session touched an operator-order argument.
+
+---
+
+# FIXED: `book6/index.html` was hiding 16 finished pages (2026-08-17)
+
+Every other defect logged here is the corpus claiming more than it has. This one was the
+reverse, and it cost more: **16 completed pages, 521 KB, were live on the site with no
+link from the index at all.** Two more existed only as prose mentions with no chapter row.
+
+Restored, with titles and descriptions taken from each file's own `<title>` and meta
+description rather than invented:
+
+- **The Portuguese Vol VI sequence** — `chVI-preface` (Cap 0), `chVI-conjecture` (Cap 1),
+  `chVI-wigner` (Cap 2), `chVI-planetary` (Cap 3), plus `g6-crystal.html`. A complete
+  reading path with no entrance. Cap 1 now carries "AXLE Issue 6 — aberta, não
+  demonstrada" so the conjecture is not read as settled.
+- **IP and commercial, 5 files** — `patent-city-doctrine`, the invention disclosure in
+  English and Portuguese, and the `jbs47` / `esg47` twenty-year plans. Badged Tech / IP;
+  both plans marked **prospective — a proposal, not an agreement**, since an unlabelled
+  20-year plan naming a real company reads as a deal.
+- **Nutrition, 3 files** — `ch-nutrient-spectrum` (72 KB) and `ch-nutrient-predictions`
+  (71 KB), the two largest files in the volume, plus `wp-nutrient-spectroscopy`.
+- **Biology, 2** — `ch-immune-maintenance`, `ch-multiagent-biological-transitions`.
+- **Loose ends, 3** — `wp02-alterna`, `wp69-the-fold-is-a-coordinate`,
+  `hidden-track-punk-edu`.
+
+Also corrected on that page: the footer claimed *"Two stubs due: chDev-waddington.html ·
+chIm-thymus.html"* — both are finished (25 KB and 22 KB); the stat tile read "25 Chapters
+Planned" against 100 live rows; and the contents heading read "27 Chapters". Counts are
+now 118 rows, heading and tile derived from the actual count.
+
+**Rule.** An index is a claim about what exists. Audit it the same way as any other claim:
+`set(files on disk) - set(files linked)` should be empty, and the count in the heading
+should be computed, not typed. Both checks take one line and neither had ever been run.
