@@ -2005,3 +2005,57 @@ Still open for Book VI, unchanged and untouched here: the `c_K` discrepancy `[OP
 σ* = 0.33 gives c_K = 0.669, b = 44.6 against v2's b = 1.208 — a factor of ~37); Otium existing
 in both WP-38 §9 and a separate unpublished deposit; and WP-02's Zenodo metadata carrying the
 wrong ISBN and a phantom series DOI, which is the author's call per rule 4.
+
+## Sweep: Book VI and Book VII (Aug 2026)
+
+Standard battery run over `book6/` (99 HTML) and `book7/` (52 HTML): dead links, non-canonical
+copies, stranded anchors (CSS-verified), ISBN/DOI misuse, index integrity, HTML parse.
+
+### Fixed
+
+| File | Defect | Fix |
+|---|---|---|
+| `book6/index.html` | WP-13 row pointed at `../../banking-butterfly-preprint.html` → `totogt.github.io/banking-butterfly-preprint.html`, **404** | `../banking-butterfly-preprint.html` — the file is in *this* repo's root; one `../` too many. Five other files already link it correctly. |
+| `book7/ch-huh.html` | `../applications/stjohns-meco/aula-index.html` — no `applications/` directory exists anywhere in the repo, and the only reference to it is this one link | Retargeted to `../../AXLE/AULA/103/dm3-courses-101-102-103.html` (AULA 101/102/103 course landing, tracked on AXLE `main`) — matches the row's own description, "the lesson programme itself — AULA 101 / 102 / 103 against CEFR" |
+| `book6/ir-animal-nutrition.html` | 2 stray `</p>` (lines 218, 320) closing nothing inside `div.gate` — one EN, one PT | Removed |
+| `book6/wp43-immediate-action.html` | Markdown `**` leaked into HTML: `<strong>Deploy ceilometer networks … in vulnerable regions.**` | `**` → `</strong>` |
+| `book6/wp38-positional-dominance.html` | 3 `<b>` opened inside table cells, never closed before `</td>` (WTI settle, Waha peak, Panama slot auction) | `</b>` inserted before each `</td>` |
+| `book6/1`, `book7/1` | 1-byte files named `1` — shell redirect artifacts (`> 1`) | Moved to `_to_delete/stray-numeric-files/` |
+
+### Verified live, not defects
+
+`book6/index.html` → `../../AXLE/GameTheory_Full_Pack.html` and `../../AXLE/lexical-generativity-ijl.html`
+both resolve on the live site. Cross-repo links out of `geometry` into `AXLE` are legitimate;
+the auditor flags them as "escapes repo" and that flag is not a finding by itself.
+
+### Not fixed — needs a decision or lives in another repo
+
+1. **`book6/wp65-the-oracle-outside.html` → `../../AXLE/chGal-galois.html` is 404 live.**
+   The link is *correct*; the file is tracked in the AXLE repo but only on the branch
+   `chapter-gal-galois`, which is 1 commit ahead of its remote and **never merged to `main`**.
+   Pages serves `main`. Two of the chapter's links and one table row depend on it. Fix belongs
+   in AXLE: merge the branch, or the three references stay dead.
+2. **Same two ISBNs used across two volumes.** `979-8-9954416-5-6` appears in
+   `book6/g6-crystal.html` and `book7/ch-huh.html`; `979-8-9954416-6-3` appears in
+   `book6/wp02-alterna.html` and `book7/wp59-dark-matter-lensing.html`. This is the registry
+   `1-8` "default ISBN for any volume without its own" note biting — an ISBN identifies one
+   edition of one title, so a shared default is not a placeholder, it is a wrong identifier.
+   Author's call.
+3. **Six `.md` in `book6/` with no `.html` counterpart:** `COHN_revision_plan_immune.md`,
+   `OPENING_NOTE.md`, `ZENODO-metadata-corrections.md`, `wp38-math-supplement.md`,
+   `wp57-one-animal-four-operators.md`, `wp58-the-recorder.md`. The last two are numbered
+   working papers with no published page — WP-57 and WP-58 exist only as source.
+
+### Known-benign — do not re-flag
+
+`book6/wp38-positional-dominance.html` reports duplicate ids (`figure_1`, `patch_1`, `axes_1`,
+`matplotlib.axis_1`, `xtick_1`). Three matplotlib-emitted inline SVGs share structural `<g id=…>`
+names. **Every `clipPath` id is unique** (matplotlib hashes those) and nothing references the
+duplicated ids via `url(#…)`, so rendering is unaffected. Cosmetic only.
+
+### Auditor caveat recorded
+
+The reachability resolver reports a bare `href="../"` as dead. It is not: `os.path.join(".", "index.html")`
+yields `./index.html`, which does not match the normalized `index.html` in the file set. Normalize
+the joined path before the membership test, or `book7/index.html` and `book7/Polylaminin.html`
+will be flagged on every future run.
