@@ -1435,3 +1435,71 @@ holds. Nobody has compared the texts.
 Note the shape of the trap in row 5: the file **named** `.FIXED` is the one the site does not
 serve. Same pattern as the `chIV-*-fixed.html` files retired above, where the `-fixed` name
 was also wrong. Do not resolve any of these by filename.
+
+# FIXED: Chapter 7 (Topological Orthogenesis) — the anyon identification (2026-08-18)
+
+`ch7-topological-orthogenesis.html` asserted, in the body and again in Theorem 7.1, that
+**G = U ∘ F ∘ K ∘ C *is* a braid-group element**. It is not, and the error was not in G.
+
+Vol I §3 gives the operators real signatures — `C : X → X_C` a Lipschitz projection,
+`K : X_C → X_C` a curvature flow with α(s) = λ(κ* − κ)₊ and κ* = 1/foc, `F : X_C → X_F` a
+corank-1 fold, `U : X_F → X` gradient descent on a Morse functional Φ — so
+**G : X → X type-checks perfectly.** What Chapter 7 did was throw those definitions away and
+re-gloss the four operators as *a channel assignment, a move, topological protection,* and
+*universality*: a map, an event, a property and a theorem. Composability died there, not in
+Vol I. Any future chapter that re-reads the chain in a new domain must carry the §3
+signatures with it, or it will reproduce this exact failure.
+
+**Withdrawn, with reasons stated on the page:**
+
+1. **&ldquo;The Yang–Baxter relation is K written in the language of topology.&rdquo;** It is one of the
+   two defining relations of Bₙ. It holds for every braid at every strand count,
+   unconditionally. K is defined *by* a threshold — α is identically zero until κ reaches κ*.
+   A relation that always holds cannot be an operator that only fires above κ*.
+2. **&ldquo;Below K, all braids are equivalent.&rdquo;** B₂ ≅ ℤ is infinite; two 2-strand braids with
+   different winding are already inequivalent, with no threshold anywhere.
+3. **&ldquo;K fires when the strand count and fusion rules become rich enough that
+   non-commutativity enters.&rdquo;** Non-commutativity of Bₙ is a fact about n ≥ 3 — a property of
+   the group. The chapter's own later sections use K as a per-move selection rule
+   (Ω_after > Ω_before + K*). One symbol was doing two incompatible jobs; only the second
+   usage is retained.
+4. **&ldquo;G is the physical content of that fabric.&rdquo;** Not available on the definitions above.
+   What survives: the order in which threshold-crossing moves are committed is not
+   recoverable from any local slice — the one property the chain and the braid group
+   demonstrably share.
+5. **The □ on the proof sketch**, per rule 3.
+
+**Corrected rather than withdrawn:**
+
+- Clause (2) said no measurement on a proper subset determines β. The true statement is about
+  *local operators* failing to distinguish the degenerate fusion states; subset fusion
+  measurements do return partial information.
+- Clause (3) is now marked `[OPEN]` with its debt written out: to make it a theorem, exhibit
+  X, X_C, X_F, n(s), κ* and Φ for a configuration space of n anyons. None exists.
+- The universality clause asserted Bₙ is universal for TQC. Universality is model-dependent:
+  Fibonacci braiding is universal (Freedman–Larsen–Wang), **Ising braiding is not** — Clifford
+  only. The theorem quantifies over non-abelian anyons generally, so the clause covers only
+  the universal models, and Google's 2023 experiment used projective *Ising* anyons.
+- The &ldquo;six elementary braid moves&rdquo; box called τᵢ and ωᵢ generators. They act trivially on
+  π₁ of the configuration space and contribute nothing to the braid word. σᵢ₋₁ is also not a
+  fifth generator — the generating set is {σ₁,…,σₙ₋₁}, size n−1.
+- The falsification test now specifies **Fibonacci** hardware: an Ising machine failing to beat
+  a gate-based one falsifies nothing.
+
+**New section — engineered order versus emergent order.** Every non-abelian anyon experiment
+to date (Google 2023, projective Ising on a superconducting processor; Quantinuum, trapped
+ions; Fibonacci braiding, Nat. Phys. 2024) builds the braid by applying unitary gates chosen
+by the experimenter. In those systems &ldquo;the order of operations is physically recorded&rdquo; is
+true by construction and tests nothing. The control case is emergent order: FQHE, where
+anyonic braiding statistics were observed directly at ν = 1/3 in 2020 (Fabry–Pérot
+interferometry; anyon collider), with non-abelian order at ν = 5/2 still open — half-integer
+thermal Hall in 2018, and hedged time-domain-braiding evidence as of 2026-08-13
+(arXiv:2608.12897, whose own abstract calls the evidence elusive).
+
+This is the same move Olimpia Lombardi objects to in quantum chemistry: molecular geometry is
+inserted by clamping the nuclei under Born–Oppenheimer, then recovered and reported as found.
+The engineered anyon experiments reproduce that pattern one level down; the FQHE does not.
+**That asymmetry — two impositions and one control — is a paper, and it is not a refutation of
+Lombardi but a question about where her argument's boundary lies.** Any such paper must meet
+the obvious counter head-on: the FQHE invariant is also read in, through the choice of
+Chern–Simons effective theory.
