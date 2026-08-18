@@ -970,3 +970,122 @@ now 118 rows, heading and tile derived from the actual count.
 **Rule.** An index is a claim about what exists. Audit it the same way as any other claim:
 `set(files on disk) - set(files linked)` should be empty, and the count in the heading
 should be computed, not typed. Both checks take one line and neither had ever been run.
+
+---
+
+# OPEN: terminology audit — two more claimed coinages that are not (2026-08-18)
+
+Ran the sweep flagged after the polylaminin finding. Only `book6/on-publication.html` §2
+makes an explicit "these terms do not appear in prior literature" claim, so the exposure is
+narrower than feared — but the list was wrong twice more.
+
+- **`knacci` is not a coinage.** *k-nacci* is standing terminology in the
+  generalised-Fibonacci literature — *"On some combinations of k-nacci numbers"* (Chaos,
+  Solitons & Fractals, 2016), *"The k-nacci triangle and applications"* (Cogent
+  Mathematics, 2017). **Open question for the author:** is the object here the same as
+  theirs? If yes, adopt their notation and cite them. If no, the difference has to be
+  stated, because a reader in that field will otherwise assume the literature was missed.
+- **`dm³` collides with SI.** dm³ is the cubic decimetre — a litre. Every chemist and
+  physicist reads it that way first. Not fatal, but it is the author's job to
+  disambiguate on first use in each document, not the reader's to infer.
+- `Principia Orthogona` and the `η weighting` stand.
+
+§2 rewritten to disclose both rather than assert novelty. Note the irony the section now
+carries deliberately: §2's argument is that referees *wrongly* suspect invented jargon —
+but a referee who knows the k-nacci literature would have been right, and the page cannot
+make that argument while committing the error.
+
+**Rule.** Before any term is listed as novel, search it. A claimed coinage that turns out
+to be someone else's published term costs more credibility than the term ever bought.
+
+---
+
+# OPEN TODO: the theorem registry undercounts the repo (opened 2026-08-18)
+
+The published registry at `sluing.github.io/neuro/SBM/1080.html` states three tiers:
+**1,165** statements formally written (Tier 3), **1,004** sorry-free in source (Tier 2),
+**30** individually kernel-audited (Tier 1), with 62 axiom declarations and 383 sorry
+tokens disclosed corpus-wide.
+
+A raw scan of `~/Desktop/AXLE` on 2026-08-17 found **122 `.lean` files** (excluding
+`.lake/`) carrying **~1,340 `theorem` / `lemma` declarations** — roughly **175 more than
+Tier 3 claims**.
+
+**Do not "fix" the registry to 1,340.** The discrepancy has at least four innocent
+explanations and they must be separated before any number moves:
+
+1. **Duplicates.** `AutophagyDm3.lean` and `AutophagyDm3_v2.lean`, `AXLE.lean` /
+   `AXLE_v5_1.lean` / `AXLE_v6.lean`, `Main_v6.lean` (51 decls, identical count to
+   `AXLE_v6.lean`) — versioned copies of the same material almost certainly double-count.
+2. **Comment and docstring hits.** The scan matched line-initial `theorem` / `lemma`; any
+   inside `/-! -/` blocks or summary tables inflate it.
+3. **Scope.** The registry may deliberately cover only the published corpus, excluding
+   scratch directories, `geometry-backup-jul5/`, `cajulina/`, `orthogenesis/` etc.
+4. **Placeholders.** `theorem X : True := by trivial` counts as a declaration and is
+   exactly the class already documented as corrected in `CatGT_Main.lean`. These should
+   **not** appear in Tier 3 at all.
+
+**The task is reconciliation, not recounting.** Produce a per-file table — path, decl
+count, sorry count, axiom count, whether it is a version-duplicate of another file — and
+diff it against the registry's own basis. If Tier 3 is genuinely low, raise it *with* the
+file list that justifies it. If the scan was loose, record the correct methodology in the
+registry so the next scan agrees.
+
+The registry's credibility comes from being conservative and auditable. A number that
+moved once without a published basis is worth less than a smaller number that never has.
+
+---
+
+# FIXED: repo-wide link audit (2026-08-18)
+
+The earlier book6 audit only globbed `book6/*.html` and treated `/geometry/...` as a
+filesystem path. Both were wrong: it missed `book6/differential-equations/` and
+`book6/policy/` entirely, and it would have flagged every site-root-absolute link as dead.
+
+**Correct method, for reuse.** Resolve `/geometry/X` against the repo root, everything else
+against the linking file's directory; skip `http`, `mailto`, `javascript`, `data:`, `tel:`,
+protocol-relative, and anything containing a JS template fragment (`${...}`, `' + t.card + '`)
+— those are string concatenations, not hrefs.
+
+**Result: 99 real dead links → 18.**
+
+- **51 were pure path errors** — the file existed elsewhere under a unique name. Repaired
+  with computed relative paths: HVEH chapters pointing at `book4/` siblings, `book1`–`book3`
+  indexes pointing at root-level chapters, `hub.html` pointing at four `book4/` PDFs.
+- **27 more were ambiguous by basename** and resolved by choosing the volume copy over the
+  root stub: `living-book.html` → `book4/`, `vol1-mathematics.html` → `book1/`,
+  `vol2-contact.html` → `book2/`, `vol2-dashboard.html` → `book1/`, `gomc-opus.html` →
+  `book4/`. Plus `HVEH/proofs/index.html`, which had a doubled `proofs/` segment on seven
+  links to files sitting beside it.
+- **4 were the book6 survivors**: the heat-equation monograph exists at
+  `book6/differential-equations/heat-equation/` (link assumed one level up); the two
+  `../../AXLE/*.lean` links pointed outside the repo at files absent from AXLE too, now
+  aimed at the repo root and titled as not-yet-deposited; `wp63`'s AULA link disabled since
+  no `applications/` directory exists.
+
+## The 18 that remain — authorial decisions, not path errors
+
+No file of that name exists anywhere in the repo. Each needs either the file, or the link
+removed:
+
+`vitruvian-approximation.pdf` (4 pages) · `living-book.html` variants resolved but
+`OMEGA_STATUS_AUDIT.md`, `docs/index.md` (×2), `ch6-cardiac.html`, `gomc-opus` resolved,
+`banking-butterfly-preprint-pt.html`, `TribonacciEta.lean`, `course-16weeks-source.html`,
+`impa-portal-patch.html`, `index-geometry-hub.html`, `journey-v1-backup.html`, `ch5.html`,
+`maquinas.html`, `access-required_copy.html`, `aula-index.html` (book7/ch-huh),
+`certify_rstar.py` and `PO_10_Pablo_Grossi.pdf` resolved to `book4/`.
+
+`vitruvian-approximation.pdf` is the most linked of the true absences — four pages promise
+it. Either deposit it or drop the four links.
+
+# FIXED: §4's unsourced interval (2026-08-18)
+
+`on-publication.html` §4 claimed *"between five and thirty years for a novel framework to
+acquire enough secondary literature."* No source, and none findable. **Withdrawn.**
+
+Replaced with the real bibliometrics, which support the shape but not the interval: Ke,
+Ferrara, Radicchi & Flammini, *"Defining and identifying Sleeping Beauties in science"*,
+PNAS 2015 (doi:10.1073/pnas.1424329112) — 22 million papers, and delayed recognition turns
+out **not** to be a rare separable class but a continuous spectrum in both hibernation
+length and awakening intensity, with early citation counts a poor proxy for impact. The
+page now says the weaker, defensible thing and states that the old figure was withdrawn.
