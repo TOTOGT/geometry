@@ -1817,3 +1817,42 @@ against a registry header saying paper books are not for sale.
 Untouched deliberately. If those products are genuinely for sale the fix is to **register
 ISBNs for them**, not to strip the numbers off the page; if they are not for sale, the price
 and the buy button are the problem, not the ISBN. Either way it is a commercial decision.
+
+# CORRECTION: the unit-distance exponent is 1.014, not 10⁻³⁸ (2026-08-18)
+
+`book7/ch-erdos.html` was written yesterday around the figure the nine-author *Remarks* note
+computes explicitly, **1 + 6.24 × 10⁻³⁸**, and concluded that "the true growth rate is exactly
+as unknown as it was in 1984." **That understated the result and is corrected.**
+
+That figure is an illustration, not the theorem. The note picks *T* = {3,5,7,11,13,17} and
+*S* = {101,∞} — its own words, *"as just one small example"* and *"for simplicity"* — and says
+of the class-number bound it uses that it is *"not optimal but suffices."* Optimised, the same
+construction does vastly better: **Will Sawin, *An explicit lower bound for the unit distance
+problem*, arXiv:2605.20579, 20 May 2026, proves more than n^1.014.**
+
+So the honest statement is: the lower bound moved from Erdős's n^(1+Ω(1/log log n)) to
+n^1.014, the Spencer–Szemerédi–Trotter ceiling still sits at O(n^4/3) ≈ n^1.333, and the truth
+between 1.014 and 1.333 is unknown. Sawin's paper is now cited in the chapter's references.
+
+**And a check that failed.** I reported to the author that `book5/chV-erdos-machine.html` had
+"zero mentions" of the unit distance result and was stale. It was not. That chapter is in
+**Portuguese** — *"Problema das distâncias unitárias no plano (Erdős, 1946)"* — and it already
+carried the correct δ = 0.014 and credited Sawin, while the English chapter I had just written
+carried the weaker figure. The grep was English-only. **In a bilingual corpus, a
+single-language search is not a search.** Any future staleness sweep must cover the Portuguese
+terms too, or it will keep reporting the translated chapters as missing content they contain.
+
+# Book V and Book III (2026-08-18)
+
+**Book V is the cleanest volume audited.** Zero dead links across twelve files. `nav.js` builds
+the nav in JavaScript for the whole volume and every one of its twelve chapter entries resolves
+to a real file. Its single ISBN mention is not a defect but a *correction note*, in Portuguese,
+recording that the fallback rule was withdrawn on 2026-08-12 and that 979-8-9954416-5-6 is
+unallocated reserve — it must not be swept. Zenodo references are the community link and two
+version DOIs (19162012, and 21431505 for the kernel-checked commutation work). Nothing changed.
+
+**Book III: the author confirms the volume lives at the root file.** `book3/index.html` is now a
+real index on the Book I/II template, pointing at `../vol3-minibeast.html` for the text and
+keeping `vocab-seismic-geometry.html`, the Brazilian edition and the pilot. It was 38,615 bytes
+of near-duplicate; it is now 8,945 bytes of index. The duplicate-hub question recorded above is
+closed.
