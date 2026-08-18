@@ -1687,3 +1687,27 @@ nearly the whole block. Any future run of that check must handle the `<ul>`-base
 - **`ch6-cardiac.html` is still dead** — linked from `book3/index.html`, no such file anywhere
   in the repo. Already on the dead-link list above; unchanged, since it needs either the file
   or a decision to drop the link.
+
+## Staleness check across the volume set (2026-08-18)
+
+Ran the obvious verification after the Book III pass: does anything still link to a
+non-canonical copy? Eleven links did, in three files the volume work had not touched.
+
+| file | links | was pointing at | now |
+|---|---|---|---|
+| `book1/vol2-dashboard.html` | 5 | `book1/vol1-mathematics.html` (2nd ed) | root `vol1-mathematics.html` (V4) |
+| `book1/vol1-mathematics.html` | 5 | `book2/vol2-contact.html` | root `vol2-contact.html` |
+| `book4/logs-segment.html` | 1 | `book1/vol1-mathematics.html` (2nd ed) | root `vol1-mathematics.html` (V4) |
+
+The second row is the one worth noticing: the **archived Second Edition** was sending readers
+on to the non-canonical Volume II. An archived page should still hand off to current
+companions — being superseded is not a reason to strand the reader one level deeper.
+
+**Six links to non-canonical copies remain, and all six are deliberate:** three ledger rows and
+the &ldquo;kept for the record&rdquo; entry in `book1/index.html`, one ledger row in
+`book2/index.html`, and the pointer inside reference [1] of both Volume II copies naming the
+Second Edition as the only text carrying the orthogenesis note. Those must not be swept —
+they exist precisely to describe the non-canonical files.
+
+Book III itself is now clean: every link resolves to a canonical file, and the only dead link
+is the pre-existing `ch6-cardiac.html`.
