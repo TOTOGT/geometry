@@ -1932,3 +1932,40 @@ way the edition name did.
 Filenames are untouched: `impa-portal.html`, `impa-working-paper.html`, `impa-masters-phd.html`
 keep their names, and `impa-masters-phd.html` is straightforwardly *about* studying at IMPA,
 which is fine.
+
+# IMPA: submitted, declined, and what they actually asked for (2026-08-18)
+
+**The submission was real and IMPA replied.** Their answer, as the author reports it: it is not
+the kind of book they publish, and what would work is **a book for a class they teach** —
+matching their size, style and digestibility.
+
+That is not a rejection of the mathematics. It is a format specification, and it is a usable one.
+
+**17 stale labels cleared across 17 files.** Footer strips reading
+`· Vol IV · Submetido ao IMPA · Newark NJ · 2026` (and the `Vol VI`, `G⁴`, and
+`originalmente Vol IV, submetido ao IMPA` variants, plus a product card reading
+*"Submitted to IMPA"*) implied a submission still under consideration. It has an outcome now,
+so the clause is gone; the strips read `· Vol IV · Newark NJ · 2026`. **The claim was true when
+written — it went stale, which is the defect class this whole audit has been chasing.** No
+`href` changed; indexes regenerated.
+
+## What IMPA's own catalogue says, for whoever picks this up
+
+IMPA publishes through, among others: **Projeto Euclides**, **Coleção Matemática
+Universitária**, **Coleção Matemática e Aplicações**, **Monografias do IMPA**, **Publicações
+Matemáticas**, and the **Coleção Colóquios Brasileiros de Matemática**. Their publisher page
+describes the works as arising from *"research, courses, seminars or scientific meetings."*
+
+The series matching their feedback most exactly is the **Colóquio minicourse notes**: short
+books written to accompany a course actually taught at the Colóquio Brasileiro de Matemática,
+sized to be worked through in a week. **The 35th Colóquio ran 27 July – 1 August 2025 at IMPA,
+and it is biennial — so the 36th falls in 2027**, which is the realistic target and leaves
+enough lead time to write to the format rather than retrofit.
+
+The corpus already has the raw material for exactly this shape — a one-week course with a
+narrow spine, not a multi-volume framework. Contact `coloquio@impa.br` for the call and
+deadlines; the 2025 cycle published its deadlines as a PDF in February of the event year.
+
+**Do not restore any IMPA edition name or submission label on the strength of a future
+submission.** Both were removed today for the same reason: a label has to describe something
+that has already happened.
