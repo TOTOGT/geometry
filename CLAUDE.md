@@ -1969,3 +1969,39 @@ deadlines; the 2025 cycle published its deadlines as a PDF in February of the ev
 **Do not restore any IMPA edition name or submission label on the strength of a future
 submission.** Both were removed today for the same reason: a label has to describe something
 that has already happened.
+
+# RESOLVED (stale ledger entry): WP-38's "two broken formulas" (2026-08-18)
+
+The triage list above states: *"**Two broken formulas** remain in Figures 1–3
+(`data-mjx-error="Misplaced &"` — matplotlib mathtext choking on a literal `&`)."*
+
+**They are not broken. They were fixed and the ledger was never updated.**
+
+Both `data-mjx-error="Misplaced &"` occurrences in `book6/wp38-positional-dominance.html` sit
+**inside HTML comments** (character ranges 474099–474901 and 483228–484006). They render
+nothing. Immediately after each comment closes there is live SVG path data using embedded
+DejaVu glyph outlines — `DejaVuSans-2202` (∂), `DejaVuSans-3e` (>), `DejaVuSerif-28` — i.e.
+the mathematics is now drawn as vector outlines instead of being handed to MathJax. Whoever
+fixed it commented out the failing render rather than deleting it, which is good practice and
+left the search string behind.
+
+**Repo-wide check: zero live `data-mjx-error` anywhere.** 638 HTML files scanned, comment-aware.
+The only two occurrences are the commented pair above.
+
+This is the ledger's own failure mode, described in rule 6 of "Rules for anyone fixing these":
+*"a future session will trust this table; leaving it stale recreates the original problem in a
+new place."* It cost this session a figure-rendering investigation to discover the work was
+already done. **When a triage item is settled, strike it here in the same commit.**
+
+## Book VI audit, same pass — clean
+
+122 files. **Zero dead links. Zero links to non-canonical copies. Zero unstyled stranded nav
+anchors.** Its three ISBN mentions are all *correction notes*, not defects, and must not be
+swept: `g6-crystal.html` states in both languages that Vol VI has no allocation of its own and
+that 979-8-9954416-5-6 is unallocated reserve and not a fallback; `wp02-alterna.html` records
+that a Zenodo record wrongly claims Book 3's 979-8-9954416-6-3.
+
+Still open for Book VI, unchanged and untouched here: the `c_K` discrepancy `[OPEN]` (inverting
+σ* = 0.33 gives c_K = 0.669, b = 44.6 against v2's b = 1.208 — a factor of ~37); Otium existing
+in both WP-38 §9 and a separate unpublished deposit; and WP-02's Zenodo metadata carrying the
+wrong ISBN and a phantom series DOI, which is the author's call per rule 4.
