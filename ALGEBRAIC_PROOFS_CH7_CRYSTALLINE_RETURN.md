@@ -6,7 +6,7 @@ Chapter 7 · Principia Orthogona Book 3
 Framework: Contact-geometric operators C, K, F, U on various configuration spaces
 Author: Pablo Nogueira Grossi · G6 LLC · ORCID 0009-0000-6496-2186
 Date: June 2026
-DOI (series): 10.5281/zenodo.19117399
+DOI (Vol I concept): 10.5281/zenodo.19117399
 Companion chapter: https://totogt.github.io/geometry/ch7-crystalline.html
 Companion proofs (zeolite): ALGEBRAIC_PROOFS_ALL_7_THEOREMS.md
 
@@ -603,7 +603,7 @@ Falsifiable predictions:
 REFERENCES
 ================================================================================
 
-[1]  Principia Orthogona series root: DOI 10.5281/zenodo.19117399
+[1]  Principia Orthogona Vol I concept DOI: DOI 10.5281/zenodo.19117399
 [2]  Ch7 companion: https://totogt.github.io/geometry/ch7-crystalline.html
 [3]  Zeolite proofs: ALGEBRAIC_PROOFS_ALL_7_THEOREMS.md (same framework)
 [4]  D1 riboswitch proofs: ALGEBRAIC_PROOFS_D1_RIBOSWITCH.md

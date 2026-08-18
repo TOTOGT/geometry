@@ -292,7 +292,7 @@ Commercial innovators and international partners: HQ-MoonBase@nasa.gov
 - **[AXLE](https://github.com/TOTOGT/AXLE)** — Lean 4 formal verification hub for G = U∘F∘K∘C. 160+ theorems, 0 sorry on structural claims.
 - **[GTCT](https://github.com/TOTOGT/GTCT)** — Generative Time Circuit Theorem. Verified Ring 5 operator T.
 - **G6 Crystal** — Zenodo concept DOI: [10.5281/zenodo.19162012](https://doi.org/10.5281/zenodo.19162012)
-- **Principia Orthogona** — Series root: [10.5281/zenodo.19117399](https://doi.org/10.5281/zenodo.19117399)
+- **Principia Orthogona** — Vol I concept DOI: [10.5281/zenodo.19117399](https://doi.org/10.5281/zenodo.19117399)
 
 ---
 

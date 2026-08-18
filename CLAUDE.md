@@ -1546,3 +1546,52 @@ above); editing an orphan copy of a page whose fate is undecided would make that
 harder, not easier. `book6/wp55-the-fixed-point.html` uses **G for the Gödel sentence**, an
 unrelated symbol; not an error, but the collision is worth knowing about before any future
 sweep matches on `G is …`.
+
+# FIXED: `19117399` mislabelled as a series DOI (2026-08-18)
+
+Author's ruling: **keep every link, fix the label.** The DOI resolves to a real record —
+Principia Orthogona Vol I — so this was mislabelling, not misdirection, and no `href` needed
+to change.
+
+Measured first, because "roughly sixty files" was wrong. **182 occurrences**: 81 in
+nav/footer/badges, 75 in prose, 26 in formal citations. And **74 of the 106 occurrences in
+running text carry no "series" word at all** — bare Zenodo links with no false claim attached.
+The real defect was ~32 strings.
+
+**23 labels changed across 16 files, plus 2 in `AMonster/monsterlaw.html`.** "Series DOI",
+"Series Root", "Zenodo series", "DOI (series)" → **"Vol I concept DOI"** / **"Vol I on
+Zenodo"**. Every `href` verified byte-identical before and after, per file, by assertion in
+the edit script.
+
+## Three exclusions the sweep would otherwise have damaged
+
+This is the same near-miss as the `master-index` anchor-label sweep, and it is now the third
+time this pattern has appeared. **A repo that documents its own defects will contain correct
+prose that matches the defect's search pattern.**
+
+1. **`wp38-zenodo-metadata.md` line 17** is a fenced code block quoting the defective HTML so
+   it can be corrected. Rewriting it would have deleted the instruction.
+2. **`HVEH/proofs/index.html`** already reads *"Vol I concept DOI, resolves to current Vol I —
+   **no single series DOI**."* That phrase is the denial. The sweep would have produced "no
+   single Vol I concept DOI" — the opposite of true.
+3. **`about-series.html`, `book6/wp02-alterna.html`, `book6/ZENODO-metadata-corrections.md`,
+   `book6/policy/SITE_ERRATA.md`** all quote the mislabel in order to report it.
+
+Also skipped: `HVEH/index.html` and `book7/jacobian-verification.html`, which were already
+correct, and `GameTheory_Full_Pack.FIXED.html` + `AMonster/MonstersLaw.html`, which are among
+the seven competing variants awaiting a decision.
+
+**Why the AMonster files needed a second pass.** The label there is split across two anchors
+in different parts of the page — a nav chip reading `Series` at line 231, and a footer reading
+`Root DOI:` at line 807. Flattened to text they look like one string, "Series Root DOI:". The
+positional sweep also required the label to sit *before* the DOI, so an anchor whose text
+follows its own `href` was invisible to it. Fixed by hand.
+
+## Still open
+
+- **The 26 formal citations.** In a reference list the string is not a label but an assertion
+  that the cited work lives at that DOI, and it does not — a reader resolving it gets Vol I v6.
+  These need the correct version DOI per work, or the Zenodo community link where the referent
+  really is the series. Not done here.
+- **`collatz-engineering_1.html` has a stray `</p>`.** Pre-existing — confirmed present in
+  `HEAD` before this change — not introduced by the sweep.

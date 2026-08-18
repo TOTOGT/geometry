@@ -253,4 +253,4 @@ public data. `[OPEN]`
 
 *Illustrative draft · CC BY 4.0 · © 2026 Pablo Nogueira Grossi — G6 LLC ·
 Newark, NJ · g6llc@proton.me · ORCID 0009-0000-6496-2186 ·
-Companion to WP-36, Principia Orthogona Vol VI · Series DOI 10.5281/zenodo.19117399*
+Companion to WP-36, Principia Orthogona Vol VI · Vol I concept DOI 10.5281/zenodo.19117399*
