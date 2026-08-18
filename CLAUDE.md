@@ -1373,3 +1373,65 @@ whether generated indexes were excluded is measuring nothing.
   `ch09-belleville` / `ch6-resonance` beside the reachable `ch06b` / `ch07` / `ch09`), three
   copies of *The Law of Monsters* in `AMonster/` with no `index.html` at all, and
   `book3/index.html` — Book III's own index has no way in.
+
+# Orphan cleanup (2026-08-18)
+
+Starting point: 636 HTML files, **59 unreachable** by the corrected breadth-first audit
+(generated indexes excluded as link sources, per audit rule 1). Of those 59, seventeen were
+never real problems — fifteen `index-*.html` files that *are* reachable through
+`master-index.html`, and the two redirect stubs written earlier the same day. **42 real
+orphans.** After this pass: **7**, and every one of the 7 is a competing variant, not a
+stranded page.
+
+## Retired (moved to `_to_delete/`, staged as deletions)
+
+- **`book4/ch06b-elojo.html`, `ch07-newark.html`, `ch08-harrison.html`,
+  `ch09-belleville.html`** — visible text byte-identical to the reachable
+  `book4/ch06b.html`, `ch07.html`, `ch08.html`, `ch09.html`.
+- **`chIV-correspondence-fixed.html`, `chIV-operators-fixed.html`,
+  `chIV-recursion-fixed.html`** — root duplicates of the reachable `book4/chIV-*.html`,
+  differing by eleven or twelve lines. Worth recording *what* those lines were, because the
+  filenames say the opposite of the truth: the `-fixed` copies carry the **stranded
+  Living Book / Series anchors**, and `chIV-correspondence-fixed.html`'s nav marks
+  `chIV-recursion.html` as the current page. The book4 copies are the correct ones.
+- **`AMonster/law-of-monsters-v2.html`** — byte-identical to `AMonster/MonstersLaw.html`.
+- **`_cajueiro-index-misplaced.html`** — a third stale copy of the home page; its filename
+  already said so.
+- **All 14 `.bak` files that were tracked in git** and therefore published to GitHub Pages,
+  including `book6/policy/SITE_ERRATA.md.bak` and a `.tex.bak` under `book8/notes/`.
+
+## Given a way in
+
+26 pages that had no inbound link from anywhere reachable are now listed in a curated
+section at the foot of `series-hub.html`, grouped as *Edição IMPA · Portuguese chapters*
+(including `gtct-index.html`, the Vol IV index, which nobody could reach), *Teaching ·
+HIST 201* (the syllabus, the tutor deck, the proposal, and the three `book7/tutor-card-*`
+hologram tutors), *Newark · Soundworks · taking part*, *Volumes and chapters not listed
+above* (including **`book3/index.html`** — Book III's own index had no way in), and
+*Editions & templates*.
+
+This is a curated section in the hub, **not** a link to the generated dump. The distinction
+is the one recorded above: `master-index.html` makes the number go down without taking any
+reader anywhere.
+
+**Result: 627 files, 604 reachable, 7 real orphans.**
+
+## The 7 that remain — each is a variant, and each is the author's call
+
+Every one has a reachable counterpart, so linking it would put two versions of the same page
+in front of readers, and retiring it would destroy the only copy of whichever differences it
+holds. Nobody has compared the texts.
+
+| orphan | bytes | reachable counterpart | bytes | diff lines |
+|---|---|---|---|---|
+| `ch-tatiana.html` | 50,083 | `book7/ch-tatiana.html` | 66,032 | 263 |
+| `Enceladus-zenodo.html` | 71,609 | `Enceladus.html` | 67,696 | 305 |
+| `AMonster/MonstersLaw.html` | 48,410 | `AMonster/monsterlaw.html` | 56,693 | 169 (mostly a larger SVG) |
+| `book4/ch6-resonance.html` | 48,304 | `ch6-resonance.html` | 51,936 | 96 |
+| `GameTheory_Full_Pack.FIXED.html` | 142,962 | `GameTheory_Full_Pack.html` | 143,339 | 38 |
+| `omega/pitch-soundworks-clinic.html` | ~16 K | `pitch-soundworks-clinic.html` | ~16 K | 24 |
+| `omega/omega-point-v2-draft.html` | 89 K | `omega/omega-point-index.html` | — | draft of |
+
+Note the shape of the trap in row 5: the file **named** `.FIXED` is the one the site does not
+serve. Same pattern as the `chIV-*-fixed.html` files retired above, where the `-fixed` name
+was also wrong. Do not resolve any of these by filename.
