@@ -2059,3 +2059,106 @@ The reachability resolver reports a bare `href="../"` as dead. It is not: `os.pa
 yields `./index.html`, which does not match the normalized `index.html` in the file set. Normalize
 the joined path before the membership test, or `book7/index.html` and `book7/Polylaminin.html`
 will be flagged on every future run.
+
+## Sweep: HVEH, omega, AMonster, Orthogenesis (Aug 2026) — the series tail
+
+Standard battery over `HVEH/` (26 HTML + 1 extensionless), `omega/` (43), `AMonster/` (2),
+`Orthogenesis/` (1): dead links, non-canonical copies, stranded anchors, ISBN/DOI misuse,
+index integrity, HTML parse. **Orthogenesis is clean.** The other three are not, and what they
+have in common is duplicates: every real finding below is either a stale copy that a repair
+pass missed, or a file nobody can reach.
+
+### Fixed
+
+| File | Defect | Fix |
+|---|---|---|
+| `HVEH/ch02.html` | **The fourth storefront.** Same product grid as `book4/ch02.html`, carrying the three unallocated/HOLD ISBNs (2-5, 4-9, 5-6) as though allocated. The 2026-08-18 storefront pass fixed three files and missed this one | `Preprint &middot; ISBN on publication` on all three cards, plus the same preprint-disclosure paragraph, byte-identical to `book4/ch02.html`. **It was the last storefront in the repo carrying those numbers** |
+| `HVEH/ch02.html` | References [1] and [2] cite `ISBN 979-8-9954416-2-5` for Vol I and `979-8-9954416-4-9` for Vol II. 2-5 is unallocated reserve; **Vol II has no allocation at all** | Both ISBNs dropped. The DOIs stay — they are correct and were checked against the Zenodo API |
+| 11 files in `HVEH/` | Provenance footer reads `Principia Orthogona &middot; Principia Orthogona &middot; HVEH` — the volume slot got filled with the series name. Every other section reads `Principia Orthogona &middot; Vol N &middot; <name>` | `Principia Orthogona &middot; HVEH`. HVEH is a project track, not a numbered volume |
+| `HVEH/index.html`, `HVEH/proofs/index.html` | Punctuation debris left by the DOI relabel: `…20360288</a>;\n ), Five works…` — a semicolon before a closing paren, then a sentence starting mid-clause | Paren closed, sentence started. No link touched |
+| `omega/space-of-possibility.html` | Footer asserts `ISBN 979-8-9954416-5-6` for Book Ω. 5-6 is unallocated reserve; Book Ω has no allocation | ISBN line dropped, Zenodo community link kept. This is the standing rule: *a volume without its own registered ISBN gets no ISBN line at all* |
+| `omega/omega-point-index.html` | "Full Status Audit" button → `OMEGA_STATUS_AUDIT.md`. **That file has never existed in the repo's history** — not present, not deleted, never committed | Button removed. There is no honest substitute: `omega/SPINE-omega-point.md` is the book's editorial spine, not a status audit, and retargeting to it would be the same mislabel this audit exists to catch |
+| `AMonster/MonstersLaw.html` | Two Tier-A phantom labels on Vol I's concept DOI — nav `<a …19117399>Series</a>` and footer `Root DOI: 10.5281/zenodo.19117399` | `Vol I on Zenodo` / `Vol I concept DOI: …`, matching the corrected `monsterlaw.html`. Commit `a7f22d6` ("Relabel 19117399: it is Vol I's concept DOI") fixed the lowercase copy and never saw this one |
+| `omega/1`, `HVEH/places/1`, `HVEH/proofs/1` | 1-byte `> 1` shell-redirect artifacts, same class as `book6/1` and `book7/1` | Moved to `_to_delete/stray-numeric-files/` |
+
+Every edited file was diffed against `HEAD` by parsed tag sequence and by sorted `href` set:
+16 files, zero unintended href changes, zero title changes (so no index regeneration needed),
+and the only structural deltas are the two tags added for the preprint paragraph and the one
+anchor removed with the dead button.
+
+### Verified live, not defects — do not re-flag
+
+- **Every Zenodo DOI cited in these four sections resolves and matches its label**, checked
+  against the API: `20561165` = *The Law of Monsters* · `20320693` = Vol I (a version under
+  concept `19117399`) · `20360288` = GTCT · `20682934` = *Contact-Geometric Theory…* ·
+  `21146416` = Vol I v6.
+- `979-8-9954416-6-3` on both AMonster pages **is correct.** Both are labelled
+  *Principia Orthogona · Vol. III · Chapter: Ocio*, and 6-3 is Book 3's own registered eBook
+  ISBN. It is the one ISBN in this sweep that should stay.
+- `HVEH/index.html` and `HVEH/proofs/index.html` label `19117399` as *"Vol I concept DOI …
+  there is no single series DOI"*. Already Tier-C correct.
+
+### Not fixed — needs a decision
+
+1. **`HVEH/proofs/` is eight stale copies, and the hub links them instead of the maintained
+   set.** `HVEH/{index,operator-algebra,distribution-theory,catastrophe-theory,contact-geometry,
+   spectral-markov,numerical-constructive,information-geometry}.html` each exist twice, once at
+   `HVEH/` and once at `HVEH/proofs/`. Commit `2ef1664` ("series-wide provenance footers:
+   307/307") added footers to the `HVEH/` copies only — **the `proofs/` copies were invisible to
+   it, so 307/307 was 307 of the files the pass could see.** `HVEH/index.html`'s own navigation
+   points at `proofs/`, so a reader who lands on the hub gets the footerless set. Pick one
+   location; the other should go.
+2. **`omega/` carries seven orphaned stale copies of root pages** — `journey.html`,
+   `omega-point-index.html`, `omega-point-sample-logos.html`, `pitch-soundworks-clinic.html`,
+   `trinity.html`, `trinity-son.html`, `trinity-spirit.html`. **Nothing hand-links any of them**;
+   they are reachable only through the generated indexes, which enumerate every file. The root
+   copies are the ones `series-hub.html`, `chapters-diagram.html` and the trinity pages point at.
+   One of the seven is actively embarrassing: **`omega/pitch-soundworks-clinic.html` has the site
+   name blanked out of a capital-campaign pitch** in three places — *"A phased capital campaign
+   for ."*, *"Acquire and stabilize ; basic build-out…"*, *"ending at ."* A find-and-replace
+   removed "Forest Hill" and left the punctuation. The root copy is intact.
+3. **There are two live Omega Point indexes and they got different halves of the repairs.**
+   `omega-point-index.html` (25 KB, root) has no Gallery, no Ancient Transmission, no Status
+   section; `omega/omega-point-index.html` (47 KB) has all three. The DOI-footer sweep
+   (`2320bd0`) hit only the root copy; the provenance-footer pass (`2ef1664`) hit only the omega
+   copy. Hand-written nav points at root; `omega/index.html`'s `<link rel="canonical">` and its
+   meta-refresh point at the omega copy. Decide which is the volume, then delete the other —
+   this is the clearest case in the repo of why two copies cost more than they save.
+4. **Two pages' worth of unique content are buried in unreachable files.**
+   - `omega/omega-point-v2-draft.html` is **three complete HTML documents concatenated** (three
+     `<!DOCTYPE>`, three `<html>`, three `<body>`): two Omega Point index drafts with an
+     unrelated page sandwiched between them — *"Clay Energy — an open archaeology of unread
+     tablets"*, which **exists nowhere else in the repo**. Marked `data-orphan="1"`.
+   - `HVEH/index` — **no file extension**, 51 KB, committed as "Create index", linked from
+     nothing. Also two documents: *"Atratores — Pablo Nogueira Grossi"*, which **exists nowhere
+     else in the repo**, and a stale copy of the G6 Opus Map. Pages will serve an extensionless
+     file as a download, not a page.
+5. **`AMonster/MonstersLaw.html` and `AMonster/monsterlaw.html` are divergent drafts** of the
+   same chapter differing only in filename case — 48 KB vs 57 KB, 155 differing lines, different
+   SVG geometry. The case difference is why the relabel pass found one and not the other; on a
+   case-insensitive checkout they cannot both exist. Only `series-hub.html` hand-links either
+   (it picks `monsterlaw.html`).
+6. **`dm3-lab-index.html` (root) has an ISBN table** listing 2-5, 4-9 and 5-6 against G¹, G² and
+   G⁵. Same unallocated numbers, same defect as the storefronts, different construct — left
+   alone because it is outside this sweep's four sections.
+7. **`impa-portal.html` is not an IMPA portal.** It is the *"Seven Sound Machines"* Soundworks
+   page; its only two mentions of IMPA are links *out* to `AXLE/impa-portal.html`. **121 files in
+   this repo link it, including the site root `index.html`.** The 2026-08-18 IMPA pass
+   deliberately kept the filename on the grounds that the page was *about* IMPA. Nobody opened
+   it. Same defect class as everything above — a label describing something that isn't there.
+8. `AMonster/Files.md` is a pasted chat transcript, not a document.
+
+### Auditor caveats recorded
+
+- **`href="/geometry/…"` absolute paths are correct, not dead.** Pages serves this repo at
+  `totogt.github.io/geometry/`, so the leading `/geometry/` is the site base. There are **896 of
+  them and all 896 resolve.** Strip the `/geometry/` prefix before the membership test or
+  `omega/pitch-soundworks-clinic.html` gets five false hits on every run.
+- **Tag-balance checking does not catch concatenated documents** — each document is internally
+  balanced, so the stack comes out clean. Count `<!DOCTYPE` per file instead; that is what found
+  both buried pages above.
+- **Counting `<!DOCTYPE` false-positives on doctypes inside JS template literals.**
+  `impa-portal.html` reports two; the second is inside ``const html=`<!DOCTYPE html>…` `` — a
+  page generator, not a defect. Check whether the match sits inside a backtick string.
+- The `href="../"` normalization bug recorded in the Book VI/VII sweep is still unfixed and
+  still produces false positives.
