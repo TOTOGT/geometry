@@ -1089,3 +1089,72 @@ PNAS 2015 (doi:10.1073/pnas.1424329112) — 22 million papers, and delayed recog
 out **not** to be a rare separable class but a continuous spectrum in both hibernation
 length and awakening intensity, with early citation counts a poor proxy for impact. The
 page now says the weaker, defensible thing and states that the old figure was withdrawn.
+
+# FIXED: `book1/index.html` was two documents in one file (2026-08-18)
+
+Found while extending the index-orphan audit past Book VI. `book1/index.html` (1,404
+lines) contained **two complete HTML documents concatenated**, with the closing tags
+interleaved:
+
+- lines 1–328 — *Formal Verification Registry*, its own `<head>`, `<title>`, `<style>`,
+  never closed;
+- lines 329–1402 — *Principia Orthogona · Volume I · Version 4 · June 21, 2026*, a second
+  `<!DOCTYPE>`, `<html>`, `<head>`, `<body>`, closed at 1402;
+- lines 1403–1404 — the first document's `</body></html>`, arriving after the second
+  document had already closed.
+
+Consequence: **the first thing a reader of Book I saw was "None of this is machine-checked
+yet."** That sentence is a true statement about five Lean files on 2026-07-03. It is not a
+true statement about the corpus, and it sat above the Volume I text on the volume's own
+front page. The second document's `<style>` also applied globally, so the registry half was
+rendered in the wrong stylesheet.
+
+**Fix — split, not rewrite. Both halves preserved verbatim:**
+
+- `book1/verification-registry.html` (new) — the registry document, properly closed, plus
+  one added banner marking it a superseded 2026-07-03 snapshot and pointing at the live
+  three-tier registry. No counts were edited; the page still says what it said. Per rule 7
+  the stale caveat was *added*, not removed.
+- `book1/index.html` — now the Volume I V4 document alone.
+
+Both files parse with zero unclosed tags, zero stray closers, zero duplicate ids, and the
+class/CSS split is clean (`banner warn` lives only in the registry half, `toc-drawer` /
+`nav-links` only in the Volume I half) — which is itself the evidence that the two
+documents were never integrated.
+
+## Nav defects fixed in the same pass
+
+1. **Two `<a>` outside `.nav-links`.** `nav` is `display:flex; justify-content:space-between`
+   and only `.nav-links a` is styled, so `Living Book` and `Series ↗` rendered as default
+   blue underlined links, spaced apart from the rest of the bar. Moved inside the div.
+   **This same stray-anchor pattern is present in `index.html` (root) and `book2/index.html`
+   and is not yet fixed** — it looks like one botched append repeated across files.
+2. **`../index.html` was labelled "Formal Verification Registry."** It is the series root.
+   Relabelled *Principia Orthogona*.
+3. **Book I's own index linked none of its own files.** Added `verification-registry.html`
+   and `vol2-dashboard.html`.
+4. **Nav "Zenodo" pointed at 10.5281/zenodo.19117400** — Vol I's *v1* deposit, which per the
+   ISBN/DOI section above is the *origin* citation, not the current text. The page's own
+   badge cites V4, 10.5281/zenodo.20784030; the nav now agrees with the page.
+
+## OPEN — authorial call, not fixed
+
+**Which Volume I is canonical?** `book1/index.html` is now V4 (June 2026).
+`book1/vol1-mathematics.html` is the **Second Edition, April 2026** — and **17 pages across
+the repo link to it**, none to the V4. It is not an orphan (the earlier audit counted only
+links from a book's own index and got this wrong); it is *stale and heavily linked*.
+
+V4 is **not** a superset. The Second Edition carries a `<details>` note "A note on
+'orthogenesis'" — the disclaimer separating orthogonal genesis from the dead
+nineteenth-century biological theory — and **V4 dropped it.** Do not merge these
+automatically. Either:
+(a) V4 regains the orthogenesis note and the 17 links are repointed at `index.html`; or
+(b) `vol1-mathematics.html` is explicitly labelled the archived Second Edition and the
+    links stay.
+
+Also open: `book2/index.html` and `book2/vol2-contact.html` are **byte-identical** (69,403
+bytes, `cmp` clean) — one is a copy of the other, and `book2`'s nav sends "← Vol I" to the
+stale `book1/vol1-mathematics.html`.
+
+14 `.bak` files are **tracked in git and published to GitHub Pages**, including
+`book1/vol1-mathematics.html.bak`.
