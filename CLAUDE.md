@@ -1900,3 +1900,35 @@ imprint credit rather than a description of intent or of a course edition. If th
 been published or endorsed by IMPA, this is the kind of thing that is cheap to correct now and
 expensive later — precisely if a genuine IMPA submission is ever made. Worth one deliberate
 decision about the wording, not 45 separate ones.
+
+# "Edição IMPA" renamed to "Edição Brasil" (2026-08-18)
+
+Author's reason, in his words: *"we wannabe worthy of IMPA, MIT etc."* — which is an argument
+for **not** wearing the name yet.
+
+**163 occurrences renamed across 47 files.** `Edição IMPA` → `Edição Brasil`,
+`IMPA Edition` → `Brazil Edition`, plus the `&ccedil;&atilde;` entity variant and the
+`The IMPA Edition` form. Every `href` verified identical before and after, per file, and every
+file's parse compared against `HEAD` — 53 files checked, zero deltas. Generated indexes
+regenerated so their cached titles follow.
+
+**Why the rename and not a disclaimer.** IMPA has its own imprint. As an *edition name* on the
+volume, "Edição IMPA" reads as a publisher credit — the same grammatical slot as "Penguin
+Edition". A disclaimer buried on one page does not undo a label repeated 163 times in titles,
+footers and nav bars. "Edição Brasil" says what the edition actually is: the bilingual PT/EN
+Brazilian edition of Vol IV, which is exactly how the surrounding text already describes it
+(`· Edição Brasil · Bilíngue PT/EN · GTCT T1`).
+
+**What was deliberately NOT changed: `Submetido ao IMPA` / `Submitted to IMPA`**, in 14 files
+(`ch-curie`, `ch-dirac`, `ch-hawking`, `chIV-preface`, `HVEH/ch02`, four `book6` chapters, and
+the four `book7` copies whose strips read *"originalmente Vol IV, submetido ao IMPA"*).
+
+That distinction is the whole point. **An edition name claims who published it; "submitted to"
+claims only what the author did.** The first is a credit that has to be earned; the second is a
+fact about an action. It stands if it is true — and it should be checked, because it is the one
+IMPA statement left in the corpus. If nothing was ever actually sent, it needs to go the same
+way the edition name did.
+
+Filenames are untouched: `impa-portal.html`, `impa-working-paper.html`, `impa-masters-phd.html`
+keep their names, and `impa-masters-phd.html` is straightforwardly *about* studying at IMPA,
+which is fine.
