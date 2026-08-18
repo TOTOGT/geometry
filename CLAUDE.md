@@ -1640,3 +1640,50 @@ by the author. **Do not guess:** `19379473` appears nowhere in `vol2-contact.htm
 `20755436` appears nowhere in this file, so whichever is wrong has been wrong consistently and
 a sweep would propagate it. Zenodo's API and record pages are robots-disallowed from the
 tooling here; resolve it by opening the record.
+
+# Book III (2026-08-18)
+
+Two files: `index.html` and `vocab-seismic-geometry.html`.
+
+## Fixed
+
+1. **Wrong Volume I and Volume II targets, seven links.** `book3/index.html` sent four links to
+   `book1/vol1-mathematics.html` (the April Second Edition) and three to
+   `book2/vol2-contact.html` (the non-canonical copy). Repointed to `../vol1-mathematics.html`
+   (V4) and `../vol2-contact.html` (13 inbound against book2's 5). This is the third volume
+   index in a row carrying the same defect — books I, II and III all pointed backwards.
+2. **`ISBN 979-8-9954416-6-3 (series)`, twice.** That number is allocated to **Book 3 ·
+   Mini-Beast · eBook PDF** — it is not a series ISBN, and this file's own rule is that a
+   volume without its own registered ISBN gets *no* ISBN line rather than a borrowed one.
+   Labelling Book 3's number "(series)" is an invitation to stamp it on other volumes, which
+   is exactly how the borrowed-ISBN defect spread the first time. Now reads
+   `(Vol III · eBook)`. The number itself was correct and is unchanged.
+3. **A nav chip reading `Series Zenodo` pointed at `10.5281/zenodo.19117399`** — Vol I's
+   concept DOI, on a Book III page. Doubly wrong: it is not a series DOI, and Book 3 has no
+   standalone deposit of its own. Repointed to the **Zenodo community**, which is the correct
+   series-wide target per the ISBN/DOI section above. Note this one survived the 2026-08-18
+   relabel sweep because the label is the anchor's *text*, which follows its `href` — the same
+   blind spot that hid the AMonster labels.
+4. **Stranded nav anchors** in `index.html`. In `vocab-seismic-geometry.html` the nav is a
+   `<ul class="nav-links">`, so `Series ↗` was stranded outside the list rather than outside a
+   div; wrapped in an `<li>` and moved inside, and a link to the Vol III index added, since
+   that page previously offered no route to its own volume index.
+
+*Detector note:* the stranded-anchor scan reported five stray anchors in
+`vocab-seismic-geometry.html`. There is one. The scan slices after the last `</div>` in the
+nav block, and that nav contains no `</div>` at all, so `rfind` returned −1 and it counted
+nearly the whole block. Any future run of that check must handle the `<ul>`-based navs.
+
+## Open
+
+- **Two Book III hubs.** Root `vol3-minibeast.html` (38,803 bytes, 5 inbound) and
+  `book3/index.html` (38,590, 2 inbound) are near-copies. The 111-line diff between them is
+  **entirely link targets** — the drift *was* the wrong-Volume-I/II problem now fixed — plus
+  one line, the `vocab-seismic-geometry.html` entry, which only the book3 copy carries. So
+  they are the same page with different destinations, not two texts. Unlike Books I and II,
+  `book3/index.html` was **not** replaced with a short index: the root copy is a hub rather
+  than a paper, so there is no separate "text" for an index to point at, and collapsing them
+  is an editorial decision about which filename the volume should live at.
+- **`ch6-cardiac.html` is still dead** — linked from `book3/index.html`, no such file anywhere
+  in the repo. Already on the dead-link list above; unchanged, since it needs either the file
+  or a decision to drop the link.
