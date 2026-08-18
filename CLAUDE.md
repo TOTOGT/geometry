@@ -1139,18 +1139,50 @@ documents were never integrated.
 
 ## OPEN — authorial call, not fixed
 
-**Which Volume I is canonical?** `book1/index.html` is now V4 (June 2026).
-`book1/vol1-mathematics.html` is the **Second Edition, April 2026** — and **17 pages across
-the repo link to it**, none to the V4. It is not an orphan (the earlier audit counted only
-links from a book's own index and got this wrong); it is *stale and heavily linked*.
+**CORRECTED 2026-08-18, same day.** The first version of this entry said "17 pages link the
+Second Edition, none link V4." That was wrong — it came from grepping the substring `book1/`
+and reading two different targets as one. Counted properly (paths resolved, `/geometry/`
+prefix handled, `_archive` excluded), there are **three Volume I files**:
 
-V4 is **not** a superset. The Second Edition carries a `<details>` note "A note on
-'orthogenesis'" — the disclaimer separating orthogonal genesis from the dead
-nineteenth-century biological theory — and **V4 dropped it.** Do not merge these
-automatically. Either:
-(a) V4 regains the orthogenesis note and the 17 links are repointed at `index.html`; or
-(b) `vol1-mathematics.html` is explicitly labelled the archived Second Edition and the
-    links stay.
+| file | edition | inbound links |
+|---|---|---|
+| `vol1-mathematics.html` (root) | **V4 · June 21, 2026** | **51** |
+| `book1/vol1-mathematics.html` | Second Edition · April 2026 | 7 |
+| `book1/index.html` | V4 · June 21, 2026 (copy) | 5 |
+
+So V4 is not unreachable — the root copy is the most-linked page in the series. The stale
+one is `book1/vol1-mathematics.html`, linked from `book2/index.html`,
+`book2/vol2-contact.html`, `book3/index.html`, `book1/vol2-dashboard.html`,
+`book4/logs-segment.html`, `index-book1.html`, `master-index.html`.
+
+**Which Volume I is canonical?** The root copy, on link count. But the two V4 copies have
+already drifted: the root copy hyperlinks reference [WP-02] to `book6/wp02-alterna.html`;
+the `book1/index.html` copy leaves it as plain text. Splitting `book1/index.html` therefore
+produced a **third** copy of V4 that was already one edit behind root.
+
+**RESOLVED, author's decision, 2026-08-18:** `book1/index.html` is now **a real index — a
+list of the volume's files — and the text of Volume I is read at the root copy.** There are
+again only two Volume I texts: `vol1-mathematics.html` (V4, current) and
+`book1/vol1-mathematics.html` (Second Edition, kept for the orthogenesis note). The index
+lists every file in `book1/`, including the duplicates and the misnamed one, so nothing in
+the directory is reachable only by guessing a URL.
+
+V4 is **not** a superset, which is why the 7 stale links must not simply be repointed. The
+Second Edition carries a `<details>` note **"A note on 'orthogenesis'"** — the disclaimer
+separating *orthogonal genesis* from the dead nineteenth-century biological theory, citing
+Waddington's canalisation — and **both V4 copies dropped it**. Repointing those 7 links
+silently deletes that disclaimer from every path a reader can take. Either:
+(a) V4 regains the orthogenesis note, then the 7 links repoint at `vol1-mathematics.html`; or
+(b) `book1/vol1-mathematics.html` is explicitly labelled the archived Second Edition and the
+    links stay as they are.
+
+**Navs fixed 2026-08-18 (both Vol I files).** Stranded anchors moved inside `.nav-links`;
+added `vol2-dashboard.html` and `book1/verification-registry.html`; the root V4 nav's Zenodo
+link pointed at `19117400` (the v1 origin deposit) while the page's own badge cites
+`20784030` — the nav now agrees with the page. The Second Edition's nav gained an explicit
+`Vol I · V4 · June 2026 →` link, so the newer text is reachable from the older without
+deciding which is canonical. Every nav target verified to exist; both files parse with zero
+unclosed tags.
 
 Also open: `book2/index.html` and `book2/vol2-contact.html` are **byte-identical** (69,403
 bytes, `cmp` clean) — one is a copy of the other, and `book2`'s nav sends "← Vol I" to the
@@ -1158,3 +1190,120 @@ stale `book1/vol1-mathematics.html`.
 
 14 `.bak` files are **tracked in git and published to GitHub Pages**, including
 `book1/vol1-mathematics.html.bak`.
+
+
+# FIXED: `book1/vol2-dashboard.html` is not a dashboard (2026-08-18)
+
+Found while writing the new Book I index. **`book1/vol2-dashboard.html` (69,313 bytes) is the
+Volume II text** — *Contact Realization of Generative Transitions, Version 2a* — under a
+filename that promises a dashboard. It differs from root `vol2-contact.html` by four diff
+lines, all of them relative paths. The **actual** interactive dashboard is root
+`vol2-dashboard.html` (38,140 bytes, `<title>Principia Orthogona Vol. II — Interactive
+Dashboard</title>`).
+
+Consequence: **20 links whose visible label said "Dashboard", "Interactive Dashboard" or
+"interactive dashboard →" opened the Volume II paper instead**, across `book2/index.html`,
+`book2/vol2-contact.html`, `book3/index.html`, `book1/vol1-mathematics.html`,
+`book1/verification-registry.html` and the file's own self-links.
+
+**Fixed** by repointing at the real dashboard — but only where the anchor's own visible label
+mentions a dashboard. Links that correctly describe the file as Volume II were left alone.
+Two of those are in `index-book1.html` and `master-index.html`: the generated indexes label
+the entry *"Principia Orthogona · Volume II · Contact Realization"* — accurate, because they
+read the file's `<title>` — and their `<span class="path mono">book1/vol2-dashboard.html</span>`
+sits **inside** the anchor text, so a naive label filter matches on the word "dashboard" in
+the path and rewrites a link that was right. It did, on the first pass, and both files were
+restored from `HEAD`. Any future sweep over anchor labels must strip `.path` spans first.
+
+**Still open:** the file itself. `book1/vol2-dashboard.html` remains a fourth copy of the
+Volume II text under a misleading name. Renaming it would break the two generated-index
+entries and any external link. The new `book1/index.html` documents it in full rather than
+hiding it. Author's call whether it is renamed, made a redirect, or removed.
+
+# RESOLVED: "V4" and "v6" — v6 is the current Volume I deposit
+
+Raised 2026-08-18. The site labels Volume I's current deposit **two different ways in two
+different books**, and both call themselves current:
+
+| label | DOI | date | where |
+|---|---|---|---|
+| **V4** (edition of the *text*) | 10.5281/zenodo.20784030 | text dated 21 June 2026 | `vol1-mathematics.html` (eyebrow, badge, nav, footer), `chRho-spectral.html`, `Enceladus.html` |
+| **v6** (Zenodo's *deposit* counter) | 10.5281/zenodo.21146416 | 2 July 2026 | `book7/ch-lattes.html`, `book7/wp59-dark-matter-lensing.html`, `book7/jacobian-verification.html`, `GameTheory_Full_Pack.html`, and the ISBN/DOI section of this file |
+
+These are not the same kind of number. "Version 4" is the author's edition of the text —
+the page's own eyebrow reads *"Principia Orthogona · Volume I · Version 4 · June 21, 2026."*
+"v6" is Zenodo's counter on the concept record, which increments on **every** deposit,
+including metadata-only corrections. An edition and a deposit count drift apart by
+construction.
+
+**They cannot both be Vol I's current DOI.** Two readings fit the repo, and this session
+could not tell them apart — Zenodo's API and record pages are robots-disallowed from the
+tooling available here:
+
+1. `20784030` is Zenodo v4, and two later deposits (v5, v6) exist — in which case the
+   website's Volume I is **two deposits behind** the record, and 21146416 is correct.
+2. The author's Version 4 text was deposited *as* v6 `21146416` — in which case
+   `vol1-mathematics.html`'s own badge cites the **wrong DOI for the text on that page**,
+   and `20784030` is an earlier deposit.
+
+**Settle it by opening the concept DOI** <https://doi.org/10.5281/zenodo.19117399>, which
+always resolves to the newest version, and reading the version badge and version-history
+list on the record page. Then make the site say one thing. Do **not** guess and sweep: three
+files carry one number and four carry the other, and picking wrong propagates a bad citation
+into both halves.
+
+**Related defect found in the same check.** `Enceladus.html` line 1038 cites Vol I as
+*"...Zenodo 10.5281/zenodo.20784030 (2026). **ISBN 979-8-9954416-0-1**."* That ISBN is
+allocated to **Complete Completeness · G5 · Paperback** (registered), not to Volume I.
+Volume I has no allocation of its own, so per the rule above it gets **no ISBN line at all**.
+This is the borrowed-ISBN defect again, in a file the August sweep did not reach.
+
+
+## Ruling and repair (2026-08-18)
+
+**Author's ruling: v6, `10.5281/zenodo.21146416`, is Volume I's last version.** The site now
+says so.
+
+The version ladder, reconstructed from the DOIs the pages themselves carry — this is what
+settled the question, because the numbers form a clean sequence and Zenodo's counter tracks
+the author's edition numbering rather than running independently of it:
+
+| deposit | DOI | cited in |
+|---|---|---|
+| v1 · 17 Mar 2026 | 10.5281/zenodo.19117400 | `book1/vol1-mathematics.html` deposit table, and dozens of pages as the origin deposit |
+| V3 | 10.5281/zenodo.20237688 | `Enceladus-zenodo.html` |
+| V4 · text dated 21 Jun 2026 | 10.5281/zenodo.20784030 | `vol1-mathematics.html`, `chRho-spectral.html`, `Enceladus.html` |
+| **v6 · 2 Jul 2026 — current** | **10.5281/zenodo.21146416** | `book7/ch-lattes.html`, `book7/wp59-dark-matter-lensing.html`, `book7/jacobian-verification.html`, `GameTheory_Full_Pack.html` |
+
+**Fixed — 12 edits across 5 files.** Every place the HTML presented a Zenodo link as
+*Volume I's record* now resolves to v6:
+
+- `vol1-mathematics.html` — nav and footer point at v6. The hero badge is the one place that
+  keeps both, because both are true and the distinction matters: *"This text (V4):
+  20784030"* beside *"Current version (v6): 21146416"*.
+- `chRho-spectral.html` — two "Zenodo V4" links → v6.
+- `Enceladus.html`, `Enceladus-zenodo.html` — reference [2] and the footer cite Volume I as a
+  work, so both take v6. `Enceladus-zenodo.html` had been three versions behind, still on V3.
+- `book1/vol1-mathematics.html` (archived Second Edition) — its badge said flatly
+  *"Zenodo 10.5281/zenodo.19117400"*, which reads as *this edition's* DOI and is not; it is
+  the v1 origin deposit. Now labelled as such, with v6 named beside it.
+
+**Borrowed ISBN removed in the same pass.** All four of those Volume I citations carried
+**ISBN 979-8-9954416-0-1** — allocated to *Complete Completeness · G5 · Paperback*, not to
+Volume I, which has no allocation and per the rule above gets no ISBN line at all.
+
+## STILL OPEN after this repair
+
+1. **The website's Volume I text is two deposits behind the archive.** The page is V4, dated
+   21 June; the record is v6, dated 2 July. The badge now discloses this rather than hiding
+   it, but disclosure is not a fix — either the v6 text is published to
+   `vol1-mathematics.html`, or the page states what changed between V4 and v6. **Do not
+   silently relabel the page "Version 6": no one has compared the two texts.**
+2. **The G5 paperback ISBN is still attached to non-G5 material in 8 files** —
+   `trilogy-sale.html` (×4), `GameTheory_Full_Pack.html`, `GameTheory_Full_Pack.FIXED.html`,
+   `Sportal.html`, `classroom-index.html`, `impa-working-paper.html`, `newark-wellness.html`,
+   `portal.html`. Each needs reading before editing: on a G5 page the number is correct.
+3. **`19117399` is still presented as a "series DOI" in roughly sixty files.** It is Vol I's
+   concept DOI; there is no series DOI. This is the defect the ISBN/DOI section at the top of
+   this file already documents, and it is by far the largest remaining citation problem in
+   the repo. It was not touched today.
