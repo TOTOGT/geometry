@@ -1711,3 +1711,55 @@ they exist precisely to describe the non-canonical files.
 
 Book III itself is now clean: every link resolves to a canonical file, and the only dead link
 is the pre-existing `ch6-cardiac.html`.
+
+# OPEN — Book IV carries unallocated ISBNs on products offered for sale (2026-08-18)
+
+Book IV was checked on the assumption it would be clean. Links are clean — **zero dead links
+across all 66 files**, no links to non-canonical copies, and no stranded-anchor defect (the two
+files the detector flags have a generic `a` rule, so their nav anchors are styled). `index.html`
+is a deliberate redirect stub to `contents.html`, which is why the naive per-book orphan audit
+once reported "50 orphans of 51".
+
+The ISBNs are not clean. **Nothing was edited** — see the verification gap below.
+
+## Storefront: three products priced and linked to Gumroad under numbers not allocated to them
+
+Identical blocks in `book4/ch02.html` and `book4/ch10.html`:
+
+| product as advertised | ISBN shown | price | status in the table above |
+|---|---|---|---|
+| Operator Framework — "Series foundation" | 979-8-9954416-2-5 | **$47 · Buy on Gumroad** | **unallocated reserve — no group, no format** |
+| Applications Across Domains — "g₃₃ = 33" | 979-8-9954416-4-9 | **$47 · Buy on Gumroad** | G5 **Hardback** — INCOMPLETE, HOLD |
+| Complete Completeness | 979-8-9954416-5-6 | **$47 · Buy on Gumroad** | **unallocated reserve** |
+
+The rule above is written for footers: *"A print ISBN in a web footer advertises a product that
+does not exist."* This is not a footer. It is a price and a buy button, and two of the three
+numbers have no group and no format assigned at all.
+
+## Citations and footers
+
+- `ch02.html`, `ch10.html`: *"Principia Orthogona, Vol. I … ISBN 979-8-9954416-2-5"* — Vol I has
+  no allocation, and 2-5 is unallocated reserve.
+- `ch02.html`, `ch10.html`: *"Principia Orthogona, Vol. II … ISBN 979-8-9954416-4-9"* — that
+  number is G5 Hardback, not Vol II.
+- `hub.html`: *"ISBN 979-8-9954416-5-6 (G5 eBook · Complete Completeness)"* — G5 eBook is
+  **1-8**. So this is an unallocated number *labelled as a different, allocated format*.
+- Vol IV footers carry **979-8-9954416-8-7** in four files (`ch-hawking.html`,
+  `ch15-complex-turn.html`, `chIV-axioms.html`, `chIV-field.html`) — unallocated reserve, and
+  Vol IV has no allocation of its own.
+- `chE-gtct.html` carries Book 3's **979-8-9954416-6-3** on a GTCT page.
+
+## Why nothing was edited
+
+**The canonical registry is not reachable.** This file names
+`~/Desktop/MATHS for life/isbn_metadata.json` as *"the only copy that carries `bowker_status`,
+so it is the only copy that can tell you whether a number is registered or merely reserved"* —
+and there is no `MATHS for life` folder in the mounted Desktop, and no `isbn*metadata*` or
+`*bowker*` file anywhere under the mount. So the only available source is the table at the top
+of this file, which this file itself records as having **drifted out of sync once already**,
+putting an unallocated reserve number into 87 book6 footers.
+
+Correcting a footer on that basis would be reasonable. Removing an ISBN from a page that
+prices a product and links to Gumroad is not something to do from a source known to have been
+wrong before. **This needs the registry, or the author.** If the numbers are right and the
+table is stale, the table is what should change.
