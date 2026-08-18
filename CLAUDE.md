@@ -1595,3 +1595,48 @@ follows its own `href` was invisible to it. Fixed by hand.
   really is the series. Not done here.
 - **`collatz-engineering_1.html` has a stray `</p>`.** Pre-existing — confirmed present in
   `HEAD` before this change — not introduced by the sweep.
+
+# Book II (2026-08-18)
+
+Same shape as Book I, and one new discrepancy that needs the author.
+
+## Fixed
+
+1. **`book2/index.html` was byte-identical to `book2/vol2-contact.html`** — the directory
+   index was a second copy of the paper, not an index. Rewritten as a real Book II index on
+   the same template as `book1/index.html`: the text, the companions (toy model, dashboard),
+   and a full ledger of the directory. It points at **`../vol2-contact.html`**, the root copy,
+   which carries 13 inbound links against `book2/vol2-contact.html`'s 5.
+2. **Book II's copy pointed at the wrong Volume I.** Five links — nav, TOC drawer, reference
+   [1], the bottom button and the footer — went to `book1/vol1-mathematics.html`, the **April
+   Second Edition**, while the canonical root copy of the same page points at
+   `vol1-mathematics.html`, the **V4**. The two copies of Volume II were sending readers to
+   two different Volume I texts. Repointed to V4.
+3. **Reference [1] cited Vol I at `19117400`** — the v1 origin deposit — in both copies. Now
+   cites **`21146416`, v6, current**, per the ruling. The entry also now names Version 4
+   explicitly and keeps a pointer to the Second Edition, because it remains the only copy
+   carrying the note on &ldquo;orthogenesis&rdquo;; repointing the links without that pointer
+   would have removed the disclaimer from Volume II's path entirely.
+4. **Stranded nav anchors** in both copies. Verified from the CSS rather than assumed: neither
+   file has a global `a` rule or a `nav a` rule, only `.nav-links a`, so `Living Book` and
+   `Series ↗` were rendering as default blue underlined links. Moved inside.
+
+All three files parse with zero unclosed tags, zero stray closers, no duplicate ids, no dead
+links.
+
+## OPEN — which DOI is Volume II's?
+
+`vol2-contact.html` cites **`10.5281/zenodo.20755436`** seven times — hero badge, nav, footer —
+for a page whose eyebrow reads *Version 2a · 2026*.
+
+The ISBN/DOI section at the top of this file says something different: *"Vol II ('Contact
+Realization'): 10.5281/zenodo.19379473. Clean, single version, April 2026 — the one paper of
+the four with an unambiguous standalone DOI."*
+
+Both cannot be right. Either a Version 2a was deposited after April and this file's note is
+stale, or the page cites the wrong record. This is the same shape as the V4/v6 question
+settled for Volume I on 2026-08-18, one volume over, and it was settled there in one sentence
+by the author. **Do not guess:** `19379473` appears nowhere in `vol2-contact.html`, and
+`20755436` appears nowhere in this file, so whichever is wrong has been wrong consistently and
+a sweep would propagate it. Zenodo's API and record pages are robots-disallowed from the
+tooling here; resolve it by opening the record.
