@@ -1856,3 +1856,47 @@ real index on the Book I/II template, pointing at `../vol3-minibeast.html` for t
 keeping `vocab-seismic-geometry.html`, the Brazilian edition and the pilot. It was 38,615 bytes
 of near-duplicate; it is now 8,945 bytes of index. The duplicate-hub question recorded above is
 closed.
+
+# Storefronts relabelled as preprints (2026-08-18)
+
+Author's ruling, in his words: *"too early to be marketing it, books aren't ready"*, then
+*"forthcoming is okay — anyone buying anything right now is buying preprints"*, and *"stale html
+and pdfs"*. So the fix is honesty in the listing, not deletion of the listing.
+
+**Changed in `book4/ch02.html`, `book4/ch10.html` and `livro3-brasil.html`:**
+
+- The three unallocated/HOLD ISBNs (2-5, 4-9, 5-6) are gone from the product cards, replaced by
+  **"Preprint · ISBN on publication"** / **"Pré-publicação · ISBN na publicação"**. A preprint
+  does not carry the volume's ISBN, and these numbers were never allocated to these works.
+  Book 3's own **6-3** stays on the Mini-Beast card — it is correct and that product is real.
+- Each grid gained a line stating what a purchase actually delivers today: the working text,
+  HTML and PDF, revised as the series revises; volumes forthcoming; ISBNs assigned on
+  publication.
+- `livro3-brasil.html`'s Vol G⁴ card cited **DOI 10.5281/zenodo.19117400** — Vol I's v1 deposit,
+  not Vol IV's. Replaced with the Zenodo community link.
+- Prices and Gumroad links left as they are. That was the instruction, and it is now accurate:
+  the page says preprint and sells a preprint.
+
+## What the Gumroad audit actually found
+
+**Every Gumroad link in the corpus — 86 of them across 43 files — points at one product,
+`/l/soundworks`**, under two different accounts (`g6llc.gumroad.com` and
+`brodanova6.gumroad.com`). That includes the buttons labelled *"Buy Book 3 on Gumroad"*,
+*"Comprar — $15"*, *"All volumes →"* and *"Complete Series"*. **The book-buy buttons do not lead
+to books.** 38 links carry book-purchase language; 22 are membership/Soundworks; the rest are
+bare "Gumroad".
+
+Two accounts for one product is its own problem — pick one. Nothing outside the three
+storefronts was touched, because most of those 43 files link the membership rather than a book.
+
+## OPEN — an IMPA claim to check before it matters
+
+`book4/ch02.html`'s Vol G⁴ card reads *"GTCT T1 — The IMPA Edition … Submitted to IMPA."*
+Separately, **"Edição IMPA" / "IMPA Edition" appears 209 times across 45 files**, and no
+affiliation disclaimer was found anywhere in the corpus.
+
+IMPA is a real institution with its own imprint. Used at that volume, the phrase reads as an
+imprint credit rather than a description of intent or of a course edition. If the work has not
+been published or endorsed by IMPA, this is the kind of thing that is cheap to correct now and
+expensive later — precisely if a genuine IMPA submission is ever made. Worth one deliberate
+decision about the wording, not 45 separate ones.
