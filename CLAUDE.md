@@ -2388,3 +2388,69 @@ Corpus now: **521 files CC BY-NC-ND 4.0 · 23 files CC BY 4.0**, and the 23 are 
 `cc-by-nc-nd-4.0` sibling record (`20230633`) of the same title. One work, two deposits, two
 incompatible licences. Nothing in this repo asserts either, so nothing was changed; it needs a
 Zenodo-side decision by the author (rule 4).
+
+# The ten books audited clean — and `tools/audit.py` now exists (Aug 2026)
+
+**311 HTML files across Vols I–IX plus HVEH. All ten report clean.**
+
+The battery is no longer improvised per-session. It lives at **`tools/audit.py`**:
+
+    python3 tools/audit.py book4 book8        # named targets
+    python3 tools/audit.py --all --json       # everything, machine-readable
+
+Its resolver rules each exist because a naive version lied to a previous session, and
+the docstring says so. **Do not "simplify" them.**
+
+| Rule | Why |
+|---|---|
+| Strip the `/geometry/` prefix | It is the Pages base path, not a repo path. ~900 links use it and all resolve; without this they all read dead |
+| `href="../"` and bare dirs → `index.html` | Normalise before the membership test |
+| Split fragments, then check ids in the target | A live file with a dead anchor is still a defect — that is how `#F3` and `#schwarzschild` were caught |
+| **Count `<!DOCTYPE`, do not rely on tag balance** | Concatenated documents are each internally balanced, so the stack comes out clean. This is what found `HVEH/index` and `omega-point-v2-draft` |
+| Ignore doctypes inside `<script>` | `impa-portal.html` emits a page from a backtick string |
+| Ignore `**bold**` inside `<pre>`/`<code>` | Lean docstrings legitimately use markdown |
+
+Three known-benign classes are now suppressed **in the tool**, not in a human's memory:
+cross-repo `../../AXLE/` links; matplotlib-emitted duplicate SVG ids; and a flagged string
+sitting inside its own correction note (an ISBN named *as* unallocated, or a claim quoted
+in order to retract it). That last one matters — the auditor was flagging this file's own
+corrections as defects.
+
+## What the sweep fixed
+
+| File | Defect | Note |
+|---|---|---|
+| **`book5/GTCT_V_Student_Edition.html`** and its **root copy** | **`<script/>` at line 1329** | The find of the sweep. HTML has no self-closing script: it opened an element that ran to the next `</script>` at line 2557, **swallowing 1,228 lines** — the whole of Level III's diagram and Levels IV–V. Half the Student Edition was not rendering, in both copies |
+| `book8/ch01-anyonic-topology.html` | two `.math-block` divs unclosed (lines 532, 606) | cascaded, so `content-wrap` appeared unclosed too |
+| `book4/ch15-complex-turn.html` | `<div class="chapter-body">` opened twice, closed once | duplicate opener removed |
+| `book4/gomc-opus.html` | `.table-scroll` never closed | every sibling closes `</table></div>`; this one did not |
+| `book4/chIV-field.html` | stray `</div>` with no opener | in a browser this closes the *parent* early — a real layout bug, not cosmetic. Note: the axiom pip rail runs 2–7; **pip 1 is missing** and was not invented |
+| `book8/ch8-9-nested-infinities.html` | display math split a paragraph; second half never opened | `<p>` added |
+| `book6/wp64-the-recorder.html` | `**` around a span in a pull-quote | → `<strong>` |
+| `book8/ch3-singularity.html` | `ch1-darkmatter.html#F3` — no such id | fragment dropped |
+| `book4/ch10.html` | *"Submitted to IMPA."* | survived the 17-file cleanup; IMPA declined |
+| `book8/ch-orthogonal-witness.html`, `book8/ch-turnaround.html` | footers asserting ISBN 979-8-9954416-5-6 | Vol VIII has no allocation |
+| `book8/ch8-3-galaxy-mergers.html` | *"will collide in 4.5 billion years"* | → *"were projected to collide"*; the van der Marel (2012) attribution stays |
+
+**Deliberately not touched:** the ISBN correction notes in `book5/chV-seed`, `book6/g6-crystal`
+and `book7/ch-huh`. Each says in its own words that 5-6 is unallocated reserve and not a
+fallback. They are the fix, not the defect.
+
+## OPEN — the root is the real backlog
+
+The ten books are clean. **The 299 files at the repository root are not:**
+
+| | |
+|---|---|
+| dead links | **79** |
+| dead anchors | 18 |
+| unclosed tags | 16 |
+| stray closers | 4 |
+| stale claims | 2 |
+
+That is the largest unaudited surface in the repo and it contains the site's front door.
+Nothing above touched it. Examples from the first page of output: `ch-tatiana.html` points at
+two `figures/*.png` that do not exist; `chEta-tribonacci.html` points into
+`Orthogenesis/Constants/` which does not exist; `chapters-diagram.html` links
+`index-geometry-hub.html` and `journey-v1-backup.html`, neither of which exists;
+`access-required.html` fails to close `<html>` and `<head>`.
