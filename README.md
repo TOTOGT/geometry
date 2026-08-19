@@ -307,6 +307,11 @@ Pull requests that close proof obligations are welcome.
 
 ## License
 
-MIT (code) · CC BY-NC-ND 4.0 (mathematical content)
+MIT (code) · CC BY-NC-ND 4.0 (written content)
+
+See [`LICENSE`](LICENSE) for the code and [`LICENSE-CONTENT`](LICENSE-CONTENT) for
+the chapters, volumes and figures. Note the one exception recorded there: papers
+deposited on Zenodo under CC BY 4.0 are governed by their deposited licence, which
+is more permissive than the default — the record wins where the two differ.
 
 Build on it.

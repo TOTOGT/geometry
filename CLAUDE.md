@@ -2322,3 +2322,69 @@ a claim about the institution, not about a link target, and each needs the autho
 
 Still open from the previous entry, unchanged: `AMonster/MonstersLaw.html` vs `monsterlaw.html`
 (divergent case-differing drafts) and `dm3-lab-index.html`'s ISBN table.
+
+# Licensing: the IMPA claim was a mis-statement, and it exposed a real split (Aug 2026)
+
+**Author's clarification:** *"Licensed for educational use at IMPA and partner programs"* was
+never a claim that IMPA licensed anything. He meant the work is openly licensed — MIT and
+Creative Commons — so it can be used in teaching. The sentence said the opposite of what he
+meant, and it was the only licensing statement on those two pages.
+
+Fixed in `GTCT_V_Student_Edition.html` and `book5/GTCT_V_Student_Edition.html`:
+**"Free for non-commercial educational use · CC BY-NC-ND 4.0"** — true under the licence, and it
+preserves the intent (teach from it) that the original sentence was reaching for.
+
+## There was no LICENSE file at all
+
+The README promised *"MIT (code)"* and **nothing in the repository granted it.** Now:
+
+- **`LICENSE`** — the MIT text, covering 27 `.lean`, 20 `.py`, 6 `.js`, 2 `.sh`.
+- **`LICENSE-CONTENT`** — CC BY-NC-ND 4.0 for the written material, with the deposit exception
+  below written down.
+- README's `## License` section points at both.
+
+## The 464/134 split was NOT drift — it mirrors the deposits
+
+Before assuming the minority string was an error, every Zenodo record cited anywhere in the
+corpus was queried for its actual `license` field. **The split is real:**
+
+| Deposited licence | Records |
+|---|---|
+| `cc-by-nc-nd-4.0` | 26 — incl. Vol I (19117400, 20320693, 21146416), Vol II (19379473), GTCT (20360288), the dm³ Operator |
+| `cc-by-4.0` | **25** — incl. The Law of Monsters (20561165), Positional Dominance (21013066, 21753025), Contact-Geometric Theory (20682934), Transamerican smoke (21431505), Gravitational Lensing, Nested Infinities |
+| `mit-license` | 1 — Polylaminin (19501831) |
+
+**A Zenodo licence cannot be narrowed after publication.** So "CC BY-NC-ND everywhere" is not
+available as a fact about the 25 records already deposited CC BY 4.0, however the series is
+labelled going forward. Writing `CC BY-NC-ND 4.0` onto a page that reports one of those deposits
+would have manufactured 100+ false statements — the exact defect class this audit exists to
+remove. **Check the deposit before normalising a licence string.**
+
+## What the 46 both-licence files actually were
+
+Not contradictions. The **provenance footer** states the licence of the *page as part of the
+series*; the **deposit block** states the licence of the *paper the page reports*. Two different
+objects. They are kept, and `LICENSE-CONTENT` now says so explicitly so a future pass does not
+"fix" one into the other.
+
+## What was changed
+
+Each of the 123 files containing `CC BY 4.0` was classified by whether it cites a record actually
+deposited under CC BY 4.0:
+
+- **23 keep it** — every one sits beside a genuine `cc-by-4.0` deposit. Verified: after the pass,
+  zero files carry `CC BY 4.0` without such a deposit.
+- **100 corrected** (108 strings) — page footers of the form
+  `© 2026 Pablo Nogueira Grossi · G6 LLC · Newark, New Jersey · CC BY 4.0` on chapters with no
+  deposit of their own. These are the series default and now read `CC BY-NC-ND 4.0`. Ten of them
+  sat directly beside Vol I's concept DOI, which is deposited NC-ND — those were flatly wrong.
+- **0 unresolved.** Every DOI in every affected file had a checked licence.
+
+Corpus now: **521 files CC BY-NC-ND 4.0 · 23 files CC BY 4.0**, and the 23 are justified.
+
+## Still open
+
+`19501831` (Polylaminin) is deposited **`mit-license`** — an MIT-licensed *paper*, alongside a
+`cc-by-nc-nd-4.0` sibling record (`20230633`) of the same title. One work, two deposits, two
+incompatible licences. Nothing in this repo asserts either, so nothing was changed; it needs a
+Zenodo-side decision by the author (rule 4).
