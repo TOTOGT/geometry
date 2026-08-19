@@ -33,9 +33,12 @@ from urllib.parse import unquote
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 SKIP_DIRS = {'.git', '_to_delete', '_archive', 'node_modules'}
 
+# NOTE: SKIP_DIRS controls what gets SCANNED, not what can be LINKED TO.
+# _archive/ is deliberately not audited, but 52 links point into it and they are
+# valid. Build the resolution set from everything except .git.
 ALL_FILES, DIRS = set(), set()
 for dp, dns, fns in os.walk(ROOT):
-    dns[:] = [d for d in dns if d not in SKIP_DIRS]
+    dns[:] = [d for d in dns if d != '.git']
     for f in fns:
         rel = os.path.relpath(os.path.join(dp, f), ROOT)
         ALL_FILES.add(rel)
@@ -110,7 +113,8 @@ def audit(targets):
         if len(re.findall(r'(?i)<!DOCTYPE', body)) > 1:       # rules 4 + 5
             F['concatenated_documents'].append([rel, len(re.findall(r'(?i)<!DOCTYPE', body))])
 
-        for m in ATTR.finditer(body):
+        links = strip_code(body)   # hrefs inside <pre>/<code> are documentation examples
+        for m in ATTR.finditer(links):
             kind, tgt = resolve(rel, m.group(2))
             if kind == 'dead':   F['dead_link'].append([rel, m.group(2), line(m.start())])
             elif kind == 'escape':
