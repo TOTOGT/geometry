@@ -173,13 +173,20 @@ if __name__ == '__main__':
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     as_json = '--json' in sys.argv
     if '--all' in sys.argv or not args:
-        args = sorted(d for d in os.listdir(ROOT)
-                      if os.path.isdir(os.path.join(ROOT, d)) and d not in SKIP_DIRS)
+        # Rule 6: --all must include the ~300 loose HTML files at the repo root.
+        # An earlier version walked directories only; the root went unaudited for
+        # months and was hiding a concatenated gomc-opus and four parse defects.
+        args = sorted([d for d in os.listdir(ROOT)
+                       if os.path.isdir(os.path.join(ROOT, d)) and d not in SKIP_DIRS]
+                      + [f for f in os.listdir(ROOT) if f.lower().endswith(('.html', '.htm'))])
     files, F = audit(args)
     if as_json:
         print(json.dumps({'scanned': len(files), 'findings': F}, indent=1, ensure_ascii=False))
     else:
-        print(f'{len(files)} html scanned in: {", ".join(args)}')
+        dirs = [a for a in args if not a.lower().endswith(('.html', '.htm'))]
+        nroot = len(args) - len(dirs)
+        where = ', '.join(dirs) + (f' + {nroot} root files' if nroot else '')
+        print(f'{len(files)} html scanned in: {where}')
         if not F: print('  clean')
         for k in sorted(F, key=lambda k: -len(F[k])):
             print(f'  {len(F[k]):5d}  {k}')

@@ -2454,3 +2454,135 @@ two `figures/*.png` that do not exist; `chEta-tribonacci.html` points into
 `Orthogenesis/Constants/` which does not exist; `chapters-diagram.html` links
 `index-geometry-hub.html` and `journey-v1-backup.html`, neither of which exists;
 `access-required.html` fails to close `<html>` and `<head>`.
+
+---
+
+# The root audited clean — 614 files, whole repo (2026-08-20)
+
+The section above ("OPEN — the root is the real backlog") is now closed. `--all` audits
+614 files and prints `clean`. Two commits did it: `3266a71` took the dead links and the
+two files that were corrupt on upload; this pass took the parse defects, the anchors and
+the ISBN claims.
+
+## The auditor was lying about its own coverage
+
+`--all` walked *directories only*. The 299 loose HTML files at the repo root — including
+`index.html`, the site's front door — were never in scope unless someone typed
+`python3 tools/audit.py *.html` by hand. Nobody did, for months.
+
+That is now **rule 6** in `tools/audit.py`: `--all` = every directory **plus** every root
+`.html`. The tool reports `… + 299 root files` so the coverage claim is visible in the
+output, not buried in the argument parser. **A tool that under-reports its own scope is
+worse than no tool** — it converts "unaudited" into "audited, clean".
+
+## What the root was hiding
+
+| file | defect | root cause |
+|---|---|---|
+| `gomc-opus.html` | 177 KB, **two whole documents** | see below |
+| `ch7-topological-orthogenesis.html` | 22 headings nested one level too deep | a `<div class="math-block">` never closed; the `</div>` labelled `<!-- /content-wrap -->` was closing *it* |
+| `ch-d2-academic.html` | a paragraph opener and a reference opener both lost | see below |
+| `ch12-conclusion.html` | `div` unclosed to EOF | a `math-block` div closed with `</p>` |
+| `collatz-engineering_1.html` | same `</p>`-for-`</div>`, **plus** every section id off by one | see below |
+| `ch15-complex-turn.html` | duplicate `<div class="chapter-body">` opener | same defect already fixed in `book4/`; the root copy was missed |
+| `ch4-neural.html` | 856 bytes of duplicated prompt block **after `</html>`** | tail of an aborted append |
+
+### `gomc-opus.html` — the concatenation the DOCTYPE rule could not see
+
+Rule 4 exists because tag balance cannot detect concatenated documents. This file defeated
+rule 4 as well: the second document's `<!DOCTYPE htm` had been **eaten**, leaving `l>`
+welded onto the end of a truncated table:
+
+```
+    </table></div>l>
+<html lang="en">
+```
+
+One `<!DOCTYPE`, so the counter stayed quiet. What gave it away was two `<body>` tags.
+
+The two copies were not old-and-new — they were **two different edit passes on two
+different copies**. Document 1 had the nav bar and the orthogenesis note and was truncated
+mid-table; document 2 had the provenance CSS and everything from §7 to `</html>`.
+`book4/gomc-opus.html` turned out to be the correct merge of both, so the root file was
+rebuilt from it plus document 1's nav. Verified content-complete first: document 1's
+18-row bridge table is document 2's CatGT table, condensed — nothing was lost.
+
+**Check for a second `<body>`, not just a second `<!DOCTYPE>`.**
+
+### `ch-d2-academic.html` — one missing opener, 1,100 lines of consequence
+
+A reference entry lost its `<div class="ref">` and author span, leaving an orphan tail:
+
+```
+    </div>
+      2013. "Mindfulness-induced Changes in Gamma Band Activity." <em>Clinical
+      Neurophysiology</em> 123(4): 700–710.
+    </div>
+```
+
+That extra `</div>` closed `<div class="references">` early, which made the `</div>` at
+line 1993 — the one labelled `<!-- /chapter -->` — read as stray, 250 lines away from the
+actual defect. The entry was identifiable from the title and the citation and restored as
+Berkovich-Ohana, Glicksohn & Goldstein; the year was also wrong (2013 → **2012**, PubMed
+21940201).
+
+Separately, a `<p>` opener and its first clause were lost around line 855, so the text
+resumed mid-sentence at *"adaptation — morphological, behavioral…"*. The clause is
+recoverable from this chapter's own abstract and is restored, **marked with an HTML
+comment naming it a reconstruction**. Do not silently restore prose; say that you did.
+
+Note also that those three paragraphs sit at the end of §1.3 (Bacon and cryptography) and
+argue the daśāvatāra hinge, which §1.1 already covers more fully. They look like a
+superseded draft that was never removed. **Left in place — that is an editorial call, not
+an audit fix.**
+
+### `collatz-engineering_1.html` — ids drift when you insert without renumbering
+
+The Saturn Lean section was added later and given `id="s9-saturn"` instead of renumbering.
+Everything after it kept its old number, so the TOC's `#s9` landed on §10's content,
+`#s10` on §11's, and `#s12` on nothing. Renumbered to match the TOC. `#ack` and `#refs`
+were also in the TOC; **neither section was ever written**, so the two promises were
+removed rather than satisfied with invented content.
+
+## ISBNs — two more instances of the rule already written above
+
+`Book1.html` footer carried `979-8-9954416-5-6 (eBook · Complete Completeness G5)`, and
+`dm3-lab-index.html`'s table assigned `2-5`, `4-9` and `5-6` to three volumes. Per
+`isbn_metadata.json`: `2-5` and `5-6` are unallocated reserve (no group, no format) and
+`4-9` is G5 *Hardback* on HOLD. All removed. The table now carries a note saying only
+registered allocations are listed and pointing at the Zenodo community.
+
+This is the fourth time the same reserve numbers have had to be pulled out of footers.
+The rule is in "Series ISBN & format map" above: **no registered allocation → no ISBN line.**
+
+## Anchors
+
+`omega-point-index.html` at the root is a redirect stub with **no ids of its own** — a
+fragment link to it silently drops the fragment. Four files were linking
+`omega-point-index.html#chapters`; all now point at `omega/omega-point-index.html#…`.
+**When you replace a page with a redirect, grep for inbound fragments.**
+
+Also fixed: three `sessao*.html` footers linked "Série completa" at
+`index.html#bibliography`, which never existed (→ `series-hub.html`); `gcm-framework.html`
+promised `#sec3-g` in its TOC and never gave the paragraph the id; `vol1-mathematics.html`
+pointed at `#references` when References is `#sec18`; `ch02-biological.html`'s "Next:
+Chapter 3" was still the placeholder `href="#next"` (→ `ch03-plasma.html`).
+
+## Cover art
+
+`assets/book-cover.png` and `book-cover.jpg` do not exist and never have — there is no
+cover image anywhere in the repo. Both `<img>` tags already had `onerror` handlers, so the
+pages looked fine while linking at nothing. Replaced with a placeholder that says "cover
+art not yet produced". **An `onerror` handler hides a broken link from the reader, not
+from the audit — and hiding it from the reader is how it survives.**
+
+## Verification
+
+```
+python3 tools/audit.py --all
+614 html scanned in: … + 299 root files
+  clean
+python3 tools/build_indexes.py     # 625 files, 31 orphaned, 16 pages written
+```
+
+The 31 orphans are almost all `_archive/` (23) and are deliberate.
