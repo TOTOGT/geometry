@@ -37,18 +37,25 @@ Those five are genuinely proved. Header comments claiming KERNEL-VERIFIED under
 v4.14.0 predate this and are stale. A header comment is not evidence -- quote
 the run.
 
-**Open failures.** `Orthogenesis/Architecture/Coverage.lean` fails on
-`bad import 'Mathlib.Data.Int.Order'`, a module removed upstream; it cascades
-through `Orthogenesis.lean` and fails the whole library.
-`Orthogenesis/Architecture/NASAGaps.lean` fails with four errors: unknown
-identifier `hexNeighbors_nodup` (61:26); a type mismatch at 98:2 where
-`Colony.stage_bound` is `forall (n : Nat), ...` but is applied as though `n`
-were already fixed; and unknown constants `Colony.expand_mono` and
-`Colony.expandN_mono` at 141:2, 155:2 and 226:3. Those lemmas do not exist in
-the package -- the file was written against an API that was never proved, which
-is a different defect from toolchain decay. Separately,
-`MagneticLattice.lean:240` and `SeismicLattice.lean:201` both use `sorry`, so
-the package is not sorry-free and no document should say that it is.
+**Open failures.** As of run #229 (branch `verify-hardening`, commit c7d082d)
+the only file that still fails is `Orthogenesis/Architecture/Coverage.lean`.
+Its bad import of `Mathlib.Data.Int.Order` was removed, the body then elaborated
+for the first time, and that exposed what the import error had been hiding:
+`hexRing_card` is admitted -- its successor case is `sorry` -- and
+`coord_coverage` is nothing but a call to it. **`coord_coverage` is therefore
+not proved and must not be cited as proved anywhere in the corpus.** The rest of
+the file fails too: unknown constant `Nat.eq_or_gt_of_le` (73:10), four `⟨...⟩`
+elaboration failures at 46 to 53, and failing `omega` and `rewrite` steps at 142
+to 143 inside `Colony.no_coord_collision`. `Orthogenesis.lean` imports Coverage,
+so the library as a whole still does not build.
+
+Closed on the branch in runs #226 to #229, each checked by the kernel:
+`hexNeighbors_nodup` (HexGrid), `Colony.expand_mono` and `Colony.expandN_mono`
+(Colony), and the `stage_bound` application in NASAGaps, which was applied to
+one argument too few. NASAGaps now compiles.
+
+Separately, `MagneticLattice.lean:240` and `SeismicLattice.lean:201` both use
+`sorry`, so the package is not sorry-free and no document should say that it is.
 
 **Traps.** Several files exist both at the repo root and under
 `Orthogenesis/Architecture/`; only the latter are built, so edits to a root copy
