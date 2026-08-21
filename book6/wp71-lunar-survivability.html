@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP71 · The Lunar Survivability Discriminant · Four Ways a Risk Can Be Governed</title>
+<meta name="description" content="Four categories of exposure metric: accumulation, threshold, kinetics, and stochastic-catastrophic. Why bone loading and lunar dust are monitored in the wrong variable, why micrometeoroids cannot be instrumented away, and why siting and subdivision compound.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],tags:'ams'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+:root{
+  --void:    #04040a;
+  --surface: #0c0d16;
+  --card:    #10111c;
+  --gold:    #c9a84c;
+  --teal:    #0ABAB5;
+  --red:     #e05a3a;
+  --purple:  #c084fc;
+  --green:   #50c878;
+  --amber:   #f59e0b;
+  --deep:    #5b4fcf;   /* deep quantum violet */
+  --text:    #e8e4d8;
+  --muted:   #6b6757;
+  --dim:     #2a2920;
+  --rule:    rgba(201,168,76,0.18);
+  --serif:   'Noto Serif', Georgia, serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-series{font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;}
+.nav-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-links a.here{color:var(--purple);}
+
+.hero{padding:5rem 2rem 4rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(91,79,207,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--deep);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:2rem;opacity:.9;}
+.hero h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:400;letter-spacing:.04em;color:var(--gold);margin-bottom:.4rem;line-height:1.25;}
+.hero-sub{font-size:1rem;color:rgba(232,228,216,.7);max-width:680px;margin:.6rem auto 0;font-style:italic;line-height:1.7;}
+.hero-eq{margin-top:2rem;font-family:var(--mono);font-size:.85rem;letter-spacing:.08em;color:rgba(201,168,76,.4);line-height:2;}
+.hero-wp{margin-top:.8rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+
+.page{max-width:900px;margin:0 auto;padding:4rem 2rem;}
+
+h2{font-size:1.25rem;font-weight:400;color:var(--gold);letter-spacing:.04em;margin:3.5rem 0 1.2rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;letter-spacing:.02em;}
+p{margin-bottom:1.2rem;}
+p:last-child{margin-bottom:0;}
+a{color:var(--teal);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* Theorem blocks */
+.block-verified{border-left:3px solid var(--teal);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(10,186,181,.03);}
+.block-model{border-left:3px solid var(--gold);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(201,168,76,.025);}
+.block-open{border-left:3px solid var(--amber);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(245,158,11,.025);}
+.block-proof{border-left:3px solid var(--purple);padding:1.1rem 1.5rem;margin:1.5rem 0;background:rgba(192,132,252,.025);}
+.block-defn{border-left:3px solid var(--deep);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(91,79,207,.03);}
+.block-lens{border-left:3px solid var(--muted);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(107,103,87,.03);}
+.block-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:.6rem;display:block;}
+.block-verified .block-label{color:var(--teal);}
+.block-model   .block-label{color:var(--gold);}
+.block-open    .block-label{color:var(--amber);}
+.block-proof   .block-label{color:var(--purple);}
+.block-defn    .block-label{color:var(--deep);}
+.block-lens    .block-label{color:var(--muted);}
+.block-body{font-size:.95rem;line-height:1.82;color:var(--text);}
+.qed{text-align:right;font-family:var(--mono);font-size:.85rem;color:var(--purple);margin-top:.6rem;}
+
+.block-math{font-family:var(--mono);font-size:.9rem;color:var(--gold);background:var(--surface);border:1px solid var(--dim);padding:1rem 1.4rem;margin:1.2rem 0;overflow-x:auto;line-height:2;}
+
+.op-chain{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:1rem 0;}
+.op{font-family:var(--mono);font-size:.78rem;padding:.2rem .55rem;border-radius:2px;}
+.op-c{background:rgba(10,186,181,.12);color:#0ABAB5;border:1px solid rgba(10,186,181,.3);}
+.op-k{background:rgba(224,90,58,.12);color:#e05a3a;border:1px solid rgba(224,90,58,.3);}
+.op-f{background:rgba(192,132,252,.12);color:#c084fc;border:1px solid rgba(192,132,252,.3);}
+.op-u{background:rgba(80,200,120,.12);color:#50c878;border:1px solid rgba(80,200,120,.3);}
+.op-arr{color:var(--muted);}
+
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0;}
+@media(max-width:700px){.compare-grid{grid-template-columns:1fr;}}
+.cg-card{background:var(--card);border:1px solid var(--rule);padding:1.4rem;border-radius:2px;}
+.cg-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;display:block;}
+.cg-body{font-size:.88rem;line-height:1.75;color:rgba(232,228,216,.8);}
+.cg-card.purple-accent{border-color:rgba(192,132,252,.25);}
+.cg-card.purple-accent .cg-title{color:var(--purple);}
+.cg-card.deep-accent{border-color:rgba(91,79,207,.25);}
+.cg-card.deep-accent .cg-title{color:rgba(91,79,207,.9);}
+
+.step-list{list-style:none;counter-reset:step-counter;margin:1rem 0;}
+.step-list li{counter-increment:step-counter;padding:.5rem 0 .5rem 2.2rem;position:relative;border-bottom:1px solid var(--dim);font-size:.94rem;line-height:1.75;}
+.step-list li:last-child{border-bottom:none;}
+.step-list li::before{content:counter(step-counter)".";position:absolute;left:0;font-family:var(--mono);font-size:.75rem;color:var(--purple);font-weight:700;top:.55rem;}
+
+.pull{text-align:center;padding:2.5rem 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:3rem 0;}
+.pull-text{font-size:1.15rem;font-style:italic;color:var(--gold);max-width:660px;margin:0 auto;line-height:1.75;}
+.pull-attr{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.8rem;}
+
+.infinity-tower{background:var(--surface);border:1px solid var(--rule);padding:2rem;margin:2rem 0;text-align:center;}
+.it-row{font-family:var(--mono);font-size:.85rem;color:rgba(232,228,216,.7);line-height:2.2;}
+.it-row .highlight{color:var(--gold);}
+.it-row .dim{color:var(--muted);}
+.it-arrow{color:var(--muted);font-size:1.1rem;display:block;}
+
+.po-ring-strip{display:flex;justify-content:center;align-items:center;gap:0;border-top:1px solid var(--rule);padding:0;font-family:var(--mono);font-size:.58rem;flex-wrap:wrap;}
+.po-ring-strip a{display:inline-block;padding:.65rem 1.1rem;color:var(--muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;border-right:1px solid var(--rule);transition:color .2s,background .2s;}
+.po-ring-strip a:last-child{border-right:none;}
+.po-ring-strip a:hover{color:var(--gold);background:rgba(201,168,76,.04);}
+.po-ring-strip a.here{color:var(--purple);}
+
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid var(--rule);}
+footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);line-height:2;}
+
+  /* --- provenance footer (added 2026-08-12) --- */
+  footer .prov{max-width:760px;margin:1.5rem auto 0;padding-top:1.1rem;
+    border-top:1px solid currentColor;display:flex;gap:34px;flex-wrap:wrap;
+    text-align:left;font-size:.72rem;line-height:1.7;opacity:.9}
+  footer .prov>div{flex:1 1 300px}
+  footer .prov a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+  footer .prov .disc{opacity:.85}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-series" href="../book4/living-book.html">Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="g6-crystal.html">G6 Crystal</a>
+    <a href="wp54-quantum-weave.html">WP54</a>
+    <a href="../book4/ch20-defect-lattice.html">B4 · Ch20</a>
+    <a href="wp71-lunar-survivability.html" class="here">WP71</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Working Paper 71 · Habitability &middot; Risk Structure</div>
+  <h1>The Lunar Survivability Discriminant</h1>
+  <p class="hero-sub">Four ways a risk can be governed, and why two of the Moon's largest hazards are measured in a variable that cannot see them. A design rule for habitat subdivision, and one control we will destroy by arriving.</p>
+  <div class="hero-eq">
+    accumulation &middot; threshold &middot; kinetics &middot; stochastic-catastrophic<br>
+    $n^{\*} = 2/p_{\text{iface}}$ &nbsp;·&nbsp; optimal pod count is set by seal reliability, not by threat flux<br>
+    depth &times; subdivision &nbsp;·&nbsp; super-multiplicative, not substitutable
+  </div>
+  <div class="hero-wp">Principia Orthogona · Book VI · WP71 · 2026</div>
+</section>
+
+<main class="page">
+
+<h2>§1 · The Wrong Variable</h2>
+
+<p>A measurement can fail in two ways. It can be imprecise — the right quantity, badly estimated. Or it can be <em>uninformative</em> — the wrong quantity, estimated perfectly. The second failure is worse, because collecting more data does not fix it, and because a well-run programme producing clean numbers looks exactly like a successful one.</p>
+
+<p>Two of the largest hazards facing a sustained lunar presence are currently monitored in the second way. Bone loss is tracked against activity volume; dust exposure is regulated against mass concentration. In both cases the underlying process is not an accumulation, and the metric therefore cannot distinguish two crewmembers at very different risk. This paper sets out why, what the right variables are, and — more usefully — a discriminant that says which of four categories any given risk falls into, including the category where the honest answer is that no amount of measurement will help.</p>
+
+<div class="block-defn">
+  <span class="block-label">The claim of this paper</span>
+  <div class="block-body">For each hazard, ask what governs the physiological response: the exposure integral, a threshold crossing, a decaying hazard state, or a Poisson tail. Each answer implies a different instrument <em>and</em> a different management lever. The discriminant earns its keep on the cases it excludes, not the ones it catches.</div>
+</div>
+
+<h2>§2 · Bone — Threshold-Governed</h2>
+
+<p>NASA's partial-gravity synthesis concludes that exposure below 0.4 <em>g</em> is insufficient to maintain musculoskeletal and cardiopulmonary properties in the long term. Lunar gravity is 0.167 <em>g</em> — under half that floor. Mars, at 0.38 <em>g</em>, sits essentially on the boundary; the Moon is nowhere near it.</p>
+
+<p>The same source models bone mineral density loss at <strong>0.39% per week</strong> in lunar gravity. Compounded, absent countermeasures:</p>
+
+<table>
+  <tr><th>BMD loss</th><th>Lunar (0.39%/wk)</th><th>Mars (0.22%/wk)</th></tr>
+  <tr><td>5%</td><td>3.0 months</td><td>5.3 months</td></tr>
+  <tr><td>10% &nbsp;<span style="opacity:.7">(osteopenic range)</span></td><td><strong>6.2 months</strong></td><td>11.0 months</td></tr>
+  <tr><td>20%</td><td>13.1 months</td><td>23.7 months</td></tr>
+  <tr><td>30% &nbsp;<span style="opacity:.7">(osteoporotic range)</span></td><td><strong>21.0 months</strong></td><td>37.3 months</td></tr>
+</table>
+
+<p>Months, not years — clinically meaningful loss inside a single long-duration stay. The rate is <em>modelled</em>, and unvalidated in humans, because total human exposure to lunar gravity amounts to roughly two weeks, all of it Apollo. That absence is itself the finding.</p>
+
+<p>But the interesting part is not the rate. Bone responds to <em>dynamic</em> loading above a strain threshold, and the osteogenic response saturates after a few tens of cycles: magnitude buys adaptation, cycle count buys very little once magnitude suffices, and nothing at all when it does not. At one-sixth <em>g</em>, peak ground reaction force in ambulation is roughly one-sixth of terrestrial — plausibly below threshold however far one walks.</p>
+
+<div class="block-model">
+  <span class="block-label">[MODEL] · the consequence</span>
+  <div class="block-body">Activity volume — step count, EVA hours, exercise minutes — cannot predict skeletal outcome under a threshold law. Two crewmembers with identical step counts can lie on opposite sides of the threshold. The predictive quantity is the <strong>count of supra-threshold loading events per day</strong>, and it is not currently collected.</div>
+</div>
+
+<h2>§3 · Dust — Kinetics-Governed</h2>
+
+<p>Here the absent atmosphere matters, and not in the way the phrase "no ozone layer" usually suggests. For a suited crewmember, ultraviolet does not reach tissue; the suit stops it. What UV reaches is the <em>regolith</em>.</p>
+
+<p>Lunar soil is activated by three mechanisms: solar ultraviolet, solar wind, and micrometeorite comminution. With no atmosphere and therefore no ozone column, the surface receives UVC and vacuum ultraviolet that never touch any terrestrial surface. Grain-surface activation in sunlit terrain is not a one-off event; it is continuously renewed.</p>
+
+<p>Activated soil is chemically aggressive. Ground lunar material generates hydroxyl radicals at roughly ten times the rate of quartz, driven by nanophase metallic iron — a species with no terrestrial analogue, which is why simulants cannot substitute for the measurement. And the reactivity <em>decays</em>: NASA's measurements give a fall to 50% of initial reactivity in approximately <strong>3.5 hours</strong> in a habitable environment, with no sample returning fully to baseline within a week.</p>
+
+<div class="block-verified">
+  <span class="block-label">[VERIFIED] · the consequence</span>
+  <div class="block-body">If reactivity halves on a several-hour timescale, the health-relevant dose is not inhaled mass. It is <strong>inhaled mass weighted by reactivity at the moment of exposure</strong> — which makes the interval between disturbance and ingress a dominant exposure variable. A permissible exposure limit written in mg·m<sup>&minus;3</sup> cannot see this, and a dwell-time protocol becomes a candidate countermeasure that current metrics cannot evaluate.</div>
+</div>
+
+<p>One consequence appears not to have been raised. At the lunar south pole, regolith in permanently shadowed regions has never been UV-activated, while adjacent sunlit regolith is activated continuously. A single Artemis traverse can cross both. If reactivity differs by terrain illumination history, then <strong>dust hazard is route-dependent, and traverse planning becomes a health countermeasure</strong>.</p>
+
+<h2>§4 · Galactic Cosmic Rays — Accumulation-Governed</h2>
+
+<p>This section exists to keep the paper honest. A framework that classifies every hazard as threshold-governed predicts nothing and excludes nothing; its value lies entirely in the cases where the standard metric is already correct.</p>
+
+<p>Stochastic radiation risk is modelled linear-no-threshold. Cancer probability is taken proportional to the integrated dose, with no threshold below which risk vanishes. Here cumulative dose in millisieverts is <em>exactly</em> the right variable, dosimeters integrating over a mission are doing precisely the correct thing, and nothing in this paper suggests otherwise.</p>
+
+<div class="block-lens">
+  <span class="block-label">Why the control matters</span>
+  <div class="block-body">A discriminant that never returns "the current metric is correct" is not a discriminant. GCR is the case that makes the other three claims falsifiable rather than decorative.</div>
+</div>
+
+<h2>§5 · Micrometeoroids — Stochastic-Catastrophic</h2>
+
+<p>The fourth category is the one intuition finds hardest and expected-value reasoning handles worst. NASA's xEMU assessment establishes a requirement of <strong>1-in-2500 failure odds per eight-hour, two-person EVA</strong>, met on the lunar surface as in low Earth orbit. That is a tolerance, not an elimination, and it compounds:</p>
+
+<table>
+  <tr><th>EVAs</th><th>P(at least one penetration)</th></tr>
+  <tr><td>52 &nbsp;<span style="opacity:.7">(≈ 6-month rotation, twice weekly)</span></td><td><strong>2.1%</strong></td></tr>
+  <tr><td>100</td><td>3.9%</td></tr>
+  <tr><td>500 &nbsp;<span style="opacity:.7">(sustained presence)</span></td><td><strong>18%</strong></td></tr>
+</table>
+
+<p>Two details deserve more attention than the headline number. First, <strong>99% of lunar-surface MMOD risk sits in softgoods</strong> — arms, legs, gloves — which is precisely the surface that cannot be armoured without destroying the dexterity the EVA exists for. Second, the lunar assessment still runs on the Apollo-era NASA SP-8013 ejecta model, with reassessment pending a new engineering model. The number underwriting the risk posture rests on 1960s secondary-ejecta physics.</p>
+
+<div class="block-open">
+  <span class="block-label">[OPEN] · why this category inverts the advice</span>
+  <div class="block-body">Exposure accumulates as a Poisson process while the outcome is bimodal: nothing, or mission loss. The expected value is small <em>and meaningless</em>. You cannot instrument your way out of a Poisson tail — monitoring buys nothing here. The levers are redundancy, shelter, reduced exposure hours, and improving the <em>model</em> rather than the measurement.</div>
+</div>
+
+<h2>§6 · The Discriminant</h2>
+
+<table>
+  <tr><th>Category</th><th>Governing quantity</th><th>Instance</th><th>Instrument</th><th>Lever</th></tr>
+  <tr><td>Accumulation</td><td>exposure integral</td><td>GCR cancer risk</td><td>integrator</td><td>reduce total dose</td></tr>
+  <tr><td>Threshold</td><td>supra-threshold event count</td><td>bone under loading</td><td>event counter</td><td>raise peak magnitude</td></tr>
+  <tr><td>Kinetics</td><td>exposure &times; decaying state</td><td>dust reactivity</td><td>time-resolved sampler</td><td>delay contact</td></tr>
+  <tr><td>Stochastic-catastrophic</td><td>tail probability</td><td>micrometeoroids</td><td><em>none helps</em></td><td>subdivide and shelter</td></tr>
+</table>
+
+<p>Each cell is falsifiable in its own terms. If skeletal outcome correlates better with total ambulation time than with supra-threshold event count, bone is not category 2. If dust toxicity tracks inhaled mass irrespective of time since disturbance, dust is not category 3. Both are testable with instrumentation that requires no dedicated crew time.</p>
+
+<h2>§7 · Architecture as the Only Countermeasure for Category 4</h2>
+
+<p>If monitoring cannot touch a tail risk, something else must. For micrometeoroids the answer is geometric, and it has two independent parts that turn out not to be substitutes.</p>
+
+<h3>Subdivision</h3>
+
+<p>Splitting a habitat into <em>n</em> pods reduces the consequence of a penetration by a factor <em>n</em> while increasing total exposed skin as $n^{1/3}$ — eight pods have exactly twice the surface of one pod of equal volume. Against this runs the chance that an isolation interface fails to contain. Balancing the two:</p>
+
+<div class="block-model">
+  <span class="block-label">[MODEL] · Result 71.1 &mdash; optimal subdivision</span>
+  <div class="block-body">Expected loss scales as $n^{-2/3} + p\,n^{1/3}$, minimised at
+  $$n^{\*} = \frac{2}{p_{\text{iface}}}$$
+  The optimal pod count is set by <strong>how reliably you can seal, not by the threat flux</strong>, which cancels. At 5% interface failure, roughly 40 pods; at 1%, roughly 200. Numerics confirm the analytic optimum to within one pod across two decades of $p$.</div>
+</div>
+
+<h3>Depth</h3>
+
+<p>Radar re-analysis of Lunar Reconnaissance Orbiter data confirmed in 2024 an <em>accessible cave conduit</em> beneath the Mare Tranquillitatis pit — not inferred from a skylight, but detected. Under a few metres of rock, galactic cosmic rays, solar particle events, micrometeoroids and 300 K thermal cycling all stop at once, with no biological intervention whatsoever.</p>
+
+<h3>They compound</h3>
+
+<p>Scored on tail probability — P(mission-ending volume loss over ten years) — rather than expected loss:</p>
+
+<table>
+  <tr><th></th><th>monolithic</th><th>8 pods</th></tr>
+  <tr><td><strong>surface</strong></td><td>baseline</td><td>3&times; better</td></tr>
+  <tr><td><strong>in the cave</strong></td><td>3&times; better</td><td><strong>13.4&times; better</strong></td></tr>
+</table>
+
+<p>Three times three is nine; the result is 13.4. Depth and subdivision are <strong>super-multiplicative</strong>, because the binomial tail is convex in per-pod failure probability: requiring <em>k</em>-of-<em>n</em> failures becomes disproportionately protective as each individual failure grows rarer. Subdivision works <em>better</em> inside the cave than outside it. Pods in a lava tube are not two good ideas stacked; each makes the other more effective than it is alone.</p>
+
+<div class="block-open">
+  <span class="block-label">[OPEN] · three caveats, carried not buried</span>
+  <div class="block-body">
+  <p>The isolation exists only if the hatches are shut. That makes this a countermeasure whose efficacy depends on crew compliance under fatigue and habituation — a human-factors dependency sitting inside an architectural solution, and the most likely mode of silent failure.</p>
+  <p>The parity effect is real: with a "lose more than half" abort criterion, even pod counts are penalised (three beats four), because losing exactly half counts against you. Where that criterion is set changes the answer.</p>
+  <p style="margin-bottom:0">All figures in this section are <strong>[MODEL]</strong>; an internal-failure rate was assumed. The ratios are the content. The absolutes require real habitat-shell ballistic limits and real seal reliability data, neither of which is in hand.</p>
+  </div>
+</div>
+
+<div class="block-lens">
+  <span class="block-label">A recorded error, kept deliberately</span>
+  <div class="block-body">The first pass at §7 scored this by <em>expected volume lost</em> and returned nonsense — it reported that subdivision buys nothing in a cave. That is precisely the failure §5 warns against: a category-4 hazard must be scored on the tail, never the mean. The error is left on the record because a discriminant that catches its own author's mistake has demonstrated something a naming exercise cannot.</div>
+</div>
+
+<h2>§8 · The Control We Destroy by Arriving</h2>
+
+<p>One further consequence follows from the same habit of asking what a measurement can and cannot see, and it is the one with the longest reach.</p>
+
+<p>Suppose a subsurface habitat succeeds. Liquid water, a thermal gradient, organics, a pressurised volume, centuries of operation. Suppose that in some crevice at the margin of it, something begins to replicate. The discovery would be the most consequential in the history of biology — and it would be uninterpretable, because we would have no way to establish that we had not brought it, seeded it, or created the conditions that produced it. Our presence is what makes the observation possible and what makes it worthless as evidence.</p>
+
+<p>This is forward contamination stated as an epistemic rather than a custodial problem. Planetary protection is usually argued on stewardship grounds: do not spoil the sample. The sharper argument is that arrival <em>destroys the control</em>, permanently and unrecoverably, and no subsequent care restores it. The measurement and the intervention are the same act.</p>
+
+<div class="block-lens">
+  <span class="block-label">Third instance &mdash; engineered order mistaken for emergent order</span>
+  <div class="block-body">
+  <p>This is the same structure recorded twice already in the corpus. In quantum chemistry, molecular geometry is inserted by clamping the nuclei under Born&ndash;Oppenheimer and then recovered and reported as found — Lombardi's objection. In the anyon experiments, the braid is built by applying gates chosen by the experimenter, so "the order of operations is physically recorded" holds by construction and tests nothing; the fractional quantum Hall system is the control precisely because nobody imposed the braiding.</p>
+  <p style="margin-bottom:0">Lunar biogenesis after human arrival is the third instance, and the most severe, because unlike the other two there is no control case available anywhere. Sterile Moon is a state that exists once. The asymmetry — two impositions and one control — was already noted as a paper in the Chapter 7 revision; this is its third leg, and it argues for measuring the pristine state <em>before</em> the habitat, not because the sample is precious but because the baseline is the only thing that cannot be recovered later.</p>
+  </div>
+</div>
+
+<h2>§9 · Honest Inventory</h2>
+
+<table>
+  <tr><th>Claim</th><th>Status</th><th>Basis</th></tr>
+  <tr><td>0.4 <em>g</em> maintenance floor; 0.39%/wk lunar BMD loss</td><td>[VERIFIED] source · [MODEL] rate</td><td>NASA ICES-2021-142</td></tr>
+  <tr><td>Bone responds above a strain threshold; response saturates in cycle number</td><td>[VERIFIED]</td><td>mechanostat literature</td></tr>
+  <tr><td>Activity volume cannot predict skeletal outcome</td><td>[MODEL]</td><td>follows from the two above; untested in partial gravity</td></tr>
+  <tr><td>Dust reactivity half-life ≈ 3.5 h; incomplete passivation at one week</td><td>[VERIFIED]</td><td>NASA dust reactivity measurements</td></tr>
+  <tr><td>UV as a continuous re-activation mechanism at the surface</td><td>[VERIFIED]</td><td>three named activation mechanisms</td></tr>
+  <tr><td>Route-dependent dust hazard (PSR vs sunlit)</td><td>[OPEN]</td><td>inference; not measured</td></tr>
+  <tr><td>xEMU 1-in-2500 per EVA; 99% of risk in softgoods</td><td>[VERIFIED]</td><td>xEMU MMOD risk assessment</td></tr>
+  <tr><td>$n^{\*} = 2/p_{\text{iface}}$</td><td>[MODEL]</td><td>analytic + numeric; assumed failure model</td></tr>
+  <tr><td>Depth &times; subdivision super-multiplicative</td><td>[MODEL]</td><td>binomial tail convexity; assumed internal rate</td></tr>
+  <tr><td>Accessible cave conduit below Mare Tranquillitatis</td><td>[VERIFIED]</td><td>LRO Mini-RF radar re-analysis, 2024</td></tr>
+  <tr><td>Real habitat-shell ballistic limits and seal reliabilities</td><td>[OPEN]</td><td>not in hand; absolutes unusable without them</td></tr>
+</table>
+
+<h2>§10 · Where This Sits</h2>
+
+<p><a href="g6-crystal.html">The G6 Crystal</a> treated lunar architecture as structure. This paper argues it is something else as well: the only available countermeasure for the one hazard class that no drug and no monitoring programme can reach. That reframing is the contribution — not architecture as engineering, but architecture as the answer to category four.</p>
+
+<p>The methodological sibling is <a href="../book4/ch20-defect-lattice.html">Book 4 · Chapter 20 · The Defect Lattice</a>, which runs the same discipline on a mathematical rather than a physiological question: fix the falsification criterion first, report the negative result, and record which half of a problem was closed and which was not. Readers coming from <a href="wp54-quantum-weave.html">WP54 · Quantum Weave Topology</a> will recognise §8's structure from the engineered-versus-emergent distinction developed there.</p>
+
+<p>Nothing in this paper depends on the operator chain, and nothing in it should be cited as extending the chain. The four categories are ordinary risk analysis; their only novelty is being applied together, and being made to exclude as well as include.</p>
+
+</main>
+
+<footer>
+  <div style="margin-bottom:.7rem"><a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" aria-label="G6 LLC — grossi-ops"><img src="g6-mark.svg" alt="G6 LLC" width="40" height="46" style="height:44px;width:auto;vertical-align:middle;display:inline-block;border:0"></a></div>
+  <p>Principia Orthogona · Book VI · Working Paper 71</p>
+  <p>The Lunar Survivability Discriminant · Habitability &middot; Risk Structure · 2026</p>
+  <p>Series: <a href="https://zenodo.org/communities/principia-orthogona" target="_blank">zenodo.org/communities/principia-orthogona</a></p>
+
+  <span style="display:block;margin-top:.5rem">&copy; 2026 Pablo Nogueira Grossi / <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> &middot; Newark, New Jersey &middot; CC BY-NC-ND 4.0</span>
+
+  <div class="prov">
+    <div>
+      <strong>WP71</strong><br>
+      Principia Orthogona &middot; Vol VI &middot; Roots<br>
+      G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; 2026<br>
+      ORCID <a href="https://orcid.org/0009-0000-6496-2186" target="_blank" rel="noopener">0009-0000-6496-2186</a>
+      &middot; <a href="mailto:g6llc@proton.me">g6llc@proton.me</a><br>
+      Series <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" rel="noopener">Principia Orthogona</a>
+      &middot; <a href="https://github.com/TOTOGT/geometry" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="disc">
+      <strong>Notice</strong><br>
+      Independent working paper; not peer-reviewed. Vol VI has no ISBN allocation and no volume-level deposit; series citations should point at the Principia Orthogona community rather than any single DOI.<br>
+      CC BY-NC-ND 4.0 &middot; &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
