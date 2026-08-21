@@ -44,6 +44,7 @@ truthfully, and certifies nothing.
 | STALE | is this the environment it was checked in? | probe |
 | FAIL | does the check still pass? | re-run |
 | **VACUOUS** | **does the statement have content?** | **nothing yet** |
+| **FALSE** | **is the statement true at all?** | **elaboration, and only if a build target reaches the file** |
 
 **Why it survives here.** The Architecture library *is* in a build target —
 `lean_lib Orthogenesis`, imported by `Orthogenesis.lean` — so `lake build`

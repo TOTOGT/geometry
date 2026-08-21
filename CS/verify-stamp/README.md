@@ -97,7 +97,7 @@ exited 2 and was scored as a genuine MISMATCH by this tool's own test suite —
 a checker whose failure is indistinguishable from the failure it reports is
 precisely the defect it exists to catch. That bug is why the codes moved.
 
-## Three defects this tool found in itself
+## Four defects this tool found in itself
 
 Recorded rather than quietly fixed, because a verification tool with an
 undisclosed defect history is asking for exactly the trust it exists to
@@ -120,9 +120,22 @@ withhold.
    literally, and any detected block whose lines do not all look like stamp
    lines is now an `ERROR` rather than a licence to delete them.
 
-The third is the one worth dwelling on: the tool corrupted an artifact while
-reporting that it had certified it. That is a worse failure than any it was
-built to detect, and it was found only by applying the instrument to itself.
+4. **It could not recognise success.** `#print axioms` prints
+   `'foo' does not depend on any axioms` when a theorem rests on nothing at
+   all. The count check matched only the string `depends on axioms`, so on its
+   first run against twelve real theorems it counted nine, failed the job, and
+   discarded the three *best* results in the file — proofs resting on no axiom
+   whatever, not even `propext`.
+
+The third is worth dwelling on: the tool corrupted an artifact while reporting
+that it had certified it. That is a worse failure than any it was built to
+detect, and it was found only by applying the instrument to itself.
+
+The fourth is worth dwelling on for the opposite reason. A verification tool
+can be wrong in two directions — it can accept what it should reject, or fail
+to recognise what it should accept. Almost all attention goes to the first,
+because the first produces false assurance and something eventually complains.
+The second produces abandoned results and silence.
 
 ## Security
 

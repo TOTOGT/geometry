@@ -288,11 +288,30 @@ V = ( artifact , toolchain , library )
 
 <p>The codes begin at ten deliberately, and the reason is a defect this tool found in itself. In the first test run, <code>MISMATCH</code> was <code>2</code> &mdash; the same code a Python interpreter returns for a file it cannot open. A broken invocation exited 2 and was scored by the tool's own test suite as a genuine <code>MISMATCH</code>: a green assertion, for the wrong reason, in a suite written to catch exactly that. A checker whose failure is indistinguishable from the failure it reports is the defect it exists to catch. The codes moved out of the range that shells and interpreters already occupy.</p>
 
+<p>A fourth defect appeared the first time the instrument ran against real theorems, and it is the strangest of the four. <code>#print axioms</code> has two output forms: <code>'foo' depends on axioms: [&hellip;]</code>, and &mdash; when a theorem rests on nothing whatever &mdash; <code>'foo' does not depend on any axioms</code>. The check counted occurrences of the first string. Three of the twelve theorems it was asked about are axiom-free, so it counted nine and failed the job.</p>
+
+<div class="block-open">
+<span class="block-label">A checker that cannot see success</span>
+<div class="block-body">The three results it discarded were the three <em>best</em> results in the file &mdash; proofs resting on no axiom at all, not even <code>propext</code>. The other defects in this instrument corrupted an artifact or mislabelled a failure. This one is quieter and worse in a particular way: it was blind to the strongest possible outcome, and it reported that blindness as the file's fault. A verification tool has two ways to be wrong, and the literature attends almost entirely to the first: it can accept what it should reject, or it can fail to recognise what it should accept. The second produces no false assurance, so nothing downstream complains &mdash; it produces abandoned results.</div>
+</div>
+
 <p>A second defect was found by turning the instrument on itself. The source defined its delimiters literally &mdash; <code>BEGIN = "&hellip;-BEGIN"</code> &mdash; so when the tool stamped its own file it matched those two constant definitions as the stamp block and deleted them from the body it wrote back. The write reported success, with a hash and a timestamp. The file could then no longer import itself, and its test suite fell from twenty passes to two. The delimiters are now assembled from parts so they never appear literally, and any detected block whose lines do not all look like stamp lines is an <code>ERROR</code> rather than a licence to remove them.</p>
 
 <div class="block-open">
 <span class="block-label">Worse than what it detects</span>
 <div class="block-body">That failure is more serious than any in the taxonomy above. MISMATCH, STALE and FAIL all describe a claim that has come loose from a <em>surviving</em> artifact. Here the instrument destroyed part of the artifact and certified the result. A verification tool is a privileged writer, and privileged writers fail in ways their subjects cannot. It was found only by applying the instrument to itself, which is now a standing test rather than an experiment.</div>
+</div>
+
+<div class="block-defn">
+<span class="block-label">What a build target surfaced</span>
+<div class="block-body">Between 21 August and the following day, twelve theorems that had sat in this repository for a month were compiled for the first time, because a single line was added to a Lake configuration. Making them compile took six repair commits and turned up four distinct defects, none of which any of the three classes above describes:
+<ul class="step-list">
+<li>a lemma <b>admitted</b> &mdash; <code>hexRing_card</code>, its successor case <code>sorry</code>, with <code>coord_coverage</code> a bare call to it;</li>
+<li>a lemma <b>misapplied</b> &mdash; <code>stage_bound</code>, given one argument fewer than it quantifies over;</li>
+<li>a lemma <b>named but never supplied</b> &mdash; <code>hexNeighbors_nodup</code>, cited by a theorem and defined nowhere;</li>
+<li>a theorem <b>false as stated</b> &mdash; <code>no_coord_collision</code>, which could not be proved because it was not true.</li>
+</ul>
+The last is the one worth pausing on. MISMATCH, STALE and FAIL all concern a claim coming loose from a surviving artifact. This is a claim that was never true, sitting in a repository, indistinguishable from its neighbours, and undiscoverable until something attempted to check it. No stamp detects it. No axiom probe detects it. Only elaboration does, and elaboration only happens to files a build target reaches.</div>
 </div>
 
 <h2>7 &middot; What the instrument does not do</h2>
@@ -313,13 +332,17 @@ V = ( artifact , toolchain , library )
 <ul class="step-list">
 <li>An earlier draft of the companion manuscript asserted &ldquo;five results are proved without sorry&rdquo; in its abstract. That sentence was copied from the file header, without running anything. The false claim moved from a comment into a manuscript in a single step &mdash; the ordinary mechanism, operating inside a paper about the mechanism.</li>
 <li>On finding three theorems admitted, the auditor concluded the header had been false when written and stated so in a source retraction and a draft. That conclusion was reached by searching one directory &mdash; chosen because the header itself named it &mdash; and treating the absence of evidence as evidence. It was wrong for two of the three theorems. It was corrected only because the author disputed it.</li>
-<li>The tool's test suite returned a false pass on its first run, and the tool corrupted its own source on first self-application while reporting success &mdash; both in &sect;6. Three defects were found in the instrument during the writing of the paper that specifies it; all three are recorded in its README rather than quietly repaired.</li>
+<li>The tool's test suite returned a false pass on its first run, and the tool corrupted its own source on first self-application while reporting success &mdash; both in &sect;6. Four defects were found in the instrument during the writing of the paper that specifies it &mdash; the fourth, in &sect;6, being an inability to recognise an axiom-free proof as a success. All four are recorded in its README rather than quietly repaired.</li>
 <li>The earliest audit in this series, logged in April 2026, records a cosmetic overlay applied to the wrong page of a PDF &mdash; index 105 rather than 99 &mdash; caught by visual inspection and reversed. That is a MISMATCH in a medium with no kernel, no CI and no hashes, and it suggests the class is not an artefact of formal methods but a property of any workflow in which claims and objects are handled separately.</li>
 </ul>
 
 <div class="block-proof">
 <span class="block-label">Status</span>
-<div class="block-body">The five theorems in <code>SaturnHexagon.lean</code> report <code>[propext, Classical.choice, Quot.sound]</code> and no <code>sorryAx</code> under <code>leanprover/lean4:v4.33.0-rc1</code>, run 21 August 2026. That result has not been reproduced under <code>v4.32.0</code>, which is the version this repository pins and the version its CI uses. The claim in this paragraph is therefore itself scoped to a triple, and will be false the day the toolchain moves. <code>verify-stamp</code> exists so that the day it becomes false is the day something says so.</div>
+<div class="block-body"><p>The five theorems in <code>SaturnHexagon.lean</code> report <code>[propext, Classical.choice, Quot.sound]</code> and no <code>sorryAx</code> under <code>leanprover/lean4:v4.33.0-rc1</code>, run 21 August 2026 on the author's machine.</p>
+
+<p>An earlier version of this paragraph recorded, as an open item, that the result had not been reproduced under <code>v4.32.0</code> &mdash; the version this repository pins and its CI uses. That item is closed. On 21 August 2026, run #235 of <code>verify-proofs.yml</code> on branch <code>verify-hardening</code> compiled the library on a public runner under <code>v4.32.0</code> and asked the kernel about seventeen theorems by name: the five above, and the twelve NASA gap-closure theorems in <code>Orthogenesis/Architecture/NASAGaps.lean</code>. No occurrence of <code>sorryAx</code> in any of them.</p>
+
+<p>The gap table those twelve constitute was described, in an errata issued three days earlier, as one that <em>&ldquo;should be regarded as unverified until a clean build is reported.&rdquo;</em> It is reported. What changed is not the theorems, most of which were sound; it is that the claim now stands downstream of a machine anyone can re-run, rather than upstream of a comment. That is the entire distance this paper is about, and it is one line of Lake configuration wide.</p></div>
 </div>
 
 </main>
