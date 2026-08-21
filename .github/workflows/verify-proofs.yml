@@ -1,6 +1,29 @@
+# Verify Lean proofs.
+#
+# DESIGN NOTE, 2026-08-21. This workflow previously passed on a repository in
+# which three of SaturnHexagon.lean's five theorems were admitted rather than
+# proved. It could not have caught that: `lake build` built only
+# `lean_lib Orthogenesis`, which did not include the file, and the step called
+# "Real axiom check through the Lean kernel" probed six definitions and no
+# theorems. Nothing in the job ever touched a theorem.
+#
+# The rule this workflow now follows: the ONLY step permitted to decide the
+# job is one that asks the Lean kernel about a named theorem and fails on
+# sorryAx. Textual scans (grep for "theorem", grep for "sorry") cannot tell a
+# real proof from a vacuous one or a comment from a declaration, so they are
+# marked informational and are not allowed to gate anything.
+
 name: Verify Lean proofs (real kernel check)
 
-on: push
+# STALE cannot be detected by a push trigger. Decay happens when a toolchain or
+# library moves under a claim that nobody is touching -- so the commit that
+# would fire CI never arrives. The July defect stood for a month precisely
+# because no relevant push occurred. A clock is the only thing that can find it.
+on:
+  push:
+  schedule:
+    - cron: '17 6 * * 1'   # Mondays 06:17 UTC
+  workflow_dispatch:
 
 jobs:
   verify:
@@ -13,6 +36,13 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- --default-toolchain none -y
           echo "$HOME/.elan/bin" >> $GITHUB_PATH
 
+      - name: Report toolchain actually in use
+        run: |
+          set -eu
+          echo "lean-toolchain pins: $(cat lean-toolchain)"
+          lean --version || true
+          lake --version || true
+
       - name: Cache Mathlib build
         uses: actions/cache@v4
         with:
@@ -20,34 +50,197 @@ jobs:
             .lake
           key: geometry-lake-${{ hashFiles('lakefile.lean', 'lean-toolchain') }}
 
-      - name: lake build (the real check -- fails the job if anything doesn't compile)
+      - name: lake build (compiles Orthogenesis AND SaturnHexagon)
         run: |
+          set -eux
           lake update
-          lake exe cache get || true
+          lake exe cache get || echo "::warning::lake exe cache get failed; Mathlib will build from source"
           lake build
 
-      - name: Real declaration + sorry scan (informational, from actually-compiled source)
+      # =================================================================
+      # AUTHORITATIVE STEP. This is the only step that decides the job.
+      # =================================================================
+      - name: Kernel axiom check on the five SaturnHexagon theorems
         run: |
-          echo "== theorem/lemma declarations in Orthogenesis/ =="
-          grep -rn "^theorem \|^lemma " Orthogenesis || echo "(none found -- package is definitions/structures only, no proofs yet)"
-          echo "== sorry usage in Orthogenesis/ =="
-          grep -rn "sorry" Orthogenesis || echo "(none found)"
+          set -u
+          cat > /tmp/probe_saturn.lean << 'EOF'
+          import SaturnHexagon
 
-      - name: Real axiom check through the Lean kernel
-        run: |
-          cat > /tmp/probe.lean << 'EOF'
-          import Orthogenesis.Geometry.HexGrid
-          import Orthogenesis.Geometry.Growth
-          import Orthogenesis.Geometry.Cell
-          import Orthogenesis.Geometry.Colony
-
-          open Orthogenesis
-
-          #print axioms hexNeighbors
-          #print axioms hexToVec2
-          #print axioms Cell.center
-          #print axioms Cell.radius
-          #print axioms Colony.insert
-          #print axioms Colony.expand
+          #print axioms gate_commutes_onsite
+          #print axioms angCoupling_not_commute
+          #print axioms rot_commutes_coupling
+          #print axioms hex_rotation_invariant
+          #print axioms hex_coupling_uniform
           EOF
-          lake env lean /tmp/probe.lean
+
+          set +e
+          lake env lean /tmp/probe_saturn.lean > /tmp/axioms.txt 2>&1
+          rc=$?
+          set -e
+
+          echo "----- probe output -----"
+          cat /tmp/axioms.txt
+          echo "------------------------"
+
+          if grep -q "sorryAx" /tmp/axioms.txt; then
+            echo "::error::sorryAx present - at least one theorem is admitted, not proved"
+            exit 1
+          fi
+
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::probe failed to elaborate (exit $rc)"
+            exit 1
+          fi
+
+          n=$(grep -c "depends on axioms" /tmp/axioms.txt || true)
+          if [ "$n" -ne 5 ]; then
+            echo "::error::expected 5 axiom lines, found $n - a theorem was renamed or removed"
+            exit 1
+          fi
+
+          echo "OK: 5 theorems reported, none depends on sorryAx."
+
+      # =================================================================
+      # AUTHORITATIVE STEP. The NASA gap-closure theorems.
+      # This is the check a third party following this repository needs.
+      # Until 2026-08-21 NASAGaps.lean was in no build target and had never
+      # been type-checked; the job's "Real axiom check" named six DEFINITIONS
+      # and no theorems. See Orthogenesis/NASA.md.
+      # =================================================================
+      - name: Kernel axiom check on the NASA gap-closure theorems
+        run: |
+          set -u
+          cat > /tmp/probe_nasa.lean << 'EOF'
+          import Orthogenesis.Architecture.NASAGaps
+
+          #print axioms Orthogenesis.NASAGaps.FN_H_101L_isoperimetric
+          #print axioms Orthogenesis.NASAGaps.FN_H_102L_phase02_cluster
+          #print axioms Orthogenesis.NASAGaps.FN_L_101L_hex_interfaces
+          #print axioms Orthogenesis.NASAGaps.FN_L_101L_unique_interface
+          #print axioms Orthogenesis.NASAGaps.FN_T_201L_payload_monotone
+          #print axioms Orthogenesis.NASAGaps.FN_T_202L_payload_ratio
+          #print axioms Orthogenesis.NASAGaps.FN_T_201L_stage_gated
+          #print axioms Orthogenesis.NASAGaps.FN_U_103L_six_layers
+          #print axioms Orthogenesis.NASAGaps.FN_U_103L_expand_models_ISRU
+          #print axioms Orthogenesis.NASAGaps.FN_A_104L_reachability
+          #print axioms Orthogenesis.NASAGaps.FN_C_101L_ring_count
+          #print axioms Orthogenesis.NASAGaps.nasa_gap_closure_summary
+          EOF
+
+          set +e
+          lake env lean /tmp/probe_nasa.lean > /tmp/nasa.txt 2>&1
+          rc=$?
+          set -e
+
+          echo "----- NASA gap-closure theorems: axiom report -----"
+          cat /tmp/nasa.txt
+          echo "--------------------------------------------------"
+
+          if grep -q "sorryAx" /tmp/nasa.txt; then
+            echo "::error::sorryAx in a gap-closure theorem - a gap recorded as closed is open"
+            exit 1
+          fi
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::NASA gap probe failed to elaborate (exit $rc)"
+            exit 1
+          fi
+          n=$(grep -c "depends on axioms" /tmp/nasa.txt || true)
+          if [ "$n" -ne 12 ]; then
+            echo "::error::expected 12 gap-closure theorems, found $n - one was renamed or removed"
+            exit 1
+          fi
+          echo "OK: 12 gap-closure theorems, none depends on sorryAx."
+
+      # =================================================================
+      # AUTHORITATIVE STEP. Vacuity.
+      # `theorem X : True := trivial` compiles, has no sorry, and passes
+      # #print axioms. No axiom check can see it. Declared ones are listed in
+      # KNOWN_PLACEHOLDERS.txt; an UNDECLARED one fails the job.
+      # =================================================================
+      - name: Vacuity scan (declared placeholders vs actual)
+        run: |
+          set -u
+          BASE=Orthogenesis/Architecture/KNOWN_PLACEHOLDERS.txt
+          echo "----- declared -----"
+          grep -v '^#' "$BASE" | grep . | sort > /tmp/declared.txt
+          cat /tmp/declared.txt
+          echo "----- actual -----"
+          grep -n ': True := trivial' Orthogenesis/Architecture/*.lean \
+            | grep -v ':[0-9]*: *--' \
+            | sed -E 's/^([^:]+):[0-9]+:[[:space:]]*theorem[[:space:]]+([A-Za-z0-9_'"'"']+).*/\1:\2/' \
+            | sort > /tmp/actual.txt
+          cat /tmp/actual.txt
+          echo "------------------"
+          if ! diff -u /tmp/declared.txt /tmp/actual.txt; then
+            echo "::error::vacuity baseline does not match. A '+' line is an UNDECLARED vacuous theorem; a '-' line is a declaration for something no longer present (update the file)."
+            exit 1
+          fi
+          echo "OK: $(wc -l < /tmp/actual.txt) vacuous statements, all declared."
+
+      - name: verify-stamp self-test (the checker must itself be checked)
+        run: |
+          set -eu
+          bash ./CS/verify-stamp/test_verify_stamp.sh   # bash, not ./ : do not depend on the exec bit surviving git
+
+      # DISABLED until SaturnHexagon.lean carries a stamp. This is an absent
+      # check, not a soft one: it asserts nothing while it is off. Restore it in
+      # the same commit that adds the stamp -- and note the stamp must be
+      # generated under the toolchain THIS repo pins (v4.32.0), which means
+      # generating it from a CI run, not from the local v4.33.0-rc1 tree.
+#      - name: verify-stamp on SaturnHexagon (triple binding)
+#        run: |
+#          set -eu
+#          set +e
+#          python3 CS/verify-stamp/verify_stamp.py check --rerun SaturnHexagon.lean
+#          rc=$?
+#          set -e
+#          case $rc in
+#            0)  echo "OK: stamp, environment and re-run agree" ;;
+#            10) echo "::error::MISMATCH - the stamp describes a different artifact than the file it is attached to"; exit 1 ;;
+#            11) echo "::error::STALE - toolchain or library moved since the stamp; re-run and re-stamp"; exit 1 ;;
+#            12) echo "::error::FAIL - re-run disagrees with the stamp"; exit 1 ;;
+#            13) echo "::error::ERROR - no stamp, or the stamp is malformed. Generate one with:"
+#                echo "  python3 CS/verify-stamp/verify_stamp.py stamp SaturnHexagon.lean \\"
+#                echo "    --prefix '-- ' --command 'lake env lean SaturnHexagon.lean' \\"
+#                echo "    --forbidden sorryAx \\"
+#                echo "    --declaration gate_commutes_onsite --declaration angCoupling_not_commute \\"
+#                echo "    --declaration rot_commutes_coupling --declaration hex_rotation_invariant \\"
+#                echo "    --declaration hex_coupling_uniform \\"
+#                echo "    --env-probe 'toolchain=cat lean-toolchain' \\"
+#                echo "    --env-probe 'mathlib=git -C .lake/packages/mathlib rev-parse HEAD'"
+#                exit 1 ;;
+#            *)  echo "::error::unexpected exit $rc"; exit 1 ;;
+#          esac
+
+      # =================================================================
+      # INFORMATIONAL ONLY. Nothing below may fail the job, because none of
+      # it distinguishes a proof from a comment.
+      # =================================================================
+      - name: Textual census (informational - proves nothing)
+        continue-on-error: true
+        run: |
+          set +e
+          echo "== lines matching ^theorem/^lemma under Orthogenesis/ =="
+          echo "   (a textual count; it cannot tell a real proof from a vacuous one)"
+          grep -rn "^theorem \|^lemma " Orthogenesis || echo "(none)"
+
+          echo
+          echo "== literal 'sorry' occurrences under Orthogenesis/ =="
+          echo "   (matches comments and prose too; the kernel step above is what counts)"
+          grep -rn "sorry" Orthogenesis || echo "(none)"
+
+          echo
+          echo "== candidate vacuous-theorem shapes across all .lean files =="
+          echo "   (': True := trivial' and identity-implication bodies)"
+          grep -rn ": True := by trivial\|: True := trivial" --include=*.lean . || echo "(none)"
+          grep -rn ":= id$\|:= fun h => h" --include=*.lean . || echo "(none)"
+
+          echo
+          echo "== root-level .lean files NOT covered by any build target =="
+          for f in *.lean; do
+            case "$f" in
+              lakefile.lean|Orthogenesis.lean|SaturnHexagon.lean) ;;
+              *) echo "  UNCHECKED: $f" ;;
+            esac
+          done
+          exit 0
