@@ -7,7 +7,6 @@
 -- NASA gap closure: FN-C-101 L (coord coverage), FN-H-101 L (no collision)
 
 import Orthogenesis.Geometry.Colony   -- was Architecture.Colony, which does not exist
-import Mathlib.Data.Int.Order
 import Mathlib.Data.Finset.Card
 import Mathlib.Tactic
 
