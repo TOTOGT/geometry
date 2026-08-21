@@ -143,8 +143,9 @@ theorem Colony.no_coord_collision (C : Colony)
     · exact absurd (hcoord ▸ hh₁) (hSep c₂ hc₂old p₁ hp₁)
     · have e₁ : p₁.stage = 0 := hStage p₁ hp₁
       have e₂ : p₂.stage = 0 := hStage p₂ hp₂
-      simp only [] at hcoord
-      exact Cell.ext hcoord (by simp [e₁, e₂])
+      have hc : h₁ = h₂ := hcoord
+      subst hc
+      rw [e₁, e₂]
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- §5  The canonical seed
