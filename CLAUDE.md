@@ -8,6 +8,59 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 ---
 
+## Read first: Lean and CI verification state
+
+Updated 2026-08-21 from CI runs #222 to #224. This section is the current
+answer. Do not re-derive it from the tree; update it when a run changes it.
+
+**Scope of the green badge.** `.github/workflows/verify-proofs.yml` on `main`
+runs `lake build`, and `lakefile.lean` declares
+`@[default_target] lean_lib Orthogenesis`. Green means every module reachable
+from `Orthogenesis.lean` compiled. It does not mean that every `.lean` file in
+the tree compiled: root-level `SaturnHexagon.lean`, `NASAGaps.lean` and
+`Coverage.lean` are not build targets and the job never touches them. It does
+not mean any theorem is non-vacuous, and it does not mean the tree is free of
+`sorry`. The `grep` steps for `theorem` and `sorry` are textual and
+informational; they cannot tell a proof from a comment and must not gate
+anything.
+
+**Proved, with provenance.** Run #222, branch `verify-hardening`, Lean
+**v4.32.0**, 2026-08-21: `SaturnHexagon` built and the kernel reported, for each
+of `gate_commutes_onsite`, `angCoupling_not_commute`, `rot_commutes_coupling`,
+`hex_rotation_invariant` and `hex_coupling_uniform`:
+`depends on axioms: [propext, Classical.choice, Quot.sound]`. No `sorryAx`.
+Those five are genuinely proved. Header comments claiming KERNEL-VERIFIED under
+v4.14.0 predate this and are stale. A header comment is not evidence -- quote
+the run.
+
+**Open failures.** `Orthogenesis/Architecture/Coverage.lean` fails on
+`bad import 'Mathlib.Data.Int.Order'`, a module removed upstream; it cascades
+through `Orthogenesis.lean` and fails the whole library.
+`Orthogenesis/Architecture/NASAGaps.lean` fails with four errors: unknown
+identifier `hexNeighbors_nodup` (61:26); a type mismatch at 98:2 where
+`Colony.stage_bound` is `forall (n : Nat), ...` but is applied as though `n`
+were already fixed; and unknown constants `Colony.expand_mono` and
+`Colony.expandN_mono` at 141:2, 155:2 and 226:3. Those lemmas do not exist in
+the package -- the file was written against an API that was never proved, which
+is a different defect from toolchain decay. Separately,
+`MagneticLattice.lean:240` and `SeismicLattice.lean:201` both use `sorry`, so
+the package is not sorry-free and no document should say that it is.
+
+**Traps.** Several files exist both at the repo root and under
+`Orthogenesis/Architecture/`; only the latter are built, so edits to a root copy
+never reach CI. `~/Desktop/orthogenesis` has `.lake/packages/mathlib` fetched
+and `~/Desktop/geometry` does not; the toolchains also differ (v4.32.0 against
+v4.33.0-rc1). Builds must run in a tree that has mathlib, or in CI. Hardened
+workflow changes belong on `verify-hardening`, where the files they probe exist;
+on `main` they fail for missing files, which is a red badge that means nothing.
+That happened in cab0768 and was reverted by 7f112c9.
+
+**Working economy.** This file is long. Read this section, then only the
+section covering the file you are about to touch. Do not page a whole Actions
+log -- read the failing step. Prefer targeted reads to whole-file reads.
+
+---
+
 ## Series ISBN & format map
 
 **Canonical source: `~/Desktop/MATHS for life/isbn_metadata.json`.** It is the only copy
