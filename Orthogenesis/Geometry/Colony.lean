@@ -60,4 +60,22 @@ theorem Colony.stage_bound (C₀ : Colony) (h₀ : ∀ c ∈ C₀.cells, c.stage
     · exact le_trans (ih x hold) (Nat.le_succ m)
     · simpa using Nat.succ_le_succ (ih c hc)
 
+/-- One expansion keeps every existing cell: `expand` is monotone. -/
+theorem Colony.expand_mono (C : Colony) : C.cells ⊆ C.expand.cells := by
+  intro x hx
+  rw [Colony.mem_expand]
+  exact Or.inl hx
+
+/-- Iterated expansion is monotone: nothing already present is ever lost. -/
+theorem Colony.expandN_mono (C : Colony) (n : ℕ) :
+    C.cells ⊆ (Colony.expandN n C).cells := by
+  induction n with
+  | zero =>
+    intro x hx
+    simpa [Colony.expandN] using hx
+  | succ m ih =>
+    intro x hx
+    simp only [Colony.expandN]
+    exact Colony.expand_mono _ (ih hx)
+
 end Orthogenesis
