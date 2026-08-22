@@ -145,7 +145,7 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-trans
 <section class="hero">
   <div class="hero-tag">Working Paper 73 &middot; Verification &middot; Software Provenance</div>
   <h1>The Stamp and the Triple</h1>
-  <p class="hero-sub">A verification claim names an artifact. Verification is a property of a <em>triple</em> &mdash; artifact, toolchain, library. Every convention in common use records the first and drops the other two, and that single omission admits three distinct failures which look identical to every automated reader. This paper audits one small Lean file across a month, separates the three, and specifies an instrument that tells them apart.</p>
+  <p class="hero-sub">A verification claim names an artifact. Verification is a property of a <em>triple</em> &mdash; artifact, toolchain, library. Every convention in common use records the first and drops the other two, and that single omission admits three distinct failures which look identical to every automated reader. This paper audits one small Lean file across a month, separates the three, and specifies an instrument that tells them apart. Running that instrument against a body of theorems then surfaces four further classes, which concern not the binding of a claim to an artifact but the artifact itself &mdash; ending in one that no instrument can decide, and which therefore fixes the ceiling of the whole programme.</p>
   <div class="hero-eq">Pablo Nogueira Grossi &middot; G6 LLC, Newark NJ &middot; 21 August 2026 &middot; instrument: <code>CS/verify-stamp</code> &middot; specimens: <code>DO NOT DELETE/MANIFEST.md</code></div>
 </section>
 
@@ -325,7 +325,50 @@ The last is the one worth pausing on. MISMATCH, STALE and FAIL all concern a cla
 <div class="block-body">Someone has to doubt the auditor. No mechanism produces that, and the failure it prevents is the worst available, because a wrong correction arrives carrying more authority than the error it replaces. In the audit reported here the decisive intervention was not a tool. It was the author reading the auditor's conclusions and saying that half of them were not true &mdash; which was correct, and which no exit code would have produced.</div>
 </div>
 
-<h2>8 &middot; Provenance of this paper</h2>
+<h2>8 &middot; Beyond the triple: two classes the stamp cannot reach</h2>
+
+<p>The classes above concern a claim coming loose from an artifact. Three further classes concern the artifact itself, and they were found by running the hardened job against a body of theorems rather than against one file. The first was described at the end of &sect;6: a theorem <b>false as stated</b>, which only elaboration detects. Two more complete the ladder, and they are of opposite character &mdash; one is trivially mechanisable and had simply not been mechanised; the other cannot be mechanised at all.</p>
+
+<p><b>VACUOUS.</b> A theorem whose conclusion is <code>True</code> compiles cleanly, contains no <code>sorry</code>, and reports <code>[propext, Classical.choice, Quot.sound]</code> exactly as a real theorem does. <code>#print axioms</code> is the wrong instrument by construction: it asks what a proof rests on, and a trivially true statement rests on nothing. The check passes, truthfully, and certifies nothing. Six such statements are live in <code>Orthogenesis/Architecture/</code>; a seventh, <code>hexagrid_collapse_resistance_superior</code>, was reported deleted in an errata issued to a federal agency and was still in the file three days later. It is now gated: a scan compares the vacuous statements present against a declared baseline, and an undeclared one fails the job. That scan caught the seventh on its first run.</p>
+
+<p><b>MISATTRIBUTED.</b> A theorem that is true, proved, and credited with a claim it does not support. The twelve NASA gap-closure theorems are each indexed against a functional gap code; reading the statements against the codes, five of the twelve prove something other than what they are filed as.</p>
+
+<div class="wrap-x">
+<table class="vtable">
+<tr><th>theorem</th><th>what the statement proves</th><th>what it is filed as</th></tr>
+<tr><td><code>FN_A_104L_reachability</code></td><td><code>C₀.cells &sube; (expandN n C₀).cells</code> &mdash; the seed cells survive <em>n</em> steps</td><td>&ldquo;every cell in <code>expandN n C₀</code> is reachable from C₀ in exactly <em>n</em> steps&rdquo; &mdash; the converse inclusion</td></tr>
+<tr><td><code>FN_L_101L_unique_interface</code></td><td>adjacency is symmetric</td><td>&ldquo;any two neighbouring cells share exactly one interface face&rdquo;</td></tr>
+<tr><td><code>FN_U_103L_six_layers</code></td><td><code>n_layers = 6</code>, by <code>decide</code> on a literal</td><td>&ldquo;each completed layer contains sufficient processed regolith to seed one additional module&rdquo;</td></tr>
+<tr><td><code>FN_U_103L_expand_models_ISRU</code></td><td>monotonicity, true of <code>expand</code> by construction</td><td>&ldquo;one expand = one ISRU cycle&rdquo;</td></tr>
+<tr><td><code>FN_T_202L_payload_ratio</code></td><td>a ratio equal to 15 in &#8469;, so any true ratio in [15, 16) satisfies it</td><td>confirmation that <em>g</em>&sup2; &asymp; 14.98</td></tr>
+</table>
+</div>
+
+<p>Every one is true. Every one is proved. Each reports the standard three axioms. None supports the sentence recorded against it, and one of them is re-exported into the summary theorem that constitutes the machine-readable gap table.</p>
+
+<div class="block-open">
+<span class="block-label">The ceiling</span>
+<div class="block-body">MISMATCH, STALE and FAIL are mechanical: both sides of each comparison are machine-readable. VACUOUS is partly mechanical &mdash; the elaborated type is a formal object, so a checker can reject <code>True</code> and self-implication. MISATTRIBUTED is the first class in which one side of the comparison is a natural-language sentence. Deciding it means deciding whether a Lean proposition entails an English claim, which is not a decision procedure and will not become one. This is the ceiling of the verification stack and is worth stating as a ceiling: <strong>the stack can certify that a proof supports a statement, and can never certify that a statement supports a claim.</strong> Everything above that line is review, and review is done by a person or not at all.</div>
+</div>
+
+<p>What is mechanisable is the bookkeeping, not the judgement. Require every theorem cited in a claims table to carry a machine-readable claim identifier; require every identifier in the prose to resolve to exactly one theorem; fail on either side unmatched. That catches drift &mdash; a renamed theorem, a gap code whose theorem was deleted, a theorem quietly repointed at a second gap &mdash; and catches nothing about whether the pairing was ever warranted. The residual judgement has one honest form, a three-column table: statement as written, what it strictly licenses, what is claimed from it. The gap between the second column and the third is the audit.</p>
+
+<p><b>UNTRUSTED.</b> The opposite case &mdash; mechanisable, and simply not mechanised. One of the twelve, <code>FN_H_102L_phase02_cluster</code>, depends on <code>colony_depth1_cells._native.native_decide.ax_1_1</code>: an axiom emitted when a goal is discharged by compiled code rather than by the kernel. The gate is a <code>grep</code> for <code>sorryAx</code> and cannot see it, so a step named <em>&ldquo;Kernel axiom check&rdquo;</em> reports success on a theorem the kernel did not check. Enumerating the forbidden axioms is the wrong shape; enumerating the permitted three is two lines and closes the class for good, including against whatever axiom nobody has thought of yet.</p>
+
+<div class="wrap-x">
+<table class="vtable">
+<tr><th></th><th>question asked</th><th>detected by</th></tr>
+<tr><td><b>MISMATCH</b></td><td>is this the artifact that was checked?</td><td>hash</td></tr>
+<tr><td><b>STALE</b></td><td>is this the environment it was checked in?</td><td>probe</td></tr>
+<tr><td><b>FAIL</b></td><td>does the check still pass?</td><td>re-run</td></tr>
+<tr><td><b>FALSE</b></td><td>is the statement true at all?</td><td>elaboration &mdash; and only if a build target reaches the file</td></tr>
+<tr><td><b>VACUOUS</b></td><td>does the statement have content?</td><td>a declared-baseline scan; fully only on the elaborated type</td></tr>
+<tr><td><b>UNTRUSTED</b></td><td>does the proof rest on the kernel?</td><td>an axiom allowlist</td></tr>
+<tr><td><b>MISATTRIBUTED</b></td><td>does the statement support the claim made from it?</td><td>nothing, and nothing can</td></tr>
+</table>
+</div>
+
+<h2>9 &middot; Provenance of this paper</h2>
 
 <p>This chapter was produced across sessions of an automated assistant that does not retain memory between them, which is the same condition that produced the July defect. Its own errors are recorded here for the same reason the July ones are.</p>
 
@@ -333,6 +376,7 @@ The last is the one worth pausing on. MISMATCH, STALE and FAIL all concern a cla
 <li>An earlier draft of the companion manuscript asserted &ldquo;five results are proved without sorry&rdquo; in its abstract. That sentence was copied from the file header, without running anything. The false claim moved from a comment into a manuscript in a single step &mdash; the ordinary mechanism, operating inside a paper about the mechanism.</li>
 <li>On finding three theorems admitted, the auditor concluded the header had been false when written and stated so in a source retraction and a draft. That conclusion was reached by searching one directory &mdash; chosen because the header itself named it &mdash; and treating the absence of evidence as evidence. It was wrong for two of the three theorems. It was corrected only because the author disputed it.</li>
 <li>The tool's test suite returned a false pass on its first run, and the tool corrupted its own source on first self-application while reporting success &mdash; both in &sect;6. Four defects were found in the instrument during the writing of the paper that specifies it &mdash; the fourth, in &sect;6, being an inability to recognise an axiom-free proof as a success. All four are recorded in its README rather than quietly repaired.</li>
+<li>The Status block below originally closed its open item by citing <b>run #235</b>. GitHub records run #235 as <b>failed</b>. The sentence describes kernel steps inside that run and reports them as though they were the run &mdash; a true statement about a part, offered as a statement about the whole, in the Status block of a paper about exactly that substitution. It was caught on 22 August 2026 by checking the run rather than the sentence, and the citation now names run #238, which is green.</li>
 <li>The earliest audit in this series, logged in April 2026, records a cosmetic overlay applied to the wrong page of a PDF &mdash; index 105 rather than 99 &mdash; caught by visual inspection and reversed. That is a MISMATCH in a medium with no kernel, no CI and no hashes, and it suggests the class is not an artefact of formal methods but a property of any workflow in which claims and objects are handled separately.</li>
 </ul>
 
@@ -340,7 +384,9 @@ The last is the one worth pausing on. MISMATCH, STALE and FAIL all concern a cla
 <span class="block-label">Status</span>
 <div class="block-body"><p>The five theorems in <code>SaturnHexagon.lean</code> report <code>[propext, Classical.choice, Quot.sound]</code> and no <code>sorryAx</code> under <code>leanprover/lean4:v4.33.0-rc1</code>, run 21 August 2026 on the author's machine.</p>
 
-<p>An earlier version of this paragraph recorded, as an open item, that the result had not been reproduced under <code>v4.32.0</code> &mdash; the version this repository pins and its CI uses. That item is closed. On 21 August 2026, run #235 of <code>verify-proofs.yml</code> on branch <code>verify-hardening</code> compiled the library on a public runner under <code>v4.32.0</code> and asked the kernel about seventeen theorems by name: the five above, and the twelve NASA gap-closure theorems in <code>Orthogenesis/Architecture/NASAGaps.lean</code>. No occurrence of <code>sorryAx</code> in any of them.</p>
+<p>An earlier version of this paragraph recorded, as an open item, that the result had not been reproduced under <code>v4.32.0</code> &mdash; the version this repository pins and its CI uses. That item is closed. Run <b>#238</b> of <code>verify-proofs.yml</code> on branch <code>verify-hardening</code>, commit <code>8855044</code>, compiled the library on a public runner under <code>v4.32.0</code> and asked the kernel about seventeen theorems by name: the five above, and the twelve NASA gap-closure theorems in <code>Orthogenesis/Architecture/NASAGaps.lean</code>. No occurrence of <code>sorryAx</code> in any of them, and the vacuity baseline matches the file. The run is green as a whole, which is the property being claimed; an earlier version of this sentence cited run #235, which is not (see &sect;9).</p>
+
+<p>What that green does <em>not</em> establish is &sect;8: eleven of the twelve rest on the kernel and one does not, and five of the twelve are filed under claims their statements do not support. Both are open. A green run is a statement about provenance, never about content.</p>
 
 <p>The gap table those twelve constitute was described, in an errata issued three days earlier, as one that <em>&ldquo;should be regarded as unverified until a clean build is reported.&rdquo;</em> It is reported. What changed is not the theorems, most of which were sound; it is that the claim now stands downstream of a machine anyone can re-run, rather than upstream of a comment. That is the entire distance this paper is about, and it is one line of Lake configuration wide.</p></div>
 </div>
