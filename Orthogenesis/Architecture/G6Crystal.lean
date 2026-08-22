@@ -298,12 +298,25 @@ theorem hex_embedding_real (h : HexCoord) :
     (hexToVec2 h).x = (h.q : ℝ) + (h.r : ℝ) / 2 := by
   simp [hexToVec2]
 
+-- TACTIC NOTE, 2026-08-22. The two theorems below were closed by
+-- `native_decide` until CI run #245. `native_decide` evaluates the goal in
+-- compiled code and asks the kernel to trust the answer, leaving
+-- `Lean.ofReduceBool` in the axiom set -- so a theorem proved that way is not
+-- kernel-checked, and `FN_H_102L_phase02_cluster`, which rests on
+-- `colony_depth1_cells`, carried
+--   Orthogenesis.G6Crystal.colony_depth1_cells._native.native_decide.ax_1_1
+-- into the NASA gap-closure report while being counted as verified.
+-- Plain `decide` closes both goals: seven cells and nineteen coordinates are
+-- well inside what the kernel will reduce. Measured on v4.32.0, default
+-- `maxRecDepth`, the whole file elaborates in 5.6 s of CPU. The unsound
+-- tactic bought no speed; it was habit, not a trade.
+
 /-- Seed colony at depth 1: 7 cells (centre + 6 neighbors).
     Reflects NASA Phase 02: seven G¹ modules form the first G² ring. -/
 theorem colony_depth1_cells :
     let seed : Colony := { cells := {Cell.mk ⟨0,0⟩ 0} }
     seed.expand.cells.card = 7 := by
-  native_decide
+  decide
 
 /-- Seed colony at depth 2: 19 distinct coordinates (centre + ring 1 + ring 2).
     Centered hexagonal number 1 + 3·2·3 = 19. NB: `Colony.expand` tags the
@@ -313,7 +326,7 @@ theorem colony_depth1_cells :
 theorem colony_depth2_coords :
     let seed : Colony := { cells := {Cell.mk ⟨0,0⟩ 0} }
     (seed.expand.expand.cells.image (fun c => c.coord)).card = 19 := by
-  native_decide
+  decide
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- §9  Open Obligations (sorry-marked, named after NASA gaps)
