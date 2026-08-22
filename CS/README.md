@@ -17,7 +17,7 @@ the failure this folder exists to document.
 | domain | ↑ filled | ↓ filled |
 |---|---|---|
 | [maths.md](maths.md) | 1 | 0 |
-| [architecture.md](architecture.md) | 1 | 0 |
+| [architecture.md](architecture.md) | 2 | 0 |
 | [physics.md](physics.md) | 0 | 0 |
 | [chem.md](chem.md) | 0 | 0 |
 | [bio.md](bio.md) | 0 | 0 |
