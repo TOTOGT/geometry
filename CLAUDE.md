@@ -14,9 +14,12 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 > **Branch:** `verify-hardening`
 > **Uncommitted:** none *(update this before your session ends)*
-> **Open — next action:** apply an axiom allowlist to `verify-proofs.yml`. The gate greps for `sorryAx` only, so `FN_H_102L_phase02_cluster` passes while resting on `native_decide` — compiled code, not the kernel — inside a step named "Kernel axiom check". Permit `propext`, `Classical.choice`, `Quot.sound`; fail on anything else. **Web editor only:** the PAT has no `workflow` scope.
+> **Open — next action, one web-editor trip:** two changes to `.github/workflows/verify-proofs.yml`. The PAT has no `workflow` scope, so both must go through github.com.
+> &nbsp;&nbsp;1. **Axiom allowlist.** The gate greps for `sorryAx` only, so `FN_H_102L_phase02_cluster` passes while resting on `native_decide` — compiled code, not the kernel — inside a step named "Kernel axiom check". Permit `propext`, `Classical.choice`, `Quot.sound`; fail on anything else.
+> &nbsp;&nbsp;2. **Wire `tools/terms.py --check`** in beside the vacuity scan.
+> **Open — later pass:** `TERMS.md`'s 148-term baseline includes author affiliations, language tags and standard field acronyms caught by the pattern. Pruning them is cosmetic; the check works regardless.
 > **Queued (2026-08-22):** V7 — L3 and cognitive limits on Lⁿ. ELTJ lexicography piece — needs the PDF and the author's angle.
-> **Closed 2026-08-22:** WP71 §7's HRP figures, checked row by row against the retained specimen at `book6/sources/hrp-rap-for-web-62026.pdf`. Two minor sub-claims remain unchecked: the comparator deliverable counts for BH/EIHSO/Team/Carcinogenesis, and the duplicated "Days post-landing prior to initial EVA" under EVA-101 and SM-106.
+> **Closed 2026-08-22:** WP71 §7's HRP figures, verified row by row against the retained specimen at `book6/sources/`. WP73 §8 and WP02 §5 written. `CLAUDE.md` split. A Google AI Overview attributed "Harmonic Resonance Bands (HRB)" and a "Log-Psi Recurrence Operator" to this corpus; neither term occurs in it, and `tools/terms.py` exists because of that.
 
 Overwrite this block; do not append to it. The house rule that governs it is
 `~/Desktop/dnls/CLAUDE.md` §9.
