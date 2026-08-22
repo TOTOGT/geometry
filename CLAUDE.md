@@ -1,5 +1,9 @@
 # CLAUDE.md — totogt.github.io/geometry repo
 
+**Read the Read-first section below and stop.** Open a later section only when
+you are about to touch the file it covers. Dated narrative for closed defects
+and audits lives in `docs/audit-log.md`, not here.
+
 This file primes Claude for the `~/geometry` working repo, which is the live HTML site
 for the Principia Orthogona series at totogt.github.io/geometry.
 
@@ -8,21 +12,63 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 ---
 
----
+## Read first: Lean and CI verification state
 
-## Handoff — read first, update last
+Updated 2026-08-21 from CI runs #222 to #224. This section is the current
+answer. Do not re-derive it from the tree; update it when a run changes it.
 
-> **Branch:** `verify-hardening`
-> **Uncommitted:** none *(update this before your session ends)*
-> **Open — next action, one web-editor trip:** two changes to `.github/workflows/verify-proofs.yml`. The PAT has no `workflow` scope, so both must go through github.com.
-> &nbsp;&nbsp;1. **Axiom allowlist.** The gate greps for `sorryAx` only, so `FN_H_102L_phase02_cluster` passes while resting on `native_decide` — compiled code, not the kernel — inside a step named "Kernel axiom check". Permit `propext`, `Classical.choice`, `Quot.sound`; fail on anything else.
-> &nbsp;&nbsp;2. **Wire `tools/terms.py --check`** in beside the vacuity scan.
-> **Open — later pass:** `TERMS.md`'s 148-term baseline includes author affiliations, language tags and standard field acronyms caught by the pattern. Pruning them is cosmetic; the check works regardless.
-> **Queued (2026-08-22):** V7 — L3 and cognitive limits on Lⁿ. ELTJ lexicography piece — needs the PDF and the author's angle.
-> **Closed 2026-08-22:** WP71 §7's HRP figures, verified row by row against the retained specimen at `book6/sources/`. WP73 §8 and WP02 §5 written. `CLAUDE.md` split. A Google AI Overview attributed "Harmonic Resonance Bands (HRB)" and a "Log-Psi Recurrence Operator" to this corpus; neither term occurs in it, and `tools/terms.py` exists because of that.
+**Scope of the green badge.** `.github/workflows/verify-proofs.yml` on `main`
+runs `lake build`, and `lakefile.lean` declares
+`@[default_target] lean_lib Orthogenesis`. Green means every module reachable
+from `Orthogenesis.lean` compiled. It does not mean that every `.lean` file in
+the tree compiled: root-level `SaturnHexagon.lean`, `NASAGaps.lean` and
+`Coverage.lean` are not build targets and the job never touches them. It does
+not mean any theorem is non-vacuous, and it does not mean the tree is free of
+`sorry`. The `grep` steps for `theorem` and `sorry` are textual and
+informational; they cannot tell a proof from a comment and must not gate
+anything.
 
-Overwrite this block; do not append to it. The house rule that governs it is
-`~/Desktop/dnls/CLAUDE.md` §9.
+**Proved, with provenance.** Run #222, branch `verify-hardening`, Lean
+**v4.32.0**, 2026-08-21: `SaturnHexagon` built and the kernel reported, for each
+of `gate_commutes_onsite`, `angCoupling_not_commute`, `rot_commutes_coupling`,
+`hex_rotation_invariant` and `hex_coupling_uniform`:
+`depends on axioms: [propext, Classical.choice, Quot.sound]`. No `sorryAx`.
+Those five are genuinely proved. Header comments claiming KERNEL-VERIFIED under
+v4.14.0 predate this and are stale. A header comment is not evidence -- quote
+the run.
+
+**Open failures.** As of run #229 (branch `verify-hardening`, commit c7d082d)
+the only file that still fails is `Orthogenesis/Architecture/Coverage.lean`.
+Its bad import of `Mathlib.Data.Int.Order` was removed, the body then elaborated
+for the first time, and that exposed what the import error had been hiding:
+`hexRing_card` is admitted -- its successor case is `sorry` -- and
+`coord_coverage` is nothing but a call to it. **`coord_coverage` is therefore
+not proved and must not be cited as proved anywhere in the corpus.** The rest of
+the file fails too: unknown constant `Nat.eq_or_gt_of_le` (73:10), four `⟨...⟩`
+elaboration failures at 46 to 53, and failing `omega` and `rewrite` steps at 142
+to 143 inside `Colony.no_coord_collision`. `Orthogenesis.lean` imports Coverage,
+so the library as a whole still does not build.
+
+Closed on the branch in runs #226 to #229, each checked by the kernel:
+`hexNeighbors_nodup` (HexGrid), `Colony.expand_mono` and `Colony.expandN_mono`
+(Colony), and the `stage_bound` application in NASAGaps, which was applied to
+one argument too few. NASAGaps now compiles.
+
+Separately, `MagneticLattice.lean:240` and `SeismicLattice.lean:201` both use
+`sorry`, so the package is not sorry-free and no document should say that it is.
+
+**Traps.** Several files exist both at the repo root and under
+`Orthogenesis/Architecture/`; only the latter are built, so edits to a root copy
+never reach CI. `~/Desktop/orthogenesis` has `.lake/packages/mathlib` fetched
+and `~/Desktop/geometry` does not; the toolchains also differ (v4.32.0 against
+v4.33.0-rc1). Builds must run in a tree that has mathlib, or in CI. Hardened
+workflow changes belong on `verify-hardening`, where the files they probe exist;
+on `main` they fail for missing files, which is a red badge that means nothing.
+That happened in cab0768 and was reverted by 7f112c9.
+
+**Working economy.** This file is long. Read this section, then only the
+section covering the file you are about to touch. Do not page a whole Actions
+log -- read the failing step. Prefer targeted reads to whole-file reads.
 
 ---
 
@@ -516,47 +562,6 @@ them, rendering a literal `&middot;` on every affected row.
 - Do not mark AXLE theorems as "✓ Lean 4" without the "(under SH)" caveat
   if they depend on the Structural Hypothesis (SH)
 - Do not use Cormorant Garamond in book4 pages — it has no math glyph coverage
-
----
-
-
----
-
-## Where the history went
-
-Closed entries — `FIXED`, `RESOLVED`, `CORRECTION`, completed sweeps — live in
-**[CLAUDE-ARCHIVE.md](CLAUDE-ARCHIVE.md)**. Do not read it at session start. Read it when
-you need the provenance of one specific repair, and read only that section.
-
-This file carries the rules, the open items, and the open residue of closed entries.
-The split exists because this file is loaded in full at the start of every session, on
-every account, and 40% of it was history that no arriving session needs.
-
-### Archived sections
-
-- FIXED: `book6/index.html` was hiding 16 finished pages (2026-08-17)
-- FIXED: repo-wide link audit (2026-08-18)
-- FIXED: §4's unsourced interval (2026-08-18)
-- FIXED: `book1/index.html` was two documents in one file (2026-08-18)
-- FIXED: `book1/vol2-dashboard.html` is not a dashboard (2026-08-18)
-- RESOLVED: "V4" and "v6" — v6 is the current Volume I deposit
-- Reachability audit, redone properly (2026-08-18)
-- Orphan cleanup (2026-08-18)
-- FIXED: Chapter 7 (Topological Orthogenesis) — the anyon identification (2026-08-18)
-- FIXED: the map/point confusion, swept (2026-08-18)
-- FIXED: `19117399` mislabelled as a series DOI (2026-08-18)
-- Book II (2026-08-18)
-- Book III (2026-08-18)
-- ISBN registry read at last — Book IV corrected, and the registry itself has two bugs (2026-08-18)
-- CORRECTION: the unit-distance exponent is 1.014, not 10⁻³⁸ (2026-08-18)
-- Book V and Book III (2026-08-18)
-- Storefronts relabelled as preprints (2026-08-18)
-- "Edição IMPA" renamed to "Edição Brasil" (2026-08-18)
-- IMPA: submitted, declined, and what they actually asked for (2026-08-18)
-- RESOLVED (stale ledger entry): WP-38's "two broken formulas" (2026-08-18)
-- Licensing: the IMPA claim was a mis-statement, and it exposed a real split (Aug 2026)
-- The ten books audited clean — and `tools/audit.py` now exists (Aug 2026)
-- The root audited clean — 614 files, whole repo (2026-08-20)
 
 ---
 
@@ -1113,367 +1118,48 @@ prices a product and links to Gumroad is not something to do from a source known
 wrong before. **This needs the registry, or the author.** If the numbers are right and the
 table is stale, the table is what should change.
 
-# The five open items from the HVEH/omega/AMonster sweep — closed (Aug 2026)
+# ISBN registry read at last — Book IV corrected, and the registry itself has two bugs (2026-08-18)
 
-All five were worked in one pass. What follows is what changed, what was *wrong in the
-previous entry*, and what is newly open.
+**The path in this file is wrong.** The registry is not at `~/Desktop/MATHS for life/`. It is at
+**`~/Documents/Claude/Projects/MATHS for life/isbn_metadata.json`**, alongside
+`Bowker_ISBN_Registration_Guide.md` and `isbn_registration.py`. Correct the path above before
+the next session repeats the hunt.
 
-## CORRECTION to the entry above: there IS an IMPA portal, on DM3-lab
+## The registry confirms every Book IV finding
 
-The entry above says *"`impa-portal.html` is not an IMPA portal"* and implies none exists.
-**That was half right and the missing half matters.** Checked live:
+Verbatim `action` fields for the numbers Book IV was using:
 
-| URL | HTTP | Title |
+| ISBN | bowker_status | registry says it is for |
 |---|---|---|
-| `totogt.github.io/DM3-lab/impa-portal.html` | 200 | **IMPA Edition — Purchase Portal · Principia Orthogona** (25 KB) |
-| `totogt.github.io/AXLE/impa-portal.html` | 200 | dm³ Soundworks · Chladni · Sacred Resonance (272 KB) |
-| `totogt.github.io/geometry/impa-portal.html` | 200 | dm³ Soundworks · Chladni · Sacred Resonance (272 KB) |
-
-So the real purchase portal is alive on **DM3-lab**, and the AXLE and geometry copies were
-**overwritten** at some point with the Seven Sound Machines page. Two of three copies clobbered,
-and this repo's copy is one of them. Note also that the surviving real one still carries
-*"IMPA Edition"* in its title — the edition name withdrawn here on 2026-08-18. That is another
-repo; rule 4 applies.
-
-**Do not "restore" geometry's copy from DM3-lab on the strength of this note.** Which page
-should be this repo's store is the author's call. What was fixed is only the *labelling*.
-
-## 1 · impa-portal labels — 117 rewrites, 0 hrefs touched
-
-`geometry/impa-portal.html` does carry the purchase apparatus (4 Gumroad links, 5 PayPal links
-including the exact `$213.24` eBook and `$263.36` hardcover amounts the storefronts quote), so
-it functions as a purchase portal. Only the word IMPA was untrue.
-
-- **84 anchor texts** on links to `impa-portal.html`: `IMPA Portal`→`Purchase Portal` (28) ·
-  `IMPA`→`Purchase` (26) · `Portal IMPA →`→`Portal de Compras →` (21, all on `lang="pt"`
-  Edição Brasil pages) · `⬡ AXLE Portal`→`⬡ Purchase Portal` (5) · plus 4 one-offs.
-- **31 non-anchor labels**: `AXLE · IMPA Portal`, `via the IMPA portal`, `Open the IMPA portal`,
-  the two `g6-opus-map.html` node labels, and 16 loose `IMPA Portal` strings.
-- **2 individually judged**: `chapters-diagram.html`'s card title `IMPA Purchase Portal` →
-  `Purchase Portal`; `livro3-brasil.html`'s `Portal IMPA (revisores)` → `Portal de Compras`.
-
-**Deliberately not changed:** `chapters-diagram.html`'s *"IMPA Portal — Patch"* card. It names
-the real file `_archive/impa-portal-patch.html`; it is a note about an artifact, not a claim
-that a portal exists. And **every filename stays**, per the 2026-08-18 precedent.
-
-**`⬡ AXLE Portal` was relabelled, not repointed.** There is no AXLE portal in this repo —
-`portal.html` is the *Student* Portal. Relabelling states what the target is; repointing would
-have been a guess about intent. If the intent was the AXLE site, that is a five-file change.
-
-## 2 · omega/ — seven orphans retired, and a trap worth remembering
-
-Retired to `_to_delete/superseded-copies/omega/`: `journey.html`,
-`omega-point-sample-logos.html`, `pitch-soundworks-clinic.html`, `trinity.html`,
-`trinity-son.html`, `trinity-spirit.html`, **and `trinity-father.html`** — the seventh turned up
-during the work: it is byte-for-byte the same page as root `trinity.html` (same title *"The
-Father — Genesis"*, same headings), just under a second filename. Root `trinity.html` **is** The
-Father; the triptych was never missing a panel.
-
-Before retiring, the one thing the omega copies had that root did not was carried over: the
-three root `trinity*.html` files now read `Principia Orthogona · Vol IX · Omega Point` instead
-of the generic `· totogt.github.io/geometry`.
-
-**The trap, recorded because it nearly shipped:** the inbound-link check searched for
-`href="omega/<file>"` and reported zero. It was wrong twice. `chapters-diagram.html` and
-`series-hub.html` *did* link `omega/trinity.html` — caught by a second assertion. And 26 more
-links inside `omega/` referenced the copies by **bare relative name** (`href="trinity.html"`),
-which no `omega/`-prefixed pattern can match; those only surfaced when the auditor reported 32
-new dead links *after* the move. All 26 were repointed to `../`.
-**Before moving a file, resolve every link in the repo and check whether it lands on that file.
-Do not pattern-match the path you expect callers to have written.**
-
-## 3 · HVEH/proofs/ — the worst thing in the sweep
-
-The eight `HVEH/proofs/` copies are gone; `HVEH/index.html`'s seven links now point at the
-maintained set beside it. The seven proof pages were a clean call — `HVEH/` is a strict superset,
-zero lines existed only in `proofs/`.
-
-`HVEH/proofs/index.html` was **not** just a footer difference. It predates commit `ea2a64e`
-("MODEL-tag engineering claims; retire expired grant/World Cup dates"), so the copy the hub
-actually linked still said:
-
-- *"reducing flood peaks by 20–50%"* — where the maintained copy says *"a modeled 20–50%
-  flood-peak reduction … **[MODEL — not yet built.]**"*
-- *"seven independent mathematical proofs **validating design claims**"* — vs *"proofs of the
-  operator framework (model-level) … the engineering design targets are modeled, not yet
-  validated by a built prototype"*
-- *"The FIFA World Cup Jersey Fan Hub … **is open for 39 days** … Forecasters **flag active**
-  flash flood risk"* — present tense, for a window that closed in July.
-
-**A page written for grant reviewers was making unqualified engineering claims about an unbuilt
-device, and it was the copy on the linked path.** This is the strongest argument in the repo for
-the no-duplicates rule: the honesty pass ran, and landed on the copy nobody reads.
-
-## 4 · The two buried pages — one real, one not
-
-- **Clay Energy is real and is now published** as `omega/ch-clay-energy.html` — a complete essay
-  (*"The tablets are already digitized. Almost no one has read them."*) on CDLI, ORACC, the
-  Electronic Babylonian Library and ETCSL, with a five-step how-to. Verified 404 at every
-  plausible URL beforehand, so nothing was being duplicated. Three of its four archive links
-  return 200; ORACC's host could not be reached from the container, but `http://oracc.org/`
-  301s to it, so the URL is canonical and only the scheme was stale (now `https`). It carries
-  its own disclaimer — *"Not affiliated with CDLI, ORACC, the Electronic Babylonian Library, or
-  the University of Oxford"* — which is the standard this repo is trying to hold. Linked from
-  `omega/ch-here-comes-everybody.html` and from the Ancient Transmission section of the index.
-- **Atratores was not buried content.** `HVEH/index` (extensionless, 51 KB) is a **stale copy of
-  a live site's homepage**: `grossi-ops.github.io/Atratores/` returns 200 at 34.4 KB with 57
-  working links, against the buried copy's 27.8 KB and 11 dead ones. Six of the seven files the
-  buried copy "lost" are served fine over there. Nothing was rescued because nothing was lost —
-  retired to `_to_delete/superseded-copies/`.
-- `omega/omega-point-v2-draft.html` is now **one** document instead of three (the original is
-  preserved in `_to_delete/superseded-copies/`). Of its two index drafts, the later was kept —
-  identified by its carrying the `prov-add`/`prov-foot` CSS that `2ef1664` introduced.
-
-## 5 · The two Omega Point indexes — merged, canonical is `omega/`
-
-**The earlier claim that they "each got a different half of the repairs" was wrong on the DOI
-half** — neither copy carries a Vol I DOI; both are clean. The real difference was content, and
-neither was a superset:
-
-- `omega/omega-point-index.html` had Gallery of Mathematical Mystics, The Ancient Transmission,
-  and Transmission Status. Root had none of the three.
-- Root had two chapter cards omega lacked: **Chapter Eleven · The Prevention Theorem** and
-  **Chapter Twelve · The Inner Pharmacy**.
-
-`omega/` wins: more content, sits with its 32 chapters, and every chapter reaches it through a
-bare relative `href="omega-point-index.html"` — against five root-level pages for the other.
-The two chapter cards were ported across (hrefs rebased), the section heading corrected from
-**"Ten Chapters" to "Twelve Chapters"** — it listed twelve — and root `omega-point-index.html`
-is now a redirect stub on the `omega/index.html` pattern, so the five root links and any
-bookmark still land. The superseded root copy is in `_to_delete/superseded-copies/`.
-
-## Verification
-
-128 HTML paths in the diff (15 retired). **107 have an identical parsed tag sequence and an
-identical href set** — the IMPA pass was pure label text, as intended. The six with real deltas
-are all accounted for: five omega chapters at ±2 hrefs (the `../` repoint) and the v2 draft at
-−476 tags (two documents removed). Auditor over all four sections: **zero dead links, zero parse
-defects, zero duplicate ids.** Indexes regenerated: 624 files, HVEH 18/0 orphaned (was 26 with
-duplicates).
-
-## Newly open — residue the 2026-08-18 IMPA pass left behind
-
-Relabelling the portal surfaced IMPA claims of a different kind. **None were touched**; each is
-a claim about the institution, not about a link target, and each needs the author.
-
-1. **`GTCT_V_Student_Edition.html` (and `book5/`): *"Licensed for educational use at IMPA and
-   partner programs."*** That is a licensing claim. It is either true or it has to go.
-2. **Edition names survived the rename.** `book6/index.html` still has *"IMPA Bilingual Edition"*
-   and *"IMPA distribution companion to Vol IV"*; `book1/vol2-dashboard.html`,
-   `book2/vol2-contact.html` and `vol2-contact.html` label Vol IV *"GTCT T1, IMPA"*.
-3. **`book4/ch10.html` still says *"Submitted to IMPA."*** IMPA replied and declined; the pass
-   that cleared 17 of these missed this one.
-4. `book4/chIV-axioms.html` and `chIV-axioms.html`: *"IMPA / Bienal SBM 2026"* — a venue claim.
-5. *"IMPA-style textbook"*, *"quarterly IMPA-style lectures"*, *"you will hear this even in IMPA
-   seminars"* — descriptive, probably fine, listed for completeness.
-6. **The `$199.99` Patron tier promises *"Complete print + eBook series, all volumes"*.** Print
-   is not for sale ("Print ISBNs reserved — paper books not for sale until further notice").
-   Only the *"via the IMPA portal"* clause was fixed; the print promise is a commercial decision.
-
-Still open from the previous entry, unchanged: `AMonster/MonstersLaw.html` vs `monsterlaw.html`
-(divergent case-differing drafts) and `dm3-lab-index.html`'s ISBN table.
-
-
----
-
-# Open items carried forward
-
-Each of these is the unfinished part of an entry whose main body is in `CLAUDE-ARCHIVE.md`.
-
-## FIXED: repo-wide link audit (2026-08-18)
-
-*Context: `CLAUDE-ARCHIVE.md` → FIXED: repo-wide link audit (2026-08-18)*
-
-## The 18 that remain — authorial decisions, not path errors
-
-No file of that name exists anywhere in the repo. Each needs either the file, or the link
-removed:
-
-`vitruvian-approximation.pdf` (4 pages) · `living-book.html` variants resolved but
-`OMEGA_STATUS_AUDIT.md`, `docs/index.md` (×2), `ch6-cardiac.html`, `gomc-opus` resolved,
-`banking-butterfly-preprint-pt.html`, `TribonacciEta.lean`, `course-16weeks-source.html`,
-`impa-portal-patch.html`, `index-geometry-hub.html`, `journey-v1-backup.html`, `ch5.html`,
-`maquinas.html`, `access-required_copy.html`, `aula-index.html` (book7/ch-huh),
-`certify_rstar.py` and `PO_10_Pablo_Grossi.pdf` resolved to `book4/`.
-
-`vitruvian-approximation.pdf` is the most linked of the true absences — four pages promise
-it. Either deposit it or drop the four links.
-
-## FIXED: `book1/index.html` was two documents in one file (2026-08-18)
-
-*Context: `CLAUDE-ARCHIVE.md` → FIXED: `book1/index.html` was two documents in one file (2026-08-18)*
-
-## OPEN — authorial call, not fixed
-
-**CORRECTED 2026-08-18, same day.** The first version of this entry said "17 pages link the
-Second Edition, none link V4." That was wrong — it came from grepping the substring `book1/`
-and reading two different targets as one. Counted properly (paths resolved, `/geometry/`
-prefix handled, `_archive` excluded), there are **three Volume I files**:
-
-| file | edition | inbound links |
-|---|---|---|
-| `vol1-mathematics.html` (root) | **V4 · June 21, 2026** | **51** |
-| `book1/vol1-mathematics.html` | Second Edition · April 2026 | 7 |
-| `book1/index.html` | V4 · June 21, 2026 (copy) | 5 |
-
-So V4 is not unreachable — the root copy is the most-linked page in the series. The stale
-one is `book1/vol1-mathematics.html`, linked from `book2/index.html`,
-`book2/vol2-contact.html`, `book3/index.html`, `book1/vol2-dashboard.html`,
-`book4/logs-segment.html`, `index-book1.html`, `master-index.html`.
-
-**Which Volume I is canonical?** The root copy, on link count. But the two V4 copies have
-already drifted: the root copy hyperlinks reference [WP-02] to `book6/wp02-alterna.html`;
-the `book1/index.html` copy leaves it as plain text. Splitting `book1/index.html` therefore
-produced a **third** copy of V4 that was already one edit behind root.
-
-**RESOLVED, author's decision, 2026-08-18:** `book1/index.html` is now **a real index — a
-list of the volume's files — and the text of Volume I is read at the root copy.** There are
-again only two Volume I texts: `vol1-mathematics.html` (V4, current) and
-`book1/vol1-mathematics.html` (Second Edition, kept for the orthogenesis note). The index
-lists every file in `book1/`, including the duplicates and the misnamed one, so nothing in
-the directory is reachable only by guessing a URL.
-
-V4 is **not** a superset, which is why the 7 stale links must not simply be repointed. The
-Second Edition carries a `<details>` note **"A note on 'orthogenesis'"** — the disclaimer
-separating *orthogonal genesis* from the dead nineteenth-century biological theory, citing
-Waddington's canalisation — and **both V4 copies dropped it**. Repointing those 7 links
-silently deletes that disclaimer from every path a reader can take. Either:
-(a) V4 regains the orthogenesis note, then the 7 links repoint at `vol1-mathematics.html`; or
-(b) `book1/vol1-mathematics.html` is explicitly labelled the archived Second Edition and the
-    links stay as they are.
-
-**Navs fixed 2026-08-18 (both Vol I files).** Stranded anchors moved inside `.nav-links`;
-added `vol2-dashboard.html` and `book1/verification-registry.html`; the root V4 nav's Zenodo
-link pointed at `19117400` (the v1 origin deposit) while the page's own badge cites
-`20784030` — the nav now agrees with the page. The Second Edition's nav gained an explicit
-`Vol I · V4 · June 2026 →` link, so the newer text is reachable from the older without
-deciding which is canonical. Every nav target verified to exist; both files parse with zero
-unclosed tags.
-
-Also open: `book2/index.html` and `book2/vol2-contact.html` are **byte-identical** (69,403
-bytes, `cmp` clean) — one is a copy of the other, and `book2`'s nav sends "← Vol I" to the
-stale `book1/vol1-mathematics.html`.
-
-14 `.bak` files are **tracked in git and published to GitHub Pages**, including
-`book1/vol1-mathematics.html.bak`.
-
-
-## RESOLVED: "V4" and "v6" — v6 is the current Volume I deposit
-
-*Context: `CLAUDE-ARCHIVE.md` → RESOLVED: "V4" and "v6" — v6 is the current Volume I deposit*
-
-## STILL OPEN after this repair
-
-1. **The website's Volume I text is two deposits behind the archive.** The page is V4, dated
-   21 June; the record is v6, dated 2 July. The badge now discloses this rather than hiding
-   it, but disclosure is not a fix — either the v6 text is published to
-   `vol1-mathematics.html`, or the page states what changed between V4 and v6. **Do not
-   silently relabel the page "Version 6": no one has compared the two texts.**
-2. **The G5 paperback ISBN is still attached to non-G5 material in 8 files** —
-   `trilogy-sale.html` (×4), `GameTheory_Full_Pack.html`, `GameTheory_Full_Pack.FIXED.html`,
-   `Sportal.html`, `classroom-index.html`, `impa-working-paper.html`, `newark-wellness.html`,
-   `portal.html`. Each needs reading before editing: on a G5 page the number is correct.
-3. **`19117399` is still presented as a "series DOI" in roughly sixty files.** It is Vol I's
-   concept DOI; there is no series DOI. This is the defect the ISBN/DOI section at the top of
-   this file already documents, and it is by far the largest remaining citation problem in
-   the repo. It was not touched today.
-
-## Reachability audit, redone properly (2026-08-18)
-
-*Context: `CLAUDE-ARCHIVE.md` → Reachability audit, redone properly (2026-08-18)*
-
-## Open
-
-- **`_cajueiro-index-misplaced.html` is a third copy of the home page.** Left alone: it is
-  not at a directory URL, so it misleads no one, and its filename already says what it is.
-- **`master-index.html` is stale.** It does not list `course-hist201.html`,
-  `hist201-development-proposal.html` or `tutor-deck.html`, added in `2cf3906` after the
-  index was last generated. Whatever generates it needs re-running.
-- **59 pages remain genuinely unreachable**, 39 of them at root. Known clusters: duplicate
-  name-variants in `book4` (`ch06b-elojo` / `ch07-newark` / `ch08-harrison` /
-  `ch09-belleville` / `ch6-resonance` beside the reachable `ch06b` / `ch07` / `ch09`), three
-  copies of *The Law of Monsters* in `AMonster/` with no `index.html` at all, and
-  `book3/index.html` — Book III's own index has no way in.
-
-## Orphan cleanup (2026-08-18)
-
-*Context: `CLAUDE-ARCHIVE.md` → Orphan cleanup (2026-08-18)*
-
-## The 7 that remain — each is a variant, and each is the author's call
-
-Every one has a reachable counterpart, so linking it would put two versions of the same page
-in front of readers, and retiring it would destroy the only copy of whichever differences it
-holds. Nobody has compared the texts.
-
-| orphan | bytes | reachable counterpart | bytes | diff lines |
-|---|---|---|---|---|
-| `ch-tatiana.html` | 50,083 | `book7/ch-tatiana.html` | 66,032 | 263 |
-| `Enceladus-zenodo.html` | 71,609 | `Enceladus.html` | 67,696 | 305 |
-| `AMonster/MonstersLaw.html` | 48,410 | `AMonster/monsterlaw.html` | 56,693 | 169 (mostly a larger SVG) |
-| `book4/ch6-resonance.html` | 48,304 | `ch6-resonance.html` | 51,936 | 96 |
-| `GameTheory_Full_Pack.FIXED.html` | 142,962 | `GameTheory_Full_Pack.html` | 143,339 | 38 |
-| `omega/pitch-soundworks-clinic.html` | ~16 K | `pitch-soundworks-clinic.html` | ~16 K | 24 |
-| `omega/omega-point-v2-draft.html` | 89 K | `omega/omega-point-index.html` | — | draft of |
-
-Note the shape of the trap in row 5: the file **named** `.FIXED` is the one the site does not
-serve. Same pattern as the `chIV-*-fixed.html` files retired above, where the `-fixed` name
-was also wrong. Do not resolve any of these by filename.
-
-## FIXED: `19117399` mislabelled as a series DOI (2026-08-18)
-
-*Context: `CLAUDE-ARCHIVE.md` → FIXED: `19117399` mislabelled as a series DOI (2026-08-18)*
-
-## Still open
-
-- **The 26 formal citations.** In a reference list the string is not a label but an assertion
-  that the cited work lives at that DOI, and it does not — a reader resolving it gets Vol I v6.
-  These need the correct version DOI per work, or the Zenodo community link where the referent
-  really is the series. Not done here.
-- **`collatz-engineering_1.html` has a stray `</p>`.** Pre-existing — confirmed present in
-  `HEAD` before this change — not introduced by the sweep.
-
-## Book II (2026-08-18)
-
-*Context: `CLAUDE-ARCHIVE.md` → Book II (2026-08-18)*
-
-## OPEN — which DOI is Volume II's?
-
-`vol2-contact.html` cites **`10.5281/zenodo.20755436`** seven times — hero badge, nav, footer —
-for a page whose eyebrow reads *Version 2a · 2026*.
-
-The ISBN/DOI section at the top of this file says something different: *"Vol II ('Contact
-Realization'): 10.5281/zenodo.19379473. Clean, single version, April 2026 — the one paper of
-the four with an unambiguous standalone DOI."*
-
-Both cannot be right. Either a Version 2a was deposited after April and this file's note is
-stale, or the page cites the wrong record. This is the same shape as the V4/v6 question
-settled for Volume I on 2026-08-18, one volume over, and it was settled there in one sentence
-by the author. **Do not guess:** `19379473` appears nowhere in `vol2-contact.html`, and
-`20755436` appears nowhere in this file, so whichever is wrong has been wrong consistently and
-a sweep would propagate it. Zenodo's API and record pages are robots-disallowed from the
-tooling here; resolve it by opening the record.
-
-## Book III (2026-08-18)
-
-*Context: `CLAUDE-ARCHIVE.md` → Book III (2026-08-18)*
-
-## Open
-
-- **Two Book III hubs.** Root `vol3-minibeast.html` (38,803 bytes, 5 inbound) and
-  `book3/index.html` (38,590, 2 inbound) are near-copies. The 111-line diff between them is
-  **entirely link targets** — the drift *was* the wrong-Volume-I/II problem now fixed — plus
-  one line, the `vocab-seismic-geometry.html` entry, which only the book3 copy carries. So
-  they are the same page with different destinations, not two texts. Unlike Books I and II,
-  `book3/index.html` was **not** replaced with a short index: the root copy is a hub rather
-  than a paper, so there is no separate "text" for an index to point at, and collapsing them
-  is an editorial decision about which filename the volume should live at.
-- **`ch6-cardiac.html` is still dead** — linked from `book3/index.html`, no such file anywhere
-  in the repo. Already on the dead-link list above; unchanged, since it needs either the file
-  or a decision to drop the link.
-
-## ISBN registry read at last — Book IV corrected, and the registry itself has two bugs (2026-08-18)
-
-*Context: `CLAUDE-ARCHIVE.md` → ISBN registry read at last — Book IV corrected, and the registry itself has two bugs (2026-08-18)*
+| 979-8-9954416-2-5 | INCOMPLETE — HOLD | *"Reserve for Vol VI or 40-language edition."* |
+| 979-8-9954416-4-9 | INCOMPLETE — HOLD | G5 **Hardback**, print — *"Activate on print."* 666 pp max |
+| 979-8-9954416-5-6 | INCOMPLETE — HOLD | *"Reserve for first major translation or Vol II."* |
+| 979-8-9954416-8-7 | INCOMPLETE — HOLD | *"Free."* — assigned to nothing |
+| 979-8-9954416-6-3 | INCOMPLETE — **register now** | Book 3 · Mini-Beast · eBook PDF, $19.99 |
+| 979-8-9954416-0-1 | **REGISTERED** | G5 Paperback — *"Print. NOT for sale until further notice."* |
+
+And the file's own header: *"Only complete/register an ISBN when the product is live and being
+distributed. Everything marked HOLD stays INCOMPLETE in Bowker until needed."*
+
+**Fixed: 10 ISBN lines removed** from citations and footers across nine files —
+`ch02`, `ch10` (Vol I cited with 2-5, Vol II with 4-9), `hub` (5-6 labelled "G5 eBook" when G5
+eBook is 1-8), `chTau-tartaruga` (5-6), `chE-gtct` (Book 3's 6-3 on a GTCT page), and
+`ch-hawking`, `ch15-complex-turn`, `chIV-axioms`, `chIV-field` (8-7, assigned to nothing).
+Per the rule above, a volume without its own registered ISBN gets **no ISBN line**, not a
+borrowed one. *(`chIV-field.html` has a stray `</div>` — pre-existing, confirmed in `HEAD`.)*
+
+## Two bugs in the registry itself — fix upstream or this recurs
+
+1. **`979-8-9954416-1-8` carries `format_note: "All-encompassing eBook. Default ISBN for any
+   volume without its own."`** This is the withdrawn fallback-ISBN instruction, still live in
+   the canonical source. It is almost certainly **the upstream origin of the borrowed-ISBN
+   defect** — the one that put an unallocated number into 87 book6 footers and 19 other files.
+   Every downstream correction made in this repo is undone the moment someone consults the
+   registry and follows that note. It should be deleted there, not just contradicted here.
+2. **`979-8-9954416-6-3` carries `distribution: "Gumroad · Zenodo doi:10.5281/zenodo.19117400"`.**
+   That DOI is Vol I's v1 founding deposit, established on 2026-08-02; Book 3 has no standalone
+   deposit at all. The registry is asserting a Zenodo record for Book 3 that is a different
+   volume's.
 
 ## OPEN — the storefront
 
@@ -1486,157 +1172,8 @@ Untouched deliberately. If those products are genuinely for sale the fix is to *
 ISBNs for them**, not to strip the numbers off the page; if they are not for sale, the price
 and the buy button are the problem, not the ISBN. Either way it is a commercial decision.
 
-## Storefronts relabelled as preprints (2026-08-18)
-
-*Context: `CLAUDE-ARCHIVE.md` → Storefronts relabelled as preprints (2026-08-18)*
-
-## OPEN — an IMPA claim to check before it matters
-
-`book4/ch02.html`'s Vol G⁴ card reads *"GTCT T1 — The IMPA Edition … Submitted to IMPA."*
-Separately, **"Edição IMPA" / "IMPA Edition" appears 209 times across 45 files**, and no
-affiliation disclaimer was found anywhere in the corpus.
-
-IMPA is a real institution with its own imprint. Used at that volume, the phrase reads as an
-imprint credit rather than a description of intent or of a course edition. If the work has not
-been published or endorsed by IMPA, this is the kind of thing that is cheap to correct now and
-expensive later — precisely if a genuine IMPA submission is ever made. Worth one deliberate
-decision about the wording, not 45 separate ones.
-
-## RESOLVED (stale ledger entry): WP-38's "two broken formulas" (2026-08-18)
-
-*Context: `CLAUDE-ARCHIVE.md` → RESOLVED (stale ledger entry): WP-38's "two broken formulas" (2026-08-18)*
-
-### Not fixed — needs a decision or lives in another repo
-
-1. **`book6/wp65-the-oracle-outside.html` → `../../AXLE/chGal-galois.html` is 404 live.**
-   The link is *correct*; the file is tracked in the AXLE repo but only on the branch
-   `chapter-gal-galois`, which is 1 commit ahead of its remote and **never merged to `main`**.
-   Pages serves `main`. Two of the chapter's links and one table row depend on it. Fix belongs
-   in AXLE: merge the branch, or the three references stay dead.
-2. **Same two ISBNs used across two volumes.** `979-8-9954416-5-6` appears in
-   `book6/g6-crystal.html` and `book7/ch-huh.html`; `979-8-9954416-6-3` appears in
-   `book6/wp02-alterna.html` and `book7/wp59-dark-matter-lensing.html`. This is the registry
-   `1-8` "default ISBN for any volume without its own" note biting — an ISBN identifies one
-   edition of one title, so a shared default is not a placeholder, it is a wrong identifier.
-   Author's call.
-3. **Six `.md` in `book6/` with no `.html` counterpart:** `COHN_revision_plan_immune.md`,
-   `OPENING_NOTE.md`, `ZENODO-metadata-corrections.md`, `wp38-math-supplement.md`,
-   `wp57-one-animal-four-operators.md`, `wp58-the-recorder.md`. The last two are numbered
-   working papers with no published page — WP-57 and WP-58 exist only as source.
-
-### Not fixed — needs a decision
-
-1. **`HVEH/proofs/` is eight stale copies, and the hub links them instead of the maintained
-   set.** `HVEH/{index,operator-algebra,distribution-theory,catastrophe-theory,contact-geometry,
-   spectral-markov,numerical-constructive,information-geometry}.html` each exist twice, once at
-   `HVEH/` and once at `HVEH/proofs/`. Commit `2ef1664` ("series-wide provenance footers:
-   307/307") added footers to the `HVEH/` copies only — **the `proofs/` copies were invisible to
-   it, so 307/307 was 307 of the files the pass could see.** `HVEH/index.html`'s own navigation
-   points at `proofs/`, so a reader who lands on the hub gets the footerless set. Pick one
-   location; the other should go.
-2. **`omega/` carries seven orphaned stale copies of root pages** — `journey.html`,
-   `omega-point-index.html`, `omega-point-sample-logos.html`, `pitch-soundworks-clinic.html`,
-   `trinity.html`, `trinity-son.html`, `trinity-spirit.html`. **Nothing hand-links any of them**;
-   they are reachable only through the generated indexes, which enumerate every file. The root
-   copies are the ones `series-hub.html`, `chapters-diagram.html` and the trinity pages point at.
-   One of the seven is actively embarrassing: **`omega/pitch-soundworks-clinic.html` has the site
-   name blanked out of a capital-campaign pitch** in three places — *"A phased capital campaign
-   for ."*, *"Acquire and stabilize ; basic build-out…"*, *"ending at ."* A find-and-replace
-   removed "Forest Hill" and left the punctuation. The root copy is intact.
-3. **There are two live Omega Point indexes and they got different halves of the repairs.**
-   `omega-point-index.html` (25 KB, root) has no Gallery, no Ancient Transmission, no Status
-   section; `omega/omega-point-index.html` (47 KB) has all three. The DOI-footer sweep
-   (`2320bd0`) hit only the root copy; the provenance-footer pass (`2ef1664`) hit only the omega
-   copy. Hand-written nav points at root; `omega/index.html`'s `<link rel="canonical">` and its
-   meta-refresh point at the omega copy. Decide which is the volume, then delete the other —
-   this is the clearest case in the repo of why two copies cost more than they save.
-4. **Two pages' worth of unique content are buried in unreachable files.**
-   - `omega/omega-point-v2-draft.html` is **three complete HTML documents concatenated** (three
-     `<!DOCTYPE>`, three `<html>`, three `<body>`): two Omega Point index drafts with an
-     unrelated page sandwiched between them — *"Clay Energy — an open archaeology of unread
-     tablets"*, which **exists nowhere else in the repo**. Marked `data-orphan="1"`.
-   - `HVEH/index` — **no file extension**, 51 KB, committed as "Create index", linked from
-     nothing. Also two documents: *"Atratores — Pablo Nogueira Grossi"*, which **exists nowhere
-     else in the repo**, and a stale copy of the G6 Opus Map. Pages will serve an extensionless
-     file as a download, not a page.
-5. **`AMonster/MonstersLaw.html` and `AMonster/monsterlaw.html` are divergent drafts** of the
-   same chapter differing only in filename case — 48 KB vs 57 KB, 155 differing lines, different
-   SVG geometry. The case difference is why the relabel pass found one and not the other; on a
-   case-insensitive checkout they cannot both exist. Only `series-hub.html` hand-links either
-   (it picks `monsterlaw.html`).
-6. **`dm3-lab-index.html` (root) has an ISBN table** listing 2-5, 4-9 and 5-6 against G¹, G² and
-   G⁵. Same unallocated numbers, same defect as the storefronts, different construct — left
-   alone because it is outside this sweep's four sections.
-7. **`impa-portal.html` is not an IMPA portal.** It is the *"Seven Sound Machines"* Soundworks
-   page; its only two mentions of IMPA are links *out* to `AXLE/impa-portal.html`. **121 files in
-   this repo link it, including the site root `index.html`.** The 2026-08-18 IMPA pass
-   deliberately kept the filename on the grounds that the page was *about* IMPA. Nobody opened
-   it. Same defect class as everything above — a label describing something that isn't there.
-8. `AMonster/Files.md` is a pasted chat transcript, not a document.
-
-## Licensing: the IMPA claim was a mis-statement, and it exposed a real split (Aug 2026)
-
-*Context: `CLAUDE-ARCHIVE.md` → Licensing: the IMPA claim was a mis-statement, and it exposed a real split (Aug 2026)*
-
-## Still open
-
-`19501831` (Polylaminin) is deposited **`mit-license`** — an MIT-licensed *paper*, alongside a
-`cc-by-nc-nd-4.0` sibling record (`20230633`) of the same title. One work, two deposits, two
-incompatible licences. Nothing in this repo asserts either, so nothing was changed; it needs a
-Zenodo-side decision by the author (rule 4).
-
-## The ten books audited clean — and `tools/audit.py` now exists (Aug 2026)
-
-*Context: `CLAUDE-ARCHIVE.md` → The ten books audited clean — and `tools/audit.py` now exists (Aug 2026)*
-
-## OPEN — the root is the real backlog
-
-The ten books are clean. **The 299 files at the repository root are not:**
-
-| | |
-|---|---|
-| dead links | **79** |
-| dead anchors | 18 |
-| unclosed tags | 16 |
-| stray closers | 4 |
-| stale claims | 2 |
-
-That is the largest unaudited surface in the repo and it contains the site's front door.
-Nothing above touched it. Examples from the first page of output: `ch-tatiana.html` points at
-two `figures/*.png` that do not exist; `chEta-tribonacci.html` points into
-`Orthogenesis/Constants/` which does not exist; `chapters-diagram.html` links
-`index-geometry-hub.html` and `journey-v1-backup.html`, neither of which exists;
-`access-required.html` fails to close `<html>` and `<head>`.
 
 ---
 
-## The root audited clean — 614 files, whole repo (2026-08-20)
-
-*Context: `CLAUDE-ARCHIVE.md` → The root audited clean — 614 files, whole repo (2026-08-20)*
-
-### `ch-d2-academic.html` — one missing opener, 1,100 lines of consequence
-
-A reference entry lost its `<div class="ref">` and author span, leaving an orphan tail:
-
-```
-    </div>
-      2013. "Mindfulness-induced Changes in Gamma Band Activity." <em>Clinical
-      Neurophysiology</em> 123(4): 700–710.
-    </div>
-```
-
-That extra `</div>` closed `<div class="references">` early, which made the `</div>` at
-line 1993 — the one labelled `<!-- /chapter -->` — read as stray, 250 lines away from the
-actual defect. The entry was identifiable from the title and the citation and restored as
-Berkovich-Ohana, Glicksohn & Goldstein; the year was also wrong (2013 → **2012**, PubMed
-21940201).
-
-Separately, a `<p>` opener and its first clause were lost around line 855, so the text
-resumed mid-sentence at *"adaptation — morphological, behavioral…"*. The clause is
-recoverable from this chapter's own abstract and is restored, **marked with an HTML
-comment naming it a reconstruction**. Do not silently restore prose; say that you did.
-
-Note also that those three paragraphs sit at the end of §1.3 (Bacon and cryptography) and
-argue the daśāvatāra hinge, which §1.1 already covers more fully. They look like a
-superseded draft that was never removed. **Left in place — that is an editorial call, not
-an audit fix.**
+Dated narrative for closed defects and audits moved to `docs/audit-log.md`
+on 2026-08-21. Nothing was changed, only relocated. Open items stayed here.
