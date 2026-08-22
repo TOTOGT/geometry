@@ -14,8 +14,9 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 > **Branch:** `verify-hardening`
 > **Uncommitted:** none *(update this before your session ends)*
-> **Unverified:** WP71 §7's factual claims against the June 2026 HRP Risk Approach Plans — gap codes, deliverable counts and dates are tagged `[VERIFIED]` but were not re-checked against the source.
-> **Next action:** apply the axiom allowlist to `verify-proofs.yml` (web editor only — the PAT has no `workflow` scope).
+> **Open — next action:** apply an axiom allowlist to `verify-proofs.yml`. The gate greps for `sorryAx` only, so `FN_H_102L_phase02_cluster` passes while resting on `native_decide` — compiled code, not the kernel — inside a step named "Kernel axiom check". Permit `propext`, `Classical.choice`, `Quot.sound`; fail on anything else. **Web editor only:** the PAT has no `workflow` scope.
+> **Queued (2026-08-22):** V7 — L3 and cognitive limits on Lⁿ. ELTJ lexicography piece — needs the PDF and the author's angle.
+> **Closed 2026-08-22:** WP71 §7's HRP figures, checked row by row against the retained specimen at `book6/sources/hrp-rap-for-web-62026.pdf`. Two minor sub-claims remain unchecked: the comparator deliverable counts for BH/EIHSO/Team/Carcinogenesis, and the duplicated "Days post-landing prior to initial EVA" under EVA-101 and SM-106.
 
 Overwrite this block; do not append to it. The house rule that governs it is
 `~/Desktop/dnls/CLAUDE.md` §9.
