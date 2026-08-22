@@ -165,3 +165,23 @@ have reported it. Now something does.
 - Yale Oriental Series (YOS)
 - York Foundation for the Arts (NYFA)
 - Zero Age Main Sequence (ZAMS)
+
+---
+
+## Disowned — attributed to this corpus, and not used by it
+
+A term in this list is **not** vocabulary of this corpus. It is recorded because
+something outside the corpus attributed it here. Each entry names the files
+permitted to *mention* it; `tools/terms.py --check` fails if it appears anywhere
+else, and that failure is louder than an ordinary undeclared term, because it
+means a confabulation has been absorbed rather than merely reported.
+
+The distinction is use versus mention. Writing down that a term is not ours is a
+mention. Building on it would be a use. The first form of this checker could not
+tell them apart: it skipped `TERMS.md` by name so the rationale at the top of
+this file would not trip it, but `CLAUDE.md` records the same episode, and CI
+run #247 failed on that sentence — the corpus penalised for saying, accurately,
+that the term is not its own.
+
+- Harmonic Resonance Bands (HRB) @ CLAUDE.md, CLAUDE-ARCHIVE.md, docs/audit-log.md
+- Log-Psi Recurrence Operator @ CLAUDE.md, CLAUDE-ARCHIVE.md, docs/audit-log.md
