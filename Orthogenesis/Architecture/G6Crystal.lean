@@ -332,10 +332,24 @@ theorem arnold_tongue_A4_coupling :
 -- The falsifiable test: scale model driven at 33.5 Hz should show damped
 -- response consistent with Arnold tongue locking. TRL 2-3.
 
-/-- S2 (FN-H-101L structural): Hexagrid progressive collapse superiority.
-    Hexagrid outperforms diagrid on progressive collapse resistance.
-    Requires: formalisation of FEM data (Mashhadiali 2013, 2014; Yildirim 2024).
-    Status: OPEN — peer-reviewed data established; formal model pending. -/
-theorem hexagrid_collapse_resistance_superior : True := trivial
+-- S2 (FN-H-101L structural): hexagrid progressive collapse superiority.
+--
+-- DELETED 2026-08-21. This stood as
+--     theorem hexagrid_collapse_resistance_superior : True := trivial
+-- which compiles, contains no `sorry`, and passes `#print axioms` with the
+-- standard three. It asserted nothing.
+--
+-- Orthogenesis/NASA.md §2 reported to NASA on 2026-08-21 that this statement
+-- was deleted. It was not: the deletion existed only as an uncommitted edit in
+-- a working tree, and the file kept the theorem. The errata and the artifact it
+-- described had come apart. The vacuity scan added to verify-proofs.yml found
+-- it on its first execution.
+--
+-- Deleted rather than converted to `sorry`, per the errata's own reasoning: a
+-- retracted claim is not an open one, and an empirical result from the
+-- engineering literature is not a proof obligation. Hexagrid progressive
+-- collapse resistance is a finding of Mashhadiali et al. (2013, 2014) and
+-- Yildirim (2024), cited as theirs. It was never a formal result of ours and
+-- there is no obligation here to discharge.
 
 end Orthogenesis.G6Crystal
