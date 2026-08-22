@@ -12,6 +12,19 @@
 # sorryAx. Textual scans (grep for "theorem", grep for "sorry") cannot tell a
 # real proof from a vacuous one or a comment from a declaration, so they are
 # marked informational and are not allowed to gate anything.
+#
+# GATE NOTE, 2026-08-22. The axiom allowlist was a shell pipeline, copied into
+# both kernel-check steps. Both copies were line-oriented; Lean's
+# pretty-printer wraps a long axiom list across indented lines, so `grep` saw
+# only the first line and the `sed` that strips the brackets never matched.
+# Run #245 failed for the right theorem and printed the wrong reason -- and
+# the same shape would have failed a theorem whose axiom list was entirely
+# permitted and merely long. Two copies meant one defect in two places.
+# The gate is now a single file, tools/axiom_gate.py, with fixtures in
+# tools/test_axiom_gate.py that include the run #245 output verbatim. A gate
+# is a claim about the artifact it guards; it is subject to the same rule as
+# any other claim here, and a pipeline buried in YAML cannot be run on a
+# fixture.
 
 name: Verify Lean proofs (real kernel check)
 
@@ -82,34 +95,13 @@ jobs:
           cat /tmp/axioms.txt
           echo "------------------------"
 
-          if grep -q "sorryAx" /tmp/axioms.txt; then
-            echo "::error::sorryAx present - at least one theorem is admitted, not proved"
-            exit 1
-          fi
 
           if [ "$rc" -ne 0 ]; then
             echo "::error::probe failed to elaborate (exit $rc)"
             exit 1
           fi
 
-          bad=$(grep "depends on axioms" /tmp/axioms.txt \
-            | sed -E 's/.*depends on axioms: \[(.*)\]/\1/' \
-            | tr ',' '\n' | sed 's/^ *//; s/ *$//' | grep . | sort -u \
-            | grep -vE '^(propext|Classical\.choice|Quot\.sound)$' || true)
-          if [ -n "$bad" ]; then
-            echo "::error::axiom outside the permitted three (propext, Classical.choice, Quot.sound):"
-            echo "$bad" | sed 's/^/::error::  /'
-            echo "::error::native_decide leaves Lean.ofReduceBool and is NOT a kernel check."
-            exit 1
-          fi
-
-          n=$(grep -cE "(depends on axioms|does not depend on any axioms)" /tmp/axioms.txt || true)
-          if [ "$n" -ne 5 ]; then
-            echo "::error::expected 5 axiom lines, found $n - a theorem was renamed or removed"
-            exit 1
-          fi
-
-          echo "OK: 5 theorems reported, none depends on sorryAx."
+          python3 tools/axiom_gate.py /tmp/axioms.txt 5
 
       # =================================================================
       # AUTHORITATIVE STEP. The NASA gap-closure theorems.
@@ -147,31 +139,11 @@ jobs:
           cat /tmp/nasa.txt
           echo "--------------------------------------------------"
 
-          if grep -q "sorryAx" /tmp/nasa.txt; then
-            echo "::error::sorryAx in a gap-closure theorem - a gap recorded as closed is open"
-            exit 1
-          fi
           if [ "$rc" -ne 0 ]; then
             echo "::error::NASA gap probe failed to elaborate (exit $rc)"
             exit 1
           fi
-          bad=$(grep "depends on axioms" /tmp/nasa.txt \
-            | sed -E 's/.*depends on axioms: \[(.*)\]/\1/' \
-            | tr ',' '\n' | sed 's/^ *//; s/ *$//' | grep . | sort -u \
-            | grep -vE '^(propext|Classical\.choice|Quot\.sound)$' || true)
-          if [ -n "$bad" ]; then
-            echo "::error::axiom outside the permitted three (propext, Classical.choice, Quot.sound):"
-            echo "$bad" | sed 's/^/::error::  /'
-            echo "::error::native_decide leaves Lean.ofReduceBool and is NOT a kernel check."
-            exit 1
-          fi
-
-          n=$(grep -cE "(depends on axioms|does not depend on any axioms)" /tmp/nasa.txt || true)
-          if [ "$n" -ne 12 ]; then
-            echo "::error::expected 12 gap-closure theorems, found $n - one was renamed or removed"
-            exit 1
-          fi
-          echo "OK: 12 gap-closure theorems, none depends on sorryAx."
+          python3 tools/axiom_gate.py /tmp/nasa.txt 12
 
       # =================================================================
       # AUTHORITATIVE STEP. Vacuity.
@@ -211,6 +183,11 @@ jobs:
         run: |
           set -eu
           python3 tools/terms.py --check
+
+      - name: axiom-gate self-test (the gate must itself be checked)
+        run: |
+          set -eu
+          python3 tools/test_axiom_gate.py
 
       - name: verify-stamp self-test (the checker must itself be checked)
         run: |
