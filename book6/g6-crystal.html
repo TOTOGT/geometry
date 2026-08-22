@@ -55,6 +55,14 @@ nav a{color:var(--crystal);text-decoration:none;}nav a:hover{color:var(--gold);}
 .sv.current{background:rgba(123,104,238,.06);}.sv.current .sv-n{color:var(--gold);}
 .doi-box{background:var(--surface);border:1px solid rgba(123,104,238,.3);padding:1rem 1.4rem;font-family:var(--mono);font-size:.75rem;color:var(--muted);margin:2rem 0;}
 .doi-box a{color:var(--crystal);text-decoration:none;}
+.lean-wrap{margin:1.6rem 0;border:1px solid var(--rule);background:var(--card);}
+.lean-head{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--crystal);padding:.6rem 1rem;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.lean-head .path{color:var(--muted);text-transform:none;letter-spacing:.04em;}
+pre.lean{margin:0;padding:1rem 1.2rem;overflow-x:auto;font-family:var(--mono);font-size:.72rem;line-height:1.65;color:var(--text);}
+pre.lean .c{color:var(--muted);}
+pre.lean .k{color:var(--crystal);}
+pre.lean .cut{color:var(--red);}
+pre.lean .ok{color:#50c878;}
 footer{text-align:center;padding:2.5rem 2rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);border-top:1px solid var(--rule);}
 footer a{color:var(--crystal);text-decoration:none;}
 
@@ -118,7 +126,7 @@ footer a{color:var(--crystal);text-decoration:none;}
     </a>
     <a href="index.html" class="ch-row">
       <span class="ch-n">AXLE</span>
-      <div class="ch-info"><strong>AXLE v7.0 — Issue 6 Resolvida / Issue 6 Resolved</strong><span class="sub">quando χ(H*(X⁶)) = 33 for provada · o sorry que deixa de ser sorry</span></div>
+      <div class="ch-info"><strong>AXLE v7.0 — Issue 6 Resolvido / Issue 6 Resolved</strong><span class="sub">quando χ(H*(X⁶)) = 33 for provada · o sorry que deixa de ser sorry</span></div>
       <span class="ch-status s-open">aberto</span>
     </a>
   </div>
@@ -293,6 +301,100 @@ footer a{color:var(--crystal);text-decoration:none;}
     <span style="opacity:.75">The deposited record still carries the withdrawn claim. Correcting a
     published Zenodo record is the author&rsquo;s call — drafted, not deposited.</span>
   </div>
+
+  <span class="section-label" style="margin-top:3rem;">O Lean Corrigido &middot; The Corrected Lean</span>
+  <h2 style="font-size:1.1rem;color:var(--gold);font-weight:400;margin-bottom:.3rem;">O que mudou no ficheiro / What changed in the file</h2>
+  <p style="margin:1rem 0;font-size:.9rem;color:var(--muted);">Duas formas de vacuidade, n&atilde;o uma. <code>: True := trivial</code> compila em sil&ecirc;ncio; <code>x &isin; S &rarr; x &isin; S</code> tamb&eacute;m, e sobrevive a um <em>grep</em>. Um <code>sorry</code> pelo menos avisa.<br>
+  <span style="opacity:.75">Two shapes of vacuity, not one. Neither was a <code>sorry</code> &mdash; and a textual sweep finds only the first.</span></p>
+
+  <div class="lean-wrap">
+    <div class="lean-head"><span>Lean 4 &middot; Mathlib v4.32.0</span><span class="path">Orthogenesis/Architecture/G6Crystal.lean &middot; NASAGaps.lean</span></div>
+    <pre class="lean"><span class="c">-- Orthogenesis/Architecture/G6Crystal.lean · corrected 2026-08-21</span>
+
+<span class="c">-- CORRECTION.  The previous header read "20 facts proved without sorry" and
+-- "three open obligations (sorry)".  Both were false, in opposite directions.
+-- There was never a `sorry` in this file; the three "obligations" were stated
+-- as `True` and discharged by `trivial`, which compiles silently and proves
+-- nothing.  A `sorry` at least warns.</span>
+
+<span class="c">/-- The dm³ cycle-threshold count g⁶ = 33 (the monster threshold, 3 × 11).
+    Dimensionless: a count of limit cycles, not a frequency, not a length.
+    Renamed from `g6_int`, whose docstring called it "the Schumann coupling
+    integer" — a name that carried §4's conclusion into the definition it was
+    supposed to be independent of. -/</span>
+<span class="k">def</span> g6_cycles : ℕ := 33
+
+<span class="c">-- §4  Schumann Resonance Coupling — <span class="cut">WITHDRAWN</span>
+--
+-- Deleted: c_light, R_earth, f4_schumann, schumann_n4_sqrt,
+-- g6_within_2pct_of_f4, g6_within_16pct, noise_tol_covers_g6_error.
+-- The arithmetic was correct; the physics was not.
+--
+--   1. UNITS.  g6_cycles = 33 is a dimensionless count.  33.516 is a number
+--      of hertz.  |33 - 33.516|/33.516 &lt; 2/100 is a true statement about two
+--      reals and an empty one about the world.  The kernel cannot see units.
+--   2. WRONG MODE.  33.516 Hz came from f_n = (c/2πR_E)·√(n(n+1)) taken bare —
+--      the lossless idealisation, which puts n=1 at 10.59 Hz, not 7.83.
+--      ch-schumann-dual, in this same corpus, puts n=4 at 27.30 Hz standard.
+--   3. BACK-FITTED CONSTANT.  An A₄:₁ tongue locks at rotation number 4 by
+--      definition; 7.83 × 4 = 31.32.  The 4.28 was chosen to reach 33.5.
+--   4. NO CAVITY.  Schumann resonance is the Earth–ionosphere cavity.  The
+--      Moon has none.  On this deposit's stated application it is absent.
+--
+-- §2 derives every dimension from g6_cycles and τ alone, so the geometry is
+-- untouched.  What the withdrawal costs is the <span class="cut">physical</span> justification of
+-- 66 = 33·τ.  The <span class="ok">geometric</span> justification stands.</span>
+
+<span class="c">-- §9  Obligations — corrected
+--
+--   S1  arnold_tongue_A4_coupling — <span class="cut">DELETED</span>.  It read
+--         ∀ δ : ℝ, ‖δ‖ &lt; noise_tolerance → True
+--       provable for any hypothesis whatsoever.  Its subject was withdrawn in
+--       §4.  A retracted claim does not become an open one, so it is not a
+--       `sorry`: marking it so would assert an intention to prove something
+--       no longer believed.
+--
+--   S2  hexagrid_collapse_resistance_superior — <span class="cut">DELETED</span>.  It read
+--         theorem hexagrid_collapse_resistance_superior : True := trivial
+--       The substantive claim — hexagrid beats diagrid on progressive collapse
+--       — is an FEM result (Mashhadiali 2013, 2014; Yildirim 2024).  It is
+--       empirical.  Lean cannot hold it, and a `sorry` would imply a formal
+--       model waiting to be filled in.  It belongs in prose, with its citation.
+--
+--   S3  coord_coverage — asserted to be tracked in Coverage.lean.  Not
+--       verified.  Confirm it is an actual `sorry` before claiming it open.</span>
+
+<span class="c">-- NASAGaps.lean · same date</span>
+
+<span class="c">-- POWER  FN-P-101L · FN-P-402L — <span class="cut">REOPENED</span>, no partial credit.
+--   FN_P_101L_schumann_proximity re-exported the deleted §4 theorem.
+--   FN_P_402L_noise_tolerance restated τ·ε₀ = 2/3 — true of the dm³
+--   invariants, silent about power.  Re-exporting a true statement under a
+--   gap code does not address the gap; it makes the table look answered.</span>
+
+<span class="c">-- FN-A-104L neighbor traversal — <span class="cut">DELETED</span> (vacuous, and redundant).
+--   ∀ nb ∈ hexNeighbors h, nb ∈ hexNeighbors h := fun nb hnb =&gt; hnb
+--   `x ∈ S → x ∈ S`, discharged by the identity function.  True of every set.
+--   Not `True`-shaped, so a grep for ": True" or ":= trivial" misses it —
+--   the sweep has to be semantic.  FN-A-104L keeps FN_A_104L_reachability.</span>
+
+<span class="c">-- FN-M-302L — <span class="cut">REOPENED</span>.  Same tautology, docstringed as "given any two
+--   coords in the same colony, there exists a sequence of neighbor steps
+--   connecting them".  The statement does not say that.  Nothing else carries
+--   this gap.  Closing it needs a reachability relation on HexCoord and a
+--   proof that any two coordinates of a connected colony are related by it.</span>
+
+<span class="c">-- What survives, unchanged and non-vacuous:</span>
+<span class="k">theorem</span> hex_beats_square : sq_isoperimetric_ratio &lt; hex_isoperimetric_ratio
+<span class="k">theorem</span> aspect_ratio_encoded : height_cubits / base_cubits = g6_cycles * 2
+<span class="k">theorem</span> height_metres : (height_cubits : ℝ) * cubit_m = 15087.6
+<span class="k">theorem</span> nasa_payload_mono : payload_phase01 &lt; payload_phase02
+<span class="k">theorem</span> colony_depth2_coords : <span class="c">-- 19 distinct coordinates at depth 2</span>
+<span class="k">theorem</span> nasa_gap_closure_summary : <span class="c">-- five gaps, all with real content</span></pre>
+  </div>
+
+  <p style="margin:1rem 0;font-size:.85rem;color:var(--muted);">Nenhuma destas edi&ccedil;&otilde;es foi compilada aqui &mdash; correr <code>lake build</code> antes de citar qualquer resultado, e <code>#print axioms</code> em cada teorema antes de o chamar provado.<br>
+  <span style="opacity:.75">None of these edits has been compiled &mdash; run <code>lake build</code> before quoting any result, and <code>#print axioms</code> on each theorem before calling it proved.</span></p>
 
   <!-- Constantes herdadas -->
   <span class="section-label" style="margin-top:3rem;">Constantes Herdadas do G5 Crystal · Inherited from G5 Crystal</span>

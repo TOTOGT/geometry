@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Wave That Stays — Recurrence, Attractors, and Saturn | Omega Point</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1b1430;--ink2:#241c3d;--ink3:#2f254a;
+    --gold:#c9a84c;--gold-soft:#f3dfa0;
+    --parchment:#f7f1e3;--parchment2:#efe6d2;
+    --crimson:#8b2942;--text:#2a2218;--mid:#6b5d4f;--rule:#b89a52;
+    --ur:#b5651d;   /* burnt clay — the color of Sumerian tablets */
+    --serif:'EB Garamond',Georgia,serif;
+    --display:'Playfair Display',Georgia,serif;
+    --display-it:'Cormorant Garamond',Georgia,serif;
+    --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--serif);background:var(--parchment);color:var(--text);line-height:1.75;font-size:18px;}
+
+  nav{position:sticky;top:0;z-index:100;background:rgba(27,20,48,0.96);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--gold);padding:0.85rem 1.5rem;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.6rem;}
+  nav .brand{font-family:var(--display);color:var(--gold-soft);font-weight:700;letter-spacing:0.12em;font-size:0.95rem;text-transform:uppercase;text-decoration:none;}
+  nav .links{display:flex;gap:1.4rem;flex-wrap:wrap;}
+  nav .links a{color:var(--parchment);text-decoration:none;font-size:0.85rem;letter-spacing:0.05em;text-transform:uppercase;}
+  nav .links a:hover{color:var(--gold-soft);}
+
+  .breadcrumb{background:rgba(27,20,48,0.06);padding:0.55rem 1.5rem;font-family:var(--mono);font-size:0.75rem;letter-spacing:0.1em;color:var(--mid);border-bottom:1px solid rgba(184,154,82,0.18);display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.4rem;}
+  .breadcrumb a{color:var(--ur);text-decoration:none;}
+
+  .hero{background:radial-gradient(ellipse at top,#1a0e04 0%,#2a1a08 40%,var(--ink) 70%);color:var(--parchment);padding:5rem 1.5rem 4rem;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at 50% 40%,rgba(181,101,29,0.22) 0%,transparent 50%),
+               radial-gradient(circle at 20% 70%,rgba(201,168,76,0.10) 0%,transparent 40%);pointer-events:none;}
+  .hero .eyebrow{font-family:var(--mono);letter-spacing:0.35em;text-transform:uppercase;font-size:0.78rem;color:var(--gold-soft);margin-bottom:1.2rem;position:relative;}
+  .hero .year{font-family:var(--mono);font-size:0.82rem;color:rgba(243,223,160,0.65);letter-spacing:0.2em;position:relative;margin-bottom:0.8rem;}
+  .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,7vw,4.8rem);letter-spacing:0.03em;margin-bottom:0.3rem;position:relative;
+    background:linear-gradient(180deg,var(--gold-soft),#d4884a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero .subtitle{font-family:var(--display-it);font-style:italic;font-size:1.3rem;color:rgba(243,223,160,0.85);position:relative;margin-bottom:1.4rem;}
+  .hero .tagline{font-family:var(--serif);font-size:1rem;color:rgba(243,223,160,0.7);max-width:580px;margin:0 auto;position:relative;}
+
+  .main{max-width:780px;margin:0 auto;padding:3.5rem 1.5rem;}
+  .main h2{font-family:var(--display);font-size:1.75rem;color:var(--ink);margin:2.5rem 0 0.8rem;padding-bottom:0.4rem;border-bottom:2px solid var(--gold);}
+  .main h3{font-family:var(--display);font-size:1.25rem;color:var(--ur);margin:2rem 0 0.6rem;}
+  .main p{margin-bottom:1.1rem;}
+  .main blockquote{border-left:4px solid var(--gold);padding:0.8rem 1.2rem;margin:1.6rem 0;background:var(--parchment2);border-radius:0 6px 6px 0;}
+  .main blockquote p{margin:0;font-family:var(--display-it);font-style:italic;font-size:1.1rem;color:var(--ink2);}
+  .main blockquote .attr{display:block;font-family:var(--mono);font-style:normal;font-size:0.72rem;letter-spacing:0.1em;color:var(--mid);margin-top:0.5rem;text-transform:uppercase;}
+
+  .cuneiform-box{background:rgba(181,101,29,0.08);border:1px solid rgba(181,101,29,0.28);border-radius:8px;padding:1.6rem 1.8rem;margin:2rem 0;text-align:center;}
+  .cuneiform-box .glyph{font-size:2.4rem;margin-bottom:0.6rem;opacity:0.7;}
+  .cuneiform-box .label{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ur);margin-bottom:0.6rem;}
+  .cuneiform-box p{margin:0;font-family:var(--display-it);font-style:italic;font-size:1.05rem;color:var(--ink2);}
+
+  .insight-box{background:rgba(181,101,29,0.07);border:1px solid rgba(181,101,29,0.22);border-radius:8px;padding:1.4rem 1.6rem;margin:2rem 0;}
+  .insight-box .label{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ur);margin-bottom:0.6rem;}
+  .insight-box p{margin:0;font-size:0.95rem;}
+  .insight-box p+p{margin-top:0.7rem;}
+
+  .film-box{background:var(--ink);color:var(--parchment);border-radius:10px;padding:1.8rem 2rem;margin:2.5rem 0;position:relative;}
+  .film-box::before{content:'"';position:absolute;top:-0.4rem;left:1rem;font-family:var(--display);font-size:5rem;color:var(--gold);opacity:0.25;line-height:1;}
+  .film-box .label{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:0.8rem;}
+  .film-box p{font-family:var(--display-it);font-style:italic;font-size:1.1rem;color:var(--gold-soft);margin:0;}
+  .film-box .note{font-family:var(--serif);font-style:normal;font-size:0.88rem;color:rgba(243,223,160,0.7);margin-top:0.9rem;}
+
+  .transmission-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.8rem;margin:2rem 0;}
+  .tx-card{background:var(--parchment2);border:1px solid var(--rule);border-left:4px solid var(--ur);border-radius:6px;padding:1rem 1.1rem;}
+  .tx-card .step{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ur);margin-bottom:0.3rem;}
+  .tx-card h4{font-family:var(--display);font-size:1rem;color:var(--ink2);margin-bottom:0.3rem;}
+  .tx-card p{font-size:0.85rem;color:var(--mid);margin:0;}
+
+  .op-map{border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin:2rem 0;}
+  .op-map table{width:100%;border-collapse:collapse;font-size:0.88rem;}
+  .op-map th{background:var(--ink);color:var(--gold-soft);font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.6rem 0.8rem;text-align:left;}
+  .op-map td{padding:0.6rem 0.8rem;border-bottom:1px solid var(--rule);vertical-align:top;}
+  .op-map tr:last-child td{border-bottom:none;}
+  .op-map tr:nth-child(even) td{background:var(--parchment2);}
+  .op-map .sym{font-family:var(--mono);color:var(--ur);font-weight:600;}
+
+  .kabbalah-box{background:rgba(107,91,149,0.07);border:1px solid rgba(107,91,149,0.25);border-radius:8px;padding:1.4rem 1.6rem;margin:2rem 0;}
+  .kabbalah-box .label{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:#6b5b95;margin-bottom:0.6rem;}
+  .kabbalah-box p{margin:0;font-size:0.94rem;}
+  .kabbalah-box p+p{margin-top:0.7rem;}
+
+  .pull{font-family:var(--display-it);font-style:italic;font-size:1.4rem;color:var(--ink2);text-align:center;max-width:560px;margin:2.5rem auto;line-height:1.5;}
+  .pull .attr{display:block;font-family:var(--mono);font-style:normal;font-size:0.72rem;letter-spacing:0.1em;color:var(--crimson);margin-top:0.6rem;text-transform:uppercase;}
+
+  .ch-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.8rem;border-top:1px solid var(--rule);margin-top:4rem;padding-top:1.5rem;}
+  .ch-nav a{font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--ur);text-decoration:none;}
+  .ch-nav a:hover{color:var(--crimson);}
+
+  footer{background:var(--ink2);color:var(--parchment2);text-align:center;padding:2rem 1.5rem;font-size:0.8rem;font-family:var(--mono);}
+  footer a{color:var(--gold-soft);text-decoration:none;}
+  .footer-links{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-top:0.8rem;}
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;font-size:.95em;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+  footer.prov-foot{margin-top:3rem;padding:2rem 1.5rem;border-top:1px solid currentColor;
+    font-size:.72rem;line-height:1.8;opacity:.85;text-align:center;}
+  footer.prov-foot a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="omega-point-index.html">Omega Point · The Convergence Series</a>
+  <div class="links">
+    <a href="omega-point-index.html">Home</a>
+    <a href="omega-point-index.html#gallery">Gallery</a>
+    <a href="ch-fourfold.html">Ch 5 · Fourfold Pattern</a>
+    <a href="https://totogt.github.io/geometry/">Principia Orthogona</a>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <span>⌂ <a href="omega-point-index.html">Omega Point</a> · The Evidence · Recurrence</span>
+  <span>← <a href="ch-what-the-wax-knows.html">What the Wax Knows</a> &nbsp;·&nbsp; <a href="ch-liturgical.html">Ch 8 · T* = 2π</a> →</span>
+</div>
+
+<header class="hero">
+  <div class="eyebrow">The Evidence · Recurrence</div>
+  <div class="year">Observed since 1981 · nothing in it is older than a few days</div>
+  <h1>The Wave That Stays</h1>
+  <p class="subtitle">Saturn's hexagon, limit cycles, and the difference between returning and going somewhere</p>
+  <p class="tagline">A pattern thirty thousand kilometres across that has persisted for forty years, made of gas that leaves it constantly. What stays is not the material. What stays is the return.</p>
+</header>
+
+<main class="main">
+  <p>There is a hexagon at the north pole of Saturn. It is about thirty thousand kilometres across
+  &mdash; you could set two Earths inside it &mdash; and it has been there since Voyager photographed
+  it in 1981. Cassini watched it for over a decade, through a Saturnian winter of darkness lasting
+  the better part of fifteen Earth years, and it was still there when the light came back.</p>
+
+  <p>It is not carved in anything. There is no surface at that altitude, no boundary, no material with
+  a shape. It is a pattern in moving gas, and the gas does not stay. Every molecule in the hexagon
+  today was somewhere else last month and will be somewhere else next month. The hexagon persists
+  while its contents are continuously replaced.</p>
+
+  <p>What it is, physically, is a fast polar jet that has stopped running in a circle. A jet of that
+  speed at that latitude on a body rotating that fast is unstable to a meander &mdash; and the meander
+  does not grow arbitrarily. It locks. Of the wave numbers available, one is selected and the flow
+  settles into six lobes. Rotating-tank experiments in the laboratory reproduce the effect, spinning
+  fluid into stable polygonal jets, hexagons among them, with no Saturn required.</p>
+
+  <div class="block-open">
+    <span class="block-label">Not the same six</span>
+    <div class="block-body">This hexagon has nothing to do with the one in the previous chapter. Wax,
+    basalt and foam arrive at 120&deg; because boundary costs energy and three-way junctions minimise
+    it. Saturn's six is a <em>mode number</em> &mdash; the wave number that a shear instability selects
+    on a rotating sphere. Same digit, unrelated physics. Holding these apart is the discipline that
+    keeps this book from becoming a collection of coincidences. Saturn is not evidence about
+    <em>shape</em>. It is evidence about <em>time</em>, which is why it appears here and not
+    there.</div>
+  </div>
+
+  <h2>Persistence Without Permanence</h2>
+
+  <p>The interesting property is not that the hexagon is old. It is that it is old <em>while being
+  made of nothing that lasts</em>. A mountain persists by being hard. The hexagon persists by being
+  re-made, continuously, out of new material, in the same configuration.</p>
+
+  <p>That requires something specific: departures from the pattern have to die. If a gust deforms one
+  lobe and the deformation grows, the hexagon is gone within a season. It has been observed for four
+  decades, so deformations must shrink. The pattern is not merely a state the system happens to be in.
+  It is a state the system <em>returns to</em>.</p>
+
+  <p>In dynamics that object has a name. A closed trajectory that neighbouring trajectories approach is
+  a <strong>limit cycle</strong>, and it is a strictly stronger thing than a periodic orbit. A
+  frictionless pendulum has periodic orbits: it repeats, but push it and it simply repeats differently,
+  keeping the disturbance forever. A limit cycle destroys the disturbance. Push it and it comes back.</p>
+
+  <h2>Poincar&eacute;'s Theorem, and Why It Is Not Enough</h2>
+
+  <p>The mathematics of return begins with Henri Poincar&eacute;, who proved in 1890 that a bounded
+  system preserving volume in its phase space must return arbitrarily close to any state it has
+  occupied &mdash; not once but infinitely often. Time, in such a system, is literally a loop. This is a
+  theorem, not an image.</p>
+
+  <p>It is also, taken alone, useless as a description of anything that develops, and honesty requires
+  saying so plainly. Zermelo turned it against Boltzmann almost immediately: if everything recurs, the
+  second law cannot hold, and history has no direction. The escape is quantitative rather than
+  philosophical &mdash; the recurrence time for a system of macroscopic size is so vast that the age of
+  the universe does not begin to approach it &mdash; but the escape concedes the point. Pure recurrence
+  gives you eternal return: every state revisited, nothing accomplished, no direction anywhere.</p>
+
+  <div class="block-open">
+    <span class="block-label">The distinction the whole book rests on</span>
+    <div class="block-body"><strong>Recurrence without attraction</strong> is the loop that goes nowhere:
+    states repeat, disturbances persist, there is no preferred configuration and nothing is selected.
+    <strong>Recurrence with attraction</strong> is a different object entirely: the system returns
+    <em>and</em> deviations decay, so among all the ways it might have been it ends up in one small
+    family of them &mdash; and stays. The first is a circle. The second is a valley with a river in it.
+    Saturn's hexagon is the second. So is a heartbeat, a circadian rhythm, a stable ecosystem, a
+    liturgical year that survives the century it is practised in.</div>
+  </div>
+
+  <h2>Three Numbers Specify a Valley</h2>
+
+  <p>To say that a system has an attractor is to say three quantifiable things, and this book has already
+  named all three &mdash; in a theological register, several chapters ago, which is why they are worth
+  re-reading in this one.</p>
+
+  <p><strong>How fast deviations die.</strong> If a disturbance decays exponentially, there is a rate. In
+  the dm&sup3; framework that rate is &mu;<sub>max</sub> = &minus;2, and
+  <a href="ch-refining-fire.html">the chapter that names it</a> calls it the Refining Fire. Without a
+  negative rate there is no attractor at all &mdash; only drift.</p>
+
+  <p><strong>How far you can be pushed and still come back.</strong> Attraction is local. There is a
+  basin, and outside it the system does not return. That radius is &epsilon;<sub>0</sub> = 1/3, and
+  <a href="ch-mercy.html">Chapter Nine</a> calls it the Mercy Radius. That it is finite is not a
+  softening of the claim; it is the claim.</p>
+
+  <p><strong>How long the loop takes.</strong> A cycle has a period. Here T* = 2&pi;, and
+  <a href="ch-liturgical.html">Chapter Eight</a> reads it as the rhythm of return.</p>
+
+  <p>Rate, basin, period. Those three numbers are what a dynamicist writes down to specify an attractor,
+  and they are the three constants this book had already been reading as fire, mercy and liturgy. The
+  correspondence is not decoration. It is why the theological vocabulary in these chapters can be used
+  without embarrassment: each term is doing the work of a defined quantity, and can be checked against
+  it.</p>
+
+    <h2>Why That Planet Carries Time</h2>
+
+  <p>Long before anyone could see the hexagon, Saturn was already the planet of time, and it is worth
+  asking what the ancients were actually looking at when they decided that.</p>
+
+  <p>They were looking at slowness. Of the seven bodies that move against the fixed stars, Saturn is the
+  slowest &mdash; it takes about twenty-nine and a half years to complete one circuit of the zodiac.
+  Mercury does it in a season. Saturn takes a generation. For an observer with no instrument and a
+  lifetime of perhaps fifty years, Saturn is the only planet whose full period is not comfortably
+  contained within a life. You watch it go round once, and if you are fortunate you watch it begin
+  again.</p>
+
+  <p>It is also the outermost of the seven, the slowest and the highest, the last moving thing before
+  the sphere of fixed stars. Slow, distant, and at the boundary of the changeable world.</p>
+
+  <div class="block-open">
+    <span class="block-label">[CONJECTURE] &middot; four candidate reasons, and how they differ</span>
+    <div class="block-body"><strong>The observation.</strong> Saturn measures the longest cycle a person
+    can see, so it becomes the marker of long duration &mdash; time as such.
+    <br><br>
+    <strong>The myth.</strong> Kronos is the Titan who devours his children and is overthrown by his
+    son: the succession of generations, which is what time does to people. The Greek Kronos and
+    <em>chronos</em>, time, are not the same word etymologically, and philologists are clear about
+    that &mdash; but the two were being deliberately identified in antiquity, in Stoic and Orphic
+    allegory, and Cicero discusses the association. The fusion is ancient. It is not evidence of an
+    original meaning.
+    <br><br>
+    <strong>The agriculture.</strong> The Roman Saturnus is a god of sowing, and the Saturnalia sits at
+    the winter solstice &mdash; the pivot of the farming year, which is the other clock these
+    civilisations ran on.
+    <br><br>
+    <strong>The temperament.</strong> Cold, dry, leaden, slow: the humoral scheme gives Saturn old age,
+    and old age is time made visible in a body.
+    <br><br>
+    These are not rivals so much as layers, and a book cannot honestly claim the first is the origin of
+    the rest. What can be said is narrower and still worth saying: <em>the slowest visible cycle
+    acquired the name of duration itself, in more than one culture, and the slowness is a fact about
+    orbital mechanics that nobody chose.</em></div>
+  </div>
+
+  <h2>And It Was Oddly Shaped</h2>
+
+  <p>The second strangeness had to wait for a lens. In 1610 Galileo turned his telescope on Saturn and
+  found that it was not round. He announced the result, as was the custom, in an anagram: <em>I have
+  observed the highest planet to be triple.</em> A central body with two attendants, one on each side
+  &mdash; handles, or ears.</p>
+
+  <p>Two years later they were gone. The planet had become a plain disc. Galileo, who could not know
+  that he was seeing a ring system edge-on as the geometry shifted, asked whether Saturn had devoured
+  his own children.</p>
+
+  <p>It is the best joke in the history of astronomy and it is also a precise description of the
+  problem. The appearance was periodic, and he had sampled it twice. It took another forty-five years,
+  and Huygens, to work out that the changing shape was a fixed ring seen from a moving vantage &mdash;
+  and Huygens too announced it as an anagram before he dared say it plainly: <em>girded by a thin flat
+  ring, nowhere touching, inclined to the ecliptic.</em></p>
+
+  <div class="block-open">
+    <span class="block-label">What the episode is doing in this chapter</span>
+    <div class="block-body">Twice now, Saturn has taught the same lesson. The rings looked like a
+    changing shape and were a fixed structure sampled at intervals. The hexagon looks like a fixed
+    structure and is a flow that is continuously replaced. In both cases the mistake is the same one
+    &mdash; taking an instantaneous appearance for the thing itself &mdash; and in both cases the
+    correction requires watching for longer than seems necessary. Galileo needed forty-five more years
+    of somebody else's observations. The hexagon needed a spacecraft to sit in orbit for a decade. The
+    planet of time keeps insisting that you cannot know what something is until you have watched it go
+    round.</div>
+  </div>
+
+<h2>The Door Down, and What Is Behind It</h2>
+
+  <p>Saturn is also where this volume touches the formal work most directly, and the connection has to be
+  stated with more care than it usually gets.</p>
+
+  <p>The <em>Principia Orthogona</em> formalisation includes a file about a six-site ring with
+  D<sub>6</sub> symmetry: five theorems, machine-checked, establishing which operations on such a ring
+  commute, that the coupling term does not, that a rotation leaves the configuration invariant, and that
+  the coupling is uniform around the ring. Those theorems are verified in the sense that matters &mdash;
+  the kernel has been asked about each one by name and none depends on an admitted proof.</p>
+
+  <div class="block-open">
+    <span class="block-label">What that does not establish</span>
+    <div class="block-body">Those theorems are about a mathematical object with six-fold symmetry. They
+    are <em>not</em> a proof of anything about Saturn's atmosphere, and nothing in this book should be
+    read as claiming otherwise. Whether the D<sub>6</sub> ring is a good model of a shear-unstable polar
+    jet is a physical question that the formalisation does not touch and that this series has not
+    settled. The Lean file establishes that the mathematics is sound. The application is a
+    <em>proposal</em>. Keeping those apart is the difference between a verified result and a verified
+    result being used to launder an unverified one. <em>[OPEN]</em></div>
+  </div>
+
+  <p>And one genuine gap in the physics, which belongs here rather than in a footnote: why the jet selects
+  six lobes rather than five or seven is still argued about. The instability produces a polygon; the
+  particular number depends on the jet's speed and width and on the planet's rotation, and the details
+  are not settled. The book's interest is in the fact that <em>a</em> number is selected and then held.
+  It has no stake in the digit.</p>
+
+  <p class="refs" style="font-size:.88em;opacity:.85">Sources: the Voyager and Cassini imaging record for
+  the north polar hexagon; A. C. Barbosa Aguiar, P. L. Read and colleagues, <em>Icarus</em> (2010), for
+  polygonal jets produced in rotating-tank experiments; H. Poincar&eacute;, on recurrence, in the
+  memoir on the three-body problem, <em>Acta Mathematica</em> (1890); E. Zermelo's recurrence objection
+  to Boltzmann (1896) and Boltzmann's reply, for the quantitative escape.</p>
+
+
+  <p style="margin-top:2rem"><strong>Next:</strong> four chapters have argued that the valley has a shape. <a href="ch-beyond-the-radius.html">Beyond the Radius</a> is about the asteroid &mdash; what constraint does not explain, and where this argument stops.</p>
+</main>
+
+<footer>
+  <div>Omega Point · The Convergence Series · G6 LLC, Newark NJ</div>
+  <div class="footer-links">
+    <a href="omega-point-index.html">Series Home</a>
+    <a href="ch-fourfold.html">Ch 5 · Fourfold Pattern</a>
+    <a href="https://totogt.github.io/geometry/">Principia Orthogona</a>
+    <a href="https://g6llc.gumroad.com/l/soundworks">Gumroad</a>
+  </div><br>
+  <span class="prov-add">Principia Orthogona &middot; Vol IX &middot; Omega Point<br>G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; 2026 &middot; ORCID <a href="https://orcid.org/0009-0000-6496-2186" target="_blank" rel="noopener">0009-0000-6496-2186</a> &middot; Series <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" rel="noopener">Principia Orthogona community</a> &middot; &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC &middot; Licence CC BY-NC-ND 4.0</span>
+</footer>
+</body>
+</html>

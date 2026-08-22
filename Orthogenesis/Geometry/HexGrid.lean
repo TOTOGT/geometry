@@ -31,4 +31,8 @@ noncomputable def hexToVec2 (h : HexCoord) : Vec2 :=
 /-- The six-neighbour list always has length 6 — the six-fold ring. -/
 theorem hexNeighbors_length (h : HexCoord) : (hexNeighbors h).length = 6 := rfl
 
+/-- The six axial neighbour directions are pairwise distinct. -/
+theorem hexNeighbors_nodup (h : HexCoord) : (hexNeighbors h).Nodup := by
+  simp [hexNeighbors, HexCoord.mk.injEq] <;> omega
+
 end Orthogenesis

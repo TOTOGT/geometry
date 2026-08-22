@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP73 · The Stamp and the Triple · Verification Claims That Outlive Their Evidence</title>
+<meta name="description" content="A verification claim names an artifact, but verification is a property of a triple: artifact, toolchain, library. Recording only the first permits three failures indistinguishable to every automated reader - misfiling, decay, and regression. A worked audit of a Lean file whose header was true, then partly false, then true again, and a checker that separates the three.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],tags:'ams'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+:root{
+  --void:    #04040a;
+  --surface: #0c0d16;
+  --card:    #10111c;
+  --gold:    #c9a84c;
+  --teal:    #0ABAB5;
+  --red:     #e05a3a;
+  --purple:  #c084fc;
+  --green:   #50c878;
+  --amber:   #f59e0b;
+  --deep:    #5b4fcf;   /* deep quantum violet */
+  --text:    #e8e4d8;
+  --muted:   #6b6757;
+  --dim:     #2a2920;
+  --rule:    rgba(201,168,76,0.18);
+  --serif:   'Noto Serif', Georgia, serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-series{font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;}
+.nav-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-links a.here{color:var(--purple);}
+
+.hero{padding:5rem 2rem 4rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(91,79,207,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--deep);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:2rem;opacity:.9;}
+.hero h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:400;letter-spacing:.04em;color:var(--gold);margin-bottom:.4rem;line-height:1.25;}
+.hero-sub{font-size:1rem;color:rgba(232,228,216,.7);max-width:680px;margin:.6rem auto 0;font-style:italic;line-height:1.7;}
+.hero-eq{margin-top:2rem;font-family:var(--mono);font-size:.85rem;letter-spacing:.08em;color:rgba(201,168,76,.4);line-height:2;}
+.hero-wp{margin-top:.8rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+
+.page{max-width:900px;margin:0 auto;padding:4rem 2rem;}
+
+h2{font-size:1.25rem;font-weight:400;color:var(--gold);letter-spacing:.04em;margin:3.5rem 0 1.2rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;letter-spacing:.02em;}
+p{margin-bottom:1.2rem;}
+p:last-child{margin-bottom:0;}
+a{color:var(--teal);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* Theorem blocks */
+.block-verified{border-left:3px solid var(--teal);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(10,186,181,.03);}
+.block-model{border-left:3px solid var(--gold);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(201,168,76,.025);}
+.block-open{border-left:3px solid var(--amber);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(245,158,11,.025);}
+.block-proof{border-left:3px solid var(--purple);padding:1.1rem 1.5rem;margin:1.5rem 0;background:rgba(192,132,252,.025);}
+.block-defn{border-left:3px solid var(--deep);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(91,79,207,.03);}
+.block-lens{border-left:3px solid var(--muted);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(107,103,87,.03);}
+.block-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:.6rem;display:block;}
+.block-verified .block-label{color:var(--teal);}
+.block-model   .block-label{color:var(--gold);}
+.block-open    .block-label{color:var(--amber);}
+.block-proof   .block-label{color:var(--purple);}
+.block-defn    .block-label{color:var(--deep);}
+.block-lens    .block-label{color:var(--muted);}
+.block-body{font-size:.95rem;line-height:1.82;color:var(--text);}
+.qed{text-align:right;font-family:var(--mono);font-size:.85rem;color:var(--purple);margin-top:.6rem;}
+
+.block-math{font-family:var(--mono);font-size:.9rem;color:var(--gold);background:var(--surface);border:1px solid var(--dim);padding:1rem 1.4rem;margin:1.2rem 0;overflow-x:auto;line-height:2;}
+
+.op-chain{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:1rem 0;}
+.op{font-family:var(--mono);font-size:.78rem;padding:.2rem .55rem;border-radius:2px;}
+.op-c{background:rgba(10,186,181,.12);color:#0ABAB5;border:1px solid rgba(10,186,181,.3);}
+.op-k{background:rgba(224,90,58,.12);color:#e05a3a;border:1px solid rgba(224,90,58,.3);}
+.op-f{background:rgba(192,132,252,.12);color:#c084fc;border:1px solid rgba(192,132,252,.3);}
+.op-u{background:rgba(80,200,120,.12);color:#50c878;border:1px solid rgba(80,200,120,.3);}
+.op-arr{color:var(--muted);}
+
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0;}
+@media(max-width:700px){.compare-grid{grid-template-columns:1fr;}}
+.cg-card{background:var(--card);border:1px solid var(--rule);padding:1.4rem;border-radius:2px;}
+.cg-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;display:block;}
+.cg-body{font-size:.88rem;line-height:1.75;color:rgba(232,228,216,.8);}
+.cg-card.purple-accent{border-color:rgba(192,132,252,.25);}
+.cg-card.purple-accent .cg-title{color:var(--purple);}
+.cg-card.deep-accent{border-color:rgba(91,79,207,.25);}
+.cg-card.deep-accent .cg-title{color:rgba(91,79,207,.9);}
+
+.step-list{list-style:none;counter-reset:step-counter;margin:1rem 0;}
+.step-list li{counter-increment:step-counter;padding:.5rem 0 .5rem 2.2rem;position:relative;border-bottom:1px solid var(--dim);font-size:.94rem;line-height:1.75;}
+.step-list li:last-child{border-bottom:none;}
+.step-list li::before{content:counter(step-counter)".";position:absolute;left:0;font-family:var(--mono);font-size:.75rem;color:var(--purple);font-weight:700;top:.55rem;}
+
+.pull{text-align:center;padding:2.5rem 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:3rem 0;}
+.pull-text{font-size:1.15rem;font-style:italic;color:var(--gold);max-width:660px;margin:0 auto;line-height:1.75;}
+.pull-attr{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.8rem;}
+
+.infinity-tower{background:var(--surface);border:1px solid var(--rule);padding:2rem;margin:2rem 0;text-align:center;}
+.it-row{font-family:var(--mono);font-size:.85rem;color:rgba(232,228,216,.7);line-height:2.2;}
+.it-row .highlight{color:var(--gold);}
+.it-row .dim{color:var(--muted);}
+.it-arrow{color:var(--muted);font-size:1.1rem;display:block;}
+
+.po-ring-strip{display:flex;justify-content:center;align-items:center;gap:0;border-top:1px solid var(--rule);padding:0;font-family:var(--mono);font-size:.58rem;flex-wrap:wrap;}
+.po-ring-strip a{display:inline-block;padding:.65rem 1.1rem;color:var(--muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;border-right:1px solid var(--rule);transition:color .2s,background .2s;}
+.po-ring-strip a:last-child{border-right:none;}
+.po-ring-strip a:hover{color:var(--gold);background:rgba(201,168,76,.04);}
+.po-ring-strip a.here{color:var(--purple);}
+
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid var(--rule);}
+footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);line-height:2;}
+
+  /* --- provenance footer (added 2026-08-12) --- */
+  footer .prov{max-width:760px;margin:1.5rem auto 0;padding-top:1.1rem;
+    border-top:1px solid currentColor;display:flex;gap:34px;flex-wrap:wrap;
+    text-align:left;font-size:.72rem;line-height:1.7;opacity:.9}
+  footer .prov>div{flex:1 1 300px}
+  footer .prov a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+  footer .prov .disc{opacity:.85}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-series" href="../book4/living-book.html">Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="index.html">Book 6</a>
+    <a href="wp66-the-wall-already-standing.html">WP66</a>
+    <a href="wp70-the-function-and-the-exponent.html">WP70</a>
+    <a href="wp72-governance-as-treatment.html">WP72</a>
+    <a href="wp73-the-stamp-and-the-triple.html" class="here">WP73</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Working Paper 73 &middot; Verification &middot; Software Provenance</div>
+  <h1>The Stamp and the Triple</h1>
+  <p class="hero-sub">A verification claim names an artifact. Verification is a property of a <em>triple</em> &mdash; artifact, toolchain, library. Every convention in common use records the first and drops the other two, and that single omission admits three distinct failures which look identical to every automated reader. This paper audits one small Lean file across a month, separates the three, and specifies an instrument that tells them apart. Running that instrument against a body of theorems then surfaces four further classes, which concern not the binding of a claim to an artifact but the artifact itself &mdash; ending in one that no instrument can decide, and which therefore fixes the ceiling of the whole programme.</p>
+  <div class="hero-eq">Pablo Nogueira Grossi &middot; G6 LLC, Newark NJ &middot; 21 August 2026 &middot; instrument: <code>CS/verify-stamp</code> &middot; specimens: <code>DO NOT DELETE/MANIFEST.md</code></div>
+</section>
+
+<main class="page">
+
+<style>
+.vtable{width:100%;border-collapse:collapse;margin:1.6rem 0;font-size:.92rem}
+.vtable th,.vtable td{text-align:left;vertical-align:top;padding:.6rem .8rem;border-bottom:1px solid var(--rule)}
+.vtable th{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.vtable code{font-size:.85em}
+.wrap-x{overflow-x:auto}
+.tl{font-family:var(--mono);font-size:.82rem;line-height:1.9;margin:1.4rem 0;padding-left:1rem;border-left:2px solid var(--rule)}
+.tl b{color:var(--gold);font-weight:400}
+</style>
+
+<h2>1 &middot; A header that was true, and then was not</h2>
+
+<p>On 20 July 2026 a file entered this repository containing five theorems about a six-site <span class="op">D<sub>6</sub></span>-equivariant ring, and a header asserting that all five had been kernel-verified: <em>0 sorry</em>, and <code>#print axioms</code> reporting only <code>propext</code>, <code>Classical.choice</code> and <code>Quot.sound</code> for each. <em>No sorryAx.</em> One commit, one day, claim and code together.</p>
+
+<p>On 21 August 2026 the file was run for the first time in a month. Three of the five theorems depended on <code>sorryAx</code>. They were admitted, not proved.</p>
+
+<p>The obvious reading &mdash; that the header was written without running anything &mdash; is wrong, and the way it is wrong is the subject of this paper. The machine that produced the file still carries a Lean tree pinned to <code>v4.14.0</code>, the toolchain the header names, with a built Mathlib in it. Running the preserved 20 July copy there separates the causes cleanly:</p>
+
+<div class="wrap-x">
+<table class="vtable">
+<tr><th>theorem</th><th>20 July, v4.14.0</th><th>21 Aug, v4.33.0-rc1</th><th>class</th></tr>
+<tr><td><code>angCoupling_not_commute</code><br><code>rot_commutes_coupling</code></td><td>proved</td><td>proved</td><td><b>stable</b></td></tr>
+<tr><td><code>gate_commutes_onsite</code><br><code>hex_rotation_invariant</code></td><td>proved</td><td><code>sorryAx</code></td><td><b>decayed</b></td></tr>
+<tr><td><code>hex_coupling_uniform</code></td><td><code>sorryAx</code></td><td><code>sorryAx</code></td><td><b>misfiled</b></td></tr>
+</table>
+</div>
+
+<p>The two that decayed were genuinely proved in July. Between <code>v4.14.0</code> and <code>v4.33.0-rc1</code>, Mathlib reorganised its import graph and stopped supplying <code>Fintype (Fin 6)</code> transitively through <code>Mathlib.Data.Real.Basic</code>. Without that instance <code>fin_cases</code> cannot perform the case split; Lean logs the failure and its error recovery admits the open goal. Nobody edited the file. Nobody made a mistake. A true claim became a false one while the object it described sat unchanged on disk.</p>
+
+<p>The third has a different history, and it is legible in two timestamps sixty seconds apart:</p>
+
+<div class="tl">
+<b>22:28</b> &nbsp; sibling copy written. Contains the <code>ring</code> call that closes <code>c + c = 2 * c</code>.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Header reads: <code>KERNEL-VERIFIED: &lt;pending &mdash; run and record&gt;</code><br>
+<b>22:29</b> &nbsp; repository copy written. The <code>ring</code> is gone.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Header reads: <code>KERNEL-VERIFIED 2026-07-20 &hellip; No sorryAx</code>
+</div>
+
+<p>In one minute, a rewrite dropped a tactic and promoted a disclaimer into a claim. The fix and the assertion that the fix had worked ended up in different files. Neither file is dishonest. The copy that could justify the claim declines to make it; the copy that makes it cannot justify it.</p>
+
+<div class="block-defn">
+<span class="block-label">Definition</span>
+<div class="block-body"><strong>Claim&ndash;artifact separation.</strong> A verification claim and the object it verifies come to reside in different places, such that no reader &mdash; human or automated &mdash; can detect the separation from either place alone.</div>
+</div>
+
+<h2>2 &middot; The triple</h2>
+
+<p>The defect that permits all of this is stateable in one line. A verification claim names an artifact. But what was verified is a <em>triple</em>:</p>
+
+<div class="block-math">
+<div class="block-body" style="text-align:center;font-family:var(--mono)">
+V = ( artifact , toolchain , library )
+</div>
+</div>
+
+<p>File headers record the artifact. Lock files record the library, elsewhere, unlinked to any claim. Toolchain pins record the toolchain, elsewhere again. No convention in common use binds the three to the assertion that depends on all of them. The consequence is that a claim can survive intact while any of its three arguments is replaced &mdash; and it will read exactly as it did when it was true.</p>
+
+<p>This is not a Lean problem. It is the general shape of software provenance: a green badge, a signed attestation, a <code>verified</code> field in a manifest, a comment saying <em>checked</em>. Each names what was checked and omits what it was checked <em>against</em>.</p>
+
+<h2>3 &middot; Three classes, and why they must be distinguished</h2>
+
+<p>Once the triple is written down, the failures separate. They demand different responses, and conflating them produces the wrong action every time.</p>
+
+<div class="wrap-x">
+<table class="vtable">
+<tr><th></th><th>what changed</th><th>who erred</th><th>correct response</th></tr>
+<tr><td><b>MISMATCH</b></td><td>the artifact is not the one that was checked</td><td>nobody lied; a copy, a handoff or a transcription separated claim from code</td><td>find the sibling; reconcile; never trust either copy until re-run</td></tr>
+<tr><td><b>STALE</b></td><td>toolchain or library moved</td><td>nobody at all</td><td>re-run and re-stamp; the claim may well still hold</td></tr>
+<tr><td><b>FAIL</b></td><td>the check itself now reports a forbidden result</td><td>a real regression</td><td>fix the artifact</td></tr>
+</table>
+</div>
+
+<p>Treat a STALE as a FAIL and you go looking for a bug in a file that has none. Treat a MISMATCH as a FAIL and you repair the copy in front of you while the correct version sits unused one directory away &mdash; which is precisely what happened here in July. Treat any of them as a passing check and you get a month of silence.</p>
+
+<h2>4 &middot; Why no layer objected</h2>
+
+<p>The header stood for a month inside a repository with continuous integration, a formal kernel, and a version-control history. Each layer was working. None of them was pointed at the claim.</p>
+
+<ul class="step-list">
+<li>The file sat at the repository root. The Lake configuration declared one build target, <code>lean_lib Orthogenesis</code>, which did not include it. <code>lake build</code> therefore never compiled it &mdash; not once, in a month, on any push.</li>
+<li>The CI job contained a step named <em>&ldquo;Real axiom check through the Lean kernel.&rdquo;</em> It was a real kernel invocation. It probed six <em>definitions</em> &mdash; <code>hexNeighbors</code>, <code>hexToVec2</code>, <code>Cell.center</code>, <code>Cell.radius</code>, <code>Colony.insert</code>, <code>Colony.expand</code> &mdash; and no theorems. Definitions cannot depend on <code>sorryAx</code>. The step could not fail.</li>
+<li>The repository held no built Mathlib, so the file could not have been compiled there even by hand. The header named a different tree as the site of verification, and that tree was outside version control.</li>
+<li>Three copies of the file existed on one disk, in three directories, two of them untracked. They were not identical.</li>
+</ul>
+
+<div class="block-open">
+<span class="block-label">The general shape</span>
+<div class="block-body">Every layer here checks <em>well-formedness</em>, and well-formedness is exactly what a false claim can afford. A build succeeds or fails; it cannot report that the file it never compiled was the important one. A kernel accepts a proof; it cannot report that the declaration it was handed is a definition. A badge turns green; it certifies that the configured steps ran, not that the configured steps were the right ones. And a comment asserting verification is, to every automated reader, indistinguishable from a comment asserting anything else.</div>
+</div>
+
+<h2>5 &middot; The cost structure</h2>
+
+<p>Naming the costs is what makes them targetable, and the distribution is counter-intuitive.</p>
+
+<div class="wrap-x">
+<table class="vtable">
+<tr><th>cost</th><th>magnitude here</th><th>reducible?</th></tr>
+<tr><td>writing the claim</td><td>one line, seconds</td><td>no &mdash; and this is the root asymmetry</td></tr>
+<tr><td>the defect itself</td><td>two lines: one <code>import</code>, one <code>ring</code></td><td>already negligible; not worth optimising</td></tr>
+<tr><td>detection</td><td><b>unbounded</b> &mdash; nothing initiated it; it happened by chance a month later</td><td>yes, qualitatively: to one CI cycle</td></tr>
+<tr><td>localisation</td><td>six filesystem sweeps, a <code>git log</code>, three runs, one wrong hypothesis</td><td>yes &mdash; named declarations in the output</td></tr>
+<tr><td>adjudication</td><td>two days; required preserved specimens, an obsolete toolchain, and someone doubting the auditor</td><td>replaced, not accelerated, by the three exit codes</td></tr>
+<tr><td>contamination</td><td>the claim reached three files, a manuscript and a commit message</td><td>only via detection latency</td></tr>
+</table>
+</div>
+
+<p>Repair was free. Detection was unbounded. And contamination is not an independent cost but a <em>multiplier</em> on latency: every day a false claim stands is another artifact that inherits it. A claim caught within one CI cycle cannot reach a paper. That reorders the priorities completely &mdash; the target is latency, because latency is what converts a two-line defect into a corpus-wide one.</p>
+
+<div class="block-open">
+<span class="block-label">Counter-move that costs</span>
+<div class="block-body">Consolidation has a negative term. Reducing to a single copy lowers drift cost and <em>raises</em> adjudication cost: the verdict above was settled by a specimen that had been moved to a deletion folder that same morning, read by a stale multi-gigabyte build of an obsolete toolchain. Delete either and the question does not become harder &mdash; it becomes permanently unanswerable. The resolution is to separate the roles: one source copy, <em>n</em> archived specimens, and the old toolchains retained as instruments rather than reclaimed as clutter.</div>
+</div>
+
+<h2>6 &middot; The instrument</h2>
+
+<p><code>verify-stamp</code> binds the triple to the claim and reports which of the three has come apart. Its design follows from the failure it was built for.</p>
+
+<ul class="step-list">
+<li><strong>The stamp lives inside the artifact,</strong> not in a sidecar file. A sidecar can be separated from what it describes, which is the failure being caught. The content hash covers the file with the stamp block removed, so the stamp can be rewritten without invalidating itself.</li>
+<li><strong>The comment prefix is inferred</strong> from whatever precedes the marker on its line, so the format works unmodified for <code>--</code>, <code>#</code>, <code>//</code>, <code>%</code>.</li>
+<li><strong>The environment is probed, not asserted.</strong> Each <code>env-probe</code> is a command whose output is recorded at stamping time and recomputed at check time. Drift is detected by comparison, not by trusting a written-down version string.</li>
+<li><strong>Stamping runs the check first</strong> and refuses to write a stamp over a failing result. A stamp cannot be issued for something that has not just passed.</li>
+</ul>
+
+<div class="block-verified">
+<span class="block-label">Exit codes</span>
+<div class="block-body" style="font-family:var(--mono);font-size:.86rem;line-height:1.8">
+&nbsp;0 &nbsp;OK &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hash, environment and re-run all agree<br>
+10 &nbsp;MISMATCH &nbsp;content hash differs from the stamp<br>
+11 &nbsp;STALE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hash matches, environment moved<br>
+12 &nbsp;FAIL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re-ran; forbidden token present or declaration absent<br>
+13 &nbsp;ERROR &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no stamp, malformed stamp, missing file, probe failed
+</div>
+</div>
+
+<p>The codes begin at ten deliberately, and the reason is a defect this tool found in itself. In the first test run, <code>MISMATCH</code> was <code>2</code> &mdash; the same code a Python interpreter returns for a file it cannot open. A broken invocation exited 2 and was scored by the tool's own test suite as a genuine <code>MISMATCH</code>: a green assertion, for the wrong reason, in a suite written to catch exactly that. A checker whose failure is indistinguishable from the failure it reports is the defect it exists to catch. The codes moved out of the range that shells and interpreters already occupy.</p>
+
+<p>A fourth defect appeared the first time the instrument ran against real theorems, and it is the strangest of the four. <code>#print axioms</code> has two output forms: <code>'foo' depends on axioms: [&hellip;]</code>, and &mdash; when a theorem rests on nothing whatever &mdash; <code>'foo' does not depend on any axioms</code>. The check counted occurrences of the first string. Three of the twelve theorems it was asked about are axiom-free, so it counted nine and failed the job.</p>
+
+<div class="block-open">
+<span class="block-label">A checker that cannot see success</span>
+<div class="block-body">The three results it discarded were the three <em>best</em> results in the file &mdash; proofs resting on no axiom at all, not even <code>propext</code>. The other defects in this instrument corrupted an artifact or mislabelled a failure. This one is quieter and worse in a particular way: it was blind to the strongest possible outcome, and it reported that blindness as the file's fault. A verification tool has two ways to be wrong, and the literature attends almost entirely to the first: it can accept what it should reject, or it can fail to recognise what it should accept. The second produces no false assurance, so nothing downstream complains &mdash; it produces abandoned results.</div>
+</div>
+
+<p>A second defect was found by turning the instrument on itself. The source defined its delimiters literally &mdash; <code>BEGIN = "&hellip;-BEGIN"</code> &mdash; so when the tool stamped its own file it matched those two constant definitions as the stamp block and deleted them from the body it wrote back. The write reported success, with a hash and a timestamp. The file could then no longer import itself, and its test suite fell from twenty passes to two. The delimiters are now assembled from parts so they never appear literally, and any detected block whose lines do not all look like stamp lines is an <code>ERROR</code> rather than a licence to remove them.</p>
+
+<div class="block-open">
+<span class="block-label">Worse than what it detects</span>
+<div class="block-body">That failure is more serious than any in the taxonomy above. MISMATCH, STALE and FAIL all describe a claim that has come loose from a <em>surviving</em> artifact. Here the instrument destroyed part of the artifact and certified the result. A verification tool is a privileged writer, and privileged writers fail in ways their subjects cannot. It was found only by applying the instrument to itself, which is now a standing test rather than an experiment.</div>
+</div>
+
+<div class="block-defn">
+<span class="block-label">What a build target surfaced</span>
+<div class="block-body">Between 21 August and the following day, twelve theorems that had sat in this repository for a month were compiled for the first time, because a single line was added to a Lake configuration. Making them compile took six repair commits and turned up four distinct defects, none of which any of the three classes above describes:
+<ul class="step-list">
+<li>a lemma <b>admitted</b> &mdash; <code>hexRing_card</code>, its successor case <code>sorry</code>, with <code>coord_coverage</code> a bare call to it;</li>
+<li>a lemma <b>misapplied</b> &mdash; <code>stage_bound</code>, given one argument fewer than it quantifies over;</li>
+<li>a lemma <b>named but never supplied</b> &mdash; <code>hexNeighbors_nodup</code>, cited by a theorem and defined nowhere;</li>
+<li>a theorem <b>false as stated</b> &mdash; <code>no_coord_collision</code>, which could not be proved because it was not true.</li>
+</ul>
+The last is the one worth pausing on. MISMATCH, STALE and FAIL all concern a claim coming loose from a surviving artifact. This is a claim that was never true, sitting in a repository, indistinguishable from its neighbours, and undiscoverable until something attempted to check it. No stamp detects it. No axiom probe detects it. Only elaboration does, and elaboration only happens to files a build target reaches.</div>
+</div>
+
+<h2>7 &middot; What the instrument does not do</h2>
+
+<p>It does not decide whether the recorded command is the right command, or whether the declarations named are the interesting ones. A stamp that faithfully re-runs a check of the wrong thing will pass forever, and will pass with a hash, a timestamp and an environment fingerprint attached &mdash; which is a more convincing false assurance than a bare comment ever was. That risk is real and it is created by this tool.</p>
+
+<p>The July CI step is the cautionary instance: a genuine kernel invocation, correctly executed, reporting truthfully about six declarations nobody cared about. No stamp would have helped, because the step was not wrong &mdash; it was aimed elsewhere.</p>
+
+<div class="block-open">
+<span class="block-label">Irreducible</span>
+<div class="block-body">Someone has to doubt the auditor. No mechanism produces that, and the failure it prevents is the worst available, because a wrong correction arrives carrying more authority than the error it replaces. In the audit reported here the decisive intervention was not a tool. It was the author reading the auditor's conclusions and saying that half of them were not true &mdash; which was correct, and which no exit code would have produced.</div>
+</div>
+
+<h2>8 &middot; Beyond the triple: two classes the stamp cannot reach</h2>
+
+<p>The classes above concern a claim coming loose from an artifact. Three further classes concern the artifact itself, and they were found by running the hardened job against a body of theorems rather than against one file. The first was described at the end of &sect;6: a theorem <b>false as stated</b>, which only elaboration detects. Two more complete the ladder, and they are of opposite character &mdash; one is trivially mechanisable and had simply not been mechanised; the other cannot be mechanised at all.</p>
+
+<p><b>VACUOUS.</b> A theorem whose conclusion is <code>True</code> compiles cleanly, contains no <code>sorry</code>, and reports <code>[propext, Classical.choice, Quot.sound]</code> exactly as a real theorem does. <code>#print axioms</code> is the wrong instrument by construction: it asks what a proof rests on, and a trivially true statement rests on nothing. The check passes, truthfully, and certifies nothing. Six such statements are live in <code>Orthogenesis/Architecture/</code>; a seventh, <code>hexagrid_collapse_resistance_superior</code>, was reported deleted in an errata issued to a federal agency and was still in the file three days later. It is now gated: a scan compares the vacuous statements present against a declared baseline, and an undeclared one fails the job. That scan caught the seventh on its first run.</p>
+
+<p><b>MISATTRIBUTED.</b> A theorem that is true, proved, and credited with a claim it does not support. The twelve NASA gap-closure theorems are each indexed against a functional gap code; reading the statements against the codes, five of the twelve prove something other than what they are filed as.</p>
+
+<div class="wrap-x">
+<table class="vtable">
+<tr><th>theorem</th><th>what the statement proves</th><th>what it is filed as</th></tr>
+<tr><td><code>FN_A_104L_reachability</code></td><td><code>C₀.cells &sube; (expandN n C₀).cells</code> &mdash; the seed cells survive <em>n</em> steps</td><td>&ldquo;every cell in <code>expandN n C₀</code> is reachable from C₀ in exactly <em>n</em> steps&rdquo; &mdash; the converse inclusion</td></tr>
+<tr><td><code>FN_L_101L_unique_interface</code></td><td>adjacency is symmetric</td><td>&ldquo;any two neighbouring cells share exactly one interface face&rdquo;</td></tr>
+<tr><td><code>FN_U_103L_six_layers</code></td><td><code>n_layers = 6</code>, by <code>decide</code> on a literal</td><td>&ldquo;each completed layer contains sufficient processed regolith to seed one additional module&rdquo;</td></tr>
+<tr><td><code>FN_U_103L_expand_models_ISRU</code></td><td>monotonicity, true of <code>expand</code> by construction</td><td>&ldquo;one expand = one ISRU cycle&rdquo;</td></tr>
+<tr><td><code>FN_T_202L_payload_ratio</code></td><td>a ratio equal to 15 in &#8469;, so any true ratio in [15, 16) satisfies it</td><td>confirmation that <em>g</em>&sup2; &asymp; 14.98</td></tr>
+</table>
+</div>
+
+<p>Every one is true. Every one is proved. Each reports the standard three axioms. None supports the sentence recorded against it, and one of them is re-exported into the summary theorem that constitutes the machine-readable gap table.</p>
+
+<div class="block-open">
+<span class="block-label">The ceiling</span>
+<div class="block-body">MISMATCH, STALE and FAIL are mechanical: both sides of each comparison are machine-readable. VACUOUS is partly mechanical &mdash; the elaborated type is a formal object, so a checker can reject <code>True</code> and self-implication. MISATTRIBUTED is the first class in which one side of the comparison is a natural-language sentence. Deciding it means deciding whether a Lean proposition entails an English claim, which is not a decision procedure and will not become one. This is the ceiling of the verification stack and is worth stating as a ceiling: <strong>the stack can certify that a proof supports a statement, and can never certify that a statement supports a claim.</strong> Everything above that line is review, and review is done by a person or not at all.</div>
+</div>
+
+<p>What is mechanisable is the bookkeeping, not the judgement. Require every theorem cited in a claims table to carry a machine-readable claim identifier; require every identifier in the prose to resolve to exactly one theorem; fail on either side unmatched. That catches drift &mdash; a renamed theorem, a gap code whose theorem was deleted, a theorem quietly repointed at a second gap &mdash; and catches nothing about whether the pairing was ever warranted. The residual judgement has one honest form, a three-column table: statement as written, what it strictly licenses, what is claimed from it. The gap between the second column and the third is the audit.</p>
+
+<p><b>UNTRUSTED.</b> The opposite case &mdash; mechanisable, and simply not mechanised. One of the twelve, <code>FN_H_102L_phase02_cluster</code>, depends on <code>colony_depth1_cells._native.native_decide.ax_1_1</code>: an axiom emitted when a goal is discharged by compiled code rather than by the kernel. The gate is a <code>grep</code> for <code>sorryAx</code> and cannot see it, so a step named <em>&ldquo;Kernel axiom check&rdquo;</em> reports success on a theorem the kernel did not check. Enumerating the forbidden axioms is the wrong shape; enumerating the permitted three is two lines and closes the class for good, including against whatever axiom nobody has thought of yet.</p>
+
+<div class="wrap-x">
+<table class="vtable">
+<tr><th></th><th>question asked</th><th>detected by</th></tr>
+<tr><td><b>MISMATCH</b></td><td>is this the artifact that was checked?</td><td>hash</td></tr>
+<tr><td><b>STALE</b></td><td>is this the environment it was checked in?</td><td>probe</td></tr>
+<tr><td><b>FAIL</b></td><td>does the check still pass?</td><td>re-run</td></tr>
+<tr><td><b>FALSE</b></td><td>is the statement true at all?</td><td>elaboration &mdash; and only if a build target reaches the file</td></tr>
+<tr><td><b>VACUOUS</b></td><td>does the statement have content?</td><td>a declared-baseline scan; fully only on the elaborated type</td></tr>
+<tr><td><b>UNTRUSTED</b></td><td>does the proof rest on the kernel?</td><td>an axiom allowlist</td></tr>
+<tr><td><b>MISATTRIBUTED</b></td><td>does the statement support the claim made from it?</td><td>nothing, and nothing can</td></tr>
+</table>
+</div>
+
+<h2>9 &middot; Provenance of this paper</h2>
+
+<p>This chapter was produced across sessions of an automated assistant that does not retain memory between them, which is the same condition that produced the July defect. Its own errors are recorded here for the same reason the July ones are.</p>
+
+<ul class="step-list">
+<li>An earlier draft of the companion manuscript asserted &ldquo;five results are proved without sorry&rdquo; in its abstract. That sentence was copied from the file header, without running anything. The false claim moved from a comment into a manuscript in a single step &mdash; the ordinary mechanism, operating inside a paper about the mechanism.</li>
+<li>On finding three theorems admitted, the auditor concluded the header had been false when written and stated so in a source retraction and a draft. That conclusion was reached by searching one directory &mdash; chosen because the header itself named it &mdash; and treating the absence of evidence as evidence. It was wrong for two of the three theorems. It was corrected only because the author disputed it.</li>
+<li>The tool's test suite returned a false pass on its first run, and the tool corrupted its own source on first self-application while reporting success &mdash; both in &sect;6. Four defects were found in the instrument during the writing of the paper that specifies it &mdash; the fourth, in &sect;6, being an inability to recognise an axiom-free proof as a success. All four are recorded in its README rather than quietly repaired.</li>
+<li>The Status block below originally closed its open item by citing <b>run #235</b>. GitHub records run #235 as <b>failed</b>. The sentence describes kernel steps inside that run and reports them as though they were the run &mdash; a true statement about a part, offered as a statement about the whole, in the Status block of a paper about exactly that substitution. It was caught on 22 August 2026 by checking the run rather than the sentence, and the citation now names run #238, which is green.</li>
+<li>The earliest audit in this series, logged in April 2026, records a cosmetic overlay applied to the wrong page of a PDF &mdash; index 105 rather than 99 &mdash; caught by visual inspection and reversed. That is a MISMATCH in a medium with no kernel, no CI and no hashes, and it suggests the class is not an artefact of formal methods but a property of any workflow in which claims and objects are handled separately.</li>
+</ul>
+
+<div class="block-proof">
+<span class="block-label">Status</span>
+<div class="block-body"><p>The five theorems in <code>SaturnHexagon.lean</code> report <code>[propext, Classical.choice, Quot.sound]</code> and no <code>sorryAx</code> under <code>leanprover/lean4:v4.33.0-rc1</code>, run 21 August 2026 on the author's machine.</p>
+
+<p>An earlier version of this paragraph recorded, as an open item, that the result had not been reproduced under <code>v4.32.0</code> &mdash; the version this repository pins and its CI uses. That item is closed. Run <b>#238</b> of <code>verify-proofs.yml</code> on branch <code>verify-hardening</code>, commit <code>8855044</code>, compiled the library on a public runner under <code>v4.32.0</code> and asked the kernel about seventeen theorems by name: the five above, and the twelve NASA gap-closure theorems in <code>Orthogenesis/Architecture/NASAGaps.lean</code>. No occurrence of <code>sorryAx</code> in any of them, and the vacuity baseline matches the file. The run is green as a whole, which is the property being claimed; an earlier version of this sentence cited run #235, which is not (see &sect;9).</p>
+
+<p>What that green does <em>not</em> establish is &sect;8: eleven of the twelve rest on the kernel and one does not, and five of the twelve are filed under claims their statements do not support. Both are open. A green run is a statement about provenance, never about content.</p>
+
+<p>The gap table those twelve constitute was described, in an errata issued three days earlier, as one that <em>&ldquo;should be regarded as unverified until a clean build is reported.&rdquo;</em> It is reported. What changed is not the theorems, most of which were sound; it is that the claim now stands downstream of a machine anyone can re-run, rather than upstream of a comment. That is the entire distance this paper is about, and it is one line of Lake configuration wide.</p></div>
+</div>
+
+</main>
+
+<footer>
+  <div style="margin-bottom:.7rem"><a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" aria-label="G6 LLC &mdash; grossi-ops"><img src="g6-mark.svg" alt="G6 LLC" width="40" height="46" style="height:44px;width:auto;vertical-align:middle;display:inline-block;border:0"></a></div>
+  <p>Principia Orthogona &middot; Book VI &middot; Working Paper 73</p>
+  <p>The Stamp and the Triple &middot; Verification Provenance &middot; 2026</p>
+  <p>Series: <a href="https://zenodo.org/communities/principia-orthogona" target="_blank">zenodo.org/communities/principia-orthogona</a></p>
+
+  <span style="display:block;margin-top:.5rem">&copy; 2026 Pablo Nogueira Grossi / <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> &middot; Newark, New Jersey &middot; CC BY-NC-ND 4.0</span>
+
+  <div class="prov">
+    <div>
+      <strong>WP73</strong><br>
+      Principia Orthogona &middot; Vol VI &middot; Roots<br>
+      G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; 2026<br>
+      ORCID <a href="https://orcid.org/0009-0000-6496-2186" target="_blank" rel="noopener">0009-0000-6496-2186</a>
+      &middot; <a href="mailto:g6llc@proton.me">g6llc@proton.me</a><br>
+      Series <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" rel="noopener">Principia Orthogona</a>
+      &middot; <a href="https://github.com/TOTOGT/geometry" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="disc">
+      <strong>Notice</strong><br>
+      Independent working paper; not peer-reviewed. Instrument at <code>CS/verify-stamp</code>; specimens and timestamps at <code>DO NOT DELETE/MANIFEST.md</code>. Every verification result quoted here is transcribed from a recorded run and is scoped to the toolchain named beside it. Vol VI has no ISBN allocation and no volume-level deposit; series citations should point at the Principia Orthogona community rather than any single DOI.<br>
+      CC BY-NC-ND 4.0 &middot; &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

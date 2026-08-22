@@ -95,7 +95,7 @@ theorem FN_T_202L_payload_ratio :
 theorem FN_T_201L_stage_gated (C₀ : Colony)
     (h₀ : ∀ c ∈ C₀.cells, c.stage = 0) (n : ℕ) :
     ∀ x ∈ (Colony.expandN n C₀).cells, x.stage ≤ n :=
-  Colony.stage_bound C₀ h₀
+  Colony.stage_bound C₀ h₀ n
 
 -- ═════════════════════════════════════════════════════════════════════════════
 -- POWER  FN-P-101L · FN-P-402L  —  REOPENED 2026-08-21  (○ open, no response)
