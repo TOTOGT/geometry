@@ -92,6 +92,17 @@ jobs:
             exit 1
           fi
 
+          bad=$(grep "depends on axioms" /tmp/axioms.txt \
+            | sed -E 's/.*depends on axioms: \[(.*)\]/\1/' \
+            | tr ',' '\n' | sed 's/^ *//; s/ *$//' | grep . | sort -u \
+            | grep -vE '^(propext|Classical\.choice|Quot\.sound)$' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::axiom outside the permitted three (propext, Classical.choice, Quot.sound):"
+            echo "$bad" | sed 's/^/::error::  /'
+            echo "::error::native_decide leaves Lean.ofReduceBool and is NOT a kernel check."
+            exit 1
+          fi
+
           n=$(grep -cE "(depends on axioms|does not depend on any axioms)" /tmp/axioms.txt || true)
           if [ "$n" -ne 5 ]; then
             echo "::error::expected 5 axiom lines, found $n - a theorem was renamed or removed"
@@ -144,6 +155,17 @@ jobs:
             echo "::error::NASA gap probe failed to elaborate (exit $rc)"
             exit 1
           fi
+          bad=$(grep "depends on axioms" /tmp/nasa.txt \
+            | sed -E 's/.*depends on axioms: \[(.*)\]/\1/' \
+            | tr ',' '\n' | sed 's/^ *//; s/ *$//' | grep . | sort -u \
+            | grep -vE '^(propext|Classical\.choice|Quot\.sound)$' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::axiom outside the permitted three (propext, Classical.choice, Quot.sound):"
+            echo "$bad" | sed 's/^/::error::  /'
+            echo "::error::native_decide leaves Lean.ofReduceBool and is NOT a kernel check."
+            exit 1
+          fi
+
           n=$(grep -cE "(depends on axioms|does not depend on any axioms)" /tmp/nasa.txt || true)
           if [ "$n" -ne 12 ]; then
             echo "::error::expected 12 gap-closure theorems, found $n - one was renamed or removed"
@@ -176,6 +198,19 @@ jobs:
             exit 1
           fi
           echo "OK: $(wc -l < /tmp/actual.txt) vacuous statements, all declared."
+
+      # =================================================================
+      # AUTHORITATIVE STEP. Vocabulary.
+      # Written 2026-08-22 after a Google AI Overview attributed a "Log-Psi
+      # Recurrence Operator" and "Harmonic Resonance Bands (HRB)" to this
+      # corpus. Neither term occurs in it. Confabulated vocabulary arrives in
+      # the credible form -- expansion followed by acronym -- and prose is the
+      # one layer here that had no checker.
+      # =================================================================
+      - name: Vocabulary guard (declared terms vs actual)
+        run: |
+          set -eu
+          python3 tools/terms.py --check
 
       - name: verify-stamp self-test (the checker must itself be checked)
         run: |
