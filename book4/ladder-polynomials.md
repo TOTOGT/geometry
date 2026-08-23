@@ -158,3 +158,93 @@ for n in range(3, 9):
     h = np.pi / np.arccos(r/2)
     assert abs(h - round(h)) > 1e-6                          # no further coincidences
 ```
+
+---
+
+# 6. One level up — the Galois group of each rung
+
+`chGal-galois.html` §§1–3 frames this ("when the group is the full symmetric group Sₙ,
+the rung has no hidden structure: no subfield, no partial symmetry"). Here are the groups.
+
+## Discriminants
+
+| n | disc qₙ | factored |
+|---|---|---|
+| 2 | 5 | 5 |
+| 3 | −44 | −2²·11 |
+| 4 | −563 | −563 (prime) |
+| 5 | 9584 | 2⁴·599 |
+| 6 | 205937 | 205937 (prime) |
+| 7 | −5390272 | −2⁶·84223 |
+| 8 | −167398247 | −1319·126913 |
+| 9 | 6042477824 | 2⁸·17·487·2851 |
+| 10 | 249317139869 | 7·35616734267 |
+
+No discriminant is a perfect square in ℚ, so no rung lies in Aₙ. Every Galois group
+contains an odd permutation, at every level of the ladder.
+
+## The groups
+
+| n | Gal(qₙ) | \|G\| | n! | status |
+|---|---|---|---|---|
+| 2 | C₂ | 2 | 2 | proved (sympy) |
+| 3 | S₃ | 6 | 6 | proved (sympy) |
+| 4 | S₄ | 24 | 24 | proved (sympy) |
+| 5 | S₅ | 120 | 120 | proved (sympy) |
+| 6 | S₆ | 720 | 720 | proved (sympy) |
+| 7 | S₇ | 5040 | 5040 | proved — Jordan, see below |
+| 8 | S₈ (evidence) | — | 40320 | **not proved** |
+| 9, 10 | Sₙ (evidence) | — | — | **not proved** |
+
+**n = 7 is rigorous.** q₇ is irreducible, so the group is transitive; 7 is prime, so a
+transitive group of degree 7 is primitive; Frobenius sampling over p < 4000 returns a
+transposition type [2,1,1,1,1,1]; and a primitive group containing a transposition is Sₙ
+(Jordan). No sampling assumption enters — one transposition suffices.
+
+**n = 8 is evidence, and the honest word is evidence.** The transposition type
+[2,1,1,1,1,1,1] does occur — first at **p = 17921**, after 2,052 usable primes, against an
+expected density C(8,2)/8! ≈ 0.000694, i.e. one in ~1,440. The earlier scan to p < 4000
+found none, which was not evidence of absence: it was under-sampling, and reporting it as
+absence would have been a false negative dressed as a result. 21 of the 22 cycle types of
+S₈ have now appeared. But 8 is not prime, so transitivity does not give primitivity, and
+Jordan does not apply. **Gal(q₈) = S₈ is not established here.**
+
+n = 9 and n = 10: irreducible, n-cycles present, 24/30 and 34/42 cycle types seen, no
+transposition found in the range searched. Same status, weaker sampling.
+
+## What this says about the ladder
+
+Maximal Galois group means **no hidden structure**: no proper subfield, no partial
+symmetry, no relation among conjugate roots beyond the ones every polynomial has. The
+ladder is, at every rung above the first, as generic as an algebraic number can be.
+
+Which isolates **n = 2 twice over**, by two independent measures:
+
+- it is the only rung with a small Galois group (C₂ — abelian, and the field ℚ(√5));
+- it is the only rung whose root is an ADE spectral radius (φ = 2cos(π/5) = ρ(A₄), §4).
+
+The bottom rung is special in the classification sense *and* in the arithmetic sense, and
+nothing above it is special in either. Two unrelated tests, one exception, the same rung.
+`[OPEN]` Whether that is one fact or two is not settled here, and it is the sharpest
+question this note produced.
+
+## Reproduce
+
+```python
+import sympy as sp
+x = sp.symbols('x')
+for n in range(2, 7):
+    q = sp.Poly(x**n - sum(x**k for k in range(n)), x)
+    print(n, sp.galois_group(q)[0].order(), sp.factorial(n))
+
+# the n=8 transposition
+n, target = 8, sorted([2] + [1]*6)
+q = sp.Poly(x**n - sum(x**k for k in range(n)), x)
+D = sp.discriminant(q.as_expr(), x)
+for p in sp.primerange(3, 60000):
+    if D % p == 0: continue
+    t = sorted(int(sp.Poly(f, x).degree())
+               for f, _ in sp.factor_list(q.as_expr(), modulus=p)[1])
+    if t == target:
+        print("transposition at p =", p); break     # -> 17921
+```
