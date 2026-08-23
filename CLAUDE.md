@@ -160,6 +160,57 @@ before this session touched them** (`ch2-write-publish-mathematics.html`;
 This is a `terms.py` case: a coined term, misspelled, propagated across four repos
 undetected. The gate would have caught it at first use.
 
+### Unwritten threads from the 23 Aug conversation — worth keeping
+
+Four connected ideas, none yet on a page. All need primary-source checks before
+publishing; the notes say which.
+
+**1. Venkatamakhin, *Caturdaṇḍiprakāśikā*.** Sanskrit treatise, Thanjavur,
+mid-17th c., commissioned by Vijayaraghava Nayak (r. 1633–1673) — **not c. 1620,
+which was wrong and was corrected before use.** Establishes the melakarta
+classification and the 72 parent ragas. The 72 is a *count*, not a selection: the
+scheme produces exactly that many and no others. Pāṇini's move applied to pitch.
+VERIFIED: authorship, patron, the 72, portions of the treatise lost, and that
+Bhatkhande used the system as the basis of the Hindustani thaat system in the
+early 20th c. NOT VERIFIED, do not state: that Venkatamakhin recognised only 19
+melas in practice; that Govindacharya supplied the katapayadi names.
+Bhatkhande is the better find — documented *transmission* with a name and date,
+the contrast case that makes convergence claims falsifiable. Belongs in
+`ch-transmission` or beside the 264 in `ch-in-the-air`.
+
+**2. Music is not linguistics — and should not be claimed as such.** Shared:
+syntax, hierarchy, finite rules generating unbounded well-formed sequences.
+Not shared: semantics. No reference, no truth conditions, nothing that can be a
+lie; amusia and aphasia dissociate in both directions. "Music is linguistics"
+loses to one question from a linguist. The survivable claim is the one the corpus
+already makes: **language and music are two instances of one object — a finite
+generative system under constraint.** Music is then the demonstration that
+generativity was never carried by the meaning. Check Lerdahl–Jackendoff and the
+Patel "shared syntactic resources" literature before writing.
+
+**3. Temperament is triage.** (3/2)¹² = 531441/4096 ≈ 129.746 against 2⁷ = 128 —
+the Pythagorean comma, ~23 cents, an equation with no solution in any culture at
+any date. Every tuning system is a decision about *where to put an error that
+cannot be removed*: Pythagorean dumps it in the wolf, meantone spreads it to save
+the thirds, equal temperament divides it evenly by making every step 2^(1/12), so
+nothing but the octave is in tune and nothing is unbearably wrong. This is WP41's
+three doors, audible. **Best pedagogical instance of the constraint thesis in the
+corpus** — the only one where the reader can hear the cost of each choice.
+Arithmetic is certain; the historical attributions need checking.
+
+**4. The Gītā, Pingala, and Movement IV.** *Gītā* = sung. ~700 verses inside the
+Bhishma Parva of a ~100,000-verse work that was itself sung — so not "the longest
+song" but a bounded generative structure recursively embedded in a larger one
+sharing its rules. Predominantly anuṣṭubh; **Pingala, already in the gallery,
+formalised exactly that metre**. Line runs: Pingala (metre) → Gītā (sung inside
+it) → Pāṇini (language) → Venkatamakhin (pitch). One civilisation, four
+substrates, one method.
+And the content matches the chapter: Arjuna's paralysis is not ignorance, it is
+that he cannot bear to be the one who acts; the instruction is to do the work and
+release the fruit. That is `ch-free-the-self` stated two millennia earlier. Add as
+one paragraph there, tagged `[CONJECTURE]` where it claims structural kinship
+rather than influence. Verify verse counts and metre first.
+
 ### Standing check to run at the START of every session
 
 `git status` in **every** repo on the Desktop, not just the one being worked in.
