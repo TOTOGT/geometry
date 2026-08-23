@@ -211,6 +211,67 @@ release the fruit. That is `ch-free-the-self` stated two millennia earlier. Add 
 one paragraph there, tagged `[CONJECTURE]` where it claims structural kinship
 rather than influence. Verify verse counts and metre first.
 
+### Book 4 RH audit — 5 of 13 items closed 23 Aug (see `book4/RH-arc-audit-ch11-15.md`)
+
+- **M1** NOT repaired. The kernel claim is **withdrawn** with a dated notice on ch11 and
+  short inherited-claim notices on ch12/13/14. The old form still appears below the notices,
+  deliberately. The exact repair (log-zeta coordinates, the pair c and g, α = c dU − g dV,
+  Wronskian W = c·∂ₜg − g·∂ₜc) is in the audit. ch11's Honest Inventory row now reads
+  ⊘ Withdrawn instead of ✓ Proved.
+- **M2 done** — Baker–Wüstholz → unique factorisation + Kronecker–Weyl, 5 sites in ch11.
+  AXLE Issue #19 shrinks from "transcendence machinery, ~80 lines" to elementary.
+- **M7 done** — pair correlation is Montgomery (1973) / Odlyzko (1987), not Bombieri–Hejhal.
+- **M9 done** — a function field's Euler product is NOT finite; ζ is rational in q^(−s).
+- **M10 done** — the p-adic section now declares c as a variable in the open unit disc of ℂ_p;
+  "trivial zeros" collision removed.
+- **M11 done** — ch11 §11.2 now quotes the revamped Ch 2 certificate α̃ = x dx + y dy = ½d(r²).
+  (Ch 2 *had* been revamped; it is in `book4/ch02.html`.)
+- **Left**: M3 (do with M1), M8 (Weil explicit formula — careful transcription), M12/M13
+  (strings have moved since the audit was written; re-locate first).
+
+### `book4/ladder-polynomials.md` — new, needs a COLD read before anything cites it
+
+Two exact results, one boundary. (1) The n-bonacci family collapses: (x−1)qₙ(x) =
+x^(n+1) − 2xⁿ + 1, so τ = 2 is visible in the polynomial before any root is computed.
+(2) **2 − rₙ = rₙ^(−n)**, exact, verified to 50 digits for n = 2…20; every rₙ is Pisot.
+(3) ADE: ρ < 2 ⟺ finite ADE, = 2 ⟺ affine — so τ = 2 is a classification boundary, and
+this is the mechanism behind `vol3-minibeast`'s standing line "the finite classification
+ends". **φ = 2cos(π/5) = ρ(A₄) is the only coincidence** between the two families, n < 40
+vs h < 60. n = 5 gives h = 17.000510 — a near-miss flagged deliberately; it is not 17.
+Galois: Sₙ at every rung, proved to n = 6 by sympy and n = 7 rigorously by Jordan;
+**n = 8 is evidence, not proof** (the transposition first appears at p = 17921 — an earlier
+scan to p < 4000 found none, which was under-sampling, not absence).
+So n = 2 is the unique exception by two independent tests. `[OPEN]` whether that is one
+fact or two.
+
+### Lean targets for `ch-seismic.html` (page currently cites no Lean — nothing false there)
+
+**Do not cite `SeismicLattice.lean` on this page.** Despite the name its companion is
+Book 4 Ch 18, and its theorems are about regular tilings and load sharing — nothing
+ch-seismic claims. Citing it would be misattribution by name similarity.
+**Do not cite `dm3_epsilon0`** — it proves a definition equals itself.
+Citable today: `dm3_mumax_neg`, `dm3_Tstar_pos`, `dm3_tau_eq_abs_mumax` (G6Crystal.lean).
+Worth writing: the ladder — `ladder_collapse`, `root_mem_Ioo`, `gap_identity`
+(three lines: rⁿ(r−2)+1 = 0), `root_strictMono`, `tendsto_two`. That turns the masthead
+arrow "→ τ = 2" into a proved rate of approach.
+Never citable: survival bias, Borobudur, Göbekli Tepe, "11,000 years" — citations, not kernels.
+
+### Two more, 23 Aug
+
+- **File indexes regenerated** (`python3 tools/build_indexes.py`): 645 files. The old
+  637/31/15 was **not wrong, just eight files stale** — all eight tonight's Omega chapters.
+  I hand-edited the generated stat block to "correct" it first; that was both a rule
+  violation (CLAUDE.md forbids hand-editing generated output) and a **mis-correction** —
+  my 9 orphans came from a population that excluded `_archive` and a rule I invented.
+  Regeneration overwrote it. 23 of the 31 orphans are `_archive` files.
+- **`ch-seismic.html`**: `.mech-body` was white on cream (unreadable); the four scale icons
+  contradicted their captions (squares for "The Arch", horizontal hexagons for orders
+  described as "stacked vertically", a circle for "The Ellipse"). Replaced with inline SVG.
+  A repo sweep found **97 white-text rules**; most are legitimate white-on-dark panels —
+  the grep only checked page background, not the element's. `.phase-desc` at
+  rgba(255,255,255,.8) repeats across ~40 `dm3-*` course pages: check one in a browser,
+  and the answer settles all forty.
+
 ### Standing check to run at the START of every session
 
 `git status` in **every** repo on the Desktop, not just the one being worked in.
