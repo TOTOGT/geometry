@@ -16,6 +16,16 @@
 # follows the same discipline: sorry-free where the mathematics is
 # elementary, with the genuinely hard obligations named and disclosed.
 #
+# SCOPE WARNING — tiling, not honeycomb
+# ------------------------------------
+# These theorems are about the hexagonal TILING: the unit is a hexagonal CELL,
+# it has 6 edge-neighbours, and each contact face therefore carries 1/6 of an
+# applied load.  They are NOT about the honeycomb lattice of graphene, whose
+# unit is a VERTEX with 3 nearest neighbours (sp2, 120 deg) and which is not a
+# Bravais lattice at all (triangular lattice, two-atom basis).  The two are
+# duals.  Both carry D6 symmetry; only the tiling carries hex_load_share_min.
+# Do not cite these facts in support of a graphene claim.
+#
 # CENTRAL FACTS (proved, no sorry)
 # --------------------------------
 #  · Only three regular polygons tile the plane — the triangle (n=3), the
