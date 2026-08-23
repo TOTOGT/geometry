@@ -46,13 +46,16 @@ The user said: index push after the next few pages.
 | `omega/ch-more-than-one-basin.html` | II · Turn | 1,214 |
 | `omega/ch-witnesses.html` | III · Case for Us | 1,485 |
 | `omega/ch-free-the-self.html` | IV · Show the Way | 1,136 |
+| `omega/ch-gate-cannot-wait.html` | IV · Show the Way | 974 |
+| `omega/ch-hope-with-an-address.html` | IV · Show the Way | 807 |
+| `omega/ch-the-wager.html` | Coda | 1,173 |
 
 `ch-vilomah` is an adaptation of WP47, **not new authorship**. The dedication and
 the user's own sentences are carried verbatim. Do not rewrite them. This chapter
 is personal; the user said the material "made it into WP47" and that is the
 source of record.
 
-Omega now stands at **~75,900 body words** against a 90,000 target.
+Omega now stands at **80,285 words** (same counting method as the 68,944 baseline) against a 90,000 target. Movements I-IV and the Coda added 10,348 words this session.
 
 ### Omega — what remains to finish the book
 
@@ -66,11 +69,17 @@ roda as a cleared space, the ginga (left foot is the author's, not the art — t
 text says so), the self as trajectory rather than essence, and closes on the guard
 that is not fear: the corpus's honesty discipline read as a fighting posture.
 
-Still to write:
+**The spine is now complete.** All five movements and the coda have chapters.
+Nothing structural is missing. What remains is depth, not scaffolding:
 
-1. **The Gate Cannot Wait** — Movement IV, from WP43.
-2. **Hope With an Address** — Movement IV, refugia/corridors, from WP42.
-3. **The Wager** — Coda, ~1,500 words.
+1. **`ch-gate-cannot-wait` (974 w) and `ch-hope-with-an-address` (807 w) are thin**
+   for what they carry. Both compress a full working paper into under a thousand
+   words. They are the first place to spend the ~9,700 words still short of 90,000.
+2. **The index pass has not been done.** Eight chapters written this session plus
+   the four older orphans are unreachable from `omega-point-index.html`, and its
+   heading still reads "Twelve Chapters" over 17 cards. The user said: index push
+   after the next few pages. The next few pages are now written.
+3. `ch-the-wager` closes the book; do not add chapters after it without moving it.
 
 ### Known defects in `omega/` — NOT yet fixed
 
@@ -150,6 +159,24 @@ before this session touched them** (`ch2-write-publish-mathematics.html`;
 
 This is a `terms.py` case: a coined term, misspelled, propagated across four repos
 undetected. The gate would have caught it at first use.
+
+### Standing check to run at the START of every session
+
+`git status` in **every** repo on the Desktop, not just the one being worked in.
+This session found, sitting uncommitted and unpushed for weeks:
+
+- `grossi-ops/cajueiro/ch2-write-publish-mathematics.html` — modified **6 July**.
+  A correction dropping a Navrátil (Zenodo 18937195) attribution. **Verified live
+  on 23 Aug: the uncorrected sentence is still what the public page serves.**
+- `grossi-ops/Atratores/index.html` — 1 Aug, a Bienal schedule correction; the
+  wrong listing was live through the event itself.
+- `grossi-ops/Atratores/wellness-soundworks.html` + `one-palm-namaste-machine.html`
+  — 3 Aug, a finished page and its card, never published. **Commit together** —
+  the card links to the page.
+
+This is a distinct failure from the ones catalogued this week. Not a claim that
+outran its evidence: a repair that was made and never left the building. Assuming
+uncommitted work is "someone's work in progress" is how it stayed there.
 
 ---
 
