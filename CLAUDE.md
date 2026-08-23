@@ -45,33 +45,38 @@ The user said: index push after the next few pages.
 | `omega/ch-accounting.html` | I · Reckoning | 1,851 |
 | `omega/ch-more-than-one-basin.html` | II · Turn | 1,214 |
 | `omega/ch-witnesses.html` | III · Case for Us | 1,485 |
+| `omega/ch-free-the-self.html` | IV · Show the Way | 1,136 |
 
 `ch-vilomah` is an adaptation of WP47, **not new authorship**. The dedication and
 the user's own sentences are carried verbatim. Do not rewrite them. This chapter
 is personal; the user said the material "made it into WP47" and that is the
 source of record.
 
-Omega now stands at **~74,760 body words** against a 90,000 target.
+Omega now stands at **~75,900 body words** against a 90,000 target.
 
 ### Omega — what remains to finish the book
 
 The spine (`omega/SPINE-omega-point.md`) has five movements. Before this session
 **all 41 chapters were Movement V**; Movements I–IV had none. Three remain:
 
-1. **Free the Self from the Self** — Movement IV opener. The user's own framing,
-   given this session: if a self is what a rule set generates under constraint,
-   freedom is not escaping the constraint but ceasing to defend the particular
-   self it produced. Converts the Witnesses' "they went back to work" from virtue
-   into mechanism, and earns the mystics gallery.
-2. **The Gate Cannot Wait** — Movement IV, from WP43.
-3. **Hope With an Address** — Movement IV, refugia/corridors, from WP42.
-4. **The Wager** — Coda, ~1,500 words.
+**WRITTEN this session:** *Free the Self from the Self* (Movement IV opener).
+Carries the user's own verse as its epigraph — "Under the cajueiro / came the jacu"
+— attributed to him. **The verse is his; do not edit it.** The chapter runs the
+roda as a cleared space, the ginga (left foot is the author's, not the art — the
+text says so), the self as trajectory rather than essence, and closes on the guard
+that is not fear: the corpus's honesty discipline read as a fighting posture.
+
+Still to write:
+
+1. **The Gate Cannot Wait** — Movement IV, from WP43.
+2. **Hope With an Address** — Movement IV, refugia/corridors, from WP42.
+3. **The Wager** — Coda, ~1,500 words.
 
 ### Known defects in `omega/` — NOT yet fixed
 
 - **Eight orphaned chapters.** Not linked from `omega-point-index.html`:
   `ch-here-comes-everybody` (4,833 w), `ch-transmission` (4,031),
-  `ch-oneness` (2,673), `space-of-possibility`, plus the four new ones above.
+  `ch-oneness` (2,673), `space-of-possibility`, plus the five new ones above.
   Roughly 11,500 words of finished prose are unreachable from the index.
 - **`omega-point-index.html` heading reads "Twelve Chapters" over 17 cards.**
   Stale since the five time chapters landed. On a page whose Transmission Status
@@ -128,6 +133,23 @@ tonight. Read-only git (`log`, `status`, `diff`, `show`) is fine.
   produces a book with no first page and a wrong "of N" count.
 - Queued from earlier: V7 (L3 and cognitive limits on Lⁿ); the ELTJ lexicography
   piece.
+
+### `grossi-ops` repos — fixed this session, NOT pushed
+
+`câmara` (a chamber) was being used as the coined term for the reader, across
+four repos, for months. The intended word is **camará** — the roda vocative,
+short for *camarada*. 20 replacements in 11 files, two passes (one file,
+`cajueiro/cajueiro_index.html`, is an accent-stripped variant carrying a bare
+`camara` that the first pattern missed). **Seven real chambers left untouched** —
+`câmara de névoa` in the Dirac chapter, temperature chambers in Curie.
+Do not "fix" those.
+
+Both `grossi-ops/cajueiro` and `grossi-ops/Atratores` had **other uncommitted work
+before this session touched them** (`ch2-write-publish-mathematics.html`;
+`index.html`, `wellness-soundworks.html`). Do not sweep them into a commit.
+
+This is a `terms.py` case: a coined term, misspelled, propagated across four repos
+undetected. The gate would have caught it at first use.
 
 ---
 
