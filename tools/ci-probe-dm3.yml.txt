@@ -1,0 +1,53 @@
+      # =================================================================
+      # AUTHORITATIVE STEP. The dm³ invariants and the stability radius.
+      # Added 2026-08-23. G6Crystal.lean has compiled in CI since it entered
+      # `lean_lib Orthogenesis`, but compilation does not catch `sorryAx` --
+      # a `sorry` is a warning, not an error. Until this step existed, every
+      # dm³ constant cited across the site rested on a build that would have
+      # gone green with the proofs admitted.
+      #
+      # The theorems named here are the sorry-free ones. G6Crystal.lean's
+      # three open obligations (S1 Arnold tongue, S2 hexgrid collapse,
+      # S3 coord_coverage) are deliberately NOT named: naming them would
+      # fail the job for being honest, which is the wrong incentive.
+      # =================================================================
+      - name: Kernel axiom check on the dm³ invariants and ε₀
+        run: |
+          set -u
+          cat > /tmp/probe_dm3.lean << 'PROBE'
+          import Orthogenesis.Architecture.G6Crystal
+
+          -- §1 canonical invariants
+          #print axioms Orthogenesis.G6Crystal.dm3_Tstar_pos
+          #print axioms Orthogenesis.G6Crystal.dm3_mumax_neg
+          #print axioms Orthogenesis.G6Crystal.dm3_tau_pos
+          #print axioms Orthogenesis.G6Crystal.dm3_tau_eq_abs_mumax
+
+          -- the stability radius: value, DERIVATION, and monotonicity
+          #print axioms Orthogenesis.G6Crystal.dm3_epsilon0
+          #print axioms Orthogenesis.G6Crystal.dm3_epsilon0_derived
+          #print axioms Orthogenesis.G6Crystal.epsilon0_of_antitone
+          #print axioms Orthogenesis.G6Crystal.dm3_noise_tolerance
+          #print axioms Orthogenesis.G6Crystal.dm3_noise_tol_lt_one
+
+          -- §2 dimensional derivation
+          #print axioms Orthogenesis.G6Crystal.aspect_ratio_eq
+          #print axioms Orthogenesis.G6Crystal.aspect_ratio_encoded
+          #print axioms Orthogenesis.G6Crystal.layer_height_cubits
+          PROBE
+
+          set +e
+          lake env lean /tmp/probe_dm3.lean > /tmp/dm3.txt 2>&1
+          rc=$?
+          set -e
+
+          echo "----- dm³ invariants: axiom report -----"
+          cat /tmp/dm3.txt
+          echo "----------------------------------------"
+
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::dm³ probe failed to elaborate (exit $rc)"
+            exit 1
+          fi
+
+          python3 tools/axiom_gate.py /tmp/dm3.txt 12

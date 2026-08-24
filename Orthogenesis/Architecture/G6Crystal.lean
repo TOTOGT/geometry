@@ -61,10 +61,57 @@ theorem dm3_tau_pos : 0 < tau := by
 theorem dm3_tau_eq_abs_mumax : tau = |mu_max| := by
   unfold tau mu_max; norm_num
 
+/-- The stability radius as a FUNCTION of the Hessian bound, which is what the
+    derivation actually says:  ε₀(H) = |μ_max| / (2·(1 + H)).
+    `epsilon0` above is this evaluated at the dm³ toy model's H = 1. -/
+noncomputable def epsilon0_of (H : ℝ) : ℝ := |mu_max| / (2 * (1 + H))
+
 -- ── Fact 5 ──────────────────────────────────────────────────────────────────
-/-- Stability radius ε₀ = 1/3. -/
+/-- Stability radius ε₀ = 1/3.
+    NOTE (23 Aug 2026): on its own this restates a definition and is evidence of
+    nothing.  The content is Fact 5a below, which derives the value. -/
 theorem dm3_epsilon0 : epsilon0 = 1 / 3 := by
   unfold epsilon0; ring
+
+-- ── Fact 5a ─────────────────────────────────────────────────────────────────
+/-- **DISCREPANCY, found by the kernel 23 Aug 2026 — unresolved.**
+
+    `epsilon0` is hardcoded to 1/3.  The derivation in the docstring above reads
+    "for the dm³ toy model with ‖Hess V‖ = 1: ε₀ = 2 / (2·2) = 1/3".
+    But 2/(2·2) = 2/4 = 1/2.  The formula ε₀(H) = |μ_max|/(2(1+H)) simplifies to
+    1/(1+H), so
+
+        H = 1  ⟹  ε₀ = 1/2
+        H = 2  ⟹  ε₀ = 1/3   ← the value actually used everywhere
+
+    The first attempt at this theorem stated `epsilon0_of 1 = epsilon0` and the
+    kernel returned `⊢ False`.  That is the theorem doing its job: the comment,
+    the formula and the constant cannot all three be right.
+
+    ONE OF THESE IS WRONG and the author must say which:
+      (a) the Hessian bound is 2, not 1, and the docstring's "= 1" is the error;
+      (b) the formula has a different denominator;
+      (c) ε₀ is 1/2 and every page printing 1/3 is wrong.
+
+    Until that is settled, the two facts below are stated as what they are —
+    arithmetic on the formula, with no claim about which H the model has. -/
+theorem epsilon0_of_one : epsilon0_of 1 = 1 / 2 := by
+  unfold epsilon0_of mu_max; norm_num
+
+/-- At H = 2 the formula returns the hardcoded ε₀ = 1/3. This does NOT establish
+    that the toy model's Hessian bound is 2; it establishes what H would have to
+    be for the constant in use to follow from the formula. -/
+theorem epsilon0_of_two : epsilon0_of 2 = epsilon0 := by
+  unfold epsilon0_of epsilon0 mu_max; norm_num
+
+theorem epsilon0_of_antitone {H₁ H₂ : ℝ} (h₁ : 0 ≤ H₁) (h : H₁ < H₂) :
+    epsilon0_of H₂ < epsilon0_of H₁ := by
+  unfold epsilon0_of mu_max
+  have hA : |(-2 : ℝ)| = 2 := by norm_num
+  rw [hA]
+  -- gcongr discharges the positivity side-goals and the denominator inequality
+  -- from `h₁` and `h` in context; nothing is left to close.
+  gcongr
 
 -- ── Fact 6 ──────────────────────────────────────────────────────────────────
 /-- Noise tolerance τ · ε₀ = 2/3. -/

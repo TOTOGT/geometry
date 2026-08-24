@@ -272,6 +272,44 @@ Never citable: survival bias, Borobudur, Göbekli Tepe, "11,000 years" — citat
   rgba(255,255,255,.8) repeats across ~40 `dm3-*` course pages: check one in a browser,
   and the answer settles all forty.
 
+### OPEN DEFECT — the ε₀ derivation does not give 1/3 (found by the kernel, 23 Aug)
+
+`G6Crystal.lean`'s docstring for `epsilon0` reads: *"ε₀ = |μ_max| / (2·(1 + sup‖Hess V‖)).
+For the dm³ toy model with ‖Hess V‖ = 1: ε₀ = 2 / (2·2) = 1/3."*
+
+**2/(2·2) = 1/2.** The formula reduces to 1/(1+H):
+
+| H | ε₀ |
+|---|---|
+| 1 | **1/2** |
+| 2 | **1/3**  ← the value used everywhere |
+
+This stood undetected because `dm3_epsilon0` compared the hardcoded constant to
+itself. Stating the derivation as a theorem — `epsilon0_of 1 = epsilon0` — made the
+kernel return `⊢ False` on the first build. Now replaced by two true theorems,
+`epsilon0_of_one : epsilon0_of 1 = 1/2` and `epsilon0_of_two : epsilon0_of 2 = epsilon0`,
+both kernel-checked GREEN, with the contradiction recorded in the docstring.
+
+**Unresolved — the author must choose.** (a) the Hessian bound is 2 and "= 1" is the
+typo; (b) the formula's denominator is wrong; (c) ε₀ is 1/2 and every page printing
+1/3 is wrong. **1/3 is load-bearing**: `noise_tolerance = τ·ε₀ = 2/3`,
+`noise_tol_covers_g6_error`, and the site's dm³ constant tables all rest on it.
+Do not "fix" this by picking the cheapest option.
+
+### Local kernel check now exists: `bash tools/verify-dm3/run.sh`
+
+Mirrors CI exactly (lake build → kernel probe → `tools/axiom_gate.py` with a count).
+First green run 23 Aug 2026: **13 theorems, no sorryAx**, and `aspect_ratio_eq`,
+`aspect_ratio_encoded`, `layer_height_cubits` depend on **no axioms at all**.
+The CI step for these is written but NOT installed — paste
+`tools/ci-probe-dm3.yml.txt` into `.github/workflows/verify-proofs.yml` via the
+GitHub **web editor** (the PAT has no `workflow` scope).
+
+**Still unguarded:** `MagneticLattice.lean:240` and `SeismicLattice.lean:211` both
+carry live `sorry`s. Disclosed in their headers, so honest — but no kernel probe
+names either file, so both would pass a green build with the proofs admitted.
+That is the July SaturnHexagon hole, still open in two files.
+
 ### Standing check to run at the START of every session
 
 `git status` in **every** repo on the Desktop, not just the one being worked in.
