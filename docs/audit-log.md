@@ -1597,3 +1597,44 @@ the corpus often eliminates options on its own, and what survives is either a
 single answer or a well-posed question. Choosing first would have looked like
 resolution and produced none.
 
+
+## M13 closed — 24 August 2026 · E₈ is not a Cayley–Dickson rung
+
+`series-hub.html` asserted *"G = U∘F∘K∘C IS the Dynkin diagram of E₈"* and
+`vol3-minibeast.html` listed E₈ as a rung of the Cayley–Dickson ladder. The
+audit (RH-arc item M13) had flagged both: E₈ is not in that sequence — the rung
+after the octonions is the 32-dimensional trigintaduonions — and the chain has
+four operators against the diagram's eight nodes, so the identity cannot hold
+as written.
+
+**What is true, and it is stronger than the compression.** The E₈ lattice *is*
+the ring of integral octonions — Coxeter's octavian integers, 1946 — and that
+ring has exactly 240 units, which are the E₈ roots. So E₈ does not sit *on* the
+ladder; it sits *at* the octonionic rung, by a different construction.
+
+Verified this session, independently of the corpus:
+
+| quantity | value |
+|---|---|
+| det(Cartan E₈) | 1 |
+| roots | 112 + 128 = **240** |
+| rank | 8 = dim 𝕆 |
+| Coxeter number h | 240/8 = **30** |
+| ρ(Dynkin adjacency) | 2cos(π/30) = 1.989043790737 |
+
+The last row is the one that connects to `docs/` → the ladder note: ρ(E₈) is the
+**largest finite ADE spectral radius**, sitting just below the affine boundary at
+2. That is what the corpus's standing line "the finite classification ends" means,
+now with the number attached — and it is the same 2 the n-bonacci ladder
+approaches from below.
+
+**Lean targets, no new mathematics required:** `e8_roots_card = 240`,
+`e8_coxeter : 240 / 8 = 30`, `e8_rank_eq_octonion_dim`, and
+`e8_rho_lt_two : adjacencySpectralRadius E8dynkin < 2`.
+
+**Method note.** The first instinct here was to call the claim wrong because no
+Lean file mentioned Dynkin diagrams — the same bad inference that produced the
+separation-theorem mis-correction the day before. Computing the E₈ invariants
+first showed every number the corpus asserts about E₈ is correct; only the
+*placement* was wrong. Absence of a proof file is not absence of a fact.
+
