@@ -1,0 +1,2 @@
+def epsilon():
+    return "epsilon"
