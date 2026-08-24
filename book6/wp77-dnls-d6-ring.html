@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Formally Verified D6-Equivariant DNLS Ring &middot; Principia Orthogona</title>
+<meta name="description" content="A six-site discrete nonlinear Schrodinger ring with D6 symmetry, kernel-checked in Lean 4. The uniform hexagonal state is the Perron-Frobenius mode; the degenerate eigenspaces carry the two-dimensional irreducible representations of D6. An index constraint on the sphere is recorded but not bridged.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root{--void:#04040a;--surface:#0c0d16;--card:#10111c;--gold:#c9a84c;--teal:#0ABAB5;
+--crystal:#7b68ee;--red:#e05a3a;--green:#50c878;--text:#e8e4d8;--muted:#6b6757;
+--rule:rgba(201,168,76,.18);--serif:'Noto Serif',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:16.5px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+nav a{color:var(--crystal);text-decoration:none;}nav a:hover{color:var(--gold);}
+.hero{padding:4.5rem 2rem 2.6rem;text-align:center;border-bottom:1px solid var(--rule);}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--crystal);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:1.6rem;}
+h1{font-size:clamp(1.5rem,4.4vw,2.5rem);font-weight:400;letter-spacing:.01em;color:var(--gold);line-height:1.2;max-width:19ch;margin:0 auto;}
+.hero-sub{font-size:1rem;color:rgba(232,228,216,.72);max-width:60ch;margin:1rem auto 0;font-style:italic;}
+.hero-meta{font-family:var(--mono);font-size:.66rem;color:var(--muted);margin-top:1.6rem;line-height:2;}
+.page{max-width:880px;margin:0 auto;padding:2.6rem 2rem 4rem;}
+h2{font-size:1.05rem;font-weight:600;color:var(--gold);margin:2.6rem 0 .7rem;letter-spacing:.01em;}
+p{margin-bottom:1rem;}
+.abstract{background:var(--surface);border-left:3px solid var(--gold);padding:1.3rem 1.6rem;margin:0 0 1.4rem;font-size:.95rem;line-height:1.75;}
+.abstract .lbl,.blk .lbl{font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:.6rem;color:var(--gold);}
+.blk{border-left:3px solid var(--crystal);background:rgba(123,104,238,.04);padding:1.1rem 1.4rem;margin:1.3rem 0;font-size:.92rem;}
+.blk.open{border-left-color:var(--red);background:rgba(224,90,58,.04);}
+.blk.open .lbl{color:var(--red);}
+code,.mono{font-family:var(--mono);font-size:.86em;}
+code{background:rgba(255,255,255,.04);padding:.08em .32em;border-radius:2px;color:var(--teal);}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.88rem;}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top;}
+th{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+td.k{font-family:var(--mono);color:var(--crystal);white-space:nowrap;}
+figure{margin:2rem 0;background:var(--card);border:1px solid var(--rule);padding:1.4rem 1.2rem 1rem;}
+figure svg{display:block;width:100%;max-width:100%;height:auto;color:var(--text);}
+figcaption{font-size:.83rem;color:var(--muted);margin-top:.9rem;line-height:1.65;border-top:1px solid var(--rule);padding-top:.8rem;}
+figcaption b{color:var(--text);font-weight:600;}
+ul{margin:0 0 1rem 1.1rem;}li{margin-bottom:.5rem;}
+.refs{font-size:.84rem;color:rgba(232,228,216,.75);}
+.refs p{margin-bottom:.45rem;padding-left:2.2rem;text-indent:-2.2rem;}
+footer{border-top:1px solid var(--rule);padding:2rem;text-align:center;font-family:var(--mono);font-size:.62rem;color:var(--muted);line-height:2;}
+footer a{color:var(--crystal);text-decoration:none;}
+@media(max-width:640px){.page{padding:2rem 1.2rem 3rem;}body{font-size:15.5px;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <span>Principia Orthogona &nbsp;&middot;&nbsp; Working Paper 77</span>
+  <span><a href="../book6/index.html">Book 6</a> &nbsp;&middot;&nbsp; <a href="../book6/g6-crystal.html">G6 Crystal</a></span>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Draft &middot; not peer-reviewed</div>
+  <h1>A Formally Verified D<sub>6</sub>-Equivariant DNLS Ring</h1>
+  <p class="hero-sub">Order-dependence, invariant states, and an index constraint that is not yet bridged</p>
+  <div class="hero-meta">
+    Pablo Nogueira Grossi &middot; G6 LLC &middot; Newark, New Jersey<br>
+    ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a> &middot; 21 August 2026
+  </div>
+</section>
+
+<main class="page">
+
+<div class="abstract">
+  <span class="lbl">Abstract</span>
+  We present a six-site discrete nonlinear Schr&ouml;dinger (DNLS) ring with dihedral $D_6$ symmetry, formalised and kernel-checked in Lean&nbsp;4 with Mathlib. Five results are proved without <code>sorry</code>: the radial gate commutes with the pointwise cubic nonlinearity but not with the angular coupling; the sixfold rotation is a symmetry of the coupling; the uniform state is rotation-invariant; and the uniform state is an eigenvector of the coupling with eigenvalue&nbsp;2. We observe that the last of these identifies the uniform hexagonal configuration as the <b>Perron&ndash;Frobenius mode</b> of the cyclic 6-ring, and that the coupling&rsquo;s degenerate eigenspaces carry the two-dimensional irreducible representations of $D_6$, which is where symmetry breaking must occur. We separately record a classical index constraint: any tangent vector field on a sphere has zero-indices summing to&nbsp;2, so a $D_6$-symmetric flow admitting six vortices must also admit six saddles. <b>We do not claim a bridge between the ring and the sphere</b>; none is established here, and constructing one is the principal open problem.
+</div>
+
+<div class="blk">
+  <span class="lbl">Status conventions</span>
+  <b>[PROVED]</b> marks kernel-checked results. <b>[CLASSICAL]</b> marks results cited, not original. <b>[OPEN]</b> marks what is not established. No claim in this paper is offered as an explanation of any planetary observation.
+</div>
+
+<h2>1 &middot; Motivation, and what is not claimed</h2>
+<p>Hexagonal planforms recur across pattern-forming systems with planar rotational and translational symmetry &mdash; Rayleigh&ndash;B&eacute;nard convection, Faraday waves, Turing patterns, Chladni figures on suitably symmetric plates, and the persistent wavenumber-6 jet at Saturn&rsquo;s north pole. Equivariant bifurcation theory explains this recurrence [1,2]: hexagonal planforms are generic outcomes of symmetry breaking in the relevant equivariant class, independently of the underlying physics.</p>
+<p>That common explanation is a statement about symmetry, not about mechanism. Saturn&rsquo;s hexagon is a barotropic instability of a polar jet; a Chladni figure is the nodal set of a Laplacian eigenmode on an elastic plate. These are different operators with different selection rules. They share a symmetry group and nothing else, and this paper does not assert otherwise.</p>
+<p>What follows is deliberately minimal: the smallest $D_6$-equivariant discrete model in which the questions of invariance and of operator order can be posed exactly, together with a machine-checked proof of what that model does and does not settle. Saturn appears as motivation only. A six-site ring of real amplitudes is not a rotating shallow-water system, and no result below should be read as bearing on planetary observation.</p>
+
+<h2>2 &middot; The model</h2>
+<p>State is an amplitude over six angular sextants, $\theta_k = k\pi/3$ for $k = 0,\dots,5$, represented as a function <code>Fin 6 &rarr; &#8477;</code>. Four operators act on it.</p>
+<table>
+  <tr><td class="k">angCoupling v k</td><td>= v(k&minus;1) + v(k+1), cyclic &mdash; the discrete Laplacian coupling; the only operator that moves amplitude <i>between</i> sextants</td></tr>
+  <tr><td class="k">onsite v k</td><td>= (v k)<sup>3</sup> &mdash; the $\lambda|\psi|^2\psi$ term, real cube; strictly pointwise</td></tr>
+  <tr><td class="k">gate v k</td><td>= v k if $k$ even, 0 if $k$ odd &mdash; a 0/1 radial mask, pointwise</td></tr>
+  <tr><td class="k">rot v k</td><td>= v(k&minus;1) &mdash; the generator of the sixfold rotation</td></tr>
+</table>
+<p>The uniform or <i>hexagonal</i> configuration is <code>hex c</code> = $(c,c,c,c,c,c)$. Together, <code>angCoupling</code> and <code>onsite</code> constitute a six-site DNLS ring with real amplitudes: a discrete Laplacian plus a cubic on-site nonlinearity, closed cyclically [3].</p>
+
+<div class="blk open">
+  <span class="lbl">[OPEN] &middot; note on the operator formulation</span>
+  The Lean development defines <i>operators</i>, not a flow. There is no equation of motion in the formalisation. In consequence, questions of stability are not yet well posed within it; see &sect;6.
+</div>
+
+<h2>3 &middot; Results [PROVED]</h2>
+<p>All five are proved in Lean&nbsp;4 with Mathlib, without <code>sorry</code>. For each, <code>#print axioms</code> reports <code>[propext, Classical.choice, Quot.sound]</code> and no <code>sorryAx</code>.</p>
+<table>
+  <tr><th>&nbsp;</th><th>Statement</th><th>Reading</th></tr>
+  <tr><td class="k">T1</td><td class="mono">gate (onsite v) = onsite (gate v)</td><td>The radial gate commutes with the pointwise nonlinearity.</td></tr>
+  <tr><td class="k">T2</td><td class="mono">angCoupling &#8728; gate &ne; gate &#8728; angCoupling</td><td>It does <i>not</i> commute with the angular coupling. Order is observable.</td></tr>
+  <tr><td class="k">T3</td><td class="mono">rot (angCoupling v) = angCoupling (rot v)</td><td>The sixfold rotation is a symmetry of the coupling: $D_6$-equivariance.</td></tr>
+  <tr><td class="k">T4</td><td class="mono">rot (hex c) = hex c</td><td>The uniform configuration is rotation-invariant.</td></tr>
+  <tr><td class="k">T5</td><td class="mono">angCoupling (hex c) = hex (2c)</td><td>The uniform configuration is an eigenvector, eigenvalue 2.</td></tr>
+</table>
+<p>T1 and T2 together are the substantive pair. A gate acting pointwise commutes with any pointwise map, so T1 is expected; T2 shows that the same gate fails to commute with the operator that moves amplitude between sextants. <b>Order-dependence in this model is carried entirely by the angular coupling, and not by the nonlinearity.</b></p>
+
+<h2>4 &middot; Spectral reading of T5</h2>
+<p><code>angCoupling</code> is the adjacency operator of the cyclic graph on six vertices. Its eigenvectors are the discrete Fourier modes $v_k(j) = \exp(2\pi i\,kj/6)$ with eigenvalues $\lambda_k = 2\cos(2\pi k/6)$.</p>
+
+<figure>
+  <svg viewBox="0 0 760 424" role="img" aria-label="The six Fourier modes of the cyclic 6-ring placed on a vertical eigenvalue axis. The uniform mode k equals 0 sits alone at the top with eigenvalue plus 2 and is the proved statement T5. The modes k equals 1 and 5 share eigenvalue plus 1, and k equals 2 and 4 share eigenvalue minus 1; each degenerate pair carries a two-dimensional irreducible representation of D6. The alternating mode k equals 3 sits at minus 2.">
+    <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a84c"/></marker></defs>
+<line x1="118" y1="46" x2="118" y2="374" stroke="currentColor" stroke-width="1" opacity=".45"/>
+<line x1="112" y1="60.0" x2="124" y2="60.0" stroke="currentColor" stroke-width="1" opacity=".45"/>
+<text x="106" y="64.0" text-anchor="end" font-size="12" fill="currentColor">+2</text>
+<line x1="112" y1="135.0" x2="124" y2="135.0" stroke="currentColor" stroke-width="1" opacity=".45"/>
+<text x="106" y="139.0" text-anchor="end" font-size="12" fill="currentColor">+1</text>
+<line x1="112" y1="285.0" x2="124" y2="285.0" stroke="currentColor" stroke-width="1" opacity=".45"/>
+<text x="106" y="289.0" text-anchor="end" font-size="12" fill="currentColor">&#8722;1</text>
+<line x1="112" y1="360.0" x2="124" y2="360.0" stroke="currentColor" stroke-width="1" opacity=".45"/>
+<text x="106" y="364.0" text-anchor="end" font-size="12" fill="currentColor">&#8722;2</text>
+<text x="118" y="34" text-anchor="middle" font-size="11" fill="#c9a84c">&#955;</text>
+<g><line x1="250.0" y1="34.0" x2="272.5" y2="47.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="272.5" y1="47.0" x2="272.5" y2="73.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="272.5" y1="73.0" x2="250.0" y2="86.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="250.0" y1="86.0" x2="227.5" y2="73.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="227.5" y1="73.0" x2="227.5" y2="47.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="227.5" y1="47.0" x2="250.0" y2="34.0" stroke="currentColor" stroke-width="1" opacity=".35"/><circle cx="250.0" cy="34.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="272.5" cy="47.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="272.5" cy="73.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="250.0" cy="86.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="227.5" cy="73.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="227.5" cy="47.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/></g>
+<text x="250.0" y="104.0" text-anchor="middle" font-size="11" fill="currentColor" opacity=".8">k = 0</text>
+<g><line x1="405.0" y1="109.0" x2="427.5" y2="122.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="427.5" y1="122.0" x2="427.5" y2="148.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="427.5" y1="148.0" x2="405.0" y2="161.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="405.0" y1="161.0" x2="382.5" y2="148.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="382.5" y1="148.0" x2="382.5" y2="122.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="382.5" y1="122.0" x2="405.0" y2="109.0" stroke="currentColor" stroke-width="1" opacity=".35"/><circle cx="405.0" cy="109.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="427.5" cy="122.0" r="6" fill="#c9a84c" opacity="0.63" stroke="currentColor" stroke-width=".8"/><circle cx="427.5" cy="148.0" r="6" fill="#7b68ee" opacity="0.62" stroke="currentColor" stroke-width=".8"/><circle cx="405.0" cy="161.0" r="6" fill="#7b68ee" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="382.5" cy="148.0" r="6" fill="#7b68ee" opacity="0.63" stroke="currentColor" stroke-width=".8"/><circle cx="382.5" cy="122.0" r="6" fill="#c9a84c" opacity="0.63" stroke="currentColor" stroke-width=".8"/></g>
+<text x="405.0" y="179.0" text-anchor="middle" font-size="11" fill="currentColor" opacity=".8">k = 1</text>
+<g><line x1="405.0" y1="259.0" x2="427.5" y2="272.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="427.5" y1="272.0" x2="427.5" y2="298.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="427.5" y1="298.0" x2="405.0" y2="311.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="405.0" y1="311.0" x2="382.5" y2="298.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="382.5" y1="298.0" x2="382.5" y2="272.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="382.5" y1="272.0" x2="405.0" y2="259.0" stroke="currentColor" stroke-width="1" opacity=".35"/><circle cx="405.0" cy="259.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="427.5" cy="272.0" r="6" fill="#7b68ee" opacity="0.62" stroke="currentColor" stroke-width=".8"/><circle cx="427.5" cy="298.0" r="6" fill="#7b68ee" opacity="0.63" stroke="currentColor" stroke-width=".8"/><circle cx="405.0" cy="311.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="382.5" cy="298.0" r="6" fill="#7b68ee" opacity="0.62" stroke="currentColor" stroke-width=".8"/><circle cx="382.5" cy="272.0" r="6" fill="#7b68ee" opacity="0.62" stroke="currentColor" stroke-width=".8"/></g>
+<text x="405.0" y="329.0" text-anchor="middle" font-size="11" fill="currentColor" opacity=".8">k = 2</text>
+<g><line x1="250.0" y1="334.0" x2="272.5" y2="347.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="272.5" y1="347.0" x2="272.5" y2="373.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="272.5" y1="373.0" x2="250.0" y2="386.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="250.0" y1="386.0" x2="227.5" y2="373.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="227.5" y1="373.0" x2="227.5" y2="347.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="227.5" y1="347.0" x2="250.0" y2="334.0" stroke="currentColor" stroke-width="1" opacity=".35"/><circle cx="250.0" cy="334.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="272.5" cy="347.0" r="6" fill="#7b68ee" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="272.5" cy="373.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="250.0" cy="386.0" r="6" fill="#7b68ee" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="227.5" cy="373.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="227.5" cy="347.0" r="6" fill="#7b68ee" opacity="1.00" stroke="currentColor" stroke-width=".8"/></g>
+<text x="250.0" y="404.0" text-anchor="middle" font-size="11" fill="currentColor" opacity=".8">k = 3</text>
+<g><line x1="525.0" y1="259.0" x2="547.5" y2="272.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="547.5" y1="272.0" x2="547.5" y2="298.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="547.5" y1="298.0" x2="525.0" y2="311.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="525.0" y1="311.0" x2="502.5" y2="298.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="502.5" y1="298.0" x2="502.5" y2="272.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="502.5" y1="272.0" x2="525.0" y2="259.0" stroke="currentColor" stroke-width="1" opacity=".35"/><circle cx="525.0" cy="259.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="547.5" cy="272.0" r="6" fill="#7b68ee" opacity="0.63" stroke="currentColor" stroke-width=".8"/><circle cx="547.5" cy="298.0" r="6" fill="#7b68ee" opacity="0.62" stroke="currentColor" stroke-width=".8"/><circle cx="525.0" cy="311.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="502.5" cy="298.0" r="6" fill="#7b68ee" opacity="0.63" stroke="currentColor" stroke-width=".8"/><circle cx="502.5" cy="272.0" r="6" fill="#7b68ee" opacity="0.63" stroke="currentColor" stroke-width=".8"/></g>
+<text x="525.0" y="329.0" text-anchor="middle" font-size="11" fill="currentColor" opacity=".8">k = 4</text>
+<g><line x1="525.0" y1="109.0" x2="547.5" y2="122.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="547.5" y1="122.0" x2="547.5" y2="148.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="547.5" y1="148.0" x2="525.0" y2="161.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="525.0" y1="161.0" x2="502.5" y2="148.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="502.5" y1="148.0" x2="502.5" y2="122.0" stroke="currentColor" stroke-width="1" opacity=".35"/><line x1="502.5" y1="122.0" x2="525.0" y2="109.0" stroke="currentColor" stroke-width="1" opacity=".35"/><circle cx="525.0" cy="109.0" r="6" fill="#c9a84c" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="547.5" cy="122.0" r="6" fill="#c9a84c" opacity="0.63" stroke="currentColor" stroke-width=".8"/><circle cx="547.5" cy="148.0" r="6" fill="#7b68ee" opacity="0.62" stroke="currentColor" stroke-width=".8"/><circle cx="525.0" cy="161.0" r="6" fill="#7b68ee" opacity="1.00" stroke="currentColor" stroke-width=".8"/><circle cx="502.5" cy="148.0" r="6" fill="#7b68ee" opacity="0.63" stroke="currentColor" stroke-width=".8"/><circle cx="502.5" cy="122.0" r="6" fill="#c9a84c" opacity="0.62" stroke="currentColor" stroke-width=".8"/></g>
+<text x="525.0" y="179.0" text-anchor="middle" font-size="11" fill="currentColor" opacity=".8">k = 5</text>
+<path d="M 439.0 135.0 H 491.0" stroke="#e05a3a" stroke-width="1.2" fill="none" opacity=".85"/>
+<text x="465.0" y="99.0" text-anchor="middle" font-size="10.5" fill="#e05a3a">2-dim irrep of D&#8326;</text>
+<path d="M 439.0 285.0 H 491.0" stroke="#e05a3a" stroke-width="1.2" fill="none" opacity=".85"/>
+<text x="465.0" y="249.0" text-anchor="middle" font-size="10.5" fill="#e05a3a">2-dim irrep of D&#8326;</text>
+<path d="M 284.0 60.0 H 636" stroke="#c9a84c" stroke-width="1.2" fill="none" marker-end="url(#ah)"/>
+<text x="646" y="56.0" font-size="11.5" fill="#c9a84c">T5 &#183; proved</text>
+<text x="646" y="72.0" font-size="10.5" fill="currentColor" opacity=".75">angCoupling(hex c)</text>
+<text x="646" y="86.0" font-size="10.5" fill="currentColor" opacity=".75">= hex(2c)</text>
+<text x="380" y="408" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".7">gold = positive amplitude &#183; violet = negative &#183; opacity &#8733; |cos(2&#960;kj/6)|</text>
+
+  </svg>
+  <figcaption><b>Figure 1.</b> The uniform hexagonal state is the top of the coupling spectrum. Each glyph shows one Fourier mode as a sign pattern around the six sites; the vertical axis is the eigenvalue $\lambda_k = 2\cos(2\pi k/6)$. T5 &mdash; the proved statement <code>angCoupling (hex c) = hex (2c)</code> &mdash; places the uniform configuration at $\lambda = +2$, the Perron&ndash;Frobenius mode: the unique eigenvector of largest eigenvalue with constant sign. The two degenerate pairs, at $+1$ and $-1$, are the two-dimensional irreducible representations of $D_6$, and any symmetry-breaking bifurcation from the uniform branch must occur inside one of them.</figcaption>
+</figure>
+
+<p>The model therefore contains both the invariant state and the modes that compete with it, which is the minimum needed to pose a mode-selection question. What it does not yet contain is the dynamics that would decide between them.</p>
+
+<h2>5 &middot; An index constraint on the sphere [CLASSICAL]</h2>
+<p>The following is standard and is included because it constrains any attempt to place a $D_6$ pattern on a closed surface. By the Poincar&eacute;&ndash;Hopf theorem [4], a tangent vector field with isolated zeros on a closed surface has zero-indices summing to the Euler characteristic. For the sphere, $\chi(S^2) = 2$, so a global flow cannot be everywhere non-vanishing: fixed points must exist, and their indices must total exactly&nbsp;2.</p>
+
+<figure>
+  <svg viewBox="0 0 750 310" role="img" aria-label="Two configurations of fixed points on a sphere. On the left, two polar centres of index plus one and six vortices of index plus one at the hexagonal jet, accompanied by six saddles of index minus one; the indices total plus two, matching the Euler characteristic of the sphere, so the configuration closes. On the right, the same six vortices without saddles total plus eight, which is impossible.">
+<circle cx="190" cy="150" r="92" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".55"/><ellipse cx="190" cy="111.4" rx="73.6" ry="22.1" fill="none" stroke="currentColor" stroke-width=".9" opacity=".3"/><circle cx="190" cy="58.0" r="6.5" fill="#c9a84c" stroke="currentColor" stroke-width=".9"/><text x="190" y="61.4" text-anchor="middle" font-size="9.5" fill="#04040a" font-weight="bold">+1</text><circle cx="190" cy="242.0" r="6.5" fill="#c9a84c" stroke="currentColor" stroke-width=".9"/><text x="190" y="245.4" text-anchor="middle" font-size="9.5" fill="#04040a" font-weight="bold">+1</text><circle cx="263.6" cy="111.4" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="263.6" y="114.4" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><rect x="248.2" y="116.9" width="11" height="11" fill="#7b68ee" stroke="currentColor" stroke-width=".8"/><text x="253.7" y="125.4" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">&#8722;1</text><circle cx="226.8" cy="130.5" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="226.8" y="133.5" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><rect x="184.5" y="127.9" width="11" height="11" fill="#7b68ee" stroke="currentColor" stroke-width=".8"/><text x="190.0" y="136.4" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">&#8722;1</text><circle cx="153.2" cy="130.5" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="153.2" y="133.5" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><rect x="120.8" y="116.9" width="11" height="11" fill="#7b68ee" stroke="currentColor" stroke-width=".8"/><text x="126.3" y="125.4" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">&#8722;1</text><circle cx="116.4" cy="111.4" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="116.4" y="114.4" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><rect x="120.8" y="94.8" width="11" height="11" fill="#7b68ee" stroke="currentColor" stroke-width=".8"/><text x="126.3" y="103.3" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">&#8722;1</text><circle cx="153.2" cy="92.2" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="153.2" y="95.2" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><rect x="184.5" y="83.8" width="11" height="11" fill="#7b68ee" stroke="currentColor" stroke-width=".8"/><text x="190.0" y="92.3" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">&#8722;1</text><circle cx="226.8" cy="92.2" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="226.8" y="95.2" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><rect x="248.2" y="94.8" width="11" height="11" fill="#7b68ee" stroke="currentColor" stroke-width=".8"/><text x="253.7" y="103.3" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">&#8722;1</text><text x="190" y="276.0" text-anchor="middle" font-size="11.5" fill="currentColor">6 vortices + 6 saddles</text><text x="190" y="296.0" text-anchor="middle" font-size="13" fill="#50c878" font-weight="bold">&#931; index = 2 + 6 &#8722; 6 = +2 &#10003;</text>
+<circle cx="560" cy="150" r="92" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".55"/><ellipse cx="560" cy="111.4" rx="73.6" ry="22.1" fill="none" stroke="currentColor" stroke-width=".9" opacity=".3"/><circle cx="560" cy="58.0" r="6.5" fill="#c9a84c" stroke="currentColor" stroke-width=".9"/><text x="560" y="61.4" text-anchor="middle" font-size="9.5" fill="#04040a" font-weight="bold">+1</text><circle cx="560" cy="242.0" r="6.5" fill="#c9a84c" stroke="currentColor" stroke-width=".9"/><text x="560" y="245.4" text-anchor="middle" font-size="9.5" fill="#04040a" font-weight="bold">+1</text><circle cx="633.6" cy="111.4" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="633.6" y="114.4" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><circle cx="596.8" cy="130.5" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="596.8" y="133.5" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><circle cx="523.2" cy="130.5" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="523.2" y="133.5" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><circle cx="486.4" cy="111.4" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="486.4" y="114.4" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><circle cx="523.2" cy="92.2" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="523.2" y="95.2" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><circle cx="596.8" cy="92.2" r="6" fill="#c9a84c" stroke="currentColor" stroke-width=".8"/><text x="596.8" y="95.2" text-anchor="middle" font-size="8.5" fill="#04040a" font-weight="bold">+1</text><text x="560" y="276.0" text-anchor="middle" font-size="11.5" fill="currentColor">6 vortices, no saddles</text><text x="560" y="296.0" text-anchor="middle" font-size="13" fill="#e05a3a" font-weight="bold">&#931; index = 2 + 6 = +8 &#10007;</text>
+<line x1="375" y1="60" x2="375" y2="245" stroke="currentColor" stroke-width=".8" opacity=".3" stroke-dasharray="4 4"/>
+<text x="375" y="278" text-anchor="middle" font-size="11" fill="currentColor" opacity=".8">&#967;(S&#178;) = 2 fixes the total. Only the left configuration closes.</text>
+<text x="375" y="296" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".6">circle = centre (index +1) &#183; square = saddle (index &#8722;1)</text>
+
+  </svg>
+  <figcaption><b>Figure 2.</b> The constraint, drawn as the difference between two configurations. Two polar centres already exhaust the budget of $+2$. A ring of six vortices at a hexagonal jet contributes $+6$ and is admissible <i>only</i> if six saddles contribute $-6$ against it; without them the total is $+8$ and no such field exists on a sphere. The vortex&ndash;saddle pairing is not an observation in need of explanation &mdash; it is forced by $\chi(S^2)=2$.</figcaption>
+</figure>
+
+<div class="blk open">
+  <span class="lbl">[OPEN] &middot; the bridge is absent</span>
+  The constraint above concerns a vector field on a two-sphere. The model of &sect;2 is a six-site ring. <b>No map between them is constructed in this paper</b>, and the vortex&ndash;saddle cancellation is therefore <i>not</i> derived from the ring: it is a property of the sphere, stated alongside. Establishing a correspondence &mdash; or showing that none exists &mdash; is the principal open problem here.
+</div>
+
+<h2>6 &middot; What is not established [OPEN]</h2>
+<ul>
+  <li>No equation of motion is formalised, so no stability result is available. Writing the flow explicitly is the immediate next step; linearising the cubic at <code>hex c</code> gives a Jacobian $3c^2 I$ on the diagonal, and a per-mode threshold in $\lambda_k + 3c^2$ follows at once. That calculation is not performed here.</li>
+  <li>Which isotropy subgroup breaks first as amplitude grows is not determined.</li>
+  <li>The correspondence between the ring and any field on a surface is not constructed (&sect;5).</li>
+  <li>No claim is made that the model bears on Saturn, on Chladni figures, or on any physical system. <b>A shared symmetry class is not a shared mechanism.</b></li>
+</ul>
+
+<h2>7 &middot; Provenance</h2>
+<p>Two corrections are recorded in the source file and are reported here because they bear on how the verification should be read.</p>
+<p>An earlier version of the surrounding work asserted that a radial gate fails to commute with a <i>pointwise</i> fold. That is false, and T1 is the corrected statement.</p>
+<p>More consequentially: the first draft of the formalisation expressed the operators in vector notation. Mathlib&rsquo;s <code>Matrix.cons_val</code> simplification lemmas do not chain to index 5 on a <code>Fin 6</code> literal, so every proof silently failed into <code>sorry</code>, and all five theorems reported <code>sorryAx</code>. The kernel caught it. The definitions were rewritten by explicit pattern match, which reduces definitionally at every index, and the proofs returned clean. <b>We record this because a formalisation that compiles is not thereby a formalisation that proves anything, and the axiom check &mdash; not the build &mdash; is what distinguishes the two.</b></p>
+
+<h2>References</h2>
+<div class="refs">
+<p>[1]&nbsp;&nbsp;M. Golubitsky, I. Stewart, D. G. Schaeffer. <i>Singularities and Groups in Bifurcation Theory, Volume II.</i> Springer, 1988.</p>
+<p>[2]&nbsp;&nbsp;J. W. Swift. <i>Bifurcation and symmetry in convection.</i> PhD thesis, University of California, Berkeley, 1984.</p>
+<p>[3]&nbsp;&nbsp;P. G. Kevrekidis. <i>The Discrete Nonlinear Schr&ouml;dinger Equation.</i> Springer Tracts in Modern Physics 232, 2009.</p>
+<p>[4]&nbsp;&nbsp;J. Milnor. <i>Topology from the Differentiable Viewpoint.</i> University Press of Virginia, 1965.</p>
+<p>[5]&nbsp;&nbsp;The mathlib Community. The Lean mathematical library. <i>CPP 2020</i>.</p>
+</div>
+
+</main>
+
+<footer>
+  Source: <code>SaturnHexagon.lean</code> &middot; Lean 4 + Mathlib<br>
+  Independent working paper; not peer-reviewed. No volume-level deposit &mdash; cite the
+  <a href="https://zenodo.org/communities/principia-orthogona">Principia Orthogona</a> community.<br>
+  &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC &middot; CC BY-NC-ND 4.0
+</footer>
+
+</body>
+</html>

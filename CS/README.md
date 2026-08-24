@@ -17,6 +17,7 @@ the failure this folder exists to document.
 | domain | ↑ filled | ↓ filled |
 |---|---|---|
 | [maths.md](maths.md) | 1 | 0 |
+| [agents.md](agents.md) | 4 | 0 |
 | [architecture.md](architecture.md) | 2 | 0 |
 | [physics.md](physics.md) | 0 | 0 |
 | [chem.md](chem.md) | 0 | 0 |
@@ -30,6 +31,12 @@ the failure this folder exists to document.
 
 ## Instruments
 
+- **[reporting-layer](https://github.com/G6LLC/probes)** (separate repo) — scores
+  an agent on the four behavioural classes no static pair can encode (FABRICATION,
+  FALSE COVERAGE, UNFALSIFIABLE GUARD, MIS-CORRECTION). Scoring is by execution, not by
+  reading the report. 16 self-tests, every scorer shown to fail on a case it should
+  reject. **Not a CI gate** — it grades external models, not this repo. Findings:
+  [agents.md](agents.md). Write-up: `book6/wp76-the-reporting-layer.html`.
 - **[verify-stamp/](verify-stamp/)** — binds a verification claim to the
   triple *(artifact, toolchain, library)* and separates MISMATCH, STALE and
   FAIL. 24 tests including self-application, wired into CI as a gating step, self-stamped. Write-up:
