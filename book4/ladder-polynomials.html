@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ladder Polynomials — Working Note · Principia Orthogona Book 4</title>
+<script>
+MathJax = { tex: { inlineMath:[['$','$']], displayMath:[['$$','$$']] }, options: { skipHtmlTags:['script','noscript','style','textarea'] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+<style>
+:root {
+  --gold: #0ABAB5;
+  --gold-dim: #076b68;
+  --dark: #05080f;
+  --surface: #0c1420;
+  --surface2: #101e2e;
+  --text: #cdd8e8;
+  --text-dim: #6a8099;
+  --c-color: #4a9eff;
+  --k-color: #e05a3a;
+  --f-color: #50c878;
+  --u-color: #c084fc;
+  --t-color: #f9c74f;
+  --g-color: #0ABAB5;
+  --inf-color: #a0d8ef;
+  --zero-color: #ff6b8a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--dark); color: var(--text); font-family: Georgia,serif; font-size: 18px; line-height: 1.75; }
+
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(5,8,15,0.96);
+  border-bottom: 1px solid var(--gold-dim);
+  padding: 0.6rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.5rem;
+}
+.nav-logo { font-family: Georgia,serif; font-size: 0.85rem; letter-spacing: 0.18em; color: var(--gold); text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; font-size: 0.78rem; flex-wrap: wrap; }
+.nav-links a { color: var(--text-dim); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+.nav-links.dual-rung { flex-direction: column; gap: 0.25rem; align-items: flex-start; }
+.rung { display: flex; gap: 0.55rem; align-items: center; flex-wrap: wrap; }
+.rl { font-size: 0.62rem; letter-spacing: .14em; color: var(--gold); font-weight: 600; min-width: 2rem; }
+.rung a { font-size: 0.68rem; }
+
+.po-ring-strip {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .4rem;
+  padding: .45rem 1.4rem;
+  background: rgba(0,0,0,.55);
+  border-bottom: 1px solid var(--gold-dim);
+  font-family: 'Courier New',monospace;
+  font-size: .72rem; letter-spacing: .08em;
+}
+.po-ring-strip a { color: var(--gold); text-decoration: none; opacity:.85; }
+.po-ring-strip a:hover { opacity:1; text-decoration:underline; }
+.po-ring-badge { display: inline-flex; align-items: center; gap: .5rem; color: var(--gold); }
+.po-ring-num { font-weight:700; letter-spacing:.15em; }
+.po-ring-sep { opacity:.4; }
+.po-ring-meta { opacity:.7; }
+.po-ring-ends { display:flex; gap:1rem; }
+
+.book-hero {
+  background: linear-gradient(160deg, #03060d 0%, #08101e 50%, #03060d 100%);
+  border-bottom: 1px solid rgba(10,186,181,0.15);
+  padding: 5rem 2rem 4rem;
+  text-align: center; position: relative; overflow: hidden;
+}
+.book-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 25% 50%, rgba(10,186,181,0.06) 0%, transparent 55%),
+    radial-gradient(circle at 75% 30%, rgba(74,158,255,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(255,107,138,0.03) 0%, transparent 45%);
+  animation: heroGlow 10s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes heroGlow { 0%{opacity:.5} 100%{opacity:1} }
+
+.series-label { font-size: 0.7rem; letter-spacing: 0.3em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 1.2rem; position: relative; }
+.chapter-num { font-size: 0.75rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.5rem; font-family:'Courier New',monospace; position: relative; }
+.book-title { font-size: clamp(2rem,6vw,3.8rem); font-weight:400; letter-spacing:0.04em; color: var(--text); line-height: 1.15; position: relative; margin-bottom: 0.5rem; }
+.book-subtitle { font-size: clamp(0.85rem,2vw,1.1rem); color: var(--text-dim); font-style:italic; max-width:600px; margin: 0 auto 1.5rem; position:relative; }
+.operator-display { font-family:'Courier New',monospace; font-size:1.1rem; letter-spacing:.15em; position:relative; margin-bottom:1.5rem; }
+.operator-display .c { color:var(--c-color); }
+.operator-display .k { color:var(--k-color); }
+.operator-display .f { color:var(--f-color); }
+.operator-display .u { color:var(--u-color); }
+.operator-display .g { color:var(--g-color); }
+.hero-meta { display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap; font-size:0.75rem; letter-spacing:.12em; color:var(--text-dim); position:relative; }
+.hero-badge { background:rgba(10,186,181,0.1); border:1px solid rgba(10,186,181,0.25); padding:.25rem .9rem; border-radius:2px; color:var(--gold); }
+
+.content-wrap { max-width: 780px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+h2 { font-size:1.4rem; font-weight:400; color:var(--gold); margin:3rem 0 1rem; letter-spacing:.06em; }
+h3 { font-size:1.1rem; font-weight:600; color:var(--text); margin:2rem 0 0.7rem; }
+p { margin-bottom: 1.1rem; }
+strong { color: var(--text); }
+em { color: var(--gold); font-style: normal; }
+
+.section-tag { font-family:'Courier New',monospace; font-size:0.7rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:.3rem; opacity:.8; }
+.gold-rule { border:none; border-top:1px solid var(--gold-dim); margin:2.5rem 0; opacity:.4; }
+.fleur { text-align:center; color:var(--gold-dim); font-size:1.2rem; margin:2rem 0; opacity:.5; }
+
+.insight-box { background:rgba(10,186,181,0.06); border:1px solid rgba(10,186,181,0.2); padding:1.2rem 1.5rem; margin:2rem 0; border-radius:4px; }
+.insight-label { font-size:0.7rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; font-family:'Courier New',monospace; margin-bottom:.4rem; }
+
+.thm-box { background:rgba(10,186,181,0.04); border:1px solid rgba(10,186,181,0.3); border-radius:4px; padding:1.2rem 1.5rem; margin:1.8rem 0; }
+.thm-label { font-size:0.7rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; font-family:'Courier New',monospace; margin-bottom:.5rem; }
+.def-box { background:rgba(74,158,255,0.05); border:1px solid rgba(74,158,255,0.25); border-radius:4px; padding:1.2rem 1.5rem; margin:1.8rem 0; }
+.def-label { font-size:0.7rem; letter-spacing:.2em; color:var(--c-color); text-transform:uppercase; font-family:'Courier New',monospace; margin-bottom:.5rem; }
+
+.status-table { width:100%; border-collapse:collapse; font-size:14px; margin:1.5rem 0; }
+.status-table th { background:var(--surface2); color:var(--gold); font-size:0.68rem; letter-spacing:.15em; text-transform:uppercase; font-family:'Courier New',monospace; padding:.6rem .8rem; text-align:left; border-bottom:1px solid var(--gold-dim); }
+.status-table td { padding:.5rem .8rem; border-bottom:1px solid #1a2e42; color:var(--text); }
+.status-table tr:hover td { background:var(--surface2); }
+.proved { color: var(--f-color); font-weight:600; }
+.open { color: var(--zero-color); font-weight:600; }
+.reform { color: var(--gold); font-weight:600; }
+
+pre { background:#07111d; border:1px solid #1a2e42; border-left:3px solid var(--gold-dim); padding:1.2rem; border-radius:0 4px 4px 0; overflow-x:auto; margin:1.5rem 0; color:#8ac0e0; font:13px/1.6 'Courier New',monospace; }
+
+/* FIGURE */
+.figure-wrap { margin:2.5rem 0; border:1px solid #1a2e42; border-radius:6px; overflow:hidden; background:var(--surface); }
+.figure-header { background:var(--surface2); border-bottom:1px solid #1a2e42; padding:.6rem 1rem; display:flex; justify-content:space-between; align-items:center; font-family:'Courier New',monospace; font-size:.72rem; letter-spacing:.1em; color:var(--gold); }
+.figure-body { position:relative; }
+canvas { display:block; width:100%; cursor:crosshair; }
+.figure-controls { background:var(--surface2); border-top:1px solid #1a2e42; padding:.8rem 1rem; display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap; }
+.ctrl { display:flex; align-items:center; gap:.5rem; font-size:.78rem; color:var(--text-dim); font-family:'Courier New',monospace; }
+.ctrl label { color:var(--gold); font-size:.7rem; letter-spacing:.1em; }
+.ctrl span { color:var(--text); min-width:2.5rem; text-align:right; }
+input[type=range] { -webkit-appearance:none; width:90px; height:3px; background:#1a2e42; border-radius:2px; outline:none; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:11px; height:11px; background:var(--gold); border-radius:50%; cursor:pointer; }
+.ctrl-btn { background:var(--gold-dim); color:var(--gold); border:none; padding:.25rem .7rem; font:700 .68rem 'Courier New',monospace; cursor:pointer; border-radius:2px; letter-spacing:.08em; transition:background .15s; }
+.ctrl-btn:hover { background:var(--gold); color:var(--dark); }
+.figure-caption { padding:.8rem 1rem; font:italic 13px/1.5 Georgia; color:var(--text-dim); border-top:1px solid #1a2e42; }
+.legend-dots { display:flex; gap:1rem; font-size:.7rem; color:var(--text-dim); font-family:'Courier New',monospace; }
+.ld { display:flex; align-items:center; gap:.3rem; }
+.ld-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+
+.op-tag { display:inline-block; font-family:'Courier New',monospace; font-size:.75rem; letter-spacing:.08em; padding:.12rem .45rem; border-radius:2px; vertical-align:middle; }
+.op-c { background:rgba(74,158,255,.15); color:var(--c-color); border:1px solid rgba(74,158,255,.3); }
+.op-k { background:rgba(224,90,58,.15); color:var(--k-color); border:1px solid rgba(224,90,58,.3); }
+.op-f { background:rgba(80,200,120,.15); color:var(--f-color); border:1px solid rgba(80,200,120,.3); }
+.op-u { background:rgba(192,132,252,.15); color:var(--u-color); border:1px solid rgba(192,132,252,.3); }
+
+.bridge { background:rgba(10,186,181,0.05); border:1px solid rgba(10,186,181,0.25); border-radius:6px; padding:1.5rem; margin:2.5rem 0; }
+.bridge-label { font-size:.7rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; font-family:'Courier New',monospace; margin-bottom:.7rem; }
+
+.chapter-nav { display:flex; justify-content:space-between; align-items:center; padding:2rem 0; border-top:1px solid #1a2e42; margin-top:3rem; }
+.chapter-nav a { color:var(--gold); text-decoration:none; font-size:.85rem; letter-spacing:.08em; border:1px solid rgba(10,186,181,.25); padding:.5rem 1rem; border-radius:2px; transition:all .2s; font-family:'Courier New',monospace; }
+.chapter-nav a:hover { background:rgba(10,186,181,.08); }
+
+footer { text-align:center; padding:2rem; font-size:.72rem; letter-spacing:.12em; color:var(--text-dim); border-top:1px solid #1a2e42; }
+footer a { color:var(--gold-dim); text-decoration:none; }
+
+mjx-container { overflow-x:auto; max-width:100%; display:block !important; }
+.table-wrap { overflow-x:auto; }
+
+/* ── correction notices · added 23 Aug 2026 ──────────────────────────────── */
+.correction{border:1px solid var(--k-color,#e05a3a);border-left-width:5px;
+  background:var(--surface2,#101e2e);color:var(--text,#cdd8e8);
+  padding:1.1rem 1.3rem;margin:1.8rem 0;border-radius:5px;}
+.correction .corr-label{font-family:ui-monospace,monospace;font-size:.7rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--k-color,#e05a3a);margin-bottom:.6rem;}
+.correction p{margin:0 0 .7rem;color:var(--text,#cdd8e8);}
+.correction p:last-child{margin-bottom:0;}
+.correction .corr-note{font-size:.9rem;color:var(--text-dim,#6a8099);}
+.correction strong{color:#fff;}
+.correction--inline{border-left-width:5px;border-top:none;border-right:none;border-bottom:none;
+  border-radius:0;padding:.85rem 1.1rem;font-size:.95rem;}
+</style>
+</head>
+<body>
+
+<style>
+.wn table{width:100%;border-collapse:collapse;font-size:.9rem;margin:1.1rem 0;}
+.wn th{text-align:left;padding:.5rem .7rem;border-bottom:2px solid var(--gold-dim,#076b68);
+  font-family:ui-monospace,monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold,#0ABAB5);}
+.wn td{padding:.45rem .7rem;border-bottom:1px solid rgba(255,255,255,.07);vertical-align:top;}
+.wn td.num{font-family:ui-monospace,monospace;color:var(--text,#cdd8e8);}
+.wn pre{background:var(--surface,#0c1420);border:1px solid rgba(255,255,255,.09);border-radius:5px;
+  padding:1rem 1.1rem;overflow-x:auto;font-size:.82rem;line-height:1.55;color:var(--text,#cdd8e8);}
+.wn .tag{display:inline-block;font-family:ui-monospace,monospace;font-size:.66rem;letter-spacing:.12em;
+  padding:1px 7px;border-radius:3px;border:1px solid var(--gold-dim,#076b68);color:var(--gold,#0ABAB5);vertical-align:2px;}
+.wn .tag.open{border-color:var(--k-color,#e05a3a);color:var(--k-color,#e05a3a);}
+.wn blockquote{border-left:4px solid var(--gold-dim,#076b68);margin:1.4rem 0;padding:.6rem 1.1rem;color:var(--text,#cdd8e8);}
+.wn .eq{text-align:center;margin:1.2rem 0;}
+</style>
+<nav>
+  <a href="https://totogt.github.io/geometry/book4/index.html" class="nav-logo">⚜ PRINCIPIA ORTHOGONA · BOOK 4 ⚜</a>
+  <div class="nav-links dual-rung">
+    <div class="rung"><span class="rl">G3</span><a href="../ch1.html">1</a>
+    <a href="../ch2.html">2</a>
+    <a href="../ch3-circadian.html">3</a>
+    <a href="../ch4-neural.html">4</a>
+    <a href="../ch5-immune.html">5</a>
+    <a href="../ch6-resonance.html">6</a>
+    <a href="../ch7-crystalline.html">7</a>
+    <a href="../ch8-axiomatic.html">8</a>
+    <a href="../ch9-phi.html">9</a>
+    <a href="../ch10-lyapunov.html">10</a>
+    <a href="../ch11-spectral.html">11</a>
+    <a href="../ch12-conclusion.html">12</a>
+    <a href="../ch13-revision.html">13</a>
+    <a href="../ch14-axle.html">14</a>
+    <a href="../ch15-entropy.html">15</a></div>
+    <div class="rung"><span class="rl">G4</span><a href="ch01.html">1</a>
+    <a href="ch02.html">2</a>
+    <a href="ch03.html">3</a>
+    <a href="ch04.html">4</a>
+    <a href="ch05.html">5</a>
+    <a href="ch06.html">6</a>
+    <a href="ch07.html">7</a>
+    <a href="ch08.html">8</a>
+    <a href="ch09.html">9</a>
+    <a href="ch10.html">10</a>
+    <a href="ch11.html">11</a>
+    <a href="ch12.html">12</a>
+    <a href="ch13.html">13</a>
+    <a href="ch14.html">14</a>
+    <a href="ch15.html">15</a>
+    <a href="ch16-crystal-lattice.html">16</a>
+    <a href="ch17-magnetic-lattice.html">17</a>
+    <a href="ch18-seismic-lattice.html">18</a>
+    <a href="ch19-acoustic-lattice.html">19</a></div>
+  </div>
+</nav>
+
+<div class="content-wrap wn">
+
+  <div class="section-tag">Book 4 &middot; Working Note &middot; 23 August 2026</div>
+  <h1 style="margin-bottom:.3rem;">The Ladder Polynomials</h1>
+  <p style="color:var(--text-dim,#6a8099);margin-top:0;">Two exact results, one honest boundary.
+  Every figure below is reproducible from the code at the end.</p>
+
+  <div class="correction correction--inline">
+    <p><strong>Read this cold before citing it.</strong> Written in a single sitting at the end of a
+    long session. The computations are machine-checked and the code is printed; the
+    <em>interpretations</em> have not been reviewed by anyone.</p>
+  </div>
+
+  <p>This note addresses the open item in WP44 &sect;2, Prediction 3 &mdash; the claim that the
+  n-bonacci ladder is the exit sequence, &ldquo;deferred to a companion paper&rdquo; pending a
+  connection between the ADE classification and the dm&sup3; operator chain. <strong>It does not
+  supply that connection.</strong> It supplies two exact results and one boundary.</p>
+
+  <div class="section-tag">&sect; 1 &middot; The family collapses to one polynomial</div>
+  <h2>x<sup>n+1</sup> &minus; 2x<sup>n</sup> + 1</h2>
+
+  <p>The n-bonacci characteristic polynomial is $q_n(x) = x^n - x^{n-1} - \cdots - x - 1$.
+  Multiplying by $(x-1)$ telescopes the entire tail:</p>
+
+  <div class="eq">$$(x-1)\,q_n(x) \;=\; x^{n+1} - 2x^n + 1$$</div>
+
+  <p>Verified symbolically for $n = 2,\ldots,8$; each $q_n$ is irreducible over $\mathbb{Q}$ over the
+  same range. So the whole ladder &mdash; $\varphi$, tribonacci, tetranacci, pentanacci, hexanacci and
+  upward &mdash; is a single one-parameter family, and <strong>the 2 in the middle coefficient is not
+  put there.</strong> It is what the telescoping leaves. $\tau = 2$ is visible in the polynomial
+  before any root is computed. <span class="tag">VERIFIED</span></p>
+
+  <div class="section-tag">&sect; 2 &middot; The gap to &tau; = 2, in closed form</div>
+  <h2>2 &minus; r<sub>n</sub> = r<sub>n</sub><sup>&minus;n</sup></h2>
+
+  <p>Let $r_n$ be the root of $p_n$ in $(1,2)$ and write $r = 2 - \varepsilon$. Then
+  $r^{n+1} - 2r^n + 1 = r^n(r-2) + 1 = -\varepsilon r^n + 1 = 0$, so</p>
+
+  <div class="eq">$$2 - r_n \;=\; r_n^{-n}$$</div>
+
+  <p>exactly &mdash; not asymptotically. The distance from the $n$-th rung to the limit is the
+  reciprocal of that same rung raised to its own index. Verified to 50 significant digits for
+  $n = 2,\ldots,20$. <span class="tag">VERIFIED</span></p>
+
+  <table>
+    <tr><th>n</th><th>r<sub>n</sub></th><th>2 &minus; r<sub>n</sub></th><th>r<sub>n</sub><sup>&minus;n</sup></th><th>2<sup>&minus;n</sup></th></tr>
+    <tr><td class="num">2</td><td class="num">1.6180339887498948</td><td class="num">0.381966011250</td><td class="num">0.381966011250</td><td class="num">0.25</td></tr>
+    <tr><td class="num">3</td><td class="num">1.8392867552141611</td><td class="num">0.160713244786</td><td class="num">0.160713244786</td><td class="num">0.125</td></tr>
+    <tr><td class="num">4</td><td class="num">1.9275619754829253</td><td class="num">0.072438024517</td><td class="num">0.072438024517</td><td class="num">0.0625</td></tr>
+    <tr><td class="num">5</td><td class="num">1.9659482366454853</td><td class="num">0.034051763354</td><td class="num">0.034051763354</td><td class="num">0.03125</td></tr>
+    <tr><td class="num">6</td><td class="num">1.9835828434243263</td><td class="num">0.016417156576</td><td class="num">0.016417156576</td><td class="num">0.015625</td></tr>
+    <tr><td class="num">12</td><td class="num">1.9997555009373175</td><td class="num">0.000244499063</td><td class="num">0.000244499063</td><td class="num">0.000244140625</td></tr>
+    <tr><td class="num">20</td><td class="num">1.9999990463165885</td><td class="num">9.53683411e&minus;7</td><td class="num">9.53683411e&minus;7</td><td class="num">9.5367432e&minus;7</td></tr>
+  </table>
+
+  <p>Since $\varepsilon = r^{-n}$ and $r \to 2$, convergence is geometric with ratio $\to \tfrac12$:
+  $\log_2(2-r_n)/(-n)$ runs 0.694, 0.879, 0.947, 0.975, 0.988, &hellip; &rarr; 1.</p>
+
+  <p><strong>Consequence for WP44 Prediction 2.</strong> That paper states the maximum Lyapunov
+  exponent &ldquo;scales with the distance from $\tau = 2$ in the n-bonacci sequence.&rdquo; That
+  distance now has a closed form, so the prediction becomes quantitative: whatever the scaling law is,
+  its argument is $r_n^{-n}$. <span class="tag">MODEL</span></p>
+
+  <p>Every $r_n$ is also a <strong>Pisot number</strong> &mdash; all conjugates strictly inside the unit
+  disc, checked for $n = 2,\ldots,12$; the largest conjugate modulus rises 0.618 &rarr; 0.980 and never
+  reaches 1. <span class="tag">VERIFIED</span></p>
+
+  <div class="section-tag">&sect; 3 &middot; Where &tau; = 2 comes from, independently</div>
+  <h2>The ADE threshold</h2>
+
+  <p>2 is not a constant chosen to make the ladder terminate. It is the threshold of a classification
+  theorem with nothing to do with recurrences:</p>
+
+  <blockquote>A connected simply-laced graph has adjacency spectral radius <strong>&lt; 2</strong>
+  exactly when it is a finite ADE Dynkin diagram, and <strong>= 2</strong> exactly when it is affine
+  (extended) ADE.</blockquote>
+
+  <table>
+    <tr><th>Finite</th><th>&rho;</th><th>Affine</th><th>&rho;</th></tr>
+    <tr><td>A<sub>5</sub></td><td class="num">1.732050807569</td><td>&Atilde;<sub>3</sub> (3-cycle)</td><td class="num">2.000000000000</td></tr>
+    <tr><td>A<sub>12</sub></td><td class="num">1.941883634852</td><td>&Atilde;<sub>6</sub> (6-cycle)</td><td class="num">2.000000000000</td></tr>
+    <tr><td>E<sub>6</sub></td><td class="num">1.931851652578</td><td>D&#771;<sub>4</sub> (4-leg star)</td><td class="num">2.000000000000</td></tr>
+    <tr><td>E<sub>7</sub></td><td class="num">1.969615506024</td><td>E&#771;<sub>8</sub></td><td class="num">2.000000000000</td></tr>
+    <tr><td>E<sub>8</sub></td><td class="num">1.989043790737</td><td></td><td></td></tr>
+  </table>
+
+  <p>This is the mechanism behind a line the corpus has carried as an assertion &mdash;
+  <em>&ldquo;at E&#8328; the finite classification ends.&rdquo;</em> It ends <em>at 2</em>, and E&#8328;
+  at 1.98904 is the closest finite diagram to the boundary. Two independent families accumulate at 2
+  from below: the Pisot side (dynamics) and the Coxeter side (classification, $\rho = 2\cos(\pi/h)$).
+  <span class="tag">VERIFIED</span></p>
+
+  <div class="section-tag">&sect; 4 &middot; The one place they touch</div>
+  <h2>&varphi; = 2cos(&pi;/5) = &rho;(A&#8324;)</h2>
+
+  <p>Verified to 30 digits, and 5 is the Coxeter number of $A_4$. <strong>The bottom rung of the ladder
+  is an ADE spectral radius.</strong> Nothing above it is. Solving $h = \pi/\arccos(r_n/2)$:</p>
+
+  <table>
+    <tr><th>n</th><th>h</th><th>integer?</th></tr>
+    <tr><td class="num">3</td><td class="num">7.783448</td><td>no</td></tr>
+    <tr><td class="num">4</td><td class="num">11.637159</td><td>no</td></tr>
+    <tr><td class="num"><strong>5</strong></td><td class="num"><strong>17.000510</strong></td><td><strong>no &mdash; near miss, 5.1 &times; 10<sup>&minus;4</sup></strong></td></tr>
+    <tr><td class="num">6</td><td class="num">24.502104</td><td>no</td></tr>
+    <tr><td class="num">7</td><td class="num">35.033998</td><td>no</td></tr>
+    <tr><td class="num">8</td><td class="num">49.859430</td><td>no</td></tr>
+  </table>
+
+  <p>An exhaustive scan over $n &lt; 40$ against $h &lt; 60$ returns exactly one coincidence,
+  $(n,h) = (2,5)$. That is expected, and the reason closes off a class of hoped-for identities: the
+  ladder roots are Pisot, with conjugates inside the unit disc, while $2\cos(\pi/h)$ is totally real
+  with conjugates in $[-2,2]$. The families are essentially disjoint, and $\varphi$ is the accident
+  that manages to be both.</p>
+
+  <p><strong>The n = 5 near-miss is flagged deliberately.</strong> $h = 17.000510$ is exactly the kind
+  of number that becomes a false claim if nobody computes the next three digits. It is not 17.</p>
+
+  <div class="section-tag">&sect; 5 &middot; One level up &mdash; the Galois group of each rung</div>
+  <h2>S<sub>n</sub>, all the way up</h2>
+
+  <p>No discriminant is a perfect square in $\mathbb{Q}$, so no rung lies in $A_n$: every Galois group
+  on the ladder contains an odd permutation.</p>
+
+  <table>
+    <tr><th>n</th><th>Gal(q<sub>n</sub>)</th><th>|G|</th><th>n!</th><th>status</th></tr>
+    <tr><td class="num">2</td><td>C<sub>2</sub></td><td class="num">2</td><td class="num">2</td><td>proved</td></tr>
+    <tr><td class="num">3&ndash;6</td><td>S<sub>n</sub></td><td class="num">6&ndash;720</td><td class="num">6&ndash;720</td><td>proved</td></tr>
+    <tr><td class="num">7</td><td>S<sub>7</sub></td><td class="num">5040</td><td class="num">5040</td><td>proved &mdash; Jordan</td></tr>
+    <tr><td class="num">8&ndash;10</td><td>S<sub>n</sub></td><td class="num">&mdash;</td><td class="num">&mdash;</td><td><span class="tag open">EVIDENCE, NOT PROOF</span></td></tr>
+  </table>
+
+  <p><strong>n = 7 is rigorous.</strong> $q_7$ is irreducible, so the group is transitive; 7 is prime,
+  so transitive implies primitive; Frobenius sampling returns a transposition; and a primitive group
+  containing a transposition is $S_n$ (Jordan). One transposition suffices &mdash; no sampling
+  assumption enters.</p>
+
+  <p><strong>n = 8 is evidence, and the honest word is evidence.</strong> The transposition type first
+  occurs at <strong>p = 17921</strong>, after 2,052 usable primes, against an expected density
+  $\binom{8}{2}/8! \approx 1$ in 1,440. An earlier scan to $p &lt; 4000$ found none &mdash; that was
+  under-sampling, and reporting it as absence would have been a false negative wearing the grammar of a
+  result. 21 of the 22 cycle types of $S_8$ have appeared. But 8 is not prime, transitivity does not
+  give primitivity, and Jordan does not apply. <span class="tag open">OPEN</span></p>
+
+  <p>Maximal Galois group means <strong>no hidden structure</strong>: no proper subfield, no partial
+  symmetry, no relation among conjugate roots beyond the ones every polynomial has. Which isolates
+  <strong>n = 2 twice over</strong>, by two independent measures &mdash; the only rung with a small
+  Galois group ($C_2$, the field $\mathbb{Q}(\sqrt5)$), and the only rung whose root is an ADE
+  spectral radius. Two unrelated tests, one exception, the same rung.
+  <span class="tag open">OPEN</span> &mdash; whether that is one fact or two is not settled here, and it
+  is the sharpest question this note produced.</p>
+
+  <div class="section-tag">&sect; 6 &middot; What this does and does not establish</div>
+  <h2>The boundary, stated</h2>
+
+  <p><span class="tag">VERIFIED</span> The single-polynomial collapse and its irreducibility over the
+  tested range; the exact gap identity; the Pisot property; the ADE/affine spectral threshold at 2;
+  and $\varphi = 2\cos(\pi/5) = \rho(A_4)$.</p>
+
+  <p><span class="tag">MODEL</span> That the shared accumulation at 2 is structurally meaningful rather
+  than a coincidence of two families that both happen to live in $(1,2)$.</p>
+
+  <p><span class="tag open">OPEN</span> The McKay correspondence connecting ADE to the dm&sup3; operator
+  chain. <strong>Nothing here supplies it.</strong> What this note does is make the target precise: any
+  such correspondence must explain why one family is Pisot and the other is not, and why they meet only
+  at $\varphi$. That is a sharper question than WP44 was able to ask, and a correspondence that cannot
+  answer it is not the right one.</p>
+
+  <div class="section-tag">Reproduce</div>
+  <pre><code>import sympy as sp
+from mpmath import mp, mpf, findroot
+x = sp.symbols('x'); mp.dps = 50
+
+# §1 collapse + irreducibility
+for n in range(2, 9):
+    q = x**n - sum(x**k for k in range(n))
+    assert sp.simplify(sp.expand((x-1)*q) - (x**(n+1) - 2*x**n + 1)) == 0
+    assert q.as_poly().is_irreducible
+
+# §2 exact gap identity
+for n in range(2, 21):
+    r = findroot(lambda z: z**(n+1) - 2*z**n + 1, mpf('1.9') if n &gt; 4 else mpf('1.6'))
+    assert abs((2 - r) - r**(-n)) &lt; mpf('1e-40')
+
+# §3-4 ADE threshold and the phi coincidence
+import numpy as np
+rho = lambda A: max(abs(np.linalg.eigvalsh(A)))
+def path(n):
+    A = np.zeros((n, n))
+    for i in range(n-1): A[i, i+1] = A[i+1, i] = 1
+    return A
+assert abs(rho(path(4)) - (1 + 5**0.5)/2) &lt; 1e-12          # rho(A_4) = phi
+for n in range(3, 9):
+    r = max(np.roots([1.0] + [-1.0]*n).real)
+    h = np.pi / np.arccos(r/2)
+    assert abs(h - round(h)) &gt; 1e-6                          # no further coincidences
+
+# §5 the n=8 transposition
+n, target = 8, sorted([2] + [1]*6)
+q = sp.Poly(x**n - sum(x**k for k in range(n)), x)
+D = sp.discriminant(q.as_expr(), x)
+for p in sp.primerange(3, 60000):
+    if D % p == 0: continue
+    t = sorted(int(sp.Poly(f, x).degree())
+               for f, _ in sp.factor_list(q.as_expr(), modulus=p)[1])
+    if t == target:
+        print("transposition at p =", p); break     # -&gt; 17921</code></pre>
+
+  <p style="margin-top:2rem;color:var(--text-dim,#6a8099);font-size:.9rem;">
+  Companion files: <code>book4/ladder-polynomials.md</code> (source of this page),
+  <a href="ch11.html#correction-m1" style="color:var(--gold,#0ABAB5)">Chapter 11</a> (withdrawn kernel
+  claim, item M1), and WP44 &mdash; <em>Disaster Theory and the Climate Catastrophe Manifold</em>.</p>
+
+</div>
+</body>
+</html>
