@@ -1,2 +1,0 @@
-def zeta():
-    return "zeta"
