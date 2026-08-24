@@ -4,6 +4,133 @@ Dated narrative for defects and audits that are closed. Moved out of
 `CLAUDE.md` on 2026-08-21 so the priming file stays short to read. Nothing
 here was changed, only relocated. Open items remain in `CLAUDE.md`.
 
+# FIXED: the Volume I deposit's Lean file had never been compiled (2026-08-24)
+
+**Class: UNTRUSTED — new.** Then FALSE, then MISATTRIBUTED, in that order, all in the
+same file.
+
+`PrincipiaOrthogona1/PrincipiaVol1.lean` is the formal-verification artifact attached to
+the Principia Orthogona Volume I deposit on Zenodo (10.5281/zenodo.19117400). Versions
+3 through 6 of that deposit described it, in the description field and in the file's own
+header, as *"30+ facts proved, 1 sorry (clearly scoped), 0 axioms beyond Mathlib4."*
+
+AXLE has no CI. Nothing in the repository builds that file. The question "has anyone ever
+run `lake build` on it?" had not been asked.
+
+A small repository was built to ask it — `vol1-proofs`, one file, pinned to the toolchain
+the deposit itself names (Lean v4.14.0, Mathlib v4.14.0 rev 4bbdccd9c5f8). AXLE is too
+large to build for one check; that is why the small repos exist.
+
+**Result: 81 errors.** The file does not compile, and had never compiled.
+
+The faults were mechanical, which is the uncomfortable part — every one of them would have
+been caught by a single build on the day the file was written:
+
+- `structure Dm3Triple where T_star : ℝ;  mu_max : ℝ;  tau : ℝ` — semicolons are not
+  structure syntax. The structure had exactly **one** field. Every
+  `canonicalTriple.mu_max` and `.tau` in the file was an unknown-field error. Same fault
+  in `RegenerationLevel` and `OrdinalRegenerationLevel`.
+- `@dist _ M.metric x y` passed a `MetricSpace` where a `Dist` was expected.
+- `(0 : Fin n)` with `n` a variable and no `[NeZero n]` — there is no `OfNat` instance.
+- Four Ordinal lemmas invoked under names that do not exist: `Ordinal.IsLimit.add_right`,
+  `Ordinal.lt_add_of_pos_right`, and a cofinality condition written `α.card.ord` where
+  the correct hypothesis is `ℵ₀ < α.cof`.
+- The club-filter chain was built on `Function.iterate` and its three lemmas were not
+  provable in that form.
+- `intManifold.carrier` never unfolded to `ℤ`, so every numeral and every `omega` in the
+  Theorem 5.3 section failed.
+- Two `linarith` calls were asked to see through `|·|`.
+- `Real.exp (-12) < 1/32` was asserted with a proof that does not establish it.
+
+## The separation theorem: FALSE, not unfinished
+
+The file's one advertised `sorry` sat in `separation_theorem`, attributed to a missing
+Mathlib eigenvalue API and tracked as open obligation O1 / AXLE issue #12.
+
+Do the math before assuming the label is right. The hypothesis is
+
+```
+IsDm3Stable M  :=  ∀ i ≠ 0, |M i i| ≤ exp (−2)
+```
+
+which constrains the transverse diagonal and says nothing whatever about `M 0 0`. So the
+trace is unbounded. At `n = 1` there is no transverse direction at all, the hypothesis
+holds vacuously, and the 1×1 matrix `(33)` has trace 33. **The deposited theorem is
+false.** That refutation is now itself a proved theorem in the file
+(`v6_separation_statement_is_false`) — the record is worth more than a silent fix.
+
+No eigenvalue API would have closed it. What was missing was a hypothesis, not a lemma.
+
+## And the sixth power had been dropped
+
+Reading the ancestors rather than the label: Book 2 Theorem 12.2, `lean/main_v7.lean`
+Part H, and `AXLE_v6.lean` Part H all state **Tr(M⁶) ≠ 33**. The deposit states
+`M.trace ≠ 33`. The exponent was lost in transcription, leaving a hypothesis about `M`
+and an argument about `M⁶` with nothing joining them.
+
+The numbers say the same thing. The intended bound is `|Tr − 1| < 1` off at most 31
+transverse directions:
+
+| power | per-direction bound | 31 directions | `|Tr − 1| < 1`? |
+|---|---|---|---|
+| first | e⁻² ≈ 0.1353 | ≈ 4.195 | **no** |
+| sixth | e⁻¹² ≈ 6.14·10⁻⁶ | ≈ 1.9·10⁻⁴ | yes, with room |
+
+So the first-power form could never have been proved by the argument attached to it, and
+the sixth-power form needs no eigenvalue API at all once the statement is made about a
+diagonal matrix or about the eigenvalue list — which is where the spectral reduction has
+already been performed.
+
+## What V7 proves
+
+49 theorems, 0 sorry, kernel-checked, no axiom beyond `propext` / `Classical.choice` /
+`Quot.sound`. Nine of them are the new §9:
+
+`exp_neg_two_le` (e⁻² ≤ 1/4, from `1 + 1 ≤ e` alone) · `exp_neg_twelve_le` ·
+`transverse_sum_bound` (the step V6 admitted) · `spectral_trace_ne_33` ·
+`separation_theorem` (diagonal, sixth power) · `separation_trace_first` (first power,
+carrying the normalisation V6 omitted) · `separation_sharp_at_33` · 
+`dm3_hypothesis_nonvacuous` · `v6_separation_statement_is_false`.
+
+The last two are there on purpose. `separation_sharp_at_33` shows the dimension bound is
+load-bearing — at n = 33 the sixth-power trace *is* 33 — so the hypothesis is not an
+UNFALSIFIABLE GUARD. `dm3_hypothesis_nonvacuous` exhibits a witness, so the theorem is
+not vacuously true. Both classes are on this ladder already; both checks now ship with
+the theorem they guard.
+
+The margin, once stated correctly, is not narrow. Under the hypotheses the sixth-power
+trace lies within `31/4096` of 1. It misses 33 by more than 31. That gap **is** the
+dimensional threshold: 33 units of trace need 33 coherent directions, and below 33
+dimensions there are not 33 directions to be had.
+
+## What was withdrawn
+
+Every provenance line of the form *"Source: `X.lean` — 0 sorry"* has been removed from
+the section banners. Those files have not been built either. The claim is restored per
+file as each one goes green — not before.
+
+The §14 banner read *"STATUS: NOT MACHINE-CHECKED beyond this file's own lake build in
+CI."* There was no CI and no lake build. Those nine theorems are now genuinely checked.
+
+## Rule
+
+**A verification artifact that has never been built is not a weak claim, it is a costume.**
+A false theorem can be refuted; an unbuilt file was never put in a form anything could
+refuse, while wearing the word "verified" on the front. The check is one line. Ship the
+runner with the artifact: `vol1-proofs/tools/run.sh` builds, probes every named theorem
+with `#print axioms`, and refuses on `sorryAx` or on any axiom outside the allowlist. It
+is 40 lines and it would have caught this in May.
+
+**And: when a `sorry` carries a reason, the reason is a claim too.** O1 said "Mathlib
+eigenvalue API." Four versions repeated it. It was wrong, and it was wrong in the
+direction that makes it look like someone else's problem — an upstream gap, nothing to do
+here, wait for Mathlib. Doing the math took an afternoon and the API was never involved.
+
+**Still open:** AXLE has no CI at all. 1,165 formalized entries, nothing re-runs any of
+them. This defect is what that costs.
+
+---
+
 # FIXED: `book6/index.html` was hiding 16 finished pages (2026-08-17)
 
 Every other defect logged here is the corpus claiming more than it has. This one was the
