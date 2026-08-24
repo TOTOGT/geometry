@@ -1481,3 +1481,33 @@ python3 tools/build_indexes.py     # 625 files, 31 orphaned, 16 pages written
 ```
 
 The 31 orphans are almost all `_archive/` (23) and are deliberate.
+
+## Errata — 23–24 August 2026
+
+Recorded here, not on the chapter pages. A book carrying its own correction
+apparatus in the body text reads as unreliable to someone who has not been
+following the work, and that cost is real: the reader does not distinguish
+"this desk checks itself" from "this text is full of mistakes." The fixes are
+in the pages. The account of them is here.
+
+| date | file | what changed |
+|---|---|---|
+| 24 Aug 2026 | `ch6-resonant.html` | Correction history. 23 Aug 2026, first pass: this sentence read &ldquo;the separation theorem guarantees&rdquo; and was changed to &ldquo;separation conjecture&rdquo; with a note asserting that no statement of it existed anywhere in this corpus. That note was wrong &mdash; the statement exists in AXLE&rsquo;s Lean and the registry tracks its single open obligation; the search behind it covered only HTML. 24 Aug 2026: corrected to the text above. A mis-correction is a defect of the same family as the one it was trying to repair, and is recorded here rather than quietly reverted. |
+| 24 Aug 2026 | `chLambda-polylaminin.html` | 24 Aug 2026: guarantees was too strong. The theorem carries one scoped sorry (h_transverse, an eigenvalue API gap, AXLE&nbsp;#12), so this chapter&rsquo;s conclusion inherits that obligation. |
+| 24 Aug 2026 | `chLambda-polylaminin.html` | under review 24 Aug 2026 &mdash; the derivation ε₀ = |μ_max|/(2(1+H)) gives 1/2 at H = 1, not 1/3; see G6Crystal.lean |
+| 23 Aug 2026 | `omega/ch-baudhayana.html` | Corrected 23 August 2026: this line previously printed the fraction as &ldquo;$\approx 1.41421356\ldots$&rdquo;, which is the decimal expansion of $\sqrt{2}$ itself, not of $577/408$ &mdash; and contradicted the five-decimal claim in the same sentence. |
+| 23 Aug 2026 | `book4/ch13.html` | Convention fixed 23 Aug 2026. $c = p^{-s}$ with $s\in\mathbb{C}$ is a complex number, and $|c|_p$ has no meaning for it. Everything in this section is to be read in the formal setting: treat $c$ as a $p$-adic variable in the open unit disc of $\mathbb{C}_p$. The ultrametric identities below are correct there and only there. |
+| 23 Aug 2026 | `book4/ch14.html` | attribution corrected 23 Aug 2026 &mdash; this line previously credited Bombieri&ndash;Hejhal, whose 1995 work is on zeros of linear combinations of L-functions, not pair correlation |
+| 23 Aug 2026 | `book4/ch14.html` | corrected 23 Aug 2026: this sentence previously said the Euler product is finite. It is not &mdash; a curve over $\mathbb{F}_q$ has infinitely many closed points, and already $\mathbb{A}^1$ has infinitely many monic irreducibles. |
+| 23 Aug 2026 | `book4/ch11.html` | corrected 23 Aug 2026: this passage previously quoted $\alpha = dy + x\,dx$ and claimed &ldquo;the key was non-integrability, $\alpha\wedge d\alpha \neq 0$&rdquo;. That is wrong twice over &mdash; $\alpha\wedge d\alpha$ is a 3-form and vanishes identically on a 2-plane, and $d(dy + x\,dx) = 0$ in any case. Non-integrability belongs to the 3-space prototype $\alpha = dy - y'\,dx$ on the 1-jet space $J^1(\mathbb{R},\mathbb{R})$, not to the oscillator certificate. |
+| 23 Aug 2026 | `book4/ch11.html` | corrected 23 Aug 2026 &mdash; this previously called for Baker&ndash;W&uuml;stholz at ~80 lines; the argument is elementary and the issue is correspondingly smaller. |
+
+### Not errata — live warnings that stay on the page
+
+`book4/ch11.html` §11.5 and the inherited notices on ch12–14 are **not** in this
+table and must not be moved here. There the body text is *still wrong* and has
+not been rewritten: α_arith = dV − g dU does not annihilate the lifted curve, and
+the chapter still prints it. A reader arriving at that page needs the warning
+before the claim, not after it in a ledger. Those notices come off when the
+log-zeta rewrite lands (audit item M1), and not before.
+
