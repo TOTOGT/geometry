@@ -4,43 +4,210 @@ Dated narrative for defects and audits that are closed. Moved out of
 `CLAUDE.md` on 2026-08-21 so the priming file stays short to read. Nothing
 here was changed, only relocated. Open items remain in `CLAUDE.md`.
 
-# FIXED: the Volume I deposit's Lean file had never been compiled (2026-08-24)
+# EDITORIAL PASS on the Volume I V7 release — six more defects, three of them mine (2026-08-24)
 
-**Class: UNTRUSTED — new.** Then FALSE, then MISATTRIBUTED, in that order, all in the
-same file.
+The V7 release above was handed over, and then read again as an editor rather than
+as its author. That second pass found more than the first, which is the point of it.
 
-`PrincipiaOrthogona1/PrincipiaVol1.lean` is the formal-verification artifact attached to
-the Principia Orthogona Volume I deposit on Zenodo (10.5281/zenodo.19117400). Versions
-3 through 6 of that deposit described it, in the description field and in the file's own
-header, as *"30+ facts proved, 1 sorry (clearly scoped), 0 axioms beyond Mathlib4."*
+## The worst one is mine: V7 was built on the wrong ancestor
 
-AXLE has no CI. Nothing in the repository builds that file. The question "has anyone ever
-run `lake build` on it?" had not been asked.
+**Class: MIS-CORRECTION.** I based the V7 paper on
+`AXLE/a.PolyLaminin/principia_vol1_v2_full.tex` — 1,168 lines, 18 pages, a V2-era
+file. The real paper is `Downloads/files (34)/principia_vol1_v6.tex` — 2,322 lines,
+**42 pages** — and its PDF is byte-identical (md5 `28cd9e46…`) to the
+`principia_vol1_v5_FIXED.pdf` in the same tree. Three filenames, one document.
 
-A small repository was built to ask it — `vol1-proofs`, one file, pinned to the toolchain
-the deposit itself names (Lean v4.14.0, Mathlib v4.14.0 rev 4bbdccd9c5f8). AXLE is too
-large to build for one check; that is why the small repos exist.
+Consequence: I reported that *"the LaTeX source did not compile either; it
+referenced three figures under names that exist nowhere, and the Perelman
+correspondence figure is withdrawn."* **That was false.** The real source uses
+`fig1_phase_portrait`, `fig6_operator_sequence`, `fig5_coherence_bridge`, all three
+present in the deposit, and it compiles clean on the first pass. The figure was
+never missing. The claim is withdrawn from `CHANGES_Vol1.md` and from the commit
+record, and V7 is rebuilt from the correct source (47 pp).
 
-**Result: 81 errors.** The file does not compile, and had never compiled.
+**Rule.** Before correcting an artifact, establish which artifact is current. A
+repository with `_v2_full`, `_v5_FIXED` and `_v6` in three directories does not
+answer that by filename. Hash the PDFs; the deposit's own version history is the
+authority, not the tree.
 
-The faults were mechanical, which is the uncomfortable part — every one of them would have
-been caught by a single build on the day the file was written:
+## The second is also mine: a sharpness claim that witnessed nothing
 
-- `structure Dm3Triple where T_star : ℝ;  mu_max : ℝ;  tau : ℝ` — semicolons are not
-  structure syntax. The structure had exactly **one** field. Every
-  `canonicalTriple.mu_max` and `.tau` in the file was an unknown-field error. Same fault
-  in `RegenerationLevel` and `OrdinalRegenerationLevel`.
-- `@dist _ M.metric x y` passed a `MetricSpace` where a `Dist` was expected.
-- `(0 : Fin n)` with `n` a variable and no `[NeZero n]` — there is no `OfNat` instance.
-- Four Ordinal lemmas invoked under names that do not exist: `Ordinal.IsLimit.add_right`,
-  `Ordinal.lt_add_of_pos_right`, and a cofinality condition written `α.card.ord` where
-  the correct hypothesis is `ℵ₀ < α.cof`.
-- The club-filter chain was built on `Function.iterate` and its three lemmas were not
-  provable in that form.
-- `intManifold.carrier` never unfolded to `ℤ`, so every numeral and every `omega` in the
-  Theorem 5.3 section failed.
-- Two `linarith` calls were asked to see through `|·|`.
-- `Real.exp (-12) < 1/32` was asserted with a proof that does not establish it.
+**Class: MIS-CORRECTION.** V7 shipped `separation_sharp_at_33 : Σ_{i<33} 1⁶ = 33`
+and read it as proof that the hypothesis `n < 33` is load-bearing — explicitly, as
+proof that it is "not an unfalsifiable guard."
+
+It is not a witness for that. Its configuration has every `λᵢ = 1`, which violates
+the theorem's own transverse hypothesis `|λᵢ| ≤ e⁻²` for `i ≠ 0`. Under the actual
+hypothesis, at n = 33 the sixth-power trace is within 32/4096 of **1**, not 33.
+
+Doing the arithmetic properly: the bound is `|Tr − 1| ≤ (n−1)·(1/4)⁶`, so the
+conclusion survives to `n = 131072 = 32·4⁶`. `n < 33` is **sufficient and nowhere
+near necessary**. It is inherited from the dm³ dimensional threshold, not forced by
+this estimate. And it cannot simply be deleted either: with about 1.7·10⁷ transverse
+directions each contracted to exactly `e⁻²`, the trace does exceed 33.
+
+Both facts are now theorems — `spectral_trace_ne_33_upto` and
+`separation_fails_in_high_dimension` — and the misread theorem is renamed
+`coherent_directions_realise_33` with a docstring saying what it does and does not
+show. A warning class the corpus already tracks was, in this instance, produced by
+the person writing the warning.
+
+## ε₀ = 1/3 does not close as printed — new obligation O7
+
+**Class: FALSE.** The headline constant of Volume I. §22, Proof VII, reads:
+
+> ε₀ = |μ_max| / [2(1 + sup‖Hess V‖)] = 2/(2·3) = 1/3, where sup‖Hess V‖ = |L₂| = 3.
+
+Three statements. They cannot all hold.
+
+| | value |
+|---|---|
+| formula at H = 3 | 2/(2·4) = **1/4** |
+| printed arithmetic `2/(2·3)` | corresponds to 1 + H = 3, i.e. **H = 2** |
+| the Lean line `2/(2*(1+2))` | **H = 2** |
+
+So the formula and the Lean agree with each other, and the sentence that names the
+constant disagrees with both. `epsilon0_of_eq_third_iff` proves the choice is
+forced: for H ≥ 0, this formula yields 1/3 for exactly one Hessian bound, H = 2.
+
+This is the same defect the ε₀ audit found in `G6Crystal.lean` in July, surfacing in
+a second place. It is not decided here, because deciding it is a question about
+which Hessian bound enters the Gronwall estimate — `V''(1) = 6`, `|L₂| = 3` — and
+that is physics, not Lean. Logged as **O7** in the deposit and stated in the paper.
+ε₀ = 1/3 is load-bearing corpus-wide; a constant reached by an argument that does
+not close is worth knowing about.
+
+## A physical prediction was reported as machine-checked
+
+**Class: MISATTRIBUTED.** The Factor-of-3 Prediction — gravitational decoherence
+satisfies τ_grav < τ_dec/3, a factor of 3 tighter than the Penrose bound — carried
+the sentence *"This is machine-checked (Lean: `basin_asymmetry`: 1/3 < 4/5)."*
+
+`basin_asymmetry` is an inequality between two rational numbers. It says nothing
+about gravitational decoherence, and no kernel can check a physical prediction. This
+is the NASAGaps defect again — true theorems filed under claims they do not support
+— and it is the one class no machine can catch, because one side of the comparison
+is a sentence in English. Withdrawn; the prediction stands as physical argument,
+which is what it is.
+
+## Two structure fields are weaker than their names
+
+**Class: VACUOUS.** `UnfoldOp.stable_branch` reads
+`∀ x, ∃ n, IsFixedPt (map^[n]) (map x)`. Take n = 0: `f^[0] = id`, and every point
+is a fixed point of the identity. The field is satisfied by **every map on every
+type**. "Theorem D (stability)" therefore has no content beyond Φ-decrease. The V6
+file recorded this in a comment; V7 proves it, so it is a fact a reader can act on
+rather than a remark that can be skipped.
+
+**Class: MISMATCH.** `CompressionOp.contractive` reads `d(fx,fy) ≤ d(x,y)`. That is
+*non-expansive*. The identity satisfies it — and `C_ex`, the deposit's own witness,
+is exactly the identity. Assumption 3 should say "non-expansive"; a contraction
+needs `≤ k·d(x,y)` with `k < 1`, which nothing here requires and nothing uses.
+
+## And a guard that could not fail
+
+**Class: UNFALSIFIABLE GUARD.** §12 ended with
+
+```lean
+def schumann_4th_harmonic_integer : ℕ := 33
+theorem g6_equals_schumann : g6_layer_count_nat = schumann_4th_harmonic_integer := rfl
+```
+
+Both sides are definitions equal to 33. It is `33 = 33`. It was counted among the
+machine-checked facts, and the ledger already records the Schumann identification
+itself as only partly supported — four carriers claimed, two real. Withdrawn rather
+than repaired: a kernel cannot check a claim about the ionosphere, and dressing an
+empirical assertion as `rfl` makes it look verified. The claim moves to prose, where
+it can be argued and challenged.
+
+## Smaller, still real
+
+- **`V(1) + 2 = (q−1)²(q+2)`** (§19). Left side a number, right side a function of
+  q. The Lean is `V q + 2`. Typo, but in a displayed equation labelled
+  "machine-checked".
+- **`1/3 < 4/5 ≈ r*`.** The corpus's canonical inner boundary is
+  `r★ = 0.77594059`; 4/5 = 0.8 is 3% above it, and `≈` reads as an identification.
+  Both comparisons are now theorems, and the text says which number is numerical
+  input rather than proved.
+- **`10.5281/zenodo.19117400` given as the "series root"** in Data and Software
+  Availability. It is the version DOI of Volume I V1 (17 March 2026). The concept
+  DOI is `19117399`.
+- **Counts.** §14 has 12 theorems, not 9; the header block carried two compensating
+  errors that summed to the right total; the status table summed to 48 while
+  claiming 49. Counts are now produced by `tools/counts.py` and never typed.
+
+## Rules
+
+**Compensating errors are the reason to compute totals rather than type them.**
+Two wrong numbers that add to the right one survive every review that checks only
+the sum.
+
+**A second pass by the same author, in a different role, is worth its cost.** The
+first pass fixed 81 compile errors and a false theorem, and shipped a false claim
+about figures and a sharpness claim that witnessed nothing. Neither was caught by
+being careful the first time. Both were caught by reading it back as an editor.
+
+Final state: 58 theorems, 0 sorry, kernel-checked; paper 47 pp rebuilt from the
+correct source; O7 opened.
+
+---
+
+# FIXED: the Volume I deposit's Lean had drifted off its own Mathlib pin (2026-08-24)
+
+**Class: STALE — silent version drift, and the reason CI is not optional.**
+
+`PrincipiaOrthogona1/PrincipiaVol1.lean` is the formal-verification artifact
+attached to the Principia Orthogona Volume I deposit (10.5281/zenodo.19117400).
+V3 through V6 described it as *"30+ facts proved, 1 sorry (clearly scoped), 0
+axioms beyond Mathlib4."*
+
+AXLE has no CI. Nothing in the repository re-runs that file. So the question
+"does it still build against the revision the repo pins?" had not been asked.
+
+A small repository was built to ask it — `vol1-proofs`, one file, pinned to
+Lean v4.14.0 and Mathlib v4.14.0 rev 4bbdccd9c5f8, exactly what
+`lake-manifest.json` names. AXLE is too large to build for one check; that is
+why the small repos exist.
+
+**Result: 81 errors.**
+
+**The first diagnosis of that number was wrong, and is withdrawn.** I recorded
+it as "the file had never been elaborated by Lean." The author's account is
+that these files were run, repeatedly, and the error profile agrees with the
+author and not with me:
+
+| name used in the file | status at the pin | when it changed |
+|---|---|---|
+| `Ordinal.sup`, `Ordinal.lt_sup` | deprecated | 2024-08-27 |
+| `Ordinal.IsLimit.add_right` | renamed `isLimit_add` | 2024-10-11 |
+| `Set.finite_insert` | Mathlib-3 spelling of `Set.Finite.insert` | port-era |
+| `pow_le_pow_left` | deprecated for `pow_le_pow_left₀` | 2024 |
+
+Those are the names of a file written and run when they were current. Sorting
+the 81: 23 proofs that no longer close, 20 missing instances, 15 type
+mismatches, 8 unknown constants — that is Mathlib moving underneath working
+code. Six parse errors and five consequent unknown-field errors are a later
+hand-edit (three structure fields written on one line separated by `;`) that
+was never rebuilt.
+
+So the true finding is narrower than the one I filed, and more useful:
+
+> **The deposit's pin was advanced past its own code, and nothing re-ran the
+> build, so the drift was silent for four published versions.**
+
+That is a tooling failure with a one-line fix, not a claim about anyone's care.
+The file is now at the pin, and `vol1-proofs/tools/run.sh` re-runs it in one
+command.
+
+**Rule.** A pin is a claim, and like any claim it goes stale unless something
+re-checks it. "Compiles under current Mathlib" is not checkable; "compiles
+under rev 4bbdccd9c5f8" is — but only if someone, or something, runs it. Ship
+the runner with the artifact.
+
+**Second rule, learned the hard way here.** When a build fails, read the
+failures before naming the cause. Deprecation dates are in the Mathlib source;
+they distinguish "was never right" from "stopped being right", and those call
+for completely different responses.
 
 ## The separation theorem: FALSE, not unfinished
 
