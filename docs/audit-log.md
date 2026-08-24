@@ -1511,3 +1511,61 @@ the chapter still prints it. A reader arriving at that page needs the warning
 before the claim, not after it in a ledger. Those notices come off when the
 log-zeta rewrite lands (audit item M1), and not before.
 
+
+## M1 closed — 24 August 2026, and a class the ladder did not have
+
+`book4/ch11–14`. The withdrawn kernel claim is repaired and the four withdrawal
+notices are retired. Zero occurrences of the old form remain in the arc.
+
+**What the defect actually was.** Not a wrong theorem. §11.3 defines
+ζ(σ+it) = U + iV — the real and imaginary parts of ζ itself, which is the correct
+picture for the trajectory and for Fig. 11.1. §11.5 then applied the
+Cauchy–Riemann equations *to log ζ* while still writing U and V. Both statements
+are individually true; they are about different coordinate systems wearing the
+same two letters. The relation ∂ₜV = g·∂ₜU is false for ζ-coordinates and the
+correct log-coordinate statement is (∂ₜŨ, ∂ₜṼ) = (−g, −c) with −ζ′/ζ = c − ig.
+
+**The repair** names them apart: Ũ + iṼ = log ζ, kept strictly distinct from
+(U,V); α_arith = c dŨ − g dṼ, verified in one line as c(−g) − g(−c) = 0; §11.6
+carries the Wronskian W = c ∂ₜg − g ∂ₜc; a zero is a plunge Ũ → −∞ rather than an
+axis crossing. ch12–14 updated in body text, in ch13's local factors, and in
+ch14's inventory array — which held the false Cauchy–Riemann justification inside
+a JavaScript string, where no prose read would have found it.
+
+---
+
+### New class · NOTATION COLLISION
+
+> Two distinct objects share a symbol inside one document, and a statement true of
+> one is asserted in the notation of the other. Every sentence is individually
+> defensible. The document is wrong.
+
+**Why the existing classes miss it.** It is not MISMATCH (nothing is filed under
+the wrong claim), not STALE (nothing decayed), not FALSE in the ordinary sense
+(each half is true where it belongs), and not VACUOUS (the statements have
+content). It is a defect of *reference*, not of content.
+
+**Why the instruments miss it.** A kernel cannot see it: each statement
+type-checks in its own coordinate system, and nothing forces the two systems into
+the same context where they would clash. `grep` cannot see it: the symbol is
+spelled identically in both uses — that is the defect. It survives review because
+a reviewer checking any single line finds it correct.
+
+**How this one was found.** By reading the definition of the coordinates against
+the use of the coordinates, four sections apart. That is the same instrument that
+found the five MISATTRIBUTED theorems in NASAGaps: a person holding two parts of
+the document in mind at once. Both classes are undecidable by machine for the same
+reason — the failure is in the correspondence between a symbol and what it denotes,
+and the denotation is not written down anywhere the machine can read it.
+
+**Cheapest available guard.** Not a checker. A convention: *when a document changes
+coordinate system, the new system gets new letters, in the sentence that introduces
+it.* Ch 11 now does this. It costs one sentence and it makes the collision
+impossible to write.
+
+**Where the classes live.** Here, in the log. WP73 carries the four artifact-level
+classes because those are the paper's subject. The rest — UNFALSIFIABLE GUARD,
+MIS-CORRECTION, FABRICATION, NOTATION COLLISION — are recorded in this file and
+not promoted to working papers. A series with a defect paper in it reads like a
+series that needs one.
+
