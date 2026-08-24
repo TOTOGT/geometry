@@ -18,6 +18,7 @@ import Orthogenesis.Architecture.G6Crystal
 #print axioms Orthogenesis.G6Crystal.dm3_epsilon0
 #print axioms Orthogenesis.G6Crystal.epsilon0_of_one
 #print axioms Orthogenesis.G6Crystal.epsilon0_of_two
+#print axioms Orthogenesis.G6Crystal.epsilon0_of_eq_third_iff
 #print axioms Orthogenesis.G6Crystal.epsilon0_of_antitone
 #print axioms Orthogenesis.G6Crystal.dm3_noise_tolerance
 #print axioms Orthogenesis.G6Crystal.dm3_noise_tol_lt_one

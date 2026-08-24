@@ -37,7 +37,22 @@ def mu_max : ℝ := -2
 def tau : ℝ := 2
 
 /-- Stability radius ε₀ = |μ_max| / (2 · (1 + sup‖Hess V‖)).
-    For the dm³ toy model with ‖Hess V‖ = 1: ε₀ = 2 / (2·2) = 1/3. -/
+
+    The value in use is 1/3. By `epsilon0_of_eq_third_iff` the formula attains
+    1/3 at exactly one Hessian bound, and that bound is **2**:
+        |μ_max|/(2(1+H)) = 2/(2(1+H)) = 1/(1+H),  so  1/3 ⟺ H = 2.
+
+    This docstring previously read "for the dm³ toy model with ‖Hess V‖ = 1:
+    ε₀ = 2/(2·2) = 1/3". That arithmetic is wrong — 2/4 = 1/2 — and it stood
+    for the life of the file because `dm3_epsilon0` compared the constant to
+    itself and could not fail. Found 23 Aug 2026 by stating the derivation as a
+    theorem, which returned `⊢ False` on the first build.
+
+    OPEN OBLIGATION, and it is now a single sentence rather than a puzzle:
+    **show that the dm³ toy model has sup‖Hess V‖ = 2.** If it does, everything
+    downstream stands unchanged. If it does not, the formula is not the one the
+    derivation uses — and no third option survives: ε₀ = 1/2 is refuted, since
+    τ·ε₀ would be 1 and `dm3_noise_tol_lt_one` is kernel-checked and passing. -/
 noncomputable def epsilon0 : ℝ := 1 / 3
 
 /-- Noise tolerance τ · ε₀ = 2/3. -/
@@ -103,6 +118,30 @@ theorem epsilon0_of_one : epsilon0_of 1 = 1 / 2 := by
     be for the constant in use to follow from the formula. -/
 theorem epsilon0_of_two : epsilon0_of 2 = epsilon0 := by
   unfold epsilon0_of epsilon0 mu_max; norm_num
+
+/-- **The formula pins the Hessian bound.**  Given ε₀ = |μ_max|/(2(1+H)) with
+    μ_max = −2, the value 1/3 is attained at exactly one H, and that H is 2.
+
+    This converts an open question into a stated obligation. Whatever else is
+    true, ε₀ = 1/3 and this formula together FORCE ‖Hess V‖ = 2 for the dm³ toy
+    model. Either the model has Hessian bound 2 — in which case the docstring's
+    "= 1" is a typo and everything else stands — or the formula is not the one
+    the derivation uses. The corpus cannot distinguish these: both give 1/3 and
+    every downstream theorem is identical under either.
+
+    What IS decided (23 Aug 2026): ε₀ = 1/2 is refuted. It gives τ·ε₀ = 1 and
+    contradicts `dm3_noise_tol_lt_one`, which is kernel-checked and passing. -/
+theorem epsilon0_of_eq_third_iff {H : ℝ} (hH : 0 ≤ H) :
+    epsilon0_of H = 1 / 3 ↔ H = 2 := by
+  unfold epsilon0_of mu_max
+  have hpos : (0 : ℝ) < 2 * (1 + H) := by linarith
+  rw [show |(-2 : ℝ)| = 2 by norm_num]
+  constructor
+  · intro h
+    field_simp at h
+    linarith
+  · rintro rfl
+    norm_num
 
 theorem epsilon0_of_antitone {H₁ H₂ : ℝ} (h₁ : 0 ≤ H₁) (h : H₁ < H₂) :
     epsilon0_of H₂ < epsilon0_of H₁ := by

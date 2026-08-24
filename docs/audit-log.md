@@ -1569,3 +1569,31 @@ MIS-CORRECTION, FABRICATION, NOTATION COLLISION — are recorded in this file an
 not promoted to working papers. A series with a defect paper in it reads like a
 series that needs one.
 
+
+## ε₀ — tested rather than chosen, 24 August 2026
+
+Three candidate resolutions were on the table. Two were eliminated by test, not
+by preference.
+
+**(c) ε₀ = 1/2 — REFUTED.** It gives τ·ε₀ = 1 exactly, contradicting
+`dm3_noise_tol_lt_one : noise_tolerance < 1`, which is kernel-checked and
+passing. That theorem is substantive, not decorative: it is the claim that
+perturbations below 2/3 of the structural amplitude preserve the resonant lock.
+At exactly 1 the claim dies. So (c) is not free — it costs a second theorem.
+
+**(a) H = 2 and (b) a different formula — INDISTINGUISHABLE inside the corpus.**
+Both give ε₀ = 1/3, both give noise tolerance 2/3, both clear the g⁶ relative
+error of 0.0154. No downstream theorem separates them. The corpus cannot decide
+this; only the source of the derivation can.
+
+**What was done instead of choosing.** `epsilon0_of_eq_third_iff` proves
+ε₀(H) = 1/3 ↔ H = 2 — an iff, so it cannot drift. The open question became a
+stated obligation: *show the dm³ toy model has sup‖Hess V‖ = 2.* Kernel-checked
+GREEN, 14 theorems, 24 Aug 2026.
+
+The method is worth keeping separately from the result. When a defect admits
+several repairs, propagate each through the existing theorems before picking one:
+the corpus often eliminates options on its own, and what survives is either a
+single answer or a well-posed question. Choosing first would have looked like
+resolution and produced none.
+
