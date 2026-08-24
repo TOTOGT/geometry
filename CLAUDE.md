@@ -310,6 +310,29 @@ carry live `sorry`s. Disclosed in their headers, so honest — but no kernel pro
 names either file, so both would pass a green build with the proofs admitted.
 That is the July SaturnHexagon hole, still open in two files.
 
+### CI closed the kernel gap — 24 Aug 2026, green
+
+`.github/workflows/verify-proofs.yml` now runs **three** kernel probes covering
+**31 named theorems**: 5 SaturnHexagon, 12 NASA gap-closure, 14 dm³/ε₀. The July
+hole — `lake build` excluding the file and the "axiom check" probing six
+definitions and no theorems — is closed. `tools/verify-dm3/run.sh` runs the same
+dm³ check locally and must stay in step with the YAML: **if you add or rename a
+theorem, update both, and the count in both.**
+
+The dm³ step failed twice before going green, correctly each time: once naming a
+theorem that had been replaced, once after an off-by-one edit. It never reported
+success on a subset. That is the property the old gate lacked.
+
+**`workflow` scope is still missing from the PAT.** Every CI edit needs the GitHub
+web editor; three round trips were spent on this. Fix at
+github.com/settings/tokens — tick `workflow` on the classic token, or set
+Workflows: Read and write on a fine-grained one. The token string does not change.
+
+**Two open, neither urgent.** (1) Show the dm³ toy model has sup‖Hess V‖ = 2 and
+ε₀ is fully closed — `epsilon0_of_eq_third_iff` proves 1/3 admits no other H.
+(2) Audit M8 (Weil explicit formula, careful transcription), M12 and M13 (small;
+strings have drifted since the audit — M12's canonical r* is now 0.77594059).
+
 ### Standing check to run at the START of every session
 
 `git status` in **every** repo on the Desktop, not just the one being worked in.
