@@ -236,3 +236,87 @@ The deposit closes **level 1** of a three-level integrability tower. Level 2
 the same dimension count — there $m = n = 2$ and the inequality $m > n$ fails. If a
 future version of this paper is deposited, saying so explicitly in the abstract would
 prevent the parity overclaim that `ch15` accumulated and that was corrected 2026-08-12.
+
+---
+
+# Record 3 — 10.5281/zenodo.21710763 (WP-35 · Retiring the Advisor)
+
+**Published:** 24 August 2026 · v1.0 · Preprint · CC BY 4.0
+**URL:** <https://zenodo.org/records/21710763>
+**Status: DRAFT — NOT DEPOSITED.** Author's call, house rule 4.
+
+## Why this record matters more than the other two
+
+The other two records inherited the phantom relation from older deposits. **This one
+acquired it on 24 August 2026** — six days after the sweep that is logged as
+`FIXED: 19117399 mislabelled as a series DOI (2026-08-18)` in `docs/audit-log.md`.
+
+The defect is therefore not a residue. It **reproduces at deposit time**, from a
+metadata template that no auditor in this repository can see. `tools/audit.py` reads
+HTML in the working tree; `tools/claims.py` reads HTML in the working tree. Zenodo's
+metadata form is outside the audited boundary, so the corpus can be clean and the
+published record still wrong. Any claim that the series-DOI defect is "fixed" is
+scoped to the repository and must say so.
+
+## Field 1 — Related works — **RULED 2026-08-24: NO CHANGE (author)**
+
+```
+Is part of · 10.5281/zenodo.19117399 · DOI
+```
+
+**Author's ruling: leave it.** The paper states its series membership on its face
+("Principia Orthogona · Vol VI · Roots"), and that is where a reader meets it.
+
+Recorded for accuracy, not as a pending action: WP-35 **is** part of the series — the
+`Is part of` *relation* is correct. What 19117399 denotes is Vol I specifically, not
+the series, and there is no series-level DOI to point at instead (the series-level
+pointer is the Zenodo community, which is not a DOI and cannot go in this field).
+So the alternatives were: this identifier, or no relation at all. The author chose
+this one. Rule 4 — amending a published record is the author's call.
+
+An accurate relation, if one is ever wanted, is
+`Continues · 10.5281/zenodo.21561818` (WP-32's concept DOI). Not required.
+
+## Field 2 — Keywords (currently empty)
+
+```
+forced urgency gap; housing financialization; municipal policy; institutional
+ownership; eviction; insurance non-renewal; short-term rentals; loss aversion;
+identification; Newark
+```
+
+## Field 3 — Version string
+
+Currently `v1.0 · July 2026`. Zenodo formulates the citation from this field; a
+semver string is preferred. Use `1.0`. The date belongs in the Dates field, not here.
+
+## Field 4 — Additional description (type: Notes)
+
+The paper's claims are tagged inline and the tags are load-bearing. A reader who does
+not have the legend cannot use them. Paste:
+
+```
+Claim tags used throughout: DATA (observed) · MODEL (derived in-framework) ·
+OPEN (not yet established) · VALUE PREMISE (explicit normative choice) ·
+ASSUMPTION (planning figure, not forecast). Twelve claims in this paper are
+tagged OPEN and are not asserted.
+```
+
+## Known divergence — deposited file vs. repository
+
+The deposited `wp35-retiring-the-advisor.html` contains, in its footer:
+
+```
+Series DOI <a href="https://doi.org/Zenodo community">Zenodo community</a>
+```
+
+a malformed `doi.org` href produced by the 2026-08-18 sweep, which replaced the link
+**text** and left the **target** standing. Fixed in the repository 2026-08-24 and now
+guarded by rule `DOI-MALFORMED` in `tools/claims.py`. The deposited copy still carries
+it. Correcting it requires a new version of the record (file changes cannot be made by
+metadata edit); the metadata fixes above do **not**.
+
+## Unchanged — verified correct, do not edit
+
+- Title, author, CC BY 4.0, resource type Preprint, publication date
+- `WP35RetiringtheAdvisor.pdf` (318.4 kB) — 10 pp, 43 numbered sources, claim tags intact

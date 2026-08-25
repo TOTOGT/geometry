@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-78 · The Seam and the Boundary — Principia Orthogona Vol VI</title>
+<meta name="description" content="WP-78 · The Seam and the Boundary: what an audit cannot see. A one-corpus case study in which a logged fix created a new defect, two auditors each had a good reason not to look at it, and the same defect reproduced outside the audited tree.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+/* nav */
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav span{color:#918a76}
+.topnav .crumbs{color:#8f8878}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+/* head */
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.05rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.metagrid a{color:var(--accent2)}
+.doi{display:inline-block;margin-top:1rem;font-family:var(--mono);font-size:.72rem;background:#eaf0f6;border:1px solid #b3c6d6;padding:.25rem .6rem;color:var(--accent2);text-decoration:none}
+.doi:hover{background:var(--paper2)}
+/* body */
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.6rem 0 .3rem}
+h2{font-size:1.42rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.05rem;font-weight:600;color:var(--ink2);margin:1.6rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.02rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.2rem 1.4rem;font-style:italic;margin-bottom:1.4rem}
+/* claim tags */
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-value{background:#f7ecd6;color:#7a5410;border:1px solid #ddc48c}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+/* boxes */
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.1rem 1.3rem;margin:1.4rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.9rem 1.2rem;margin:1.2rem 0;overflow-x:auto;color:var(--accent2)}
+/* table */
+table{width:100%;border-collapse:collapse;margin:1.3rem 0;font-size:.86rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+td.mono{font-family:var(--mono);font-size:.78rem}
+tr:hover td{background:var(--paper2)}
+/* chain */
+.chain{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin:1.3rem 0}
+@media(max-width:620px){.chain{grid-template-columns:1fr 1fr}}
+.op{padding:.9rem .7rem;color:#fff;text-align:center}
+.op b{display:block;font-family:var(--mono);font-size:1.5rem}
+.op i{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.11em;text-transform:uppercase;font-style:normal;opacity:.85;margin:.15rem 0 .35rem}
+.op span{font-size:.76rem;line-height:1.4;font-style:italic;opacity:.94}
+.op1{background:#17435f}.op2{background:#7a3410}.op3{background:#2f5c33}.op4{background:#16564a}
+/* refs */
+ol.refs{padding-left:1.4rem;font-size:.84rem;line-height:1.62}
+ol.refs li{margin-bottom:.45rem}
+ol.refs a{color:var(--accent2)}
+/* footer */
+footer{background:var(--ink2);color:#8f8878;padding:2.4rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+</style>
+
+<style>
+.t-closed{background:#dfe9df;color:#2f5c33;border:1px solid #a9c8a8;text-decoration:none}
+.reg td{vertical-align:top}
+.reg .n{font-family:var(--mono);font-size:.62rem;color:var(--dim);white-space:nowrap}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.tl{font-family:var(--mono);font-size:.72rem;line-height:1.75;background:var(--paper2);border:1px solid var(--rule);padding:1rem 1.2rem;margin:1.2rem 0;overflow-x:auto}
+.tl b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="topnav">
+  <span class="crumbs"><a href="../index.html">⚜ PRINCIPIA ORTHOGONA</a> · <a href="index.html">Vol VI · Roots</a> · WP-78</span>
+  <span class="meta"><a href="wp29-numerology-sweep.html">← WP-29 · Numerology Sweep</a> · <a href="wp30-how-to-audit.html">WP-30 · How to Audit</a> · <a href="wp31-calibration-pipeline.html">WP-31 · Calibration Pipeline</a></span>
+</div>
+
+<div class="wp-head">
+  <div class="wp-kicker">Vol VI · Roots · WP-78 · Method &amp; Verification · Draft</div>
+  <h1>The Seam and the <em>Boundary</em></h1>
+  <div class="subtitle">What an audit cannot see — a one-corpus case study in identifier hygiene</div>
+  <div class="metagrid">
+    <div><strong>Author</strong>Pablo Nogueira Grossi<br>G6 LLC · Newark, NJ</div>
+    <div><strong>Method lineage</strong>WP-29 · WP-30 · WP-31<br>Audit standard, applied reflexively</div>
+    <div><strong>Status</strong>Working paper · v0.1 · August 2026<br>Not peer-reviewed · not deposited</div>
+    <div><strong>Evidence base</strong>One corpus, 640 HTML files<br>Two auditors, one deposit</div>
+    <div><strong>Tooling</strong><code>tools/audit.py</code> · <code>tools/claims.py</code><br>Both in-repo, both public</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<p class="lede">A corpus that audits its own claims still has a shape it cannot see. On 24 August 2026
+this one produced, in a single afternoon, four instances of the same identifier defect — one of
+them <em>created by the fix</em> logged as having corrected it, one invisible to both auditors for
+structural reasons each of them was right to have, one that survived the sweep untouched, and one
+that reproduced six days later outside the tree either auditor reads. This paper reports them as a
+case study and draws the general form: an audit's coverage is not what it checks. It is what it
+checks, minus the seams between its tools, minus everything outside the tree it reads.</p>
+
+<div class="taglegend">
+  <span><span class="tag t-data">DATA</span> observed in this corpus</span>
+  <span><span class="tag t-model">MODEL</span> derived in-framework</span>
+  <span><span class="tag t-open">OPEN</span> not yet established</span>
+  <span><span class="tag t-closed">CLOSED</span> was open; resolved, with the date</span>
+  <span><span class="tag t-value">VALUE PREMISE</span> explicit normative choice</span>
+</div>
+
+<div class="box">
+  <span class="lab">Scope, stated first</span>
+  <p>This is <b>n = 1</b>. One corpus, one author, one toolchain, one afternoon. Nothing here is a
+  frequency claim about audits in general, and no measurement is offered of how often these failures
+  occur elsewhere. What the case supports is an <em>existence</em> claim — that these failure modes
+  are real, are reachable by ordinary competent practice, and are structurally invisible rather than
+  merely overlooked — and a proposed discipline that follows from it.
+  <span class="tag t-value">VALUE PREMISE</span> We hold that a method paper whose evidence is its
+  author's own mistakes is worth more than one whose evidence is hypothetical.</p>
+</div>
+
+<div class="eyebrow">§ 1 · The defect</div>
+<h2>One identifier, mislabelled</h2>
+
+<p>The corpus deposits its volumes on Zenodo. Zenodo issues two kinds of DOI: a <b>version DOI</b>,
+which pins one deposited state forever, and a <b>concept DOI</b>, which resolves to whichever version
+was deposited most recently. For some years this corpus mislabelled
+<code>10.5281/zenodo.19117399</code> as a <b>“Series DOI”</b> — a phantom identifier that has
+since been withdrawn from the corpus, and which is quoted here only as the object of study.
+<span class="tag t-data">DATA</span></p>
+
+<p>That is wrong twice over. 19117399 is the concept DOI of <em>Principia Orthogona, Volume I</em> —
+one book, not the series. And a concept DOI pins nothing even for that book: cite it today and cite it
+next year and you may be citing different documents. There is no series-level DOI. The series-level
+pointer is a Zenodo <em>community</em>, which is not a DOI and cannot occupy a DOI field.
+<span class="tag t-model">MODEL</span></p>
+
+<p>On <b>18 August 2026</b> a sweep corrected this. The audit log records the result precisely:
+<em>“23 labels changed across 16 files, plus 2 in <code>AMonster/monsterlaw.html</code>. ‘Series DOI’,
+‘Series Root’, ‘Zenodo series’, ‘DOI (series)’ → ‘Vol I concept DOI’ / ‘Vol I on Zenodo’.”</em> The
+entry is headed <code>FIXED</code>. <span class="tag t-data">DATA</span></p>
+
+<p>It was not fixed. What follows is what a re-audit found six days later.</p>
+
+<div class="eyebrow">§ 2 · Failure one</div>
+<h2>The fix that made a new defect</h2>
+
+<p>The sweep was a find/replace on the <em>displayed text</em> of the link. In three files the
+displayed text sat inside an anchor whose <code>href</code> was built from the identifier, and the
+replacement changed the text while leaving the target standing. The result, live in three published
+working papers: <span class="tag t-data">DATA</span></p>
+
+<div class="eq">&lt;a href=&quot;https://doi.org/Zenodo community&quot;&gt;Zenodo community&lt;/a&gt;</div>
+
+<p>A <code>doi.org</code> URL whose path is the phrase <i>Zenodo community</i>. It resolves to nothing.
+It renders as a perfectly ordinary blue link that a reader will click and a crawler will follow. And
+its text now reads correctly — which is precisely what made it survive: anyone re-reading the page to
+check the sweep would see the right words.</p>
+
+<div class="gap">
+  <span class="lab">The general form</span>
+  <p>A correction applied to a <b>representation</b> of an identifier does not correct the
+  <b>identifier</b>. Link text and link target are two representations of one claim, and a sweep that
+  edits one and not the other converts a <em>visible wrong claim</em> into an <em>invisible broken
+  one</em>. The second is worse: the first was legible to any reader, and the second is legible only
+  to a machine that follows the link — and, as §4 shows, no machine in this corpus was following it.
+  <span class="tag t-model">MODEL</span></p>
+</div>
+
+<div class="eyebrow">§ 3 · Failure two</div>
+<h2>The file the sweep never reached</h2>
+
+<p>A fourth file, <code>ch-ocio.html</code>, carried the original mislabelling entirely unmutated —
+<code>&lt;a href=&quot;…zenodo.19117399&quot;&gt;Series DOI ↗&lt;/a&gt;</code>, the withdrawn label still
+live — through the sweep and out the other side. <span class="tag t-data">DATA</span></p>
+
+<div class="box">
+  <span class="lab">Observed while writing this section</span>
+  <p>The sentence above originally described the defect in neutral analytical vocabulary —
+  <i>“carried the original defect entirely unmutated”</i> — and <code>claims.py</code> flagged the
+  paper for asserting the very label it was documenting. The suppression that exists for exactly this
+  case works by keyword proximity, and <em>defect</em>, <em>unmutated</em> and <em>survived</em> are
+  not among its markers. The tool was right to be suspicious and wrong about this instance, and the
+  fix was to write <i>mislabelling</i> and <i>withdrawn</i> into the prose, which is more accurate
+  anyway. Recorded because it is §4's seam one level up: a heuristic tuned to catch a corpus
+  documenting its own defects has its own blind spot, and the blind spot is neutral description.
+  <span class="tag t-data">DATA</span></p>
+</div>
+
+<p>This is the ordinary failure and the least interesting one: a sweep enumerated its targets and the
+enumeration was short. It is worth reporting only because of what it does to the log entry. “23 labels
+changed across 16 files” is <em>true</em>. It is a faithful account of what the sweep did. It is not
+an account of what the corpus contains, and the word <code>FIXED</code> at the head of the entry
+silently converts the first into the second.</p>
+
+<div class="box thm">
+  <span class="lab">Proposition 1 — the scope of a fix log</span>
+  <p>An audit-log entry records a <b>sweep</b>, not a <b>corpus</b>. “<i>n</i> instances changed in
+  <i>m</i> files” is a statement about the actor; “the defect is gone” is a statement about the world,
+  and only a re-run of a detector that can see the defect establishes it. An entry that reports the
+  first under a heading that asserts the second is a category error, and it is the most comfortable
+  error in the practice, because it is written in the moment of greatest confidence.
+  <span class="tag t-model">MODEL</span></p>
+  <p><b>Consequence.</b> A fix entry should close with the detector that verified it, or state that
+  none exists. If none exists, the fix is unverified by construction and the entry should say so.</p>
+</div>
+
+<div class="eyebrow">§ 4 · Failure three</div>
+<h2>The seam between two auditors</h2>
+
+<p>This corpus carries two audit tools, deliberately split. <code>tools/audit.py</code> checks
+<b>structure</b>: tags balance, files close, internal links and anchors resolve.
+<code>tools/claims.py</code> checks <b>assertion</b>: that a DOI quoted beside a title resolves to
+that title, that withdrawn claims are gone, that status claims have not decayed. The split has a
+documented origin — <code>audit.py</code> certified a book clean while a chapter in it attributed
+Volume I's DOI to a different work, because a correctly-formed DOI pointing at the wrong record is
+invisible to a structural auditor. <span class="tag t-data">DATA</span></p>
+
+<p>Neither tool could see <code>doi.org/Zenodo community</code>. Both had a good reason.</p>
+
+<div class="tbl-wrap"><table>
+<caption>Why each auditor was right not to look</caption>
+<thead><tr><th>Auditor</th><th>What it does with this link</th><th>Why that is correct</th></tr></thead>
+<tbody>
+<tr><td><code>audit.py</code></td><td>Skips it — external URL</td><td>A structural auditor that fetched every outbound link would be a crawler, slow and network-dependent. Not fetching external URLs is the right design.</td></tr>
+<tr><td><code>claims.py</code></td><td>Skips it — not DOI-shaped</td><td>Its DOI rules work by <em>resolving the identifier and comparing the result to the surrounding text</em>. <code>Zenodo community</code> is not a DOI, so there is no record to fetch and nothing to compare. The rule cannot fire on a string it cannot look up.</td></tr>
+</tbody></table></div>
+
+<div class="gap">
+  <span class="lab">The seam</span>
+  <p>The defect was not missed through negligence. It fell into the gap between two correct scopes:
+  <b>too external for the structural tool, too malformed for the semantic one.</b> The semantic
+  auditor's entire method — resolve, then compare — presupposes a resolvable identifier, so the one
+  input it structurally cannot handle is an identifier broken badly enough not to be one.
+  <span class="tag t-model">MODEL</span></p>
+  <p>Generalised: <b>a validator that works by dereferencing is blind to inputs too damaged to
+  dereference.</b> Every such tool needs a well-formedness check standing in front of it, because the
+  failure mode it is least able to see is the one nearest to hand.</p>
+</div>
+
+<h3>The rule that closes it</h3>
+
+<p>Added to <code>claims.py</code> on 24 August 2026 as <code>DOI-MALFORMED</code>: any
+<code>href</code> on <code>doi.org</code> whose path does not match <code>10.\d{4,9}/\S+</code>. It
+requires no network, resolves nothing, and takes one regular expression.
+<span class="tag t-data">DATA</span> It flags all three mutations, plus the empty
+<code>doi.org/</code> and the tutorial placeholder <code>doi.org/[your DOI]</code>; it passes real
+DOIs and the <code>dx.doi.org</code> host. Corpus clean on the rule as of 24 August.
+<span class="tag t-closed">CLOSED</span> 2026-08-24</p>
+
+<div class="box">
+  <span class="lab">A note on where the reason lives</span>
+  <p>The rule's docstring in <code>claims.py</code> records the sweep that produced the defect, the
+  two auditors that could not see it, and the six days it was live. This is the house pattern: every
+  rule carries the incident that caused it. A rule without its origin is a rule that a future
+  maintainer will delete as noise, and the deletion will look like cleanup.
+  <span class="tag t-value">VALUE PREMISE</span></p>
+</div>
+
+<div class="eyebrow">§ 5 · Failure four</div>
+<h2>Outside the audited boundary</h2>
+
+<p>The strongest finding is the last. On <b>24 August 2026</b> — six days after the sweep — a new
+deposit went to Zenodo. Its metadata carried the same identifier, in the same wrong role:
+<code>Is part of · 10.5281/zenodo.19117399</code>, which asserts that a Volume VI working paper is
+part of Volume I. <span class="tag t-data">DATA</span></p>
+
+<p>Both auditors were clean on the file. Both auditors read HTML in the working tree. The deposit
+form is not in the working tree. So the defect did not survive the sweep — it <b>reproduced</b>,
+from a metadata template that no tool in the repository can reach, into a public record indexed by
+OpenAIRE, where a reader meets it before ever seeing the corpus.</p>
+
+<div class="box thm">
+  <span class="lab">Proposition 2 — the audited boundary</span>
+  <p>Let <b>T</b> be the tree an auditor reads and <b>P</b> the set of artefacts the project
+  publishes. Every claim in <b>P \ T</b> is unaudited <em>by construction</em>, and no amount of
+  cleanliness on <b>T</b> constrains it. A corpus can be certified clean and its public record still
+  carry the exact defect the certificate is about. <span class="tag t-model">MODEL</span></p>
+  <p><b>Consequence.</b> Any statement that a defect is "fixed" is implicitly scoped to <b>T</b> and
+  must name that scope. For this corpus: identifier claims in deposited metadata, in the three
+  sibling sites off-domain, and in the GitHub repository descriptions are all in <b>P \ T</b>. At
+  least one of them — an off-domain hub still labelling 19117399 a "Series DOI" — is known and
+  unfixed. <span class="tag t-open">OPEN</span></p>
+</div>
+
+<div class="eyebrow">§ 6 · Timeline</div>
+<h2>Six days, four mutations</h2>
+
+<div class="tl">
+<b>2026-08-18</b>  Sweep runs. 23 labels, 16 files. Logged <code>FIXED</code>.
+             ├── 3 files: link text corrected, href left → <b>new defect created</b>
+             ├── 1 file (ch-ocio): not enumerated → <b>original defect survives</b>
+             └── ~52 files: correctly repaired
+<b>2026-08-18 → 24</b>  Defect live. audit.py clean (external URL, skipped).
+                  claims.py clean (not DOI-shaped, unresolvable).
+<b>2026-08-24</b>  WP-35 deposited. HTML file <b>containing the broken href</b> attached
+             to the record. Metadata form independently supplies
+             <code>Is part of · 19117399</code> → <b>defect reproduces outside T</b>.
+<b>2026-08-24</b>  Re-audit. 4 files repaired. <code>DOI-MALFORMED</code> added to claims.py.
+             Deposited copy still carries it — file changes need a new version.
+</div>
+
+<div class="eyebrow">§ 7 · The tracker</div>
+<h2>A promise with nothing to return to</h2>
+
+<p>This corpus tags its claims inline: <span class="tag t-data">DATA</span> for the observed,
+<span class="tag t-model">MODEL</span> for the derived, <span class="tag t-open">OPEN</span> for what
+is not yet established. The discipline is real and it is unusual — most writing states its claims at
+one confidence level and lets the reader guess.</p>
+
+<p>As of 24 August 2026 the corpus carries <b>68 <span class="tag t-open">OPEN</span> tags across 21
+files</b>. <span class="tag t-data">DATA</span> None is numbered. None is dated. None records what
+would close it. And the legend has no closed state — an <span class="tag t-open">OPEN</span> item that
+gets resolved has nowhere to become resolved, so it stays on the page looking unresolved forever,
+indistinguishable from one nobody has touched.</p>
+
+<div class="gap">
+  <span class="lab">The general form</span>
+  <p>An <span class="tag t-open">OPEN</span> tag is a <b>promise to return</b>. A register is the
+  thing you return <em>to</em>. Without identity — a number, a date, a stated closing condition — the
+  tag marks honesty at the moment of writing and provides no mechanism for that honesty to be
+  redeemed. It is a commitment made in a system with no way to record its discharge.
+  <span class="tag t-model">MODEL</span></p>
+</div>
+
+<h3>Proposed: the register is generated, not maintained</h3>
+
+<p>The tags are already in the markup. A hand-maintained register would immediately drift from them —
+which is the same class of error as the audit log entry in §3, a record of an action standing in for a
+state. The register should therefore be <em>harvested</em>: a rule in <code>claims.py</code> that
+walks every <code>OPEN</code> tag, emits file, line, the sentence it governs, and the file's
+last-modified date, and reports the whole set on every run.</p>
+
+<div class="tbl-wrap"><table class="reg">
+<caption>Minimum fields for an open-claim register</caption>
+<thead><tr><th>Field</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td class="n">id</td><td>Stable handle so another paper can cite the open item rather than restate it.</td></tr>
+<tr><td class="n">opened</td><td>An open claim with no age cannot be triaged. Age is the signal.</td></tr>
+<tr><td class="n">closes-when</td><td>The condition that would discharge it. An open item with no stated closing condition is not open — it is vague, and should be rewritten or dropped.</td></tr>
+<tr><td class="n">status</td><td><span class="tag t-open">OPEN</span> / <span class="tag t-closed">CLOSED</span> + date. The state the current legend lacks.</td></tr>
+</tbody></table></div>
+
+<p>This paper adopts the <span class="tag t-closed">CLOSED</span> tag in its own legend, and uses it
+once, in §4. That is the whole of the demonstration.</p>
+
+<div class="eyebrow">§ 8 · What follows</div>
+<h2>The method, stated generally</h2>
+
+<div class="box thm">
+  <span class="lab">The four propositions</span>
+  <p><b>1 · Representations.</b> Correcting one representation of an identifier does not correct the
+  identifier. Sweeps must target the claim, not its rendering — and a sweep that improves what a
+  reader sees while breaking what a machine follows has made the defect harder to find, not easier.</p>
+  <p><b>2 · Logs.</b> An audit-log entry records a sweep, not a corpus. It should close with the
+  detector that verified it, or state that none exists.</p>
+  <p><b>3 · Seams.</b> Tools with correct, complementary scopes have a gap between them, and defects
+  live there. In particular, any validator that works by dereferencing is blind to inputs too damaged
+  to dereference, and needs a well-formedness gate in front of it.</p>
+  <p><b>4 · Boundaries.</b> Everything the project publishes but does not read is unaudited by
+  construction. "Fixed" is always scoped to the tree, and must name it.</p>
+</div>
+
+<p>Read together these are one claim: <b>the coverage of an audit is not the set of things it
+checks.</b> It is that set, less the seams between the tools, less everything outside the tree they
+read. Both subtractions are invisible from inside — a clean run reports what the tools examined, and
+says nothing about what no tool was positioned to examine. The only thing that surfaces either one is
+a defect that escapes and is caught downstream, which is what happened here.
+<span class="tag t-model">MODEL</span></p>
+
+<div class="box warn">
+  <span class="lab">What would falsify the general form</span>
+  <p>(1) If the three link mutations turn out to be detectable by an off-the-shelf HTML link checker
+  that any project would ordinarily run, then §4's "seam" is not a seam but a missing standard tool,
+  and the proposition weakens to an argument for using one. <span class="tag t-open">OPEN</span> —
+  not tested here.</p>
+  <p>(2) If deposit-time metadata can in fact be pulled into the audited tree — Zenodo exposes record
+  metadata through an API — then <b>P \ T</b> is not a structural boundary for this class of artefact
+  but an unimplemented feature, and Proposition 4 narrows accordingly.
+  <span class="tag t-open">OPEN</span> — the right next build, and it would have caught the 24 August
+  reproduction on the day it happened.</p>
+  <p>(3) If a second corpus, audited the same way, shows none of these four modes, the existence claim
+  survives but its generality does not. <span class="tag t-open">OPEN</span></p>
+</div>
+
+<div class="eyebrow">§ 9 · Corpus</div>
+<h2>Relation to the series</h2>
+
+<p><b>Method lineage.</b> <a href="wp29-numerology-sweep.html">WP-29</a> and
+<a href="wp30-how-to-audit.html">WP-30 · How to Audit</a> established the audit standard this corpus holds
+itself to; this paper applies that standard to the audit apparatus itself, which is the one target
+the earlier papers could not take. <a href="wp31-calibration-pipeline.html">WP-31 · The Calibration
+Pipeline</a> governs the move from a claim to a checkable function of data; the register proposed in
+§7 is that move applied to claim status. <b>Tooling.</b> <code>tools/audit.py</code> and
+<code>tools/claims.py</code> are in the repository and are the evidence for every
+<span class="tag t-data">DATA</span> tag above; the <code>DOI-MALFORMED</code> rule and its docstring
+can be read there. <b>Case material.</b> The deposit discussed in §5 is
+<a href="wp35-retiring-the-advisor.html">WP-35 · Retiring the Advisor</a>
+(doi:10.5281/zenodo.21710763); the metadata corrections drafted against it and two earlier records are
+in <code>book6/ZENODO-metadata-corrections.md</code>, undeposited, because amending a published record
+is the author's call.</p>
+
+<p>This paper contains no formal results. Its contribution is a set of four negative propositions
+about verification practice, each grounded in a defect this corpus produced, and a proposal for making
+the open-claim tags redeemable.</p>
+
+</div>
+
+<footer>
+  <div style="margin-bottom:.7rem"><a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" aria-label="G6 LLC — grossi-ops"><img src="g6-mark.svg" alt="G6 LLC" width="40" height="46" style="height:44px;width:auto;vertical-align:middle;display:inline-block;border:0"></a></div>
+  <div class="fwrap">
+    <div>
+      <strong style="color:var(--gold2)">WP-78 · The Seam and the Boundary</strong><br>
+      Principia Orthogona · Vol VI · Roots<br>
+      <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> · Pablo Nogueira Grossi · Newark NJ · 2026<br>
+      ORCID 0009-0000-6496-2186 · <a href="mailto:g6llc@proton.me">g6llc@proton.me</a><br>
+      Series <a href="https://zenodo.org/communities/principia-orthogona">Zenodo community</a> ·
+      Not yet deposited
+    </div>
+    <div class="disc">
+      <strong style="color:var(--gold2)">Disclaimer</strong><br>
+      Independent working paper; not peer-reviewed. The case study is a single corpus and no frequency
+      claim is made from it. CC BY 4.0 · © 2026 Pablo Nogueira Grossi — G6 LLC.
+    </div>
+  </div>
+</footer>
+</body>
+</html>

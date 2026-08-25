@@ -101,61 +101,181 @@ earlier: do the work, release the fruit. Tag `[CONJECTURE]` for structural kinsh
 
 ## Read first: Lean and CI verification state
 
-Updated 2026-08-21 from CI runs #222 to #224. This section is the current
-answer. Do not re-derive it from the tree; update it when a run changes it.
+Updated **2026-08-25**. This section is the current answer. Do not re-derive it
+from the tree; update it when a run changes it. Every number below was measured
+on the date shown, not inherited from a header comment.
 
-**Scope of the green badge.** `.github/workflows/verify-proofs.yml` on `main`
-runs `lake build`, and `lakefile.lean` declares
-`@[default_target] lean_lib Orthogenesis`. Green means every module reachable
-from `Orthogenesis.lean` compiled. It does not mean that every `.lean` file in
-the tree compiled: root-level `SaturnHexagon.lean`, `NASAGaps.lean` and
-`Coverage.lean` are not build targets and the job never touches them. It does
-not mean any theorem is non-vacuous, and it does not mean the tree is free of
-`sorry`. The `grep` steps for `theorem` and `sorry` are textual and
-informational; they cannot tell a proof from a comment and must not gate
-anything.
+**What the green badge now covers.** `.github/workflows/verify-proofs.yml`
+builds and then gates. `lakefile.lean` declares two default targets,
+`lean_lib Orthogenesis` and `lean_lib SaturnHexagon`. The job runs
+`tools/axiom_gate.py` three times — on 5 SaturnHexagon theorems, 12 NASAGaps,
+14 G6Crystal — so **31 theorems in this repo are kernel-checked**, each
+reporting `[propext, Classical.choice, Quot.sound]` and no `sorryAx`. Those
+three gate steps are the only steps permitted to decide the job.
 
-**Proved, with provenance.** Run #222, branch `verify-hardening`, Lean
-**v4.32.0**, 2026-08-21: `SaturnHexagon` built and the kernel reported, for each
-of `gate_commutes_onsite`, `angCoupling_not_commute`, `rot_commutes_coupling`,
-`hex_rotation_invariant` and `hex_coupling_uniform`:
-`depends on axioms: [propext, Classical.choice, Quot.sound]`. No `sorryAx`.
-Those five are genuinely proved. Header comments claiming KERNEL-VERIFIED under
-v4.14.0 predate this and are stale. A header comment is not evidence -- quote
-the run.
+**What it still does not cover.** Green does not mean every `.lean` in the tree
+compiled — root-level `NASAGaps.lean`, `Coverage.lean`, `CollatzDescent.lean`,
+`FoldCentralCharge.lean`, `SmokeBox.lean` and `AMonster/*.lean` are in no
+target and the job never touches them. Green does not mean the tree is
+sorry-free. And green does not mean any theorem **asserts** anything — see the
+vacuity gap below, which is the largest open hole in this repo's verification.
 
-**Open failures.** As of run #229 (branch `verify-hardening`, commit c7d082d)
-the only file that still fails is `Orthogenesis/Architecture/Coverage.lean`.
-Its bad import of `Mathlib.Data.Int.Order` was removed, the body then elaborated
-for the first time, and that exposed what the import error had been hiding:
-`hexRing_card` is admitted -- its successor case is `sorry` -- and
-`coord_coverage` is nothing but a call to it. **`coord_coverage` is therefore
-not proved and must not be cited as proved anywhere in the corpus.** The rest of
-the file fails too: unknown constant `Nat.eq_or_gt_of_le` (73:10), four `⟨...⟩`
-elaboration failures at 46 to 53, and failing `omega` and `rewrite` steps at 142
-to 143 inside `Colony.no_coord_collision`. `Orthogenesis.lean` imports Coverage,
-so the library as a whole still does not build.
+**The `sorry` inventory, measured 2026-08-25** (comments and docstrings
+stripped; grep alone over-counts badly, because these files discuss `sorry` at
+length in their headers):
 
-Closed on the branch in runs #226 to #229, each checked by the kernel:
-`hexNeighbors_nodup` (HexGrid), `Colony.expand_mono` and `Colony.expandN_mono`
-(Colony), and the `stage_bound` application in NASAGaps, which was applied to
-one argument too few. NASAGaps now compiles.
+| Where | Count | In a build target? |
+|---|---|---|
+| `Orthogenesis/Architecture/MagneticLattice.lean:240` | 1 | **yes** — M2 incommensurate aperiodicity, disclosed in-file |
+| `Orthogenesis/Architecture/SeismicLattice.lean:211` | 1 | **yes** — Q2 response-spectrum detuning, disclosed in-file |
+| `CollatzDescent.lean` | 2 | no target |
+| `Coverage.lean` (ROOT copy) | 1 | no target |
+| `AMonster/GenerativeWeave.lean` | 1 | no target |
 
-Separately, `MagneticLattice.lean:240` and `SeismicLattice.lean:201` both use
-`sorry`, so the package is not sorry-free and no document should say that it is.
+Six total, two of them visible to the build. No document should say the package
+is sorry-free.
 
-**Traps.** Several files exist both at the repo root and under
-`Orthogenesis/Architecture/`; only the latter are built, so edits to a root copy
-never reach CI. `~/Desktop/orthogenesis` has `.lake/packages/mathlib` fetched
-and `~/Desktop/geometry` does not; the toolchains also differ (v4.32.0 against
-v4.33.0-rc1). Builds must run in a tree that has mathlib, or in CI. Hardened
-workflow changes belong on `verify-hardening`, where the files they probe exist;
-on `main` they fail for missing files, which is a red badge that means nothing.
-That happened in cab0768 and was reverted by 7f112c9.
+`Orthogenesis/Architecture/Coverage.lean` is **clean and building** as of this
+date, and `Orthogenesis.lean` imports it. The 2026-08-21 note recording
+`hexRing_card` as admitted and `coord_coverage` as unproved described the root
+copy and is superseded; the surviving `sorry` at `Coverage.lean:92` is in the
+untargeted root file.
+
+**How to count `sorry` correctly.** Lean writes ``declaration uses `sorry` ``
+with **backticks**. A grep written `declaration uses 'sorry'` with straight
+quotes matches nothing and prints `0`, which reads as clean. That false
+negative was produced on 2026-08-25 and believed until the build log two lines
+above it was read. Use `grep -c 'declaration uses'` with no quoting around
+sorry, and cross-check against a comment-stripped source scan.
+
+### The vacuity gap — the one instrument this repo does not have
+
+`#print axioms` certifies that a proof establishes its stated proposition. It
+has nothing to say about whether the proposition asserts anything. This corpus
+has shipped four vacuous or near-vacuous claims that a kernel check passed:
+
+- `g6_equals_schumann : g6_layer_count_nat = schumann_4th_harmonic_integer := rfl`
+  — both sides are `def … := 33`. It is `33 = 33` and cannot fail. Withdrawn in
+  Vol I V7. A kernel cannot check a claim about the ionosphere.
+- `basin_asymmetry` was cited as machine-checking the Factor-of-3 gravitational
+  decoherence prediction. It is `1/3 < 4/5`, an inequality between rationals.
+- `NASAGaps.lean` carried `: True := trivial` and `∀ x ∈ S, x ∈ S := id`.
+  Deleted 2026-08. The second shape is the one a `: True` sweep misses.
+- `UnfoldOp.stable_branch` is satisfied by `n = 0` for every map on every type,
+  so "Theorem D (stability)" has no content beyond Φ-decrease.
+
+**A working detector exists and is not in this repo.** `vacuity.lean` in the
+Vol I bundle defines `#vacuity_scan` (flags trivially inhabited conclusions:
+`True`, `∃ _, True`, and conjunctions of those, after `whnf` — so it sees
+through definitions, which a grep for the token `True` cannot) and
+`#unused_param_scan` (Prop-definitions that never mention an explicit
+argument — true of every subject). It ships with `vacuity_fixtures.lean`,
+five deliberate vacuous specimens and one honest control, so the instrument is
+checked before its verdict counts. It runs in `vol1-proofs` and returned
+`flagged=0` over 82 theorems.
+
+The scan is prefix-driven, so porting it here is a probe file plus one CI step:
+`#vacuity_scan "Orthogenesis."`. Until that runs, **this repo's 31 theorems are
+kernel-checked and unverified for content**, and `nasa_gap_closure_summary` —
+a summary theorem in the file that carried the two tautologies — is where to
+point it first.
+
+### Cross-repo verification tally, 2026-08-25
+
+| Repo | Kernel-checked under a green gate | Vacuity-scanned |
+|---|---|---|
+| `vol1-proofs` | **82** (PrincipiaVol1 58 + AutophagyDm3 24) | **yes — 0 flagged** |
+| `geometry` (this repo) | **31** (SaturnHexagon 5 + NASAGaps 12 + G6Crystal 14) | no |
+| `io` | **16** (Theorem53 + CatGT) | no |
+| **Total** | **129** | **82** |
+
+The defensible public claim is **82 real, 129 kernel-checked**. Saying 129 real
+would be the same overclaim the corpus has already corrected four times.
+
+`io` runs "Verify proofs" on every push to `main` — 57 green runs as of this
+date — and is where Theorem 5.3 is kernel-checked in a small repo. `vol1-proofs`
+gained a real gate on 2026-08-24; before that its only workflow was
+`pages-build-deployment`, which compiles no Lean, so the Vol I deposit's
+published reproduction recipe (`git clone`, `bash tools/run.sh`) produced
+`no configuration file with a supported extension` for as long as V7 had been
+public.
+
+**Traps.**
+
+- Several files exist both at the repo root and under
+  `Orthogenesis/Architecture/` (`NASAGaps.lean`, `Coverage.lean`). Only the
+  latter are built. Edits to a root copy never reach CI, and the two copies
+  have already diverged — the root `Coverage.lean` still carries a `sorry` the
+  built copy does not.
+- A `.lean` file that is not a build target is checked by nothing, however
+  green the badge. `SaturnHexagon.lean` sat outside every target for a month
+  while its own header asserted it had been kernel-verified and three of its
+  five theorems were admitted. Declaring it a target is what made a regression
+  fail the job rather than pass unnoticed.
+- Header comments are not evidence. Seven pages still cite Mathlib
+  **v4.33.0-rc1** (`wp35`, `wp66`, `wp73` ×3, `research-status.html`) while
+  `lean-toolchain` pins **v4.32.0**. Quote the run, not the header.
+- `~/Desktop/orthogenesis` has `.lake/packages/mathlib` fetched and
+  `~/Desktop/geometry` does not. Builds must run in a tree that has mathlib, or
+  in CI.
+- **Do not run `git` through the Cowork device bridge.** It cannot delete
+  files, so `git status` leaves a `.git/index.lock` that the bridge cannot
+  remove and that blocks every later git command in that clone. This happened
+  in `geometry` (three times) and in `io-clone` (once).
+- **Read `git log --oneline -1` before generating any file for a repo, not
+  after.** On 2026-08-25 a correction was built against a `vol1-proofs` HEAD
+  that was one commit stale and would have left `AutophagyDm3_v2.lean` in the
+  tree with no target building it — the `SaturnHexagon` failure, regenerated.
+  It was caught only because an unrelated `git rm` failed.
+
+### Audit tooling — what each tool can and cannot see
+
+`tools/audit.py` checks **structure** (tags balance, files close, internal
+links and anchors resolve). `tools/claims.py` checks **assertion** (a DOI
+quoted beside a title resolves to that title; withdrawn claims are gone; status
+claims have not decayed). The split is deliberate and documented in each file.
+
+Changes landed 2026-08-25:
+
+- `audit.py` **rule 6**, WP numbering: `wp_number_collision` (scoped
+  per-directory — cross-directory pairs like the `wp56` book6/book7 case are
+  legitimate), `wp_self_mismatch` (filename number against footer self-claim),
+  and `wp_above_max` (informational; `book7/ch-hamilton.html`'s two references
+  to WP81 are a deliberate forward reference to Vol VIII, not a defect).
+- `claims.py` **`DOI-MALFORMED`**: any `href` on `doi.org` whose path is not
+  `10.\d{4,9}/\S+`. Origin: the 2026-08-18 "series DOI" sweep replaced the link
+  **text** and left the **target**, producing
+  `href="https://doi.org/Zenodo community"` in `wp35`, `wp36` and `wp37` — live
+  for six days and shipped inside a Zenodo deposit. Invisible to both auditors:
+  `audit.py` skips external URLs by design, and `claims.py`'s DOI rules work by
+  resolving an identifier, so the one input they cannot handle is an identifier
+  too broken to be one. A validator that dereferences needs a well-formedness
+  gate in front of it.
+- `claims.py` **negative-cache fix**: `.doi-cache.json` persisted failures, so
+  a record queried before publication was cached as a permanent 404 and the
+  live record was reported dead forever. Failures are no longer written and a
+  cached error no longer short-circuits a fresh lookup. Two poisoned entries
+  purged. A failed lookup is a fact about one moment on one network; only a
+  success is a fact about the world.
+- `claims.py` cannot reach the Zenodo API from the Cowork device bridge (egress
+  403). Run it `--offline` there.
+
+Open audit findings: one genuine `wp_number_collision` (`wp30-how-to-audit` and
+`wp30-the-missing-anchor`, same directory), one `dead_anchor`
+(`book4/ladder-polynomials.html:442` → `ch11.html#correction-m1`, which does not
+exist), and one `dead_link` inside `.lake/packages/` that is vendored and should
+probably be excluded by adding `.lake` to `SKIP_DIRS`.
+
+**The general rule this section exists to enforce.** An audit's coverage is not
+the set of things it checks. It is that set, less the seams between its tools,
+less everything outside the tree they read. Both subtractions are invisible from
+inside: a clean run reports what the tools examined and says nothing about what
+no tool was positioned to examine. `book6/wp78-the-seam-and-the-boundary.html`
+is the write-up.
 
 **Working economy.** This file is long. Read this section, then only the
 section covering the file you are about to touch. Do not page a whole Actions
-log -- read the failing step. Prefer targeted reads to whole-file reads.
+log — read the failing step. Prefer targeted reads to whole-file reads.
 
 ---
 

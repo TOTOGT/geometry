@@ -25,6 +25,21 @@ missed a real defect during the Aug-2026 sweeps. Do not "simplify" them:
    That is what found HVEH/index and omega-point-v2-draft.
 5. ...but doctypes inside JS template literals are not defects (impa-portal.html
    emits a page from a backtick string). Ignore matches inside <script>.
+6. WORKING-PAPER NUMBERS fail in two directions and neither survives `ls`.
+   Too low: wp73-dnls-d6-ring was written against a stale memory of the highest
+   number and collided with wp73-the-stamp-and-the-triple, which already existed.
+   Too high: a session claimed the next free number was 81 when the maximum was
+   75 — right shape, right magnitude, no referent, the same failure as an
+   asserted DOI. And a third: wp71's footer identified it as "Working Paper 54",
+   copied from the file it was drafted from. All three are mechanical to detect
+   and none is visible to a tag-balance or link check, because every file
+   involved is perfectly well-formed.
+   Two false positives shaped these rules on first run. book6/wp56 and
+   book7/wp56 are NOT a collision — numbering is per-volume, so 6a compares
+   within a directory only. And "Vol VIII begins at WP81" is a legitimate plan,
+   not a dangling reference, so 6c is informational: it names forward references
+   so a later session cannot mistake one for the next free number, which is
+   exactly what happened.
 """
 import os, re, sys, json, html
 from collections import defaultdict
@@ -45,6 +60,28 @@ for dp, dns, fns in os.walk(ROOT):
         d = os.path.dirname(rel)
         while d:
             DIRS.add(d); d = os.path.dirname(d)
+
+# ---- working-paper index (rule 6) -------------------------------------------
+# Built from filenames only. _archive and _to_delete are excluded: a superseded
+# copy parked there must not count as a live claim on its number.
+WP_RE = re.compile(r'(?:^|/)wp(\d+)[-.]', re.I)
+WP_FILES = defaultdict(list)
+for _rel in ALL_FILES:
+    if _rel.startswith(('_archive/', '_to_delete/')):
+        continue
+    _m = WP_RE.search(_rel)
+    if _m and _rel.lower().endswith(('.html', '.htm')):
+        WP_FILES[int(_m.group(1))].append(_rel)
+WP_MAX = max(WP_FILES) if WP_FILES else 0
+
+# A file's own claim about which paper it is. Deliberately NOT every mention of
+# a WP number — a paper legitimately cites its neighbours. Only the two places
+# a document names itself: the provenance block and the footer byline.
+WP_SELF = re.compile(r'Working Paper\s*(\d+)|<strong>WP[-\s]?(\d+)</strong>', re.I)
+
+# A prose reference to a number ABOVE the highest that exists. Cannot false-fire
+# on a cross-reference to a real paper, because those are all <= WP_MAX.
+WP_CITE = re.compile(r'\bWP[-\s]?(\d{1,3})\b')
 
 COMMENT = re.compile(r'<!--.*?-->', re.S)
 PRE = re.compile(r'<(pre|code)\b.*?</\1\s*>', re.S | re.I)   # Lean docstrings legitimately use **bold**
@@ -105,6 +142,17 @@ def audit(targets):
                     files.append(os.path.relpath(os.path.join(dp, f), ROOT))
     files = sorted(set(files))
     F = defaultdict(list)
+
+    # rule 6a — two live files claiming the same working-paper number.
+    scanned = set(files)
+    for n, paths in sorted(WP_FILES.items()):
+        bydir = defaultdict(list)
+        for p in paths:
+            bydir[os.path.dirname(p)].append(p)
+        for d, ps in sorted(bydir.items()):
+            if len(ps) > 1 and any(p in scanned for p in ps):
+                F['wp_number_collision'].append([n, sorted(ps)])
+
     for rel in files:
         raw = open(os.path.join(ROOT, rel), encoding='utf-8', errors='replace').read()
         body = strip_noncontent(raw)
@@ -148,6 +196,25 @@ def audit(targets):
                 stack.pop()
             else: F['stray_close'].append([rel, name, line(m.start())])
         for n, pos in stack: F['unclosed_tag'].append([rel, n, line(pos)])
+
+        # rule 6b — the file's own claim about which paper it is.
+        _fm = WP_RE.search('/' + rel)
+        if _fm:
+            _n = int(_fm.group(1))
+            _foot = body[body.rfind('<footer'):] if '<footer' in body else body[-4000:]
+            _claims = {int(a or b) for a, b in WP_SELF.findall(_foot)}
+            for _c in sorted(_claims - {_n}):
+                F['wp_self_mismatch'].append([rel, _n, _c])
+
+        # rule 6c — a WP cited above the highest that exists. INFORMATIONAL, not
+        # a defect: book7/ch-hamilton legitimately says "Vol VIII begins at WP81",
+        # a plan, not a claim about a file. What it catches is the reading error —
+        # a later session took that forward reference for the next free number and
+        # wrote 81 when the maximum was 75. The number to trust is max(WP_FILES)+1.
+        for _m in WP_CITE.finditer(strip_code(body)):
+            _c = int(_m.group(1))
+            if _c > WP_MAX:
+                F['wp_above_max'].append([rel, _c, line(_m.start())])
 
         prose = strip_code(body)                      # benign class 1
         for m in re.finditer(r'\*\*[^*\n]{1,80}\*\*|<strong>[^<]*\*\*', prose):

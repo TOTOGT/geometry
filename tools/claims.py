@@ -39,6 +39,17 @@ FORECAST    A projection stated as fact. Origin: "will collide in 4.5 billion
 ISBN        An ISBN not in the canonical registry. Origin: unallocated 5-6
             reserve printed in two Book 8 footers.
 
+DOI-MALFORMED
+            An href on doi.org/ whose path is not a DOI. Origin: the 2026-08-18
+            "series DOI" sweep find/replaced the DISPLAYED TEXT of the link and
+            left the href wrapper standing, producing
+            `<a href="https://doi.org/Zenodo community">` in wp35, wp36 and wp37.
+            Structural audit skips it (external URL, never fetched); DOI-TITLE
+            and DOI-ALIAS skip it (the path is not DOI-shaped, so there is no
+            record to resolve). It was invisible to both auditors for six days
+            and shipped inside a Zenodo deposit. A fix that edits link text
+            without editing the target is the failure mode this rule exists for.
+
 CONFLICT    Merge artifacts committed as content: *-REMOTE.html, *-LOCAL.html,
             *-BACKUP.html, or conflict markers in the body. Origin: thirteen
             _archive/book7/*-REMOTE.html files, which are reachable link
@@ -58,6 +69,7 @@ Usage
 import argparse
 import datetime as _dt
 import html as _html
+import io
 import json
 import os
 import re
@@ -194,16 +206,29 @@ def load_cache():
 
 
 def save_cache(c):
-    with open(CACHE, "w", encoding="utf-8") as fh:
-        json.dump(c, fh, indent=1, sort_keys=True)
+    """Persist successful lookups only.
+
+    Negative results are deliberately NOT written. A cached failure records
+    "we asked once and it was not there" and then reports it forever as "it
+    is not there" — the two are different claims, and the cache was silently
+    converting the first into the second. Found 2026-08-25: record 21710763
+    was queried before it was published, cached as a permanent 404, and the
+    tool went on reporting the live record as dead. A failed lookup is a fact
+    about one moment on one network; only a success is a fact about the world.
+    """
+    json.dump({k: v for k, v in c.items()
+               if not (isinstance(v, dict) and "__error__" in v)},
+              io.open(CACHE, "w", encoding="utf-8"), indent=1, sort_keys=True)
 
 
 def resolve(rec_id, cache, offline):
     """Return the Zenodo record title for a record id, or None."""
-    if rec_id in cache:
-        return cache[rec_id]
+    hit = cache.get(rec_id)
+    if hit is not None and not (isinstance(hit, dict) and "__error__" in hit):
+        return hit
     if offline:
-        return None
+        return hit  # may be a stale error from a pre-publication query
+    
     url = "https://zenodo.org/api/records/%s" % rec_id
     try:
         with urllib.request.urlopen(url, timeout=25) as r:
@@ -295,6 +320,16 @@ def scan(path, src, cache, offline, findings):
             mtime = _dt.date.fromtimestamp(os.path.getmtime(path)).isoformat()
             add("PENDING", line_of(src, m.start()),
                 "%s  (file last touched %s)" % (m.group(0).strip(), mtime), why)
+
+    # --- DOI-MALFORMED
+    for m in re.finditer(r'href="https?://(?:dx\.)?doi\.org/([^"]*)"', src, re.I):
+        target = _html.unescape(m.group(1)).strip()
+        if not re.fullmatch(r"10\.\d{4,9}/\S+", target):
+            add("DOI-MALFORMED", line_of(src, m.start()),
+                "doi.org href is not a DOI: %r" % target,
+                "the 2026-08-18 sweep replaced link text and left the href, "
+                "producing doi.org/Zenodo%20community in three published papers",
+                pos=m.start())
 
     # --- ISBN
     for m in re.finditer(r"ISBN[^0-9]{0,12}((?:97[89][- ]?)?[\d][\d\- ]{8,15}[\dXx])", src):
@@ -410,8 +445,8 @@ def main():
         keep = {r.upper() for r in args.rule}
         findings = [f for f in findings if f["rule"] in keep]
 
-    order = ["DOI-ALIAS", "DOI-DEAD", "WITHDRAWN", "CONFLICT", "DOI-TITLE",
-             "FORECAST", "ISBN", "PENDING"]
+    order = ["DOI-ALIAS", "DOI-DEAD", "DOI-MALFORMED", "WITHDRAWN", "CONFLICT",
+             "DOI-TITLE", "FORECAST", "ISBN", "PENDING"]
     findings.sort(key=lambda f: (order.index(f["rule"]) if f["rule"] in order else 99,
                                  f["file"], f["line"]))
 
