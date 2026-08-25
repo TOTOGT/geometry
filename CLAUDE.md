@@ -1384,3 +1384,9 @@ and the buy button are the problem, not the ISBN. Either way it is a commercial 
 
 Dated narrative for closed defects and audits moved to `docs/audit-log.md`
 on 2026-08-21. Nothing was changed, only relocated. Open items stayed here.
+
+## Session 2026-08-25
+- WP-Preemie added to AXLE/AULA/day-by-day/ — dm3 prematurity mapping, four bio domains
+- Anchor: AutophagyDm3_v2.lean, 24 theorems, no sorry, no True conclusions
+- Open Lean: [LEAN-NEEDED-1] surfactant CRNT deficiency, [LEAN-NEEDED-2] thymic selection
+- to_delete/ policy: errors are evidence, nothing deleted directly
