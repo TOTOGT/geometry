@@ -1932,3 +1932,57 @@ separation-theorem mis-correction the day before. Computing the E₈ invariants
 first showed every number the corpus asserts about E₈ is correct; only the
 *placement* was wrong. Absence of a proof file is not absence of a fact.
 
+
+---
+
+## 2026-08-26 · Volume II: the verification table described a file nobody built
+
+`vol2-contact.html` was serving **Version 2a** while the deposit stood at V4
+(doi:10.5281/zenodo.21148424, July 2026), and the V4 record's own "read it here"
+link points at that page. So the canonical URL served the Contact Hopf value
+γ* = e^(z₀) that V4 exists to correct, and claimed *"Inner basin formal proof
+closed — Project 1080"* on the same page where the Open Problems section called
+that obligation open. Its DOI badge read `20755436`, which is V3's.
+
+**Appendix A named twelve declarations; six had never existed.** `thm_B_mu_iff_tau`
+and `thm_C_A1_surjective` — both in the *proved* column — plus
+`thm_gronwall_asymmetry`, `eigenvalue_limit_filter`, `thm_A_contact_realization`
+and `thm_B_full_chain` return nothing anywhere in AXLE. The cited path
+`AXLE/lean/VolumeTwo.lean` 404s; the file is at
+`AXLE/PrincipiaOrthogona_v2/VolumeTwo.lean`, with a byte-identical second copy
+under `NASA/MoonBase/AXLE_lean_files/`.
+
+**Why it could drift that far: the file was in no lakefile target.** Nothing had
+ever elaborated it. Its first build reported eight errors, three of them in
+theorems the table listed as proved — including `eigenvalue_neg_pos_z`, whose
+proof the page displayed verbatim as its worked example and which used
+`Real.exp_lt_one_of_neg`, not a Mathlib constant. AXLE has no CI at all, which
+is worth stating plainly: the repository the papers name as "the companion formal
+verification repository" has never run an automated check.
+
+Fixed in AXLE, verified at v4.14.0, 14/14 on
+`[propext, Classical.choice, Quot.sound]`. Three findings the axiom gate cannot
+see, and which the corrected table therefore states in words:
+
+- **Theorem A's conclusion is `True`**, not a `sorry`. A `sorry` fails a kernel
+  gate; `True := by trivial` passes one. The published row read `sorry ★★★★`.
+- **Theorem B's biconditional is proved from assumptions on both sides** —
+  `sys.mu_neg` is a field of `DM3System`, so `μ_max < 0` is assumed at
+  declaration, and both branches discard the incoming hypothesis.
+- **Theorem C is a surjection, not a bijection.** Four bifurcations onto three
+  Whitney types, two-to-one on A₁. §5 states this correctly while the abstract,
+  Theorem C and the Lean name all said "bijective."
+
+Also withdrawn: integrability Levels 2d and 2d+t, whose "dΩ = 0" hypothesis was
+`∀ X Y Z, (0:ℝ) = 0` — a tautology, so the axiom field asserted its own
+conclusion. Recorded as OP4/OP5 rather than restated as `sorry`s, because
+N_J needs Lie brackets of vector fields and cannot be written in a pointwise
+model at all. Level 1 is genuinely proved and stands.
+
+**Method note.** This is the third claim-about-Lean in two days written from
+intention rather than from the artifact — after the `vol2-toymodel.html` badges
+naming declarations absent from `geometry`, and `tools/verify-dm3/probe_dm3.lean`
+naming thirteen ToyModel declarations without importing the module. Each got a
+local repair; none produced a check. The rule that would have caught all three
+does not exist in any CLAUDE.md: *every declaration named in prose must resolve,
+at the path cited.*
