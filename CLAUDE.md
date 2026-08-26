@@ -759,13 +759,140 @@ recur in any link checker written for this repo:
 Titles are unescaped from `<title>` and re-escaped exactly once; the original double-escaped
 them, rendering a literal `&middot;` on every affected row.
 
+## Duplicate pages — declared, or a finding
+
+Added 2026-08-25. **Run `python3 tools/duplicates.py` before creating any page,
+and after moving one.**
+
+### The cause, stated plainly
+
+Sessions run out of context and continue on another account. The next session
+does not always see what the previous one left, or it continues and writes into
+a different folder. Nothing looks wrong when it happens — two copies of a page
+behave identically until somebody edits one. After that the corpus has two
+answers and no record of which is current, and neither page mentions the other.
+
+`book7/ch-curie.html` and `book7/chcurie.html` reached **516 lines apart** that
+way. Same title. One linked from the Book 7 hub, series-hub and `ch-ada`; the
+other from `master-index`, `ch-pasteur` and `ch-metchnikoff`. The newer copy
+decomposed a `sorry` the older left opaque — γ = 1 → γ = 6/5 (U→C→K→F) →
+γ ≈ 1.24 — so which text a reader got depended on which page they arrived from.
+Merged 2026-08-25; `chcurie.html` is now a redirect that records why.
+
+The sweep that found it found **32 more**. The whole `HVEH/` ↔ `book4/` chapter
+set — `ch02`, `ch06b`, `ch07`, `ch08`, `ch09`, `chHALO`, `ch-build-2river` — is
+one directory copied once with both copies edited since; five of the seven have
+drifted apart.
+
+### What this file already said, and why it was not enough
+
+The **File indexes** section above records that `ch-tatiana.html` and
+`ch6-resonance.html` each exist twice and instructs the crawler to *"resolve by
+path, not basename."* That is a workaround for the duplication, not a fix, and
+it made the crawler correct while leaving the corpus wrong. **What NOT to do**
+separately forbids merging `ch7-topological-orthogenesis.html` and
+`ch8-nested-infinities.html`, which are intentional alternate editions.
+
+So both facts were known and neither was actionable: nothing prevented a new
+duplicate, and nothing distinguished an intended pair from an accident. Reading
+the two rules together, a future session could conclude either that duplication
+is normal here or that it is forbidden, and both readings are wrong.
+
+### The rule
+
+**One page, one home, unless the pair is declared.** Declared groups live in
+`tools/duplicate_ledger.txt`, append-only with a reason, in the same style as
+`KNOWN_PLACEHOLDERS.txt`. `tools/duplicates.py` fails on any undeclared group.
+
+Adding a line to the ledger is a decision that **both copies are maintained**.
+If that is not true, merge and leave a redirect — the Curie shape. A redirect
+stub is not counted as a copy, because it has no paragraphs of its own.
+
+Before creating a page, check that its title is not already taken. Before
+moving one, check what links to the old path. Both are one command.
+
+### Before trusting the similarity number
+
+The first version of this sweep used 8-gram shingles across the whole document.
+It reported **2%** similarity for two files that are **100%** identical
+paragraph for paragraph. Written up as it stood, sixteen pure duplicates would
+have been presented as unrelated pages that happen to share a title, and every
+one of them would have been left in place.
+
+It was caught only because the Curie pair had already been compared by hand, so
+there was a known answer to check the metric against. `duplicates.py` therefore
+runs `--self-test` on four synthetic cases with hand-computed answers *before*
+it reports anything, and refuses to continue if the metric is wrong.
+
+**An instrument with no known-answer case is not known to work.** That is the
+same rule the axiom gate, the conclusion scan and `vendor_check.py` follow, and
+this is the fourth place it has paid for itself.
+
+### The churn this doctrine causes, and the limit on it
+
+"Recomputed, not remembered" is the right rule and it has a failure mode that
+produces the very drift it exists to prevent.
+
+Verification is cheap for a **claim** and expensive for an **instrument**. A
+session that will not trust a recorded count and recomputes it costs a command.
+A session that will not trust a recorded *tool* and rebuilds it costs a second
+tool — and now there are two, they will diverge, and neither knows about the
+other. The doctrine, read carelessly, licenses exactly that.
+
+Both halves have to be said, because only one of them was:
+
+- **Claims are recomputed, never inherited.** Counts, statuses, link validity,
+  sorry totals, theorem totals, "fixed" — every one of these decays, and a
+  figure in prose is a claim about a moment, not about the world.
+- **Instruments are reused, never rebuilt.** An instrument is checked against
+  its fixtures. If it passes, use it. If it fails, fix *it* — do not write a
+  second one beside it. Before writing any tool, grep `tools/` for one that
+  already does the job.
+
+Two specimens from 2026-08-25, both the assistant's:
+
+- Asked whether any Prop-definition ignores an argument, it wrote a textual
+  regex scanner — which over-matched, reported `V` as taking 37 explicit
+  arguments including one named `-2`, and answered a question that
+  `#unused_param_scan` already answered correctly. A broken second instrument
+  built next to a working first one, while explaining why not to.
+- It generated a corrected `lakefile.toml`, `probe.lean` and `run.sh` for
+  `vol1-proofs` against a HEAD one commit stale, and nearly committed a
+  configuration that would have left `AutophagyDm3_v2.lean` in the tree with no
+  target building it. Caught by an unrelated `git rm` failing, not by judgment.
+
+The cheap guard for the second: **`git log --oneline -1` before generating any
+file for a repository, not after.** The cheap guard for the first: search before
+you build.
+
+### Working through the backlog
+
+The 32 groups split three ways, and only the third needs judgment:
+
+- **Pure duplicates (≥ 90 %)** — identical content, two or three homes. Pick
+  the home matching the naming convention, redirect the others, repoint
+  inbound links, regenerate indexes.
+- **Diverged (40–90 %)** — real edits on both sides. Compare paragraph sets,
+  establish which is the refinement, merge as with Curie.
+- **Same title, different content** — the title is wrong on one of them, not
+  the file. Retitle rather than merge.
+
+Do not batch these. Each is a decision about which text is current, and the
+Curie case shows the answer is not always the larger file or the newer mtime.
+
 ## What NOT to do
 
 - Do not hand-edit `master-index.html` or `index-*.html` — regenerate them
 - Do not add a print ISBN to Book 3 / Vol III pages
 - Do not create a `book5/` directory without user instruction
 - Do not merge or deduplicate the shadow pages (ch7-topological-orthogenesis.html,
-  ch8-nested-infinities.html) — they are intentional alternate editions
+  ch8-nested-infinities.html) — they are intentional alternate editions, and they
+  are declared as such in `tools/duplicate_ledger.txt`
+- Do not create a page without running `python3 tools/duplicates.py` first — 32
+  undeclared duplicate groups exist as of 2026-08-25 and the mechanism that made
+  them (a session continuing on another account, in another folder) is still live
+- Do not write a new tool when `tools/` has one for the job. Claims are recomputed;
+  instruments are reused. Rebuilding an instrument is how a second one appears
 - Do not mark AXLE theorems as "✓ Lean 4" without the "(under SH)" caveat
   if they depend on the Structural Hypothesis (SH)
 - Do not use Cormorant Garamond in book4 pages — it has no math glyph coverage

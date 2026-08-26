@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>George Dantzig · Book 7: Scientist Gallery · Principia Orthogona</title>
+<meta name="description" content="Chapter D · George Dantzig: two problems on a blackboard, the simplex method, duality with von Neumann, Klee-Minty, degeneracy as a fold, and what a feasible region costs. Book 7, Scientist Gallery.">
+<script>MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --void:#04040a; --surface:#0c0d14; --card:#10111c;
+  --gold:#c9a84c; --gold2:#e8d49a;
+  --escher:#2a9d8f;        /* Dutch graphic teal/verdigris */
+  --escher2:#4ec1b0;
+  --escher3:#a8e6dd;
+  --graphite:#9a9a9d;       /* pencil */
+  --parchment:#e8dec5;      /* drawing-paper warm */
+  --text:#e8e4d8; --dim:#6b6757; --dim2:#9a9485;
+  --rule:rgba(201,168,76,0.14);
+  --rule-e:rgba(42,157,143,0.30);
+  --op-c:#60a5fa; --op-k:#a78bfa; --op-f:#f472b6; --op-u:#34d399;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:Georgia,serif;background:var(--void);color:var(--text);
+     font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased;}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,.96);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);
+    padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:.6rem;}
+.nav-logo{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.28em;
+          text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;flex-wrap:wrap;}
+.nav-links a{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.1em;
+             color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+
+/* HERO */
+.hero{padding:5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);
+      position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;
+              background:radial-gradient(ellipse 60% 50% at 50% 30%,
+                rgba(42,157,143,.08) 0%,transparent 70%);pointer-events:none;}
+.hero-eyebrow{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.35em;
+              text-transform:uppercase;color:var(--escher);border:1px solid currentColor;
+              padding:.2rem .7rem;display:inline-block;margin-bottom:2rem;position:relative;}
+.op-chain{font-family:'Courier New',monospace;font-size:.75rem;letter-spacing:.15em;
+          margin-bottom:1.8rem;display:flex;justify-content:center;gap:.7rem;flex-wrap:wrap;
+          position:relative;}
+.op-dot{display:inline-block;padding:.2rem .7rem;border-radius:2px;border:1px solid currentColor;}
+.op-c{color:var(--op-c);border-color:var(--op-c);}
+.op-k{color:var(--op-k);border-color:var(--op-k);}
+.op-f{color:var(--op-f);border-color:var(--op-f);}
+.op-u{color:var(--op-u);border-color:var(--op-u);}
+.op-active{background:rgba(42,157,143,.15)!important;color:var(--escher2)!important;
+           border-color:var(--escher2)!important;}
+.hero h1{font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;color:var(--gold);
+         letter-spacing:.03em;margin:.8rem 0 .5rem;line-height:1.1;position:relative;}
+.hero h1 em{color:var(--escher2);font-style:italic;}
+.hero-sub{font-size:1.05rem;color:var(--dim2);font-style:italic;max-width:640px;
+          margin:.8rem auto 1.5rem;position:relative;line-height:1.7;}
+.value{font-family:'Courier New',monospace;font-size:.78rem;letter-spacing:.12em;
+       color:rgba(42,157,143,.7);margin-top:1.4rem;position:relative;}
+
+/* PAGE */
+.page{max-width:800px;margin:0 auto;padding:4rem 2rem 5rem;}
+h2{font-size:1.15rem;font-weight:400;color:var(--gold);letter-spacing:.1em;
+   text-transform:uppercase;margin:3.5rem 0 1.2rem;padding-bottom:.4rem;
+   border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;
+   align-items:baseline;}
+h2 .sec-no{color:var(--escher);font-size:.85em;font-family:'Courier New',monospace;}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;}
+p{margin-bottom:1.1rem;}
+em{color:var(--gold2);font-style:italic;}
+strong{color:var(--gold2);}
+
+.lead{font-style:italic;font-size:1.08rem;color:var(--parchment);
+      max-width:640px;margin:1rem 0 2rem;line-height:1.7;}
+
+/* Work block — one per Escher print */
+.work{margin:2.4rem 0;padding:1.6rem 1.8rem;background:var(--card);
+      border:1px solid var(--rule-e);border-left:3px solid var(--escher);
+      border-radius:4px;}
+.work-head{display:flex;justify-content:space-between;align-items:baseline;
+           flex-wrap:wrap;gap:.8rem;border-bottom:1px dashed rgba(42,157,143,.18);
+           padding-bottom:.7rem;margin-bottom:.9rem;}
+.work-title{font-size:1.15rem;font-weight:600;color:var(--escher2);
+            font-family:Georgia,serif;}
+.work-year{font-family:'Courier New',monospace;font-size:.7rem;letter-spacing:.1em;
+           color:var(--dim2);}
+.work-medium{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.18em;
+             text-transform:uppercase;color:var(--escher);margin-bottom:.6rem;}
+.work-where{margin-top:1rem;padding-top:.9rem;border-top:1px dashed rgba(201,168,76,.15);
+            font-size:.82rem;color:var(--dim2);font-style:italic;}
+.work-where a{color:var(--escher2);text-decoration:none;border-bottom:1px solid rgba(42,157,143,.3);}
+.work-where a:hover{color:var(--escher3);}
+
+/* Figure (SVG diagrams) */
+.figure{margin:1.4rem -.6rem;padding:1.2rem 1rem .9rem;background:var(--surface);
+        border:1px solid var(--rule);border-radius:4px;}
+.figure-head{display:flex;justify-content:space-between;align-items:baseline;
+             padding:0 1rem .6rem;border-bottom:1px dashed var(--rule);margin-bottom:.6rem;}
+.figure-num{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.2em;
+            text-transform:uppercase;color:var(--escher);}
+.figure-title{font-size:.88rem;color:var(--gold2);font-weight:600;}
+.figure-caption{padding:.7rem 1.2rem 0;font-size:.78rem;color:var(--dim2);
+                line-height:1.6;font-style:italic;}
+.figure-caption .ccnote{display:block;margin-top:.3rem;font-family:'Courier New',monospace;
+                        font-size:.62rem;letter-spacing:.1em;font-style:normal;
+                        color:var(--escher);opacity:.8;}
+.svg-stage{width:100%;max-width:560px;margin:0 auto;display:block;}
+
+/* Sidebar callouts */
+.pull-quote{border-left:2px solid var(--escher);padding:1rem 1.6rem;margin:2rem 0;
+            font-style:italic;font-size:1rem;color:var(--parchment);line-height:1.75;}
+.pull-quote cite{display:block;margin-top:.6rem;font-style:normal;
+                 font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.1em;
+                 color:var(--dim2);}
+
+.box{margin:2rem 0;padding:1.1rem 1.4rem;border-radius:4px;background:var(--card);
+     border:1px solid var(--rule);}
+.box.note{border-color:var(--rule-e);background:rgba(42,157,143,.04);}
+.box.davinci{border-color:rgba(232,212,154,.20);background:rgba(232,212,154,.03);}
+.box.license{border-color:rgba(154,154,157,.25);background:rgba(154,154,157,.05);}
+.box-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.2em;
+           text-transform:uppercase;margin-bottom:.5rem;color:var(--dim2);}
+.box.note .box-label{color:var(--escher);}
+.box.davinci .box-label{color:var(--gold);}
+.box.license .box-label{color:var(--graphite);}
+.box p:last-child{margin-bottom:0;}
+.box .vinci-list{margin:.5rem 0 0 1.2rem;font-size:.92rem;line-height:1.7;}
+
+/* Operator map */
+.op-map{margin:2.4rem 0;padding:1.4rem 1.6rem;background:var(--card);
+        border:1px solid var(--rule);border-radius:4px;}
+.op-map h4{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.18em;
+           text-transform:uppercase;color:var(--gold);margin-bottom:1rem;font-weight:400;}
+.op-map table{width:100%;border-collapse:collapse;font-size:.88rem;}
+.op-map th{background:rgba(8,8,15,.9);color:var(--gold2);padding:.5rem .8rem;
+           text-align:left;font-family:'Courier New',monospace;font-size:.62rem;
+           letter-spacing:.1em;text-transform:uppercase;font-weight:500;
+           border-bottom:1px solid var(--rule);}
+.op-map td{padding:.5rem .8rem;border-bottom:1px solid rgba(255,255,255,.04);
+           color:rgba(232,228,216,.85);}
+.op-map td.op{font-family:'Courier New',monospace;color:var(--escher2);}
+
+/* Closing image */
+.closing{margin:4rem -1rem 2rem;padding:2.6rem 2rem;text-align:center;
+         background:linear-gradient(160deg,var(--card),#06070c);
+         border:1px solid var(--rule-e);border-radius:6px;}
+.closing-label{font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.3em;
+               text-transform:uppercase;color:var(--dim);margin-bottom:1.4rem;}
+.closing p{font-size:1.05rem;font-style:italic;color:var(--parchment);
+           max-width:520px;margin:0 auto 1rem;line-height:1.7;}
+.closing p:last-of-type{margin-bottom:0;}
+.closing .last{font-family:'Courier New',monospace;font-size:.78rem;letter-spacing:.14em;
+               color:var(--escher2);font-style:normal;margin-top:1.6rem;}
+
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem 0;
+             border-top:1px solid var(--rule-e);margin-top:3rem;}
+.chapter-nav a{color:var(--escher2);text-decoration:none;font-family:'Courier New',monospace;
+               font-size:.78rem;letter-spacing:.08em;border:1px solid rgba(42,157,143,.25);
+               padding:.5rem 1rem;border-radius:2px;transition:all .2s;}
+.chapter-nav a:hover{background:rgba(42,157,143,.08);}
+
+footer{text-align:center;padding:2rem;font-family:'Courier New',monospace;font-size:.58rem;
+       letter-spacing:.08em;color:var(--dim);border-top:1px solid var(--rule);line-height:2;}
+footer a{color:var(--gold);text-decoration:none;}
+footer a:hover{color:var(--escher2);}
+
+@media (max-width: 720px){
+  .figure{margin:1.4rem -.3rem;}
+  .closing{margin-left:0;margin-right:0;}
+  .work-head{flex-direction:column;align-items:flex-start;gap:.3rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">⚜ Principia Orthogona · Book 7 · The Scientist Gallery</a>
+  <div class="nav-links">
+    <a href="index.html">← Book 7</a>
+    <a href="ch-turing.html">Turing</a>
+    <a href="ch-noether.html">Noether</a>
+    <a href="ch-erdos.html">Erdős</a>
+    <a href="../book8/index.html">Book 8 ↗</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Chapter D · The Scientist Gallery</div>
+  <div class="op-chain">
+    <span class="op-dot op-c">C</span>
+    <span class="op-dot op-k op-active">K</span>
+    <span class="op-dot op-f">F</span>
+    <span class="op-dot op-u">U</span>
+  </div>
+  <h1>George Dantzig— the man who walked the edges</h1>
+  <div class="hero-sub">Two problems on a blackboard, and an algorithm that schedules the world
+  by refusing to look at the interior</div>
+</div>
+
+<div class="page">
+
+<p class="lead">Almost everyone knows one story about George Dantzig, and it is the
+least interesting true thing about him. A graduate student arrives late, copies two
+problems off the blackboard thinking they are homework, and solves them; they turn
+out to be open. The story is real. It is also a distraction, because the thing
+Dantzig actually did — eight years later, in a Pentagon office, for a problem nobody
+thought was mathematics — is stranger and far more consequential. He found a way to
+search a space with astronomically many candidate answers by never entering it. The
+simplex method walks only the boundary, corner to corner, and it works because of
+where an optimum is forced to live.</p>
+
+<div class="box">
+  <span class="box-label">Sources</span>
+  <p><strong>&sect;&sect;1&ndash;3 and &sect;7</strong> &mdash; Donald J. Albers and Constance
+  Reid, "An Interview with George B. Dantzig," <em>College Mathematics Journal</em> 17:4
+  (1986), 292&ndash;314. Dantzig tells the blackboard story himself there, and it is also
+  where the Wald sequence in &sect;2 is recorded.</p>
+  <p><strong>&sect;&sect;5&ndash;6</strong> &mdash; George B. Dantzig,
+  <em>Linear Programming and Extensions</em> (Princeton University Press, 1963), the
+  author's own formal development of the method.</p>
+  <p><strong>&sect;&sect;6, 8, 9</strong> depend on none of the biography. If every
+  anecdote in this chapter were withdrawn, the mathematics in those three sections would
+  be untouched &mdash; which is the correct relationship between a life and a theorem, and
+  the reason they are separated here.</p>
+</div>
+
+<div class="op-map">
+  <span class="op-dot op-k op-active">K</span>
+  <strong>Why K.</strong> Every other scientist in this gallery is placed by what
+  they made. Dantzig is placed by <em>where he looked</em>. Linear programming is
+  the study of binding constraints — a threshold problem end to end — and the
+  simplex method is the refusal to consider any point at which no constraint is
+  tight. The optimum lives where the walls meet.
+</div>
+
+<div class="eyebrow">§ 1 · Berkeley, 1939</div>
+<h2>Two problems on a blackboard</h2>
+
+<p>George Bernard Dantzig was a doctoral student at Berkeley, working under Jerzy
+Neyman — one of the two names on the Neyman–Pearson lemma, and a man with a
+documented habit of writing unsolved problems on the board without saying so.</p>
+
+<p>Dantzig came in late to a statistics lecture. Two problems were on the
+blackboard. He copied them down, took them to be the homework assignment, and
+found them harder than usual. He apologised when he handed them in a few days
+late.</p>
+
+<p>They were not homework. They were two open problems in mathematical statistics
+that Neyman had put up as examples of what remained unsolved. Dantzig had solved
+both. When he needed a thesis, Neyman's advice was, in substance, to put the two
+papers in a binder and submit them.</p>
+
+<p>The part usually left out is the part worth keeping: <strong>Dantzig solved them
+because he did not know they were hard.</strong> He brought to two open problems
+exactly the effort a competent student brings to an assignment, which is more effort
+than most people bring to something they have been told is impossible. The
+information he lacked was not mathematical. It was social.</p>
+
+<div class="eyebrow">§ 2 · What the problems were</div>
+<h2>Not a parable, a thesis</h2>
+
+<p>The problems concerned the existence of certain statistical tests and estimators
+— the Neyman–Pearson territory of what can and cannot be constructed under
+constraints on unbiasedness and power. That is the same shape as everything Dantzig
+later did: <em>given these requirements, does an object satisfying all of them
+exist, and if so, where is it?</em></p>
+
+<p>What happened next is better than the legend and is usually cut from it. When
+Dantzig submitted one of the two solutions for publication, Neyman told him that
+Abraham Wald had independently reached the same conclusion, in a paper already going
+to press &mdash; "On the Elimination of Unknown Parameters in Problems of Statistical
+Inference." Neyman's response was to have Dantzig listed as a co-author of Wald's
+paper, so that the earlier proof was credited.</p>
+
+<p>Note where the initiative sat. Dantzig did not negotiate for it and Wald did not
+concede it; the senior figure who knew both timelines simply acted. That is the
+discipline functioning correctly &mdash; priority established by who got there, not by
+who was senior, and arranged by the one person positioned to see both sides.</p>
+
+<div class="eyebrow">§ 3 · What happened to the story</div>
+<h2>The legend and its mutations</h2>
+
+<p>The blackboard episode escaped into folklore and mutated on the way. It became a
+motivational sermon illustration in which the student's ignorance is the moral. It
+became, in outline, the scene in <em>Good Will Hunting</em> where a janitor solves
+a problem left on a corridor blackboard. It is told with the number of problems
+varying, the subject varying, and the punchline sharpened.</p>
+
+<p>The mutation is instructive, and it is the same defect this corpus tracks in its
+own pages: <strong>a claim decays in the direction that makes it a better
+story.</strong> Nobody lies. Each retelling improves the anecdote slightly, and
+after enough retellings the mathematics has dropped out entirely and only the moral
+remains. Dantzig's own account is duller and better. He worked hard on what he
+thought was homework, and it took him longer than usual.</p>
+
+<div class="pull-quote">
+  The story survived because it flatters the listener. What survived is the version
+  with no statistics in it.
+</div>
+
+<div class="eyebrow">§ 4 · 1941–1946</div>
+<h2>Statistical Control</h2>
+
+<p>The war interrupted the doctorate. Dantzig spent it with the US Army Air Forces
+in the Office of Statistical Control, doing what would now be called operations
+research and was then called, without irony, paperwork: how many aircraft, with
+what crews, carrying what, routed where, supplied by whom, and in what order.</p>
+
+<p>These were not toy questions. A bomber wing's schedule is a system of hard
+constraints — airframes, trained crew, fuel, ordnance, runway hours, maintenance
+cycles — with an objective on top of it. The arithmetic was done by hand, by rooms
+of people, and the plans they produced were feasible but not optimal, because
+nobody had a method for optimal. They had a method for <em>workable</em>.</p>
+
+<p>The distinction between feasible and optimal is the whole of what came next.</p>
+
+<div class="eyebrow">§ 5 · The Pentagon, 1947</div>
+<h2>"Programming," before it meant code</h2>
+
+<p>A <em>program</em>, in the military usage Dantzig inherited, was a schedule — a
+plan of activities over time, with the resources they consume. "Programming" meant
+producing one. It had nothing to do with computers, which barely existed.</p>
+
+<p>Dantzig's problem was to mechanise it. The Air Force wanted plans generated
+rather than negotiated, and wanted them to be the best available rather than merely
+consistent. The obstacle was that no one had written down what "best available"
+meant in a way a procedure could chase.</p>
+
+<p>What he wrote down was this. Choose non-negative quantities <em>x</em> of each
+activity, subject to linear resource constraints, maximising a linear objective:</p>
+
+<div class="box">
+  <span class="box-label">The linear program</span>
+  <p style="text-align:center;font-size:1.15rem">
+  maximise &nbsp; <strong>c</strong><sup>T</sup><strong>x</strong> &nbsp;&nbsp;
+  subject to &nbsp; <strong>Ax</strong> ≤ <strong>b</strong>, &nbsp;
+  <strong>x</strong> ≥ 0
+  </p>
+  <p>Three objects and nothing else: a cost vector, a constraint matrix, a
+  requirements vector. The modelling act — deciding what counts as an activity and
+  which couplings are linear — is where all the judgment lives, and it is done
+  before the mathematics starts.</p>
+</div>
+
+<p>Tjalling Koopmans is generally credited with suggesting the name
+<em>linear programming</em> for it, and the name stuck hard enough that when
+"programming" later came to mean writing code, the older sense survived only here,
+stranded, in the phrase that made Dantzig's reputation.</p>
+
+<div class="eyebrow">§ 6 · The method</div>
+<h2>Why you may ignore the interior</h2>
+
+<p>The constraints carve out a region of the space of possible plans: every point
+satisfying all of them at once. Because each constraint is linear, this region is a
+<strong>convex polytope</strong> — a solid with flat faces, straight edges and
+corners, possibly unbounded, possibly empty.</p>
+
+<p>Two facts do all the work.</p>
+
+<p><strong>First:</strong> a linear objective on a convex polytope, if it attains a
+maximum at all, attains it at a vertex. The reason is almost embarrassing once seen.
+A linear function has no interior peaks — no curvature to hold one. Stand anywhere
+that is not a corner and there is a direction along which the objective does not
+decrease; follow it until a wall stops you. Repeat. You arrive at a corner. The
+entire interior of the feasible region, which is where all the volume is, can be
+discarded without loss.</p>
+
+<p><strong>Second:</strong> the vertices are finite in number, and each is the
+solution of a square subsystem of the constraints — a choice of which inequalities
+are tight. So the search is finite, combinatorial, and in principle enumerable.</p>
+
+<p>In principle only. The number of vertices grows combinatorially in the number of
+constraints and variables; enumeration is hopeless for anything real. Dantzig's
+contribution is the walk.</p>
+
+<div class="box">
+  <span class="box-label">The simplex method, in one paragraph</span>
+  <p>Start at a vertex. Examine the edges leaving it. If some edge improves the
+  objective, move along it to the vertex at its far end. Repeat. If no edge
+  improves, stop: the current vertex is optimal, and the fact that no edge improves
+  is itself the proof. The algorithm never enters the interior, never evaluates a
+  point that is not a corner, and terminates with a certificate rather than a
+  confidence.</p>
+</div>
+
+<p>That last clause is the part that gets least attention and matters most. Simplex
+does not return a good answer. It returns an answer <em>together with the reason no
+better one exists</em>, and the reason is checkable independently of the algorithm
+that produced it. Most of what we now call optimisation returns a number and asks
+to be trusted.</p>
+
+<div class="eyebrow">§ 7 · Princeton, October 1947</div>
+<h2>Von Neumann, and an hour that should not have been possible</h2>
+
+<p>Dantzig went to Princeton to describe linear programming to John von Neumann. By
+his own account he had barely begun — a few minutes of exposition — when von Neumann
+told him to get to the point, and then, having got it, delivered an impromptu
+lecture of over an hour on the theory of the thing Dantzig had just described.</p>
+
+<p>What von Neumann saw immediately was <strong>duality</strong>. Every linear
+program has a shadow — a second program, built from the same data transposed, whose
+optimum equals the first's. The dual variables price the constraints: each says how
+much the objective would improve if that particular wall moved outward by one unit.
+Von Neumann recognised the structure because he had built it already, in the theory
+of two-person zero-sum games, where the same duality is the minimax theorem.</p>
+
+<p>This is the moment the subject stopped being a scheduling trick and became
+mathematics. And it is a specific kind of event, worth naming: <em>the recognition
+that two objects developed for unrelated reasons are the same object.</em> Dantzig
+had an algorithm for Air Force logistics. Von Neumann had a theorem about poker.
+They were the same theorem.</p>
+
+<div class="pull-quote">
+  A shadow price is the answer to a question nobody asked the algorithm: not
+  <em>what should I do</em>, but <em>which of my constraints is actually costing me
+  something</em>.
+</div>
+
+<div class="eyebrow">§ 8 · 1972</div>
+<h2>Klee and Minty, or the algorithm that should not work</h2>
+
+<p>For twenty-five years simplex was spectacularly effective and nobody could say
+why. In 1972, Victor Klee and George Minty settled half the question by constructing
+a deformed cube — the constraints skewed so that the natural pivoting rule visits
+<em>every</em> vertex, all 2<sup>n</sup> of them, before finding the optimum.</p>
+
+<p>So the worst case is exponential. And yet in practice, on problems arising from
+actual scheduling, simplex takes a number of steps roughly linear in the number of
+constraints. The Klee–Minty cube is real and essentially never occurs.</p>
+
+<p>That gap stood as an open embarrassment for another thirty years, until Daniel
+Spielman and Shang-Hua Teng introduced <strong>smoothed analysis</strong>: instead
+of asking for the worst case over all inputs, or the average over a distribution
+nobody believes, ask for the worst case over inputs that have been slightly
+perturbed. Under that measure simplex is polynomial. The Klee–Minty cube is a
+knife's edge; jog it and it collapses.</p>
+
+<p>The lesson generalises past this algorithm. <strong>A worst-case bound is a
+statement about an adversary, not about the world.</strong> When theory and practice
+disagree this loudly for this long, the usual fault is in what the theory was asked.</p>
+
+<div class="eyebrow">§ 9 · Degeneracy</div>
+<h2>Where the map folds</h2>
+
+<p>The one way simplex can genuinely fail is subtler than slowness. At a
+<strong>degenerate</strong> vertex, more constraints are tight than the dimension
+requires — three walls meeting along a line in a plane, say. The vertex is one point
+but corresponds to several distinct choices of tight constraints. The algorithm can
+pivot from one such description to another, changing its bookkeeping while not
+moving at all, and in rare cases it can cycle: a closed loop of pivots, objective
+unchanged, forever.</p>
+
+<p>This is a fold in the exact sense this series uses the word. The map from
+<em>choices of tight constraints</em> to <em>vertices</em> loses injectivity there —
+several pre-images, one image — and the pathology is a direct consequence of that
+loss, not an implementation bug.</p>
+
+<p>Robert Bland gave the clean fix in 1977. Among the candidate pivots, always take
+the one with the smallest index. It is not the fastest rule; it is the rule that
+provably cannot cycle, because it imposes a total order that the loop would have to
+violate. <strong>Anti-cycling is a tie-breaking rule</strong> — the degeneracy is
+not removed, only prevented from closing on itself.</p>
+
+<div class="eyebrow">§ 10 · 1975</div>
+<h2>The prize that did not come</h2>
+
+<p>In 1975 the Nobel Memorial Prize in Economic Sciences went to Leonid Kantorovich
+and Tjalling Koopmans, for the theory of optimal allocation of resources.
+Kantorovich had formulated linear programming problems in the Soviet Union in 1939,
+independently and earlier, and had been largely unable to get them applied.
+Koopmans had developed the economics.</p>
+
+<p>Dantzig was not among the laureates. He received the National Medal of Science
+the same year, and the omission has been remarked on ever since — reportedly
+including by Koopmans himself. He spent the rest of his career at Stanford, where
+he had founded the operations research programme, and by all accounts declined to
+be bitter about it in public.</p>
+
+<p>Two things are true at once and the chapter should hold both. Kantorovich's
+priority is genuine and was earned under conditions that make it more impressive,
+not less. And the algorithm that made linear programming a working technology
+rather than a theory was Dantzig's.</p>
+
+<div class="eyebrow">§ 11 · Placement</div>
+<h2>Where Dantzig sits on the operator map</h2>
+
+<p>Stated as a structural reading, not a numerical claim. No coefficient of a linear
+program is asserted to equal any dimensionless constant of this series, and none is
+fitted to one — the same discipline WP-29 and WP-31 impose everywhere else.</p>
+
+<div class="box">
+  <span class="box-label">The chain, run on a scheduling problem</span>
+  <p><strong>C · Compress.</strong> A fleet, a supply chain, a hospital roster —
+  reduced to a matrix, a cost vector and a requirements vector. Everything that is
+  not linear is discarded here, and the discarding is a human judgment made before
+  any mathematics. Most of the failures of applied optimisation are failures of this
+  step, defended afterwards by the rigour of the steps that follow it.</p>
+  <p><strong>K · Threshold.</strong> Each inequality is a wall. The feasible region
+  is where they all hold at once, and the optimum is where some subset of them binds
+  exactly. This is the operator Dantzig is placed under: the method's whole content
+  is the decision to look only where constraints are tight.</p>
+  <p><strong>F · Fold.</strong> Degeneracy. Several descriptions collapsing to one
+  vertex — injectivity lost — with cycling as the visible symptom. Bland's rule does
+  not unfold it; it makes the fold survivable.</p>
+  <p><strong>U · Unfold.</strong> The optimal vertex and its dual certificate,
+  re-entering the world as a schedule someone has to execute and a set of shadow
+  prices telling them which constraint to attack next. The measurement returns to
+  the system it measured.</p>
+</div>
+
+<p>The placement is worth one caution. The chain is a reading, not a derivation:
+nothing about the simplex method depends on it, and if the reading were removed the
+mathematics in §§6–9 would be untouched. It earns its place only if it helps a
+reader see that a scheduling algorithm and a fold catastrophe have the same
+skeleton.</p>
+
+<div class="eyebrow">§ 12 · Closing</div>
+<h2>What a feasible region costs</h2>
+
+<p>Linear programming is now infrastructure. It routes aircraft, blends fuels and
+animal feed, schedules crews and operating theatres, dispatches electricity across
+grids, and decides which orders a warehouse fills first. Almost none of it is
+visible, and almost all of it is running somebody's simplex or interior-point
+solver right now.</p>
+
+<p>Which makes the modelling step — the compression — a moral act, and this is
+where the chapter meets WP-27's <em>Ethics of Algebra</em>. Correctly done
+mathematics has no ethics of its own; the ethics live in who decides what goes in
+the matrix and to whom the objective belongs. An LP that schedules nurses will
+produce an optimal roster with respect to whatever was written in
+<strong>c</strong>. If nobody put fatigue in the objective, the optimum will be
+brutal, and it will be provably optimal, and the proof will be correct.</p>
+
+<p>Dantzig's own famous first application makes the point better than argument. The
+diet problem — minimise the cost of a diet meeting nutritional requirements — was
+one of the earliest large linear programs solved. The mathematics was flawless. The
+answer was a diet no human being would eat, because palatability was not a
+constraint and nobody had thought to make it one.</p>
+
+<p>The feasible region contains only what you put in it. That is the whole warning,
+and it was visible in the first serious application, in the first decade.</p>
+
+<div class="closing">
+  <span class="closing-label">Chapter D</span>
+  <p>He is remembered for arriving late to a lecture. He should be remembered for
+  noticing that if you are looking for the best point in a convex region, you can
+  throw away the entire inside of it — and that the reason you can is that a flat
+  objective has nowhere to rest except against a wall.</p>
+</div>
+
+<div class="chapter-nav">
+  <a href="index.html">← G7 Index</a>
+  <a href="ch-turing.html">Turing</a>
+  <a href="ch-noether.html">Noether</a>
+  <a href="../book8/index.html">Book 8 · The Monster →</a>
+</div>
+
+</div>
+
+<footer>
+  <a href="../index.html">Principia Orthogona</a> &nbsp;·&nbsp;
+  <a href="index.html">Book 7 · The Scientist Gallery</a> &nbsp;·&nbsp;
+  <a href="../book8/index.html">Book 8 · The Monster</a> &nbsp;·&nbsp;
+  <a href="https://zenodo.org/communities/principia-orthogona" target="_blank">Zenodo community</a><br><br>
+  © 2026 Pablo Nogueira Grossi · G6 LLC · Newark, NJ 07104, USA ·
+  <a href="mailto:g6llc@proton.me">g6llc@proton.me</a> ·
+  ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a><br>
+  Chapter D · George Dantzig · CC BY-NC-ND 4.0 · Draft — biographical claims pending source check
+</footer>
+
+</body>
+</html>
