@@ -880,6 +880,74 @@ The 32 groups split three ways, and only the third needs judgment:
 Do not batch these. Each is a decision about which text is current, and the
 Curie case shows the answer is not always the larger file or the newer mtime.
 
+## Threshold, not scale — the guard on fold language
+
+Added 2026-08-26. **The shared structure is the threshold, not the scale.**
+
+Fold, criticality and threshold language is the most portable vocabulary in this
+corpus and therefore the easiest to misread. The misreading is always the same:
+a reader takes a claim that two systems share a *shape* and hears a claim that
+one supplies the *mechanism* for the other.
+
+The true claim, stated once so it can be cited rather than re-derived:
+
+- Near a critical point, susceptibility to the **parameters** of the governing
+  equations diverges. Arbitrarily small parameter changes produce qualitatively
+  different outcomes. This is the definition of criticality, not a metaphor.
+- A system driven slowly to a threshold and then crossing it irreversibly has
+  the same *shape* whether the driver is a detuning laser, a decade of glacial
+  melt, or a curvature accumulating toward κ*. Shape, not substrate.
+- Irreversibility has an address: the second-order line is reversible, and the
+  **tricritical point is where it stops being so** — past it the transition is
+  first order and hysteretic. If F is about irreversible rank loss, the
+  tricritical point is its analogue, not the ordinary critical point.
+
+Stated as three clauses, which is the form to use because the guard is then part of the
+claim rather than an appendix to it:
+
+- **Scale-invariant** — at the critical point, technically: power-law correlations, no characteristic
+  length. This is why a conformal description can emerge.
+- **Domain-agnostic** — by universality, and for a reason: a universality class is fixed by symmetry
+  and dimension, not by constituents. The 2D Ising class contains a magnet, a liquid–gas critical
+  point, and a chain of nineteen strontium atoms.
+- **Predictive of the universal data only** — ratios, exponents, central charges, degeneracies.
+  Silent by construction on every scale: where the transition sits, how fast anything moves, how big
+  anything is. **A claim of this kind that appears to predict a scale is either fitting it or has
+  smuggled in a substrate.**
+
+This is the standard universal / non-universal distinction of critical phenomena, not a coinage.
+WP-79's filter is that distinction applied to our own quantities.
+
+Two things that must travel with it, every time:
+
+1. **The sensitivity is to parameters, not to states.** In a quantum system,
+   unitary evolution preserves the overlap between two states exactly; there is
+   no exponential state-to-state divergence of the classical-chaos kind. What is
+   exquisitely sensitive is the dependence on the Hamiltonian's knobs. "Tiny
+   changes" is true of parameter space and false of state space.
+2. **It is a property of sitting at criticality, not of being quantum, small,
+   or fundamental.** Off the critical point susceptibility is finite and small
+   perturbations do small things. Generic systems are not at their critical
+   points, which is why the world is mostly stable.
+
+**Never claim, and never let a page imply, that the quantum scale supplies the
+mechanism at the geological, biological or civilisational one.** A glacier fails
+from accumulated stress under a warming trend — classical, slow, and with a
+threshold. The threshold is the shared object. Nothing crosses the scale gap,
+and the argument does not need it to.
+
+Live exposure, surveyed 2026-08-26: `ch-belousov-zhabotinsky.html` carries the
+heading "From Quantum to Cosmic — Complex Systems at Every Scale" over a quoted
+programme note. The quote is defensible as written — ordered behaviour *is* found
+at all scales — but the heading invites the mechanistic reading, and the guard is
+now stated on the page. Fifteen further files use "at every scale"; most are
+about self-similarity of a mathematical object, which is a different and correct
+claim. Re-survey with:
+
+    grep -rn -i "at every scale\|from quantum to\|across all scales" --include="*.html" .
+
+---
+
 ## What NOT to do
 
 - Do not hand-edit `master-index.html` or `index-*.html` — regenerate them
@@ -896,6 +964,8 @@ Curie case shows the answer is not always the larger file or the newer mtime.
 - Do not mark AXLE theorems as "✓ Lean 4" without the "(under SH)" caveat
   if they depend on the Structural Hypothesis (SH)
 - Do not use Cormorant Garamond in book4 pages — it has no math glyph coverage
+- Do not let fold/criticality language imply a scale bridge. The shared structure
+  is the threshold, not the scale — see the guard section above
 
 ---
 
