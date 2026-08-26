@@ -8,4 +8,5 @@ import Orthogenesis.Architecture.SeismicLattice
 import Orthogenesis.Architecture.AcousticLattice
 import Orthogenesis.Architecture.DM3Bridge
 import Orthogenesis.Architecture.Coverage
+import Orthogenesis.Architecture.ToyModel
 import Orthogenesis.Architecture.NASAGaps

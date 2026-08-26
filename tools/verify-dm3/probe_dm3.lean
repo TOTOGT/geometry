@@ -27,3 +27,19 @@ import Orthogenesis.Architecture.G6Crystal
 #print axioms Orthogenesis.G6Crystal.aspect_ratio_eq
 #print axioms Orthogenesis.G6Crystal.aspect_ratio_encoded
 #print axioms Orthogenesis.G6Crystal.layer_height_cubits
+
+-- ToyModel.lean, added 2026-08-26. These are the two declarations
+-- vol2-toymodel.html cites on its Lean badges, plus the facts they rest on.
+#print axioms Orthogenesis.ToyModel.rdot_on_gamma
+#print axioms Orthogenesis.ToyModel.zdot_on_gamma
+#print axioms Orthogenesis.ToyModel.transEig_eq_deriv
+#print axioms Orthogenesis.ToyModel.eigenvalue_neg_pos_z
+#print axioms Orthogenesis.ToyModel.transEig_zero
+#print axioms Orthogenesis.ToyModel.transEig_gt_neg_two
+#print axioms Orthogenesis.ToyModel.transEig_strictAnti
+#print axioms Orthogenesis.ToyModel.transEig_tendsto_muMax
+#print axioms Orthogenesis.ToyModel.toyModel_tau
+#print axioms Orthogenesis.ToyModel.toyModel_tau_eq_abs_muMax
+#print axioms Orthogenesis.ToyModel.eps0_at_hessian_two
+#print axioms Orthogenesis.ToyModel.eps0_at_hessian_three
+#print axioms Orthogenesis.ToyModel.eps0_eq_third_iff
