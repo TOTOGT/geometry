@@ -7,6 +7,7 @@
 -- S2 hexgrid collapse, S3 coord_coverage) are deliberately NOT named.
 
 import Orthogenesis.Architecture.G6Crystal
+import Orthogenesis.Architecture.ToyModel
 
 -- §1 · canonical invariants  (T* = 2π, μ_max = −2, τ = 2)
 #print axioms Orthogenesis.G6Crystal.dm3_Tstar_pos
@@ -32,6 +33,7 @@ import Orthogenesis.Architecture.G6Crystal
 -- vol2-toymodel.html cites on its Lean badges, plus the facts they rest on.
 #print axioms Orthogenesis.ToyModel.rdot_on_gamma
 #print axioms Orthogenesis.ToyModel.zdot_on_gamma
+#print axioms Orthogenesis.ToyModel.transEig_hasDerivAt
 #print axioms Orthogenesis.ToyModel.transEig_eq_deriv
 #print axioms Orthogenesis.ToyModel.eigenvalue_neg_pos_z
 #print axioms Orthogenesis.ToyModel.transEig_zero

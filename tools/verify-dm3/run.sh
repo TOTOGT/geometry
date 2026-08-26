@@ -7,7 +7,9 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT" || exit 1
 PROBE="tools/verify-dm3/probe_dm3.lean"
 OUT="tools/verify-dm3/axioms.txt"
-N=14                                   # theorems named in the probe
+N=28                                   # theorems named in the probe
+                                       # 14 in G6Crystal + 14 in ToyModel,
+                                       # counted by: grep -c '#print axioms' "$PROBE"
 
 command -v lake >/dev/null 2>&1 || {
   echo "lake not found. Install elan first:"
