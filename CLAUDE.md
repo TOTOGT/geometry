@@ -1587,3 +1587,81 @@ on 2026-08-21. Nothing was changed, only relocated. Open items stayed here.
 - Anchor: AutophagyDm3_v2.lean, 24 theorems, no sorry, no True conclusions
 - Open Lean: [LEAN-NEEDED-1] surfactant CRNT deficiency, [LEAN-NEEDED-2] thymic selection
 - to_delete/ policy: errors are evidence, nothing deleted directly
+
+---
+
+# RULE (2026-08-27): every declaration named in prose must resolve, at the path cited
+
+Three findings in one week had the same shape: a claim about Lean written from
+intention rather than from the artifact.
+
+- `vol2-toymodel.html` carried Lean badges naming declarations absent from the repo.
+- `tools/verify-dm3/probe_dm3.lean` named thirteen `ToyModel` declarations without
+  importing the module.
+- `PrincipiaOrthogona_v2/VolumeTwo.lean` was in no lakefile target, so six
+  declaration names survived into a published paper without ever being elaborated.
+
+Each got a local repair. None produced a check, because the rule that covers all
+three was nowhere written down. It is this:
+
+**Before a declaration name appears in prose — an HTML badge, a paper, a README, a
+probe file, a commit message — resolve it. Open the file at the path cited and see
+the name. If the file is not in a lakefile target, say so beside the claim, because
+an unelaborated declaration is a name, not a theorem.**
+
+Corollaries, each of which has already cost a correction:
+
+- **Compilation is not verification.** `sorry` is a warning. Run `#print axioms`.
+- **`#print axioms` emits info, not an error.** A `sorryAx` scrolls past inside a
+  build that reports success. The gate is `tools/axiom_gate.py`, not the build.
+- **Sorry-free is not proved.** `theorem X : True := by trivial` is sorry-free and
+  vacuous; a biconditional proved from assumptions on both sides is sorry-free and
+  empty. Both have been found in this corpus and are recorded in `docs/audit-log.md`.
+- **A hand run proves the file on the day it is run and nothing afterwards.**
+  Declare the target, or the next regression is silent.
+
+## What NOT to do
+
+Do not repair the individual page and move on. That is what produced three
+instances of one defect. Repair the page, then ask what check would have caught it,
+and write that check into `tools/`.
+
+---
+
+# RULE (2026-08-27): a published number must be produced by a tool in `tools/`
+
+A number on a public page is a claim. If no script in `tools/` regenerates it, a
+reader cannot check it and neither can the next session — and the number drifts
+from whatever it once described without anything failing.
+
+**Every corpus-wide figure that appears on a public page must name the tool that
+computes it and the date it was last run.** If the tool does not exist, write it
+before the number ships. Existing instances:
+
+| figure | tool |
+|---|---|
+| theorem / declaration counts | `tools/theorem_census.py` |
+| kernel-checked declaration counts | `tools/verify-*/run.sh` + `tools/axiom_gate.py` |
+| probe / gate / README count agreement | `tools/probe_consistency.py` |
+| word counts | `tools/wordcount_scan.py` |
+
+The counting vocabulary is not interchangeable, and the three words below have been
+used as synonyms on public pages when they name three different quantities:
+
+- **written** — a `theorem` or `lemma` declaration exists. Says nothing about proof.
+- **sorry-free** — no `sorry` in the proof body. Still says nothing about content:
+  see the vacuity findings above.
+- **kernel-audited** — `#print axioms` run on that named declaration, reporting
+  only `[propext, Classical.choice, Quot.sound]`. This is the only one of the three
+  that is evidence, and it is always the smallest number.
+
+"Proved" belongs to the third column only. A page that puts a first-column number
+under the word "Proved" is overclaiming by two full steps, whatever the arithmetic.
+
+## What NOT to do
+
+Do not raise a published number to match a fresh scan. The task is reconciliation:
+produce the per-file basis (`tools/theorem_census.py --table`), diff it against the
+number's stated basis, and move the number only with the file list that justifies
+it. A number that moved once without a published basis is worth less than a smaller
+number that never has.
