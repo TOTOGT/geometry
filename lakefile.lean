@@ -22,3 +22,13 @@ lean_lib Orthogenesis
 -/
 @[default_target]
 lean_lib SaturnHexagon
+
+/-
+  book8/OrthogonalWitness.lean kernel-checked by hand on 2026-08-27 (all four
+  theorems on [propext, Classical.choice, Quot.sound]). A hand run proves the file
+  on the day it is run and nothing afterwards, which is the same gap SaturnHexagon
+  had. Declaring the target is what makes a later regression fail the job.
+-/
+@[default_target]
+lean_lib OrthogonalWitness where
+  srcDir := "book8"
