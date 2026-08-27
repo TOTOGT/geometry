@@ -220,7 +220,7 @@
     <a href="https://github.com/TOTOGT/AXLE" target="_blank"
        style="color:#8a9bb0;font-size:.77rem;text-decoration:none;letter-spacing:.04em;"
        onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='#8a9bb0'">AXLE</a>
-    <a href="https://doi.org/10.5281/zenodo.20755436" target="_blank"
+    <a href="https://doi.org/10.5281/zenodo.22117968" target="_blank"
        style="color:#8a9bb0;font-size:.77rem;text-decoration:none;letter-spacing:.04em;"
        onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='#8a9bb0'">Zenodo</a>
   </div>
@@ -347,7 +347,7 @@
       <div class="theorem-card">
         <h4>eigenvalue_neg_pos_z <span class="proved-badge">PROVED</span></h4>
         <p>λ(z) &lt; 0 for z &gt; 0 — attracting post-embodiment.</p>
-        <div class="status">mul_neg_of_neg_of_pos + exp_lt_one_of_neg.</div>
+        <div class="status">mul_neg_of_neg_of_pos + Real.exp_lt_exp against exp_zero. (exp_lt_one_of_neg, cited until V5, is not a Mathlib constant.)</div>
       </div>
       <div class="theorem-card">
         <h4>toyModel_tau <span class="proved-badge">PROVED</span></h4>
@@ -367,19 +367,19 @@
     </div>
     <div>
       <div class="theorem-card">
-        <h4>eigenvalue_limit <span class="sorry-badge">OPEN</span></h4>
+        <h4>eigenvalue_limit <span class="proved-badge">PROVED</span></h4>
         <p>λ(z) → μ_max as z → ∞.</p>
-        <div class="status">★★☆ — Needs: Real.tendsto_exp_atBot + filter algebra. Estimated 1–2 days.</div>
+        <div class="status">Real.tendsto_exp_atBot composed with const_mul_atTop_of_neg. Closed 2026-08-26 (V5).</div>
       </div>
       <div class="theorem-card">
-        <h4>thm_A_contact_realization <span class="sorry-badge">OPEN</span></h4>
-        <p>H_diss → S(γ) as β→∞ in distributional sense.</p>
-        <div class="status">★★★★☆ — Requires distribution theory framework in Mathlib. Major effort.</div>
+        <h4>thm_A_contact_realization_fold <span class="sorry-badge">PLACEHOLDER</span></h4>
+        <p>H_diss → S(γ) as β→∞ in the distributional sense. <strong>The declaration's conclusion is <code>True</code>, not a <code>sorry</code></strong> — so it passes every axiom check, which is why it is marked here rather than left to a badge.</p>
+        <div class="status">★★★★☆ — distribution theory, not in Mathlib. The pointwise skeleton <em>is</em> proved: thm_A_regularization_pointwise (vanishes off the fold) and thm_A_regularization_at_fold (constant on it).</div>
       </div>
       <div class="theorem-card">
-        <h4>thm_B full chain <span class="sorry-badge">OPEN</span></h4>
-        <p>|κ|↑κ* ↔ μ_max &lt; 0: requires Floquet theory formalization.</p>
-        <div class="status">★★★★★ — Floquet + SDE in Lean 4 is frontier Mathlib work. Collaboration target.</div>
+        <h4>thm_B_threshold_equivalence <span class="sorry-badge">TRIVIAL</span></h4>
+        <p>The declaration proves μ_max &lt; 0 ⟺ τ &gt; 0, but <strong>from assumptions on both sides</strong>: each branch discards its hypothesis, and μ_max &lt; 0 is a field of the DM3System structure. Each half is independently true and the arrow carries nothing.</p>
+        <div class="status">★★★★★ — the full chain |κ|↑κ* ⟺ μ_max &lt; 0 has no declaration at all. Needs Floquet + Has'minskii stochastic stability. Collaboration target.</div>
       </div>
       <div class="theorem-card">
         <h4>OP1: Global Equivalence <span class="sorry-badge">OPEN</span></h4>
@@ -404,11 +404,13 @@
     stabilityRadius <span class="nm">2</span> <span class="nm">2</span> (by norm_num) (by norm_num) = <span class="nm">1</span> / <span class="nm">3</span> := <span class="kw">by</span>
   unfold stabilityRadius; norm_num  <span class="proved-badge">✓</span>
 
-<span class="cm">-- Open obligation (sorry documented):</span>
+<span class="cm">-- Closed 2026-08-26 (V5). The strategy below was the one that worked.</span>
 <span class="kw">theorem</span> <span class="nm">eigenvalue_limit</span> (sys : <span class="ty">DM3System</span>) :
     Filter.Tendsto (transverseEigenvalue sys) Filter.atTop (nhds sys.mu_max) := <span class="kw">by</span>
-  sorry  <span class="sorry-badge">OPEN ★★☆</span>
-  <span class="cm">-- Strategy: Real.tendsto_exp_atBot, then ring. Est. 1-2 days.</span>
+  <span class="cm">-- unapplied constant: rw a `rfl` equation, simp cannot unfold it</span>
+  <span class="kw">have</span> hlin := Filter.Tendsto.const_mul_atTop_of_neg _ Filter.tendsto_id
+  <span class="kw">have</span> h_exp := Real.tendsto_exp_atBot.comp hlin
+  simpa <span class="kw">using</span> (tendsto_const_nhds.mul (h_exp.const_sub 1))  <span class="proved-badge">✓</span>
   </div>
 </div>
 
@@ -829,7 +831,7 @@ drawOperators();
     <a href="impa-portal.html" style="color:#888;text-decoration:none;margin:0 .6rem;">Purchase Portal</a>
   </div>
   © 2026 Pablo Nogueira Grossi / G6 LLC · Newark, NJ · ORCID 0009-0000-6496-2186<br>
-  Principia Orthogona · DOI 10.5281/zenodo.20755436 · CC BY-NC-ND 4.0
+  Principia Orthogona · DOI 10.5281/zenodo.22117968 · CC BY-NC-ND 4.0
 </div>
 
 
