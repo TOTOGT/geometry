@@ -1986,3 +1986,76 @@ naming thirteen ToyModel declarations without importing the module. Each got a
 local repair; none produced a check. The rule that would have caught all three
 does not exist in any CLAUDE.md: *every declaration named in prose must resolve,
 at the path cited.*
+
+---
+
+## 2026-08-27 — Book 8 `OrthogonalWitness.lean`: first kernel run, and the count-drift guard
+
+`book8/OrthogonalWitness.lean` had a STATUS header asserting sympy verification
+and stating plainly that the Lean had never been through a kernel. That is the
+honest version of the failure the entries above document, and it is what made
+today cheap: nothing had to be withdrawn, only run.
+
+**The run.** `lake env lean book8/OrthogonalWitness.lean` under
+`leanprover/lean4:v4.32.0` — the toolchain this repository already pins, so no
+second Mathlib and no cache download. All four theorems report
+`[propext, Classical.choice, Quot.sound]`. No `sorryAx`. STATUS now records the
+date, the pin, the command and the axiom line.
+
+**What the four theorems are.** None is vacuous in the gate's sense — no `True`,
+no unsatisfiable hypothesis, no conclusion independent of its hypotheses — but
+four *names* are not four independent facts, and the file now says so in a SCOPE
+block rather than leaving the reader to infer it:
+
+- `on_hyperboloid` and `proper_time` are the same Mathlib fact,
+  `cosh² − sinh² = 1`, multiplied by ℓ² in one and negated in the other.
+- `on_hyperboloid` states the ω-reduced constraint: `‖ω‖² = 1` is substituted by
+  hand into the statement rather than carried as a hypothesis. No metric,
+  manifold, pullback or normal bundle appears anywhere in the file.
+- `radius_has_throat` is stated for `0 ≤ ℓ` and is true-but-empty at ℓ = 0, since
+  Lean's `τ / 0 = 0` gives `a 0 τ = 0 ≤ 0`. The geometry needs `0 < ℓ`.
+- `throat_value` is `cosh 0 = 1`.
+
+The tensor pullback — the step that would make "induced metric" a proved phrase
+rather than a docstring phrase — is the sympy result and is **not** in the
+kernel. `witness_codimension` (`5 - 4 = 1`) was demoted to a comment: truncated
+subtraction on ℕ literals closes by `rfl` whether or not anything about normal
+bundles holds, and stated beside three real analytic identities it invites the
+reading that vocabulary matching means the theorem matches.
+
+**The file was in no build target.** Same shape as `SaturnHexagon.lean` before
+2026-08-21 and `PrincipiaOrthogona_v2/VolumeTwo.lean` before 2026-08-26: it
+compiles when invoked by hand, and a hand run proves the file on the day it is
+run and nothing afterwards. Declared as `lean_lib OrthogonalWitness` with
+`srcDir := "book8"`. Eight root-level `.lean` files remain outside every target.
+
+**The gate, and its limit.** `tools/verify-book8/` mirrors `verify-dm3`: build,
+kernel probe, `axiom_gate.py` with a hardcoded count. Note that `#print axioms`
+emits *info*, not an error — a `sorryAx` would scroll past inside a build that
+still reports success — so the declared target catches a compile regression and
+the gate catches an admission regression. They are two different checks.
+
+**A check that produced a finding on its first run.** The hardcoded `N` in each
+`run.sh` is deliberate: deriving it from the probe would let a theorem be
+dropped without failing anything, which is the regression the gate exists to
+catch. The cost of hardcoding is drift between three places — the probe's actual
+`#print axioms` lines, `N=` in `run.sh`, and the README.
+`tools/probe_consistency.py` refuses that drift (selftest 5/5; negative controls
+catch a wrong `N` and an emptied probe; exit 2 on a zero scan, so it cannot
+silently stop checking). It immediately found `tools/verify-dm3/README.md`
+stating 12 theorems and gate count 12 while `run.sh` had been `N=28` since the
+ToyModel additions of 2026-08-26. The README now lists all 28 by name.
+
+**What it does not do.** `probe_consistency.py` guards counts, not claims. It
+cannot tell you that `on_hyperboloid` and `proper_time` are one fact wearing two
+names. That is prose in a README, and nothing enforces it — the same class of
+gap as the declaration-resolver rule noted in the entry above, still unwritten.
+
+**Open after today.** `.github/workflows/verify-proofs.yml` remains uncommitted
+(PAT lacks `workflow` scope) and, when it lands, needs a verify-book8 step and a
+`probe_consistency.py` step. AXLE has no CI at all, and `AXLE/tools/verify-vol2/`
+now has the same three-file shape without the guard, which only walks
+`geometry/tools/`.
+
+Commits: `d203f4c` (kernel run + build target), `7047888` (gate + guard + README
+count 12→28).
