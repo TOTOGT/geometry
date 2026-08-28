@@ -138,6 +138,7 @@
     font-size: .78rem; line-height: 1.7;
     margin: 1.6rem 0;
     overflow-x: auto;
+    white-space: pre-wrap;
   }
   .lean-kw { color: #93c5fd; }
   .lean-id { color: #d8b4fe; }
@@ -370,55 +371,109 @@
   <h2>§ 4 · The Lean 4 Proof</h2>
 
   <p>
-    The autophagy fold operator is machine-verified in the AXLE repository
-    as part of <code>AutophagyDm3.lean</code>, the same file that contains
-    the triple-alpha process proof. The core theorem establishes that the
-    mTOR threshold is a fold operator F in the dm³ sense:
+    The fold is proved where a proof is available: on the potential itself. The two
+    Whitney A&#8321; conditions &mdash; a critical point at q = 1, and that critical point
+    non-degenerate &mdash; are a few lines of Lean each, and the factorisation exhibiting
+    the double root is one more. What follows is verbatim from
+    <code>AutophagyDm3.lean</code> in the AXLE repository.
   </p>
 
   <div class="lean-box">
-<span class="lean-cmt">-- AutophagyDm3.lean (excerpt) · AXLE · 0 sorry</span>
-<br>
-<span class="lean-kw">structure</span> <span class="lean-id">CellState</span> <span class="lean-kw">where</span>
-  <span class="lean-id">nutrient</span>  : ℝ  <span class="lean-cmt">-- normalised [amino acid] / K_aa</span>
-  <span class="lean-id">mtor</span>      : ℝ  <span class="lean-cmt">-- mTORC1 activity ∈ [0,1]</span>
-  <span class="lean-id">autophagy</span> : ℝ  <span class="lean-cmt">-- LC3-II / LC3-I ratio (fold indicator)</span>
-<br>
-<span class="lean-cmt">-- The critical threshold: fold fires when nutrient ≤ √(K / λ)</span>
-<span class="lean-kw">noncomputable</span> <span class="lean-kw">def</span> <span class="lean-id">autophagyThreshold</span> (K λ : ℝ) (hK : <span class="lean-num">0</span> < K) (hλ : <span class="lean-num">0</span> < λ) : ℝ :=
-  Real.sqrt (K / λ)
-<br>
-<span class="lean-kw">theorem</span> <span class="lean-id">autophagy_fold_fires</span> (K λ r : ℝ) (hK : <span class="lean-num">0</span> < K) (hλ : <span class="lean-num">0</span> < λ)
-    (hr : <span class="lean-num">0</span> ≤ r) (h_starved : r ^ <span class="lean-num">2</span> ≤ K / λ) :
-    r ≤ <span class="lean-id">autophagyThreshold</span> K λ hK hλ := <span class="lean-kw">by</span>
-  unfold <span class="lean-id">autophagyThreshold</span>
-  rw [← Real.sqrt_sq hr]; apply Real.sqrt_le_sqrt; exact h_starved
-<br>
-<span class="lean-cmt">-- The Lyapunov stability of the post-autophagy restored state</span>
-<span class="lean-kw">theorem</span> <span class="lean-id">autophagy_lyapunov_stable</span> (μ : ℝ) (h : μ = -<span class="lean-num">2</span>) :
-    μ < <span class="lean-num">0</span> := <span class="lean-kw">by</span> linarith [h]
+<span class="lean-cmt">-- AutophagyDm3.lean · AXLE · verbatim</span>
+
+<span class="lean-cmt">-- c(ρ) = −2ρ is strictly negative for ρ &gt; 0: the scalar witness</span>
+<span class="lean-cmt">-- for non-degeneracy of the contact form α = dz − ρ² dθ.</span>
+<span class="lean-kw">theorem</span> <span class="lean-id">contactCoeff_neg</span> (ρ : ℝ) (hρ : <span class="lean-num">0</span> &lt; ρ) : contactCoeff ρ &lt; <span class="lean-num">0</span> := <span class="lean-kw">by</span>
+  unfold contactCoeff
+  linarith
+
+<span class="lean-cmt">-- Whitney A₁, first condition.</span>
+<span class="lean-kw">theorem</span> <span class="lean-id">V_critical_at_one</span> : V' <span class="lean-num">1</span> = <span class="lean-num">0</span> := <span class="lean-kw">by</span>
+  unfold V'
+  norm_num
+
+<span class="lean-cmt">-- Whitney A₁, second condition: V″(1) = 6 ≠ 0.</span>
+<span class="lean-kw">theorem</span> <span class="lean-id">V_second_deriv_at_one</span> : V'' <span class="lean-num">1</span> = <span class="lean-num">6</span> := <span class="lean-kw">by</span>
+  unfold V''
+  norm_num
+
+<span class="lean-cmt">-- The double root exhibited by factorisation, not asserted.</span>
+<span class="lean-kw">theorem</span> <span class="lean-id">V_factored</span> (q : ℝ) : V q + <span class="lean-num">2</span> = (q - <span class="lean-num">1</span>) ^ <span class="lean-num">2</span> * (q + <span class="lean-num">2</span>) := <span class="lean-kw">by</span>
+  unfold V
+  ring
   </div>
 
   <p>
-    The proof of <code>autophagy_fold_fires</code> is structurally identical to
-    <code>helical_selectivity</code> in <code>CatGT_Main.lean</code> — the same
-    theorem, the same proof, different physical substrate. This is not coincidence.
-    Both are instances of the universal fold theorem: given a contact manifold
-    with form α = dz − λr²dθ, the fold operator F fires when r ≤ √(J/λ).
-    The symbol J is K_aa in cells, J (hopping integral) in DNLS, T (temperature)
-    in plasma — the same mathematics in every domain.
+    The triple-alpha side is a separate file, and deliberately a spare one. Three
+    α-particles couple, so the fold ladder is the three-term recurrence
+    w(k+3) = w(k+2) + w(k+1) + w(k), whose characteristic root is the Tribonacci
+    constant η &asymp; 1.8393 &mdash; above the two-body constant φ, below the embodiment
+    threshold τ = 2. <code>TripleAlphaDm3.lean</code> proves the ordinal form of that
+    sandwich, and carries no dependency on Mathlib, so it can be checked from a clean
+    checkout with nothing to fetch.
+  </p>
+
+  <div class="lean-box">
+<span class="lean-cmt">-- TripleAlphaDm3.lean · AXLE · verbatim · Mathlib-free</span>
+
+<span class="lean-kw">def</span> <span class="lean-id">tribo</span> : Nat → Nat
+  | <span class="lean-num">0</span> =&gt; <span class="lean-num">1</span>
+  | <span class="lean-num">1</span> =&gt; <span class="lean-num">1</span>
+  | <span class="lean-num">2</span> =&gt; <span class="lean-num">2</span>
+  | (n + <span class="lean-num">3</span>) =&gt; <span class="lean-id">tribo</span> (n + <span class="lean-num">2</span>) + <span class="lean-id">tribo</span> (n + <span class="lean-num">1</span>) + <span class="lean-id">tribo</span> n
+
+<span class="lean-cmt">-- η &gt; φ: each term strictly exceeds the Fibonacci step.</span>
+<span class="lean-kw">theorem</span> <span class="lean-id">tribo_dominates_fibonacci_step</span> (n : Nat) :
+    <span class="lean-id">tribo</span> (n + <span class="lean-num">2</span>) + <span class="lean-id">tribo</span> (n + <span class="lean-num">1</span>) &lt; <span class="lean-id">tribo</span> (n + <span class="lean-num">3</span>) := <span class="lean-kw">by</span>
+  have h := <span class="lean-id">tribo_pos</span> n
+  rw [<span class="lean-id">tribo_rec</span>]
+  omega
+
+<span class="lean-cmt">-- η &lt; τ = 2: past the first term the ladder stays under the doubling rate.</span>
+<span class="lean-kw">theorem</span> <span class="lean-id">tribo_lt_two_pow</span> : ∀ n, <span class="lean-num">0</span> &lt; n → <span class="lean-id">tribo</span> n &lt; <span class="lean-num">2</span> ^ n
+  </div>
+
+  <p>
+    The two files answer different questions and are held to different standards.
+    The autophagy theorems are sorry-free in source, compiled against Mathlib.
+    The triple-alpha theorems have been through the kernel with a per-declaration
+    <code>#print axioms</code>, which returns <code>[propext, Quot.sound]</code> &mdash;
+    two of the three standard axioms, since nothing in the file is classical.
   </p>
 
   <table>
     <thead>
-      <tr><th>Theorem</th><th>File</th><th>Status</th><th>Physical domain</th></tr>
+      <tr><th>Declaration</th><th>File</th><th>Status</th><th>Content</th></tr>
     </thead>
     <tbody>
-      <tr><td><code>autophagy_fold_fires</code></td><td>AutophagyDm3.lean</td><td><span class="badge badge-green">closed · 0 sorry</span></td><td>mTOR / LC3-II fold</td></tr>
-      <tr><td><code>autophagy_lyapunov_stable</code></td><td>AutophagyDm3.lean</td><td><span class="badge badge-green">closed · 0 sorry</span></td><td>μ = −2 anti-entropy</td></tr>
-      <tr><td><code>triple_alpha_fold</code></td><td>AutophagyDm3.lean</td><td><span class="badge badge-green">closed · 0 sorry</span></td><td>T^40 fold T* ≈ 10⁸ K</td></tr>
-      <tr><td><code>helical_selectivity</code></td><td>CatGT_Main.lean</td><td><span class="badge badge-green">closed · 0 sorry</span></td><td>Zeolite HSP</td></tr>
-      <tr><td><code>sweet_parker_fold</code></td><td>DustyPlasma.lean</td><td><span class="badge badge-green">closed · 0 sorry</span></td><td>MHD reconnection</td></tr>
+      <tr><td><code>contactCoeff_neg</code></td><td>AutophagyDm3.lean</td><td><span class="badge badge-green">sorry-free</span></td><td>contact form non-degenerate, scalar witness</td></tr>
+      <tr><td><code>V_critical_at_one</code></td><td>AutophagyDm3.lean</td><td><span class="badge badge-green">sorry-free</span></td><td>Whitney A&#8321;: V&prime;(1) = 0</td></tr>
+      <tr><td><code>V_second_deriv_at_one</code></td><td>AutophagyDm3.lean</td><td><span class="badge badge-green">sorry-free</span></td><td>Whitney A&#8321;: V&Prime;(1) = 6 &ne; 0</td></tr>
+      <tr><td><code>V_factored</code></td><td>AutophagyDm3.lean</td><td><span class="badge badge-green">sorry-free</span></td><td>double root by factorisation</td></tr>
+      <tr><td><code>gronwall_radius</code></td><td>AutophagyDm3.lean</td><td><span class="badge badge-green">sorry-free</span></td><td>&epsilon;&#8320; = 1/3</td></tr>
+      <tr><td><code>helical_selectivity</code></td><td>CatGT_Main.lean</td><td><span class="badge badge-green">sorry-free</span></td><td>zeolite helical selectivity</td></tr>
+      <tr><td><code>tribo_dominates_fibonacci_step</code></td><td>TripleAlphaDm3.lean</td><td><span class="badge badge-blue">kernel-checked</span></td><td>&eta; &gt; &phi;</td></tr>
+      <tr><td><code>tribo_lt_two_pow</code></td><td>TripleAlphaDm3.lean</td><td><span class="badge badge-blue">kernel-checked</span></td><td>&eta; &lt; &tau; = 2</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    Three statements in <code>AutophagyDm3.lean</code> are placeholders and are
+    labelled as such in the source: <code>contactForm_nondeg_full</code>,
+    <code>whitneyFold_from_kinase_data</code> and <code>limitCycle_exists_auto</code>
+    are each stated as <code>True</code> pending AXLE Issue&nbsp;#14. They are open
+    obligations, not results, and the scalar or algebraic content standing in for each
+    is the theorem named beside it above.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Open obligation</th><th>Needs</th><th>Tracked</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>contactForm_nondeg_full</code></td><td>differential forms on X_auto</td><td><span class="badge badge-gold">AXLE #14</span></td></tr>
+      <tr><td><code>whitneyFold_from_kinase_data</code></td><td>&sigma; ~ V near &rho;*, via Mather</td><td><span class="badge badge-gold">AXLE #14</span></td></tr>
+      <tr><td><code>limitCycle_exists_auto</code></td><td>Poincar&eacute; section and return map</td><td><span class="badge badge-gold">AXLE #14</span></td></tr>
     </tbody>
   </table>
 
@@ -441,7 +496,7 @@
     Triple-alpha:  T ≤ T* = √(ℏω / k_B λ_grav)  →  fold F fires  →  helium burns → carbon
     Autophagy:     r ≤ r* = √(K_aa / λ_AMPK)     →  fold F fires  →  LC3-II forms → recycling
 
-    Same operator. Same proof. Different universe.
+    Same operator. Same threshold structure. Different universe.
   </div>
 
   <p>
@@ -516,20 +571,22 @@
   <h2>§ 8 · AXLE Cross-Reference and Lean 4 Status</h2>
 
   <p>
-    The autophagy theorems live in <code>AutophagyDm3.lean</code> in the AXLE
-    repository. The file also contains the triple-alpha triple process (T^40 fold)
-    and the mTOR/AMPK bistability proof. Current status:
+    The autophagy theorems live in <code>AutophagyDm3.lean</code> and the three-body
+    ladder in <code>TripleAlphaDm3.lean</code>, both in the AXLE repository, with the
+    zeolite companion in <code>CatGT_Main.lean</code>. Counts are per file, produced by
+    <code>tools/theorem_census.py</code>, and separate theorems that carry content from
+    placeholders that do not:
   </p>
 
   <table>
     <thead>
-      <tr><th>File</th><th>Closed</th><th>Admits</th><th>Sorries</th></tr>
+      <tr><th>File</th><th>Theorems</th><th>Substantive</th><th>Placeholders</th><th>Sorries</th></tr>
     </thead>
     <tbody>
-      <tr><td><code>AutophagyDm3.lean</code></td><td>∼8</td><td>2</td><td>0</td></tr>
-      <tr><td><code>CatGT_Main.lean</code></td><td>6</td><td>3</td><td>0</td></tr>
-      <tr><td><code>DustyPlasma.lean</code></td><td>13</td><td>3</td><td>0</td></tr>
-      <tr><td><strong>AXLE total</strong></td><td><strong>∼27</strong></td><td><strong>∼8</strong></td><td><strong>0</strong></td></tr>
+      <tr><td><code>AutophagyDm3.lean</code></td><td>21</td><td>18</td><td>3</td><td>0</td></tr>
+      <tr><td><code>CatGT_Main.lean</code></td><td>9</td><td>9</td><td>0</td><td>0</td></tr>
+      <tr><td><code>TripleAlphaDm3.lean</code></td><td>6</td><td>6</td><td>0</td><td>0</td></tr>
+      <tr><td><strong>This chapter</strong></td><td><strong>36</strong></td><td><strong>33</strong></td><td><strong>3</strong></td><td><strong>0</strong></td></tr>
     </tbody>
   </table>
 
@@ -537,9 +594,11 @@
     The universal fold theorem — that the same mathematical object r*(λ) = √(J/λ)
     is the threshold for qualitative transitions in cells, zeolites, plasmas, and
     stellar interiors — is the central claim of Vol VI and the primary novel
-    contribution of the dm³ programme. Autophagy is its biological proof of concept:
-    the most intensively studied example of a biological threshold transition, now
-    formally verified in Lean 4 at 0 sorries.
+    contribution of the dm³ programme. Autophagy is its biological proof of concept —
+    the most intensively studied biological threshold transition — and the fold
+    conditions on its potential are machine-checked. The identification of the two
+    domains is a claim of this chapter, argued here; it is the theorems above that
+    are verified, not the analogy between them.
   </p>
 
   <!-- cross-links -->

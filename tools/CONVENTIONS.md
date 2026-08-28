@@ -46,6 +46,29 @@ same instrument, at least one of them will end up with two of it.
 Deferred renames are deferred because they touch CI in more than one
 repository, not because they are optional. Do each in one commit per repo.
 
+### Added 2026-08-28
+
+| File | Role | Note |
+|---|---|---|
+| `tools/declaration_scan.py` | `_scan` | resolves names used in prose against tracked sources across the corpus |
+| `tools/declaration_scan_fixtures.py` | `_fixtures` | |
+| `tools/textual_conclusion_scan.py` | `_scan` | **textual**; `conclusion_scan.lean` is the semantic instrument and is authoritative |
+| `tools/textual_conclusion_scan_fixtures.py` | `_fixtures` | |
+| `tools/corpus_roots.txt` | root set | one checkout per remote; see the corpus rule in `CLAUDE.md` |
+
+`textual_conclusion_scan.py` is deliberately **not** named `conclusion_scan.py`.
+Two mechanisms chasing the same property must not share a name (§1), and these
+two differ exactly where it matters: the Lean scan reduces with `whnf` and sees
+`∀ x ∈ S, x ∈ S := id`; the textual one cannot, and says so in its header. What
+the textual one has is reach — it does not need the file to elaborate, so it
+covers the ~2600 declarations in this corpus that no build currently touches.
+Find candidates with the textual scan; confirm with the Lean one where the file
+builds.
+
+It was written on 2026-08-28 without noticing `conclusion_scan.lean` already
+existed, which is the duplication this document exists to prevent. It is kept
+because the reach is real, not because it was needed.
+
 ---
 
 ## 2. Every instrument is checked before its verdict counts

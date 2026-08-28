@@ -6,10 +6,18 @@ the repo … the task is reconciliation, not recounting." This is the tool that
 does the reconciliation, so that a published number has a basis a reader can
 regenerate instead of a number a reader must trust.
 
+    python3 tools/theorem_census.py --corpus --tracked   # the published corpus
     python3 tools/theorem_census.py ~/Desktop/geometry ~/Desktop/AXLE
     python3 tools/theorem_census.py --table ...     # per-file table
     python3 tools/theorem_census.py --json  ...
     python3 tools/theorem_census.py --selftest
+
+SCOPE, which is half the number. A corpus figure is undefined until the root set
+is. --corpus reads tools/corpus_roots.txt: one checkout per distinct git remote,
+with the excluded paths listed there and the reason for each. --tracked restricts
+to `git ls-files` output, because an untracked file is a draft, not a publication.
+Without both flags this tool counts whatever tree you point it at, second
+checkouts and ~/Downloads copies included, and the total means nothing.
 
 METHOD, stated because the number is worthless without it.
 
@@ -40,7 +48,7 @@ never as "theorems proved".
 Exit 0 clean, 2 if a root has no .lean files (a silent zero is how a count
 quietly stops counting).
 """
-import os, re, sys, json, hashlib
+import os, re, sys, json, hashlib, subprocess
 from collections import defaultdict
 
 SKIP_DIRS = {'.lake', 'lake-packages', '.git', 'node_modules', '__pycache__'}
@@ -100,17 +108,43 @@ def stem_key(path):
     return VERSUF.sub('', b).lower()
 
 
-def census(roots):
+def tracked_lean(root):
+    """git-tracked .lean paths under root, or None if root is not a git repo."""
+    r = subprocess.run(['git', '-C', root, 'ls-files', '*.lean'],
+                       capture_output=True, text=True)
+    if r.returncode != 0:
+        return None
+    return set(r.stdout.split())
+
+
+def read_roots_file(path):
+    """One path per line, ~ expanded, # comments and blanks ignored."""
+    out = []
+    for line in open(path, encoding='utf-8'):
+        line = line.split('#', 1)[0].strip()
+        if line:
+            out.append(os.path.expanduser(line))
+    return out
+
+
+def census(roots, tracked=False):
     rows = []
     for root in roots:
         root = os.path.abspath(os.path.expanduser(root))
         label = os.path.basename(root.rstrip('/'))
+        keep = tracked_lean(root) if tracked else None
+        if tracked and keep is None:
+            print(f'warning: {root} is not a git repo — skipped under --tracked',
+                  file=sys.stderr)
+            continue
         for dp, dns, fns in os.walk(root):
             dns[:] = [d for d in dns if d not in SKIP_DIRS]
             for f in sorted(fns):
                 if not f.endswith('.lean'):
                     continue
                 p = os.path.join(dp, f)
+                if keep is not None and os.path.relpath(p, root) not in keep:
+                    continue
                 raw = open(p, encoding='utf-8', errors='replace').read()
                 s = strip_comments(raw)
                 tot, adm, names, ax = scan_text(s)
@@ -133,15 +167,19 @@ def summarize(rows):
         groups[(r['repo'], r['stem'])].append(r)
     dup_groups = {k: v for k, v in groups.items() if len(v) > 1}
     # de-duplicated total: from each version group keep the largest member only
-    dedup = 0
+    dedup = dedup_adm = 0
     for k, v in groups.items():
-        dedup += max(x['decls'] for x in v)
+        m = max(v, key=lambda x: x['decls'])
+        dedup += m['decls']
+        dedup_adm += m['admitted']
     return {
         'files': len(rows),
         'decls_raw': sum(r['decls'] for r in rows),
         'decls_dedup_version_groups': dedup,
         'admitted': sum(r['admitted'] for r in rows),
         'sorry_free': sum(r['decls'] - r['admitted'] for r in rows),
+        'admitted_grouped': dedup_adm,
+        'sorry_free_grouped': dedup - dedup_adm,
         'axiom_decls': sum(r['axioms'] for r in rows),
         'version_dup_groups': {'/'.join(k): sorted(x['path'] for x in v)
                                for k, v in sorted(dup_groups.items())},
@@ -179,8 +217,15 @@ if __name__ == '__main__':
         print('selftest clean' if not bad else f'{bad} case(s) failed')
         sys.exit(1 if bad else 0)
 
-    roots = [a for a in sys.argv[1:] if not a.startswith('--')] or ['.']
-    rows = census(roots)
+    TRACKED = '--tracked' in sys.argv
+    roots = [a for a in sys.argv[1:] if not a.startswith('--')]
+    if '--corpus' in sys.argv:
+        rf = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'corpus_roots.txt')
+        if not os.path.exists(rf):
+            print(f'--corpus needs {rf}', file=sys.stderr); sys.exit(2)
+        roots = read_roots_file(rf) + roots
+    roots = roots or ['.']
+    rows = census(roots, tracked=TRACKED)
     if not rows:
         print('no .lean files found — nothing counted')
         sys.exit(2)
@@ -197,12 +242,16 @@ if __name__ == '__main__':
         print()
 
     print(f'roots            : {", ".join(roots)}')
+    print(f'scope            : {"git-tracked .lean only" if TRACKED else "every .lean on disk under each root"}')
     print(f'.lean files      : {S["files"]}')
-    print(f'declarations     : {S["decls_raw"]}  (theorem + lemma, comments stripped)')
-    print(f'  after grouping : {S["decls_dedup_version_groups"]}  version-suffixed copies collapsed')
-    print(f'  sorry-free     : {S["sorry_free"]}   <- NOT the same as proved; see header')
-    print(f'  admitted       : {S["admitted"]}   (sorry in the proof body)')
+    print()
+    print(f'{"":<14} {"raw":>8} {"grouped":>8}   (grouped = version-suffixed copies collapsed)')
+    print(f'{"declarations":<14} {S["decls_raw"]:>8} {S["decls_dedup_version_groups"]:>8}')
+    print(f'{"sorry-free":<14} {S["sorry_free"]:>8} {S["sorry_free_grouped"]:>8}   <- NOT the same as proved; see header')
+    print(f'{"admitted":<14} {S["admitted"]:>8} {S["admitted_grouped"]:>8}   (sorry in the proof body)')
+    print()
     print(f'axiom decls      : {S["axiom_decls"]}   (an axiom is not a proof)')
+    print('Read down one column. A raw figure and a grouped figure are not comparable.')
     if S['version_dup_groups']:
         print(f'\nversion-duplicate groups ({len(S["version_dup_groups"])}):')
         for k, v in list(S['version_dup_groups'].items())[:12]:

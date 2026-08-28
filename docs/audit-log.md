@@ -4,6 +4,99 @@ Dated narrative for defects and audits that are closed. Moved out of
 `CLAUDE.md` on 2026-08-21 so the priming file stays short to read. Nothing
 here was changed, only relocated. Open items remain in `CLAUDE.md`.
 
+# CHAPTER A PASS — the chapter page cited nine declarations that do not exist (2026-08-28)
+
+Found while preparing `chA-autophagy.html` and the Chapter A deposit. Method:
+`tools/declaration_scan.py` over `tools/corpus_roots.txt` with `--tracked`, which is
+new this session and exists because the declaration-resolver rule had no tool.
+
+## Nine of the ten declarations named on the chapter page do not resolve
+
+**Class: FABRICATED.** `chA-autophagy.html` named ten Lean declarations. One
+resolves. The nine that do not:
+
+`CellState`, `autophagy`, `autophagyThreshold`, `autophagy_fold_fires`,
+`autophagy_lyapunov_stable`, `mtor`, `nutrient`, `sweet_parker_fold`,
+`triple_alpha_fold`.
+
+They were not merely named. §4 displayed a `lean-box` containing the full text of
+`structure CellState`, `def autophagyThreshold` and `theorem autophagy_fold_fires`
+— statement, hypotheses and tactic proof — for declarations that are in no file in
+any of the eleven corpus repositories. A status table gave four of them a green
+`closed · 0 sorry` badge. The page also attributed `triple_alpha_fold` to
+`AutophagyDm3.lean`, a file which at that date contained no triple-alpha material
+of any kind.
+
+The file the page cited does exist and holds 27 declarations. None of them is
+named anywhere on the page. `helical_selectivity` in `CatGT_Main.lean` is the one
+name that resolves, and it resolves cleanly.
+
+This is the sharpest instance so far of the class the 2026-08-24 pass called
+MISATTRIBUTED, and worse in kind: there, true theorems were filed under claims
+they did not support. Here the theorems do not exist, and a proof term was
+rendered for one of them.
+
+## AutophagyDm3.lean contains three vacuous theorems
+
+**Class: VACUOUS.** `contactForm_nondeg_full`, `whitneyFold_from_kinase_data` and
+`limitCycle_exists_auto` are each `: True := by trivial`. They are sorry-free,
+which is exactly how they pass every count that keys on `sorry`.
+
+The source is honest about them — each carries a `TODO (Issue #14)` and names the
+scalar or algebraic content standing in for it. The defect is not in the file. It
+is that "21 sorry-free theorems in `AutophagyDm3.lean`" is a true sentence that
+overstates by three, and nothing downstream knew to subtract.
+
+Substantive count for that file: 18.
+
+## gronwall_radius — a third value for the Hessian bound, in a fourth place
+
+Related to **O7**, still open. `AutophagyDm3.lean` proves
+
+    theorem gronwall_radius : (2 : ℝ) / (2 * (1 + 2)) = 1 / 3 := by norm_num
+
+which is the formula at sup‖Hess V‖ = 2. The docstring immediately above it reads
+"With |μ_max| = 2 and sup‖Hess V‖ = 1", which would give 2/(2·(1+1)) = 1/2. And
+`V_second_deriv_at_one`, eleven lines earlier in the same file, proves V″(1) = 6.
+
+The 2026-08-24 pass recorded the naming sentence at H = 3 and the Lean at H = 2.
+This is a third value, in a fourth location. ε₀ = 1/3 is load-bearing corpus-wide
+and the theorem asserting it is arithmetically correct; what is not settled is
+which Hessian bound is the right one to put in, and that remains physics, not Lean.
+
+## What changed in the chapter, and what did not
+
+Changed: §4 and §8 now cite only declarations that resolve, quoted verbatim from
+source. The three placeholders appear in their own table as open obligations
+against Issue #14, which is what the file says they are. §8's counts are per file
+and separate theorems that carry content from placeholders that do not. The
+closing paragraph no longer says the analogy is verified; it says the theorems are
+and the identification is argued.
+
+Not changed: the biology, the history, the mTOR account, and the claim that
+autophagy and the triple-alpha process are the same fold. That claim is the
+chapter's thesis. It is argued in prose, where a thesis belongs.
+
+One word in §5. The display read "Same operator. Same proof. Different universe."
+The two proofs now both exist and are not the same: `AutophagyDm3.lean` is real
+analysis over Mathlib, `TripleAlphaDm3.lean` is Nat arithmetic with no dependency.
+A referee who opens both finds different proofs, so the sentence was falsifiable
+and false. It now reads "Same operator. Same threshold structure." The threshold
+structure r* = √(J/λ) is what the display actually exhibits, and that much is
+true.
+
+## Added
+
+`AXLE/TripleAlphaDm3.lean` — the three-body ladder, Mathlib-free, compiled under
+Lean 4.14.0 with `EXIT=0`, no `sorry`, no `native_decide`. Per-declaration
+`#print axioms` returns `[propext, Quot.sound]`, and nothing at all for
+`tribo_rec`. Six theorems: positivity, the recurrence, η > φ and η < τ = 2 in
+ordinal form, and the two-sided bracket. Wired into `lakefile.toml` as its own
+`[[lean_lib]]` target, since a file that is no target's root is compiled by nothing.
+
+It proves no physics and its header says so. The triple-alpha identification is a
+modelling claim of the chapter prose, not a theorem of the file.
+
 # EDITORIAL PASS on the Volume I V7 release — six more defects, three of them mine (2026-08-24)
 
 The V7 release above was handed over, and then read again as an editor rather than

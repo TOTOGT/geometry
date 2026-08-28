@@ -1644,6 +1644,57 @@ before the number ships. Existing instances:
 | kernel-checked declaration counts | `tools/verify-*/run.sh` + `tools/axiom_gate.py` |
 | probe / gate / README count agreement | `tools/probe_consistency.py` |
 | word counts | `tools/wordcount_scan.py` |
+| the corpus root set itself | `tools/corpus_roots.txt` |
+
+## What counts as the corpus (added 2026-08-27)
+
+A corpus-wide number is undefined until the root set is. This was the live defect:
+`theorem_census.py` was first run over `~/Desktop/geometry ~/Desktop/AXLE` and its
+output reported as a corpus census. Two of eleven repositories is not the corpus,
+and the missing nine are why that run found 32 `axiom` declarations against the
+registry's 62.
+
+Scanning wider is not the fix either. `~/Downloads` holds `files (27)`,
+`files (28)`, `files (39)` — repeated copies of the same declarations.
+`~/Desktop/geometry-backup-jul5` and `~/Desktop/files 4.12.2026` are second
+checkouts of `TOTOGT/geometry` and `TOTOGT/AXLE`. A scan of everything on disk is
+not a wider net, it is a broken one: it counts the same theorem four times and
+calls the result growth.
+
+**The corpus is one checkout per distinct git remote, git-tracked `.lean` files
+only.** The root set lives in `tools/corpus_roots.txt`, with every excluded path
+listed there beside the reason it is excluded. Untracked files are drafts — in
+`geometry` alone, `_to_delete/`, `V4,` and `vol2-v5/` hold 19 declarations that no
+published number may include. Tracked files under `.lake/` or `lake-packages/` are
+vendored dependencies and are excluded too: they are someone else's theorems.
+
+    python3 tools/theorem_census.py --corpus --tracked
+
+Run of 2026-08-27 — 11 repositories, 254 files:
+
+| | raw | grouped |
+|---|---|---|
+| declarations written | 2628 | 1856 |
+| sorry-free | 2365 | 1676 |
+| admitted (`sorry` in body) | 263 | 180 |
+
+53 `axiom` declarations. Read down one column; a raw figure and a grouped figure
+are not comparable, and the tool now prints them as two columns for that reason.
+
+**None of these six numbers is publishable yet, and the reason is written here so
+the next session does not publish one anyway.** Grouping keys on the basename with
+any `_vN` suffix stripped, discarding the directory, so it collapses files that
+merely share a name in different directories — `AXLE.lean` appears four times in
+one group. The grouped column is therefore a lower bound, not a count. The raw
+column double-counts genuine version siblings (`AXLE.lean`, `AXLE_v5_1.lean`,
+`AXLE_v6.lean`, `AXLE_V8.lean` are four tracked files in one repository). The true
+figure is bracketed by 1856 and 2628 and is not yet known.
+
+The registry publishes 1165 / 1004 / 30. That gap against 2628 is the reconciliation
+opened in the 2026-08-18 TODO, still open. One lead: counting tracked files
+*including* those under `.lake/` raises the axiom count from 53 to 61, against the
+registry's 62 — which suggests the registry's scan reached into vendored trees this
+rule excludes. Confirm that before moving any number.
 
 The counting vocabulary is not interchangeable, and the three words below have been
 used as synonyms on public pages when they name three different quantities:
@@ -1665,3 +1716,18 @@ produce the per-file basis (`tools/theorem_census.py --table`), diff it against 
 number's stated basis, and move the number only with the file list that justifies
 it. A number that moved once without a published basis is worth less than a smaller
 number that never has.
+
+Do not pass a directory tree to `theorem_census.py` and report the result as a
+corpus figure. Without `--corpus --tracked` it counts whatever you point it at,
+second checkouts and `~/Downloads` copies included. If a root belongs in the
+corpus, add it to `tools/corpus_roots.txt` with its remote — and re-run the census
+and diff before shipping, because adding a root changes every published total.
+
+Do not quote a raw figure and a grouped figure in the same sentence. Before
+2026-08-27 this tool printed "after grouping: 1009" four lines above "sorry-free:
+1493" — a grouped total above a raw one, a pair that cannot both describe the same
+corpus, and 1493 was on its way to a public page.
+
+Do not treat "reach more places" as the fix for a number that is too low. The
+registry undercounts and the disk overcounts; the work in between is naming the
+corpus, not widening the scan.
