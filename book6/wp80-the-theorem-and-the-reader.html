@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-80 &middot; The Theorem and the Reader &mdash; Principia Orthogona Vol VI</title>
+<meta name="description" content="WP-80 &middot; The Theorem and the Reader: machine-assisted mathematics can now produce theorems faster than people can judge them. This paper uses one corpus as a specimen &mdash; 2,234 declarations, 1,984 sorry-free, 173 kernel-audited &mdash; to argue that the scarce resource is comprehension, and that the checks which can be mechanised are precisely the ones that do not answer whether a statement says anything.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+/* nav */
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav span{color:#918a76}
+.topnav .crumbs{color:#8f8878}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+/* head */
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.05rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.metagrid a{color:var(--accent2)}
+.doi{display:inline-block;margin-top:1rem;font-family:var(--mono);font-size:.72rem;background:#eaf0f6;border:1px solid #b3c6d6;padding:.25rem .6rem;color:var(--accent2);text-decoration:none}
+.doi:hover{background:var(--paper2)}
+/* body */
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.6rem 0 .3rem}
+h2{font-size:1.42rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.05rem;font-weight:600;color:var(--ink2);margin:1.6rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.02rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.2rem 1.4rem;font-style:italic;margin-bottom:1.4rem}
+/* claim tags */
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-value{background:#f7ecd6;color:#7a5410;border:1px solid #ddc48c}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+/* boxes */
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.1rem 1.3rem;margin:1.4rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.9rem 1.2rem;margin:1.2rem 0;overflow-x:auto;color:var(--accent2)}
+/* table */
+table{width:100%;border-collapse:collapse;margin:1.3rem 0;font-size:.86rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+td.mono{font-family:var(--mono);font-size:.78rem}
+tr:hover td{background:var(--paper2)}
+/* chain */
+.chain{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin:1.3rem 0}
+@media(max-width:620px){.chain{grid-template-columns:1fr 1fr}}
+.op{padding:.9rem .7rem;color:#fff;text-align:center}
+.op b{display:block;font-family:var(--mono);font-size:1.5rem}
+.op i{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.11em;text-transform:uppercase;font-style:normal;opacity:.85;margin:.15rem 0 .35rem}
+.op span{font-size:.76rem;line-height:1.4;font-style:italic;opacity:.94}
+.op1{background:#17435f}.op2{background:#7a3410}.op3{background:#2f5c33}.op4{background:#16564a}
+/* refs */
+ol.refs{padding-left:1.4rem;font-size:.84rem;line-height:1.62}
+ol.refs li{margin-bottom:.45rem}
+ol.refs a{color:var(--accent2)}
+/* footer */
+footer{background:var(--ink2);color:#8f8878;padding:2.4rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+</style>
+<style>
+.t-closed{background:#dfe9df;color:#2f5c33;border:1px solid #a9c8a8;text-decoration:none}
+.reg td{vertical-align:top}
+.reg .n{font-family:var(--mono);font-size:.62rem;color:var(--dim);white-space:nowrap}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.tl{font-family:var(--mono);font-size:.72rem;line-height:1.75;background:var(--paper2);border:1px solid var(--rule);padding:1rem 1.2rem;margin:1.2rem 0;overflow-x:auto}
+.tl b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="topnav">
+  <span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a> &middot; WP-80</span>
+  <span class="meta"><a href="wp78-the-seam-and-the-boundary.html">&larr; WP-78 &middot; The Seam</a> &middot; <a href="wp79-the-ratio-and-the-scale.html">WP-79 &middot; The Ratio and the Scale</a></span>
+</div>
+
+<div class="wp-head">
+  <div class="wp-kicker">Vol VI &middot; Roots &middot; WP-80 &middot; Machine Learning &amp; Method &middot; Draft</div>
+  <h1>The Theorem and the <em>Reader</em></h1>
+  <div class="subtitle">Machine-assisted mathematics produces statements faster than anyone can judge them &mdash; one corpus as specimen</div>
+  <div class="metagrid">
+    <div><strong>Author</strong>Pablo Nogueira Grossi<br>G6 LLC &middot; Newark, NJ 07104</div>
+    <div><strong>Occasion</strong>The comprehension bottleneck in machine-assisted proof<br>Paraphrasing a point made publicly by Terence Tao</div>
+    <div><strong>Status</strong>Working paper &middot; v0.1 &middot; August 2026<br>Not peer-reviewed &middot; not deposited</div>
+    <div><strong>Specimen</strong>Project 1080 &middot; AXLE Theorem Registry<br>13 repositories &middot; figures dated, not fixed</div>
+    <div><strong>Claim</strong>Every check that scales answers the wrong question<br>The one that matters costs a human minute</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<p class="lede">Terence Tao has made the point, in substance, that we can now generate theorems in
+enormous quantity, and that the binding constraint is no longer production but the limited number of
+people able to make sense of what has been produced. This paper takes that seriously by treating one
+corpus as a specimen and asking what its numbers actually measure. The answer is uncomfortable and,
+I think, general: the checks that mechanise are exactly the checks that cannot tell you whether a
+statement means anything; the check that can is the one that does not scale; and in a single-author
+corpus the count of statements examined by anyone other than their author is not merely low but
+structurally close to zero.</p>
+
+<div class="taglegend">
+  <span><span class="tag t-data">DATA</span> measured, with the producing command</span>
+  <span><span class="tag t-model">MODEL</span> derived in-framework</span>
+  <span><span class="tag t-open">OPEN</span> not yet established</span>
+  <span><span class="tag t-closed">CLOSED</span> was open; resolved, with the date</span>
+  <span><span class="tag t-value">VALUE PREMISE</span> explicit normative choice</span>
+</div>
+
+<div class="box">
+  <span class="lab">Scope, stated first</span>
+  <p>This paper makes <b>no claim that the specimen corpus is well verified</b>, no claim that a
+  kernel-checked theorem is a good theorem, and no claim to have solved the problem it describes.
+  The figures below are dated and change weekly; they are offered as an instance, not a result, and
+  every one names the command that regenerates it.
+  <span class="tag t-value">VALUE PREMISE</span> A body of machine-assisted mathematics that reports
+  how much it has produced, without reporting how much has been read, is reporting the easy half.</p>
+</div>
+
+<div class="eyebrow">&sect; 1 &middot; The occasion</div>
+<h2>Production stopped being the constraint</h2>
+
+<p>For most of the history of formalisation the bottleneck was writing the proof. Getting a
+non-trivial argument past a kernel took months, and the number of formalised theorems was a
+reasonable proxy for the amount of mathematics a community had digested, because someone had
+digested every one of them on the way in.</p>
+
+<p>That proxy has broken. With proof assistants, tactic automation and language models in the loop,
+declarations can be produced at a rate no reviewer matches. The number of statements in a repository
+now measures machine time, not human understanding. Tao&#8217;s observation is that the scarce
+resource has moved: not proofs, but readers.</p>
+
+<p>This is not an argument against machine assistance, and this corpus is built on it. It is an
+argument that the metrics inherited from the era of scarcity have quietly stopped measuring what
+they used to measure, and that continuing to publish them is a way of overstating without ever
+saying anything false.</p>
+
+<div class="eyebrow">&sect; 2 &middot; Three checks that scale</div>
+<h2>And what each one does not settle</h2>
+
+<p>A formal corpus admits three mechanical checks. They are genuinely useful, they are cheap, they
+run without a person, and they are ordered by strength. None of them is about meaning.</p>
+
+<table>
+<thead><tr><th>Check</th><th>Cost</th><th>Rules out</th><th>Does not rule out</th></tr></thead>
+<tbody>
+<tr><td><b>It compiles</b></td><td>Seconds to minutes, automatic</td><td>Syntax and type errors</td>
+<td>That the proof is admitted. <code>sorry</code> raises a <em>warning</em>; the build exits 0.</td></tr>
+<tr><td><b>It is sorry-free</b></td><td>A text scan</td><td>An explicit hole left by the author</td>
+<td>That the statement is empty. <code>theorem X : True := by trivial</code> is sorry-free.</td></tr>
+<tr><td><b>The kernel accepts it</b></td><td>One <code>#print axioms</code> per declaration</td>
+<td>Admitted proofs, and reliance on undeclared axioms</td>
+<td>That the statement asserts anything at all.</td></tr>
+</tbody>
+</table>
+
+<p>Note the shape. Each check closes the loophole the previous one left open, and the sequence
+terminates one step short. The kernel certifies that a proof establishes its stated proposition. It
+has nothing whatever to say about whether the proposition is worth establishing &mdash; or whether
+it excludes any state of the world.</p>
+
+<p>That last gap is not a technicality. It is precisely where machine-generated mathematics fails,
+because a generator optimising for &#8220;compiles, no <code>sorry</code>&#8221; is optimising for a
+target that a vacuous statement hits perfectly.</p>
+
+<div class="eyebrow">&sect; 3 &middot; The failure mode</div>
+<h2>Statements that pass every mechanical gate and exclude nothing</h2>
+
+<p><span class="tag t-data">DATA</span> Four instances found in this corpus and withdrawn. Each
+compiled. Each was <code>sorry</code>-free. Each would have reported a clean axiom set.</p>
+
+<table>
+<thead><tr><th>Declaration</th><th>As stated</th><th>Why it is empty</th></tr></thead>
+<tbody>
+<tr><td><code>whitneyFold_conditional</code></td><td><code>(h&sigma; : IsMorseCritical &sigma; &rho;) : &exist; &phi; : &reals; &rarr; &reals;, True</code></td><td>&phi; = id discharges it for every hypothesis. The hypothesis constrains nothing.</td></tr>
+<tr><td><code>reeb_orbit_is_integral</code></td><td><code>1 = 1</code></td><td>The name describes a geometric fact; the statement is an identity on numerals.</td></tr>
+<tr><td><code>limitCycle_exists_auto</code></td><td><code>True</code></td><td>Proved <code>by trivial</code>. Carried no <code>sorry</code> because there was nothing to guard.</td></tr>
+<tr><td><code>witness_codimension</code></td><td><code>5 - 4 = 1</code></td><td>Truncated subtraction on natural-number literals. Closes by <code>rfl</code> whether or not any claim about normal bundles holds.</td></tr>
+</tbody>
+</table>
+
+<p>The pattern is consistent and it is the crux of this paper: <b>the name carried the mathematics
+and the statement carried none of it.</b> A reader skimming a verification table sees
+<code>reeb_orbit_is_integral &middot; kernel-checked &middot; &#10003;</code> and imports the
+meaning from the identifier. The kernel imported nothing, because there was nothing to import.</p>
+
+<p>Nothing mechanical caught these. They were caught by someone opening the file and reading the
+proposition &mdash; the exact resource Tao identifies as scarce.</p>
+
+<div class="box">
+  <span class="lab">A partial mechanisation, and its ceiling</span>
+  <p>One repository in this corpus runs <code>vacuity.lean</code>, which detects trivially inhabited
+  <em>conclusions</em> &mdash; <code>True</code>, <code>&exist; _, True</code>, and conjunctions of
+  those &mdash; and ships fixtures that must fire, on the principle that a silent detector is worse
+  than none. It catches the first and third rows above.
+  <span class="tag t-open">OPEN</span> It does not catch the second or fourth, and by construction it
+  cannot catch unsatisfiable hypotheses, or a statement that is non-trivial but about the wrong
+  object. It is a lower bound on meaninglessness. There is no upper bound on meaning to be had
+  mechanically, and it is worth being clear that this is not a tooling gap that better tooling
+  closes.</p>
+</div>
+
+<div class="eyebrow">&sect; 4 &middot; The specimen</div>
+<h2>One corpus, counted honestly</h2>
+
+<p><span class="tag t-data">DATA</span> 28 August 2026, across thirteen repositories, eight of them
+reachable at the time of the sweep. Regenerated by
+<code>python3 tools/theorem_census.py &lt;repo&gt;</code>, which strips comments before matching, so
+a declaration named in a docstring counts as prose. <b>These figures change weekly and are not the
+claim of this paper</b>; the shape they make is.</p>
+
+<table>
+<thead><tr><th>Quantity</th><th>n</th><th>Share of written</th><th>Who or what produced the number</th></tr></thead>
+<tbody>
+<tr><td>Declarations written</td><td>2,234</td><td>100%</td><td>A text scan. Measures machine time.</td></tr>
+<tr><td>Sorry-free in source</td><td>1,984</td><td>88.8%</td><td>A text scan. Measures whether a hole was left explicitly.</td></tr>
+<tr><td>Individually kernel-audited</td><td><b>173</b></td><td><b>7.7%</b></td><td>A probe that ran. Measures what a machine confirmed.</td></tr>
+<tr><td>Admitted and disclosed</td><td>250</td><td>11.2%</td><td>Honest open obligations.</td></tr>
+<tr><td>Axiom declarations</td><td>52</td><td>&mdash;</td><td>An axiom is not a proof.</td></tr>
+<tr><td>Read and judged by the author</td><td>2,234</td><td>100%</td><td>He wrote them. This number is uninformative by construction.</td></tr>
+<tr><td><b>Read and judged by an independent reader</b></td><td><b>not tracked, and near zero</b></td><td><b>&asymp; 0%</b></td><td><b>Nothing. No repository records it, and for a single-author corpus there is little to record.</b></td></tr>
+</tbody>
+</table>
+
+<p>The last two rows are the point, and the distinction between them is the whole argument. Counting
+declarations the author has read gives 2,234 &mdash; a perfect score, and worthless, because an
+author reading his own statement is checking his intent against his notation, not checking whether
+the statement means what a stranger would take it to mean. The four withdrawn declarations of
+&sect; 3 survived years of exactly that kind of reading. They did not survive the first reading that
+approached the proposition without already knowing what it was supposed to say.</p>
+
+<p>So the informative quantity is the second one: declarations read and judged by someone other than
+the author. For this corpus it is not tracked, and it is close to zero &mdash; not through neglect
+but structurally. One author, one machine-assisted pipeline, no editorial board. The tooling in this
+paper can raise the kernel tier arbitrarily; it cannot manufacture a second reader.</p>
+
+<p>It is worth being exact about what does not count as one. The author&#8217;s own second pass is
+the same reader on a later day. A language model in the loop is not an independent reader either: it
+is part of the production pipeline, it is what made the statements plentiful, and treating its
+agreement as review is circular in the same way that grading one&#8217;s own paper twice is. Machine
+assistance is what created the surplus; it cannot also be what certifies the surplus.</p>
+
+<p>The distribution across repositories sharpens it. The repository with 1,407 declarations has
+nineteen audited and no continuous integration on any branch. The repository with nineteen
+declarations has sixteen audited and CI on every push. Verification coverage runs inversely to size,
+which is what one expects when checking is human-paced and writing is not.</p>
+
+<div class="eyebrow">&sect; 5 &middot; The economics</div>
+<h2>Why the ratio inverts</h2>
+
+<p>Set the costs side by side, in orders of magnitude rather than precise figures.</p>
+
+<table>
+<thead><tr><th>Operation</th><th>Cost per declaration</th><th>Scales with</th></tr></thead>
+<tbody>
+<tr><td>Write a declaration, machine-assisted</td><td>Seconds to minutes</td><td>Compute</td></tr>
+<tr><td>Compile it</td><td>Milliseconds, amortised</td><td>Compute</td></tr>
+<tr><td>Kernel-audit it</td><td>Milliseconds, amortised</td><td>Compute</td></tr>
+<tr><td>Scan it for a trivially inhabited conclusion</td><td>Milliseconds</td><td>Compute</td></tr>
+<tr><td><b>Read the statement and decide whether it says anything</b></td><td><b>One to ten human minutes</b></td><td><b>People</b></td></tr>
+</tbody>
+</table>
+
+<p>Four rows scale with hardware; one does not. So a corpus grows until the reading backlog
+dominates, and then keeps growing, because nothing in the pipeline exerts back-pressure. The
+mechanical checks all stay green throughout &mdash; they are measuring the cheap rows.</p>
+
+<p><span class="tag t-model">MODEL</span> On these figures, auditing everything written in this
+specimen is roughly a fortnight of compute. Reading everything written is, at five minutes each,
+something like six person-months. That gap is the phenomenon, and no amount of additional automation
+narrows it, because automation adds to the numerator.</p>
+
+<div class="eyebrow">&sect; 6 &middot; A second symptom</div>
+<h2>Duplication accumulates faster than pruning</h2>
+
+<p><span class="tag t-data">DATA</span> Grouping version-suffixed copies reduces the largest
+repository&#8217;s 1,407 declarations to 765 &mdash; forty-six per cent of the raw count is the same
+material at different vintages. One file exists in four places, two byte-identical and two
+divergent; one script exists in seven.</p>
+
+<p>Deciding which copy is canonical is not a mechanical operation either. It requires knowing what
+the project meant to keep, so it queues behind the same scarce resource. Meanwhile the duplicates
+inflate every scan-based figure, which is one reason a corpus of this kind reports larger numbers
+the less carefully it is read.</p>
+
+<p>A related instance, small but exact: one file in the corpus is Lean source carrying a version
+number where its extension should be. No build system compiles it, no counter counts it, and a
+citation naming it resolves to nothing &mdash; while the file itself is perfectly good source. It
+went unnoticed because noticing required someone to look, and everything mechanical was looking for
+<code>*.lean</code>.</p>
+
+<div class="eyebrow">&sect; 7 &middot; What follows for practice</div>
+<h2>Report the readership, not only the yield</h2>
+
+<p>Four consequences, stated as practice rather than principle.</p>
+
+<p><b>Publish the three counts separately, and never let the largest wear the strongest word.</b>
+&#8220;Written&#8221;, &#8220;sorry-free&#8221; and &#8220;kernel-audited&#8221; differ here by more
+than an order of magnitude. A page presenting a written-tier number under the heading
+<em>proved</em> overstates by two full steps without containing a single false sentence.</p>
+
+<p><b>Attach a producing command to every published figure.</b> A number no script regenerates is a
+number a reader must take on trust, and in a corpus that changes daily it will be wrong within the
+week whether or not anyone notices.</p>
+
+<p><b>Treat the identifier as untrusted.</b> The four withdrawn statements in &sect; 3 were all
+discovered by reading the proposition after having read the name. Verification tables invite the
+opposite habit. <span class="tag t-value">VALUE PREMISE</span> A name is a claim about a statement
+and should be audited like one.</p>
+
+<p><b>Name the reader, and require that it not be the author.</b>
+<span class="tag t-open">OPEN</span> The proposal this paper actually makes: alongside the kernel
+tier, record which declarations have been read and judged non-vacuous by a named person who did not
+write them, with the date. A self-reported reading is not a datum; the author&#8217;s pass is
+already implicit in authorship, and a model in the loop is part of production, not review. It is a
+weaker guarantee than a kernel check, far more expensive, and unfakeable in exactly the way the
+mechanical tiers are not &mdash; nobody can regenerate it overnight. It is the only tier that
+responds to Tao&#8217;s objection, and this corpus&#8217;s honest current value for it is
+essentially zero.</p>
+
+<p><span class="tag t-value">VALUE PREMISE</span> Peer review is the institution that has always
+supplied independent readers, and its scarcity is the same scarcity described here. Machine
+assistance multiplied one side of that exchange and not the other. A corpus that grows past what
+review can absorb has not become better verified; it has become harder to referee, and should say
+so in its own figures rather than leave a reader to infer it.</p>
+
+<div class="eyebrow">&sect; 8 &middot; What this paper does not claim</div>
+<h2>Four disclaimers</h2>
+
+<p><b>It does not claim machine assistance is the problem.</b> Every check in &sect; 2, and every
+figure in &sect; 4, exists because machines produced it. The argument is about which metrics survive
+the change in what is scarce.</p>
+
+<p><b>It does not claim the specimen is representative.</b> It is one corpus, single-author,
+uneven. It is offered because its numbers are open and its failures are documented, not because it
+is typical.</p>
+
+<p><b>It does not claim a fix.</b> &#8220;Name the reader&#8221; is a bookkeeping proposal, not a
+solution to the comprehension bottleneck. Nothing here makes mathematics easier to understand.</p>
+
+<p><b>It does not claim these numbers.</b> They are dated 28 August 2026 and change weekly. The
+commands in &sect; 9 are the durable part.</p>
+
+<div class="eyebrow">&sect; 9 &middot; Reproduction</div>
+<h2>Every figure, regenerated</h2>
+
+<table>
+<thead><tr><th>Figure</th><th>Command</th></tr></thead>
+<tbody>
+<tr><td>Written / sorry-free / admitted / axiom declarations</td><td><code>python3 tools/theorem_census.py &lt;repo&gt;</code></td></tr>
+<tr><td>Per-file basis and version-duplicate groups (&sect; 6)</td><td><code>python3 tools/theorem_census.py --table &lt;repo&gt;</code></td></tr>
+<tr><td>Kernel-audited counts</td><td><code>bash tools/verify-*/run.sh</code></td></tr>
+<tr><td>Vacuity scan and its fixtures (&sect; 3)</td><td><code>cd vol1-proofs &amp;&amp; bash tools/run.sh</code></td></tr>
+<tr><td>Agreement of probe, runner and README counts</td><td><code>python3 tools/probe_consistency.py</code></td></tr>
+<tr><td>Whether a cited declaration resolves at the path cited</td><td><code>python3 tools/decl_resolve.py claims.json &lt;repo&gt;</code></td></tr>
+<tr><td>The registry page</td><td><code>python3 scripts/build_theorem_registry.py</code></td></tr>
+</tbody>
+</table>
+
+<p>Two of these found defects on their first run &mdash; a count guard found a README stating twelve
+where the runner had been pinned at twenty-eight, and the census found the extensionless module of
+&sect; 6. Neither defect was subtle. Both had survived because no one had looked, which is the
+paper&#8217;s thesis in miniature.</p>
+
+<div class="eyebrow">&sect; 10 &middot; Corpus</div>
+<h2>Where this sits</h2>
+
+<p><b>WP-78 &middot; The Seam and the Boundary</b> &mdash; artifacts that live only inside the
+documents citing them; the audit tools cannot see past the boundary of the repository.</p>
+
+<p><b>WP-79 &middot; The Ratio and the Scale</b> &mdash; which dm&sup3; quantities an experiment
+could refute. WP-79 asks what the world can say about our claims; this paper asks what we can say
+about them ourselves.</p>
+
+<p><b>Project 1080</b> &mdash; the AXLE Theorem Registry, the three-tier publication of these counts.
+<b>AXLE</b> &mdash; Algebraic eXpression Language for Evaluation, the Lean 4 / Mathlib4 environment.
+<a href="https://github.com/TOTOGT/AXLE">github.com/TOTOGT/AXLE</a></p>
+
+<div class="box">
+  <span class="lab">Standing figure &mdash; regenerate before citing</span>
+  <p><b>28 August 2026.</b> 13 repositories referenced, 8 measured.
+  <b>2,234</b> written &middot; <b>1,984</b> sorry-free &middot; <b>173</b> kernel-audited &middot;
+  <b>250</b> admitted and disclosed &middot; <b>52</b> axiom declarations. Zero
+  <code>sorryAx</code> in any probe report. Declarations read and judged by an
+  independent reader &mdash; anyone other than the author, and not a model in the production
+  pipeline: <b>not tracked, and near zero</b>. Toolchains: Lean v4.32.0 and v4.14.0.</p>
+</div>
+
+</div>
+</body>
+</html>
