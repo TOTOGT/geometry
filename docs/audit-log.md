@@ -85,6 +85,29 @@ and false. It now reads "Same operator. Same threshold structure." The threshold
 structure r* = √(J/λ) is what the display actually exhibits, and that much is
 true.
 
+## A refinement to the UNFALSIFIABLE GUARD class (2026-08-28)
+
+The class was recorded from `g6_equals_schumann : g6_layer_count_nat =
+schumann_4th_harmonic_integer := rfl`, and stated as: `rfl` between two
+definitions the author chose. That statement is too wide, and applying it flags
+`g33_stability_index : GSeries.cycles .g33 = 33 := rfl` in all three `Chain`
+versions, which is not a defect.
+
+`GSeries` is a five-constructor taxonomy — g0, g2, g6, g33, g64 — and `cycles`
+assigns each a number. The theorem pins the mnemonic label to its numeral so the
+two cannot drift apart. Both sides are internal to the formal system. It does the
+job a fixture does, and its docstring says "by definition".
+
+The Schumann case differs in one respect and it is the only one that matters:
+`schumann_4th_harmonic_integer` **denotes a physical quantity**. The `rfl` made a
+claim about the ionosphere look kernel-checked.
+
+Corrected statement of the class: **`rfl` between two definitions is a defect
+only when one of them denotes something outside the formal system.** The shape is
+identical in both cases, no scanner can separate them, and a reader separates
+them immediately. Any tool reporting this shape must report it as a candidate
+for a human read, never as a finding.
+
 ## Added
 
 `AXLE/TripleAlphaDm3.lean` — the three-body ladder, Mathlib-free, compiled under

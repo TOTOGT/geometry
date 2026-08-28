@@ -35,7 +35,12 @@ content lives where a parser cannot see it and need a human read.
                 that constrains nothing, which is what `stable_branch` was.
 
 KNOWN LIMITS, stated because a scanner believed past its scope is the defect
-above. The statement/proof split scans to the first top-level `:` and `:=` by
+above. NUMERIC-ONLY cannot tell a taxonomy coherence check from a claim about
+the world: `GSeries.cycles .g33 = 33 := rfl` pins a label to its numeral and is
+sound; `g6_layer_count_nat = schumann_4th_harmonic_integer := rfl` has the same
+shape and made an ionospheric claim look kernel-checked. The difference is
+whether either side denotes something outside the formal system, which is not
+visible in the text. That is why NUMERIC-ONLY does not gate. The statement/proof split scans to the first top-level `:` and `:=` by
 bracket depth, not by Lean's grammar. `True` appearing as a value inside an
 anonymous constructor `⟨…, True, …⟩` is a structure field, not a vacuous
 conjunct, and is excluded — that exclusion is itself a heuristic. Fixtures live
