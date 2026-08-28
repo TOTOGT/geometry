@@ -1820,3 +1820,234 @@ verification tool before reading `vol1-proofs/tools/`. Do not count a file witho
 checking which repo holds its canonical copy — `Projects/io` is a stale non-git
 working copy of `TOTOGT/io`, and `AXLE/CatGT/` holds six `Main_v*` versions that
 do not exist in the io repo at all.
+
+---
+
+# RULE (2026-08-28): a mismatch is a defect only where something is distributed
+
+The corpus is drafts. Everything in it is provisional until the verification machine
+is finished, preprints are self-published and identified by their Zenodo DOI, and an
+ISBN is only needed for a product that is actually being distributed. A draft that
+disagrees with a registry, a plan, or another draft is not broken. It is a draft.
+
+This rule exists because comparing provisional content against a canonical table and
+reporting every difference as an error produces confident, well-evidenced findings
+that are wrong. Three in one session:
+
+- **"Complete Series — G¹ through G⁵ · Five volumes"** was read as an overclaim
+  against a nine-volume series and renamed. It is the real title of a real 528-page
+  bound product whose own title page reads *Principia Orthogona G¹–G⁵ · Complete
+  Completeness Series*. The five-volume printed series and the nine-volume web series
+  are two different objects; both counts are correct about their own object. Reverted.
+- **The volume count** more generally. "Seven-volume", "five volumes" and "nine
+  volumes" appear across the corpus and at least two of them name something specific.
+  Before changing a count, establish what it counts.
+- **ISBNs on a draft title page.** `Principia_Orthogona_Complete_v8.pdf` prints
+  numbers the registry holds for other products. It is a draft; the numbers are not
+  final; there is nothing to reconcile.
+
+The same shape appears in the corpus's own history: a number that had been counted
+was later declared wrong by a pass that believed it was doing a service.
+
+## The test, before reporting any number or name as a defect
+
+1. **Is it distributed?** Per `isbn_metadata.json`, exactly one product is:
+   Book 3's eBook, `979-8-9954416-6-3`. Everything else is HOLD or draft.
+2. **What does the number count?** Printed series, web series, framework, G-series
+   and repository are five different denominators here.
+3. **Is there a real artifact behind it?** Look for the PDF, the ISBN entry, the
+   product page — before concluding a claim has nothing behind it.
+
+## What NOT to do
+
+Do not "fix" a draft into agreement with a plan. Do not chase ISBN registration,
+listing copy, or volume counts — they are provisional by design. Work that improves
+the verification machine is the priority; work that tidies drafts is not.
+
+---
+
+# OPEN — the machine: four of five checkers print without gating (2026-08-28)
+
+This is the load-bearing item. `#print axioms` emits **info**, not an error, and
+`lake build` exits 0 on an admitted proof, so printing axioms is not gating on them.
+
+| repo | state | would a new `sorryAx` fail it? |
+| --- | --- | --- |
+| `vol1-proofs` | five stages: gate self-test, build, probe, axiom gate, vacuity scan with fixtures that must fire | **yes** |
+| `GTCT` | probe list generated from source; axiom step ends `\|\| true` | no — the badge reddens, the job does not |
+| `io` | `lake env lean` prints; nothing parses the output | no |
+| `geometry` | gate written and tested; workflow file uncommitted (PAT lacks `workflow` scope) | not running |
+| `AXLE` | gates exist as local scripts; no CI on any branch | no |
+
+The repair is identical in each: parse the probe output, exit non-zero on `sorryAx`
+or on any axiom outside the allowlist. `tools/axiom_gate.py` already does this and
+has a self-test. This is a copy, not a design problem.
+
+**A check that runs and cannot fail is worse than no check**, because it produces a
+green mark a reader is entitled to believe.
+
+---
+
+# OPEN — `DM3-lab`: measured 2026-08-28. Real Lean, early Lean
+
+Measured by cloning the repository and running `tools/theorem_census.py` on it:
+
+| | raw | grouped |
+| --- | ---: | ---: |
+| `.lean` files | 49 | |
+| declarations | 313 | 237 |
+| sorry-free | 285 | 225 |
+| admitted | 28 | 12 |
+| **axiom declarations** | **134** | |
+
+**Two things are true at once, and both matter.** The repository is early work — a
+first pass, not a finished verification, and it should not be described as verified.
+But the corpus's description of it is wrong in the other direction, and that is the
+error worth fixing first, because it is on a reader-facing page.
+
+**The description is wrong.** `book1/vol1-mathematics.html` lists Kakeya and the Tribonacci
+growth rate among "complete mathematical arguments deposited in DM3-lab **without**
+Lean 4 verification … proof sketches, not proof claims." Both have real Lean:
+
+- `NS/Dm3Kakeya.lean` proves `finite_kakeya_thickened_positive_measure`, and its own
+  header calls it *"First formally_verified pillar … a complete, zero-sorry result."*
+- `Tribonacci.lean` carries `charpoly_C_eq_tribPoly`, `recurrence_holds`, `eta_root`,
+  `eta_gt_one`, `eta_pos`, `tribonacci_growth_rate`.
+
+That sentence needs the author's revision. It is the rarer failure: a page giving
+away work that was done.
+
+**The real qualifier is the axiom load, not absence of Lean.** 134 `axiom`
+declarations — more than the rest of the measured corpus combined (52) — concentrated
+in `NS/`: `Dm3Hodge` 18, `continuousDm3` 17, `Dm3Poincarev1.1` 16, `Dm3YangMills` 14,
+`Dm3RH` 10, `Dm3Goldbach` + `Dm3GoldbachDeepened` 20. `Dm3Kakeya.lean` itself declares
+`Kakeya_K`, `Kakeya_dirs`, `Kakeya_measurable`, `C_Kakeya`/`K_Kakeya`/`F_Kakeya`/
+`U_Kakeya` and `Kakeya_preserves_contact`.
+
+So "sorry-free" here means *sorry-free on top of declared assumptions*, which is a
+different claim from the rest of the corpus and must not be summed with it. The
+accurate description is neither "sketches, not proof claims" nor "verified": it is
+**a first pass in Lean, resting on 134 declared axioms, never probed and never
+version-pinned.** That sentence is defensible in both directions.
+`#print axioms` settles it per declaration in one run, and `tools/axiom_gate.py`
+refuses anything outside `[propext, Classical.choice, Quot.sound]` — so a probe would
+immediately separate the theorems that stand alone from those resting on `NS/`'s
+axioms. Nobody has run it.
+
+**Blockers before it can be probed.** No `lean-toolchain`, so nothing is version-
+pinned or reproducible. No `.github/workflows`. And `lakefile.toml` declares
+`roots = ["Finite"]` against four case-differing `Finite.lean` copies — the same
+case-sensitivity defect AXLE's lakefile header already records, invisible on macOS
+and fatal on a Linux runner.
+
+Order: pin a toolchain, see what builds, probe what builds, and report DM3-lab's
+count in its own row — never folded into a corpus total, because its axiom base is
+not the corpus's axiom base.
+
+---
+
+# OPEN — the audit tools run only by hand (2026-08-28)
+
+`tools/theorem_census.py`, `tools/decl_resolve.py` and `tools/probe_consistency.py`
+each found a real defect on their first run, and none of them is wired into any
+pipeline. A citation that does not resolve, a count that has drifted, or a Lean file
+outside every build target is currently found when someone thinks to look.
+
+The sequence, in order of value: gate the four ungated checkers, measure `DM3-lab`,
+then wire the census and the resolver in so a broken citation fails a build.
+
+---
+
+# PARTLY CLOSED — the theorem registry undercounts the repo (opened 2026-08-18)
+
+Reconciliation done 2026-08-27/28. `tools/theorem_census.py` produces the per-file
+basis the original entry asked for: comments stripped before matching, `example`
+excluded, each `sorry` attributed to its own declaration, version-suffixed copies
+grouped. `scripts/build_theorem_registry.py` now delegates to it instead of carrying
+its own regex — the old one matched only line-initial `^(theorem|lemma)` and did not
+strip comments, two errors in opposite directions, which is why its totals never
+reconciled. Its publication date was also a hardcoded literal and is now `today()`.
+
+Still open: the registry's Tier 1 reads from live `axioms.txt` files only, so it
+misses runs recorded elsewhere — Volume I's 58, GTCT's CI badge, io's CI. Counted by
+hand the total is **173**; the tool says less until it learns to read those sources.
+
+---
+
+# REFRAMED — Book IV and "unallocated ISBNs" (opened 2026-08-18, reframed 2026-08-28)
+
+The original entry treated HOLD-status ISBNs appearing on pages as a defect on
+products offered for sale. Under the rule above that is mostly not a defect: those
+pages are self-published preprints carrying a Zenodo DOI, and the ISBNs are
+provisional.
+
+What survives, and it is one line: `isbn_metadata.json` marks
+`979-8-9954416-6-3` (Book 3 eBook) **"INCOMPLETE — ACTION REQUIRED · Register this
+now. Only actively distributed product."** That is the one place the distribution
+test is met. It is an allocation decision for the author, not a repair for a tool.
+
+---
+
+# RULE (2026-08-28): never report absence from a single search
+
+A failed search is evidence about the search. It is not evidence about the corpus.
+
+The recurring failure in this project is not a session inventing something that does
+not exist. It is a session declaring that something **does not exist** when it does,
+and presenting the deletion or the correction as a service. That has cost real work:
+a counted figure was declared wrong and replaced; a real product title was renamed as
+an overclaim; a repository full of Lean was described as holding only sketches.
+
+**Never write "there is no X", "X does not exist anywhere", or "this claim has
+nothing behind it" on the strength of one search.** Write what is actually known:
+*"I did not find X by <method>."* Then, before it goes in a file or a message, look
+again by a differently-shaped method.
+
+## Blind spots that produced false absences here, all in one session
+
+| method | what it missed |
+| --- | --- |
+| `find -name 'AXLE_v8*'` | `AXLE_V8.lean` — case-sensitive glob. AXLE's own lakefile header already records this defect (`roots = ["Finite"]` vs `finite.lean`). |
+| glob `*.lean` | `main/axle_v8.1` — Lean source with a version number where its extension should be. |
+| `t.lstrip('./')` | `../impa-portal.html` became `impa-portal.html`. `lstrip` strips a character set, not a prefix. Produced 69 phantom dead links. |
+| treating `/geometry/…` as a relative path | 55 phantom dead links across the root index and the student portal. Absolute paths resolve on the live site; `tools/audit.py` skips them for exactly this reason. |
+| reading a page's description of a repository | `DM3-lab` — described in the corpus as sketches "without Lean 4 verification"; it holds 313 declarations and a `finite_kakeya_thickened_positive_measure` whose own header calls it a complete zero-sorry result. |
+| reading whichever copy was open | CatGT counted at 227, then 36, then 19 — three checkouts of the same material. Only the one with the git remote is the number. |
+
+## The check, before asserting absence
+
+1. **Use the corpus's own tool first.** `tools/audit.py` was right about links every
+   time an ad-hoc script said otherwise. `tools/decl_resolve.py` resolves paths
+   case-insensitively because a hand-written `find` did not.
+2. **Search by a second shape.** Case-insensitive, different extension, content
+   rather than filename, git remote rather than working copy.
+3. **Look at the artifact, not the description of it.** A README, a chapter, or an
+   audit note about a repository is not the repository.
+4. **State the method in the finding.** "Not found by `grep -rl` across the mounted
+   folders" is checkable and survives being wrong. "Does not exist" is neither.
+
+## The compounding cost: it gets pasted onto the face of the book
+
+A false absence does not stay in a log. It becomes a **disclaimer on a reader-facing
+page** — a sentence telling the reader that work is unverified, sketchy, or open,
+written in the author's voice and carrying his byline. It then reads as the author's
+own assessment of his own work, and it is wrong in the direction that makes the work
+look weaker than it is.
+
+`book1/vol1-mathematics.html` is the live example: it tells every reader of Volume I's
+mathematics page that the Kakeya and Tribonacci results are *"complete mathematical
+arguments deposited in DM3-lab without Lean 4 verification … proof sketches, not proof
+claims."* DM3-lab holds 313 declarations, and `Dm3Kakeya.lean`'s own header calls its
+result *"the first formally_verified pillar … a complete, zero-sorry result."*
+
+So the rule has a second half. **A retraction, an OPEN tag, a "not verified" or a
+"nothing behind this" never goes onto a reader-facing page from a search result.** It
+goes to `docs/audit-log.md` with the method named, and it reaches the book only after
+the artifact itself has been opened and read.
+
+## What NOT to do
+
+Do not delete, rename, retract or "correct" anything on the strength of a negative
+search result. A false absence is more expensive than a missing finding: the finding
+can still be made later, the deleted work cannot, and in between it sits on the page
+under the author's name telling readers his own work does not exist.
