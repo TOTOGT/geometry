@@ -1760,7 +1760,7 @@ repo of record decides the number.
 Counts from `tools/theorem_census.py`, 2026-08-27. `DM3-lab` is the third
 most-referenced repo in the corpus (318 links) and has never been measured.
 
-## Tier 1 — kernel-audited: 171
+## Tier 1 — kernel-audited: 173
 
 | source | n | evidence |
 | --- | ---: | --- |
@@ -1768,9 +1768,10 @@ most-referenced repo in the corpus (318 links) and has never been measured.
 | `geometry/tools/verify-dm3` + `verify-book8` | 32 | live `axioms.txt` |
 | `GTCT/.github/badges/gctc-status.json` | 24 | CI badge, "24/24 proved", written 2026-08-01 |
 | `AXLE/tools/verify-vol2` | 19 | live `axioms.txt` |
-| `io/.github/workflows/verify-proofs.yml` | 14 | CatGT 9 + Theorem53 5, every push |
+| `io/.github/workflows/verify-proofs.yml` | 16 | CatGT 9 + Theorem53/Zeolite 7, every push |
 
-Not 51. A number quoted from one repo's reports is a fifth of the real figure.
+Not 51, and not 171: the io workflow probes 16, not 14 — `foldMap_not_odd` and
+`exists_order_dependent` sit in a step that a first reading missed. A number quoted from one repo's reports is a fifth of the real figure.
 
 ## `vol1-proofs` is the reference implementation — do not rebuild it
 
