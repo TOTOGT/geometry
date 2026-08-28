@@ -1731,3 +1731,91 @@ corpus, and 1493 was on its way to a public page.
 Do not treat "reach more places" as the fix for a number that is too low. The
 registry undercounts and the disk overcounts; the work in between is naming the
 corpus, not widening the scan.
+
+---
+
+# THE REPO MAP AND THE VERIFICATION LEDGER (mapped 2026-08-27)
+
+Read this before counting anything, citing a declaration, or quoting a total.
+The corpus is **thirteen repositories**, not one, and the same file exists in
+several of them at different vintages. Three different CatGT counts were given in
+a single session — 227, 36, 19 — purely by reading three different copies. The
+repo of record decides the number.
+
+## Repositories, by reference count across the corpus
+
+| repo | .lean | decls | sorry-free | admitted | axiom decls | CI | Tier 1 audited |
+| --- | ---: | ---: | ---: | ---: | ---: | --- | ---: |
+| `TOTOGT/AXLE` | 127 | 1407 | 1235 | 172 | 32 | **none** | 19 |
+| `TOTOGT/geometry` | 38 | 306 | 301 | 5 | 0 | uncommitted | 32 |
+| `TOTOGT/vol1-proofs` | 7 | 140 | 140 | 0 | 0 | **gated + vacuity** | **82** |
+| `TOTOGT/GTCT` | 32 | 148 | 122 | 26 | 20 | badge, ungated | 24 |
+| `TOTOGT/io` | 3 | 19 | 19 | 0 | 0 | ungated | 14 |
+| `TOTOGT/dnls` | 4 | 152 | 109 | 43 | 0 | none | 0 |
+| `TOTOGT/3M` | 6 | 58 | 54 | 4 | 0 | none | 0 |
+| `TOTOGT/book3-starter` | 3 | 4 | 4 | 0 | 0 | none | 0 |
+| `TOTOGT/DM3-lab` | — | — | — | — | — | ? | ? |
+| `TOTOGT/maths`, `Collatz`, `Atratores`, `reporting-layer` | — | — | — | — | — | ? | ? |
+
+Counts from `tools/theorem_census.py`, 2026-08-27. `DM3-lab` is the third
+most-referenced repo in the corpus (318 links) and has never been measured.
+
+## Tier 1 — kernel-audited: 171
+
+| source | n | evidence |
+| --- | ---: | --- |
+| `vol1-proofs/tools/axioms.txt` | **82** | PrincipiaVol1 58 + AutophagyDm3_v2 24; run 2026-08-25; 76 on the standard trio, 2 on `[propext, Quot.sound]`, 3 on `[propext]` alone; zero `sorryAx` |
+| `geometry/tools/verify-dm3` + `verify-book8` | 32 | live `axioms.txt` |
+| `GTCT/.github/badges/gctc-status.json` | 24 | CI badge, "24/24 proved", written 2026-08-01 |
+| `AXLE/tools/verify-vol2` | 19 | live `axioms.txt` |
+| `io/.github/workflows/verify-proofs.yml` | 14 | CatGT 9 + Theorem53 5, every push |
+
+Not 51. A number quoted from one repo's reports is a fifth of the real figure.
+
+## `vol1-proofs` is the reference implementation — do not rebuild it
+
+`vol1-proofs/tools/run.sh` runs five stages: **gate self-test → build → probe →
+axiom gate → vacuity scan**, the last with fixtures that must fire ("a silent
+detector is worse than none"). It has `axiom_gate.py`, `test_axiom_gate.py`,
+`counts.py`, `probe.lean` (82 declarations) and `vacuity.lean`. Its header states
+the method better than anything else in the corpus:
+
+> Neither `lake build` exiting 0 nor grepping for "sorry" can decide anything —
+> a theorem can be sorry-free and vacuous. Only `#print axioms` sees both.
+
+Before writing a verification tool anywhere in this corpus, read that directory.
+`AXLE/tools/verify-core/` was built on 2026-08-27 to probe PrincipiaVol1 and
+AutophagyDm3_v2 — which `vol1-proofs` had already been doing, gated, since the
+25th. That is duplicated work, and the duplicate is the weaker one: it has no
+vacuity stage.
+
+## The gap the ledger has, in every repo but one
+
+`#print axioms` emits **info, not an error**, and `lake build` succeeds whether or
+not a proof is admitted. So printing axioms is not gating on them:
+
+- `GTCT`: the axiom step ends `|| true`. The badge would go red because it parses
+  `registry.csv`, but the job itself cannot fail on `sorryAx`.
+- `io`: `lake env lean` exits 0 regardless, and nothing parses the output.
+- `AXLE`: no CI at all, on any branch.
+- `geometry`: `verify-proofs.yml` still uncommitted — the PAT lacks `workflow` scope.
+- `vol1-proofs`: **gates correctly**, and additionally scans for vacuity.
+
+Only the last one would actually fail if a proof were replaced by `sorry` tomorrow.
+
+## Claims with no repo behind them
+
+- **Jacobian.** `geometry/book7/jacobian-verification.html` carries the axiom line
+  for `not_injective_despite_constant_jacobian` pasted into the page. No `.lean`
+  file exists in any repo. It cannot be re-run.
+- **Galois.** `AXLE/chGal-galois.html` carries
+  `#print axioms Theorem_Galois -- expect sorryAx: this theorem is OPEN`.
+  Correctly disclosed, contributes nothing, needs no repair.
+
+## What NOT to do
+
+Do not quote a corpus total from whichever repo happens to be open. Do not build a
+verification tool before reading `vol1-proofs/tools/`. Do not count a file without
+checking which repo holds its canonical copy — `Projects/io` is a stale non-git
+working copy of `TOTOGT/io`, and `AXLE/CatGT/` holds six `Main_v*` versions that
+do not exist in the io repo at all.
