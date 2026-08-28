@@ -32,3 +32,13 @@ lean_lib SaturnHexagon
 @[default_target]
 lean_lib OrthogonalWitness where
   srcDir := "book8"
+
+/-
+  TripleAlphaDm3.lean is the Lean behind chA-autophagy.html, which calls it
+  "Mathlib-free" and "kernel-checked". Both are true and now checkable: the file
+  has zero imports, so it elaborates with the bare `lean` binary in about a second
+  and cannot drift with a Mathlib bump. It was nonetheless outside every target
+  until 2026-08-27, which is the one thing that could have let it rot unnoticed.
+-/
+@[default_target]
+lean_lib TripleAlphaDm3

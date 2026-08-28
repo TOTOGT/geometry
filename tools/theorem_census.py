@@ -102,6 +102,77 @@ def scan_text(s):
     return len(ms), len(admitted), admitted, len(AXIOM.findall(s))
 
 
+def looks_like_module(head):
+    """True only if the text OPENS as a Lean module.
+
+    Containing `import Mathlib` is not enough: MAYA/1 is a markdown article with
+    Lean in fenced code blocks, and a substring test calls it a source file. So
+    walk from the top, skip comments and blank lines, and require the first real
+    line to be a module-head keyword. A file that opens with '##' or '<' is prose.
+    """
+    depth = 0
+    for line in head.splitlines():
+        t = line.strip()
+        if not t:
+            continue
+        if depth:
+            depth += t.count('/-') - t.count('-/')
+            if depth < 0:
+                depth = 0
+            continue
+        if t.startswith('/-'):
+            if '-/' not in t[2:]:
+                depth = 1
+            continue
+        if t.startswith('--'):
+            continue
+        return bool(re.match(r'(import|namespace|open|set_option|universe|section|'
+                             r'noncomputable|private|protected|theorem|lemma|def|'
+                             r'abbrev|structure|inductive|instance|axiom)\b', t))
+    return False
+
+
+BINARY_EXT = {'.pdf','.png','.jpg','.jpeg','.zip','.gz','.pyc','.olean','.ilean',
+              '.trace','.hash','.svg','.ico','.woff','.woff2','.ttf','.mp4',
+              # other languages whose files also open with `import`
+              '.py','.js','.jsx','.ts','.tsx','.java','.scala','.kt','.go',
+              '.html','.htm','.md','.txt','.json','.toml','.yml','.yaml','.css'}
+BACKUP_MARK = ('.bak', '.pre-', '.orig', '~')
+
+
+def stray_lean(root):
+    """Lean source NOT named *.lean — invisible to lake, to this census, and to
+    decl_resolve. Found because AXLE/main/axle_v8.1 is Lean source with a version
+    number where the extension should be: `lake` cannot build it, no tool counts
+    it, and a paper citing it as `AXLE_v8.1.lean` resolves to nothing. Reported
+    separately rather than folded into the totals, because a file the toolchain
+    cannot see should be fixed, not quietly counted."""
+    out = []
+    for dp, dns, fns in os.walk(root):
+        dns[:] = [d for d in dns if d not in SKIP_DIRS and d != 'to_delete']
+        for f in fns:
+            if f.endswith('.lean'):
+                continue
+            if os.path.splitext(f)[1].lower() in BINARY_EXT:
+                continue
+            if any(m in f for m in BACKUP_MARK):
+                continue
+            p = os.path.join(dp, f)
+            try:
+                if os.path.getsize(p) > 400_000:
+                    continue
+                with open(p, encoding='utf-8', errors='strict') as fh:
+                    head = fh.read(4000)
+            except (OSError, UnicodeDecodeError):
+                continue
+            if looks_like_module(head) and re.search(r'^import Mathlib', head, re.M):
+                body = strip_comments(open(p, encoding='utf-8', errors='replace').read())
+                tot, adm, _, ax = scan_text(body)
+                out.append({'path': os.path.relpath(p, root), 'decls': tot,
+                            'admitted': adm, 'axioms': ax})
+    return out
+
+
 def stem_key(path):
     """Version-duplicate group key: basename with any _vN suffix removed."""
     b = os.path.splitext(os.path.basename(path))[0]
@@ -201,8 +272,24 @@ CASES = [
 ]
 
 
+MODULE_CASES = [
+    ("import Mathlib\ntheorem a : True := trivial\n", True, "opens with import"),
+    ("-- header\n/- block -/\nimport Mathlib\n", True, "comments before import"),
+    ("## An article\n\n```lean\nimport Mathlib\n```\n", False,
+     "markdown containing Lean is not a module (the MAYA/1 case)"),
+    ("<html>\nimport Mathlib\n", False, "html is not a module"),
+    ("namespace Foo\n", True, "namespace also opens a module"),
+    ("", False, "empty is not a module"),
+]
+
+
 def selftest():
     bad = 0
+    for text, want, why in MODULE_CASES:
+        got = looks_like_module(text)
+        ok = got == want
+        bad += not ok
+        print(f'  {"ok  " if ok else "FAIL"}  module-head {want!s:<5} == {got!s:<5}  {why}')
     for text, wt, wa, wx, why in CASES:
         t, a, _, x = scan_text(strip_comments(text))
         ok = (t, a, x) == (wt, wa, wx)
@@ -252,6 +339,15 @@ if __name__ == '__main__':
     print()
     print(f'axiom decls      : {S["axiom_decls"]}   (an axiom is not a proof)')
     print('Read down one column. A raw figure and a grouped figure are not comparable.')
+    strays = []
+    for r in roots:
+        strays += stray_lean(os.path.abspath(os.path.expanduser(r)))
+    if strays:
+        print(f'\nLEAN SOURCE NOT NAMED *.lean ({len(strays)}) — invisible to lake,')
+        print('to this census, and to decl_resolve. Not included in the totals above:')
+        for x in strays:
+            print(f'  {x["path"]}  decls={x["decls"]} admitted={x["admitted"]} axioms={x["axioms"]}')
+
     if S['version_dup_groups']:
         print(f'\nversion-duplicate groups ({len(S["version_dup_groups"])}):')
         for k, v in list(S['version_dup_groups'].items())[:12]:
