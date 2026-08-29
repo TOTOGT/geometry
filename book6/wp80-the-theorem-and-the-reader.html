@@ -227,6 +227,28 @@ proposition &mdash; the exact resource Tao identifies as scarce.</p>
   object. It is a lower bound on meaninglessness. There is no upper bound on meaning to be had
   mechanically, and it is worth being clear that this is not a tooling gap that better tooling
   closes.</p>
+  <p><span class="tag t-closed">CLOSED 2026-08-29</span> <b>And until that date the scan had never
+  executed.</b> Its fixture file imported <code>Mathlib</code> &mdash; the root aggregator, the one
+  module <code>lake</code> never builds unless something asks for it. Two thousand two hundred and
+  sixty-nine Mathlib object files were present in that checkout; the aggregator was not. So the
+  fixtures could not elaborate, the gate exited before the scan, and <code>vacuity.out</code> had
+  never existed. Four stages green and a fifth refusing at its own control &mdash; which is the
+  control working exactly as its comment promises, <i>&#8220;a gate that has never rejected anything
+  is not known to work&#8221;</i>, and it is also four months of a check that was being counted and
+  never ran.</p>
+  <p>The repair was one import: the fixtures now load what <code>vacuity.lean</code> loads.
+  <b>A control that elaborates in a different environment from the thing it controls is not a
+  control.</b> First real run, 29 August 2026: fixtures <b>5 of 6 flagged</b>, the honest one clean;
+  scan <b>164 declarations</b> under <code>PrincipiaVol1.</code> and <code>AutophagyDm3.</code>,
+  <b>0 vacuous, 0 ignoring an argument</b>.</p>
+  <p>Two notes keep that zero honest. It is a <em>confirmation, not a miss</em>: the three
+  <code>True</code>-shaped declarations this paper cites &mdash; <code>whitneyFold_conditional</code>,
+  <code>omega_limit_nonempty</code>, <code>limitCycle_exists_auto</code> &mdash; had already been
+  withdrawn by hand, and no live declaration in either file now carries a trivially inhabited
+  statement. And the scan sees <b>164</b> where a source-text census counts <b>88</b>: it walks the
+  <em>environment</em>, so it also reaches equation lemmas and generated auxiliaries under the same
+  namespace. It inspects strictly more than any count of the text can, and the two figures should
+  never be reconciled &mdash; they measure different things.</p>
 </div>
 
 <div class="eyebrow">&sect; 4 &middot; The specimen</div>
