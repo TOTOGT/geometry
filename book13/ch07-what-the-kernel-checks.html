@@ -69,10 +69,10 @@ footer .disc{max-width:520px;color:#6f6a5c}
   <span class="meta"><a href="ch06-past-two.html">&larr; Ch 6</a> &nbsp;·&nbsp; <a href="ch08-known-limits.html">Ch 8 &rarr;</a></span>
 </div>
 <div class="wp-head">
-  <div class="wp-kicker">Vol XIII · Coherence · Chapter 7 · Stub</div>
+  <div class="wp-kicker">Vol XIII · Coherence · Chapter 7 · Partial result · 2026-08-29</div>
   <h1>What the Kernel Can <em>Check</em></h1>
   <div class="subtitle">The admissibility test this volume has to pass before it is written</div>
-  <div class="metagrid"><div><strong>Status</strong>Stub · specification only</div><div><strong>Rung</strong>30 · Higher Category Theory</div><div><strong>Mathlib</strong>CategoryTheory 1113 files<br>measured 2026-08-29</div><div><strong>Artifact</strong>none yet</div></div>
+  <div class="metagrid"><div><strong>Status</strong>Stub · specification only</div><div><strong>Rung</strong>30 · Higher Category Theory</div><div><strong>Mathlib</strong>CategoryTheory 1113 files<br>measured 2026-08-29</div><div><strong>Artifact</strong>AXLE/Vol13_Coherence.lean<br>first run 2026-08-29</div></div>
 </div>
 <div class="wrap">
 
@@ -105,11 +105,61 @@ depends on it.</p>
 that has never rejected anything is not known to work. This is not optional infrastructure; it is
 the reason two of the three failure modes above were ever found.</p>
 
+
+<div class="eyebrow">Result · 2026-08-29</div>
+<h2>A fourth failure mode, observed on the first run</h2>
+
+<p>The chapter-3 file was written with a fixture: a declaration
+<code>vacuity_control : True := trivial</code>, deliberately contentless, placed in the audit so
+that the probe would have something it ought to be able to reject. It could not.</p>
+
+<div class="eq">'Vol13.chain₀_assoc'            does not depend on any axioms
+'Vol13.chain₀_bracketing_free'  does not depend on any axioms
+'Vol13.chain₁_assoc'            depends on axioms: [propext, Classical.choice, Quot.sound]
+'Vol13.chain₁_assoc_rfl'        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Vol13.iterate₁_succ'           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Vol13.iterate₁_regroup'        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Vol13.assoc₂_hom_inv'          does not depend on any axioms
+'Vol13.assoc₂_inv_hom'          does not depend on any axioms
+'Vol13.vacuity_control'         does not depend on any axioms</div>
+
+<p>Read the last three lines together. <code>assoc₂_hom_inv</code> and <code>assoc₂_inv_hom</code>
+carry the entire mathematical content of level 2 — the associator is invertible, so the bracketings
+are isomorphic and not equal. <code>vacuity_control</code> says nothing at all. The reports are
+<strong>byte-identical</strong>. <span class="tag t-data">DATA</span></p>
+
+<div class="gap">
+  <span class="lab">And the count runs backwards</span>
+  <table>
+  <thead><tr><th>Declaration</th><th>Content</th><th style="text-align:right">Axioms</th></tr></thead>
+  <tbody>
+  <tr><td class="mono">chain₁_assoc</td><td>trivial — a rewrite by two lemmas</td><td class="n">3</td></tr>
+  <tr><td class="mono">assoc₂_hom_inv</td><td>substantive — invertibility of the associator</td><td class="zero">0</td></tr>
+  <tr><td class="mono">vacuity_control</td><td>none</td><td class="zero">0</td></tr>
+  </tbody>
+  </table>
+  <p style="margin-bottom:0">Axiom count is not a proxy for content. In this file it is
+  <em>anti</em>-correlated: the trivial statements carry three axioms and the substantive ones carry
+  none. The three on the <code>chain₁</code> family almost certainly enter through the ambient
+  <code>Category</code> and <code>Functor</code> machinery the statements reference, not through
+  anything their proofs do — checkable with
+  <code>#print axioms CategoryTheory.Functor.assoc</code>, and not yet checked here.
+  <span class="tag t-open">OPEN</span></p>
+</div>
+
+<div class="box thm">
+  <span class="lab">The rule this establishes</span>
+  <p style="margin-bottom:0"><code>#print axioms</code> reports what a declaration <em>rests on</em>.
+  It never reports what a declaration <em>says</em>. A clean axiom report is a floor, not a
+  certificate, and no volume in this series may cite one as evidence that a theorem has content.
+  Reading the statement remains mandatory. This is the empirical version of the argument in
+  <code>book8/ch-do-not-trust-verify.html</code>.</p>
+</div>
 <div class="box warn">
-  <span class="lab">Stub · what would close this chapter</span>
-  <p style="margin-bottom:0">A Lean file in the repository, green under the pinned
-  toolchain, with its axiom report printed in this chapter verbatim rather than summarised — and
-  its fixtures alongside it.</p>
+  <span class="lab">Still open</span>
+  <p style="margin-bottom:0">One file exists and its report is printed above verbatim, with its
+  fixture. The chapter closes when every other chapter of this volume has one — chapter 2 above
+  all, which chapter 3 has now made load-bearing for the entire volume.</p>
 </div>
 </div>
 <footer>
