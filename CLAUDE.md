@@ -12,93 +12,98 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 ---
 
-## HANDOFF — 2026-08-24 (OVERWRITE this block. Do not append. It was appended to four times and reached 341 lines; narrative belongs in `docs/audit-log.md`.)
+## HANDOFF — 2026-08-29 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
+
+**Last session:** 2026-08-29 · model `claude-opus-5` (configured identifier; the
+serving model can differ and is not asserted here).
+Transcript: `https://claude.ai/code/session_01K1ttT8t4kmB9GVHWw1rn7s`
+Account: `brodananda@gmail.com` — the session URL resolves only under this login.
+
+Record both, every session. The URL identifies the session; the account is the
+namespace it resolves in, and without it a later reader holding the link has no
+way to know which login opens it. Note this is **not** the git author identity,
+which is `Pablo Nogueira Grossi <g6llc@proton.me>`; the two are unrelated and
+both are correct.
+
+The repo already carries `Claude-Session:` trailers on four earlier commits. The
+six landed on 2026-08-29 are missing it — that omission is why this line exists
+here instead of in the commits, and future sessions should put it back in the
+trailer where it belongs, alongside `Co-Authored-By:`.
 
 ### Run this first, every session
 `git status` in **every** repo on the Desktop, not just the one you are working in.
-It has repeatedly found finished work stranded: a false-citation fix uncommitted
-for seven weeks while the wrong page served readers, a completed page never
-published, a correction staged and never committed.
+It has repeatedly found finished work stranded.
+
+**Do not run `git status` or `git diff` through the desktop bridge.** Both refresh
+and rewrite the index, both take `.git/index.lock`, and the bridge cannot delete
+files — so every such call strands a lock that makes the user's next `git add`
+fail with no visible cause. It happened twice on 2026-08-28. Through the bridge
+use only `git log`, `git grep`, `git ls-files`. House rule §10 already says the
+bridge must not write the index; `status` and `diff` are covered by it.
 
 ### Repo state at handoff
 
 | repo | state |
 |---|---|
-| `geometry` | main, clean, pushed. CI green. |
-| `AXLE` | clean except untracked `CS/` (deliberate — geometry is canonical) and `Journal/err.tmp` (scratch, delete it) |
-| `grossi-ops/cajueiro` | **5 files staged, never committed** — the camará fix and the seven-week-old Navrátil correction. The live page still says *câmara*. |
-| `grossi-ops/Atratores` | clean, pushed |
-| `dnls` | 8 untracked, HEAD is "WIP … mid-edit" — another session's, do not sweep |
-| `b3s` | 3 modified — `COPRODUCTION_AND_FUNDING.md` lost §7, its honesty caveat. Read before committing. |
+| `geometry` | main, pushed at `a16cad4`. Dirty from other sessions: `.github/workflows/verify-proofs.yml`, `CLAUDE.md`, `HVEH/ch02.html`, `book4/ch02.html`, `book4/ch10.html` |
+| `AXLE` | main, pushed at `1f31dce`. Dirty from another session: `lake-manifest.json`, `scripts/build_theorem_registry.py`, `theorem-registry.html` |
+| `vol1-proofs` | stage 5 RED, unresolved. See open items. |
+
+### What landed 2026-08-29
+
+- `654fb06` nodal-sets: Rasuwa corridor note, Nepali then English; two plan
+  requirements corrected with the originals quoted.
+- `747f2ea` / `7624596` polilaminina: ANVISA date to 5 Jan 2026, verb given its
+  object, compassionate-use figures aligned across five files in two repos.
+- `47a9541` `AXLE_v8_1.lean`: renamed from `main/axle_v8.1`, un-drifted 4.14→4.32
+  (twelve API errors), header corrected five admits → six, correction on the record.
+- `a16cad4` WP-81 *The Missing Floor* + Volume XIII (nine pages) + both indexes.
+- `1f31dce` `AXLE/Vol13_Coherence.lean`: green under Lean 4.32.0, nine axiom
+  probes, no `sorryAx`.
+
+### Three findings the next session should not have to rediscover
+
+1. **A file that does not elaborate reports the same axioms as one that does.**
+   `closurePoints_stationary_regular` returned `[propext, sorryAx, Classical.choice,
+   Quot.sound]` before and after repair — but before, its *hypothesis* had silently
+   become `sorry` because `Ordinal.IsLimit` no longer resolved.
+2. **`#print axioms` cannot see content.** In `Vol13_Coherence.lean`,
+   `assoc₂_hom_inv` (substantive) and `vacuity_control : True := trivial` both report
+   "does not depend on any axioms", byte-identical — while the *trivial* `chain₁`
+   family reports three. Axiom count is anti-correlated with content here. A clean
+   report is a floor, never a certificate.
+3. **The corpus reaches rung 33 with rung 28 unbuilt.** Measured at `654fb06`:
+   noncommutative 9 files, Connes 15, spectral triple 7, **k-theory 0**. Mathlib has
+   zero K-theory files too, so Vol XI cannot have a machine-checked core; it has 1113
+   `CategoryTheory/` files, so Vol XIII can. Construction order ≠ reading order.
+
+### Two claims of absence I made and got wrong — check spellings before asserting none
+
+- `Mathlib.SetTheory.ClubFilter.Basic` is absent; the **content is not**. It lives at
+  `SetTheory/Cardinal/Cofinality/Club.lean` — `structure IsClub`, `def IsStationary`,
+  284 lines. AXLE hand-rolls both, so Mathlib's stationary-set lemmas cannot reach the
+  `sorry` blocking hyper-Mahlo.
+- Rung-30 vocabulary was first counted on one spelling. Recounted across ten it is
+  still ≈0, but the first number was not evidence.
+
+A single-pattern grep returning 0 means *zero in that form*. Say it that way.
 
 ### Open, in the order I would take them
 
-1. **`AXLE` has no CI at all** — no `.github/workflows`. It holds 1,165 formalized
-   entries and 30 registry "kernel-audited" theorems that nothing re-runs. This is
-   now the largest single gap in the corpus and the reason Journal No. 5's "thirty
-   kernel-verified theorems" has no re-runnable warrant. `geometry`'s
-   `tools/verify-dm3/run.sh` and its three CI probes are the template.
-2. **The Hessian bound.** `epsilon0_of_eq_third_iff` proves ε₀ = 1/3 forces
-   sup‖Hess V‖ = 2. Show the dm³ toy model has it and ε₀ closes.
-3. **Book 4 audit** — `book4/RH-arc-audit-ch11-15.md`. Closed: M1, M2, M7, M9,
-   M10, M11, M13. Open: **M3** (do with M1's convention), **M8** (Weil explicit
-   formula — careful transcription, do it rested), **M12** (strings have drifted;
-   canonical r* is now 0.77594059, not the 0.776 the audit names).
-4. **Omega** — 84,242 words, spine complete, index done. ~5,800 short of 90,000.
-   The Witnesses (1,485) is the thinnest chapter that deserves more.
-5. **`book4/hub.html`** — audited for the 1,080 figure only. The rest of the page
-   has not been read as claims.
-6. **dnls house rule §10** — still not added. See below.
-
-### House rules learned the hard way (add to `~/Desktop/dnls/CLAUDE.md`)
-
-- **§10 · The desktop bridge must not run git commands that write the index** —
-  no `add`, `commit`, `merge`, `rebase`, `stash`. The mount blocks `unlink`, so git
-  cannot clean up its own lock files and the next command in the user's terminal
-  fails with an error that reads like repo corruption. Read-only git is fine.
-- **Corrections do not go in the book.** A fixed page is simply correct; the
-  account goes in `docs/audit-log.md`. Only an *unrepaired* claim gets a notice,
-  at the point of the claim. Correction apparatus in body text makes a careful
-  book read as an unreliable one.
-- **Every guard must be shown to fail on a case it should reject.** `dm3_epsilon0`
-  compared a constant to itself and passed for months while the derivation behind
-  it was wrong.
-- **Verify a claimed edit against the file before reporting it.** A description of
-  work is not the work.
-- **Absence of a proof file is not absence of a fact.** Two mis-corrections this
-  week came from a search's scope silently becoming the claim's scope.
-- **Check an identifier is free before minting it.** WP75 was assigned twice.
-
-### Where the record lives
-
-- `docs/audit-log.md` — dated defect narrative, the failure classes, method notes.
-- `docs/defect-ledger.html` — the reader-facing ledger, 17 defects and what found
-  each. Deliberately **not** a working paper: a series with a defect paper in it
-  reads like a series that needs one.
-- `book4/ladder-polynomials.md` / `.html` — needs a **cold read** before anything
-  cites it. Written fast; computations are machine-checked, interpretations are not.
-
-### Unwritten threads worth keeping
-
-**Venkatamakhin, *Caturdaṇḍiprakāśikā*** (Thanjavur, mid-17th c., patron
-Vijayaraghava Nayak r. 1633–73): 72 melakartas as a *count*, not a selection —
-Pāṇini's move applied to pitch. Bhatkhande carried the system into Hindustani
-thaat in the early 20th c.: documented *transmission*, the contrast case that
-makes convergence claims falsifiable. NOT verified, do not state: the 19-melas
-claim, the katapayadi attribution.
-
-**Music is not linguistics** — shared syntax, no semantics; amusia and aphasia
-dissociate. The survivable claim is the one the corpus already makes: language and
-music are two instances of one object, a finite generative system under constraint.
-
-**Temperament is triage.** (3/2)¹² = 531441/4096 ≈ 129.746 vs 2⁷ = 128 — an
-equation with no solution, and every tuning system is a decision about where to put
-an irremovable error. WP41's three doors, audible.
-
-**Pingala → Gītā → Pāṇini → Venkatamakhin** — one civilisation, four substrates,
-one method. And Arjuna's paralysis is `ch-free-the-self` stated two millennia
-earlier: do the work, release the fruit. Tag `[CONJECTURE]` for structural kinship.
-
+1. `G6LLC/probes` on GitHub is still missing `.github/`, `.gitignore` and `results/`,
+   and still carries a committed `.pyc`. The web uploader drops dot-entries; the fix
+   is a force-push from a local clone.
+2. `vol1-proofs` stage 5 RED. Read `tools/vacuity_fixtures.out` first. Hypothesis:
+   `grep -c '^VACUOUS: '` is anchored, `lake env lean` prefixes `logInfo` output with
+   `file:line:col: information:`, so the anchor matches nothing — and the *real* scan
+   two lines later uses the identical pattern, which would make its green meaningless.
+3. Ten files say hyper-Mahlo is "formalized in AXLE", including `index.html` and
+   `book8/ch-do-not-trust-verify.html`. `regeneration_hierarchy_mahlo_unconditional`
+   is `sorry` and `AXLE_v6.lean` (22 sorries) does not compile under 4.32.
+4. AXLE registry work from another session, still unstaged.
+5. Volume XIII chapter 2 is now load-bearing for the whole volume: chapter 3 proved
+   the chain strict at levels 0–1 by `rfl`, so rung 30 has content only if the
+   operators are level-2 objects.
 ## Read first: Lean and CI verification state
 
 Updated **2026-08-25**. This section is the current answer. Do not re-derive it
@@ -2013,6 +2018,28 @@ again by a differently-shaped method.
 | treating `/geometry/…` as a relative path | 55 phantom dead links across the root index and the student portal. Absolute paths resolve on the live site; `tools/audit.py` skips them for exactly this reason. |
 | reading a page's description of a repository | `DM3-lab` — described in the corpus as sketches "without Lean 4 verification"; it holds 313 declarations and a `finite_kakeya_thickened_positive_measure` whose own header calls it a complete zero-sorry result. |
 | reading whichever copy was open | CatGT counted at 227, then 36, then 19 — three checkouts of the same material. Only the one with the git remote is the number. |
+
+## A second mechanism: over-reading a correct note past its scope
+
+The table above is about failed searches. There is a quieter variant that needs no
+search at all: **an accurate internal note is read as covering more than it says.**
+
+On 2026-08-28 the `chLambda-polylaminin.html` line *"ANVISA Phase 1 approved 2025;
+Phase 2 trials scheduled 2026"* was reported as having "nothing behind it" for the
+Phase 2 clause. The basis given was this file's own polilaminina entry (2026-08-17),
+which states: *"ANVISA's Phase I is a 5-patient safety trial authorised January 2026
+that has not reported."* That sentence is correct and it is **only about Phase I**.
+It was silently extended to Phase II, and the extension was attributed to the record.
+
+Phase 2 is real: ANVISA's own release says advancing to Phases 2 and 3 depends on the
+Phase 1 results, and Cristália has discussed a Phase 2 publicly with approval projected
+within roughly two years. The accurate correction was narrower than the one offered —
+"planned and conditional, no published start date", not "unsupported".
+
+**A note is evidence for what it asserts and for nothing adjacent.** Before citing one
+against a claim, check that its scope covers the claim. If it does not, the honest
+statement is *"the record is silent on this"* — which is a reason to search, not a
+finding.
 
 ## The check, before asserting absence
 
