@@ -14,121 +14,107 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 ## HANDOFF — 2026-08-29 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
 
-**Last session:** 2026-08-29 · model `claude-opus-5` (configured identifier; the serving
-model can differ and is not asserted here).
-Transcript: `https://claude.ai/code/session_01K1ttT8t4kmB9GVHWw1rn7s`
-Account: `brodananda@gmail.com` — the session URL resolves only under this login.
+**From:** session `01K1ttT8t4kmB9GVHWw1rn7s` · account `brodananda@gmail.com` · model `claude-opus-5`
+**Ended:** 2026-08-29, ~90% of session budget. The user is taking a break and resumes **Saturday 5 September**.
+**Repos touched this session:** `~/Desktop/geometry`, `~/Desktop/AXLE`, `~/Desktop/b3s`.
 
-Record both, every session. The URL identifies the session; the account is the namespace it
-resolves in. Not the git author identity, which is `Pablo Nogueira Grossi <g6llc@proton.me>`.
-Put `Claude-Session:` back in the commit trailer alongside `Co-Authored-By:` — the repo carries
-it on four earlier commits and most of 2026-08-28's are missing it.
+### State on exit
 
-### Run this first, every session
+**geometry — clean.** `tools/build_indexes.py` re-run at exit produced no changes; WP-86 and
+WP-89 are indexed and committed at `8d32b89`. The six files showing as modified
+(`.github/workflows/verify-proofs.yml`, `HVEH/ch02.html`, `book4/ch02.html`, `book4/ch10.html`,
+`book7/ch-hopfield.html`, `book7/ch-thom.html`) predate this session. **They are not mine — do
+not sweep them into a commit.** `8d32b89` may or may not be pushed; check before assuming.
 
-`git status` in **every** repo on the Desktop — it has repeatedly found finished work stranded.
+**AXLE — uncommitted.** `Journal/vol7.html`, `Journal/vol8.html`, `Journal/index.html` carry this
+session's work and were handed to the user as `git add`/`commit`/`push` commands. `Journal/vol5.html`
+and `Journal/vol6.html` also show modified, from an earlier session, and were deliberately left out.
 
-**Never run `git status` or `git diff` through the desktop bridge.** Both rewrite the index and
-take `.git/index.lock`; the bridge cannot delete files, so each call strands a lock and the
-user's next `git add` fails with no visible cause. It happened twice on 2026-08-28. Through the
-bridge: `git log`, `git grep`, `git ls-files` only. **Every command that writes the index is the
-user's to run — hand him the commands.**
+**b3s — uncommitted.** `assignments/literature/FACT_AND_FICTION.md` extended twice.
 
-**The bridge exists only in the desktop app.** In a browser session there is no bridge at all;
-ask whether he can connect from the desktop before planning any work that touches his files.
+### What shipped
 
-**Splice, never truncate.** On 2026-08-29 an edit to this file replaced from a heading to
-end-of-file instead of to the next heading, cutting 2,068 lines to 134. Recovered with
-`git show HEAD:CLAUDE.md > CLAUDE.md`. When editing by string index, always keep the tail.
+- **`book6/wp-86-rasuwa-lhende.html`** — rebuilt Nepali-first with a sticky nav to English /
+  中文 / हिन्दी (four `<article data-lang>` blocks, JS toggle, `#ne`/`#en`/`#zh`/`#hi` deep links,
+  no-JS shows all). Red Cross / IFRC / Restoring Family Links / NDRRMA block sits **above** the
+  analysis. Added the Imja Tsho 2016 controlled-lowering precedent *with* the caveat that the
+  technique does not transfer to hanging ice.
+- **`book6/wp89-the-reception-instruments.html`** — new, same four-language machinery. Tables
+  US TPS (INA §244), Brazil (Lei 13.445/2017 art. 14 §3º + Portaria 60/2025), Argentina
+  (Disposición DNM 891/2022), Australia–Tuvalu Falepili Union, EU Directive 2001/55/EC, each
+  with citation and status dated 29 Aug 2026.
+- **Journal No. 7 (5 Sept)** — re-led with Rasuwa, replacing "The Check That Was Counted and
+  Never Ran," whose lead the user established was false. Complete and internally consistent.
+- **Journal No. 8 (12 Sept)** — re-led with the reception instruments. **NOT READY, see below.**
+- **Situations Wanted**, both issues — rewritten findings-first at the user's explicit direction.
 
-### Repo state at handoff
+### The editorial rule established this session — apply it
 
-| repo | state |
-|---|---|
-| `geometry` | main, pushed at `537bfb3` |
-| `AXLE` | main, pushed at `1f31dce`. Dirty from another session: `lake-manifest.json`, `scripts/build_theorem_registry.py`, `theorem-registry.html` |
-| `vol1-proofs` | stage 5 RED, unresolved |
+The user's instruction, verbatim in effect: eight weeks of a journal whose recurring subject is
+its own errors "loses readers — people laugh at it and run," and Situations Wanted read as
+*"I made a ton of mistakes and I am out of work"* when it should read as *"I made a ton of
+discoveries and I am looking for opportunities to kick ass with other rock-stars."*
+**Findings lead. Corrections go dated in the corrections column and stay there.** Do not put a
+defect on a front page again without checking this first.
 
-### What landed 2026-08-29
+### Open, in priority order
 
-- `747f2ea` / `7624596` polilaminina: ANVISA date to 5 Jan 2026, verb given its object,
-  compassionate-use figures aligned across five files in two repos.
-- `47a9541` `AXLE_v8_1.lean`: renamed from `main/axle_v8.1`, un-drifted 4.14 → 4.32 (twelve API
-  errors), header corrected five admits → six, correction on the record.
-- `654fb06` nodal-sets: Rasuwa corridor note, Nepali then English; two plan requirements
-  corrected with the originals quoted.
-- `1f31dce` `AXLE/Vol13_Coherence.lean`: green under Lean 4.32.0, nine probes, no `sorryAx`.
-  Vol XIII ch 3 CLOSED, ch 7 PARTIAL.
-- `931ca5b` WP-81 collision → **WP-82 · The Missing Floor**. *The Conviction and the Kernel*
-  (2026-08-27, five inbound) keeps 81. **WP-84 · The Fold Is the Folding Frequency** committed
-  with its defects named rather than published clean.
-- `c41a84c` WP-84's four sections revised by a parallel session; WP-85–88 numbered.
-- `537bfb3` Book 3 taught-order nav.
+1. **Journal No. 8 is not publishable.** Page 2 (The Ledger, 2,690 chars) and Page 3 (The
+   Mathematics, 3,513 chars) are **byte-identical to No. 7's**, and Announcements is too —
+   including "Seven weeks out" for LAW3M, which is five weeks from 12 September. Its own
+   material: front page, Situations Wanted, Reading Room Part 3, colophon. **This is the
+   5 September task.** Proposed fills: Ledger ← WP-89's five jurisdictions; Mathematics ← the
+   N = 12 uniqueness worked out properly.
+2. **N = 12 must be written as a characterisation, never a necessity.** "Twelve is the unique N
+   for which the hexagonal mode coincides with Nyquist" — never "twelve is forced."
+3. **WP-86 is a number collision.** `book6/wp86-autophagy-calibration-case-study.html` holds it
+   too. The user chose the filename `wp-86-rasuwa-lhende.html` himself; flagged twice, not resolved.
+4. Two TPS termination dates for Nepal are in tension — Federal Register 6 Jun 2025 (effective
+   5 Aug 2025) vs Kathmandu Post 15 Aug 2026. **Both are carried; neither was chosen.** Litigation
+   is the likely explanation. Reconciling it is an open item on WP-89 and in No. 8's front page.
+5. `G6LLC/probes` — missing `.github/`, `.gitignore`, `results/`; carries a committed `.pyc`.
+6. Ten files say hyper-Mahlo is "formalized in AXLE"; the load-bearing theorem is `sorry` and
+   `AXLE_v6.lean` (22 sorries) does not compile under 4.32.
+7. **XIII LAW3M, Natal, 19–23 October 2026** — package in `AXLE/LAW3M/`. Five weeks out on 12 Sept.
 
-### The Fourier thread — the live one
+### Serial canon — do not improvise against it
 
-Two sessions converged independently, which is **not** corroboration (same model, same corpus).
-What checked out:
+The eighteen parts of *Pierre et Mademoiselle* are **already written** in
+`~/Desktop/b3s/assignments/literature/`, ordered by `CHAPTER_ORDER` in `build_reader.py`.
+Typeset from those files; never draft a part from scratch.
 
-- **A Poincaré section is a sampler.** With θ̇ = 1, twelve equally spaced sections per revolution
-  *is* `PhaseVector := Fin 12 → ℝ`. C is that sampling and it is **lossless** — the
-  section-to-section map is the time-π/6 flow map on a transversal, a diffeomorphism — so it
-  satisfies Vol I's Assumption 3 and is *not* where aliasing happens. **F** is where the flow
-  ceases to be a diffeomorphism; aliasing is F's dual-side signature.
-- **Uniqueness, verified for N = 6,12,18,24,30,36,42,48,60.** Non-DC modes fixed by six-fold
-  rotation are `{6,12,…} ∩ [1,N/2]`, equal to `{N/2}` **iff N = 12**. `Fin 12` is a
-  characterisation — but *not forced by the physics*. Write "the unique N for which…", never
-  "twelve is forced".
-- **The open assumption relocated, it did not vanish:** that `Fin 12 → ℝ` **is** the
-  twelve-section representation of the LAW3M flow. The NS prediction rests entirely on it.
-- **The NS consequence.** Twelve sections resolve to 6 transverse cycles per revolution.
-  μ_max = −2 is non-oscillatory and cannot alias, but an NS torus frequency above 6/rev folds a
-  real frequency onto a false one and the discrete model fails outright. WP-79 tags NS as the
-  falsifiable branch. Checkable against the DNLS extension.
+- **Part 17 is `what_arrived_without_its_head.md`.** The Descartes material (1650 Stockholm,
+  1666 repatriation, Terlon's finger, the missing skull, Berzelius, the Musée de l'Homme, and
+  the dispute over both the timing and the skull's authenticity) is filed in
+  `FACT_AND_FICTION.md` under a heading marking it **not before Part 17**. It was briefly
+  printed in No. 8's ledger for Part 3 this session and **removed as a fourteen-week spoiler** —
+  it also sat two weeks ahead of Part 5, where the death is faked. Do not reinstate it without
+  the user saying so.
+- **In canon there is no body of Fermat's that could be missing a head.** Duval used a carter's,
+  weighted as a plague death and given to the sea: "no grave anyone can open."
+- **Duval is not Medon.** Bernard Medon is real, named in Part 1, a *conseiller au présidial de
+  Toulouse*, whose false report of Fermat's death is 1653 and an accident he withdrew a week
+  later. Duval is invented — a physician who finds a body in 1665, on purpose.
+- `FACT_AND_FICTION.md` line ~74 already carries the trap: **not the guillotine** (1792).
 
-### Constants — checked, do not merge
+### Method rules that cost something to relearn
 
-```
-η       = 1.839286755214161   identical to AXLE_v8_1.lean's `def η` to 16 digits
-|r±|    = 0.737352706 = 1/√η  (product of roots = 1, forced)
-r*      = 0.775940590         LAW3M basin boundary, bisection to 1e-7
-          5.23% apart — DIFFERENT CONSTANTS
-κ*      = √(7/9) = 0.881917104        ε₀ = 1/3
-```
+- **Never run `git status` or `git diff` through the desktop bridge.** Both take
+  `.git/index.lock`, and the bridge cannot delete files, so each call strands a lock and the
+  user's next `git add` fails with no visible cause. Through the bridge: `git log`, `git grep`,
+  `git ls-files` only.
+- **Every git command that writes the index is the user's to run.** Hand him the commands.
+- **A single-pattern grep returning 0 means "zero in that form."** Date every count and exclude
+  the instrument — a measurement published into the corpus changes the next measurement.
+- **Splice, never truncate.** Replace to the *next heading*, not to EOF.
+- **A naive HTML stack-matcher is not authoritative, and a lenient one is worse.** A permissive
+  checker declared Nos. 5–8 clean; a strict parse found Nos. 7 and 8 each missing one `</div>`
+  (the `.stage` wrapper, unclosed since the Reading Room page was added). Both were fixed and
+  confirmed by **rendering** in headless Chromium, which is the authority.
+- **Do not report work as done before doing it.** Happened once this session, on the
+  Duval/Medon note; caught by the user.
 
-### Absence claims that were wrong — check spellings, dates, and the instrument
 
-- `Mathlib.SetTheory.ClubFilter.Basic` is absent; **the content is not** — it lives at
-  `SetTheory/Cardinal/Cofinality/Club.lean`, 284 lines, `structure IsClub`, `def IsStationary`.
-  AXLE hand-rolls both, so none of Mathlib's stationary-set lemmas can reach the `sorry`
-  blocking hyper-Mahlo.
-- **WP-81 was asserted free and was not.** It had been held since 2026-08-27 with five inbound
-  citations.
-- **A count published into the corpus changes the next count.** "k-theory 0" measured at
-  `654fb06` re-measured as 4 — the four hits being the paper reporting the zero and three files
-  citing it. **Date every count and exclude the measuring document.**
-
-A single-pattern grep returning 0 means *zero in that form*. Say it that way.
-
-### Open, in the order I would take them
-
-1. **XIII LAW3M, Natal, 19–23 October 2026.** Submission package already exists in `AXLE/LAW3M/`
-   — abstract, technical brief, `certify_rstar.py`, jackknife proof, two posters, prototype
-   schematics, MSCA Siena letter. Seven weeks. This was on no list until 2026-08-29 and it
-   outranks everything below.
-2. `vol1-proofs` stage 5 RED. Read `tools/vacuity_fixtures.out` **first**. Hypothesis:
-   `grep -c '^VACUOUS: '` is anchored while `lake env lean` prefixes `logInfo` output with
-   `file:line:col: information:` — and the *real* scan two lines later uses the identical
-   pattern, which would make its green meaningless.
-3. `G6LLC/probes` still missing `.github/`, `.gitignore`, `results/`; carries a committed `.pyc`.
-   The web uploader drops dot-entries; fix is a force-push from a local clone.
-4. Ten files say hyper-Mahlo is "formalized in AXLE".
-   `regeneration_hierarchy_mahlo_unconditional` is `sorry`; `AXLE_v6.lean` (22 sorries) does not
-   compile under 4.32.
-5. Vol XIII ch 2 is load-bearing for the whole volume. Ch 3 proved the chain strict at levels
-   0–1 by `rfl`, so rung 30 has content only if the operators are level-2 objects — and
-   outcome 4 (phases of a flow) now has independent support from the Poincaré reading.
-6. AXLE registry work from another session, still unstaged.
 ## Read first: Lean and CI verification state
 
 Updated **2026-08-25**. This section is the current answer. Do not re-derive it
