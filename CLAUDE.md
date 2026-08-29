@@ -14,96 +14,121 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 ## HANDOFF — 2026-08-29 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
 
-**Last session:** 2026-08-29 · model `claude-opus-5` (configured identifier; the
-serving model can differ and is not asserted here).
+**Last session:** 2026-08-29 · model `claude-opus-5` (configured identifier; the serving
+model can differ and is not asserted here).
 Transcript: `https://claude.ai/code/session_01K1ttT8t4kmB9GVHWw1rn7s`
 Account: `brodananda@gmail.com` — the session URL resolves only under this login.
 
-Record both, every session. The URL identifies the session; the account is the
-namespace it resolves in, and without it a later reader holding the link has no
-way to know which login opens it. Note this is **not** the git author identity,
-which is `Pablo Nogueira Grossi <g6llc@proton.me>`; the two are unrelated and
-both are correct.
-
-The repo already carries `Claude-Session:` trailers on four earlier commits. The
-six landed on 2026-08-29 are missing it — that omission is why this line exists
-here instead of in the commits, and future sessions should put it back in the
-trailer where it belongs, alongside `Co-Authored-By:`.
+Record both, every session. The URL identifies the session; the account is the namespace it
+resolves in. Not the git author identity, which is `Pablo Nogueira Grossi <g6llc@proton.me>`.
+Put `Claude-Session:` back in the commit trailer alongside `Co-Authored-By:` — the repo carries
+it on four earlier commits and most of 2026-08-28's are missing it.
 
 ### Run this first, every session
-`git status` in **every** repo on the Desktop, not just the one you are working in.
-It has repeatedly found finished work stranded.
 
-**Do not run `git status` or `git diff` through the desktop bridge.** Both refresh
-and rewrite the index, both take `.git/index.lock`, and the bridge cannot delete
-files — so every such call strands a lock that makes the user's next `git add`
-fail with no visible cause. It happened twice on 2026-08-28. Through the bridge
-use only `git log`, `git grep`, `git ls-files`. House rule §10 already says the
-bridge must not write the index; `status` and `diff` are covered by it.
+`git status` in **every** repo on the Desktop — it has repeatedly found finished work stranded.
+
+**Never run `git status` or `git diff` through the desktop bridge.** Both rewrite the index and
+take `.git/index.lock`; the bridge cannot delete files, so each call strands a lock and the
+user's next `git add` fails with no visible cause. It happened twice on 2026-08-28. Through the
+bridge: `git log`, `git grep`, `git ls-files` only. **Every command that writes the index is the
+user's to run — hand him the commands.**
+
+**The bridge exists only in the desktop app.** In a browser session there is no bridge at all;
+ask whether he can connect from the desktop before planning any work that touches his files.
+
+**Splice, never truncate.** On 2026-08-29 an edit to this file replaced from a heading to
+end-of-file instead of to the next heading, cutting 2,068 lines to 134. Recovered with
+`git show HEAD:CLAUDE.md > CLAUDE.md`. When editing by string index, always keep the tail.
 
 ### Repo state at handoff
 
 | repo | state |
 |---|---|
-| `geometry` | main, pushed at `a16cad4`. Dirty from other sessions: `.github/workflows/verify-proofs.yml`, `CLAUDE.md`, `HVEH/ch02.html`, `book4/ch02.html`, `book4/ch10.html` |
+| `geometry` | main, pushed at `537bfb3` |
 | `AXLE` | main, pushed at `1f31dce`. Dirty from another session: `lake-manifest.json`, `scripts/build_theorem_registry.py`, `theorem-registry.html` |
-| `vol1-proofs` | stage 5 RED, unresolved. See open items. |
+| `vol1-proofs` | stage 5 RED, unresolved |
 
 ### What landed 2026-08-29
 
-- `654fb06` nodal-sets: Rasuwa corridor note, Nepali then English; two plan
-  requirements corrected with the originals quoted.
-- `747f2ea` / `7624596` polilaminina: ANVISA date to 5 Jan 2026, verb given its
-  object, compassionate-use figures aligned across five files in two repos.
-- `47a9541` `AXLE_v8_1.lean`: renamed from `main/axle_v8.1`, un-drifted 4.14→4.32
-  (twelve API errors), header corrected five admits → six, correction on the record.
-- `a16cad4` WP-81 *The Missing Floor* + Volume XIII (nine pages) + both indexes.
-- `1f31dce` `AXLE/Vol13_Coherence.lean`: green under Lean 4.32.0, nine axiom
-  probes, no `sorryAx`.
+- `747f2ea` / `7624596` polilaminina: ANVISA date to 5 Jan 2026, verb given its object,
+  compassionate-use figures aligned across five files in two repos.
+- `47a9541` `AXLE_v8_1.lean`: renamed from `main/axle_v8.1`, un-drifted 4.14 → 4.32 (twelve API
+  errors), header corrected five admits → six, correction on the record.
+- `654fb06` nodal-sets: Rasuwa corridor note, Nepali then English; two plan requirements
+  corrected with the originals quoted.
+- `1f31dce` `AXLE/Vol13_Coherence.lean`: green under Lean 4.32.0, nine probes, no `sorryAx`.
+  Vol XIII ch 3 CLOSED, ch 7 PARTIAL.
+- `931ca5b` WP-81 collision → **WP-82 · The Missing Floor**. *The Conviction and the Kernel*
+  (2026-08-27, five inbound) keeps 81. **WP-84 · The Fold Is the Folding Frequency** committed
+  with its defects named rather than published clean.
+- `c41a84c` WP-84's four sections revised by a parallel session; WP-85–88 numbered.
+- `537bfb3` Book 3 taught-order nav.
 
-### Three findings the next session should not have to rediscover
+### The Fourier thread — the live one
 
-1. **A file that does not elaborate reports the same axioms as one that does.**
-   `closurePoints_stationary_regular` returned `[propext, sorryAx, Classical.choice,
-   Quot.sound]` before and after repair — but before, its *hypothesis* had silently
-   become `sorry` because `Ordinal.IsLimit` no longer resolved.
-2. **`#print axioms` cannot see content.** In `Vol13_Coherence.lean`,
-   `assoc₂_hom_inv` (substantive) and `vacuity_control : True := trivial` both report
-   "does not depend on any axioms", byte-identical — while the *trivial* `chain₁`
-   family reports three. Axiom count is anti-correlated with content here. A clean
-   report is a floor, never a certificate.
-3. **The corpus reaches rung 33 with rung 28 unbuilt.** Measured at `654fb06`:
-   noncommutative 9 files, Connes 15, spectral triple 7, **k-theory 0**. Mathlib has
-   zero K-theory files too, so Vol XI cannot have a machine-checked core; it has 1113
-   `CategoryTheory/` files, so Vol XIII can. Construction order ≠ reading order.
+Two sessions converged independently, which is **not** corroboration (same model, same corpus).
+What checked out:
 
-### Two claims of absence I made and got wrong — check spellings before asserting none
+- **A Poincaré section is a sampler.** With θ̇ = 1, twelve equally spaced sections per revolution
+  *is* `PhaseVector := Fin 12 → ℝ`. C is that sampling and it is **lossless** — the
+  section-to-section map is the time-π/6 flow map on a transversal, a diffeomorphism — so it
+  satisfies Vol I's Assumption 3 and is *not* where aliasing happens. **F** is where the flow
+  ceases to be a diffeomorphism; aliasing is F's dual-side signature.
+- **Uniqueness, verified for N = 6,12,18,24,30,36,42,48,60.** Non-DC modes fixed by six-fold
+  rotation are `{6,12,…} ∩ [1,N/2]`, equal to `{N/2}` **iff N = 12**. `Fin 12` is a
+  characterisation — but *not forced by the physics*. Write "the unique N for which…", never
+  "twelve is forced".
+- **The open assumption relocated, it did not vanish:** that `Fin 12 → ℝ` **is** the
+  twelve-section representation of the LAW3M flow. The NS prediction rests entirely on it.
+- **The NS consequence.** Twelve sections resolve to 6 transverse cycles per revolution.
+  μ_max = −2 is non-oscillatory and cannot alias, but an NS torus frequency above 6/rev folds a
+  real frequency onto a false one and the discrete model fails outright. WP-79 tags NS as the
+  falsifiable branch. Checkable against the DNLS extension.
 
-- `Mathlib.SetTheory.ClubFilter.Basic` is absent; the **content is not**. It lives at
-  `SetTheory/Cardinal/Cofinality/Club.lean` — `structure IsClub`, `def IsStationary`,
-  284 lines. AXLE hand-rolls both, so Mathlib's stationary-set lemmas cannot reach the
-  `sorry` blocking hyper-Mahlo.
-- Rung-30 vocabulary was first counted on one spelling. Recounted across ten it is
-  still ≈0, but the first number was not evidence.
+### Constants — checked, do not merge
+
+```
+η       = 1.839286755214161   identical to AXLE_v8_1.lean's `def η` to 16 digits
+|r±|    = 0.737352706 = 1/√η  (product of roots = 1, forced)
+r*      = 0.775940590         LAW3M basin boundary, bisection to 1e-7
+          5.23% apart — DIFFERENT CONSTANTS
+κ*      = √(7/9) = 0.881917104        ε₀ = 1/3
+```
+
+### Absence claims that were wrong — check spellings, dates, and the instrument
+
+- `Mathlib.SetTheory.ClubFilter.Basic` is absent; **the content is not** — it lives at
+  `SetTheory/Cardinal/Cofinality/Club.lean`, 284 lines, `structure IsClub`, `def IsStationary`.
+  AXLE hand-rolls both, so none of Mathlib's stationary-set lemmas can reach the `sorry`
+  blocking hyper-Mahlo.
+- **WP-81 was asserted free and was not.** It had been held since 2026-08-27 with five inbound
+  citations.
+- **A count published into the corpus changes the next count.** "k-theory 0" measured at
+  `654fb06` re-measured as 4 — the four hits being the paper reporting the zero and three files
+  citing it. **Date every count and exclude the measuring document.**
 
 A single-pattern grep returning 0 means *zero in that form*. Say it that way.
 
 ### Open, in the order I would take them
 
-1. `G6LLC/probes` on GitHub is still missing `.github/`, `.gitignore` and `results/`,
-   and still carries a committed `.pyc`. The web uploader drops dot-entries; the fix
-   is a force-push from a local clone.
-2. `vol1-proofs` stage 5 RED. Read `tools/vacuity_fixtures.out` first. Hypothesis:
-   `grep -c '^VACUOUS: '` is anchored, `lake env lean` prefixes `logInfo` output with
-   `file:line:col: information:`, so the anchor matches nothing — and the *real* scan
-   two lines later uses the identical pattern, which would make its green meaningless.
-3. Ten files say hyper-Mahlo is "formalized in AXLE", including `index.html` and
-   `book8/ch-do-not-trust-verify.html`. `regeneration_hierarchy_mahlo_unconditional`
-   is `sorry` and `AXLE_v6.lean` (22 sorries) does not compile under 4.32.
-4. AXLE registry work from another session, still unstaged.
-5. Volume XIII chapter 2 is now load-bearing for the whole volume: chapter 3 proved
-   the chain strict at levels 0–1 by `rfl`, so rung 30 has content only if the
-   operators are level-2 objects.
+1. **XIII LAW3M, Natal, 19–23 October 2026.** Submission package already exists in `AXLE/LAW3M/`
+   — abstract, technical brief, `certify_rstar.py`, jackknife proof, two posters, prototype
+   schematics, MSCA Siena letter. Seven weeks. This was on no list until 2026-08-29 and it
+   outranks everything below.
+2. `vol1-proofs` stage 5 RED. Read `tools/vacuity_fixtures.out` **first**. Hypothesis:
+   `grep -c '^VACUOUS: '` is anchored while `lake env lean` prefixes `logInfo` output with
+   `file:line:col: information:` — and the *real* scan two lines later uses the identical
+   pattern, which would make its green meaningless.
+3. `G6LLC/probes` still missing `.github/`, `.gitignore`, `results/`; carries a committed `.pyc`.
+   The web uploader drops dot-entries; fix is a force-push from a local clone.
+4. Ten files say hyper-Mahlo is "formalized in AXLE".
+   `regeneration_hierarchy_mahlo_unconditional` is `sorry`; `AXLE_v6.lean` (22 sorries) does not
+   compile under 4.32.
+5. Vol XIII ch 2 is load-bearing for the whole volume. Ch 3 proved the chain strict at levels
+   0–1 by `rfl`, so rung 30 has content only if the operators are level-2 objects — and
+   outcome 4 (phases of a flow) now has independent support from the Poincaré reading.
+6. AXLE registry work from another session, still unstaged.
 ## Read first: Lean and CI verification state
 
 Updated **2026-08-25**. This section is the current answer. Do not re-derive it
