@@ -2089,3 +2089,40 @@ Do not delete, rename, retract or "correct" anything on the strength of a negati
 search result. A false absence is more expensive than a missing finding: the finding
 can still be made later, the deleted work cannot, and in between it sits on the page
 under the author's name telling readers his own work does not exist.
+
+---
+
+## Lean environments on this machine — 2026-08-30
+
+Five `.lake` trees exist across the Desktop checkouts, 22.9 GB in total, on
+**four different Lean toolchains**. Only one is a complete, matched build.
+
+| checkout | toolchain | Mathlib build | usable |
+|---|---|---|---|
+| `geometry` | v4.32.0 | 6.4 GB, `Mathlib.olean` present | **yes — use this one** |
+| `orthogenesis` | v4.33.0-rc1 | 6.5 GB, `Mathlib.olean` present | yes, but a release candidate |
+| `AXLE` | v4.14.0 | 1.4 GB, partial, no `Mathlib.olean` | no |
+| `vol1-proofs` | v4.14.0 | 2.0 GB, partial | no |
+| `GTCT/GTCT` (tarball extract) | v4.11.0 | 1.3 GB, partial | no |
+| `3M` | none — no `lean-toolchain`, no `.lake` | — | not a project |
+
+**`~/Desktop/geometry` is the Lean environment.** GTCT is pinned to the same
+v4.32.0, so GTCT files check there too. Nothing needs downloading — the build
+is already on disk.
+
+    bash ~/Desktop/geometry/tools/leancheck.sh --audit ~/Desktop/GTCT/*.lean
+
+`leancheck.sh` compiles a file and, with `--audit`, runs `#print axioms` on
+every declaration and reports anything trusting `sorryAx` or `native_decide`.
+A clean compile is not a verification; the audit is the gate.
+
+### Open pin problems
+- **AXLE is on v4.14.0** while geometry and GTCT are on v4.32.0. Its Lean
+  files cannot be checked against the build we have. Same class of defect as
+  GTCT's unsatisfiable pin, just less severe — this one at least resolves.
+- **3M has no `lean-toolchain` and no `lakefile`.** Its seven `.lean` files
+  have never been part of a project, so they have never been compiled.
+- `GTCT/GTCT/` is a tarball extract carrying a stale v4.11.0 partial build.
+  CLAUDE.md says tarball duplicates are intentional — but 1.3 GB of dead
+  `.olean` on an old toolchain is not, and it is safe to delete `.lake` there
+  without touching the sources.
