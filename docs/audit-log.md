@@ -2292,3 +2292,144 @@ are not the place for errata.
 - ch10's Key Constants sidebar still reads `ε₀ = 1/3 (Gronwall, outer)` after the commit that
   removed the Gronwall framing from the prose. Same shape as WP-61: a sweep that named prose
   as its scope and stopped there.
+
+---
+
+## 2026-08-30 · Book 4 sweep: correction notices off the chapter pages
+
+**Why.** Pablo, this session: *"those are not the pages of the draft book — my publisher
+won't like to see that there — we need that note in the log where that belongs."* A chapter
+carries the corrected statement; this log carries the history.
+
+**Scope searched.** All 50 `.html` files in `geometry/book4`, on the union of
+`correction notice | corrected on | erratum | errata | this page was wrong | was incorrect |
+previously stated | now corrected` plus `class="correction`. Not searched: the same chapters
+as they exist in `GTCT/book4` (non-canonical, to be reduced to pointers), and Books 1–3, 5–8.
+
+**Structural state at the same date, for the record.** 50 files: **0 parse errors, 0 dead
+internal anchors, 0 broken local links.** 21 of 50 carry an "In Plain Terms" opener; 8 carry
+an in-page contents list; 18 carry chapter-nav.
+
+### Moved off the pages
+
+**1. `ch10.html` — "Erratum (V4 sync)."** An earlier posting of §6 quoted λ₊ ≈ 1.1097 and
+Δ ≈ 4.534. Direct evaluation of the Jacobian at (r_s, z_s) gives **λ₊ = 1.49148,
+λ₋ = −0.24450, Δ = 3.01362**; the closed-form expressions in Theorems B.1–B.5 are unchanged
+and verify to machine precision. The corrected discriminant is already stated in the proof
+immediately above the removed block ("numerically ≈ 3.0136"), so the page loses no fact.
+
+**2. `chIV-orthogonality.html` — "Correction notice (2026-07-18)."** Preserved in full because
+it is the sharpest of the three: *the lemma previously asserted the opposite of what is true,
+and the error propagated.* The earlier statement claimed
+`[K, F]ψ = −λ|ψ(η*)|²ψ(η*)·δ(η − η*) ≠ 0` for K a Heaviside gate and F the **pointwise**
+Nemytskii fold. False — a 0/1 gate commutes with a pointwise map *exactly*, for every state,
+and the δ term does not exist. The lemma's own proof (steps 2–3) derives KFψ = FKψ; the old
+step 4 introduced the δ from nowhere. The lemma now stands correctly on the page.
+**Downstream chapters that inherited the false version are tracked in the repository ledger** —
+that pointer was on the page and is carried here so it is not lost.
+
+**3. `ch13.html` §13.4** — retitled from "The p-adic Boundary and a Correction" to "The p-adic
+Boundary", and the paragraph narrating the error replaced by one that states what the
+ultrametric inequality decides. Removed from the page: the attribution of the wrong claim to
+"the Gemini conversation in Ch 11's development", and the aside that "the earlier wording
+collided with that term". The mathematics is untouched: for |c|_p < 1, |1−c|_p = 1 throughout
+the interior, so |(1−c)²|_p = 1 and |g_p|_p = |c|_p = p^(−σ) → 1, not 0; the boundary
+|c|_p = 1 is a wall of poles of the local Euler factor, not a soft lock.
+
+### Left in place, deliberately
+
+`ladder-polynomials.html` carries a `.correction`-styled block, but it is not an erratum — it
+is a provenance warning: *"Read this cold before citing it. Written in a single sitting at the
+end of a long session. The computations are machine-checked and the code is printed; the
+interpretations have not been reviewed by anyone."* That is a caveat about reliability, not a
+record of a past error, and removing it would delete an honest signal rather than relocate a
+history. **Flagged for Pablo's decision**, not acted on.
+
+### A claim of mine, withdrawn
+
+Earlier in this session I reported that ch10's sidebar label `ε₀ = 1/3 (Gronwall, outer)` was a
+correction that "reached the prose and missed the sidebar", citing the commit *"Remove Gronwall
+framing; relabel ε₀ as Lyapunov stability radius."* **That was wrong.** All six Book 4 files
+mentioning Gronwall use the name correctly: ch04 lists it among the tools of the original proof;
+ch09 and ch10 say r* was established *against* the symmetric Gronwall estimate, which is the
+accurate history; ch10:292 states a true theorem; ch10:539 is the Lean declaration
+`gronwall_outer`, which must not be renamed; hub.html records that the symmetric Gronwall ball
+is wrong on the inner side. The commit in question corrected one page and never claimed a
+corpus-wide sweep. I inferred a scope that was not asserted — the same error the WP-61 entry
+above is about, committed while acting on it.
+
+### Still open
+
+- **Twelve Book 4 files claim Lean verification** — `ch-build-2river`, `ch-hawking`, `ch02`,
+  `ch06`, `ch06b`, `ch08`, `ch09`, `ch10`, `ch11-catgt`, `ch11`, `ch12`, `ch13`. Each needs
+  checking against what the kernel actually reports. This is where a ✓ on a false statement
+  would live, and it has not been done.
+- **Seven `chIV-*` files hold 170–250 words of prose each** — axioms, correspondence,
+  emergence, field, operators, recursion, time. Placeholders carrying chapter names.
+- `ch15.html` (223 words) and `ch15-complex-turn.html` (3,784) both claim chapter 15.
+
+---
+
+## 2026-08-30 · Book 4 §12.2: the open note answered — c is the Riemann–Siegel theta derivative
+
+**Provenance.** The note left on the page an hour earlier read: *"What is needed: the
+corresponding law for c(σ,t) and the d𝑈̃ component, and then the identification of the
+resulting 1-form."* Pablo: *"there are notes in the book you left for me — we can try doing
+that now."* This entry records what came out.
+
+### Result 12.2
+Taking real parts of ζ'/ζ(s) = χ'/χ(s) − ζ'/ζ(1−s), with c even in t:
+
+    c(σ,t) + c(1−σ,t) = −Re[(χ'/χ)(σ+it)]
+
+A **sum** law, where g obeys a **difference** law. Verified to 30 digits at seven points
+(σ ∈ {0.3, 0.5, 0.8, 1.1, 1.5, 2.3}; t from 1.2 to 25).
+
+On σ = ½ the two terms coincide and it collapses to a closed form:
+
+    c(½,t) = ½[ Re ψ(¼ + it/2) − log π ]  =  ϑ'(t)
+
+**ϑ is the Riemann–Siegel theta function.** Verified to 25 digits at t = 0.7, 3, 6, 10, 25,
+40, 100 — agreement exact at four of the seven, ≤ 2.6e-26 at the rest.
+
+### Why that matters, and it is not internal to the framework
+The Riemann–von Mangoldt formula is N(T) = ϑ(T)/π + 1 + S(T). So the d𝑈̃ coefficient of
+α_arith, restricted to the critical wall, **is the density of the zero-counting function**, and
+its integral along the wall counts the zeros. Checked: ϑ(T)/π + 1 gives 1.378 / 9.423 / 29.002
+against actual counts of 1 / 10 / 29 below T = 20 / 50 / 100, the gaps being S(T) as expected.
+On that line the contact form is not *analogous* to classical analytic number theory; it is
+classical analytic number theory in a different alphabet.
+
+### The coefficients divide the labour completely
+At a zero ρ = ½ + iγ, ζ'/ζ has a simple pole, and along the wall s − ρ = i(t−γ) is purely
+imaginary — so the pole lands **entirely in g and not at all in c**. Measured:
+g(½, γ₁+δ) = −10.076 / −100.08 / −1000.08 / −10000.08 / −100000.08 for δ = 1e-1 … 1e-5, a
+simple pole of residue −1; c converges quietly to ϑ'(γ₁) = 0.4052744. So on the critical line
+**c is prime-free, smooth, and counts; g carries every pole, one per zero.**
+
+This gives §12.6's "each zero is a fold singularity" a precise and checkable form: the
+singularity is a simple pole in the d𝑉̃ component, and the d𝑈̃ component is analytic across it.
+
+⚠️ **One numerical trap, recorded so no one repeats it.** Evaluating c *exactly at* t = γ₁ by
+numerical differentiation of ζ returns 0.342444, not 0.405274 — mpmath is differentiating
+across a pole. The closed form is right and the limit from δ = 1e-5 confirms it to six digits.
+**Do not quote the at-the-pole evaluation.**
+
+### Status
+All of the above is **numerical, not proved.** `GTCT/book4/ZetaReflection.lean` states Result
+12.1 as `reflection_law` carrying `sorryAx`; Result 12.2 is not yet in the file at all. The
+Mathlib pieces for the ϑ identification exist — `Complex.digamma` and
+`riemannCompletedZeta_one_sub` — so it is formalisable, and it is a better first target than
+Result 12.1 because it needs no contact geometry.
+
+### Interpretation — deliberately left open
+Pablo reads new mathematics toward applications first. Both readings are available here and
+neither has been written into the chapter yet:
+- **Applied.** c(½,t) has a closed form in gamma factors, so any numerical scheme working with
+  α on the critical line can use ϑ'(t) instead of evaluating ζ'/ζ — which is expensive and
+  unstable precisely where it matters, near the zeros. The singular part is isolated in one
+  component with a known residue, which is the standard precondition for subtracting it off.
+- **Pure.** The 1-form separates the counting function from the zeros into different
+  components of the same object. If RH is "the critical line attracts", then whatever does the
+  attracting is carried by g alone; c contributes nothing to it and is fully classical. That
+  splits the conjecture along a seam that was not visible before it was written as a 1-form.
