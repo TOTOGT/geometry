@@ -2106,6 +2106,30 @@ Five `.lake` trees exist across the Desktop checkouts, 22.9 GB in total, on
 | `GTCT/GTCT` (tarball extract) | v4.11.0 | 1.3 GB, partial | no |
 | `3M` | none — no `lean-toolchain`, no `.lake` | — | not a project |
 
+### CHECK BEFORE YOU BUILD — read this before any `lake exe cache get`
+
+Mathlib is on this Mac **six times, 30.3 GB**, because six sessions each
+decided to fetch it and not one looked first. Five of those copies are dead
+weight; the machine has ~25 GB free.
+
+| | toolchain | build | size |
+|---|---|---|---|
+| **`~/Desktop/geometry`** | **v4.32.0** | **complete** | **7.7 GB — keep** |
+| `~/geometry` | v4.32.0 | complete | 7.6 GB — stale duplicate checkout |
+| `~/Desktop/orthogenesis` | v4.33.0-rc1 | complete | 7.7 GB — 10 sources byte-identical to geometry's |
+| `~/Desktop/vol1-proofs` | v4.14.0 | partial | 2.8 GB |
+| `~/Desktop/AXLE` | v4.14.0 | partial | 2.5 GB |
+| `~/Desktop/GTCT/GTCT` | v4.11.0 | partial | 2.0 GB |
+
+**Before fetching or building Mathlib, run `bash tools/lean-disk.sh`.** It
+reports every build on the machine. If the toolchain you need is already
+there, use it — `lake env lean` from that project compiles a file anywhere on
+disk, so a second copy is never needed just to check a file in another repo.
+
+`bash tools/lean-disk.sh --yes` removes the five dead trees (22.6 GB). It
+touches only `.lake` directories, never a source file, and every one of them
+is regenerable with `lake exe cache get`.
+
 **`~/Desktop/geometry` is the Lean environment.** GTCT is pinned to the same
 v4.32.0, so GTCT files check there too. Nothing needs downloading — the build
 is already on disk.
