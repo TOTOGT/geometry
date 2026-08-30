@@ -65,9 +65,13 @@ proof plans; use it rather than asking how to close the gap.
 ## State at handoff
 
 - **Pushed:** GTCT, AXLE, geometry, 3M. All clean.
-- **Not pushed: `dnls`.** Three commits sit on branch
-  `add-verification-and-coi-statement`; a repository ruleset refuses direct
-  pushes. Route: `cd ~/Desktop/dnls && gh pr create --fill`.
+- **`dnls` is pushed** (the blocking ruleset was removed 30 Aug). Its §6
+  "what counts as formally verified" sits on branch
+  `add-verification-and-coi-statement` at `c2a394a` and still needs a PR into
+  `main`: https://github.com/TOTOGT/dnls/compare/main...add-verification-and-coi-statement
+  The same six rules are duplicated in this file, so nothing is blocked on it.
+  Note `dnls` carries 16 remote branches, several looking abandoned — branch
+  hygiene there has drifted and is worth a pass.
 - **Book 4 is clean.** 50 HTML files, all `<div>` balanced, 0 missing tracked
   files, 0 dead links or anchors (the repo's remaining 17 dead links and 4 dead
   anchors are all outside book4). A font checker flagged `MathFallback` in
