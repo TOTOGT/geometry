@@ -2551,3 +2551,51 @@ single-coefficient form α = dV − g dU; the new material is what justifies Boo
 two-coefficient form, since "g → ∞" cannot say what stays finite.
 
 **DOI reserved for v1: 10.5281/zenodo.22179684.** Not yet published — the deposit is pending and the DOI will not resolve until the record goes live. This is the first deposit of this manuscript; the v2 material described above is intended to go up with it, or as a second version.
+
+## Errata belong here, not in the manuscript — 30 August 2026
+
+Editorial rule, set by Pablo: **the book chapters are draft manuscript pages a
+publisher will read. Correction notices do not belong on them.** The mathematics
+on the page must be right; the story of how it came to be wrong belongs in this
+log.
+
+Three chapters still carried the red `CORRECTION NOTICE` banner from WP-61
+(2026-08-12). Removed today, with the corrected mathematics left in place and
+verified to stand on its own:
+
+| page | banner | inline `[CORRECTED …]` | correct statement retained |
+|---|---|---|---|
+| `ch-recurrence-ladder.html` | removed | 1 removed | yes |
+| `chapters-pi-phi-mu-eta-delta-sigma-omega.html` | removed | 1 removed | yes |
+| `ch-eta-dnls.html` | removed | 1 removed | yes |
+| `ch-lambda-criticality.html` | already swept | — | yes |
+
+Each page was checked **before** the banner came off, because on a page whose
+body had never been rewritten the banner would have been the only place the
+true statement appeared — removing it would have silently reinstated the false
+claim. All four bodies carry it independently: `q = 1` is a non-degenerate
+critical point of `V₃`, not a root (`V₃(1) = −2`), and the double root belongs
+to the shifted potential `V(q) + 2 = (q−1)²(q+2)`.
+
+Corpus-wide check after the sweep: **zero pages assert the false form.**
+
+### The rule
+1. A correction is **published in this log**, with its date, its cause, and the
+   file set it touched.
+2. The chapter is **silently corrected** — the prose, the figures, and any Lean
+   snippet quoted in it.
+3. No errata banner on a manuscript page. A reader of the book should meet the
+   mathematics, not the repair history. A reader of this log should be able to
+   reconstruct every repair.
+
+This is not the corpus hiding anything: the log is public, versioned, and named
+from the repository root. It is the difference between a printed erratum slip
+and a marked-up galley proof.
+
+### Note on concurrent sessions
+Another session was working this repository at the same time and had already
+swept the banner from `ch-lambda-criticality.html` (commits `b38d5fd`,
+`f3979f5` — "corrections logged, not posted", "notices swept into the log"),
+while keeping the corrected `fold_critical_at_unity` /
+`shifted_double_root_at_unity` snippet written earlier today. Verified before
+touching anything; nothing of that session's work was overwritten.
