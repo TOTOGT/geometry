@@ -40,6 +40,28 @@ file's prose claim against its comment-stripped body.
    at all**, so neither can be checked against the build we have. Repinning
    both to v4.32.0 is the unblock, and it is a deliberate decision — ask first.
 
+## RH preprint — where reflection_law stands (30 Aug, end of day)
+
+`GTCT/book4/ZetaReflection.lean` went from two `sorry`s to one. Proved and
+kernel-audited today, none of them touching the zeros of ζ:
+`chiLog_real_on_critical_line`, `Zlog_conj`, `gCoef_odd_in_t`, `cCoef_even_in_t`.
+
+`reflection_law` needs exactly one input: `ζ'/ζ(s) + ζ'/ζ(1−s) = chiLog s`,
+verified to 30 digits (mpmath) at three interior points. Its docstring carries
+the route. Two traps recorded there, both found by checking advice rather than
+taking it:
+  · Go via `completedRiemannZeta_one_sub` (Λ(1−s) = Λ(s)), **not**
+    `riemannZeta_one_sub` — the latter is the asymmetric form with cos(πs/2),
+    and converting it to `chiLog` costs Legendre duplication and Euler
+    reflection.
+  · **Mathlib encodes Γ's poles as zeros** (`Gamma_eq_zero_iff`), so
+    `Γ(s/2) ≠ 0` is not free and must be carried as a hypothesis.
+
+`deposits/rh-arithmetic-contact-v1/RELATED-WORK.md` holds the verified
+bibliography — three citations right, two corrected — plus the claims rejected
+in audit. `GEMINI-PROMPT.md` beside it asks for checkable things instead of
+proof plans; use it rather than asking how to close the gap.
+
 ## State at handoff
 
 - **Pushed:** GTCT, AXLE, geometry, 3M. All clean.
