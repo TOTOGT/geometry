@@ -2230,3 +2230,65 @@ simply missed. The rule going in to `CLAUDE.md`: **a correction sweep must name
 the file set it searched, and that set must include every format the claim appears
 in — prose, Lean, and any registry or figure caption that quotes it.** A sweep
 with an unstated scope cannot be audited, and this one was not.
+
+---
+
+## 2026-08-30 · Book 4 §12.1–§12.2: the reflection was the wrong map, and the open computation was classical
+
+**Scope searched.** `book4/ch12.html` in `geometry` and in `GTCT` (the two copies), and
+`GTCT/book4/ZetaReflection.lean`. Naming the set because the WP-61 lesson below says to.
+Not searched, and therefore not claimed clean: ch11, ch13, ch14, and any figure caption
+outside ch12 that restates the functional equation.
+
+### Defect 1 — §12.1 stated the wrong involution
+The page read: *"This reflects $s \mapsto 1-s$: the function at $\sigma + it$ equals (up to
+$\chi$) the function at $(1-\sigma) + it$."* False. $s \mapsto 1-s$ carries $\sigma + it$ to
+$(1-\sigma) - it$; the height changes sign. The $t$-preserving mirror the chapter actually
+uses throughout — and the one Figure 12.1 draws — is $s \mapsto 1-\bar{s}$, the functional
+equation composed with complex conjugation, legitimate only because $\zeta$ has real
+coefficients. The figure was always right; the prose named the wrong map.
+
+Consequence, and this is why it mattered rather than being a slip: **$s \mapsto 1-s$ fixes
+only the single point $s = \tfrac{1}{2}$, not the critical line.** Conjecture 12.1 asserted a
+fixed locus of "the plane $\sigma = \tfrac{1}{2}$" for an involution that does not have one.
+The figure caption carried the same error and is corrected with it.
+
+### Defect 2 — §12.2's "what's needed" was already known
+The conjecture said the missing step was *"understanding how the von Mangoldt coefficient
+$g(\sigma,t)$ transforms under the functional equation."* That computation is the logarithmic
+derivative of $\zeta(s) = \chi(s)\zeta(1-s)$ and is classical. It gives
+
+    g(σ,t) − g(1−σ,t) = Im[(χ'/χ)(σ+it)],
+    (χ'/χ)(s) = log π − ½ψ(s/2) − ½ψ((1−s)/2)
+
+Confirmed numerically to 30 digits at eight points (σ ∈ {0.3, 0.5, 0.8, 1.1, 1.5, 2.3};
+t from 0.7 to 25), max deviation 8.8e-16 at one point, exact at the rest. On σ = ½ the digamma
+arguments ¼ ± it/2 are conjugates, so χ'/χ is real there and the right side vanishes — checked
+at five heights, `Im = 0.0` exactly.
+
+### What that does to the conjecture
+It weakens it, in the direction of being provable. $g$ is not carried to $\pm g$; it is carried
+to itself plus a defect built from gamma factors and containing no $\Lambda$ at all, so no
+scalar $f$ can give $\Phi^*\alpha = f\alpha$ off the critical line. Restated on the page as
+**Conjecture 12.2**, graded: $\Phi^*\alpha - \alpha$ is an explicit gamma-factor 1-form
+vanishing on $\sigma = \tfrac{1}{2}$. The old form is superseded, and the page says so in one
+clause rather than carrying a notice.
+
+### Formalisation
+`GTCT/book4/ZetaReflection.lean`, pushed 2026-08-30. `lseries_vonMangoldt_eq_neg_Zlog` — that
+$c$ and $g$ are the real and imaginary parts of $-\zeta'/\zeta$ — is **proved**, resting on
+`[propext, Classical.choice, Quot.sound]`, verified by `tools/leancheck.sh --audit` against
+Mathlib v4.32.0. `reflection_law` and `chiLog_real_on_critical_line` are **admitted**
+(`sorryAx`). Numerically confirmed is not proved, and the file states this in its header.
+
+### Where the notices went
+Nowhere. Per `CLAUDE.md`, a chapter page carries the corrected statement, not the history of
+having been wrong; this entry is the history. Book 4 is a draft for a publisher and the pages
+are not the place for errata.
+
+### Still open from this
+- `GTCT/book4/ch12.html` still carries both defects. It is the non-canonical copy and, per the
+  canonical-HTML rule set today, must be reduced to a pointer rather than edited in parallel.
+- ch10's Key Constants sidebar still reads `ε₀ = 1/3 (Gronwall, outer)` after the commit that
+  removed the Gronwall framing from the prose. Same shape as WP-61: a sweep that named prose
+  as its scope and stopped there.
