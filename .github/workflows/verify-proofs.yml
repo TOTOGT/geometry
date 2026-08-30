@@ -159,50 +159,37 @@ jobs:
       # three open obligations (S1 Arnold tongue, S2 hexgrid collapse,
       # S3 coord_coverage) are deliberately NOT named: naming them would
       # fail the job for being honest, which is the wrong incentive.
+      #
+      # 2026-08-26. This step used to carry its own copy of the probe as a
+      # heredoc while tools/verify-dm3/probe_dm3.lean carried another, and the
+      # two drifted the moment ToyModel.lean was added: the tracked file grew
+      # to 28 declarations, the heredoc stayed at 14, and CI went green over a
+      # local runner that could not elaborate. Two copies of one instrument,
+      # which is the thing CONVENTIONS.md exists to forbid. The step now runs
+      # the tracked probe, so `bash tools/verify-dm3/run.sh` and this job are
+      # the same check by construction rather than by intention.
       # =================================================================
       
-      - name: Kernel axiom check on the dm³ invariants and ε₀
+      - name: Kernel axiom check on the dm³ invariants, ε₀, and the toy model
         run: |
           set -u
-          cat > /tmp/probe_dm3.lean << 'PROBE'
-          import Orthogenesis.Architecture.G6Crystal
-
-          -- §1 canonical invariants
-          #print axioms Orthogenesis.G6Crystal.dm3_Tstar_pos
-          #print axioms Orthogenesis.G6Crystal.dm3_mumax_neg
-          #print axioms Orthogenesis.G6Crystal.dm3_tau_pos
-          #print axioms Orthogenesis.G6Crystal.dm3_tau_eq_abs_mumax
-
-          -- the stability radius: value, DERIVATION, and monotonicity
-          #print axioms Orthogenesis.G6Crystal.dm3_epsilon0
-          #print axioms Orthogenesis.G6Crystal.epsilon0_of_one
-          #print axioms Orthogenesis.G6Crystal.epsilon0_of_two
-          #print axioms Orthogenesis.G6Crystal.epsilon0_of_eq_third_iff
-          #print axioms Orthogenesis.G6Crystal.epsilon0_of_antitone
-          #print axioms Orthogenesis.G6Crystal.dm3_noise_tolerance
-          #print axioms Orthogenesis.G6Crystal.dm3_noise_tol_lt_one
-
-          -- §2 dimensional derivation
-          #print axioms Orthogenesis.G6Crystal.aspect_ratio_eq
-          #print axioms Orthogenesis.G6Crystal.aspect_ratio_encoded
-          #print axioms Orthogenesis.G6Crystal.layer_height_cubits
-          PROBE
+          PROBE=tools/verify-dm3/probe_dm3.lean
 
           set +e
-          lake env lean /tmp/probe_dm3.lean > /tmp/dm3.txt 2>&1
+          lake env lean "$PROBE" > /tmp/dm3.txt 2>&1
           rc=$?
           set -e
 
-          echo "----- dm³ invariants: axiom report -----"
+          echo "----- dm³ invariants and toy model: axiom report -----"
           cat /tmp/dm3.txt
-          echo "----------------------------------------"
+          echo "------------------------------------------------------"
 
           if [ "$rc" -ne 0 ]; then
             echo "::error::dm³ probe failed to elaborate (exit $rc)"
             exit 1
           fi
 
-          python3 tools/axiom_gate.py /tmp/dm3.txt 14
+          python3 tools/axiom_gate.py /tmp/dm3.txt 28
       
       # =================================================================
       # AUTHORITATIVE STEP. Vacuity.
