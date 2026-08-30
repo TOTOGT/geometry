@@ -145,6 +145,30 @@ footer a { color: var(--tiffany); text-decoration: none; }
     <div class="ch-eyebrow">Companion Paper · Criticality Side · Chapter λ</div>
     <div class="hero-letter">λ</div>
     <h1 class="hero-title">Criticality in <em>Multiplying Media</em></h1>
+<div class="theorem-box" style="border-left:4px solid #c0392b">
+  <div style="color:#c0392b;font-weight:700;letter-spacing:.06em">CORRECTION NOTICE — 2026-08-30 · PRECISION OF THE ROOT LANGUAGE (LATE)</div>
+  <div>
+    This chapter previously said that the dm³ potential <em>V</em>(q) = q³ − 3q
+    <strong>has a double root at q = 1</strong>, and displayed a Lean theorem
+    <code>fold_double_root_at_unity</code> asserting <code>V 1 = 0</code> — with a ✓ beside it.
+    <strong>Both were false.</strong> V₃(1) = −2, so q = 1 is not a root of V₃ at all, and no
+    theorem asserting <code>V 1 = 0</code> can have been checked.
+    <br><br>
+    <strong>What is true:</strong> c = 3 is the unique coefficient for which q = 1 is a
+    <em>critical point</em> of V<sub>c</sub> (V′<sub>c</sub>(1) = 3 − c = 0 ⟺ c = 3), and it is
+    <em>non-degenerate</em> since V″(1) = 6 ≠ 0 — precisely the Whitney A₁ condition. The double
+    root belongs to the <em>shifted</em> potential V(q) − V(1) = V(q) + 2 = (q−1)²(q+2).
+    <br><br>
+    <strong>Why this notice is eighteen days late.</strong> The same error was found and corrected
+    on 2026-08-12 by the sweep published as
+    <a href="book6/wp61-root-language-sweep.html">WP-61 · The Root-Language Sweep</a>, which fixed
+    <a href="ch-recurrence-ladder.html">Chapter π–Ω</a> and
+    <a href="ch-eta-dnls.html">Chapter η</a>. This page was missed. It was found on 2026-08-30
+    while repairing <code>GTCTsorryFree.lean</code> in TOTOGT/GTCT, whose Section 1 carried the
+    identical false claim in Lean — the sweep had not reached the formalization either.
+  </div>
+</div>
+
     <div class="hero-subtitle">The threshold λc(n) of an n-bonacci-modulated multiplying medium is set by the spectral gap Δn — not the dominant root. The same gap that made Tribonacci robust in the DNLS study sets criticality here.</div>
     <div class="op-chain" id="opChain" aria-label="Operator chain C K F U">
       <span class="op-glyph" data-i="0">C</span>
@@ -248,10 +272,14 @@ k_eff = dominant eigenvalue of L⁻¹F
     ∀ ρ : ℝ, ρ &gt; 0 → α ∧ dα = -2*ρ • (dz ∧ dρ ∧ dθ) ∧ (…) ≠ 0    <span class="lcm">-- ✓</span>
 <span class="lkw">theorem</span> <span class="lnm">whitney_a1_fold</span> :             <span class="lcm">-- V(q) = q³ − 3q at the A₁ fold</span>
     FoldA1 (fun q =&gt; q^3 - 3*q) 1                                    <span class="lcm">-- ✓</span>
-<span class="lkw">theorem</span> <span class="lnm">fold_double_root_at_unity</span> :    <span class="lcm">-- V(1)=V'(1)=0, V''(1)&gt;0</span>
-    V 1 = 0 ∧ deriv V 1 = 0 ∧ deriv (deriv V) 1 &gt; 0                 <span class="lcm">-- ✓</span></pre>
+<span class="lkw">theorem</span> <span class="lnm">fold_critical_at_unity</span> :      <span class="lcm">-- V'(1)=0, V''(1)&gt;0 : Whitney A₁</span>
+    deriv V 1 = 0 ∧ deriv (deriv V) 1 &gt; 0                           <span class="lcm">-- ✓</span>
+
+<span class="lcm">-- The DOUBLE ROOT belongs to the shifted potential, not to V itself:</span>
+<span class="lkw">theorem</span> <span class="lnm">shifted_double_root_at_unity</span> :   <span class="lcm">-- W = V + 2 = (q−1)²(q+2)</span>
+    (fun q =&gt; q^3 - 3*q + 2) = (fun q =&gt; (q-1)^2 * (q+2))           <span class="lcm">-- ✓</span></pre>
   </div>
-  <p>These are the same c* = 3 fold lemmas that anchor Chapter η: V(q) = q³ − 3q with its double root at q = 1 is the fold threshold, and it is the contact-geometric skeleton beneath both the DNLS robustness and the criticality gap. What is <em>not</em> yet formalized — and is tracked openly on the AXLE sorry roadmap — is a Lean statement of the spectral-gap formula λc(n) ≈ 0.958·Δn + 0.107 itself, and the 7/6 saturation limit for n ≥ 4 as a formal limit theorem. The verification currently stands at the contact-geometry layer, not the empirical fit.</p>
+  <p>These are the same c* = 3 fold lemmas that anchor Chapter η: V(q) = q³ − 3q has q = 1 as a non-degenerate critical point — that, not a root, is the fold threshold — and it is the contact-geometric skeleton beneath both the DNLS robustness and the criticality gap. What is <em>not</em> yet formalized — and is tracked openly on the AXLE sorry roadmap — is a Lean statement of the spectral-gap formula λc(n) ≈ 0.958·Δn + 0.107 itself, and the 7/6 saturation limit for n ≥ 4 as a formal limit theorem. The verification currently stands at the contact-geometry layer, not the empirical fit.</p>
 
   <div class="falsify">
     <div class="falsify-label">Three Falsifiability Conditions</div>

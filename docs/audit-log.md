@@ -2175,3 +2175,58 @@ now has the same three-file shape without the guard, which only walks
 
 Commits: `d203f4c` (kernel run + build target), `7047888` (gate + guard + README
 count 12→28).
+
+## WP-61 · The Root-Language Sweep — logged 30 August 2026, eighteen days after the fact
+
+The sweep happened on **2026-08-12**. It never reached this log. Recording it now,
+together with what it missed, because a correction that is not logged cannot be
+checked for completeness — which is exactly how it came to be incomplete.
+
+### The error
+Several chapters asserted that the dm³ potential `V(q) = q³ − cq` **has a double
+root at q = 1** when `c = 3`. False. `V₃(q) = q³ − 3q` has roots `0, ±√3`, and
+`V₃(1) = −2`, so `q = 1` is not a root of it at all.
+
+What is true, and what every downstream result actually uses: `c = 3` is the
+unique coefficient for which `q = 1` is a **critical point** of `V_c`
+(`V′_c(1) = 3 − c = 0 ⟺ c = 3`), and it is **non-degenerate**, since
+`V″(1) = 6 ≠ 0` — the Whitney A₁ condition. The double root belongs to the
+**shifted** potential `V(q) − V(1) = V(q) + 2 = (q−1)²(q+2)`, where it is
+automatic at any non-degenerate critical point, not a special feature of `c = 3`.
+
+The distinction is load-bearing: "double root", "degenerate" and "critical point"
+are technical terms in singularity theory and in the combinatorial-Hodge-theory
+literature this material sits beside. Conflating them is the same error WP-24
+found and refuted.
+
+### What WP-61 fixed on 2026-08-12
+- `ch-recurrence-ladder.html` — correction notice added
+- `chapters-pi-phi-mu-eta-delta-sigma-omega.html` — correction notice added
+- `ch-eta-dnls.html` — correction notice added
+
+### What it missed, found 2026-08-30
+- **`ch-lambda-criticality.html`.** Worse than the others: besides the prose, it
+  displayed a Lean theorem `fold_double_root_at_unity` asserting `V 1 = 0` **with
+  a ✓ beside it**. No such theorem can have been checked, because the statement is
+  false. Corrected, with a notice naming the eighteen-day gap.
+- **`GTCTsorryFree.lean` in TOTOGT/GTCT.** Section 1 carried the identical false
+  claim in Lean: `fold_factorization_c3`, `root_at_one` and `c_star_unique` were
+  false statements, not unproved ones. The sweep never reached the formalization.
+  Corrected 2026-08-30 with the operator `W_c q c = q³ − c·q + (c−1)`, which is
+  the same shifted potential the HTML notice describes.
+- **`dm3CriticalityPrinciple_extended.lean`** still carries it. Open.
+
+### Not defects
+- `chPI-recurrence.html` — the short Greek-series hub. Never made the claim; no
+  notice needed.
+- `book4/chpt11.md` — a diagnosis note *about* the error. Its own correction,
+  `q³ − q² − q + 1 = (q−1)²(q+1)`, is a different cubic from the shifted potential
+  but is itself correct; it is describing the general shape, not the framework's V.
+
+### The lesson, and it is the second time this week
+A sweep is only as good as its inventory. WP-61 swept HTML and stopped there; the
+Lean files stating the same claim were never in scope, and one HTML page was
+simply missed. The rule going in to `CLAUDE.md`: **a correction sweep must name
+the file set it searched, and that set must include every format the claim appears
+in — prose, Lean, and any registry or figure caption that quotes it.** A sweep
+with an unstated scope cannot be audited, and this one was not.
