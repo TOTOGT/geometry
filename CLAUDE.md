@@ -1,3 +1,72 @@
+# HANDOFF — 2026-08-30, end of session
+
+Read this first. Everything below the next `---` is the standing house notes.
+
+## The overnight job, if you are the session that runs it
+
+**Nothing needs installing.** Mathlib v4.32.0 is built at
+`~/Desktop/geometry/.lake` (7.8 GB, 8,650 `.olean`, manifest `81a5d257c8e4`).
+Do **not** run `lake exe cache get` — six sessions did that and left 30 GB of
+duplicate builds; five were deleted today. See CHECK BEFORE YOU BUILD below.
+
+    bash ~/Desktop/geometry/tools/leancheck.sh --audit FILE.lean [FILE.lean ...]
+
+`lake env lean` from the geometry project compiles a file **anywhere on disk**,
+so GTCT and 3M files check here without their own Mathlib. Budget ~3–30 s per
+file now that imports are narrowed; it was 576 s each when files said
+`import Mathlib`.
+
+**The gate is `#print axioms`, not a clean compile.** `--audit` appends the
+probe and reports any declaration trusting `sorryAx` or `native_decide`. A file
+can build, contain no `sorry`, and still be worthless — see §6 of
+`~/Desktop/dnls/CLAUDE.md`.
+
+**Run order, highest value first.** The scan behind this is in
+`/tmp/leanscan.json` if it survives; regenerate it by comparing each `.lean`
+file's prose claim against its comment-stripped body.
+
+1. **The 17 files with zero `import` lines.** They have never been compiled by
+   anything. Give each the narrowest import set that resolves it, then audit.
+   `AXLE/CatGT/axle_togt_canonical.lean` is one of these and was the worst
+   finding of the day — three of its nine axioms are refutable, so the file is
+   inconsistent. Fixed today; the other 16 are untouched.
+2. **The 168 `sorry`s across 158 unique files.** Triage before proving: this
+   session found three GTCT theorems and three AXLE axioms that were *false*,
+   not merely unproved. Instantiate a claim at a two-element type with constant
+   maps before spending an hour on its proof.
+3. **`dm3CriticalityPrinciple_extended.lean`** carries the same false `V_c`
+   double-root claim corrected in `GTCTsorryFree.lean`. Same repair applies.
+4. **AXLE is stranded on toolchain v4.14.0** and **3M has no `lean-toolchain`
+   at all**, so neither can be checked against the build we have. Repinning
+   both to v4.32.0 is the unblock, and it is a deliberate decision — ask first.
+
+## State at handoff
+
+- **Pushed:** GTCT, AXLE, geometry, 3M. All clean.
+- **Not pushed: `dnls`.** Three commits sit on branch
+  `add-verification-and-coi-statement`; a repository ruleset refuses direct
+  pushes. Route: `cd ~/Desktop/dnls && gh pr create --fill`.
+- **Book 4 is clean.** 50 HTML files, all `<div>` balanced, 0 missing tracked
+  files, 0 dead links or anchors (the repo's remaining 17 dead links and 4 dead
+  anchors are all outside book4). A font checker flagged `MathFallback` in
+  `ch11-catgt.html` and `gomc-opus.html`; that is a **false positive** — it is a
+  deliberate `@font-face` with `local()` sources and a `unicode-range` for Greek
+  and math glyphs, working as designed. Do not "fix" it.
+- One WIP commit preserves a previous session's book4 pricing edit (PayPal
+  links removed). Unreviewed — confirm it was intended.
+- Disk: 49 GB free, up from 26 GB. `tools/disk-survey.sh` finds the rest.
+
+## Not started, deliberately
+
+ISO 13485 / orthobiologics. G6 LLC is moving into life sciences with a medical
+device. Pablo asked to defer the QMS write-up until the corpus is ready. When
+it starts, the first question is regulatory classification — device vs
+21 CFR 1271 §361 HCT/P vs §351 biologic — because ISO 13485 is the right
+standard only for the first. Do not let dm³ become a design input or a
+marketing claim without evidence behind it.
+
+---
+
 # CLAUDE.md — totogt.github.io/geometry repo
 
 **Read the Read-first section below and stop.** Open a later section only when
