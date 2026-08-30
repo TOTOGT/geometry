@@ -200,6 +200,45 @@ Typeset from those files; never draft a part from scratch.
   Duval/Medon note; caught by the user.
 
 
+## CANONICAL: all HTML lives in geometry (set 2026-08-30 by Pablo)
+
+**`~/Desktop/geometry` is the canonical home for every HTML page in the corpus.**
+No exceptions. New pages are created here. Other repos hold Lean, tooling, data,
+notebooks and PDFs — not chapter HTML.
+
+**Why this rule exists.** Sessions run under different accounts and do not share
+memory. This file is the only channel between them, so a convention that is not
+written here does not survive the session that invented it. Book 4 is the proof:
+it exists in `geometry/book4/` (50 HTML files) and in `GTCT/book4/` (36), and as
+measured 2026-08-30 **every single shared chapter differs** — with drift running
+in *both* directions, so neither copy is simply newer:
+
+```
+ch07.html   geometry 35,207 B   GTCT 88,789 B     ← GTCT ahead
+ch08.html   geometry 34,182 B   GTCT 75,060 B     ← GTCT ahead
+ch02.html   geometry 47,867 B   GTCT 25,212 B     ← geometry ahead
+ch12.html   geometry 35,138 B   GTCT 30,473 B     ← geometry ahead
+```
+
+Fourteen chapters exist only in geometry (`ch15-complex-turn`, `ch16`–`ch20`
+lattices, `ch-hawking`, `ch06b`, `ch-build-2river`, `ch6-resonance`, …).
+
+**How to consolidate — this is a reconciliation, not a copy.** A blind
+`cp` in either direction is silent data loss. Per file: diff the two, merge the
+later work in both directions, land the result in `geometry/`, and then replace
+the non-canonical copy with a one-line pointer to the geometry URL — never leave
+a second copy behind. Do this chapter by chapter, and record in
+`docs/audit-log.md` which files were reconciled and which direction each carried.
+
+**Until a page is reconciled, do not edit it in either repo.** Editing the
+non-canonical copy widens the gap; editing only the canonical one loses whatever
+the other side has. That is why the §12.2 correction is still unwritten.
+
+**Corollary for Lean.** Lean files are the exception that proves the rule: they
+belong with the project whose toolchain builds them. Book 4's Lean is GTCT's
+(`GTCT/book4/`, and `GTCT/GTCT/GCTC/` once that package moves off mathlib
+v4.11.0). HTML never follows the Lean; the Lean never follows the HTML.
+
 ## Read first: Lean and CI verification state
 
 Updated **2026-08-25**. This section is the current answer. Do not re-derive it
