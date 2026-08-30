@@ -2150,3 +2150,49 @@ A clean compile is not a verification; the audit is the gate.
   CLAUDE.md says tarball duplicates are intentional — but 1.3 GB of dead
   `.olean` on an old toolchain is not, and it is safe to delete `.lake` there
   without touching the sources.
+
+---
+
+## Where files live — the tiering rule
+
+Settled 2026-08-30, after six Mathlib builds ate 30 GB because nobody had a
+policy. Four tiers. The tier is decided by **how the file is replaced if it is
+lost**, not by how big it is.
+
+**1. Delete outright — regenerable build artefacts.**
+`.lake`, `node_modules`, `__pycache__`, `.venv`, `dist`, `build`, `target`.
+Never archived, never committed, never copied to Drive. Copying a build
+artefact to Drive is the worst option available: it costs storage AND stays
+stale. If it can be rebuilt by a command, it is not data.
+The one exception is kept deliberately: **`~/Desktop/geometry/.lake`** (7.8 GB,
+Mathlib v4.32.0) — regenerable, but at a cost of hours, and it is the single
+build the whole corpus checks against. One copy. See CHECK BEFORE YOU BUILD.
+
+**2. GitHub — anything text and worth a history.**
+`.lean`, `.html`, `.md`, `.py`, scripts, manifests. This is where the corpus
+lives and it is already right. If a file would ever be worth a `git blame`,
+it goes here and nowhere else.
+
+**3. Google Drive — large, final, and not worth versioning.**
+Deposit PDFs, dated dumps, backup folders, big binaries, anything whose
+history is a liability rather than an asset. On Desktop today that is
+`geometry-backup-jul5/` (93 MB) and `files 4.12.2026/` (122 MB) — snapshots
+that git already supersedes. A folder with a date in its name is almost always
+tier 3.
+
+**4. Local working copy — active repos, and nothing else.**
+The Desktop is a workbench, not a warehouse. Two application bundles are
+sitting there right now (`Google Chrome.app` 2.1 GB, `Claude.app` 824 MB);
+those belong in `/Applications`.
+
+### The number that matters
+After the Mathlib purge the Desktop is 12 GB, of which 7.9 GB is geometry and
+2.9 GB is those two `.app` bundles. **All the actual work — every repo, every
+paper, every deposit — is about 1.2 GB.** The disk is ~204 GB used. So
+archiving Desktop content to Drive would recover almost nothing and break the
+working setup; the space is somewhere the desktop bridge cannot see.
+
+Run `bash tools/disk-survey.sh` to find it. It reports the whole home
+directory, every regenerable build artefact by size, and which Lean toolchains
+in `~/.elan` are orphaned — after this purge, `v4.11.0`, `v4.14.0` and
+`v4.33.0-rc1` are candidates at roughly 1.5–2.5 GB each.
