@@ -4,11 +4,19 @@
 
 *Preprint — not peer reviewed*
 
+**DOI reserved for v1: [10.5281/zenodo.22179684](https://doi.org/10.5281/zenodo.22179684)** — Zenodo community *Principia Orthogona*. Deposit pending; the DOI will not resolve until the record is published.
+
+*Version 2, revised 30 August 2026.* Version 1 (10 June 2026) constructed the form and
+stated the missing rung. This version adds §4.4–§4.6: the one-sided pole at zeros, the two
+reflection laws, the Riemann–Siegel identification (classical, credited), the refutation of
+the contactomorphism conjecture, and a status-of-claims table separating what is proved,
+machine-checked, classical, and numerical.
+
 ---
 
 ## Abstract
 
-We reformulate the Riemann Hypothesis (RH) as a non-vanishing condition on a globally defined arithmetic contact 3-form on the adele class space $\mathbb{A}_{\mathbb{Q}}/\mathbb{Q}^\times$. Starting from the classical $2D+t$ contact geometry prototype of *Principia Orthogona* (Book 4, Chapter 2), we lift the Riemann zeta function to an extended arithmetic phase space, construct an explicit contact 1-form $\alpha_{\text{arith}}$ whose twisting coefficient is the von Mangoldt–Dirichlet series (or its meromorphic continuation), and decompose it into local contact forms $\alpha_v$ at each place of $\mathbb{Q}$. The non-integrability condition $\alpha_{\text{arith}} \wedge d\alpha_{\text{arith}} \neq 0$ — which in the smooth ODE setting is automatic — becomes, in the arithmetic setting, equivalent to a global positivity statement on the action of the idele class group on $\ker\alpha_{\text{arith}}$. We compare this positivity condition to Weil's explicit formula criterion, Connes' spectral-triple approach, and the function-field case (where everything is already proved), identifying precisely where the final rung of the proof would need to sit. **No new theorem is proved.** The contribution is a translation dictionary between contact geometry and arithmetic, intended for researchers at the arithmetic–geometry–physics interface.
+We reformulate the Riemann Hypothesis (RH) as a non-vanishing condition on a globally defined arithmetic contact 3-form on the adele class space $\mathbb{A}_{\mathbb{Q}}/\mathbb{Q}^\times$. Starting from the classical $2D+t$ contact geometry prototype of *Principia Orthogona* (Book 4, Chapter 2), we lift the Riemann zeta function to an extended arithmetic phase space, construct an explicit contact 1-form $\alpha_{\text{arith}}$ whose twisting coefficient is the von Mangoldt–Dirichlet series (or its meromorphic continuation), and decompose it into local contact forms $\alpha_v$ at each place of $\mathbb{Q}$. The non-integrability condition $\alpha_{\text{arith}} \wedge d\alpha_{\text{arith}} \neq 0$ — which in the smooth ODE setting is automatic — becomes, in the arithmetic setting, equivalent to a global positivity statement on the action of the idele class group on $\ker\alpha_{\text{arith}}$. We compare this positivity condition to Weil's explicit formula criterion, Connes' spectral-triple approach, and the function-field case (where everything is already proved), identifying precisely where the final rung of the proof would need to sit. This revision adds two reflection laws for the form's coefficients under the functional equation, verified numerically to 30 digits; the observation that the pole at each zero falls entirely into one component while the other remains analytic and coincides with the Riemann–Siegel $\vartheta'$; and a refutation of the earlier conjecture that the functional equation acts as a contactomorphism. **RH itself is untouched, and §4.6 states exactly which claims are proved, which are machine-checked, which are classical, and which are numerical only.** The contribution remains a translation dictionary between contact geometry and arithmetic, intended for researchers at the arithmetic–geometry–physics interface.
 
 **MSC classes:** 11M26 (Riemann and Hurwitz zeta functions) · 53D10 (Contact manifolds, general) · 11R56 (Adèle rings and groups) · 81Q10 (Selfadjoint operator theory in quantum mechanics)
 
@@ -145,9 +153,65 @@ $$\alpha_{\text{arith}} \wedge d\alpha_{\text{arith}} = -(\partial_t g)\,dV\wedg
 
 **Proof sketch.** The independence of $\{\log p\}$ over $\mathbb{Q}$ follows from the uniqueness of prime factorization. Hence the quasi-periodic sum $\partial_t g$ is not identically zero on any open interval of $t$. $\square$
 
-### 4.4 Behavior at zeros
+### 4.4 Behaviour at zeros, and why one coefficient is not enough
 
-At a zero $s_0 = \tfrac{1}{2} + it_0$ (or any $s_0$ in the critical strip), the logarithmic derivative $\zeta'/\zeta(s)$ has a simple pole. As $t\to t_0$ along the zero-curve, $g(\sigma, t) \to \infty$: the "contact planes" twist infinitely rapidly at the exact moment the curve touches $U = V = 0$. This pole behavior is the arithmetic analogue of the smooth case's bounded twisting, but dramatically amplified by the arithmetic structure.
+At a zero $s_0 = \tfrac{1}{2}+it_0$ the logarithmic derivative has a simple pole, and $g(\sigma,t)\to\infty$: the contact planes twist infinitely rapidly at the moment the curve touches $U=V=0$. That much was in the first version of this paper. It is imprecise in a way worth repairing, because the repair is what motivates the two-coefficient form used in *Principia Orthogona* Book 4, Chapters 11–12.
+
+Write the companion coefficient
+
+$$c(\sigma,t) \;=\; \operatorname{Re}\!\left(-\frac{\zeta'}{\zeta}(\sigma+it)\right) \;=\; \sum_{n=1}^{\infty}\frac{\Lambda(n)}{n^\sigma}\cos(t\log n),$$
+
+so that $-\zeta'/\zeta = c - ig$ and the Book 4 form reads $\alpha_{\text{arith}} = c\,d\tilde U - g\,d\tilde V$. The single-coefficient form of §4.1 is the special case in which $c$ is suppressed.
+
+**Proposition 4.3 (the pole is one-sided).** *Along the critical line, the simple pole of $\zeta'/\zeta$ at a zero $\rho = \tfrac12+i\gamma$ falls entirely into $g$ and not at all into $c$.*
+
+*Proof.* Near $\rho$, $\zeta'/\zeta(s) \sim (s-\rho)^{-1}$. Restricting to $\sigma=\tfrac12$ gives $s-\rho = i(t-\gamma)$, so $(s-\rho)^{-1} = -i(t-\gamma)^{-1}$, which is purely imaginary. The real part is therefore bounded and the imaginary part carries the entire singularity. $\square$
+
+Numerically, with $\gamma_1 = 14.134725142$: $g(\tfrac12,\gamma_1+\delta) = -10.076,\,-100.08,\,-1000.08,\,-10000.08,\,-100000.08$ for $\delta = 10^{-1}\ldots10^{-5}$ — a simple pole of residue $-1$ — while $c$ converges to $0.4052744$.
+
+This is the content the one-coefficient form cannot express. "$g\to\infty$" is true but says nothing about what stays finite. In the two-coefficient form the statement is sharp: **the $d\tilde V$ component carries every zero as a simple pole; the $d\tilde U$ component is analytic across each of them.**
+
+### 4.5 The reflection laws, and the failure of contactomorphism
+
+Book 4 §12.2 conjectured that the involution induced by the functional equation is a contactomorphism of $\alpha_{\text{arith}}$ — that $\Phi^*\alpha = f\alpha$ for a scalar $f$, with fixed locus the plane $\sigma=\tfrac12$. Two corrections are required, and the second refutes the conjecture as stated.
+
+**First, the involution.** $s\mapsto 1-s$ carries $\sigma+it$ to $(1-\sigma)-it$; it does not preserve $t$, and its only fixed point is $s=\tfrac12$, not the critical line. The map with fixed locus $\sigma=\tfrac12$ is $\Phi: s\mapsto 1-\bar s$, i.e. $(\sigma,t)\mapsto(1-\sigma,t)$ — the functional equation composed with complex conjugation, available because $\zeta$ has real coefficients.
+
+**Second, the transformation laws.** Taking the logarithmic derivative of $\zeta(s)=\chi(s)\zeta(1-s)$, and using that $c$ is even and $g$ odd in $t$:
+
+$$g(\sigma,t) - g(1-\sigma,t) \;=\; \operatorname{Im}\big[(\chi'/\chi)(\sigma+it)\big], \qquad c(\sigma,t) + c(1-\sigma,t) \;=\; -\operatorname{Re}\big[(\chi'/\chi)(\sigma+it)\big],$$
+
+with $(\chi'/\chi)(s) = \log\pi - \tfrac12\psi(s/2) - \tfrac12\psi((1-s)/2)$. Note the asymmetry: $g$ obeys a **difference** law, $c$ a **sum** law. Both verified numerically to 30 significant digits at $\sigma\in\{0.3,0.5,0.8,1.1,1.5,2.3\}$, $t\in[0.7,25]$.
+
+**Corollary 4.4.** *On $\sigma=\tfrac12$ the two digamma arguments $\tfrac14\pm\tfrac{it}{2}$ are conjugate, so $\chi'/\chi$ is real there and the difference law gives $g(\tfrac12,t)=g(\tfrac12,t)$ identically — the reflection constraint holds on the critical line and on no other vertical line.*
+
+**Corollary 4.5.** *On $\sigma=\tfrac12$ the sum law collapses to*
+$$c\!\left(\tfrac12,t\right) = \tfrac12\left[\operatorname{Re}\psi\!\left(\tfrac14+\tfrac{it}{2}\right)-\log\pi\right] = \vartheta'(t),$$
+*where $\vartheta$ is the Riemann–Siegel theta function.*
+
+This last is **classical, and we claim no novelty for it**: it is equivalent to the standard fact that $Z(t)=e^{i\vartheta(t)}\zeta(\tfrac12+it)$ is real-valued, since $Z'/Z = i\vartheta' + i\zeta'/\zeta$ is real precisely when $\operatorname{Re}(\zeta'/\zeta)=-\vartheta'$. What is new here is only its role: it identifies the $d\tilde U$ coefficient of $\alpha_{\text{arith}}$ on the critical wall with the density of the Riemann–von Mangoldt counting formula $N(T)=\vartheta(T)/\pi+1+S(T)$. The form's two components separate the counting function from the zeros.
+
+**Proposition 4.6 (the conjecture fails off the line).** *$\Phi^*\alpha_{\text{arith}} = f\cdot\alpha_{\text{arith}}$ with $f$ scalar does not hold away from $\sigma=\tfrac12$.*
+
+*Reason.* Under $\Phi$, $g$ is carried not to $\pm g$ but to itself plus $-\operatorname{Im}[\chi'/\chi]$, a term built from gamma factors and containing no von Mangoldt data whatever. No scalar multiple of $\alpha_{\text{arith}}$, whose coefficients are $\Lambda$-series, can absorb it. $\square$
+
+What survives is a graded statement: $\Phi^*\alpha_{\text{arith}} - \alpha_{\text{arith}}$ is an explicit gamma-factor $1$-form vanishing on $\sigma=\tfrac12$. Establishing its precise shape requires the transformation of $\tilde U$ and $\tilde V$ themselves, which is not settled here.
+
+**A methodological remark.** The distinguished locus is not selected by the contact structure. It is selected by the gamma factor — an analytic input from outside the geometry — and the geometry then carries the consequence. Any claim elsewhere in this framework that a distinguished set is "determined by the contact geometry alone" should be checked against this example.
+
+### 4.6 Status of claims
+
+| Claim | Status |
+|---|---|
+| $c,g$ are the real and imaginary parts of $-\zeta'/\zeta$; $\sum\Lambda(n)n^{-s} = -\zeta'/\zeta$ for $\Re s>1$ | **Proved, machine-checked.** Lean 4 / Mathlib v4.32.0, `lseries_vonMangoldt_eq_neg_Zlog`, resting on `[propext, Classical.choice, Quot.sound]` |
+| Proposition 4.3, the pole is one-sided | Proved above; residue confirmed numerically |
+| Corollary 4.5, $c(\tfrac12,t)=\vartheta'(t)$ | **Classical** (equivalent to $Z$ real); verified to 25 digits |
+| Reflection laws of §4.5 | **Numerical only**, 30 digits at 7 points. Stated in Lean as `reflection_law`, *admitted* (`sorryAx`) |
+| $\chi'/\chi$ real on $\sigma=\tfrac12$ | Argued above; stated in Lean as `chiLog_real_on_critical_line`, *admitted* |
+| Proposition 4.6, failure of contactomorphism | Argued, not formalised |
+| Global positivity (§6), and RH itself | **Open.** Nothing here bears on it |
+
+Lean source: `TOTOGT/GTCT`, `book4/ZetaReflection.lean`.
 
 ---
 

@@ -2433,3 +2433,121 @@ neither has been written into the chapter yet:
   components of the same object. If RH is "the critical line attracts", then whatever does the
   attracting is carried by g alone; c contributes nothing to it and is fully classical. That
   splits the conjecture along a seam that was not visible before it was written as a 1-form.
+
+---
+
+## 2026-08-30 · ch-lambda-criticality: the ✓ on a false statement, moved off the page
+
+**Not my finding.** This was found and corrected on the page by another session earlier today,
+under a different account, while repairing `GTCTsorryFree.lean` in TOTOGT/GTCT. It is recorded
+here in full and removed from the chapter, per the rule that a draft-book page carries the
+corrected statement and this log carries the history. Nothing below is new work; it is a
+relocation.
+
+### The defect
+Chapter λ previously stated that the dm³ potential V(q) = q³ − 3q **has a double root at q = 1**,
+and displayed a Lean theorem `fold_double_root_at_unity` asserting `V 1 = 0` — **with a ✓ beside
+it.** Both were false. V₃(1) = −2, so q = 1 is not a root of V₃ at all, and no theorem asserting
+`V 1 = 0` can have been kernel-checked. A tick mark on a false statement, on a live page.
+
+### What is true, and is what the page now says
+c = 3 is the unique coefficient for which q = 1 is a *critical point* of V_c
+(V′_c(1) = 3 − c = 0 ⟺ c = 3), and it is *non-degenerate* since V″(1) = 6 ≠ 0 — precisely the
+Whitney A₁ condition. The double root belongs to the *shifted* potential
+V(q) − V(1) = V(q) + 2 = (q−1)²(q+2).
+
+### Why the notice was eighteen days late
+The same error was found and corrected on **2026-08-12** by the sweep published as
+**WP-61 · The Root-Language Sweep**, which fixed Chapter π–Ω and Chapter η. **This page was
+missed**, and so was the Lean: `GTCTsorryFree.lean` §1 carried the identical false claim in
+formal form. The sweep reached neither. That is the WP-61 lesson twice over — a correction
+sweep must name the file set it searched, and that set must span every format the claim appears
+in, prose and Lean alike.
+
+### How it surfaced today
+Not by review. **CI caught it sideways.** `tools/terms.py`, the vocabulary guard, flagged
+`PRECISION OF THE ROOT LANGUAGE (LATE)` — the notice's own heading — as an undeclared
+expansion-plus-acronym, and failed run #341 on commit `f3979f5`. The guard was written to catch
+confabulated vocabulary; it caught an erratum heading instead, and in doing so pointed at the
+one chapter page still carrying a correction notice. An instrument finding something it was not
+aimed at is worth recording as such.
+
+### The other half of that CI failure
+`Risk Reduction and Management Authority (NDRRMA)` from `book6/wp-86-rasuwa-lhende.html` was
+also flagged. That one is a genuine external proper noun — Nepal's National Disaster Risk
+Reduction and Management Authority — and is now declared in `TERMS.md` (line 116, between RCSR
+and Saddle-node), which is what the baseline is for. Guard now reports: *149 declared terms, all
+present; 2 disowned terms, mentioned only where declared.*
+
+### Still open
+`GTCTsorryFree.lean` was repaired in GTCT, but that repo's kernel check builds `GTCT/GCTC/` only
+and root-level files are outside the build. The repair has therefore not been verified by CI —
+only locally, by the session that made it.
+
+---
+
+## 2026-08-30 · The counter-example we had not written down: what the geometry does not determine
+
+Pablo asked whether tonight's observation had been recorded anywhere. It had not — it existed
+only in conversation. Recording it, because it bears on a live grant document.
+
+### The observation
+`HVEH/contact-geometry.html` states: *"The basin hierarchy ε₀=1/3 < r*≈0.776 < κ*≈0.882 < 1
+demarcates three nested zones: the inner laminar core, the transition annulus, and the outer
+turbulent boundary. **All three are determined by the contact geometry alone.**"* The same
+sentence sits in `_to_delete/superseded-copies/HVEH_proofs/contact-geometry.html`.
+
+Chapter 12 is a counter-example to that *style* of claim, from inside the same framework. There,
+the distinguished locus is not picked out by the contact structure. It is picked out by the
+**gamma factor**: the constraint g(σ,t) = g(1−σ,t) holds exactly where Im[χ'/χ(σ+it)] vanishes,
+and that happens on σ = ½ because the two digamma arguments ¼ ± it/2 are complex conjugates
+there. Nothing in α = c d𝑈̃ − g d𝑉̃ knows that. The wall is located by an analytic input from
+outside the geometry, and the geometry then carries the consequence.
+
+### Why it matters beyond the phrasing
+If the arithmetic instance of this framework needs an external analytic input to locate its
+distinguished set, the burden is on the hydrodynamic instance to show that its three zones do
+**not**. They may not — ε₀, r* and κ* could well follow from the ODE and the contact condition
+alone. But r* itself was obtained *numerically*, by bisection to 10⁻⁷, and ch10 records that a
+closed form for it "remains an open analytic problem". A boundary whose value is only known by
+bisection is not obviously "determined by the geometry alone" in the sense a reviewer will read.
+
+### Recommended repair, not yet made
+Either show the derivation, or weaken the sentence to what is defensible: the three zones are
+*located within* the contact-geometric model, with r* determined numerically. On a $350,000
+NJDEP Resilient NJ narrative the difference between those two sentences is the difference
+between a claim that invites a proof request and one that does not.
+
+### Status
+Not acted on. `HVEH/contact-geometry.html` is unchanged; this is a flag for Pablo, not an edit.
+
+---
+
+## 2026-08-30 · The preprint was never deposited — updated to v2 and readied
+
+`RH_arithmetic_contact_structure.md` — 326 lines, full abstract, MSC 11M26 / 53D10 / 11R56 /
+81Q10, nine sections, two appendices, comparisons to Weil, Connes and the function-field case —
+was committed **10 June 2026** (`f116d5e`, "Add files via upload") and **never touched again, and
+never deposited.** It is the most complete statement of the arithmetic-contact framework in the
+corpus and the only substantial piece carrying no DOI.
+
+**Priority evidence that already exists:** `book4/ch11.html` and `ch12.html` public since
+**9 June 2026**, manuscript since the 10th, all with git history. Public and timestamped, but
+not citable.
+
+**Literature check, 2026-08-30.** No prior work found formulating a contact form on the critical
+strip with von Mangoldt coefficients, or asking whether the functional equation is a
+contactomorphism. Nearest neighbours: a Gaussian–Perron prime-side defect comparing a smoothed
+prime force with ζ'/ζ (2607.04316); an extension of the Riemann–Siegel Z function off the line
+(2107.03191); spirals and curvature of ζ via Voronin universality (2306.00460). The framework
+appears unoccupied. **The identity c(½,t) = ϑ'(t) is not** — it is equivalent to Z(t) being real
+and is credited as such in the text.
+
+**Updated to v2 today.** New §4.4 (the pole is one-sided, with proof and residue), §4.5 (both
+reflection laws, the ϑ' corollary with its classical credit, and Proposition 4.6 refuting the
+contactomorphism conjecture), §4.6 (status-of-claims table). Abstract's "No new theorem is
+proved" replaced by a precise statement of what the revision adds. The manuscript used the
+single-coefficient form α = dV − g dU; the new material is what justifies Book 4's
+two-coefficient form, since "g → ∞" cannot say what stays finite.
+
+**DOI reserved for v1: 10.5281/zenodo.22179684.** Not yet published — the deposit is pending and the DOI will not resolve until the record goes live. This is the first deposit of this manuscript; the v2 material described above is intended to go up with it, or as a second version.
