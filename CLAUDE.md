@@ -62,6 +62,33 @@ bibliography — three citations right, two corrected — plus the claims reject
 in audit. `GEMINI-PROMPT.md` beside it asks for checkable things instead of
 proof plans; use it rather than asking how to close the gap.
 
+## dnls has Lean CI already written — merge it before rebuilding one
+
+Found 30 Aug. `TOTOGT/dnls` has **0 open PRs**; what looks like open work is 16
+stale remote branches. Five are one stacked lineage whose tip,
+**`fix-lean-proof-errors`**, was written 13 July and never merged. It carries:
+
+- `.github/workflows/verify-proofs.yml` — *"Verify Lean proofs (real kernel
+  check)"*: runs `lake build` as the gate and scans for `sorry` from
+  actually-compiled source. This is the discipline this session rebuilt by hand.
+- `Pin mathlib to v4.32.0 tag` + `Align lean-toolchain with pinned mathlib`.
+
+Meanwhile **`dnls/main` carries `lean-toolchain v4.32.0-rc1` against
+`mathlib @ "master"`** — a release candidate against a moving target, the same
+defect class as GTCT's unsatisfiable pin. The branch fixes it and **merges into
+main with zero conflicts**.
+
+    https://github.com/TOTOGT/dnls/compare/main...fix-lean-proof-errors?expand=1
+
+**Do not write new Lean CI for this corpus before reading that workflow.** Merge
+it, then adapt it for geometry and GTCT rather than starting over.
+
+After it lands, nine branches are already contained in main and can be deleted
+by ancestry (never by name): TOTOGT-patch-1/4/5/6/7,
+feature/archive-rehomed-book3-files, feature/curate-repo-structure,
+feature/dnls-foundations-lean, house-rules. The four remaining stacked branches
+become contained too.
+
 ## State at handoff
 
 - **Pushed:** GTCT, AXLE, geometry, 3M. All clean.
