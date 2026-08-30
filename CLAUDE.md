@@ -128,23 +128,39 @@ defect on a front page again without checking this first.
 
 ### Open, in priority order
 
-1. **Journal No. 8 is not publishable.** Page 2 (The Ledger, 2,690 chars) and Page 3 (The
+1. **Correction notices are sitting on draft-book pages, and the publisher will see them.**
+   The user's instruction, 29 Aug: *"those are not the pages of the draft book — my publisher
+   won't like to see that there — we need that note in the log where that belongs, same with
+   other pages."* **41 files** carry a visible correction/erratum notice, measured 2026-08-29
+   with a multi-pattern grep (`correction notice|corrected on|erratum|errata|this page was
+   wrong|was incorrect|correction —|correction:`) — not a single spelling. Roughly 23 of those
+   are book chapters (`ch-lambda-criticality.html`, `ch-recurrence-ladder.html`,
+   `ch-eta-dnls.html`, `chapters-pi-phi-mu-eta-delta-sigma-omega.html`, `book4/ch10`–`ch14`,
+   `book4/chIV-orthogonality.html`, `book8/ch6-quantum.html`, `HVEH/*`, `omega/ch-*`, and
+   others). **The rule to apply:** a chapter page carries the corrected statement, not the
+   history of its being wrong; the dated notice moves to `docs/audit-log.md`. Work packages,
+   audits and dashboards keep their notices — a WP is a working paper and the correction is
+   its content. **Do not sweep blind:** list the file set first, split chapters from WPs, and
+   get the user's confirmation on the split before editing. Full list is reproducible with the
+   grep above.
+
+2. **Journal No. 8 is not publishable.** Page 2 (The Ledger, 2,690 chars) and Page 3 (The
    Mathematics, 3,513 chars) are **byte-identical to No. 7's**, and Announcements is too —
    including "Seven weeks out" for LAW3M, which is five weeks from 12 September. Its own
    material: front page, Situations Wanted, Reading Room Part 3, colophon. **This is the
    5 September task.** Proposed fills: Ledger ← WP-89's five jurisdictions; Mathematics ← the
    N = 12 uniqueness worked out properly.
-2. **N = 12 must be written as a characterisation, never a necessity.** "Twelve is the unique N
+3. **N = 12 must be written as a characterisation, never a necessity.** "Twelve is the unique N
    for which the hexagonal mode coincides with Nyquist" — never "twelve is forced."
-3. **WP-86 is a number collision.** `book6/wp86-autophagy-calibration-case-study.html` holds it
+4. **WP-86 is a number collision.** `book6/wp86-autophagy-calibration-case-study.html` holds it
    too. The user chose the filename `wp-86-rasuwa-lhende.html` himself; flagged twice, not resolved.
-4. Two TPS termination dates for Nepal are in tension — Federal Register 6 Jun 2025 (effective
+5. Two TPS termination dates for Nepal are in tension — Federal Register 6 Jun 2025 (effective
    5 Aug 2025) vs Kathmandu Post 15 Aug 2026. **Both are carried; neither was chosen.** Litigation
    is the likely explanation. Reconciling it is an open item on WP-89 and in No. 8's front page.
-5. `G6LLC/probes` — missing `.github/`, `.gitignore`, `results/`; carries a committed `.pyc`.
-6. Ten files say hyper-Mahlo is "formalized in AXLE"; the load-bearing theorem is `sorry` and
+6. `G6LLC/probes` — missing `.github/`, `.gitignore`, `results/`; carries a committed `.pyc`.
+7. Ten files say hyper-Mahlo is "formalized in AXLE"; the load-bearing theorem is `sorry` and
    `AXLE_v6.lean` (22 sorries) does not compile under 4.32.
-7. **XIII LAW3M, Natal, 19–23 October 2026** — package in `AXLE/LAW3M/`. Five weeks out on 12 Sept.
+8. **XIII LAW3M, Natal, 19–23 October 2026** — package in `AXLE/LAW3M/`. Five weeks out on 12 Sept.
 
 ### Serial canon — do not improvise against it
 
@@ -1314,9 +1330,9 @@ for a worked example of a corrected document.
 3. **No document scores its own rigor.** No "10/10", no `∎` on a sketch.
 4. **A correction to a published Zenodo record is the author's call.** Draft it,
    show it, do not deposit it. Amending a DOI is not a routine edit.
-5. **Never wholesale-replace a working file** to fix this. Minimal edit to the
+6. **Never wholesale-replace a working file** to fix this. Minimal edit to the
    specific lemma, then update the ledger above in the same session.
-6. **Update this ledger** when you settle a file — mark it fixed, or move it out
+7. **Update this ledger** when you settle a file — mark it fixed, or move it out
    of triage. A future session will trust this table; leaving it stale recreates
    the original problem in a new place.
 7. **A caveat may only be removed by the same edit that verifies the thing it
