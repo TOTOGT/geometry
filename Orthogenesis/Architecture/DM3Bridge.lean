@@ -14,7 +14,7 @@
 -- Toolchain: Lean 4 + Mathlib (v4.14.0, as G6Crystal.lean)
 -- Zenodo: 10.5281/zenodo.19162012  AXLE: github.com/TOTOGT/AXLE
 
-import Mathlib
+import Mathlib.Tactic
 import Orthogenesis.Geometry.Colony
 import Orthogenesis.Architecture.G6Crystal
 

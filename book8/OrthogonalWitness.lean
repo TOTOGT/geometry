@@ -71,7 +71,14 @@
 -- Real.one_le_cosh lives in Mathlib/Analysis/SpecialFunctions/Trigonometric/DerivHyp.lean,
 -- which Trigonometric.Basic does not reach. Checked against the Mathlib pinned by this
 -- repository (v4.32.0) rather than assumed. The full import is a cache hit here.
-import Mathlib
+import Mathlib.Analysis.Calculus.Deriv.Basic
+import Mathlib.Analysis.Calculus.Deriv.Pow
+import Mathlib.Analysis.Calculus.Deriv.Mul
+import Mathlib.Analysis.Calculus.Deriv.Inv
+import Mathlib.Analysis.SpecialFunctions.ExpDeriv
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
+import Mathlib.Tactic
 -- (uses Real.cosh_sq_sub_sinh_sq, Real.one_le_cosh, Real.cosh_zero; if a lemma
 --  path shifts in your Mathlib pin, `import Mathlib` is the safe fallback)
 

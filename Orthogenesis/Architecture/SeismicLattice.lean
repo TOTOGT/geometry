@@ -56,7 +56,7 @@
 # GitHub: https://github.com/TOTOGT/geometry
 # ORCID:  0009-0000-6496-2186
 -/
-import Mathlib
+import Mathlib.Tactic
 
 namespace Orthogenesis.Seismic
 

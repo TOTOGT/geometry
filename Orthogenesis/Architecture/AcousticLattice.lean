@@ -48,7 +48,7 @@
 # Zenodo concept DOI: 10.5281/zenodo.19162012
 # GitHub: https://github.com/TOTOGT/geometry · ORCID: 0009-0000-6496-2186
 -/
-import Mathlib
+import Mathlib.Tactic
 
 namespace Orthogenesis.Acoustic
 
