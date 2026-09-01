@@ -2373,3 +2373,43 @@ Run `bash tools/disk-survey.sh` to find it. It reports the whole home
 directory, every regenerable build artefact by size, and which Lean toolchains
 in `~/.elan` are orphaned — after this purge, `v4.11.0`, `v4.14.0` and
 `v4.33.0-rc1` are candidates at roughly 1.5–2.5 GB each.
+
+---
+
+# RULE (2026-09-01): a working paper whose finding is about machine-assisted production carries `#Machine Learning` at the top
+
+The corpus publishes findings about how it is produced. Those findings are worth more when a
+reader can pick them out without reading every paper, and worth less when they are scattered
+through papers about mathematics. The tag makes the population addressable.
+
+**Markup** — first element inside `.wp-head`, above the kicker, plus a mention in the
+Provenance cell of the metagrid so it survives a copy-paste of the header:
+
+```html
+<div class="topictag" title="This paper's finding is about machine-assisted production">#Machine Learning</div>
+<div class="wp-kicker">Vol VI · Roots · WP-NN · Received YYYY-MM-DD · Open</div>
+```
+
+The `.topictag` CSS block lives in `book6/wp91-a-theorem-twenty-seven-characters-long.html` and
+is copied with the rest of the WP template.
+
+**When it applies.** The paper's *finding* is about what machine assistance produced, or about
+an instrument that scored generated work wrongly. WP-91 is the reference case: a registry badge
+read "proved" on a theorem whose body invoked an axiom, and a second copy of the file had its
+caveats deleted somewhere between two versions. Both are facts about production, not about
+Collatz.
+
+**When it does not.** The paper's subject is mathematics, an external preprint, or a domain
+result — even if the work was done with machine assistance, and even if the paper reports
+defects. WP-90 answers an open question in arXiv:2602.06716 and reports three errors in it;
+those are that paper's errors, not production artefacts, so WP-90 carries no tag. **Assistance
+used is not the test. Assistance as the subject is the test.**
+
+**What the tag is not.** It is not a confession and it is not a byline. Under the editorial rule
+already in this file, findings lead and corrections go dated in the corrections column; the tag
+sorts papers, it does not apologise for them. Do not let a tagged paper drift into
+assistant-error narrative — that belongs in `docs/audit-log.md`.
+
+**Retro-tagging is not automatic.** Deciding that an existing paper's subject is production is a
+judgement per paper. Do not sweep the back catalogue; propose candidates and let the author
+confirm.
