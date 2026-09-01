@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-91 · A Theorem Twenty-Seven Characters Long — Principia Orthogona Vol VI</title>
+<meta name="description" content="WP-91: collatz_converges is published in the theorem registry with a proved badge. Its body is 27 characters and invokes an axiom that states the Collatz conjecture. It is counted twice, from two files differing only in case, neither of which compiles.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.quote{border-left:3px solid var(--dim);background:#fff;padding:.9rem 1.2rem;margin:1.2rem 0;font-style:italic;color:var(--ink2)}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+td.mono{font-family:var(--mono);font-size:.78rem}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+.instrument{border:1px solid var(--rule);background:#fff;border-left:3px solid var(--accent3);padding:.9rem 1.2rem;margin:1.3rem 0;font-size:.92rem}
+.instrument .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent3);margin-bottom:.5rem}
+.instrument ul{margin:.4rem 0 0 1.2rem}
+.instrument li{font-family:var(--mono);font-size:.76rem;line-height:1.9;margin-bottom:.1rem}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+td.zero{font-family:var(--mono);font-size:.8rem;text-align:right;color:var(--red);font-weight:700}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#5a3070;background:#eae0f0;
+  border:1px solid #c4addb;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.topictag a{color:inherit;text-decoration:none}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+</style>
+</head>
+<body>
+<div class="topnav">
+  <span class="crumbs"><a href="../index.html">⚜ PRINCIPIA ORTHOGONA</a> · <a href="index.html">Vol VI · Roots</a> · WP-91</span>
+  <span class="meta"><a href="wp89-the-reception-instruments.html">← WP-89</a> · <a href="wp90-the-metric-on-the-restricted-fibre.html">WP-90 · The Metric on the Restricted Fibre</a></span>
+</div>
+
+<div class="wp-head">
+  <div class="topictag" title="This paper's finding is about machine-assisted production">#Machine Learning</div>
+  <div class="wp-kicker">Vol VI · Roots · WP-91 · Received 2026-09-01 · Open</div>
+  <h1>A Theorem <em>Twenty-Seven Characters</em> Long</h1>
+  <div class="subtitle">The registry publishes <span class="mono">collatz_converges</span> with a proved badge. Its body invokes an axiom that states the Collatz conjecture. It is counted twice, from two files distinguishable only by case, neither of which compiles.</div>
+  <div class="metagrid">
+    <div><strong>Computed</strong>2026-09-01<br><a href="../tools/axiom_dependence.py"><span class="mono">tools/axiom_dependence.py</span></a></div>
+    <div><strong>Provenance</strong>internal audit · <span class="mono">#Machine Learning</span><br>opened by a git case-collision</div>
+    <div><strong>Claim type</strong>defect report<br>with corpus-wide measurement</div>
+    <div><strong>Scope</strong>10 of 11 declared roots<br>264 tracked .lean files</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="lede">
+Cloning <span class="mono">sluing/neuro</span> on macOS produced a warning about colliding paths.
+Following it led to two tracked files whose names differ only in case, then to the theorem they
+both contain, then to the published registry entry for that theorem. The registry says
+<span class="mono">collatz_converges</span> is proved. The proof is
+<span class="mono">hasStructuredCycle_collatz X</span> — twenty-seven characters invoking an axiom
+declared eleven lines above it, whose statement is the Collatz conjecture. The file's own
+comment says so.
+</div>
+
+<div class="taglegend">
+  <span><span class="tag t-open">DEFECT</span> published claim, reproducible</span>
+  <span><span class="tag t-data">MEASURED</span> produced by the instrument</span>
+  <span><span class="tag t-model">READ</span> read from source, quoted</span>
+  <span><span class="tag t-stub">OPEN</span> not settled here</span>
+</div>
+
+<div class="eyebrow">§1</div>
+<h2>The pair, and which is canonical <span class="tag t-model">READ</span></h2>
+
+<p>Three tracked names, two contents:</p>
+
+<table>
+<tr><th>path</th><th>bytes</th><th>axioms</th><th>theorems</th><th>documented</th></tr>
+<tr><td class="mono">DiscreteDM3.lean</td><td class="n">2,732</td><td class="n">4</td><td class="n">4</td><td>no header, no comments on the axioms</td></tr>
+<tr><td class="mono">discreteDm3.lean</td><td class="n">6,511</td><td class="n">4</td><td class="n">4</td><td>module header naming the axioms as the conjecture</td></tr>
+<tr><td class="mono">discretedm3.lean</td><td class="n">6,511</td><td class="n">4</td><td class="n">4</td><td>byte-identical to the above</td></tr>
+</table>
+
+<p>APFS is case-insensitive, so a macOS checkout holds one of these and reports the survivor as
+modified against the index entry for its sibling. Committing that apparent modification
+overwrites one tracked file with another's content. That is the hazard; it is not the finding.</p>
+
+<div class="box thm">
+<span class="lab">The canonical file is <span class="mono">discreteDm3.lean</span></span>
+<p>Not because it is larger, and not on any sorry count — <b>neither file contains a
+<span class="mono">sorry</span></b>. Both declare four axioms and four theorems, and the
+mathematics is the same. The difference is entirely in what each one tells the reader.</p>
+<p><span class="mono">discreteDm3.lean</span> carries a module header stating that its three
+analytic axioms <em>are</em> the Collatz conjecture, marks
+<span class="mono">hasStructuredCycle_collatz</span> as "the Collatz conjecture itself", annotates
+<span class="mono">collatz_converges</span> as "as strong as the axiom it rests on", and
+<b>proves the even branch</b> of <span class="mono">M_collatz_iff_E_collatz</span> before
+isolating the odd branch as a named <span class="mono">private axiom</span> with its reason.</p>
+<p><span class="mono">DiscreteDM3.lean</span> is the same file with the header deleted, the
+annotations deleted, and <span class="mono">M_collatz_iff_E_collatz</span> demoted from a
+partially proved theorem to a bare <span class="mono">axiom</span>. It is a caveat-stripping
+regression, and it is the copy the published registry links to.</p>
+</div>
+
+<div class="eyebrow">§2</div>
+<h2>What the registry says <span class="tag t-open">DEFECT</span></h2>
+
+<p>Read from the tracked pages on 2026-09-01:</p>
+
+<div class="eq">AXLE/theorem-registry.html
+&lt;div class="thm" data-st="proved"&gt;&lt;span class="b b-proved"&gt;✓&lt;/span&gt;collatz_converges&lt;/div&gt;</div>
+
+<div class="eq">geometry/neuro/SBM/1080.html
+&lt;tr data-tier="free" … &gt;&lt;span class="badge bf"
+  title="Sorry-free in source — proof written, no unproved step"&gt;S&lt;/span&gt;
+  … collatz_converges … DiscreteDM3.lean ↗</div>
+
+<p>Against the source:</p>
+
+<div class="eq">axiom hasStructuredCycle_collatz :
+  ∀ X, ∃ n, collatzStep_dm3^[n] X = attractor
+
+theorem collatz_converges
+    (X : CollatzState) (_hX : isSimplyConnected X) :
+    ∃ n : ℕ, collatzStep_dm3^[n] X = attractor :=
+  hasStructuredCycle_collatz X</div>
+
+<p>The badge tooltip — <i>"proof written, no unproved step"</i> — is false for this entry. The
+unproved step is the axiom, and the tiering treats an axiom as not-a-step. Both statements are
+individually defensible and their conjunction publishes the Collatz conjecture as a
+machine-verified theorem. This is the failure mode the corpus already names in
+<span class="mono">CLAUDE.md</span>: <i>sorry-free is not proved</i>.</p>
+
+<div class="gap">
+<span class="lab">And it is counted twice</span>
+<p><span class="tag t-data">MEASURED</span> <span class="mono">AXLE/directory.html</span> carries
+<span class="mono">collatz_converges</span> at entry <b>357</b> (from
+<span class="mono">DiscreteDM3.lean</span>) and again at entry <b>773</b> (from
+<span class="mono">lean/discreteDm3.lean</span>); <span class="mono">1080.html</span> lists it at
+<b>356</b> and <b>773</b>. The case-collision is therefore not only a git hazard — it inflates a
+published declaration count by duplicating the same theorem under two spellings. The same applies
+to <span class="mono">entropy_monotone</span> and <span class="mono">M_collatz_iff_E_collatz</span>.</p>
+</div>
+
+<div class="eyebrow">§3</div>
+<h2>Neither file compiles <span class="tag t-data">MEASURED</span></h2>
+
+<p>Both import <span class="mono">Mathlib.Init.Function</span>. Checked against the v4.32.0 build
+at <span class="mono">geometry/.lake/packages/mathlib</span> on 2026-09-01:</p>
+
+<table>
+<tr><th>import</th><th>present in the v4.32.0 build</th></tr>
+<tr><td class="mono">Mathlib.Init.Function</td><td class="zero">ABSENT</td></tr>
+<tr><td class="mono">Mathlib.Data.Nat.Basic</td><td>present</td></tr>
+<tr><td class="mono">Mathlib.Data.Nat.Factorization.Basic</td><td>present</td></tr>
+</table>
+
+<p>So the "sorry-free in source" badge was determined by <b>parsing the text</b>, not by building
+it. <span class="mono">tools/axiom_gate.py</span> — the real gate, which asks the kernel via
+<span class="mono">#print axioms</span> — cannot see either file, because a file that does not
+elaborate has no axioms to report. <b>The declarations least able to be checked are the ones the
+gate is structurally blind to,</b> and they are scored by the instrument that cannot tell an
+axiom from a proof.</p>
+
+<div class="eyebrow">§4</div>
+<h2>How much of the corpus is like this <span class="tag t-data">MEASURED</span></h2>
+
+<p>Measured 2026-09-01 by <a href="../tools/axiom_dependence.py"><span class="mono">tools/axiom_dependence.py</span></a>
+over the roots declared in <span class="mono">tools/corpus_roots.txt</span>, 10 of 11 readable
+(<span class="mono">io-clone</span> was not reachable), 264 tracked <span class="mono">.lean</span>
+files:</p>
+
+<table>
+<tr><th>figure</th><th>count</th></tr>
+<tr><td>axiom declarations</td><td class="n">61</td></tr>
+<tr><td>theorems / lemmas whose body names a locally declared axiom</td><td class="n">27</td></tr>
+<tr><td>…of which the body is a pass-through (≤ 80 non-space chars)</td><td class="zero">10</td></tr>
+</table>
+
+<p>The ten pass-throughs, shortest first:</p>
+
+<table>
+<tr><th>chars</th><th>declaration</th><th>rests on</th><th>file</th></tr>
+<tr><td class="n">25</td><td class="mono">entropy_monotone</td><td class="mono">meanContraction_collatz</td><td class="mono">AXLE/discreteDm3.lean</td></tr>
+<tr><td class="n">25</td><td class="mono">entropy_monotone</td><td class="mono">meanContraction_collatz</td><td class="mono">AXLE/discretedm3.lean</td></tr>
+<tr><td class="n">27</td><td class="mono">collatz_converges</td><td class="mono">hasStructuredCycle_collatz</td><td class="mono">AXLE/discreteDm3.lean</td></tr>
+<tr><td class="n">27</td><td class="mono">collatz_converges</td><td class="mono">hasStructuredCycle_collatz</td><td class="mono">AXLE/discretedm3.lean</td></tr>
+<tr><td class="n">47</td><td class="mono">critDim_3</td><td class="mono">nBonacciRingSize_3</td><td class="mono">GTCT/dm3CriticalityPrinciple_extended.lean</td></tr>
+<tr><td class="n">47</td><td class="mono">critDim_4</td><td class="mono">nBonacciRingSize_4</td><td class="mono">GTCT/dm3CriticalityPrinciple_extended.lean</td></tr>
+<tr><td class="n">64</td><td class="mono">entropic_cost_minimal_at_rank3</td><td class="mono">nBonacciRingSize</td><td class="mono">GTCT/dm3CriticalityPrinciple_extended.lean</td></tr>
+<tr><td class="n">67</td><td class="mono">igcp_3</td><td class="mono">dm3_criticality_principle</td><td class="mono">AXLE/CatGT/Criticality_Principle.lean</td></tr>
+<tr><td class="n">69</td><td class="mono">tribonacci_3_critical</td><td class="mono">dm3_criticality_principle_instance</td><td class="mono">GTCT/dm3CriticalityPrinciple_extended.lean</td></tr>
+<tr><td class="n">77</td><td class="mono">super</td><td class="mono">dm3_criticality_principle</td><td class="mono">AXLE/CatGT/Criticality_Principle.lean</td></tr>
+</table>
+
+<p>The seventeen longer ones are questions, not defects — a long body naming an axiom may contain
+real work, and several plainly do. They are listed in the tool's output and should be read once
+each, not swept.</p>
+
+<div class="box warn">
+<span class="lab">The instrument cannot see the file the registry links to</span>
+<p>Run on macOS, the scan finds <span class="mono">discreteDm3.lean</span> and
+<span class="mono">discretedm3.lean</span> but not <span class="mono">DiscreteDM3.lean</span>,
+because the case-collision means only one is in the working tree. The registry's link points at
+the one the scan cannot open. Any count of this population taken on a Mac is short by the hidden
+siblings; see Finding 3 in <span class="mono">docs/leanscan-2026-09-01.md</span>.</p>
+</div>
+
+<div class="eyebrow">§5</div>
+<h2>What is not claimed</h2>
+
+<ul>
+<li><b>No accusation of fabrication.</b> <span class="mono">discreteDm3.lean</span> states its
+axioms and their status plainly, in its own header, in more detail than most files in the corpus.
+The defect is that the registry's tiering discards that honesty on the way to a badge, and that a
+second copy of the file deleted it at source.</li>
+<li><b>Axiomatising the conjecture is a legitimate move.</b> Stating "if Collatz holds in this
+form, the dm³ closure gives convergence" is a real thing to formalise. What cannot follow is a
+registry row reading <span class="mono">✓ proved</span>.</li>
+<li><b>The 61 / 27 / 10 figures are source-level.</b> They come from a regex scan, not from the
+kernel. They cannot see axioms imported from other modules and do not resolve namespaces. The
+authoritative instrument is <span class="mono">#print axioms</span>, which is blind to every file
+that does not elaborate — which is why this tool exists alongside it, not instead of it.
+<span class="tag t-stub">OPEN</span></li>
+<li><b>No corpus-wide recount is published here.</b> Changing the tier of these entries changes
+totals on several pages; under the house rule that is a census re-run and a diff, not an
+edit. <span class="tag t-stub">OPEN</span></li>
+</ul>
+
+<div class="eyebrow">§6</div>
+<h2>Repairs, in order</h2>
+
+<ol>
+<li><b>Retier the registry.</b> "Sorry-free in source" needs a fourth state for
+<em>rests on a local axiom</em>. Ten declarations are pass-throughs today; the tooltip "proof
+written, no unproved step" must not apply to them. This is the change that touches published
+counts.</li>
+<li><b>Retire <span class="mono">DiscreteDM3.lean</span></b> in favour of
+<span class="mono">discreteDm3.lean</span>, and delete <span class="mono">discretedm3.lean</span>
+as a byte-identical third spelling. The retired copy goes to
+<span class="mono">docs/ml-evidence/</span> — it is the evidence that the caveats were removed
+somewhere between the two, which is a finding about machine-assisted production and not junk.</li>
+<li><b>Repoint the registry link</b> from <span class="mono">DiscreteDM3.lean</span> to the
+canonical file, and collapse the duplicate entries (356/357 and 773).</li>
+<li><b>Fix or retire the imports.</b> <span class="mono">Mathlib.Init.Function</span> no longer
+exists; until it is dropped, neither file can be gated and no badge on either is evidence of
+anything a machine checked.</li>
+<li><b>Add the case-collision check to CI.</b> One line — compare
+<span class="mono">git ls-files</span> against its case-folded set — would have caught this
+before it reached a published count. <span class="tag t-stub">OPEN</span></li>
+</ol>
+
+<div class="gap">
+<span class="lab">Falsifiers</span>
+<p>§1 fails if the two files differ in some way this page missed — both are short and are quoted
+from directly. §2 fails if the registry markup has changed since 2026-09-01; the two lines are
+quoted verbatim and are greppable. §3 fails if
+<span class="mono">Mathlib.Init.Function</span> is present under some other path in the build. §4
+fails if the scan's regex misattributes a body; the ten flagged rows are short enough to read in
+full, which is the point of sorting by length.</p>
+</div>
+
+<div class="eyebrow">References</div>
+<ol class="refs">
+  <li id="r1"><a href="../tools/axiom_dependence.py"><span class="mono">tools/axiom_dependence.py</span></a> — the instrument. Source scan; run 2026-09-01.</li>
+  <li id="r2"><span class="mono">tools/axiom_gate.py</span> — the kernel gate, via <span class="mono">#print axioms</span>. Authoritative where a file elaborates.</li>
+  <li id="r3"><span class="mono">docs/leanscan-2026-09-01.md</span>, Finding 3 — the case-collision and what it does to any count taken on macOS.</li>
+  <li id="r4"><span class="mono">tools/corpus_roots.txt</span> — the declared root set these figures are taken over.</li>
+  <li id="r5"><a href="wp80-the-theorem-and-the-reader.html">WP-80 · The Theorem and the Reader</a> — the position that a count of declarations must exclude the author and the production pipeline. This page is an instance: the badge counted a reader who was never there.</li>
+</ol>
+
+</div>
+<footer>
+  <div class="fwrap">
+    <div>
+      <strong style="color:var(--gold2)">WP-91 · A Theorem Twenty-Seven Characters Long</strong><br>
+      Principia Orthogona · Vol VI · Roots<br>
+      <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> · Pablo Nogueira Grossi · Newark NJ · 2026<br>
+      ORCID 0009-0000-6496-2186 · <a href="mailto:g6llc@proton.me">g6llc@proton.me</a>
+    </div>
+    <div class="disc">
+      <strong style="color:var(--gold2)">Disclaimer</strong><br>
+      Independent working paper; not peer-reviewed. §1–§3 are read from source and quoted. The
+      §4 figures are a source-level scan, not a kernel result, and are stated as such. No
+      registry counts were changed by this page. CC BY-NC-ND 4.0 · © 2026 Pablo Nogueira Grossi — G6 LLC.
+    </div>
+  </div>
+</footer>
+</body>
+</html>

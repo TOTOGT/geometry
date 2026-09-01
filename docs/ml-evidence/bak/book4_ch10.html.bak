@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 10 — Helical Attractors on Contact 3-Manifolds · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1c22;
+  --ink2: #2d3142;
+  --paper: #f7f4ee;
+  --paper2: #ede9e0;
+  --paper3: #e4dfd4;
+  --accent: #8b3a0f;
+  --accent2: #1a4d6e;
+  --accent3: #3d6b3f;
+  --rule: #c8c0b0;
+  --dim: #7a7060;
+  --serif: 'EB Garamond', Georgia, serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--paper); color:var(--ink); font-family:var(--serif); font-size:19px; line-height:1.72; counter-reset:figure theorem; }
+/* RUNNING HEAD */
+.rh { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(247,244,238,0.93); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule); padding:0.5rem 2.5rem; display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.63rem; color:var(--dim); letter-spacing:0.07em; }
+.rh a { color:var(--accent); text-decoration:none; }
+/* CHAPTER OPEN */
+.ch-open { max-width:960px; margin:0 auto; padding:7rem 3rem 3rem; border-bottom:2px solid var(--ink2); }
+.ch-num { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.18em; color:var(--dim); text-transform:uppercase; margin-bottom:1rem; }
+.ch-title { font-size:clamp(2rem,4.5vw,3.6rem); font-weight:500; line-height:1.1; color:var(--ink2); max-width:800px; margin-bottom:1.5rem; }
+.ch-title em { font-style:italic; color:var(--accent); }
+.ch-meta { display:flex; gap:2rem; flex-wrap:wrap; padding:1rem 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin-bottom:1.5rem; }
+.meta { font-family:var(--mono); font-size:0.62rem; color:var(--dim); letter-spacing:0.06em; }
+.meta strong { color:var(--ink); font-weight:500; }
+.ch-abs { max-width:640px; font-size:0.96rem; color:var(--ink2); line-height:1.68; padding:1.25rem 1.25rem 1.25rem 1.5rem; border-left:3px solid var(--accent); background:var(--paper2); font-style:italic; }
+/* TOC */
+.toc-wrap { padding:2rem 3rem 0; max-width:960px; margin:0 auto; }
+.toc-wrap h4 { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.14em; color:var(--dim); text-transform:uppercase; margin-bottom:0.6rem; }
+.toc { list-style:none; counter-reset:toc; }
+.toc li { counter-increment:toc; display:flex; gap:0.5rem; padding:0.18rem 0; font-size:0.88rem; }
+.toc li::before { content:counter(toc)"."; font-family:var(--mono); font-size:0.6rem; color:var(--accent); min-width:1.4rem; padding-top:0.15em; }
+.toc a { color:var(--ink2); text-decoration:none; border-bottom:1px dotted var(--rule); }
+.toc a:hover { color:var(--accent); }
+/* BODY GRID */
+.body-wrap { max-width:960px; margin:0 auto; padding:3rem 3rem 5rem; display:grid; grid-template-columns:1fr 240px; gap:0 3.5rem; }
+.main { min-width:0; }
+.side { position:sticky; top:3.5rem; font-size:0.8rem; align-self:start; }
+/* HEADINGS */
+.sec-num { font-family:var(--mono); font-size:0.6rem; color:var(--accent); letter-spacing:0.14em; text-transform:uppercase; margin-top:3.5rem; margin-bottom:0.25rem; }
+h2.sec { font-size:1.5rem; font-weight:500; color:var(--ink2); border-bottom:1px solid var(--rule); padding-bottom:0.35rem; margin-bottom:1rem; }
+h3.sub { font-size:1.1rem; font-weight:500; font-style:italic; color:var(--ink2); margin:1.8rem 0 0.6rem; }
+p { margin-bottom:0.95rem; }
+p+p { text-indent:1.4em; }
+/* MATH */
+.eq { font-family:var(--mono); font-size:0.86rem; background:var(--paper2); border:1px solid var(--rule); border-left:3px solid var(--accent2); padding:1rem 1.4rem; margin:1.4rem 0; overflow-x:auto; line-height:2.1; color:var(--accent2); }
+.eq .cm { color:var(--dim); font-size:0.75rem; }
+/* ENVIRONMENTS */
+.env { border:1px solid var(--rule); padding:1.1rem 1.4rem; margin:1.6rem 0; background:var(--paper2); }
+.env::before { display:block; font-family:var(--mono); font-size:0.6rem; letter-spacing:0.11em; text-transform:uppercase; margin-bottom:0.55rem; counter-increment:theorem; }
+.thm::before { content:"Theorem "counter(theorem); color:var(--accent); }
+.dfn::before { content:"Definition "counter(theorem); color:var(--accent2); }
+.rem::before { content:"Remark "counter(theorem); color:var(--accent3); }
+.cor::before { content:"Correction "counter(theorem); color:#8b3a0f; }
+.env p { font-style:italic; margin-bottom:0; }
+.env p+p { text-indent:0; margin-top:0.45rem; }
+.pf { font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:0.07em; text-transform:uppercase; margin:1.2rem 0 0.35rem; }
+/* FIGURES */
+.fig { margin:2.2rem 0; counter-increment:figure; }
+.fig.wide { margin-left:-0.5rem; margin-right:-0.5rem; }
+.fig-inner { background:var(--paper2); border:1px solid var(--rule); padding:1.25rem; display:flex; justify-content:center; align-items:center; }
+.fig-cap { margin-top:0.5rem; font-size:0.83rem; color:var(--dim); line-height:1.5; }
+.fig-cap b { font-family:var(--mono); font-size:0.67rem; color:var(--ink2); }
+.fig-cap b::before { content:"Figure "counter(figure)". "; }
+/* LEAN */
+.lean { background:#1e1e2e; border:1px solid #3a3a5c; padding:1.2rem 1.4rem; margin:1.6rem 0; font-family:var(--mono); font-size:0.77rem; line-height:1.9; overflow-x:auto; color:#cdd6f4; }
+.lc { color:#6c7086; } .lk { color:#cba6f7; } .lt { color:#89dceb; } .ln { color:#fab387; } .ls { color:#a6e3a1; } .lo { color:#f38ba8; }
+/* TABLE */
+.dtab { width:100%; border-collapse:collapse; margin:1.4rem 0; font-size:0.83rem; }
+.dtab th { font-family:var(--mono); font-size:0.6rem; letter-spacing:0.07em; text-transform:uppercase; color:var(--accent2); padding:0.45rem 0.7rem; border-bottom:2px solid var(--ink2); text-align:left; }
+.dtab td { padding:0.4rem 0.7rem; border-bottom:1px solid var(--rule); font-family:var(--mono); font-size:0.78rem; color:var(--ink2); }
+.dtab tr:hover td { background:var(--paper2); }
+.dtab td:first-child { color:var(--accent); }
+.cv { color:#3d6b3f; } .es { color:#8b3a0f; }
+/* SIDENOTES */
+.sn { border-left:2px solid var(--rule); padding:0.7rem 0 0.7rem 0.9rem; margin-bottom:1.3rem; color:var(--dim); font-size:0.78rem; line-height:1.5; }
+.sn strong { font-family:var(--mono); font-size:0.67rem; color:var(--ink); display:block; margin-bottom:0.25rem; letter-spacing:0.04em; }
+.sn a { color:var(--accent2); text-decoration:none; }
+/* SIM SECTION */
+.sim-sec { background:var(--ink2); color:#c0c8d8; padding:4rem 3rem; }
+.sim-wrap { max-width:960px; margin:0 auto; }
+.sim-label { font-family:var(--mono); font-size:0.63rem; letter-spacing:0.14em; color:#6eb8c8; text-transform:uppercase; margin-bottom:0.4rem; }
+.sim-h { font-family:var(--serif); font-size:1.75rem; font-weight:400; color:#eef0f5; margin-bottom:0.4rem; }
+.sim-sub { font-size:0.88rem; color:#5a6080; margin-bottom:1.75rem; }
+.sim-grid { display:grid; grid-template-columns:1fr 270px; gap:1.5px; background:rgba(255,255,255,0.04); }
+.sim-canvas-wrap { background:#060810; min-height:380px; }
+canvas#sc { display:block; width:100%; height:380px; }
+.sim-panel { background:#0e1018; padding:1.4rem; display:flex; flex-direction:column; gap:1rem; }
+.ctrl label { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.6rem; color:#5a6080; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:0.3rem; }
+.ctrl label span { color:#6eb8c8; }
+.ctrl input[type=range] { width:100%; accent-color:#c8a96e; cursor:pointer; }
+.sim-btns { display:flex; gap:0.5rem; }
+.sb { flex:1; font-family:var(--mono); font-size:0.6rem; letter-spacing:0.07em; text-transform:uppercase; padding:0.4rem; background:transparent; border:1px solid rgba(255,255,255,0.08); color:#5a6080; cursor:pointer; transition:all .15s; }
+.sb:hover,.sb.on { border-color:#6eb8c8; color:#6eb8c8; }
+.sim-legend { font-family:var(--mono); font-size:0.57rem; color:#3a4050; line-height:1.9; border-top:1px solid rgba(255,255,255,0.04); padding-top:0.7rem; margin-top:auto; }
+.sim-legend .c1{color:#6eb8c8;} .sim-legend .c2{color:#c86e8a;} .sim-legend .c3{color:#c8a96e;}
+.sim-out { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5px; background:rgba(255,255,255,0.04); }
+.out-box { background:#0e1018; padding:0.7rem 1rem; }
+.out-l { font-family:var(--mono); font-size:0.57rem; color:#3a4050; letter-spacing:0.05em; text-transform:uppercase; }
+.out-v { font-family:var(--mono); font-size:0.95rem; color:#6eb8c8; margin-top:0.15rem; }
+/* BOOKS */
+.books { background:var(--paper3); border-top:2px solid var(--ink2); border-bottom:2px solid var(--ink2); padding:3.5rem 3rem; }
+.books-in { max-width:960px; margin:0 auto; }
+.books-hd { display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--rule); padding-bottom:0.65rem; margin-bottom:1.75rem; }
+.books-hd h2 { font-size:1.25rem; font-weight:500; }
+.books-hd a { font-family:var(--mono); font-size:0.63rem; color:var(--accent); text-decoration:none; }
+.bg { display:grid; grid-template-columns:repeat(5,1fr); gap:1.5px; background:var(--rule); margin-bottom:1.5px; }
+.bk { background:var(--paper); padding:1.1rem 0.9rem; display:flex; flex-direction:column; }
+.bk .g { font-family:var(--mono); font-size:0.58rem; color:var(--accent); letter-spacing:0.1em; margin-bottom:0.3rem; }
+.bk h4 { font-size:0.85rem; font-weight:500; margin-bottom:0.35rem; flex:1; line-height:1.3; }
+.bk p { font-size:0.72rem; color:var(--dim); line-height:1.4; margin-bottom:0.6rem; }
+.bk .isbn { font-family:var(--mono); font-size:0.56rem; color:var(--dim); margin-bottom:0.4rem; }
+.bk .pr { font-family:var(--mono); font-size:1rem; color:var(--accent); margin-bottom:0.6rem; }
+.bk a { font-family:var(--mono); font-size:0.58rem; letter-spacing:0.07em; text-transform:uppercase; padding:0.3rem 0.65rem; border:1px solid var(--rule); color:var(--ink2); text-decoration:none; display:inline-block; transition:all .15s; }
+.bk a:hover { border-color:var(--accent); color:var(--accent); }
+.bk.ft { background:var(--ink2); }
+.bk.ft .g { color:#c8a96e; } .bk.ft h4,.bk.ft { color:var(--paper); } .bk.ft p { color:#5a6080; } .bk.ft .isbn { color:#3a4050; } .bk.ft .pr { color:#c8a96e; } .bk.ft a { border-color:#c8a96e; color:#c8a96e; } .bk.ft a:hover { background:#c8a96e; color:var(--ink2); }
+.bundle { background:var(--ink2); color:var(--paper); padding:1.4rem 2rem; display:flex; justify-content:space-between; align-items:center; gap:2rem; }
+.bundle h3 { font-size:1.05rem; font-weight:400; }
+.bundle p { font-size:0.78rem; color:#5a6080; margin-top:0.2rem; }
+.bundle .bpr { font-family:var(--mono); font-size:1.7rem; color:#c8a96e; white-space:nowrap; }
+.bundle a { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.55rem 1.3rem; border:1px solid #c8a96e; color:#c8a96e; text-decoration:none; white-space:nowrap; transition:all .15s; display:inline-block; margin-top:0.4rem; }
+.bundle a:hover { background:#c8a96e; color:var(--ink2); }
+/* FOOTER */
+footer { background:var(--ink2); color:#5a6080; padding:3rem; }
+.ft-grid { max-width:960px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; padding-bottom:2rem; border-bottom:1px solid rgba(255,255,255,0.06); margin-bottom:1.4rem; }
+footer h4 { font-family:var(--mono); font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:#c8a96e; margin-bottom:0.7rem; }
+footer p { line-height:1.65; margin-bottom:0.2rem; font-size:0.82rem; }
+footer a { color:#5a6080; text-decoration:none; display:block; margin-bottom:0.2rem; font-size:0.82rem; transition:color .15s; }
+footer a:hover { color:#c8a96e; }
+.ft-copy { max-width:960px; margin:0 auto; display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.58rem; color:#2d3040; letter-spacing:0.04em; }
+/* FADE */
+.f { opacity:0; transform:translateY(12px); transition:opacity .6s ease,transform .6s ease; }
+.f.in { opacity:1; transform:translateY(0); }
+/* RESPONSIVE */
+@media(max-width:860px){ .body-wrap{grid-template-columns:1fr;} .side{position:static;} .sim-grid{grid-template-columns:1fr;} .bg{grid-template-columns:1fr 1fr;} .ft-grid{grid-template-columns:1fr;gap:1.5rem;} .bundle{flex-direction:column;} .ch-open,.toc-wrap,.body-wrap,.books,.sim-sec,.footer{padding-left:1.5rem;padding-right:1.5rem;} }
+@media(max-width:520px){ body{font-size:17px;} .bg{grid-template-columns:1fr;} .sim-out{grid-template-columns:repeat(2,1fr);} .ft-copy{flex-direction:column;gap:0.3rem;} }
+</style>
+</head>
+<body>
+<div class="rh">
+  <span><a href="https://totogt.github.io/AXLE">Principia Orthogona</a> · G6 LLC · 2026</span>
+  <span>Chapter 10 · Helical Attractors · <a href="PO_10_Pablo_Grossi.pdf">PDF ↓</a> · <a href="https://github.com/TOTOGT/GTCT">GitHub →</a></span>
+</div>
+<!-- ═══════════════════ CHAPTER OPEN ═══════════════════ -->
+<div class="ch-open">
+  <div class="ch-num">Principia Orthogona · Volume IV · Chapter 10 · dm³ Contact Study</div>
+  <h1 class="ch-title">Helical Attractors on<br><em>Contact 3-Manifolds</em>:<br>A Toy ODE Study</h1>
+  <div class="ch-meta">
+    <div class="meta"><strong>Author</strong><br>Pablo Nogueira Grossi</div>
+    <div class="meta"><strong>Affiliation</strong><br>G6 LLC · Newark, New Jersey</div>
+    <div class="meta"><strong>Series</strong><br>Principia Orthogona, Vol. IV (GTCT T1)</div>
+    <div class="meta"><strong>Verification</strong><br>AXLE v6.1 · Lean 4 + Mathlib4 · 0 logic axioms · 2 explicit domain axioms</div>
+    <div class="meta"><strong>License</strong><br>MIT · © 2026 Pablo Nogueira Grossi — G6 LLC</div>
+  </div>
+  <div class="ch-abs">We study a three-dimensional model system on a contact manifold in cylindrical coordinates and establish that the unit circle r = 1 is a globally attracting helix for all initial conditions with r(0) &gt; 1, with exponential convergence rate μ → −2. The inner-basin boundary is asymmetric at r* = 0.77594059 (certified by bisection, tolerance 10⁻⁷), correcting the symmetric Gronwall estimate ε₀ = 1/3. The saddle equilibrium is resolved in closed form: r<sub>s</sub> = 2cos(3π/7). This is a concrete instantiation of the dm³ operator cycle C → K → F → U in the GTCT framework, with formal verification in Lean 4 (AXLE v6.1).</div>
+  <div class="toc-wrap" style="padding:1.5rem 0 0;">
+    <h4>Contents</h4>
+    <ol class="toc">
+      <li><a href="#s1">The Contact 3-Manifold Setting</a></li>
+      <li><a href="#s2">The ODE System</a></li>
+      <li><a href="#s3">Main Theorem and Proof Sketch</a></li>
+      <li><a href="#s4">Interactive Simulation</a></li>
+      <li><a href="#s5">Numerical Findings and Diagrams</a></li>
+      <li><a href="#s6">The Basin Asymmetry Correction</a></li>
+      <li><a href="#s6b">Saddle Geometry: Closed-Form Results</a></li>
+      <li><a href="#s7">Formal Verification in Lean 4 (AXLE)</a></li>
+      <li><a href="#s8">Connection to the GTCT Operator Chain</a></li>
+      <li><a href="#s9">References</a></li>
+    </ol>
+  </div>
+</div>
+<!-- ═══════════════════ BODY ═══════════════════ -->
+<div class="body-wrap">
+<div class="main">
+<!-- §1 -->
+<div class="sec-num" id="s1">§ 1</div>
+<h2 class="sec">The Contact 3-Manifold Setting</h2>
+<p>A <em>contact 3-manifold</em> is a smooth 3-manifold M equipped with a completely non-integrable plane field ξ = ker(α), where α is a contact form satisfying α ∧ dα ≠ 0 everywhere. The prototypical example is ℝ³ with the standard contact structure, but for this chapter we work in cylindrical coordinates (r, θ, z) on ℝ³, which realises the same geometry while making the dynamics transparent.</p>
+<p>The contact condition imposes that trajectories cannot close up in the (r, θ) plane without ascending in z. This is the structural reason a limit cycle in the planar projection — r converging to 1, θ rotating at unit speed — must lift to a <em>helix</em> in three dimensions rather than a closed loop.</p>
+<div class="dfn env f">
+  <p><strong>Contact manifold (cylindrical model).</strong> Let M = ℝ³ with coordinates (r, θ, z) and contact form α = dz − r² dθ. The Reeb vector field is R = ∂/∂z. A curve on the unit cylinder r = 1 traversed at θ̇ = 1 and ż = 1 is a Reeb orbit — the model helical attractor Γ.</p>
+</div>
+<p>The system we study is a <em>dissipative</em> system whose attractor is a curve asymptotic to a Reeb orbit, not a Reeb flow itself. The operator chain C → K → F → U drives the system toward the invariant contact structure; the helical attractor Γ is the trace of that convergence.</p>
+<!-- FIGURE 1: Contact geometry diagram -->
+<div class="fig f">
+  <div class="fig-inner">
+    <svg viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;" font-family="JetBrains Mono, monospace" font-size="9">
+      <defs>
+        <marker id="a1" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#1a4d6e"/></marker>
+        <marker id="a2" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#8b3a0f"/></marker>
+        <marker id="a3" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#3d6b3f"/></marker>
+      </defs>
+      <rect width="560" height="260" fill="#ede9e0"/>
+      <!-- cylinder outline -->
+      <ellipse cx="280" cy="72" rx="95" ry="22" fill="none" stroke="#c8c0b0" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="185" y1="72" x2="185" y2="205" stroke="#c8c0b0" stroke-width="1"/>
+      <line x1="375" y1="72" x2="375" y2="205" stroke="#c8c0b0" stroke-width="1"/>
+      <ellipse cx="280" cy="205" rx="95" ry="22" fill="rgba(138,58,15,0.05)" stroke="#8b3a0f" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <!-- helix -->
+      <path d="M 280 200 Q 375 187 375 170 Q 375 148 280 138 Q 185 128 185 108 Q 185 86 280 74" fill="none" stroke="#8b3a0f" stroke-width="2.5" marker-end="url(#a2)"/>
+      <!-- initial condition -->
+      <circle cx="185" cy="108" r="4.5" fill="#1a4d6e"/>
+      <!-- z axis -->
+      <line x1="80" y1="232" x2="80" y2="55" stroke="#1a4d6e" stroke-width="1.5" marker-end="url(#a1)"/>
+      <text x="63" y="51" fill="#1a4d6e">z</text>
+      <!-- r axis -->
+      <line x1="62" y1="232" x2="150" y2="232" stroke="#1a4d6e" stroke-width="1.5" marker-end="url(#a1)"/>
+      <text x="153" y="236" fill="#1a4d6e">r</text>
+      <!-- theta -->
+      <path d="M 253 207 A 16 4 0 0 1 307 207" fill="none" stroke="#3d6b3f" stroke-width="1.5" marker-end="url(#a3)"/>
+      <text x="264" y="224" fill="#3d6b3f">θ̇ = 1</text>
+      <!-- contact planes (schematic) -->
+      <line x1="185" y1="152" x2="220" y2="140" stroke="#3d6b3f" stroke-width="1" opacity="0.5"/>
+      <line x1="185" y1="152" x2="185" y2="143" stroke="#3d6b3f" stroke-width="1" opacity="0.5"/>
+      <text x="110" y="158" fill="#3d6b3f" opacity="0.7">ξ (contact plane)</text>
+      <!-- labels -->
+      <text x="148" y="104" fill="#1a4d6e">r₀ &gt; 1</text>
+      <text x="248" y="68" fill="#8b3a0f">Γ (helix, r=1)</text>
+      <text x="390" y="207" fill="#8b3a0f">r = 1</text>
+    </svg>
+  </div>
+  <div class="fig-cap"><b></b>Helical attractor Γ on the contact 3-manifold. A trajectory starting at r₀ &gt; 1 spirals inward radially while ascending in z, converging to the unit helix r = 1. The contact planes ξ are indicated schematically; the Reeb direction R = ∂/∂z is vertical.</div>
+</div>
+<!-- §2 -->
+<div class="sec-num" id="s2">§ 2</div>
+<h2 class="sec">The ODE System</h2>
+<p>We study the following autonomous system on the contact manifold, designed to exhibit a stable helical attractor while capturing the structural features of the GTCT operator cycle.</p>
+<div class="eq f">ṙ  =  r(1 − r²)  +  ε · (r − 1) · e<sup style="font-size:.76em">−z</sup>
+θ̇  =  1
+ż  =  r²  −  ε · (r − 1)² · e<sup style="font-size:.76em">−z</sup>          <span class="cm">// ε = 2 throughout this chapter</span></div>
+<p>The radial equation decomposes into the Hopf normal form r(1−r²) — which has an attracting circle at r = 1 and a repelling fixed point at r = 0 — plus the z-dependent coupling ε(r−1)e<sup>−z</sup> that decays exponentially as z grows. At large z the system is asymptotically the Hopf normal form.</p>
+<p>The rotation θ̇ = 1 encodes the contact structure at unit speed. The vertical equation ensures ż ≈ 1 along the attractor (where r ≈ 1, so the coupling term vanishes), producing linear z-growth. For r &lt; 1 the coupling amplification can drive z negative, causing the inner-basin escape documented in §6.</p>
+<div class="dfn env f">
+  <p><strong>Helical attractor.</strong> The attractor Γ is the curve {(1, t, z₀ + t) : t ≥ 0} — the Reeb orbit on the unit cylinder r = 1, traversed at unit speed. The system is said to have a <em>globally attracting helix</em> for the outer basin if every trajectory with r(0) &gt; 1 satisfies |r(t) − 1| → 0 as t → ∞.</p>
+</div>
+<!-- §3 -->
+<div class="sec-num" id="s3">§ 3</div>
+<h2 class="sec">Main Theorem and Proof Sketch</h2>
+<div class="thm env f">
+  <p><strong>Helical attractor (outer basin).</strong> For all initial conditions with r(0) &gt; 1, the solution satisfies:</p>
+  <p>(i) r(t) → 1 exponentially, with |r(t) − 1| ≤ C · e<sup>μt</sup> where μ → −2 as z → ∞;</p>
+  <p>(ii) ż(t) → 1 monotonically, so z(t) ~ t;</p>
+  <p>(iii) the trajectory converges in C⁰ to the helix Γ = {r = 1, ż = 1}.</p>
+</div>
+<div class="pf">Proof sketch (numerical)</div>
+<p>Linearise about r = 1: setting u = r − 1 gives u̇ ≈ −2u + O(u²) + ε·u·e<sup>−z</sup>. Since z grows monotonically on the outer basin (ż ≥ r² − ε·u²·e<sup>−z</sup> &gt; 0 for small u), the coupling decays and the decay rate approaches μ = −2. Gronwall's inequality gives exponential convergence in a neighbourhood. Numerical evidence (DOP853, rtol = 10<sup>−10</sup>) confirms convergence globally for r(0) up to at least 3.0. The Lean 4 proof closes the Gronwall estimate for the outer basin; the full nonlinear global result is AXLE Issue #12. □</p>
+</div><!-- end main -->
+<div class="side">
+  <div class="sn"><strong>OPERATOR CHAIN</strong><br>C → K → F → U<br>Compress · Curvature · Fold · Unfold<br>Γ is the fixed point of repeated G = U∘F∘K∘C.</div>
+  <div class="sn"><strong>KEY CONSTANTS</strong><br>μ = −2 (decay rate)<br>r<sub>s</sub> = 2cos(3π/7) ≈ 0.4450 (saddle, closed form)<br>r* ≈ 0.77594059 (inner boundary, certified; closed form open)<br>ε₀ = 1/3 (Gronwall, outer)<br>g₃₃ = 33 (threshold cycles)<br>κ<sub>chain</sub> ≤ √(5/9) ≈ 0.745 (Vol IV recursion, Pythagorean)<br>κ* = √(7/9) ≈ 0.882 (dm³ marker; derivation open)</div>
+  <div class="sn"><strong>INTEGRATION</strong><br>DOP853 (Hairer 1993)<br>rtol = 10⁻¹⁰<br>atol = 10⁻¹²<br>Certification: rtol = 10⁻¹², atol = 10⁻¹⁴<br>Python source: /numerics/</div>
+  <div class="sn"><strong>DOWNLOADS</strong><br><a href="PO_10_Pablo_Grossi.pdf">SBM submission PDF</a><br><a href="https://github.com/TOTOGT/GTCT">Full source (GitHub)</a><br><a href="https://github.com/TOTOGT/GTCT/blob/main/FINDINGS.md">FINDINGS.md</a></div>
+</div>
+</div><!-- end body-wrap -->
+<!-- ═══════════════════ §4 SIMULATION (full width) ═══════════════════ -->
+<div class="sim-sec" id="s4">
+<div class="sim-wrap">
+  <div class="sim-label">§ 4 · Interactive · Real-time Integration</div>
+  <div class="sim-h">Toy ODE Simulation</div>
+  <div class="sim-sub">Euler integration of the dm³ contact system. Adjust sliders to see the helical attractor emerge — or collapse.</div>
+  <div class="sim-grid">
+    <div class="sim-canvas-wrap"><canvas id="sc"></canvas></div>
+    <div class="sim-panel">
+      <div class="ctrl"><label>r(0) <span id="v_r">1.80</span></label><input type="range" id="s_r" min="0.1" max="3.5" step="0.05" value="1.8"></div>
+      <div class="ctrl"><label>z(0) <span id="v_z">0.00</span></label><input type="range" id="s_z" min="-2" max="4" step="0.1" value="0"></div>
+      <div class="ctrl"><label>coupling ε <span id="v_e">2.00</span></label><input type="range" id="s_e" min="0" max="5" step="0.1" value="2"></div>
+      <div class="ctrl"><label>trajectories N <span id="v_n">8</span></label><input type="range" id="s_n" min="1" max="16" step="1" value="8"></div>
+      <div class="ctrl"><label>speed <span id="v_s">1.0×</span></label><input type="range" id="s_s" min="0.2" max="5" step="0.1" value="1"></div>
+      <div class="sim-btns">
+        <button class="sb on" id="playBtn" onclick="toggle()">⏸ Pause</button>
+        <button class="sb" onclick="reset()">↺ Reset</button>
+      </div>
+      <div class="sim-legend">
+        View: r–z projection<br>
+        <span class="c1">■</span> r &gt; 1 → converging<br>
+        <span class="c2">■</span> r &lt; r* → escaping<br>
+        <span class="c3">■</span> r ≈ 1 → on attractor
+      </div>
+    </div>
+  </div>
+  <div class="sim-out">
+    <div class="out-box"><div class="out-l">r(t)</div><div class="out-v" id="or">—</div></div>
+    <div class="out-box"><div class="out-l">z(t)</div><div class="out-v" id="oz">—</div></div>
+    <div class="out-box"><div class="out-l">|r − 1|</div><div class="out-v" id="oe">—</div></div>
+    <div class="out-box"><div class="out-l">μ̂ (est.)</div><div class="out-v" id="om">—</div></div>
+  </div>
+</div>
+</div>
+<!-- ═══════════════════ §5-9 (body resumes) ═══════════════════ -->
+<div class="body-wrap" style="padding-top:2rem;">
+<div class="main">
+<div class="sec-num" id="s5">§ 5</div>
+<h2 class="sec">Numerical Findings and Diagrams</h2>
+<p>All integrations use DOP853 with rtol = 10<sup>−10</sup>, atol = 10<sup>−12</sup>. This scheme is ideal for smooth nonstiff ODEs; errors are well below the convergence scale. The inner boundary r* = 0.77594059 is certified independently by bisection to tolerance 10<sup>−7</sup> (<code>numerics/certify_rstar.py</code>: rtol = 10<sup>−12</sup>, atol = 10<sup>−14</sup>, with a verification sweep at ±10<sup>−4</sup> to ±10<sup>−2</sup>).</p>
+<h3 class="sub">5.1 The helical attractor — phase portrait</h3>
+<div class="fig wide f">
+  <div class="fig-inner" style="padding:1rem;">
+    <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;" font-family="JetBrains Mono,monospace" font-size="9">
+      <rect width="640" height="280" fill="#f0ede6"/>
+      <!-- axes -->
+      <line x1="65" y1="250" x2="610" y2="250" stroke="#b8b0a0" stroke-width="1"/>
+      <line x1="65" y1="20" x2="65" y2="250" stroke="#b8b0a0" stroke-width="1"/>
+      <text x="616" y="254" fill="#7a7060">r</text>
+      <text x="58" y="16" fill="#7a7060">z</text>
+      <!-- grid -->
+      <line x1="195" y1="20" x2="195" y2="250" stroke="#c8c0b0" stroke-width="0.5" stroke-dasharray="3,4"/>
+      <line x1="325" y1="20" x2="325" y2="250" stroke="#c8c0b0" stroke-width="0.5" stroke-dasharray="3,4"/>
+      <line x1="455" y1="20" x2="455" y2="250" stroke="#c8c0b0" stroke-width="0.5" stroke-dasharray="3,4"/>
+      <!-- r=1 -->
+      <line x1="195" y1="20" x2="195" y2="250" stroke="#8b3a0f" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.45"/>
+      <text x="198" y="30" fill="#8b3a0f" opacity="0.65">r = 1</text>
+      <!-- r* at 65 + 0.77594*130 = 166 -->
+      <line x1="166" y1="20" x2="166" y2="250" stroke="#8b3a0f" stroke-width="1" stroke-dasharray="2,5" opacity="0.3"/>
+      <text x="118" y="30" fill="#8b3a0f" opacity="0.45" font-size="8">r* ≈ 0.776</text>
+      <!-- tick labels -->
+      <text x="188" y="264" fill="#7a7060">1</text>
+      <text x="318" y="264" fill="#7a7060">2</text>
+      <text x="448" y="264" fill="#7a7060">3</text>
+      <!-- convergent paths -->
+      <path d="M 325 242 C 290 232 250 210 230 182 C 217 160 210 135 207 105 C 205 82 203 58 202 34" fill="none" stroke="#1a4d6e" stroke-width="2" opacity="0.85"/>
+      <path d="M 260 244 C 244 232 228 210 218 185 C 210 162 207 138 205 108 C 204 84 203 60 202 36" fill="none" stroke="#1a4d6e" stroke-width="2" opacity="0.6"/>
+      <path d="M 455 240 C 400 222 330 194 290 166 C 265 146 250 120 240 92 C 233 72 220 52 208 36" fill="none" stroke="#1a4d6e" stroke-width="1.5" opacity="0.45"/>
+      <!-- escaping -->
+      <path d="M 117 248 C 108 238 94 218 82 190 C 73 166 67 138 66 108" fill="none" stroke="#c86e8a" stroke-width="2" stroke-dasharray="4,3" opacity="0.75"/>
+      <!-- attractor -->
+      <line x1="196" y1="248" x2="197" y2="30" stroke="#c8a96e" stroke-width="3" opacity="0.9"/>
+      <!-- dots -->
+      <circle cx="325" cy="242" r="4" fill="#1a4d6e"/>
+      <circle cx="260" cy="244" r="4" fill="#1a4d6e"/>
+      <circle cx="455" cy="240" r="4" fill="#1a4d6e"/>
+      <circle cx="117" cy="248" r="4" fill="#c86e8a"/>
+      <!-- labels -->
+      <text x="328" y="240" fill="#1a4d6e">r₀ = 2</text>
+      <text x="262" y="242" fill="#1a4d6e">r₀ = 1.5</text>
+      <text x="457" y="238" fill="#1a4d6e">r₀ = 3</text>
+      <text x="70" y="240" fill="#c86e8a">r₀ = 0.6 (escape)</text>
+      <text x="170" y="130" fill="#c8a96e" font-size="8" transform="rotate(-90 170 130)">Γ attractor</text>
+    </svg>
+  </div>
+  <div class="fig-cap"><b></b>(r, z) phase portrait. Blue trajectories with r(0) &gt; 1 all converge to the gold vertical line r = 1 (the attractor Γ projected). The dashed red trajectory with r(0) = 0.6 &lt; r* escapes to z → −∞. The faint dashed vertical marks r* = 0.77594.</div>
+</div>
+<h3 class="sub">5.2 Exponential decay rate</h3>
+<p>For outer-basin trajectories, log|r(t) − 1| decays linearly with slope ≈ −2, approaching the linearised rate μ = −2 asymptotically as z grows and the coupling dies out.</p>
+<div class="fig f">
+  <div class="fig-inner" style="padding:1rem;">
+    <svg viewBox="0 0 540 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;" font-family="JetBrains Mono,monospace" font-size="9">
+      <rect width="540" height="220" fill="#f0ede6"/>
+      <line x1="65" y1="195" x2="520" y2="195" stroke="#b8b0a0" stroke-width="1"/>
+      <line x1="65" y1="18" x2="65" y2="195" stroke="#b8b0a0" stroke-width="1"/>
+      <text x="526" y="199" fill="#7a7060">t</text>
+      <text x="54" y="14" fill="#7a7060">log|r−1|</text>
+      <!-- reference line slope -2 -->
+      <line x1="65" y1="28" x2="520" y2="188" stroke="#8b3a0f" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.55"/>
+      <text x="435" y="178" fill="#8b3a0f" opacity="0.65">slope = −2</text>
+      <!-- curves approaching -2 -->
+      <polyline points="65,42 130,76 200,111 280,141 360,162 440,177 518,187" fill="none" stroke="#1a4d6e" stroke-width="2" opacity="0.9"/>
+      <polyline points="65,56 130,88 200,120 280,148 360,168 440,181 518,190" fill="none" stroke="#1a4d6e" stroke-width="2" opacity="0.6"/>
+      <polyline points="65,28 130,64 200,100 280,132 360,155 440,172 518,185" fill="none" stroke="#1a4d6e" stroke-width="1.5" opacity="0.4"/>
+      <!-- y ticks -->
+      <text x="46" y="31" fill="#7a7060">0</text>
+      <text x="36" y="71" fill="#7a7060">−0.5</text>
+      <text x="36" y="111" fill="#7a7060">−1.0</text>
+      <text x="36" y="151" fill="#7a7060">−1.5</text>
+      <text x="36" y="191" fill="#7a7060">−2.0</text>
+      <!-- x ticks -->
+      <text x="120" y="208" fill="#7a7060">0.5</text>
+      <text x="245" y="208" fill="#7a7060">1.0</text>
+      <text x="372" y="208" fill="#7a7060">1.5</text>
+      <text x="498" y="208" fill="#7a7060">2.0</text>
+      <!-- legend -->
+      <line x1="360" y1="42" x2="392" y2="42" stroke="#1a4d6e" stroke-width="2"/>
+      <text x="396" y="46" fill="#7a7060">r₀ ∈ {1.1, 1.5, 3.0}</text>
+    </svg>
+  </div>
+  <div class="fig-cap"><b></b>Log-linear plot of |r(t) − 1| for three outer-basin trajectories. All curves converge toward the reference line of slope −2 (dashed), confirming μ → −2.</div>
+</div>
+<h3 class="sub">5.3 Stability sweep table</h3>
+<div class="f">
+<table class="dtab">
+  <thead><tr><th>ε = r(0)−1</th><th>r(0)</th><th>t<sub>1/2</sub></th><th>μ̂</th><th>Converges?</th></tr></thead>
+  <tbody>
+    <tr><td>0.01</td><td>1.01</td><td>0.42</td><td>−1.896</td><td class="cv">✓</td></tr>
+    <tr><td>0.05</td><td>1.05</td><td>0.41</td><td>−1.921</td><td class="cv">✓</td></tr>
+    <tr><td>0.10</td><td>1.10</td><td>0.40</td><td>−1.943</td><td class="cv">✓</td></tr>
+    <tr><td>0.33</td><td>1.33</td><td>0.37</td><td>−1.898</td><td class="cv">✓</td></tr>
+    <tr><td>0.50</td><td>1.50</td><td>0.35</td><td>−1.872</td><td class="cv">✓</td></tr>
+    <tr><td>1.00</td><td>2.00</td><td>0.29</td><td>−1.812</td><td class="cv">✓</td></tr>
+    <tr><td>2.00</td><td>3.00</td><td>0.21</td><td>−1.801</td><td class="cv">✓</td></tr>
+    <tr><td>−0.22406</td><td>0.77594</td><td>—</td><td>—</td><td style="color:#8b3a0f;">boundary</td></tr>
+    <tr><td>−0.40</td><td>0.60</td><td>—</td><td>—</td><td class="es">✗ escape</td></tr>
+  </tbody>
+</table>
+<p style="font-size:0.8rem;color:var(--dim);">Note: μ̂ above is a finite-window (t<sub>1/2</sub>-based) estimate taken during the transient; asymptotic tail fits of log|r−1| give μ = −2.00 to two decimal places across the outer basin.</p>
+</div>
+<!-- §6 -->
+<div class="sec-num" id="s6">§ 6</div>
+<h2 class="sec">The Basin Asymmetry Correction</h2>
+<p>The Gronwall estimate predicts a symmetric basin |r − 1| &lt; ε₀ = 1/3, i.e. r ∈ (2/3, 4/3). The outer side is correct and in fact too conservative — all r(0) &gt; 1 converge. The inner side fails: the true inner boundary is r* = 0.77594059 (certified by bisection to 10⁻⁷), not 0.667.</p>
+<div class="cor env f">
+  <p><strong>Basin asymmetry.</strong> The inner basin boundary is r* = 0.77594059. Trajectories with r(0) ∈ (0.667, 0.77594) — in the Gronwall basin but outside the true basin — escape to r = 0, z → −∞ in finite time. The coupling amplification is the mechanism: for r &lt; 1 and decreasing z, the term ε(r−1)e<sup>−z</sup> grows exponentially, driving r further from 1.</p>
+</div>
+<!-- FIGURE 4: Basin diagram -->
+<div class="fig f">
+  <div class="fig-inner" style="padding:1.25rem 1rem;">
+    <svg viewBox="0 0 560 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;" font-family="JetBrains Mono,monospace" font-size="9">
+      <defs>
+        <marker id="b1" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="#c86e8a"/></marker>
+        <marker id="b2" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="#3d6b3f"/></marker>
+        <marker id="b3" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="#1a4d6e"/></marker>
+      </defs>
+      <rect width="560" height="170" fill="#f0ede6"/>
+      <!-- number line -->
+      <line x1="50" y1="88" x2="530" y2="88" stroke="#b8b0a0" stroke-width="1.5"/>
+      <!-- zones: 0 at x=50, 1 at x=236 (186 px/unit); 2/3 -> 174, r* -> 194 -->
+      <rect x="50" y="62" width="124" height="20" fill="#c86e8a" opacity="0.13" rx="1"/>
+      <rect x="174" y="66" width="20" height="14" fill="#8b3a0f" opacity="0.1" rx="1"/>
+      <rect x="194" y="62" width="42" height="20" fill="#3d6b3f" opacity="0.1" rx="1"/>
+      <rect x="236" y="62" width="294" height="20" fill="#1a4d6e" opacity="0.08" rx="1"/>
+      <!-- tick marks -->
+      <line x1="50" y1="80" x2="50" y2="96" stroke="#7a7060" stroke-width="1"/>
+      <text x="43" y="110" fill="#7a7060">0</text>
+      <line x1="174" y1="82" x2="174" y2="94" stroke="#8b3a0f" stroke-width="1" stroke-dasharray="2,2" opacity="0.5"/>
+      <text x="156" y="118" fill="#8b3a0f" opacity="0.55" font-size="8">2/3</text>
+      <line x1="194" y1="78" x2="194" y2="98" stroke="#8b3a0f" stroke-width="2"/>
+      <text x="168" y="118" fill="#8b3a0f">r*≈0.776</text>
+      <line x1="236" y1="76" x2="236" y2="100" stroke="#c8a96e" stroke-width="3"/>
+      <text x="230" y="118" fill="#c8a96e">1</text>
+      <line x1="380" y1="80" x2="380" y2="96" stroke="#7a7060" stroke-width="1"/>
+      <text x="374" y="110" fill="#7a7060">2</text>
+      <line x1="524" y1="80" x2="524" y2="96" stroke="#7a7060" stroke-width="1"/>
+      <text x="518" y="110" fill="#7a7060">3</text>
+      <!-- labels above -->
+      <text x="60" y="55" fill="#c86e8a">ESCAPE (r &lt; r*)</text>
+      <text x="160" y="45" fill="#8b3a0f" font-size="8">basin gap</text>
+      <text x="196" y="55" fill="#3d6b3f" font-size="8">inner basin</text>
+      <text x="310" y="55" fill="#1a4d6e">OUTER BASIN (all r &gt; 1 converge)</text>
+      <!-- arrows -->
+      <path d="M 95 88 L 62 88" fill="none" stroke="#c86e8a" stroke-width="1.8" marker-end="url(#b1)"/>
+      <path d="M 210 88 L 238 88" fill="none" stroke="#3d6b3f" stroke-width="1.8" marker-end="url(#b2)"/>
+      <path d="M 370 88 L 240 88" fill="none" stroke="#1a4d6e" stroke-width="1.8" marker-end="url(#b3)"/>
+    </svg>
+  </div>
+  <div class="fig-cap"><b></b>Basin of attraction on the r-axis. The outer basin (r &gt; 1, blue) is entirely convergent. The Gronwall inner boundary 2/3 (dashed) is too permissive — the true boundary r* = 0.77594 is further from the attractor. The gap (orange) contains initial conditions the Gronwall estimate misclassifies as converging.</div>
+</div>
+<div class="rem env f">
+  <p><strong>Corrected theorem statement.</strong> The outer-basin theorem is clean: "For all r(0) &gt; 1, the trajectory converges exponentially to Γ at rate μ → −2." The inner-basin claim should be restated as: r(0) &gt; r* = 0.77594 with explicit coupling bounds — not the symmetric Gronwall ball of radius 1/3.</p>
+</div>
+<!-- §6.5 -->
+<div class="sec-num" id="s6b">§ 6.5</div>
+<h2 class="sec">Saddle Geometry: Closed-Form Results</h2>
+<p>The saddle equilibrium (r<sub>s</sub>, z<sub>s</sub>) of the dm³ ODE separates the convergent basin from the escape region. Its r-coordinate solves a cubic whose roots are expressible in closed form via Chebyshev-cosine reduction.</p>
+<div class="thm env f">
+  <p><strong>Theorem B.1 (Saddle cubic).</strong> The r-coordinate of the saddle equilibrium is the unique root in (0,1) of</p>
+  <p style="text-align:center;">r³ − r² − 2r + 1 = 0.</p>
+  <p>This root equals r<sub>s</sub> = 2 cos(3π/7) ≈ 0.4450. The other two roots are 2cos(π/7) ≈ 1.8019 and 2cos(5π/7) ≈ −1.2470.</p>
+</div>
+<div class="pf">Proof</div>
+<p>Setting ṙ = 0 and ż = 0 in the dm³ vector field with ε = 2 yields r(1−r²) + 2(r−1)e<sup>−z</sup> = 0 and r² − 2(r−1)²e<sup>−z</sup> = 0. Eliminating e<sup>−z</sup> gives the cubic r³ − r² − 2r + 1 = 0. Depressing via r = u + 1/3 and applying the trigonometric method for three real roots produces the triple r<sub>k</sub> = 2cos((2kπ + π)/7), k = 0, 1, 2, identifying r<sub>0</sub> = 2cos(3π/7) as the root in (0,1). □</p>
+<div class="thm env f">
+  <p><strong>Theorem B.2 (Fundamental saddle identity).</strong> The saddle root satisfies</p>
+  <p style="text-align:center;">(1 + r<sub>s</sub> − r<sub>s</sub>²)² = 2 − r<sub>s</sub>.</p>
+</div>
+<div class="pf">Proof</div>
+<p>From the cubic r<sub>s</sub>³ = r<sub>s</sub>² + 2r<sub>s</sub> − 1. Expand (1 + r<sub>s</sub> − r<sub>s</sub>²)² = 1 + r<sub>s</sub>² + r<sub>s</sub>⁴ + 2r<sub>s</sub> − 2r<sub>s</sub>² − 2r<sub>s</sub>³. Substitute r<sub>s</sub>⁴ = r<sub>s</sub>·r<sub>s</sub>³ = r<sub>s</sub>(r<sub>s</sub>² + 2r<sub>s</sub> − 1) and r<sub>s</sub>³ = r<sub>s</sub>² + 2r<sub>s</sub> − 1; collect modulo the cubic to obtain 2 − r<sub>s</sub>. □</p>
+<div class="thm env f">
+  <p><strong>Theorem B.3 (Trace identity).</strong> The trace of the Jacobian at the saddle equals</p>
+  <p style="text-align:center;">tr(J)|<sub>r=r<sub>s</sub></sub> = 1 + r<sub>s</sub> − r<sub>s</sub>² = √(2 − r<sub>s</sub>) = 2 cos(2π/7).</p>
+</div>
+<div class="pf">Proof</div>
+<p>Direct computation of J = D(ṙ, ż) at the saddle gives J<sub>11</sub> + J<sub>22</sub> = (1 − 3r<sub>s</sub>² + 2e<sup>−z<sub>s</sub></sup>) + r<sub>s</sub>². Using the saddle condition to eliminate e<sup>−z<sub>s</sub></sup> yields tr(J) = 1 + r<sub>s</sub> − r<sub>s</sub>². By Theorem B.2 this equals √(2 − r<sub>s</sub>). The cosine value follows from the identity 2 − 2cos(3π/7) = 4cos²(2π/7) applied to r<sub>s</sub> = 2cos(3π/7), giving √(2 − r<sub>s</sub>) = 2cos(2π/7). □</p>
+<div class="thm env f">
+  <p><strong>Theorem B.4 (J<sub>22</sub> exact value).</strong> In (r, z) coordinates,</p>
+  <p style="text-align:center;">J<sub>22</sub>|<sub>r=r<sub>s</sub></sub> = r<sub>s</sub>².</p>
+</div>
+<div class="pf">Proof</div>
+<p>The ż-component of the field is ż = r² − 2(r−1)²e<sup>−z</sup>. Differentiating with respect to z: ∂<sub>z</sub>ż = 2(r−1)²e<sup>−z</sup>. At the saddle the saddle condition r<sub>s</sub>² = 2(r<sub>s</sub>−1)²e<sup>−z<sub>s</sub></sup> gives ∂<sub>z</sub>ż|<sub>s</sub> = r<sub>s</sub>². □</p>
+<div class="thm env f">
+  <p><strong>Theorem B.5 (Eigenvalue formula).</strong> The two eigenvalues of J at the saddle are</p>
+  <p style="text-align:center;">λ± = cos(2π/7) ± ½√(32r<sub>s</sub>² + 15r<sub>s</sub> − 10).</p>
+  <p>Numerically: λ₊ ≈ 1.4915 (unstable) and λ₋ ≈ −0.2445 (stable-saddle direction).</p>
+</div>
+<div class="pf">Proof</div>
+<p>The characteristic polynomial is λ² − tr(J)λ + det(J) = 0. From Theorem B.3, tr(J) = 2cos(2π/7). Computing det(J) = J<sub>11</sub>J<sub>22</sub> − J<sub>12</sub>J<sub>21</sub> at the saddle and simplifying modulo the cubic gives det(J) = cos²(2π/7) − ¼(32r<sub>s</sub>² + 15r<sub>s</sub> − 10). The discriminant Δ = tr² − 4det = 32r<sub>s</sub>² + 15r<sub>s</sub> − 10 &gt; 0 (numerically ≈ 3.0136), confirming two real eigenvalues. □</p>
+<div class="rem env f">
+  <p><strong>Erratum (V4 sync).</strong> An earlier posting of this section quoted λ₊ ≈ 1.1097 and Δ ≈ 4.534. Direct evaluation of the Jacobian at (r<sub>s</sub>, z<sub>s</sub>) gives λ₊ = 1.49148, λ₋ = −0.24450, Δ = 3.01362; the closed-form expressions in Theorems B.1–B.5 are unchanged and verify to machine precision.</p>
+</div>
+<div class="rem env f">
+  <p><strong>Remark.</strong> Theorems B.1–B.5 give a complete closed-form picture of the saddle. The basin boundary r* ≈ 0.77594059 is a distinct object: it is the Whitney A₁ fold threshold of F in the operator chain. Because F is irreversible (pre-image not unique) and time flows strictly forward in the GTCT framework, r* cannot be recovered algebraically by inverting any map. A closed-form expression for r* in terms of ε = 2 and the ODE coefficients remains an open analytic problem.</p>
+</div>
+<!-- §7 -->
+<div class="sec-num" id="s7">§ 7</div>
+<h2 class="sec">Formal Verification in Lean 4 (AXLE)</h2>
+<p>The GCTC Lean 4 project formalises key structural claims with Mathlib4, with zero logic axioms beyond Mathlib. Note: two files named <code>Chain_updated.lean</code> exist; the one described here is the registry-indexed copy (<code>AXLE:NASA/MoonBase/AXLE_lean_files/</code>), not the older 2026-04-18 draft at the GTCT repo root, which still carries two sorrys and <code>r_star := 0.8</code>. In the registry-indexed <code>Chain_updated.lean</code> four theorems are fully proved with no <code>sorry</code>: <code>gronwall_outer</code>, <code>iter_consecutive_dist</code>, <code>spiral_return_exists</code> (T1), and <code>poincare_collatz_contracting</code>. Two statements are admitted as <em>explicit domain axioms</em> pending dm³ ODE formalisation in Mathlib: <code>inner_basin_is_asymmetric</code> (AXLE Issue #13) and the general <code>poincare_collatz</code>. The distinction matters: a <code>sorry</code> marks an incomplete proof of something claimed to be true; an axiom is an admitted hypothesis, explicitly labelled as such. The original <code>Chain.lean</code> (retained for history) contains 3 sorrys; <code>Chain_updated.lean</code> contains none.</p>
+<div class="lean f"><span class="lc">/-
+  © 2026 Pablo Nogueira Grossi — G6 LLC · MIT License
+  GTCT Chapter 10: Helical attractor formal verification
+  GCTC/Operators/Chain_updated.lean · Lean 4 + Mathlib4
+  0 logic axioms beyond Mathlib · 0 sorrys · 2 explicit domain axioms
+  github.com/TOTOGT/GTCT
+-/</span>
+<span class="lc">-- Verified structural constants</span>
+<span class="lk">noncomputable def</span> <span class="ln">mu_max</span>   : ℝ := <span class="ls">-2</span>
+<span class="lk">noncomputable def</span> <span class="ln">r_star</span>   : ℝ := <span class="ls">0.77594059</span>  <span class="lc">-- certified inner boundary</span>
+<span class="lk">noncomputable def</span> <span class="ln">eps_zero</span> : ℝ := <span class="ls">1</span> / <span class="ls">3</span>   <span class="lc">-- Gronwall stability radius (outer only)</span>
+
+<span class="lc">-- Outer basin convergence — proved, no sorry</span>
+<span class="lk">theorem</span> <span class="lt">gronwall_outer</span>
+    (μ_max ε μ_bound : ℝ) (hμ_bound : <span class="ls">0</span> &lt; μ_bound)
+    (hμ : μ_max + <span class="ls">3</span> * ε ≤ -μ_bound) :
+    ∃ C : ℝ, <span class="ls">0</span> &lt; C ∧ ∀ t : ℝ, <span class="ls">0</span> ≤ t →
+      Real.exp ((μ_max + <span class="ls">3</span> * ε) * t) ≤ C * Real.exp (-μ_bound * t) := <span class="lk">by</span>
+  exact ⟨<span class="ls">1</span>, one_pos, <span class="lk">fun</span> t ht => <span class="lk">by</span>
+    rw [one_mul]
+    exact Real.exp_le_exp.mpr (mul_le_mul_of_nonneg_right hμ ht)⟩
+
+<span class="lc">-- Inner basin asymmetry — explicit domain axiom, not a sorry</span>
+<span class="lc">-- (AXLE Issue #13: pending dm³ ODE formalisation in Mathlib)</span>
+<span class="lk">axiom</span> <span class="lt">inner_basin_is_asymmetric</span> : ∃ r₀ : ℝ,
+    |r₀ - <span class="ls">1</span>| &lt; <span class="ln">eps_zero</span> ∧ r₀ &lt; <span class="ln">r_star</span>  <span class="lc">-- inside Gronwall ball, yet escapes</span></div>
+<!-- §8 -->
+<div class="sec-num" id="s8">§ 8</div>
+<h2 class="sec">Connection to the GTCT Operator Chain</h2>
+<p>The dm³ system is a concrete instance of G = U ∘ F ∘ K ∘ C applied to a contact manifold. <strong>C (Compress)</strong> maps (r₀, z₀) to the deviation u = r − 1. <strong>K (Curvature)</strong> identifies the curvature −2 = μ<sub>max</sub> at r = 1; the empirical threshold κ* = √(7/9) ≈ 0.882 marks the dm³ basin hierarchy (distinct from the chain contraction κ<sub>chain</sub> ≤ √(5/9) ≈ 0.745 of the Vol IV Recursion Theorem, which follows from σ<sub>min</sub> ≥ 2/3 and ‖u<sub>i</sub>w<sub>i</sub>ᵀ‖ ≤ 1/3 via (2/3)² + (1/3)² = 5/9; note √(5/9) &lt; r*, so the two constants cannot coincide). <strong>F (Fold)</strong> captures the Whitney A1 singularity at r* = 0.77594 where attractor and repeller branches merge. <strong>U (Unfold)</strong> projects back to the manifold, producing the limit set Γ.</p>
+<div class="thm env f">
+  <p><strong>GTCT correspondence.</strong> The helical attractor Γ is the fixed point of G = U ∘ F ∘ K ∘ C on the contact 3-manifold. Repeated application of G to any outer-basin initial condition converges to Γ in at most g₃₃ = 33 operator cycles (threshold constant). This is the contact-geometric instance of Complete Completeness.</p>
+</div>
+<!-- §9 -->
+<div class="sec-num" id="s9">§ 9</div>
+<h2 class="sec">References</h2>
+<p style="font-size:0.87rem;line-height:2;color:var(--ink2);">
+[1] Grossi, P. N. (2026). <em>Principia Orthogona, Vol. I.</em> Version 6. G6 LLC. ISBN 979-8-9954416-2-5. <a href="https://doi.org/10.5281/zenodo.19117399" style="color:var(--accent2);">doi:10.5281/zenodo.19117399</a> (series DOI, resolves to current version)<br>
+[2] Grossi, P. N. (2026). <em>Principia Orthogona, Vol. II.</em> G6 LLC. ISBN 979-8-9954416-4-9. <a href="https://doi.org/10.5281/zenodo.19379473" style="color:var(--accent2);">doi:10.5281/zenodo.19379473</a><br>
+[3] AXLE v6.1 formal verification. <a href="https://totogt.github.io/AXLE" style="color:var(--accent2);">totogt.github.io/AXLE</a> · <a href="https://github.com/TOTOGT/GTCT" style="color:var(--accent2);">github.com/TOTOGT/GTCT</a><br>
+[4] Grossi, P. N. (2026). <em>The Generative Time Circuit Theorem (GTCT).</em> Version 4. Zenodo. <a href="https://doi.org/10.5281/zenodo.21708678" style="color:var(--accent2);">doi:10.5281/zenodo.21708678</a><br>
+[5] Hairer, E., Nørsett, S. P., &amp; Wanner, G. (1993). <em>Solving ODEs I.</em> Springer. [DOP853]<br>
+[6] Geiges, H. (2008). <em>An Introduction to Contact Topology.</em> Cambridge University Press.<br>
+[7] Hartman, P. (1982). <em>Ordinary Differential Equations.</em> SIAM. [Gronwall]<br>
+[8] Mathlib4 Community (2024). <a href="https://leanprover-community.github.io/mathlib4_docs/" style="color:var(--accent2);">leanprover-community.github.io/mathlib4_docs</a>
+</p>
+</div><!-- end main -->
+<div class="side">
+  <div class="sn"><strong>CHAPTER IN SERIES</strong><br>Vol. IV (GTCT T1 — IMPA Edition). Bilingual PT/EN. The SBM Bienal 3-page submission is a condensed version of this chapter.</div>
+  <div class="sn"><strong>OPEN PROBLEMS</strong><br>AXLE Issues #12–#17. Issue #12 (kappa_lipschitz) blocks the full nonlinear global proof of Theorem 1. Issue #13 (inner_basin_is_asymmetric) and the general Poincaré–Collatz are stated as explicit domain axioms in Chain_updated.lean.</div>
+  <div class="sn"><strong>SADDLE RESOLVED</strong><br>The saddle r<sub>s</sub> = 2cos(3π/7) is analytically resolved (Theorems B.1–B.5, verified to machine precision). The basin boundary r* ≈ 0.77594059 is a separate object — the Whitney A₁ fold threshold. Because F is irreversible and GTCT time is strictly forward, a closed-form expression for r* remains open.</div>
+  <div class="sn"><strong>FALSIFIABLE PREDICTION</strong><br>r* = 0.77594059 is numerically certified (bisection, tol 10⁻⁷). A closed-form expression for r* in terms of ε = 2 and the ODE structure is an open analytic problem.</div>
+  <div class="sn"><strong>CITE THIS CHAPTER</strong><br><span style="font-family:var(--mono);font-size:0.6rem;line-height:1.8;color:var(--dim);">Grossi, P.N. (2026). Helical Attractors on Contact 3-Manifolds. <em>Principia Orthogona</em>, Vol. IV. G6 LLC.</span></div>
+</div>
+</div><!-- end body-wrap -->
+<!-- ═══════════════════ BOOKS ═══════════════════ -->
+<div class="books">
+<div class="books-in">
+  <div class="books-hd">
+    <h2>Principia Orthogona — The Complete Series</h2>
+    <a href="https://g6llc.gumroad.com/l/soundworks">All volumes →</a>
+  </div>
+  <div class="bg">
+    <div class="bk"><div class="g">G¹ · Vol. I</div><h4>The Orthogonal Operator Framework</h4><p>Abstract operator algebra. G = U∘F∘K∘C defined and proved. Series foundation.</p><div class="isbn">979-8-9954416-2-5</div><div class="pr">$47</div><a href="https://g6llc.gumroad.com/l/soundworks">Buy on Gumroad</a></div>
+    <div class="bk"><div class="g">G² · Vol. II</div><h4>TOGT: Applications Across Domains</h4><p>Contact geometry realised across physics, biology, linguistics. g₃₃ = 33.</p><div class="isbn">979-8-9954416-4-9</div><div class="pr">$47</div><a href="https://g6llc.gumroad.com/l/soundworks">Buy on Gumroad</a></div>
+    <div class="bk ft"><div class="g">G³ · Vol. III · ENTRADA</div><h4>The Mini-Beast: Biological Instantiations</h4><p>C1→C2 English for researchers. The cajueiro principle. Ponto de entrada — eBook disponível. Included in Complete Series.</p><div class="isbn">979-8-9954416-6-3</div><div class="pr">$19.99 eBook</div><a href="https://g6llc.gumroad.com/l/soundworks">Buy on Gumroad →</a></div>
+    <div class="bk"><div class="g">G⁴ · Vol. IV</div><h4>GTCT T1 — The IMPA Edition</h4><p>This chapter. Bilingual EN/PT. Submitted to IMPA. Science + language from Day 21.</p><div class="isbn">Included in bundle</div><div class="pr">—</div><a href="https://g6llc.gumroad.com/l/soundworks">Complete Series</a></div>
+    <div class="bk"><div class="g">G⁵ · Vol. V + AXLE</div><h4>The Seed — Complete Completeness</h4><p>Banach Fixed Point. AXLE v6.1. 0 axioms beyond Mathlib4. Series proves itself.</p><div class="isbn">979-8-9954416-5-6</div><div class="pr">$47</div><a href="https://g6llc.gumroad.com/l/soundworks">Buy on Gumroad</a></div>
+  </div>
+  <div class="bundle">
+    <div><h3>Complete Series — G¹ through G⁵</h3><p>Five volumes · AXLE v6.1 · Lean 4 verified · Brasil é o mercado primário</p></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;">
+      <div class="bpr">$199.99 <span style="font-size:0.9rem;color:#5a6080;">eBook · $247 hardcover</span></div>
+      <a href="https://g6llc.gumroad.com/l/soundworks" style="background:rgba(200,169,110,0.18);border-color:#c8a96e;color:#c8a96e;">Buy on Gumroad — Vols I–VI Living Access →</a>
+      <a href="https://www.paypal.com/paypalme/pgrossi/213.24" style="background:rgba(200,169,110,0.08);">Pay eBook via PayPal (incl. NJ tax) →</a>
+      <a href="https://www.paypal.com/paypalme/pgrossi/263.36">Pay Hardcover via PayPal (incl. NJ tax) →</a>
+      <a href="https://totogt.github.io/AXLE/impa-portal.html" style="border-color:rgba(255,255,255,0.15);color:#5a6080;font-size:0.55rem;">Tax-exempt / other rate → IMPA Portal</a>
+    </div>
+  </div>
+</div>
+</div>
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+<div class="ft-grid">
+  <div>
+    <h4>GTCT · Chapter 10</h4>
+    <p>Helical Attractors on Contact 3-Manifolds</p>
+    <p>Principia Orthogona Vol. IV · G6 LLC · Newark, NJ · 2026</p>
+    <p style="margin-top:0.75rem;font-family:var(--mono);font-size:0.58rem;color:#2d3040;line-height:1.9;">© 2026 Pablo Nogueira Grossi — G6 LLC<br>MIT License · ORCID: 0009-0000-6496-2186 · g6llc@proton.me</p>
+  </div>
+  <div>
+    <h4>Links</h4>
+    <a href="https://totogt.github.io/AXLE">Principia Orthogona →</a>
+    <a href="https://github.com/TOTOGT/GTCT">github.com/TOTOGT/GTCT →</a>
+    <a href="PO_10_Pablo_Grossi.pdf">SBM Submission PDF</a>
+    <a href="https://doi.org/10.5281/zenodo.19117399">Zenodo Series (latest)</a>
+    <a href="https://doi.org/10.5281/zenodo.19379473">Zenodo Vol. II</a>
+    <a href="https://doi.org/10.5281/zenodo.21708678">Zenodo GTCT V4</a>
+    <a href="https://totogt.github.io/AXLE/portal.html">Student Portal</a>
+    <a href="https://totogt.github.io/AXLE/impa-portal.html">IMPA Portal</a>
+  </div>
+  <div>
+    <h4>Citation</h4>
+    <p style="font-family:var(--mono);font-size:0.58rem;line-height:2;color:#3a4050;">@incollection{grossi2026gtct,<br>&nbsp;author={Grossi, Pablo N.},<br>&nbsp;title={Helical Attractors on Contact 3-Manifolds},<br>&nbsp;booktitle={Principia Orthogona},<br>&nbsp;volume={IV},year={2026},<br>&nbsp;publisher={G6 LLC}}</p>
+  </div>
+</div>
+<div class="ft-copy">
+  <span>© 2026 Pablo Nogueira Grossi — G6 LLC · MIT License</span>
+  <span>totogt.github.io/GTCT · github.com/TOTOGT/GTCT · totogt.github.io/AXLE</span>
+</div>
+</footer>
+<!-- ═══════════════════ SIMULATION ENGINE ═══════════════════ -->
+<script>
+(function(){
+'use strict';
+const RSTAR=0.77594059;
+// ODE
+function ode(r,z,e){
+  const ez=Math.exp(-Math.min(z,25));
+  return{dr:r*(1-r*r)+e*(r-1)*ez, dz:r*r-e*(r-1)*(r-1)*ez};
+}
+// State
+let playing=true, r0=1.8, z0=0, eps=2, N=8, spd=1;
+let parts=[];
+const DT=0.008;
+let W=0, H=0;
+const cv=document.getElementById('sc');
+const cx=cv.getContext('2d');
+// ResizeObserver for reliable canvas sizing
+const ro=new ResizeObserver(entries=>{
+  for(const e of entries){
+    const w=Math.floor(e.contentRect.width);
+    const h=380;
+    const dpr=window.devicePixelRatio||1;
+    cv.width=Math.round(w*dpr);
+    cv.height=Math.round(h*dpr);
+    cv.style.height=h+'px';
+    cx.resetTransform();
+    cx.scale(dpr,dpr);
+    W=w; H=h;
+  }
+});
+ro.observe(cv.parentElement);
+function initParts(){
+  parts=[];
+  for(let i=0;i<N;i++){
+    const a=(i/N)*Math.PI*2;
+    const pr=Math.max(0.05, r0+Math.cos(a)*0.45);
+    const pz=z0+Math.sin(a)*0.15;
+    parts.push({r:pr,z:pz,trail:[],alive:true,isRef:false});
+  }
+  parts.push({r:1.001,z:z0,trail:[],alive:true,isRef:true});
+}
+window.reset=function(){readSliders();initParts();};
+window.toggle=function(){
+  playing=!playing;
+  const b=document.getElementById('playBtn');
+  b.textContent=playing?'⏸ Pause':'▶ Play';
+  b.className=playing?'sb on':'sb';
+};
+function readSliders(){
+  r0=+document.getElementById('s_r').value;
+  z0=+document.getElementById('s_z').value;
+  eps=+document.getElementById('s_e').value;
+  N=+document.getElementById('s_n').value;
+  spd=+document.getElementById('s_s').value;
+  document.getElementById('v_r').textContent=r0.toFixed(2);
+  document.getElementById('v_z').textContent=z0.toFixed(2);
+  document.getElementById('v_e').textContent=eps.toFixed(2);
+  document.getElementById('v_n').textContent=N;
+  document.getElementById('v_s').textContent=spd.toFixed(1)+'×';
+}
+['s_r','s_z','s_e','s_n','s_s'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',()=>{readSliders();window.reset();});
+});
+function pColor(p){
+  if(p.isRef)return'#c8a96e';
+  if(p.r<RSTAR)return'#c86e8a';
+  if(Math.abs(p.r-1)<0.04)return'#c8a96e';
+  return'#6eb8c8';
+}
+function stepSim(){
+  const steps=Math.max(1,Math.round(spd*1.5));
+  for(let s=0;s<steps;s++){
+    parts.forEach(p=>{
+      if(!p.alive)return;
+      const{dr,dz}=ode(p.r,p.z,eps);
+      p.r+=dr*DT;
+      p.z+=dz*DT;
+      if(p.r<0.001||p.r>20||Math.abs(p.z)>80){p.alive=false;return;}
+      p.trail.push({r:p.r,z:p.z});
+      if(p.trail.length>200)p.trail.shift();
+    });
+  }
+}
+function draw(){
+  if(!W||!H)return;
+  cx.clearRect(0,0,W,H);
+  cx.fillStyle='#060810';
+  cx.fillRect(0,0,W,H);
+  // grid
+  cx.strokeStyle='rgba(255,255,255,0.025)';
+  cx.lineWidth=1;
+  for(let x=0;x<W;x+=55){cx.beginPath();cx.moveTo(x,0);cx.lineTo(x,H);cx.stroke();}
+  for(let y=0;y<H;y+=55){cx.beginPath();cx.moveTo(0,y);cx.lineTo(W,y);cx.stroke();}
+  const sR=W*0.26, oR=W*0.15, sZ=H*0.05, oZ=H*0.87;
+  const px=r=>oR+r*sR;
+  const py=z=>oZ-(z-z0)*sZ;
+  // r=1 reference
+  const x1=px(1);
+  cx.strokeStyle='rgba(200,169,110,0.18)';
+  cx.lineWidth=1.5;cx.setLineDash([5,4]);
+  cx.beginPath();cx.moveTo(x1,0);cx.lineTo(x1,H);cx.stroke();
+  cx.setLineDash([]);
+  // r* reference
+  const xs=px(RSTAR);
+  cx.strokeStyle='rgba(200,110,138,0.12)';
+  cx.lineWidth=1;cx.setLineDash([2,5]);
+  cx.beginPath();cx.moveTo(xs,0);cx.lineTo(xs,H);cx.stroke();
+  cx.setLineDash([]);
+  // axis labels
+  cx.font='10px JetBrains Mono,monospace';
+  cx.fillStyle='rgba(200,169,110,0.45)';
+  cx.fillText('r = 1',x1+4,14);
+  cx.fillStyle='rgba(200,110,138,0.35)';
+  cx.fillText('r*',xs+3,26);
+  cx.fillStyle='rgba(110,184,200,0.4)';
+  cx.fillText('→ r',W-34,oZ-8);
+  cx.fillText('↑ z',oR-20,14);
+  // particles
+  parts.forEach(p=>{
+    if(!p.alive&&p.trail.length<2)return;
+    const col=pColor(p);
+    if(p.trail.length>1){
+      cx.beginPath();
+      p.trail.forEach((pt,i)=>{
+        const x=px(pt.r),y=py(pt.z);
+        if(i===0)cx.moveTo(x,y);else cx.lineTo(x,y);
+      });
+      cx.strokeStyle=col;
+      cx.globalAlpha=p.isRef?0.9:0.55;
+      cx.lineWidth=p.isRef?2.5:1.5;
+      cx.stroke();
+      cx.globalAlpha=1;
+    }
+    if(p.alive){
+      const x=px(p.r),y=py(p.z);
+      if(p.isRef){
+        cx.beginPath();cx.arc(x,y,8,0,Math.PI*2);
+        cx.fillStyle='rgba(200,169,110,0.1)';cx.fill();
+      }
+      cx.beginPath();cx.arc(x,y,p.isRef?4:3,0,Math.PI*2);
+      cx.fillStyle=col;cx.fill();
+    }
+  });
+  // axes
+  cx.strokeStyle='rgba(255,255,255,0.06)';
+  cx.lineWidth=1;
+  cx.beginPath();cx.moveTo(0,oZ);cx.lineTo(W,oZ);cx.stroke();
+  cx.beginPath();cx.moveTo(oR,0);cx.lineTo(oR,H);cx.stroke();
+}
+let frame=0;
+function updateOut(){
+  const p=parts.find(q=>!q.isRef&&q.alive);
+  if(!p)return;
+  document.getElementById('or').textContent=p.r.toFixed(4);
+  document.getElementById('oz').textContent=p.z.toFixed(3);
+  document.getElementById('oe').textContent=Math.abs(p.r-1).toFixed(5);
+  if(p.trail.length>30){
+    const a=p.trail[p.trail.length-30],b=p.trail[p.trail.length-1];
+    const e1=Math.abs(a.r-1),e2=Math.abs(b.r-1);
+    if(e1>1e-7&&e2>1e-7){
+      const mu=Math.log(e2/e1)/(30*DT);
+      document.getElementById('om').textContent=mu.toFixed(3);
+    }
+  }
+}
+function loop(){
+  if(playing){
+    stepSim();
+    if(frame%3===0)updateOut();
+  }
+  draw();
+  frame++;
+  requestAnimationFrame(loop);
+}
+readSliders();
+initParts();
+loop();
+// scroll fade
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});
+},{threshold:0.08});
+document.querySelectorAll('.f').forEach(el=>io.observe(el));
+})();
+</script>
+</body>
+</html>

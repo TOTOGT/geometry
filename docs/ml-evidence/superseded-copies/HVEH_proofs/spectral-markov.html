@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proof V — Spectral / Markov Generator | HVEH Seven-Proofs</title>
+<style>
+  :root {
+    --teal-0:#e1f5ee;--teal-1:#9fe1cb;--teal-2:#5dcaa5;--teal-3:#1d9e75;
+    --teal-4:#0f6e56;--teal-5:#085041;--teal-6:#04342c;
+    --ink:#0b1f1a;--ink-mid:#1a3830;--rule:rgba(15,110,86,0.18);
+    --font-display:'Georgia','Times New Roman',serif;
+    --font-body:system-ui,-apple-system,'Segoe UI',sans-serif;
+    --font-mono:'Courier New',monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body);background:var(--ink);color:#e8f5f0;line-height:1.7;font-size:16px}
+  nav{position:sticky;top:0;z-index:100;padding:0.75rem 5%;background:rgba(11,31,26,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .nav-brand{font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;color:var(--teal-4);text-decoration:none;white-space:nowrap}
+  .nav-proofs{display:flex;gap:0.4rem;flex-wrap:wrap}
+  .nav-proofs a{font-family:var(--font-mono);font-size:10px;letter-spacing:0.05em;color:#3d7060;text-decoration:none;padding:0.2rem 0.45rem;border:1px solid transparent;border-radius:2px;transition:all 0.15s}
+  .nav-proofs a:hover,.nav-proofs a.active{color:var(--teal-2);border-color:var(--rule)}
+  .proof-hero{padding:4rem 8% 3rem;border-bottom:1px solid var(--rule)}
+  .proof-eyebrow{font-family:var(--font-mono);font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal-3);margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem}
+  .proof-eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:var(--teal-4)}
+  .proof-hero h1{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.2rem);font-weight:400;color:#d4f0e8;line-height:1.15;letter-spacing:-0.01em;margin-bottom:0.5rem}
+  .subtitle{font-family:var(--font-mono);font-size:0.9rem;color:var(--teal-3);margin-bottom:1.5rem}
+  .thesis-block{background:rgba(29,158,117,0.07);border-left:3px solid var(--teal-3);padding:1.25rem 1.75rem;border-radius:0 4px 4px 0;font-size:1.05rem;color:#a8d5c5;line-height:1.8;font-style:italic;max-width:820px}
+  .proof-body-section{padding:3rem 8%;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+  @media(max-width:768px){.proof-body-section{grid-template-columns:1fr;gap:2rem}}
+  .prose p{color:#a8ccbd;line-height:1.85;margin-bottom:1.25rem;font-size:0.975rem}
+  .prose p strong{color:#cdeee3;font-weight:500}
+  .prose p em{color:var(--teal-2);font-style:italic}
+  .math-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-4);margin-bottom:1rem}
+  .math-table{width:100%;border-collapse:collapse}
+  .math-table tr{border-bottom:1px solid rgba(15,110,86,0.12)}
+  .math-table tr:last-child{border-bottom:none}
+  .math-table td{padding:0.6rem 0;font-family:var(--font-mono);font-size:0.82rem;vertical-align:top}
+  .math-table td:first-child{color:#3d7060;width:38%;padding-right:1rem}
+  .math-table td:last-child{color:#9fd4bf}
+  .svg-wrap{margin-top:2rem;background:rgba(0,0,0,0.2);border-radius:4px;padding:1.25rem;border:1px solid var(--rule)}
+  .consequence-section{padding:2.5rem 8%;background:var(--ink-mid);border-bottom:1px solid var(--rule)}
+  .consequence-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--teal-4);margin-bottom:0.75rem}
+  .consequence-text{font-size:0.975rem;color:#a8ccbd;line-height:1.8;max-width:820px}
+  .consequence-text strong{color:#cdeee3;font-weight:500}
+  .proof-nav-footer{padding:2.5rem 8%;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;border-top:1px solid var(--rule)}
+  .pnf-link{text-decoration:none;color:var(--teal-3);font-size:0.875rem;font-family:var(--font-mono);transition:color 0.15s}
+  .pnf-link:hover{color:var(--teal-2)}
+  .pnf-center{text-align:center;font-family:var(--font-mono);font-size:10px;color:#3d7060;line-height:1.8}
+  .pnf-center a{color:#3d7060;text-decoration:none}
+  .pnf-center a:hover{color:var(--teal-3)}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="index.html">HVEH / Seven Proofs</a>
+  <div class="nav-proofs"><a href="operator-algebra.html">I — Operator Algebra</a>
+    <a href="distribution-theory.html">II — Distribution</a>
+    <a href="catastrophe-theory.html">III — Catastrophe</a>
+    <a href="contact-geometry.html">IV — Contact Geom</a>
+    <a href="spectral-markov.html" class="active">V — Markov</a>
+    <a href="numerical-constructive.html">VI — Numerical</a>
+    <a href="information-geometry.html">VII — Info Geom</a></div>
+</nav>
+<section class="proof-hero">
+  <div class="proof-eyebrow">Proof V of VII</div>
+  <h1>Spectral / Markov Generator</h1>
+  <div class="subtitle">Discrete state stability and the absorbing barrier</div>
+  <div class="thesis-block">A discrete Markov model confirms that correct operator order creates a stable non-absorbing rotating attractor, while wrong order creates a locked-off absorbing state — from which no recovery is possible without physical intervention.</div>
+</section>
+<section class="proof-body-section">
+  <div class="prose"><p>The continuous flow dynamics can be discretized into a Markov chain over five states: OFF, LAMINAR, TRANSITION, VORTEX, and CHAOS. The generator matrix L encodes transition rates between states.</p>
+<p>Under correct operator order, the generator L_correct has a positive spectral gap — the smallest nonzero eigenvalue of −L is bounded away from zero. The system returns exponentially fast to the VORTEX state after any perturbation. VORTEX is a stable non-absorbing attractor.</p>
+<p>Under wrong operator order, L_wrong drives the system to CHAOS, which functions as an absorbing barrier: once reached, P(CHAOS → VORTEX) = 0. No spontaneous recovery occurs. The only escape is a physical reset — draining the basin and recommissioning.</p>
+<p>The spectral gap also determines the recovery timescale after a storm surge temporarily disrupts the vortex. A larger gap means faster recovery. The contact geometry of the correct-order system maximizes this gap.</p></div>
+  <div class="math-panel">
+    <div class="math-title">Key relations</div>
+    <table class="math-table"><tr><td>State space</td><td>S = {OFF, LAMINAR, TRANSITION, VORTEX, CHAOS}</td></tr>
+<tr><td>Correct generator</td><td>L_correct:  TRANSITION → VORTEX (non-absorbing)</td></tr>
+<tr><td>Wrong generator</td><td>L_wrong:    TRANSITION → CHAOS  (absorbing)</td></tr>
+<tr><td>Spectral gap</td><td>gap(L_correct) > 0  →  exponential return</td></tr>
+<tr><td>Absorbing barrier</td><td>P(CHAOS → VORTEX) = 0  without reset</td></tr></table>
+    <div class="svg-wrap"><svg viewBox="0 0 480 195" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px">
+  <defs>
+    <marker id="arr5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#1d9e75"/></marker>
+    <marker id="arr5r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#6b4040"/></marker>
+  </defs>
+  <circle cx="45" cy="97" r="26" fill="#04342c" stroke="#0f6e56" stroke-width="1.5"/>
+  <text x="45" y="101" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#3d7060">OFF</text>
+  <circle cx="150" cy="97" r="26" fill="#04342c" stroke="#1d9e75" stroke-width="1.5"/>
+  <text x="150" y="94" text-anchor="middle" font-family="'Courier New',monospace" font-size="8" fill="#1d9e75">LAM-</text>
+  <text x="150" y="105" text-anchor="middle" font-family="'Courier New',monospace" font-size="8" fill="#1d9e75">INAR</text>
+  <circle cx="258" cy="97" r="26" fill="#04342c" stroke="#5dcaa5" stroke-width="1.5"/>
+  <text x="258" y="94" text-anchor="middle" font-family="'Courier New',monospace" font-size="8" fill="#5dcaa5">TRANS</text>
+  <text x="258" y="105" text-anchor="middle" font-family="'Courier New',monospace" font-size="8" fill="#5dcaa5">-ITION</text>
+  <circle cx="400" cy="50" r="30" fill="#085041" stroke="#9fe1cb" stroke-width="2"/>
+  <text x="400" y="47" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#9fe1cb">VORTEX</text>
+  <text x="400" y="59" text-anchor="middle" font-family="'Courier New',monospace" font-size="8" fill="#5dcaa5">stable ✓</text>
+  <circle cx="400" cy="152" r="30" fill="#2a0a0a" stroke="#6b4040" stroke-width="2"/>
+  <text x="400" y="149" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#6b4040">CHAOS</text>
+  <text x="400" y="161" text-anchor="middle" font-family="'Courier New',monospace" font-size="8" fill="#6b4040">absorbing ✗</text>
+  <line x1="71" y1="97" x2="122" y2="97" stroke="#1d9e75" stroke-width="1.5" marker-end="url(#arr5)"/>
+  <line x1="176" y1="97" x2="230" y2="97" stroke="#1d9e75" stroke-width="1.5" marker-end="url(#arr5)"/>
+  <path d="M281,77 Q330,48 370,50" fill="none" stroke="#9fe1cb" stroke-width="1.5" marker-end="url(#arr5)"/>
+  <text x="315" y="48" font-family="'Courier New',monospace" font-size="8" fill="#9fe1cb">K→F</text>
+  <path d="M281,117 Q330,148 370,152" fill="none" stroke="#6b4040" stroke-width="1.5" marker-end="url(#arr5r)"/>
+  <text x="312" y="148" font-family="'Courier New',monospace" font-size="8" fill="#6b4040">F→K</text>
+  <path d="M420,28 Q448,8 428,28" fill="none" stroke="#5dcaa5" stroke-width="1" marker-end="url(#arr5)"/>
+</svg></div>
+  </div>
+</section>
+<section class="consequence-section">
+  <div class="consequence-label">Engineering consequence</div>
+  <div class="consequence-text">HVEH modules recover automatically from flow disturbances as long as they are in the correct-order state. <strong>A module that fails to re-establish vortex rotation within one tidal cycle after flow resumes is flagged for recommissioning, not repair.</strong></div>
+</section>
+<div class="proof-nav-footer">
+  <a class="pnf-link" href="contact-geometry.html">← IV</a>
+  <div class="pnf-center">
+    <a href="index.html">HVEH Project Index</a><br>
+    <span style="margin-top:0.3rem;display:block">Seven-Proofs Framework · Principia Orthogona · G6 LLC</span>
+  </div>
+  <a class="pnf-link" href="numerical-constructive.html">VI →</a>
+</div>
+</body>
+</html>

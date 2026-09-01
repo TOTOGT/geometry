@@ -1,12 +1,14 @@
 # Zenodo metadata corrections — DRAFTS, NOT DEPOSITED
 
-Two live records carry the phantom series DOI. Neither has been amended;
+Four live records carry the phantom series DOI. None has been amended;
 amending a published record is the author's call (house rule 4).
 
 | Record | Title | Defects |
 |---|---|---|
 | `10.5281/zenodo.21431505` | Transamerican smoke | series DOI ×2 |
 | `10.5281/zenodo.20710023` | Alternating Forms Vanish Beyond Dimension (Alterna) | series DOI ×2, wrong ISBN |
+| `10.5281/zenodo.21710763` | WP-35 · Retiring the Advisor | series DOI (ruled no-change 2026-08-24), malformed doi.org href |
+| `10.5281/zenodo.22117968` | Principia Orthogona Volume Two, V5 | series DOI ×2 — **acquired 26 Aug 2026** |
 
 ---
 
@@ -320,3 +322,80 @@ metadata edit); the metadata fixes above do **not**.
 
 - Title, author, CC BY 4.0, resource type Preprint, publication date
 - `WP35RetiringtheAdvisor.pdf` (318.4 kB) — 10 pp, 43 numbered sources, claim tags intact
+
+
+---
+
+# Record 4 — 10.5281/zenodo.22117968 (Principia Orthogona Volume Two, V5)
+
+**Published:** 26 August 2026 · Version 5.0 · Preprint · CC BY-NC-ND 4.0
+**URL:** <https://zenodo.org/records/22117968>
+**Status: DRAFT — NOT DEPOSITED.** Author's call, house rule 4.
+
+## What this record confirms
+
+Record 3 argued that the phantom series DOI is not a residue but **reproduces at
+deposit time**, from a metadata template outside the audited boundary. This record
+is that prediction landing two days later.
+
+| Deposit | Date | Phantom relation present |
+|---|---|---|
+| Vol I DOI sweep logged as fixed | 18 Aug 2026 | — |
+| Record 3 · WP-35 | 24 Aug 2026 | yes |
+| **Record 4 · Volume Two V5** | **26 Aug 2026** | **yes, twice** |
+
+Two deposits in three days, both after the sweep. The repository-side count is
+irrelevant to this: nothing in `tools/` can see a Zenodo metadata form.
+
+## Field 1 — Related works
+
+### Current (read from the record page, 2026-09-01)
+
+- **Is part of:** `10.5281/zenodo.19117399`
+- **Is supplement to:** `10.5281/zenodo.19117399`
+- Supersedes: `10.5281/zenodo.21148424` (V4) — **correct, do not edit**
+
+### Why both are wrong
+
+`10.5281/zenodo.19117399` is **Volume One's concept DOI**, not a series DOI. Verified
+2026-09-01 from Zenodo's own record page, which states that the concept DOI resolving
+to all versions is `19117399` and that the current version is
+`10.5281/zenodo.22084842` (V7, deposited 24 Aug 2026).
+
+So as published, **Volume Two declares itself a part of, and a supplement to, Volume
+One.** It is neither. They are sibling volumes of a series that has no series-level
+DOI — which is the whole content of the phantom-series finding.
+
+### Replace with — option A (preferred)
+
+Drop both relations. Add the record to the community
+<https://zenodo.org/communities/principia-orthogona>, which is what carries series
+membership. `Supersedes → 21148424` stays.
+
+### Replace with — option B (if a DOI relation is required downstream)
+
+Keep `Supersedes → 10.5281/zenodo.21148424` only. Do not relate Volume Two to Volume
+One in either direction: `IsPartOf` and `IsSupplementTo` both assert a containment
+that does not hold, and OpenAIRE indexes them.
+
+## Unchanged — verified correct, do not edit
+
+- Title, author, deposit date, Version 5.0, resource type Preprint
+- **CC BY-NC-ND 4.0** — matches `LICENSE-CONTENT`, which is the series default
+- `Supersedes → 10.5281/zenodo.21148424` (V4)
+- The eight uploaded files. Sizes were checked against the staging copy in
+  `vol2-v5/deposit/` on 2026-09-01 and all eight agree: `certify_rstar.py` 10.2 kB,
+  `dashboard.html` 39.1 kB, `figures.py` 20.6 kB, `principia_v5_1.pdf` 151.8 kB,
+  `principia_v5_1.tex` 37.8 kB, `README_1.md` 6.3 kB, `verify-vol2.zip` 6.6 kB,
+  `VolumeTwo.lean` 25.1 kB.
+
+## Not a metadata defect, but noted against the deposited `dashboard.html`
+
+`tools/audit.py --all` (2026-09-01) reports **13 dead links inside
+`vol2-v5/deposit/dashboard.html`** — `vol1-mathematics.html`, `vol2-contact.html`,
+`vol2-toymodel.html`, `gcm-framework.html`, `gomc-opus.html`, `impa-portal.html`,
+`living-book.html`, `series-hub.html`. The file was written to sit at the repository
+root and reaches for its siblings by bare filename; inside the deposit it has no
+siblings. A reader who opens `dashboard.html` from the Zenodo download gets eight
+dead targets. This cannot be fixed by metadata edit — it needs a V6 with the links
+either made absolute to `totogt.github.io/geometry/` or removed.

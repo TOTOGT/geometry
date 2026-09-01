@@ -102,6 +102,17 @@ $$\gamma(t) = \bigl(U(\sigma,t),\, V(\sigma,t),\, t\bigr) \in \mathbb{R}^3.$$
 
 The non-trivial zeros of $\zeta$ are the $t$-values where $\gamma(t)$ pierces the plane $U = V = 0$.
 
+![**Figure 1 — the lift.** Left: the phase plane at three abscissae, with $t$ present only as a parameter; the curves overlap and nothing distinguishes $\sigma=\tfrac12$. Right: the same three curves with $t$ promoted to a coordinate. They separate into helices, the mirror pair $\sigma$ and $1-\sigma$ sit either side of the self-mirror line, and each non-trivial zero becomes a puncture of the $U=V=0$ axis (marked). Regenerate with `figures.py`.](fig1_rh_lift.pdf){width=100%}
+
+> **The figure is flat and the object is not.** A printed projection fixes one viewpoint and
+> loses the rotation that makes the separation legible. An interactive version, in which the
+> abscissa is a slider and the mirror pair can be watched converging onto the critical line, is
+> published as Figure 12.1 of Book 4, Chapter 12:
+> **<https://totogt.github.io/geometry/book4/ch12.html>**. Readers who want the geometry rather
+> than a picture of it should start there; the construction of §4 will be easier to follow
+> afterwards.
+
+
 ### 3.2 The Riemann Hypothesis as a geometric trapping condition
 
 **Reformulation 3.1 (informal).** *The Riemann Hypothesis is equivalent to the statement that every zero-curve $\gamma$ satisfying $U(\sigma_0, t) = V(\sigma_0, t) = 0$ must lie on the single hyperplane $\sigma_0 = \tfrac{1}{2}$ inside the extended space $\mathbb{R}^3_{(U,V,t)}$.*

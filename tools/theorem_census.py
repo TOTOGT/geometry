@@ -149,7 +149,13 @@ def stray_lean(root):
     cannot see should be fixed, not quietly counted."""
     out = []
     for dp, dns, fns in os.walk(root):
-        dns[:] = [d for d in dns if d not in SKIP_DIRS and d != 'to_delete']
+        # Three retired-copy folders, not one. The skip used to name only
+        # 'to_delete'; the folder on disk is '_to_delete' (the spelling used by
+        # .gitignore, build_indexes.py, audit.py and duplicates.py), so retired
+        # copies were being counted into every on-disk census. docs/ml-evidence
+        # is the tracked evidence folder — same reasoning, see its README.
+        dns[:] = [d for d in dns
+                  if d not in SKIP_DIRS and d not in ('to_delete', '_to_delete', 'ml-evidence')]
         for f in fns:
             if f.endswith('.lean'):
                 continue
@@ -209,7 +215,9 @@ def census(roots, tracked=False):
                   file=sys.stderr)
             continue
         for dp, dns, fns in os.walk(root):
-            dns[:] = [d for d in dns if d not in SKIP_DIRS]
+            dns[:] = [d for d in dns
+                      if d not in SKIP_DIRS
+                      and d not in ('to_delete', '_to_delete', 'ml-evidence')]
             for f in sorted(fns):
                 if not f.endswith('.lean'):
                     continue

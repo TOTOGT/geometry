@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proof VII — Information Geometry | HVEH Seven-Proofs</title>
+<style>
+  :root {
+    --teal-0:#e1f5ee;--teal-1:#9fe1cb;--teal-2:#5dcaa5;--teal-3:#1d9e75;
+    --teal-4:#0f6e56;--teal-5:#085041;--teal-6:#04342c;
+    --ink:#0b1f1a;--ink-mid:#1a3830;--rule:rgba(15,110,86,0.18);
+    --font-display:'Georgia','Times New Roman',serif;
+    --font-body:system-ui,-apple-system,'Segoe UI',sans-serif;
+    --font-mono:'Courier New',monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body);background:var(--ink);color:#e8f5f0;line-height:1.7;font-size:16px}
+  nav{position:sticky;top:0;z-index:100;padding:0.75rem 5%;background:rgba(11,31,26,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .nav-brand{font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;color:var(--teal-4);text-decoration:none;white-space:nowrap}
+  .nav-proofs{display:flex;gap:0.4rem;flex-wrap:wrap}
+  .nav-proofs a{font-family:var(--font-mono);font-size:10px;letter-spacing:0.05em;color:#3d7060;text-decoration:none;padding:0.2rem 0.45rem;border:1px solid transparent;border-radius:2px;transition:all 0.15s}
+  .nav-proofs a:hover,.nav-proofs a.active{color:var(--teal-2);border-color:var(--rule)}
+  .proof-hero{padding:4rem 8% 3rem;border-bottom:1px solid var(--rule)}
+  .proof-eyebrow{font-family:var(--font-mono);font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal-3);margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem}
+  .proof-eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:var(--teal-4)}
+  .proof-hero h1{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.2rem);font-weight:400;color:#d4f0e8;line-height:1.15;letter-spacing:-0.01em;margin-bottom:0.5rem}
+  .subtitle{font-family:var(--font-mono);font-size:0.9rem;color:var(--teal-3);margin-bottom:1.5rem}
+  .thesis-block{background:rgba(29,158,117,0.07);border-left:3px solid var(--teal-3);padding:1.25rem 1.75rem;border-radius:0 4px 4px 0;font-size:1.05rem;color:#a8d5c5;line-height:1.8;font-style:italic;max-width:820px}
+  .proof-body-section{padding:3rem 8%;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+  @media(max-width:768px){.proof-body-section{grid-template-columns:1fr;gap:2rem}}
+  .prose p{color:#a8ccbd;line-height:1.85;margin-bottom:1.25rem;font-size:0.975rem}
+  .prose p strong{color:#cdeee3;font-weight:500}
+  .prose p em{color:var(--teal-2);font-style:italic}
+  .math-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-4);margin-bottom:1rem}
+  .math-table{width:100%;border-collapse:collapse}
+  .math-table tr{border-bottom:1px solid rgba(15,110,86,0.12)}
+  .math-table tr:last-child{border-bottom:none}
+  .math-table td{padding:0.6rem 0;font-family:var(--font-mono);font-size:0.82rem;vertical-align:top}
+  .math-table td:first-child{color:#3d7060;width:38%;padding-right:1rem}
+  .math-table td:last-child{color:#9fd4bf}
+  .svg-wrap{margin-top:2rem;background:rgba(0,0,0,0.2);border-radius:4px;padding:1.25rem;border:1px solid var(--rule)}
+  .consequence-section{padding:2.5rem 8%;background:var(--ink-mid);border-bottom:1px solid var(--rule)}
+  .consequence-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--teal-4);margin-bottom:0.75rem}
+  .consequence-text{font-size:0.975rem;color:#a8ccbd;line-height:1.8;max-width:820px}
+  .consequence-text strong{color:#cdeee3;font-weight:500}
+  .proof-nav-footer{padding:2.5rem 8%;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;border-top:1px solid var(--rule)}
+  .pnf-link{text-decoration:none;color:var(--teal-3);font-size:0.875rem;font-family:var(--font-mono);transition:color 0.15s}
+  .pnf-link:hover{color:var(--teal-2)}
+  .pnf-center{text-align:center;font-family:var(--font-mono);font-size:10px;color:#3d7060;line-height:1.8}
+  .pnf-center a{color:#3d7060;text-decoration:none}
+  .pnf-center a:hover{color:var(--teal-3)}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="index.html">HVEH / Seven Proofs</a>
+  <div class="nav-proofs"><a href="operator-algebra.html">I — Operator Algebra</a>
+    <a href="distribution-theory.html">II — Distribution</a>
+    <a href="catastrophe-theory.html">III — Catastrophe</a>
+    <a href="contact-geometry.html">IV — Contact Geom</a>
+    <a href="spectral-markov.html">V — Markov</a>
+    <a href="numerical-constructive.html">VI — Numerical</a>
+    <a href="information-geometry.html" class="active">VII — Info Geom</a></div>
+</nav>
+<section class="proof-hero">
+  <div class="proof-eyebrow">Proof VII of VII</div>
+  <h1>Information Geometry</h1>
+  <div class="subtitle">Non-homotopic geodesics on a negatively curved manifold</div>
+  <div class="thesis-block">Flow states live on a statistical manifold with the Fisher information metric. Correct and incorrect operator sequences correspond to non-homotopic geodesics — paths that cannot be continuously deformed into each other — making the two outcomes topologically distinct.</div>
+</section>
+<section class="proof-body-section">
+  <div class="prose"><p>Information geometry treats probability distributions as points on a smooth manifold equipped with the Fisher information metric. Flow states — characterized by their vorticity distribution, coherence spectrum, and phase statistics — are points on this manifold.</p>
+<p>The manifold of flow states has negative sectional curvature everywhere, a consequence of the contact structure and the log-concavity of the vortex phase distribution. On negatively curved manifolds, geodesics diverge exponentially — two paths from nearly the same point end up arbitrarily far apart.</p>
+<p>The correct and incorrect operator sequences correspond to geodesics γ_K and γ_F. Because the manifold is negatively curved, these belong to different homotopy classes in π₁(M): they cannot be continuously deformed into one another. There is no smooth interpolation between VORTEX and CHAOS.</p>
+<p>This is the deepest of the seven proofs. It says not merely that wrong order produces a bad outcome, but that the two outcomes are <em>topologically separated</em>. No fine-tuning, no partial operator application, can slide the wrong-order system into the correct-order basin.</p></div>
+  <div class="math-panel">
+    <div class="math-title">Key relations</div>
+    <table class="math-table"><tr><td>Fisher metric</td><td>g_ij(θ) = E[∂_i log p · ∂_j log p]</td></tr>
+<tr><td>Sectional curvature</td><td>K_sec &lt; 0  everywhere on the flow manifold</td></tr>
+<tr><td>Correct geodesic</td><td>γ_K:  LAMINAR → VORTEX  [class K]</td></tr>
+<tr><td>Wrong geodesic</td><td>γ_F:  LAMINAR → CHAOS   [class F]</td></tr>
+<tr><td>Topological result</td><td>[γ_K] ≠ [γ_F] in π₁(M)  →  no deformation</td></tr></table>
+    <div class="svg-wrap"><svg viewBox="0 0 480 215" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px">
+  <defs>
+    <marker id="arr7" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#5dcaa5"/></marker>
+    <marker id="arr7r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#6b4040"/></marker>
+  </defs>
+  <path d="M40,75 Q120,58 200,65 Q290,74 370,55 Q420,44 455,50" fill="none" stroke="#0f6e56" stroke-width="0.75"/>
+  <path d="M40,105 Q120,88 200,95 Q290,104 370,85 Q420,74 455,80" fill="none" stroke="#0f6e56" stroke-width="0.75"/>
+  <path d="M40,135 Q120,118 200,125 Q290,134 370,115 Q420,104 455,110" fill="none" stroke="#0f6e56" stroke-width="0.75"/>
+  <path d="M80,45 Q88,95 92,145 Q95,175 97,200" fill="none" stroke="#0f6e56" stroke-width="0.75"/>
+  <path d="M185,40 Q193,90 197,140 Q200,170 202,200" fill="none" stroke="#0f6e56" stroke-width="0.75"/>
+  <path d="M310,38 Q318,88 322,138 Q325,168 327,200" fill="none" stroke="#0f6e56" stroke-width="0.75"/>
+  <path d="M415,35 Q423,85 427,135 Q430,165 432,200" fill="none" stroke="#0f6e56" stroke-width="0.75"/>
+  <circle cx="125" cy="110" r="7" fill="#1d9e75"/>
+  <text x="115" y="134" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#1d9e75">LAMINAR</text>
+  <path d="M132,107 Q225,72 338,65" fill="none" stroke="#5dcaa5" stroke-width="2" marker-end="url(#arr7)"/>
+  <text x="228" y="63" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#5dcaa5">γ_K  [K-before-F]</text>
+  <circle cx="343" cy="65" r="8" fill="#085041" stroke="#9fe1cb" stroke-width="2"/>
+  <text x="380" y="62" font-family="'Courier New',monospace" font-size="9" fill="#9fe1cb">VORTEX</text>
+  <path d="M130,114 Q215,148 328,162" fill="none" stroke="#6b4040" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#arr7r)"/>
+  <text x="225" y="168" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#6b4040">γ_F  [F-before-K]</text>
+  <circle cx="333" cy="162" r="8" fill="#2a0a0a" stroke="#6b4040" stroke-width="2"/>
+  <text x="348" y="173" font-family="'Courier New',monospace" font-size="9" fill="#6b4040">CHAOS</text>
+  <text x="240" y="200" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#3d7060">[γ_K] ≠ [γ_F] in π₁(M)  —  no continuous deformation between outcomes</text>
+  <text x="35" y="18" font-family="'Courier New',monospace" font-size="10" fill="#5dcaa5">Fisher manifold  K_sec &lt; 0  (negative curvature)</text>
+</svg></div>
+  </div>
+</section>
+<section class="consequence-section">
+  <div class="consequence-label">Engineering consequence</div>
+  <div class="consequence-text"><strong>There is no 'almost correct' HVEH design.</strong> A module with basin geometry that partially enforces K-before-F does not produce a weaker vortex — it produces no vortex at all, or a chaotic one. Critical geometric parameters (inlet angle, sill radius ratio, vane spacing) must be held to specification, not approximated.</div>
+</section>
+<div class="proof-nav-footer">
+  <a class="pnf-link" href="numerical-constructive.html">← VI</a>
+  <div class="pnf-center">
+    <a href="index.html">HVEH Project Index</a><br>
+    <span style="margin-top:0.3rem;display:block">Seven-Proofs Framework · Principia Orthogona · G6 LLC</span>
+  </div>
+  <a class="pnf-link" href="index.html">← Back to project index</a>
+</div>
+</body>
+</html>

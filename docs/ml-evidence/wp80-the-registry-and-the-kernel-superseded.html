@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-80 &middot; The Registry and the Kernel &mdash; Principia Orthogona Vol VI</title>
+<meta name="description" content="WP-80 &middot; The Registry and the Kernel: Project 1080 counted across thirteen repositories. 2,234 declarations written, 1,984 sorry-free in source, 173 individually kernel-audited. Why the three numbers are not interchangeable, and why only the smallest one is evidence.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+/* nav */
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav span{color:#918a76}
+.topnav .crumbs{color:#8f8878}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+/* head */
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.05rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.metagrid a{color:var(--accent2)}
+.doi{display:inline-block;margin-top:1rem;font-family:var(--mono);font-size:.72rem;background:#eaf0f6;border:1px solid #b3c6d6;padding:.25rem .6rem;color:var(--accent2);text-decoration:none}
+.doi:hover{background:var(--paper2)}
+/* body */
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.6rem 0 .3rem}
+h2{font-size:1.42rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.05rem;font-weight:600;color:var(--ink2);margin:1.6rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.02rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.2rem 1.4rem;font-style:italic;margin-bottom:1.4rem}
+/* claim tags */
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-value{background:#f7ecd6;color:#7a5410;border:1px solid #ddc48c}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+/* boxes */
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.1rem 1.3rem;margin:1.4rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.9rem 1.2rem;margin:1.2rem 0;overflow-x:auto;color:var(--accent2)}
+/* table */
+table{width:100%;border-collapse:collapse;margin:1.3rem 0;font-size:.86rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+td.mono{font-family:var(--mono);font-size:.78rem}
+tr:hover td{background:var(--paper2)}
+/* chain */
+.chain{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin:1.3rem 0}
+@media(max-width:620px){.chain{grid-template-columns:1fr 1fr}}
+.op{padding:.9rem .7rem;color:#fff;text-align:center}
+.op b{display:block;font-family:var(--mono);font-size:1.5rem}
+.op i{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.11em;text-transform:uppercase;font-style:normal;opacity:.85;margin:.15rem 0 .35rem}
+.op span{font-size:.76rem;line-height:1.4;font-style:italic;opacity:.94}
+.op1{background:#17435f}.op2{background:#7a3410}.op3{background:#2f5c33}.op4{background:#16564a}
+/* refs */
+ol.refs{padding-left:1.4rem;font-size:.84rem;line-height:1.62}
+ol.refs li{margin-bottom:.45rem}
+ol.refs a{color:var(--accent2)}
+/* footer */
+footer{background:var(--ink2);color:#8f8878;padding:2.4rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+</style>
+<style>
+.t-closed{background:#dfe9df;color:#2f5c33;border:1px solid #a9c8a8;text-decoration:none}
+.reg td{vertical-align:top}
+.reg .n{font-family:var(--mono);font-size:.62rem;color:var(--dim);white-space:nowrap}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.tl{font-family:var(--mono);font-size:.72rem;line-height:1.75;background:var(--paper2);border:1px solid var(--rule);padding:1rem 1.2rem;margin:1.2rem 0;overflow-x:auto}
+.tl b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="topnav">
+  <span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a> &middot; WP-80</span>
+  <span class="meta"><a href="wp78-the-seam-and-the-boundary.html">&larr; WP-78 &middot; The Seam</a> &middot; <a href="wp79-the-ratio-and-the-scale.html">WP-79 &middot; The Ratio and the Scale</a></span>
+</div>
+
+<div class="wp-head">
+  <div class="wp-kicker">Vol VI &middot; Roots &middot; WP-80 &middot; Method &amp; Verification &middot; Draft</div>
+  <h1>The Registry and the <em>Kernel</em></h1>
+  <div class="subtitle">Project 1080, counted across thirteen repositories &mdash; and what the count is worth</div>
+  <div class="metagrid">
+    <div><strong>Author</strong>Pablo Nogueira Grossi<br>G6 LLC &middot; Newark, NJ 07104</div>
+    <div><strong>Occasion</strong>Corpus-wide verification sweep<br>27&ndash;28 August 2026</div>
+    <div><strong>Status</strong>Working paper &middot; v0.1 &middot; August 2026<br>Not peer-reviewed &middot; not deposited</div>
+    <div><strong>Counterpart to</strong>AXLE Theorem Registry (Project 1080)<br>WP-78 &middot; The Seam and the Boundary</div>
+    <div><strong>Claim</strong>2,234 written &middot; 1,984 sorry-free &middot; 173 audited<br>Only the third number is evidence</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<p class="lede">Project 1080 is this corpus&#8217;s attempt to say, in public and in numbers, how much of
+its mathematics a machine has actually checked. The name comes from the page that carries the
+registry. This paper reports the first sweep of that registry across <em>every</em> repository
+rather than whichever one happened to be open, and it reports something the earlier counts could
+not: the three numbers the registry publishes are not three views of one quantity. They are three
+different quantities, they differ by an order of magnitude, and only the smallest of them is
+evidence of anything.</p>
+
+<div class="taglegend">
+  <span><span class="tag t-data">DATA</span> measured, with the producing command</span>
+  <span><span class="tag t-model">MODEL</span> derived in-framework</span>
+  <span><span class="tag t-open">OPEN</span> not yet established</span>
+  <span><span class="tag t-closed">CLOSED</span> was open; resolved, with the date</span>
+  <span><span class="tag t-value">VALUE PREMISE</span> explicit normative choice</span>
+</div>
+
+<div class="box">
+  <span class="lab">Scope, stated first</span>
+  <p>This paper makes <b>no claim about whether any dm&sup3; result is true</b>, no claim that a
+  kernel-checked theorem is an interesting theorem, and no claim that the corpus is more verified
+  than the figures below state. It is a counting paper. It says what exists, what has been through
+  Lean&#8217;s kernel, what has not, and which published figures do not survive contact with the
+  filesystem.
+  <span class="tag t-value">VALUE PREMISE</span> A framework that publishes a verification count
+  without publishing the command that regenerates it is asking to be trusted rather than checked.</p>
+</div>
+
+<div class="eyebrow">&sect; 1 &middot; The occasion</div>
+<h2>The corpus outgrew hand-counting</h2>
+
+<p>The registry&#8217;s figures were produced by a text scan of one repository. The corpus is
+thirteen repositories. Files are duplicated across them at different vintages, so the same file name
+resolves to different content depending on which checkout is read, and a total quoted from one
+checkout is not a total.</p>
+
+<p>The sharpest illustration is a single file. <code>CatGT_Main.lean</code> and its neighbours yield
+<b>227</b> declarations if counted in <code>AXLE/CatGT/</code>, <b>36</b> in a working copy under
+<code>Projects/io</code>, and <b>19</b> in <code>TOTOGT/io</code> itself &mdash; the repository with
+the git remote, and the only one of the three whose contents are under continuous integration. The
+227 is inflated by six <code>Main_v*</code> versions of the same material that exist in no
+repository of record. The 36 is a stale working copy. The 19 is the number.</p>
+
+<p>Three answers to one question, all obtained honestly, differing by a factor of twelve. That is a
+property of a corpus this size, not an accident, and it does not improve with care. It improves with
+a map.</p>
+
+<div class="eyebrow">&sect; 2 &middot; Disambiguation</div>
+<h2>Three words that are not synonyms</h2>
+
+<p>The registry publishes three tiers. They have been read as three levels of confidence in one
+quantity. They are three different quantities, and the gap between them is where every overstated
+claim in this corpus has lived.</p>
+
+<table>
+<thead><tr><th>Tier</th><th>What it means</th><th>What it rules out</th></tr></thead>
+<tbody>
+<tr><td><b>Written</b></td><td>A <code>theorem</code> or <code>lemma</code> declaration exists in a
+file.</td><td>Nothing. It does not even mean the file compiles.</td></tr>
+<tr><td><b>Sorry-free</b></td><td>No <code>sorry</code> appears in the proof body.</td>
+<td>That the author left an explicit hole. Nothing else. <code>theorem X : True := by trivial</code>
+is sorry-free; so is a biconditional whose hypothesis is assumed on both sides. Both have been found
+in this corpus and both were withdrawn.</td></tr>
+<tr><td><b>Kernel-audited</b></td><td><code>#print axioms</code> was run on that named declaration
+and reported nothing outside <code>[propext, Classical.choice, Quot.sound]</code>.</td>
+<td>That the proof is admitted, and that it rests on an undeclared axiom. It still does not rule out
+that the statement says nothing.</td></tr>
+</tbody>
+</table>
+
+<p>Two consequences follow, and both have cost corrections here. <b>Compiling is not proving:</b>
+<code>sorry</code> raises a <em>warning</em>, so <code>lake build</code> exits 0 on an admitted
+proof. <b>Printing is not gating:</b> <code>#print axioms</code> emits <em>info</em>, so a probe
+reporting <code>sorryAx</code> scrolls past inside a build that still reports success. A gate has to
+read the output and refuse.</p>
+
+<div class="box">
+  <span class="lab">The limit of the third tier, stated by the corpus itself</span>
+  <p>From <code>vol1-proofs/tools/run.sh</code>: <i>&#8220;Neither <code>lake build</code> exiting 0
+  nor grepping for &#8216;sorry&#8217; can decide anything &mdash; a theorem can be sorry-free and
+  vacuous. Only <code>#print axioms</code> sees both.&#8221;</i> And from
+  <code>OPEN_QUESTIONS.md</code>: <i>&#8220;A kernel check certifies the proof, not the interest of
+  the statement.&#8221;</i>
+  <span class="tag t-open">OPEN</span> Vacuity is a fourth question the third tier does not answer.
+  One repository scans for it; four do not.</p>
+</div>
+
+<div class="eyebrow">&sect; 3 &middot; The map</div>
+<h2>Thirteen repositories</h2>
+
+<p><span class="tag t-data">DATA</span> Counted 28 August 2026 by
+<code>tools/theorem_census.py</code>, which strips comments before matching &mdash; a declaration
+named in a docstring is prose &mdash; counts <code>theorem</code> and <code>lemma</code> but not
+anonymous <code>example</code>, and attributes each <code>sorry</code> to the declaration whose body
+contains it.</p>
+
+<table>
+<thead><tr><th>Repository</th><th>.lean</th><th>Written</th><th>Sorry-free</th><th>Admitted</th><th>Axiom decls</th><th>CI</th><th>Audited</th></tr></thead>
+<tbody>
+<tr><td><code>TOTOGT/AXLE</code></td><td>127</td><td>1,407</td><td>1,235</td><td>172</td><td>32</td><td>none</td><td>19</td></tr>
+<tr><td><code>TOTOGT/GTCT</code></td><td>32</td><td>148</td><td>122</td><td>26</td><td>20</td><td>badge, ungated</td><td>24</td></tr>
+<tr><td><code>TOTOGT/geometry</code></td><td>39</td><td>306</td><td>301</td><td>5</td><td>0</td><td>uncommitted</td><td>32</td></tr>
+<tr><td><code>TOTOGT/dnls</code></td><td>4</td><td>152</td><td>109</td><td>43</td><td>0</td><td>none</td><td>0</td></tr>
+<tr><td><code>TOTOGT/vol1-proofs</code></td><td>7</td><td>140</td><td>140</td><td>0</td><td>0</td><td><b>gated + vacuity</b></td><td><b>82</b></td></tr>
+<tr><td><code>TOTOGT/3M</code></td><td>6</td><td>58</td><td>54</td><td>4</td><td>0</td><td>none</td><td>0</td></tr>
+<tr><td><code>TOTOGT/io</code></td><td>3</td><td>19</td><td>19</td><td>0</td><td>0</td><td>ungated</td><td>16</td></tr>
+<tr><td><code>TOTOGT/book3-starter</code></td><td>3</td><td>4</td><td>4</td><td>0</td><td>0</td><td>none</td><td>0</td></tr>
+<tr><td><b>Total, eight measured</b></td><td><b>221</b></td><td><b>2,234</b></td><td><b>1,984</b></td><td><b>250</b></td><td><b>52</b></td><td>&mdash;</td><td><b>173</b></td></tr>
+<tr><td><code>TOTOGT/DM3-lab</code></td><td colspan="7"><span class="tag t-open">OPEN</span> Third
+most-referenced repository in the corpus (318 links). Never measured.</td></tr>
+<tr><td><code>maths</code>, <code>Collatz</code>, <code>Atratores</code>, <code>reporting-layer</code></td><td colspan="7"><span class="tag t-open">OPEN</span> Not measured.</td></tr>
+</tbody>
+</table>
+
+<p>Note the shape of the table rather than its total. The repository with the <em>fewest</em>
+declarations that has CI at all &mdash; <code>io</code>, at nineteen &mdash; has audited sixteen of
+them. The repository with the <em>most</em>, at 1,407, has no continuous integration on any branch
+and has audited nineteen. Verification coverage in this corpus is inversely correlated with size,
+which is what one would expect and is not a defence.</p>
+
+<div class="eyebrow">&sect; 4 &middot; The ledger</div>
+<h2>What has actually been through the kernel</h2>
+
+<p><span class="tag t-data">DATA</span> Each row below exists only because a probe produced it. The
+figure cannot be typed into the registry; it is read out of a report file or a CI artifact.</p>
+
+<table>
+<thead><tr><th>Source</th><th>n</th><th>Evidence</th><th>Date</th></tr></thead>
+<tbody>
+<tr><td><code>vol1-proofs/tools/axioms.txt</code></td><td><b>82</b></td><td>PrincipiaVol1 58 + AutophagyDm3_v2 24; gated, plus a vacuity scan</td><td>2026-08-25</td></tr>
+<tr><td><code>geometry/tools/verify-dm3</code></td><td>28</td><td>G6Crystal 14 + ToyModel 14</td><td>2026-08-26</td></tr>
+<tr><td><code>GTCT/.github/badges/</code></td><td>24</td><td>CI badge, &#8220;24/24 proved&#8221;; probe list generated from source</td><td>2026-08-01</td></tr>
+<tr><td><code>AXLE/tools/verify-vol2</code></td><td>19</td><td>VolumeTwo.lean</td><td>2026-08-27</td></tr>
+<tr><td><code>io/.github/workflows/</code></td><td>16</td><td>CatGT 9 + Theorem53 and Zeolite 7; every push</td><td>continuous</td></tr>
+<tr><td><code>geometry/tools/verify-book8</code></td><td>4</td><td>OrthogonalWitness.lean</td><td>2026-08-27</td></tr>
+<tr><td><b>Total</b></td><td><b>173</b></td><td>zero <code>sorryAx</code> in any report</td><td>&mdash;</td></tr>
+</tbody>
+</table>
+
+<p>Every probe count matches its report count exactly &mdash; 82/82, 28/28, 19/19, 4/4 &mdash; which
+is itself a check: a declaration silently dropped from a probe would shrink the number rather than
+fail, so the counts are pinned in the runner scripts and a drift guard compares the three places each
+count is written.</p>
+
+<p><b>173 of 2,234.</b> Seven and three-quarter per cent of what is written has been individually
+kernel-audited. That is the honest headline of Project 1080, and it is a much smaller number than
+the registry has been publishing. It is also, for a corpus assembled by one author, not a
+discreditable one &mdash; provided it is the number that gets published.</p>
+
+<div class="eyebrow">&sect; 5 &middot; The distribution</div>
+<h2>What the audited proofs rest on</h2>
+
+<p><span class="tag t-data">DATA</span> Across the 133 declarations whose reports are readable as
+text (the CI-only rows are counted but their per-declaration output lives in build artifacts):</p>
+
+<table>
+<thead><tr><th>Axiom set reported</th><th>n</th><th>Reading</th></tr></thead>
+<tbody>
+<tr><td><code>[propext, Classical.choice, Quot.sound]</code></td><td>121</td><td>Mathlib&#8217;s standard base.</td></tr>
+<tr><td><code>[propext, Quot.sound]</code></td><td>2</td><td>No axiom of choice.</td></tr>
+<tr><td><code>[propext]</code></td><td>4</td><td>Propositional extensionality alone.</td></tr>
+<tr><td><i>does not depend on any axioms</i></td><td>6</td><td>Definitional. The kernel needs nothing.</td></tr>
+</tbody>
+</table>
+
+<p>Two files sharpen this. <code>NbonacciLadder.lean</code> proves the ceiling of the n-bonacci
+ladder &mdash; that a <i>k</i>-bonacci sequence seeded below powers of two stays strictly below
+2<sup>n</sup>, for every <i>k</i>, hence &eta;<sub>k</sub> &le; &tau; = 2 &mdash; and does so with no
+imports at all and no <code>Classical.choice</code>. <code>TripleAlphaDm3.lean</code>, the Lean
+behind Book 3&#8217;s Chapter A, reports five declarations on
+<code>[propext, Quot.sound]</code> and one, <code>tribo_rec</code>, on nothing whatever.</p>
+
+<p><span class="tag t-closed">CLOSED 2026-08-27</span> Both were run under Lean v4.32.0 and are
+counted above. Their reports are not yet written to disk, so they are the next two rows the ledger
+gains.</p>
+
+<div class="box">
+  <span class="lab">What the ladder result does and does not give</span>
+  <p>The theorem bounds the <em>sequence</em>, not the constant: a(m+k) &lt; 2<sup>m+k</sup> for all
+  m yields &eta;<sub>k</sub> &le; 2. <span class="tag t-open">OPEN</span> The strict inequality
+  &eta;<sub>k</sub> &lt; 2 needs a limit argument no file in the corpus contains. And the fractal
+  dimension d<sub>n</sub> = log(n)/log(&eta;<sub>n</sub>), with d<sub>n</sub> &rarr; 1, has no Lean
+  statement anywhere: a search across every repository for a dimension declaration returns nothing.
+  Where that formula appears in prose it is <span class="tag t-model">MODEL</span>, not a result.</p>
+</div>
+
+<div class="eyebrow">&sect; 6 &middot; The gap</div>
+<h2>Four of five checkers print without gating</h2>
+
+<p>Five verification setups exist across the corpus. Only one of them would fail if a proof were
+replaced by <code>sorry</code> tomorrow.</p>
+
+<table>
+<thead><tr><th>Repository</th><th>State</th><th>Would a new <code>sorryAx</code> fail it?</th></tr></thead>
+<tbody>
+<tr><td><code>vol1-proofs</code></td><td>Five stages: gate self-test, build, probe, axiom gate, vacuity scan whose fixtures must fire</td><td><b>Yes</b></td></tr>
+<tr><td><code>GTCT</code></td><td>Probe list generated from source; axiom step ends <code>|| true</code></td><td>No &mdash; though the badge would turn red, since it parses the registry CSV</td></tr>
+<tr><td><code>io</code></td><td><code>lake env lean</code> prints; nothing parses the output</td><td>No</td></tr>
+<tr><td><code>geometry</code></td><td>Gate written and tested; workflow file uncommitted</td><td>Not yet running</td></tr>
+<tr><td><code>AXLE</code></td><td>Gates exist as local scripts; no CI on any branch</td><td>No</td></tr>
+</tbody>
+</table>
+
+<p><span class="tag t-open">OPEN</span> The repair is small and identical in each case: parse the
+probe output and exit non-zero on <code>sorryAx</code> or on any axiom outside the allowlist. The
+gate already exists, tested, in two repositories. It is a copy, not a design problem.</p>
+
+<p><span class="tag t-value">VALUE PREMISE</span> A check that runs and cannot fail is worse than no
+check, because it produces a green mark that a reader is entitled to believe.</p>
+
+<div class="eyebrow">&sect; 7 &middot; Claims with no repository behind them</div>
+<h2>Two results that cannot be re-run</h2>
+
+<p><b>The Jacobian result.</b> <code>book7/jacobian-verification.html</code> carries the axiom line
+for <code>not_injective_despite_constant_jacobian</code> pasted into the page. No <code>.lean</code>
+file with that declaration exists in any repository in the corpus. The output is real; the source is
+not present, so the claim cannot be regenerated by anyone, including its author.
+<span class="tag t-open">OPEN</span> This is the failure mode WP-78 named: an artifact whose only
+copy lives inside the document that cites it.</p>
+
+<p><b>The Galois result.</b> <code>chGal-galois.html</code> carries
+<code>#print axioms Theorem_Galois &mdash; expect sorryAx: this theorem is OPEN</code>. It is
+correctly disclosed, contributes nothing to the ledger, and needs no repair. It is recorded here
+because a disclosed open problem and an unreproducible closed one look similar in a bibliography and
+are opposites.</p>
+
+<div class="eyebrow">&sect; 8 &middot; The duplication tax</div>
+<h2>The same file at several vintages</h2>
+
+<p>Of 127 Lean files in AXLE, grouping version-suffixed copies reduces 1,407 declarations to 765
+&mdash; forty-six per cent of the raw count is duplicate material. <code>AutophagyDm3_v2.lean</code>
+exists in four places, two of them byte-identical and two divergent.
+<code>certify_rstar.py</code> exists in seven. A corpus-wide total that does not group these is not
+wrong so much as meaningless.</p>
+
+<p>The tax is not only in counting. A verifier was written this month to probe PrincipiaVol1 and
+AutophagyDm3_v2 &mdash; work <code>vol1-proofs</code> had been doing, gated and with a vacuity stage,
+for two days already. AXLE even contained a pointer script placed there to prevent exactly that
+duplication, reading: <i>&#8220;AXLE is too large to build for a single check &mdash; that is the
+whole reason the little repos exist. This script exists only so that anyone who looks for the Volume
+I verifier in AXLE finds the pointer instead of a dead end.&#8221;</i> The pointer was not read.
+<span class="tag t-closed">CLOSED 2026-08-27</span> The duplicate verifier is retired; the pointer
+now carries the current count.</p>
+
+<div class="eyebrow">&sect; 9 &middot; What this paper does not claim</div>
+<h2>Four disclaimers</h2>
+
+<p><b>It does not claim the corpus is verified.</b> 173 of 2,234 declarations have been through the
+kernel. The other 2,061 have not, and most of them are in files no build target compiles.</p>
+
+<p><b>It does not claim the 173 are interesting.</b> A kernel check certifies a proof, not a
+statement. One repository scans for vacuous conclusions; the rest do not, and vacuous statements
+have been found and withdrawn in this corpus before.</p>
+
+<p><b>It does not claim the map is complete.</b> Five repositories were not reachable when the sweep
+ran, including <code>DM3-lab</code>, the third most-referenced in the corpus. Their declarations are
+absent from every figure above.</p>
+
+<p><b>It does not claim these numbers will hold.</b> They are dated. The point of the tooling is
+that re-deriving them costs one command rather than one afternoon.</p>
+
+<div class="eyebrow">&sect; 10 &middot; Reproduction</div>
+<h2>Every figure above, regenerated</h2>
+
+<p><span class="tag t-value">VALUE PREMISE</span> A number in this corpus that no script produces is
+a number a reader cannot check. Each figure in this paper names its producing command.</p>
+
+<table>
+<thead><tr><th>Figure</th><th>Command</th></tr></thead>
+<tbody>
+<tr><td>Written / sorry-free / admitted / axiom declarations, per repository</td><td><code>python3 tools/theorem_census.py &lt;repo&gt;</code></td></tr>
+<tr><td>Per-file basis and version-duplicate groups</td><td><code>python3 tools/theorem_census.py --table &lt;repo&gt;</code></td></tr>
+<tr><td>Kernel-audited counts, geometry</td><td><code>bash tools/verify-dm3/run.sh</code> &middot; <code>bash tools/verify-book8/run.sh</code></td></tr>
+<tr><td>Kernel-audited counts, Volume I and Autophagy</td><td><code>cd vol1-proofs &amp;&amp; bash tools/run.sh</code></td></tr>
+<tr><td>Agreement of probe, runner and README counts</td><td><code>python3 tools/probe_consistency.py</code></td></tr>
+<tr><td>Whether a cited declaration resolves at the path cited</td><td><code>python3 tools/decl_resolve.py claims.json &lt;repo&gt;</code></td></tr>
+<tr><td>The registry page itself</td><td><code>python3 scripts/build_theorem_registry.py</code></td></tr>
+</tbody>
+</table>
+
+<p>Two of those tools found defects on their first run, which is the argument for writing them: the
+count-agreement guard found a README stating twelve theorems where the runner had been pinned at
+twenty-eight since new declarations were added, and the census found Lean source carrying a version
+number where its file extension should be &mdash; a module no build system, no counter and no
+citation could resolve.</p>
+
+<div class="eyebrow">&sect; 11 &middot; Corpus</div>
+<h2>Where this sits</h2>
+
+<p><b>WP-78 &middot; The Seam and the Boundary</b> &mdash; artifacts that live only inside the
+documents citing them. The Jacobian result in &sect; 7 is a new instance.</p>
+
+<p><b>WP-79 &middot; The Ratio and the Scale</b> &mdash; which dm&sup3; quantities a measurement
+could refute. This paper is its internal counterpart: which dm&sup3; statements a kernel has
+refuted the possibility of being unproved.</p>
+
+<p><b>Book 3 &middot; Chapter A</b> &mdash; <code>chA-autophagy.html</code>, whose
+<code>TripleAlphaDm3.lean</code> supplied the strongest axiom result in &sect; 5.</p>
+
+<p><b>AXLE</b> &mdash; Algebraic eXpression Language for Evaluation, the Lean 4 / Mathlib4
+environment. <a href="https://github.com/TOTOGT/AXLE">github.com/TOTOGT/AXLE</a></p>
+
+<div class="box">
+  <span class="lab">Standing figure, to be updated with each sweep</span>
+  <p><b>28 August 2026</b> &mdash; 13 repositories referenced, 8 measured.
+  <b>2,234</b> declarations written &middot; <b>1,984</b> sorry-free in source &middot;
+  <b>173</b> individually kernel-audited &middot; <b>250</b> admitted and disclosed &middot;
+  <b>52</b> axiom declarations. Zero <code>sorryAx</code> in any probe report.
+  Toolchains: Lean v4.32.0 (geometry), v4.14.0 (AXLE, GTCT, io, vol1-proofs).</p>
+</div>
+
+</div>
+</body>
+</html>

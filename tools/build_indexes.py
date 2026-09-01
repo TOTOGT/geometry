@@ -87,6 +87,12 @@ def discover() -> list[str]:
         # not part of the site — indexing them reports retired pages as live orphans.
         if rel.startswith("_to_delete/") or "/_to_delete/" in rel:
             continue
+        # docs/ml-evidence/ holds retired copies kept ON PURPOSE as audit
+        # evidence (see its README). Same reasoning as the line above: indexing
+        # a superseded copy reports it as a live page. Unlike _to_delete/ this
+        # folder IS tracked, so the skip has to be explicit.
+        if rel.startswith("docs/ml-evidence/"):
+            continue
         if rel in skip:
             continue
         out.append(rel)

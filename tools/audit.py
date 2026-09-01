@@ -46,7 +46,7 @@ from collections import defaultdict
 from urllib.parse import unquote
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-SKIP_DIRS = {'.git', '_to_delete', '_archive', 'node_modules'}
+SKIP_DIRS = {'.git', '_to_delete', '_archive', 'node_modules', 'ml-evidence'}
 
 # NOTE: SKIP_DIRS controls what gets SCANNED, not what can be LINKED TO.
 # _archive/ is deliberately not audited, but 52 links point into it and they are
@@ -62,12 +62,15 @@ for dp, dns, fns in os.walk(ROOT):
             DIRS.add(d); d = os.path.dirname(d)
 
 # ---- working-paper index (rule 6) -------------------------------------------
-# Built from filenames only. _archive and _to_delete are excluded: a superseded
-# copy parked there must not count as a live claim on its number.
+# Built from filenames only. _archive, _to_delete and docs/ml-evidence are
+# excluded: a superseded copy parked there must not count as a live claim on
+# its number. docs/ml-evidence is tracked (it is audit evidence, not junk), so
+# without this line the wp73 and wp80 superseded copies would collide with the
+# live pages carrying those numbers.
 WP_RE = re.compile(r'(?:^|/)wp(\d+)[-.]', re.I)
 WP_FILES = defaultdict(list)
 for _rel in ALL_FILES:
-    if _rel.startswith(('_archive/', '_to_delete/')):
+    if _rel.startswith(('_archive/', '_to_delete/', 'docs/ml-evidence/')):
         continue
     _m = WP_RE.search(_rel)
     if _m and _rel.lower().endswith(('.html', '.htm')):

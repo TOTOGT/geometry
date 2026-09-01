@@ -73,7 +73,12 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LEDGER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "duplicate_ledger.txt")
-SKIP = (".lake/", "_to_delete/", "_archive/", "node_modules/", ".git/")
+# docs/ml-evidence/ is skipped for the same reason as _to_delete/: every file in
+# it is a superseded copy of a live page, so it is a duplicate BY CONSTRUCTION.
+# Its README is the standing declaration; listing 17 groups in
+# tools/duplicate_ledger.txt would restate that once per file.
+SKIP = (".lake/", "_to_delete/", "_archive/", "node_modules/", ".git/",
+        "docs/ml-evidence/")
 
 # A redirect stub legitimately shares its target's title. It is not a second
 # copy of anything -- it has no paragraphs of its own to speak of.
