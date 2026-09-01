@@ -1,0 +1,206 @@
+# corpus-audit.yml — the source-level audit battery, over the whole declared corpus.
+#
+# WHY THIS RUNS IN CI AND NOT ON A LAPTOP
+# ---------------------------------------
+# Not for convenience. For correctness. macOS is case-insensitive by default, so a
+# checkout there cannot hold DiscreteDM3.lean and discreteDm3.lean at the same time,
+# nor lean/AXLE_V8.1.lean and lean/AXLE_v8.1.lean, nor book3/chW-wigner.html and its
+# lowercase twin. Every count taken on that machine is short by the hidden siblings,
+# and in the DiscreteDM3 case the published registry links to the file the local scan
+# cannot open (WP-91). ubuntu-latest is case-sensitive, so this is the only place the
+# corpus can be measured at all.
+#
+# If a future session finds these numbers disagree with a laptop run: the laptop is
+# the one that is wrong. Do not "fix" CI to match it.
+#
+# WHAT THIS JOB DOES NOT DO
+# -------------------------
+# It never compiles anything. Every tool here reads source text. The kernel gate
+# (`#print axioms` via tools/leancheck.sh, judged by tools/axiom_gate.py) is a
+# separate job below, and it stays disabled until the toolchains agree: geometry and
+# GTCT are on v4.32.0, AXLE and vol1-proofs on v4.14.0, dnls on v4.32.0-rc1, 3M and
+# b3s carry no lean-toolchain, grossi-ops/g6 tracks the unpinned `stable` channel.
+# Measured 2026-09-01, docs/leanscan-2026-09-01.md.
+#
+# THE PARTIAL-CORPUS RULE
+# -----------------------
+# Cross-repo checkout needs CORPUS_RO_TOKEN (a read-scoped PAT covering the TOTOGT and
+# grossi-ops repos in tools/corpus_roots.txt). Without it this job still runs, over
+# geometry alone — and it says so, loudly, in the summary. A total over one root of
+# eleven is a DIFFERENT MEASUREMENT, not a smaller one, and must never be reported as
+# a corpus total. That distinction is the whole reason corpus_roots.txt exists.
+
+name: corpus audit
+
+on:
+  schedule:
+    - cron: '41 6 * * 2'      # Tuesdays 06:41 UTC, a day off verify-proofs.yml
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/**'
+      - '.github/workflows/corpus-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  source-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out geometry
+        uses: actions/checkout@v4
+        with:
+          path: _corpus/Desktop/geometry
+
+      # corpus_roots.txt spells its roots ~/Desktop/... and ~/Documents/...
+      # tools/leanscan.sh and tools/axiom_dependence.py both rewrite that leading ~
+      # from an env var, so the checkout layout below mirrors those paths exactly and
+      # no tool needs a CI-specific code path.
+      - name: Check out the other declared roots
+        id: roots
+        continue-on-error: true
+        env:
+          T: ${{ secrets.CORPUS_RO_TOKEN }}
+        run: |
+          set -u
+          if [ -z "${T:-}" ]; then
+            echo "have_all=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::CORPUS_RO_TOKEN is not set — auditing geometry only. Totals in this run are NOT corpus totals."
+            exit 0
+          fi
+          clone() {
+            git clone --quiet --depth 1 "https://x-access-token:${T}@github.com/$1.git" "_corpus/$2" \
+              && echo "  ok   $1 -> $2" \
+              || echo "::warning::could not clone $1 — this run is missing a declared root"
+          }
+          clone TOTOGT/AXLE            Desktop/AXLE
+          clone TOTOGT/GTCT            Desktop/GTCT
+          clone TOTOGT/vol1-proofs     Desktop/vol1-proofs
+          clone TOTOGT/3M              Desktop/3M
+          clone TOTOGT/dnls            Desktop/dnls
+          clone TOTOGT/book3-starter   Desktop/b3s
+          clone grossi-ops/g6          Desktop/grossi-ops/g6
+          clone grossi-ops/cajueiro    Desktop/grossi-ops/cajueiro
+          clone grossi-ops/Atratores   Desktop/grossi-ops/Atratores
+          clone TOTOGT/io              Documents/Claude/Projects/io-clone
+          echo "have_all=true" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # This is the check that would have caught WP-91 before it reached a published
+      # count. Two tracked paths differing only in case are invisible to macOS and to
+      # anyone auditing there; they also double-count in the registry. It fails the
+      # build, because unlike the measurements below it has a definite right answer.
+      - name: Case-collision gate
+        run: |
+          set -uo pipefail
+          rc=0
+          for r in $(find _corpus -name .git -maxdepth 5 -type d | sed 's|/.git$||'); do
+            dup=$(git -C "$r" ls-files | awk '{print tolower($0)"\t"$0}' | sort \
+                  | awk -F'\t' '{if($1==p){print "    "q; print "    "$2} p=$1; q=$2}')
+            if [ -n "$dup" ]; then
+              echo "::error::case-collision in ${r#_corpus/}: paths differing only in case cannot coexist on macOS"
+              printf '%s\n' "$dup"
+              rc=1
+            fi
+          done
+          [ $rc -eq 0 ] && echo "no case-collisions in any checked-out root"
+          exit $rc
+
+      - name: Source-level battery
+        id: battery
+        working-directory: _corpus/Desktop/geometry
+        env:
+          AXDEP_PREFIX: ${{ github.workspace }}/_corpus
+          LEANSCAN_PREFIX: ${{ github.workspace }}/_corpus
+          LEANSCAN_REF: ${{ github.workspace }}/_corpus/Desktop/geometry
+        run: |
+          set -uo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/_report"
+          R="$GITHUB_WORKSPACE/_report"
+          ROOTS=$(sed 's/#.*//' tools/corpus_roots.txt | sed 's/[[:space:]]*$//' | grep -v '^$' \
+                  | sed "s|^~|$GITHUB_WORKSPACE/_corpus|")
+
+          echo "## corpus audit — $(date -u +%F)" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ steps.roots.outputs.have_all }}" != "true" ]; then
+            echo "> **Partial run.** \`CORPUS_RO_TOKEN\` was not available, so only \`geometry\` was audited." >> "$GITHUB_STEP_SUMMARY"
+            echo "> The figures below are **not corpus totals**. See the partial-corpus rule in this workflow." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python3 tools/theorem_census.py --tracked $ROOTS 2>&1 | tee "$R/census.txt" | tail -14 >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+          echo '### axiom dependence' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python3 tools/axiom_dependence.py 2>&1 | tee "$R/axiom-dependence.txt" | head -22 >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python3 tools/axiom_dependence.py --json > "$R/axiom-dependence.json" 2>/dev/null || true
+
+          echo '### zero-import scan' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          bash tools/leanscan.sh 2>&1 | tee "$R/leanscan.txt" | tail -16 >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+          # These three already gate elsewhere; recorded here so one artifact holds the
+          # whole picture. Their exit codes are preserved in the step outcome below.
+          python3 tools/duplicates.py  > "$R/duplicates.txt"  2>&1; echo "duplicates=$?"  >> "$R/exit-codes.txt"
+          python3 tools/audit.py --all > "$R/audit.txt"       2>&1; echo "audit=$?"       >> "$R/exit-codes.txt"
+          python3 tools/terms.py --check > "$R/terms.txt"     2>&1; echo "terms=$?"       >> "$R/exit-codes.txt"
+          cat "$R/exit-codes.txt"
+
+      - name: Publish the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: corpus-audit-${{ github.run_number }}
+          path: _report/
+          retention-days: 90
+
+      # terms.py --check is an existing gate and must keep failing the build. The
+      # measurements above are informational: a nonzero axiom count is not a defect,
+      # it is a fact about the corpus, and failing on it would train everyone to
+      # ignore a red build.
+      - name: Enforce the gates that have a right answer
+        if: always()
+        working-directory: _corpus/Desktop/geometry
+        run: |
+          set -u
+          rc=0
+          grep -q '^terms=0'      "$GITHUB_WORKSPACE/_report/exit-codes.txt" || { echo "::error::terms.py --check failed"; rc=1; }
+          grep -q '^duplicates=0' "$GITHUB_WORKSPACE/_report/exit-codes.txt" || echo "::warning::duplicates.py reports undeclared groups"
+          exit $rc
+
+  # ---------------------------------------------------------------------------
+  # The kernel half. DISABLED ON PURPOSE — see the toolchain spread at the top.
+  # Turning this on before the roots agree produces 252 identical path or version
+  # errors and a summary reading "0 ok, N failed", which is what the 2026-08-30
+  # leanaudit log actually was. Enable by removing the `if: false` once every root
+  # in corpus_roots.txt reports the same lean-toolchain, and not before.
+  # ---------------------------------------------------------------------------
+  kernel-audit:
+    if: false
+    needs: source-audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: _corpus/Desktop/geometry
+      - name: Restore the Mathlib build
+        uses: actions/cache@v4
+        with:
+          path: _corpus/Desktop/geometry/.lake
+          key: mathlib-${{ hashFiles('_corpus/Desktop/geometry/lean-toolchain') }}
+      - name: Compile and kernel-audit the zero-import files
+        working-directory: _corpus/Desktop/geometry
+        run: |
+          # leanscan.sh prints the checkable subset; leancheck.sh --audit runs
+          # #print axioms over it; axiom_gate.py judges the report. A `skipped`
+          # count above zero means paths, not mathematics.
+          bash tools/leanscan.sh > /tmp/scan.txt
+          sed -n '/checkable subset/,$p' /tmp/scan.txt | tail -n +2 | tr -d ' ' > /tmp/files.txt
+          xargs -a /tmp/files.txt bash tools/leancheck.sh --audit 2>&1 | tee /tmp/audit.log
+          python3 tools/axiom_gate.py /tmp/audit.log 0
