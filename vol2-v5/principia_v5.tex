@@ -1,0 +1,712 @@
+% !TEX TS-program = xelatex
+% Principia Orthogona, Volume II — Contact Realization of Generative Transitions
+% Version V4 (July 2026) — Deposit edition
+% Zenodo: 10.5281/zenodo.21148424 (supersedes 10.5281/zenodo.20755436)
+\documentclass[11pt]{article}
+
+\usepackage{fontspec}
+\setmainfont{DejaVu Serif}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=blue,citecolor=black]{hyperref}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{xcolor}
+
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\newtheoremstyle{boxed}{1em}{1em}{\itshape}{0pt}{\bfseries}{.}{.5em}{}
+\theoremstyle{boxed}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\title{\textbf{PRINCIPIA ORTHOGONA}\\[0.3em]
+Volume Two: Contact Realization of Generative Transitions\\[0.3em]
+\large Version V5 --- Deposit Edition (August 2026)}
+
+\author{Pablo Nogueira Grossi\\
+G6 LLC \textperiodcentered{} Newark NJ\\
+\texttt{g6llc@proton.me} \textperiodcentered{} ORCID: 0009-0000-6496-2186\\
+\small\textbf{DOI:} \href{https://doi.org/10.5281/zenodo.22117968}{10.5281/zenodo.22117968}
+\textperiodcentered{} concept \href{https://doi.org/10.5281/zenodo.19379472}{zenodo.19379472}\\
+\small Supersedes V4 \textperiodcentered{} \href{https://doi.org/10.5281/zenodo.21148424}{zenodo.21148424}\\
+\small GitHub: \href{https://github.com/TOTOGT/AXLE}{github.com/TOTOGT/AXLE}
+\textperiodcentered{} commit \href{https://github.com/TOTOGT/AXLE/tree/e44e8d1}{\texttt{e44e8d1}}\\
+\small Lean 4: \texttt{PrincipiaOrthogona\_v2/VolumeTwo.lean}\\
+\small AXLE Issue \#13 --- numerical certificate V3, Lean obligation open}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{center}\itshape
+Dedicated to my children Vic (R.I.P.), Giulia, Alice (R.I.P.), Sarah (R.I.P.), and David. Once tiny, always strong.
+\end{center}
+
+\vspace{1em}
+
+\section*{Abstract}
+
+This volume is the second in the \emph{Principia Orthogona} series. Volume One developed
+the singularity-theoretic and variational foundations: the operator sequence
+$C \to K \to F \to U$, the curvature threshold $\kappa^{*}$, the Whitney $A_1$--$A_3$
+singularity classification, and a symplectic preservation theorem for the fold map.
+The present volume constructs the explicit contact-geometric realization of those
+foundations. The three main results are:
+(A) a precise correspondence between the geometric fold operator $F$ and the
+$dm^3$ contact-Hamiltonian dissipation $H_{\mathrm{diss}}$ (\S 2);
+(B) equivalence of the curvature threshold $\kappa^{*}$ and the embodiment
+threshold $\tau$ (\S 3), with explicit values $\tau = 2$, $\varepsilon_0 = 1/3$
+verified in the $dm^3$ toy model;
+(C) a bifurcation analysis showing that the four $dm^3$ bifurcations correspond
+\emph{surjectively} to the Whitney $A_1$--$A_3$ singularity types (\S 5), the map being
+two-to-one at $A_1$ and injective elsewhere.
+Version V5 corrects three things and adds one. \emph{(i)} Appendix~A is regenerated from
+the Lean file rather than maintained beside it: six of the twelve entries in the V4 table named
+declarations that have never existed in any version of \texttt{VolumeTwo.lean}, and the file itself
+was in no build target until 26 August 2026 and had therefore never been elaborated. It now builds,
+and all fourteen declarations are kernel-checked. \emph{(ii)} Result (C) is restated as a surjection:
+four bifurcations onto three Whitney types, two-to-one at $A_1$, cannot be a bijection, and \S 5.2
+already said as much in its own table. \emph{(iii)} The Lean file path is corrected; the path cited
+in V2a--V4 does not resolve. \emph{(iv)} A new \S 5.3 records the $D_6$-equivariant DNLS results of
+\cite{wp77} and uses them to sharpen---not to discharge---the Neimark--Sacker obligation. The
+reproducibility bundle dropped between V3 and V4 is restored (see \emph{Deposit contents}).
+Version V4 corrected: the Contact Hopf bifurcation point $\gamma^{*}$ (\S 5.1),
+from $e^{z_0}$ to $2e^{z_0}$, propagated from the $dm^3$ toy model paper's V3
+erratum. No other theorem statement, canonical invariant, or Lean-verified
+fact changes from V3. Version V3 added: the certified inner-basin boundary
+$r^{*} = 0.77594059$ (rounded $\approx 0.776$), refining the placeholder value
+$0.773$ used in V2a; an updated Gronwall-asymmetry section (\S 6.3, closing
+AXLE Issue \#13); Lean~4 formal proof skeleton
+(\texttt{VolumeTwo.lean}); seven reproducible figures (\texttt{figures.py});
+and an interactive HTML dashboard.
+
+\smallskip
+\noindent\textbf{MSC 2020:} 37C10 (limit cycles), 53D10 (contact manifolds),
+37C75 (stability), 58K05 (Whitney singularities), 37G10 (bifurcations), 70H05 (Hamiltonian systems).
+
+\noindent\textbf{Keywords:} contact geometry, $dm^3$ toy model, Whitney
+singularities, Gronwall stability, Lean~4 formal verification, curvature
+threshold, embodiment threshold, operator algebra, generative transitions,
+helical attractor.
+
+\section*{Preface}
+
+This volume is the second in the \emph{Principia Orthogona} series. Volume One
+\cite{VolI} developed the singularity-theoretic and variational foundations of
+generative transitions: the operator sequence $C \to K \to F \to U$, the
+curvature threshold $\kappa^{*}$, the Whitney $A_1$--$A_3$ singularity
+classification, and a symplectic preservation theorem for the fold map.
+
+The central results are:
+\begin{itemize}[leftmargin=2em]
+  \item A precise correspondence between the geometric fold operator $F$ and the $dm^3$ contact-Hamiltonian dissipation (\S 2).
+  \item A theorem establishing the equivalence of the curvature threshold $\kappa^{*}$ and the embodiment threshold $\tau$ (\S 3).
+  \item Explicit verification of the correspondence in the $dm^3$ toy model (\S 4).
+  \item A bifurcation analysis showing that the four $dm^3$ bifurcations correspond to the singularity types of Volume One (\S 5).
+\end{itemize}
+
+Throughout, we take as established the results of Volume One \cite{VolI},
+Generative Contact Mechanics \cite{GCM}, and the $dm^3$ Toy Model \cite{dm3}.
+Volume III instantiates the framework in biological systems; Volume IV delivers
+GTCT T1 and the IMPA work; Volume V + AXLE provides the Banach FPT formal proof
+and Complete Completeness.
+
+\section{Introduction}
+
+\subsection{The Problem: From Geometric Folds to Dissipative Dynamics}
+
+Volume One established that generative transitions are localized geometric events
+classified by the Whitney $A_1$--$A_3$ hierarchy. The fold operator $F$ was shown
+to act as a symplectic canonical transformation on $T^{*}X$, and the full transition
+$G = U \circ F \circ K \circ C$ was shown to be a piecewise-smooth symplectic map.
+What Volume One deliberately left open was the question of \emph{post-fold stability}:
+once the fold has occurred and the unfolding $U$ has selected a stable branch, what
+governs the long-term dissipative dynamics near that branch?
+
+The Hamiltonian framework of Volume One cannot answer this question: Liouville's
+theorem forbids attractors in symplectic systems on compact manifolds. The answer
+is contact geometry. The contact manifold $M = X \times \mathbb{R}$ with contact
+form $\alpha = dz - \lambda$ provides the correct geometric setting for dissipative
+dynamics with limit-cycle attractors, stochastic stability, and variational structure.
+
+\subsection{Role of the $dm^3$ Toy Model}
+
+The $dm^3$ Toy Model \cite{dm3} serves as a complete, explicit realization of the
+abstract contact-geometric framework of \cite{GCM} and as the bridge that certifies
+the realizability of the geometric fold theory of Volume One. The $dm^3$ Toy Model
+proves that the generative transition framework is not merely definable, but fully
+instantiable by an explicit, smooth, globally analyzable dynamical system. Its role
+is logical, not empirical.
+
+\subsection{Main Results}
+
+\begin{theorem}[Contact Realization of the Fold]\label{thm:A}
+The fold operator $F$ of Volume One is the piecewise-smooth, pre-contact limit of
+the $dm^3$ operator $A_{dm^3} = \varphi^{T^{*}/4}$ of \cite{GCM}. Under the contact
+extension $M = X \times \mathbb{R}$, the impulsive momentum jump
+$p^{+} - p^{-} = \mu n$ at the fold corresponds to the contact-Hamiltonian
+correction $H_{\mathrm{diss}} = -\gamma V e^{-\beta z}$ in the regularized limit
+$\beta \to \infty$.
+\end{theorem}
+
+\begin{theorem}[Threshold Equivalence]\label{thm:B}
+$|\kappa| \uparrow \kappa^{*} \iff \mu_{\max} < 0 \iff \tau = \sqrt{c/\kappa_{\mathrm{noise}}} \in (0,\infty)$.
+The curvature threshold $\kappa^{*}$ and the embodiment threshold $\tau$ are two
+parameterizations of the same event: the onset of transverse stability in the
+post-fold dissipative system.
+\end{theorem}
+
+\begin{theorem}[Singularity--Bifurcation Correspondence]\label{thm:C}
+The four bifurcations of the $dm^3$ toy model \cite{dm3} correspond to the Whitney
+singularity types of Volume One under the projection $M = S \times \mathbb{R} \to S$.
+\end{theorem}
+
+\subsection{Standing Assumptions}
+
+\begin{assumption}[Volume One framework]
+The operator sequence $C \to K \to F \to U$, the threshold $\kappa^{*}$, and all
+results of \cite{VolI} hold.
+\end{assumption}
+
+\begin{assumption}[$dm^3$ framework]
+The $dm^3$ system, contact manifold $M = S \times \mathbb{R}$, and all results
+of \cite{GCM,dm3} hold.
+\end{assumption}
+
+\section{Contact Realization of the Fold Operator}
+
+\subsection{From Hamiltonian Phase Space to Contact Extension}
+
+In Volume One, the fold is realized in $T^{*}X$ as a symplectic discontinuity. At
+fold point $s_0$:
+\[
+  p(s_0^{+}) - p(s_0^{-}) = \mu\, n(s_0)
+\]
+generated by $S(\gamma) = \mu\, \Theta(\kappa(\gamma) - \kappa^{*})$
+(\cite{VolI}, \S 12). The fold map $F : (\gamma, p) \mapsto (\gamma, p + \mu n)$
+preserves $\omega = d\gamma \wedge dp$ (\cite{VolI}, Theorem 11.1). To capture
+post-fold stabilization, we pass to the contact extension $M = X \times \mathbb{R}$
+with $\alpha = dz - \lambda$, $d\lambda = \omega$ (\cite{GCM}, Def. 6.1).
+
+\subsection{The Fold as a Contact Discontinuity}
+
+\begin{proposition}[Regularization of the fold generator]
+The contact dissipation $H_{\mathrm{diss}}(x,z) = -\gamma V(x) e^{-\beta z}$ is a
+smooth regularization of $S(\gamma) = \mu\, \Theta(\kappa(\gamma) - \kappa^{*})$:
+as $\beta \to \infty$ and $z \to 0^{+}$, the correction $-\gamma \nabla V e^{-\beta z}$
+concentrates near $\Gamma = \{V = 0\}$ and mimics the threshold activation of
+$\Theta$ at $\kappa = \kappa^{*}$.
+Structural properties: (i) $H_{\mathrm{diss}}|_{\Gamma} = 0$;
+(ii) off $\Gamma$: $H_{\mathrm{diss}} < 0$;
+(iii) $e^{-\beta z}$ weakens dissipation as action accumulates.
+\end{proposition}
+
+\subsection{Relation to the $dm^3$ Normal Form}
+
+By \cite{GCM} (Theorem C), every $dm^3$ system near $\Gamma$ is locally
+contact-diffeomorphic to:
+\begin{align*}
+\dot{\rho} &= \mu_{\max}(1 - e^{-\beta z})\rho + O(\rho^2) \quad\text{(radial)}\\
+\dot{\theta} &= \omega + O(\rho)\\
+\dot{z} &= \omega - |\mu_{\max}|\rho^2 e^{-\beta z} + O(\rho^3)
+\end{align*}
+
+\subsection{Correspondence Table (proves Theorem A)}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Volume One (geometric)} & \textbf{GCM / $dm^3$ (contact)}\\
+\midrule
+Curvature threshold $\kappa^{*}$ & Onset of transverse contraction\\
+Fold impulse $p^{+} - p^{-} = \mu n$ & Contact correction $H_{\mathrm{diss}}$\\
+Rank-1 Jacobian loss & Dissipative contact normal form\\
+Unfolding $U$ & Gradient flow to $\Gamma$ via $U_3$ \cite{GCM}\\
+Distributional generator $S$ & Regularized $H_{\mathrm{diss}}$ (Prop.~2.1)\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Equivalence of $\kappa^{*}$ and $\tau$}
+
+\subsection{Geometric Threshold Implies Stochastic Threshold}
+
+\begin{lemma}[Fold activation produces hyperbolicity]
+If $K$ drives curvature to $\kappa^{*}$, $F$ is rank-1, and $U$ selects a
+nondegenerate branch, then $\Gamma$ is hyperbolic with $\mu_{\max} < 0$ and
+$\dot{V} \leq -cV$ for some $c > 0$.
+\end{lemma}
+
+\begin{theorem}[Geometric implies stochastic threshold]
+Under the previous lemma, $\mathcal{L}V \leq -cV + \kappa_{\mathrm{noise}}\|\sigma\|^{2}$
+and $\tau = \sqrt{c/\kappa_{\mathrm{noise}}} \in (0,\infty)$.
+\end{theorem}
+
+\subsection{Stochastic Threshold Implies Geometric Threshold}
+
+\begin{lemma}[Finite $\tau$ implies transverse contraction]
+If $\mathcal{L}V \leq -cV + \kappa_{\mathrm{noise}}\|\sigma\|^{2}$ with $c > 0$, then
+$\mu_{\max} < 0$ and $\dot{V} \leq -cV$ near $\Gamma$.
+\end{lemma}
+
+\begin{theorem}[Stochastic implies geometric threshold]
+If $\tau \in (0,\infty)$, then the trajectory must have crossed $\kappa^{*}$ and
+undergone a rank-1 fold.
+\end{theorem}
+
+\subsection{The Equivalence Theorem}
+
+\begin{theorem}[Threshold Equivalence --- Theorem B]
+$|\kappa| \uparrow \kappa^{*} \iff \mu_{\max} < 0 \iff \tau \in (0,\infty)$. The
+threshold $\kappa^{*}$ is the geometric precursor of $\tau$: curvature accumulation
+creates the conditions under which stochastic stability becomes meaningful.
+Scope: local to the fold neighborhood and post-fold tubular neighborhood of $\Gamma$.
+\end{theorem}
+
+\section{Explicit Verification in the $dm^3$ Toy Model}
+
+\subsection{The System and Verification Theorem}
+
+\begin{theorem}[Verification of GCM by the $dm^3$ Toy Model]
+There exists an explicit smooth dynamical system on a contact manifold --- the $dm^3$
+toy model --- in which all of the following hold by direct computation:
+(1) Axiom consistency: all eight $dm^3$ axioms satisfied simultaneously;
+(2) Contact structure: explicit $\alpha = dz - r^{2}d\theta$;
+(3) Normal form: contact-diffeomorphic to universal form with $(\mu_{\max}, \omega, \beta) = (-2, 1, 1)$;
+(4) Operator algebra closure;
+(5) Stochastic stability: $\tau = 2$ in closed form, Gaussian stationary measure;
+(6) Global dynamics: attractor $\Gamma_{12}$, all four predicted bifurcations.
+\end{theorem}
+
+\subsection{The System}
+
+On $M = \mathbb{R}^{2}_{>0} \times \mathbb{R}$ with polar coordinates $(r, \theta, z)$
+and contact form $\alpha = dz - r^{2}d\theta$ (Proposition 2.2 of \cite{dm3}):
+\begin{align}
+\dot{r} &= r(1 - r^{2}) + 2(r - 1)e^{-z} \label{eq:r}\\
+\dot{\theta} &= 1 \label{eq:theta}\\
+\dot{z} &= r^{2} - 2(r - 1)^{2}e^{-z} \label{eq:z}
+\end{align}
+Limit cycle: $\Gamma = \{r = 1\}$, $T^{*} = 2\pi$. These are the exact equations used in
+\texttt{figures.py} (fully reproducible: \texttt{python3 figures.py}).
+
+\subsection{Threshold Verification}
+
+\begin{proposition}[Explicit threshold values]
+$\mu_{\max} = -2$, $\kappa_{\mathrm{noise}} = 1$, $\tau = 2$. The transverse
+eigenvalue $\lambda(z) = -2(1 - e^{-z})$ satisfies: $\lambda(0) = 0$ (neutral,
+pre-embodiment); $\lambda(z) < 0$ for $z > 0$ (attracting, post-embodiment);
+$\lambda(z) \to -2$ as $z \to \infty$.
+\end{proposition}
+
+The neutral stability at $z = 0$ is the mathematical content of the embodiment
+threshold: the orbit earns its stability by accumulating action. The crossing
+$z = 0 \to z > 0$ corresponds exactly to the curvature crossing $\kappa \to \kappa^{*}$
+in Volume One.
+
+\subsection{Normal Form Verification}
+
+\begin{proposition}[Contact normal form]
+In coordinates $(\rho, \theta, z)$ with $\rho = r - 1$, the system takes the form
+$\dot{\rho} = -2(1 - e^{-z})\rho + O(\rho^{2})$,
+$\dot{\theta} = 1 + O(\rho)$,
+$\dot{z} = 1 - 2\rho^{2}e^{-z} + O(\rho^{3})$,
+the contact normal form of \cite{GCM} (Theorem C) with $(\mu_{\max}, \omega, \beta) = (-2, 1, 1)$.
+\end{proposition}
+
+\subsection{Stability Radius (outer basin)}
+
+\[
+\varepsilon_0 = \frac{|\mu_{\max}|}{2(1 + \sup_{\Gamma}\|\mathrm{Hess}\,V\|)} = \frac{2}{2(1 + 2)} = \frac{1}{3}.
+\]
+
+\subsection{Inner-basin boundary $r^{*}$ (V3 correction, AXLE Issue \#13)}
+
+The symmetric Gronwall estimate $|r - 1| < 1/3$ correctly bounds the \emph{outer}
+basin $\{r > r_{\mathrm{att}}\}$, but the \emph{inner} basin is asymmetric: trajectories
+starting at $r_0 \in (2/3,\, r^{*})$ lie inside the Gronwall ball yet still escape to
+$r \to 0$. The true inner boundary, certified numerically by \texttt{certify\_rstar.py}
+(DOP853, $\mathrm{rtol}=10^{-12}$, $\mathrm{atol}=10^{-14}$, bisection tolerance $10^{-7}$), is
+\[
+r^{*} = 0.77594059 \;\;\text{(rounded to 3 d.p.: } 0.776\text{)}.
+\]
+The corrected hierarchy is
+\[
+\varepsilon_0 = \tfrac{1}{3} \;<\; \tfrac{2}{3} \;<\; r^{*} \approx 0.776 \;<\; \kappa^{*} = \sqrt{7/9} \approx 0.882 \;<\; 1.
+\]
+This refines the placeholder value $r^{*} \approx 0.773$ used in V2a (the deviation,
+$\approx 3\times 10^{-3}$, is the bisection-floor of the prior certification run; the
+present value is reproducible on any IEEE-754 platform to $\geq 6$ significant figures).
+AXLE Issue \#13 is closed \emph{at the numerical level}. The formal obligation is not: there is
+no Lean declaration for the inner-basin bound at all. \texttt{thm\_gronwall\_asymmetry}, named in
+the V2a--V4 tables as an open obligation carrying a difficulty rating, has never existed in
+\texttt{VolumeTwo.lean} --- a rating on a declaration that does not exist describes nothing. A
+numerical certificate and a proof are different objects, and only the first is in hand.
+
+\section{Singularity--Bifurcation Correspondence}
+
+\subsection{The Four Bifurcations of the Toy Model}
+
+From \cite{dm3} (Theorem C), the $dm^3$ toy model exhibits four bifurcations:
+\begin{enumerate}[label=(\roman*)]
+  \item Contact Hopf at $\gamma = 2e^{z_0}$: limit cycle loses stability, new cycle bifurcates. (Corrected in V4: the $dm^3$ toy model paper's V3 erratum found a spurious factor of 2 in the linearized transverse eigenvalue, giving $\gamma^{*}=e^{z_0}$ in earlier versions where the correct value is $\gamma^{*}=2e^{z_0}$; confirmed there by an internal consistency check against the paper's own baseline parameter $\gamma=2$.)
+  \item Saddle-node at $\eta \approx 0.15$: two cycles collide, multi-orbit structure collapses.
+  \item Neimark--Sacker at detuning $|\Delta| = \Delta^{*}$: resonant orbit loses stability, 2-torus bifurcates.
+  \item Slow-fast crossover at $\beta = \beta^{*}$: smooth transition between contact and classical regimes.
+\end{enumerate}
+
+\subsection{Correspondence with Whitney Singularities}
+
+\begin{proposition}[Singularity--Bifurcation Correspondence]
+Under projection $M = S \times \mathbb{R} \to S$ the correspondence is \emph{surjective},
+and injective away from $A_1$:
+$A_1$ (codim 0) $\leftarrow$ Contact Hopf \emph{and} Saddle-node;
+$A_2$ (codim 1) $\leftrightarrow$ Neimark--Sacker;
+$A_3$ (codim 2) $\leftrightarrow$ Slow-fast crossover. Higher singularities are excluded:
+in Volume One by the Morse condition; in \cite{GCM} by contact normal form rigidity
+(Theorem C). Proves Theorem C.
+
+\smallskip
+\noindent\textbf{Not a bijection.} Four bifurcations map onto three Whitney types and the table
+below assigns two of them to $A_1$; a two-to-one map is not injective. Versions V2a--V4 described
+this correspondence as bijective in the abstract and in this proposition while the table stated the
+truth. Corrected in V5.
+
+\smallskip
+\noindent\textbf{Indexing convention.} This series indexes Whitney types by the singularity of the
+map ($A_1$ = fold, $A_2$ = cusp, $A_3$ = swallowtail). Arnold's convention indexes the germ
+$x^{k+1}$, giving $A_2$ = fold, $A_3$ = cusp, $A_5$ = butterfly. Readers arriving from singularity
+theory or from the critical-phenomena literature should apply the first convention here.
+\end{proposition}
+
+\begin{center}
+\begin{tabular}{lcll}
+\toprule
+\textbf{Whitney} & \textbf{Codim} & \textbf{$dm^3$ Bifurcation} & \textbf{Mechanism}\\
+\midrule
+$A_1$ (fold) & 0 & Contact Hopf (H) & Rank-1 loss, radial direction\\
+$A_1$ (fold) & 0 & Saddle-node (SN) & Rank-1 loss, radial collision\\
+$A_2$ (cusp) & 1 & Neimark--Sacker (NS) & Rank-1, 2nd angular direction\\
+$A_3$ (swallowtail) & 2 & Slow-fast (SF) & Rank-1, 3rd-order $z$-change\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The Neimark--Sacker row: what it is a claim about (V5)}
+
+The Neimark--Sacker entry in Proposition~5.1 has carried a \textsc{model} tag since 7 August 2026,
+when a direct computation established something stronger than the tag conveys. It is recorded here
+because it changes what the row asserts.
+
+\begin{proposition}[No Neimark--Sacker in the bare system]
+Linearising the three-equation $dm^3$ system (\ref{eq:r})--(\ref{eq:z}) transverse to $\Gamma$ gives the
+triangular Jacobian
+\[
+J(z) \;=\;
+\begin{pmatrix} -2\bigl(1 - e^{-z}\bigr) & 0 \\[2pt] 2 & 0 \end{pmatrix},
+\]
+whose eigenvalues are real for every $z$. A Neimark--Sacker bifurcation requires a
+complex-conjugate pair crossing the unit circle. No such pair exists in $(r,\theta,z)$, at any $z$.
+\end{proposition}
+
+\noindent The consequence is not that the correspondence is unproved. It is that
+\textbf{the $A_2 \leftrightarrow$ NS row was never a claim about the toy model}: the mechanism it
+names cannot arise there. It is a claim about the $dm^3$ operator's DNLS extension, where the
+relevant instability is modulational, with hopping term $J$ and threshold
+$\lambda_c = -2J/|A|^2$. The ``2nd angular direction / detuning $\Delta$'' language in the table
+identified this correctly and the table's provenance did not.
+
+\smallskip
+\noindent\textbf{Where the complex pair comes from.} \cite{wp77} formalises a six-site
+$D_6$-equivariant DNLS ring in Lean~4, with five results kernel-checked and no \texttt{sorry}: the
+radial gate commutes with the pointwise cubic nonlinearity but not with the angular coupling; the
+sixfold rotation is a symmetry of the coupling; the uniform state is rotation-invariant; and the
+uniform state is an eigenvector of the coupling with eigenvalue~2, the Perron--Frobenius mode of the
+cyclic $6$-ring. The coupling's \emph{degenerate} eigenspaces carry the two-dimensional irreducible
+representations of $D_6$.
+
+A two-dimensional real irreducible representation is precisely a complex-conjugate pair. So the ring
+possesses, provably, the structure the bare system provably lacks --- and equivariant bifurcation
+theory places symmetry breaking exactly in those eigenspaces. The fit is sharper than a resemblance:
+one computation says where the pair cannot be, the other says where it is.
+
+\smallskip
+\noindent\textbf{What remains open.} \cite{wp77} declines to claim a bridge from the discrete ring to
+a continuous symmetric domain and states that constructing one is its principal open problem. The
+same gap stands here. What is \emph{not} open, and should stop being described as though it were, is
+whether the toy model exhibits NS: it does not, and the Jacobian above is the reason.
+
+\begin{quote}
+\textbf{OP-NS.} Establish the $dm^3$ DNLS extension as a system in its own right, and exhibit within
+it a symmetry group whose transverse linearisation at the resonant orbit carries a two-dimensional
+irreducible summand. Until then the $A_2$ row of Proposition~5.1 is a claim about that extension,
+carried in the table for continuity, and it should be read as such.
+\end{quote}
+
+\section{Discussion}
+
+\subsection{Summary of the Three Main Results}
+
+\begin{enumerate}
+  \item The fold operator $F$ is the geometric precursor of the $dm^3$ contact-Hamiltonian
+        $H_{\mathrm{diss}}$; the distributional generator $S$ is regularized by
+        $H_{\mathrm{diss}}$ in the limiting sense of Proposition~2.1 (Theorem~A).
+  \item $\kappa^{*}$ and $\tau$ are equivalent: each is finite and positive iff the
+        other is, both detecting the onset of transverse stability (Theorem~B).
+  \item The four $dm^3$ bifurcations correspond to Whitney $A_1$--$A_3$ types,
+        completing the singularity-theoretic classification of the toy model dynamics
+        (Theorem~C).
+\end{enumerate}
+
+\subsection{Role in the G-Series ($G^1$--$G^5$)}
+
+The \emph{Principia Orthogona} series is a spiral, not a ladder. Each volume is a
+complete orbit --- a full turn around the fixed point. $G$ applied five times is
+$G^5 = $ Complete Completeness. $G^6$ remains open (2026).
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{$G$-Level / Volume} & \textbf{Core Concept} & \textbf{Fixed Point}\\
+\midrule
+$G^1$ / Vol.~I               & Abstract Operator Algebra        & Orthogonal operator\\
+$G^2$ / Vol.~II (this)       & Contact Geometry, $g_{33} = 33$  & Contact fixed point\\
+$G^3$ / Vol.~III             & Biological Instantiations         & Living form\\
+$G^4$ / Vol.~IV              & GTCT T1, IMPA                     & Temporal contact\\
+$G^5$ / Vol.~V + AXLE        & Banach FPT, formal proof          & Complete Completeness\\
+$G^6$ / Issue 6              & $\chi(H^{*}(X^{6})) = 33\ \forall n$ & Open --- 2026\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Open Problems}
+
+\begin{enumerate}
+  \item \textbf{Global Equivalence.} Theorem~B is local. A global version requires
+        showing every $\tau$-stable $dm^3$ system arises from a fold globally on $X$.
+  \item \textbf{Higher Resonances.} Systematic treatment of $k{:}m$ correspondence
+        between higher $A_k$ singularities and higher resonances.
+  \item \textbf{Volume Three.} Domain-specific $(X, g, \Phi)$ with explicit computation
+        of $\kappa^{*}$ and $\tau$ from data.
+  \item \textbf{Neimark--Sacker (OP-NS, restated in V5, \S 5.3).} Exhibit a symmetry group
+        acting near $\Gamma_{12}$ whose transverse linearisation carries a two-dimensional
+        irreducible summand. The $D_6$ DNLS ring of \cite{wp77} supplies the mechanism in a
+        different system; the bridge is not established.
+  \item \textbf{Integrability beyond Level~1.} \texttt{Theorem\_15\_2\_integrability} proves
+        $N_J|_\Gamma = 0$ on the one-dimensional attractor by a dimension count. The contact
+        distribution and full-manifold levels are open and are not currently statable in the
+        available formalisation: the Nijenhuis tensor requires Lie brackets of vector fields, which
+        a pointwise model cannot express.
+  \item \textbf{Gronwall Asymmetry (AXLE Issue \#13, closed numerically in V3).} The
+        certification $r^{*} = 0.77594059$ (\S 4.7) establishes the inner-basin boundary
+        numerically. A formal Lean~4 proof remains open, and there is currently \emph{no
+        declaration at all} for it: \texttt{thm\_gronwall\_asymmetry}, carried in the
+        V2a--V4 tables with a $\star\star\star$ rating, has never existed in the file.
+        Rating an obligation that has not been stated describes nothing.
+\end{enumerate}
+
+\section*{Appendix A --- Lean 4 Formal Verification Status (V5)}
+
+\textbf{This table is generated from the file, not maintained beside it.} The V4 table was
+hand-written, and six of its twelve entries named declarations that have never existed in any
+version of \texttt{VolumeTwo.lean}:
+
+\begin{quote}\small
+\begin{tabbing}
+\texttt{eigenvalue\_limit\_filter}\qquad\= \kill
+\texttt{thm\_B\_mu\_iff\_tau}          \> listed as \emph{proved}\\
+\texttt{thm\_C\_A1\_surjective}        \> listed as \emph{proved}\\
+\texttt{eigenvalue\_limit\_filter}     \> listed open $\star\star$\\
+\texttt{thm\_A\_contact\_realization}  \> listed open $\star\star\star\star$\\
+\texttt{thm\_B\_full\_chain}           \> listed open $\star\star\star\star\star$\\
+\texttt{thm\_gronwall\_asymmetry}      \> listed open $\star\star\star$
+\end{tabbing}
+\end{quote}
+
+\noindent The file was in no lakefile target until 26 August 2026, so nothing had ever elaborated
+it; its first build reported eight errors, three of them in theorems the table listed as proved.
+
+\medskip\noindent\textbf{Reproduce:}
+\begin{quote}\ttfamily\small
+git clone https://github.com/TOTOGT/AXLE \&\& cd AXLE\\
+bash tools/verify-vol2/run.sh
+\end{quote}
+\noindent Builds the \texttt{PrincipiaVol2} target at Lean v4.14.0, asks the kernel for the axiom
+dependencies of all nineteen declarations, and refuses on \texttt{sorryAx} or on any axiom outside
+$\{$\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}$\}$. All nineteen pass; two
+depend on no axioms at all.
+
+\smallskip\noindent The state described in this appendix is commit
+\href{https://github.com/TOTOGT/AXLE/tree/e44e8d1}{\texttt{e44e8d1}}. The link is pinned to a
+commit rather than to a branch, so it resolves to what was checked when this was written.
+
+\medskip\noindent\textbf{Passing that gate is necessary and not sufficient.} A theorem whose
+conclusion is \texttt{True}, or whose hypotheses already contain its conclusion, is a true theorem
+and reports clean axioms. Four rows are marked below for exactly that reason.
+
+{\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.26\textwidth} >{\raggedright\arraybackslash}p{0.40\textwidth} >{\raggedright\arraybackslash}p{0.28\textwidth}@{}}
+\toprule
+\textbf{Theorem / Lemma} & \textbf{Lean name} & \textbf{Status}\\
+\midrule
+\endhead
+$\tau > 0$ (Thm 3.2)                     & \texttt{embodimentThreshold\_pos}       & proved\\
+$\tau = 2$ (Prop. 4.2)                   & \texttt{toyModel\_tau}                  & proved\\
+$\lambda(0) = 0$ (Prop. 4.2)             & \texttt{eigenvalue\_at\_zero}           & proved\\
+$\lambda(z) < 0$ for $z>0$               & \texttt{eigenvalue\_neg\_pos\_z}        & proved\\
+$\lambda(z) \to \mu_{\max}$              & \texttt{eigenvalue\_limit}              & proved (V4: open $\star\star$)\\
+Thm 3.3 stability certificate            & \texttt{vol2\_contact\_Theorem\_3\_3}   & proved\\
+$\varepsilon_0 = 1/3$ (\S 4.6)           & \texttt{toyModel\_epsilon0}             & proved\\
+$N_J|_\Gamma = 0$, Level 1 (Thm 15.2)    & \texttt{Theorem\_15\_2\_integrability}  & proved\\
+alternating $m$-form $=0$, $m>\dim$      & \texttt{alternating\_vanishes\_beyond\_dim} & proved\\
+Thm C, unique preimages of $A_2, A_3$    & \texttt{thm\_C\_singularity\_bijection} & proved; name overstates it\\
+$A_1$ surjectivity                       & \texttt{thm\_C\_A1\_surjective}         & proved (V5); \emph{no axioms}\\
+the map is \emph{not} a bijection        & \texttt{thm\_C\_not\_bijective}         & proved (V5); \emph{no axioms}\\
+Thm A, correction vanishes off the fold  & \texttt{thm\_A\_regularization\_pointwise} & proved (V5)\\
+Thm A, correction constant on the fold   & \texttt{thm\_A\_regularization\_at\_fold}  & proved (V5)\\
+$\tau = |\mu|$ iff $|\mu| = 2$           & \texttt{tau\_eq\_abs\_mu\_iff}          & proved (V5)\\
+$\varepsilon_0=1/3$, Waddington reading  & \texttt{epsilon\_zero\_waddington}      & duplicate of \texttt{toyModel\_epsilon0}\\
+$\mu_{\max} + \tau = 0$                  & \texttt{entropy\_lyapunov\_duality}     & arithmetic; $c=4$ supplied by hand\\
+Thm B, $\mu_{\max}<0 \iff \tau>0$        & \texttt{thm\_B\_threshold\_equivalence} & \textbf{trivial}; see note 2\\
+Thm A (full)                             & \texttt{thm\_A\_contact\_realization\_fold} & \textbf{placeholder}; see note 1\\
+Thm B (full chain)                       & ---                                     & open $\star\star\star\star\star$; no declaration\\
+Gronwall asymmetry, $r^{*}$              & ---                                     & open $\star\star\star$; numeric cert.\ only\\
+$N_J|_\xi = 0$ (Level 2d)                & --- (OP4)                               & open $\star\star\star\star$; not yet statable\\
+$N_J|_M = 0$ (Level 2d+t)                & --- (OP5)                               & open; depends on OP4\\
+\bottomrule
+\end{longtable}}
+
+\noindent\textbf{Note 1 --- Theorem A is not a \texttt{sorry}; its conclusion is \texttt{True}.}
+The declaration states the hypotheses on $S$ and $H_{\mathrm{diss}}$ and concludes \texttt{True},
+with an in-file comment reading \texttt{OPEN: Replace True with actual convergence statement}. This
+matters more than a \texttt{sorry} would: a \texttt{sorry} reports \texttt{sorryAx} and fails a
+kernel gate, whereas \texttt{True := by trivial} passes every axiom check ever run against it. V4
+reported this row as \texttt{sorry} $\star\star\star\star$, which overstates what is present. The
+obligation itself is unchanged.
+
+\smallskip
+\noindent\textbf{Note 2 --- Theorem B's biconditional is proved from assumptions on both sides.}
+Both branches discard the incoming hypothesis; the right-hand side follows from positivity of $c$
+and $\kappa_{\mathrm{noise}}$ alone, and the left-hand side is a \emph{field} of the
+\texttt{DM3System} structure, so $\mu_{\max}<0$ is assumed at declaration. Each half is
+independently true and the arrow carries nothing. The prose proof of the full chain in \S 3.3 is
+unaffected; only the claim that Lean witnesses it.
+
+\smallskip
+\noindent\textbf{Note 3 --- what V5 supplied.} Two of the five declarations added for this version
+close rows the V4 table listed as \emph{proved} against names that existed nowhere:
+\texttt{thm\_C\_A1\_surjective} and \texttt{thm\_C\_not\_bijective}. Both report \emph{does not
+depend on any axioms} --- constructive, without even \texttt{propext}. The second states the
+correction as a theorem: contact Hopf and saddle-node share the $A_1$ preimage, so injectivity fails
+and no bijection exists. Two more give Theorem~A real content \emph{beside} its \texttt{True}
+placeholder, which is left in the file with its \texttt{OPEN} comment rather than quietly replaced:
+the contact correction vanishes off the fold as $\beta \to \infty$ and does not move with $\beta$ on
+it. That pair is the pointwise skeleton of the distributional statement, which remains open. The
+fifth, \texttt{tau\_eq\_abs\_mu\_iff}, proves that $\tau = |\mu_{\max}|$ holds exactly when
+$|\mu_{\max}| = 2$ --- a property of the canonical value, not an identity.
+
+\smallskip
+\noindent\textbf{Note 4 --- two formalisations, neither redundant.} The abstract treatment here is
+stated over a \texttt{DM3System} whose sign conditions are hypotheses. A concrete treatment in the
+\texttt{geometry} repository fixes $\lambda(z) = -2 + 2e^{-z}$ and ties it to the vector field by
+proving it \emph{is} $\partial\dot r/\partial r$ at $r=1$. Two declarations share a name across the
+two files and are different theorems. The toolchains differ (v4.14.0 here, v4.32.0 there), so no
+continuous-integration job compares them.
+
+\smallskip
+\noindent\textbf{Policy.} No \texttt{sorry} is hidden, and---as of V5---no vacuous conclusion is
+either. Every open obligation is documented with a difficulty rating ($\star$ = easy,
+$\star\star\star\star\star$ = frontier), and every declaration named above resolves in the file at
+the path given.
+
+\section*{Deposit contents (V5)}
+
+Versions V2a and V3 carried the reproducibility bundle; V4 carried the paper alone, dropping fifteen
+files. V5 restores them:
+
+\begin{itemize}[nosep]
+  \item \texttt{principia\_v5.pdf}, \texttt{principia\_v5.tex} --- this paper and its source
+        (XeLaTeX; run twice for cross-references).
+  \item \texttt{VolumeTwo.lean} --- the current file, which builds. Not the V2a/V3 skeleton.
+  \item \texttt{verify-vol2/} --- \texttt{run.sh}, \texttt{probe\_vol2.lean},
+        \texttt{axiom\_gate.py} and its fixtures: the check reproduced above.
+  \item \texttt{figures.py}, \texttt{fonts.py} and the seven figures.
+  \item \texttt{certify\_rstar.py} --- the $r^{*}$ numerical certificate (DOP853, rtol 1e-12,
+        atol 1e-14, bisection 1e-7).
+  \item \texttt{dashboard.html}, \texttt{README.md}.
+\end{itemize}
+
+\section*{Acknowledgments}
+
+The author acknowledges with gratitude the foundational influence of the teachings
+of Paramahamsa Nithyananda and the yogic scriptural tradition from which this work derives.
+
+\section*{Version history}
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{V4 (July 2026, DOI 10.5281/zenodo.21148424):} corrected the Contact Hopf bifurcation point $\gamma^{*}=e^{z_0}\to2e^{z_0}$ (\S 5.1), propagated from the $dm^3$ toy model V3 erratum; no other change.
+  \item \textbf{V3 (June 2026, DOI 10.5281/zenodo.20755436):} certified inner-basin boundary $r^{*} = 0.77594059$ (\S 4.7); AXLE Issue \#13 closed; updated Lean status table; cosmetic edits.
+  \item \textbf{V2a (May 2026, DOI 10.5281/zenodo.20159456):} Lean 4 skeleton; 7 reproducible figures; HTML dashboard; placeholder $r^{*} \approx 0.773$.
+\end{itemize}
+
+\begin{thebibliography}{10}
+
+\bibitem{wp77}
+P. Nogueira Grossi, \emph{A Formally Verified $D_6$-Equivariant DNLS Ring:
+order-dependence, invariant states, and an index constraint that is not yet bridged.}
+Principia Orthogona Working Paper 77, G6 LLC, 21 August 2026.
+
+\bibitem{VolI}
+P.~Nogueira Grossi, \emph{Principia Orthogona, Volume One: The Mathematics of
+Generative Transitions}, preprint, HAL, 2026.
+
+\bibitem{GCM}
+P.~Nogueira Grossi, \emph{Generative Contact Mechanics: A Geometric Framework for
+Dissipative Systems with Structured Limit Cycles}, submitted to J.~Geom.~Mech., 2026.
+
+\bibitem{dm3}
+P.~Nogueira Grossi, \emph{The $dm^3$ Operator: Explicit Toy Model and Global
+Dynamical Analysis}, submitted to SIAM J.~Appl.~Dyn.~Syst., 2026.
+
+\bibitem{Arnold}
+V.~I.~Arnold, \emph{Mathematical Methods of Classical Mechanics}, 2nd ed.,
+Springer, 1989.
+
+\bibitem{Bravetti}
+A.~Bravetti, \emph{Contact Hamiltonian mechanics}, Ann.~Phys. \textbf{376} (2017),
+17--39.
+
+\bibitem{deLeon}
+M.~de Le\'on and M.~Lainz Valc\'azar, \emph{Contact Hamiltonian systems},
+J.~Math.~Phys. \textbf{60} (2019), 102902.
+
+\bibitem{GH}
+J.~Guckenheimer and P.~Holmes, \emph{Nonlinear Oscillations, Dynamical Systems,
+and Bifurcations of Vector Fields}, Springer, 1983.
+
+\bibitem{HPS}
+M.~W.~Hirsch, C.~C.~Pugh, and M.~Shub, \emph{Invariant Manifolds},
+Lecture Notes in Mathematics \textbf{583}, Springer, 1977.
+
+\bibitem{Hasminskii}
+R.~Z.~Has\textquoteright minski\u{\i}, \emph{Stochastic Stability of Differential
+Equations}, Sijthoff \& Noordhoff, 1980.
+
+\bibitem{Shub}
+M.~Shub, \emph{Global Stability of Dynamical Systems}, Springer, 1987.
+\end{thebibliography}
+
+\end{document}

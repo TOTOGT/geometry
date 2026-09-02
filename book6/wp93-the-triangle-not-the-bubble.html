@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-93 · The Triangle, Not the Bubble — Principia Orthogona Vol VI</title>
+<meta name="description" content="WP-93: a research-scoping note on why nearest-neighbor percolation mean-field behavior is unproven for 7<=d<=10. Corrects a diagrammatic misattribution (bubble vs triangle sum) in an earlier draft of this note, and scopes the real obstruction: the triangle sum, not the bubble, produces percolation's d_c=6, and closing the NoBLE bootstrap there likely needs new analytic ingredients, per Fitzner-van der Hofstad's own assessment of the adjacent lattice-trees/animals extension.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+</style>
+</head>
+<body>
+<div class="topnav">
+  <span class="crumbs"><a href="../index.html">⚜ PRINCIPIA ORTHOGONA</a> · <a href="index.html">Vol VI · Roots</a> · WP-93</span>
+  <span class="meta"><a href="wp92-a-cusp-that-is-real-and-a-fold-that-was-not.html">← WP-92 · Not a Cusp: Percolation's Own Fold</a></span>
+</div>
+
+<div class="wp-head">
+  <div class="topictag" title="A research-scoping note: what would be needed to close an open gap, not a claim of closing it">#Scoping Note</div>
+  <div class="wp-kicker">Vol VI · Roots · WP-93 · Received 2026-09-02 · Companion to WP-92 · Open</div>
+  <h1>The Triangle, Not the <em>Bubble</em></h1>
+  <div class="subtitle">Scoping the real obstruction to proving mean-field percolation exponents on $\mathbb{Z}^d$ for $7\le d\le10$ — and, first, fixing a diagrammatic misattribution from an earlier pass at this note, which blamed the wrong two-propagator sum for a threshold that is actually produced by a three-propagator one.</div>
+  <div class="metagrid">
+    <div><strong>Companion</strong>WP_percolation_cusp_catastrophe.md<br>WP-92 · <span class="mono">geometry/book6/</span></div>
+    <div><strong>Method</strong>direct power-counting + literature check<br>AI-assisted verification, not AI-generated math</div>
+    <div><strong>Claim type</strong>scoping note<br>what would close the gap, not a claimed closing</div>
+    <div><strong>Status</strong>gap open<br>this page proves nothing new about $7\le d\le10$</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="box err">
+<span class="lab">Erratum, stated first</span>
+<p>A draft pass at scoping this problem attributed the $1/(d-6)$ divergence responsible for
+percolation's obstruction to $\|G\|_2^2=\int(1-\hat D(k))^{-2}dk$ &#8212; a <b>two</b>-propagator
+(bubble) integral. Direct power counting shows that integral's own threshold is
+<span class="mono">d=4</span>, not 6 (see §1) &#8212; it is the self-avoiding-walk/Ising value,
+not percolation's. The diagram that actually produces <span class="mono">d<sub>c</sub>=6</span> is
+the <b>triangle</b> sum, three propagators, and that correction is carried through §§2&#8211;3
+below.</p>
+</div>
+
+<div class="lede">
+Nobody doubts the physics: mean-field exponents (β=1, γ=1, δ=2, η=0, ν=1/2 — WP-92, §1&#8211;§2)
+are expected to hold for nearest-neighbor percolation on $\mathbb{Z}^d$ at every $d>6$, including
+the unproven window $7\le d\le10$. What is scoped here is the separate, narrower question: why the
+existing proof technique (the lace expansion, closed numerically by NoBLE) stops at $d\ge11$
+(Fitzner&#8211;van der Hofstad, 2017) rather than reaching all the way to 7, and what closing that
+gap would actually require.
+</div>
+
+<div class="taglegend">
+  <span><span class="tag t-model">COMPUTED</span> power-counting worked out directly on this page</span>
+  <span><span class="tag t-open">DEFECT</span> corrects an earlier draft of this scoping note</span>
+  <span><span class="tag t-stub">OPEN</span> not resolved by anyone, as far as this note found</span>
+</div>
+
+<div class="eyebrow">§1</div>
+<h2>Which diagram actually gives $d_c=6$ <span class="tag t-model">COMPUTED</span></h2>
+
+<p>The free/mean-field two-point function decays as <span class="mono">G(x) ~ |x|^{-(d-2)}</span>
+(the discrete Newtonian potential), with Fourier transform <span class="mono">Ĝ(k) ~ |k|^{-2}</span>
+near <span class="mono">k=0</span>. Two candidate diagrams, two different thresholds:</p>
+
+<table>
+<tr><th>diagram</th><th>propagators</th><th>near-0 integrand</th><th>power counting</th><th>threshold</th></tr>
+<tr><td>Bubble, <span class="mono">‖G‖₂²</span></td><td>2</td><td class="mono">|k|⁻⁴</td><td class="mono">∫r^{d-5}dr</td><td class="n"><b>d = 4</b></td></tr>
+<tr><td>Triangle, <span class="mono">ΣG(x)G(x−y)G(y)</span></td><td>3</td><td class="mono">|k|⁻⁶</td><td class="mono">∫r^{d-7}dr</td><td class="n"><b>d = 6</b></td></tr>
+</table>
+
+<p>The bubble's threshold, <span class="mono">d=4</span>, is the self-avoiding-walk and Ising
+upper critical dimension — a real number, just not percolation's. Percolation's <span class="mono">
+d_c=6</span> comes from the Aizenman&#8211;Newman <b>triangle condition</b>
+(<span class="mono">∇(p_c)=Σ_{x,y}τ(x)τ(x−y)τ(y)&lt;∞</span>), the three-propagator sum, not the
+two-propagator bubble. Any scoping note that blames a two-propagator quantity for the
+<span class="mono">d=6</span> threshold has the wrong diagram, regardless of how correct its
+surrounding architecture is.</p>
+
+<div class="eyebrow">§2</div>
+<h2>The corrected mechanism <span class="tag t-model">COMPUTED</span></h2>
+
+<div class="eq">Triangle sum:  Σ_{x,y} G(x)G(x−y)G(y)  =  ∫ Ĝ(k)³ dk/(2π)^d
+Near k=0:      Ĝ(k)³ ~ |k|⁻⁶  ⟹  ∫₀ |k|⁻⁶ d^dk ~ ∫ r^{d−7} dr
+Converges (d&gt;6) — diverges as d → 6⁺, rate ~ 1/(d−6)</div>
+
+<p>NoBLE's bootstrap (WP-92's companion note; Fitzner&#8211;van der Hofstad, 2017) closes a loop of
+three functions <span class="mono">f₁,f₂,f₃</span> bounding ratios of percolation diagrams to
+their SRW counterparts, via numerical (interval-arithmetic) bounds on convolution integrals built
+from these propagator sums. As <span class="mono">d→6⁺</span>, the triangle-type sums that
+dominate the higher-order lace-expansion coefficients grow, and the numerical bounds that close the
+loop at <span class="mono">d≥11</span> stop closing — not because the arithmetic gets less precise,
+but because the quantity being bounded is genuinely larger and closer to the threshold where it
+diverges.</p>
+
+<div class="box thm">
+<span class="lab">What this note is not claiming</span>
+<p>It is not claimed that the triangle sum itself is the only quantity NoBLE tracks, nor that
+fixing this diagram identification amounts to a proof strategy. The correction is narrower: it
+identifies which diagram's divergence is doing the structural work, so that any future scoping of
+this gap reasons about the right object.</p>
+</div>
+
+<div class="eyebrow">§3</div>
+<h2>What closing $7\le d\le10$ would require <span class="tag t-stub">OPEN</span></h2>
+
+<p>Fitzner and van der Hofstad's own account of the closely related NoBLE extension to lattice
+trees and lattice animals — same method, same authors, a different but adjacent model — states
+plainly that pushing their proven range further "would require substantially new ingredients and
+insights," not sharper interval arithmetic on the existing scheme. This note does not have the
+equivalent sentence in hand for percolation specifically (the percolation paper's own discussion
+section was not accessible when checked), so the claim below is an inference from the adjacent
+case, not a quotation about this one — flagged as such rather than presented as settled.</p>
+
+<p>Candidate directions a genuine attack would need, in roughly increasing order of how much they
+change the existing method rather than tune it:</p>
+
+<ul>
+<li><b>Sharper diagrammatic cancellation.</b> Lace-expansion terms are currently bounded by
+absolute value; sign-alternating cancellation between terms, if it exists and can be proven, would
+tighten the bound without a new base object.</li>
+<li><b>A different reference process.</b> Replacing the non-backtracking random-walk reference with
+one that decays faster near the origin (e.g. a self-avoiding-walk-type reference) would shrink the
+triangle sum being bounded, at the cost of a harder reference process to analyze.</li>
+<li><b>Analytic isolation of the pole.</b> Extracting the <span class="mono">1/(d−6)</span>
+singularity analytically near <span class="mono">k=0</span> before handing the remainder to
+interval arithmetic, rather than bounding the whole integral numerically at once.</li>
+</ul>
+
+<div class="gap">
+<span class="lab">What this note does not supply</span>
+<p>None of the three directions above is developed here. This is a scoping note: it says what the
+obstruction is and what shape a resolution would need to have, not a resolution.</p>
+</div>
+
+<div class="eyebrow">§4</div>
+<div class="block-open">
+  <span class="block-label">[UPDATE 2026-09-02] &middot; two of these three directions have now been tested</span>
+  <div class="block-body">
+  <p><strong>Direction 1 &mdash; sign-alternating cancellation.</strong> Tested directly in <a href="../book4/ch-lace-bootstrap.html">Book 4 &middot; The Lace Bootstrap in Intermediate Dimensions</a>. The true zero-lace coefficient was computed at the Brillouin-zone corner for $\mathbb{Z}^7$: $\hat\Pi^{(0)}(k^*) = -84\,p^4 + O(p^6)$ by exact enumeration, and $-0.004782 \pm 0.000430$ by Monte Carlo &mdash; <strong>negative at $11.1\sigma$</strong>. A sign-alternating scheme of the form $\hat\Pi^{(2m)} - \hat\Pi^{(2m+1)} \ge 0$ therefore begins from a negative first term at the corner. The direction is not closed off, but it does not start where it was assumed to start.</p>
+  <p style="margin-bottom:0"><strong>Direction 3 &mdash; analytic isolation of the pole.</strong> Partly mis-stated here. The $1/(d-6)$ is the <em>$d$-dependence of a convergent integral</em>, not a pole in $k$ at fixed $d$. Evaluated exactly, $\Omega(7) = 0.7164$, with $\Omega\cdot(d-6)$ between $0.60$ and $0.72$ across $7 \le d \le 13$ &mdash; an $O(1)$ quantity at every integer dimension in range, and no singularity to extract. Isolating the small-$k$ region remains a reasonable numerical tactic; there is simply no pole there. The binding constant is the combinatorial $C$, not $\Omega$: descending from $d=11$ to $d=7$ costs a factor of $5.8$, not a divergence.</p>
+  </div>
+</div>
+
+<h2>What is not claimed</h2>
+
+<ul>
+<li><b>No claim that $7\le d\le10$ is false for mean-field behavior.</b> The expectation, on
+physical grounds, is unchanged: mean-field should hold there.</li>
+<li><b>No claim about the percolation paper's own stated difficulty.</b> The "substantially new
+ingredients" language is quoted from the adjacent lattice-trees/animals paper by the same authors,
+not from the percolation paper itself, which this note could not access on this point.</li>
+<li><b>No new mathematics.</b> §1&#8211;§2 correct a diagrammatic misattribution using standard
+power counting; §3 lists directions without developing any of them.</li>
+</ul>
+
+<div class="eyebrow">References</div>
+<ol class="refs">
+  <li>Aizenman, M., Newman, C. M. (1984). Tree graph inequalities and critical behavior in percolation models. <em>Journal of Statistical Physics</em>, 36, 107–143.</li>
+  <li>Aizenman, M., Newman, C. M. (1989/1991). The triangle condition for percolation. <em>Bulletin of the AMS</em>, 21(2); and companion convergence-of-critical-exponents papers.</li>
+  <li>Hara, T., Slade, G. (1990). Mean-field critical behaviour for percolation in high dimensions. <em>Communications in Mathematical Physics</em>, 128, 333–391.</li>
+  <li>Fitzner, R., van der Hofstad, R. (2017). Mean-field behavior for nearest-neighbor percolation in d &gt; 10. <em>Electronic Journal of Probability</em>, 22. arXiv:1506.07977.</li>
+  <li>Fitzner, R., van der Hofstad, R. (2021). NoBLE for lattice trees and lattice animals. Source of the "substantially new ingredients and insights" assessment quoted in §3, for the adjacent (not identical) model.</li>
+  <li><a href="wp92-a-cusp-that-is-real-and-a-fold-that-was-not.html">WP-92 · Not a Cusp: Percolation's Own Fold</a> — the companion note this page scopes an open thread from.</li>
+</ol>
+
+</div>
+<footer>
+  <div class="fwrap">
+    <div>
+      <strong style="color:var(--gold2)">WP-93 · The Triangle, Not the Bubble</strong><br>
+      Principia Orthogona · Vol VI · Roots<br>
+      <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> · Pablo Nogueira Grossi · Newark NJ · 2026<br>
+      ORCID 0009-0000-6496-2186 · <a href="mailto:g6llc@proton.me">g6llc@proton.me</a>
+    </div>
+    <div class="disc">
+      <strong style="color:var(--gold2)">Disclaimer</strong><br>
+      Independent working paper; not peer-reviewed. A research-scoping note, not a proof or a
+      proof strategy. §1&#8211;§2 are direct power-counting computations on this page; §3 draws an
+      inference from an adjacent (not identical) paper by the cited authors and is flagged as
+      such. CC BY-NC-ND 4.0 · © 2026 Pablo Nogueira Grossi — G6 LLC.
+    </div>
+  </div>
+</footer>
+</body>
+</html>
