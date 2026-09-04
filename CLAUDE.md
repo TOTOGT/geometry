@@ -162,124 +162,88 @@ carry `Claude-Session:`, all from before this rule. They are left in place:
 removing them rewrites every downstream SHA and breaks the commit links recorded
 in `docs/audit-log.md`. The rule is forward-looking. Do not add more.
 
-## HANDOFF — 2026-08-29 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
+## HANDOFF — 2026-09-04 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
 
-**From:** session `01K1ttT8t4kmB9GVHWw1rn7s` · account `brodananda@gmail.com` · model `claude-opus-5`
-**Ended:** 2026-08-29, ~90% of session budget. The user is taking a break and resumes **Saturday 5 September**.
-**Repos touched this session:** `~/Desktop/geometry`, `~/Desktop/AXLE`, `~/Desktop/b3s`.
+**From:** session `01DfPorRiUiwcVdUj5rYnWRj` · account `sluhcdf@gmail.com` · model `claude-opus-5`
+**Ended:** 2026-09-04, ~90% of session budget, on the user's signal.
+**Repos touched:** `~/Desktop/geometry` only. AXLE and vol1-proofs were read, never written.
 
-### State on exit
+### Shipped and pushed
+`4a12732` WP-94 created · `93733d2` §8 AxiomProver · `10bbd7d` WP-95 + indexes ·
+`2136d51` §10 Isabelle probe · `3dda315` licence conflicts · `d86dc76` attribution rule ·
+`320d5fc` Book 4 ORCID.
 
-**geometry — clean.** `tools/build_indexes.py` re-run at exit produced no changes; WP-86 and
-WP-89 are indexed and committed at `8d32b89`. The six files showing as modified
-(`.github/workflows/verify-proofs.yml`, `HVEH/ch02.html`, `book4/ch02.html`, `book4/ch10.html`,
-`book7/ch-hopfield.html`, `book7/ch-thom.html`) predate this session. **They are not mine — do
-not sweep them into a commit.** `8d32b89` may or may not be pushed; check before assuming.
+### The WP-94 arc — read §9 and §10 before adding to it
+The note now runs §1–§11 and **twice corrects itself**, which is the point of it.
+§9 retracts the §5 claim that no shared unit exists for what sits outside a formal
+artifact: `#print axioms` is that unit and always was. §10 widens it — Isabelle
+ships `thm_oracles`, thirty years older, equally unquoted. So the finding is a
+**norm that failed to form twice, independently**, not a missing standard.
 
-**AXLE — uncommitted.** `Journal/vol7.html`, `Journal/vol8.html`, `Journal/index.html` carry this
-session's work and were handed to the user as `git add`/`commit`/`push` commands. `Journal/vol5.html`
-and `Journal/vol6.html` also show modified, from an earlier session, and were deliberately left out.
+`book6/wp94-coining-note.md` proposes `vouch`. **Three findings have now narrowed
+it** and the next session should not quietly re-widen it: Anthropic's FLT axiom
+disclosure, the two-system tooling, and Isabelle's incumbent noun `oracle`, which
+is machine-checkable and in use. The honest position is that disclosure is the
+recommendation and coinage is the weaker claim.
 
-**b3s — uncommitted.** `assignments/literature/FACT_AND_FICTION.md` extended twice.
-
-### What shipped
-
-- **`book6/wp-86-rasuwa-lhende.html`** — rebuilt Nepali-first with a sticky nav to English /
-  中文 / हिन्दी (four `<article data-lang>` blocks, JS toggle, `#ne`/`#en`/`#zh`/`#hi` deep links,
-  no-JS shows all). Red Cross / IFRC / Restoring Family Links / NDRRMA block sits **above** the
-  analysis. Added the Imja Tsho 2016 controlled-lowering precedent *with* the caveat that the
-  technique does not transfer to hanging ice.
-- **`book6/wp89-the-reception-instruments.html`** — new, same four-language machinery. Tables
-  US TPS (INA §244), Brazil (Lei 13.445/2017 art. 14 §3º + Portaria 60/2025), Argentina
-  (Disposición DNM 891/2022), Australia–Tuvalu Falepili Union, EU Directive 2001/55/EC, each
-  with citation and status dated 29 Aug 2026.
-- **Journal No. 7 (5 Sept)** — re-led with Rasuwa, replacing "The Check That Was Counted and
-  Never Ran," whose lead the user established was false. Complete and internally consistent.
-- **Journal No. 8 (12 Sept)** — re-led with the reception instruments. **NOT READY, see below.**
-- **Situations Wanted**, both issues — rewritten findings-first at the user's explicit direction.
-
-### The editorial rule established this session — apply it
-
-The user's instruction, verbatim in effect: eight weeks of a journal whose recurring subject is
-its own errors "loses readers — people laugh at it and run," and Situations Wanted read as
-*"I made a ton of mistakes and I am out of work"* when it should read as *"I made a ton of
-discoveries and I am looking for opportunities to kick ass with other rock-stars."*
-**Findings lead. Corrections go dated in the corrections column and stay there.** Do not put a
-defect on a front page again without checking this first.
+`tools/lexeme_census.py` is the instrument. Rerun it rather than quoting numbers:
+one figure in this session moved 780 → 271 purely by stripping comments.
 
 ### Open, in priority order
 
-1. **Correction notices are sitting on draft-book pages, and the publisher will see them.**
-   The user's instruction, 29 Aug: *"those are not the pages of the draft book — my publisher
-   won't like to see that there — we need that note in the log where that belongs, same with
-   other pages."* **41 files** carry a visible correction/erratum notice, measured 2026-08-29
-   with a multi-pattern grep (`correction notice|corrected on|erratum|errata|this page was
-   wrong|was incorrect|correction —|correction:`) — not a single spelling. Roughly 23 of those
-   are book chapters (`ch-lambda-criticality.html`, `ch-recurrence-ladder.html`,
-   `ch-eta-dnls.html`, `chapters-pi-phi-mu-eta-delta-sigma-omega.html`, `book4/ch10`–`ch14`,
-   `book4/chIV-orthogonality.html`, `book8/ch6-quantum.html`, `HVEH/*`, `omega/ch-*`, and
-   others). **The rule to apply:** a chapter page carries the corrected statement, not the
-   history of its being wrong; the dated notice moves to `docs/audit-log.md`. Work packages,
-   audits and dashboards keep their notices — a WP is a working paper and the correction is
-   its content. **Do not sweep blind:** list the file set first, split chapters from WPs, and
-   get the user's confirmation on the split before editing. Full list is reproducible with the
-   grep above.
+**0. SEND THE AI FOR MATH FUND SEED APPLICATION. This is the priority, said so by
+the user on the way out: "need that out the door, we need to work."**
+Draft is `~/Documents/Claude/Projects/ai-for-math-seed-application.md`, 962 words,
+$95,000 / 12 months, tools-and-infrastructure track. Seed grants are **rolling** —
+no deadline to wait for, and the 2026 main round has already closed (abstracts were
+due 30 March, decided August), so seed is the only live door and it is open today.
+Apply through the fund page, **not** `renaissancephilanthropy.org/partner-with-us`,
+which is for co-funders and institutions, not applicants. Contact for questions is
+on the fund page.
+Two things to clear first, both small and both blocking on their own terms:
+`vol1-proofs` needs a LICENSE file (MIT, matching the SPDX headers already in its
+sources), and the fund requires **all outputs open-access**, which the NC-ND prose
+licence contradicts. Do not send it with the repository legally all-rights-reserved.
 
-2. **Journal No. 8 is not publishable.** Page 2 (The Ledger, 2,690 chars) and Page 3 (The
-   Mathematics, 3,513 chars) are **byte-identical to No. 7's**, and Announcements is too —
-   including "Seven weeks out" for LAW3M, which is five weeks from 12 September. Its own
-   material: front page, Situations Wanted, Reading Room Part 3, colophon. **This is the
-   5 September task.** Proposed fills: Ledger ← WP-89's five jurisdictions; Mathematics ← the
-   N = 12 uniqueness worked out properly.
-3. **N = 12 must be written as a characterisation, never a necessity.** "Twelve is the unique N
-   for which the hexagonal mode coincides with Nyquist" — never "twelve is forced."
-4. **WP-86 is a number collision.** `book6/wp86-autophagy-calibration-case-study.html` holds it
-   too. The user chose the filename `wp-86-rasuwa-lhende.html` himself; flagged twice, not resolved.
-5. Two TPS termination dates for Nepal are in tension — Federal Register 6 Jun 2025 (effective
-   5 Aug 2025) vs Kathmandu Post 15 Aug 2026. **Both are carried; neither was chosen.** Litigation
-   is the likely explanation. Reconciling it is an open item on WP-89 and in No. 8's front page.
-6. `G6LLC/probes` — missing `.github/`, `.gitignore`, `results/`; carries a committed `.pyc`.
-7. Ten files say hyper-Mahlo is "formalized in AXLE"; the load-bearing theorem is `sorry` and
-   `AXLE_v6.lean` (22 sorries) does not compile under 4.32.
-8. **XIII LAW3M, Natal, 19–23 October 2026** — package in `AXLE/LAW3M/`. Five weeks out on 12 Sept.
+1. **SciENcv is mandatory from 1 Sept 2026** for the ROSES A.13 proposal (due
+   **15 Oct**). No profile exists. Cannot be done the night before.
+2. **Is the A.13 PI an NSPIRES AOR for G6 LLC?** If not, nobody can press submit.
+   Five-minute check, and the classic 11:50 pm failure.
+3. **A.13 duration and award ceiling still unverified.** Needs-and-Opportunities →
+   Market Discovery → 1 year is an *inference* from the amendment's ordering, never
+   read stated. The budget is built for 3 years and $432,000. If the inference is
+   wrong, Years 2–3 ($298,000) come off.
+4. `vol1-proofs` **has no LICENSE file** while its Lean sources carry SPDX MIT.
+   It is the repository the AI for Math seed application leads with.
+5. CC BY-NC-ND vs the AI for Math Fund's open-access requirement — unresolved.
+6. Two handoff blocks exist: this one, and a stale 2026-08-30 block at **line 1**,
+   above the file's own title. That is the append violation this header warns about,
+   already recurred once. Not deleted here — another session's notes.
 
-### Serial canon — do not improvise against it
+### Deliverables that live OUTSIDE this repo
+`~/Documents/Claude/Projects/` holds the A.13 pack (PSD answers, Q26, Q29, DAPR
+checklist, attachment plan, budget review, budget narrative, S/T/M draft, OSDMP +
+references), the submission tracker, the Carina Hong note, and the AI for Math seed
+application. `~/Downloads/G6LLC_NASA_Proposal_Enceladus_2026_ORCIDfix.docx` is the
+Enceladus proposal with ORCID and email corrected.
 
-The eighteen parts of *Pierre et Mademoiselle* are **already written** in
-`~/Desktop/b3s/assignments/literature/`, ordered by `CHAPTER_ORDER` in `build_reader.py`.
-Typeset from those files; never draft a part from scratch.
+**Lost with the session:** the IJL work built in the cloud container and never
+committed — a full reference audit finding **Petersen & Potts wrong three ways**
+(Erika not W., *Findings of EACL 2023* not SCiL, 490–511 not 212–222), Bond &
+Rudnicka's page range, and a rewritten §8.4 against C/K/F/U. **Redo it before the
+IJL manuscript goes anywhere.**
 
-- **Part 17 is `what_arrived_without_its_head.md`.** The Descartes material (1650 Stockholm,
-  1666 repatriation, Terlon's finger, the missing skull, Berzelius, the Musée de l'Homme, and
-  the dispute over both the timing and the skull's authenticity) is filed in
-  `FACT_AND_FICTION.md` under a heading marking it **not before Part 17**. It was briefly
-  printed in No. 8's ledger for Part 3 this session and **removed as a fourteen-week spoiler** —
-  it also sat two weeks ahead of Part 5, where the death is faked. Do not reinstate it without
-  the user saying so.
-- **In canon there is no body of Fermat's that could be missing a head.** Duval used a carter's,
-  weighted as a plague death and given to the sea: "no grave anyone can open."
-- **Duval is not Medon.** Bernard Medon is real, named in Part 1, a *conseiller au présidial de
-  Toulouse*, whose false report of Fermat's death is 1653 and an accident he withdrew a week
-  later. Duval is invented — a physician who finds a body in 1665, on purpose.
-- `FACT_AND_FICTION.md` line ~74 already carries the trap: **not the guillotine** (1792).
+### Scheduled
+A weekly task fires **Sundays 09:00 ET** testing David Grossi's writing-coach
+prompts and appending to `book6/wp94-coach-compliance.md`. It commits nothing.
 
-### Method rules that cost something to relearn
-
-- **Never run `git status` or `git diff` through the desktop bridge.** Both take
-  `.git/index.lock`, and the bridge cannot delete files, so each call strands a lock and the
-  user's next `git add` fails with no visible cause. Through the bridge: `git log`, `git grep`,
-  `git ls-files` only.
-- **Every git command that writes the index is the user's to run.** Hand him the commands.
-- **A single-pattern grep returning 0 means "zero in that form."** Date every count and exclude
-  the instrument — a measurement published into the corpus changes the next measurement.
-- **Splice, never truncate.** Replace to the *next heading*, not to EOF.
-- **A naive HTML stack-matcher is not authoritative, and a lenient one is worse.** A permissive
-  checker declared Nos. 5–8 clean; a strict parse found Nos. 7 and 8 each missing one `</div>`
-  (the `.stage` wrapper, unclosed since the Reading Room page was added). Both were fixed and
-  confirmed by **rendering** in headless Chromium, which is the authority.
-- **Do not report work as done before doing it.** Happened once this session, on the
-  Duval/Medon note; caught by the user.
-
+### Method notes worth keeping
+- **Every negative claim got a search behind it, and three were wrong.** A frontier
+  paper's parameter table was found inconsistent (A₁ and δ disagree between §9.2 and
+  §9.3; the errors cancel, so the printed total is right). Two "suspicious"
+  citations were verified genuine. One self-check counted comments as code.
+- **`device_bash` cannot unlink `.git/*.lock`.** Every git call through the bridge
+  strands a lock and blocks the user's own git. Inspect read-only; hand writes over.
 
 ## CANONICAL: all HTML lives in geometry (set 2026-08-30 by Pablo)
 
