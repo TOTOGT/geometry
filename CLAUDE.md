@@ -134,6 +134,34 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 ---
 
+## Attribution — it goes in the handoff, not in commit messages
+
+**Set 2026-09-04 by Pablo. Applies to every session.**
+
+Do **not** put `Co-Authored-By:`, `Claude-Session:`, `🤖 Generated with…` or any
+equivalent trailer in a commit message. The books are the user's work. A tool
+that helped does not get a byline on 717 commits.
+
+Attribution belongs in **one place**: the handoff block, in the form already used
+below —
+
+    **From:** session `<session id>` · account `<account email>` · model `<model>`
+
+The account email is the load-bearing field. Sessions run under different
+accounts (`brodananda@gmail.com`, `sluhcdf@gmail.com`, others), and months later
+the only way to find which conversation produced a given artifact is to know
+which account held it. A commit trailer cannot answer that question; the handoff
+block can.
+
+**If a session is running out of context ("no gas"), write the handoff before
+anything else.** A session that spends its last tokens on one more edit instead
+of the handoff costs the next session more than the edit was worth.
+
+**Existing trailers.** 31 commits carry `Co-Authored-By: Claude Opus 5` and 27
+carry `Claude-Session:`, all from before this rule. They are left in place:
+removing them rewrites every downstream SHA and breaks the commit links recorded
+in `docs/audit-log.md`. The rule is forward-looking. Do not add more.
+
 ## HANDOFF — 2026-08-29 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
 
 **From:** session `01K1ttT8t4kmB9GVHWw1rn7s` · account `brodananda@gmail.com` · model `claude-opus-5`
