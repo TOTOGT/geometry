@@ -120,6 +120,7 @@ const CHAPTERS = [
   { href:"chV-saturn-smoke.html", label:"Saturn·Smoke" },
   { href:"chV-seed.html",      label:"The Seed" },
   { href:"chV-erdos-machine.html", label:"Erdős" },
+  { href:"chV-cosmic-law.html", label:"Cosmic Law" },
   { href:"GTCT_V_Student_Edition.html", label:"Student Ed." },
 ];
 
