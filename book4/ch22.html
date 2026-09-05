@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch 22 · Duality and the Discriminant · Principia Orthogona Book 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1c22;
+  --ink2: #2d3142;
+  --paper: #f7f4ee;
+  --paper2: #ede9e0;
+  --paper3: #e4dfd4;
+  --accent: #8b3a0f;
+  --accent2: #1a4d6e;
+  --accent3: #3d6b3f;
+  --rule: #c8c0b0;
+  --dim: #7a7060;
+  --serif: 'EB Garamond', Georgia, serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--paper); color:var(--ink); font-family:var(--serif); font-size:19px; line-height:1.72; counter-reset:figure theorem; }
+/* RUNNING HEAD */
+.rh { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(247,244,238,0.93); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule); padding:0.5rem 2.5rem; display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.63rem; color:var(--dim); letter-spacing:0.07em; }
+.rh a { color:var(--accent); text-decoration:none; }
+/* CHAPTER OPEN */
+.ch-open { max-width:960px; margin:0 auto; padding:7rem 3rem 3rem; border-bottom:2px solid var(--ink2); }
+.ch-num { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.18em; color:var(--dim); text-transform:uppercase; margin-bottom:1rem; }
+.ch-title { font-size:clamp(2rem,4.5vw,3.6rem); font-weight:500; line-height:1.1; color:var(--ink2); max-width:800px; margin-bottom:1.5rem; }
+.ch-title em { font-style:italic; color:var(--accent); }
+.ch-meta { display:flex; gap:2rem; flex-wrap:wrap; padding:1rem 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin-bottom:1.5rem; }
+.meta { font-family:var(--mono); font-size:0.62rem; color:var(--dim); letter-spacing:0.06em; }
+.meta strong { color:var(--ink); font-weight:500; }
+.ch-abs { max-width:640px; font-size:0.96rem; color:var(--ink2); line-height:1.68; padding:1.25rem 1.25rem 1.25rem 1.5rem; border-left:3px solid var(--accent); background:var(--paper2); font-style:italic; }
+/* TOC */
+.toc-wrap { padding:2rem 3rem 0; max-width:960px; margin:0 auto; }
+.toc-wrap h4 { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.14em; color:var(--dim); text-transform:uppercase; margin-bottom:0.6rem; }
+.toc { list-style:none; counter-reset:toc; }
+.toc li { counter-increment:toc; display:flex; gap:0.5rem; padding:0.18rem 0; font-size:0.88rem; }
+.toc li::before { content:counter(toc)"."; font-family:var(--mono); font-size:0.6rem; color:var(--accent); min-width:1.4rem; padding-top:0.15em; }
+.toc a { color:var(--ink2); text-decoration:none; border-bottom:1px dotted var(--rule); }
+.toc a:hover { color:var(--accent); }
+/* BODY GRID */
+.body-wrap { max-width:960px; margin:0 auto; padding:3rem 3rem 5rem; display:grid; grid-template-columns:1fr 240px; gap:0 3.5rem; }
+.main { min-width:0; }
+.side { position:sticky; top:3.5rem; font-size:0.8rem; align-self:start; }
+/* HEADINGS */
+.sec-num { font-family:var(--mono); font-size:0.6rem; color:var(--accent); letter-spacing:0.14em; text-transform:uppercase; margin-top:3.5rem; margin-bottom:0.25rem; }
+h2.sec { font-size:1.5rem; font-weight:500; color:var(--ink2); border-bottom:1px solid var(--rule); padding-bottom:0.35rem; margin-bottom:1rem; }
+h3.sub { font-size:1.1rem; font-weight:500; font-style:italic; color:var(--ink2); margin:1.8rem 0 0.6rem; }
+p { margin-bottom:0.95rem; }
+p+p { text-indent:1.4em; }
+/* MATH */
+.eq { font-family:var(--mono); font-size:0.86rem; background:var(--paper2); border:1px solid var(--rule); border-left:3px solid var(--accent2); padding:1rem 1.4rem; margin:1.4rem 0; overflow-x:auto; line-height:2.1; color:var(--accent2); }
+.eq .cm { color:var(--dim); font-size:0.75rem; }
+/* ENVIRONMENTS */
+.env { border:1px solid var(--rule); padding:1.1rem 1.4rem; margin:1.6rem 0; background:var(--paper2); }
+.env::before { display:block; font-family:var(--mono); font-size:0.6rem; letter-spacing:0.11em; text-transform:uppercase; margin-bottom:0.55rem; counter-increment:theorem; }
+.thm::before { content:"Theorem "counter(theorem); color:var(--accent); }
+.dfn::before { content:"Definition "counter(theorem); color:var(--accent2); }
+.rem::before { content:"Remark "counter(theorem); color:var(--accent3); }
+.cor::before { content:"Correction "counter(theorem); color:#8b3a0f; }
+.env p { font-style:italic; margin-bottom:0; }
+.env p+p { text-indent:0; margin-top:0.45rem; }
+.pf { font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:0.07em; text-transform:uppercase; margin:1.2rem 0 0.35rem; }
+/* FIGURES */
+.fig { margin:2.2rem 0; counter-increment:figure; }
+.fig.wide { margin-left:-0.5rem; margin-right:-0.5rem; }
+.fig-inner { background:var(--paper2); border:1px solid var(--rule); padding:1.25rem; display:flex; justify-content:center; align-items:center; }
+.fig-cap { margin-top:0.5rem; font-size:0.83rem; color:var(--dim); line-height:1.5; }
+.fig-cap b { font-family:var(--mono); font-size:0.67rem; color:var(--ink2); }
+.fig-cap b::before { content:"Figure "counter(figure)". "; }
+/* LEAN */
+.lean { background:#1e1e2e; border:1px solid #3a3a5c; padding:1.2rem 1.4rem; margin:1.6rem 0; font-family:var(--mono); font-size:0.77rem; line-height:1.9; overflow-x:auto; color:#cdd6f4; }
+.lc { color:#6c7086; } .lk { color:#cba6f7; } .lt { color:#89dceb; } .ln { color:#fab387; } .ls { color:#a6e3a1; } .lo { color:#f38ba8; }
+/* TABLE */
+.dtab { width:100%; border-collapse:collapse; margin:1.4rem 0; font-size:0.83rem; }
+.dtab th { font-family:var(--mono); font-size:0.6rem; letter-spacing:0.07em; text-transform:uppercase; color:var(--accent2); padding:0.45rem 0.7rem; border-bottom:2px solid var(--ink2); text-align:left; }
+.dtab td { padding:0.4rem 0.7rem; border-bottom:1px solid var(--rule); font-family:var(--mono); font-size:0.78rem; color:var(--ink2); }
+.dtab tr:hover td { background:var(--paper2); }
+.dtab td:first-child { color:var(--accent); }
+.cv { color:#3d6b3f; } .es { color:#8b3a0f; }
+/* SIDENOTES */
+.sn { border-left:2px solid var(--rule); padding:0.7rem 0 0.7rem 0.9rem; margin-bottom:1.3rem; color:var(--dim); font-size:0.78rem; line-height:1.5; }
+.sn strong { font-family:var(--mono); font-size:0.67rem; color:var(--ink); display:block; margin-bottom:0.25rem; letter-spacing:0.04em; }
+.sn a { color:var(--accent2); text-decoration:none; }
+/* SIM SECTION */
+.sim-sec { background:var(--ink2); color:#c0c8d8; padding:4rem 3rem; }
+.sim-wrap { max-width:960px; margin:0 auto; }
+.sim-label { font-family:var(--mono); font-size:0.63rem; letter-spacing:0.14em; color:#6eb8c8; text-transform:uppercase; margin-bottom:0.4rem; }
+.sim-h { font-family:var(--serif); font-size:1.75rem; font-weight:400; color:#eef0f5; margin-bottom:0.4rem; }
+.sim-sub { font-size:0.88rem; color:#5a6080; margin-bottom:1.75rem; }
+.sim-grid { display:grid; grid-template-columns:1fr 270px; gap:1.5px; background:rgba(255,255,255,0.04); }
+.sim-canvas-wrap { background:#060810; min-height:380px; }
+canvas#sc { display:block; width:100%; height:380px; }
+.sim-panel { background:#0e1018; padding:1.4rem; display:flex; flex-direction:column; gap:1rem; }
+.ctrl label { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.6rem; color:#5a6080; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:0.3rem; }
+.ctrl label span { color:#6eb8c8; }
+.ctrl input[type=range] { width:100%; accent-color:#c8a96e; cursor:pointer; }
+.sim-btns { display:flex; gap:0.5rem; }
+.sb { flex:1; font-family:var(--mono); font-size:0.6rem; letter-spacing:0.07em; text-transform:uppercase; padding:0.4rem; background:transparent; border:1px solid rgba(255,255,255,0.08); color:#5a6080; cursor:pointer; transition:all .15s; }
+.sb:hover,.sb.on { border-color:#6eb8c8; color:#6eb8c8; }
+.sim-legend { font-family:var(--mono); font-size:0.57rem; color:#3a4050; line-height:1.9; border-top:1px solid rgba(255,255,255,0.04); padding-top:0.7rem; margin-top:auto; }
+.sim-legend .c1{color:#6eb8c8;} .sim-legend .c2{color:#c86e8a;} .sim-legend .c3{color:#c8a96e;}
+.sim-out { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5px; background:rgba(255,255,255,0.04); }
+.out-box { background:#0e1018; padding:0.7rem 1rem; }
+.out-l { font-family:var(--mono); font-size:0.57rem; color:#3a4050; letter-spacing:0.05em; text-transform:uppercase; }
+.out-v { font-family:var(--mono); font-size:0.95rem; color:#6eb8c8; margin-top:0.15rem; }
+/* BOOKS */
+.books { background:var(--paper3); border-top:2px solid var(--ink2); border-bottom:2px solid var(--ink2); padding:3.5rem 3rem; }
+.books-in { max-width:960px; margin:0 auto; }
+.books-hd { display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--rule); padding-bottom:0.65rem; margin-bottom:1.75rem; }
+.books-hd h2 { font-size:1.25rem; font-weight:500; }
+.books-hd a { font-family:var(--mono); font-size:0.63rem; color:var(--accent); text-decoration:none; }
+.bg { display:grid; grid-template-columns:repeat(5,1fr); gap:1.5px; background:var(--rule); margin-bottom:1.5px; }
+.bk { background:var(--paper); padding:1.1rem 0.9rem; display:flex; flex-direction:column; }
+.bk .g { font-family:var(--mono); font-size:0.58rem; color:var(--accent); letter-spacing:0.1em; margin-bottom:0.3rem; }
+.bk h4 { font-size:0.85rem; font-weight:500; margin-bottom:0.35rem; flex:1; line-height:1.3; }
+.bk p { font-size:0.72rem; color:var(--dim); line-height:1.4; margin-bottom:0.6rem; }
+.bk .isbn { font-family:var(--mono); font-size:0.56rem; color:var(--dim); margin-bottom:0.4rem; }
+.bk .pr { font-family:var(--mono); font-size:1rem; color:var(--accent); margin-bottom:0.6rem; }
+.bk a { font-family:var(--mono); font-size:0.58rem; letter-spacing:0.07em; text-transform:uppercase; padding:0.3rem 0.65rem; border:1px solid var(--rule); color:var(--ink2); text-decoration:none; display:inline-block; transition:all .15s; }
+.bk a:hover { border-color:var(--accent); color:var(--accent); }
+.bk.ft { background:var(--ink2); }
+.bk.ft .g { color:#c8a96e; } .bk.ft h4,.bk.ft { color:var(--paper); } .bk.ft p { color:#5a6080; } .bk.ft .isbn { color:#3a4050; } .bk.ft .pr { color:#c8a96e; } .bk.ft a { border-color:#c8a96e; color:#c8a96e; } .bk.ft a:hover { background:#c8a96e; color:var(--ink2); }
+.bundle { background:var(--ink2); color:var(--paper); padding:1.4rem 2rem; display:flex; justify-content:space-between; align-items:center; gap:2rem; }
+.bundle h3 { font-size:1.05rem; font-weight:400; }
+.bundle p { font-size:0.78rem; color:#5a6080; margin-top:0.2rem; }
+.bundle .bpr { font-family:var(--mono); font-size:1.7rem; color:#c8a96e; white-space:nowrap; }
+.bundle a { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.55rem 1.3rem; border:1px solid #c8a96e; color:#c8a96e; text-decoration:none; white-space:nowrap; transition:all .15s; display:inline-block; margin-top:0.4rem; }
+.bundle a:hover { background:#c8a96e; color:var(--ink2); }
+/* FOOTER */
+footer { background:var(--ink2); color:#5a6080; padding:3rem; }
+.ft-grid { max-width:960px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; padding-bottom:2rem; border-bottom:1px solid rgba(255,255,255,0.06); margin-bottom:1.4rem; }
+footer h4 { font-family:var(--mono); font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:#c8a96e; margin-bottom:0.7rem; }
+footer p { line-height:1.65; margin-bottom:0.2rem; font-size:0.82rem; }
+footer a { color:#5a6080; text-decoration:none; display:block; margin-bottom:0.2rem; font-size:0.82rem; transition:color .15s; }
+footer a:hover { color:#c8a96e; }
+.ft-copy { max-width:960px; margin:0 auto; display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.58rem; color:#2d3040; letter-spacing:0.04em; }
+/* FADE */
+.f { opacity:0; transform:translateY(12px); transition:opacity .6s ease,transform .6s ease; }
+.f.in { opacity:1; transform:translateY(0); }
+/* RESPONSIVE */
+@media(max-width:860px){ .body-wrap{grid-template-columns:1fr;} .side{position:static;} .sim-grid{grid-template-columns:1fr;} .bg{grid-template-columns:1fr 1fr;} .ft-grid{grid-template-columns:1fr;gap:1.5rem;} .bundle{flex-direction:column;} .ch-open,.toc-wrap,.body-wrap,.books,.sim-sec,.footer{padding-left:1.5rem;padding-right:1.5rem;} }
+@media(max-width:520px){ body{font-size:17px;} .bg{grid-template-columns:1fr;} .sim-out{grid-template-columns:repeat(2,1fr);} .ft-copy{flex-direction:column;gap:0.3rem;} }
+
+.pull-note { border-left:3px solid var(--accent); background:var(--paper2); padding:1rem 1.3rem; margin:1.6rem 0; }
+.pull-note p { margin-bottom:0; font-size:0.95rem; color:var(--ink2); }
+.mono { font-family:var(--mono); font-size:0.86em; }
+</style>
+</head>
+<body>
+
+<div class="rh">
+  <span>Principia Orthogona · Book IV · Higher Dimensions</span>
+  <span><a href="index.html">Contents</a> · <a href="ch21-gauss-map.html">← Ch 21</a> · <a href="ch23.html">Ch 23 →</a></span>
+</div>
+
+<div class="ch-open">
+  <div class="ch-num">Book IV · Chapter 22 · The Dimension Ladder, Continued</div>
+  <h1 class="ch-title">Duality and the Discriminant, or <em>What the Projections Cost</em></h1>
+  <div class="ch-meta">
+    <div class="meta"><strong>Arc</strong> · Higher Dimensions, rung 22</div>
+    <div class="meta"><strong>Prerequisite</strong> · Ch 21 (Gauss map, conormal variety)</div>
+    <div class="meta"><strong>Status</strong> · classical, one correction, one row narrowed</div>
+    <div class="meta"><strong>Verification</strong> · <span class="mono">ch22-verify.py</span> · 12 blocks, all passing</div>
+  </div>
+  <div class="ch-abs">
+    Chapter 21 built the correspondence: the conormal variety Con(X) is the closure of the
+    graph of the Gauss map, Legendrian in ℙT*ℙⁿ, and it projects two ways. This chapter asks
+    what the two projections do. One recovers X. The other produces a discriminant, and the
+    price of the passage is paid in degree — computed exactly by Plücker's formulas, and
+    exactly refunded by the singularities. The same correspondence, read in an affine chart,
+    is the Legendre transformation; and reading it that way settles a defect printed in
+    Chapter 5, where a theorem was stated on a space where Bäcklund's theorem forbids it.
+    The repair is not a retreat. It relocates the claim to the space the framework started in.
+  </div>
+</div>
+
+<div class="toc-wrap">
+  <h4>Contents</h4>
+  <ol class="toc">
+    <li><a href="#s1">Two projections, two questions</a></li>
+    <li><a href="#s2">The dual variety is a discriminant</a></li>
+    <li><a href="#s3">What the singularities cost</a></li>
+    <li><a href="#s4">When the dual is not a hypersurface</a></li>
+    <li><a href="#s5">Legendre, in an affine chart</a></li>
+    <li><a href="#s6">Bäcklund, and Chapter 5's Theorem 5.1</a></li>
+    <li><a href="#s7">The dm³ form is the standard one</a></li>
+    <li><a href="#s8">Honest inventory</a></li>
+  </ol>
+</div>
+
+<div class="body-wrap">
+<div class="main">
+
+<div class="sec-num" id="s1">§ 22.1</div>
+<h2 class="sec">Two projections, two questions</h2>
+
+<p>The diagram of §21.6 is taken as given. Inside ℙT*ℙⁿ — pairs (point, hyperplane through
+it), of dimension 2n−1 — sits the conormal variety Con(X), Legendrian, of dimension n−1
+whatever the dimension of X. It carries two projections, and the whole subject is the
+difference between them.</p>
+
+<div class="eq">
+π₁ : Con(X) → X ⊂ ℙⁿ            <span class="cm">forget the hyperplane</span>
+π₂ : Con(X) → X<sup>∨</sup> ⊂ (ℙⁿ)<sup>∨</sup>        <span class="cm">forget the point</span>
+</div>
+
+<p>π₁ is easy. Over a smooth point of a hypersurface its fibre is a single point, because the
+embedded tangent hyperplane is determined; over a smooth point of a variety of codimension c
+the fibre is a ℙ<sup>c−1</sup> of hyperplanes containing the tangent space. Either way the
+fibre dimension is constant on the smooth locus, and π₁ loses nothing.</p>
+
+<p>π₂ is where the content is. Its fibre over a hyperplane H is the set of points of X at
+which H is tangent. Generically that is one point and π₂ is birational. Over special
+hyperplanes it is not: H may be tangent at two points, or tangent to higher order at one.
+Those are exactly the hyperplanes at which X<sup>∨</sup> fails to be smooth, and the
+book-keeping of that failure is the rest of this chapter.</p>
+
+<div class="dfn env f">
+<p><strong>Contact locus.</strong> For H ∈ X<sup>∨</sup>, the contact locus is
+π₁(π₂<sup>−1</sup>(H)) ⊆ X — the set of points where H is tangent. A general H has finite
+contact locus; a positive-dimensional contact locus for <em>every</em> H is the defective
+case of §22.4.</p>
+</div>
+
+<div class="sec-num" id="s2">§ 22.2</div>
+<h2 class="sec">The dual variety is a discriminant</h2>
+
+<p>The word <em>discriminant</em> arrives here rather than being imported. Consider the family
+of all binary forms of degree d, that is, all homogeneous polynomials
+f(u,v) = c₀u<sup>d</sup> + c₁u<sup>d−1</sup>v + ⋯ + c<sub>d</sub>v<sup>d</sup>. The
+coefficients (c₀ : ⋯ : c<sub>d</sub>) are a point of ℙ<sup>d</sup>, and the forms with a
+repeated root make a hypersurface in that ℙ<sup>d</sup>: the discriminant.</p>
+
+<p>Separately, the rational normal curve C<sub>d</sub> ⊂ ℙ<sup>d</sup> is the image of
+[u:v] ↦ [u<sup>d</sup> : u<sup>d−1</sup>v : ⋯ : v<sup>d</sup>]. A hyperplane of ℙ<sup>d</sup>
+is a linear condition on the coefficients, that is, a binary form; it is tangent to
+C<sub>d</sub> exactly when that form has a repeated root. So:</p>
+
+<div class="thm env f">
+<p><strong>The discriminant is a dual variety.</strong> The dual of the rational normal curve
+C<sub>d</sub> ⊂ ℙ<sup>d</sup> is the discriminant hypersurface of binary forms of degree d,
+and its degree is 2(d−1).</p>
+</div>
+
+<p class="pf">Checked</p>
+
+<p>Computing Res(f, f′) in the coefficients and dividing out the leading coefficient — the
+resultant carries one extra factor of c₀ — gives degrees 2, 4, 6, 8 for d = 2, 3, 4, 5, which
+is 2(d−1) in each case. Block [7] of <span class="mono">ch22-verify.py</span>. For d = 2 this
+agrees with the smooth-plane-curve formula of §22.3, since C₂ is a conic and 2(2−1) = 2·1 = 2;
+the two formulas compute the same number by different routes, which is the only reason to
+trust either.</p>
+
+<p>This is what the projection <em>costs</em>, stated positively. Passing from a variety to its
+dual converts a geometric object into the vanishing locus of an algebraic condition on a
+family. Every discriminant, resultant and determinant appearing anywhere in this corpus is π₂
+applied to something.</p>
+
+<div class="sec-num" id="s3">§ 22.3</div>
+<h2 class="sec">What the singularities cost</h2>
+
+<p>For a plane curve the accounting closes exactly. Let X ⊂ ℙ² be an irreducible curve of
+degree d whose only singularities are δ ordinary nodes and κ ordinary cusps. Then the dual
+curve — classically the <em>class</em> of X, the number of tangent lines through a general
+point — has degree</p>
+
+<div class="eq">
+d<sup>∨</sup>  =  d(d−1) − 2δ − 3κ
+</div>
+
+<p>Read that as a budget. A smooth curve of degree d has class d(d−1); every node refunds 2,
+every cusp refunds 3. The refunds are not conventions — they count how many of the d(d−1)
+tangent lines are absorbed into the singular point and are no longer available to pass through
+a general point elsewhere.</p>
+
+<table class="dtab">
+<tr><th>Curve</th><th>d</th><th>δ</th><th>κ</th><th>d<sup>∨</sup></th><th>Check</th></tr>
+<tr><td>smooth conic</td><td>2</td><td>0</td><td>0</td><td>2</td><td class="cv">dual of a conic is a conic</td></tr>
+<tr><td>smooth cubic</td><td>3</td><td>0</td><td>0</td><td>6</td><td class="cv">a sextic, with 9 cusps at the 9 flexes</td></tr>
+<tr><td>nodal cubic</td><td>3</td><td>1</td><td>0</td><td>4</td><td class="cv">6 − 2</td></tr>
+<tr><td>cuspidal cubic</td><td>3</td><td>0</td><td>1</td><td>3</td><td class="es">6 − 3 — computed independently below</td></tr>
+</table>
+
+<p>The last row is the one worth doing by hand, because it can be checked without the formula.
+Parametrise the cuspidal cubic as (x, y) = (t², t³). The tangent line at parameter t is
+a x + b y + c = 0 subject to the two conditions that it meets the point and matches the
+direction; eliminating t between them gives the dual curve in line coordinates,</p>
+
+<div class="eq">
+X<sup>∨</sup> :  4a³ + 27b²c  =  0        <span class="cm">degree 3, as the formula demands</span>
+</div>
+
+<p>Block [6]. Now read its singularities, because this is where the chart matters and where a
+careless reading goes wrong. The gradient (12a², 54bc, 27b²) vanishes on X<sup>∨</sup> at the
+single point [0 : 0 : 1]. That point is <em>not visible</em> in the affine chart b = 1, where
+the equation reads 4a³ + 27c = 0 — a smooth graph c = −4a³/27, with no singular point at all.
+It lives in the chart c = 1, where the same curve reads</p>
+
+<div class="eq">
+4a³ + 27b²  =  0        <span class="cm">b² = −4a³/27 — a semicubical parabola, cusp at the origin</span>
+</div>
+
+<p>So the dual of a curve with a cusp is a curve with a cusp: the correspondence does not smooth
+anything out, it moves the singularity to the other side. But the cusp is only in view from the
+right chart, and a dual curve plotted in the wrong one looks smooth while being nothing of the
+kind. Block [11] locates the singular point projectively and then checks both charts, which is
+the only honest way to make the claim.</p>
+
+<div class="fig f">
+  <div class="fig-inner">
+    <svg viewBox="0 0 520 225" width="100%" style="max-width:500px">
+      <g stroke="#c8c0b0" stroke-width="0.8">
+        <line x1="40" y1="105" x2="200" y2="105"/><line x1="40" y1="30" x2="40" y2="182"/>
+        <line x1="215" y1="105" x2="378" y2="105"/><line x1="360" y1="30" x2="360" y2="182"/>
+      </g>
+      <path d="M204.0 257.4 L198.0 249.2 L192.2 241.3 L186.4 233.6 L180.8 226.3 L175.3 219.2 L169.9 212.4 L164.6 205.9 L159.4 199.7 L154.3 193.7 L149.3 188.0 L144.5 182.5 L139.7 177.3 L135.1 172.3 L130.6 167.6 L126.1 163.0 L121.8 158.7 L117.6 154.7 L113.6 150.8 L109.6 147.1 L105.7 143.7 L102.0 140.4 L98.3 137.3 L94.8 134.4 L91.4 131.7 L88.0 129.2 L84.8 126.8 L81.8 124.6 L78.8 122.5 L75.9 120.6 L73.1 118.8 L70.5 117.2 L68.0 115.7 L65.5 114.4 L63.2 113.1 L61.0 112.0 L58.9 111.0 L56.9 110.0 L55.0 109.2 L53.3 108.5 L51.6 107.9 L50.1 107.3 L48.6 106.8 L47.3 106.4 L46.1 106.1 L45.0 105.8 L44.0 105.6 L43.1 105.4 L42.3 105.3 L41.7 105.2 L41.1 105.1 L40.7 105.0 L40.3 105.0 L40.1 105.0 L40.0 105.0 L40.0 105.0 L40.1 105.0 L40.3 105.0 L40.7 105.0 L41.1 104.9 L41.7 104.8 L42.3 104.7 L43.1 104.6 L44.0 104.4 L45.0 104.2 L46.1 103.9 L47.3 103.6 L48.6 103.2 L50.1 102.7 L51.6 102.1 L53.3 101.5 L55.0 100.8 L56.9 100.0 L58.9 99.0 L61.0 98.0 L63.2 96.9 L65.5 95.6 L68.0 94.3 L70.5 92.8 L73.1 91.2 L75.9 89.4 L78.8 87.5 L81.8 85.4 L84.8 83.2 L88.0 80.8 L91.4 78.3 L94.8 75.6 L98.3 72.7 L102.0 69.6 L105.7 66.3 L109.6 62.9 L113.6 59.2 L117.6 55.3 L121.8 51.3 L126.1 47.0 L130.6 42.4 L135.1 37.7 L139.7 32.7 L144.5 27.5 L149.3 22.0 L154.3 16.3 L159.4 10.3 L164.6 4.1 L169.9 -2.4 L175.3 -9.2 L180.8 -16.3 L186.4 -23.6 L192.2 -31.3 L198.0 -39.2 L204.0 -47.4" fill="none" stroke="#8b3a0f" stroke-width="1.7"/>
+      <path d="M217.6 152.5 L222.0 150.3 L226.3 148.2 L230.6 146.1 L234.7 144.2 L238.9 142.3 L242.9 140.4 L246.9 138.6 L250.8 136.9 L254.6 135.2 L258.4 133.6 L262.1 132.1 L265.7 130.6 L269.2 129.2 L272.7 127.8 L276.2 126.4 L279.5 125.2 L282.8 124.0 L286.0 122.8 L289.2 121.7 L292.2 120.6 L295.2 119.6 L298.2 118.6 L301.1 117.6 L303.9 116.7 L306.6 115.9 L309.3 115.1 L311.9 114.3 L314.4 113.6 L316.9 112.9 L319.3 112.3 L321.6 111.6 L323.9 111.1 L326.0 110.5 L328.2 110.0 L330.2 109.5 L332.2 109.1 L334.1 108.7 L336.0 108.3 L337.7 107.9 L339.5 107.6 L341.1 107.3 L342.7 107.0 L344.2 106.8 L345.6 106.5 L347.0 106.3 L348.3 106.1 L349.5 105.9 L350.7 105.8 L351.8 105.7 L352.8 105.5 L353.8 105.4 L354.7 105.3 L355.5 105.3 L356.2 105.2 L356.9 105.2 L357.5 105.1 L358.1 105.1 L358.6 105.0 L359.0 105.0 L359.3 105.0 L359.6 105.0 L359.8 105.0 L359.9 105.0 L360.0 105.0 L360.0 105.0 L359.9 105.0 L359.8 105.0 L359.6 105.0 L359.3 105.0 L359.0 105.0 L358.6 105.0 L358.1 104.9 L357.5 104.9 L356.9 104.8 L356.2 104.8 L355.5 104.7 L354.7 104.7 L353.8 104.6 L352.8 104.5 L351.8 104.3 L350.7 104.2 L349.5 104.1 L348.3 103.9 L347.0 103.7 L345.6 103.5 L344.2 103.2 L342.7 103.0 L341.1 102.7 L339.5 102.4 L337.7 102.1 L336.0 101.7 L334.1 101.3 L332.2 100.9 L330.2 100.5 L328.2 100.0 L326.0 99.5 L323.9 98.9 L321.6 98.4 L319.3 97.7 L316.9 97.1 L314.4 96.4 L311.9 95.7 L309.3 94.9 L306.6 94.1 L303.9 93.3 L301.1 92.4 L298.2 91.4 L295.2 90.4 L292.2 89.4 L289.2 88.3 L286.0 87.2 L282.8 86.0 L279.5 84.8 L276.2 83.6 L272.7 82.2 L269.2 80.8 L265.7 79.4 L262.1 77.9 L258.4 76.4 L254.6 74.8 L250.8 73.1 L246.9 71.4 L242.9 69.6 L238.9 67.7 L234.7 65.8 L230.6 63.9 L226.3 61.8 L222.0 59.7 L217.6 57.5" fill="none" stroke="#1a4d6e" stroke-width="1.7"/>
+      <circle cx="40" cy="105" r="3.4" fill="#8b3a0f"/>
+      <circle cx="360" cy="105" r="3.4" fill="#1a4d6e"/>
+      <g font-family="'JetBrains Mono',monospace" font-size="9" fill="#7a7060">
+        <text x="34" y="200">X : y&#178; = x&#179;   &#183;   d = 3, &#954; = 1</text>
+        <text x="238" y="200">X&#8744; in the chart c = 1 :  4a&#179; + 27b&#178; = 0</text>
+        <text x="238" y="212">cusp at the origin  &#183;  class 3</text>
+        <text x="240" y="99" font-size="13" fill="#2d3142">&#960;&#8322;</text>
+        <text x="237" y="117" font-size="11" fill="#2d3142">&#10230;</text>
+      </g>
+    </svg>
+  </div>
+  <div class="fig-cap"><b></b>The cuspidal cubic and its dual, both plotted from their own
+  equations rather than sketched, and both in a chart that contains the singular point. The
+  cusp at the origin on the left reappears as the cusp at the origin on the right, opening the
+  other way. Degree 3 on both sides: Pl&#252;cker's refund of 3 for one cusp exactly cancels the
+  rise from 3 to 6 that smoothness would have bought. Plotted in the chart b = 1 instead, the
+  right-hand curve is the smooth graph c = &#8722;4a&#179;/27 and the cusp is nowhere in the
+  picture &#8212; the singular point of X&#8744; is the one line b = 0 that chart omits.</div>
+</div>
+
+<div class="sec-num" id="s4">§ 22.4</div>
+<h2 class="sec">When the dual is not a hypersurface</h2>
+
+<p>For a plane curve the dual is again a curve, and for most X the dual is a hypersurface. Not
+always. If every tangent hyperplane is tangent along a positive-dimensional locus, π₂
+contracts, and X<sup>∨</sup> comes out too small.</p>
+
+<div class="dfn env f">
+<p><strong>Dual defect.</strong> def(X) = codim X<sup>∨</sup> − 1. It is zero exactly when the
+dual is a hypersurface. Biduality still holds; it is only the expectation of codimension one
+that fails.</p>
+</div>
+
+<p>The standard example is the Segre embedding ℙ¹ × ℙ² ⊂ ℙ⁵, which is the rank-one locus in
+the space of 2 × 3 matrices. Its dual is the locus where a general 2 × 3 matrix drops rank, and
+for a non-square matrix that locus has codimension 2, not 1. The defect is 1. Block [8].</p>
+
+<p>Squareness is the whole of it: for m × m matrices the same construction gives the
+determinant, a genuine hypersurface with defect 0. The determinant is the dual variety of the
+Segre ℙ<sup>m−1</sup> × ℙ<sup>m−1</sup> — the cleanest statement in this chapter, and the one
+to keep if only one survives.</p>
+
+<div class="sec-num" id="s5">§ 22.5</div>
+<h2 class="sec">Legendre, in an affine chart</h2>
+
+<p>Everything above is projective. Take an affine chart and the same correspondence turns into
+an object this book has used since Chapter 1 without naming it as duality.</p>
+
+<p>On J¹(ℝ,ℝ) with coordinates (x, u, p) and contact form α = du − p dx, define</p>
+
+<div class="eq">
+L(x, u, p)  =  (p,  px − u,  x)
+</div>
+
+<div class="thm env f">
+<p><strong>The Legendre transformation is a contactomorphism, and an involution.</strong>
+L*α = −α, so L preserves ker α; and L ∘ L = id.</p>
+</div>
+
+<p class="pf">Checked</p>
+
+<p>Both by direct computation, blocks [9] and [10]. The second is worth pausing on. Chapter 21
+proved biduality (X<sup>∨</sup>)<sup>∨</sup> = X from the isomorphism
+ℙT*ℙⁿ ≅ ℙT*(ℙⁿ)<sup>∨</sup> exchanging the two projections. In an affine chart that isomorphism
+<em>is</em> L, and biduality <em>is</em> the identity L ∘ L = id, which takes one line to
+verify. The classical theorem and the undergraduate exercise are the same statement in two
+charts.</p>
+
+<p>And L is not the prolongation of anything happening on the base. It sends the base
+coordinate x to the slope coordinate and the slope p to a base coordinate; a transformation of
+(x, u) alone could never do that. Hold that fact for one section.</p>
+
+<div class="sec-num" id="s6">§ 22.6</div>
+<h2 class="sec">Bäcklund, and Chapter 5's Theorem 5.1</h2>
+
+<p>Chapter 5 identifies the Sator Square with J¹(ℝ, ℝ²) and states, as Theorem 5.1, that every
+contact symmetry of J¹(ℝ, ℝⁿ) is either a prolonged point transformation or a genuine contact
+transformation mixing x, y<sub>i</sub> and p<sub>i</sub>, the latter being the Galilean Contact
+Transformations of Chapter 6. As printed, the second alternative is empty on the space the
+chapter works in.</p>
+
+<div class="thm env f">
+<p><strong>Bäcklund (1876).</strong> For n ≥ 2, every contact transformation of J¹(ℝ, ℝⁿ) —
+every diffeomorphism preserving the Cartan distribution — is the prolongation of a point
+transformation of the base. Genuine contact transformations exist only for n = 1.</p>
+</div>
+
+<p>The mechanism is dimensional, and visible before any theorem is invoked. A contact structure
+on a manifold of dimension 2m+1 is a maximally non-integrable field of hyperplanes — corank
+exactly one. On J¹(ℝ, ℝⁿ) the Cartan distribution is cut out by the n independent forms
+α<sub>i</sub> = dy<sub>i</sub> − p<sub>i</sub> dx, so its corank is n.</p>
+
+<table class="dtab">
+<tr><th>n</th><th>dim J¹(ℝ,ℝⁿ)</th><th>Cartan rank</th><th>corank</th><th>contact?</th></tr>
+<tr><td>1</td><td>3</td><td>2</td><td>1</td><td class="cv">yes</td></tr>
+<tr><td>2</td><td>5</td><td>3</td><td>2</td><td class="es">no — a rank-2 Pfaffian system</td></tr>
+<tr><td>3</td><td>7</td><td>4</td><td>3</td><td class="es">no</td></tr>
+</table>
+
+<p>So J¹(ℝ, ℝ²) is not a contact manifold at all, and "contact symmetry" there means symmetry
+of a Pfaffian system of rank 2. Bäcklund's theorem says such systems are rigid. The exceptional
+case n = 1 is exceptional precisely because corank 1 is the only case in which the distribution
+is a hyperplane field — and the Legendre transformation of §22.5 is the witness that the
+exception is not vacuous.</p>
+
+<div class="cor env f">
+<p><strong>Theorem 5.1, as printed, is false for n ≥ 2.</strong> Its dichotomy offers a second
+alternative — genuine contact transformations of J¹(ℝ, ℝ²) — which Bäcklund's theorem shows is
+empty. Two repairs are available, and they are not equivalent.</p>
+<p><strong>(a) Keep the space.</strong> On J¹(ℝ, ℝ²) the correct statement is that
+<em>every</em> symmetry of the Cartan distribution is a prolonged point transformation. The
+Sator correspondence of §5.2 survives untouched; what does not survive is calling the resulting
+group "genuine contact transformations." It is the prolonged point group — a perfectly good
+group, and what Chapter 6 has in fact been computing.</p>
+<p><strong>(b) Move to the space where the claim is true.</strong> Genuine contact
+transformations exist on contact 3-manifolds. §22.7 shows the dm³ manifold is one, so the
+Chapter 6 programme is not lost — it is relocated to the space the framework started in.</p>
+</div>
+
+<p>Both repairs are honest, and (b) is the one this book takes, for the reason in the next
+section. Chapter 5 is amended to state Bäcklund and to name its own space correctly; the Sator
+material, which is a mnemonic and was never load-bearing, is unaffected.</p>
+
+<div class="sec-num" id="s7">§ 22.7</div>
+<h2 class="sec">The dm³ form is the standard one</h2>
+
+<p>The framework's contact form is α = dz − r² dθ on ℝ³, with r² = x² + y². Three facts about
+it were assumed rather than checked, and one of them was assumed wrongly.</p>
+
+<div class="thm env f">
+<p><strong>(i)</strong> r² dθ = x dy − y dx, so α = dz − x dy + y dx.</p>
+<p><strong>(ii)</strong> α ∧ dα = −2 dx ∧ dy ∧ dz. The form is contact on <em>all</em> of ℝ³,
+including the axis r = 0.</p>
+<p><strong>(iii)</strong> The shear ψ(x,y,z) = (x, y, z + xy) followed by y ↦ y/2 carries α to
+dz + y dx. Hence (ℝ³, ker α) is contactomorphic to the standard contact ℝ³ — that is, to
+J¹(ℝ, ℝ) with u = z and p = −y.</p>
+</div>
+
+<p class="pf">Checked</p>
+
+<p>Blocks [1]–[3]. Point (ii) corrects a reading the corpus had carried: in cylindrical
+coordinates α ∧ dα = −2r dz ∧ dr ∧ dθ, which vanishes at r = 0, and this had been read as a
+degeneracy on the axis. The vanishing factor is the Jacobian of the polar chart. In Cartesian
+coordinates the coefficient is the constant −2, and there is no degeneracy anywhere.</p>
+
+<div class="pull-note">
+<p>Point (iii) is what makes repair (b) available. The dm³ manifold is J¹(ℝ, ℝ) up to
+contactomorphism; n = 1 is exactly Bäcklund's exceptional case; so genuine contact
+transformations — the Legendre transformation among them — do act on it. The Chapter 6
+programme was being run on the one space where the theorem it needs is false, and it belongs on
+the space Chapter 3 already built.</p>
+</div>
+
+<h3 class="sub">What this does to the open question of §21.8</h3>
+
+<p>Chapter 21 left one row open: whether the dm³ contact structure is the real locus of a
+holomorphic contact structure on a projective variety. Point (iii) narrows it substantially.
+ℙT*ℙ² is a projective variety of dimension 3 carrying a canonical holomorphic contact
+structure, and in an affine chart that structure is the tautological form du − p dx. By (iii)
+the dm³ structure is contactomorphic to exactly that. So the <em>structure</em> algebraises.</p>
+
+<div class="rem env f">
+<p><strong>What remains open, stated narrowly.</strong> Algebraising the structure is not
+algebraising the system. Half of the residual question has since been settled: the attractor
+<em>is</em> Legendrian. Its tangent is (0, 1, 1) in (r, θ, z), and α(γ̇) = ż − r²θ̇ = 1 − r²,
+which vanishes at r = 1 — so γ* lies inside the contact distribution rather than transverse to
+it. (Chapter 3 had called it a closed Reeb orbit; the Reeb field of α is ∂z, which is the
+complementary condition, and Chapter 3 is corrected.) What is still open is <em>algebraic</em>:
+on the attractor ż = θ̇ = 1, so z = θ and the curve is a helix, whose parametrisation is
+transcendental in these coordinates even though the circle r = 1 is not. Whether the
+identification of (iii) carries it to an algebraic Legendrian in ℙT*ℙ², and whether the operator
+chain is induced by a morphism, is not settled here. <span class="mono">ch23-verify.py</span>,
+block [1].</p>
+</div>
+
+<div class="sec-num" id="s8">§ 22.8</div>
+<h2 class="sec">Honest inventory</h2>
+
+<table class="dtab">
+<tr><th>Claim</th><th>Status</th><th>What it rests on</th></tr>
+<tr><td>π₁ has constant fibre dimension on the smooth locus</td><td class="cv">Classical</td><td>definition of Con(X)</td></tr>
+<tr><td>dual of C<sub>d</sub> is the discriminant, degree 2(d−1)</td><td class="cv">Classical</td><td>GKZ ch. 1; recomputed, block [7]</td></tr>
+<tr><td>d<sup>∨</sup> = d(d−1) − 2δ − 3κ</td><td class="cv">Classical</td><td>Plücker; four cases checked, block [5]</td></tr>
+<tr><td>dual of the cuspidal cubic is 4a³ + 27b²c</td><td class="cv">Computed</td><td>elimination, block [6]</td></tr>
+<tr><td>that dual is itself cuspidal, at [0 : 0 : 1]</td><td class="cv">Computed</td><td>singular locus, block [11]; invisible in the chart b = 1</td></tr>
+<tr><td>4a³ + 27b² is dual, discriminant <em>and</em> bifurcation set</td><td class="cv">Computed</td><td>block [12] — the bridge to Ch 23</td></tr>
+<tr><td>def(ℙ¹ × ℙ²) = 1</td><td class="cv">Classical</td><td>rank locus of 2 × 3 matrices, block [8]</td></tr>
+<tr><td>L*α = −α and L ∘ L = id</td><td class="cv">Computed</td><td>blocks [9], [10]</td></tr>
+<tr><td>J¹(ℝ,ℝⁿ) is contact iff n = 1</td><td class="cv">Classical</td><td>corank count, block [4]</td></tr>
+<tr><td>Theorem 5.1 as printed is false for n ≥ 2</td><td class="es">Correction</td><td>Bäcklund — see §22.6</td></tr>
+<tr><td>α = dz − r²dθ is contact on all of ℝ³</td><td class="cv">Computed</td><td>block [2]; corrects the axis reading</td></tr>
+<tr><td>dm³ form is contactomorphic to J¹(ℝ,ℝ)</td><td class="cv">Computed</td><td>block [3], explicit shear</td></tr>
+<tr><td>the dm³ <em>structure</em> algebraises</td><td class="cv">Follows</td><td>(iii) plus the canonical form on ℙT*ℙ²</td></tr>
+<tr><td>the dm³ attractor is Legendrian</td><td class="cv">Computed</td><td>α(γ̇) = 1 − r² = 0 at r = 1; <span class="mono">ch23-verify.py</span> [1]</td></tr>
+<tr><td>the dm³ <em>flow</em> algebraises</td><td class="es">OPEN</td><td>Legendrian yes; the helix z = θ is transcendental in these coordinates</td></tr>
+</table>
+
+<p>Every row marked <em>Computed</em> is regenerated by
+<span class="mono">ch22-verify.py</span>, which sits beside this chapter and exits non-zero on
+any failure. It caught two errors while the chapter was being written. In §22.2: the resultant Res(f, f′) has
+degree 2d−1, not 2(d−1), and the discriminant is that divided by the leading coefficient. And in
+§22.3, the dual of the cuspidal cubic had been written in the chart b = 1 and plotted there, where
+it is a smooth graph — under a caption asserting that its cusp was visible. The singular point
+[0 : 0 : 1] is precisely the point that chart omits. Both figures printed above are the corrected
+ones. A dual curve plotted in a chart that misses its singular locus is the failure mode this
+chapter is about, arriving from the inside.</p>
+
+</div>
+
+<div class="side">
+  <div class="sn"><strong>Bäcklund</strong>A. V. Bäcklund, <em>Ueber Flächentransformationen</em>,
+  Math. Ann. 9 (1876). The rigidity statement for n ≥ 2 is the one cited in §22.6.</div>
+  <div class="sn"><strong>Discriminants</strong>Gelfand–Kapranov–Zelevinsky,
+  <em>Discriminants, Resultants and Multidimensional Determinants</em>, ch. 1 for the identity of
+  dual varieties and discriminants; ch. 9 for the determinant as a dual.</div>
+  <div class="sn"><strong>Plücker</strong>The formulas are in every classical text;
+  Griffiths–Harris, <em>Principles of Algebraic Geometry</em>, ch. 2 derives them from the same
+  correspondence used here.</div>
+  <div class="sn"><strong>Dual defect</strong>Ein's classification of smooth defective varieties;
+  the Segre ℙ¹ × ℙ² is the smallest example.</div>
+  <div class="sn"><strong>Standard contact ℝ³</strong>That dz + r²dθ and dz + y dx define the same
+  structure is standard — see Geiges, <em>An Introduction to Contact Topology</em>, §2.1. The
+  explicit shear is written out here because §22.7 needs the map, not only its existence.</div>
+  <div class="sn"><strong>Where this goes next</strong>Block [12] is the hinge. 4a³ + 27b² is the dual
+  variety computed in §22.3, the discriminant of x³ + ax + b, <em>and</em> the bifurcation set of the
+  cusp catastrophe — one equation wearing three names. Ch 23 takes that identity back into dynamical
+  systems: the bifurcation set of a family is the discriminant of that family, and π₂ is the
+  projection from the equilibrium manifold to parameter space.</div>
+</div>
+</div>
+
+<div class="ft-grid" style="max-width:960px;margin:0 auto;padding:2.5rem 3rem 4rem;border-top:1px solid var(--rule)">
+  <div class="ft-copy" style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);line-height:2">
+    Principia Orthogona · Book IV · Chapter 22<br>
+    Pablo Nogueira Grossi · G6 LLC, Newark, New Jersey · ORCID 0009-0000-6496-2186<br>
+    ISBN 979-8-9954416-8-7 · doi 10.5281/zenodo.19117400<br>
+    <a href="ch21-gauss-map.html" style="color:var(--accent);text-decoration:none">← Ch 21 · The Gauss Map</a> ·
+    <a href="index.html" style="color:var(--accent);text-decoration:none">Contents</a> ·
+    <a href="ch23.html" style="color:var(--accent);text-decoration:none">Ch 23 · The Bifurcation Set Is a Discriminant →</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.f').forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>

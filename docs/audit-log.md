@@ -2671,3 +2671,63 @@ exercise hint that made students reason from it). Two further copies of M6 that
 the audit had not caught — the proof-ladder figure caption and ch13's setup line
 — stated the degeneracy backwards, positive-definite ON the critical line rather
 than off it, contradicting the corrected box. All now consistent.
+
+
+## THEOREM 5.1 AND THE SPACE IT WAS STATED ON (2026-09-05)
+
+**Defect.** Book 4 Chapter 5 printed, as Theorem 5.1, a dichotomy: every contact symmetry
+of J¹(ℝ,ℝⁿ) is either a prolonged point transformation or a genuine contact transformation
+mixing x, yᵢ and pᵢ, the latter being Chapter 6's Galilean Contact Transformations. By
+Bäcklund's theorem (Math. Ann. 9, 1876) the second alternative is empty for n ≥ 2, and
+Chapter 5 works in n = 2 throughout.
+
+**Root cause, stated structurally rather than as an oversight.** A contact structure is a
+hyperplane field — corank exactly one. The Cartan distribution on J¹(ℝ,ℝⁿ) is cut out by n
+independent forms αᵢ = dyᵢ − pᵢ dx, so its corank is n. J¹(ℝ,ℝ²) is therefore not a contact
+manifold at all; it is a Pfaffian system of rank 2, and those are rigid. The chapter had been
+calling the Cartan distribution "the contact distribution" throughout, and the wrong noun
+carried the wrong theorem with it. Corank is checkable in one line and had never been
+checked.
+
+**Repair.** Two were available and they are not equivalent:
+  (a) keep J¹(ℝ,ℝ²) and rename the group — it is the prolonged point group, which is what
+      Chapter 6 has in fact been computing;
+  (b) relocate the claim to a contact 3-manifold, where genuine contact transformations do
+      exist.
+(b) is the repair taken, because the dm³ manifold turns out to be such a space. The shear
+ψ(x,y,z) = (x,y,z+xy) followed by y ↦ y/2 carries α = dz − r²dθ to dz + y dx, so the dm³
+contact structure is contactomorphic to the standard one on ℝ³, i.e. to J¹(ℝ,ℝ) — Bäcklund's
+exceptional case n = 1. The Legendre transformation is the witness that the exception is not
+vacuous.
+
+**Second finding, from the same computation.** In cylindrical coordinates α ∧ dα = −2r dz∧dr∧dθ,
+which vanishes at r = 0, and the corpus had read this as a degeneracy of the structure on the
+axis. In Cartesian coordinates α ∧ dα = −2 dx∧dy∧dz. The vanishing factor was the Jacobian of
+the polar chart. The form is contact on all of ℝ³.
+
+**Third finding, caught by the tool rather than by reading.** While Chapter 22 §22.2 was being
+drafted, `ch22-verify.py` failed the assertion that Res(f, f′) has degree 2(d−1) in the
+coefficients of a binary form of degree d. It has degree 2d−1; the discriminant is that divided
+by the leading coefficient. The claim in the chapter was corrected before it was printed, not
+after. This is the first instance in this corpus of the verify-alongside rule catching an error
+during composition rather than in audit.
+
+**Files changed.**
+- `book4/ch22.html` — new. §22.6 states Bäcklund and sets out both repairs; §22.7 gives the
+  explicit contactomorphism.
+- `book4/ch22-verify.py` — new. Ten blocks, all passing, exits non-zero on any failure.
+- `book4/ch05.html` — Theorem 5.1 restated as Bäcklund's rigidity theorem; version note added;
+  five occurrences of "contact distribution" corrected to "Cartan distribution"; "invariant
+  under all contactomorphisms" corrected to "under all its symmetries". The Sator material is
+  untouched — it is a mnemonic and was never load-bearing.
+- `book4/ch21-gauss-map.html` — the §21.8 inventory row "dm³ contact form algebraises / OPEN"
+  split: the structure half is settled in Ch 22 §22.7, the flow half stays open and is now
+  stated narrowly.
+- `book4/contents.html` — ch20 was missing from Part V; added. New Part VI (The Algebraic Turn)
+  with ch21 and ch22.
+
+**Also fixed, unrelated to the mathematics.** ch21-gauss-map.html spliced ch10's stylesheet but
+not ch10's IntersectionObserver. The stylesheet sets `.f { opacity:0 }` and nothing added the
+`.in` class, so all fifteen elements carrying that class — every theorem box and all three
+SVG diagrams — rendered invisible. The script is now in both ch21 and ch22. Any chapter built
+by splicing ch10's `<style>` should be checked for the same thing.

@@ -305,6 +305,22 @@ Pull requests that close proof obligations are welcome.
 
 ---
 
+## Contact
+
+**Pablo Nogueira Grossi** · G6 LLC, Newark, New Jersey
+· [g6llc@proton.me](mailto:g6llc@proton.me)
+· ORCID [0009-0000-6496-2186](https://orcid.org/0009-0000-6496-2186)
+
+Enquiries welcome, including the sceptical kind — a defect report against a
+chapter or a Lean file is the most useful mail this repository can receive.
+Findings are recorded dated in [`docs/audit-log.md`](docs/audit-log.md),
+whoever finds them.
+
+Provenance for machine-assisted sessions is recorded in the handoff block of
+`CLAUDE.md` — session id, account email, model — not in commit trailers.
+
+---
+
 ## License
 
 MIT (code) · CC BY-NC-ND 4.0 (written content)

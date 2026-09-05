@@ -162,16 +162,28 @@ carry `Claude-Session:`, all from before this rule. They are left in place:
 removing them rewrites every downstream SHA and breaks the commit links recorded
 in `docs/audit-log.md`. The rule is forward-looking. Do not add more.
 
-## HANDOFF — 2026-09-04 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
+## HANDOFF — 2026-09-05 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
 
-**From:** session `01DfPorRiUiwcVdUj5rYnWRj` · account `sluhcdf@gmail.com` · model `claude-opus-5`
-**Ended:** 2026-09-04, ~90% of session budget, on the user's signal.
-**Repos touched:** `~/Desktop/geometry` only. AXLE and vol1-proofs were read, never written.
+**From:** session `0117aYddrkuC2TP6y8hhsxrP` · account `grossiatwork@gmail.com` · model `claude-opus-5`
+**Ended:** 2026-09-05, in progress.
+**Repos touched:** `~/Desktop/geometry` (Book 4 ch21, ch22, ch05, contents, audit log), `~/Desktop/AXLE` (Journal vol9, index), `~/Desktop/GTCT` (ZetaReflection.lean).
 
-### Shipped and pushed
+### Written this session, not yet committed
+`ch22.html` + `ch22-verify.py` — duality and the discriminant; ten verification blocks, all passing.
+Theorem 5.1 repaired against Bäcklund in `ch05.html`; ch21 §21.8 open row split, structure half settled.
+ch21 and ch22 given the IntersectionObserver ch21 was missing — fifteen elements per chapter had been
+rendering at `opacity:0`. `contents.html` gained ch20 and a new Part VI.
+Journal Vol. Ω No. 9 built (five pages) in the AXLE repo.
+
+### Attribution note
+The rule above was followed: no commit trailers were added this session. Two commit scripts were
+drafted with `Co-Authored-By` and `Claude-Session` lines before the rule was read, and were corrected
+before anything was committed. **Read §"Attribution" before writing a commit message.**
+
+### Pushed earlier (2026-09-04 session)
 `4a12732` WP-94 created · `93733d2` §8 AxiomProver · `10bbd7d` WP-95 + indexes ·
 `2136d51` §10 Isabelle probe · `3dda315` licence conflicts · `d86dc76` attribution rule ·
-`320d5fc` Book 4 ORCID.
+`320d5fc` Book 4 ORCID. Then `5b8140d` Book 4 ch21.
 
 ### The WP-94 arc — read §9 and §10 before adding to it
 The note now runs §1–§11 and **twice corrects itself**, which is the point of it.
