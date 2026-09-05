@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch 21 · The Gauss Map · Principia Orthogona Book 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1c22;
+  --ink2: #2d3142;
+  --paper: #f7f4ee;
+  --paper2: #ede9e0;
+  --paper3: #e4dfd4;
+  --accent: #8b3a0f;
+  --accent2: #1a4d6e;
+  --accent3: #3d6b3f;
+  --rule: #c8c0b0;
+  --dim: #7a7060;
+  --serif: 'EB Garamond', Georgia, serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--paper); color:var(--ink); font-family:var(--serif); font-size:19px; line-height:1.72; counter-reset:figure theorem; }
+/* RUNNING HEAD */
+.rh { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(247,244,238,0.93); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule); padding:0.5rem 2.5rem; display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.63rem; color:var(--dim); letter-spacing:0.07em; }
+.rh a { color:var(--accent); text-decoration:none; }
+/* CHAPTER OPEN */
+.ch-open { max-width:960px; margin:0 auto; padding:7rem 3rem 3rem; border-bottom:2px solid var(--ink2); }
+.ch-num { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.18em; color:var(--dim); text-transform:uppercase; margin-bottom:1rem; }
+.ch-title { font-size:clamp(2rem,4.5vw,3.6rem); font-weight:500; line-height:1.1; color:var(--ink2); max-width:800px; margin-bottom:1.5rem; }
+.ch-title em { font-style:italic; color:var(--accent); }
+.ch-meta { display:flex; gap:2rem; flex-wrap:wrap; padding:1rem 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin-bottom:1.5rem; }
+.meta { font-family:var(--mono); font-size:0.62rem; color:var(--dim); letter-spacing:0.06em; }
+.meta strong { color:var(--ink); font-weight:500; }
+.ch-abs { max-width:640px; font-size:0.96rem; color:var(--ink2); line-height:1.68; padding:1.25rem 1.25rem 1.25rem 1.5rem; border-left:3px solid var(--accent); background:var(--paper2); font-style:italic; }
+/* TOC */
+.toc-wrap { padding:2rem 3rem 0; max-width:960px; margin:0 auto; }
+.toc-wrap h4 { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.14em; color:var(--dim); text-transform:uppercase; margin-bottom:0.6rem; }
+.toc { list-style:none; counter-reset:toc; }
+.toc li { counter-increment:toc; display:flex; gap:0.5rem; padding:0.18rem 0; font-size:0.88rem; }
+.toc li::before { content:counter(toc)"."; font-family:var(--mono); font-size:0.6rem; color:var(--accent); min-width:1.4rem; padding-top:0.15em; }
+.toc a { color:var(--ink2); text-decoration:none; border-bottom:1px dotted var(--rule); }
+.toc a:hover { color:var(--accent); }
+/* BODY GRID */
+.body-wrap { max-width:960px; margin:0 auto; padding:3rem 3rem 5rem; display:grid; grid-template-columns:1fr 240px; gap:0 3.5rem; }
+.main { min-width:0; }
+.side { position:sticky; top:3.5rem; font-size:0.8rem; align-self:start; }
+/* HEADINGS */
+.sec-num { font-family:var(--mono); font-size:0.6rem; color:var(--accent); letter-spacing:0.14em; text-transform:uppercase; margin-top:3.5rem; margin-bottom:0.25rem; }
+h2.sec { font-size:1.5rem; font-weight:500; color:var(--ink2); border-bottom:1px solid var(--rule); padding-bottom:0.35rem; margin-bottom:1rem; }
+h3.sub { font-size:1.1rem; font-weight:500; font-style:italic; color:var(--ink2); margin:1.8rem 0 0.6rem; }
+p { margin-bottom:0.95rem; }
+p+p { text-indent:1.4em; }
+/* MATH */
+.eq { font-family:var(--mono); font-size:0.86rem; background:var(--paper2); border:1px solid var(--rule); border-left:3px solid var(--accent2); padding:1rem 1.4rem; margin:1.4rem 0; overflow-x:auto; line-height:2.1; color:var(--accent2); }
+.eq .cm { color:var(--dim); font-size:0.75rem; }
+/* ENVIRONMENTS */
+.env { border:1px solid var(--rule); padding:1.1rem 1.4rem; margin:1.6rem 0; background:var(--paper2); }
+.env::before { display:block; font-family:var(--mono); font-size:0.6rem; letter-spacing:0.11em; text-transform:uppercase; margin-bottom:0.55rem; counter-increment:theorem; }
+.thm::before { content:"Theorem "counter(theorem); color:var(--accent); }
+.dfn::before { content:"Definition "counter(theorem); color:var(--accent2); }
+.rem::before { content:"Remark "counter(theorem); color:var(--accent3); }
+.cor::before { content:"Correction "counter(theorem); color:#8b3a0f; }
+.env p { font-style:italic; margin-bottom:0; }
+.env p+p { text-indent:0; margin-top:0.45rem; }
+.pf { font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:0.07em; text-transform:uppercase; margin:1.2rem 0 0.35rem; }
+/* FIGURES */
+.fig { margin:2.2rem 0; counter-increment:figure; }
+.fig.wide { margin-left:-0.5rem; margin-right:-0.5rem; }
+.fig-inner { background:var(--paper2); border:1px solid var(--rule); padding:1.25rem; display:flex; justify-content:center; align-items:center; }
+.fig-cap { margin-top:0.5rem; font-size:0.83rem; color:var(--dim); line-height:1.5; }
+.fig-cap b { font-family:var(--mono); font-size:0.67rem; color:var(--ink2); }
+.fig-cap b::before { content:"Figure "counter(figure)". "; }
+/* LEAN */
+.lean { background:#1e1e2e; border:1px solid #3a3a5c; padding:1.2rem 1.4rem; margin:1.6rem 0; font-family:var(--mono); font-size:0.77rem; line-height:1.9; overflow-x:auto; color:#cdd6f4; }
+.lc { color:#6c7086; } .lk { color:#cba6f7; } .lt { color:#89dceb; } .ln { color:#fab387; } .ls { color:#a6e3a1; } .lo { color:#f38ba8; }
+/* TABLE */
+.dtab { width:100%; border-collapse:collapse; margin:1.4rem 0; font-size:0.83rem; }
+.dtab th { font-family:var(--mono); font-size:0.6rem; letter-spacing:0.07em; text-transform:uppercase; color:var(--accent2); padding:0.45rem 0.7rem; border-bottom:2px solid var(--ink2); text-align:left; }
+.dtab td { padding:0.4rem 0.7rem; border-bottom:1px solid var(--rule); font-family:var(--mono); font-size:0.78rem; color:var(--ink2); }
+.dtab tr:hover td { background:var(--paper2); }
+.dtab td:first-child { color:var(--accent); }
+.cv { color:#3d6b3f; } .es { color:#8b3a0f; }
+/* SIDENOTES */
+.sn { border-left:2px solid var(--rule); padding:0.7rem 0 0.7rem 0.9rem; margin-bottom:1.3rem; color:var(--dim); font-size:0.78rem; line-height:1.5; }
+.sn strong { font-family:var(--mono); font-size:0.67rem; color:var(--ink); display:block; margin-bottom:0.25rem; letter-spacing:0.04em; }
+.sn a { color:var(--accent2); text-decoration:none; }
+/* SIM SECTION */
+.sim-sec { background:var(--ink2); color:#c0c8d8; padding:4rem 3rem; }
+.sim-wrap { max-width:960px; margin:0 auto; }
+.sim-label { font-family:var(--mono); font-size:0.63rem; letter-spacing:0.14em; color:#6eb8c8; text-transform:uppercase; margin-bottom:0.4rem; }
+.sim-h { font-family:var(--serif); font-size:1.75rem; font-weight:400; color:#eef0f5; margin-bottom:0.4rem; }
+.sim-sub { font-size:0.88rem; color:#5a6080; margin-bottom:1.75rem; }
+.sim-grid { display:grid; grid-template-columns:1fr 270px; gap:1.5px; background:rgba(255,255,255,0.04); }
+.sim-canvas-wrap { background:#060810; min-height:380px; }
+canvas#sc { display:block; width:100%; height:380px; }
+.sim-panel { background:#0e1018; padding:1.4rem; display:flex; flex-direction:column; gap:1rem; }
+.ctrl label { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.6rem; color:#5a6080; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:0.3rem; }
+.ctrl label span { color:#6eb8c8; }
+.ctrl input[type=range] { width:100%; accent-color:#c8a96e; cursor:pointer; }
+.sim-btns { display:flex; gap:0.5rem; }
+.sb { flex:1; font-family:var(--mono); font-size:0.6rem; letter-spacing:0.07em; text-transform:uppercase; padding:0.4rem; background:transparent; border:1px solid rgba(255,255,255,0.08); color:#5a6080; cursor:pointer; transition:all .15s; }
+.sb:hover,.sb.on { border-color:#6eb8c8; color:#6eb8c8; }
+.sim-legend { font-family:var(--mono); font-size:0.57rem; color:#3a4050; line-height:1.9; border-top:1px solid rgba(255,255,255,0.04); padding-top:0.7rem; margin-top:auto; }
+.sim-legend .c1{color:#6eb8c8;} .sim-legend .c2{color:#c86e8a;} .sim-legend .c3{color:#c8a96e;}
+.sim-out { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5px; background:rgba(255,255,255,0.04); }
+.out-box { background:#0e1018; padding:0.7rem 1rem; }
+.out-l { font-family:var(--mono); font-size:0.57rem; color:#3a4050; letter-spacing:0.05em; text-transform:uppercase; }
+.out-v { font-family:var(--mono); font-size:0.95rem; color:#6eb8c8; margin-top:0.15rem; }
+/* BOOKS */
+.books { background:var(--paper3); border-top:2px solid var(--ink2); border-bottom:2px solid var(--ink2); padding:3.5rem 3rem; }
+.books-in { max-width:960px; margin:0 auto; }
+.books-hd { display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--rule); padding-bottom:0.65rem; margin-bottom:1.75rem; }
+.books-hd h2 { font-size:1.25rem; font-weight:500; }
+.books-hd a { font-family:var(--mono); font-size:0.63rem; color:var(--accent); text-decoration:none; }
+.bg { display:grid; grid-template-columns:repeat(5,1fr); gap:1.5px; background:var(--rule); margin-bottom:1.5px; }
+.bk { background:var(--paper); padding:1.1rem 0.9rem; display:flex; flex-direction:column; }
+.bk .g { font-family:var(--mono); font-size:0.58rem; color:var(--accent); letter-spacing:0.1em; margin-bottom:0.3rem; }
+.bk h4 { font-size:0.85rem; font-weight:500; margin-bottom:0.35rem; flex:1; line-height:1.3; }
+.bk p { font-size:0.72rem; color:var(--dim); line-height:1.4; margin-bottom:0.6rem; }
+.bk .isbn { font-family:var(--mono); font-size:0.56rem; color:var(--dim); margin-bottom:0.4rem; }
+.bk .pr { font-family:var(--mono); font-size:1rem; color:var(--accent); margin-bottom:0.6rem; }
+.bk a { font-family:var(--mono); font-size:0.58rem; letter-spacing:0.07em; text-transform:uppercase; padding:0.3rem 0.65rem; border:1px solid var(--rule); color:var(--ink2); text-decoration:none; display:inline-block; transition:all .15s; }
+.bk a:hover { border-color:var(--accent); color:var(--accent); }
+.bk.ft { background:var(--ink2); }
+.bk.ft .g { color:#c8a96e; } .bk.ft h4,.bk.ft { color:var(--paper); } .bk.ft p { color:#5a6080; } .bk.ft .isbn { color:#3a4050; } .bk.ft .pr { color:#c8a96e; } .bk.ft a { border-color:#c8a96e; color:#c8a96e; } .bk.ft a:hover { background:#c8a96e; color:var(--ink2); }
+.bundle { background:var(--ink2); color:var(--paper); padding:1.4rem 2rem; display:flex; justify-content:space-between; align-items:center; gap:2rem; }
+.bundle h3 { font-size:1.05rem; font-weight:400; }
+.bundle p { font-size:0.78rem; color:#5a6080; margin-top:0.2rem; }
+.bundle .bpr { font-family:var(--mono); font-size:1.7rem; color:#c8a96e; white-space:nowrap; }
+.bundle a { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.55rem 1.3rem; border:1px solid #c8a96e; color:#c8a96e; text-decoration:none; white-space:nowrap; transition:all .15s; display:inline-block; margin-top:0.4rem; }
+.bundle a:hover { background:#c8a96e; color:var(--ink2); }
+/* FOOTER */
+footer { background:var(--ink2); color:#5a6080; padding:3rem; }
+.ft-grid { max-width:960px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; padding-bottom:2rem; border-bottom:1px solid rgba(255,255,255,0.06); margin-bottom:1.4rem; }
+footer h4 { font-family:var(--mono); font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:#c8a96e; margin-bottom:0.7rem; }
+footer p { line-height:1.65; margin-bottom:0.2rem; font-size:0.82rem; }
+footer a { color:#5a6080; text-decoration:none; display:block; margin-bottom:0.2rem; font-size:0.82rem; transition:color .15s; }
+footer a:hover { color:#c8a96e; }
+.ft-copy { max-width:960px; margin:0 auto; display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.58rem; color:#2d3040; letter-spacing:0.04em; }
+/* FADE */
+.f { opacity:0; transform:translateY(12px); transition:opacity .6s ease,transform .6s ease; }
+.f.in { opacity:1; transform:translateY(0); }
+/* RESPONSIVE */
+@media(max-width:860px){ .body-wrap{grid-template-columns:1fr;} .side{position:static;} .sim-grid{grid-template-columns:1fr;} .bg{grid-template-columns:1fr 1fr;} .ft-grid{grid-template-columns:1fr;gap:1.5rem;} .bundle{flex-direction:column;} .ch-open,.toc-wrap,.body-wrap,.books,.sim-sec,.footer{padding-left:1.5rem;padding-right:1.5rem;} }
+@media(max-width:520px){ body{font-size:17px;} .bg{grid-template-columns:1fr;} .sim-out{grid-template-columns:repeat(2,1fr);} .ft-copy{flex-direction:column;gap:0.3rem;} }
+</style>
+</head>
+<body>
+
+<div class="rh">
+  <span>Principia Orthogona · Book IV · Higher Dimensions</span>
+  <span><a href="index.html">Contents</a> · <a href="ch03.html">← Ch 3</a> · <a href="ch22.html">Ch 22 →</a></span>
+</div>
+
+<div class="ch-open">
+  <div class="ch-num">Book IV · Chapter 21 · The Dimension Ladder, Continued</div>
+  <h1 class="ch-title">The Gauss Map, or <em>What Survives the Lift</em></h1>
+  <div class="ch-meta">
+    <div class="meta"><strong>Arc</strong> · Higher Dimensions, rung 21</div>
+    <div class="meta"><strong>Prerequisite</strong> · Ch 3 (contact 3-manifold, S³)</div>
+    <div class="meta"><strong>Status</strong> · classical results; §7 open</div>
+    <div class="meta"><strong>Register</strong> · exposition, with one open question</div>
+  </div>
+  <div class="ch-abs">
+    Chapters 1 through 6 built a ladder of embeddings: a curve into a surface, a surface
+    into a contact 3-manifold, that into four dimensions, into a jet space, into six. Every
+    rung asked where a thing sits. None asked what belongs to the thing itself. This chapter
+    supplies the missing rung. Gauss's <em>Theorema Egregium</em> says curvature is intrinsic —
+    it survives every lift the ladder performs. His Gauss map says how to see that curvature
+    as a map to the sphere. And the projectivisation of that same map is where this book
+    stops being differential geometry and becomes algebraic geometry: the conormal variety
+    is the closure of the graph of the Gauss map, and it is Legendrian.
+  </div>
+</div>
+
+<div class="toc-wrap">
+  <h4>Contents</h4>
+  <ol class="toc">
+    <li><a href="#s1">What the ladder never asked</a></li>
+    <li><a href="#s2">Theorema Egregium</a></li>
+    <li><a href="#s3">The Gauss map</a></li>
+    <li><a href="#s4">Gauss–Bonnet, and a constraint on the attractor</a></li>
+    <li><a href="#s5">The projective Gauss map</a></li>
+    <li><a href="#s6">The lift</a></li>
+    <li><a href="#s7">Where the fold was hiding</a></li>
+    <li><a href="#s8">Honest inventory</a></li>
+  </ol>
+</div>
+
+<div class="body-wrap">
+<div class="main">
+
+<div class="sec-num" id="s1">§ 21.1</div>
+<h2 class="sec">What the ladder never asked</h2>
+
+<p>The ladder of Chapters 1–6 is a sequence of embeddings. The radial ODE sits in a plane;
+the plane sits in extended phase space; extended phase space sits in a contact
+3-manifold; that sits in four dimensions, then in the jet space J¹, then in six. Each
+rung answers the question <em>where does this live?</em></p>
+
+<p>No rung answers the question <em>what does it carry with it?</em> An embedding can be
+bent. If a quantity changes when the ambient space changes, it was a fact about the
+embedding, not about the object, and it will not survive the next rung. A dimension ladder
+with no invariant is a stack, not a ladder.</p>
+
+<p>Gauss settled this in 1827, and the settlement is the rung this arc has been missing.</p>
+
+<div class="sec-num" id="s2">§ 21.2</div>
+<h2 class="sec">Theorema Egregium</h2>
+
+<p>Let <span class="mono">S</span> be a surface in ℝ³ with unit normal field
+<span class="mono">N</span>. Its two principal curvatures κ₁, κ₂ measure how the surface
+bends in the two extremal directions. Both depend on the embedding. Their product does not.</p>
+
+<div class="thm env f">
+<p><strong>Theorema Egregium (Gauss, 1827).</strong> The Gaussian curvature
+K = κ₁κ₂ is intrinsic: it is determined by the first fundamental form alone, and is
+therefore unchanged by any isometry of the surface, however the surface is bent in the
+ambient space.</p>
+</div>
+
+<p>The word Gauss chose — <em>egregium</em>, remarkable — is not decoration. Each factor is
+extrinsic; the product is not. That is the whole of what a lift preserves.</p>
+
+<div class="fig f">
+  <div class="fig-inner">
+    <svg viewBox="0 0 700 200" width="100%" style="max-width:660px">
+      <g fill="none" stroke="#2d3142" stroke-width="1.6">
+        <rect x="30" y="60" width="120" height="80"/>
+        <path d="M200 60 q30 40 0 80" stroke="#8b3a0f"/>
+        <path d="M200 60 h100 M200 140 h100"/>
+        <path d="M300 60 q30 40 0 80" stroke="#8b3a0f" stroke-dasharray="3 3"/>
+        <ellipse cx="470" cy="100" rx="55" ry="55"/>
+        <path d="M415 100 q55 30 110 0" stroke="#1a4d6e" stroke-dasharray="3 3"/>
+        <path d="M470 45 q-30 55 0 110" stroke="#1a4d6e" stroke-dasharray="3 3"/>
+      </g>
+      <g font-family="JetBrains Mono, monospace" font-size="11" fill="#7a7060">
+        <text x="60" y="165">plane · K = 0</text>
+        <text x="205" y="165">cylinder · K = 0</text>
+        <text x="425" y="180">sphere · K = 1/R²</text>
+        <text x="160" y="105" fill="#8b3a0f">bend →</text>
+        <text x="545" y="105" fill="#8b3a0f">✗</text>
+      </g>
+    </svg>
+  </div>
+  <div class="fig-cap"><b></b>Bending is an isometry; stretching is not. The plane rolls into a
+  cylinder without distortion, and both have K = 0. No patch of the sphere flattens onto the
+  plane, because K = 1/R² ≠ 0 and K cannot change. Every flat map of the Earth lies, and
+  Theorema Egregium says exactly why.</div>
+</div>
+
+<div class="sec-num" id="s3">§ 21.3</div>
+<h2 class="sec">The Gauss map</h2>
+
+<p>The proof of the theorem needs an instrument, and the instrument is more important than
+the theorem. Send each point of the surface to its unit normal, regarded as a point of the
+unit sphere.</p>
+
+<div class="dfn env f">
+<p><strong>The Gauss map.</strong> For an oriented surface S ⊂ ℝ³,
+N : S → S² sends p to its unit normal N(p). Its differential dN<sub>p</sub> is the shape
+operator, and</p>
+</div>
+
+<div class="eq f">
+K(p)  =  det dN<sub>p</sub><br>
+<span class="cm">— the Gaussian curvature is the local area distortion of the Gauss map,
+signed by orientation.</span>
+</div>
+
+<p>So K is not merely <em>related</em> to the Gauss map; K <em>is</em> the Gauss map's
+Jacobian. Curvature measures how fast the normal turns. Where the map folds — where
+det dN = 0 — the surface is parabolic. Hold that; §21.7 returns to it.</p>
+
+<div class="fig f">
+  <div class="fig-inner">
+    <svg viewBox="0 0 700 230" width="100%" style="max-width:660px">
+      <path d="M40 170 q60 -90 130 -55 q70 35 140 -35" fill="none" stroke="#2d3142" stroke-width="2"/>
+      <g stroke="#8b3a0f" stroke-width="1.2">
+        <line x1="70" y1="140" x2="55" y2="108"/><line x1="130" y1="112" x2="128" y2="77"/>
+        <line x1="190" y1="121" x2="200" y2="88"/><line x1="250" y1="130" x2="268" y2="101"/>
+        <line x1="300" y1="98" x2="326" y2="76"/>
+      </g>
+      <g fill="#8b3a0f" font-size="9" font-family="JetBrains Mono, monospace">
+        <circle cx="55" cy="108" r="2.5"/><circle cx="128" cy="77" r="2.5"/>
+        <circle cx="200" cy="88" r="2.5"/><circle cx="268" cy="101" r="2.5"/>
+        <circle cx="326" cy="76" r="2.5"/>
+      </g>
+      <path d="M380 115 h60" stroke="#7a7060" stroke-width="1.2" marker-end="url(#ar)"/>
+      <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0 0 L8 4 L0 8 z" fill="#7a7060"/></marker></defs>
+      <text x="384" y="105" font-family="JetBrains Mono, monospace" font-size="10" fill="#7a7060">N</text>
+      <circle cx="560" cy="115" r="70" fill="none" stroke="#2d3142" stroke-width="1.6"/>
+      <ellipse cx="560" cy="115" rx="70" ry="22" fill="none" stroke="#c8c0b0" stroke-width="1"/>
+      <g fill="#8b3a0f">
+        <circle cx="520" cy="62" r="2.5"/><circle cx="548" cy="52" r="2.5"/>
+        <circle cx="578" cy="55" r="2.5"/><circle cx="600" cy="70" r="2.5"/>
+        <circle cx="612" cy="88" r="2.5"/>
+      </g>
+      <path d="M520 62 q45 -14 92 26" fill="none" stroke="#8b3a0f" stroke-width="1" stroke-dasharray="2 3"/>
+      <g font-family="JetBrains Mono, monospace" font-size="11" fill="#7a7060">
+        <text x="120" y="205">surface S, with normals</text>
+        <text x="510" y="205">unit sphere S²</text>
+      </g>
+    </svg>
+  </div>
+  <div class="fig-cap"><b></b>The Gauss map records only direction. A region where the normal
+  sweeps quickly covers a large patch of S² and has large |K|; a flat region collapses to a
+  point. K is the Jacobian of this map — curvature <em>is</em> area distortion under N.</div>
+</div>
+
+<div class="sec-num" id="s4">§ 21.4</div>
+<h2 class="sec">Gauss–Bonnet, and a constraint on the attractor</h2>
+
+<p>The Gauss map's degree is a topological invariant, and integrating K recovers it.</p>
+
+<div class="thm env f">
+<p><strong>Gauss–Bonnet.</strong> For a closed oriented surface S,
+∫<sub>S</sub> K dA = 2π χ(S), where χ is the Euler characteristic.</p>
+</div>
+
+<p>This is the first theorem in the book's lineage where a local quantity, integrated,
+returns something that cannot vary continuously. It is the model for everything downstream —
+including the degree formulas of §21.6.</p>
+
+<p>It also constrains this corpus's own objects, which is worth stating because it is
+checkable rather than decorative. The Neimark–Sacker analysis produces invariant tori. For
+any such torus, χ(T²) = 0, hence</p>
+
+<div class="eq f">
+∫<sub>T²</sub> K dA  =  0<br>
+<span class="cm">— on any invariant torus, positive and negative curvature cancel exactly.
+A numerical torus whose computed curvature integral drifts from zero is reporting a
+discretisation error, not a discovery.</span>
+</div>
+
+<div class="sec-num" id="s5">§ 21.5</div>
+<h2 class="sec">The projective Gauss map</h2>
+
+<p>Now change what the map records. Instead of the unit normal — which needs a metric and an
+orientation — record the tangent hyperplane, which needs neither.</p>
+
+<div class="dfn env f">
+<p><strong>Projective Gauss map.</strong> For a projective variety X ⊂ ℙⁿ, the map
+γ : X<sub>sm</sub> → (ℙⁿ)<sup>∨</sup> sends a smooth point x to its embedded tangent
+hyperplane T<sub>x</sub>X, regarded as a point of the dual projective space. The closure of
+its image is the <em>dual variety</em> X<sup>∨</sup>.</p>
+</div>
+
+<p>This is the same construction with the metric removed. Where N needed a normal direction,
+γ needs only a tangent hyperplane; where N landed in S², γ lands in the dual space. Dropping
+the metric is what makes the map algebraic — γ is given by the partial derivatives of the
+defining equations, so it is a rational map of varieties, and everything after this point is
+algebraic geometry.</p>
+
+<div class="sec-num" id="s6">§ 21.6</div>
+<h2 class="sec">The lift</h2>
+
+<p>A rational map with an indeterminacy locus is awkward. The remedy is the one this book has
+used since Chapter 2: do not study the map, study its graph in a bigger space. That bigger
+space is the projectivised cotangent bundle ℙT*ℙⁿ, which carries a canonical contact
+structure — the same kind of structure as Chapter 3's, now holomorphic and projective.</p>
+
+<div class="dfn env f">
+<p><strong>Conormal variety.</strong> Con(X) ⊂ ℙT*ℙⁿ is the closure of
+{ (x, H) : x ∈ X<sub>sm</sub>, T<sub>x</sub>X ⊆ H } — that is, the closure of the graph
+of γ.</p>
+</div>
+
+<div class="thm env f">
+<p><strong>The conormal variety is Legendrian.</strong> For any irreducible X ⊂ ℙⁿ,
+Con(X) has dimension n − 1 and is an integral submanifold of the contact distribution on
+ℙT*ℙⁿ.</p>
+</div>
+
+<div class="pf">Classical; see the sidenote for sources.</div>
+
+<p>So the graph of the Gauss map is exactly the object Chapter 5's jet space was reaching
+for. A Legendrian submanifold of a contact manifold — the same definition, over ℂ, in a
+projective ambient. The ladder's fifth rung and Gauss's 1827 map are the same construction
+seen from two ends.</p>
+
+<div class="fig wide f">
+  <div class="fig-inner">
+    <svg viewBox="0 0 700 300" width="100%" style="max-width:680px">
+      <rect x="245" y="20" width="210" height="56" fill="#ede9e0" stroke="#1a4d6e" stroke-width="1.8"/>
+      <text x="350" y="44" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#1a4d6e">Con(X) ⊂ ℙT*ℙⁿ</text>
+      <text x="350" y="63" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#7a7060">Legendrian · dim n−1 · the graph of γ</text>
+
+      <line x1="280" y1="82" x2="150" y2="185" stroke="#2d3142" stroke-width="1.5" marker-end="url(#a2)"/>
+      <line x1="420" y1="82" x2="550" y2="185" stroke="#2d3142" stroke-width="1.5" marker-end="url(#a2)"/>
+      <defs><marker id="a2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+        <path d="M0 0 L9 4.5 L0 9 z" fill="#2d3142"/></marker></defs>
+      <text x="188" y="126" font-family="JetBrains Mono, monospace" font-size="11" fill="#8b3a0f">π</text>
+      <text x="492" y="126" font-family="JetBrains Mono, monospace" font-size="11" fill="#8b3a0f">π<tspan baseline-shift="super" font-size="8">∨</tspan></text>
+
+      <rect x="55" y="192" width="190" height="52" fill="#ede9e0" stroke="#2d3142" stroke-width="1.4"/>
+      <text x="150" y="214" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#2d3142">X ⊂ ℙⁿ</text>
+      <text x="150" y="232" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#7a7060">the variety</text>
+
+      <rect x="455" y="192" width="190" height="52" fill="#ede9e0" stroke="#2d3142" stroke-width="1.4"/>
+      <text x="550" y="214" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#2d3142">X<tspan baseline-shift="super" font-size="9">∨</tspan> ⊂ (ℙⁿ)<tspan baseline-shift="super" font-size="9">∨</tspan></text>
+      <text x="550" y="232" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#7a7060">its tangent hyperplanes</text>
+
+      <path d="M245 275 h410" stroke="#c8c0b0" stroke-width="1" stroke-dasharray="4 4"/>
+      <text x="350" y="270" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#8b3a0f">Con(X) = Con(X∨) — one object, two projections</text>
+    </svg>
+  </div>
+  <div class="fig-cap"><b></b>The correspondence. Con(X) sits above both spaces and projects to
+  each. Reading down the left arrow recovers the variety; down the right, its dual. Biduality
+  is the statement that the <em>same</em> Legendrian object serves both projections — so
+  duality is an involution and (X<sup>∨</sup>)<sup>∨</sup> = X in characteristic zero. The
+  Legendre transform of Chapter 5 and projective duality are this one diagram, read in two
+  directions.</div>
+</div>
+
+<div class="thm env f">
+<p><strong>Biduality (reflexivity).</strong> Over a field of characteristic zero,
+Con(X) = Con(X<sup>∨</sup>) under the canonical identification ℙT*ℙⁿ ≅ ℙT*(ℙⁿ)<sup>∨</sup>;
+hence (X<sup>∨</sup>)<sup>∨</sup> = X.</p>
+</div>
+
+<div class="rem env f">
+<p>The characteristic-zero hypothesis is not decoration. Reflexivity fails in positive
+characteristic — the standard counterexample is a strange curve whose Gauss map is
+inseparable. A statement that holds over ℂ and fails over 𝔽<sub>p</sub> is a statement about
+separability, not about geometry, and it should be quoted with its hypothesis.</p>
+</div>
+
+<div class="sec-num" id="s7">§ 21.7</div>
+<h2 class="sec">Where the fold was hiding</h2>
+
+<p>Return to §21.3. The Gauss map degenerates where det dN = 0 — the parabolic curve, K = 0.
+A map between surfaces degenerating along a curve is precisely the setting of Whitney's
+theorem: the generic singularities of a smooth map ℝ² → ℝ² are folds along a curve and
+isolated cusps.</p>
+
+<p>So the fold is not an analogy imported into this book from catastrophe theory. It is what
+the Gauss map does at a parabolic point, and it was already in Chapter 3's surface before the
+word was used. Under projectivisation the same statement becomes algebro-geometric: the
+singularities of the projection π<sup>∨</sup> in the diagram above are the singularities of
+the dual variety, and in low dimension these are the A<sub>k</sub> normal forms — fold,
+cusp, swallowtail.</p>
+
+<div class="rem env f">
+<p><strong>The claim being made, and the one not being made.</strong> That fold and cusp
+arise as singularities of the Gauss map and of Legendrian projections is a theorem. That the
+classification of such singularities is ADE is a theorem. What is <em>not</em> claimed here is
+that real catastrophe theory and complex Legendrian singularity theory are the same subject:
+the complex theory classifies, the real theory selects real forms, and the correspondence
+between them requires care that this chapter does not supply. Where this corpus has used
+fold and cusp language for real dynamical systems, the connection drawn here is that they
+share a normal form, not that they are the same object.</p>
+</div>
+
+<div class="sec-num" id="s8">§ 21.8</div>
+<h2 class="sec">Honest inventory</h2>
+
+<table class="dtab">
+<tr><th>Claim</th><th>Status</th><th>What it rests on</th></tr>
+<tr><td>K is intrinsic</td><td class="cv">Classical</td><td>Gauss 1827</td></tr>
+<tr><td>K = det dN</td><td class="cv">Classical</td><td>definition of the shape operator</td></tr>
+<tr><td>∫K dA = 2πχ</td><td class="cv">Classical</td><td>Gauss–Bonnet</td></tr>
+<tr><td>∫K dA = 0 on an invariant torus</td><td class="cv">Corollary</td><td>χ(T²) = 0</td></tr>
+<tr><td>Con(X) is Legendrian, dim n−1</td><td class="cv">Classical</td><td>standard; over ℂ</td></tr>
+<tr><td>(X<sup>∨</sup>)<sup>∨</sup> = X</td><td class="cv">Classical</td><td>char 0 only — see Remark</td></tr>
+<tr><td>fold/cusp are Gauss-map singularities</td><td class="cv">Classical</td><td>Whitney</td></tr>
+<tr><td>dm³ contact form algebraises</td><td class="es">OPEN</td><td>nothing yet — see below</td></tr>
+</table>
+
+<div class="rem env f">
+<p><strong>The open question this chapter creates.</strong> The dm³ contact form is
+α = dz − r²dθ with r² = x² + y², which is polynomial. Whether the structure it defines is the
+real locus of a holomorphic contact structure on a projective variety — and if so, which one —
+is not settled here. A positive answer places the whole framework of Books I–IV inside
+algebraic geometry and makes the diagram of §21.6 available to it. A negative answer is
+sharper still, because it would identify precisely which feature of the dm³ geometry is
+irreducibly real. Either outcome is worth having; neither is assumed.</p>
+</div>
+
+</div>
+
+<div class="side">
+  <div class="sn"><strong>Egregium</strong>Gauss, <em>Disquisitiones generales circa
+  superficies curvas</em>, 1827. The theorem is §12; the surrounding sections build the
+  Gauss map first, which is the order followed here.</div>
+  <div class="sn"><strong>Two Disquisitiones</strong>The same author's
+  <em>Disquisitiones Arithmeticae</em> (1801) opens the other branch this corpus works in.
+  Both branches meet again in §21.6, where the Gauss map becomes algebraic.</div>
+  <div class="sn"><strong>Conormal varieties</strong>Standard treatments: Griffiths–Harris,
+  <em>Principles of Algebraic Geometry</em>; Gelfand–Kapranov–Zelevinsky,
+  <em>Discriminants, Resultants and Multidimensional Determinants</em>, ch. 1.</div>
+  <div class="sn"><strong>Positive characteristic</strong>Reflexivity failing over
+  𝔽<sub>p</sub> is Wallace's observation; the mechanism is inseparability of γ.</div>
+  <div class="sn"><strong>Where this goes next</strong>Ch 22 takes the diagram of §21.6 as
+  given and asks what the projections do: degree formulas, discriminants, and the repair of
+  Ch 5's Theorem 5.1, which as printed contradicts Bäcklund.</div>
+</div>
+</div>
+
+<div class="ft-grid" style="max-width:960px;margin:0 auto;padding:2.5rem 3rem 4rem;border-top:1px solid var(--rule)">
+  <div class="ft-copy" style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);line-height:2">
+    Principia Orthogona · Book IV · Chapter 21<br>
+    Pablo Nogueira Grossi · G6 LLC, Newark, New Jersey · ORCID 0009-0000-6496-2186<br>
+    ISBN 979-8-9954416-8-7 · doi 10.5281/zenodo.19117400<br>
+    <a href="ch03.html" style="color:var(--accent);text-decoration:none">← Ch 3 · Contact 3-Manifold</a> ·
+    <a href="index.html" style="color:var(--accent);text-decoration:none">Contents</a> ·
+    <a href="ch22.html" style="color:var(--accent);text-decoration:none">Ch 22 · Duality and the Discriminant →</a>
+  </div>
+</div>
+
+</body>
+</html>

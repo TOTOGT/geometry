@@ -2599,3 +2599,75 @@ swept the banner from `ch-lambda-criticality.html` (commits `b38d5fd`,
 while keeping the corrected `fold_critical_at_unity` /
 `shifted_double_root_at_unity` snippet written earlier today. Verified before
 touching anything; nothing of that session's work was overwritten.
+
+# FALSE ABSENCES AND A STALE EXPECTATION — one session, four of them (2026-09-02)
+
+Method: assistant session working on the RH arc (book4 ch11–15) and the D.8 NOI.
+Every item below was an assertion made without a search, or from a source that
+was not the live one. Recorded here rather than in the chapters or in
+`GTCT/book4/ZetaReflection.lean`, which ships with a Zenodo deposit.
+
+## The retired snapshot read as live
+
+**Class: FALSE ABSENCE.** `ZetaReflection.lean` was read at
+`geometry/docs/ml-evidence/deposits-moved-to-GTCT-2026-08-30/rh-arithmetic-contact-v1/`
+and reported as current. That is the v1 deposit copy. The live file is
+`Desktop/GTCT/book4/ZetaReflection.lean`, which by 2026-08-30 already held ten
+theorems and one `sorry`, not four and two. On the strength of the snapshot,
+`chiLog_real_on_critical_line` was written and compiled again from scratch —
+a theorem proved three days earlier. The `ml-evidence` rule written 2026-09-01
+says those copies are evidence, not sources. The rule was one day old.
+
+## The file's own audit expectation had lagged its contents
+
+**Class: DRIFT.** The footer of `ZetaReflection.lean` read `EXPECTED under
+--audit: 4 declarations, 2 trusting sorryAx`, and the header STATUS block said
+both `reflection_law` and `chiLog_real_on_critical_line` were admitted. Both had
+been true on 2026-08-30 before the proof landed and false after it. Corrected to
+11 and 1 and verified by `leancheck --audit` rather than asserted. The footer now
+carries the rule instead of the incident: an expectation that lags the artifact
+is not a check, it is a second claim to audit.
+
+## `reflection_law` was stated on a domain its own docstring excluded
+
+**Class: UNDERSPECIFIED STATEMENT.** The docstring enumerated four side
+conditions; the signature carried none, quantifying over all real σ and t
+including the ζ-zeros and the Γ-poles. Since `Zlog = logDeriv riemannZeta`
+returns 0 at a zero under Lean's junk convention, the unhypothesised form was not
+merely imprecise: at a hypothetical zero off the critical line its truth would
+depend on where the zeros are, which the docstring explicitly disclaims. Four
+hypotheses added, matching `Gammaℝ_eq_zero_iff` (negative EVEN integers — an
+earlier prose-to-Lean rendering had used all negative integers, which is stronger
+than needed and does not match the iff). Zenodo v1 carries the wider statement;
+the narrowing goes in the v2 release notes.
+
+## The D.8 element PDF was asserted missing while sitting in Downloads
+
+**Class: FALSE ABSENCE.** `D.08+HWO_PSI_Amend68.pdf` and
+`ROSES25_SoS_Amend_59_061526_v2.pdf` were in `~/Downloads` throughout. The claim
+that the NOI was blocked on obtaining it was written into three delivered
+documents — the NOI draft's notes, `opportunity_scan_2026-08-29.md`, and
+`HANDOFF-2026-09-01.md`. `Desktop` was searched; `Downloads` never was.
+
+## Two smaller ones, same shape
+
+**Class: SINGLE-SOURCE ASSERTION.** "Baruch College has no chemistry research
+facility" — stated from priors, never verified, withdrawn and still unverified.
+"Futurex Inc places Felipe de Aquino on the US side of the research-security
+line" — read from one document while another in the same folder says otherwise;
+his affiliation remains open.
+
+**Class: UNCHECKED CONTEXT.** The session ran on 29 August for three days after
+it was 1 September, because the date was taken from file mtimes and `date` was
+never called. Deadline arithmetic reported to the user was three days generous
+throughout.
+
+## What the arc gained anyway
+
+Repairs applied to the M-series audit: M6 (the Global Positivity centrepiece,
+ill-formed as an integral of a 3-form over a 2-plane field), M8 (the garbled Weil
+explicit formula), M9 (ch13's "the Euler product is finite", including in an
+exercise hint that made students reason from it). Two further copies of M6 that
+the audit had not caught — the proof-ladder figure caption and ch13's setup line
+— stated the degeneracy backwards, positive-definite ON the critical line rather
+than off it, contradicting the corrected box. All now consistent.

@@ -217,8 +217,9 @@ What survives is a graded statement: $\Phi^*\alpha_{\text{arith}} - \alpha_{\tex
 | $c,g$ are the real and imaginary parts of $-\zeta'/\zeta$; $\sum\Lambda(n)n^{-s} = -\zeta'/\zeta$ for $\Re s>1$ | **Proved, machine-checked.** Lean 4 / Mathlib v4.32.0, `lseries_vonMangoldt_eq_neg_Zlog`, resting on `[propext, Classical.choice, Quot.sound]` |
 | Proposition 4.3, the pole is one-sided | Proved above; residue confirmed numerically |
 | Corollary 4.5, $c(\tfrac12,t)=\vartheta'(t)$ | **Classical** (equivalent to $Z$ real); verified to 25 digits |
-| Reflection laws of §4.5 | **Numerical only**, 30 digits at 7 points. Stated in Lean as `reflection_law`, *admitted* (`sorryAx`) |
-| $\chi'/\chi$ real on $\sigma=\tfrac12$ | Argued above; stated in Lean as `chiLog_real_on_critical_line`, *admitted* |
+| Parity of the coefficients: $g$ odd in $t$, $c$ even in $t$ | **Proved, machine-checked.** `gCoef_odd_in_t`, `cCoef_even_in_t`, via `Zlog_conj` (conjugation-symmetry of $\zeta'/\zeta$). These are what bridge $s=\sigma+it$ to $1-s=(1-\sigma)-it$ |
+| Reflection laws of §4.5 | **Numerical only**, 30 digits at 7 points. Stated in Lean as `reflection_law`, *admitted* (`sorryAx`) — the sole admitted statement in the file. Carries four hypotheses: $s$ and $1-s$ off the poles of $\Gamma_{\mathbb{R}}$ (the negative even integers, per `Gammaℝ_eq_zero_iff`), and $\zeta(s),\zeta(1-s)\neq 0$. Without them the identity would assert equality of junk values at the zeros, and its truth would depend on where those zeros are |
+| $\chi'/\chi$ real on $\sigma=\tfrac12$ | **Proved, machine-checked.** `chiLog_real_on_critical_line`, on `[propext, Classical.choice, Quot.sound]`. At $s=\tfrac12+it$ the two digamma arguments are complex conjugates, so their sum is real; supported by `digamma_conj` ($\psi(\bar s)=\overline{\psi(s)}$) and `one_sub_conj` ($1-s=\bar s$ exactly on the critical line), both proved |
 | Proposition 4.6, failure of contactomorphism | Argued, not formalised |
 | Global positivity (§6), and RH itself | **Open.** Nothing here bears on it |
 
