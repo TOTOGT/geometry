@@ -2773,3 +2773,91 @@ Verified counts, comments stripped:
 **Standing rule reinforced.** A declaration count in a commit message, a chapter or a
 journal page is a published number and falls under the repo rule: regenerate it from
 the file at the moment of writing, never restate it from a draft.
+
+
+## WHAT "KERNEL-AUDITED" ASSERTS, IN THIS CORPUS AND ELSEWHERE (2026-09-05)
+
+**Occasion.** `book4/Bhaskara.lean` was run through `leancheck.sh --audit` and passed:
+
+    OK     202s  Bhaskara.lean
+            audit: 11 declarations, 0 trusting sorryAx/native_decide
+      1 ok, 0 failed
+
+**What that establishes, read from the script rather than from the badge.** The audit
+copies the file, appends `#print axioms <ns>.<decl>` for every declaration matched by
+`^(theorem|lemma)`, runs it, and counts two things: lines reporting an axiom
+dependency, and lines mentioning `sorryAx` or `native_decide`. So the assertion is
+**no theorem in this file transitively trusts `sorryAx` or `native_decide`** — a
+kernel-level, transitive statement, and genuinely stronger than sorry-free-in-source.
+
+**What it does not establish.** That the axiom set is *exactly* `propext`,
+`Classical.choice`, `Quot.sound`. The gate tests for the two dependencies that break
+trust; it does not reject a fourth axiom, and it would pass a file that added one. For
+`Bhaskara.lean` the added-axiom count is 0 by inspection and the tactics used are
+`ring` and `norm_num`, so the axiom set almost certainly *is* the three — but "almost
+certainly by inspection" is not what the tool reported, and the difference is the whole
+subject of WP-94.
+
+**Two counts, two meanings.** The audit reports **11** declarations; the file holds
+**12**. The gate probes `theorem` and `lemma`, and `IsPell` is a `def`. Neither number
+is wrong; they measure different sets, and quoting either without saying which gate
+produced it is the defect this corpus keeps finding in other people's figures.
+
+**The comparison that makes this worth logging.** The Fermat formalization announced
+4 September states a stricter gate: its build *fails* unless the final theorem rests on
+exactly the three standard axioms with no `sorry` anywhere. Two developments, both
+truthfully described as kernel-audited, tested against different gates. Neither party is
+misreporting. There is no agreed sense in which the phrase is a measurement.
+
+**Action.** No change to the tool in this entry. Recorded so that the three-tier
+registry's tier-three wording can be made precise — "no declaration trusts `sorryAx` or
+`native_decide`" rather than the bare word *audited* — and so that a later session does
+not read the badge as the stronger claim. A stricter mode that fails on any axiom
+outside the allowlist is the obvious follow-up and is exactly item 1 of the `leanledger`
+proposal in the seed-grant application.
+
+
+## WHAT WAS LEFT IN GTCT WHEN BOOK 4 MOVED (2026-09-05)
+
+**Audit.** Six files exist in `GTCT/book4/` with no counterpart in
+`geometry/book4/`. Checked one at a time rather than assumed:
+
+| File | Verdict |
+|---|---|
+| `chIV-preface-impa.html` | superseded — the IMPA-named preface, retired by the Edição Brasil rename |
+| `chIV-15.html` | superseded — same chapter as `ch15.html` here, which is larger and further developed |
+| `nav.js` | not needed — nothing here loads it; the single grep hit is a CSS comment in `ch15-complex-turn.html` |
+| `SERIES_SKELETON.md` | GTCT's own |
+| `certify_rstar_rigorous.py` | **real gap — brought over** |
+| `METHODOLOGY.md` | **real gap — brought over**, it is the certifier's benchmark record |
+
+**The gap that mattered.** `certify_rstar_rigorous.py` certifies r* by a
+Lohner-style method — mpmath centre trajectory, Jacobian-linearised error
+transport, interval-Hessian Lagrange remainder — so the radius over-approximates
+the reachable set instead of estimating it. This repo held only the plain
+float-bisection `certify_rstar.py`. Re-run, the rigorous script reproduces its
+documented result exactly: **r\* ∈ [0.775940575501953125, 0.77594057550234375]**,
+width 3.906e-13.
+
+**A dangling citation, resolved without writing anything.** The script's docstring
+pointed at a companion note `why_no_closed_form.md` for the algebraic and
+Hamiltonian checks ruling out a closed form. No such file exists in any repo. The
+content does exist — `METHODOLOGY.md` §"Path 3 — closed form (ruled out)". The
+reference was misnamed, not missing, and is repointed. Nothing was composed to
+fill it.
+
+**A number published today, corrected against the certificate.** `ch23-verify.py`
+block [8] regenerated Ch 3's basin figure by float bisection and reported
+`0.775940575502539698`. That value is **outside** the certified bracket, 1.96e-13
+above its upper bound. The two agree to eleven significant figures under
+rounding; the twelve leading digits are identical (775940575502) and they part at
+the thirteenth, by an amount comparable to the bracket width itself. The cause is
+the block's own error floor: `solve_ivp` at rtol=1e-11/atol=1e-13. Ch 3 quotes
+~0.776 and is unaffected. Block [8] now prints the bracket, states plainly that it
+falls outside it, and directs any citation past eleven figures to the certificate.
+
+**Standing note.** A figure regenerated by an instrument is only as good as that
+instrument's floor, and quoting it to sixteen digits because Python printed
+sixteen digits is the same defect as quoting a declaration count without its
+convention. Where two instruments exist, the paper cites the stronger one and
+says which.

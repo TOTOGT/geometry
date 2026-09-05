@@ -144,6 +144,16 @@ print("       so the reduction is asymptotic — exact in the limit, not at fini
 
 # ─────────────────────────────────────────────────────────────────────────────
 print("\n[8] Ch 3's published basin number, regenerated")
+print("""       NOTE ON PRECISION. What follows is a plain float bisection driven by
+       solve_ivp at rtol=1e-11 / atol=1e-13, so its error floor is ~1e-13 and
+       digits beyond the twelfth are integrator noise. The rigorous value lives
+       in certify_rstar_rigorous.py (mpmath centre + Jacobian-linearised error
+       transport + interval-Hessian Lagrange remainder), which certifies
+
+           r* in [0.775940575501953125, 0.77594057550234375]   width 3.906e-13
+
+       This block agrees with that enclosure to eleven significant figures and
+       should not be quoted past them. Cite the certificate, not this number.""")
 # ─────────────────────────────────────────────────────────────────────────────
 def converges(r0):
     s = solve_ivp(full, [0, 200], [r0, 0.0, 0.0], args=(0.0,), rtol=1e-11, atol=1e-13)
@@ -157,6 +167,26 @@ basin = 0.5*(lo + hi)
 print("       basin boundary at z=0, by bisection: r* = %.9f" % basin)
 print("       Ch 3 prints                        : r* ~ 0.776")
 check("Ch 3's basin figure regenerates", basin, 0.776, tol=5e-3)
+
+# Against the rigorous enclosure. LO/HI are the certified bracket printed by
+# certify_rstar_rigorous.py; the float value below is NOT inside it, and that
+# is the point rather than a defect.
+LO, HI = 0.775940575501953125, 0.77594057550234375
+print("       certified bracket : [%.18f, %.18f]  width %.3e" % (LO, HI, HI-LO))
+print("       this block        :  %.18f" % basin)
+inside = LO <= basin <= HI
+print("       inside the bracket: %s (above the upper bound by %.2e)"
+      % (inside, basin - HI))
+check("float bisection sits within its own error floor of the certificate",
+      abs(basin - 0.5*(LO+HI)) < 1e-12, True)
+check("first eleven significant figures match",
+      "%.10e" % basin, "%.10e" % (0.5*(LO+HI)))
+print("       So: agreement to eleven significant figures under rounding. The")
+print("       twelve leading digits are identical (775940575502) but the two")
+print("       differ at the thirteenth, by an amount comparable to the bracket")
+print("       width itself.")
+print("       Ch 3 quotes ~0.776 and is safe. Anything past eleven figures must")
+print("       be cited from certify_rstar_rigorous.py, not from this block.")
 
 # ─────────────────────────────────────────────────────────────────────────────
 print("\n[9] Continuity with Ch 22: the same discriminant, one chapter earlier")
