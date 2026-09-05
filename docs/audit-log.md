@@ -2731,3 +2731,45 @@ not ch10's IntersectionObserver. The stylesheet sets `.f { opacity:0 }` and noth
 `.in` class, so all fifteen elements carrying that class — every theorem box and all three
 SVG diagrams — rendered invisible. The script is now in both ch21 and ch22. Any chapter built
 by splicing ch10's `<style>` should be checked for the same thing.
+
+
+## A COUNT ERROR IN A COMMIT MESSAGE ABOUT COUNTING (2026-09-05)
+
+**What was published.** GTCT commit `7ac47df`, pushed, states of `book4/Bhaskara.lean`:
+"Ten declarations, no sorry."
+
+**What the file holds.** **Twelve** declarations — eleven `theorem` and one `def`
+(`IsPell`). Zero `sorry` in code. The same wrong figure went into *Imaginary Origin*
+No. 9 page 4 twice, in the body and in the sidebar stat, and into the session's
+working notes.
+
+**Root cause.** The count was carried forward from the description written while the
+file was being drafted, before the last two theorems were added, and was never
+regenerated from the file. No instrument was run; a remembered number was reused.
+This is the failure the corpus's own census exists to prevent, in a commit message
+whose neighbouring paragraph reports a de-duplicated declaration count.
+
+**A second point, which is the more useful one.** A naive `grep -c '\bsorry\b'` on
+`Bhaskara.lean` returns **1**. The file contains no `sorry` in any proof; the single
+match is the word inside the header comment "Every theorem below is proved. No
+`sorry`." Stripping block and line comments before counting returns 0, which is the
+truth. This is exactly the code-versus-comment distinction that moved this corpus's
+own admitted count from 780 to 270, reproduced at file scale on the same day the
+seed-grant application citing that distinction was being finalised.
+
+**Resolution.** The commit is left as pushed: amending rewrites downstream SHAs and
+breaks the commit links recorded in this log (rule of `d86dc76`, 2026-09-04). The
+journal is corrected to twelve in both places before publication on 19 September.
+Verified counts, comments stripped:
+
+| file | declarations | `sorry` in code |
+|---|---:|---:|
+| `book4/Bhaskara.lean` | 12 (11 theorem, 1 def) | 0 |
+| `book4/ZetaReflection.lean` | 11 | 1 |
+
+`ZetaReflection`'s figures in the same commit message — eleven declarations, one
+`sorryAx` — are correct and unchanged.
+
+**Standing rule reinforced.** A declaration count in a commit message, a chapter or a
+journal page is a published number and falls under the repo rule: regenerate it from
+the file at the moment of writing, never restate it from a draft.
