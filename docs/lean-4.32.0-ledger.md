@@ -4,12 +4,13 @@ Produced by `tools/toolchain_ledger.py`. Toolchain pinned: `leanprover/lean4:v4.
 
 Nothing here is compiled by this tool. Each row reports whether a gate report already on disk names this file's declarations, and **what those declarations rest on**. Axiom reports are parsed by `tools/axiom_gate.py`, which holds the allowlist and rejoins Lean's wrapped output.
 
-**30 of 330 tracked declarations in this repo have a kernel record** — 3 of them resting on no axiom at all, 27 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 0 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
+**45 of 338 tracked declarations in this repo have a kernel record** — 8 of them resting on no axiom at all, 37 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 0 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
 
 | file | decls | audited | `axiom` | rests on | status | report | dated |
 |---|---:|---:|---:|---|---|---|---|
 | `Orthogenesis/Architecture/G6Crystal.lean` | 38 | 14 | 0 | 3 axiom-free · 11 standard | kernel-audited | `geometry/tools/verify-dm3/axioms.txt` | 2026-08-26 |
 | `Orthogenesis/Architecture/ToyModel.lean` | 14 | 12 | 0 | 12 standard | kernel-audited | `geometry/tools/verify-dm3/axioms.txt` | 2026-08-26 |
+| `PolarPolygonCommonRefinement.lean` | 15 | 15 | 0 | 5 axiom-free · 10 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-05/PolarPolygonCommonRefinement.axioms.txt` | 2026-09-06 |
 | `book8/OrthogonalWitness.lean` | 4 | 4 | 0 | 4 standard | kernel-audited | `geometry/tools/verify-book8/axioms.txt` | 2026-08-27 |
 | `vol2-v5/deposit/VolumeTwo.lean` | 19 | 0 | 0 | — | ambiguous name | `—` | — |
 | `ChladniPolygon.lean` | 4 | 0 | 0 | — | declared, no gate | `—` | — |
@@ -25,7 +26,6 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Geometry/Growth.lean` | 1 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/HexGrid.lean` | 2 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/Main.lean` | 0 | 0 | 0 | — | declared, no gate | `—` | — |
-| `PolarPolygonCommonRefinement.lean` | 7 | 0 | 0 | — | declared, no gate | `—` | — |
 | `PolarTriadClosure.lean` | 9 | 0 | 0 | — | declared, no gate | `—` | — |
 | `SaturnHexagon.lean` | 5 | 0 | 0 | — | declared, no gate | `—` | — |
 | `TripleAlphaDm3.lean` | 6 | 0 | 0 | — | declared, no gate | `—` | — |
@@ -57,7 +57,9 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | declarations | rests on |
 |---:|---|
 | 29 | `Classical.choice, Quot.sound, propext` |
-| 3 | `(none — axiom-free)` |
+| 8 | `(none — axiom-free)` |
+| 6 | `propext` |
+| 4 | `Quot.sound, propext` |
 
 An axiom-free proof is the strongest result `#print axioms` can report, and a checker that counts only the `depends on axioms:` form cannot see it (WP-73 §6). Both forms are counted here.
 

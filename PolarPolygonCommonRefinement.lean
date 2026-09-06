@@ -159,9 +159,11 @@ theorem sixfold_alone_permits_structure :
 /-!
 ## The thirty-sector grid was doing work the theorem did not admit
 
-STATUS: WRITTEN, NOT VERIFIED. Nothing below has been through the kernel.
-Run `bash tools/leancheck.sh --audit PolarPolygonCommonRefinement.lean` before
-any of it is cited, and delete this paragraph in the commit that records the run.
+STATUS: KERNEL-AUDITED 2026-09-05, v4.32.0. 15 declarations in this file, 0
+trusting sorryAx, none resting on anything outside propext / Classical.choice /
+Quot.sound — and five resting on no axiom whatever. Report at
+tools/verify-audit/2026-09-05/PolarPolygonCommonRefinement.axioms.txt, written
+by the run, not typed.
 
 `hex_and_dec_forces_constant` is true and stays true. What overreached was the
 sentence written around it — "the only field admitting both a hexagon and a
@@ -250,12 +252,28 @@ theorem periodic_gcd {α : Type _} (v : Nat → α) :
   termination_by a _ _ _ => a
   decreasing_by exact Nat.mod_lt _ (Nat.succ_pos a)
 
--- Kernel gate.
+-- Kernel gate. Every theorem in the file, so `lake build` alone reports the
+-- whole set; leancheck's --audit probe generates its own copy of these lines,
+-- which is why a leancheck report on this file lists each declaration twice.
+-- Harmless: every consumer of a gate report deduplicates by name.
+--
+-- sawtooth_not_constant was missing from this block until 2026-09-05 and was
+-- therefore outside Tier 1 while the file around it was inside. A theorem is in
+-- the tier because a line here names it, not because it sits in an audited file.
 #print axioms periodic_sub
 #print axioms periodic_one_const
 #print axioms hex_and_dec_forces_constant
 #print axioms constant_is_bisymmetric
 #print axioms sawtooth_periodic_five
+#print axioms sawtooth_not_constant
 #print axioms sixfold_alone_permits_structure
+#print axioms alt_periodic_ten
+#print axioms alt_periodic_six
+#print axioms alt_not_constant
+#print axioms sixty_sectors_permit_structure
+#print axioms periodic_add
+#print axioms periodic_mul
+#print axioms periodic_mod
+#print axioms periodic_gcd
 
 end PolarPolygonCommonRefinement

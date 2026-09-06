@@ -30,9 +30,22 @@ answer, and the instinct behind it — sixty has room where thirty does not,
 because 60/6 and 60/10 still share a factor — was exactly right. Second time in
 two days that dismissing the vocabulary cost me the finding.
 
-`periodic_gcd` and the sixty-sector witness are written into
-`PolarPolygonCommonRefinement.lean` and are **NOT YET VERIFIED**; they carry no
-`#print axioms` line, so they are outside Tier 1 until a run says otherwise.
+**Closed the same day.** `bash tools/leancheck.sh --audit
+PolarPolygonCommonRefinement.lean` — OK 7s, 15 declarations, 0 sorryAx, nothing
+outside the permitted three. `periodic_gcd` compiled with its `termination_by`
+on the first attempt. Five of the fifteen rest on no axiom at all:
+`periodic_one_const`, `constant_is_bisymmetric`, `sawtooth_not_constant`,
+`alt_not_constant`, `periodic_add`.
+
+This is also the first run to leave a report behind on its own —
+`tools/verify-audit/2026-09-05/PolarPolygonCommonRefinement.axioms.txt`, written
+by the run rather than typed. Every earlier `--audit` in this repo's history
+printed to a terminal and discarded the evidence.
+
+One thing the report exposed: `sawtooth_not_constant` had no `#print axioms`
+line in the file's gate block, so it sat outside Tier 1 while every theorem
+around it sat inside. A declaration is in the tier because a line names it, not
+because it lives in an audited file. Block completed to all fifteen.
 
 # Audit log — totogt.github.io/geometry
 
