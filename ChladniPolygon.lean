@@ -1,3 +1,5 @@
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+
 /-!
 # ChladniPolygon.lean
 
@@ -36,8 +38,6 @@ For what the pair *cannot* be, see `PolarPolygonCommonRefinement.lean`: a field
 carrying both symmetries at once is constant, so the hexagon and the decagon are
 not two symmetries of one field.
 -/
-
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 
 namespace ChladniPolygon
 
