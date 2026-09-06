@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-98 · A Measurement Science Without a Unit — Principia Orthogona Vol VI</title>
+<meta name="description" content="WP-98: America's AI Action Plan directs NIST to convene a consortium to identify proven, scalable and interoperable techniques and metrics for evaluating AI. Interoperability presupposes a unit that survives transfer between parties, and that unit does not exist: a verification claim names an artifact when what was verified is a triple. This note reads the Plan for what it asks of the verification layer, names the three gaps, and offers a working instrument — demonstrated by four defects it caught in this corpus in one week.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+</style>
+</head>
+<body>
+<div class="topnav">
+  <span class="crumbs"><a href="../index.html">⚜ PRINCIPIA ORTHOGONA</a> · <a href="index.html">Vol VI · Roots</a> · WP-98</span>
+  <span class="meta"><a href="wp97-thirty-was-doing-the-work.html">← WP-97 · Thirty Was Doing the Work</a></span>
+</div>
+
+<div class="wp-head">
+  <div class="topictag" title="A policy reading: what a federal strategy document asks of the verification layer, and what that layer does not yet have">#Policy Reading</div>
+  <div class="wp-kicker">Vol VI · Roots · WP-98 · Received 2026-09-06 · Companion to WP-73, WP-94, WP-97 · Open</div>
+  <h1>A Measurement Science <em>Without a Unit</em></h1>
+  <div class="subtitle">America&#8217;s AI Action Plan directs NIST to convene a consortium to identify &#8220;proven, scalable, and interoperable techniques and metrics&#8221; for evaluating AI. Interoperability presupposes a unit that survives transfer between parties. This note reads the Plan for what it asks of the verification layer, shows that the unit does not exist and why, and offers a working instrument &#8212; together with the four defects that instrument caught in this corpus in a single week, which is the only honest way to recommend one.</div>
+  <div class="metagrid">
+    <div><strong>Method</strong>close reading of a primary source<br>plus corpus figures read from gate reports on disk</div>
+    <div><strong>Reproduction</strong><span class="mono">wp98-verify.py</span><br>recomputes every corpus number; runs no Lean</div>
+    <div><strong>Claim type</strong>policy reading and a gap analysis<br>not a proposal, and not a bid</div>
+    <div><strong>Status</strong>open<br>the unit does not exist; this scopes what one would have to carry</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="lede">
+A metric is interoperable when a number computed by one party means the same thing to another. For
+physical quantities that is what a unit is for. The Plan asks for interoperable metrics for AI
+evaluation and does not say what the unit is, and the reason is not an oversight in the Plan: nobody
+has one.
+</div>
+
+<div class="taglegend">
+  <span><span class="tag t-model">CHECKED</span> quoted from the Plan, page cited</span>
+  <span><span class="tag t-data">MEASURED</span> read from gate reports by <span class="mono">wp98-verify.py</span></span>
+  <span><span class="tag t-assume">RECORDED</span> an event in <span class="mono">docs/audit-log.md</span>, not recomputable</span>
+  <span><span class="tag t-open">OPEN</span> asserted, not yet established</span>
+</div>
+
+<div class="eyebrow">&sect;1</div>
+<h2>What the Plan asks of this layer</h2>
+
+<p><em>Winning the Race: America&#8217;s AI Action Plan</em> (The White House, July 2025) has three
+pillars &#8212; innovation, infrastructure, international diplomacy and security. Four of Pillar I&#8217;s
+sections bear directly on verification. <span class="tag t-model">CHECKED</span></p>
+
+<table>
+  <thead><tr><th>Section</th><th class="n">p.</th><th>What it asks for</th></tr></thead>
+  <tbody>
+    <tr><td>Build an AI Evaluations Ecosystem</td><td class="n">10</td><td>NIST/CAISI guidelines for Federal agencies to run their own evaluations; &#8220;support the development of the science of measuring and evaluating AI models&#8221;; a NIST AI Consortium to establish &#8220;new measurement science that will enable the identification of proven, scalable, and interoperable techniques and metrics&#8221;</td></tr>
+    <tr><td>Invest in AI Interpretability, Control, and Robustness</td><td class="n">9</td><td>a DARPA-led programme, with CAISI and NSF, because &#8220;the inner workings of frontier AI systems are poorly understood&#8221; and technologists &#8220;often cannot explain why a model produced a specific output&#8221;</td></tr>
+    <tr><td>Invest in AI-Enabled Science</td><td class="n">8</td><td>automated cloud-enabled labs; and a requirement that federally funded researchers &#8220;disclose non-proprietary, non-sensitive datasets that are used by AI models during the course of research and experimentation&#8221;</td></tr>
+    <tr><td>Build World-Class Scientific Datasets</td><td class="n">8</td><td>NSTC recommendations on &#8220;minimum data quality standards&#8221; for scientific data used in model training</td></tr>
+  </tbody>
+</table>
+
+<p>Read together, the ask is coherent and it is the right ask: a measurement science for a layer that
+currently has conventions instead of measurements. The rest of this note is about the one word in it
+that is load-bearing and unfunded &#8212; <em>interoperable</em>.</p>
+
+<div class="eyebrow">&sect;2</div>
+<h2>The unit problem</h2>
+
+<p>A metric transfers between parties when the receiving party can reconstruct what the number is a
+number <em>of</em>. That is what a unit does. &#8220;Three&#8221; transfers because &#8220;three metres&#8221;
+carries the metre with it.</p>
+
+<p>A verification claim does not do this, and the failure is structural rather than sloppy. WP-73 of
+this series states it in one line: a verification claim names an <strong>artifact</strong>, but what was
+verified is a <strong>triple</strong>.</p>
+
+<div class="eq">V = (artifact, toolchain, library)</div>
+
+<p>File headers record the artifact. Lock files record the library, elsewhere, unlinked to any claim.
+Toolchain pins record the toolchain, elsewhere again. No convention in common use binds all three to
+the assertion that depends on all three &#8212; so a claim survives intact while any of its arguments is
+replaced, and reads exactly as it did when it was true.</p>
+
+<p>This is not a Lean problem and not an artefact of formal methods. It is the general shape of software
+provenance, and it is exactly the shape an evaluation score has: a benchmark number names a model. The
+harness version, the prompt template, the decoding parameters, the scorer, and the dataset revision are
+recorded elsewhere if at all. An eval result published against a model and a harness that both move is a
+claim whose arguments were never written down.</p>
+
+<div class="box thm">
+  <span class="lab">Gap 1 &#8212; the arguments are not carried</span>
+  <p style="margin-bottom:0">The Plan requires disclosure of <em>inputs</em> (datasets, p. 8) and asks for
+  <em>outputs</em> (evaluation scores, p. 10). It says nothing about recording the <em>environment</em> a
+  result was produced in &#8212; which is the argument that decays without anyone editing anything.
+  <span class="tag t-open">OPEN</span></p>
+</div>
+
+<div class="eyebrow">&sect;3</div>
+<h2>And no shared word for the hole</h2>
+
+<p>WP-94 of this series censused five verification communities and found five non-interchangeable words
+for the same object &#8212; a step that is not finished, standing inside an otherwise complete argument.
+Lean writes <span class="mono">sorry</span>. Coq writes <span class="mono">admit</span> and
+<span class="mono">Admitted</span>. Proof-carrying code writes <span class="mono">axiom</span> and
+<em>trust</em>. An avionics assurance case writes <em>assumption</em>. The differences are recoverable
+from grammar, not doctrine, and no term spans them.</p>
+
+<p>A consortium convened to identify interoperable techniques will find that the communities it is
+convening cannot state, in shared vocabulary, where their arguments stop.</p>
+
+<div class="gap">
+  <span class="lab">Gap 2 &#8212; the vocabulary does not exist yet</span>
+  <p style="margin-bottom:0">And it is open precisely because the layer that would need it &#8212; a
+  proof- or evidence-exchange layer between parties &#8212; does not exist either. The window is real and
+  it is not permanent. <span class="tag t-open">OPEN</span></p>
+</div>
+
+<div class="eyebrow">&sect;4</div>
+<h2>What a checker is blind to, and what it is blind to about itself</h2>
+
+<p>The third gap is the one that costs the most and reads as the most technical. A gate that enumerates
+<em>forbidden</em> results cannot see a result nobody has thought of yet; a gate that enumerates
+<em>permitted</em> results closes the class permanently. WP-73 &sect;6 gives the specimen: a theorem
+resting on an axiom emitted by compiled-code evaluation passed a step named &#8220;Kernel axiom check&#8221;,
+because the check was a text search for the one failure its author had in mind.</p>
+
+<p>The same section gives the mirror failure, which is stranger. A checker counting only the
+&#8220;depends on axioms&#8221; form of a report was blind to the other form &#8212; a proof resting on
+nothing whatever, the strongest available outcome &#8212; and failed a file over its own three best
+results. <strong>A verification tool has two ways to be wrong, and the literature attends almost entirely
+to one of them.</strong></p>
+
+<div class="box warn">
+  <span class="lab">Gap 3 &#8212; the checkers are not themselves checked</span>
+  <p style="margin-bottom:0">A gate is a claim about the artifact it guards and is subject to the same
+  rule as any other claim: it must be checkable on a fixture. A pipeline buried in a YAML file cannot be
+  run on one. <span class="tag t-open">OPEN</span></p>
+</div>
+
+<div class="eyebrow">&sect;5</div>
+<h2>The instrument that exists</h2>
+
+<p>This series did not build these in response to the Plan; they were built because the corpus needed
+them, and the Plan happens to describe the hole they fill. Four pieces, all in
+<span class="mono">TOTOGT/geometry</span>, all runnable by a third party:</p>
+
+<table>
+  <thead><tr><th>Piece</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">CS/verify-stamp</td><td>binds a claim to the triple and fails when they come apart, distinguishing MISMATCH (wrong artifact), STALE (environment moved), FAIL (real regression) &#8212; three outcomes that are identical to every automated reader today</td></tr>
+    <tr><td>the three tiers</td><td><em>written</em> / <em>sorry-free</em> / <em>kernel-audited</em>, reported separately and never collapsed. Only the third is evidence</td></tr>
+    <tr><td class="mono">tools/axiom_gate.py</td><td>an allowlist, not a forbidden list; reads both output forms; rejoins the pretty-printer&#8217;s wrapped lines; and has its own fixture suite including the CI run that motivated it</td></tr>
+    <tr><td>the defect taxonomy</td><td>MISMATCH, STALE, FAIL, FALSE, VACUOUS, UNTRUSTED, MISATTRIBUTED (WP-73), and OVER-GENERALISED (WP-97) &#8212; each with what detects it, including the two that nothing detects</td></tr>
+  </tbody>
+</table>
+
+<p>The design rule under all of them is one sentence: <strong>a published figure must be produced by an
+artefact on disk, not typed.</strong> Tier 1 in this corpus is read out of the
+<span class="mono">axioms.txt</span> files the gates write; a number with no report behind it does not
+appear.</p>
+
+<div class="eyebrow">&sect;6</div>
+<h2>The week the instrument ran</h2>
+
+<p>Recommending a tool on its successes is worth little. Here is what it caught in this corpus between
+1 and 5 September 2026, all four defects belonging to its own author.
+<span class="tag t-assume">RECORDED</span></p>
+
+<table>
+  <thead><tr><th>Found</th><th>What it was</th><th>Cost had it stood</th></tr></thead>
+  <tbody>
+    <tr><td><strong>UNDERCOUNT</strong></td><td>the kernel-audited tier read <strong>32</strong> against a true 133. A glob swept two hardcoded directory shapes and missed a report holding 82 audited declarations &#8212; the largest in the corpus</td><td>a four-fold understatement in the one tier whose design premise is that its number cannot be typed</td></tr>
+    <tr><td><strong>NO EVIDENCE</strong></td><td>the audit tool wrote its probe to a temporary file, read two counts off it, and deleted it. A full-corpus overnight run printed to a terminal and left nothing</td><td>the repository could not distinguish a file audited last night from one never checked at all</td></tr>
+    <tr><td><strong>FORBIDDEN LIST</strong></td><td>a text search for one failure mode, reintroduced in three separate places by an author who had documented why it is wrong</td><td>a declaration the kernel never checked, counted as kernel-checked</td></tr>
+    <tr><td><strong>OVER-GENERALISED</strong></td><td>a published claim &#8212; kernel-verified, zero admitted steps &#8212; whose sentence was wider than its theorem, because a parameter fixed in the hypotheses read in prose as a constant of nature (WP-97)</td><td>a true theorem carrying a false sentence, indefinitely, with a green check beside it</td></tr>
+  </tbody>
+</table>
+
+<p>Corpus state as this note is written, every figure read from reports on disk by
+<span class="mono">wp98-verify.py</span>: <strong>148</strong> distinct kernel-audited declarations across
+five gate reports; <strong>0</strong> resting on anything outside the permitted three;
+<strong>0</strong> report lines the gate could not parse; <strong>11</strong> proofs resting on no axiom
+at all. <span class="tag t-data">MEASURED</span></p>
+
+<p>That last figure was first written here as <em>8</em>. Eight is the geometry-only count from the
+per-file ledger, carried into a corpus sentence without its scope &#8212; the same defect as WP-97&#8217;s,
+one week later, by the same author. <span class="mono">wp98-verify.py</span> refused the paper and printed
+the right number. That is the argument of this note arriving on the note, and it is left in rather than
+quietly corrected.</p>
+
+<div class="eyebrow">&sect;7</div>
+<h2>What would have to be carried</h2>
+
+<p>Not a proposal. A statement of the minimum an interoperable evaluation record would have to contain
+for a second party to know what the number is a number of.</p>
+
+<ol>
+  <li><strong>The triple, bound to the claim.</strong> Artifact hash, toolchain identity, library
+    revision, in the same object as the assertion &#8212; not in a lock file, a pin, and a header that
+    reference nothing.</li>
+  <li><strong>An environment probe that can be re-run.</strong> STALE is undetectable by a push trigger,
+    because decay happens when nothing is edited. Only a clock finds it.</li>
+  <li><strong>An allowlist of what the result may rest on.</strong> Enumerating permitted grounds is two
+    lines and closes the class against results nobody has anticipated. Enumerating forbidden ones never
+    closes.</li>
+  <li><strong>A vocabulary for the unfinished step</strong>, shared across the communities being convened
+    (WP-94), because a record that cannot say where the argument stops is not a record of an argument.</li>
+</ol>
+
+<div class="eyebrow">&sect;8</div>
+<h2>What this note does not claim</h2>
+
+<p>It does not claim that formal verification of Lean theorems and evaluation of frontier models are the
+same activity. They are not, and the second is enormously harder: a theorem has a statement and a model
+has a distribution of behaviours. The transferable part is narrower and it is the provenance discipline,
+not the mathematics &#8212; how a result is bound to the conditions that produced it, and what a checker
+must enumerate to be sound.</p>
+
+<p>It does not claim the instruments here are policy-grade. They are one person&#8217;s tools, running on
+one corpus, and &sect;6 is a list of what they found wrong with that corpus and not a record of adoption
+anywhere.</p>
+
+<p>It takes no position on the Plan&#8217;s other pillars, on its energy and permitting provisions, or on
+its direction to revise the NIST AI Risk Management Framework (p. 4) &#8212; noted here only because that
+framework is the artefact the evaluations ask on p. 10 would build on, so its scope is a fact about where
+this work could land. <span class="tag t-model">CHECKED</span></p>
+
+<p>And it is not a bid. The corpus has one federal proposal in flight and this is not a second one.</p>
+
+<div class="eyebrow">&sect;9</div>
+<h2>Sources</h2>
+
+<ol class="refs">
+  <li>The White House, <em>Winning the Race: America&#8217;s AI Action Plan</em>, July 2025. Pillar I
+    &#8220;Accelerate AI Innovation&#8221;, pp. 3&#8211;13; the four sections read here at pp. 8&#8211;10.</li>
+  <li>Executive Order 14179 of 23 January 2025, &#8220;Removing Barriers to American Leadership in
+    Artificial Intelligence&#8221;, 90 Fed. Reg. 8741 &#8212; the order directing the Plan.</li>
+  <li>NIST, <em>Artificial Intelligence Risk Management Framework (AI RMF 1.0)</em>, 2023,
+    <a href="https://doi.org/10.6028/NIST.AI.100-1">10.6028/NIST.AI.100-1</a>.</li>
+  <li>WP-73, <em>The Stamp and the Triple</em>, this volume &#8212; the triple, the seven classes, and
+    &sect;6 on axiom-free proofs. Instrument at <span class="mono">geometry/CS/verify-stamp</span>.</li>
+  <li>WP-94, <em>One Hole, Five Words</em>, this volume &#8212; the five-community census.</li>
+  <li>WP-97, <em>Thirty Was Doing the Work</em>, this volume &#8212; OVER-GENERALISED.</li>
+  <li>Corpus figures: <span class="mono">wp98-verify.py</span>, this directory. Reads the gate reports
+    and parses them with <span class="mono">geometry/tools/axiom_gate.py</span>. Runs no Lean, and cannot
+    tell you a report is stale &#8212; which is &sect;4, demonstrated on this paper.</li>
+</ol>
+
+</div>
+
+<footer>
+  <div class="fwrap">
+    <div>
+      <strong style="color:var(--gold2)">WP-95 · The Right Word, the Wrong Reader</strong><br>
+      Principia Orthogona · Vol VI · Roots<br>
+      <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> · Pablo Nogueira Grossi · Newark NJ · 2026<br>
+      ORCID 0009-0000-6496-2186 · <a href="mailto:g6llc@proton.me">g6llc@proton.me</a>
+    </div>
+    <div class="disc">
+      <strong style="color:var(--gold2)">Disclaimer</strong><br>
+      Independent working paper; not peer-reviewed. A stylized structural analysis. No transaction,
+      institution, instrument or person is identified, and none is alleged; every parameter is illustrative
+      and chosen for legibility, as &sect;8 sets out. &sect;3&#8217;s result is conditional on the instrument
+      being own funds; &sect;4&#8217;s diagnostic is a screen, not a proof; &sect;6&#8217;s routing claim is
+      argued from mechanism and not measured; &sect;7&#8217;s control is open and unimplemented.
+      CC BY-NC-ND 4.0 · © 2026 Pablo Nogueira Grossi — G6 LLC.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
