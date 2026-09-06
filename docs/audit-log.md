@@ -1,3 +1,39 @@
+# THIRTY WAS DOING THE WORK — an overclaim found by asking about base sixty (2026-09-05)
+
+**Class: OVERSTATED.** Mine, in `book5/chV-saturn-smoke.html` §4 and on the
+standalone decagon page.
+
+The sentence was "the only field admitting both a hexagon and a decagon is the
+trivial one", offered as a fact about six and ten. It is a fact about choosing
+THIRTY sectors. On sixty, a sixfold pattern repeats every ten and a tenfold
+every six, `gcd(10, 6) = 2`, and `k mod 2` carries both symmetries without being
+constant. Checked exhaustively for every refinement N = 30 … 600: the invariant
+space has exactly N/30 free values, never one except at N = 30.
+
+`hex_and_dec_forces_constant` is true and unaffected. The defect is entirely in
+the prose written around it, which carried the grid choice inside it as though
+the grid were not a choice. This is the vacuity vocabulary's neighbour: not a
+statement without content, a statement whose content is narrower than the
+sentence built on it.
+
+**The correction is stronger than what it replaces.** Rotations of order 6 and
+order 10 generate rotation of order 30. A field carrying both is invariant under
+C₃₀ and shows a thirty-sided pattern — no hexagon, no decagon. Nobody has
+photographed a triacontagon on Saturn, so the two polygons are still two rings,
+and the claim now names the observation that would refute it. "The field is
+trivial" named nothing.
+
+**Provenance.** Pablo asked whether base sixty would change the arithmetic. I
+had already answered once that a base changes numerals and not numbers, which
+is true and was not the question. Sixty as a NUMBER OF SECTORS changes the
+answer, and the instinct behind it — sixty has room where thirty does not,
+because 60/6 and 60/10 still share a factor — was exactly right. Second time in
+two days that dismissing the vocabulary cost me the finding.
+
+`periodic_gcd` and the sixty-sector witness are written into
+`PolarPolygonCommonRefinement.lean` and are **NOT YET VERIFIED**; they carry no
+`#print axioms` line, so they are outside Tier 1 until a run says otherwise.
+
 # Audit log — totogt.github.io/geometry
 
 Dated narrative for defects and audits that are closed. Moved out of
