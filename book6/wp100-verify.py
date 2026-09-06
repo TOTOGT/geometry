@@ -58,18 +58,38 @@ print(f"       lambda_10 = 2*pi*R10/10 = {lam10_geo:8.0f} km")
 check("lambda_6 geometric",  lam6_geo,  13886, 40)
 check("lambda_10 geometric", lam10_geo, 18625, 50)
 
-print("\n[3] Cross-check against the paper's MEASURED wavelength, and the gap")
+print("\n[3] The paper's measured Lx, and where the 11 per cent goes")
 R10_from_meas = N_DEC * LX_DEC_MEAS / (2 * np.pi)
+gap = (lam10_geo - LX_DEC_MEAS) / LX_DEC_MEAS
 print(f"       paper Lx = {LX_DEC_MEAS:.0f} +/- {LX_DEC_ERR:.0f} km  ->  implied ring radius {R10_from_meas:.0f} km")
 print(f"       geometric radius at {LAT_DEC} S graphic            = {R10:.0f} km")
-gap = (lam10_geo - LX_DEC_MEAS) / LX_DEC_MEAS
-print(f"       geometric lambda_10 exceeds the measured Lx by {100*gap:.1f} %")
-print("       NOT RESOLVED HERE. The measured value sits between the planetocentric and")
-print("       planetographic readings of 63 S; the paper does not state which circle Lx")
-print("       was integrated along. Both readings are carried below and the conclusion")
-print("       is reported under each. This gap is the largest uncertainty in the note.")
-check("measured Lx is below the geometric value", gap > 0, True, 0.5)
-check("gap is under 15 per cent", abs(gap), 0.10, 0.05)
+print(f"       geometric lambda_10 exceeds the measured Lx by {100*gap:.1f} %, outside the paper's own bar")
+print("       RESOLVED. It is a reference-radius convention, not a measurement dispute:")
+R_VOL = 58232.0                    # Saturn volumetric mean radius, km
+for nm, Rref in (("volumetric mean radius", R_VOL), ("1-bar equatorial radius", A_EQ)):
+    lam_sph = 2*np.pi*Rref*np.cos(np.radians(LAT_DEC))/N_DEC
+    print(f"         spherical planet, {nm:24s} R*cos(63): lambda = {lam_sph:.0f} km"
+          f"  ({100*(lam_sph-LX_DEC_MEAS)/LX_DEC_MEAS:+.1f} %)")
+lam_sph_vol = 2*np.pi*R_VOL*np.cos(np.radians(LAT_DEC))/N_DEC
+check("paper's Lx matches a SPHERICAL Saturn at 63 S to ~1 per cent", lam_sph_vol, LX_DEC_MEAS, 200)
+check("and does NOT match the oblate axis radius", abs(lam10_geo-LX_DEC_MEAS) > LX_DEC_ERR, True, 0.5)
+print("       For a wave running around the spin axis the OBLATE radius is the physical one,")
+print("       so lambda_10 = %.0f km is used below and the paper's Lx is carried only as a check." % lam10_geo)
+
+print("\n[3b] The decagon's latitude, measured from Figure 1 itself")
+print("""       wp100-figure-measure.py reads the CC BY figure with no reference to the text:
+       the red dashed circle is 80 S by the caption, the two cyan circles fall at
+       301.4 and 600.7 px, and the projection is linear in colatitude to better than
+       0.6 per cent across all three. Sampling brightness on circles of constant
+       latitude, the 10-fold Fourier component peaks at colatitude 27.25.""")
+LAT_FIG = 62.75                    # measured, wp100-figure-measure.py
+for lat, px in ((80.0, 149.9), (70.0, 301.4), (50.0, 600.7)):
+    print(f"       {lat:4.0f} S -> {px:6.1f} px  = {px/(90-lat):6.3f} px/deg"
+          f"   residual {100*((px/(90-lat))/(149.9/10.0)-1):+5.2f} %")
+check("projection is linear in colatitude (70 S residual)", (301.4/20)/(149.9/10), 1.0, 0.01)
+check("projection is linear in colatitude (50 S residual)", (600.7/40)/(149.9/10), 1.0, 0.01)
+check("figure-measured latitude agrees with the paper", LAT_FIG, LAT_DEC, 0.4)
+print(f"       measured {LAT_FIG} S against the paper's {LAT_DEC} +/- 0.4 S. Independent, and it agrees.")
 
 print("\n[4] The comparison — radii differ by a factor of two, wavelengths do not")
 for tag, lam10 in (("geometric  ", lam10_geo), ("paper Lx   ", LX_DEC_MEAS)):
@@ -82,17 +102,28 @@ print("           n10/n6 = (R10/R6) / (lambda_10/lambda_6)")
 check("identity holds", (R10/R6)/(lam10_geo/lam6_geo), N_DEC/N_HEX, 1e-9)
 print("       The side count is not chosen. It is a circumference divided by a wavelength.")
 
-print("\n[5] The prediction — what the hexagon's jet width must be")
-L6_a = L_JET_DEC * lam6_geo / lam10_geo
-L6_b = L_JET_DEC * lam6_geo / LX_DEC_MEAS
-print(f"       decagon jet FWHM (measured)       = {L_JET_DEC:.0f} km  (~2.8 deg at {LAT_JET} S)")
-print(f"       => hexagon jet FWHM, geometric    = {L6_a:.0f} km   ({L6_a/L_JET_DEC:.2f} x)")
-print(f"       => hexagon jet FWHM, paper Lx     = {L6_b:.0f} km   ({L6_b/L_JET_DEC:.2f} x)")
-print(f"       PREDICTION: {min(L6_a,L6_b):.0f}-{max(L6_a,L6_b):.0f} km, i.e. about 2.1-2.3 deg of latitude.")
-print("       Refuted if the published Cassini hexagon wind profile gives a half-max")
-print("       width outside roughly 1800-2500 km.")
-check("prediction lower bound", L6_a, 2013, 30)
-check("prediction upper bound", L6_b, 2234, 30)
+print("\n[5] The prediction — stated as a ratio, because the absolute width is not citable")
+L6 = L_JET_DEC * lam6_geo / lam10_geo
+DEG_KM = 2*np.pi*((A_EQ+B_POL)/2)/360
+print("""       Digitising Fig. 3 (wp100-profile-digitize.py) recovers the paper's own peak
+       exactly -- 115.9 m/s at 60.50 S against its stated 116 at 60.5 -- and then gives
+       a jet width of 4.77, 3.96 or 2.93 degrees depending on whether the half-maximum
+       is taken above zero, above the adjacent minimum, or above the ~55 m/s shoulder.
+       The paper's 2.80 degrees matches only the third. It does not say which it used.
+       A factor of 1.6 therefore sits in any absolute width quoted from this profile.""")
+for nm, w_deg in (("above zero", 4.77), ("above adjacent minimum", 3.96), ("above 55 m/s shoulder", 2.93)):
+    print(f"       {nm:24s} {w_deg:4.2f} deg = {w_deg*DEG_KM:5.0f} km"
+          f"   -> hexagon {w_deg*DEG_KM*lam6_geo/lam10_geo:5.0f} km")
+check("paper's 2.8 deg is recovered by the shoulder baseline", 2.93, 2.80, 0.20)
+print(f"""
+       THE PREDICTION, convention-free:
+         L6 / L10 = lambda_6 / lambda_10 = {lam6_geo/lam10_geo:.3f}
+       The hexagon's jet, measured by whatever definition is applied to the decagon's,
+       must come out at {100*lam6_geo/lam10_geo:.0f} per cent of it. Refuted if that ratio is outside
+       0.65-0.85. The absolute figure follows only once a baseline is fixed:
+       with the paper's own 2700 km it is {L_JET_DEC*lam6_geo/lam10_geo:.0f} km.""")
+check("width ratio", lam6_geo/lam10_geo, 0.7456, 0.002)
+check("absolute figure on the paper's stated 2700 km", L6, 2013, 30)
 
 print("\n[6] Is the decagon the fastest-growing barotropic mode? No.")
 LB = L_JET_DEC / 1.76275          # FWHM -> Bickley half-width, sech^2 profile
