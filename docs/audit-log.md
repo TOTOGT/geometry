@@ -3046,3 +3046,66 @@ instrument's floor, and quoting it to sixteen digits because Python printed
 sixteen digits is the same defect as quoting a declaration count without its
 convention. Where two instruments exist, the paper cites the stronger one and
 says which.
+
+---
+
+## AN ORIENTATION BUG THAT INVENTED FIFTEEN PENTAGONS (2026-09-06)
+
+Chapter 20b, `book4/ch20b-the-closing-field.html`, is new: the Eisenstein-norm
+classification of closable hexagonal shells. Its §20b.7 reports measured panel
+geometry, and the first version of that table was wrong. It is recorded here
+because the numbers had already been quoted in conversation before the fault
+was found.
+
+**What was reported.** The thirty-two-panel shell — the classic football,
+Goldberg GP(1,1) — at coefficient of variation ≈ 15% in panel area, with a
+hexagon-to-pentagon area ratio of 1.39. Rounder shells were said to be *more*
+uniform than the numbers actually support.
+
+**What is true.** CV **2.90%**, ratio **1.0623**. The trade-off runs the other
+way and runs monotonically: across GP(1,1) → GP(5,5) roundness climbs
+0.9058 → 0.9960 while panel uniformity degrades 2.90% → 12.64%. The classic
+thirty-two-panel ball has the most uniform panels of any shell in the family
+that has hexagons at all — which is a result, and the opposite of what the bad
+table said.
+
+**The fault.** Icosahedral faces were taken from a convex-hull routine without
+enforcing a consistent outward orientation. The Eisenstein lattice patch was
+therefore laid down in mirrored handedness on roughly half the twenty faces,
+and the seams did not register. The dual then miscounted vertex degree.
+
+**Why it survived a first check.** Achiral shells — Goldberg class I, $(m,0)$,
+and class II, $(m,m)$ — carry a mirror-symmetric patch, so orientation does not
+matter and those rows were correct throughout. Only class III is chiral, and
+only class III was wrong. A spot check on the football, which is class II,
+returned a clean twelve pentagons and licensed the whole table.
+
+**What caught it.** Theorem 20b.2 — every such shell has exactly twelve
+pentagons, by Euler, with no exceptions and no parameters. GP(2,1) came back
+with **twenty-seven**. GP(3,1) with forty-one. A theorem with no free
+parameters is the cheapest possible assertion to test against a computation,
+and it is the only reason this was found at all. `ball3.py` now prints the
+pentagon count for every row; twelve in all of them is the check, not the
+result.
+
+**Standing note.** Where a construction has a symmetric special case and a
+general case, verifying the symmetric case verifies nothing about the general
+one. The bug lived exactly in the branch the spot check could not reach, and it
+was reported to the reader before it was caught.
+
+**A second fault, in the numbering.** The chapter was first written as Chapter
+21 and its file named `ch21-the-closing-field.html`. Book 4 already had one:
+`ch21-gauss-map.html`, "The Gauss Map, or What Survives the Lift", commit
+`5b8140d`, 2026-09-04 — together with `ch22.html` and a `ch23-verify.py` naming
+a Chapter 23. The number was chosen by reading a directory listing and adding
+one to the highest chapter in it. That listing was already stale when it was
+read, and a listing is the wrong instrument regardless: `git ls-files | grep
+ch21` answers the question in one line and answers it about the repository
+rather than about one working tree at one moment. Renumbered to **20b**,
+following the `ch06` / `ch06b` precedent in the same directory, and placed in
+Part V beside Ch 20 — where it belongs anyway, since Ch 20's defects are
+translational and this chapter's are rotational.
+
+**Standing note, second.** Do not derive an identifier from a listing. Derive it
+from the index. The tree is one machine's opinion at one instant; `git ls-files`
+is the repository's.
