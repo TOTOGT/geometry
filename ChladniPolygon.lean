@@ -10,7 +10,7 @@ polar polygons.
 
 `nodal-sets.html` displays Lean source for `chladni6`, `chladni6_sixfold_sym`
 and `hexagon_nodes_are_zeros`, and its status table marks the row
-"Six-fold symmetry, hexagon nodes are zeros" as **Lean ✓**. As of 2026-09-06 a
+"Six-fold symmetry, hexagon nodes are zeros" as **Lean ✓**. As of 2026-09-05 a
 declaration scan over the tracked corpus resolved neither
 `hexagon_nodes_are_zeros` nor `hexagon_nodal_angles`: the source was shown on
 the page but lived in no file, so nothing had ever elaborated it, and the tick

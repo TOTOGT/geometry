@@ -4,7 +4,7 @@ Dated narrative for defects and audits that are closed. Moved out of
 `CLAUDE.md` on 2026-08-21 so the priming file stays short to read. Nothing
 here was changed, only relocated. Open items remain in `CLAUDE.md`.
 
-# ENCELADUS PROPOSAL PASS — a Lean file that is honest, and prose that is not (2026-09-06)
+# ENCELADUS PROPOSAL PASS — a Lean file that is honest, and prose that is not (2026-09-05)
 
 Occasioned by `G6LLC_NASA_Proposal_Enceladus_2026_ORCIDfix.docx` (May 2026), audited
 against the tracked corpus with `tools/declaration_scan.py` and by reading the named

@@ -10,7 +10,7 @@
 # and reports anything that is not a subset of the three standard axioms.
 # That is the real gate. A clean compile is not a verification.
 #
-# --audit NOW LEAVES AN ARTEFACT. Until 2026-09-06 the probe was written to a
+# --audit NOW LEAVES AN ARTEFACT. Until 2026-09-05 the probe was written to a
 # mktemp file, read for two counts, and `rm -f`d. So an overnight run over the
 # whole corpus printed its results to a terminal and left nothing behind: the
 # next morning the repository could not tell a file that had been audited from

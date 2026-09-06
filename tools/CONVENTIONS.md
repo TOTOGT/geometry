@@ -170,3 +170,24 @@ Stated so it is not rediscovered a fourth time.
   `conclusion_scan.lean` covers part of this — trivially inhabited conclusions.
   It does **not** detect unsatisfiable hypotheses, which is the other thing
   "vacuous" means. Report it as what it checks.
+
+## Dates are local to the machine that did the work
+
+US Eastern, the timezone of the machine with the Mathlib build. Not UTC.
+
+Caught 2026-09-05. Seven commits landed that evening from a sandbox running
+UTC, so git recorded them as 2026-09-06 01:24–01:46 +0000 — correct, and four
+hours ahead of the desk they were typed at. The commit timestamps are fine;
+they carry their offset. The damage was in the date STRINGS typed into file
+headers, a lakefile comment, an audit-log entry and a chapter footer, which
+carry no offset and read as a bare day. The `docs/lean-4.32.0-ledger.md`
+header said "measured 2026-09-06" while `tools/verify-audit/2026-09-05/` held
+the reports it was measuring: a ledger apparently predating its own evidence.
+
+Tools take the date from the machine they run on (`date +%F`,
+`datetime.date.today()`), so they are already right when run at the desk and
+wrong only when run from elsewhere. A date typed by hand from a machine that
+is not the desk is the failure mode; if you must, write the offset.
+
+This is WP-73's rule at one turn smaller. A claim names its arguments, and a
+date is one of them.
