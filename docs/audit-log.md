@@ -4,6 +4,101 @@ Dated narrative for defects and audits that are closed. Moved out of
 `CLAUDE.md` on 2026-08-21 so the priming file stays short to read. Nothing
 here was changed, only relocated. Open items remain in `CLAUDE.md`.
 
+# ENCELADUS PROPOSAL PASS — a Lean file that is honest, and prose that is not (2026-09-06)
+
+Occasioned by `G6LLC_NASA_Proposal_Enceladus_2026_ORCIDfix.docx` (May 2026), audited
+against the tracked corpus with `tools/declaration_scan.py` and by reading the named
+files. The pattern across every finding below is the same: **the Lean says what it
+does; the prose upgrades it.** No defect here was introduced by a Lean file.
+
+## ε₀ = 1/3 is presented as a machine-verified constant. It is a conditional one
+
+**Class: OVERSTATED.** The proposal states "the Gronwall basin of Γ, with radius
+ε₀ = 1/3 (PROVED, Lean 4)", calls it "a formally verified constant", and makes its
+physical interpretation — the Khawaja et al. bond-dissociation boundary — its primary
+novel scientific result, with the emphasis that "the mathematical constant was derived
+before the comparison, not fitted after it."
+
+What Lean holds is `AutophagyDm3.lean:182`:
+
+    theorem gronwall_radius : (2 : ℝ) / (2 * (1 + 2)) = 1 / 3 := by norm_num
+
+That is the last arithmetic step of the derivation, at sup‖Hess V‖ = 2. It mentions no
+dynamical system, no Gronwall lemma, no Hessian and no basin. The formula
+ε₀ = |μ_max| / [2(1 + sup‖Hess V‖)] is real and the value is derived, not chosen — but
+whether the dm³ system has the Hessian bound that yields 1/3 is **O7, still open**, and
+recorded above at four values in four places.
+
+The correct tier is: *derived, conditional on an open input, with the final arithmetic
+kernel-checked.* Not "PROVED, Lean 4."
+
+## r* may decide O7, and not in the direction the corpus prefers
+
+**Class: NEW — not yet resolved, recorded so it is not lost.** ch03 places the attractor
+at r = 1 and the certified inner basin boundary at r* ≈ 0.776, so the distance from
+attractor to boundary is ≈ **0.224**.
+
+A Gronwall stability radius is a *guaranteed-contraction* radius: every point within ε₀
+must converge. But ε₀ = 1/3 ≈ 0.333 exceeds 0.224 — a ball of that radius about r = 1
+reaches r ≈ 0.667, inside the region the certification says diverges. The bound would be
+claiming more than the numerics allow, which is the opposite of conservative.
+
+At sup‖Hess V‖ = 6 — the value `V_second_deriv_at_one` proves — ε₀ = 1/7 ≈ 0.143, and the
+ball reaches r ≈ 0.857, inside the basin. Consistent.
+
+`basin_asymmetry : (1:ℝ)/3 < 4/5` compares the two as bare reals and its docstring reads
+the gap as conservatism. Under the geometry above they are not the same kind of quantity —
+one a radius from r = 1, the other a position in r — and in a common frame the reading
+reverses. **Caveat that keeps this open:** if ε₀ is a radius in a different norm, or on
+the (r,z) phase space rather than in r alone, the comparison does not apply. Settling
+that is what closes O7.
+
+## `nodal-sets.html` marks "Lean ✓" for declarations that exist nowhere
+
+**Class: FABRICATED.** `AXLE/SBM/nodal-sets.html` — Bienal presentation material —
+displays Lean source for `chladni6`, `chladni6_sixfold_sym` and
+`hexagon_nodes_are_zeros`, and its status table carries the row "Six-fold symmetry,
+hexagon nodes are zeros — **Lean ✓**". A declaration scan over the tracked corpus
+resolves neither `hexagon_nodes_are_zeros` nor `hexagon_nodal_angles`. The displayed
+proof also calls `hexagon_nodal_angles` without defining it, so the snippet could not
+elaborate as shown even if a file held it.
+
+Same class as the Chapter A pass, on a public page. Written this session as
+`geometry/ChladniPolygon.lean`, which supplies both declarations and adds the tenfold
+case; the tick is earned once that file passes `leancheck.sh --audit`, and not before.
+
+## `separation_theorem` is not "one open obligation" — it is an uncompiled file
+
+**Class: UNCHECKED.** The proposal names AXLE #12 `separation_theorem` as the single open
+obligation with an explicit closure path. It does carry a real `sorry`
+(`h_transverse ... := sorry -- placeholder for eigenvalue API`), so "open" is true. But it
+lives in `AXLE/lean/`, and **no target in AXLE's lakefile covers that directory** — roots
+are AXLE, finite, three toys, AXLE_v5_1, Main_v6, TribonacciRatioConvergence and
+PrincipiaVol1. Nothing has ever compiled it. Reading it, `Real.exp (-12) < 1/32 := by
+norm_num` will not discharge and the `calc` chains appear malformed. This is the same
+class as bug #5 that AXLE's own lakefile records about `Main_v6`.
+
+## Two counts that do not resolve
+
+**Class: UNVERIFIABLE.** "Chapter A ... Twenty-six theorems are verified in Lean 4 with
+zero sorry statements." Current tree: `AutophagyDm3.lean` 21, `TripleAlphaDm3.lean` 6,
+`NbonacciLadder.lean` 13, all with zero code-level `sorry`. No grouping gives 26; the
+nearest is 27, and the latter two files postdate the proposal. Not necessarily false when
+written; not checkable now, which is the defect for a document inviting verification.
+
+"Thirty-plus theorems are machine-verified with zero axioms beyond Mathlib4" cannot be
+checked at all: AXLE pins Mathlib **v4.14.0**, the only complete build on this machine is
+geometry's **v4.32.0**, so `leancheck.sh` cannot audit AXLE. The Control Ledger already
+says this.
+
+## "A reviewer ... can verify every proved claim in under one hour"
+
+**Class: FALSE.** With a v4.14.0 pin a reviewer must build that Mathlib first — hours, not
+one — and several of the named files are in no build target, so `lake build` would not
+reach them regardless.
+
+---
+
 # CHAPTER A PASS — the chapter page cited nine declarations that do not exist (2026-08-28)
 
 Found while preparing `chA-autophagy.html` and the Chapter A deposit. Method:
