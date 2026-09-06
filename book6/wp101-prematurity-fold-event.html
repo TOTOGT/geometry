@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-101 &middot; Prematurity as a Fold Event &mdash; Principia Orthogona Vol VI</title>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.t-verified{background:#eef7ee;color:#1a5c1a;border:1px solid #90c890}
+.t-closed{background:#f0f0f0;color:#555;border:1px solid #bbb}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.box.closed{background:#f5f5f5;border-color:#bbb;border-left:3px solid #999}
+.box.closed .lab{color:#666}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+.xref{font-family:var(--mono);font-size:.7rem;background:var(--paper3);border:1px solid var(--rule);padding:.6rem 1rem;margin:1rem 0;line-height:1.9}
+.xref strong{color:var(--ink2)}
+</style>
+</head>
+
+<body>
+<div class="topnav">
+  <span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a> &middot; WP-101</span>
+  <span class="meta"><a href="wp100-the-wavelength-not-the-count.html">&larr; WP-100 &middot; The Wavelength, Not the Count</a></span>
+</div>
+
+<div class="wp-head">
+  <div class="wp-kicker">WP-101 &middot; Working Paper &middot; Principia Orthogona Vol VI &middot; Roots &middot; G6 LLC</div>
+  <h1>Prematurity as a <em>Fold Event</em></h1>
+  <div class="subtitle">Mapping the dm³ operator chain across four biological domains disrupted by preterm birth</div>
+  <div class="metagrid">
+    <div><strong>Author</strong>Pablo Nogueira Grossi</div>
+    <div><strong>Affiliation</strong>G6 LLC · Newark, NJ</div>
+    <div><strong>Date</strong>September 2026</div>
+    <div><strong>ORCID</strong><a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+    <div><strong>Status</strong>Draft · not peer-reviewed · claims tagged</div>
+    <div><strong>Anchor</strong><a href="https://github.com/TOTOGT/AXLE">AXLE/AutophagyDm3_v2.lean</a></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="topictag">Bio Domain · Prematurity · dm³ · CRNT · Fold Bifurcation</div>
+
+<div class="taglegend">
+  <span><span class="tag t-verified">kernel-verified</span> Lean 4, no sorry</span>
+  <span><span class="tag t-data">documented</span> Primary literature</span>
+  <span><span class="tag t-model">model</span> dm³ applied, not independently verified</span>
+  <span><span class="tag t-open">open</span> Conjecture or open problem</span>
+  <span><span class="tag t-closed">closed&thinsp;·&thinsp;neg</span> Obligation attempted, did not clear</span>
+</div>
+
+<div class="xref">
+  <strong>Cross-references:</strong>
+  <a href="sample-chapter-autophagy.html">Ch A &middot; Autophagy (anchor)</a> &middot;
+  <a href="chIm-thymus.html">Ch 13 &middot; Thymic Selection</a> &middot;
+  <a href="ch15-cardiac-rhythms.html">Ch 15 &middot; Cardiac Rhythms</a> &middot;
+  <a href="ch16-hopfield-networks.html">Ch 16 &middot; Hopfield Networks</a> &middot;
+  <a href="wp31c-autophagy-calibration-case-study.html">WP-31C &middot; Calibration Pipeline</a> &middot;
+  <a href="wp30-the-missing-anchor.html">WP-30 &middot; The Missing Anchor</a> &middot;
+  <a href="https://totogt.github.io/AXLE/AULA/day-by-day/preemie-manual.html">Preemie Manual (AXLE)</a>
+</div>
+
+<div class="lede">
+  A preterm birth forces the developing organism across multiple biological threshold events
+  before the attractor basins supporting those transitions are fully formed. This paper maps
+  four such thresholds onto the dm³ operator chain G = U∘F∘K∘C, using the kernel-verified
+  autophagy result as the topological anchor. Two CRNT obligations were attempted and
+  closed negative. The boundary of what is actually verified is precisely drawn.
+</div>
+
+<div class="eyebrow">§1 &middot; The Verified Anchor</div>
+<h2>What is actually kernel-checked</h2>
+
+<p>The starting point is what is proved. From <span class="mono">AutophagyDm3_v2.lean</span>
+(18 theorems, no sorry, no True conclusions, AXLE repo, 2026-08-25):</p>
+
+<div class="box thm">
+  <span class="lab">Kernel-verified &middot; AutophagyDm3_v2.lean <span class="tag t-verified">kernel-verified</span></span>
+  <ul>
+    <li><strong>Contact coefficient:</strong> c(ρ) = −2ρ &lt; 0 for all ρ &gt; 0 — scalar witness that α∧dα ≠ 0 on X<sub>auto</sub>. Not the full manifold statement.</li>
+    <li><strong>Whitney A₁ fold:</strong> V(q) = q³ − 3q has a genuine Morse critical point at q = 1, non-vacuously checked. Algebraic half only — kinase data and Mather finite-determinacy remain open (Obligation B).</li>
+    <li><strong>Gronwall stability radius:</strong> ε₀ = 1/3, positive, less than 1, with basin asymmetry 1/3 &lt; 4/5.</li>
+    <li><strong>Annular basin:</strong> [1/3, 2] is compact and non-empty — Heine-Borel on a closed interval. Named "dm³ basin" only pending a semiflow definition (Obligation C).</li>
+    <li><strong>Lyapunov exponents:</strong> μ_canonical = −3, μ_dm3 = −2, both negative.</li>
+  </ul>
+  <p style="margin-top:.7rem;font-size:.88rem;color:var(--dim)">Three obligations remain open in the file: full contact non-degeneracy on X<sub>auto</sub> (A); Whitney A₁ from mTORC1 kinase data (B); limit cycle via Poincaré–Bendixson (C).</p>
+</div>
+
+<div class="box">
+  <span class="lab">SymPy-verified &middot; WP-31C &middot; separate tool <span class="tag t-data">documented</span></span>
+  CRNT deficiency δ = 2 for the AMPK–mTORC1–ULK1 network established by explicit graph
+  construction (n=9, l=4, s=3). Necessary, not sufficient, for fold behavior. Rate constants
+  did not clear (WP-31C: "Estimate: did not clear"). μ_max ≈ −0.41 s⁻¹ withdrawn in
+  <a href="wp30-the-missing-anchor.html">WP-30</a> — inconsistent time constants, untraceble
+  to literature. This paper does not use that parameter.
+</div>
+
+<div class="eyebrow">§2 &middot; Domain 1 &middot; Pulmonary Surfactant</div>
+<h2>Surfactant synthesis — phenomenological only</h2>
+
+<h3>The biological threshold <span class="tag t-data">documented</span></h3>
+<p>SP-B synthesis is functionally absent before approximately 24–26 weeks gestation and reaches
+adequate levels around 34–36 weeks. The transition is not gradual: below the gestational threshold,
+respiratory distress syndrome (RDS) is near-universal in the absence of exogenous surfactant;
+above it, RDS incidence drops sharply.
+(Jobe &amp; Ikegami 1987; Whitsett &amp; Weaver 2015, <em>NEJM</em>)</p>
+
+<p>Antenatal corticosteroids accelerate surfactant maturation by acting upstream of the TTF-1
+threshold — augmenting the C operator pharmacologically.
+(Roberts &amp; Dalziel 2006, <em>Cochrane</em>) <span class="tag t-data">documented</span></p>
+
+<h3>dm³ mapping <span class="tag t-model">model — phenomenological only</span></h3>
+<p>C = glucocorticoid/mechanical compression; K = TTF-1 activation threshold; F = lamellar body
+commitment; U = sustained surfactant secretion. The mapping is a phenomenological analogy only.</p>
+
+<div class="box closed">
+  <span class="lab">[LEAN-NEEDED-1] &middot; Closed, negative result &middot; 2026-09-06 <span class="tag t-closed">closed&thinsp;·&thinsp;neg</span></span>
+  CRNT deficiency analysis of the TTF-1/NKX2-1 → SP-B/SP-C network (9 reactions, 5 species + ∅,
+  including degradation sinks and biologically honest autoregulation as de novo transcription)
+  returned δ &lt; 0 under two independent formulations. Valid CRNT deficiency requires δ ≥ 0.
+  Adjusting the network to force δ = 2 was considered and rejected — fitting topology to a
+  target value invalidates the proof model.<br><br>
+  <strong>Conclusion:</strong> The contact morphism from the surfactant network to X<sub>auto</sub>
+  is not supportable by CRNT topology and is withdrawn. The surfactant threshold is real and
+  clinically documented. No SurfactantDm3.lean will be written on this basis.
+</div>
+
+<div class="eyebrow">§3 &middot; Domain 2 &middot; Cardiac Conduction</div>
+<h2>Bradycardia of prematurity — shallow attractor basin</h2>
+
+<p>Preterm infants show high rates of bradycardia of prematurity. The mechanism is incomplete
+maturation of parasympathetic cardiac control. <span class="tag t-data">documented</span>
+(Poets et al. 1994, <em>Pediatrics</em>; Fairchild et al. 2016, <em>Frontiers in Physiology</em>)</p>
+
+<p>In dm³ terms: the Lyapunov attractor basin for stable sinus rhythm — the limit cycle Γ of
+<a href="ch15-cardiac-rhythms.html">Ch 15</a> — has not fully formed in the preterm autonomic system.
+The fold at K* is crossed repeatedly because the basin is shallow.
+<span class="tag t-model">model</span></p>
+
+<p>Falsifiable in principle: HRV data from preterm infants should show lower Lyapunov stability
+than term infants of matched corrected age, converging toward term values as corrected age increases.
+Such data exist (Lake et al. 2002, <em>Am J Physiol</em>) but have not been fitted to dm³ parameters.
+<span class="tag t-open">open</span></p>
+
+<div class="eyebrow">§4 &middot; Domain 3 &middot; Neural Attractor Formation</div>
+<h2>Myelination and Hopfield basin depth</h2>
+
+<p>Myelination proceeds most rapidly between 28 and 40 weeks gestation. In the preterm brain this
+window occurs ex utero. <span class="tag t-data">documented</span>
+(Counsell et al. 2006, <em>Pediatrics</em>; Ball et al. 2013, <em>Brain</em>)</p>
+
+<p>In Hopfield network terms (<a href="ch16-hopfield-networks.html">Ch 16</a>): the weight matrix W
+is sparser and less structured than in a term brain at equivalent developmental stage. Energy wells
+are shallower, network capacity (~0.138N) is lower. <span class="tag t-model">model</span></p>
+
+<p>Preterm infants at corrected term age show different EEG coherence patterns than term newborns,
+consistent with shallower attractor basins. <span class="tag t-data">documented</span>
+(Stjerna et al. 2015, <em>NeuroImage</em>). dm³ parameter fitting is an open calibration problem.
+<span class="tag t-open">open</span></p>
+
+<p>Auditory stimulation in the NICU — including the mother's recorded voice and selected music —
+has documented effects on preterm neurodevelopment.
+(Loewy et al. 2013, <em>Pediatrics</em>; Filippa et al. 2019, <em>Acta Paediatrica</em>)
+<span class="tag t-data">documented</span>
+In attractor terms: consistent auditory input during myelination may contribute to attractor depth.
+Plausible mechanistic reading, not verified. <span class="tag t-open">open</span></p>
+
+<div class="eyebrow">§5 &middot; Domain 4 &middot; Immune Proofreading</div>
+<h2>Thymic selection — asymmetric thresholds</h2>
+
+<p>Preterm infants have reduced naive T cell output, lower thymic index, and altered regulatory
+T cell proportions. <span class="tag t-data">documented</span>
+(Gibbons et al. 2014, <em>J Allergy Clin Immunol</em>; Rechavi et al. 2015,
+<em>Sci Transl Med</em>)</p>
+
+<p><a href="chIm-thymus.html">Ch 13</a> frames thymic selection as C∘K*∘K** — positive selection
+at K*, negative selection closing at K**. Literature review (2026-09-06) confirms the two-threshold
+model is real. <span class="tag t-data">documented</span>
+(Moran 2012, <em>Immunology</em>; Daniels et al. 2006, <em>Nature</em> 444:724–729)</p>
+
+<div class="box warn">
+  <span class="lab">Asymmetry finding — thresholds are not symmetric</span>
+  <p><strong>K** — negative selection:</strong> Very sharply defined. A 1.2-fold difference in
+  TCR-pMHC affinity separates the weakest negative selector from the strongest positive selector
+  (Daniels et al. 2006; PNAS 2009). Sharp threshold — consistent with fold structure.
+  <span class="tag t-data">documented</span></p>
+  <p style="margin-top:.6rem"><strong>K* — positive selection:</strong> Graded, not sharp.
+  Positive selection occurs over a broad range of ligand potency. No sharp threshold separating
+  positively selecting ligands from those that bind too weakly.
+  <span class="tag t-data">documented</span>
+  Inconsistent with a Whitney A₁ fold — a fold requires sharp commitment, not a graded response.</p>
+</div>
+
+<div class="box closed">
+  <span class="lab">[LEAN-NEEDED-2] &middot; Closed, partial result &middot; 2026-09-06 <span class="tag t-closed">closed&thinsp;·&thinsp;partial</span></span>
+  Two thresholds are real and documented. K** (negative selection) is sharp and phenomenologically
+  fold-like; K* (positive selection) is graded and the fold analogy does not apply.
+  The full contact morphism claim for the C∘K*∘K** cascade is withdrawn.<br><br>
+  A phenomenological fold analogy for K** alone is supportable as a documented sharp threshold.
+  A CRNT or ODE characterization of K** specifically remains possible future work.<br><br>
+  <strong>Editorial note for Ch 13:</strong> The K* fold claim in Ch 13 of Vol VI is overstated
+  and should be revised in a future pass. The K** sharp-threshold reading stands.
+</div>
+
+<div class="eyebrow">§6 &middot; Summary</div>
+<h2>What holds and what does not</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Domain</th>
+      <th>dm³ mapping</th>
+      <th>Contact morphism to X<sub>auto</sub></th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Molecular · Autophagy</td>
+      <td>Full C∘K∘F∘U; contact form α = dz−ρ²dθ; CRNT δ=2</td>
+      <td>Anchor — not a claim, the reference object</td>
+      <td><span class="tag t-verified">kernel-verified</span> fold algebra · <span class="tag t-data">documented</span> CRNT · rate constants <span class="tag t-open">open</span></td>
+    </tr>
+    <tr>
+      <td>Pulmonary · Surfactant</td>
+      <td>C∘K∘F∘U phenomenological</td>
+      <td>Withdrawn — CRNT δ &lt; 0</td>
+      <td><span class="tag t-data">documented</span> threshold · <span class="tag t-closed">closed&thinsp;·&thinsp;neg</span> morphism</td>
+    </tr>
+    <tr>
+      <td>Cardiac · Sinus rhythm</td>
+      <td>Limit cycle Γ; shallow Lyapunov basin</td>
+      <td>Not attempted — different topology</td>
+      <td><span class="tag t-data">documented</span> clinical · <span class="tag t-model">model</span> basin · <span class="tag t-open">open</span> HRV fitting</td>
+    </tr>
+    <tr>
+      <td>Neural · Myelination</td>
+      <td>Hopfield W matrix; shallower energy wells</td>
+      <td>Not attempted — different topology</td>
+      <td><span class="tag t-data">documented</span> EEG · <span class="tag t-model">model</span> W-matrix · <span class="tag t-open">open</span> fitting</td>
+    </tr>
+    <tr>
+      <td>Immunological · K** only</td>
+      <td>Sharp negative-selection threshold — fold-like</td>
+      <td>Withdrawn for K*; K** phenomenological only</td>
+      <td><span class="tag t-data">documented</span> asymmetry · <span class="tag t-closed">closed&thinsp;·&thinsp;partial</span> · Ch 13 K* claim flagged</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="eyebrow">§7 &middot; The Clinical Instrument</div>
+<h2>Preemie Manual growth tracker</h2>
+
+<p>The <a href="https://totogt.github.io/AXLE/AULA/day-by-day/preemie-manual.html">Preemie Manual</a>
+implements the most immediate practical consequence of the fold argument: WHO Child Growth Standards
+are suppressed before corrected age zero and the Fenton 2013 preterm chart is cited instead.
+A reference standard built for term-equivalent biology does not apply before the relevant thresholds
+have been crossed. The tracker is valid for any child from term-equivalent age to 5 years (WHO),
+and for preterm infants from birth using the Fenton chart (22–50 weeks PMA).</p>
+
+<div class="eyebrow">§8 &middot; Open obligations</div>
+<h2>What remains</h2>
+
+<div class="box">
+  <span class="lab">[OPEN-1] HRV Lyapunov fitting</span>
+  Fit dm³ Lyapunov parameters to published HRV data from preterm infants (Lake et al. 2002 or
+  equivalent) at matched corrected ages. Cardiac timescales are directly measurable — this may
+  be more tractable than the autophagy rate constant problem that defeated WP-30.
+</div>
+
+<div class="box">
+  <span class="lab">[OPEN-2] Neural attractor calibration</span>
+  Map EEG coherence data (Stjerna et al. 2015 or equivalent) to Hopfield parameters: does the
+  coherence deficit correspond to reduced W, or increased noise in the energy landscape?
+  These make different predictions about recovery trajectory.
+</div>
+
+<div class="box">
+  <span class="lab">[OPEN-3] K** CRNT characterization</span>
+  The negative-selection threshold K** is sharp and documented. A CRNT or reduced-ODE
+  characterization of the TCR signaling network at K** specifically remains possible —
+  the continuous nature of TCR affinity is the obstacle, not the sharpness of the threshold.
+</div>
+
+<div class="eyebrow">References</div>
+<h2>Sources</h2>
+<ol class="refs">
+  <li>Autophagy anchor: AXLE/<span class="mono">AutophagyDm3_v2.lean</span> · WP-30, WP-31C, WP-31D · <a href="wp31c-autophagy-calibration-case-study.html">totogt.github.io/geometry/book6/wp31c</a></li>
+  <li>Jobe AH, Ikegami M (1987). Surfactant for the treatment of respiratory distress syndrome. <em>Am Rev Respir Dis</em> 136(5):1256–75</li>
+  <li>Whitsett JA, Weaver TE (2015). Hydrophobic surfactant proteins in lung function and disease. <em>NEJM</em> 347:2141–8</li>
+  <li>Roberts D, Dalziel S (2006). Antenatal corticosteroids for accelerating fetal lung maturation. <em>Cochrane Database Syst Rev</em> 2006(3):CD004454</li>
+  <li>Poets CF et al. (1994). Effect of supplemental oxygen on apnea in preterm infants. <em>Pediatrics</em> 93(4):592–5</li>
+  <li>Lake DE et al. (2002). Accuracy of heart rate variability measures. <em>Am J Physiol Heart Circ Physiol</em> 283(1):H230–9</li>
+  <li>Counsell SJ et al. (2006). Diffusion-based tractography in preterm infants. <em>Pediatrics</em> 117(4):1169–74</li>
+  <li>Ball G et al. (2013). The influence of preterm birth on the developing thalamocortical connectome. <em>Cortex</em> 49(6):1711–21</li>
+  <li>Stjerna S et al. (2015). Preterm EEG: a multimodal neurophysiological protocol. <em>PLoS ONE</em> 10(5):e0123420</li>
+  <li>Loewy J et al. (2013). The effects of music therapy on vital signs, feeding, and sleep in premature infants. <em>Pediatrics</em> 131(5):902–18</li>
+  <li>Filippa M et al. (2019). Early maternal voice stimulation effects on the prematurely born infant. <em>Acta Paediatrica</em> 109(1):59–65</li>
+  <li>Gibbons D et al. (2014). Interleukins 1β and 6 are expressed in preterm infants. <em>J Allergy Clin Immunol</em> 134(5):1158–65</li>
+  <li>Rechavi E et al. (2015). Timely and spatially regulated maturation of B and T cell repertoire. <em>Sci Transl Med</em> 7(316):316ra195</li>
+  <li>Moran AE (2012). T-cell receptor affinity in thymic development. <em>Immunology</em> 135(4):261–7</li>
+  <li>Daniels MA et al. (2006). Thymic selection threshold defined by compartmentalization of Ras/MAPK signalling. <em>Nature</em> 444:724–729</li>
+  <li>Hogquist KA, Jameson SC (2014). The self-obsession of T cells. <em>Nat Immunol</em> 15:815–822</li>
+</ol>
+
+</div><!-- .wrap -->
+
+<footer>
+  <div class="fwrap">
+    <div>
+      <strong style="color:var(--gold2)">WP-101 &middot; Prematurity as a Fold Event</strong><br>
+      Principia Orthogona &middot; Vol VI &middot; Roots &middot; G6 LLC<br>
+      Pablo Nogueira Grossi &middot; Newark NJ &middot; September 2026<br>
+      ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a> &middot; g6llc@proton.me<br>
+      CC BY-NC-ND 4.0 &middot; &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC
+    </div>
+    <div class="disc">
+      Draft &middot; not peer-reviewed &middot; all claims tagged by evidence class.<br>
+      Kernel-verified anchor: <span class="mono">AutophagyDm3_v2.lean</span> 18 theorems, no sorry.<br>
+      [LEAN-NEEDED-1] closed negative 2026-09-06: surfactant CRNT δ &lt; 0, morphism withdrawn.<br>
+      [LEAN-NEEDED-2] closed partial 2026-09-06: K** fold-like, K* graded, full morphism withdrawn.<br>
+      Ch 13 Vol VI K* claim flagged for editorial revision.<br>
+      <a href="index.html">Vol VI &middot; Roots</a> &middot; <a href="../index.html">Principia Orthogona</a> &middot; <a href="https://github.com/TOTOGT/AXLE">AXLE</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
