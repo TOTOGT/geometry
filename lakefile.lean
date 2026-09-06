@@ -42,3 +42,15 @@ lean_lib OrthogonalWitness where
 -/
 @[default_target]
 lean_lib TripleAlphaDm3
+
+/-
+  PolarTriadClosure.lean was hand-checked with the bare `lean` binary on
+  2026-09-05 under v4.32.0, the repo pin: no sorry, axioms limited to propext
+  and Quot.sound, which arrive through the induction on an inductive Prop.
+  Like TripleAlphaDm3 it has zero imports, so it elaborates in about a second
+  and cannot drift with a Mathlib bump. But a hand run proves the file on the
+  day it is run and nothing afterwards — the same gap SaturnHexagon had.
+  Declaring the target is what makes a later regression fail the job.
+-/
+@[default_target]
+lean_lib PolarTriadClosure
