@@ -324,10 +324,13 @@ due 30 March, decided August), so seed is the only live door and it is open toda
 Apply through the fund page, **not** `renaissancephilanthropy.org/partner-with-us`,
 which is for co-funders and institutions, not applicants. Contact for questions is
 on the fund page.
-Two things to clear first, both small and both blocking on their own terms:
-`vol1-proofs` needs a LICENSE file (MIT, matching the SPDX headers already in its
-sources), and the fund requires **all outputs open-access**, which the NC-ND prose
-licence contradicts. Do not send it with the repository legally all-rights-reserved.
+**Both blockers were cleared by Pablo on 2026-09-04 and this application is now
+unblocked.** `vol1-proofs/LICENSE` is MIT; `vol1-proofs/LICENSE-CONTENT` relicensed
+the prose from CC BY-NC-ND to **CC BY 4.0**, on the stated grounds that NC-ND
+permits neither commercial reuse nor derivatives and so does not meet the fund's
+open-access requirement. It also records that Zenodo deposits keep the licence in
+force at deposit time and that `record/` is not retroactively altered. Nothing
+stands between the draft and submission. **Send it.**
 
 1. **SciENcv is mandatory from 1 Sept 2026** for the ROSES A.13 proposal (due
    **15 Oct**). No profile exists. Cannot be done the night before.
@@ -343,6 +346,32 @@ licence contradicts. Do not send it with the repository legally all-rights-reser
 6. Two handoff blocks exist: this one, and a stale 2026-08-30 block at **line 1**,
    above the file's own title. That is the append violation this header warns about,
    already recurred once. Not deleted here — another session's notes.
+
+### WP-96 — do not write it. It exists elsewhere.
+
+**Recorded 2026-09-06.** `book6/wp96-verify.py` is committed and live; the page it
+belongs to is **not**. The paper — WP-96, *The Second Instrument* — is held in a
+session on **another account**, unwritten to disk, and that account is out of budget
+until **8 September 2026**.
+
+So the sequence has a hole at 96 while 95 and 97 are both shipped. That is expected
+and temporary. **No session should draft a replacement.** Two WP-96s is a worse
+problem than two days of gap, and the verifier already fixes the claim, the scope,
+and the tagging decision, so an independently written page would diverge from the one
+that is coming.
+
+What the verifier says the paper argues, for anyone who needs to know what is missing:
+WP-79 states its filter as a general principle — "ratios are falsifiable, scales are
+not" — and it holds only for spectrum instruments. "Dimensionless" and
+"scale-invariant" are different properties; a phase is the first and not the second.
+Block [5] redoes the sorting. It carries no `#Machine Learning` tag, per the rule of
+2026-09-01, on the same grounds as WP-90.
+
+When the page lands, run `python3 tools/build_indexes.py` and it will index itself.
+
+Also note: `wp96-verify.py` reached the repo inside `c933f84`, a Book 4 commit, as a
+swept-in file. It is correct and it belongs there, but it was not the subject of that
+commit.
 
 ### Deliverables that live OUTSIDE this repo
 `~/Documents/Claude/Projects/` holds the A.13 pack (PSD answers, Q26, Q29, DAPR
