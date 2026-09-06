@@ -118,6 +118,36 @@ arguing with borrowed vocabulary cost a finding; the other was ε₀ = 1/3 descr
 as "a chosen threshold" when it is a Grönwall bound. **When the words are wrong
 and the gesture is at a structure, go look at the structure.**
 
+## A.13 went to NASA
+
+**Submitted 2026-09-05** (ROSES-2025 A.13, Needs and Opportunities,
+`G6-AES-PROP-2026-13`, *Whose Flag Is It? Mapping the Decision Architecture for
+Outdoor-Activity Restriction During Wildfire Smoke Episodes*). Stated by Pablo;
+what is verifiable from this machine is that the four required documents exist
+in `~/Desktop/A13/`, all built 5 September:
+
+| file | pp | note |
+|---|---|---|
+| `A13_STM_ANONYMIZED_2026-09-05.pdf` | 8 | §1–12 = 6 of the 10 allowed pages; DAPR-anonymised |
+| `A13_TOTAL_BUDGET_2026-09-05.pdf` | 2 | **not** anonymised — Table A.13-4 requires this separately |
+| `A13_EXPERTISE_RESOURCES_2026-09-05.pdf` | 2 | |
+| `A13_OSDMP_2026-09-05.pdf` | 2 | |
+
+Alongside them: `A13_program_specific_data_answers_2026-09-05.md` (Q1–Q30 as
+entered) and `A13_proposal_summary_v2_2026-09-05.txt`.
+
+**Do not assume the NSPIRES-side items closed.** At last check these were open
+and a next session should verify rather than infer them from the submission:
+SciENcv biosketch and Current & Pending (SciENcv mandatory since 2026-09-01),
+research security training, and the training sentence into Expertise &
+Resources §7 — which would mean re-uploading that one file.
+
+Facts worth not relitigating: N&O proposals are **limited to one year** by the
+element text, so there is no year 2 or 3 to fill; the anonymised budget goes
+*inside* the proposal document (Table A.13-1) **and** a separate non-anonymised
+Total Budget is also required (Table A.13-4); NSPIRES warns if Q5 is answered
+when Q4 is No. Contact email on everything is `g6llc@proton.me`.
+
 ## Open, in the order they should be taken
 
 1. **The 22 files outside every build target.** Give each a `lean_lib` entry, or
