@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-97 · Thirty Was Doing the Work — Principia Orthogona Vol VI</title>
+<meta name="description" content="WP-97: a kernel-verified theorem carried a sentence wider than itself. That a field with both sixfold and tenfold symmetry must be constant is a fact about choosing thirty sectors, not about six and ten; on sixty, the alternating field is a non-constant witness. Gives the general statement — rotations of order 6 and 10 generate rotation of order 30 — kernel-audited in Lean 4, and names the defect class: a claim narrower than its own prose.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+</style>
+</head>
+<body>
+<div class="topnav">
+  <span class="crumbs"><a href="../index.html">⚜ PRINCIPIA ORTHOGONA</a> · <a href="index.html">Vol VI · Roots</a> · WP-97</span>
+  <span class="meta"><a href="wp95-the-right-word-the-wrong-reader.html">← WP-95 · The Right Word, the Wrong Reader</a></span>
+</div>
+
+<div class="wp-head">
+  <div class="topictag" title="A verification note: the finding concerns the gap between a theorem and the sentence written around it">#Verification</div>
+  <div class="wp-kicker">Vol VI · Roots · WP-97 · Received 2026-09-05 · Companion to WP-73, WP-91, WP-94 · Closed</div>
+  <h1>Thirty Was <em>Doing the Work</em></h1>
+  <div class="subtitle">A theorem passed the kernel with no <span class="mono">sorryAx</span> and rested on nothing but <span class="mono">propext</span> and <span class="mono">Quot.sound</span>. The sentence written around it was still wrong, because it silently carried a choice of grid as though the grid were not a choice. This note gives the counterexample, the corrected statement — which is stronger — and a name for the class.</div>
+  <div class="metagrid">
+    <div><strong>Method</strong>exhaustive orbit counting over every refinement N = 30…1200<br>reproduced by <span class="mono">wp97-verify.py</span></div>
+    <div><strong>Kernel</strong>Lean 4 v4.32.0 · 15 declarations · 0 <span class="mono">sorryAx</span><br>report written by the run, not typed</div>
+    <div><strong>Claim type</strong>correction, plus one general theorem<br>and a defect class the existing vocabulary lacked</div>
+    <div><strong>Status</strong>closed<br>the Lean obligation opened in §5 was discharged the same day</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="lede">
+A verification tool can only tell you that a proof is a proof of the statement above it. It cannot
+tell you that the statement is the one your paragraph is about. This note works one case where those
+came apart by a single hidden parameter, and the parameter was the number thirty.
+</div>
+
+<div class="taglegend">
+  <span><span class="tag t-data">COMPUTED</span> produced by the companion script</span>
+  <span><span class="tag t-model">KERNEL</span> reported by <span class="mono">#print axioms</span> on a named declaration</span>
+  <span><span class="tag t-assume">CHECKED</span> verified against a primary source</span>
+  <span><span class="tag t-open">CORRECTION</span> fixes a claim published earlier in this series</span>
+</div>
+
+<div class="eyebrow">&sect;1</div>
+<h2>The sentence</h2>
+
+<p>On 2 September 2026 Hubble OPAL imagery established a wavenumber-ten pattern encircling Saturn&#8217;s
+south pole &#8212; the first regular polygonal jet observed in that hemisphere, alongside the north polar
+hexagon that has been present in every observation for more than forty years.
+<span class="tag t-assume">CHECKED</span></p>
+
+<p>Three days later this series published, in Vol V &sect;4 and on a standalone page, the following:</p>
+
+<div class="box err">
+  <span class="lab">The claim, as published</span>
+  <p style="margin-bottom:0"><em>The hexagon and the decagon are not two symmetries of one field &#8212;
+  the only field admitting both is the trivial one.</em></p>
+</div>
+
+<p>It rested on a theorem, <span class="mono">hex_and_dec_forces_constant</span>, which had been through
+the Lean kernel and reported <span class="mono">[propext, Quot.sound]</span>. No <span class="mono">sorryAx</span>.
+The theorem is true. It is still true. What follows is not a retraction of it.</p>
+
+<div class="eyebrow">&sect;2</div>
+<h2>What the theorem actually says</h2>
+
+<p>Represent a field on a polar ring as a function on a finite number of angular sectors. To carry a
+sixfold and a tenfold symmetry at once, the sector count must be a common multiple of six and ten;
+the smallest is <strong>thirty</strong>, and thirty is what was chosen.</p>
+
+<div class="eq">30 &divide; 6 = 5 &nbsp;&nbsp;&nbsp; 30 &divide; 10 = 3 &nbsp;&nbsp;&nbsp; gcd(5, 3) = 1</div>
+
+<p>On thirty sectors a sixfold pattern repeats every five and a tenfold every three. Sums and differences
+of five and three reach every one of the thirty, so a field carrying both takes the same value everywhere.
+It is constant. <span class="tag t-model">KERNEL</span> <span class="tag t-data">COMPUTED</span></p>
+
+<p>Every word of that is right, and the theorem states exactly it &#8212; hypotheses
+<span class="mono">Periodic v 5</span> and <span class="mono">Periodic v 3</span>, conclusion
+<span class="mono">&forall; k, v k = v 0</span>. The numbers five and three are in the statement.
+<strong>They are where thirty is hiding.</strong> The prose translated them back into &#8220;sixfold&#8221;
+and &#8220;tenfold&#8221; and dropped the grid that made the translation valid.</p>
+
+<div class="eyebrow">&sect;3</div>
+<h2>Sixty</h2>
+
+<p>Take sixty sectors instead. Nothing forbids it: sixty is a common multiple of six and ten, so both
+symmetries are expressible there, and every sixfold field on thirty sectors lifts to one on sixty.</p>
+
+<div class="eq">60 &divide; 6 = 10 &nbsp;&nbsp;&nbsp; 60 &divide; 10 = 6 &nbsp;&nbsp;&nbsp; gcd(10, 6) = <strong>2</strong></div>
+
+<p>Two, not one. So on sixty sectors the two symmetries force a field only to have period two &#8212; and a
+non-constant field of period two exists, immediately:</p>
+
+<div class="box thm">
+  <span class="lab">The witness</span>
+  <p><span class="mono">alt(k) = k mod 2</span> on the sixty-sector ring.</p>
+  <p style="margin-bottom:0"><span class="mono">alt(k+10) = alt(k)</span> &#8212; sixfold. &nbsp;
+  <span class="mono">alt(k+6) = alt(k)</span> &#8212; tenfold. &nbsp;
+  <span class="mono">alt(1) &ne; alt(0)</span> &#8212; not constant.
+  <span class="tag t-model">KERNEL</span></p>
+</div>
+
+<p>The published sentence asserted that no such field exists. One does. The forcing-to-constant was never
+a fact about six and ten; it was a fact about taking the <em>minimal</em> common refinement, where the
+subgroup the two symmetries generate happens to exhaust the grid.</p>
+
+<div class="eyebrow">&sect;4</div>
+<h2>What is true on every grid</h2>
+
+<p>Orbit counting over every refinement from thirty to twelve hundred gives the pattern without
+assuming it. The dimension of the invariant space &#8212; the number of values a field carrying both
+symmetries is free to choose &#8212; is <em>N</em>/30 at every step, and equals one only at
+<em>N</em> = 30. <span class="tag t-data">COMPUTED</span></p>
+
+<table>
+  <thead><tr><th>Sectors <em>N</em></th><th class="n">sixfold period</th><th class="n">tenfold period</th><th class="n">gcd</th><th class="n">free values</th><th>reading</th></tr></thead>
+  <tbody>
+    <tr><td class="n">30</td><td class="n">5</td><td class="n">3</td><td class="n">1</td><td class="n">1</td><td>constant &#8212; the case that was published</td></tr>
+    <tr><td class="n">60</td><td class="n">10</td><td class="n">6</td><td class="n">2</td><td class="n">2</td><td>period two; <span class="mono">alt</span> is the witness</td></tr>
+    <tr><td class="n">90</td><td class="n">15</td><td class="n">9</td><td class="n">3</td><td class="n">3</td><td>period three</td></tr>
+    <tr><td class="n">120</td><td class="n">20</td><td class="n">12</td><td class="n">4</td><td class="n">4</td><td>period four</td></tr>
+    <tr><td class="n">150</td><td class="n">25</td><td class="n">15</td><td class="n">5</td><td class="n">5</td><td>period five</td></tr>
+  </tbody>
+</table>
+
+<p>The group-theoretic statement is the one that does not mention a grid at all. Rotation by
+2&pi;/6 and rotation by 2&pi;/10 generate rotation by 2&pi;/30: the subgroup of the circle group they
+generate is <strong>C<sub>30</sub></strong>.</p>
+
+<div class="box thm">
+  <span class="lab">The corrected statement</span>
+  <p style="margin-bottom:0">A field carrying both a sixfold and a tenfold symmetry is invariant under
+  C<sub>30</sub>, and no more. On a ring of <em>N</em> sectors it has period <em>N</em>/30. It exhibits
+  neither a hexagon nor a decagon. <strong>It exhibits a thirty-sided pattern.</strong></p>
+</div>
+
+<p>At <em>N</em> = 30 this reads &#8220;constant&#8221;, because <em>N</em>/30 = 1. That is the whole of
+the original result, recovered as one case.</p>
+
+<div class="eyebrow">&sect;5</div>
+<h2>The Lean</h2>
+
+<p>The general fact is Euclid&#8217;s algorithm on periods, and it was already half-written: the file
+carried <span class="mono">periodic_sub</span> &#8212; two periods give their difference &#8212; which is
+the Euclidean step. What it lacked was the closure.</p>
+
+<div class="eq">periodic_gcd : &forall; a b, Periodic v a &rarr; Periodic v b &rarr; Periodic v (Nat.gcd a b)</div>
+
+<p>With <span class="mono">periodic_add</span> and <span class="mono">periodic_mul</span> giving multiples,
+<span class="mono">periodic_mod</span> gives the remainder, and <span class="mono">periodic_gcd</span>
+recurses on it exactly as <span class="mono">Nat.gcd</span> does.
+<span class="mono">hex_and_dec_forces_constant</span> is now the case gcd(5,&nbsp;3) = 1, and the sixty-sector
+case is gcd(10,&nbsp;6) = 2 with <span class="mono">alt</span> attached to it.</p>
+
+<p>Audited the same day. <span class="mono">bash tools/leancheck.sh --audit
+PolarPolygonCommonRefinement.lean</span> &#8212; 7 s, 15 declarations, 0 trusting
+<span class="mono">sorryAx</span>, nothing outside <span class="mono">propext</span>,
+<span class="mono">Classical.choice</span>, <span class="mono">Quot.sound</span>.
+<span class="tag t-model">KERNEL</span></p>
+
+<table>
+  <thead><tr><th>Declaration</th><th>Rests on</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">periodic_add</td><td class="mono">&#8212; no axiom at all</td></tr>
+    <tr><td class="mono">alt_not_constant</td><td class="mono">&#8212; no axiom at all</td></tr>
+    <tr><td class="mono">alt_periodic_ten</td><td class="mono">propext</td></tr>
+    <tr><td class="mono">alt_periodic_six</td><td class="mono">propext</td></tr>
+    <tr><td class="mono">sixty_sectors_permit_structure</td><td class="mono">propext</td></tr>
+    <tr><td class="mono">periodic_mul</td><td class="mono">propext</td></tr>
+    <tr><td class="mono">periodic_mod</td><td class="mono">propext, Quot.sound</td></tr>
+    <tr><td class="mono">periodic_gcd</td><td class="mono">propext, Quot.sound</td></tr>
+  </tbody>
+</table>
+
+<p>Five of the file&#8217;s fifteen declarations rest on <em>no axiom whatever</em> &#8212; not even
+<span class="mono">propext</span>. That is the strongest outcome <span class="mono">#print axioms</span>
+can report, and a gate that counts only the <span class="mono">depends on axioms:</span> form is blind to
+it; see WP-73 &sect;6, where a CI job failed a file over its own three best results for exactly that reason.</p>
+
+<div class="eyebrow">&sect;6</div>
+<h2>What it does to the astronomy</h2>
+
+<p>The corrected statement is <em>stronger</em> than the one it replaces, which is not the usual direction
+for a correction and is worth being explicit about.</p>
+
+<p>&#8220;The only field admitting both is trivial&#8221; named no observation. Nothing could have been
+looked at to test it, because a trivial field is not a thing a telescope resolves. The replacement names
+one: a single field carrying both symmetries would show <strong>thirty sides</strong>. Nobody has
+photographed a triacontagon on Saturn. So the two polygons remain two rings &#8212; two jets, in two
+hemispheres &#8212; and the claim now carries its own refutation condition.</p>
+
+<div class="gap">
+  <span class="lab">What this still does not do</span>
+  <p style="margin-bottom:0">It does not explain why the decagon exists. NASA does not either &#8212; the
+  discovery team states the mechanism is not known and asks openly why it formed now.
+  <span class="tag t-assume">CHECKED</span> Wavenumber selection in a rotating stratified fluid is a
+  stability question turning on measured quantities: jet latitude, width, shear, deformation radius. No
+  theorem supplies those. Every result in this note is a statement about periodic functions on a finite
+  ring. None of them is a statement about Saturn.</p>
+</div>
+
+<div class="eyebrow">&sect;7</div>
+<h2>The class</h2>
+
+<p>WP-73 separated the ways a verification claim comes loose from its artifact &#8212; MISMATCH, STALE,
+FAIL &#8212; and then four more concerning the artifact itself: FALSE, VACUOUS, UNTRUSTED, MISATTRIBUTED.
+This defect is none of them, and it is nearest to the last two.</p>
+
+<table>
+  <thead><tr><th>Class</th><th>What is wrong</th><th>Detected by</th></tr></thead>
+  <tbody>
+    <tr><td>VACUOUS</td><td>the statement has no content</td><td>a declared-baseline scan; fully only on the elaborated type</td></tr>
+    <tr><td>MISATTRIBUTED</td><td>the statement is true but does not support the claim made from it</td><td>nothing, and nothing can</td></tr>
+    <tr><td><strong>OVER-GENERALISED</strong></td><td>the statement is true and does support a claim &#8212; a <em>narrower</em> one than the prose makes, because a parameter fixed in the statement reads in prose as a constant of nature</td><td>instantiating the statement at a second value of that parameter</td></tr>
+  </tbody>
+</table>
+
+<p>The distinguishing feature is that it <em>is</em> mechanisable, unlike MISATTRIBUTED, and cheaply: the
+test is to ask what the theorem says at another value of every number appearing in its hypotheses. Here
+the numbers were five and three; asking what happens at ten and six took one line of arithmetic and
+overturned a published sentence. A theorem whose hypotheses contain a numeral that the surrounding prose
+does not mention should be read as a warning.</p>
+
+<div class="eyebrow">&sect;8</div>
+<h2>Provenance</h2>
+
+<p>The question that found this was whether base sixty would change the arithmetic. It was asked twice.
+The first time it was answered &#8212; correctly, and uselessly &#8212; that a base is notation and changes
+no number. That answer is true and was not responsive: the questioner was not proposing to write thirty
+differently, but pointing at sixty as a quantity with room where thirty has none, because 60/6 and 60/10
+still share a factor while 30/6 and 30/10 do not. The instinct was right and the vocabulary was borrowed.
+Dismissing the vocabulary cost the finding for a day.</p>
+
+<p>This is the second such episode in this series inside a week. The other concerned &epsilon;<sub>0</sub> =
+1/3, described in a draft as &#8220;a chosen threshold&#8221; when it is a Gr&ouml;nwall bound, and corrected
+by the same reader on the same grounds &#8212; that the description named the wrong kind of object. Both
+times the correction arrived in words that were easy to argue with and pointed at something that was not.</p>
+
+<div class="eyebrow">&sect;9</div>
+<h2>Sources and artefacts</h2>
+
+<ol class="refs">
+  <li>Lean: <span class="mono">geometry/PolarPolygonCommonRefinement.lean</span>, 15 declarations, Lean 4 v4.32.0.
+    Gate report: <span class="mono">geometry/tools/verify-audit/2026-09-05/PolarPolygonCommonRefinement.axioms.txt</span>,
+    written by the run.</li>
+  <li>Arithmetic: <span class="mono">wp97-verify.py</span>, this directory. Orbit counting is independent of the
+    gcd formula it checks, so a disagreement between them is a finding rather than a tautology.</li>
+  <li>The corrected chapter: Vol V, <span class="mono">book5/chV-saturn-smoke.html</span> &sect;4.</li>
+  <li>The defect record: <span class="mono">geometry/docs/audit-log.md</span>, entry of 2026-09-05.</li>
+  <li>NASA, <a href="https://science.nasa.gov/missions/hubble/nasas-hubble-tracks-new-decagon-encircling-saturns-south-pole/">Hubble Tracks New Decagon Encircling Saturn&#8217;s South Pole</a>.</li>
+  <li>S&aacute;nchez-Lavega, Simon, Wong et al., &#8220;A decagon wave around Saturn&#8217;s south pole&#8221;,
+    <em>Science Advances</em>, <a href="https://doi.org/10.1126/sciadv.aee4251">10.1126/sciadv.aee4251</a>, 2 September 2026.</li>
+  <li>WP-73, <em>The Stamp and the Triple</em>, this volume &#8212; the seven classes, and &sect;6 on axiom-free proofs.</li>
+</ol>
+
+</div>
+
+<footer>
+  <div class="fwrap">
+    <div>
+      <strong style="color:var(--gold2)">WP-95 · The Right Word, the Wrong Reader</strong><br>
+      Principia Orthogona · Vol VI · Roots<br>
+      <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> · Pablo Nogueira Grossi · Newark NJ · 2026<br>
+      ORCID 0009-0000-6496-2186 · <a href="mailto:g6llc@proton.me">g6llc@proton.me</a>
+    </div>
+    <div class="disc">
+      <strong style="color:var(--gold2)">Disclaimer</strong><br>
+      Independent working paper; not peer-reviewed. A stylized structural analysis. No transaction,
+      institution, instrument or person is identified, and none is alleged; every parameter is illustrative
+      and chosen for legibility, as &sect;8 sets out. &sect;3&#8217;s result is conditional on the instrument
+      being own funds; &sect;4&#8217;s diagnostic is a screen, not a proof; &sect;6&#8217;s routing claim is
+      argued from mechanism and not measured; &sect;7&#8217;s control is open and unimplemented.
+      CC BY-NC-ND 4.0 · © 2026 Pablo Nogueira Grossi — G6 LLC.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
