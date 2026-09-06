@@ -58,6 +58,12 @@ print(f"       lambda_10 = 2*pi*R10/10 = {lam10_geo:8.0f} km")
 check("lambda_6 geometric",  lam6_geo,  13886, 40)
 check("lambda_10 geometric", lam10_geo, 18625, 50)
 
+print("       circumferences, for the cross-reference in section 9:")
+print(f"         hexagon ring 2*pi*R6  = {2*np.pi*R6:8.0f} km   -> 6 x {lam6_geo:.0f}")
+print(f"         decagon ring 2*pi*R10 = {2*np.pi*R10:8.0f} km   -> 10 x {lam10_geo:.0f}")
+check("hexagon circumference", 2*np.pi*R6, 83316, 200)
+check("decagon circumference", 2*np.pi*R10, 186241, 400)
+
 print("\n[3] The paper's measured Lx, and where the 11 per cent goes")
 R10_from_meas = N_DEC * LX_DEC_MEAS / (2 * np.pi)
 gap = (lam10_geo - LX_DEC_MEAS) / LX_DEC_MEAS
