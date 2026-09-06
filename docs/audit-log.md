@@ -1,3 +1,38 @@
+# THE THIRD OVER-GENERALISED IN ONE WEEK, AND IT CONTRADICTED ITS OWN COMPANION (2026-09-05)
+
+**Class: OVER-GENERALISED.** Mine, in `book6/wp99-paying-for-what-the-kernel-can-see.html` §6.
+
+Comparing theorem-closing to mining, I wrote that mining's memorylessness
+fails here because "skill and prior work dominate completely; the reward
+concentrates, and concentrates on the people who least need an incentive." The
+first clause is right and stands. The second fixed a parameter — that capability
+in this work is a function of training history — and read it as a constant of
+nature. Unmeasured, and asserted as structure.
+
+**It also contradicted WP-98 §8, written days earlier, by me.** That section
+argues the credential requirement falls to near zero on a hub whose outputs are
+machine-checkable, because the artefact carries the argument. WP-99 §6 denied it
+one paper later. A corpus is supposed to make that visible and it did — but only
+because Pablo read both.
+
+Corrected in place, the row marked rather than rewritten. The corrected form:
+theorem-closing is not memoryless and cannot be made so, and is also not the
+strongly path-dependent tournament the draft implied; variance in who closes a
+given obligation is higher than a seniority model predicts and the direction of
+travel is toward wider access, because the part of "prior work" that was tooling
+fluency is what an assistant supplies. Both directions remain unmeasured and
+WP-98 §7 already names the measurement.
+
+**The correction strengthens the paper, which is why it matters.** A market is
+worth running only when the supplier's identity is uncertain — if you can
+predict who closes an obligation you hire them instead of posting a bounty. The
+concentration I asserted would have been an argument against WP-99's own
+mechanism. High variance is the condition for commissioning, not a defect in it.
+
+Provenance: third instance in a week of the same class, and the third time the
+correction came from Pablo. ε₀ = 1/3 called a chosen threshold when it is a
+Grönwall bound; thirty sectors read as a fact about six and ten; now this.
+
 # THIRTY WAS DOING THE WORK — an overclaim found by asking about base sixty (2026-09-05)
 
 **Class: OVERSTATED.** Mine, in `book5/chV-saturn-smoke.html` §4 and on the
