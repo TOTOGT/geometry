@@ -32,26 +32,32 @@ recorded above at four values in four places.
 The correct tier is: *derived, conditional on an open input, with the final arithmetic
 kernel-checked.* Not "PROVED, Lean 4."
 
-## r* may decide O7, and not in the direction the corpus prefers
+## r* and ε₀: the "basin asymmetry" may be an artifact of the Hessian bound
 
-**Class: NEW — not yet resolved, recorded so it is not lost.** ch03 places the attractor
-at r = 1 and the certified inner basin boundary at r* ≈ 0.776, so the distance from
-attractor to boundary is ≈ **0.224**.
+**Class: NOT NEW — ch10 §6, restated with a consequence it does not draw.** An earlier
+draft of this entry labelled the r*/ε₀ tension NEW. It is not: it is the headline of
+Book 4 ch10, whose abstract says the inner boundary r* = 0.77594059 "correct[s] the
+symmetric Gronwall estimate ε₀ = 1/3", and whose §6 states that trajectories with
+r(0) ∈ (0.667, 0.77594059) are "in the Gronwall basin but outside the true basin" and
+escape. Claiming novelty without looking is the FALSE ABSENCE pattern, recorded here
+against the writer of this entry.
 
-A Gronwall stability radius is a *guaranteed-contraction* radius: every point within ε₀
-must converge. But ε₀ = 1/3 ≈ 0.333 exceeds 0.224 — a ball of that radius about r = 1
-reaches r ≈ 0.667, inside the region the certification says diverges. The bound would be
-claiming more than the numerics allow, which is the opposite of conservative.
+The consequence ch10 does not draw is this. §6 frames the discrepancy as *asymmetry* —
+a symmetric estimate against an asymmetric basin, the outer side conservative and the
+inner side failing. But a Gronwall stability radius is a **guaranteed-contraction**
+radius. A ball that contains points which provably escape is not an asymmetric bound;
+it is an invalid one. On the strict reading, ε₀ = 1/3 is simply too large.
 
-At sup‖Hess V‖ = 6 — the value `V_second_deriv_at_one` proves — ε₀ = 1/7 ≈ 0.143, and the
-ball reaches r ≈ 0.857, inside the basin. Consistent.
+And that lands on **O7**. At sup‖Hess V‖ = 6 — the value `V_second_deriv_at_one` proves —
+ε₀ = 2/(2·7) = 1/7 ≈ 0.143, giving a basin r ∈ (0.857, 1.143), entirely inside the true
+basin (0.776, ∞). Valid, and conservative on both sides, which is what a Gronwall bound
+is supposed to be. **The asymmetry requiring correction may therefore be an artifact of
+using H = 2 rather than a property of the system.** At H = 6 the correction ch10 §6
+performs is not needed, because there is nothing to correct.
 
-`basin_asymmetry : (1:ℝ)/3 < 4/5` compares the two as bare reals and its docstring reads
-the gap as conservatism. Under the geometry above they are not the same kind of quantity —
-one a radius from r = 1, the other a position in r — and in a common frame the reading
-reverses. **Caveat that keeps this open:** if ε₀ is a radius in a different norm, or on
-the (r,z) phase space rather than in r alone, the comparison does not apply. Settling
-that is what closes O7.
+Caveat that keeps this open: if ε₀ is a radius in a different norm, or on the (r,z)
+phase space rather than in r alone, the comparison lapses. Settling that closes O7 and
+decides whether ch10 §6 describes a real asymmetry or a wrong constant.
 
 ## `nodal-sets.html` marks "Lean ✓" for declarations that exist nowhere
 
