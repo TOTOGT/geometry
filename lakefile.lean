@@ -63,3 +63,13 @@ lean_lib PolarTriadClosure
 -/
 @[default_target]
 lean_lib PolarPolygonCommonRefinement
+
+/-
+  ChladniPolygon.lean supplies the declarations `nodal-sets.html` displays and
+  marks "Lean ✓" — which resolved nowhere until 2026-09-06 — and adds the tenfold
+  case. Checked with `leancheck.sh --audit` on 2026-09-06: 4 theorems, 0 trusting
+  sorryAx. It imports Mathlib, so unlike the other two polar files it cannot be
+  run with the bare `lean` binary; the target is what keeps it checked.
+-/
+@[default_target]
+lean_lib ChladniPolygon
