@@ -10,6 +10,29 @@
 # and reports anything that is not a subset of the three standard axioms.
 # That is the real gate. A clean compile is not a verification.
 #
+# --audit NOW LEAVES AN ARTEFACT. Until 2026-09-06 the probe was written to a
+# mktemp file, read for two counts, and `rm -f`d. So an overnight run over the
+# whole corpus printed its results to a terminal and left nothing behind: the
+# next morning the repository could not tell a file that had been audited from
+# one that never had. That is the same shape as the July defect this repo
+# exists to prevent -- a verification that happened and left no evidence is
+# indistinguishable from one that did not happen. Reports now land in
+#
+#     tools/verify-audit/<YYYY-MM-DD>/<stem>.axioms.txt
+#
+# which is a gate-report shape tools/toolchain_ledger.py and the theorem
+# registry already read, so an overnight run raises Tier 1 by construction.
+# Override the directory with --out DIR.
+#
+# THE VERDICT IS tools/axiom_gate.py's. This script used to judge with
+# `grep -c 'sorryAx\|native_decide'`. That is a forbidden list, and WP-73 §6
+# gives the two ways a forbidden list is wrong: it cannot see an axiom nobody
+# has thought of yet (Lean.ofReduceBool leaks straight through the name
+# `native_decide`), and a checker counting only the `depends on axioms:` form
+# is blind to `does not depend on any axioms`, which is the strongest result
+# #print axioms can give. The gate enumerates the permitted three and reads
+# both forms.
+#
 # WHY THIS PROJECT: ~/Desktop/geometry is the only checkout on this machine
 # with a COMPLETE Mathlib build matching its own toolchain (v4.32.0, full
 # Mathlib.olean present, 6.4 GB). GTCT is pinned to the same v4.32.0, so its
@@ -19,7 +42,12 @@
 set -uo pipefail
 PROJ=~/Desktop/geometry
 AUDIT=0
+OUTDIR=""
 [ "${1:-}" = "--audit" ] && { AUDIT=1; shift; }
+[ "${1:-}" = "--out" ] && { OUTDIR="${2:-}"; shift 2; }
+[ "${1:-}" = "--audit" ] && { AUDIT=1; shift; }
+[ -z "$OUTDIR" ] && OUTDIR="$PROJ/tools/verify-audit/$(date +%F)"
+[ $AUDIT -eq 1 ] && mkdir -p "$OUTDIR"
 [ $# -eq 0 ] && { echo "usage: leancheck.sh [--audit] FILE.lean ..."; exit 1; }
 
 # Resolve every argument to an absolute path BEFORE cd-ing into the project.
@@ -82,11 +110,18 @@ for f in "${FILES[@]}"; do
     | while read -r d; do
         [ -n "$ns" ] && echo "#print axioms $ns.$d" || echo "#print axioms $d"
       done >> "$probe"
-  ax=$(lake env lean "$probe" 2>&1 | grep 'depends on axioms\|does not depend')
-  tot=$(printf '%s' "$ax" | grep -c .)
-  bad=$(printf '%s' "$ax" | grep -c 'sorryAx\|native_decide')
-  printf "        audit: %d declarations, %d trusting sorryAx/native_decide\n" "$tot" "$bad"
-  [ "$bad" -gt 0 ] && printf '%s\n' "$ax" | grep 'sorryAx\|native_decide' | sed 's/^/          /'
+  rep="$OUTDIR/$(basename "${f%.lean}").axioms.txt"
+  # Keep the wrapped continuation lines: axiom_gate.py rejoins them, and a
+  # line-oriented grep here would truncate a long list exactly as CI run #245 did.
+  lake env lean "$probe" 2>&1 | grep -E "^'|^ +[A-Za-z]" > "$rep"
+  tot=$(grep -cE "^'" "$rep")
+  if python3 "$PROJ/tools/axiom_gate.py" "$rep" "$tot" > "$rep.gate" 2>&1; then
+    printf "        audit: %d declarations, all within the permitted three\n" "$tot"
+  else
+    printf "        audit: %d declarations — GATE REFUSED\n" "$tot"
+    sed 's/^/          /' "$rep.gate"
+  fi
+  printf "        report: %s\n" "${rep#$PROJ/}"
   rm -f "$probe"
 done
 

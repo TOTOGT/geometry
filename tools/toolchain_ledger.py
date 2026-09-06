@@ -76,7 +76,10 @@ import theorem_census as TC
 import axiom_gate as AG
 
 ROOT = HERE.parent
-GATE_SHAPES = ['tools/verify-*/axioms*.txt', 'tools/axioms*.txt']
+GATE_SHAPES = ['tools/verify-*/axioms*.txt', 'tools/axioms*.txt',
+               # dated per-file reports written by `leancheck.sh --audit`,
+               # so an overnight run raises Tier 1 without anyone typing a number
+               'tools/verify-audit/*/*.axioms.txt']
 SKIP = re.compile(r'(^|/)(_?to_delete|ml-evidence|\.lake)(/|$)')
 
 
