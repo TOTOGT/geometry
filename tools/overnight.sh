@@ -44,10 +44,21 @@ mkdir -p "$OUT"
 # leanscan.sh, the registry and the ledger read. A root that cannot be read is
 # reported, not skipped: a run over five roots of eleven is a different
 # measurement, not a smaller one.
-mapfile -t ROOTS < <(sed 's/#.*//' "$PROJ/tools/corpus_roots.txt" | sed 's/[[:space:]]*$//' | grep .)
+#
+# BASH 3.2. macOS ships bash 3.2.57 as /bin/bash and has since 2007, for
+# licensing reasons that are not going to change. `mapfile`/`readarray` is
+# bash 4, so the first version of this line died on the machine it was written
+# for with "mapfile: command not found" — and then, under `set -u`, took the
+# whole run down with "ROOTS[@]: unbound variable". Anything written here has
+# to run under 3.2 or it does not run at all.
+ROOTS=()
+while IFS= read -r _line; do
+  [ -n "$_line" ] && ROOTS+=("$_line")
+done < <(sed 's/#.*//' "$PROJ/tools/corpus_roots.txt" | sed 's/[[:space:]]*$//' | grep .)
+[ ${#ROOTS[@]} -eq 0 ] && { echo "no roots in tools/corpus_roots.txt — nothing to run"; exit 1; }
 
 : > "$OUT/order.txt"
-for r in "${ROOTS[@]}"; do
+for r in ${ROOTS[@]+"${ROOTS[@]}"}; do
   d="${r/#\~/$HOME}"
   [ -d "$d/.git" ] || { echo "UNREADABLE ROOT: $d" | tee -a "$OUT/order.txt"; continue; }
   ( cd "$d" && git ls-files '*.lean' ) | while read -r f; do
@@ -63,6 +74,7 @@ sort -s -k1,1n "$OUT/order.txt" -o "$OUT/order.txt"
 
 n=$(grep -c $'^[0-9]\t' "$OUT/order.txt")
 echo "corpus: $n tracked .lean files across ${#ROOTS[@]} declared roots"
+echo "shell: bash ${BASH_VERSION:-unknown}"
 for p in 1 2 3; do
   printf "  priority %d: %d files\n" "$p" "$(grep -c "^$p"$'\t' "$OUT/order.txt")"
 done
@@ -84,7 +96,12 @@ done | tee -a "$OUT/run.log"
 
 echo | tee -a "$OUT/run.log"
 echo "== summary ==" | tee -a "$OUT/run.log"
-printf "  reports written : %d\n" "$(ls "$OUT"/*.axioms.txt 2>/dev/null | wc -l)" | tee -a "$OUT/run.log"
-printf "  gate refusals   : %d\n" "$(grep -l . "$OUT"/*.gate 2>/dev/null | xargs grep -l '::error::' 2>/dev/null | wc -l)" | tee -a "$OUT/run.log"
+# Counted with find, not with a glob piped to xargs. On an empty directory a
+# glob stays literal and `xargs grep -l` runs grep with no file arguments,
+# which reads stdin -- a summary line that can hang is worse than no summary.
+nrep=$(find "$OUT" -name '*.axioms.txt' 2>/dev/null | wc -l | tr -d ' ')
+nbad=$(find "$OUT" -name '*.gate' -exec grep -l '::error::' {} + 2>/dev/null | wc -l | tr -d ' ')
+printf "  reports written : %s\n" "$nrep" | tee -a "$OUT/run.log"
+printf "  gate refusals   : %s\n" "$nbad" | tee -a "$OUT/run.log"
 echo | tee -a "$OUT/run.log"
 echo "next: python3 tools/toolchain_ledger.py --write" | tee -a "$OUT/run.log"
