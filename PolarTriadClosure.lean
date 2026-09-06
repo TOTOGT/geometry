@@ -42,6 +42,38 @@ insolation after the 2025 equinox — is not addressed here and is not weakened
 by anything proved here.
 
 Mathlib-free: core Lean 4 only.
+
+## VERIFICATION STATUS — 2026-09-05. CLEAN, RUN AND RECORDED.
+
+Elaborated twice on the repository pin, `leanprover/lean4:v4.32.0`, on two
+machines and two operating systems, with identical output both times:
+
+* bare `lean` on Linux, x86_64, container;
+* bare `lean` and then `lake build` on macOS, the author's machine.
+
+`lake build PolarTriadClosure PolarPolygonCommonRefinement` completed
+successfully, five jobs. Both files are declared default targets in
+`lakefile.lean`, so a later toolchain or Mathlib change fails the build rather
+than passing unnoticed — the gap `SaturnHexagon.lean` lived in until 2026-08-21.
+
+Per declaration:
+
+```
+    partners_six_ten          does not depend on any axioms
+    reach_even                [propext, Quot.sound]
+    seven_not_reachable       [propext, Quot.sound]
+    nine_not_reachable        [propext, Quot.sound]
+    four_reachable            does not depend on any axioms
+    sixteen_reachable         does not depend on any axioms
+    odd_seeds_reach_odd       [propext, Quot.sound]
+```
+
+No `sorryAx`. No `Classical.choice`. The two axioms that do appear are Lean's
+own and arrive through the induction on an inductive `Prop`.
+
+A run dates from the day it was run and says nothing about any later day. The
+target declaration is what carries it forward; this block is what makes the
+claim checkable against the file rather than asserted over it.
 -/
 
 namespace PolarTriadClosure

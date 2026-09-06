@@ -49,6 +49,37 @@ southern one now reorganising under changing insolation after the 2025 equinox
 
 Mathlib-free: core Lean 4 only. Companion to `SaturnHexagon.lean`, which models
 the sixfold case concretely as `Fin 6 → ℝ`.
+
+## VERIFICATION STATUS — 2026-09-05. CLEAN, RUN AND RECORDED.
+
+Elaborated twice on the repository pin, `leanprover/lean4:v4.32.0`, on two
+machines and two operating systems, with identical output both times:
+
+* bare `lean` on Linux, x86_64, container;
+* bare `lean` and then `lake build` on macOS, the author's machine.
+
+`lake build PolarTriadClosure PolarPolygonCommonRefinement` completed
+successfully, five jobs. Both files are declared default targets in
+`lakefile.lean`, so a later toolchain or Mathlib change fails the build rather
+than passing unnoticed — the gap `SaturnHexagon.lean` lived in until 2026-08-21.
+
+Per declaration:
+
+```
+    periodic_sub                  [propext, Quot.sound]
+    periodic_one_const            does not depend on any axioms
+    hex_and_dec_forces_constant   [propext, Quot.sound]
+    constant_is_bisymmetric       does not depend on any axioms
+    sawtooth_periodic_five        [propext]
+    sixfold_alone_permits_structure [propext]
+```
+
+No `sorryAx`. No `Classical.choice`. The two axioms that do appear are Lean's
+own and arrive through the induction on an inductive `Prop`.
+
+A run dates from the day it was run and says nothing about any later day. The
+target declaration is what carries it forward; this block is what makes the
+claim checkable against the file rather than asserted over it.
 -/
 
 namespace PolarPolygonCommonRefinement
