@@ -54,3 +54,12 @@ lean_lib TripleAlphaDm3
 -/
 @[default_target]
 lean_lib PolarTriadClosure
+
+/-
+  PolarPolygonCommonRefinement.lean, same conditions: zero imports, hand-checked
+  under v4.32.0 on 2026-09-05, no sorry, axioms propext and Quot.sound only.
+  Declared here for the same reason as the others — a hand run dates from the
+  day it was run.
+-/
+@[default_target]
+lean_lib PolarPolygonCommonRefinement
