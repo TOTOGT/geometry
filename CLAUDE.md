@@ -1,44 +1,156 @@
-# HANDOFF — 2026-08-30, end of session
+# HANDOFF — 2026-09-05, end of session
 
-Read this first. Everything below the next `---` is the standing house notes.
+Read this first. Everything below the second `---` is the standing house notes.
+
+## What changed today, in one paragraph
+
+The overnight job became a job, an `--audit` began leaving evidence, Tier 1 was
+found to be a four-fold undercount caused by a glob, and a published claim was
+found to be an artefact of a grid. All four are the same defect wearing four
+costumes: **a measurement nobody could regenerate.** Every fix pushed in that
+direction — the numbers now come from artefacts on disk, and where they cannot,
+the tool says so.
 
 ## The overnight job, if you are the session that runs it
 
-**Nothing needs installing.** Mathlib v4.32.0 is built at
-`~/Desktop/geometry/.lake` (7.8 GB, 8,650 `.olean`, manifest `81a5d257c8e4`).
-Do **not** run `lake exe cache get` — six sessions did that and left 30 GB of
-duplicate builds; five were deleted today. See CHECK BEFORE YOU BUILD below.
+**It is now a script.** Do not re-read a prose run-order and re-type it.
 
-    bash ~/Desktop/geometry/tools/leancheck.sh --audit FILE.lean [FILE.lean ...]
+    cd ~/Desktop/geometry
+    bash tools/overnight.sh --dry-run     # the order, and nothing compiled
+    bash tools/overnight.sh               # ~275 files, hours
+    python3 tools/toolchain_ledger.py --write
+    cd ~/Desktop/AXLE && python3 scripts/build_theorem_registry.py
 
-`lake env lean` from the geometry project compiles a file **anywhere on disk**,
-so GTCT and 3M files check here without their own Mathlib. Budget ~3–30 s per
-file now that imports are narrowed; it was 576 s each when files said
-`import Mathlib`.
+`overnight.sh` is a DRIVER and judges nothing. It reads the declared roots from
+`tools/corpus_roots.txt`, sorts into priority order — no `import` line, then
+contains `sorry`, then the rest — and hands each file to `tools/leancheck.sh`,
+whose verdict is `tools/axiom_gate.py`'s. It is resumable: a report already
+written today is skipped, so an interruption costs the remaining files and not
+the night. A root it cannot read is REPORTED, never skipped — a run over five
+roots of eleven is a different measurement, not a smaller one.
 
-**The gate is `#print axioms`, not a clean compile.** `--audit` appends the
-probe and reports any declaration trusting `sorryAx` or `native_decide`. A file
-can build, contain no `sorry`, and still be worthless — see §6 of
-`~/Desktop/dnls/CLAUDE.md`.
+Measured 2026-09-05: **275 tracked `.lean` across 11 roots — 30 with no import
+line, 133 containing `sorry`, 112 the rest.** The 2026-08-30 handoff said 17 and
+168; the tool recomputes rather than repeating.
 
-**Run order, highest value first.** The scan behind this is in
-`/tmp/leanscan.json` if it survives; regenerate it by comparing each `.lean`
-file's prose claim against its comment-stripped body.
+Zero-import is a HEURISTIC for "never elaborated", not a proof of it.
+`PolarTriadClosure.lean` and `PolarPolygonCommonRefinement.lean` import nothing
+because they need nothing, and both compile.
 
-1. **The 17 files with zero `import` lines.** They have never been compiled by
-   anything. Give each the narrowest import set that resolves it, then audit.
-   `AXLE/CatGT/axle_togt_canonical.lean` is one of these and was the worst
-   finding of the day — three of its nine axioms are refutable, so the file is
-   inconsistent. Fixed today; the other 16 are untouched.
-2. **The 168 `sorry`s across 158 unique files.** Triage before proving: this
-   session found three GTCT theorems and three AXLE axioms that were *false*,
-   not merely unproved. Instantiate a claim at a two-element type with constant
-   maps before spending an hour on its proof.
-3. **`dm3CriticalityPrinciple_extended.lean`** carries the same false `V_c`
-   double-root claim corrected in `GTCTsorryFree.lean`. Same repair applies.
-4. **AXLE is stranded on toolchain v4.14.0** and **3M has no `lean-toolchain`
-   at all**, so neither can be checked against the build we have. Repinning
-   both to v4.32.0 is the unblock, and it is a deliberate decision — ask first.
+**`--audit` now leaves an artefact**, which it did not before today. Reports land
+at `tools/verify-audit/<date>/<stem>.axioms.txt`. Until 2026-09-05 the probe went
+to `mktemp`, was read for two counts, and `rm -f`'d — so a full-corpus run printed
+to a terminal and left the repo unable to tell an audited file from one never
+checked. **Commit the reports.** They are what Tier 1 is read from.
+
+**Nothing needs installing.** Mathlib v4.32.0 is built at `~/Desktop/geometry/.lake`.
+Do **not** run `lake exe cache get` — six sessions did, leaving 30 GB of duplicates.
+
+**The gate is `#print axioms`, not a clean compile**, and the verdict is
+`tools/axiom_gate.py`'s, never a grep. A grep for `sorryAx` is a forbidden list;
+WP-73 §6 gives the two ways that is wrong, and I reintroduced it in three separate
+places today before noticing. Enumerate the permitted three.
+
+## Counting: read this before publishing any total
+
+Three tiers, and only the first is evidence.
+
+| tier | what it is | where it comes from | 2026-09-05 |
+|---|---|---|---|
+| 1 | kernel-audited | `axioms.txt` written by a gate run | **133** corpus / 45 in geometry |
+| 2 | sorry-free | text scan, `theorem_census.py` | 1 815 grouped |
+| 3 | declarations written | text scan | 1 995 grouped |
+
+Tier 1 read **32** until today. The undercount was a glob in
+`AXLE/scripts/build_theorem_registry.py`, which swept two hardcoded shapes and
+missed `vol1-proofs/tools/axioms.txt` — 82 audited declarations, the largest
+report in the corpus. It now reads `tools/corpus_roots.txt`, the same root set
+every other published number uses.
+
+`tools/toolchain_ledger.py` is the per-file view: which files have a kernel
+record, what their declarations rest on, and which sit `OUTSIDE EVERY TARGET`.
+**22 geometry files are in no `lake build` target** — 137 declarations that can
+stop compiling with nothing saying so. That is exactly how `SaturnHexagon.lean`
+stood broken for a month. It is the largest open item in this repo.
+
+What the ledger CANNOT do: tell STALE from still-true. A gate report carries no
+toolchain and no library, only a filesystem timestamp. `CS/verify-stamp` is the
+instrument that binds the triple (WP-73 §2). An old date is an invitation to run
+it, not a substitute.
+
+`book5/index.html` line 103 still reads `1.080 teoremas · 0 sorry`. The corpus
+has 270 admitted declarations, so "0 sorry" is false at corpus scope. Left alone
+deliberately — 1 080 is a branded milestone and not a census. Ask before changing.
+
+## Dates are local to the desk
+
+US Eastern, the machine with the Mathlib build. Not UTC. A sandbox session
+running UTC stamped five hand-typed dates a day ahead on 5 September and produced
+a ledger apparently predating its own evidence. Tools read the clock they run on
+and are already right; only hand-typed dates can be wrong. See `tools/CONVENTIONS.md`.
+
+## Bash 3.2
+
+macOS ships bash 3.2.57 as `/bin/bash`. `mapfile`/`readarray` is bash 4 and dies
+here. `bash -n` will not catch it — a missing builtin is not a syntax error.
+Anything written for this machine from elsewhere must be read for 3.2 by eye.
+
+## The Saturn correction, and the class it named
+
+`hex_and_dec_forces_constant` is true and was carrying a sentence wider than
+itself: "the only field admitting both a hexagon and a decagon is the trivial
+one" is a fact about choosing THIRTY sectors. On sixty the periods are 10 and 6,
+gcd is 2, and `k mod 2` is a non-constant witness. The grid-free statement —
+rotations of order 6 and 10 generate C₃₀, so such a field shows thirty sides and
+neither polygon — is closed by `periodic_gcd`, kernel-audited 2026-09-05.
+
+Published as **WP-97, `book6/wp97-thirty-was-doing-the-work.html`**, with
+`wp97-verify.py`. §7 names the class WP-73's seven lacked: **OVER-GENERALISED** —
+true statement, wider prose, because a parameter fixed in the hypotheses reads in
+prose as a constant of nature. Unlike MISATTRIBUTED it is mechanisable and cheap:
+instantiate at a second value of every number in the hypotheses. A theorem whose
+hypotheses carry a numeral the surrounding prose never mentions is a warning.
+
+Provenance, recorded because the failure mode is the point: the finding came from
+"what about base 60", asked twice, and the first answer — that a base is notation
+and changes no number — was true and not responsive. Second time in a week that
+arguing with borrowed vocabulary cost a finding; the other was ε₀ = 1/3 described
+as "a chosen threshold" when it is a Grönwall bound. **When the words are wrong
+and the gesture is at a structure, go look at the structure.**
+
+## Open, in the order they should be taken
+
+1. **The 22 files outside every build target.** Give each a `lean_lib` entry, or
+   move it to `_to_delete/`. Until then they are unverifiable by construction.
+2. **`verify-proofs.yml` discards its own axiom reports** into `/tmp`. It gates
+   45 declarations named by hand in three heredocs, weekly, and only on pushed
+   commits. Make it upload or commit the reports, and consider driving it from
+   the tracked probes rather than heredocs — the dm³ step already does.
+3. **The `verify-stamp` step in `verify-proofs.yml` is commented out**, waiting
+   on `SaturnHexagon.lean` carrying a stamp generated under v4.32.0, which means
+   generating it from a CI run and not from a local tree.
+4. **`ZetaReflection` refactor: keep or revert.** If kept, `book4/ch12.html`
+   line 331 reads "eleven theorems… one admitted" and must become twelve and two.
+5. **`verify-book8/run.sh` counts `N` with an unanchored grep** that matches its
+   own probe docstring. `verify-polar` uses the anchored form. Fix, in its own
+   commit — moving a gate's N inside an unrelated commit is how a number drifts.
+6. **O7** — one supremum computation (sup‖Hess V‖) from either closing or moving
+   ε₀. Caveat recorded: ε₀ may live in a different norm than r.
+7. Untracked and awaiting a decision: `book4/ZetaScratch.lean` (the superseded
+   route — commit with a header saying so, or delete), `book5/.bak-saturn-smoke`,
+   `.bak-polar-*`, `tools/.leancheck.sh.bak-*`.
+
+## Git, on this machine
+
+A sandboxed session cannot delete `.git/*.lock` files and works around it by
+renaming them to `.stale-*`. **Those are litter — delete them.** If a `git`
+command reports `index.lock: File exists`, remove it and retry:
+
+    rm -f ~/Desktop/AXLE/.git/index.lock ~/Desktop/geometry/.git/index.lock
+    rm -f ~/Desktop/*/.git/.stale-*.lock
+
+Sandboxed sessions also have no push credentials. Every push in this repo is run
+at the desk.
 
 ## RH preprint — where reflection_law stands (30 Aug, end of day)
 
