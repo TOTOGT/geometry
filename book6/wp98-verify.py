@@ -114,6 +114,29 @@ for c, what in [
     print(f"       {c:18s} {what}")
 
 print()
+print("[4] The labour arithmetic of §8 — inputs stated, so the reader can move them")
+POP = {  # approximate 2026 figures, millions; sources in §11
+    'India': 1460, 'China': 1410,
+    'United States': 342, 'European Union': 449, 'Japan': 123,
+    'South Korea': 52, 'United Kingdom': 69,
+}
+IC = POP['India'] + POP['China']
+BLOC = sum(POP[k] for k in ('United States', 'European Union', 'Japan',
+                            'South Korea', 'United Kingdom'))
+share = 0.30
+trained = IC * share
+print(f"       India + China                     {IC:,.0f} M")
+print(f"       US + EU + Japan + Korea + UK      {BLOC:,.0f} M")
+print(f"       30% of India + China              {trained:,.0f} M")
+print(f"       as a fraction of the whole bloc   {trained / BLOC:.0%}")
+check("30% of India+China exceeds the bloc's entire population", trained > BLOC, False)
+check("fraction of the bloc's TOTAL population needed to match, rounded",
+      round(trained / BLOC * 100), 83)
+print("       Note: 30% of a total population holding a CS education exceeds total")
+print("       tertiary attainment in every country that exists. This is a ratio, not")
+print("       a forecast, and §8 says so.")
+
+print()
 if FAIL:
     print(f"FAILED: {len(FAIL)}")
     for f in FAIL:
