@@ -39,13 +39,16 @@ echo
 echo "── 2/2  axiom gate ($N expected) ───────────────────────────"
 cat "$OUT"
 got=$(wc -l < "$OUT" | tr -d ' ')
-bad=$(grep -c sorryAx "$OUT")
+# The verdict is tools/axiom_gate.py's, not a grep's. A grep for sorryAx is a
+# forbidden list, and a forbidden list cannot see Lean.ofReduceBool or a
+# native_decide axiom -- WP-73 §6. The gate enumerates the permitted three.
+python3 tools/axiom_gate.py "$OUT" "$N"; ok=$?
 echo
-if [ "$got" -eq "$N" ] && [ "$bad" -eq 0 ]; then
+if [ "$got" -eq "$N" ] && [ "$ok" -eq 0 ]; then
   echo "GREEN — $got declarations, every one kernel-checked, no sorryAx."
   echo "        Arithmetic and symmetry only. Nothing here is a claim about Saturn."
   exit 0
 fi
-echo "RED — expected $N declarations, harvested $got, $bad trusting sorryAx."
+echo "RED — expected $N declarations, harvested $got; gate exit $ok."
 echo "      A count that moved without a commit saying so is the thing this gate exists to catch."
 exit 1
