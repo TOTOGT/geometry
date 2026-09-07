@@ -3341,3 +3341,47 @@ instance of the same mistake — the class is a correct finding assigned to the
 wrong category of remedy. What actually caught all three was resolving the
 artifact: opening the index, opening the pages. The cheap operation was available
 every time and was skipped every time in favour of a pattern over names.
+
+### Addendum, same day: the fourth instance reached the filesystem
+
+The entry above closed by saying a taxonomy describes errors after the fact and
+is not a check. Within the hour the same author produced a fourth instance, and
+this one was not caught by reading — it was written to disk first.
+
+**What happened.** Two index rows appeared to disagree with the files they open:
+a row labelled WP-30 opening `wp85-the-missing-anchor.html`, and a row labelled
+WP-31B opening `wp30-how-to-audit.html`. The pages do not declare their own
+numbers; they declare their neighbours, in prev/next navigation. Reading those
+links produced a self-consistent forward chain — WP-29, WP-30a, WP-30b, WP-31,
+WP-31C, WP-31D — and an argument for it: `wp30` precedes `wp31`, so labelling it
+31B places it after a paper it comes before, and there is no WP-31A for a 31B to
+follow. On that reasoning seven edits were made across six files, changing the
+index and five pages.
+
+**What was actually true.** The index row's own description records the decision,
+dated: *"renumbered 2026-08-11 from a collision with WP-30 (The Missing Anchor);
+written after WP-31, so it sits as WP-31B rather than displacing either."* The
+index was correct. `wp85-the-missing-anchor.html` holds WP-30 and
+`wp30-how-to-audit.html` is WP-31B, by an editorial decision taken four weeks
+earlier and written down in the file being edited. All seven edits were reverted
+and the tree returned to HEAD exactly.
+
+**What the reasoning was worth.** The forward chain was real and the argument
+from ordering was sound. It was reasoning about what the numbering *should* be,
+offered where a record of what it *is* already existed, a few hundred characters
+away in the same file. A good argument is not evidence, and producing one is not
+the same as looking.
+
+**What the survey then found, correctly.** Measured against the documented
+decision rather than against an inference, twelve links in eight files were
+stale, eight of them still calling `wp30-how-to-audit.html` by its
+pre-renumbering name. That is the real residue of the 2026-08-11 collision: the
+file was renumbered and eight files were never followed through. All twelve are
+now corrected, and a re-audit returns zero.
+
+**Standing note.** The failure did not change between instances three and four;
+the consequence did. Instances one to three ended in a wrong sentence. The fourth
+ended in modified files, and was caught only because a grep for the label turned
+up the word *renumbered* by accident. Where a repair touches several files at
+once, the check is not to reason more carefully. It is to search the artifact for
+a record of the decision before assuming none was taken.
