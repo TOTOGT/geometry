@@ -377,27 +377,34 @@ stands between the draft and submission. **Send it.**
    above the file's own title. That is the append violation this header warns about,
    already recurred once. Not deleted here — another session's notes.
 
-### WP-96 — do not write it. It exists elsewhere.
+### WP-96 — written 2026-09-07. Do not write a second one.
 
-**Recorded 2026-09-06.** `book6/wp96-verify.py` is committed and live; the page it
-belongs to is **not**. The paper — WP-96, *The Second Instrument* — is held in a
-session on **another account**, unwritten to disk, and that account is out of budget
-until **8 September 2026**.
+**Superseded note.** From 2026-09-06 this section read *do not write it, it exists
+elsewhere*: the paper was held in a session on another account, out of budget until
+8 September, and the sequence had a hole at 96 with 95 and 97 both shipped.
 
-So the sequence has a hole at 96 while 95 and 97 are both shipped. That is expected
-and temporary. **No session should draft a replacement.** Two WP-96s is a worse
-problem than two days of gap, and the verifier already fixes the claim, the scope,
-and the tagging decision, so an independently written page would diverge from the one
-that is coming.
+On **2026-09-07 the author instructed this session to take control and write it**, so
+`book6/wp96-the-second-instrument.html` was rendered from `wp96-verify.py` — eight
+sections against the script's five blocks — and indexed, with WP-95 and WP-97 rewired
+so the chain reads 95 → 96 → 97. The page carries a *Provenance of this page* block
+saying so.
 
-What the verifier says the paper argues, for anyone who needs to know what is missing:
-WP-79 states its filter as a general principle — "ratios are falsifiable, scales are
-not" — and it holds only for spectrum instruments. "Dimensionless" and
-"scale-invariant" are different properties; a phase is the first and not the second.
-Block [5] redoes the sorting. It carries no `#Machine Learning` tag, per the rule of
-2026-09-01, on the same grounds as WP-90.
+**Reconciliation rule if the held version arrives.** The two are renderings of the same
+claim set — the verifier fixes the claim, the scope and the tagging decision, and both
+pages are downstream of it. Do **not** ship both and do **not** renumber. Compare the
+two against `wp96-verify.py`; if the held draft says more, replace this page's body at
+the same filename and keep the index row and navigation; if it does not, keep this one
+and file the draft under `book6/_drafts/`. Either way the outcome is one WP-96.
 
-When the page lands, run `python3 tools/build_indexes.py` and it will index itself.
+What the paper argues: WP-79 states its filter as a general principle — "ratios are
+falsifiable, scales are not" — and it holds only for spectrum instruments.
+"Dimensionless" and "scale-invariant" are different properties; a phase is the first and
+not the second. An action instrument reports S/ħ, and ħ is fixed by nature, so the
+rescaling symmetry the filter quotients by is not a symmetry of that column. Block [5]
+redoes the sorting: T*, μ_max and the light-cone velocity v move from unexposed to
+exposed; the k-nacci roots η_k do not move. The physics is standard (Parker 2018 Cs,
+Morel 2020 Rb) and is not claimed as a result. It carries no `#Machine Learning` tag,
+per the rule of 2026-09-01, on the same grounds as WP-90.
 
 Also note: `wp96-verify.py` reached the repo inside `c933f84`, a Book 4 commit, as a
 swept-in file. It is correct and it belongs there, but it was not the subject of that
