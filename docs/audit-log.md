@@ -3109,3 +3109,48 @@ translational and this chapter's are rotational.
 **Standing note, second.** Do not derive an identifier from a listing. Derive it
 from the index. The tree is one machine's opinion at one instant; `git ls-files`
 is the repository's.
+
+---
+
+## THE CONTACT FORM WAS GIBBS'S ALL ALONG, MINUS THE HEAT (2026-09-06)
+
+`book4/ch20b-the-closing-field.html` §20b.8 was written as a pointer at an open
+question. It is now a result, and the result is a subtraction.
+
+**The measurement that prompted it.** Across `geometry/`: `contact form` in 164
+files, `Reeb` in 164, `Legendrian` in 33, `α ∧ dα` in 24 — against `Gibbs` in
+**one** file (a subordinate clause in `gcm-framework.html`), `Carnot` in **one**
+(a history section), and `Legendre transform` in **zero**. The structure is
+everywhere and has never been named.
+
+**Observation 20b.7.** The first law for a system that can rotate is
+`dU = T dS + Ω dJ`, whose contact form is `α_G = dU − T dS − Ω dJ`. Setting
+`dS = 0` gives `dU − Ω dJ`, which is `dz − r² dθ` — the corpus's own form, with
+`z = U`, `θ` the angle, `r²` in the position of `Ω`. **The form used throughout
+this corpus is the Gibbs form with the heat term deleted.** Its Legendrian
+submanifolds are adiabats. Nothing appeared to be spent because on an adiabat
+nothing is.
+
+**Observation 20b.8.** Restoring the term and evaluating along a process gives
+`α_G(γ̇) = δQ − T dS`, which is the Clausius defect. So `α_G(γ̇) ≤ 0` on every
+physical path, with equality exactly on `ker α` — **the Legendrian submanifolds
+are the reversible processes, and the failure to be Legendrian is the entropy
+produced.** The direction is the sign of α; the cost is `−α(γ̇)/T`. Both were
+already in the geometry, and deleting `T dS` had thrown the arrow away.
+
+**A Legendre transform, the first written in this corpus.** `G = U − ΩJ` gives
+`α′ = dG − T dS + J dΩ = dU − T dS − Ω dJ = α_G`. Not equivalent — identical.
+Changing potential is a change of chart, which is Arnold's point.
+
+All three verified symbolically in `book4/gibbs-check.py`, exit 0.
+
+**What this does NOT license.** 20b.B stands and is now stricter. Clausius is a
+statement about processes with a real entropy. The critical strip supplies none,
+and the `c/π = (1/2π)log(t/2π)` rate remains a bookkeeping identity. A rate that
+is positive is not thereby entropy production.
+
+**The open question, restated.** It is no longer "does a potential exist" — it
+does. It is: **what is the corpus's entropy?** Until an `S` is named on the
+corpus's own phase space rather than borrowed from an analogy, the `T dS` term
+cannot be restored and §20b.8 describes a thermodynamics the corpus is adjacent
+to rather than one it has.
