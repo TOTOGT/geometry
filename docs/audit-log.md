@@ -3291,3 +3291,53 @@ surface that. The check that catches MISFRAMED is not another instrument: it is
 asking what kind of thing the measured property is, and whether the repair it
 implies would damage something the artifact is supposed to be. Where the repair
 touches many correct files at once, that question is not optional.
+
+
+## NAMING A FAILURE MODE DID NOT PREVENT ITS NEXT TWO INSTANCES (2026-09-07)
+
+Earlier today this log gained a class, MISFRAMED: the artifact is correct and
+the finding about it is real, but the finding is assigned to the wrong category,
+so the repair it implies damages something that was not broken. It was written
+up with an instance, a plausibility account, and a note on what could have caught
+it. Within the same session, by the same author, it recurred twice.
+
+**Second instance — twenty-three working papers that were never missing.** A scan
+for unwritten papers reported WP-1 and WP-3 through WP-24 as cited but absent. It
+had matched files whose names begin `wpNN-`. WP-11 is a Zenodo DOI; WP-14 is
+`emmes-whitepaper.html`; WP-23 is `archive.html`; WP-24 is
+`ch-criticality-bridge-audit.html`; WP-60 is `book7/jacobian-verification.html`.
+All present. Resolving the index's own hrefs instead — 155 rows — returns 154
+local targets, none broken, and three external deposits. The corpus was complete
+and the instrument said it was not.
+
+**Third instance — a numbering scheme read as a mismatch.** A follow-up flagged
+five index rows whose label number differs from the file they open, among them
+"WP-31B" opening `wp30-how-to-audit.html` and "WP-31C" opening
+`wp86-autophagy-calibration-case-study.html`. Reading the pages settles it: `wp86`
+calls itself **WP-31C** in its own text, `wp87` calls itself **WP-31D**, `wp30`
+calls itself **WP-31B**. Two numbering systems are laid over each other on
+purpose — filename as position in the book, letter-suffix as position in the
+calibration sub-series — and the index is faithfully showing the second. Three of
+the five were a deliberate scheme reported as a defect.
+
+**The mechanism, identical in all three.** A property was read off a name instead
+of resolved from the artifact: filename to existence, filename number to identity,
+citation count to correctness. In every case the artifact was available and would
+have answered directly.
+
+**What did survive the check.** Two of the five are real. A row labelled WP-81
+opened `wp82-the-missing-floor.html`, whose own header says WP-82; the label was
+wrong and the page is the authority, and it has been corrected. A row labelled
+WP-30 opens `wp85-the-missing-anchor.html`, which calls itself WP-85 while citing
+WP-31; the page does not settle whether it is a sub-series member or a stale
+label, and it is left for a person.
+
+**Standing note, and it is the point of this entry.** Naming a failure mode,
+writing it into the log with a worked instance, and recording what would catch
+it, did not prevent the same author from committing it twice more within the
+hour. A taxonomy is a vocabulary for describing errors after the fact. It is not
+a check, and treating a written-down class as though it were one is a fourth
+instance of the same mistake — the class is a correct finding assigned to the
+wrong category of remedy. What actually caught all three was resolving the
+artifact: opening the index, opening the pages. The cheap operation was available
+every time and was skipped every time in favour of a pattern over names.
