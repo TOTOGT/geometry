@@ -2,7 +2,12 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2026 Pablo Nogueira Grossi / G6 LLC
 """
-build_indexes.py — regenerate the geometry repo's file indexes from the filesystem.
+build_indexes.py — regenerate a repo's file indexes from the filesystem.
+
+Serves any repo in this series. Run with no argument it indexes the repo it lives
+in; pass a path to index a sibling. Per-repo settings come from that repo's
+tools/index-config.json when present, so the crawler corrections recorded below
+are shared rather than forked.
 
 Writes `master-index.html` plus one `index-<folder>.html` per content cluster into
 the repo root. Every page is self-contained (inline CSS + JS, no external deps) to
@@ -37,12 +42,25 @@ twice renders a literal "&middot;" on the page.
 from __future__ import annotations
 
 import html
+import json
 import posixpath
 import re
+import sys
 from datetime import date
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+# The repo to index. Defaults to the repo this script lives in; pass a path to
+# index a sibling repo instead:  python3 ../geometry/tools/build_indexes.py .
+ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parent.parent
+
+# Per-repo settings. A repo may override them with tools/index-config.json:
+#   {"site": "totogt.github.io/AXLE", "prefix": "/AXLE/", "name": "AXLE",
+#    "skip": ["scratch/"], "folders": [["slug","Display name","path-prefix"], ...]}
+# Without one, the geometry defaults below apply.
+SITE   = "totogt.github.io/geometry"
+PREFIX = "/geometry/"
+REPO   = "geometry"
+SKIP   = ["docs/ml-evidence/"]
 
 # (output suffix, display name, predicate on the posix path)
 FOLDERS: list[tuple[str, str, str]] = [
@@ -62,6 +80,15 @@ FOLDERS: list[tuple[str, str, str]] = [
     ("root", "Root — Standalone Chapters", ""),
     ("_archive", "Archive (legacy)", "_archive"),
 ]
+
+_cfg = ROOT / "tools" / "index-config.json"
+if _cfg.exists():
+    _c = json.loads(_cfg.read_text(encoding="utf-8"))
+    SITE    = _c.get("site", SITE)
+    PREFIX  = _c.get("prefix", PREFIX)
+    REPO    = _c.get("name", REPO)
+    SKIP    = _c.get("skip", SKIP)
+    FOLDERS = [tuple(x) for x in _c["folders"]] if "folders" in _c else FOLDERS
 
 HREF = re.compile(r'href\s*=\s*["\']([^"\'#?]+)', re.I)
 JSREF = re.compile(r'["\']([A-Za-z0-9_\-./]+\.html)["\']')
@@ -91,7 +118,7 @@ def discover() -> list[str]:
         # evidence (see its README). Same reasoning as the line above: indexing
         # a superseded copy reports it as a live page. Unlike _to_delete/ this
         # folder IS tracked, so the skip has to be explicit.
-        if rel.startswith("docs/ml-evidence/"):
+        if any(rel.startswith(sk) or ("/" + sk) in rel for sk in SKIP):
             continue
         if rel in skip:
             continue
@@ -122,8 +149,8 @@ def crawl(files: list[str]) -> tuple[dict[str, int], dict[str, str]]:
     def resolve(target: str, base_dir: str) -> str | None:
         if target.startswith(("http://", "https://", "mailto:", "javascript:", "data:", "//", "#")):
             return None
-        if target.startswith("/geometry/"):
-            target = target[len("/geometry/"):]
+        if target.startswith(PREFIX):
+            target = target[len(PREFIX):]
         elif target.startswith("/"):
             target = target[1:]
         else:
@@ -149,9 +176,14 @@ def crawl(files: list[str]) -> tuple[dict[str, int], dict[str, str]]:
 
 
 def bucket(rel: str) -> str:
+    """Which index a file belongs to. A folder entry's third field is a top-level
+    directory name, or a list of them when several small folders share one index."""
     top = rel.split("/")[0] if "/" in rel else ""
     for slug, _, prefix in FOLDERS:
-        if prefix and top == prefix:
+        if not prefix:
+            continue
+        names = prefix if isinstance(prefix, (list, tuple)) else [prefix]
+        if top in names:
             return slug
     return "root"
 
@@ -305,7 +337,7 @@ def main() -> None:
                  f'<div class="stat"><b style="color:var(--amber)">{n_orph}</b><span>orphaned</span></div>')
         (ROOT / f"index-{slug}.html").write_text(page(
             f"{name} · Index · Principia Orthogona",
-            "totogt.github.io/geometry &middot; folder index", name,
+            f"{SITE} &middot; folder index", name,
             "Every HTML file in this folder, generated from the filesystem. "
             "Amber tags mark files with zero inbound links from anywhere in the repo.",
             stats, '<div class="folderlinks">'
@@ -335,9 +367,9 @@ def main() -> None:
              f'<div class="stat"><b style="color:var(--amber)">{orphans}</b><span>orphaned</span></div>'
              f'<div class="stat"><b>{len(FOLDERS)}</b><span>books / folders</span></div>')
     (ROOT / "master-index.html").write_text(page(
-        "Master Index · geometry · Principia Orthogona",
-        "totogt.github.io/geometry &middot; full repo crawl", "Master Index",
-        f"Every HTML file in the geometry repo, generated directly from the filesystem "
+        f"Master Index · {REPO} · Principia Orthogona",
+        f"{SITE} &middot; full repo crawl", "Master Index",
+        f"Every HTML file in the {REPO} repo, generated directly from the filesystem "
         f"&mdash; not the hand-built nav. Search across all {total} chapters, papers and "
         f"pages at once. Amber tags mark files with zero inbound links from anywhere else "
         f"in the repo; the generated indexes themselves are excluded as link sources, so "
