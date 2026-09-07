@@ -3184,3 +3184,60 @@ between being drafted and being run. Where a message asserts a verification
 status, it should be written after the verification, not before — or it should
 name the file and let the file's own header carry the status. This one did
 neither.
+
+
+## FIRST EDITIONS CANNOT POINT FORWARD (2026-09-07)
+
+`tools/backlinks.py`, written today, reads every working paper in the corpus and
+reports each citation that runs only one way: a later paper names an earlier one,
+the earlier one says nothing back. Across 80 papers it finds **121 such edges,
+touching 48 of them** — sixty per cent of the corpus is built on by something it
+has never heard of. The mode is two to three papers later, a successor never
+announced by its predecessor. The tail reaches 71 papers, which is a thread
+reopening after most of a year with no trace at the older end.
+
+The first reading of that result was wrong, and it was the assistant's. It was
+put as a defect in 48 files, with a proposal to edit them.
+
+**A first edition cannot point at what happens later.** The paper was complete
+and correct on its date; what it lacks is knowledge it could not have had.
+Appending "cited later by" to a dated note quietly undates it — a reader can no
+longer tell what the paper knew when it was written from what the corpus learned
+afterwards. Corrections are what a **second edition** is for, and the first
+edition stays what it was.
+
+**So the policy, from here.**
+
+- Forward references belong to the **index**, which is allowed to know the
+  present. They do not belong in the papers, which are dated records.
+- Corrections go to **this log** by default. That is what it is.
+- A correction reaches the **book** only when it must go through: when a reader
+  who sees only that page could act on the claim and be wrong. In practice that
+  means a published number, a stated verification status, or a claim offered for
+  citation. Tightened statements, better proofs of the same result, loose prose
+  and internal refinements are log-only.
+- The corpus finds corrections continually. Publishing a notice for each one
+  teaches a reader to read the errata instead of the work, and a high correction
+  rate is evidence of checking rather than of sloppiness — which a reader has no
+  way to distinguish from a wall of notices.
+
+**The worklist, for whenever Book 6 turns an edition.** Splitting the 121 by
+whether the citing text reads as a correction gives **13 corrections across 11
+papers** against 116 extensions across 49. The 116 are the new cross-references
+an edition would gain. The 13 are what an edition would fold in:
+
+    WP-28  <- WP-30          WP-70  <- WP-72
+    WP-29  <- WP-38, WP-85   WP-78  <- WP-81
+    WP-30  <- WP-35          WP-79  <- WP-84
+    WP-31  <- WP-38          WP-100 <- WP-104
+    WP-39  <- WP-45, WP-66   WP-102 <- WP-104
+    WP-41  <- WP-72
+
+**The classifier overcalls.** It is a keyword window around each citation, so
+"corrects" appearing near a mention of WP-n does not always mean WP-n is the
+thing being corrected. Thirteen is small enough to read by hand, and that is the
+intended use: a shortlist for a person, not a verdict.
+
+**Standing note.** `backlinks.py` is not a defect finder and should not be
+described as one. It produces the worklist for a second edition. Nothing it
+reports is an error in the paper it names.
