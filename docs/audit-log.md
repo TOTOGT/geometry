@@ -3154,3 +3154,33 @@ does. It is: **what is the corpus's entropy?** Until an `S` is named on the
 corpus's own phase space rather than borrowed from an analogy, the `T dS` term
 cannot be restored and §20b.8 describes a thermodynamics the corpus is adjacent
 to rather than one it has.
+
+---
+
+## A COMMIT MESSAGE THAT CONTRADICTED THE FILE IT COMMITTED (2026-09-06)
+
+Commit `57add27` landed `CycleCoupling.lean` with the header **"VERIFICATION
+STATUS — 2026-09-06. CLEAN, RUN AND RECORDED,"** carrying the three axiom lines
+from an actual kernel check. Its commit message says of the same file:
+**"NOT YET RUN."**
+
+Both were written by the assistant. The message was drafted before the run and
+handed over as a paste-ready block; the run then succeeded, the file's header
+was rewritten to record it, and the message was not. Nothing in the pipeline
+re-reads a commit message against the tree it is about to describe.
+
+**What is true.** `lake env lean CycleCoupling.lean` in `~/Desktop/geometry`
+under leanprover/lean4:v4.32.0 returns, for each of the three theorems,
+`[propext, Classical.choice, Quot.sound]`. No `sorryAx`. WP-104 §2 is therefore
+a theorem and not a reading: `SaturnHexagon.lean`'s content is available at
+every sector count, and `Fin 6` entered as a hypothesis.
+
+**Not amended.** `57add27` is pushed. Rewriting it would move every downstream
+SHA to repair a message, which is the same trade this log already declined for
+the `Co-Authored-By` trailers. The commit stands and this entry is the erratum.
+
+**Standing note.** A commit message is a claim about a tree, and it can go stale
+between being drafted and being run. Where a message asserts a verification
+status, it should be written after the verification, not before — or it should
+name the file and let the file's own header carry the status. This one did
+neither.
