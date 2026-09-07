@@ -3241,3 +3241,53 @@ intended use: a shortlist for a person, not a verdict.
 **Standing note.** `backlinks.py` is not a defect finder and should not be
 described as one. It produces the worklist for a second edition. Nothing it
 reports is an error in the paper it names.
+
+### The class
+
+WP-73 separated the ways a verification claim comes loose from its artifact —
+MISMATCH, STALE, FAIL — and four concerning the artifact itself: FALSE, VACUOUS,
+UNTRUSTED, MISATTRIBUTED. WP-97 added OVER-GENERALISED: a statement true in its
+own setting, carried into prose where a parameter fixed inside it reads as a
+constant of nature.
+
+This is none of those, and it is worth a name because it happened twice today.
+
+    MISFRAMED   The artifact is correct and the finding about it is real, but
+                the finding has been assigned to the wrong category, so the
+                repair it implies damages something that was not broken.
+
+**Instance one.** 121 one-way citations is a true measurement. Calling it a
+defect in 48 papers was a category error — the property measured is navigational
+and belongs to the corpus as a reading surface, not to any document in it. The
+implied repair, editing 48 correct dated papers, would have destroyed the one
+thing those papers are for: saying what was known on their date.
+
+**Instance two, one level up.** The tool's own header then described it as a
+reference *symmetry audit* finding one-way edges, which is the same mistake
+written into the instrument. An instrument that names its output wrongly
+propagates the misframing to everyone who runs it.
+
+**Why it was plausible.** Every other survey this corpus runs — `terms.py`,
+`leancheck`, the verify scripts, the link checker — reports defects, and its
+output is a worklist of things to repair. A new survey producing a long list of
+asymmetries reads as the same kind of object. The prior was strong and it was
+wrong.
+
+### What caught it, and what could not have
+
+**No instrument in this repository would have caught this.** Every gate here
+checks an artifact against a claim about it. This was a claim about a *class of
+artifact*, and it was true as measurement and wrong as classification. There is
+no assertion to test. `backlinks.py` would have kept reporting the same 121
+edges, correctly, under a heading that made them mean something they did not.
+
+It was caught by a reader saying *this happens naturally — one can only look
+back in time*. That sentence carries no data the tool did not have. It supplies
+the category.
+
+**What generalises.** A measurement can be exactly right and the sentence
+wrapping it exactly wrong, and no amount of re-running the measurement will
+surface that. The check that catches MISFRAMED is not another instrument: it is
+asking what kind of thing the measured property is, and whether the repair it
+implies would damage something the artifact is supposed to be. Where the repair
+touches many correct files at once, that question is not optional.
