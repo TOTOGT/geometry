@@ -3640,3 +3640,51 @@ pointer to Ch 25 on 21.A.
 `ch25-verify.py`: all checks pass. Zero broken links in the new chapter.
 MathJax does not render in the sandbox (CDN blocked) — confirmed identical
 behaviour on ch21, so not a defect in the new page.
+
+### §25.8 — a borrowed strategy, and what it actually returned
+
+Pablo's note: Larsen's route to Carmichael numbers, and the standing method —
+watch how others devised a strategy, try it on ours, see what works.
+
+Larsen (2021, *IMRN*, arXiv:2111.06963) proved a Bertrand postulate for
+Carmichael numbers — one in (x,2x) for large x — by adapting the Maynard–Tao
+sieve to the Alford–Granville–Pomerance framework. The obvious transplant: is
+there always a *maximum-entropy shell* in (x,2x)?
+
+**What the transplant returned.** Yes, and it is easy. Counting T = pqr in
+(x,2x) with three distinct split primes gives 1, 3, 10, 24, 66, 153, 345, 781,
+1714, 3664 across dyadic intervals from 2¹⁰ up. The supply grows; there is no
+scarcity for a sieve of that power to fight.
+
+**Why, and this is the part worth keeping.** Larsen's difficulty is Korselt:
+p−1 | n−1 *couples the primes to each other*, so they cannot be chosen
+independently, and the whole apparatus exists to manage that coupling. W is
+multiplicative — each split prime contributes its factor alone. The transplant
+fails, and it fails informatively: it locates the difficulty in Larsen's problem
+by showing ours does not have it.
+
+Recorded as a discipline in §25.8, because it generalises: before importing
+machinery, ask whether the borrowed problem still contains the difficulty the
+machinery was built to defeat. If yes, it may transfer. If no, the honest
+conclusion is that our problem is easier than it looked — and knowing which case
+you are in is most of the value of having looked.
+
+**1729.** The record-setters for W below 4000 are 1, 7, 49, 91, 637, **1729**,
+and 1729 = 7·13·19 is three split primes, so W = 2³ = 8: eight distinct closable
+shells at 17,292 sites. It is also the taxicab number and the third Carmichael
+number. Checked against WP-29's rule before being written down, because a shared
+number is not a bridge until the mechanism is shared:
+
+*p ≡ 1 mod 3 ⟺ 3 | p−1 ⟺ p splits in ℤ[ω].* Korselt is easiest when the p−1 are
+smooth and share small factors, so Carmichael numbers favour 3 | p−1; W is
+raised by exactly those primes. Two constructions, two different reasons, one
+congruence class. The overlap is **partial**, which is the check that it is real:
+of the first eight Carmichael numbers, 1729, 2821 and 8911 are closable (all
+prime factors split, each W = 8) and 561, 1105, 2465, 6601, 10585 are not
+(inert primes to odd powers, W = 0 — no shell of that size exists at all).
+
+Also added: the Landau–Ramanujan count of closable sizes,
+#{T ≤ x : W(T) > 0} ~ K x/√(log x) with K ≈ 0.6389 for this form; computed to
+x = 2×10⁶ the ratio reads 0.670 and is still falling slowly toward it.
+
+`ch25-verify.py` extended with section [7]; all checks pass. Zero broken links.
