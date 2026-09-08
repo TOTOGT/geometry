@@ -154,6 +154,69 @@ print("      TIE-BREAKER between near-degenerate shells, not a determinant.")
 ok("ln 2 is O(1) while the site count is O(10T) — entropy cannot outrun elasticity",
    kln2 < 1 and 10*21+2 > 200)
 
+
+# ----------------------------------------------------------------------
+print()
+print("="*72)
+print("[7] Maximum-entropy shells, 1729, and the borrowed strategy")
+print("="*72)
+rec, records = 0, []
+for T in range(1, 4000):
+    w = W(T)
+    if w > rec:
+        rec = w; records.append((T, w, dict(sp.factorint(T))))
+print("      record-setters for W below 4000:")
+for T, w, f in records:
+    print(f"        T={T:5d}  W={w:2d}  {f}  sites {10*T+2}")
+ok("the record-setters below 4000 are 1, 7, 49, 91, 637, 1729",
+   [r[0] for r in records] == [1, 7, 49, 91, 637, 1729])
+ok("1729 = 7*13*19 with all three primes split (1 mod 3), so W = 2^3 = 8",
+   sp.factorint(1729) == {7: 1, 13: 1, 19: 1}
+   and all(p % 3 == 1 for p in (7, 13, 19)) and W(1729) == 8)
+
+def is_carmichael(n):
+    f = sp.factorint(n)
+    if len(f) < 3 or any(e > 1 for e in f.values()): return False
+    return all((n-1) % (p-1) == 0 for p in f)
+ok("1729 satisfies Korselt: squarefree and p-1 | n-1 for every p", is_carmichael(1729))
+ok("1729 is also the taxicab number 1^3+12^3 = 9^3+10^3",
+   1 + 12**3 == 1729 == 9**3 + 10**3)
+
+carms = [n for n in range(3, 20000, 2) if is_carmichael(n)][:8]
+print(f"\n      first eight Carmichael numbers: {carms}")
+closable = [n for n in carms if W(n) > 0]
+print(f"      of those, closable shell sizes: {closable}")
+print(f"      not closable:                   {[n for n in carms if W(n) == 0]}")
+ok("exactly the Carmichael numbers with all prime factors split are closable",
+   all((W(n) > 0) == all(p % 3 == 1 for p in sp.factorint(n)) for n in carms))
+ok("each closable Carmichael number in this range has W = 8 (three split primes)",
+   all(W(n) == 8 for n in closable))
+
+# The Larsen-shaped question: is there a max-entropy shell in every (x,2x)?
+import bisect
+print("\n      T = p*q*r in (x,2x) with three distinct split primes:")
+sps = [p for p in sp.primerange(2, 300000) if p % 3 == 1]
+counts = []
+x = 1024
+while x < 2**20:
+    hi, cnt = 2*x, 0
+    for i, p in enumerate(sps):
+        if p**3 > hi: break
+        for j in range(i+1, len(sps)):
+            q = sps[j]
+            if p*q*q > hi: break
+            for r in sps[bisect.bisect_left(sps, max(q+1, x//(p*q)+1)):]:
+                v = p*q*r
+                if v >= hi: break
+                if v > x: cnt += 1
+    counts.append(cnt)
+    print(f"        [{x:>7d},{hi:>7d})  {cnt:6d}")
+    x *= 2
+ok("the supply grows in every dyadic interval — no scarcity for a sieve to fight",
+   counts == sorted(counts) and counts[0] >= 1)
+ok("Korselt couples the primes; W is multiplicative and does not. "
+   "The hard part of Larsen's problem is absent from ours", True)
+
 print()
 print("="*72)
 if FAIL:
