@@ -3385,3 +3385,82 @@ ended in modified files, and was caught only because a grep for the label turned
 up the word *renumbered* by accident. Where a repair touches several files at
 once, the check is not to reason more carefully. It is to search the artifact for
 a record of the decision before assuming none was taken.
+
+## 2026-09-07 — WP-105 and a footer erratum in three files
+
+**WP-105 · The Unit That Inflates** (`book6/`, ~2,200 words, 9 sections,
+`wp105-verify.py` all checks pass under sympy 1.14).
+
+The note closes the gap WP-103 §4 left open. WP-103 established φ(n) ≤ d as the
+condition for an order-n lattice rotation in dimension d, and stopped there. It
+did not say what the excluded orders do *instead*. They inflate.
+
+Three results, none novel, none previously stated together in this corpus:
+
+1. φ(n) = 4 has **exactly four solutions**: {5, 8, 10, 12}. Not a search
+   result — φ(n) ≳ √(n/2), so no n > 32 can have φ(n) ≤ 4. The observed
+   quasicrystal symmetries are a solution set, not an empirical list. My first
+   draft asserted {5,8,10,12,15,16,20,24,30}; the verify script caught it
+   (φ(15) = φ(16) = φ(20) = φ(24) = φ(30) = 8, not 4). The correct statement is
+   strictly stronger than the one I wrote.
+2. Dirichlet rank, not rotation order, is the classification. Rank 0 with
+   torsion ±1 → the periodic plane (n = 3,4,6). Rank 0 with torsion μ₆ (ℤ[ω])
+   → Ch 21's closing shell and its twelve defects. Rank 1 → an infinite ±ε^k,
+   hence an inflation. A tiling cannot inflate unless its field has somewhere
+   to inflate to.
+3. The inflation factor **is** the fundamental unit of ℚ(ζ_n)⁺: φ for Penrose,
+   1+√2 for Ammann–Beenker, 2+√3 for the twelve-fold shield. Confirmed by brute
+   Pell search, and independently from the substitution side, where
+   det M = ±1 is the same condition read in GL(2,ℤ). This supplies the missing
+   half of `ch-aperiodic-multiplying-media.html`'s "conserved criticality"
+   sentence: the conserved quantity is the field norm.
+
+Also recorded: 2cos(2π/10) = φ exactly, so for the decagon the *trace* of the
+rotation is the fundamental unit; and η (tribonacci) is a Pisot unit but of a
+**cubic** field, which is why Chapter η's chain is 1D and its Penrose cousin 2D.
+
+§7 states the Saturn consequence and marks it OPEN: ℚ(ζ₁₀)⁺ = ℚ(√5) has one
+fundamental unit, so *if* a scale ratio shows up in the south polar decagon the
+arithmetic says it must be φ — but whether that is a statement about Saturn or
+only about ℚ(√5) is not established. The note is kinematics throughout;
+selection remains unclosed, as WP-104 §4 said.
+
+**Erratum.** `wp102`, `wp103` and `wp104` each carried
+"WP-100 · The Wavelength, Not the Count" in the footer title — copied from
+WP-100's shell when I built them this session and never changed. Corrected in
+place to each file's own title. WP-101 was correct; WP-105 was written correct.
+Standing lesson, third variant of the same one: *when a file is built by
+copying another, the identifiers are the part that does not survive the copy.*
+
+## 2026-09-08 — ch8-meru: the fourth column
+
+The attribution table had three columns: the pattern, the Western name, the
+date of Western naming. It named no Indian source in any row, which made it a
+table about Europe with an Indian header. Added **"Named in India"** as the
+second column, and changed the first header from "What Pingala found in Meru
+Prastara" to "What the Meru Prastara holds" — two of the five rows are not
+Pingala's.
+
+Sources checked before writing, not after:
+
+- **Binomial coefficients.** Piṅgala, *Chandaḥśāstra*, final centuries BCE
+  (conventionally c. 200 BCE); the *meru-prastāra* construction rule is written
+  out explicitly in Halāyudha's *Mṛtasañjīvinī*, 10th c. CE. The sūtra style is
+  cryptic and depends on the commentary — worth naming Halāyudha rather than
+  letting Piṅgala carry a rule he stated only in outline.
+- **Diagonal sums.** Virahāṅka, *Vṛttajātisamuccaya*, 6th–8th c. CE;
+  Hemachandra, *Chandonuśāsana*, c. 1150. This is the row that started the
+  thread.
+- **Row sums = 2ⁿ.** Piṅgala's *saṅkhyā* pratyaya, *Chandaḥśāstra* 8.28, where
+  2⁷ is obtained by three doublings and two squarings — repeated squaring, in a
+  prosody manual.
+- **Hockey stick.** Āryabhaṭa's *citighana*, *Gaṇitapāda* 21, 499 CE.
+
+**The fourth row is left blank.** The odd-cell Sierpiński pattern has no Indian
+attestation I could find, and the cell says so: *"not attested — a twentieth-
+century reading of an ancient table."* A caption under the table states why the
+blank is there. A table that claimed five out of five would be worth less than
+one that claims four; the empty cell is the reason to believe the other four.
+
+One secondary correction while checking: a search summary dated Halāyudha to
+the 13th century. Both the primary-facing sources give the 10th. Used the 10th.
