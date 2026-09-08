@@ -6,11 +6,17 @@
 
 **DOI reserved for v1: [10.5281/zenodo.22179684](https://doi.org/10.5281/zenodo.22179684)** — Zenodo community *Principia Orthogona*. Deposit pending; the DOI will not resolve until the record is published.
 
-*Version 2, revised 30 August 2026.* Version 1 (10 June 2026) constructed the form and
-stated the missing rung. This version adds §4.4–§4.6: the one-sided pole at zeros, the two
-reflection laws, the Riemann–Siegel identification (classical, credited), the refutation of
-the contactomorphism conjecture, and a status-of-claims table separating what is proved,
-machine-checked, classical, and numerical.
+*Version 3, revised 8 September 2026.* Version 1 (10 June 2026) constructed the form and
+stated the missing rung. Version 2 (30 August 2026) added §4.4–§4.6: the one-sided pole at
+zeros, the two reflection laws, the Riemann–Siegel identification (classical, credited), the
+refutation of the contactomorphism conjecture, and a status-of-claims table separating what
+is proved, machine-checked, classical, and numerical.
+
+This version adds **§4.7**, which records the August–September 2026 movement in the analytic
+line — the unconditional 67.25% bound and its three-week simplification — and states plainly
+why it does not bear on the construction here; a note under §4.6 on what that episode shows
+about status tables; and two new items in §9, one of them a constraint on §9.4 that comes
+from computing the Reeb field of the smooth prototype rather than assuming it.
 
 ---
 
@@ -225,6 +231,64 @@ What survives is a graded statement: $\Phi^*\alpha_{\text{arith}} - \alpha_{\tex
 
 Lean source: `TOTOGT/GTCT`, `book4/ZetaReflection.lean`.
 
+**A note on why this table is the load-bearing part.** The rows above are not sorted by
+importance but by *how each claim is known*, and the four kinds are not interchangeable. A
+machine-checked row rests on a kernel, which is exhaustive within a formal statement and
+silent about everything outside it — including whether the statement was worth making. A
+numerical row rests on agreement to a stated number of digits at a stated number of points,
+which is evidence and not proof. A classical row rests on the literature, and an argued row
+rests on the author. Collapsing these into a single column of ticks is the most common way a
+document of this kind becomes untrustworthy while every individual sentence in it stays true.
+The taxonomy is developed at length in Book 3, Chapter 44 [15].
+
+
+### 4.7 What autumn 2026 changed in the analytic line, and what it did not
+
+Between version 2 of this paper and version 3, the analytic approach to the critical line
+moved further in three weeks than it had in a decade. A reader who follows the subject will
+have seen it, and is entitled to know whether it bears on anything here. It does not, and the
+reasons are worth stating precisely rather than by assertion.
+
+**What happened.** The standing unconditional record for the proportion of non-trivial zeros
+on the critical line was five-twelfths — 41.67% — due to Pratt, Robles, Zaharescu and
+Zeindler (2020) [11], the culmination of the Levinson–Conrey mollifier line. On 11 August
+2026 Anthropic reported [12] that an internal research version of Claude, directed over two
+sessions by Jarred Sumner — not a mathematician — across roughly 31 million output tokens,
+some sixty subagents and 2,400 shell commands, had obtained an **unconditional** proof that
+more than **67.25%** of the non-trivial zeros are *simple and on the critical line*, and that
+at least 83.62% are distinct. The route was not the mollifier: it combined Bombieri's work on
+Weil's quadratic form with the unconditional form of Montgomery's pair correlation theorem
+obtained by Baluyot, Goldston, Suriajaya and Turnage-Butterbaugh [13]. The argument was
+verified by Alpöge and Furman and formalised in Lean. On 2 September 2026 Lamzouri [14]
+published a shorter proof of the same theorem, describing the original as technically
+intricate with a mechanism that is not immediately transparent, and replacing its
+finite-dimensional matrix framework with a Hilbert space inequality.
+
+**Why it does not touch this paper.** Three reasons, in decreasing order of obviousness.
+
+*Target.* That line bounds the **proportion** of zeros on the critical line. This paper proves
+no bound of any kind and claims none; the last row of §4.6 records that global positivity and
+RH itself are open and that nothing here bears on them. A movement from 41.67% to 67.25%
+improves a quantity this paper does not compute.
+
+*Method.* Pair correlation and the explicit formula are second-moment statements about the
+zeros as a set. The construction here is a differential-geometric reformulation of the
+condition itself. The two share ζ and nothing else.
+
+*A citation that could be misread.* Montgomery's pair correlation paper appears in this
+bibliography as [5], and the theorem made unconditional in [13] is precisely Montgomery's. It
+should therefore be said explicitly that this paper makes **no use** of it: [5] is cited for
+orientation on the random-matrix connection, not as machinery. A reader who noticed the
+citation and the news in the same season should not infer a dependency that is not there.
+
+**What it does bear on, and it is not mathematical.** The episode is the clearest public
+demonstration of why §4.6 is a table and not a list of ticks. The proof was correct and
+formally verified within days; what took three further weeks was somebody making it
+*comprehensible*. A kernel certifies that steps follow. It has no opinion on whether an
+argument is transparent, natural, or reusable, and that judgment did not come from a machine.
+Nothing in this paper is improved by the observation, but the standard it is written to is
+the same one, and it now has a public instance.
+
 ---
 
 ## 5. Adelic Decomposition
@@ -358,6 +422,32 @@ Step 4 is precisely Global Positivity (Conjecture 6.1) and is equivalent to RH.
 
 4. **$p$-adic Reeb dynamics.** The local Reeb vector field at each place $p$ is the dual vector field to $\alpha_p$ (defined by $\alpha_p(R_p) = 1$, $d\alpha_p(R_p, \cdot) = 0$). Studying the dynamics of $R_p$ in the rigid-analytic setting might reveal additional arithmetic structure.
 
+5. **The smooth prototype has no closed Reeb orbit, and that constrains question 4.** Book 7,
+Chapter Fy [16] computes the Reeb field of the prototype form of §2 directly. For
+$\alpha = dz - r^2\,d\theta$ the conditions $\alpha(R)=1$, $\iota_R d\alpha = 0$ force
+$R^r = R^\theta = 0$ and then $R = \partial/\partial z$: along $R$ the coordinate $z$
+increases strictly, so **this form admits no periodic Reeb orbit at all**. Two consequences
+for question 4 above. Any arithmetic content one hopes to find in closed Reeb orbits must
+come from the adelic construction itself and not from the prototype it generalises; and no
+Weinstein-type existence statement may be imported here by analogy with the smooth case,
+because in the smooth case the conclusion is false. The same chapter computes
+$\alpha(X) = -2(r-1)^2 e^{-z}$ for the dm³ field $X$, which is $\le 0$ everywhere and zero
+exactly on the attractor — so the prototype's distinguished orbit is *tangent* to
+$\ker\alpha$, Legendrian in character rather than Reeb. Whether $\alpha_{\text{arith}}$
+admits closed Reeb orbits is open, and the prototype settles it in neither direction.
+
+6. **Does $\alpha_{\text{arith}}$ have a free parameter?** Book 4, Chapter 26 [17] proposes a
+test for whether a construction is capable of being wrong: a formula with a free integer can
+always be fitted to whatever it meets, and therefore forbids nothing, while one with no free
+parameter can return an answer that is refuted. Applied here the answer is favourable and
+should be stated as narrowly as it deserves. The construction of §4.1 has no free parameter:
+the twisting coefficient is the von Mangoldt–Dirichlet series, or its continuation, and there
+is nothing in it to tune. That is why §4.5's reflection laws could have failed numerically and
+did not, and why Proposition 4.6 could be — and was — refuted. But a reformulation with no
+free parameter is not thereby a result. It is a translation that is at least *capable* of
+being shown wrong, which is the minimum entry requirement and not an achievement. §6 remains
+where it would have to earn more than that.
+
 ---
 
 ## Appendix A: Meromorphic Continuation of $g(\sigma,t)$ Inside the Critical Strip
@@ -396,7 +486,15 @@ using this meromorphic continuation. The exterior derivative formula $d\alpha_{\
 8. V. I. Arnold, *Mathematical Methods of Classical Mechanics*, Springer (1989). [Contact geometry background]
 9. J. Etnyre, *Introductory lectures on contact geometry*, Topology and Geometry of Manifolds, Proc. Sympos. Pure Math. **71** (2003).
 10. P. Deligne, *La conjecture de Weil I*, Publ. Math. IHÉS **43** (1974), 273–307.
+11. K. Pratt, N. Robles, A. Zaharescu, D. Zeindler, *More than five-twelfths of the zeros of $\zeta$ are on the critical line*, Research in the Mathematical Sciences **7** (2020), art. 2. arXiv:1802.10521.
+12. Anthropic, *Learning more about Claude's mathematical capabilities*, 11 August 2026. https://www.anthropic.com/research/riemann-zeta
+13. S. A. C. Baluyot, D. A. Goldston, A. I. Suriajaya, C. L. Turnage-Butterbaugh, *An unconditional Montgomery theorem for pair correlation of zeros of the Riemann zeta function*, arXiv:2306.04799.
+14. Y. Lamzouri, *A new proof that more than $2/3$ of the zeros of the Riemann zeta function are simple and on the critical line*, arXiv:2609.02882, 2 September 2026.
+15. P. N. Grossi, *Principia Orthogona*, Book 3, Chapter 44: How to Learn — the four gap-detecting instruments and their blind spots. https://totogt.github.io/geometry/ch44-how-to-learn.html
+16. P. N. Grossi, *Principia Orthogona*, Book 7, Chapter Fy: Richard Feynman — the Standard Model path integral, the Reeb field of $\alpha = dz - r^2 d\theta$, and the contact action as a Lyapunov functional. https://totogt.github.io/geometry/book7/ch-feynman.html
+17. P. N. Grossi, *Principia Orthogona*, Book 4, Chapter 26: The Kaleidoscope Test — free parameters and what a construction must risk in order to count. https://totogt.github.io/geometry/book4/ch26-kaleidoscope-test.html
 
 ---
 
-*End of draft. Version 0.1 — for internal review and critique.*
+*Version 3, 8 September 2026 — preprint, not peer reviewed.*
+*DOI reserved: [10.5281/zenodo.22179684](https://doi.org/10.5281/zenodo.22179684). HTML edition: [book4/rh-paper.html](https://totogt.github.io/geometry/book4/rh-paper.html).*
