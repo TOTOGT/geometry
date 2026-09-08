@@ -3828,3 +3828,247 @@ Also fixed on the way: my first index insertion put the card orphaned outside th
 with heading, intro and grid. Book 7's index is being edited by another session
 (a Feynman card, +7 lines); this insert is in a different region and does not
 touch it.
+
+### §4 rewritten — "Why so few walk through, and who decided"
+
+The first draft listed Feldman's co-incidence factors the way Feldman lists them
+— geographic availability, family tradition, access to training, historical
+timing — and let them stand as a neutral inventory. They are not neutral.
+*Historical timing* is whose government was in power and what it did. *Access to
+training* is whether a family could spare a child from earning. *Family
+tradition* presumes a household with room for one rather than a household
+organised around staying alive. Every factor is a condition on the child's
+circumstances and every one was set by somebody. Stated neutrally the theory
+explains why prodigies are rare; stated plainly, much of what it files under
+coincidence is somebody's policy.
+
+**The methodological objection is this corpus's recurring one.** Co-incidence
+theory is assembled by examining prodigies and asking what they had in common,
+so it can only ever see the survivors. It gives an excellent account of how a
+prodigy holds together once present and no account at all of the children who
+never came near the domain, because they are not in the sample and cannot be.
+That is the WP-104 / Chapter 25 gap in a subject as far from shells and Saturn
+as it is possible to get: **everything on offer was stability, and the question
+was selection.** The selection account here is not a psychological question and
+will not be answered by studying prodigies — it is about states, economies,
+schools and wars.
+
+So the chapter's thesis now has the half §2 was missing: **a domain decides when
+it can be entered; access decides who arrives; and only the first of those is a
+fact about mathematics.** The indifference of a closed formal system to the age
+of the entrant is real and is the good news in §2 — the rules do not check a
+birth certificate and did not close while Huh spent seven years elsewhere.
+Institutions are not indifferent, and it is institutions, not domains, that
+invented being too old.
+
+Illustration, checked against a reference before use: mathematics has no age gate
+anywhere in it; the Fields Medal requires the recipient be **under 40 on 1
+January of the award year**, following Fields's stated intent that the medal
+encourage further work rather than only crown finished work. A decision made by
+people, not a property of the subject — the domain's openness and the
+institution's deadline side by side, with only one of them mathematics. Huh
+cleared it having begun at twenty-three.
+
+Closing paragraph states the limit so the section cannot be read as determinism:
+this is not an argument that talent is fiction or circumstance destiny, but the
+narrower claim that when a distribution is produced jointly by a door and by who
+was permitted near it, reading it as though the door were the only term mistakes
+an accident of access for a fact about people — and that error has a direction.
+It always flatters whoever got in.
+
+Index card blurb updated to carry the two-part thesis. No biographical material
+was added to the chapter; the argument stands on the roster and the sources.
+
+### §5 added — "The case: Brazil, 1964–1985", with the author's own account
+
+§4 asserted that the selection question is answered in terms of states, economies,
+schools and wars. §5 demonstrates it once, on a case with a good record, at
+Pablo's explicit invitation and with his account given in his words.
+
+**The mechanism is sharper than "a dictatorship damaged education."** Verified
+before writing, per §6's own rule:
+
+- ~300 professors forcibly retired or dismissed across two purges, 1964 and 1969,
+  the second after AI-5 and Decreto-Lei 477, which permitted summary expulsion
+  with practically no defence. 1,000+ students expelled 1969–79, 250 at UnB in
+  1969 alone. From 1970, ~35 ASIs monitored campuses and reported to the national
+  intelligence service. At USP's Faculty of Philosophy the compulsory retirements
+  took Cardoso, Florestan Fernandes and Ianni. *Educação Moral e Cívica*
+  compulsory from 1969.
+- **Simultaneously** the same regime expanded science and technology enormously:
+  enrolment 142,000 (1964) → 1.4M (1984); graduate programmes 6 courses (1961) →
+  792 master's + 333 doctoral (1984); FINEP 1967, Embrapa 1973, twelve new
+  federal universities.
+- And it ran the elite technical schools itself. **ITA** (1950) is maintained by
+  the Brazilian Air Force; first-year undergraduates *are classified as military
+  personnel* and attend weekly military preparation, discharging compulsory
+  service; admission runs near 1% and its entrance exam is the country's most
+  competitive. **IME** is the Army's equivalent.
+
+So the regime did not close the door to mathematics. **It funded that door,
+widened it, and stood in it.** A household that opposed the regime, containing a
+child with an aptitude for mathematics, faced a domain whose rules were open and
+indifferent to age (§2) and an institutional route that ran through a gate with
+soldiers on it. A family that turned away was not less mathematical; it was
+pricing the route accurately, and the cost was not tuition.
+
+**The instance** is Pablo's, in his own account and marked as his: both parents
+are journalists rather than mathematicians for this reason; the household was
+required to participate in institutions not its own — the Catholic church, in a
+Jewish family — and to write about the feats of the great country and its armed
+forces while defending democracy, freedom and human rights. The turn towards art
+and away from the sciences passed down a generation as though it were a
+temperament. It was a political inheritance. He was told at thirty-five he was
+too old to begin; the mathematics in this series was written afterwards. The
+section says explicitly that neither half is offered as a triumph — the point is
+that to anyone counting later, this looks like a family that simply preferred
+the arts, which is the §4 error in one household over two generations.
+
+Sources for the history are cited in §8 and are *not* from him; the family
+account is his and is attributed as such. Every personal sentence is his to cut.
+
+**Not past tense.** Pablo raised Colombia, flagging it himself as hearsay —
+correctly, and it checked out stronger than he had it. Corte Constitucional,
+*Sentencia T-357 de 2024* (September 2024): a nine-year-old in a state school,
+Christian but not Catholic, required to learn Catholic prayers and dogma; her
+father's request for an alternative went unanswered; she was excluded from the
+class and given **0.0**, damaging her record. The Court found violations of
+freedom of worship, the right to education and state secularity, and ordered
+alternatives, removal of dogmatic content, and neutral teaching. A constitutional
+court had to say this in 2024, so the practice was live until it did.
+
+**Two things I did not write, and why.** He named the city as Pereira; the ruling
+anonymises the child and the reporting does not name the school or city, as is
+standard for a tutela involving a minor, so the location is not in the chapter.
+And "Pereira, a Jewish name" is too strong as stated: it is a Portuguese
+toponymic surname (*pear tree*) that is well attested among Sephardic converso
+families but is also extremely common among non-Jewish Portuguese, and the
+Colombian city is named after Francisco Pereira Martínez. An association, not an
+identification — so it is not in the chapter either.
+
+### §5 closes on "Availability is not access"
+
+Pablo's point, and it targets a soft spot the chapter had acquired: the argument
+so far could be read as though the problem were historical and the internet had
+solved it. Two corrections, both his.
+
+**Church and state are not separated everywhere**, and where the principle exists
+on paper it is not thereby enforced — which is exactly what T-357/2024 shows: a
+constitutional guarantee, and a nine-year-old marked 0.0 for declining the
+catechism, in the same country in the same year.
+
+**And availability was never the binding constraint.** Verified before use:
+Hansen & Reich, *Science*, 4 December 2015 — 68 free HarvardX and MITx courses on
+edX, 2012–2014. Young registrants lived in neighbourhoods with median incomes
+**38% above** the typical American neighbourhood; among teenagers, those with
+college-educated parents had **nearly twice the odds** of completing. Reich's own
+summary: online learning does not yet live up to its promise to democratise
+education.
+
+The reason is this chapter's own distinction one level up. The internet is an
+availability revolution. It distributes the material and nothing else on
+Feldman's list — not a household with room for study, not a tradition that makes
+the domain thinkable, not an adult who knows the field exists, not the time of a
+fifteen-year-old who is earning, and not the sentence *this is for people like
+you*, which is on no syllabus and is the one that decides. Family, tradition and
+opportunity do not materialise because a PDF is free.
+
+The section ends on why this is worth stating: the availability claim is usually
+offered not as an observation but as a dismissal — *it's all online, so what's
+your excuse* — which converts a question about access into a verdict about a
+person. The §4 error in contemporary dress, with the same direction. It flatters
+whoever got in.
+
+One wording caution: the fetched summary of the Hansen–Reich paper described the
+finding as MOOCs "narrowing rather than widening" access, which reads garbled
+against both the statistics and Reich's own quote. The chapter states the
+statistics and the quote and does not use that directional phrasing. Third time
+today that a single fetch was the unreliable link in the chain.
+
+### §5 gains the strongest evidence in the chapter: a measurable absence
+
+Pablo: "teachers of sociology and philosophy did not exist for 20 years — when
+they returned, they were either very young, or very old. I was lucky to have had
+one."
+
+Checked, and the record is longer and messier than either of us had it, which
+made the point sharper rather than weaker:
+
+- **Philosophy and Sociology were banned from Brazilian schools in 1971** and
+  replaced by *Educação Moral e Cívica*. They returned in **1986** as optional
+  subjects. They became compulsory in secondary education only in **2008**
+  (Lei 11.684/2008) — thirty-seven years after the ban.
+- Sociology's exclusion is older still: out of the curriculum since the Reforma
+  Capanema of **1942**, creeping back state by state from 1983 (São Paulo,
+  Resolução SEE/SP 236/83).
+- And it is live: philosophy and sociology have been removed from the compulsory
+  curriculum again under the current secondary-education reform, São Paulo among
+  the states dropping them.
+
+Pablo's "twenty years" is a fair description of the lived gap — the ban ran
+fifteen years and the 1986 return was optional, so the effective absence from
+most classrooms ran longer.
+
+**Why this is the best evidence in the section.** For fifteen years nobody could
+enter the profession, because the job did not exist. When the subjects returned,
+the teachers were necessarily of two kinds — those who predated 1971 and those
+trained after 1986 — with no middle cohort, and none possible. The ban is legible
+in the age distribution of the teaching staff decades after it was lifted: a
+bimodal profession, very old or very young, with a hole where a generation should
+be.
+
+That answers §4's own methodological objection in the one case where it can be
+answered. §4 says a theory assembled from the people who arrived cannot count the
+people who did not, because the missing are not in the sample. Here they are in
+the sample, as a gap with edges and dates. Nobody needs to be interviewed about
+the sociologists Brazil did not train between 1971 and 1986 — the number is
+readable off who was standing in front of a classroom in 1995, and **the shape of
+the hole is the shape of the law.**
+
+His having had such a teacher is recorded as his note, and "luck" is kept as his
+word because it is also Feldman's: in a fifteen-year hole, an adult in the room
+who can teach the subject *is* a coincidence factor.
+
+### §5 · "Cut from the curriculum, bought at the frontier" — with a declared conflict
+
+Pablo: "that is absurd, AI is hiring philosophy majors, put that in the book."
+
+The observation is real and checkable. A publicly maintained list at *Daily Nous*
+names philosophers in research roles at frontier AI firms — among them Amanda
+Askell, Joe Carlsmith, Ben Levinstein, Jackson Kernion and Harvey Lederman at
+Anthropic; Iason Gabriel, Adam Bales, Atoosa Kasirzadeh, Arianna Manzini, Julia
+Haas and Geoff Keeling at Google DeepMind; Robert Long and Patrick Butlin at
+Eleos AI; Beba Cibralic at RAND; Lisa Miracchi Titus at Meta. Roles: alignment,
+evaluation, governance, moral status, character.
+
+**Three cautions written into the section rather than left out of it.**
+
+1. The magnitude is disputed. Workforce specialists have publicly pushed back on
+   reports of philosophers commanding extraordinary salaries. That pushback is
+   cited; the source itself returned 403 on fetch, so it is referenced as
+   existing rather than characterised in detail.
+2. The practice is not industry-wide — OpenAI is reported to treat safety largely
+   as an engineering problem without dedicated philosopher roles.
+3. **Declared conflict of interest.** This section was drafted with the
+   assistance of an AI system built by one of the companies named. That is stated
+   in §8 in the chapter itself, and the section is written conservatively for
+   that reason. It would have been easy and wrong to let an Anthropic model write
+   an enthusiastic passage about Anthropic hiring philosophers into somebody
+   else's book without saying so.
+
+**The argument is framed so it does not depend on the trend being large**, which
+is what makes it survivable: the skills being cut from a public curriculum have
+non-zero and rising value at the frontier, and eligibility for that frontier is
+set roughly a generation upstream by a decision a fifteen-year-old does not take.
+Twenty such jobs would suffice. What matters is not how many exist but who will
+be able to hold them. Explicitly *not* a labour-market claim — "study philosophy,
+the market wants you" is disclaimed in the text.
+
+It closes on the chapter's mechanism running live rather than in retrospect:
+philosophy as a domain is wide open and §2 applies to it as much as to chess; the
+state narrows the school door; the frontier then recruits from wherever
+philosophers are still made — the systems that did not cut the subject, and the
+households that could supply it privately when the school would not. Hansen and
+Reich measured what that produces. A curriculum decision taken in 2026 is a
+statement about who is eligible in 2045, and it is not debated in those terms
+because the people it excludes are not yet old enough to say anything.
