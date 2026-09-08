@@ -125,6 +125,47 @@ def chapter_nav(chapters: list[dict], i: int) -> str:
             f'border-bottom:1px solid currentColor;opacity:.7">\n{body}\n</nav>\n')
 
 
+
+# The hero label states the same derived fact a second time — "Chapter 5 of 42"
+# in <p class="chapter-label">.  On 2026-09-08 the roster grew by one and the
+# generated nav updated everywhere while 23 of these labels stayed at "of 42":
+# the drift this tool was written to kill, surviving in a second location.
+# Same rule, same remedy: regenerate it.
+_LABEL_RE = re.compile(r'(<p class="chapter-label">)(.*?)(</p>)', re.S)
+
+
+def chapter_label(chapters: list[dict], i: int) -> str:
+    c = chapters[i]
+    return (f'Book 3 &middot; The Mini-Beast &middot; '
+            f'Chapter {c["n"]} of {len(chapters)}')
+
+
+def write_chapter_labels(chapters: list[dict]) -> int:
+    changed = 0
+    for i, c in enumerate(chapters):
+        path = ROOT / c["f"]
+        if not path.exists():
+            continue
+        html = path.read_text(encoding="utf-8", errors="replace")
+        want = chapter_label(chapters, i)
+        new = _LABEL_RE.sub(lambda m: m.group(1) + want + m.group(3), html, count=1)
+        if new != html:
+            path.write_text(new, encoding="utf-8")
+            changed += 1
+    return changed
+
+
+def label_drift(chapters: list[dict]) -> list[tuple]:
+    out = []
+    for i, c in enumerate(chapters):
+        path = ROOT / c["f"]
+        if not path.exists():
+            continue
+        m = _LABEL_RE.search(path.read_text(encoding="utf-8", errors="replace"))
+        if m and m.group(2).strip() != chapter_label(chapters, i):
+            out.append((c["n"], c["f"], m.group(2).strip()))
+    return out
+
 def write_chapter_navs(chapters: list[dict]) -> int:
     changed = 0
     for i, c in enumerate(chapters):
@@ -272,6 +313,18 @@ def main() -> None:
     else:
         print(f"  all {len(chapters)} chapters carry a current taught-order nav")
 
+    ld = label_drift(chapters)
+    if ld:
+        drift = True
+        print(f"\n  HERO LABEL STALE ({len(ld)}/{len(chapters)}) — the position stated a"
+              f"\n  second time, in <p class=\"chapter-label\">. Run with --write.")
+        for n, f, got in ld[:20]:
+            print(f"    {n:>3}  {f:<44} {got}")
+        if len(ld) > 20:
+            print(f"    … and {len(ld) - 20} more")
+    else:
+        print(f"  all {len(chapters)} hero labels match the roster")
+
     lc = legacy_conflicts(chapters)
     if lc:
         print(f"\n  ADVISORY ({len(lc)}) — older in-page links that do not reach the taught"
@@ -295,6 +348,9 @@ def main() -> None:
 
         n = write_chapter_navs(chapters)
         print(f"  chapter nav written from the roster into {n} of {len(chapters)} chapters")
+
+        m = write_chapter_labels(chapters)
+        print(f"  hero label written from the roster into {m} of {len(chapters)} chapters")
 
     print("\nDRIFT FOUND" if drift else "\nin sync")
     sys.exit(1 if drift else 0)
