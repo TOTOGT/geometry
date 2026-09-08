@@ -3567,3 +3567,76 @@ lung would not, and is not claimed.
 Sources: Murray, *PNAS* **12**, 207 (1926); Weibel, *Morphometry of the Human
 Lung* (1963); Douady & Couder, *PRL* **68**, 2098 (1992); Rodríguez-Iturbe &
 Rinaldo, *Fractal River Basins* (1997); Hurwitz (1891) for the √5 constant.
+
+## 2026-09-08 — Book 4, Part VII, Chapter 25; and the rung, correctly this time
+
+### Correcting today's correction
+
+Earlier today I recorded that "the G3 rung is not broken" and downgraded the
+item. **That entry was wrong and the original note was right.** I had searched
+for `.nav-links` generally and concluded the rung was fine; the rung is a
+different element, `div.rung` inside `nav-links.dual-rung`, and it is carried by
+**16 files**, not 55. Measured:
+
+- G3 rung: 15 links labelled 1..15, of which **10** are roster chapters —
+  sitting at roster positions 28,29,31,32,33,34,35,36,37,38 — and **5**
+  (`ch1.html`, `ch2.html`, `ch5-immune.html`, `ch9-phi.html`,
+  `ch15-entropy.html`) are not on the taught path at all. **32 of 42** roster
+  chapters unreachable. The 1..15 labels were a second numbering with no
+  relation to the book's own.
+- G4 rung: four incompatible shapes across the 16 files — 15, 19, 20 and 23
+  links — and not one of them reached Chapter 24.
+
+Both are now generated: G4 from `book4/contents.html` (the source of truth for
+Book 4, deduplicated at slot 15 where the pt-BR stub shares the number), G3 from
+`tools/book3_roster.json`, showing the Week 1–14 spine under its **real** roster
+numbers 25–38 plus an "all 42" link to `journey.html`. A bar cannot hold 42
+links; it can stop lying about which number a chapter has.
+
+**A bug I introduced and caught.** The first pass applied Book-4-relative
+prefixes uniformly, which broke **78** links in `chPI-rh.html` and
+`chPHI-rh.html` — two files at the repo root that carry the same nav and had
+correct root-relative paths in HEAD. Fixed by deriving the prefix per file from
+its directory. Verified: 0 broken rung links across all 16 files. Lesson, and it
+is the third time this session in a different costume: *a shared block is not a
+shared context — anything relative in it has to be recomputed per file.*
+
+### Chapter 25 · The Selection Principle
+
+Part VII opened at 25 rather than renumbering a third time, per Pablo. The
+chapter answers §21.8's standing question — *name an entropy on the corpus's own
+phase space, not borrowed from an analogy* — for one system.
+
+**Proposition 25.1.** The number of distinct closable shells at size T, counting
+enantiomers separately, is W(T) = d₁(T) − d₂(T), the divisors of T congruent to
+1 minus those congruent to 2 mod 3. So S(T) = k·log(d₁ − d₂). Checked for every
+closable T below 1000, no mismatches; and W(T) = 0 coincides exactly with
+Chapter 21's inertness condition.
+
+This meets the bar §21.8 set. It is *named* (a function of T, no free
+parameter), *not borrowed* (a count of the sheet's own configurations, which is
+what S = k log W means), and it is arithmetic rather than geometric — a
+consequence of Ch 21 indexing shells by norms in ℤ[ω].
+
+Consequences recorded: chirality is worth exactly k·log 2, so the split primes
+are thermodynamically preferred; T = 49 is the smallest size carrying two
+distinct shells (GP(5,3), its mirror, and GP(7,0)) because 49 = 7² with 7 split;
+and the 216-sphere family splits 4 chiral / 6 achiral, giving a desk experiment
+with three stated failure modes.
+
+**What the chapter refuses to claim**, all in §25.6: it is one system, not the
+corpus — S lives on the shell configuration space, the contact form lives on the
+jet space, and nothing transports between them; it selects among closures, not
+between closing and not closing, so the δQ question is untouched; it does not
+reach Saturn; and it does not establish that systems tend to complexity. The
+Dirichlet identity Σ W(T)T⁻ˢ = ζ(s)L(s,χ₋₃) is recorded in §25.4 **inside a
+warning box**, because the log-cost assumption it needs is unargued and §21.8's
+own caution about ζ applies at full force.
+
+Also fixed in `ch21-the-closing-field.html`: four stale open-item labels still
+read "20b.A" / "20b.B" from before the renumber. Now 21.A / 21.B, with a forward
+pointer to Ch 25 on 21.A.
+
+`ch25-verify.py`: all checks pass. Zero broken links in the new chapter.
+MathJax does not render in the sandbox (CDN blocked) — confirmed identical
+behaviour on ch21, so not a defect in the new page.
