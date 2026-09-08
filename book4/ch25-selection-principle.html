@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch 25 · The Selection Principle — Principia Orthogona, Book 4</title>
+<script>
+MathJax = { tex: { inlineMath:[['$','$']], displayMath:[['$$','$$']] }, options: { skipHtmlTags:['script','noscript','style','textarea'] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+<style>
+:root {
+  --gold:#0ABAB5; --gold-dim:#076b68;
+  --dark:#05080f; --surface:#0c1420; --surface2:#101e2e;
+  --text:#cdd8e8; --text-dim:#6a8099;
+  --c-color:#4a9eff; --k-color:#e05a3a; --f-color:#50c878;
+  --u-color:#c084fc; --t-color:#f9c74f; --g-color:#0ABAB5;
+  --zero-color:#ff6b8a; --jade:#3fbf7f;
+  --proved:#50c878; --open:#ff6b8a;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--dark); color:var(--text); font-family:Georgia,serif; font-size:18px; line-height:1.75; }
+nav { position:sticky; top:0; z-index:100; background:rgba(5,8,15,.96); border-bottom:1px solid var(--gold-dim); padding:.6rem 2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.5rem; }
+.nav-logo { font-family:Georgia,serif; font-size:.85rem; letter-spacing:.18em; color:var(--gold); text-decoration:none; }
+.nav-links { display:flex; gap:1.2rem; font-size:.78rem; flex-wrap:wrap; }
+.nav-links a { color:var(--text-dim); text-decoration:none; letter-spacing:.08em; transition:color .2s; }
+.nav-links a:hover, .nav-links a.active { color:var(--gold); }
+.rung { display:flex; gap:.55rem; align-items:center; flex-wrap:wrap; }
+.rl { font-family:'Courier New',monospace; font-size:.6rem; letter-spacing:.1em; color:var(--gold); font-weight:600; min-width:1.8rem; }
+.dual-rung { flex-direction:column; gap:.2rem; align-items:flex-start; }
+.po-ring-strip { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.4rem; padding:.45rem 1.4rem; background:rgba(0,0,0,.55); border-bottom:1px solid var(--gold-dim); font-family:'Courier New',monospace; font-size:.72rem; letter-spacing:.08em; }
+.po-ring-strip a { color:var(--gold); text-decoration:none; opacity:.85; }
+.po-ring-strip a:hover { opacity:1; text-decoration:underline; }
+.po-ring-badge { display:inline-flex; align-items:center; gap:.5rem; color:var(--gold); }
+.po-ring-num { font-weight:700; letter-spacing:.15em; }
+.po-ring-sep { opacity:.4; }
+.po-ring-meta { opacity:.7; }
+.po-ring-ends { display:flex; gap:1rem; }
+.book-hero { background:linear-gradient(160deg,#04100b 0%,#06171d 50%,#04100b 100%); border-bottom:1px solid rgba(10,186,181,.15); padding:5rem 2rem 4rem; text-align:center; position:relative; overflow:hidden; }
+.book-hero::before { content:''; position:absolute; inset:0; background-image: radial-gradient(circle at 50% 40%,rgba(10,186,181,.09) 0%,transparent 60%); animation:heroGlow 8s ease-in-out infinite alternate; pointer-events:none; }
+@keyframes heroGlow { 0%{opacity:.4} 100%{opacity:1} }
+.series-label { font-size:.7rem; letter-spacing:.3em; color:var(--text-dim); text-transform:uppercase; margin-bottom:1.2rem; position:relative; }
+.chapter-num { font-size:.75rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:.5rem; font-family:'Courier New',monospace; position:relative; }
+.book-title { font-size:clamp(2rem,6vw,3.8rem); font-weight:400; letter-spacing:.04em; color:var(--text); line-height:1.15; position:relative; margin-bottom:.5rem; }
+.book-subtitle { font-size:clamp(.85rem,2vw,1.1rem); color:var(--text-dim); font-style:italic; max-width:640px; margin:0 auto 1.5rem; position:relative; }
+.operator-display { font-family:'Courier New',monospace; font-size:1.1rem; letter-spacing:.15em; position:relative; margin-bottom:1.5rem; }
+.hero-meta { display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap; font-size:.75rem; letter-spacing:.12em; color:var(--text-dim); position:relative; }
+.hero-badge { background:rgba(10,186,181,.12); border:1px solid rgba(10,186,181,.3); padding:.25rem .9rem; border-radius:2px; color:var(--gold); }
+.content-wrap { max-width:780px; margin:0 auto; padding:3rem 2rem 4rem; }
+h2 { font-size:1.4rem; font-weight:400; color:var(--gold); margin:3rem 0 1rem; letter-spacing:.06em; }
+h3 { font-size:1.1rem; font-weight:600; color:var(--text); margin:2rem 0 .7rem; }
+p { margin-bottom:1.1rem; }
+strong { color:var(--text); } em { color:var(--gold); font-style:normal; }
+code { font-family:'Courier New',monospace; font-size:.85em; color:var(--u-color); background:rgba(192,132,252,.08); padding:.1rem .35rem; border-radius:2px; }
+a.inline { color:var(--gold); }
+.section-tag { font-family:'Courier New',monospace; font-size:.7rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:.3rem; opacity:.8; }
+.gold-rule { border:none; border-top:1px solid var(--gold-dim); margin:2.5rem 0; opacity:.4; }
+.insight-box { background:rgba(10,186,181,.06); border:1px solid rgba(10,186,181,.2); padding:1.2rem 1.5rem; margin:2rem 0; border-radius:4px; }
+.insight-label { font-size:.7rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; font-family:'Courier New',monospace; margin-bottom:.4rem; }
+.thm-box { background:rgba(10,186,181,.04); border:1px solid rgba(10,186,181,.3); border-radius:4px; padding:1.2rem 1.5rem; margin:1.8rem 0; }
+.thm-label { font-size:.7rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; font-family:'Courier New',monospace; margin-bottom:.5rem; }
+.exp-box { background:rgba(63,191,127,.06); border:1px solid rgba(63,191,127,.32); border-radius:6px; padding:1.3rem 1.6rem; margin:2.2rem 0; }
+.exp-label { font-size:.7rem; letter-spacing:.2em; color:var(--jade); text-transform:uppercase; font-family:'Courier New',monospace; margin-bottom:.5rem; }
+.open-box { background:rgba(255,107,138,.04); border:1px solid rgba(255,107,138,.3); border-radius:4px; padding:1.2rem 1.5rem; margin:1.8rem 0; }
+.open-label { font-size:.7rem; letter-spacing:.2em; color:var(--zero-color); text-transform:uppercase; font-family:'Courier New',monospace; margin-bottom:.5rem; }
+.status-table { width:100%; border-collapse:collapse; font-size:14px; margin:1.5rem 0; }
+.status-table th { background:var(--surface2); color:var(--gold); font-size:.68rem; letter-spacing:.15em; text-transform:uppercase; font-family:'Courier New',monospace; padding:.6rem .8rem; text-align:left; border-bottom:1px solid var(--gold-dim); }
+.status-table td { padding:.5rem .8rem; border-bottom:1px solid #1a2e42; color:var(--text); }
+.status-table tr:hover td { background:var(--surface2); }
+.status-table code { font-size:.8em; }
+.proved-s{color:var(--f-color);font-weight:600} .open-s{color:var(--zero-color);font-weight:600}
+.figure-wrap { margin:2.5rem 0; border:1px solid #1a2e42; border-radius:6px; overflow:hidden; background:var(--surface); }
+.figure-header { background:var(--surface2); border-bottom:1px solid #1a2e42; padding:.6rem 1rem; display:flex; justify-content:space-between; align-items:center; font-family:'Courier New',monospace; font-size:.72rem; letter-spacing:.1em; color:var(--gold); flex-wrap:wrap; gap:.4rem; }
+canvas { display:block; width:100%; }
+.figure-caption { padding:.8rem 1rem; font:italic 13px/1.5 Georgia; color:var(--text-dim); border-top:1px solid #1a2e42; }
+.fig-btns { display:flex; gap:.4rem; flex-wrap:wrap; padding:.7rem 1rem; background:var(--surface2); border-top:1px solid #1a2e42; align-items:center; }
+.fig-btns button { font-family:'Courier New',monospace; font-size:.72rem; letter-spacing:.06em; color:var(--gold); background:rgba(10,186,181,.08); border:1px solid rgba(10,186,181,.3); border-radius:3px; padding:.4rem 1rem; cursor:pointer; transition:all .15s; }
+.fig-btns button:hover { background:rgba(10,186,181,.22); }
+.bridge { background:rgba(10,186,181,.05); border:1px solid rgba(10,186,181,.25); border-radius:6px; padding:1.5rem; margin:2.5rem 0; }
+.bridge-label { font-size:.7rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; font-family:'Courier New',monospace; margin-bottom:.7rem; }
+.chapter-nav { display:flex; justify-content:space-between; align-items:center; padding:2rem 0; border-top:1px solid #1a2e42; margin-top:3rem; gap:.6rem; flex-wrap:wrap; }
+.chapter-nav a { color:var(--gold); text-decoration:none; font-size:.85rem; letter-spacing:.08em; border:1px solid rgba(10,186,181,.25); padding:.5rem 1rem; border-radius:2px; transition:all .2s; font-family:'Courier New',monospace; }
+.chapter-nav a:hover { background:rgba(10,186,181,.08); }
+footer { text-align:center; padding:2rem; font-size:.72rem; letter-spacing:.12em; color:var(--text-dim); border-top:1px solid #1a2e42; }
+footer a { color:var(--gold-dim); text-decoration:none; }
+mjx-container { overflow-x:auto; max-width:100%; display:block !important; }
+.table-wrap { overflow-x:auto; }
+ul.tight { margin:1rem 0 1rem 1.5rem; line-height:2.05; }
+.refs { font-size:.8rem; color:var(--text-dim); }
+.refs li { margin-bottom:.4rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://totogt.github.io/geometry/book4/index.html" class="nav-logo">⚜ PRINCIPIA ORTHOGONA · BOOK 4 ⚜</a>
+  <div class="nav-links dual-rung">
+    <div class="rung"><span class="rl">G3</span>
+    <a href="../ch1-seed.html">25</a>
+    <a href="../wk02-compression.html">26</a>
+    <a href="../ch2-allostatic.html">27</a>
+    <a href="../ch3-circadian.html">28</a>
+    <a href="../ch4-neural.html">29</a>
+    <a href="../wk06-threshold.html">30</a>
+    <a href="../ch6-resonance.html">31</a>
+    <a href="../ch7-crystalline.html">32</a>
+    <a href="../ch8-axiomatic.html">33</a>
+    <a href="../ch10-lyapunov.html">34</a>
+    <a href="../ch11-spectral.html">35</a>
+    <a href="../ch12-conclusion.html">36</a>
+    <a href="../ch13-revision.html">37</a>
+    <a href="../ch14-axle.html">38</a>
+    <a href="../journey.html">all 42</a></div>
+    <div class="rung"><span class="rl">G4</span>
+    <a href="ch00-student-edition.html">0</a>
+    <a href="ch01.html">1</a>
+    <a href="ch02.html">2</a>
+    <a href="ch03.html">3</a>
+    <a href="ch04.html">4</a>
+    <a href="ch05.html">5</a>
+    <a href="ch06.html">6</a>
+    <a href="ch07.html">7</a>
+    <a href="ch08.html">8</a>
+    <a href="ch09.html">9</a>
+    <a href="ch10.html">10</a>
+    <a href="ch11.html">11</a>
+    <a href="ch12.html">12</a>
+    <a href="ch13.html">13</a>
+    <a href="ch14.html">14</a>
+    <a href="ch15-complex-turn.html">15</a>
+    <a href="ch16-crystal-lattice.html">16</a>
+    <a href="ch17-magnetic-lattice.html">17</a>
+    <a href="ch18-seismic-lattice.html">18</a>
+    <a href="ch19-acoustic-lattice.html">19</a>
+    <a href="ch20-defect-lattice.html">20</a>
+    <a href="ch21-the-closing-field.html">21</a>
+    <a href="ch22-gauss-map.html">22</a>
+    <a href="ch23-duality-discriminant.html">23</a>
+    <a href="ch24.html">24</a>
+    <a href="ch25-selection-principle.html" class="active">25</a></div>
+  </div>
+</nav>
+
+<div class="po-ring-strip">
+  <div class="po-ring-badge">
+    <span class="po-ring-num">G4 · Architecture</span>
+    <span class="po-ring-sep">·</span>
+    <span class="po-ring-meta">Dimensional Theory · Book 4 · Ch 25 · <em style="color:var(--text-dim);font-style:normal">Part VII · The Selection Turn</em></span>
+  </div>
+  <div class="po-ring-ends">
+    <a href="ch24.html">← Ch 24 · The Bifurcation Set Is a Discriminant</a>
+    <a href="contents.html">Contents →</a>
+  </div>
+</div>
+
+<section class="book-hero">
+  <div class="series-label">Principia Orthogona · Volume IV · Architecture Arc · Part VII</div>
+  <div class="chapter-num">Chapter 25 · Selection · Why the Sheet Closes This Way and Not Another</div>
+  <h1 class="book-title">The Selection Principle</h1>
+  <p class="book-subtitle">Chapter 21 said which shells are available. It did not say which one gets built. The missing quantity is an entropy — and the closing field turns out to carry its own, countable, with no analogy borrowed from anywhere</p>
+  <div class="operator-display">
+    <span style="color:var(--gold)">$S(T)/k = \log\!\big(d_1(T) - d_2(T)\big)$</span>
+    &nbsp;·&nbsp; <span style="color:var(--text-dim)">$F = E - TS$</span>
+  </div>
+  <div class="hero-meta">
+    <span class="hero-badge">ch25-verify.py</span>
+    <span>answers §21.8's open question, in one system</span>
+    <span>Boltzmann · Clausius · Eisenstein</span>
+    <span>One falsifiable prediction, one desk experiment</span>
+  </div>
+</section>
+
+<div class="content-wrap">
+
+<div class="section-tag">§ 25.0 · In Plain Terms</div>
+<h2>Availability Is Not Tendency</h2>
+
+<p>Chapter 21 ended with a catalogue. Given a hexagonal sheet and the one operation the lattice allows, here are the balls you can make: twelve pentagons in every one of them, sizes fixed by an arithmetic of the triangular lattice, some of them coming in left- and right-handed pairs and some not. It is a complete list, and it is a list of <em>possibilities</em>.</p>
+
+<p>A possibility is not a prediction. Pour out a box of magnetic spheres, shake it, and something specific happens. The sheet does not consult the catalogue and pick at random; it does one thing. Chapter 21 has no way to say what. Everything in it is a constraint — this is allowed, that is not — and constraints never make anything happen. They only say what cannot.</p>
+
+<p>The word for what is missing is <em>selection</em>. It is the same word WP-104 used when it found that <span class="mono">SaturnHexagon.lean</span> proves stability results about a hexagon and never proves that the hexagon should be there. And it is the word that has been waiting under this whole arc: the corpus is very good at showing that a structure, once present, is consistent and stable. It has never once shown why a structure arrives.</p>
+
+<p>This chapter does not solve that in general. It solves it for one system, the closing field of Chapter 21, and it does so by noticing that the catalogue was never just a list. It was a list <em>with multiplicities</em>, and a multiplicity is an entropy.</p>
+
+<div class="section-tag">§ 25.1 · The Question §21.8 Left Standing</div>
+<h2>What the Corpus's Entropy Would Have to Be</h2>
+
+<p>Section 21.8 identified the corpus's contact form as Gibbs's with the heat term deleted:</p>
+
+<p style="text-align:center;margin:1.4rem 0">$$\alpha \;=\; dz - r^2 d\theta \;=\; \big(dU - T\,dS - \Omega\,dJ\big)\Big|_{dS=0} .$$</p>
+
+<p>and closed by naming the price of saying so. The open item was stated exactly, and it is worth quoting rather than paraphrasing, because the whole of this chapter is an attempt to pay it:</p>
+
+<blockquote>What is the corpus's entropy? Until a function $S$ is named on the corpus's own phase space — not borrowed from an analogy — the $T\,dS$ term cannot be restored, and Observations 21.7–21.8 describe a thermodynamics the corpus is adjacent to rather than one it has.</blockquote>
+
+<p>Two words in that sentence do the work. <strong>Named</strong>: not gestured at, not asserted to exist, but written down as a function of the system's own variables. <strong>Not borrowed</strong>: not "the shell is like a gas, so let us use the entropy of a gas." A borrowed entropy is exactly the move WP-24 and WP-28 caught and refused in this corpus, and WP-29 generalised into a standing rule — a number shared between two domains is not a bridge until the mechanism is shared too.</p>
+
+<p>So the bar is high, and it is the right bar. What follows meets it for the closing field and does not meet it anywhere else, and §25.6 says so plainly.</p>
+
+<div class="section-tag">§ 25.2 · The Catalogue Has Multiplicities</div>
+<h2>Counting the Shells at a Given Size</h2>
+
+<p>Recall the ledger. A Goldberg shell $\mathrm{GP}(m,n)$ is indexed by a pair of non-negative integers, and its size is governed by</p>
+
+<p style="text-align:center;margin:1.4rem 0">$$T \;=\; m^2 + mn + n^2 \;=\; N_{\mathbb{Q}(\omega)/\mathbb{Q}}(m+n\omega), \qquad \text{sites} = 10T+2 .$$</p>
+
+<p>Chapter 21 read this as a filter: $T$ must be a Löschian number, so shells exist at $T = 1, 3, 4, 7, 9, 12, 13, \dots$ and never at $T = 2$ or $T=5$, because $2$ and $5$ are inert in $\mathbb{Z}[\omega]$. That reading throws something away. It asks <em>whether</em> $T$ is a norm, and never asks <em>in how many ways</em>.</p>
+
+<p>The count matters physically, because two things can happen at one value of $T$. First, a chiral shell and its mirror image are different objects — you cannot rotate $\mathrm{GP}(3,2)$ onto $\mathrm{GP}(2,3)$ — and Chapter 21 established exactly when this happens: chirality is the splitting of primes, so $p \equiv 1 \bmod 3$ gives an enantiomeric pair and $3$ ramifies into an achiral shell. Second, and less obviously, one $T$ can carry genuinely distinct shells that are not mirror images of each other at all. The first case is $T = 49$:</p>
+
+<p style="text-align:center;margin:1.4rem 0">$$49 \;=\; 5^2 + 5\cdot 3 + 3^2 \;=\; 7^2 + 7\cdot 0 + 0^2 ,$$</p>
+
+<p>so at $492$ sites the sheet can close as the chiral $\mathrm{GP}(5,3)$, as its mirror image, or as the achiral $\mathrm{GP}(7,0)$ — three distinct objects of identical size. <span class="mono">ch25-verify.py</span> confirms $49$ is the smallest such $T$, and that $49 = 7^2$ with $7$ split is the reason.</p>
+
+<p>Write $W(T)$ for the number of distinct shells at size $T$, counting enantiomers separately because they are separate states. The first values:</p>
+
+<div class="table-wrap">
+<table class="status-table">
+<thead><tr><th>$T$</th><th>sites</th><th>shells</th><th>$W(T)$</th><th>$S/k = \log W$</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>12</td><td>GP(1,0)</td><td>1</td><td>0</td></tr>
+<tr><td>3</td><td>32</td><td>GP(1,1)</td><td>1</td><td>0</td></tr>
+<tr><td>4</td><td>42</td><td>GP(2,0)</td><td>1</td><td>0</td></tr>
+<tr><td>7</td><td>72</td><td>GP(2,1) and its mirror</td><td>2</td><td>0.6931</td></tr>
+<tr><td>9</td><td>92</td><td>GP(3,0)</td><td>1</td><td>0</td></tr>
+<tr><td>13</td><td>132</td><td>GP(3,1) and its mirror</td><td>2</td><td>0.6931</td></tr>
+<tr><td>21</td><td>212</td><td>GP(4,1) and its mirror</td><td>2</td><td>0.6931</td></tr>
+<tr><td>49</td><td>492</td><td>GP(5,3), its mirror, GP(7,0)</td><td>3</td><td>1.0986</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section-tag">§ 25.3 · The Entropy Is a Divisor Function</div>
+<h2>The Main Result of This Chapter</h2>
+
+<p>$W(T)$ looks at first like something one has to search for — enumerate pairs $(m,n)$, test each, count what survives. It is not. It is a divisor function, and the identification is exact.</p>
+
+<div class="thm-box">
+<div class="thm-label">Proposition 25.1 · the closing field's entropy</div>
+<p>Let $d_1(T)$ and $d_2(T)$ be the numbers of divisors of $T$ congruent to $1$ and to $2$ modulo $3$. Then the number of distinct closable shells at size $T$, with enantiomers counted separately, is</p>
+$$W(T) \;=\; d_1(T) - d_2(T),$$
+<p>and the Boltzmann entropy of the closing field at that size is</p>
+$$S(T) \;=\; k\,\log\big(d_1(T)-d_2(T)\big).$$
+<p>In particular $W(T) = 0$ — no shell of that size exists — precisely when $d_1(T) = d_2(T)$, which is the arithmetic statement of Chapter 21&rsquo;s inertness condition.</p>
+</div>
+
+<p>This is the Eisenstein analogue of the classical theorem counting representations as a sum of two squares, and it is not new mathematics; it is standard. What is new here is only where it is being pointed. <span class="mono">ch25-verify.py</span> checks $W(T) = d_1(T)-d_2(T)$ for every closable $T$ below $1000$ and reports no mismatches, and checks that $W(T)=0$ coincides with non-closability throughout the same range.</p>
+
+<p>Three things follow immediately, and they are the reason this is worth a chapter rather than a footnote.</p>
+
+<p><strong>It is named.</strong> $S$ is a function of the system's own variable — the size index $T$ that Chapter 21 already uses — with no free parameter and nothing imported. It is a count of the system's own configurations, which is what Boltzmann's $S = k\log W$ means and all it means.</p>
+
+<p><strong>It is not borrowed.</strong> No gas, no analogy, no cross-domain transfer. The multiplicity being counted is the multiplicity of ways the sheet's own arithmetic permits it to close.</p>
+
+<p><strong>It is arithmetic, not geometric.</strong> The entropy of a closed shell is a statement about the divisors of an integer. That is a strange sentence, and it is a consequence of Chapter 21's central identification — that the shells are indexed by norms in $\mathbb{Z}[\omega]$, so anything counting shells is counting ideals, and anything counting ideals is a divisor sum.</p>
+
+<div class="section-tag">§ 25.4 · What the Partition Function Would Be</div>
+<h2>One Conditional, Clearly Marked</h2>
+
+<p>Given a multiplicity and an energy, statistical mechanics wants a partition function. The multiplicity is now in hand. The energy is not, and this section says what would follow <em>if</em> a particular energy scaling held, without asserting that it does.</p>
+
+<div class="open-box">
+<div class="open-label">Conditional — the assumption is unargued</div>
+<p>Suppose the cost of closing at size $T$ takes the form $E(T) = \varepsilon_0 \log(10T+2) + \text{const}$. Then the canonical partition function over shell sizes is the Dirichlet series</p>
+$$Z(s) \;=\; \sum_{T \ge 1} W(T)\, T^{-s} \;=\; \zeta(s)\, L(s,\chi_{-3}), \qquad s = \beta\varepsilon_0 ,$$
+<p>because $d_1 - d_2$ is exactly the Dirichlet convolution $\mathbf{1} * \chi_{-3}$. Verified numerically at $s=2$: partial sums rise to $1.28519\ldots = \zeta(2)L(2,\chi_{-3})$.</p>
+</div>
+
+<p>The identity is real and the arithmetic is exact. <strong>The log-cost assumption is not argued anywhere</strong>, here or elsewhere in the corpus, and without it the Dirichlet form is a coincidence of bookkeeping rather than a physical partition function. It is recorded because it is checkable and because it would be dishonest to notice that the closing field's generating function is $\zeta(s)L(s,\chi_{-3})$ and quietly not mention it — but §21.8's own warning about $\zeta$ applies here with full force, and nothing in this section licenses a thermodynamic argument about the Riemann zeta function.</p>
+
+<div class="section-tag">§ 25.5 · The Prediction, and Its Size</div>
+<h2>Entropy Breaks Ties. It Does Not Win Arguments.</h2>
+
+<p>With $S$ named, the selection statement is the ordinary one. A shell is not chosen by minimising energy but by minimising free energy,</p>
+
+<p style="text-align:center;margin:1.4rem 0">$$F(T) \;=\; E(T) - T_{\text{temp}}\,S(T) \;=\; E(T) - k T_{\text{temp}} \log\big(d_1(T)-d_2(T)\big),$$</p>
+
+<p>so between two shells of comparable elastic cost, the one with more realisations is favoured — and by Chapter 21's arithmetic, "more realisations" means "built on split primes". <strong>Chirality is thermodynamically preferred, and the preference is worth exactly $k\log 2$ per shell.</strong></p>
+
+<p>Now the honest part, which is the size of that number. $\log 2 = 0.693$, and it does not grow. Elastic energy of a closed shell grows with the site count, which is $10T+2$. An entropy difference of order one cannot outrun an energy difference that scales. So the correct statement is not that entropy selects the shell; it is that <em>entropy breaks ties between shells the elasticity has already made nearly degenerate</em>, and it always breaks them the same way, toward the split primes.</p>
+
+<div class="insight-box">
+<div class="insight-label">A desk experiment, and how it fails</div>
+<p>A standard set of magnetic spheres contains $216$. Chapter 21, Exercise 21.3 established that the shells fitting that budget are $T \in \{1,3,4,7,9,12,13,16,19,21\}$, the largest being $\mathrm{GP}(4,1)$ at $212$ sites with four spheres left over. Split that family by handedness:</p>
+<p style="font-style:normal"><strong>chiral</strong> ($W=2$, $S/k = \log 2$): $T = 7, 13, 19, 21$<br>
+<strong>achiral</strong> ($W=1$, $S=0$): $T = 1, 3, 4, 9, 12, 16$</p>
+<p><strong>Prediction.</strong> Over repeated assembly from a shaken set, chiral shells should appear more often than achiral shells of comparable size, at a ratio biased by $e^{\log 2} = 2$ in the degenerate limit and by less than that whenever the elastic costs differ.</p>
+<p><strong>How it fails.</strong> If assembly from a shaken set produces achiral shells at or above the rate of chiral ones of matched size, the free-energy argument is wrong as stated. If the observed ratio exceeds $2$, something other than configurational entropy is doing the work and this chapter has not found it. If assembly turns out to be kinetically trapped — the sheet freezing into whichever shell it stumbles into first — then no equilibrium argument applies at all, and the correct verdict is that the question was posed in the wrong ensemble.</p>
+</div>
+
+<p>The third failure mode is the most likely one, and it should be said out loud. Magnetic spheres are strongly bound; a closed shell is not obviously able to explore its alternatives. An equilibrium selection principle is the right first thing to write down and may well be the wrong physics, and finding that out costs one afternoon and one box of magnets.</p>
+
+<div class="section-tag">§ 25.6 · What This Does Not Do</div>
+<h2>The Boundary, Stated Before Anyone Else States It</h2>
+
+<p><strong>It is one system, not the corpus.</strong> $S(T) = k\log(d_1-d_2)$ lives on the configuration space of closed shells. The corpus's contact form lives on a jet space with coordinates $(z, r, \theta)$. These are different spaces, and nothing here transports an entropy from one to the other. §21.8's question is answered for the closing field and remains open for everything else — which is progress, because it is the first $S$ the corpus has named at all, and it is not a solution.</p>
+
+<p><strong>It selects among closures, not between closing and not closing.</strong> The multiplicity $W(T)$ counts shells at a given size. It says nothing about whether a sheet folds in the first place, which is the actual $\delta Q$ question and the one a tornado answers by running a Carnot cycle. Chapter 21's storm is still doing something this chapter cannot describe.</p>
+
+<p><strong>It does not reach Saturn.</strong> WP-105 established that $\mathbb{Q}(\zeta_{10})^+ = \mathbb{Q}(\sqrt 5)$ has one fundamental unit, so a decagonal quasiperiodic structure has $\varphi$ available and no alternative. That is availability again, in a different field, and this chapter's method does not carry over: the shells here are a discrete finite catalogue at each size, and a quasiperiodic tiling is not. <span class="mono">OPEN</span></p>
+
+<p><strong>It does not make systems tend to complexity.</strong> Nothing above is a general principle about nature preferring structure. What it shows is narrower and firmer: when a system is already solving a closure problem, the arithmetic of that problem supplies both the list of solutions and their weights, and the weights have thermodynamic consequences. Whether the system embarks on the problem is a question about throughflow — Prigogine's regime, energy crossing a boundary and being dissipated — and that argument is not made here.</p>
+
+<div class="section-tag">§ 25.7 · Where This Attaches</div>
+<h2>The Chain, From the Colony to the Heat</h2>
+
+<p>The arc now reads in one line. <a href="ch16-crystal-lattice.html">Chapter 16</a> grows a hexagonal colony by <span class="mono">Colony.expand</span>, and <span class="mono">ring_card</span>'s $6n$ is the plane's six-fold symmetry made discrete — available, as WP-103 showed, because $\varphi(6) = 2$ and the plane admits it. <a href="ch21-the-closing-field.html">Chapter 21</a> asks that colony to close and finds it cannot without paying twelve elementary disclinations, and finds the arithmetic that fixes which closures exist. This chapter observes that the same arithmetic counts them, and a count is an entropy, and an entropy is the term §21.8 found missing from the corpus's own contact form.</p>
+
+<p>What is still absent, and what Part VII exists to pursue, is the step from a weighted catalogue to a driven process: the sheet that closes because something is pushing energy through it. That is the $\delta Q$ in $\alpha_{\mathrm{G}}(\dot\gamma) = \delta Q - T\,dS$, and it is the only term in the Gibbs form this corpus still has no account of.</p>
+
+<h2>Exercises</h2>
+<p><strong>25.1</strong> &nbsp; Show directly from $W = d_1 - d_2$ that $W$ is multiplicative, and deduce that a shell size built entirely from inert primes to even powers is achiral.</p>
+<p><strong>25.2</strong> &nbsp; Find the smallest $T$ with $W(T) = 4$, and describe the four shells. Is any pair of them related by reflection?</p>
+<p><strong>25.3</strong> &nbsp; The 216-set family contains four chiral and six achiral sizes. Compute the free-energy difference between $\mathrm{GP}(4,1)$ ($T=21$, chiral, 212 sites) and $\mathrm{GP}(4,0)$ ($T=16$, achiral, 162 sites) under the assumption that elastic cost per site is constant, and say what that assumption gets wrong.</p>
+<p><strong>25.4</strong> &nbsp; Explain, without computing, why no amount of configurational entropy can make a shell exist at $T = 2$.</p>
+
+<h2>References</h2>
+<ul>
+<li>Boltzmann, L. (1877). Über die Beziehung zwischen dem zweiten Hauptsatze… <em>Wiener Berichte</em> 76, 373–435.</li>
+<li>Cox, D. A. (2013). <em>Primes of the Form $x^2+ny^2$.</em> 2nd ed., Wiley. — for the divisor-count theorem in $\mathbb{Z}[\omega]$.</li>
+<li>Caspar, D. L. D. &amp; Klug, A. (1962). Physical principles in the construction of regular viruses. <em>Cold Spring Harbor Symp. Quant. Biol.</em> 27, 1–24.</li>
+<li>Nelson, D. R. (2002). <em>Defects and Geometry in Condensed Matter Physics.</em> Cambridge.</li>
+<li>Prigogine, I. (1967). <em>Introduction to Thermodynamics of Irreversible Processes.</em> 3rd ed., Interscience.</li>
+<li>OEIS A002324 — $d_1(n) - d_2(n)$, the number of divisors $\equiv 1$ minus those $\equiv 2 \bmod 3$.</li>
+<li>This corpus: <a href="ch16-crystal-lattice.html">Ch 16 · The Crystalline Lattice</a>; <a href="ch21-the-closing-field.html">Ch 21 · The Closing Field</a>, §21.8; <a href="../book6/wp103-why-six-and-why-not-five.html">WP-103</a>; <a href="../book6/wp104-six-was-an-input.html">WP-104</a>; <a href="../book6/wp105-the-unit-that-inflates.html">WP-105</a>; <a href="../book6/wp29-numerology-sweep.html">WP-29 · The Numerology Sweep</a>.</li>
+</ul>
+
+<div class="chapter-nav">
+  <a href="ch24.html">← Ch 24 · The Bifurcation Set Is a Discriminant</a>
+  <a href="contents.html">Contents →</a>
+</div>
+
+</div>
+
+<div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
+  <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
+  <span style="color:#333">&nbsp;·&nbsp;</span>
+  <span>g6llc@proton.me</span>
+  <span style="color:#333">&nbsp;·&nbsp;</span>
+  <span>+1 (646) 342-3751</span>
+</div>
+</body>
+</html>
