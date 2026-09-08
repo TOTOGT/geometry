@@ -42,13 +42,21 @@
 set -uo pipefail
 PROJ=~/Desktop/geometry
 AUDIT=0
+FULL=0
 OUTDIR=""
-[ "${1:-}" = "--audit" ] && { AUDIT=1; shift; }
-[ "${1:-}" = "--out" ] && { OUTDIR="${2:-}"; shift 2; }
-[ "${1:-}" = "--audit" ] && { AUDIT=1; shift; }
+# Flags in any order, and repeated flags are harmless. The fixed-position form
+# this replaced silently ignored --full when it followed --audit.
+while [ $# -gt 0 ]; do
+  case "${1:-}" in
+    --audit) AUDIT=1; shift ;;
+    --full)  FULL=1;  shift ;;
+    --out)   OUTDIR="${2:-}"; shift 2 ;;
+    *) break ;;
+  esac
+done
 [ -z "$OUTDIR" ] && OUTDIR="$PROJ/tools/verify-audit/$(date +%F)"
 [ $AUDIT -eq 1 ] && mkdir -p "$OUTDIR"
-[ $# -eq 0 ] && { echo "usage: leancheck.sh [--audit] FILE.lean ..."; exit 1; }
+[ $# -eq 0 ] && { echo "usage: leancheck.sh [--audit] [--full] [--out DIR] FILE.lean ..."; exit 1; }
 
 # Resolve every argument to an absolute path BEFORE cd-ing into the project.
 # This used to happen inside the loop, AFTER `cd "$PROJ"`, so a relative
@@ -96,7 +104,19 @@ for f in "${FILES[@]}"; do
       printf "  FAIL  %4ds  %s  (%d errors)\n" $((e-s)) "$(basename "$f")" "$n"
     fi
     fail=$((fail+1))
-    printf '%s\n' "$out" | grep 'error' | head -5 | sed 's/^/          /'
+    # An error line is a LABEL; the part a reader can act on is underneath it.
+    # `unsolved goals` prints the remaining goal on the following lines and
+    # `type mismatch` prints both terms, and the previous form here --
+    # `grep 'error' | head -5` -- kept only the lines carrying the word and
+    # discarded every one of them. Measured 2026-09-08: two runs were spent
+    # re-deriving a goal state the toolchain had already printed and this
+    # script had already thrown away. An instrument must not discard its own
+    # measurement. `--full` prints the untouched output.
+    if [ $FULL -eq 1 ]; then
+      printf '%s\n' "$out" | sed 's/^/          /'
+    else
+      printf '%s\n' "$out" | grep -A 14 -E 'error' | head -70 | sed 's/^/          /'
+    fi
     continue
   fi
 
