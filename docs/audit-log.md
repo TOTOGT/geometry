@@ -4072,3 +4072,71 @@ households that could supply it privately when the school would not. Hansen and
 Reich measured what that produces. A curriculum decision taken in 2026 is a
 statement about who is eligible in 2045, and it is not debated in those terms
 because the people it excludes are not yet old enough to say anything.
+
+## 2026-09-08 — Book 4 Ch 26 · The Kaleidoscope Test; Book 8 joins Book 4
+
+Prompted by evaluating an external framework (Guarino, "plasma mirage",
+SEIS-UGFM) at Pablo's request. The evaluation produced a reusable instrument, so
+the instrument became the chapter and the evaluation stayed conversational.
+
+**The taxonomy.** Three sources of a stable image, each leaving a different bill:
+
+| source | order lives in | dies when | ledger | in this corpus |
+|---|---|---|---|---|
+| recording | the medium's past | read-out is cut | a **capacity** | Book 8's territory |
+| throughflow | the dynamics | energy input stops | a **cost** | Ch 21 §21.8 |
+| boundary | the symmetry group | the container changes | a **count** | Ch 21, Ch 25 |
+
+Recorded en route: the holographic *principle* is the capacity column and has no
+projector in it — degrees of freedom scaling with boundary area, Bekenstein–
+Hawking S = A/4G. Critiques aimed at the optical hologram (reference beam, plate,
+playback) leave it untouched. This is a distinction the corpus should not lose.
+
+**Proposition 26.1, the negative test.** For a one-parameter ladder
+L_c = {c/N}, spacing near f is c/(N(N+1)) ≈ f²/c, so the nearest rung satisfies
+**|rung − f|/f ≤ f/(2c)**. Verified against 200,000 random targets in (1,200) Hz
+at c = 700: **zero violations**. Below 50 Hz such a ladder matches any frequency
+to better than 4%, near 10 Hz to better than 0.8%. A family that matches every
+target excludes none, so it predicts nothing — and the correct response to such
+a fit is not doubt about the fitter but the observation that the family could
+not have failed.
+
+**The contrast, computed.** W(T) = d₁ − d₂ has no free parameter and returns zero
+on a large set (below 40: 2,5,6,8,10,11,14,15,17,18,20,22,23,24,26,29,30,32,33,
+34,35,38). Counted to x = 200,000 the closing field **forbids ~80.6%** of sizes,
+with the permitted fraction → 0 like 1/√(log x). A one-parameter ladder forbids
+**0%** at every x. Opposite extremes of the only property that matters for a
+selection rule — a difference in degrees of freedom, not in rigour or good faith.
+
+**§26.3 is the join Pablo asked for.** Book 8 Ch 13 named the fourth face —
+topology connects the parts, topography maps the surface, holography inscribes
+the whole, holology is the logic by which a totality is coherent as one — and
+closed saying that what holology is in itself "remains structurally invisible
+from inside". Holology is the *boundary* column: a claim about constraint, not
+storage and not drive. Chapters 21 and 25 are the first place in this corpus
+where that constraint is **counted**: μ₆ fixing the admissible defects and
+forcing twelve, W(T) saying how many wholes of each size are permitted. So: it
+was not invisible, it was uncounted, and what made it visible was a norm form
+rather than a better vantage point. The limit is stated in the chapter — one
+instance of a logic is not the logic, so the general claim stays OPEN; the join
+establishes only that holology is the kind of thing that can have a count.
+
+`book8/ch13-holology.html` now carries a forward block into Part VII, so the join
+is navigable from both ends.
+
+**§26.4 turns the test inward,** because a diagnostic written for other people's
+work and never aimed at one's own is a weapon rather than an instrument (WP-29's
+rule). Where the corpus passes: Ch 21's twelve forbids eleven and thirteen; Ch
+25's W forbids four sizes in five; §21.8's cost has a sign fixed by Clausius, not
+by us. Where it does not: α ran for 164 files before anyone noticed a missing
+term, and the entropy §21.8 asked for is named for exactly one system. The §26.2
+objection is explicitly pointed at our own η-ladder and φ material — wherever
+this corpus fits a constant to a phenomenon, the question is what the fit forbids.
+
+Standing rule adopted in §26.4: any claim that a structure is *selected* must
+come with one of the three ledgers, and a count must be able to return zero.
+Otherwise the claim stays marked OPEN.
+
+Part VII now has two chapters. `ch26-verify.py` all checks pass; contents row
+added; ch25 → ch26 forward link; G4 rung regenerated to 0..26 across 17 files,
+0 broken links; terms.py clean.
