@@ -410,6 +410,35 @@ Also note: `wp96-verify.py` reached the repo inside `c933f84`, a Book 4 commit, 
 swept-in file. It is correct and it belongs there, but it was not the subject of that
 commit.
 
+### Book 7 Ch Fy — Feynman, written 2026-09-08
+
+`book7/ch-feynman.html` + `book7/ch-feynman-verify.py` (8 blocks, EXIT=0, numpy only,
+no scipy). The Standard Model path integral read through G = U∘F∘K∘C, continuing the
+Faraday → Maxwell → Einstein → Dirac chain and supplying the Higgs those chapters
+lacked. Forward pointers added to all five predecessors and to WP-96.
+
+The load-bearing new result is §VI: for α = dz − r²dθ and the dm³ field X,
+**α(X) = −2(r−1)²e^{−z}** exactly. So the contact action is a strict Lyapunov
+functional — zero on Γ = {r=1} over any interval, strictly negative on every other
+orbit — and Γ is its global maximum. Also proved: the Reeb field of α is ∂/∂z and has
+**no** closed orbit, so nothing here may invoke Reeb existence theory. Γ is tangent to
+ker α, not transverse to it.
+
+Two things are deliberately NOT claimed and are marked OPEN on the page:
+the Gutzwiller weight 1/(2 sinh 2π) is printed but does not apply (dm³ is dissipative,
+Gutzwiller assumes a Hamiltonian flow); and the cusp result holds only for the
+one-real-field truncation, since the full SU(2)×U(1) potential has a vacuum manifold
+and Arnold's A_k list classifies isolated critical points.
+
+§VIII runs the WP-29 method on this chapter's own near-miss: κ* ≈ 0.882 agrees with
+cos θ_W = 0.881357 to 0.073%, and it is REFUSED — a corpus of ~40 named constants
+against ~25 SM quantities expects 0.32 such matches, so this is the expected one.
+Recorded so the next reader finds the refusal instead of writing the claim.
+
+Note: commit `cc4bbd1` (another session) swept the Feynman index card in `book7/index.html`
+into a Ch Pr commit while this page was still unwritten. The card is correct and it
+belongs there; it was not the subject of that commit.
+
 ### Deliverables that live OUTSIDE this repo
 `~/Documents/Claude/Projects/` holds the A.13 pack (PSD answers, Q26, Q29, DAPR
 checklist, attachment plan, budget review, budget narrative, S/T/M draft, OSDMP +
