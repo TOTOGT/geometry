@@ -224,12 +224,23 @@ What survives is a graded statement: $\Phi^*\alpha_{\text{arith}} - \alpha_{\tex
 | Proposition 4.3, the pole is one-sided | Proved above; residue confirmed numerically |
 | Corollary 4.5, $c(\tfrac12,t)=\vartheta'(t)$ | **Classical** (equivalent to $Z$ real); verified to 25 digits |
 | Parity of the coefficients: $g$ odd in $t$, $c$ even in $t$ | **Proved, machine-checked.** `gCoef_odd_in_t`, `cCoef_even_in_t`, via `Zlog_conj` (conjugation-symmetry of $\zeta'/\zeta$). These are what bridge $s=\sigma+it$ to $1-s=(1-\sigma)-it$ |
-| Reflection laws of §4.5 | **Numerical only**, 30 digits at 7 points. Stated in Lean as `reflection_law`, *admitted* (`sorryAx`) — the sole admitted statement in the file. Carries four hypotheses: $s$ and $1-s$ off the poles of $\Gamma_{\mathbb{R}}$ (the negative even integers, per `Gammaℝ_eq_zero_iff`), and $\zeta(s),\zeta(1-s)\neq 0$. Without them the identity would assert equality of junk values at the zeros, and its truth would depend on where those zeros are |
+| The logarithmic derivative of the functional equation, $\zeta'/\zeta(s) + \zeta'/\zeta(1-s) = \chi'/\chi(s)$ | **Proved, machine-checked** (2026-09-08; admitted since 2026-08-30). `Zlog_add_Zlog_one_sub`, on `[propext, Classical.choice, Quot.sound]`. Proof: $\Lambda(1-s)=\Lambda(s)$ differentiated gives $\operatorname{logDeriv}\Lambda(s) + \operatorname{logDeriv}\Lambda(1-s) = 0$; then $\operatorname{logDeriv}\Lambda = \operatorname{logDeriv}\Gamma_{\mathbb{R}} + \operatorname{logDeriv}\zeta$; then the archimedean factor is read off. Carries four hypotheses: $s$ and $1-s$ off the poles of $\Gamma_{\mathbb{R}}$ (the negative even integers, per `Gammaℝ_eq_zero_iff`), and $\zeta(s),\zeta(1-s)\neq 0$. Without them the identity would assert equality of junk values at the zeros, and its truth would depend on where those zeros are. They are also *sufficient*: at $n=0$ they supply $s\neq0$ and $s\neq1$, the two points where $\zeta$ and $\Lambda$ are not differentiable |
+| $\operatorname{logDeriv}\Gamma_{\mathbb{R}}(s) = -\tfrac12\log\pi + \tfrac12\psi(s/2)$ | **Proved, machine-checked.** `logDeriv_Gammaℝ`. Stated in terms of `Gammaℝ` and `digamma` only, both of which are Mathlib's; **no result of this kind is in Mathlib**, whose `RiemannZeta` file carries the functional equation in three forms and differentiates none of them |
+| Reflection laws of §4.5 | **Proved, machine-checked.** `reflection_law`, on `[propext, Classical.choice, Quot.sound]`. It was proved on 2026-08-30 *from* the row above while that row was admitted; the input is now proved, so the law is. The numerical agreement that stood in place of the proof — 30 digits at eight points, $\sigma \in \{0.3, 0.5, 0.8, 1.1, 1.5, 2.3\}$, $t$ from 0.7 to 25, maximum deviation $8.8\times10^{-16}$ — is retained as a record and is no longer load-bearing |
 | $\chi'/\chi$ real on $\sigma=\tfrac12$ | **Proved, machine-checked.** `chiLog_real_on_critical_line`, on `[propext, Classical.choice, Quot.sound]`. At $s=\tfrac12+it$ the two digamma arguments are complex conjugates, so their sum is real; supported by `digamma_conj` ($\psi(\bar s)=\overline{\psi(s)}$) and `one_sub_conj` ($1-s=\bar s$ exactly on the critical line), both proved |
 | Proposition 4.6, failure of contactomorphism | Argued, not formalised |
 | Global positivity (§6), and RH itself | **Open.** Nothing here bears on it |
 
-Lean source: `TOTOGT/GTCT`, `book4/ZetaReflection.lean`.
+Lean source: `TOTOGT/GTCT`, `book4/ZetaReflection.lean` — 18 theorems, **no `sorryAx`**, axiom
+report at `geometry/tools/verify-audit/2026-09-08/ZetaReflection.axioms.txt`, written by the gate
+run rather than transcribed. The route, and the five runs and corrections it took, are in
+`book4/ZetaFELogDeriv.lean`, kept as the development record.
+
+**What the closure does not do.** The file no longer contains an admitted statement, and that is a
+fact about this file and not about the problem. Every row above concerns the *coefficients* of the
+arithmetic contact form and how they transform; none of them bounds anything, and the last row of
+this table is unchanged. A reader who takes "no `sorryAx` anywhere" as movement on §6 has read the
+table as a column of ticks, which is the exact failure the note below is about.
 
 **A note on why this table is the load-bearing part.** The rows above are not sorted by
 importance but by *how each claim is known*, and the four kinds are not interchangeable. A
@@ -240,6 +251,9 @@ which is evidence and not proof. A classical row rests on the literature, and an
 rests on the author. Collapsing these into a single column of ticks is the most common way a
 document of this kind becomes untrustworthy while every individual sentence in it stays true.
 The taxonomy is developed at length in Book 3, Chapter 44 [15].
+
+The two rows that moved on 2026-09-08 moved *between* kinds, from numerical to machine-checked, and
+that is the only kind of movement this table is built to show. Nothing moved from open to closed.
 
 
 ### 4.7 What autumn 2026 changed in the analytic line, and what it did not
