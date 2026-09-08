@@ -133,8 +133,26 @@ for f in "${FILES[@]}"; do
   rep="$OUTDIR/$(basename "${f%.lean}").axioms.txt"
   # Keep the wrapped continuation lines: axiom_gate.py rejoins them, and a
   # line-oriented grep here would truncate a long list exactly as CI run #245 did.
-  lake env lean "$probe" 2>&1 | grep -E "^'|^ +[A-Za-z]" > "$rep"
+  probe_out=$(lake env lean "$probe" 2>&1)
+  printf '%s\n' "$probe_out" | grep -E "^'|^ +[A-Za-z]" > "$rep"
   tot=$(grep -cE "^'" "$rep")
+  # An EMPTY REPORT IS NOT A PASS. Until 2026-09-08 this branch did not exist:
+  # if the probe failed to elaborate, the grep matched nothing, a 0-byte artefact
+  # was written to verify-audit/, and the run still printed OK. That is a gate
+  # reporting success on a measurement it did not make, and a 0-byte file in the
+  # evidence directory is indistinguishable from a file that was never checked --
+  # which is the exact defect --audit was introduced to remove. Measured on
+  # ZetaFELogDeriv.lean: file compiled, seven declarations extracted correctly,
+  # report 0 bytes, wrapper said OK.
+  if [ "$tot" -eq 0 ]; then
+    printf "        audit: NO DECLARATIONS REPORTED — probe produced no axiom lines\n"
+    printf "        the probe output, first 20 lines:\n"
+    printf '%s\n' "$probe_out" | head -20 | sed 's/^/          /'
+    printf "        probe kept for inspection: %s\n" "$probe"
+    printf "        report: %s  (EMPTY — do not commit as evidence)\n" "${rep#$PROJ/}"
+    fail=$((fail+1)); pass=$((pass-1))
+    continue
+  fi
   if python3 "$PROJ/tools/axiom_gate.py" "$rep" "$tot" > "$rep.gate" 2>&1; then
     printf "        audit: %d declarations, all within the permitted three\n" "$tot"
   else
