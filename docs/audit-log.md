@@ -3688,3 +3688,81 @@ Also added: the Landau–Ramanujan count of closable sizes,
 x = 2×10⁶ the ratio reads 0.670 and is still falling slowly toward it.
 
 `ch25-verify.py` extended with section [7]; all checks pass. Zero broken links.
+
+## 2026-09-08 — Book 3 grows to 43, and the second place the number lived
+
+### A correction first: the chapter did not exist
+
+My handoff list carried "The Term You Set to Zero — written, renders, points at
+§21.8, still unplaced" through several turns. It was never written to disk.
+`git log --all --diff-filter=A` finds no such file ever added, and
+`--diff-filter=D` finds none removed. It lived only in a previous session's
+context and my note promoted it to a file. Written properly today.
+
+### And a second correction: the insertion cost was never real
+
+I twice described placing it at roster position 6 as triggering "an `of 42` →
+`of 43` pass across 42 files", and used that cost to argue for appending at the
+end instead. **`tools/build_book3.py` generates the b3nav rung** — the line
+`f'{c["n"]} of {len(chapters)}'` at line 118 — so the whole pass is one JSON edit
+plus `--write`. The tool's own docstring says so: *a derived fact is regenerated,
+never maintained.* I had argued against an insertion on the grounds of a manual
+cost the repository had already automated away.
+
+With the mechanical objection gone the placement is purely editorial, and
+Pablo's original intent wins: he asked for this chapter in Book 3 "so it comes
+earlier then here". Inserted at **position 6**, immediately after
+`ch05-contact-normal-form.html` — the student meets the omission at the moment
+the form is written down, not several hundred pages downstream in another book.
+Week 3, phase C, level B1, matching its neighbours.
+
+### The chapter
+
+`ch-term-set-to-zero.html`, ~1,500 words. α = dz − r²dθ is the Gibbs form with
+T dS deleted; the deleted term was carrying the arrow of time (Clausius fixes
+the sign, not convention) and the entropy budget (−α(γ̇)/T is what the process
+cost). Which is why nothing in dm³ ever appears to cost anything: on an adiabat,
+nothing is.
+
+Its spine is a census, taken by script over 685 files:
+
+| | files | |
+|---|---|---|
+| `contact form` | 150 | the restricted object |
+| `Reeb` | 143 | its vocabulary |
+| `entropy` | 60 | the word, used elsewhere |
+| `adiabatic` | 4 | the name of the restriction |
+| `Clausius` | 5 | the inequality supplying the sign |
+| `set to zero` | **0** | — |
+| `we assume … = 0` | **0** | — |
+| `neglect` | 7 | none of them about α |
+
+150 files write the restricted object; 4 name the restriction; **0** record that
+a restriction was made. The chapter's four rules for crossing something out come
+out of that asymmetry, and rule 4 is the census itself: a corpus that can count
+how often it says *adiabatic* against how often it uses the adiabatic form can
+audit itself; one that cannot, cannot.
+
+### The second location
+
+After `--write`, 23 files still read "of 42". The position is stated **twice**
+per chapter — the generated `nav.b3nav`, and a hand-written
+`<p class="chapter-label">Chapter n of 42</p>` in the hero. Only the first was
+generated. That is precisely the drift `build_book3.py` was written to kill,
+surviving in a location the tool did not know about.
+
+Extended the tool rather than fixing 23 files: `chapter_label()`,
+`write_chapter_labels()` and `label_drift()`, wired into both the report and
+`--write`. It found and rewrote **25** stale labels (23 at "of 42" plus two the
+insertion shifted). Reruns clean: *all 43 chapters carry a current taught-order
+nav; all 43 hero labels match the roster.* Corpus-wide `of 42` count: 0.
+
+Also repointed `ch05-contact-normal-form.html`'s bottom in-page nav to the new
+chapter. `ch02-biological.html` has no bottom nav at all — pre-existing legacy
+shape, and the generated rung is authoritative, so left alone.
+
+**The standing lesson, and it is the session's third variant.** Before arguing
+that a change is expensive, check whether the repository already automates it.
+I have now twice mis-scoped work in this repo by reading the artefact instead of
+the tool that generates it — the rung this morning, the roster insertion this
+afternoon. The tools here are better than my estimates of them.
