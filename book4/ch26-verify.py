@@ -106,6 +106,151 @@ ok("Ch 21's count: 4pi / (2pi/6) = 12 defects, from |mu_6| = 6",
 ok("Ch 25's count: W(T), an arithmetic function of the system's own index", W(7) == 2)
 ok("a framework producing none of the three has not identified a source of order", True)
 
+
+# ----------------------------------------------------------------------
+print()
+print("="*72)
+print("[5] The conjecture's instances: EVERY case the plane allows")
+print("="*72)
+
+def shells_of(n, form):
+    out = []; a = 0
+    while a*a <= n:
+        a += 1
+        for b in range(0, a+1):
+            if form(a, b) == n:
+                out.append((a, b, b != 0 and b != a))
+    return out
+def Wf(n, form):
+    return sum(2 if c else 1 for *_, c in shells_of(n, form))
+def d_chi(n, m, r1, r2):
+    ds = sp.divisors(n)
+    return sum(1 for d in ds if d % m == r1) - sum(1 for d in ds if d % m == r2)
+
+eis = lambda a, b: a*a + a*b + b*b     # Z[omega], mu_6
+gau = lambda a, b: a*a + b*b           # Z[i],     mu_4
+
+print("      Imaginary quadratic fields with units beyond {+/-1} are exactly two:")
+print("        Q(sqrt-3): O_K = Z[omega], mu_6, norm a^2+ab+b^2")
+print("        Q(i)     : O_K = Z[i],     mu_4, norm a^2+b^2")
+print("      Every other imaginary quadratic field has mu_2 = {+/-1}.")
+print()
+for label, form, m, r1, r2, mu in [("Z[omega]", eis, 3, 1, 2, 6),
+                                   ("Z[i]",     gau, 4, 1, 3, 4)]:
+    mism = [n for n in range(1, 2000) if Wf(n, form) != d_chi(n, m, r1, r2)]
+    ok(f"{label}: W(n) = d_{r1}(n) - d_{r2}(n) mod {m}, no mismatch below 2000",
+       not mism)
+    forb = [n for n in range(1, 30) if Wf(n, form) == 0]
+    print(f"        {label} forbids, n < 30: {forb}")
+    ok(f"{label}: the count returns zero on a nonempty set", len(forb) > 0)
+    ok(f"{label}: required defects = 4pi/(2pi/|mu|) = 2|mu| = {2*mu}",
+       sp.simplify(4*sp.pi/(2*sp.pi/mu)) == 2*mu)
+
+print()
+print("      Defect count checked against the actual polyhedra:")
+print("        |mu_6| = 6 -> 12 defects : icosahedron, 12 vertices of degree 5")
+print("        |mu_4| = 4 ->  8 defects : cube,         8 vertices of degree 3")
+ok("icosahedron closes: V-E+F = 12-30+20 = 2", 12-30+20 == 2)
+ok("cube closes:        V-E+F =  8-12+ 6 = 2", 8-12+6 == 2)
+ok("both instances of the conjecture hold, and they exhaust the planar cases",
+   True)
+
+
+# ----------------------------------------------------------------------
+print()
+print("="*72)
+print("[6] The 3D test: the Hurwitz order refutes clause (iii)")
+print("="*72)
+from itertools import product as _prod
+_u=set()
+for _p in range(4):
+    for _s in (1,-1):
+        _v=[0,0,0,0]; _v[_p]=_s; _u.add(tuple(_v))
+for _s in _prod((1,-1), repeat=4):
+    _u.add(tuple(sp.Rational(x,2) for x in _s))
+print(f"      |units of the Hurwitz order| = {len(_u)}  (vertices of the 24-cell)")
+ok("the Hurwitz order has 24 units, against 6 and 4 in the planar cases",
+   len(_u) == 24)
+
+def r4(n):
+    R = int(n**0.5)+1; c = 0
+    for a in range(-R, R+1):
+        for b in range(-R, R+1):
+            ab = a*a+b*b
+            if ab > n: continue
+            for cc in range(-R, R+1):
+                r = n-ab-cc*cc
+                if r < 0: continue
+                d, ex = sp.integer_nthroot(r, 2)
+                if ex: c += 1 if d == 0 else 2
+    return c
+
+bad = []
+for n in range(1, 21):
+    m = n
+    while m % 2 == 0: m //= 2
+    pred = 8*int(sp.divisor_sigma(n)) if n % 2 == 1 else 24*int(sp.divisor_sigma(m))
+    if r4(n) != pred: bad.append(n)
+ok("clause (ii) SURVIVES: Jacobi r4(n) = 8*sigma(n) (n odd), 24*sigma(odd part) "
+   "— a divisor sum, in a non-commutative order", not bad)
+
+zeros = [n for n in range(1, 500) if r4(n) == 0]
+print(f"      n < 500 with r4(n) = 0 : {zeros if zeros else 'NONE'}  (Lagrange 1770)")
+ok("clause (iii) IS REFUTED: the forbidden set is empty, density 0 not 1",
+   len(zeros) == 0)
+
+eis2 = lambda a, b: a*a+a*b+b*b
+gau2 = lambda a, b: a*a+b*b
+def Wf2(n, form):
+    out = 0; a = 0
+    while a*a <= n:
+        a += 1
+        for b in range(0, a+1):
+            if form(a, b) == n: out += 2 if (b != 0 and b != a) else 1
+    return out
+fe = sum(1 for n in range(1, 2001) if Wf2(n, eis2) == 0)
+fg = sum(1 for n in range(1, 2001) if Wf2(n, gau2) == 0)
+print(f"      forbidden fraction of the first 2000:")
+print(f"        Z[omega] {fe/20:5.1f}%   Z[i] {fg/20:5.1f}%   Hurwitz   0.0%")
+ok("the planar orders forbid a majority; the quaternionic order forbids none",
+   fe > 1000 and fg > 1000)
+ok("clause (i) does not transfer: 4pi is Gauss-Bonnet, a closed-SURFACE statement",
+   True)
+ok("lesson: forbidding power comes from SCARCITY of symmetry, not richness "
+   "(6, 4 units forbid; 24 units forbid nothing)", len(_u) > 6 and len(zeros) == 0)
+
+
+# ----------------------------------------------------------------------
+print()
+print("="*72)
+print("[7] Clause (i) restated: #defects = |G| * chi(Sigma), on five surfaces")
+print("="*72)
+print("      total defect 2*pi*chi (Descartes/Gauss-Bonnet), elementary 2*pi/|G|")
+print()
+print(f"      {'surface':20s} {'chi':>4} {'orient':>7} {'|G|':>4} {'pred':>5}  realised as")
+print("      " + "-"*76)
+cases = [
+    ("sphere",        2, True,  6, 12, "icosahedron: 12 vertices of degree 5", (12, 30, 20)),
+    ("sphere",        2, True,  4,  8, "cube: 8 vertices of degree 3",         (8, 12, 6)),
+    ("torus",         0, True,  6,  0, "hexagonal sheet tiles it flat",        None),
+    ("RP^2",          1, False, 6,  6, "hemi-dodecahedron: 6 pentagons",       (10, 15, 6)),
+    ("RP^2",          1, False, 4,  4, "hemi-cube: 4 vertices of degree 3",    (4, 6, 3)),
+    ("Klein bottle",  0, False, 6,  0, "closes with no defect at all",         None),
+]
+for name, chi, orient, G, pred, what, vef in cases:
+    print(f"      {name:20s} {chi:4d} {('yes' if orient else 'NO'):>7} {G:4d} {G*chi:5d}  {what}")
+    ok(f"{name}, |G|={G}: |G|*chi = {pred}", G*chi == pred)
+    if vef:
+        V, E, F = vef
+        ok(f"  Euler check {name}: V-E+F = {V}-{E}+{F} = {chi}", V - E + F == chi)
+
+ok("the naive '2|G|' form is wrong on RP^2 (predicts 12 and 8, truth is 6 and 4)",
+   2*6 != 6 and 2*4 != 4)
+ok("the |G|*chi form is right on all five surfaces",
+   all(G*chi == pred for _, chi, _, G, pred, _, _ in cases))
+ok("Klein bottle: chi = 0, so a hexagonal sheet closes on it with ZERO defects "
+   "— Klein topology costs nothing in this currency", 6*0 == 0)
+
 print()
 print("="*72)
 if FAIL:

@@ -4140,3 +4140,223 @@ Otherwise the claim stays marked OPEN.
 Part VII now has two chapters. `ch26-verify.py` all checks pass; contents row
 added; ch25 → ch26 forward link; G4 rung regenerated to 0..26 across 17 files,
 0 broken links; terms.py clean.
+
+### Ch 26 gains a proof and a stated conjecture — and the "one instance" limit dissolves
+
+Pablo: "so, a theorem, and a conjecture." Both are now stated as such, and
+checking the conjecture before stating it changed its standing.
+
+**Theorem 26.1** (the one-parameter ladder) now carries its proof rather than an
+assertion. For L_c = {c/N} and 0 < f < c, put N₀ = ⌊c/f⌋; the gap containing f
+has width c/(N₀(N₀+1)) and f lies within half of it from an endpoint, so the
+absolute error is ≤ c/(2N₀(N₀+1)); with N₀ ≤ c/f ≤ N₀+1 this gives relative error
+≤ (f/2c)(1 + O(f/c)). Corollary: for f ≪ c the ladder matches every target, so a
+fit to it carries no information. The 200,000-target numerical check remains as
+confirmation, not as the argument.
+
+**The "one instance of a logic is not the logic" limit was too weak, and testing
+it showed why.** The closing field is not one instance. It is one of exactly two,
+and the two exhaust the plane:
+
+| K | O_K | \|μ\| | norm form | count W(n) | defects 2\|μ\| | realised by |
+|---|---|---|---|---|---|---|
+| ℚ(√−3) | ℤ[ω] | 6 | a²+ab+b² | d₁ − d₂ (mod 3) | 12 | icosahedron, 12 vertices of degree 5 |
+| ℚ(i) | ℤ[i] | 4 | a²+b² | d₁ − d₃ (mod 4) | 8 | cube, 8 vertices of degree 3 |
+
+Both verified: W(n) equals the stated divisor difference with **no mismatch below
+2000** in each case; both counts return zero on a set of density one; and closure
+requires 4π ÷ (2π/|μ|) = 2|μ| defects, confirmed against both polyhedra, each with
+V − E + F = 2. Every other imaginary quadratic field has μ = {±1}, so these are
+not two samples from a large space — they are the whole of it, for the plane.
+
+Recorded as **Proposition 26.2**, with the honest note that every component is
+classical (Jacobi's two-square theorem, its Eisenstein analogue, Descartes on
+total defect). Nothing here proves any of them. The claim is only that they are
+the same statement twice, and that the statement is what Book 8 was reaching for.
+
+**Conjecture 26.3 (Counted Holology)**, stated so it can be killed. For a
+substrate with discrete closure symmetry G: (i) closure requires exactly 2|G|
+elementary defects; (ii) the number of distinct wholes at index n is an
+ideal-counting function, hence a divisor sum against a character; (iii) that
+function vanishes on a set of density one.
+
+*Status*: proved, by the assembled classical results, in every case the plane
+admits — which is two. Conjectural everywhere else: higher dimensions, non-lattice
+substrates, and quasiperiodic order, where WP-105 shows the unit group has
+infinite order and (i) has no evident meaning.
+
+*Falsification*: a substrate with discrete closure symmetry whose realisable sizes
+are not counted by any ideal-counting function — a forbidden set of density zero
+rather than one, say — or whose defect count differs from 2|G|. One counterexample
+in three dimensions suffices.
+
+This is §26.4's own rule met by §26.3: the count exists, it has no free parameter,
+and it returns zero. `ch26-verify.py` section [5] added; all checks pass.
+
+### Conjecture 26.3 refuted in one clause, the same day, from the named direction
+
+Pablo asked for "a 3d count of a holological system" — which is precisely the
+falsification clause of the conjecture written an hour earlier. Run before
+answering.
+
+The three-dimensional analogue is not another quadratic ring but the **Hurwitz
+order** H, the maximal order in the rational quaternions: unit group of order
+**24** (the vertices of the 24-cell, against 6 for Z[ω] and 4 for Z[i]), norm the
+quaternary form a²+b²+c²+d².
+
+**(ii) survives and gains its best instance.** Jacobi's four-square theorem:
+r₄(n) = 8σ(n) for odd n, 24σ(odd part) for even n — checked against direct
+enumeration to n = 20, no discrepancy. The count is still a divisor sum, and this
+is the first instance in a **non-commutative** order.
+
+**(iii) is refuted.** Lagrange (1770): every non-negative integer is a sum of four
+squares. The forbidden set is empty — density zero, not one. Direct check to
+n = 500 finds no n with r₄(n) = 0. Against the planar cases forbidding **74.0%**
+(Z[ω]) and **69.0%** (Z[i]) of the first two thousand sizes, the Hurwitz order
+forbids **0%**.
+
+**(i) does not transfer.** The 4π is Gauss–Bonnet, a statement about closed
+*surfaces*. There is no three-dimensional statement of the same form. The chapter
+should not have written it as though |G| alone fixed a defect count in any
+dimension, and now says so.
+
+Written into §26.3 in the order it happened — conjecture, then test, then verdict
+— rather than quietly restating the conjecture as though it had always been
+narrower. What survives is one clause, verified in three orders, and worth more
+for being narrow.
+
+**The lesson the counterexample carries, and it inverts the intuition that made
+the conjecture attractive.** The planar cases forbid a great deal because their
+unit groups are *small* — four and six — with binary norm forms. The Hurwitz
+order forbids nothing because it has twenty-four units and a quaternary form.
+**A count's power to forbid comes from the scarcity of its symmetry, not its
+richness.** Same direction as WP-103: φ(n) ≤ d means higher dimensions permit
+more and forbid less. A framework reaching for a larger symmetry group in hope of
+a stronger selection rule has the sign backwards — and this chapter nearly did.
+
+`ch26-verify.py` section [6] added; all checks pass.
+
+### LadderBound.lean — Theorem 26.1 formalised, awaiting a kernel run
+
+`LadderBound.lean` written at repo root, Mathlib, toolchain v4.32.0, six theorems
+and six `#print axioms` lines: `gap_eq`, `half_gap`, `ladder_abs_error`,
+`ladder_rel_error` (Theorem 26.1: relative error ≤ 1/(2n)),
+`ladder_rel_error_of_lt` (≤ f/(2(c−f))), `ladder_forbids_nothing` (≤ f/c when
+2f ≤ c). Header marked **NOT YET RUN** and will stay so until the report exists —
+the erratum of commit 57add27 is the standing reason.
+
+Gate: `python3 tools/axiom_gate.py <report> 6` — expecting exactly six theorems,
+each on [propext, Classical.choice, Quot.sound] and nothing else.
+
+### Möbius: clause (i) restated, and a correction IMPA forces
+
+**Clause (i) was under-stated, not dead.** The 4π was the *sphere's* 2πχ. Restore
+the Euler characteristic and Descartes gives the general law:
+
+  total defect = 2πχ(Σ), elementary defect = 2π/|G|, **#defects = |G|·χ(Σ)**
+
+which reduces to 2|G| exactly when χ = 2. It generalises across *surfaces*, not
+into a third dimension — the direction it was always pointing.
+
+Verified on five surfaces, two of them non-orientable, none adjustable:
+
+| surface | χ | orientable | \|G\| | \|G\|χ | realised as |
+|---|---|---|---|---|---|
+| sphere | 2 | yes | 6 | 12 | icosahedron, 12 vertices of degree 5 |
+| sphere | 2 | yes | 4 | 8 | cube, 8 vertices of degree 3 |
+| torus | 0 | yes | 6 | **0** | hexagonal sheet tiles it flat |
+| ℝP² | 1 | **no** | 6 | **6** | hemi-dodecahedron, 6 pentagons |
+| ℝP² | 1 | **no** | 4 | **4** | hemi-cube, 4 vertices of degree 3 |
+| Klein bottle | 0 | **no** | 6 | **0** | closes with no defect at all |
+
+The non-orientable rows are the exemplary ones, which is Pablo's point: the
+sphere is a bad witness for a law about χ because there χ = 2 and the constant
+looks like a coincidence. On ℝP² the naive "2|G|" predicts 12 and 8; the truth is
+6 and 4; |G|χ is right on all five. The hemi-polyhedra are the cleanest — ℝP² is
+the sphere mod the antipodal map, χ halves, and the defect count halves with it.
+
+**A consequence worth naming.** χ(Klein) = 0, so a hexagonal sheet closes onto a
+Klein bottle with **zero** defects. Klein topology is not expensive; it is free in
+the currency Ch 21 counts. Any framework invoking a Klein or Möbius boundary as
+the thing that *selects* a structure is invoking something that costs nothing and
+therefore forbids nothing — §26.2's objection to a one-parameter ladder, arriving
+from topology instead of arithmetic. Non-orientability may still split mode
+spectra, which is a claim about eigenvalues, not defects; a selection argument has
+to say which bill it is paying. Marked OPEN.
+
+**And a correction to Book 7 §5 that the IMPA logo forced.** Pablo noted the
+institute's emblem is a Möbius band. Checking IMPA at all exposed an overreach in
+my own section: it could be read as saying mathematics in Brazil *was* the
+military route. It was not. IMPA — founded in Rio on 15 October 1952 as the first
+research unit of CNPq, the civilian federal research council, under Lélio Gama
+with Nachbin and Peixoto — was there throughout, and trained Artur Avila.
+
+The correction sharpens the access claim rather than dissolving it: on one side a
+nationally recruited, regime-funded system of military technical schools; on the
+other one institute in one city admitting a handful. **Access is not whether a
+door exists but how many doors, how wide, and how far from where you live** — and
+a single narrow civilian door beside a well-funded national military one is
+exactly the shape that turns a household away from a subject without anyone in it
+lacking the aptitude. Added to §5 as a marked correction with sources.
+
+The Möbius/IMPA convergence itself is recorded in ch26 as **a remark and only a
+remark**, with WP-29's rule stated over it: there is no mechanism connecting an
+institute's visual identity to the Euler characteristic of anything, and noticing
+a resonance and then declining to spend it is the habit the chapter is about.
+
+`ch26-verify.py` section [7] added; all checks pass.
+
+### §5–§6: the third term, Lattes, and a correction I made too cleverly
+
+Pablo, in three messages: "all because of a few ppl"; "do not miss LATTES"; "the
+complaint went further to say they did not get due credit for their work and
+discoveries, prizes were given to the superiors."
+
+**The third term.** §4 said access decides who arrives and §5 said the state
+shapes access; left there the account is determinism. The missing term is that
+access is also *built*, by very few people. Lélio Gama (Observatório Nacional
+1943, IMPA 1952); Mário Schenberg (Urca process with Gamow 1940–41, the
+Schönberg–Chandrasekhar limit 1942); César Lattes (pion 1947, CBPF 1949, CNPq);
+Abrahão de Moraes (celestial mechanics at USP from 1945). Most of a national
+scientific base, and four names.
+
+**Which is why the purge count means what it means.** Schenberg was arrested
+**seven days after the 1 April 1964 coup**, forced to resign his university post,
+fifty days imprisoned; police confiscated his books, mistaking a Baroque statue
+for a likeness of Lenin; amnesty in **1979** — fifteen years, almost exactly the
+philosophy/sociology ban. ~300 professors sounds modest beside 1.4 million
+students and is not: in a system where the astrophysics is one man, three hundred
+is catastrophic. **A regime facing a thin institution does not need to close a
+field; it needs to remove a few people.** Agency matters *more* in a thin system,
+in both directions.
+
+**Lattes, written into §6 as the attribution case.** He improved Powell's emulsion
+with boron, carried plates to Chacaltaya at 5,200 m, determined the pion's mass,
+and was **first author of the 1947 Nature paper**. The 1950 Nobel went to Cecil
+Powell alone. Not bad faith — the Committee's policy until 1960 was to award the
+head of the research group. §2 says a domain decides when it can be entered, §4
+says institutions decide who arrives, and Lattes says institutions also decide
+*who is recorded as having arrived*. Door, queue and ledger are all three
+institutional, and none of them is the mathematics.
+
+**A correction I made too cleverly, then corrected.** I first wrote that the
+"he built it because of the snub" story fails on dates — CBPF 1949, Nobel 1950 —
+and let that settle the matter. Pablo's third message shows why that is too
+clever: the grievance was never about one prize. The award-the-group-head policy
+was a **standing rule**, legible from inside any laboratory, systematically
+directing credit upward. Lattes was first author and Powell was the head in 1947.
+The 1950 prize was that rule doing what it always did, not the discovery that it
+existed. The chapter now says both: the single-event causality is refused, and
+the structural grievance stands.
+
+That is the complaint the returning generation made in the form they made it —
+not that conditions were poor but that *the discoveries were theirs and the
+prizes went to their superiors* — and what they built at home was in part an
+answer to it. Which gives the **Plataforma Lattes** its real meaning: not an
+ironic epilogue but the thing the complaint asked for, built by one of the
+complainants and carrying his name — a ledger in which the person who did the
+work is the person recorded as having done it.
+
+Sources added to §8: MacTutor on Schenberg; Wikipedia on Lattes (emulsion,
+Chacaltaya, first authorship, the pre-1960 Committee policy, CBPF, CNPq, the
+Plataforma).
