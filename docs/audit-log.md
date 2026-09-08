@@ -3766,3 +3766,65 @@ that a change is expensive, check whether the repository already automates it.
 I have now twice mis-scoped work in this repo by reading the artefact instead of
 the tool that generates it — the rung this morning, the roster insertion this
 afternoon. The tools here are better than my estimates of them.
+
+## 2026-09-08 — Book 7 · Chapter Pr · What a Child Can Enter
+
+Opens a new Vol VII section, "The Door Before the Life", as the slot the prodigy
+entries go into. Pablo's framing: the ninth volume exists and has its part about
+authors, but those are the other kind — the ones with life experience — so Book 7
+gets the chapter that opens the question.
+
+**The argument is about domains, not children,** which is what makes it ours
+rather than a summary of somebody's literature. Vol VII holds 34 people in five
+sections built by subject, and reading the roster against one question —
+*could a twelve-year-old have done this?* — splits it in two along a line that
+ignores every section heading. Ramanujan, Hamilton, Noether, Mirzakhani,
+Kovalevskaya, Tao: yes, in the sense that nothing in the material forbids it.
+The Writers section: no, and not by a little. Ramos's material is the sertão and
+the prison, dos Anjos's is his own body failing, Levi's is Monowitz.
+
+§2 states the proposal so it can fail: **a domain admits prodigies when its rules
+are complete, available, and independent of having lived.** Chess, notation and
+tonal harmony, mathematics. The excluded domains fail only the third condition —
+craft can be taught, material cannot be handed over, because the material is a
+life. Predicts that apparent exceptions resolve into either a formal sub-skill
+mistaken for the domain (technical facility is not musicianship) or a constructed
+story.
+
+**§3 is the part that keeps it honest,** and both halves were already in this
+gallery. Terence Tao: university mathematics at 9, IMO bronze/silver/gold at
+10/11/12 and still the youngest winner of each, Flinders at 16, PhD Princeton
+1996 under Stein at 21, Fields 2006. June Huh: dropped out at 16 to write poetry,
+SNU 2002, Hironaka's course in his sixth year, PhD Michigan 2014 under Mustață at
+31, Fields 2022. Same domain, same medal, entry at 9 and at ~23. So the door is
+open **early**, not **only early** — and Huh is the counterexample the proposal
+survives, which is worth more than one it never met.
+
+§4 gives the literature its due: Feldman & Goldsmith's co-incidence theory
+(*Nature's Gambit*, 1986) — a prodigy is an improbable convergence of ordinary
+factors, and "a child raised in a family of mathematicians" is three or four of
+them arriving in one household. With the uncomfortable corollary stated: their
+distribution measures access at least as much as it measures children. Ruthsatz
+on working memory and attention to detail over general IQ, with profiles
+differing by domain.
+
+**§5 sets the attribution standard before the entries rather than after an
+erratum**, using our own caught case: the video account of Bhargava arriving at
+n(n+1)(n+2)/6 by stacking oranges, where the formula is Āryabhaṭa's *citighana*,
+*Gaṇitapāda* 21, 499 CE. Nothing against Bhargava; everything against the genre,
+which wants a scene of spontaneous discovery and will supply one. Five rules
+follow, including: look for prior art *before* the sentence is written, and where
+the subject is a child, write about the domain and the work rather than the child
+as spectacle.
+
+**A check that went the right way.** A fetched summary told me Huh's PhD was
+2011; `ch-huh.html` says 2014. I nearly filed that as an error in an existing
+chapter. Wikipedia confirms 2014, under Mustață, at 31 — the chapter was right
+and my single summarised fetch was wrong. Lesson: one fetch is not a source, and
+an existing chapter gets checked against a reference before it gets corrected.
+
+Also fixed on the way: my first index insertion put the card orphaned outside the
+`sci-grid` and immediately before the Writers `<h2>`. Rebuilt as its own section
+with heading, intro and grid. Book 7's index is being edited by another session
+(a Feynman card, +7 lines); this insert is in a different region and does not
+touch it.
