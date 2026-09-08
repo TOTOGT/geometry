@@ -3464,3 +3464,106 @@ one that claims four; the empty cell is the reason to believe the other four.
 
 One secondary correction while checking: a search summary dated Halāyudha to
 the 13th century. Both the primary-facing sources give the 10th. Used the 10th.
+
+## 2026-09-08 — Two corrections and one result
+
+**1. The G3 rung is not broken. I mischaracterised it.**
+
+I had this on the open list as "shows 15 where Book 3 has 42, 5 of those 15
+aren't in the roster, 32 roster chapters unreachable." Checked properly against
+`tools/book3_roster.json`:
+
+- all 42 roster files exist on disk
+- all 42 carry a `nav.b3nav` rung
+- **0** rungs disagree with the roster — position ("n of 42"), previous chapter,
+  next chapter and the journey link are correct in every one
+
+The taught path is complete and correct, and every chapter is reachable by
+walking it. What I was actually looking at is the *other* nav, the `.nav-links`
+series bar, which is a different element with a different job. There the union
+over Book-3 files reaches 15 roster chapters and 15 non-roster pages, in three
+incompatible shapes (23 files with a 9-link bar, 8 with a 20-link bar, 1 with
+2 links, 10 with none). That is real inconsistency but it is not a broken
+reading path, and cramming 42 links into a top bar would not improve it. The
+item as I wrote it was wrong; downgraded from "regenerate 55 files" to "make
+the secondary bar consistent", which is a smaller and more honest job.
+
+**2. φ is the smallest fundamental unit of any real quadratic field.**
+
+Computed over every squarefree d < 300: the minimum of ε > 1 is d = 5,
+ε = 1.618034 = φ; the next is d = 2, ε = 1+√2 = 2.414214. So among all the
+inflations the plane makes available, **φ is the gentlest one there is.**
+
+This matters because it unifies two arguments that land on φ by what look like
+different routes:
+
+- *Diophantine.* φ is the worst-approximable irrational — Hurwitz's constant √5
+  is optimal and fails to improve exactly for φ and its equivalents. This is why
+  phyllotaxis: a divergence angle that is hard to approximate by a rational is
+  an angle at which leaves never line up.
+- *Algebraic.* φ is the fundamental unit of ℚ(√5) = ℚ(ζ₁₀)⁺, hence the
+  inflation factor of the Penrose and decagonal tilings (WP-105 §5).
+
+These are the same fact. The continued fraction [1;1,1,1,…] is simultaneously
+the slowest-converging expansion (worst approximable) and the shortest possible
+period (smallest unit). φ is the extreme point of one problem, not the shared
+answer to two.
+
+**Douady & Couder**, *Phys. Rev. Lett.* **68**, 2098–2101 (30 March 1992),
+"Phyllotaxis as a Physical Self-Organized Growth Process": ferrofluid drops in
+silicone oil under a vertical magnetic field with a radial gradient
+self-organise to a divergence angle converging on 137.5°. No biology anywhere
+in the apparatus. Follow-up: "Static and Dynamical Phyllotaxis in a Magnetic
+Cactus", *PRL* **102**, 186103 (2009).
+
+**The boundary this does not cross.** Two mechanisms landing on one number is
+the exact failure mode WP-24 and WP-28 caught in this corpus. Here they do
+unify, and the unification is now computed rather than asserted — but what it
+establishes is *availability*, not *tendency*. It says: when a planar system
+must be aperiodic and self-similar, the arithmetic leaves it one cheapest
+choice. It does not say systems tend toward that state. Getting from
+availability to tendency needs a throughflow argument — Prigogine, dissipative
+structure, far from equilibrium — which is thermodynamics and attaches at
+§21.8's heat term. That remains the gap, and it is the whole content of the
+dm³ selection chapter.
+
+### The branching case — same thesis, different constants, and that is the evidence
+
+Trees, rivers and lungs branch, and each is solving a constrained optimisation.
+Checked what the constants actually are, because the claim only survives if they
+are *not* all φ:
+
+| system | constraint | law | exponent / ratio |
+|---|---|---|---|
+| blood vessels, airways | pumping power + metabolic cost of the fluid | Hess–Murray: r₀³ = Σrᵢ³ | 3 → homothety (½)^⅓ = 0.7937 |
+| human lung, conducting airways | the same | Weibel's fractal tree | measured ≈ 0.79 |
+| tree branches | mechanical (wind, self-load) vs hydraulic | da Vinci's rule: Σ areas conserved | 2 nominal; measured 1.8–3.0 |
+| river networks | total energy dissipation | Horton / optimal channel networks | bifurcation 3–5; Hack h ≈ 0.57 |
+| phyllotaxis | non-repetition — never line up | worst-approximable angle | φ, 137.5° |
+| planar quasicrystal | aperiodic + self-similar | fundamental unit of ℚ(ζₙ)⁺ | φ, 1+√2, 2+√3 |
+
+The exponent is not a decoration on the law; it *is* the constraint, read off.
+3 means the cost was pumping power. 2 means the cost was bending moment.
+1.8–3.0 in real trees means the two costs trade off and the exponent moves with
+the trade. φ means the problem was never transport at all — it was packing
+without repetition, and the extremal answer to *that* is the worst-approximable
+number.
+
+So the general claim is supported and the specific one is not: **form is the
+solution to a constraint problem, and substrate does not enter** — blood, air,
+sap and water give the same law when the cost function is the same. But there is
+no single constant across problems, and there should not be. A theory in which
+every system returned φ would explain nothing, because it could not distinguish
+a lung from a sunflower. The exponents differ *because* the constraints differ,
+and that is what makes the framework falsifiable rather than decorative.
+
+This is WP-29's standard applied to our own thesis. WP-29 refused three
+"not a coincidence" claims in this corpus for asserting a shared number without
+a shared mechanism. The same rule binds here: φ in phyllotaxis and φ in the
+decagonal tiling *do* share a mechanism (both extremise the same continued
+fraction — see the entry above, now computed), and that bridge stands. φ in a
+lung would not, and is not claimed.
+
+Sources: Murray, *PNAS* **12**, 207 (1926); Weibel, *Morphometry of the Human
+Lung* (1963); Douady & Couder, *PRL* **68**, 2098 (1992); Rodríguez-Iturbe &
+Rinaldo, *Fractal River Basins* (1997); Hurwitz (1891) for the √5 constant.
