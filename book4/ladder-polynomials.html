@@ -244,7 +244,7 @@ mjx-container { overflow-x:auto; max-width:100%; display:block !important; }
 
 <div class="content-wrap wn">
 
-  <div class="section-tag">Book 4 &middot; Working Note &middot; 23 August 2026</div>
+  <div class="section-tag">Book 4 &middot; Working Note &middot; 23 August 2026 &middot; rev. 8 September 2026 &mdash; &sect;&thinsp;7 added, companion script added</div>
   <h1 style="margin-bottom:.3rem;">The Ladder Polynomials</h1>
   <p style="color:var(--text-dim,#6a8099);margin-top:0;">Two exact results, one honest boundary.
   Every figure below is reproducible from the code at the end.</p>
@@ -370,7 +370,7 @@ mjx-container { overflow-x:auto; max-width:100%; display:block !important; }
     <tr><td class="num">2</td><td>C<sub>2</sub></td><td class="num">2</td><td class="num">2</td><td>proved</td></tr>
     <tr><td class="num">3&ndash;6</td><td>S<sub>n</sub></td><td class="num">6&ndash;720</td><td class="num">6&ndash;720</td><td>proved</td></tr>
     <tr><td class="num">7</td><td>S<sub>7</sub></td><td class="num">5040</td><td class="num">5040</td><td>proved &mdash; Jordan</td></tr>
-    <tr><td class="num">8&ndash;10</td><td>S<sub>n</sub></td><td class="num">&mdash;</td><td class="num">&mdash;</td><td><span class="tag open">EVIDENCE, NOT PROOF</span></td></tr>
+    <tr><td class="num">8&ndash;10</td><td>S<sub>n</sub></td><td class="num">&mdash;</td><td class="num">&mdash;</td><td><span class="tag open">NOT PROVED HERE</span></td></tr>
   </table>
 
   <p><strong>n = 7 is rigorous.</strong> $q_7$ is irreducible, so the group is transitive; 7 is prime,
@@ -408,6 +408,62 @@ mjx-container { overflow-x:auto; max-width:100%; display:block !important; }
   such correspondence must explain why one family is Pisot and the other is not, and why they meet only
   at $\varphi$. That is a sharper question than WP44 was able to ask, and a correspondence that cannot
   answer it is not the right one.</p>
+
+  <div class="section-tag">&sect; 7 &middot; Where this sits in the literature</div>
+  <h2>Two references this note should have carried</h2>
+
+  <p>The results above were computed rather than looked up, which is the right order and also the
+  reason a note like this can end up sitting <em>beside</em> a literature instead of in it. Two
+  papers address exactly these objects.</p>
+
+  <h3 style="margin-top:1.4rem">The discriminant is known in closed form</h3>
+
+  <p>Luca, <em>On the discriminant of the k-generalized Fibonacci polynomial, II</em>
+  (<em>The Fibonacci Quarterly</em> <strong>62</strong>:3, 2024), gives</p>
+
+  <p style="text-align:center">$$\mathrm{Disc}(q_k) \;=\; (-1)^{\binom{k+1}{2}-1}\,
+  \frac{2^{\,k+1}k^{\,k} - (k+1)^{\,k+1}}{(k-1)^{2}}$$</p>
+
+  <p><span class="tag">VERIFIED</span> That formula reproduces every entry of the discriminant table
+  in &sect;&thinsp;5, for $k = 2$ through $10$ &mdash; nine agreements, checked by
+  <code>ladder-polynomials-verify.py</code> block [6]. The table here was computed before the formula
+  was known to this note, so the agreement is a cross-check in both directions and not a restatement
+  of one source by the other. Luca&rsquo;s paper proves something further that this note does not
+  need: $|\mathrm{Disc}(q_k)|$ is itself a $k$-generalized Fibonacci number only for $k = 2, 3$.</p>
+
+  <h3 style="margin-top:1.4rem">The Galois group has its own paper</h3>
+
+  <p>Luca cites Martin, <em>The Galois group of</em> $x^n - x^{n-1} - \cdots - x - 1$ (2004), as the
+  reference for the Galois group of precisely this family. <strong>This note has not read it</strong>,
+  and says so rather than guessing at its contents.</p>
+
+  <div class="correction correction--inline">
+  <p><strong>What that changes about &sect;&thinsp;5.</strong> The status column there reads
+  &ldquo;not proved here&rdquo;, and <em>here</em> is doing real work in that sentence. It records what
+  the computation in this note establishes: rigorous through $n = 7$ by Jordan&rsquo;s theorem, and
+  sampling evidence at $n = 8, 9, 10$. It is <em>not</em> a claim that
+  $\mathrm{Gal}(q_8) = S_8$ is open in the literature. Anyone extending &sect;&thinsp;5 &mdash; and
+  in particular any competition or preprint entry built on it &mdash; reads Martin first and states
+  the result from the source. A computation reported as evidence beside a theorem that already exists
+  is not a finding.</p>
+  </div>
+
+  <h3 style="margin-top:1.4rem">The rest of the standing ground</h3>
+
+  <ul>
+    <li>Irreducibility of $q_k$ over $\mathbb{Q}$ is classical for this family; the note verifies it
+    on $k = 2\ldots10$ and claims nothing beyond the tested range.</li>
+    <li>That the ladder roots are Pisot is classical &mdash; they are the multinacci numbers, and the
+    check here (conjugate moduli rising $0.618 \to 0.980$, never reaching 1) is a reproduction, not a
+    result.</li>
+    <li>The ADE / affine spectral threshold at 2 is the Smith&ndash;Coxeter classification of
+    simply-laced graphs by spectral radius. &sect;&thinsp;3 uses it; it does not extend it.</li>
+  </ul>
+
+  <p>None of this weakens &sect;&thinsp;1 or &sect;&thinsp;2. The collapse to
+  $x^{n+1} - 2x^n + 1$ and the exact identity $2 - r_n = r_n^{-n}$ are elementary and stand as
+  written; what &sect;&thinsp;7 supplies is where to check them against, which is the difference
+  between a note that can be cited and one that cannot.</p>
 
   <div class="section-tag">Reproduce</div>
   <pre><code>import sympy as sp
@@ -450,7 +506,9 @@ for p in sp.primerange(3, 60000):
         print("transposition at p =", p); break     # -&gt; 17921</code></pre>
 
   <p style="margin-top:2rem;color:var(--text-dim,#6a8099);font-size:.9rem;">
-  Companion files: <code>book4/ladder-polynomials.md</code> (source of this page),
+  Companion files: <code>book4/ladder-polynomials-verify.py</code> (regenerates every number on this
+  page, including the &sect;&thinsp;7 cross-check; all checks pass),
+  <code>book4/ladder-polynomials.md</code> (source of this page),
   <a href="ch11.html" style="color:var(--gold,#0ABAB5)">Chapter 11</a> (the log-&zeta; coordinate repair, audit item M1, closed 24 August 2026), and WP44 &mdash; <em>Disaster Theory and the Climate Catastrophe Manifold</em>.</p>
 
 </div>

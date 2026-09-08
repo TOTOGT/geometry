@@ -248,3 +248,53 @@ for p in sp.primerange(3, 60000):
     if t == target:
         print("transposition at p =", p); break     # -> 17921
 ```
+
+---
+
+# 7. Where this sits in the literature
+
+*Added 8 September 2026. Two references this note should have carried.*
+
+## The discriminant is known in closed form
+
+Luca, *On the discriminant of the k-generalized Fibonacci polynomial, II*, The Fibonacci
+Quarterly **62**:3 (2024):
+
+    Disc(q_k) = (−1)^(C(k+1,2)−1) · [ 2^(k+1)·k^k − (k+1)^(k+1) ] / (k−1)²
+
+`[VERIFIED]` That formula reproduces every entry of the §6 discriminant table for k = 2…10 —
+nine agreements, checked by `ladder-polynomials-verify.py` block [6]. The table was computed
+before the formula was known to this note, so the agreement is a cross-check in both directions.
+Luca proves something further that is not needed here: |Disc(q_k)| is itself a k-generalized
+Fibonacci number only for k = 2, 3.
+
+## The Galois group has its own paper
+
+Luca cites Martin, *The Galois group of x^n − x^(n−1) − … − x − 1* (2004), as the reference for
+the Galois group of precisely this family. **This note has not read it**, and says so rather than
+guessing at its contents.
+
+**What that changes about §6.** The status column reads "not proved here", and *here* is doing
+real work in that sentence: it records what the computation in this note establishes — rigorous
+through n = 7 by Jordan, sampling evidence at n = 8, 9, 10. It is not a claim that
+Gal(q₈) = S₈ is open in the literature. Anyone extending §6 — in particular any competition or
+preprint entry built on it — reads Martin first and states the result from the source. A
+computation reported as evidence beside a theorem that already exists is not a finding.
+
+## The rest of the standing ground
+
+- Irreducibility of q_k over ℚ is classical for this family; verified here on k = 2…10 and
+  claimed nothing beyond the tested range.
+- The Pisot property is classical — these are the multinacci numbers; the check here is a
+  reproduction, not a result.
+- The ADE / affine spectral threshold at 2 is the Smith–Coxeter classification of simply-laced
+  graphs by spectral radius. §3 uses it; it does not extend it.
+
+None of this weakens §1 or §2. The collapse to x^(n+1) − 2x^n + 1 and the exact identity
+2 − r_n = r_n^(−n) are elementary and stand as written; what §7 supplies is where to check them
+against, which is the difference between a note that can be cited and one that cannot.
+
+## Reproduce
+
+    python3 book4/ladder-polynomials-verify.py        # ~1 min, all checks pass
+    python3 book4/ladder-polynomials-verify.py --slow # redoes the p<60000 transposition search
