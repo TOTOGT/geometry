@@ -225,7 +225,7 @@ What survives is a graded statement: $\Phi^*\alpha_{\text{arith}} - \alpha_{\tex
 | Corollary 4.5, $c(\tfrac12,t)=\vartheta'(t)$ | **Classical** (equivalent to $Z$ real); verified to 25 digits |
 | Parity of the coefficients: $g$ odd in $t$, $c$ even in $t$ | **Proved, machine-checked.** `gCoef_odd_in_t`, `cCoef_even_in_t`, via `Zlog_conj` (conjugation-symmetry of $\zeta'/\zeta$). These are what bridge $s=\sigma+it$ to $1-s=(1-\sigma)-it$ |
 | The logarithmic derivative of the functional equation, $\zeta'/\zeta(s) + \zeta'/\zeta(1-s) = \chi'/\chi(s)$ | **Proved, machine-checked** (2026-09-08; admitted since 2026-08-30). `Zlog_add_Zlog_one_sub`, on `[propext, Classical.choice, Quot.sound]`. Proof: $\Lambda(1-s)=\Lambda(s)$ differentiated gives $\operatorname{logDeriv}\Lambda(s) + \operatorname{logDeriv}\Lambda(1-s) = 0$; then $\operatorname{logDeriv}\Lambda = \operatorname{logDeriv}\Gamma_{\mathbb{R}} + \operatorname{logDeriv}\zeta$; then the archimedean factor is read off. Carries four hypotheses: $s$ and $1-s$ off the poles of $\Gamma_{\mathbb{R}}$ (the negative even integers, per `Gammaℝ_eq_zero_iff`), and $\zeta(s),\zeta(1-s)\neq 0$. Without them the identity would assert equality of junk values at the zeros, and its truth would depend on where those zeros are. They are also *sufficient*: at $n=0$ they supply $s\neq0$ and $s\neq1$, the two points where $\zeta$ and $\Lambda$ are not differentiable |
-| $\operatorname{logDeriv}\Gamma_{\mathbb{R}}(s) = -\tfrac12\log\pi + \tfrac12\psi(s/2)$ | **Proved, machine-checked.** `logDeriv_Gammaℝ`. Stated in terms of `Gammaℝ` and `digamma` only, both of which are Mathlib's; **no result of this kind is in Mathlib**, whose `RiemannZeta` file carries the functional equation in three forms and differentiates none of them |
+| $\operatorname{logDeriv}\Gamma_{\mathbb{R}}(s) = -\tfrac12\log\pi + \tfrac12\psi(s/2)$ | **Proved, machine-checked.** `logDeriv_Gammaℝ`. Stated in terms of `Gammaℝ` and `digamma` only, both of which are Mathlib's. Not present in the pinned Mathlib v4.32.0, nor in `Gamma/Deligne.lean` on master as of 2026-09-09 |
 | Reflection laws of §4.5 | **Proved, machine-checked.** `reflection_law`, on `[propext, Classical.choice, Quot.sound]`. It was proved on 2026-08-30 *from* the row above while that row was admitted; the input is now proved, so the law is. The numerical agreement that stood in place of the proof — 30 digits at eight points, $\sigma \in \{0.3, 0.5, 0.8, 1.1, 1.5, 2.3\}$, $t$ from 0.7 to 25, maximum deviation $8.8\times10^{-16}$ — is retained as a record and is no longer load-bearing |
 | $\chi'/\chi$ real on $\sigma=\tfrac12$ | **Proved, machine-checked.** `chiLog_real_on_critical_line`, on `[propext, Classical.choice, Quot.sound]`. At $s=\tfrac12+it$ the two digamma arguments are complex conjugates, so their sum is real; supported by `digamma_conj` ($\psi(\bar s)=\overline{\psi(s)}$) and `one_sub_conj` ($1-s=\bar s$ exactly on the critical line), both proved |
 | Proposition 4.6, failure of contactomorphism | Argued, not formalised |
@@ -235,6 +235,14 @@ Lean source: `TOTOGT/GTCT`, `book4/ZetaReflection.lean` — 18 theorems, **no `s
 report at `geometry/tools/verify-audit/2026-09-08/ZetaReflection.axioms.txt`, written by the gate
 run rather than transcribed. The route, and the five runs and corrections it took, are in
 `book4/ZetaFELogDeriv.lean`, kept as the development record.
+
+**A correction, 2026-09-09.** An earlier version of this section said the log-derivative form of the
+functional equation was absent from Mathlib. It is not: `logDeriv_riemannZeta_one_sub` exists in
+current Mathlib, and was pointed out within a day of the claim being made publicly. It is absent from
+the **v4.32.0** tree this development is pinned to, which is where the search was run, and that is the
+only statement the search supported. The proof above is therefore an independent derivation of an
+existing result rather than a new one, and the row above is retained on that footing: what it records
+is that the statement holds under this toolchain with an axiom report behind it, not that it was first.
 
 **What the closure does not do.** The file no longer contains an admitted statement, and that is a
 fact about this file and not about the problem. Every row above concerns the *coefficients* of the
