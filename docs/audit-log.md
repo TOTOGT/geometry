@@ -4705,3 +4705,48 @@ the push had nothing to send.
 **Replacement habit:** to ask whether a file has reached origin, use
 `git log origin/main -- <file>`, which only reads. Never `git diff` through the
 bridge, for any purpose.
+
+---
+
+## 2026-09-09 · Book 4 Chapter 28, and four corrections found in building it
+
+**Ch 28, `What the Flow Pays`.** §21.8 asked for an entropy named on the corpus's
+own phase space. Evaluating the corpus's contact form on the corpus's own vector
+field returns `α(X) = ż − r²θ̇ = −2(r−1)²e^(−z)`, non-positive everywhere and zero
+exactly on `Γ = {r = 1}`. The two objects had been in the corpus for a hundred and
+sixty-four files without being placed side by side. Companion `book4/ch28-verify.py`,
+symbolic throughout, exits 0.
+
+**A scaffold script died on a replacement template.** `re.sub` parses its
+replacement as a template in which `\` opens an escape. `\a` is legal (bell) and
+passed silently; `\s` is not, so a replacement carrying `\alpha` and `\sigma`
+failed on the second and nothing downstream ran. Rebuilt with exact string
+replacement and no regex. **Rule:** any `re.sub` whose replacement contains a
+backslash takes a `lambda _:` replacement, or the backslashes are doubled.
+
+**Exact-match beat pattern-match on a second point.** The separator in the
+`po-ring-meta` strip is a literal `·`, not `&middot;`. A regex tolerant enough to
+match both would have hidden the difference; the assertion on an exact substring
+surfaced it.
+
+**A verification tactic failed and the fix strengthened the claim.** The check on
+`2cos(3π/7)` as a root of `r³ − r² − 2r + 1` was written as
+`expand_trig().rewrite(cos).simplify()` and left a non-obviously-zero expression —
+a failure of the tactic, not of the claim. Replaced with `minimal_polynomial`,
+which returns the cubic exactly. The cubic is therefore the minimal polynomial and
+not merely a polynomial admitting the root, which is the stronger statement.
+
+**`ch27` carried `ch25`'s header.** It was scaffolded from Chapter 25 and the ring
+strip read `Book 4 · Ch 25` with the chapter line `Chapter 25 · Selection · Why the
+Sheet Closes This Way and Not Another`, on a page titled *The Measure That Binds*.
+Both renumbered to 27.
+
+**§28.2 separated two numbers that had been run together.** The transverse
+eigenvalue gives `μ_max = lim λ(z) = −2` and gives nothing else. `τ = 2` is the
+limit of the n-bonacci ladder, reached from polynomial arithmetic with no dynamics
+in it. They agree numerically; agreeing is not being the same claim, and the
+chapter now says so and marks the coincidence OPEN.
+
+**Indexes regenerated, not hand-edited.** `master-index.html` and `index-book4.html`
+are outputs of `tools/build_indexes.py`; both lacked Ch 27 as well as Ch 28. Running
+the tool added both. Ch 28 indexes at 17 links, not orphaned.
