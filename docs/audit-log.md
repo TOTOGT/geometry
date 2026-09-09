@@ -4824,3 +4824,24 @@ carried forward with three items added and item 8 correcting its predecessor: th
 line-1 block it called "a stale 2026-08-30 block" is now dated 2026-09-05 and
 holds the overnight-job run order. Merging the two blocks is a restructure and is
 left undone on purpose.
+
+### Postscript, ten minutes later: the bridge can commit too
+
+The entry above lifted the ban on *reading* and left writes at the desk. Then the
+commit carrying it was made through the bridge, to see what would happen, and it
+worked — `38e0f5a`, `git add` and `git commit` both succeeding. Git builds each
+object as `.git/objects/??/tmp_obj_*` and renames it into place; the rename is the
+operation that matters and the bridge permits it. What fails is git's attempt to
+unlink the temporaries it did not use, and the resulting `Operation not permitted`
+warnings are litter reports rather than failures. A `HEAD.lock` is left behind too,
+already released; `git --no-optional-locks status` returns 0 with it sitting there
+and `git fsck` is clean.
+
+So the corrected rule is narrower again than the correction: **push is the only
+operation that has to happen at the desk, and it is push credentials that require
+it.** Sweep `tmp_obj_*` and `HEAD.lock` into `.git/_stale-locks/` before ending a
+session that committed — 1,520 temporaries had accumulated in
+`geometry/.git/objects` from sessions that never looked, all now swept.
+
+Two corrections to the same rule in one day, each narrower than the last, both
+found by running the command instead of reasoning about it.

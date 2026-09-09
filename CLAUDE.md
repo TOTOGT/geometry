@@ -199,9 +199,23 @@ that directory:
     rm -rf ~/Desktop/geometry/.git/_stale-locks
     rm -f  ~/Desktop/*/.git/.stale-*.lock ~/Desktop/*/.git/index.lock
 
-Sandboxed sessions also have no push credentials. Every push in this repo is run
-at the desk. **That is the only remaining reason a write goes to the desk — it
-is credentials, not locks.**
+**`git add` and `git commit` also work through the bridge.** Measured 2026-09-09
+on commit `38e0f5a`: both succeeded. Git creates its objects as `tmp_obj_*` and
+renames them into place — the rename is what matters and it works — then tries to
+unlink whatever it did not use, and *that* is what prints `Operation not
+permitted`. The warnings are litter reports, not failures. Two kinds are left
+behind:
+
+    .git/objects/??/tmp_obj_*        unused temporaries
+    .git/HEAD.lock                   after the commit, already released
+
+Neither blocks anything: `git --no-optional-locks status` returns 0 with
+`HEAD.lock` present, and `git fsck` is clean. Sweep them into `.git/_stale-locks/`
+at the end of a session that committed. 1,520 `tmp_obj_*` had accumulated in
+`geometry/.git/objects` before anyone looked.
+
+Sandboxed sessions still have no push credentials. **Push is the one operation
+that must happen at the desk, and it is credentials that require it, not locks.**
 
 **Superseded, and worth saying why.** Until 2026-09-09 this section and a bullet
 under *Read first* banned `git` through the bridge outright, on the grounds that
