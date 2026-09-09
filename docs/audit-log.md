@@ -4612,3 +4612,96 @@ The Faraday connection Pablo asked about is real but it is *content*, not a home
 ∮E·dl = −dΦ/dt is well-posed only when the surface is orientable — flux is not
 defined on a Möbius band. That belongs as a section inside the Möbius chapter,
 cross-linked to `ch-faraday.html`, rather than making it a Book 4 chapter.
+
+## 2026-09-09 — Book 4 Ch 27 · The Measure That Binds, and a claim
+
+Pablo asked for the next chapter toward P vs NP, for gap-filling, and — fairly —
+for the corpus to produce a claim of its own from time to time rather than only
+audit. This is the attempt, and the claim is real but its standing is stated
+rather than dressed.
+
+**The question is §26.2's second failure mode, turned from a diagnostic into a
+demand:** name the measure, and show the count is nonzero on it. Easy to state,
+hard to meet. Met here once, completely, on the smallest object that can carry
+it.
+
+**Two classical facts about W(T) = d₁ − d₂ point opposite ways.** Summing W is a
+lattice-point count in ℤ[ω], whose fundamental domain has area √3/2, giving
+Σ_{T≤x} W(T) ~ (π/√27)x = 0.60460x. But by Landau–Ramanujan in its Löschian form
+the support has density zero: #{T≤x : W>0} ~ K x/√(log x), K = 0.6389…
+
+Constant mean on a vanishing support forces the surviving values to grow.
+
+### Result 27.1
+
+    ⟨W(T) | W(T) > 0⟩  ~  C √(log T),   C = (π/√27)/K = 0.94617…
+    ⟨S(T)⟩/k = ⟨log W⟩ ~  ½ log log T + log C
+
+Sieved to T = 4×10⁶: summatory mean settles on 0.60460 against π/√27 = 0.60460;
+permitted fraction still falling 0.230 → 0.171; conditional mean over √(log x)
+climbing 0.867, 0.887, 0.899, 0.902, 0.905 — flattening, below C, which is what a
+Landau–Ramanujan constant does on the way up.
+
+**The standing of the claim, stated in the chapter rather than implied.** Both
+inputs are classical. The quotient is not, for a prosaic reason: the conditional
+mean of a divisor function is an odd thing to want until the function is an
+entropy, which it became one chapter ago. So it is **a new statement about a new
+object, assembled from old parts**, fully checkable by `ch27-verify.py`. Same
+standing as Proposition 26.2. Nothing here is a new theorem of number theory, and
+the chapter says so.
+
+### And it costs us
+
+Ch 25 said its entropy was a tie-breaker — k log 2 against an elastic cost
+scaling with 10T+2 — and could not say how the entropy grows. Now it can, and the
+news makes the earlier claim stronger by making it worse:
+
+| T | sites | ⟨S⟩/k | ratio |
+|---|---|---|---|
+| 10¹ | 102 | 0.362 | 3.5×10⁻³ |
+| 10³ | 10,002 | 0.911 | 9.1×10⁻⁵ |
+| 10⁶ | 10⁷ | 1.258 | 1.3×10⁻⁷ |
+| 10¹² | 10¹³ | 1.604 | 1.6×10⁻¹³ |
+
+Doubly logarithmic against linear. A hundred sites to ten trillion multiplies the
+elastic bill by 10¹¹ and the entropy by four. **The ledger binds, and what it
+binds is almost nothing** — a real answer to §26.2's demand, and a negative one
+about our own chapter. A framework that had asked only whether the count can
+return zero would have stopped one chapter earlier, satisfied.
+
+### §27.4, and the discipline held
+
+Three serious answers to the same demand where it is hard, none of them ours:
+average-case complexity (Levin 1986), smoothed analysis (Spielman & Teng, *JACM*
+51(3) 2004, Gödel Prize 2008 — the simplex method polynomial under small random
+perturbation, which is Trefethen's observation converted into a theorem by naming
+the measure), and phase transitions (random k-SAT's sharp threshold; proved for
+large k by Ding–Sly–Sun, numerically ≈4.267 for k=3 and still open there).
+
+The κ* remark — a sharp threshold at which cost peaks has the shape of this
+corpus's critical parameter — is **recorded and left unspent**, per WP-29. No
+mechanism is offered, so no bridge is claimed.
+
+§27.5 states the distance plainly: nothing here bears on whether P equals NP;
+average-case and worst-case are different questions; smoothed analysis does not
+collapse the classes; the SAT threshold is about random instances. The chapter
+takes a diagnostic from that literature and repays it with an example small
+enough to finish.
+
+`ch27-verify.py` all checks pass. Contents row added, ch26 → ch27 forward link,
+G4 rung regenerated to 0..27 across 18 files, 0 broken links, terms.py clean.
+
+### An operational note: the index.lock was mine
+
+`git push` failed on a stale `.git/index.lock` — zero bytes, owned by the
+bridge's session user, created 00:15 UTC. Cause: I ran `git diff --quiet
+origin/main -- <file>` in a loop while checking what had reached origin, and
+`git diff --stat` / `git diff` on `book7/index.html`. Those refresh the index and
+take the lock, and the bridge cannot delete files. That is precisely the standing
+rule — through the bridge, only `git log`, `git grep`, `git ls-files` — and I
+broke it. Nothing was lost; both `git add` and `git commit` had already failed, so
+the push had nothing to send.
+
+**Replacement habit:** to ask whether a file has reached origin, use
+`git log origin/main -- <file>`, which only reads. Never `git diff` through the
+bridge, for any purpose.
