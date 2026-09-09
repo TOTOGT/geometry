@@ -4360,3 +4360,255 @@ work is the person recorded as having done it.
 Sources added to §8: MacTutor on Schenberg; Wikipedia on Lattes (emulsion,
 Chacaltaya, first authorship, the pre-1960 Committee policy, CBPF, CNPq, the
 Plataforma).
+
+## 2026-09-09 — WP-107: auditing OpenAI's Navier–Stokes formalization
+
+Resumed from a handoff whose central worry was: a theorem of the right shape can
+be true without being the problem, if `NavierStokesExistenceAndSmoothnessRn`
+demands more of a solution than Fefferman does — the negation then rules out a
+smaller class. Same species as WP-104's `Fin 6`.
+
+**The worry is closed, structurally.** The challenge file carries a header saying
+it is copied from Google DeepMind's *Formal Conjectures* at commit `8bf45ed`.
+Checked rather than trusted: stripping comments, docstrings, attributes, imports,
+open/namespace lines and blanks leaves 80 code lines upstream, 71 in the OpenAI
+copy, and a full unified diff of **17 lines** whose only substantive content is
+the *deletion* of the two (A)/(B) `sorry` placeholders they are not claiming.
+
+**Every definition is byte-identical** — `divergence`, `IsOnePeriodic`,
+`InitialVelocityCondition(Decay)`, `ForceCondition(Decay)`,
+`NavierStokesExistenceAndSmoothness` and both extensions. The breakdown theorems
+are DeepMind's own sorry-ed challenges, discharged. **OpenAI could not have
+narrowed the target statement because they did not author it.** The audit
+question moves one layer out, to whether DeepMind's formalization is faithful to
+Fefferman — a question about a public, independently maintained artifact, which
+is a far better thing for a claim to rest on.
+
+The asymmetry worth recording, because it is the general lesson: strengthening
+the *data conditions* makes such a theorem **harder** (fewer witnesses qualify);
+strengthening the *solution notion* makes the negation **weaker**. Only the
+second is a risk, and it is the one the diff closes.
+
+§4 spot-checks the inherited definitions against Fefferman's (1)–(7): the
+equation on t ≥ 0 via `derivWithin` on `Ici 0`; div-free; initial condition;
+`∀ m K, ∃ C, ‖iteratedFDeriv ℝ m u₀ x‖ ≤ C/(1+‖x‖)^K`; force decay in x and t
+with bound C/(1+‖x‖+t)^K; `ContDiffOn ℝ ∞` for v and p on `univ ×ˢ Ici 0`; L² at
+each t plus uniformly bounded energy. Forcing is permitted in (C)/(D), so f is
+not a dodge.
+
+§5: across **2,486 Lean files and 616,276 lines**, excluding the reference file,
+**zero** `sorry`, `admit`, `native_decide` or user-declared `axiom`. Stated as
+what it is — a fact about source text, not a build.
+
+§6: the verification design is the strongest part and deserves saying out loud.
+Comparator exports the proof term and re-checks it in an **independent kernel**
+(nanoda, not Lean's own), in a **sandbox** (landrun), against a **statement file
+the claimant did not write**. Three distinct failure modes closed at once — which
+means the axiom question this corpus usually asks by hand is answered by the
+tooling, provided the tool is run.
+
+§7 is the honest limit and it is long on purpose: no build was run (toolchain
+v4.34.0-rc2 against our v4.32.0), so nothing here says the theorems are proved;
+the Euler side is unaudited; the ComparatorBridge adapters are unread, though the
+§3 diff constrains them usefully since the adapter must land on a Prop it did not
+author; there is no peer review; and no mathematical opinion is offered. What is
+established is narrower and worth having: **the thing being proved is the thing
+that was asked.**
+
+A note on the method cutting both ways: WP-24 refuted one of this corpus's own
+bridges and WP-29 generalised the sweep. An audit method that can only return
+findings is not a method. This one returned clean on the layer it examined, and
+says so.
+
+### LadderBound.lean, second draft
+
+First run: `gap_eq` and `half_gap` **CLEAN** — [propext, Classical.choice,
+Quot.sound], no sorryAx. Four failures, two causes:
+
+(a) the mathematical bug found on paper beforehand, in `ladder_rel_error_of_lt`;
+(b) `div_le_iff`, `le_div_iff` and `div_le_div_iff` **do not exist** in this
+    Mathlib — renamed in the GroupWithZero refactor. My first "fix" still used
+    two of them and would have failed identically, which I told Pablo before he
+    re-ran.
+
+Rewritten to lean on tactics (`field_simp`, `gcongr`, `positivity`, `nlinarith`,
+`mul_le_mul_of_nonneg_left`) rather than version-sensitive lemma names, and the
+statements are cleared of division where the content allows: the main theorem is
+now `2 * n * min (...) ≤ f`, which is "relative error ≤ 1/(2n)" without asking
+Lean to divide. Awaiting a second run.
+
+## 2026-09-09 — LadderBound.lean CLEAN; Theorem 26.1 is kernel-checked
+
+Third run, all six theorems on `[propext, Classical.choice, Quot.sound]`, no
+`sorryAx`, no errors. Gated:
+
+    python3 tools/axiom_gate.py <report> 6
+    OK: 6 theorems, no sorryAx, no axiom outside the permitted set.
+
+So Chapter 26's negative test is no longer a numerical sweep with an informal
+argument attached. **Theorem 26.1 — a one-parameter ladder c/N matches any target
+to relative error ≤ f/(2c), and therefore forbids nothing — has been read by a
+kernel.** The Lean statement is multiplicative, `2 * n * min (…) ≤ f`, which is
+the relative bound cleared of its division; the 200,000-target run stays as
+illustration.
+
+That is the chapter's own standard met by the chapter. §26.4 says any claim that
+a structure is *selected* must produce a ledger; §26.2's negative test is now the
+one thing in the arc a machine has verified.
+
+### The three drafts, and why two of them had nothing to do with the mathematics
+
+1. **A real error, caught on paper before any run.** `ladder_rel_error_of_lt`
+   derived `n*f ≤ c` from the upper bracket when the goal needs `c ≤ (n+1)*f`
+   from the lower one — wrong direction, unprovable as written. Found by
+   re-deriving the cross-multiplication by hand while Pablo's first run was still
+   going, and reported before he pasted the errors.
+2. **`div_le_iff`, `le_div_iff`, `div_le_div_iff` and `le_or_lt` are all gone**
+   from this Mathlib — the GroupWithZero refactor renamed or removed them. Four
+   of the six failures across two runs, one cause, and none of it about the
+   theorem. My first "fix" still used two of them, which I caught and told Pablo
+   before he re-ran rather than after.
+3. **Two trailing `ring`s after a `field_simp` that had already closed the goal.**
+   Reported as "No goals to be solved"; the declarations were clean regardless,
+   which is why run two showed four clean theorems alongside two errors.
+
+**Standing lesson.** Proofs written against remembered lemma *names* are fragile
+across Mathlib versions in a way proofs written with *tactics* are not. The final
+version leans on `field_simp`, `gcongr`, `positivity`, `nlinarith`, `by_cases`
+and `push_neg`, and the only name-shaped risk left is `div_le_iff₀`. Worth
+carrying into any future Lean in this corpus: prefer a tactic to a name whenever
+the tactic exists.
+
+Two warnings deliberately left: `hax`/`hxb` in `half_gap` are consumed
+implicitly by `linarith`, and `push_neg` is deprecated in favour of `push Not`.
+Editing verified code to silence a warning means re-verifying it — a bad trade
+against a clean run.
+
+### WP-107 §7b — Trefethen, and a convergence with Ch 26
+
+Pablo supplied L. N. Trefethen, *Reflections on the Millennium Problems*,
+arXiv:2608.24965v1 [math.HO], **25 August 2026** — Harvard SEAS, fourteen days
+before OpenAI's announcement. It argues RH, P vs NP and Navier–Stokes have each
+lost much of their original practical leverage, for three different reasons. On
+NS: research since 2000 (Chen & Hou, *PNAS* 122, 2025) has made candidate blowup
+scenarios look ever more special, "the farther removed from 'wet' fluid
+mechanics", initial conditions "too contrived", configurations possibly unstable
+in themselves. And, written before any resolution existed to comment on:
+
+> "It is fascinating to speculate what may happen if it is proved that
+> singularities can arise. I think that in this case, the next scientific
+> challenge will be not so much to modify the NS equations to make them more
+> physical … as **to understand why those singularities have so little
+> consequence**."
+
+He named the branch in advance. Added as WP-107 §7b because it answers the
+question that note deliberately declines — not *is the proof right* but *what is
+being right worth* — from someone with no stake, written beforehand. It also
+fixes the register: a (C) result would be historic mathematics whose consequences
+for fluid mechanics may be near nil, which is neither an engineering
+breakthrough nor a triviality.
+
+**And a convergence with Ch 26 that has a mechanism, not just a resonance.**
+Trefethen: "To resolve a problem one way or another, we need to find a handle to
+grab it by. Maybe these handles have something to do with what gives a problem,
+as it were, *measurable consequences*. Perhaps problems that remain open for a
+century … tend to be so smooth that they glide through both our theory and our
+practice, like neutrinos, hard to catch."
+
+A *handle* is a *ledger*. Ch 26 says a framework producing none of the three
+ledgers has not identified a source of order; Trefethen says a problem forbidding
+little is a problem with nothing to grab. Unlike the resonances WP-29 refuses,
+these share a mechanism rather than a number — both are claims about whether a
+statement has measurable consequences. Recorded as a convergence, not as
+evidence for either.
+
+## 2026-09-09 — Ch 26 §26.3 completed with three dynamical figures; and a second failure mode
+
+**The Möbius material was carrying the law and showing none of it.** Three canvas
+figures added, in the chapter's existing `figure-wrap` house style, each earning
+its place by showing something a static picture cannot:
+
+- **Fig 26.1 · the Volterra wedge.** Flat sheet beside closed sheet, wedge 2π/|G|
+  excised and the angles re-drawn compressed. Switchable |G| ∈ {3,4,6}. Shows why
+  the defect size is not a choice: the rotation gluing one cut edge to the other
+  must be a lattice symmetry.
+- **Fig 26.2 · transport on a Möbius band.** A frame carried once around,
+  returning with its ends *exchanged* rather than rotated back. Non-orientability
+  is a statement about a journey, not a shape, so it is animated. Play/pause and
+  a slow mode.
+- **Fig 26.3 · the ledger, interactive.** Pick surface and lattice; |G|·χ against
+  the sphere-only 2|G|, with the realising object named. On ℝP² the two formulas
+  visibly separate — 6 and 4 against 12 and 8 — and the hemi-polyhedra have
+  exactly the smaller counts.
+
+Prose layered around them: the sphere is a bad witness for a law about χ because
+there χ = 2 and the constant looks like a coincidence; the lattice fixes the
+denomination of the currency and the surface fixes the bill; and the Möbius
+band's flatness is the first hint that non-orientability is free in the currency
+Ch 21 counts. Render-checked: all three canvases paint, 11 controls live, labels
+update on click, animation running, no console errors, no overflow.
+
+### §26.2 gains a second failure mode, from Trefethen's P vs. NP section
+
+Pablo, on reading it: "it's almost as if we had already solved the problem with
+the series, just never wrote it down."
+
+**We have not, and the chapter now says so in its own voice.** But the feeling had
+a real cause worth extracting. §26.2 catches one failure — a count that cannot
+return zero. Trefethen's P/NP account supplies a second that this chapter's own
+examples could not reveal, because both of them are evaluated on every instance
+of their index.
+
+Worst-case complexity *is* a strict ledger: a count, no free parameter, forbids
+plenty. Yet its practical force has drained, for two reasons Trefethen names —
+worst-case-exponential algorithms that run fast on real instances (simplex
+remains a workhorse though provably exponential; Knuth's 2016 von Neumann lecture
+was all SAT applications and mentioned NP-completeness in passing), and
+approximate optimality removing the exponential even in the worst case (88% on
+max cut).
+
+> **The second failure mode.** A ledger can be exact, parameter-free and able to
+> return zero, and still forbid nothing that matters — if it is computed over a
+> measure the world does not sample. A bound that binds only off the support of
+> what occurs is not a false bound; it is a true one with no purchase. So the
+> test needs a second clause: not only *can this count return zero* but *does it
+> return zero anywhere the system actually goes*.
+
+Written with the limit attached, because the reading it invites is wrong: nothing
+here bears on whether P equals NP, and nothing in this corpus does. Trefethen's
+observation is his, published under his name, and it concerns the *consequences*
+of a distinction rather than the distinction — he is explicit that P vs. NP's
+standing as an organising principle "has only grown", with 551 complexity classes
+catalogued as of August 2026. The chapter takes a diagnostic from it, not a
+result. The closing line is the one that matters: **recognising the shape of a
+problem is not the same as having solved it, and the gap between those two is
+where most of the mathematics lives.**
+
+That is §26.4's rule applied to us rather than to anyone else, which is the only
+way it stays an instrument.
+
+### A Möbius chapter — Book 7, and a claim I checked and then weakened
+
+Recommendation is Book 7's Attribution Series, not Book 4. Möbius is a person and
+Book 7 is the gallery of people; Book 4 would need it to be about the mathematics,
+which Ch 26 now covers.
+
+The attribution angle, **checked and then walked back one step**: the tempting
+claim is that Johann Benedict Listing discovered the band first and was robbed by
+the naming. MacTutor will not support that. It says Listing "discovered the
+properties of the Möbius band at almost the same time, and independently of"
+Möbius, in 1858, and does not establish priority either way. So the honest case is
+not theft but **co-discovery collapsed by a singular name** — a third kind of
+attribution failure, distinct from Bhargava's (a story the genre invented) and
+Lattes' (a rule sending credit upward). Here it is convention: objects get one
+name because names are singular.
+
+With a genuine counterweight: **Listing coined the word "topology"** — first in an
+1834 letter, published in *Vorstudien zur Topologie*, 1847, the first published
+use of the term. The man whose name is not on the band named the entire field.
+
+The Faraday connection Pablo asked about is real but it is *content*, not a home:
+**Stokes' theorem requires an orientable surface**, so Faraday's law
+∮E·dl = −dΦ/dt is well-posed only when the surface is orientable — flux is not
+defined on a Möbius band. That belongs as a section inside the Möbius chapter,
+cross-linked to `ch-faraday.html`, rather than making it a Book 4 chapter.

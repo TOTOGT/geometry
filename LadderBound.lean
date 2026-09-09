@@ -39,16 +39,47 @@
   with no free parameter that DOES return zero — is Chapter 25's
   W(T) = d₁(T) − d₂(T), and is not formalised here.
 
-  VERIFICATION STATUS — 2026-09-08.  NOT YET RUN.
-  (First draft had a wrong hypothesis in `ladder_rel_error_of_lt`: it derived
-   n*f ≤ c from the upper bracket when the goal needs c ≤ (n+1)*f from the
-   lower one. Found by re-deriving on paper, before any run. Corrected here.)
+  VERIFICATION STATUS — 2026-09-09.  **CLEAN, RUN AND RECORDED.**
 
       cd ~/Desktop/geometry && lake env lean LadderBound.lean
 
-  Expected: no output (Lean is silent on success), then the axiom report from
-  the `#print axioms` lines at the foot of the file, which should list only
-  [propext, Classical.choice, Quot.sound] for all five theorems.
+  All six theorems:
+
+      'LadderBound.gap_eq'                depends on axioms: [propext, Classical.choice, Quot.sound]
+      'LadderBound.half_gap'              depends on axioms: [propext, Classical.choice, Quot.sound]
+      'LadderBound.ladder_abs_error'      depends on axioms: [propext, Classical.choice, Quot.sound]
+      'LadderBound.ladder_rel_error'      depends on axioms: [propext, Classical.choice, Quot.sound]
+      'LadderBound.ladder_rel_error_of_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+      'LadderBound.ladder_forbids_nothing' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+  No `sorryAx`, no axiom outside the permitted three, no errors.  Gated:
+
+      python3 tools/axiom_gate.py <report> 6
+      OK: 6 theorems, no sorryAx, no axiom outside the permitted set.
+
+  Ran under Lean v4.32.0 in `geometry`.  Three drafts were needed and the faults
+  are worth keeping, because two of the three had nothing to do with the
+  mathematics:
+
+    1. A real error, found on paper before any run: `ladder_rel_error_of_lt`
+       derived `n*f ≤ c` from the UPPER bracket when the goal needs
+       `c ≤ (n+1)*f` from the LOWER one.  Wrong direction; unprovable as
+       written.
+    2. `div_le_iff`, `le_div_iff`, `div_le_div_iff` and `le_or_lt` are all gone
+       from this Mathlib — the GroupWithZero refactor.  Four failures, one
+       cause, and none of it about the theorem.
+    3. Two trailing `ring`s after a `field_simp` that had already closed the
+       goal.  Reported as errors; the declarations were clean regardless.
+
+  Lesson recorded in the audit log: proofs written against remembered lemma
+  NAMES are fragile across Mathlib versions in a way proofs written with
+  TACTICS are not.  The final version leans on field_simp, gcongr, positivity,
+  nlinarith, by_cases and push_neg.
+
+  Two harmless warnings remain and are deliberately not fixed: `hax`/`hxb` in
+  `half_gap` are used implicitly by `linarith`, and `push_neg` is deprecated in
+  favour of `push Not`.  Editing verified code to silence a warning would mean
+  re-verifying it, which is a bad trade against a clean run.
 -/
 
 import Mathlib.Data.Real.Basic
@@ -75,70 +106,61 @@ theorem half_gap {a b x : ℝ} (hax : a ≤ x) (hxb : x ≤ b) :
 theorem ladder_abs_error {c f n : ℝ} (hc : 0 < c) (hn : 0 < n)
     (hlo : c / (n + 1) ≤ f) (hhi : f ≤ c / n) :
     min (c / n - f) (f - c / (n + 1)) ≤ c / (2 * (n * (n + 1))) := by
+  have hn1 : (0:ℝ) < n + 1 := by linarith
+  have h1 : n ≠ 0 := ne_of_gt hn
+  have h2 : n + 1 ≠ 0 := ne_of_gt hn1
   have h := half_gap hlo hhi
-  have hg : c / n - c / (n + 1) = c / (n * (n + 1)) := gap_eq c hn
-  have : min (f - c / (n + 1)) (c / n - f) ≤ (c / n - c / (n + 1)) / 2 := h
-  rw [min_comm] at this
-  rw [hg] at this
+  rw [min_comm] at h
   calc min (c / n - f) (f - c / (n + 1))
-      ≤ c / (n * (n + 1)) / 2 := this
-    _ = c / (2 * (n * (n + 1))) := by ring
+      ≤ (c / n - c / (n + 1)) / 2 := h
+    _ = c / (2 * (n * (n + 1))) := by rw [gap_eq c hn]; field_simp
 
-/-- **Theorem 26.1.**  For a target bracketed by rungs `n` and `n+1`, the
-relative error of the nearer rung is at most `1 / (2n)`. -/
+/-- **Theorem 26.1.**  For a target bracketed by rungs `n` and `n+1`, the error of
+the nearer rung is at most `f / (2n)` — stated as `2n · error ≤ f`, which is the
+relative bound `error / f ≤ 1/(2n)` cleared of its division. -/
 theorem ladder_rel_error {c f n : ℝ} (hc : 0 < c) (hn : 0 < n)
     (hlo : c / (n + 1) ≤ f) (hhi : f ≤ c / n) :
-    min (c / n - f) (f - c / (n + 1)) / f ≤ 1 / (2 * n) := by
+    2 * n * min (c / n - f) (f - c / (n + 1)) ≤ f := by
   have hn1 : (0:ℝ) < n + 1 := by linarith
-  have hcn1 : 0 < c / (n + 1) := div_pos hc hn1
-  have hf : 0 < f := lt_of_lt_of_le hcn1 hlo
+  have h1 : n ≠ 0 := ne_of_gt hn
+  have h2 : n + 1 ≠ 0 := ne_of_gt hn1
   have habs := ladder_abs_error hc hn hlo hhi
-  -- from  c/(n+1) ≤ f  we get  c ≤ f * (n+1)
-  have hc_le : c ≤ f * (n + 1) := by
-    rw [div_le_iff hn1] at hlo
-    linarith
-  have step : c / (2 * (n * (n + 1))) / f ≤ 1 / (2 * n) := by
-    rw [div_div, div_le_div_iff (by positivity) (by positivity)]
-    nlinarith [hc_le, hn, hf]
-  calc min (c / n - f) (f - c / (n + 1)) / f
-      ≤ c / (2 * (n * (n + 1))) / f := by gcongr
-    _ ≤ 1 / (2 * n) := step
+  have hpos : (0:ℝ) ≤ 2 * n := by positivity
+  calc 2 * n * min (c / n - f) (f - c / (n + 1))
+      ≤ 2 * n * (c / (2 * (n * (n + 1)))) := mul_le_mul_of_nonneg_left habs hpos
+    _ = c / (n + 1) := by field_simp
+    _ ≤ f := hlo
 
-/-- Reader-facing form.  If the target sits strictly below `c`, the relative
-error is at most `f / (2 (c − f))`, which tends to `0` as `f / c → 0`. -/
+/-- The reader-facing form.  Since `2n · error ≤ f` and `c ≤ (n+1)f`, the error
+is at most `f·f / (2(c−f))`, which tends to `0` with `f/c`. -/
 theorem ladder_rel_error_of_lt {c f n : ℝ} (hc : 0 < c) (hn : 0 < n)
     (hlo : c / (n + 1) ≤ f) (hhi : f ≤ c / n) (hfc : f < c) :
-    min (c / n - f) (f - c / (n + 1)) / f ≤ f / (2 * (c - f)) := by
-  have hn1 : (0:ℝ) < n + 1 := by linarith
-  have hcn1 : 0 < c / (n + 1) := div_pos hc hn1
-  have hf : 0 < f := lt_of_lt_of_le hcn1 hlo
-  have hcf : 0 < c - f := by linarith
-  have main := ladder_rel_error hc hn hlo hhi
-  -- The goal cross-multiplies to  c - f ≤ n * f,  i.e.  c ≤ (n+1) * f,
-  -- which is `hlo` with its denominator cleared.  (An earlier draft derived
-  -- `n * f ≤ c` from `hhi` instead — the wrong direction, and unusable here.)
-  have hc_le : c ≤ f * (n + 1) := by
-    rw [div_le_iff hn1] at hlo
-    linarith
-  have : (1:ℝ) / (2 * n) ≤ f / (2 * (c - f)) := by
-    rw [div_le_div_iff (by positivity) (by positivity)]
-    nlinarith [hc_le, hf, hn, hcf]
-  linarith [main, this]
-
-/-- The corollary the chapter states: as the target falls away from `c`, the
-bound collapses, so the ladder excludes nothing. -/
-theorem ladder_forbids_nothing {c f n : ℝ} (hc : 0 < c) (hn : 0 < n)
-    (hlo : c / (n + 1) ≤ f) (hhi : f ≤ c / n) (hfc : 2 * f ≤ c) :
-    min (c / n - f) (f - c / (n + 1)) / f ≤ f / c := by
+    2 * (c - f) * min (c / n - f) (f - c / (n + 1)) ≤ f * f := by
   have hn1 : (0:ℝ) < n + 1 := by linarith
   have hf : 0 < f := lt_of_lt_of_le (div_pos hc hn1) hlo
-  have hfc' : f < c := by linarith
-  have h := ladder_rel_error_of_lt hc hn hlo hhi hfc'
   have hcf : 0 < c - f := by linarith
-  have : f / (2 * (c - f)) ≤ f / c := by
-    rw [div_le_div_iff (by positivity) hc]
-    nlinarith [hf, hfc, hcf]
-  linarith
+  -- clear `hlo` of its denominator with a tactic, not a renamed lemma
+  have hc_le : c ≤ f * (n + 1) := by
+    have h := hlo
+    rw [div_le_iff₀ hn1] at h
+    linarith
+  have main := ladder_rel_error hc hn hlo hhi
+  -- If the error is negative the bound is trivial; otherwise divide `main` through.
+  by_cases hge : 0 ≤ min (c / n - f) (f - c / (n + 1))
+  · nlinarith [main, hge, hc_le, hn, hf, hcf]
+  · push_neg at hge
+    nlinarith [hge, hf, hcf]
+
+/-- The corollary the chapter states: once the target is at most half of `c`, the
+error is bounded by `f·f / c`, so the ladder excludes nothing. -/
+theorem ladder_forbids_nothing {c f n : ℝ} (hc : 0 < c) (hn : 0 < n)
+    (hlo : c / (n + 1) ≤ f) (hhi : f ≤ c / n) (h2f : 2 * f ≤ c) :
+    c * min (c / n - f) (f - c / (n + 1)) ≤ f * f := by
+  have hn1 : (0:ℝ) < n + 1 := by linarith
+  have hf : 0 < f := lt_of_lt_of_le (div_pos hc hn1) hlo
+  have hfc : f < c := by linarith
+  have h := ladder_rel_error_of_lt hc hn hlo hhi hfc
+  nlinarith [h, hf, hc, h2f]
 
 #print axioms gap_eq
 #print axioms half_gap

@@ -223,6 +223,21 @@ and $f$ lies within half of it from one endpoint or the other, so the absolute e
 <p><strong>Corollary.</strong> For $f \ll c$ the ladder matches every target to arbitrary relative precision. It therefore excludes nothing, and a fit to it carries no information.</p>
 </div>
 
+<div class="insight-box">
+<div class="insight-label">Kernel-checked, 9 September 2026</div>
+<p>Theorem 26.1 is formalised in <span class="mono">LadderBound.lean</span> and machine-verified:
+<span class="mono">gap_eq</span>, <span class="mono">half_gap</span>,
+<span class="mono">ladder_abs_error</span>, <span class="mono">ladder_rel_error</span>,
+<span class="mono">ladder_rel_error_of_lt</span> and <span class="mono">ladder_forbids_nothing</span>
+each depend on <span class="mono">[propext, Classical.choice, Quot.sound]</span> and nothing else &mdash;
+no <span class="mono">sorryAx</span>, gated by <span class="mono">tools/axiom_gate.py</span> at
+six theorems. The Lean statement is multiplicative, <span class="mono">2 * n * min (…) ≤ f</span>,
+which is the relative bound cleared of its division.</p>
+<p>Which is the chapter&rsquo;s own standard met by the chapter: §26.4 says a claim that a
+structure is selected must produce a ledger, and §26.2&rsquo;s negative test is now the one thing
+here that a kernel has read.</p>
+</div>
+
 <p><span class="mono">ch26-verify.py</span> checks the bound numerically against 200,000 random targets in $(1, 200)$ with $c = 700$ and finds <strong>zero violations</strong>. Concretely, below 50 Hz such a ladder matches any frequency whatever to better than 4%, and near 10 Hz to better than 0.8%. <span class="proved-s">COMPUTED</span></p>
 
 <p>So a ladder of that shape is not a prediction. It is a curve with one free parameter and effectively unlimited resolution in the band where the claims are made, and finding that a measured frequency &ldquo;lies on the ladder&rdquo; conveys no information at all. The correct response to such a fit is not scepticism about the fitter. It is the observation that <em>the family could not have failed</em>.</p>
@@ -233,6 +248,49 @@ and $f$ lies within half of it from one endpoint or the other, so the absolute e
 <p>Counted to $x = 200{,}000$, the closing field <strong>forbids about 80.6% of sizes</strong>, and by Landau&ndash;Ramanujan the permitted fraction tends to zero like $1/\sqrt{\log x}$. A one-parameter ladder forbids <strong>0%</strong>, at every $x$. <span class="proved-s">COMPUTED</span></p>
 <p>The two sit at opposite extremes of the only property that matters for a selection rule. This is not a difference of rigour, presentation or good faith. It is a difference in the degrees of freedom of the fitting function, and it is measurable.</p>
 </div>
+
+<h3 style="color:var(--gold);margin-top:2rem">A second way a ledger fails, from a case this chapter did not anticipate</h3>
+
+<p>§26.2 catches one failure: a count that cannot return zero. There is another, and it was not
+visible from inside this chapter&rsquo;s examples because both of them &mdash; the closing field and
+the ladder &mdash; are evaluated on every instance of their index. Trefethen&rsquo;s account of
+P vs. NP supplies the case that shows the gap.</p>
+
+<p>Worst-case complexity <em>is</em> a ledger in the sense of §26.1, and a strict one: it returns a
+count, it has no free parameter, and it forbids a great deal. Yet the practical force of the P/NP
+distinction has drained away, and Trefethen gives two reasons. Exponential-in-the-worst-case
+algorithms often run fast on the instances anybody actually has &mdash; the simplex method remains
+a workhorse of large-scale optimisation despite being provably exponential, and 3-SAT solvers
+became industrial tools, to the point where Knuth&rsquo;s 2016 von Neumann Prize lecture was all
+about SAT applications and mentioned NP-completeness only in passing. And where that fails,
+accepting slightly less than optimality removes the exponential even in the worst case: a
+polynomial algorithm gets within 88% on max cut.</p>
+
+<div class="thm-box">
+<div class="thm-label">The second failure mode</div>
+<p>A ledger can be exact, parameter-free, and able to return zero, and still forbid nothing that
+matters &mdash; if it is computed over a measure the world does not sample. Worst-case complexity
+quantifies over all inputs; instances arriving from practice occupy a thin, structured subset. A
+bound that binds only off the support of what occurs is not a false bound. It is a true one with no
+purchase.</p>
+<p>So the test in §26.2 needs a second clause. Ask not only <em>can this count return zero</em> but
+<em>does it return zero anywhere the system actually goes</em>. The first question catches a
+decoration; the second catches a theorem.</p>
+</div>
+
+<p>Which is worth stating carefully, because it does not license the reading it invites. Nothing
+here bears on whether P equals NP, and nothing in this corpus does. Trefethen&rsquo;s observation is
+his, published under his name, and it is an argument about the <em>consequences</em> of a
+distinction rather than about the distinction itself &mdash; he is explicit that P vs. NP&rsquo;s
+&ldquo;visibility as a pillar of theoretical computer science has only grown&rdquo;, with 551
+complexity classes catalogued as of August 2026. What this chapter takes from it is a diagnostic it
+was missing, not a result.</p>
+
+<p>And that distinction is the one §26.4 exists to enforce. A framework that can supply a vocabulary
+for someone else&rsquo;s finding has an instrument; it does not thereby have their finding, and it
+certainly does not have the theorem their finding is about. <strong>Recognising the shape of a
+problem is not the same as having solved it, and the gap between those two is where most of the
+mathematics lives.</strong></p>
 
 <div class="section-tag">§ 26.3 · Where Book 8 and Book 4 Meet</div>
 <h2>Holology Asked for the Logic; the Closing Field Supplied a Number</h2>
@@ -293,7 +351,92 @@ $$\text{total defect} = 2\pi\chi(\Sigma), \qquad \text{elementary defect} = \fra
 
 <h3 style="color:var(--gold);margin-top:2rem">Where you can see it: the non-orientable cases</h3>
 
-<p>The sphere is a bad witness for a law about $\chi$, because on the sphere $\chi = 2$ and the constant is indistinguishable from a coincidence. The surfaces that make the law visible are the ones where $\chi \ne 2$ &mdash; and the non-orientable ones are exemplary, because they are where the sphere-specific version fails outright and the general version keeps working.</p>
+<p>The sphere is a bad witness for a law about $\chi$. On the sphere $\chi = 2$, so
+$|G|\chi$ and $2|G|$ agree, and a constant that happens to equal two is indistinguishable from a
+coincidence. Every classical statement of the twelve-pentagon theorem is stated on the sphere,
+which is why the $\chi$ was never visible in it: there was nothing for it to vary against.</p>
+
+<p>To see a law you need the quantity to move. Three things have to be understood together, and
+each is easier watched than read, so each has a figure below: what a single defect <em>is</em> and
+why its size is fixed by $|G|$; what non-orientability actually does to a surface, which is not a
+picture but a process; and how the two combine into a count.</p>
+
+<div class="figure-wrap">
+  <div class="figure-header"><span>Fig 26.1 &middot; The Volterra wedge &mdash; why one defect costs 2&pi;/|G|</span><span id="w-lab">|G| = 6</span></div>
+  <canvas id="wedge" height="300"></canvas>
+  <div class="fig-btns">
+    <button class="fbtn" data-g="3">|G| = 3 &middot; 120&deg;</button>
+    <button class="fbtn" data-g="4">|G| = 4 &middot; 90&deg;</button>
+    <button class="fbtn" data-g="6" data-on="1">|G| = 6 &middot; 60&deg;</button>
+    <span style="color:#6a8099;font:11px 'Courier New',monospace;margin-left:.6rem" id="w-out"></span>
+  </div>
+  <div class="figure-caption">Left: a flat sheet, every ray a lattice direction. A wedge of
+  2&pi;/|G| is excised and the cut edges identified &mdash; the only operation the lattice permits,
+  because the rotation gluing one edge to the other has to be a symmetry. Right: what remains,
+  redrawn with the angle closed. The sheet can no longer lie flat. That deficit is one defect, and
+  its size is not a choice.</div>
+</div>
+
+<p>The wedge is the whole mechanism, and it is why $|G|$ enters at all. The rotation that carries
+one cut edge onto the other must be a symmetry of the lattice, so the wedge angle is a multiple of
+$2\pi/|G|$ and nothing finer. A triangular sheet pays in sixtieths of a turn, a square sheet in
+quarters. <strong>The lattice fixes the denomination of the currency; the surface fixes the
+bill.</strong></p>
+
+<p>And the bill is Descartes&rsquo;. The total angular deficit of any closed surface built this way
+is $2\pi\chi(\Sigma)$ &mdash; a purely topological quantity that knows nothing about lattices.
+Divide the one by the other and the defect count falls out with no freedom left in it.</p>
+
+<p>Which brings the second thing, and it is the one that cannot be drawn statically. A surface is
+non-orientable when a frame carried around some loop comes back reversed. That is a statement about
+a <em>journey</em>, not about a shape, and the Möbius band is the smallest place it happens.</p>
+
+<div class="figure-wrap">
+  <div class="figure-header"><span>Fig 26.2 &middot; Transport on a Möbius band &mdash; non-orientability as a process</span><span id="m-lab">circuit 0.00</span></div>
+  <canvas id="mob" height="320"></canvas>
+  <div class="fig-btns">
+    <button class="fbtn" id="m-play" data-on="1">&#10074;&#10074; pause</button>
+    <button class="fbtn" id="m-slow">slow</button>
+    <span style="color:#6a8099;font:11px 'Courier New',monospace;margin-left:.6rem" id="m-out">one circuit returns the frame inverted</span>
+  </div>
+  <div class="figure-caption">A frame is carried once around the band. The two ends are marked
+  differently so you can tell them apart. After a single circuit the marker returns to the same
+  place with its ends exchanged &mdash; not rotated back, <em>exchanged</em>. There is no way to
+  choose &ldquo;up&rdquo; consistently over the whole band, and that is the entire content of
+  non-orientability. A cylinder, given the same treatment, returns the frame unchanged.</div>
+</div>
+
+<p>Nothing in that process costs curvature. The band is flat &mdash; it can be made from paper
+without stretching &mdash; and the frame&rsquo;s reversal is a global fact about how the strip is
+glued, not a local one about how it bends. That is the first hint of the result in §26.3&rsquo;s
+last box: non-orientability is a real structural property that is <em>free</em> in the currency
+Chapter 21 counts.</p>
+
+<p>Now put the two together. The lattice sets the size of one defect; the surface sets the total;
+and the count is forced.</p>
+
+<div class="figure-wrap">
+  <div class="figure-header"><span>Fig 26.3 &middot; The ledger &mdash; #defects = |G| &middot; &chi;(&Sigma;)</span><span id="l-lab">sphere &middot; triangular</span></div>
+  <canvas id="ledger" height="330"></canvas>
+  <div class="fig-btns">
+    <button class="fbtn" data-s="0" data-on="1">sphere &chi;=2</button>
+    <button class="fbtn" data-s="1">&#8477;P&sup2; &chi;=1</button>
+    <button class="fbtn" data-s="2">torus &chi;=0</button>
+    <button class="fbtn" data-s="3">Klein &chi;=0</button>
+    <span style="width:1px;height:18px;background:#1a2e42;margin:0 .3rem"></span>
+    <button class="fbtn" data-lat="6" data-on="1">triangular |G|=6</button>
+    <button class="fbtn" data-lat="4">square |G|=4</button>
+  </div>
+  <div class="figure-caption">The predicted count against the object that realises it. Switch to
+  &#8477;P&sup2; and watch the two formulas separate: the sphere-specific 2|G| keeps saying 12 and 8,
+  while |G|&chi; says 6 and 4 &mdash; and the hemi-dodecahedron has six pentagons, the hemi-cube four
+  vertices of degree three. On the torus and the Klein bottle the count is zero and the sheet tiles
+  flat.</div>
+</div>
+
+
+
+<p>The table below is the same statement as the figure, in numbers, and the non-orientable rows are the exemplary ones: they are where the sphere-specific version fails outright and the general version keeps working.</p>
 
 <div class="table-wrap">
 <table class="status-table">
@@ -364,6 +507,174 @@ $$\text{total defect} = 2\pi\chi(\Sigma), \qquad \text{elementary defect} = \fra
 </div>
 
 </div>
+
+<style>
+.fbtn{background:#0c1420;border:1px solid #1a2e42;color:#6a8099;font:11px 'Courier New',monospace;
+      padding:.32rem .6rem;border-radius:3px;cursor:pointer;letter-spacing:.06em}
+.fbtn:hover{border-color:#c9a84c;color:#cdd8e8}
+.fbtn[data-on]{border-color:#c9a84c;color:#c9a84c;background:rgba(201,168,76,.08)}
+</style>
+<script>
+(function(){
+"use strict";
+var GOLD='#c9a84c', DIM='#6a8099', TXT='#cdd8e8', JADE='#50c878', OPEN='#ff6b8a', RULE='#1a2e42';
+function fit(c,h){var d=window.devicePixelRatio||1,w=c.clientWidth||600;
+  c.width=w*d;c.height=h*d;var x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return {x:x,w:w,h:h};}
+function group(sel,fn){var b=document.querySelectorAll(sel);
+  b.forEach(function(el){el.onclick=function(){b.forEach(function(o){o.removeAttribute('data-on');});
+    el.setAttribute('data-on','1');fn(el);};});}
+
+/* ---------- Fig 26.1 · the Volterra wedge ---------- */
+var wc=document.getElementById('wedge'); if(wc){
+  var G=6;
+  function wedge(){
+    var r=fit(wc,300),x=r.x,W=r.w,H=r.h; x.clearRect(0,0,W,H);
+    var th=2*Math.PI/G, R=Math.min(H*0.36,W*0.20), cy=H/2;
+    var cx1=W*0.27, cx2=W*0.73;
+    // left: flat sheet, wedge highlighted
+    x.strokeStyle=RULE;x.lineWidth=1;
+    x.beginPath();x.arc(cx1,cy,R,0,2*Math.PI);x.stroke();
+    x.fillStyle='rgba(255,107,138,.16)';
+    x.beginPath();x.moveTo(cx1,cy);x.arc(cx1,cy,R,-th/2,th/2);x.closePath();x.fill();
+    x.strokeStyle=OPEN;x.lineWidth=1.4;
+    x.beginPath();x.moveTo(cx1,cy);x.lineTo(cx1+R*Math.cos(-th/2),cy+R*Math.sin(-th/2));
+    x.moveTo(cx1,cy);x.lineTo(cx1+R*Math.cos(th/2),cy+R*Math.sin(th/2));x.stroke();
+    var N=36,i,a;
+    x.strokeStyle='rgba(106,128,153,.5)';x.lineWidth=.8;
+    for(i=0;i<N;i++){a=-Math.PI+i*2*Math.PI/N;
+      if(a>-th/2&&a<th/2) continue;
+      x.beginPath();x.moveTo(cx1,cy);x.lineTo(cx1+R*Math.cos(a),cy+R*Math.sin(a));x.stroke();}
+    // right: closed — angles compressed by (2pi-th)/2pi
+    var k=(2*Math.PI-th)/(2*Math.PI);
+    x.strokeStyle=RULE;x.beginPath();x.arc(cx2,cy,R,0,2*Math.PI);x.stroke();
+    x.strokeStyle='rgba(80,200,120,.55)';
+    for(i=0;i<N;i++){a=-Math.PI+i*2*Math.PI/N;
+      if(a>-th/2&&a<th/2) continue;
+      var b=(a<0? a+2*Math.PI : a); var ang=(b-th/2)*k - Math.PI;
+      x.beginPath();x.moveTo(cx2,cy);x.lineTo(cx2+R*Math.cos(ang),cy+R*Math.sin(ang));x.stroke();}
+    x.font="11px 'Courier New',monospace";x.textAlign='center';
+    x.fillStyle=DIM;x.fillText('flat sheet · wedge 2π/'+G+' removed',cx1,cy+R+26);
+    x.fillStyle=JADE;x.fillText('closed · deficit '+Math.round(360/G)+'°  →  cannot lie flat',cx2,cy+R+26);
+    x.fillStyle=GOLD;x.textAlign='left';
+    x.fillText('one defect = 2π/'+G,14,20);
+    document.getElementById('w-lab').textContent='|G| = '+G;
+    document.getElementById('w-out').textContent='wedge '+Math.round(360/G)+'°  ·  '+
+      '4π ÷ (2π/'+G+') = '+(2*G)+' defects on a sphere';
+  }
+  group('.fbtn[data-g]',function(el){G=+el.getAttribute('data-g');wedge();});
+  wedge(); window.addEventListener('resize',wedge);
+}
+
+/* ---------- Fig 26.2 · transport on a Möbius band ---------- */
+var mc=document.getElementById('mob'); if(mc){
+  var t=0, playing=true, speed=0.0055;
+  function P(u,v,W,H){ // Möbius band, projected
+    var R=1, X=(R+v*Math.cos(u/2))*Math.cos(u), Y=(R+v*Math.cos(u/2))*Math.sin(u),
+        Z=v*Math.sin(u/2);
+    var e=0.55, sx=Math.min(W,H*2.1)*0.30;
+    return [W/2 + (X-Y*0.45)*sx, H/2 + (Z*1.25 - (X+Y)*e*0.28)*sx];
+  }
+  function mob(){
+    var r=fit(mc,320),x=r.x,W=r.w,H=r.h; x.clearRect(0,0,W,H);
+    var u,v,p,i,w=0.32,NU=140;
+    // surface as ribs, painter-sorted back to front
+    var ribs=[];
+    for(i=0;i<NU;i++){u=i*2*Math.PI/NU; ribs.push([u,Math.sin(u)]);}
+    ribs.sort(function(a,b){return a[1]-b[1];});
+    ribs.forEach(function(rb){
+      u=rb[0];
+      var a=P(u,-w,W,H), b=P(u,w,W,H);
+      var sh=0.20+0.55*(rb[1]+1)/2;
+      x.strokeStyle='rgba(201,168,76,'+sh.toFixed(3)+')';x.lineWidth=1.3;
+      x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke();
+    });
+    // edge
+    x.strokeStyle='rgba(205,216,232,.45)';x.lineWidth=1;
+    x.beginPath();
+    for(i=0;i<=2*NU;i++){u=i*2*Math.PI/NU;p=P(u,(i<NU? w : -w),W,H);
+      i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]);}
+    x.stroke();
+    // the transported frame
+    u=t%(2*Math.PI);
+    var A=P(u,-w*1.02,W,H), B=P(u,w*1.02,W,H);
+    x.strokeStyle=TXT;x.lineWidth=2.4;
+    x.beginPath();x.moveTo(A[0],A[1]);x.lineTo(B[0],B[1]);x.stroke();
+    x.fillStyle=OPEN;x.beginPath();x.arc(A[0],A[1],5.2,0,2*Math.PI);x.fill();
+    x.fillStyle=JADE;x.beginPath();x.arc(B[0],B[1],5.2,0,2*Math.PI);x.fill();
+    // start marker
+    var S0=P(0,-w*1.02,W,H), S1=P(0,w*1.02,W,H);
+    x.strokeStyle='rgba(106,128,153,.55)';x.lineWidth=1.2;x.setLineDash([3,3]);
+    x.beginPath();x.moveTo(S0[0],S0[1]);x.lineTo(S1[0],S1[1]);x.stroke();x.setLineDash([]);
+    x.font="11px 'Courier New',monospace";x.fillStyle=DIM;x.textAlign='left';
+    x.fillText('start', S0[0]+8, S0[1]-6);
+    var circ=t/(2*Math.PI);
+    document.getElementById('m-lab').textContent='circuit '+circ.toFixed(2);
+    var half=(circ%1)>0.5;
+    document.getElementById('m-out').textContent = circ<1
+      ? 'carrying the frame around…'
+      : 'returned with its ends exchanged — no consistent “up” exists';
+    x.fillStyle=GOLD;x.fillText('χ(Möbius band) = 0   ·   non-orientable', 14, 20);
+  }
+  function loop(){ if(playing){t+=speed;} mob(); requestAnimationFrame(loop); }
+  document.getElementById('m-play').onclick=function(){
+    playing=!playing; this.textContent = playing? '❚❚ pause':'▶ play';
+    if(playing) this.setAttribute('data-on','1'); else this.removeAttribute('data-on');};
+  document.getElementById('m-slow').onclick=function(){
+    speed = (speed>0.003)? 0.0016 : 0.0055;
+    this.textContent = (speed<0.003)? 'normal':'slow';};
+  loop(); window.addEventListener('resize',mob);
+}
+
+/* ---------- Fig 26.3 · the ledger ---------- */
+var lc=document.getElementById('ledger'); if(lc){
+  var SURF=[{n:'sphere',chi:2,or:true},{n:'ℝP²',chi:1,or:false},
+            {n:'torus',chi:0,or:true},{n:'Klein bottle',chi:0,or:false}];
+  var REAL={ '6,2':'icosahedron — 12 vertices of degree 5',
+             '4,2':'cube — 8 vertices of degree 3',
+             '6,1':'hemi-dodecahedron — 6 pentagons',
+             '4,1':'hemi-cube — 4 vertices of degree 3',
+             '6,0':'the sheet tiles it flat — no defect',
+             '4,0':'the sheet tiles it flat — no defect' };
+  var si=0, lat=6;
+  function ledger(){
+    var r=fit(lc,330),x=r.x,W=r.w,H=r.h; x.clearRect(0,0,W,H);
+    var S=SURF[si], pred=lat*S.chi, naive=2*lat;
+    x.font="12px 'Courier New',monospace";x.textAlign='left';
+    x.fillStyle=DIM;x.fillText('surface',24,30);
+    x.fillStyle=TXT;x.font="15px Georgia";x.fillText(S.n,24,52);
+    x.font="11px 'Courier New',monospace";
+    x.fillStyle=S.or?DIM:OPEN;x.fillText(S.or?'orientable':'NON-ORIENTABLE',24,70);
+    x.fillStyle=DIM;x.font="12px 'Courier New',monospace";
+    x.fillText('χ = '+S.chi,24,92);
+    x.fillText('|G| = '+lat+'   ('+(lat===6?'triangular':'square')+')',24,110);
+    // the two formulas
+    var by=150, bx=24, bw=Math.min(W-48,520);
+    function bar(y,label,val,col,note){
+      x.fillStyle=DIM;x.font="11px 'Courier New',monospace";x.fillText(label,bx,y-8);
+      var maxv=12, ww=bw*Math.max(val,0)/maxv;
+      x.fillStyle='rgba(26,46,66,.9)';x.fillRect(bx,y,bw,22);
+      x.fillStyle=col;x.fillRect(bx,y,ww,22);
+      x.fillStyle=val>0?'#05080f':TXT;x.font="bold 13px 'Courier New',monospace";
+      x.fillText(String(val), val>0? bx+8 : bx+8, y+16);
+      if(note){x.fillStyle=DIM;x.font="11px Georgia";x.textAlign='right';
+        x.fillText(note,bx+bw,y+38);x.textAlign='left';}
+    }
+    bar(by,'|G| · χ(Σ)   — the law',pred,JADE,'');
+    var wrong = (naive!==pred);
+    bar(by+62,'2|G|   — the sphere-only form',naive,wrong?'rgba(255,107,138,.75)':'rgba(80,200,120,.35)',
+        wrong?'wrong here by '+(naive-pred):'agrees only because χ = 2');
+    x.fillStyle=GOLD;x.font="12px Georgia";x.textAlign='left';
+    x.fillText('realised as:',24,by+120);
+    x.fillStyle=TXT;x.font="13px Georgia";
+    x.fillText(REAL[lat+','+S.chi]||'—',24,by+142);
+    document.getElementById('l-lab').textContent=S.n+' · '+(lat===6?'triangular':'square');
+  }
+  group('.fbtn[data-s]',function(el){si=+el.getAttribute('data-s');ledger();});
+  group('.fbtn[data-lat]',function(el){lat=+el.getAttribute('data-lat');ledger();});
+  ledger(); window.addEventListener('resize',ledger);
+}
+})();
+</script>
 
 <div style="background:#0e1525;border-top:1px solid #2a3a5a;padding:.55rem 2rem;text-align:right;font-family:sans-serif;font-size:.72rem;color:#666">
   <a href="https://grossi-ops.github.io/g6/" target="_blank" style="color:#c9a84c;text-decoration:none;letter-spacing:.05em">G6 LLC</a>
