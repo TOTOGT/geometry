@@ -4899,3 +4899,72 @@ from one that can be traced. §7 already marked the Euler side OPEN; it now says
 what specifically is open about it, tagged COMPUTED and OPEN together.
 
 Handoff item 6 closed. Item 7 — the proof layer, on both sides — stands.
+
+### `wp101-verify.py`, and a withdrawal that was right for the wrong reason
+
+WP-101 maps the dm³ chain onto four biological thresholds disrupted by preterm
+birth and **withdraws two of the four**. A paper whose value is in what it refuses
+has to be right about the refusals, so the companion script checks those first.
+
+**The anchor recount.** §1 quoted `AutophagyDm3_v2.lean` at 18 theorems. The file
+carries **24**, still with no `sorry` and no `True` conclusion — its own header
+says 24 and the page did not follow. Corrected, and now recounted by the script
+rather than quoted. A figure that is transcribed decays the moment the file moves;
+this is the same defect as the seven pages citing Mathlib v4.33.0-rc1 against a
+v4.32.0 pin.
+
+**The surfactant withdrawal was right and its reason was not.** §2 withdrew the
+contact morphism because CRNT deficiency analysis "returned δ < 0 under two
+independent formulations", adding that valid deficiency requires δ ≥ 0. That
+second sentence is true and destroys the first as evidence. Deficiency is
+δ = n − ℓ − s, and it is non-negative for **every** reaction network: the reaction
+vectors of a linkage class span at most one dimension fewer than the class has
+complexes, so s ≤ n − ℓ. Degradation sinks and de novo synthesis do not change it.
+A computed δ < 0 is therefore a defect in the graph construction — miscounted
+complexes, linkage classes, or stoichiometric rank — and cannot be a property of
+the network. Both formulations were wrong, in the same direction.
+
+The script implements deficiency from the definition, calibrates on Feinberg's
+textbook example (n,ℓ,s,δ) = (3,1,1,1), and finds minimum δ = 0 over 5,898 random
+networks. The corrected ground is narrower than what was published: **no valid
+deficiency was ever obtained for the surfactant network, so CRNT supplies no
+evidence either way.** The morphism stays withdrawn; what is withdrawn alongside
+it is the claim to have shown anything against it.
+
+**Rule: an impossible measurement is a broken instrument, not a finding.** When a
+computation returns a value the theory forbids, the conclusion available is about
+the computation. Reading it as a result about the object is the same error as
+reading a zero-byte axiom report as a gate defect, three entries above.
+
+### Four citations in WP-101 checked against the primary sources, and four wrong
+
+The corpus has a standing method for this — WP-28 traced a citation to a phantom
+DOI — and it is owed to its own pages as much as to other people's.
+
+- **Whitsett & Weaver** is **2002**, not 2015. NEJM 347:2141–8, PMID 12501227. The
+  volume and pages were right, which is what made the year survive.
+- **Ball et al. 2013** is in ***Cortex*** 49(6):1711–21. The reference list had it
+  right and the in-text citation said *Brain*.
+- **Gibbons et al. 2014** is *Interleukin-8 (CXCL8) production is a signatory T
+  cell effector function of human newborn infants*, **Nat Med** 20:1206–10,
+  doi 10.1038/nm.3670. The entry had a different title, journal, volume and pages.
+- **Stjerna** is the serious one. The entry gave *PLoS ONE* 10(5):e0123420 (2015)
+  and the in-text citation gave *NeuroImage* 2015 — two different journals for one
+  source, neither of which publishes a paper of that title. The real paper is
+  *J Vis Exp* 60:3774 (2012), PMID 22371054, and it is a recording **protocol**,
+  which cannot support a finding about EEG coherence. The sentence it carried is
+  **downgraded to unsourced** rather than re-attached to a paper that does not
+  bear it, and OPEN-2 now says a source has to be identified.
+
+Three more are unresolved and are recorded as unresolved rather than guessed at:
+Fairchild et al. 2016 and a bare "PNAS 2009" are cited in the text with no
+reference entry, and the Poets et al. 1994 entry did not resolve to a paper of
+that title, journal, volume and pages.
+
+Block [3] of the script now checks the internal half mechanically — every in-text
+(Author, Year, Journal) resolves to an entry, and the journals agree — and block
+[4] asserts each externally verified correction is present, so a citation checked
+against a primary source cannot silently revert.
+
+Handoff item 6 fully closed: every working paper from WP-94 onward now carries a
+verify script.

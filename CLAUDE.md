@@ -460,8 +460,12 @@ stands between the draft and submission. **Send it.**
    ComparatorChallenges reference files excluded, not one), both now corrected in
    a dated box. It also found that §3's structural argument does not extend to
    Euler — that challenge file is *adapted*, not copied, and pins no commit. See
-   the 2026-09-09 audit-log entries. **`book6/wp101` still has no verify script**;
-   of the fourteen papers from WP-94 onward it is now the only one without.
+   the 2026-09-09 audit-log entries. `wp101-verify.py` written the same day and it
+   too found more than it reproduced: the anchor is 24 theorems, not the 18 quoted;
+   the surfactant withdrawal was right for a reason that cannot be right, since
+   CRNT deficiency is non-negative for every network; and four citations were wrong
+   against their primary sources, one of them naming two different journals for a
+   paper that is in neither. **Every paper from WP-94 onward now has a script.**
 7. **The OpenAI release's PROOF layer is unaudited.** WP-107 settles the statement
    layer and says so; nobody here has looked at the proofs.
 8. Two handoff blocks still exist: this one, and a second at **line 1**, above the
