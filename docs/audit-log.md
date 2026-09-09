@@ -4845,3 +4845,57 @@ session that committed — 1,520 temporaries had accumulated in
 
 Two corrections to the same rule in one day, each narrower than the last, both
 found by running the command instead of reasoning about it.
+
+### `wp107-verify.py`, and two figures it caught in the page it verifies
+
+WP-107 shipped without a companion script, which for a paper whose entire claim
+is a diff is the wrong way round: the load-bearing numbers were exactly the kind
+a reader should not have to take on trust. `book6/wp107-verify.py` regenerates
+them — standard library only, blocks [1]–[4] fetching the two statement files
+over HTTPS and blocks [5]–[6] reporting SKIPPED unless `--repo` points at a
+checkout, rather than guessing.
+
+Reproduced exactly: 2,486 Lean files, 616,276 lines, a 17-line unified diff at
+default context, every changed line a deletion, and the deleted block exactly the
+two positive alternatives with their placeholders. The definition comparison came
+out **stronger** than the page claimed — eleven declarations byte-identical, not
+nine, the two extra being the periodic variants of the initial-velocity and force
+conditions, 4,801 bytes in total.
+
+**Two figures were wrong and are corrected on the page in a dated box.** The copy
+has **72** normalised code lines, not 71: the 71 came from a normalisation that
+also dropped `variable {n : ℕ}`, while the 80 for upstream came from one that did
+not, so the published pair mixed two strippings of the same file. `variable` binds
+the dimension in every definition below it and is statement content; the page's
+own declared strip list does not include it, and 80/72 is what that list gives.
+And §5 excluded "the challenge reference file", singular, where there are two —
+the Euler one carries the only two `sorry`s in the repository. Both exclusions
+rest on the same stated ground, each file declaring its placeholders intentional
+in its own header, so the finding does not move.
+
+**Rule: a count is a claim, and a pair of counts is two claims that have to come
+from one procedure.** Neither number was individually implausible. What made the
+error findable was writing the procedure down as code and running it on both
+files at once.
+
+### The Euler side is not the same kind of object, and now the page says why
+
+The script's block [6] is not a reproduction; it is a finding, and it is the
+reason the script was worth writing rather than transcribing. WP-107 §3 argues
+structurally: the claimant could not have narrowed the target statement because
+they did not author it. **That argument covers Navier–Stokes and does not extend
+to Euler.** The two challenge files declare different provenance in their own
+headers — the Navier–Stokes file says *copied from* DeepMind at a pinned
+40-character commit, the Euler file says *adapted from* the same upstream file at
+`main`, with no commit, and describes itself as the whole-space breakdown
+alternative *specialized* to zero viscosity and zero external force. A
+specialization is authored. Its normalised code lines are not a subset of
+upstream's, so on that side there is neither a diff that could settle the question
+nor a pinned version to diff against.
+
+Nothing here says the Euler statement is unfaithful. It says the cheap check is
+unavailable there, and a Prop that has to be read is a different epistemic object
+from one that can be traced. §7 already marked the Euler side OPEN; it now says
+what specifically is open about it, tagged COMPUTED and OPEN together.
+
+Handoff item 6 closed. Item 7 — the proof layer, on both sides — stands.

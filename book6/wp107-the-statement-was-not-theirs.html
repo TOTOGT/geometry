@@ -89,7 +89,7 @@ footer .disc{max-width:520px;color:#6f6a5c}
 <h1>The Statement Was <em>Not Theirs</em></h1>
 <div class="subtitle">OpenAI announced on 8 September 2026 that an internal system had resolved the Navier&ndash;Stokes Millennium problem by establishing Fefferman&rsquo;s alternatives (C) and (D). The question an auditor asks first is whether the formalized statement is the official problem or a narrower one that merely resembles it. It is not narrower, and the reason is structural: they did not write it.</div>
 <div class="metagrid">
-<div><strong>Method</strong>normalised diff of every code line against the upstream source; repository-wide search for the usual escapes</div>
+<div><strong>Method</strong>normalised diff of every code line against the upstream source; repository-wide search for the usual escapes<br>reproduced by <span class="mono">wp107-verify.py</span></div>
 <div><strong>Inputs</strong><span class="mono">openai/NavierStokesAndEuler</span> at HEAD; <span class="mono">google-deepmind/formal-conjectures</span> at <span class="mono">8bf45ed</span></div>
 <div><strong>Claim type</strong>no verdict on the mathematics offered here<br>this audits the <em>statement</em>, not the proof</div>
 <div><strong>Status</strong>statement layer: settled<br>proof layer: <strong>not verified</strong> &mdash; no build was run</div>
@@ -151,7 +151,7 @@ metadata attributes, namespace, and local notation&rdquo; adapted. That is a che
 than a reassurance, so it was checked.</p>
 <p>Stripping comments, docstrings, attributes, imports, <span class="mono">open</span>/
 <span class="mono">namespace</span> lines and blank lines from both files leaves 80 code lines
-upstream and 71 in the OpenAI copy. The full unified diff is <strong>17 lines</strong>, and the only
+upstream and 72 in the OpenAI copy. The full unified diff is <strong>17 lines</strong>, and the only
 substantive difference is a <em>deletion</em>: <span class="tag t-data">COMPUTED</span></p>
 <div class="eq">
 &minus; theorem navier_stokes_existence_and_smoothness_R3 &hellip; := by sorry<br>
@@ -195,8 +195,9 @@ the decay conditions bind the <em>witness</em>, which makes the theorem harder t
 easier.</p>
 
 <h2><span class="n">&sect; 5</span> The usual escapes, searched for</h2>
-<p>Across <strong>2,486</strong> Lean files and <strong>616,276</strong> lines, excluding the
-challenge reference file which retains DeepMind&rsquo;s intentional placeholders:
+<p>Across <strong>2,486</strong> Lean files and <strong>616,276</strong> lines, excluding the two
+<span class="mono">ComparatorChallenges</span> reference files, each of which declares in its own
+header that it retains intentional placeholders:
 <span class="tag t-data">COMPUTED</span></p>
 <div class="eq">
 sorry &nbsp; 0 &nbsp;&middot;&nbsp; admit &nbsp; 0 &nbsp;&middot;&nbsp; native_decide &nbsp; 0 &nbsp;&middot;&nbsp; user-declared axiom &nbsp; 0
@@ -228,6 +229,18 @@ smooth divergence-free field with finite lifespan, unbounded $C^1$ norm and dive
 integral &mdash; Beale&ndash;Kato&ndash;Majda &mdash; and carries a non-triviality clause
 <span class="mono">A.field ≠ 0</span>, which is the clause a sceptic checks first. Its supporting
 definitions have not been read. <span class="tag t-open">OPEN</span></p>
+<p><strong>And the Euler challenge statement is theirs.</strong> The structural argument of &sect;3
+does not extend to it, and the asymmetry is visible in the two files&rsquo; own headers. The
+Navier&ndash;Stokes challenge says it is <em>copied from</em> DeepMind at a pinned 40-character
+commit. The Euler challenge says it is <em>adapted from</em> the same upstream file at
+<span class="mono">main</span> &mdash; no commit &mdash; and describes itself as
+&ldquo;the whole-space breakdown alternative specialized to zero viscosity and zero external
+force.&rdquo; A specialization is authored. Its normalised code lines are consequently
+<em>not</em> a subset of upstream&rsquo;s, so on that side there is no diff that could settle the
+question and no pinned version to diff against. Nothing here says the Euler statement is
+unfaithful; what it says is that the cheap check available for Navier&ndash;Stokes is unavailable
+for Euler, and the Prop has to be read rather than traced.
+<span class="tag t-data">COMPUTED</span> <span class="tag t-open">OPEN</span></p>
 <p><strong>The bridge layer is unread.</strong> The solution file proves the challenge statements
 &ldquo;using ComparatorBridge adapters&rdquo;, and adapters are where scope slips. The diff in §3
 constrains this usefully &mdash; the adapter must land on a Prop it did not author &mdash; but the
@@ -300,7 +313,26 @@ Clay Mathematics Institute official problem description.<br>
 [7] <span class="mono">github.com/leanprover/comparator</span>; nanoda, an independent Lean kernel.<br>
 [8] This corpus: <a href="wp29-numerology-sweep.html">WP-29</a>;
 <a href="wp30-how-to-audit.html">WP-30</a>; <a href="wp104-six-was-an-input.html">WP-104</a>;
-<a href="../book4/ch26-kaleidoscope-test.html">Book 4 &middot; Ch 26</a>.</p>
+<a href="../book4/ch26-kaleidoscope-test.html">Book 4 &middot; Ch 26</a>.<br>
+[9] Every COMPUTED figure in this note is regenerated by
+<span class="mono">wp107-verify.py</span>, standard library only. Blocks [1]&ndash;[4] fetch the two
+statement files; blocks [5]&ndash;[6] need a checkout and report SKIPPED without one:
+<span class="mono">python3 wp107-verify.py --repo NavierStokesAndEuler</span>.</p>
+
+<div class="box" style="margin-top:26px;font-size:0.92em">
+<div class="lab">Corrections &middot; 2026-09-09</div>
+<p style="margin-top:6px"><strong>&sect;3, the copy&rsquo;s line count.</strong> Read 71; the count
+is <strong>72</strong> under the normalisation this note states. The 71 came from additionally
+dropping <span class="mono">variable {n : &#8469;}</span>, which binds the dimension in every
+definition below it and is statement content rather than scaffolding. The diff length of 17 lines,
+and the finding that every changed line is a deletion, are unaffected.</p>
+<p><strong>&sect;5, the exclusion.</strong> Read &ldquo;the challenge reference file&rdquo;,
+singular. There are two, and the Euler one carries the only two <span class="mono">sorry</span>s in
+the repository. Both are excluded on the same stated ground and not a wider one: each declares its
+placeholders intentional in its own header.</p>
+<p>Both figures are now assertions in <span class="mono">wp107-verify.py</span> and cannot decay
+silently a second time.</p>
+</div>
 </div>
 
 <footer>

@@ -455,14 +455,13 @@ stands between the draft and submission. **Send it.**
 4. `vol1-proofs` **has no LICENSE file** while its Lean sources carry SPDX MIT.
    It is the repository the AI for Math seed application leads with.
 5. CC BY-NC-ND vs the AI for Math Fund's open-access requirement — unresolved.
-6. **`book6/wp107-the-statement-was-not-theirs.html` has no `wp107-verify.py`.**
-   Of the fourteen working papers from WP-94 onward, twelve carry one; WP-101 and
-   WP-107 do not. (Across book6 as a whole 66 of 81 have none — the companion
-   script is a convention of the recent papers, not of the book, and the claim
-   "the only one without" was checked and is false.) WP-107's load-bearing numbers
-   — 80 upstream code lines against 71 in the copy, a 17-line unified diff,
-   byte-identical definitions — are exactly the kind a script should regenerate
-   from the two upstream repositories rather than a reader take on trust.
+6. ~~`wp107-verify.py`~~ **CLOSED 2026-09-09.** Written, and it caught two wrong
+   figures in the page it verifies (72 normalised code lines, not 71; two
+   ComparatorChallenges reference files excluded, not one), both now corrected in
+   a dated box. It also found that §3's structural argument does not extend to
+   Euler — that challenge file is *adapted*, not copied, and pins no commit. See
+   the 2026-09-09 audit-log entries. **`book6/wp101` still has no verify script**;
+   of the fourteen papers from WP-94 onward it is now the only one without.
 7. **The OpenAI release's PROOF layer is unaudited.** WP-107 settles the statement
    layer and says so; nobody here has looked at the proofs.
 8. Two handoff blocks still exist: this one, and a second at **line 1**, above the
