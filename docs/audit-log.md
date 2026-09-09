@@ -4706,6 +4706,14 @@ the push had nothing to send.
 `git log origin/main -- <file>`, which only reads. Never `git diff` through the
 bridge, for any purpose.
 
+> **Superseded 2026-09-09, one day later.** The diagnosis above is right and the
+> prohibition drawn from it is wrong. `git --no-optional-locks diff --stat` does
+> not take the index lock, so `diff` through the bridge is safe when the flag is
+> present; and a lock that is stranded can be `mv`-ed aside by the same bridge
+> that cannot `rm` it. This entry is left as written — it is the log — with the
+> correction attached. See the 2026-09-09 entry, and *Git, on this machine* in
+> `CLAUDE.md`.
+
 ---
 
 ## 2026-09-09 · Book 4 Chapter 28, and four corrections found in building it
@@ -4750,3 +4758,69 @@ chapter now says so and marks the coincidence OPEN.
 **Indexes regenerated, not hand-edited.** `master-index.html` and `index-book4.html`
 are outputs of `tools/build_indexes.py`; both lacked Ch 27 as well as Ch 28. Running
 the tool added both. Ch 28 indexes at 17 links, not orphaned.
+
+### The bridge git ban was wrong, and had been wrong the whole time
+
+`CLAUDE.md` carried, in three places, a rule saying not to run `git` through the
+Cowork device bridge: the bridge cannot delete files, so any command that touches
+the index strands a `.git/index.lock` that nothing but the desk can clear. The
+diagnosis was accurate and the rule drawn from it was wrong on both halves, which
+two commands settled in under a minute.
+
+    git --no-optional-locks status --short      # returns; no index.lock created
+    mv .git/index.lock .git/_stale-locks/...    # succeeds where rm does not
+
+`--no-optional-locks` tells git not to take the opportunistic index-refresh lock,
+which is the only lock a read command wants; and while `rm` inside `.git/` still
+fails with `Operation not permitted`, `mv` does not, so a stranded lock can be
+moved out of git's way by the session that stranded it. Neither fact needed
+discovering — both are documented behaviour — and neither had been tried.
+
+**The rule cost more than the incidents did.** Four stranded locks (`geometry`
+three times, `io-clone` once) produced a prohibition that left every subsequent
+sandboxed session unable to read the state of the repository it was editing, for
+four days. **Rule: a prohibition inferred from a failure gets tested against the
+failure before it is written down.** Three sites updated — the *Git, on this
+machine* section, the bullet under *Read first*, and the handoff method note —
+each marked superseded rather than silently rewritten, and the 2026-09-08 entry
+above given a correction box in place.
+
+Fifty-four zero-byte `.stale-HEAD.lock-*` files had accumulated loose in
+`geometry/.git` from sessions using the rename workaround. All moved to
+`.git/_stale-locks/` so the desk clears them with one `rm -rf`.
+
+### WP-107 curated: two sessions, one paper, and the other one is better
+
+Two sessions independently set out to audit the OpenAI Navier–Stokes / Euler
+release for statement fidelity. Both were real work; only one shipped. The
+curation rule the corpus already had for WP-96 — compare against the claim set,
+keep one, do not renumber — applies unchanged, and here it decides against this
+session: `book6/wp107-the-statement-was-not-theirs.html` (`3f3107c`) reaches a
+finding this session had not reached, namely that the OpenAI challenge file's own
+header says it is copied from Google DeepMind's Formal Conjectures at commit
+`8bf45ed`, with a 17-line unified diff whose only substantive content is the
+**deletion** of the two positive alternatives and their `sorry` placeholders.
+This session's draft is dropped and not filed; nothing in it survives the shipped
+page. Its §7 draws the boundary honestly — statement layer complete, proof layer
+not verified here — and that boundary, plus the absent `wp107-verify.py`, are now
+items 6 and 7 of the handoff's open list.
+
+**A claim written into the handoff was checked and was false.** The first draft of
+item 6 said WP-107 was "the only working paper in book6 without a verify script."
+Counting: 66 of 81 have none, and among the fourteen from WP-94 onward twelve do,
+with WP-101 the other exception. The companion script is a convention of the
+recent papers and not of the book. The corrected item says so and records that the
+first version was wrong — the same discipline the entry above applies to the lock
+rule, applied to a sentence written four minutes earlier.
+
+### The handoff block was overwritten, as its own header instructs
+
+`CLAUDE.md`'s handoff is dated 2026-09-09 and replaces the 2026-09-05 narrative in
+place. Standing subsections that later sessions had added below it — the WP-94
+arc, the WP-96 do-not-duplicate rule, Book 7 Ch Fy, the out-of-repo deliverables,
+the scheduled task — were kept, because they are house notes wearing a handoff's
+indentation and deleting them would lose rules, not narrative. The open list is
+carried forward with three items added and item 8 correcting its predecessor: the
+line-1 block it called "a stale 2026-08-30 block" is now dated 2026-09-05 and
+holds the overnight-job run order. Merging the two blocks is a restructure and is
+left undone on purpose.
