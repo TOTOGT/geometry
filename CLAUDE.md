@@ -495,12 +495,24 @@ exactness test ∂ṙ/∂z + ∂ż/∂r not identically zero, no separability un
 (r=1, z=0) not a fixed point of the reduced system. **A misnamed reference, not a missing
 file.** The citation was repointed and nothing was composed.
 
-**Then the certificate caught this repo's own arithmetic.** `book4/ch23-verify.py` block
-[8] reported `0.775940575502539698` — **outside the certified bracket, 1.96e-13 above its
-upper bound.** Twelve leading digits identical; they part at the thirteenth. Cause is that
-block's own floor, `solve_ivp` at rtol=1e-11/atol=1e-13. **Ch 3's published ~0.776 is
-unaffected.** Block [8] now prints the bracket, says plainly that it falls outside it, and
-sends any citation past eleven figures to the certificate.
+**Then the certificate caught this repo's own arithmetic.** A float-bisection basin figure
+came out **outside the certified bracket, above its upper bound.** Twelve leading digits
+identical; they part at the thirteenth, by about the bracket width. Cause is that block's
+own `solve_ivp` floor. **Ch 3's published ~0.776 is unaffected.** The block now prints the
+bracket, says plainly that it falls outside it, and sends any citation past eleven figures
+to `certify_rstar_rigorous.py`.
+
+**The repair is in `book4/ch24-verify.py`, not `ch23-verify.py`.** Session A's report named
+ch23 and this handoff repeated it; `ch23-verify.py` is contact forms, the Segre P¹×P², and
+the Legendre transformation, and computes no r* at all. Verified on disk 2026-09-10: the
+bracket, the comparison and the "cite the certificate past eleven figures" line are at
+`book4/ch24-verify.py` lines ~168–190 and are complete. `push-book4-whole.sh` staged
+`ch23-verify.py` for the same reason and had nothing to commit. Nothing is broken — but a
+session sent to ch23 would have found a Segre block and concluded the repair was never
+made. **Fourth instance of the day's shape: right finding, wrong file.**
+
+`ch24-verify.py` needs **scipy**, which the Cowork bridge VM does not have. Run it at the
+desk, not through the bridge.
 
 **The standing rule, and it is the finding of the two days:**
 **where two instruments exist for one number, cite the stronger one and say which.**

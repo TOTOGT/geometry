@@ -5292,3 +5292,25 @@ Recorded as the third instance today of the same shape: a correct measurement un
 sentence that would have caused damage. The other two are WP-84's fixed-k sweep and
 block [8]'s regenerated r*. Repair: the handoff now says *archive the 36 HTML files,
 not the directory*, and lists what else is in there.
+
+### Addendum 2, 2026-09-10: the repair was real, the citation was not
+
+The block-[8] finding above is correct in substance and **was attributed to the wrong
+file**. It is `book4/ch24-verify.py`, not `ch23-verify.py`. `ch23-verify.py` computes
+contact forms, the Segre P¹×P² dual defect and the Legendre transformation on J¹(ℝ,ℝ),
+and contains no r* at all — which is why `push-book4-whole.sh`, whose `git add` names
+`book4/ch23-verify.py`, reported nothing to commit.
+
+Verified on disk: `ch24-verify.py` lines ~168–190 carry the certified bracket
+[0.775940575501953125, 0.77594057550234375], the inside/outside test, the eleven-figure
+agreement check, and the instruction to cite `certify_rstar_rigorous.py` past eleven
+figures. The repair is complete. Only its address was wrong.
+
+This handoff repeated the wrong address for a day. A session sent to `ch23-verify.py`
+would have found a Segre block, concluded the repair was never made, and either redone it
+or reopened a closed finding. **Fourth instance today of one shape** — after WP-84's
+fixed-k sweep, block [8]'s regenerated r*, and the container-vs-subset archive
+instruction. Here the object measured was right and the *pointer* to it was wrong.
+
+Caught by opening the file instead of trusting the report of it, which is the same move
+that produced all three of the others.
