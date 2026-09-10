@@ -25,6 +25,16 @@ the kind of claim a reader should not have to take on trust.
       does NOT extend to Euler.  This block is why the script is worth having:
       it turns §7's "the Euler side is unaudited" into a specific finding.
 
+  [7] THE ADAPTER LAYER, which §7 of the page marked OPEN.  The submission's
+      proofs are stated against `NavierStokes/ComparatorDefinitions.lean`, not
+      against the challenge file.  That module is the challenge file MINUS the
+      two theorem statements and their placeholders, with nothing added -- so
+      the Props the adapters land on are the ones they did not author, and the
+      "adapters are where scope slips" risk is closed at the statement layer;
+  [8] THE WITNESS.  The (C) theorem is existential, so what is supplied for u_0
+      decides how strong the instance is.  It is `fun _ => 0` -- the fluid at
+      rest -- which is a strengthening, not a dodge.
+
 Blocks [1]-[4] need only two files and fetch them over HTTPS.  Blocks [5]-[6]
 need the OpenAI repository; pass --repo PATH to a checkout, or the script reports
 them SKIPPED rather than guessing.
@@ -334,6 +344,74 @@ else:
               "this block says what specifically is open about it.")
         check("Euler placeholders are declared intentional",
               "intentional" in eu, True)
+
+# ------------------------------------------------------------------------- [7]
+print()
+print("[7] the adapter layer -- what the submission's proofs are stated against")
+DEFS = os.path.join("NavierStokes", "ComparatorDefinitions.lean")
+SOLN = os.path.join("NavierStokes", "ComparatorSolution.lean")
+if not args.repo:
+    skip("adapter definitions", "no --repo given")
+    skip("the (C) witness", "no --repo given")
+else:
+    try:
+        defs = open(os.path.join(args.repo, DEFS), encoding="utf-8").read()
+        soln = open(os.path.join(args.repo, SOLN), encoding="utf-8").read()
+    except OSError as e:                                   # noqa: BLE001
+        defs = soln = ""
+        print("       could not read the adapter files: %s" % e)
+    if defs:
+        D = code_lines(defs)
+        extra = [x for x in D if x not in B]
+        gone = [x for x in B if x not in D]
+        check("definitions module adds NOTHING to the challenge file", extra, [],
+              "THE POINT. %d code lines against the challenge file's %d, and every\n"
+              "one of them already present there. The Props the submission proves\n"
+              "are the ones it did not author, so there is no room in the adapter\n"
+              "for a narrower statement to enter. WP-107 §7 marked this OPEN on the\n"
+              "grounds that adapters are where scope slips; at the statement layer\n"
+              "it is now closed." % (len(D), len(B)))
+        check("and removes exactly the two theorems and their placeholders",
+              len(gone), 10,
+              "Two 4-line theorem statements plus their two `sorry` lines. The\n"
+              "module's own header says why: the adapters' import closure must\n"
+              "contain no reference placeholders.")
+        check("removed lines are the (C) and (D) statements",
+              sum(1 for x in gone if x.startswith("theorem navier_stokes_breakdown")), 2)
+        check("the submission restates (C) and (D) under the reference names",
+              soln.count("theorem navier_stokes_breakdown"), 2)
+        check("and asks the kernel what they rest on",
+              soln.count("#print axioms"), 2,
+              "Two `#print axioms` lines in the submission file. Their OUTPUT is\n"
+              "not checked here and no build was run -- see §7.")
+
+# ------------------------------------------------------------------------- [8]
+print()
+print("[8] the witness supplied for (C)")
+if not args.repo:
+    skip("the u_0 witness", "no --repo given")
+else:
+    try:
+        thm = open(os.path.join(args.repo, "NavierStokes",
+                                "ComparatorR3Theorem.lean"), encoding="utf-8").read()
+    except OSError:
+        thm = ""
+    if thm:
+        check("initial velocity is the zero field", "fun _ => 0" in thm, True,
+              "`refine <fun _ => 0, ...>` -- the fluid at rest. The statement is\n"
+              "existential in u_0, so the witness decides how strong the instance\n"
+              "is, and this is the strongest and least contrived one available.\n"
+              "Per §2: strengthening the DATA conditions makes a theorem harder,\n"
+              "never easier. Independently described by Olga Holtz (UC Berkeley,\n"
+              "9 September 2026) as starting 'with a three-dimensional\n"
+              "incompressible fluid at rest'; this is that sentence, in source.")
+        check("the decay obligation on it is discharged, not assumed",
+              "zero_initial_condition_decay" in thm, True)
+        check("forcing is present, as (C) permits",
+              "ForceConditionDecay" in thm, True,
+              "Fefferman permits forcing in (C) and (D), so f is not a dodge --\n"
+              "§4 already said so. What it is NOT is unforced blow-up, and no\n"
+              "part of this audit says otherwise.")
 
 # ---------------------------------------------------------------------- verdict
 print()

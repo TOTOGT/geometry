@@ -5025,3 +5025,45 @@ its own fixture, which is what a fixture is for.
 
 WP-29 extended in place, as its own closing paragraph asks for, rather than
 re-done.
+
+### WP-107 §9: the adapter layer and the witness, prompted by an outside reading
+
+Olga Holtz (UC Berkeley) published a public assessment of the OpenAI announcement
+on 9 September asking, among other things, for independent scrutiny of "whether
+the formal statement matches the intended theorem" — the question WP-107 was
+written to answer, asked independently a day later. Her description of the
+construction (a 3D incompressible fluid at rest, forced, bounded energy) turned
+out to be checkable in the repository, so two of §7's three OPEN items were read.
+
+**The adapter layer, which §7 flagged as where scope slips.** The submission
+proves nothing against the challenge file; it proves against
+`NavierStokes/ComparatorDefinitions.lean`, whose header says the adapters' import
+closure must contain no reference placeholders. Normalised and compared line for
+line: **62 code lines against the challenge file's 72, zero lines present here and
+absent there, and exactly 10 removed — the two theorem statements and their two
+`sorry`s.** Nothing is added. The adapter has no room to introduce a weaker
+solution notion, because it introduces nothing. Closed at the statement layer.
+`ComparatorSolution.lean` restates (C) and (D) under the reference names and calls
+`#print axioms` on both; that the calls are there is checked, what they print is
+not, and no build was run.
+
+**The witness.** (C) is existential in u₀, so the witness decides how strong the
+instance is. `ComparatorR3Theorem.lean` supplies `fun _ => 0` — the zero field,
+its decay obligation discharged by a lemma rather than assumed. By §2's asymmetry
+that is a strengthening: conditions on the data make a theorem harder, never
+easier. Holtz's "a three-dimensional incompressible fluid at rest" is that line of
+Lean, and it is one line.
+
+**What was deliberately not adopted.** Her note also raises research-priority and
+discovery-provenance questions, including concerns attributed to others. Those are
+outside the note's scope and are recorded as outside it. **Rule: relaying an
+allegation is not auditing it.** WP-107 has an instrument for comparing a
+statement against an upstream file and no instrument for adjudicating credit, and
+a paper that borrows the authority of the first to carry the second is doing the
+thing this corpus audits other people for. The distinction WP-107 depends on is
+the one Holtz draws herself: a verified theorem can settle a mathematical question
+and cannot settle scientific credit. §3's finding is provenance of the *statement*
+and says nothing about provenance of the *proof*.
+
+Blocks [7] and [8] added to `wp107-verify.py`. Two of §7's three OPEN items remain
+open: the proof layer, and the Euler side.
