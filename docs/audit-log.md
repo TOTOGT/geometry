@@ -4968,3 +4968,60 @@ against a primary source cannot silently revert.
 
 Handoff item 6 fully closed: every working paper from WP-94 onward now carries a
 verify script.
+
+## 2026-09-10 · WP-29 verified: the instrument that refuses coincidences
+
+WP-29 is the most-linked instrument in the corpus — **26 pages** point at it, and
+WP-30, WP-104, WP-107 and Book 4 Ch 26 invoke "the WP-29 method" by name — and it
+had no script. An instrument used to refuse other people's claims is the first
+thing that should be verified, not the last.
+
+**Its claims are unusual: most are about other files.** Five sentences of the form
+"Fixed: page X now reads Y". A claim of that shape decays in silence — nothing
+fails when a page is edited back, and nothing was watching. `wp29-verify.py` holds
+all five as assertions. **All five held.** Then it re-ran the sweep.
+
+**A. The Moonshine repair fixed the epigraph and not the chapter.**
+`book8/ch8-6-voa.html` carried the corrected epigraph — "conjectured… still open
+as of 2026" — and eight paragraphs below it a technical box reading "the
+uniqueness of V♮ (Frenkel–Lepowsky–Meurman conjecture, **now a theorem**)". One
+chapter, both statements. The conjecture is open: Betsumiya, Lam and Shimakura
+(*Comm. Math. Phys.*, 2023) prove uniqueness for holomorphic c = 24 VOAs with
+**non-trivial** weight-one Lie algebra — exactly the complement of the moonshine
+module, which has dim V₁ = 0. Corrected to a conditional. **Rule: repairing a
+page's epigraph is not repairing the page.** Finding 4 did the first and reported
+the second.
+
+**B. The same claim species survived one paragraph above its own correction.**
+`course-dm3-102.html` still read "critDim(4) = 112 — exactly the number of proofs
+in the AXLE 1080-proofs programme", directly above the Week 10 card carrying
+finding 3's correction. The registry reports 284 core proved, 148 kernel-audited,
+1244 recursive; the programme is named for 1080. It survived because **the sweep
+searched for the phrase "not a coincidence" and this sentence does not contain
+it.** A sweep keyed to wording finds the wording. Corrected.
+
+**C. Finding 3's correction is no longer regenerable.** The figures that replaced
+the bad claim — 112 rows, 1,041 sorrys, 1,027 open — came off
+`project-1080-proofs/sorry_inventory.csv`, which is in no repository reachable
+from this desk. More defensible than what it replaced, and now resting on an
+artefact nobody can re-run. Recorded, not fixed.
+
+**The base rate, measured instead of asserted.** Finding 2 argued that a shared 3
+is not evidence because small integers recur by base rate — rhetoric until now.
+Counting every integer below 1000 in the running text of **751 pages**, 63,771 of
+them: **3 accounts for 10.94% and ranks third overall.** And 112 occurs **70
+times**, one of them Book 6 Ch 02 building E₈ as 112 + 128 = 240 — a three-digit
+integer recurring across unrelated structures, inside the corpus, in a chapter
+WP-29 already cites for something else.
+
+**One correction toward strength.** The control case is stated for simply-laced
+root systems; |Φ| = rank × h holds for *every* irreducible root system. Thirteen
+checked including B, C, F₄ and G₂. The control is right and its stated scope was
+narrower than the identity under it.
+
+**A verify script found an error in itself before it found any in the paper.**
+The root-system table was written with h(D₇) = 14; it is 12. The check failed on
+its own fixture, which is what a fixture is for.
+
+WP-29 extended in place, as its own closing paragraph asks for, rather than
+re-done.
