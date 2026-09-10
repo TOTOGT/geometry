@@ -5067,3 +5067,74 @@ and says nothing about provenance of the *proof*.
 
 Blocks [7] and [8] added to `wp107-verify.py`. Two of §7's three OPEN items remain
 open: the proof layer, and the Euler side.
+
+### The audit report is clean for the first time, and the reason it wasn't is a finding
+
+`tools/audit.py` had reported **19 dead links and 6 markdown leaks** on every run
+for as long as this session has been watching. A report that is never empty is a
+report nobody reads, so the standing findings were cleared rather than stepped
+over again.
+
+**Twelve of the dead links were one mistake.** `vol2-v5/deposit/dashboard.html`
+links eight sibling pages by bare filename while sitting two directories down.
+All eight exist at the repository root. Thirteen hrefs given `../../`.
+
+**Five were in WP-101, and they were symptoms of something else.** The page links
+`wp30-the-missing-anchor.html`, `wp31c-autophagy-calibration-case-study.html` and
+`sample-chapter-autophagy.html`. None exists. Each is **a filename constructed out
+of a display label**, and the labels do not match the filenames:
+
+| the label a reader sees | the file it actually points to |
+|---|---|
+| WP-30 · The Missing Anchor | `book6/wp85-the-missing-anchor.html` |
+| WP-31B · How to Audit a Mathematical Claim | `book6/wp30-how-to-audit.html` |
+| WP-31C · Executing the Calibration Pipeline | `book6/wp86-autophagy-calibration-case-study.html` |
+| WP-31D · Topological Mismatch | `book6/wp87-topological-mismatch-bifurcation-loss.html` |
+
+So **"WP-30" is not a well-defined citation in this corpus**: by label it is *The
+Missing Anchor*, by filename it is *How to Audit a Mathematical Claim*, and those
+are different papers. WP-101 cites "WP-30" for the μ_max ≈ −0.41 s⁻¹ withdrawal,
+which is the first of the two; the link was repaired to `wp85`, and the label left
+alone. **Nothing was renumbered.** The corpus's own rule from the WP-96 and WP-107
+collisions is that renumbering is worse than the collision, and the author is
+entitled to a display numbering that follows the argument rather than the disk.
+What is not acceptable is a divergence nobody can see, so it is now instrumented.
+
+**Six markdown leaks: five real, one not.** `book4/rh-paper.html` — the RH preprint
+— was rendering literal `**asterisks**` to readers in five places, including the
+line stating the axiom result. Converted to `<strong>`. The sixth was
+`<strong>K**` in WP-101, where `K*` and `K**` are the two thymic-selection
+thresholds; a mathematical name ending in a star is not half-converted bold, and
+`audit.py` now carries a documented notation exception rather than a weakened
+check.
+
+`.lake` added to `SKIP_DIRS`: the remaining dead link was `importGraph`'s own
+html-template referencing a stylesheet it does not ship. Auditing other people's
+vendored files reports defects nobody here can fix.
+
+**`tools/audit.py` now reports `clean` across 693 files.**
+
+### `tools/numbering.py` — the check that would have caught it
+
+Reports four things over every index page and judges none of them: label number
+against filename number (MISMATCH), one label on several files (COLLISION), a
+`wpNN` file no index lists (ORPHAN), and one number carried by files in two books
+(DUPLICATE). Exit 0 unless `--strict`, because divergence can be deliberate.
+
+First run, 165 rows across 29 index pages, **15 reported**:
+
+- the four MISMATCHes above;
+- six COLLISIONs, of which four are benign — `Cap 0`–`Cap 3` are per-book
+  Portuguese chapter numbers in Book 5 and Book 6 — one is generic (`Plan` on the
+  two 47-year plans), and one is real: **`Ch DE-3` on both
+  `ch-aperiodic-multiplying-media.html` and `ch-box-domain-lift.html`**;
+- four ORPHANs, all Book 7: `wp56-special-relativity`, `wp57-causal-integration`,
+  `wp58-galactic-fold`, `wp59-dark-matter-lensing` — written and listed nowhere;
+- one DUPLICATE, and it is the same four papers again from the other side:
+  **`book6/wp56-algorithmic-urgency.html` and `book7/wp56-special-relativity.html`
+  both claim WP-56.** Book 7 opened a wp56–wp59 run over Book 6's wp56 and put
+  none of it in an index, which is why nothing surfaced it.
+
+None of these are repaired here. They are decisions — which numbering wins, and
+whether Book 7's run belongs in an index — and this entry's contribution is that
+they are now visible and will stay visible.

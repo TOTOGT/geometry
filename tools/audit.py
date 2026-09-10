@@ -46,7 +46,11 @@ from collections import defaultdict
 from urllib.parse import unquote
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-SKIP_DIRS = {'.git', '_to_delete', '_archive', 'node_modules', 'ml-evidence'}
+SKIP_DIRS = {'.git', '.lake', '_to_delete', '_archive', 'node_modules', 'ml-evidence'}
+# .lake added 2026-09-10: it holds fetched third-party packages (importGraph's
+# own html-template links a style.css it does not ship). Auditing other
+# people's vendored files reports defects nobody here can fix, and a report
+# that is never empty is a report nobody reads.
 
 # NOTE: SKIP_DIRS controls what gets SCANNED, not what can be LINKED TO.
 # _archive/ is deliberately not audited, but 52 links point into it and they are
@@ -221,6 +225,13 @@ def audit(targets):
 
         prose = strip_code(body)                      # benign class 1
         for m in re.finditer(r'\*\*[^*\n]{1,80}\*\*|<strong>[^<]*\*\*', prose):
+            # NOTATION EXCEPTION, 2026-09-10.  `K*` and `K**` are the two thymic
+            # selection thresholds -- positive selection and negative selection --
+            # named that way in Book 6 Ch 13 and WP-101.  A mathematical name that
+            # ends in a star is not half-converted bold, and suppressing the check
+            # generally to accommodate it would cost more than it saves.
+            if re.search(r'\bK\*\*?\s*$', m.group(0)):
+                continue
             F['markdown_leak'].append([rel, line(m.start()), m.group(0)[:52]])
         for m in re.finditer(r'&(?:amp;)+(?:[a-z]{2,8}|#\d+);', body):
             F['double_escaped'].append([rel, m.group(0), line(m.start())])
