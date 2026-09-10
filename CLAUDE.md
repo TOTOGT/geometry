@@ -347,68 +347,115 @@ carry `Claude-Session:`, all from before this rule. They are left in place:
 removing them rewrites every downstream SHA and breaks the commit links recorded
 in `docs/audit-log.md`. The rule is forward-looking. Do not add more.
 
-## HANDOFF — 2026-09-09 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
+## HANDOFF — 2026-09-10 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
 
 **From:** session `018xEUzVc4fHaeLN5oumWAvc` · account `grossiatwork@gmail.com` · model `claude-opus-5`
-**Ended:** 2026-09-09, in progress.
-**Repos touched:** `~/Desktop/geometry` (Book 4 ch27–ch28, Book 6 wp106, `book4/ladder-polynomials.html`, `tools/leancheck.sh`, `CLAUDE.md`, `docs/audit-log.md`), `~/Desktop/GTCT` (`book4/ZetaReflection.lean`, `book4/ZetaFELogDeriv.lean`, `book4/MATHLIB-POST.md`), `~/Desktop/AXLE` (Journal Vol. 10).
+**Ended:** 2026-09-10, on a context limit, mid-way through WP-31B (see *In flight*).
+**Repos touched:** `~/Desktop/geometry` (Book 4 ch27–ch28 and `rh-paper.html`, Book 6 wp29/wp101/wp106/wp107, Book 8 ch8-6-voa, `course-dm3-102.html`, `vol2-v5/deposit/dashboard.html`, `tools/audit.py`, `tools/numbering.py`, `CLAUDE.md`, `docs/audit-log.md`), `~/Desktop/GTCT` (`ZetaReflection.lean`, `ZetaFELogDeriv.lean`, `MATHLIB-POST.md`), `~/Desktop/AXLE` (Journal Vol. 10; registry read only).
 
 ### Read this before touching git
 
-**The ban on `git` through the Cowork bridge is lifted.** See *Git, on this
-machine*. Prefix every read with `--no-optional-locks`; `mv` a stranded lock into
-`.git/_stale-locks/`. Fifty-four loose `.stale-HEAD.lock-*` files were swept into
-that directory today and are waiting on one `rm -rf` at the desk.
+**The ban on `git` through the Cowork bridge is lifted, and was corrected twice.**
+Reads: prefix `--no-optional-locks`. Writes: `git add` and `git commit` **work** —
+they only leave `tmp_obj_*` and a released `HEAD.lock` behind, which are litter
+reports, not failures. **Push is the only thing that needs the desk, and it is
+credentials that require it.** Sweep the litter into `.git/_stale-locks/` before
+ending a session that committed; the desk clears that directory with one
+`rm -rf`. Full account in *Git, on this machine*.
 
-### Closed this session
+### What shipped, 2026-09-09 and 2026-09-10
 
-`Zlog_add_Zlog_one_sub` — admitted in `GTCT/book4/ZetaReflection.lean` since
-2026-08-30 — **is proved.** That file is now 18 declarations, 0 `sorryAx`, every
-one on `propext` / `Classical.choice` / `Quot.sound`. Four steps:
-`completedRiemannZeta_one_sub` differentiated through `deriv_comp_const_sub`, the
-Λ = Γ_ℝ·ζ split taken only on a neighbourhood (it is false at the zeros of Γ_ℝ),
-and `logDeriv_Gammaℝ` computed directly. The four hypotheses turned out to be
-*sufficient*, not merely necessary: at n = 0 they supply s ≠ 0 and s ≠ 1, the two
-points of non-differentiability, so no side condition had to be added.
-`GTCT/book4/ZetaFELogDeriv.lean` was the development file and is retired evidence.
+**The RH arc's last admitted statement is closed.** `Zlog_add_Zlog_one_sub` is
+proved; `GTCT/book4/ZetaReflection.lean` is 18 declarations, 0 `sorryAx`, all on
+the three standard axioms. `ZetaFELogDeriv.lean` was the development file and is
+retired evidence. The `#mathlib4` post went out; text in `GTCT/book4/MATHLIB-POST.md`.
 
-### Corrected this session — three overclaims, all this desk's
+**Four verify scripts, and every one of them found something.** This is the
+finding of the two days, more than any single result: *a paper without a script is
+a paper whose numbers have not been checked, including the ones nobody doubted.*
 
-1. **"The ζ′/ζ reflection is not in Mathlib" was wrong.** Moritz Doll answered the
-   `#mathlib4` thread pointing at `logDeriv_riemannZeta_one_sub`, which is in
-   current Mathlib. The defensible scope was always *not in the pinned v4.32.0*.
-   RH paper §4.6 and Journal Vol. 10 now carry dated correction boxes. **Read the
-   pinned tree under `.lake/packages/mathlib`, never the docs site, which is built
-   against a moving Mathlib.** The same habit produced a call to
-   `HasDerivAt.logDeriv_Gamma`, which does not exist in v4.32.0 either.
-2. **A zero-byte axiom report was read mid-write and called a gate defect.** The
-   gate was fine. The commit message was amended to say so rather than quietly
-   fixed.
-3. **The bridge lock rule**, above — a rule generalised past the incidents that
-   produced it, and wrong in both halves.
+- `book6/wp107-verify.py` — reproduces the OpenAI/DeepMind diff exactly (2,486
+  Lean files, 616,276 lines, 17-line diff, deletions only). Found the copy has
+  **72** normalised code lines not 71, and that §5's exclusion covers **two**
+  reference files not one. Blocks [7]–[8] added 10 Sept: the adapter layer proves
+  against `ComparatorDefinitions.lean`, which is the challenge file minus the two
+  theorems with **nothing added**, so §7's "adapters are where scope slips" closes
+  at the statement layer; and the (C) witness is `fun _ => 0`, the fluid at rest,
+  which by §2's asymmetry is a strengthening.
+- `book6/wp101-verify.py` — the anchor is **24** theorems not the 18 quoted; the
+  surfactant withdrawal is right and its reason cannot be, since CRNT deficiency
+  δ = n − ℓ − s is **non-negative for every network** and a computed δ < 0 is a
+  construction error; and **four citations were wrong** against primary sources,
+  one naming two different journals for a paper that is in neither.
+- `book6/wp29-verify.py` — all five of WP-29's repairs held. Three new findings:
+  `ch8-6-voa` called FLM uniqueness "now a theorem" eight paragraphs below its own
+  corrected epigraph; `course-dm3-102` still claimed 112 = the AXLE proof count one
+  paragraph above its own correction; and finding 3's replacement figures rest on a
+  CSV that is in no reachable repository. Base rate measured, not asserted: over
+  751 pages and 63,771 integers below 1000, **the digit 3 is 10.94% and ranks
+  third**.
+- `tools/numbering.py` — MISMATCH / COLLISION / ORPHAN / DUPLICATE across every
+  index page.
 
-### Zulip — the post went out, and one mistake not to repeat
+**`tools/audit.py` reports `clean` across 693 files**, first time. It had shown 19
+dead links and 6 markdown leaks on every run. Twelve were one relative-path
+mistake in `vol2-v5/deposit/dashboard.html`; five were WP-101 hrefs built out of
+display labels; five markdown leaks were **in the RH preprint**, rendering literal
+asterisks to readers. `.lake` added to `SKIP_DIRS`; a documented notation
+exception added for the thresholds `K*` and `K**`.
 
-Text of the post is `GTCT/book4/MATHLIB-POST.md`. The reply to Moritz Doll was
-**sent as a DM by accident**: a click landed on a coordinate that an un-dismissed
-user card had moved under the cursor. The reply was then posted publicly with an
-apology line; the DM was left in place for Pablo to decide on. **On Zulip, read
-the compose box's target out of the screenshot before typing — every time.**
+### Rules earned this session — these are the reusable part
+
+- **A prohibition inferred from a failure gets tested against the failure before
+  it is written down.** The bridge git ban cost four days of sessions unable to
+  read their own repo state, on the strength of four incidents and no test.
+- **An impossible measurement is a broken instrument, not a finding.** δ < 0, and
+  the zero-byte axiom report read as a gate defect, are the same error.
+- **Repairing a page's epigraph is not repairing the page.**
+- **A sweep keyed to wording finds the wording.** WP-29 missed a claim one
+  paragraph from its own correction because that sentence lacked the phrase.
+- **A count is a claim, and a pair of counts is two claims that must come from
+  one procedure.** 80/71 mixed two normalisations of one file.
+- **Relaying an allegation is not auditing it.** Kept the OpenAI priority and
+  Codex-leakage material out of WP-107 and said on the page why.
+- **A figure that is transcribed decays the moment the file moves.** Recompute.
+
+### In flight — WP-31B, stopped mid-audit
+
+`book6/wp30-how-to-audit.html` is labelled **WP-31B · How to Audit a Mathematical
+Claim** and is the second-most-linked instrument (20 inbound). It has no verify
+script and was being read when this session ran out. Established so far:
+
+1. **The label/filename split is deliberate and documented on the page.** It was
+   renumbered 2026-08-11 out of a collision with WP-30 *The Missing Anchor*, and
+   the filename was **deliberately left unchanged** because WP-28 and WP-38 link
+   to it directly. So one of the four MISMATCHes `numbering.py` reports is a
+   recorded decision, not a defect — record that when writing the script.
+2. `value_iteration_midstream.py` **does exist** at the repository root. The
+   page's §8 claim that "the phantom is now a real file" holds.
+3. Arithmetic to assert: √(1.05/9.493) = 0.3326 ≈ 0.333 and √(4.20/9.493) =
+   0.6652 ≈ 0.665. Note **4.20 = 4 × 1.05 exactly**, so the two σ* differ by
+   exactly 2 and the "ψ ≈ 0.50 correction" is exactly a factor of 4 in the
+   unstated rent b₀. The page says ψ is the gap between two guesses; it can be
+   made exact.
+4. **One phrase to check before trusting it.** §7 says R_V = βσ(1−γ)·min(v,1)·|I|
+   − v²/2 is "identically zero at σ = 0". At σ = 0 it is **−v²/2**, which is zero
+   only at v = 0; what is zero is the payoff *maximised over v*. The point stands
+   and the wording is loose.
+5. Book 4 Ch 10 confirms r* = 0.77594059 by bisection to 10⁻⁷, refining ε₀ = 1/3,
+   which is what §5 asserts.
 
 ### WP-107 — curated 2026-09-09. There is one, and it is the other session's.
 
-Two sessions independently set out to audit the OpenAI Navier–Stokes / Euler
-release for statement fidelity. The other session shipped
-`book6/wp107-the-statement-was-not-theirs.html` in `3f3107c`; this session's
-version is **dropped, not renumbered.** The shipped page is the stronger of the
-two, and it is the reason no second audit is wanted: the OpenAI challenge file
-carries a header saying it is copied from Google DeepMind's Formal Conjectures at
-commit `8bf45ed`; stripping comments, attributes and imports leaves 80 upstream
-code lines against 71 in the copy; the unified diff is 17 lines; and the only
-substantive change is the **deletion** of positive alternatives (A) and (B) along
-with their `sorry` placeholders. Every definition is byte-identical to DeepMind's.
-Its §7 is honest about the boundary — statement layer complete, proof layer not
-verified here — and the two things still open on it are in the priority list.
+Two sessions independently audited the OpenAI release for statement fidelity. The
+other shipped `book6/wp107-the-statement-was-not-theirs.html` in `3f3107c`; this
+session's version was **dropped, not renumbered.** The shipped page finds the
+challenge file's own header pointing at DeepMind's Formal Conjectures at
+`8bf45ed`, a 17-line diff whose only substantive content is the deletion of the
+positive alternatives (A) and (B) with their `sorry`s, and every definition
+byte-identical. §9 now closes the adapter question. Still open: the proof layer,
+and the Euler side — that challenge file is *adapted*, not copied, pins no commit,
+and its Prop was therefore authored by the claimant.
 ### The WP-94 arc — read §9 and §10 before adding to it
 The note now runs §1–§11 and **twice corrects itself**, which is the point of it.
 §9 retracts the §5 claim that no shared unit exists for what sits outside a formal
@@ -426,7 +473,6 @@ recommendation and coinage is the weaker claim.
 one figure in this session moved 780 → 271 purely by stripping comments.
 
 ### Open, in priority order
-
 **0. SEND THE AI FOR MATH FUND SEED APPLICATION. This is the priority, said so by
 the user on the way out: "need that out the door, we need to work."**
 Draft is `~/Documents/Claude/Projects/ai-for-math-seed-application.md`, 962 words,
@@ -455,25 +501,32 @@ stands between the draft and submission. **Send it.**
 4. `vol1-proofs` **has no LICENSE file** while its Lean sources carry SPDX MIT.
    It is the repository the AI for Math seed application leads with.
 5. CC BY-NC-ND vs the AI for Math Fund's open-access requirement — unresolved.
-6. ~~`wp107-verify.py`~~ **CLOSED 2026-09-09.** Written, and it caught two wrong
-   figures in the page it verifies (72 normalised code lines, not 71; two
-   ComparatorChallenges reference files excluded, not one), both now corrected in
-   a dated box. It also found that §3's structural argument does not extend to
-   Euler — that challenge file is *adapted*, not copied, and pins no commit. See
-   the 2026-09-09 audit-log entries. `wp101-verify.py` written the same day and it
-   too found more than it reproduced: the anchor is 24 theorems, not the 18 quoted;
-   the surfactant withdrawal was right for a reason that cannot be right, since
-   CRNT deficiency is non-negative for every network; and four citations were wrong
-   against their primary sources, one of them naming two different journals for a
-   paper that is in neither. **Every paper from WP-94 onward now has a script.**
-7. **The OpenAI release's PROOF layer is unaudited.** WP-107 settles the statement
-   layer and says so; nobody here has looked at the proofs.
-8. Two handoff blocks still exist: this one, and a second at **line 1**, above the
-   file's own title. That is the append violation this header warns about. Item 6
-   of the 2026-09-05 list called the line-1 block "a stale 2026-08-30 block"; it is
-   now dated 2026-09-05 and carries the overnight-job run order, which is standing
-   house notes and not narrative. Merging the two is a restructure, not a fix, and
-   is left undone deliberately — but it should be done.
+6. **Three numbering decisions, reported and not made.** `tools/numbering.py`
+   surfaces them and they are the author's calls, not a session's:
+   **(a)** `Ch DE-3` labels two different Book 6 chapters —
+   `ch-aperiodic-multiplying-media.html` and `ch-box-domain-lift.html`;
+   **(b)** four Book 7 papers are in **no index at all** —
+   `wp56-special-relativity`, `wp57-causal-integration`, `wp58-galactic-fold`,
+   `wp59-dark-matter-lensing`; **(c)** `book6/wp56-algorithmic-urgency` and
+   `book7/wp56-special-relativity` **both claim WP-56**. Book 7 opened a wp56–59
+   run over Book 6's wp56 and indexed none of it, which is why nothing surfaced
+   it. Do **not** renumber on a session's initiative — the WP-96 and WP-107 rule.
+7. **`wp31b-verify.py` (i.e. for `wp30-how-to-audit.html`) — see *In flight*.**
+   Everything needed is listed there; it is an hour of work, not a day.
+8. **The OpenAI release's PROOF layer is unaudited**, on both the Navier–Stokes
+   and the Euler side. WP-107 settles the statement layer and says so.
+9. **`sorry_inventory.csv` is in no reachable repository.** WP-29's finding 3 and
+   both dm³-102 pages quote figures off it (112 rows, 1,041 sorrys, 1,027 open)
+   that can no longer be regenerated. Restore it or re-derive the numbers.
+10. **Three WP-101 citations unresolved**, recorded as unresolved rather than
+   guessed: Fairchild et al. 2016 and a bare "PNAS 2009" are cited with no
+   reference entry, and Poets et al. 1994 did not resolve to that title, journal,
+   volume and pages.
+11. Two handoff blocks still exist: this one, and a second at **line 1**, above
+   the file's own title. The line-1 block carries the overnight-job run order,
+   which is standing house notes and not narrative. Merging them is a
+   restructure, not a fix, and is left undone deliberately — but it should be
+   done.
 
 ### WP-96 — written 2026-09-07. Do not write a second one.
 

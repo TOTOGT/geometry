@@ -5138,3 +5138,35 @@ First run, 165 rows across 29 index pages, **15 reported**:
 None of these are repaired here. They are decisions — which numbering wins, and
 whether Book 7's run belongs in an index — and this entry's contribution is that
 they are now visible and will stay visible.
+
+### Handoff written on a context limit, not after one
+
+`CLAUDE.md`'s handoff block overwritten for 2026-09-10 at 90% of the session
+budget, per the standing rule that losing the handoff costs the next session more
+than the edit was worth. The block carries what a fresh session cannot recover
+from the log: the corrected git rule, the four verify scripts and what each found,
+seven rules earned rather than assumed, and an **In flight** section for WP-31B
+(`book6/wp30-how-to-audit.html`), which was being read when the limit arrived.
+
+Five things were established about WP-31B before stopping and are recorded so the
+reading does not have to be redone. The most useful is the first: **the
+label/filename split that `tools/numbering.py` flagged yesterday is documented on
+the page itself** — WP-31B was renumbered on 2026-08-11 out of a collision with
+WP-30 *The Missing Anchor*, and the filename was deliberately left unchanged
+because WP-28 and WP-38 link to it directly. One of the four MISMATCHes is a
+recorded decision, which is exactly the case the tool was built to allow for: it
+reports and does not judge.
+
+Also confirmed: `value_iteration_midstream.py` is present at the repository root,
+so §8's claim that the phantom is now a real file holds; √(1.05/9.493) = 0.3326
+and √(4.20/9.493) = 0.6652, with 4.20 = 4 × 1.05 exactly, so the "ψ ≈ 0.50
+correction" is exactly a factor of four in the unstated rent b₀ and can be stated
+exactly rather than approximately; Book 4 Ch 10 confirms r* = 0.77594059 by
+bisection to 10⁻⁷. And one phrase not to trust as written: §7 calls the payoff
+"identically zero at σ = 0" when at σ = 0 it is −v²/2, zero only at v = 0 — what
+vanishes is the payoff maximised over v. The argument survives; the sentence is
+loose.
+
+The open list is renumbered to 11 items with the three numbering decisions, the
+unreachable `sorry_inventory.csv`, and the three unresolved WP-101 citations added
+as their own entries rather than left inside prose.
