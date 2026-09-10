@@ -56,11 +56,12 @@ while IFS= read -r _line; do
   [ -n "$_line" ] && ROOTS+=("$_line")
 done < <(sed 's/#.*//' "$PROJ/tools/corpus_roots.txt" | sed 's/[[:space:]]*$//' | grep .)
 [ ${#ROOTS[@]} -eq 0 ] && { echo "no roots in tools/corpus_roots.txt — nothing to run"; exit 1; }
+UNREADABLE=0
 
 : > "$OUT/order.txt"
 for r in ${ROOTS[@]+"${ROOTS[@]}"}; do
   d="${r/#\~/$HOME}"
-  [ -d "$d/.git" ] || { echo "UNREADABLE ROOT: $d" | tee -a "$OUT/order.txt"; continue; }
+  [ -d "$d/.git" ] || { echo "UNREADABLE ROOT: $d" | tee -a "$OUT/order.txt"; UNREADABLE=$((UNREADABLE+1)); continue; }
   ( cd "$d" && git ls-files '*.lean' ) | while read -r f; do
       p="$d/$f"; [ -f "$p" ] || continue
       body=$(sed 's|--.*||' "$p")
@@ -73,6 +74,18 @@ done
 sort -s -k1,1n "$OUT/order.txt" -o "$OUT/order.txt"
 
 n=$(grep -c $'^[0-9]\t' "$OUT/order.txt")
+# A run that could not read ANY root is not a small run, it is a failed one, and
+# "0 files" reads like "nothing to do" to a tired reader. Say so and stop.
+# This is the usual cause: the Cowork bridge mounts the desk under ~/mnt, so
+# ~/Desktop/... in corpus_roots.txt resolves to nothing there. The roots file is
+# correct for the desk; the bridge is the wrong place to run this.
+if [ "$UNREADABLE" -eq "${#ROOTS[@]}" ]; then
+  echo
+  echo "EVERY declared root was unreadable (${UNREADABLE}/${#ROOTS[@]})."
+  echo "This is a FAILED run, not an empty corpus. Most likely you are on the"
+  echo "Cowork bridge, where the desk is mounted under ~/mnt — run this at the desk."
+  exit 2
+fi
 echo "corpus: $n tracked .lean files across ${#ROOTS[@]} declared roots"
 echo "shell: bash ${BASH_VERSION:-unknown}"
 for p in 1 2 3; do

@@ -5422,3 +5422,29 @@ Recorded as a **ruling** rather than a finding so that the next session to notic
 eighth digit finds the decision already made. A discrepancy that is real, visible, and
 deliberately not repaired needs its reason written down, or it gets rediscovered and
 "fixed" by someone acting in good faith.
+
+### overnight.sh could report a failed run as an empty corpus (2026-09-10)
+
+Run through the Cowork bridge, `tools/overnight.sh --dry-run` printed eleven
+`UNREADABLE ROOT` lines and then `corpus: 0 tracked .lean files across 11 declared
+roots`, `priority 1: 0`, `priority 2: 0`, `priority 3: 0`, and exited 0.
+
+Nothing was wrong with the corpus and nothing was wrong with the roots file.
+`corpus_roots.txt` names `~/Desktop/...`, which is correct at the desk; on the bridge
+`~` is the session root and the desk is mounted under `~/mnt`, so every path resolves
+to nothing. The script's own design already handles this correctly — *a root it cannot
+read is REPORTED, never skipped* — and it did report all eleven.
+
+**The defect was in the summary, not the measurement.** After eleven honest failure
+lines the script printed a zero corpus and a clean exit, and "0 files, priority 1: 0"
+reads like *nothing to do*. The failure lines scroll; the summary is what gets read.
+
+Repaired: the script now counts unreadable roots and, when every declared root failed,
+prints that this is a **failed run and not an empty corpus**, names the bridge as the
+likely cause, and exits 2. Recorded in the handoff's overnight section with the
+instruction not to "fix" `corpus_roots.txt` to bridge paths — the file is right for the
+machine the job runs on.
+
+Same shape as the day's other four: the measurement was correct and the sentence
+carrying it would have licensed a wrong conclusion. Fifth instance, and the first one
+found in a tool rather than a page.

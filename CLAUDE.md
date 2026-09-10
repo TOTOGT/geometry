@@ -45,6 +45,17 @@ checked. **Commit the reports.** They are what Tier 1 is read from.
 
 **Nothing needs installing.** Mathlib v4.32.0 is built at `~/Desktop/geometry/.lake`.
 Do **not** run `lake exe cache get` — six sessions did, leaving 30 GB of duplicates.
+Measured 2026-09-10: `.lake` is **7.8 G** of the repo's 8.0 G, which is the build and
+not duplication.
+
+**Run it at the desk, never through the Cowork bridge.** `corpus_roots.txt` names
+`~/Desktop/...`; on the bridge `~` is the session root and the desk is under `~/mnt`,
+so all eleven roots resolve to nothing. Before 2026-09-10 that printed eleven
+`UNREADABLE ROOT` lines and then `corpus: 0 tracked .lean files … priority 1: 0`,
+which reads like *nothing to do* to a tired reader at 2 a.m. **`overnight.sh` now
+exits 2 and says so when every root is unreadable** — a run that read nothing is a
+failed run, not an empty corpus. Do not "fix" `corpus_roots.txt` to bridge paths;
+the file is correct for the machine the job runs on.
 
 **The gate is `#print axioms`, not a clean compile**, and the verdict is
 `tools/axiom_gate.py`'s, never a grep. A grep for `sorryAx` is a forbidden list;
