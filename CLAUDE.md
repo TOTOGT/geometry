@@ -349,9 +349,23 @@ in `docs/audit-log.md`. The rule is forward-looking. Do not add more.
 
 ## HANDOFF — 2026-09-10 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
 
-**From:** session `018xEUzVc4fHaeLN5oumWAvc` · account `grossiatwork@gmail.com` · model `claude-opus-5`
-**Ended:** 2026-09-10, on a context limit, mid-way through WP-31B (see *In flight*).
-**Repos touched:** `~/Desktop/geometry` (Book 4 ch27–ch28 and `rh-paper.html`, Book 6 wp29/wp101/wp106/wp107, Book 8 ch8-6-voa, `course-dm3-102.html`, `vol2-v5/deposit/dashboard.html`, `tools/audit.py`, `tools/numbering.py`, `CLAUDE.md`, `docs/audit-log.md`), `~/Desktop/GTCT` (`ZetaReflection.lean`, `ZetaFELogDeriv.lean`, `MATHLIB-POST.md`), `~/Desktop/AXLE` (Journal Vol. 10; registry read only).
+**Two sessions feed this block. Read both — they ran in the same repos on the same days.**
+
+**A · session `018xEUzVc4fHaeLN5oumWAvc`** · `grossiatwork@gmail.com` · claude-opus-5.
+Ended 2026-09-10 on a context limit, mid-way through WP-31B (see *In flight*).
+Touched `~/Desktop/geometry` (Book 4 ch27–ch28 and `rh-paper.html`, Book 6
+wp29/wp101/wp106/wp107, Book 8 ch8-6-voa, `course-dm3-102.html`,
+`vol2-v5/deposit/dashboard.html`, `tools/audit.py`, `tools/numbering.py`,
+`CLAUDE.md`, `docs/audit-log.md`), `~/Desktop/GTCT` (`ZetaReflection.lean`,
+`ZetaFELogDeriv.lean`, `MATHLIB-POST.md`), `~/Desktop/AXLE` (Journal Vol. 10).
+
+**B · session `c8a4c97a` (`sluhcdf@gmail.com`)** · claude-opus-5, Cowork bridge.
+Ended 2026-09-10 at 90% of a session limit, work all committed. Touched
+`~/Desktop/geometry` (Book 7 Ch Fy, Book 3 Ch 44, WP-96, Book 4 Ch 26 cross-link,
+the rung strips, `RH_arithmetic_contact_structure.md` v3, `book4/rh-paper.html`,
+three new tools) and `~/Desktop/AXLE` (`AULA/coach.html` and its assets).
+
+**Neither session had push credentials.** Both left commits for the desk.
 
 ### Read this before touching git
 
@@ -362,6 +376,59 @@ reports, not failures. **Push is the only thing that needs the desk, and it is
 credentials that require it.** Sweep the litter into `.git/_stale-locks/` before
 ending a session that committed; the desk clears that directory with one
 `rm -rf`. Full account in *Git, on this machine*.
+
+### What shipped 2026-09-08, session B — and one rule it earned
+
+**Book 3 Ch 44 · `ch44-how-to-learn.html` + `ch44-verify.py` (5 blocks, stdlib only).**
+The Feynman technique has five steps and step 3 — *find the gaps* — carries the whole
+method and is the step self-explanation is worst at. Empirical, from this repo's own
+`docs/audit-log.md`: 35 dated entries, **20 name how the defect surfaced — kernel 10,
+recomputation 4, a person 3, reading it back 3.** The chapter's argument is that
+frequency is not coverage: the person column is smallest and contains the only entry
+saying *no instrument in this repository would have caught this* (the MISFRAMED case
+of 2026-09-07). `--entries` prints all 35 verdicts so any one can be disputed by name.
+The roster grew to 44; **slot 44 at week 14 is a proposal, not a decision** — a method
+chapter may belong at week 1 and that is an editorial move of one line.
+
+**Rung strips derived, not typed · `tools/build_rungs.py`.** Seventeen pages carry the
+G3/G4 strip. Session A had already fixed the +1 Book 3 shift in fifteen and left two
+uncommitted; Ch 44 then made all seventeen say "all 43". The tool takes G3 numbers and
+the total from `book3_roster.json` and **never adds or removes a G3 link** — which
+chapters the strip lists is editorial. The G4 rule was *read off the corpus*: eleven of
+twelve Book 4 chapter pages omit exactly one number, their own. So `ch26` omitting 26 is
+correct and was nearly "fixed" into a defect; the one real fault was `book4/ch15.html`
+linking to itself. 701 rung links, 0 broken, no drift.
+
+**RH preprint v3 · new §4.7 + `book4/rh-paper.html` + `tools/build_rh_paper.py`.**
+§4.7 records the August–September 2026 movement in the analytic line and says why it
+does not touch the construction: Pratt–Robles–Zaharescu–Zeindler's five-twelfths
+(41.67%) was the standing unconditional record; on 11 Aug 2026 an internal research
+Claude, directed by Jarred Sumner over two sessions and ~31M output tokens, proved
+**unconditionally that >67.25% of the non-trivial zeros are simple and on the critical
+line** (≥83.62% distinct), via Bombieri on Weil's quadratic form plus the unconditional
+Montgomery pair correlation of Baluyot–Goldston–Suriajaya–Turnage-Butterbaugh; verified
+by Alpöge and Furman, formalised in Lean; Lamzouri published a shorter proof on 2 Sept.
+**The paper already cited Montgomery as [5]**, so §4.7 states explicitly that [5] is
+orientation and not machinery — a reader seeing the citation and the news in one season
+could infer a dependency that is not there. §4.6 gained a note on why it is a table
+sorted by *how each claim is known*. §9 gained two questions the corpus can now ask of
+itself: Ch Fy's Reeb computation constrains §9.4, and Ch 26's free-parameter test
+applied here returns *no free parameter*, which is the minimum entry requirement and not
+an achievement. `rh-paper.html` is **generated from the manuscript** and the tool exits 1
+when they disagree, so the HTML cannot drift.
+
+**AXLE · `AULA/coach.html`.** David Grossi's *Writer* pattern moved from sentences to
+steps with the model removed: 50 authored questions, five stages, no model, no network,
+all questions in the page source. Written for David after the 2 Sept NYC generative-AI
+restriction reached his project. Carries the verified credit-by-exam routes (CLEP has no
+age floor; **Modern States requires 13**, which the advice circulating gets wrong; ASU
+ULC $25/$400; CUNY College Now; ECC/East Orange *Jaguar University*, which is East
+Orange district only). Signed with Pablo's own Figure 1 from the RH paper.
+
+**The rule this session earned, and it cost two near-misses:**
+**check what the other instances do before "fixing" one.** The Ch 26 rung and the ch15
+self-link look identical from inside a single file; only the population distinguishes a
+convention from a defect. Same shape as A's `certify_rstar` finding below.
 
 ### What shipped, 2026-09-09 and 2026-09-10
 
@@ -404,7 +471,58 @@ display labels; five markdown leaks were **in the RH preprint**, rendering liter
 asterisks to readers. `.lake` added to `SKIP_DIRS`; a documented notation
 exception added for the thresholds `K*` and `K**`.
 
-### Rules earned this session — these are the reusable part
+### GTCT → geometry: the orphan audit is closed, and it caught a published number
+
+**The precondition for archiving GTCT's `book4/` HTML is now met, and was not before.**
+Six files existed only in GTCT. Four were never gaps: `chIV-15.html` is the same chapter
+as geometry's larger `ch15.html`; `chIV-preface-impa.html` is the retired IMPA preface;
+`nav.js` is not needed — the single grep hit in geometry is a CSS comment reading *"NAV —
+replaced by nav.js, but style is here for no-JS fallback"*, not a script tag; and
+`SERIES_SKELETON.md` is GTCT's own. **Two were real and are now in geometry.**
+
+- **`tools/certify_rstar_rigorous.py`** — Lohner-style rigorous interval certification of
+  the inner basin boundary: mpmath centre trajectory, Jacobian-linearised error transport,
+  interval-Hessian Lagrange remainder, so the radius **over-approximates** the reachable
+  set rather than estimating it. Reproduced exactly:
+  **r\* ∈ [0.775940575501953125, 0.77594057550234375]**, width 3.906e-13. geometry had
+  only `certify_rstar.py`, the plain float-bisection version.
+- **`tools/METHODOLOGY.md`** — the certifier's benchmark record; closes AXLE #21.
+
+**`why_no_closed_form.md` never needed writing.** The rigorous script cited it for "the
+algebraic/Hamiltonian checks ruling this out" and it exists nowhere — because the content
+is `METHODOLOGY.md` §*Path 3 — closed form (ruled out)*: `nonlinsolve` degenerate, the
+exactness test ∂ṙ/∂z + ∂ż/∂r not identically zero, no separability under w = e⁻ᶻ, and
+(r=1, z=0) not a fixed point of the reduced system. **A misnamed reference, not a missing
+file.** The citation was repointed and nothing was composed.
+
+**Then the certificate caught this repo's own arithmetic.** `book4/ch23-verify.py` block
+[8] reported `0.775940575502539698` — **outside the certified bracket, 1.96e-13 above its
+upper bound.** Twelve leading digits identical; they part at the thirteenth. Cause is that
+block's own floor, `solve_ivp` at rtol=1e-11/atol=1e-13. **Ch 3's published ~0.776 is
+unaffected.** Block [8] now prints the bracket, says plainly that it falls outside it, and
+sends any citation past eleven figures to the certificate.
+
+**The standing rule, and it is the finding of the two days:**
+**where two instruments exist for one number, cite the stronger one and say which.**
+A number was regenerated from scratch while a stronger instrument for it sat one repo
+over. Session B hit the same shape from the other side (see *check what the other
+instances do*).
+
+**What remains before GTCT `book4/` goes to archive:** nothing, except running
+`bash ~/Downloads/push-book4-whole.sh` and confirming. After that the only unique thing
+left in it is `SERIES_SKELETON.md`. **GTCT itself has not been touched by either session.**
+
+**Lean, 2026-09-09:** `tools/leancheck.sh --audit --full ~/Desktop/GTCT/book4/FoldingFrequency.lean`
+→ **OK, 289s, 6 declarations, all within the permitted three axioms.** Report at
+`tools/verify-audit/2026-09-09/FoldingFrequency.axioms.txt` — **untracked at handoff;
+commit or discard it deliberately.**
+
+### Rules earned, both sessions — these are the reusable part
+
+*(This block is long because it merges two sessions. On the next overwrite it should come back to one, with the dated narrative moved to `docs/audit-log.md`.)*
+
+- **Where two instruments exist for one number, cite the stronger one and say which.**
+- **Check what the other instances do before "fixing" one.** A convention and a defect are indistinguishable from inside a single file; only the population tells them apart.
 
 - **A prohibition inferred from a failure gets tested against the failure before
   it is written down.** The bridge git ban cost four days of sessions unable to
@@ -527,6 +645,20 @@ stands between the draft and submission. **Send it.**
    which is standing house notes and not narrative. Merging them is a
    restructure, not a fix, and is left undone deliberately — but it should be
    done.
+12. **Run `bash ~/Downloads/push-book4-whole.sh`, then push geometry.** One commit is
+   waiting. After the script, GTCT `book4/` HTML is archivable — see *GTCT → geometry*.
+13. **Ch 44's roster slot is an open editorial call.** It sits at n=44, week 14, phase G,
+   D2 — appended, not placed. A chapter about *how to study* plausibly belongs at week 1.
+   One line in `tools/book3_roster.json`; a session must not move it on its own initiative.
+14. **`tools/verify-audit/2026-09-09/` is untracked.** Commit the axioms report or delete
+   it, but decide — an untracked verification artefact is the thing WP-73 calls UNTRUSTED.
+15. **Book 4 Ch 26 ↔ Book 7 Ch Fy are cross-linked; the third leg is not.** Ch 44's
+   instrument taxonomy is cited by the RH paper's §4.6 but Ch 44 does not cite the RH
+   paper back. First editions cannot point forward; this is now second-edition work.
+16. **AXLE Coach has two offered follow-ups, neither started:** a parent-facing companion
+   to `coach.html` ("can my nine-year-old already do this"), and a mapping of Zero
+   Sorries' eight sessions onto the CLEP College Algebra objectives so the course visibly
+   aims at the exam.
 
 ### WP-96 — written 2026-09-07. Do not write a second one.
 
@@ -589,6 +721,32 @@ Recorded so the next reader finds the refusal instead of writing the claim.
 Note: commit `cc4bbd1` (another session) swept the Feynman index card in `book7/index.html`
 into a Ch Pr commit while this page was still unwritten. The card is correct and it
 belongs there; it was not the subject of that commit.
+
+### State at handoff — 2026-09-10
+
+**geometry:** clean tree except `tools/verify-audit/2026-09-09/` (untracked).
+**1 commit unpushed:** `2433ff7` *RH 4.6: amend the Mathlib concession after reading the
+statement, not the name*. Session B's seven commits (WP-96, Ch Fy and its three
+corrections, Ch 44, Ch 26 cross-link, the rungs, RH v3) are **already on origin**.
+
+**AXLE:** clean and **in sync** — the five Coach commits are pushed.
+
+**Pending on the desk:** `bash ~/Downloads/push-book4-whole.sh`, then
+`cd ~/Desktop/geometry && git push`.
+
+**Litter:** both repos have a `_to_delete/` holding git lock files moved aside by session
+B before `--no-optional-locks` was understood, plus two stale downloads
+(`coach-1.html`, `ch44-how-to-learn-1.html`) that are copies of delivered files, and
+session B's superseded `sig-rh-lift.py`/`.svg`. **All safe to `rm -rf`.** geometry also
+carries ~1,300 orphaned `.git/objects/*/tmp_obj_*`; `git gc --prune=now` from the desk
+clears them.
+
+**Standing constraints from Pablo, both still in force:**
+1. **No attribution trailers in commits** — no `Co-Authored-By`, no `Claude-Session`, no
+   generated-with line. Attribution goes in this handoff.
+2. **"Where I came from, we have a place for an audit and that is not here."** No
+   correction trails or self-audit narration inside deliverables; `docs/audit-log.md` is
+   the place for those.
 
 ### Deliverables that live OUTSIDE this repo
 `~/Documents/Claude/Projects/` holds the A.13 pack (PSD answers, Q26, Q29, DAPR
