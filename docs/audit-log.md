@@ -5270,3 +5270,25 @@ by barotropic instability. They share the integers 6 and 10 and nothing else.
 Linked to WP-100 and WP-97 rather than restating either.
 
 `tools/verify-audit/2026-09-09/` is committed with this, since it is now cited.
+
+### Addendum, 2026-09-10: "the HTML is redundant" would have licensed archiving the folder
+
+The GTCT orphan audit concluded that `GTCT/book4/`'s HTML is redundant and that the
+only unique thing left would be `SERIES_SKELETON.md`. Both halves are true **of the
+HTML**. The folder is 36 html · 4 pdf · 4 lean · 3 md · 2 py · 1 js · 1 .bak.
+
+The four PDFs are safe — all four are already in `geometry/book4/` at the same names.
+The four Lean files are not, and two are cited from this repo by that path:
+`FoldingFrequency.lean` from `book6/wp84-…html` as of today, and `ZetaReflection.lean`
+— the RH arc's closed statement, 18 declarations — from `docs/ml-evidence/`.
+`MATHLIB-POST.md` exists nowhere else.
+
+Nothing is wrong with where those files live: the canonical rule says other repos hold
+Lean, tooling, data and PDFs, so GTCT is correct and the citations are correct. What was
+wrong was the **instruction** a later session would have acted on. A sentence true of a
+subset, written about the container, licenses an action on the container.
+
+Recorded as the third instance today of the same shape: a correct measurement under a
+sentence that would have caused damage. The other two are WP-84's fixed-k sweep and
+block [8]'s regenerated r*. Repair: the handoff now says *archive the 36 HTML files,
+not the directory*, and lists what else is in there.

@@ -508,9 +508,28 @@ A number was regenerated from scratch while a stronger instrument for it sat one
 over. Session B hit the same shape from the other side (see *check what the other
 instances do*).
 
-**What remains before GTCT `book4/` goes to archive:** nothing, except running
-`bash ~/Downloads/push-book4-whole.sh` and confirming. After that the only unique thing
-left in it is `SERIES_SKELETON.md`. **GTCT itself has not been touched by either session.**
+**What remains before GTCT `book4/` goes to archive — and READ THIS BEFORE ARCHIVING.**
+Run `bash ~/Downloads/push-book4-whole.sh` and confirm. Then **archive the 36 HTML files,
+not the directory.** The audit's conclusion was about the HTML and is correct about the
+HTML; the folder holds more than that, and checked 2026-09-10 it is
+36 html · 4 pdf · 4 lean · 3 md · 2 py · 1 js · 1 .bak.
+
+- **The four PDFs are safe** — all four already exist at the same names in
+  `geometry/book4/`.
+- **The four Lean files are not, and two are cited from this repo by that path.**
+  `FoldingFrequency.lean` is cited by `book6/wp84-…html` (see below);
+  `ZetaReflection.lean` is the RH arc's closed statement, 18 declarations, cited from
+  `docs/ml-evidence/`; `ZetaFELogDeriv.lean` is named in `book4/rh-paper.html` and the
+  manuscript as retired evidence; `Bhaskara.lean` appears in the audit log.
+- `MATHLIB-POST.md` is the text of the #mathlib4 post and exists nowhere else.
+- `SERIES_SKELETON.md` is GTCT's own. `ZetaReflection.lean.bak-1788655485` is litter.
+
+**Do not move the Lean or the PDFs into geometry to "solve" this.** The canonical rule
+already says other repos hold Lean, tooling, data and PDFs; GTCT is where they belong and
+the citations are correct as written. The only thing that needs to change is the
+*instruction*: it is an HTML archive, not a directory archive.
+
+**GTCT itself has not been touched by either session.**
 
 **Lean, 2026-09-09:** `tools/leancheck.sh --audit --full ~/Desktop/GTCT/book4/FoldingFrequency.lean`
 → **OK, 289s, 6 declarations, all within the permitted three axioms.** Report at
