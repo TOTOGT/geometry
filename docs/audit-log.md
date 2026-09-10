@@ -5448,3 +5448,47 @@ machine the job runs on.
 Same shape as the day's other four: the measurement was correct and the sentence
 carrying it would have licensed a wrong conclusion. Fifth instance, and the first one
 found in a tool rather than a page.
+
+### Ch 28's own open caveat, closed against the deposit (2026-09-10)
+
+Chapter 28 §28.5 shipped with a caveat in its "What Is Not Claimed" section: *"The
+source is not current. Version 4 is the published version this was computed against;
+the author reports later revisions. The evaluation is two lines and should be re-run
+against the current equations before anything is built on it."*
+
+Re-run. Three things came back, and only one of them was expected.
+
+**The version is current.** The Zenodo record of record is
+[10.5281/zenodo.21708678](https://doi.org/10.5281/zenodo.21708678) — *GTCT 2026*, v4.0,
+deposited 30 July 2026, concept DOI 10.5281/zenodo.19498857 — and it is the most recent
+version in the series. The caveat assumed v4 had been superseded. It has not been. The
+chapter was computed against the current source and said otherwise about itself.
+
+**The erratum is settled in the deposit, not merely survivable.** §28.2 argued that
+Result 28.1 is robust to the coupling, so it would survive the reported
+$e^{-r}\!\to\!e^{-z}$ correction either way. That argument stands, but it is no longer
+what carries the result: the deposit's executable `dm3_simulation.py` has
+
+    rdot = r * (1.0 - r**2) + 2.0 * (r - 1.0) * np.exp(-z)
+    zdot = r**2 - 2.0 * (r - 1.0)**2 * np.exp(-z)
+
+character for character what `ch28-verify.py` assumes, $e^{-z}$ included. The robustness
+argument was insurance against a possibility that the deposit had already resolved.
+
+**Nothing in the deposit's numerics touches the identity.** `FINDINGS.md` reports
+$\mu_{\max} = -2$ recovered to three decimals and an asymmetric inner basin boundary
+$r^\ast \approx 0.7732$ — correcting the symmetric $2/3$ estimate. Neither reaches
+Result 28.1: $\alpha(X) = -2(r-1)^2 e^{-z}$ is computed pointwise on the field and is
+indifferent to which initial conditions reach $\Gamma$. A basin correction changes who
+arrives, not what the arrival costs.
+
+§28.5 rewritten: the paragraph now records the check with the DOI rather than asking a
+future reader to perform it, and is marked CHECKED. The reference entry now cites the
+deposit and its files rather than a manuscript version number.
+
+**The lesson is about the caveat, not the result.** The honest caveat was written from
+what the session knew — the author had mentioned later revisions — and it was cheap to
+discharge: one API call and one `grep`. A caveat that can be closed in two minutes and
+is instead shipped as an open question is a small dishonesty in the other direction:
+it makes the chapter look more careful than the work behind it was. Where a check is
+this cheap, run it before publishing the doubt.
