@@ -5217,3 +5217,56 @@ on trust.
 **Rule: `docs#name` is a pointer, not a statement.** Conceding to a name is the
 same error as trusting a green badge — WP-31B's first rule, applied to this desk
 by this desk. The concession was right to make and was made a day too early.
+
+## WP-84 WAS CORRECTED BY ITS OWN LEAN FILE, AND DID NOT KNOW (2026-09-10)
+
+`GTCT/book4/FoldingFrequency.lean` was written and kernel-checked on 2026-09-09 —
+six declarations, no `sorry`, all on `[propext, Classical.choice, Quot.sound]`,
+report in `tools/verify-audit/2026-09-09/`. Its own header states that WP-84's
+framing is wrong: *"twelve is not characterised, it is an instance."*
+
+**WP-84 said nothing about any of it.** Zero occurrences of `Lean`,
+`FoldingFrequency`, `sorry` or `decagon` on the page. A correction existed, was
+proved, and sat one repo over for a day without reaching the page it corrected.
+
+### The defect
+
+§7 is titled *The coincidence is a characterisation of twelve* and says the
+non-DC fixed modes equal {N/2} "if and only if N = 12", verified at
+N = 6, 12, 18, 24, 30, 36, 42, 48, 60.
+
+Every one of those checks holds k = 6 and varies N. **With k fixed the answer can
+only come back N = 12**, so the sweep could not see the thing it was asked to
+test. The general theorem varies both:
+
+    visibleModes N k = {N/2}  ↔  N = 2k        (0 < k, 2 ∣ N)
+
+At k = 6 it returns 12; at k = 10 it returns 20. Nothing distinguishes twelve
+except the k it was computed at. The arithmetic was never wrong — the sentence
+around it claimed a specialness the general statement removes. MISFRAMED.
+
+### What generalises
+
+**A sweep that varies one axis of a two-axis claim confirms itself.** This is the
+same shape as *a sweep keyed to wording finds the wording* (2026-09-09), one level
+up: there the instrument matched the phrasing, here it matched the parameter that
+was already fixed. Before trusting a table, ask which variable it was not allowed
+to move.
+
+### Repair
+
+Correction block added to WP-84 at the §5 boundary: the general theorem, the six
+declarations with their statements, the axiom result and the report path, the
+dropped `k ∣ N` hypothesis (only `0 < k` and `2 ∣ N` are used), and what prompted
+it — the ten-sided wave reported at Saturn's south pole on 2026-09-02
+(Sánchez-Lavega et al., *Science Advances*, doi 10.1126/sciadv.aee4251).
+
+A `NOT CLAIMED` block was added with it, carrying the Lean file's own disclaimer
+forward, because `hexagon_at_twelve` and `decagon_at_twenty` sitting beside a
+Saturn citation invite exactly the inference the file forbids: **nothing here
+bears on Saturn.** The theorem is about Fourier modes of a discretely sampled
+ring; Saturn's polar waves are jet-stream wavenumbers in a continuous fluid set
+by barotropic instability. They share the integers 6 and 10 and nothing else.
+Linked to WP-100 and WP-97 rather than restating either.
+
+`tools/verify-audit/2026-09-09/` is committed with this, since it is now cited.
