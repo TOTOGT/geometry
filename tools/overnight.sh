@@ -34,6 +34,18 @@
 # duplicate builds. Mathlib v4.32.0 is already at .lake.
 set -uo pipefail
 PROJ=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+. "$PROJ/tools/report_slug.sh"
+
+# A per-file wall clock. The 2026-09-09 run stopped at file 227 of 280 on
+# GTCT/Axioms.lean and the 2026-09-10 run produced nothing at all in eight
+# hours: with no timeout, one file that never returns ends the night for every
+# file after it. macOS has no GNU `timeout`, so fall back through gtimeout to
+# perl's alarm, which ships with the system.
+LIMIT=${LEANCHECK_TIMEOUT:-900}
+if command -v timeout >/dev/null 2>&1;    then TMO="timeout $LIMIT"
+elif command -v gtimeout >/dev/null 2>&1; then TMO="gtimeout $LIMIT"
+elif command -v perl >/dev/null 2>&1;     then TMO="perl -e alarm(shift);exec@ARGV $LIMIT"
+else TMO=""; echo "WARNING: no timeout available; a hung file will stall the run"; fi
 DATE=$(date +%F)
 OUT="$PROJ/tools/verify-audit/$DATE"
 DRY=0
@@ -98,13 +110,26 @@ echo
 i=0
 grep $'^[0-9]\t' "$OUT/order.txt" | cut -f2 | while read -r f; do
   i=$((i+1))
-  rep="$OUT/$(basename "${f%.lean}").axioms.txt"
-  # Resumable on purpose. An overnight run gets interrupted — a closed lid, a
-  # full disk — and re-running from the top would spend the night redoing the
-  # cheap files it already did.
-  [ -s "$rep" ] && { printf "[%4d/%4d] skip (done today) %s\n" "$i" "$n" "$f"; continue; }
+  slug=$(report_slug "$f")
+  # Resume ACROSS nights, not only within one. The first version compared only
+  # against today's directory, so every new date re-verified all 280 files from
+  # scratch and a nightly run could not finish. A prior report counts when it is
+  # non-empty AND newer than the source file: if the .lean has been touched
+  # since, the evidence is stale and the file is done again.
+  prior=$(ls -t "$PROJ"/tools/verify-audit/*/"$slug".axioms.txt 2>/dev/null | head -1)
+  if [ -n "$prior" ] && [ -s "$prior" ] && [ "$prior" -nt "$f" ]; then
+    printf "[%4d/%4d] skip (audited %s, source older) %s\n" "$i" "$n" \
+      "$(basename "$(dirname "$prior")")" "$f"
+    continue
+  fi
   printf "[%4d/%4d] %s\n" "$i" "$n" "$f"
-  bash "$PROJ/tools/leancheck.sh" --out "$OUT" --audit "$f" 2>&1
+  $TMO bash "$PROJ/tools/leancheck.sh" --out "$OUT" --audit "$f" 2>&1
+  rc=$?
+  # 124 from timeout/gtimeout, 142 from a perl SIGALRM. Either way the file is
+  # named and the run continues, which is the whole point.
+  if [ "$rc" -eq 124 ] || [ "$rc" -eq 142 ]; then
+    printf "        TIMED OUT after %ss — not audited, run continues\n" "$LIMIT"
+  fi
 done | tee -a "$OUT/run.log"
 
 echo | tee -a "$OUT/run.log"

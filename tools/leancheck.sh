@@ -41,6 +41,7 @@
 
 set -uo pipefail
 PROJ=~/Desktop/geometry
+. "$PROJ/tools/report_slug.sh"
 AUDIT=0
 FULL=0
 OUTDIR=""
@@ -130,7 +131,7 @@ for f in "${FILES[@]}"; do
     | while read -r d; do
         [ -n "$ns" ] && echo "#print axioms $ns.$d" || echo "#print axioms $d"
       done >> "$probe"
-  rep="$OUTDIR/$(basename "${f%.lean}").axioms.txt"
+  rep="$OUTDIR/$(report_slug "$f").axioms.txt"
   # Keep the wrapped continuation lines: axiom_gate.py rejoins them, and a
   # line-oriented grep here would truncate a long list exactly as CI run #245 did.
   probe_out=$(lake env lean "$probe" 2>&1)

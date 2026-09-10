@@ -54,7 +54,16 @@ import sys
 
 DEFAULT_ALLOWED = ("propext", "Classical.choice", "Quot.sound")
 
-RECORD = re.compile(r"^'([^']+)' depends on axioms: \[(.*)\]$")
+# A Lean identifier may contain apostrophes -- `brahmagupta'`, `add_comm'` --
+# and primed names are ordinary Mathlib style rather than a curiosity. The
+# first version of this pattern used `[^']+`, which stops at the first
+# apostrophe INSIDE the name and then fails to match, so every primed
+# declaration in a report was reported as unparseable. It failed safe, which is
+# why it surfaced at all: `'Bhaskara.brahmagupta'' depends on axioms: [propext,
+# Quot.sound]` appeared in the ledger's did-not-parse section on 2026-09-10
+# rather than being silently dropped from Tier 1. Anchoring on the LAST
+# apostrophe before the fixed text is what makes a primed name readable.
+RECORD = re.compile(r"^'(.+)' depends on axioms: \[(.*)\]$")
 NO_AXIOMS = "does not depend on any axioms"
 HAS_AXIOMS = "depends on axioms"
 
@@ -75,7 +84,10 @@ def parse(text):
     for line in joined.splitlines():
         line = line.strip()
         if NO_AXIOMS in line:
-            name = line.split("'")[1] if "'" in line else line
+            # Same reasoning as RECORD: take everything between the first and
+            # LAST apostrophe, so a primed name survives.
+            m0 = re.match(r"^'(.+)' " + NO_AXIOMS.split(' ', 1)[0], line)
+            name = m0.group(1) if m0 else (line.split("'")[1] if "'" in line else line)
             records.append((name, []))
             continue
         if HAS_AXIOMS not in line:

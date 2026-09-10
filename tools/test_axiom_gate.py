@@ -5,6 +5,14 @@ The gate decides whether the repository's verification claims stand, so the
 gate itself is checked here against reports whose correct verdict is known.
 Case 2 is the output of CI run #245, verbatim, including the pretty-printer's
 line wrapping -- the shape the previous shell pipeline could not read.
+
+PRIMED is the 2026-09-10 case: a Lean identifier may contain apostrophes, and
+`[^']+` in the record pattern stopped at the first one inside the name. Every
+primed declaration -- ordinary Mathlib style, not a curiosity -- was reported as
+unparseable and therefore left out of Tier 1. It failed safe, which is the only
+reason it was ever seen: the line surfaced in the ledger's did-not-parse
+section instead of vanishing. The third fixture line carries two apostrophes,
+because a name may.
 """
 
 import os
@@ -13,6 +21,13 @@ import sys
 import tempfile
 
 GATE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "axiom_gate.py")
+
+_Q = "'"
+PRIMED = (
+    "'Bhaskara.brahmagupta" + _Q + "' depends on axioms: [propext, Quot.sound]\n"
+    "'Bhaskara.pell" + _Q + "' does not depend on any axioms\n"
+    "'Bhaskara.cyclic" + _Q + _Q + "' depends on axioms: [propext]\n"
+)
 
 CLEAN_12 = """\
 'Orthogenesis.NASAGaps.FN_H_101L_isoperimetric' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -63,6 +78,7 @@ CASES = [
     ("clean but wrapped",         WRAPPED_CLEAN, 12, 0, "OK: 12 theorems"),
     ("admitted theorem",          ADMITTED,      12, 1, "sorryAx present"),
     ("unreadable record",         MALFORMED,     13, 1, "did not parse"),
+    ("primed names read",         PRIMED,         3, 0, ""),
     ("a theorem went missing",    CLEAN_12,      13, 1, "found 12"),
 ]
 
