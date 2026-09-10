@@ -5314,3 +5314,56 @@ instruction. Here the object measured was right and the *pointer* to it was wron
 
 Caught by opening the file instead of trusting the report of it, which is the same move
 that produced all three of the others.
+
+## BOOK 3 HAS ONE VERIFY SCRIPT, AND THE AUDIT FOUND AN 8TH DIGIT (2026-09-10)
+
+### The book that teaches has the least instrumentation
+
+`tools/book3_roster.json` lists **44 chapters, every file present on disk**, and
+**one** has a companion verify script — `ch44-verify.py`, written 2026-09-08. Book 4
+has five, Book 6 about twelve, Book 7 one. Book 3 is the taught path, the book a
+child is handed, and it is the least checked in the corpus.
+
+Eighteen of its 44 chapters print a number to three or more decimals. Not all want a
+script; the recurring constants do, because they are quoted in several chapters at
+once and nothing keeps them agreeing.
+
+### What the scan found: r* is wrong at the eighth decimal, in 67 files
+
+`certify_rstar_rigorous.py` certifies
+
+    r* ∈ [0.775940575501953125, 0.775940575502343750]     width 3.906e-13
+    midpoint 0.7759405755021484375,  which to 8 dp is 0.77594058
+
+The value carried across the corpus is **0.77594059**. That is **1.450e-8 above the
+certified upper bound** — outside the bracket, and the disagreement is in the eighth
+decimal place, not the thirteenth. Rounded honestly the certificate gives
+**...58**, not ...59.
+
+`0.77594059` appears in **67 files** (html, py, md, lean; `_to_delete` and `_archive`
+excluded), including three Book 3 chapters — `ch05-contact-normal-form.html`,
+`ch23-14-week.html`, `about-author.html` — and `book7/ch-feynman-verify.py`, which
+took it from `labs/dm3_numeric.py`. **`0.77594058` appears in three files.** So the
+correct digit exists in the repo and never propagated.
+
+WP-69 already recorded that "Vol II toy-model §7 lists 'certified 0.77594059' — 8th
+digit differs". The certificate now says which side is right.
+
+### Not repaired here, and deliberately
+
+Changing a figure that is published in 67 files, several of them deposited, is an
+author's decision and not a session's — the WP-96 and WP-107 rule. Two things must
+be settled first, and neither is arithmetic:
+
+1. **Are they the same quantity?** `dm3_rstar_verify.py` reads 0.77594059 as the
+   λ = 2 basin edge (ε=2, z₀=0). If the certificate certifies that same edge, ...59
+   is simply wrong at the 8th place. If it certifies something else, the two numbers
+   are different objects sharing a name, and the repair is to distinguish them — not
+   to overwrite one with the other.
+2. **What is actually at stake?** Every use found so far quotes ~0.776 or 8 digits in
+   prose, where the error is invisible. No downstream computation has been shown to
+   depend on the 8th digit. The cost of a 67-file sweep may exceed the cost of the
+   error, and that is a judgement about the corpus, not about the number.
+
+Recorded with the arithmetic so the decision can be made once, from the certificate,
+instead of rediscovered a fourth time.
