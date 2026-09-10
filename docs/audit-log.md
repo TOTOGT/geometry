@@ -5396,3 +5396,29 @@ same rule the δ < 0 case earned. Fixed, and the row count is now **asserted at 
 a row that stops matching fails the block instead of quietly shrinking it.
 
 Book 3 now has 2 verify scripts for 44 chapters.
+
+### RULED: r* stays at 0.77594059 — the eighth decimal is not worth 67 files (2026-09-10)
+
+The finding above stands as arithmetic: the corpus value is 1.45e-8 above the
+certified upper bound, and the certificate rounded honestly to eight places gives
+0.77594058, not ...59.
+
+**Pablo's ruling, same day: not a defect. Do not chase it.** The reasoning is a cost
+argument and it is the right one. Every use of the number in the corpus quotes ~0.776
+or eight digits in prose. No computation has been shown to depend on the eighth
+decimal. A sweep of 67 files, several of them deposited, buys nothing a reader could
+act on and risks the thing a sweep always risks — touching many correct files to
+repair a defect that was never load-bearing. That is the MISFRAMED lesson of
+2026-09-07 applied before the damage rather than after it.
+
+**What this closes and what it does not.** It closes the sweep. It does not close the
+precision rule, which `ch24-verify.py` already carries and which is now the settled
+position of the corpus:
+
+> Prose keeps ~0.776. Anything cited past eleven significant figures comes from
+> `certify_rstar_rigorous.py` and not from any float-bisection block.
+
+Recorded as a **ruling** rather than a finding so that the next session to notice the
+eighth digit finds the decision already made. A discrepancy that is real, visible, and
+deliberately not repaired needs its reason written down, or it gets rediscovered and
+"fixed" by someone acting in good faith.

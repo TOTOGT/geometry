@@ -686,13 +686,17 @@ stands between the draft and submission. **Send it.**
 15. **Book 4 Ch 26 ↔ Book 7 Ch Fy are cross-linked; the third leg is not.** Ch 44's
    instrument taxonomy is cited by the RH paper's §4.6 but Ch 44 does not cite the RH
    paper back. First editions cannot point forward; this is now second-edition work.
-16. **r\* = 0.77594059 is outside the certified bracket, at the 8th decimal, in 67
-   files.** The certificate's midpoint to 8 dp is **0.77594058**; the corpus carries
-   ...59, which is 1.45e-8 above the upper bound. Three files already have ...58.
-   **An author's call, not a session's** — settle first whether the two are the same
-   quantity (`dm3_rstar_verify.py` reads ...59 as the λ=2 edge) and whether anything
-   downstream depends on the 8th digit; every use found quotes ~0.776 or 8 digits in
-   prose. Full arithmetic in `docs/audit-log.md`, 2026-09-10.
+16. **r\* — RULED 2026-09-10 by Pablo: not a defect, do not sweep it.** The corpus
+   carries 0.77594059; the certificate's midpoint to 8 dp is 0.77594058, so the corpus
+   value sits 1.45e-8 above the certified upper bound. **The author's ruling is that the
+   difference is too small to chase** — every use in the corpus quotes ~0.776 or eight
+   digits in prose, nothing downstream depends on the eighth decimal, and a 67-file
+   sweep would cost more than the error does. **This item is closed. A later session
+   must not reopen it** on rediscovering the discrepancy; that it looks like a defect
+   and is not is precisely why the ruling is written here. The standing rule stays as
+   `ch24-verify.py` already states it: **prose keeps ~0.776, and anything cited past
+   eleven significant figures comes from `certify_rstar_rigorous.py`, not from a
+   float-bisection block.** Arithmetic in `docs/audit-log.md`, 2026-09-10.
 17. **Book 3 has 1 verify script for 44 chapters** (`ch44-verify.py`). It is the taught
    path and the least instrumented book in the corpus; 18 of its chapters print a
    3+-decimal number. The cheap first move is one `book3-verify.py` for the constants
