@@ -5367,3 +5367,32 @@ be settled first, and neither is arithmetic:
 
 Recorded with the arithmetic so the decision can be made once, from the certificate,
 instead of rediscovered a fourth time.
+
+### Book 3 gets its second verify script — and the chapter was clean (2026-09-10)
+
+`ch7-crystalline-verify.py`, for `ch7-crystalline.html` (Book 3, ch 33), the chapter
+carrying the most numbers in the book: thirteen at three or more decimals.
+
+**Every number on the page is correct.** Five table ratios, five ten-term sequences,
+six widget ratios, all reproduced. η_k is computed as the root in (1,2) of
+x^(k+1) − 2x^k + 1 = 0 — the k-nacci characteristic equation with the spurious root
+x = 1 divided out — bisected to 1e-15 and compared **at the page's own precision**:
+
+    eta_2 1.618033988750   eta_3 1.839286755214   eta_4 1.927561975483
+    eta_5 1.965948236645   eta_6 1.983582843424   eta_7 1.991964196605
+
+The widget's three-decimal forms round correctly from these, including 1.92756 → 1.928.
+The chapter's "∞-bonacci 2.00000" row is confirmed as a limit and not a member: η_k is
+strictly increasing and bounded above by 2, and 2 − η_12 = 2.4e-4.
+
+**The script reads the numbers out of the page rather than from a transcription**, so a
+later edit is checked instead of assumed. That is what WP-29's *a figure that is
+transcribed decays the moment the file moves* asks for, applied at the source.
+
+**The one failure was the instrument's.** Block [2] first reported four sequences, not
+five: the Hexanacci row carries a `✦` between its ratio and its sequence and the pattern
+did not allow it. An impossible measurement is a broken instrument, not a finding — the
+same rule the δ < 0 case earned. Fixed, and the row count is now **asserted at five**, so
+a row that stops matching fails the block instead of quietly shrinking it.
+
+Book 3 now has 2 verify scripts for 44 chapters.
