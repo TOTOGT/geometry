@@ -10,6 +10,7 @@
 **License:** CC BY 4.0
 **Date:** September 2026
 **Status:** Preprint — not peer reviewed
+**Corpus position:** *Principia Orthogona* Book VI · Roots · Working Papers · Language & Education · **WP-12**
 
 ---
 
@@ -48,13 +49,20 @@ method.
 
 ## Relation to other work in the series
 
+This is **WP-12** in Book VI's *Working Papers · Language & Education* strand. The strand's
+first deposit is WP-11.
+
 | Deposit / document | Relation |
 |---|---|
+| WP-11, *Nested Infinities in the Language Classroom (TEFL)* — [10.5281/zenodo.20719399](https://doi.org/10.5281/zenodo.20719399) | Sibling working paper, same strand; contact-geometric model of L2 fluency, the ZPD as a Lyapunov attractor |
 | *Principia Orthogona* Vol. I — [10.5281/zenodo.19117399](https://doi.org/10.5281/zenodo.19117399) | Series root; introduces the operator chain C → K → F → U |
 | *Principia Orthogona* Vol. II — [10.5281/zenodo.22117968](https://doi.org/10.5281/zenodo.22117968) | Contact realization of generative transitions |
 | GTCT v4.0 — [10.5281/zenodo.21708678](https://doi.org/10.5281/zenodo.21708678) | The fifth operator T; the chain this article's four operators sit inside |
-| WP-94, *One Hole, Five Words* (Vol. VI) | Companion corpus-linguistic study — 3,207,496-word census over five verification communities' terms for the same object |
-| WP-95, *The Right Word, The Wrong Reader* (Vol. VI) | Companion — terminology and readership |
+| WP-94, *One Hole, Five Words* (Book VI) | Companion corpus-linguistic study — 3,207,496-word census over five verification communities' terms for the same object |
+| WP-95, *The Right Word, The Wrong Reader* (Book VI) | Companion — terminology and readership |
+
+The article is linked from `book6/index.html` and links back to it; the two are wired
+reciprocally in the corpus as of 7 September 2026.
 
 WP-94 is the methodological sibling: same claim shape (that vocabulary differences are
 recoverable from grammar rather than doctrine), same corpus method, different corpus.
