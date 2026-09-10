@@ -724,10 +724,20 @@ belongs there; it was not the subject of that commit.
 
 ### State at handoff — 2026-09-10
 
-**geometry:** clean tree except `tools/verify-audit/2026-09-09/` (untracked).
-**1 commit unpushed:** `2433ff7` *RH 4.6: amend the Mathlib concession after reading the
-statement, not the name*. Session B's seven commits (WP-96, Ch Fy and its three
-corrections, Ch 44, Ch 26 cross-link, the rungs, RH v3) are **already on origin**.
+**geometry:** clean but for regenerated `index-*.html`. **1 commit unpushed:** `4df28b6`
+*WP-84: the correction its own Lean file had already proved*. `2433ff7` (RH 4.6) and the
+merged handoff went up while this session was running. `tools/verify-audit/2026-09-09/` is
+**no longer untracked** — it is committed, because WP-84 now cites it. Open item 14 closed.
+
+**WP-84 is the last thing that happened and it is worth reading before anything else.**
+`FoldingFrequency.lean` was proved on 09-09 and its own header says WP-84's framing is
+wrong — twelve is an instance, not a characterisation — and WP-84 knew nothing about it for
+a day. Section 7's sweep verified "iff N = 12" at nine values of N while **holding k = 6**,
+so it could only ever return 12. The general theorem is `visibleModes N k = {N/2} ↔ N = 2k`.
+**A sweep that varies one axis of a two-axis claim confirms itself.** The page now carries
+the correction, the six declarations, and the Lean file's own *nothing here bears on Saturn*
+disclaimer, because `hexagon_at_twelve` and `decagon_at_twenty` beside a Saturn citation
+invite exactly the inference the file forbids.
 
 **AXLE:** clean and **in sync** — the five Coach commits are pushed.
 
