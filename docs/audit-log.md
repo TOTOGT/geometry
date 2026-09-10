@@ -5170,3 +5170,50 @@ loose.
 The open list is renumbered to 11 items with the three numbering decisions, the
 unreachable `sorry_inventory.csv`, and the three unresolved WP-101 citations added
 as their own entries rather than left inside prose.
+
+### The Mathlib lemma was read by its name, and its name was misleading
+
+The Zulip thread was checked. Three messages: the post, Moritz Doll's one-line
+`docs#logDeriv_riemannZeta_one_sub`, and the reply conceding it. **The two
+follow-up questions in that reply are still unanswered**, and both turn out to be
+answerable from the primary source, which is where they should have been answered
+before conceding anything.
+
+**What `logDeriv_riemannZeta_one_sub` actually says**, read off master rather than
+inferred from its name — it lives in `NumberTheory/LSeries/RiemannZetaLogDeriv.lean`,
+a module whose entire content is this one statement:
+
+    ζ'/ζ(s) = −ζ'/ζ(1−s) + log 2π − ψ(s) + (π/2)·tan(πs/2)
+    hypotheses:  ∀ n : ℤ, s ≠ n        ζ s ≠ 0
+
+It is obtained by differentiating **`riemannZeta_one_sub`, the asymmetric
+functional equation**, which is why it carries `log 2π`, a single unhalved
+digamma, and a tangent term. The statement in `ZetaReflection.lean` comes from
+`completedRiemannZeta_one_sub`, the **symmetric** Λ form: `log π`, two
+half-argument digammas, **no trigonometric term**. They are equivalent modulo
+Legendre duplication and Euler reflection — which is exactly the conversion this
+development's own route note, written 2026-08-30, records deciding not to pay.
+Mathlib paid it. The two identities are therefore not the same statement, and the
+symmetric form is not in the library.
+
+**The hypotheses differ, and not uniformly.** Mathlib excludes *every* integer and
+needs ζ non-vanishing at s alone. This desk's excludes only
+{0,−2,−4,…} ∪ {1,3,5,…} and needs non-vanishing at both s and 1−s. So the local
+statement applies at s = 2, 4, −1, −3, where Mathlib's does not, and costs a
+second non-vanishing hypothesis for it.
+
+**And `logDeriv Gammaℝ` is absent from master.** `Gamma/Deligne.lean` carries
+eighteen declarations today — the two definitions, their `_def` lemmas, recurrences,
+zero characterisations, reflection formulas, and `differentiable_Gammaℝ_inv` — and
+not one derivative, `logDeriv` or digamma lemma among them. The offer stands.
+
+**The correction was over-conceded, and is amended.** The 2026-09-09 box in
+RH §4.6 said the proof is "an independent derivation of an existing result", which
+reads as *the same result*. It is an independent derivation of a *different form*
+of the same mathematics. Amended in place with both statements printed side by
+side, so a reader can see the difference rather than take either characterisation
+on trust.
+
+**Rule: `docs#name` is a pointer, not a statement.** Conceding to a name is the
+same error as trusting a green badge — WP-31B's first rule, applied to this desk
+by this desk. The concession was right to make and was made a day too early.
