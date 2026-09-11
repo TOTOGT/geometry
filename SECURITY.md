@@ -45,10 +45,19 @@ no `sorryAx` for every theorem it covers. A kernel check certifies that a proof
 establishes its stated proposition; it says nothing about whether the
 proposition asserts anything, which is a separate audit.
 
-<sub>Corrections, 2026-08-21. The earlier S1/S2/S3 table named none of the
-repository's admitted declarations: S1 and S2 read `: True := trivial` and were
-deleted, S3 `coord_coverage` was proved. `no_coord_collision` was false as
-stated and now carries the separation hypothesis it requires.</sub>
+<sub>Corrections, 2026-08-21, amended 2026-09-11. The earlier S1/S2/S3 table
+named none of the repository's admitted declarations. S2 read
+`: True := trivial` and was deleted on 2026-08-21; S3 `coord_coverage` was
+proved; `no_coord_collision` was false as stated and now carries the separation
+hypothesis it requires. S1 `arnold_tongue_A4_coupling` was reported deleted on
+2026-08-21 and was not: it read `∀ δ : ℝ, ‖δ‖ < noise_tolerance → True`, a
+conclusion of `True` behind an implication, which the vacuity scan's
+`: True := trivial` pattern does not match. It was deleted on 2026-09-11 with
+G6Crystal §4, and `verify-proofs.yml` now scans for the implication form as
+well. The lesson is the one this section already states: a kernel check
+certifies that a proof establishes its proposition, not that the proposition
+asserts anything — and a textual scan certifies only the shapes it was written
+to look for.</sub>
 
 **2. Dependency integrity**
 The Mathlib revision is pinned. Do not update `lake-manifest.json` without

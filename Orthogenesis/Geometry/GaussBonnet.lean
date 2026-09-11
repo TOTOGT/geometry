@@ -9,6 +9,15 @@
 -- topological invariant.  The discrete form needs no differential geometry at
 -- all -- it is the Euclidean angle sum plus one counting identity.
 --
+-- THE SPECIAL CASE IS ALREADY IN THE CORPUS
+--   book4/ch21-the-closing-field.html carries sum_k (6-k) f_k = 12, the
+--   statement that a closed shell of hexagons and smaller faces needs exactly
+--   twelve pentagons' worth of defect.  That is this file's theorem at chi = 2
+--   with the defect quantised in units of 2*pi/6: total defect 4*pi, hexagons
+--   contributing nothing, twelve units left over.  Descartes had it in the
+--   1600s; this file is its general form and did not cite the chapter.
+--   Poincare-Hopf is the same invariant again and appears in 0 files here.
+--
 -- WHAT THIS ESTABLISHES
 --   total_defect            : sum of defects = 2*pi*V - pi*F.  Exchange of
 --                             summation order and the Euclidean angle sum.

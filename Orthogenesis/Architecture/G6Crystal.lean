@@ -1,15 +1,31 @@
 -- Orthogenesis/Architecture/G6Crystal.lean
--- 20 facts proved without sorry, extending HexGrid.lean and Growth.lean.
--- Proves: dm³ invariants, aspect ratio, isoperimetric optimum, Schumann
--- coupling, stability, planetary scaling, phase payload monotonicity,
--- and hex grid colony facts.
+-- Proves: dm³ invariants, aspect ratio, isoperimetric optimum, stability,
+-- planetary scaling, phase payload monotonicity, and hex grid colony facts.
+-- No `sorry` in this file. Run `#print axioms` on any result before quoting it.
 --
--- Three open obligations (sorry):
---   S1  Arnold tongue A₄:₁ — requires ODE flow theory not yet in Mathlib
---   S2  Hexagrid progressive collapse superiority — requires FEM formalisation
---   S3  coord_coverage cardinality — tracked in Coverage.lean
+-- CORRECTION 2026-09-11.  The previous header read "20 facts proved without
+-- sorry" and "three open obligations (sorry): S1, S2, S3".  Both were false,
+-- in opposite directions.  There was never a `sorry` in this file; S1 and S2
+-- were stated as `True` and discharged by `trivial`, which compiles silently
+-- and proves nothing.  A `sorry` at least warns.  What changed:
 --
--- Toolchain: Lean 4 + Mathlib v4.14.0
+--   §4  Schumann resonance coupling — WITHDRAWN, not weakened.  See §4.
+--   S1  arnold_tongue_A4_coupling  — DELETED 2026-09-11 with §4, its basis.
+--       It was a vacuous `∀ δ, ‖δ‖ < c → True`, not a `sorry`. See §9.
+--   S2  hexagrid_collapse_resistance_superior — DELETED as a theorem; it is
+--       an FEM result from the literature, which Lean cannot hold.  Cited in
+--       prose instead.
+--   S3  coord_coverage — PROVED, in Orthogenesis/Architecture/Coverage.lean.
+--       It is no longer an open obligation and no document should list it.
+--
+-- This correction was written on 2026-08-21, was never committed, and the file
+-- ran for three weeks in its uncorrected state while four HTML pages were
+-- edited to describe the corrected one.  Recorded here because a withdrawal
+-- that does not land is worse than one never written: the prose moves and the
+-- kernel does not.
+--
+-- Toolchain: Lean 4 + Mathlib v4.32.0  (header said v4.14.0; lakefile and
+--   lean-toolchain both pin v4.32.0 — corrected 2026-09-11)
 -- NASA gaps: FN-H-101L, FN-H-102L, FN-L-101L, FN-T-201L, FN-P-101L,
 --            FN-P-402L, FN-U-103L, FN-A-104L
 -- Zenodo concept DOI: 10.5281/zenodo.19162012
@@ -169,9 +185,12 @@ theorem dm3_noise_tol_lt_one : noise_tolerance < 1 := by
 -- 1 common cubit = 0.4572 m (18 inches exactly)
 -- ─────────────────────────────────────────────────────────────────────────────
 
-/-- The Schumann coupling integer g⁶ = 33.
-    This is the monster threshold of the dm³ framework (3 × 11 = 33). -/
-def g6_int : ℕ := 33
+/-- The dm³ cycle-threshold count g⁶ = 33 (3 × 11).
+    Dimensionless: a count, not a frequency and not a length.
+    Renamed 2026-09-11 from `g6_int`, whose docstring called it "the Schumann
+    coupling integer" — a name that carried the conclusion of §4 into the
+    definition §4 was supposed to be independent of. -/
+def g6_cycles : ℕ := 33
 
 /-- Total height in cubits: 33,000 = 1,000 × g⁶. -/
 def height_cubits : ℕ := 33000
@@ -194,9 +213,10 @@ theorem aspect_ratio_eq : height_cubits / base_cubits = 66 := by decide
 
 -- ── Fact 9 ──────────────────────────────────────────────────────────────────
 /-- Aspect ratio encodes both locked constants: 66 = 33 · τ = 33 · |μ_max|.
-    The factor 33 = g⁶ is the Schumann coupling integer.
-    The factor τ = 2 = |μ_max| appears because τ = |μ_max| in the dm³ toy model. -/
-theorem aspect_ratio_encoded : height_cubits / base_cubits = g6_int * 2 := by decide
+    The factor 33 = g⁶ is the dm³ cycle-threshold count.
+    The factor τ = 2 = |μ_max| appears because τ = |μ_max| in the dm³ toy model.
+    Both factors are dimensionless; the aspect ratio is a pure number. -/
+theorem aspect_ratio_encoded : height_cubits / base_cubits = g6_cycles * 2 := by decide
 
 -- ── Fact 10 ─────────────────────────────────────────────────────────────────
 /-- Layer height = 33,000 / 6 = 5,500 cubits per structural layer. -/
@@ -254,44 +274,28 @@ theorem hex_improvement_gt_115 :
   linarith
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- §4  Schumann Resonance Coupling
--- f_n = (c / 2πR_E) · √(n(n+1)), n=4 gives f₄ ≈ 33.516 Hz
+-- §4  Schumann Resonance Coupling — WITHDRAWN 2026-09-11
 -- ─────────────────────────────────────────────────────────────────────────────
-
-/-- Speed of light in m/s. -/
-noncomputable def c_light : ℝ := 3e8
-
-/-- Earth radius in metres. -/
-noncomputable def R_earth : ℝ := 6.371e6
-
-/-- Schumann n=4 mode frequency: f₄ = (c/2πR_E) · √20. -/
-noncomputable def f4_schumann : ℝ := (c_light / (2 * π * R_earth)) * sqrt 20
-
-/-- The Schumann n=4 formula: √(n(n+1)) for n=4 is √20. -/
--- ── Fact 15 ─────────────────────────────────────────────────────────────────
-theorem schumann_n4_sqrt : (4 : ℕ) * ((4 : ℕ) + 1) = 20 := by decide
-
-/-- g⁶ = 33 lies within 2% of the Schumann f₄ ≈ 33.516 Hz.
-    |33 - 33.516| / 33.516 = 0.516/33.516 ≈ 1.54% < 2%. -/
--- ── Fact 16 ─────────────────────────────────────────────────────────────────
-theorem g6_within_2pct_of_f4 :
-    |(g6_int : ℝ) - 33.516| / 33.516 < 2 / 100 := by
-  unfold g6_int
-  norm_num
-
--- ── Fact 17 ─────────────────────────────────────────────────────────────────
-/-- g⁶ = 33 lies within 16% of f₄ (conservative bound for the coupling claim). -/
-theorem g6_within_16pct :
-    |(g6_int : ℝ) - 33.516| / 33.516 < 16 / 100 := by
-  unfold g6_int; norm_num
-
--- ── Fact 18 ─────────────────────────────────────────────────────────────────
-/-- The noise tolerance 2/3 covers the g⁶/f₄ frequency error:
-    the Schumann error 1.54% is well within the 67% Arnold tongue band. -/
-theorem noise_tol_covers_g6_error :
-    |(g6_int : ℝ) - 33.516| / 33.516 < noise_tolerance := by
-  unfold g6_int noise_tolerance tau epsilon0
-  norm_num
+--
+-- This section defined c_light, R_earth, f4_schumann and proved
+-- schumann_n4_sqrt, g6_within_2pct_of_f4, g6_within_16pct and
+-- noise_tol_covers_g6_error.  All are deleted.  The arithmetic was correct;
+-- the physics was not.  Four independent failures, any one sufficient:
+--
+--   1. UNITS.  g6_cycles = 33 is a dimensionless count.  33.516 is a number
+--      of hertz.  |33 - 33.516|/33.516 < 2/100 is a true statement about two
+--      real numbers and says nothing about the ionosphere.  A kernel cannot
+--      check a claim about a physical quantity it was never given.
+--   2. The comparison value 33.516 Hz was entered as a literal.  Nothing in
+--      the file derives it, and f4_schumann was never evaluated against it.
+--   3. A 2% agreement between a count and a frequency is not evidence of
+--      coupling; it is evidence that two numbers near 33 are near each other.
+--   4. noise_tol_covers_g6_error compared that same gap to τ·ε₀ = 2/3, which
+--      made a numerological proximity look like it had passed a dynamical
+--      test.  It had not.
+--
+-- The dm³ invariants (T*, μ_max, τ, ε₀) are untouched and remain proved.
+-- What is withdrawn is their attachment to a named physical resonance.
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- §5  Stability
@@ -415,21 +419,31 @@ theorem colony_depth2_coords :
   decide
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- §9  Open Obligations (sorry-marked, named after NASA gaps)
+-- §9  Former Open Obligations — all three resolved; none was ever a `sorry`
 -- ─────────────────────────────────────────────────────────────────────────────
 
-/-- S1 (FN-P-101L / FN-P-402L): Arnold tongue A₄:₁ coupling.
-    The G6 Crystal couples passively to Schumann n=4 via Arnold tongue A₄:₁.
-    Perturbations ‖δG‖ < τ·ε₀ = 2/3 preserve the resonant lock.
-    Requires: ODE flow theory (Poincaré maps, Arnold tongues) in Mathlib.
-    Status: OPEN — tracked as AXLE Issue #S1. -/
-theorem arnold_tongue_A4_coupling :
-    ∀ δ : ℝ, ‖δ‖ < noise_tolerance → True := by
-  intro _ _; trivial
--- Note: the substantive claim (reduced oscillation amplitude vs square
--- cross-section at 33.5 Hz) is an experimental prediction, not a Lean theorem.
--- The falsifiable test: scale model driven at 33.5 Hz should show damped
--- response consistent with Arnold tongue locking. TRL 2-3.
+-- S1 (FN-P-101L / FN-P-402L): Arnold tongue A₄:₁ coupling.
+--
+-- DELETED 2026-09-11. This stood as
+--     theorem arnold_tongue_A4_coupling :
+--         ∀ δ : ℝ, ‖δ‖ < noise_tolerance → True := by intro _ _; trivial
+-- whose conclusion is `True` for every δ, including every δ the hypothesis
+-- excludes. It asserted nothing, and the vacuity scan in verify-proofs.yml
+-- catches the `: True := trivial` shape but not this one, where `True` sits
+-- behind an implication arrow.
+--
+-- Its docstring claimed passive coupling to Schumann n=4 and a lock preserved
+-- under ‖δG‖ < τ·ε₀ = 2/3. That is the §4 claim, withdrawn above: τ·ε₀ = 2/3
+-- is a dimensionless dm³ quantity and has no bearing on an ionospheric mode.
+-- The header of this file had recorded S1 as "DELETED with §4, its basis"
+-- since the 2026-08-21 correction was drafted. The correction was never
+-- committed and the theorem outlived the sentence announcing its removal —
+-- the same failure §4's banner records, in miniature.
+--
+-- The substantive content was always an experimental prediction, not a
+-- theorem: a scale model driven near 33.5 Hz showing damped response relative
+-- to a square cross-section. TRL 2-3. It belongs in the prediction register,
+-- not in a Lean file, and Lean never held it.
 
 -- S2 (FN-H-101L structural): hexagrid progressive collapse superiority.
 --

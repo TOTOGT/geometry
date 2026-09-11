@@ -248,6 +248,30 @@ jobs:
           fi
           echo "OK: $(wc -l < /tmp/actual.txt) vacuous statements, all declared."
 
+      # ── Added 2026-09-11 ──────────────────────────────────────────────────
+      # The scan above matches the literal shape `: True := trivial`. It does
+      # not match a conclusion of `True` sitting behind an implication arrow:
+      #
+      #     theorem X : ∀ δ : ℝ, ‖δ‖ < c → True := by intro _ _; trivial
+      #
+      # That form is true for every δ, including every δ the hypothesis was
+      # written to exclude, so the hypothesis does no work and the theorem
+      # asserts nothing. G6Crystal.arnold_tongue_A4_coupling had this shape and
+      # survived every scan in this file for three weeks while the repository
+      # header described it as deleted. There is no baseline here on purpose:
+      # the count is zero and a placeholder wanting this shape can use the
+      # declared `: True := trivial` form instead.
+      - name: Vacuity scan (conclusion True behind an implication)
+        run: |
+          set -u
+          hits=$(grep -rn -- '→ True[[:space:]]*:=\|-> True[[:space:]]*:='                    --include=*.lean Orthogenesis book8 ./*.lean 2>/dev/null                  | grep -v ':[0-9]*:[[:space:]]*--' || true)
+          if [ -n "$hits" ]; then
+            echo "$hits"
+            echo "::error::a declaration concludes in \`True\` behind an implication. It is vacuous: the hypothesis constrains nothing. Delete it or restate the real conclusion."
+            exit 1
+          fi
+          echo "OK: no implication-into-True declarations."
+
       # =================================================================
       # AUTHORITATIVE STEP. Vocabulary.
       # Written 2026-08-22 after a Google AI Overview attributed a "Log-Psi

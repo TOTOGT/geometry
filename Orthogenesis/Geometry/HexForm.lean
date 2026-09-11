@@ -24,6 +24,27 @@
 --   hexNeighbors_form_one  : all six neighbours have Q = 1, so the six-fold
 --                            ring is the set of minimal vectors of Q.
 --
+-- ALREADY IN THE CORPUS, AND THIS FILE DID NOT FIND IT
+--   book4/ch21-the-closing-field.html carries
+--       T = m^2 + mn + n^2 = N_{Q(omega)/Q}(m + n*omega)
+--   as the Caspar-Klug T-number of a closable hexagonal shell, with Goldberg
+--   polyhedra and Descartes on total defect.  That is this file's Q, written
+--   as the Eisenstein norm.  ch26-kaleidoscope-test.html adds that Jacobi's
+--   two-square theorem and "its Eisenstein analogue" are the same statement
+--   twice.  This file is the machine-checked floor under those chapters and
+--   was written without citing them.
+--
+-- NOT IN THE CORPUS, AND WORTH ADDING
+--   * h(-3) = 1.  The discriminant -3 has class number one, so there is a
+--     UNIQUE reduced form of that discriminant.  That is WHY the Eisenstein
+--     classification in ch21 is complete rather than merely available, and
+--     -3 is one of the nine Heegner discriminants, the list that ends at -163.
+--     "class number" and "Heegner" appear in 0 files.
+--   * The theta series of this lattice, sum over (q,r) of x^Q(q,r), is a
+--     weight-one Eisenstein series of level 3: the count of representations
+--     of n is 6*(d_{1,3}(n) - d_{2,3}(n)).  That places the hex lattice inside
+--     modular forms.  "theta series" appears in 0 files.
+--
 -- WHAT IT DOES NOT ESTABLISH
 --   * Not that the six neighbours are the ONLY vectors with Q = 1.  That is
 --     true and is the statement that the A2 lattice has kissing number 6; it

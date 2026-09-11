@@ -85,7 +85,7 @@ footer .disc{max-width:520px;color:#6f6a5c}
 
 <div class="wp-head">
 <div class="topictag" title="An audit of somebody else's formalization, by the method this corpus uses on itself">#Audit</div>
-<div class="wp-kicker">Vol VI &middot; Roots &middot; WP-107 &middot; Received 2026-09-09 &middot; Audit of a third-party claim &middot; Partial: statement layer complete, proof layer not verified here</div>
+<div class="wp-kicker">Vol VI &middot; Roots &middot; WP-107 &middot; Received 2026-09-09 &middot; Updated 2026-09-10 &middot; Audit of a third-party claim &middot; Partial: statement layer complete, proof layer not verified here</div>
 <h1>The Statement Was <em>Not Theirs</em></h1>
 <div class="subtitle">OpenAI announced on 8 September 2026 that an internal system had resolved the Navier&ndash;Stokes Millennium problem by establishing Fefferman&rsquo;s alternatives (C) and (D). The question an auditor asks first is whether the formalized statement is the official problem or a narrower one that merely resembles it. It is not narrower, and the reason is structural: they did not write it.</div>
 <div class="metagrid">
@@ -347,6 +347,87 @@ Holtz draws is the one this paper depends on: a verified theorem can settle a ma
 question and cannot, by itself, settle scientific credit. §3&rsquo;s finding is provenance of the
 <em>statement</em> and says nothing about provenance of the <em>proof</em>.</p>
 
+<h2><span class="n">&sect; 10</span> The third layer: what the axiom line says, without a build</h2>
+<p>§9 closed by naming what it could not reach: <em>&ldquo;That the two calls are</em> there
+<em>is checked here; what they</em> print <em>is not, and no build was run.&rdquo;</em> That
+sentence is now out of date, and not because anything was built. The repository states the answer
+in a file this note had not read. <span class="tag t-data">COMPUTED</span></p>
+
+<p>Audited at HEAD <span class="mono">f9e8bc5</span>, 2026-09-10, toolchain
+<span class="mono">leanprover/lean4:v4.34.0-rc2</span>: 2,659 Lean files, 641,332 lines
+&mdash; <span class="mono">Euler/</span> 1,839 files and 211,578 lines,
+<span class="mono">NavierStokes/</span> 816 and 429,279,
+<span class="mono">ComparatorChallenges/</span> 2 and 472.</p>
+
+<h3 style="font-size:1.02em;margin-top:14px">The disclosure is machine-readable and per-theorem</h3>
+<p>The repository root carries <span class="mono">formalization.yaml</span>, declaring itself
+against the mathlib-initiative <span class="mono">formalization.schema.json</span> at v0.4. For each
+of the four headline declarations it records the file, the declaration name, a
+<span class="mono">sorry_count</span>, and an explicit axiom list. All four entries are
+identical in the last two fields: <span class="tag t-data">COMPUTED</span></p>
+<div class="eq">
+<span class="mono">sorry_count: 0</span><br>
+<span class="mono">axioms: [ propext, Classical.choice, Quot.sound ]</span><br><br>
+for <span class="mono">NavierStokes.Comparator.navier_stokes_breakdown_R3</span> (C),<br>
+<span class="mono">&hellip;.navier_stokes_breakdown_periodic</span> (D),<br>
+<span class="mono">Euler.euler_breakdown_R3</span>,<br>
+<span class="mono">Euler.exists_compact_smooth_euler_singularity</span>
+</div>
+<p>The same file records <span class="mono">review: status: &ldquo;self-assessed&rdquo;</span> and,
+under <span class="mono">automation</span>, <span class="mono">method: agent</span>,
+<span class="mono">models: GPT-6 Astra</span>, <span class="mono">framework: Codex</span>. The
+absence of peer review that §1 had to infer from the announcement is declared in the repository, in
+the same machine-readable file as the axiom list.</p>
+
+<h3 style="font-size:1.02em;margin-top:14px">And the set is enforced, not merely reported</h3>
+<p>Both Comparator configurations carry a <span class="mono">permitted_axioms</span> field holding
+exactly those three names. That is a stronger object than a printed list: the independent checker
+is told what the proof is allowed to depend on and fails if it depends on more, so the axiom
+discipline is a gate in the verification pipeline rather than a line of output a reader is
+trusted to notice. <span class="tag t-data">COMPUTED</span></p>
+
+<h3 style="font-size:1.02em;margin-top:14px">The escapes, counted again at this HEAD</h3>
+<div class="eq">
+<span class="mono">sorry</span> &mdash; <strong>5</strong>, all in
+<span class="mono">ComparatorChallenges/{Euler,NavierStokes}.lean</span><br>
+<span class="mono">axiom</span> declarations &mdash; <strong>0</strong><br>
+<span class="mono">native_decide</span> &mdash; <strong>0</strong> &nbsp;·&nbsp;
+<span class="mono">implemented_by</span> &mdash; <strong>0</strong> &nbsp;·&nbsp;
+<span class="mono">sorryAx</span> &mdash; <strong>0</strong>
+</div>
+<p>The five live in the two challenge files, whose own header calls them intentional placeholders,
+and §9 established the firewall from the other side: the solution adapters import
+<span class="mono">ComparatorDefinitions</span> and never the challenge module. A
+<span class="mono">sorry</span> in this repository cannot reach a headline theorem by construction,
+and the declared <span class="mono">sorry_count: 0</span> is consistent with that architecture
+rather than with an assertion about it.</p>
+
+<h3 style="font-size:1.02em;margin-top:14px">What this corrects in our own pages</h3>
+<p>Journal Vol.&nbsp;&Omega; No.&nbsp;9 argued that the axiom line goes unquoted because the
+vocabulary for it does not exist, and cited the Fermat formalization having to spell the three
+axioms out <em>in prose</em> &mdash; &ldquo;because there is no standard citation for them.&rdquo;
+<strong>There is one, and it is in use.</strong> A schema with a per-declaration
+<span class="mono">axioms:</span> field, published under the mathlib initiative and populated here
+alongside <span class="mono">sorry_count</span>, automation disclosure and review status, is the
+layer that page said did not exist yet. It existed while the page was being set.
+<span class="tag t-assume">CHECKED</span></p>
+<p>The revised claim is narrower and survives: the habit forms where the stakes are high enough to
+require it, and this is the highest-stakes formalization of the month. What Vol.&nbsp;9 should have
+said is that the layer is <em>new and unevenly adopted</em>, not absent &mdash; and that the
+interesting census is no longer how many projects print the line, but how many populate the field.</p>
+
+<h3 style="font-size:1.02em;margin-top:14px">What is still not established here</h3>
+<p>A declared axiom list is a claim in a metadata file. It is not kernel output, and reading it is
+not running it. Everything in this section is a statement about what the repository
+<em>says</em> about itself &mdash; consistently, in three places, in a form designed to be
+checked &mdash; and the check itself still requires <span class="mono">lake build</span> and the
+four <span class="mono">#print axioms</span> calls that §9 found in place. This note has now
+declined to run that build three times. That is a limit of the note, not a finding about the
+proof. <span class="tag t-open">OPEN</span></p>
+<p>The proof layer remains unaudited here, and nothing in this section speaks to it. What §10 adds
+is that the disclosure layer of this submission is, on the evidence of its own files, better than
+the practice the corpus has spent two pages complaining about.</p>
+
 <h2><span class="n">&sect; 8</span> Sources</h2>
 <p>[1] OpenAI, &ldquo;Navier&ndash;Stokes solution&rdquo;, announcement, 8 September 2026.<br>
 [2] <span class="mono">github.com/openai/NavierStokesAndEuler</span> &mdash; audited at HEAD, 9 September 2026.<br>
@@ -368,6 +449,8 @@ Clay Mathematics Institute official problem description.<br>
 [9] O. Holtz, public assessment of the Navier&ndash;Stokes announcement, 9 September 2026 &mdash;
 quoted at §9 for the request for statement-level scrutiny and for the description of the
 construction; its priority and provenance claims are noted as out of scope and not adopted.<br>
+[11] <span class="mono">formalization.yaml</span> at the repository root, schema v0.4, <span class="mono">mathlib-initiative/formalization.yaml</span> &mdash; the per-declaration <span class="mono">axioms</span>, <span class="mono">sorry_count</span>, <span class="mono">automation</span> and <span class="mono">review</span> fields read at &sect;10; and <span class="mono">ComparatorChallenges/{Euler,NavierStokes}.json</span> for <span class="mono">permitted_axioms</span>.<br>
+[12] This corpus: Journal Vol.&nbsp;&Omega; No.&nbsp;9, &ldquo;Two Instruments, Thirty Years, Neither Quoted&rdquo; &mdash; the claim &sect;10 corrects.<br>
 [10] Every COMPUTED figure in this note is regenerated by
 <span class="mono">wp107-verify.py</span>, standard library only. Blocks [1]&ndash;[4] fetch the two
 statement files; blocks [5]&ndash;[6] need a checkout and report SKIPPED without one:

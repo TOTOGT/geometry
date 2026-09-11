@@ -44,7 +44,9 @@ Corrective action taken: the vacuous statements are deleted rather than converte
 
 ## 3. The gap-closure table had never been machine-checked
 
-`NASAGaps.lean`, the file carrying the mapping from FN-xxx-L codes to Lean results, sits outside the package's default build target and imports a module that does not exist in the repository. `lake build` has therefore never type-checked it. The same is true of the file tracking the one genuine open obligation. This is being corrected; the table should be regarded as unverified until a clean build is reported.
+`NASAGaps.lean`, the file carrying the mapping from FN-xxx-L codes to Lean results, sat outside the package's default build target and imported a module that does not exist in the repository. `lake build` had therefore never type-checked it. The same was true of the file tracking the one genuine open obligation.
+
+**Update 2026-09-11.** The gap ledger now lives at `Orthogenesis/Architecture/NASAGaps.lean`, inside the `Orthogenesis` default target, with the import corrected to `Orthogenesis.Geometry.Colony`. The stale root-level copy has been emptied of declarations and marked superseded; it had continued to state, in proof form, the §4 Schumann proximity claim withdrawn the same day. The twelve gap theorems are gated by `tools/axiom_gate.py`, which fails the job on `sorryAx` or on a missing declaration, so the table's status is now decided by the build rather than asserted alongside it. Nothing here should be read as covering the root-level files still outside every target (`CardiacHopfReduction`, `CollatzDescent`, `Coverage`, `FoldCentralCharge`, `Growth`, `HexGrid`, `SmokeBox`): those remain unchecked, and no claim resting on them is verified.
 
 ## 4. Two entries narrow rather than fall
 

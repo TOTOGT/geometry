@@ -231,13 +231,21 @@ Both are inside `lean_lib Orthogenesis` and appear in the build log as
 ``declaration uses `sorry` ``. They are the only two admitted declarations the
 build can see.
 
-<sub>Corrections, 2026-08-21. The earlier S1/S2/S3 table named none of the
-repository's admitted declarations. S1 `arnold_tongue_A4_coupling` and S2
-`hexagrid_collapse_resistance_superior` were never `sorry`s — they read
-`: True := trivial` and were deleted with §4 of `G6Crystal.lean`; a retracted
-claim is not an open one. S3 `coord_coverage` was proved, together with
+<sub>Corrections, 2026-08-21, amended 2026-09-11. The earlier S1/S2/S3 table
+named none of the repository's admitted declarations. None of the three was
+ever a `sorry`. S2 `hexagrid_collapse_resistance_superior` read
+`: True := trivial` and was deleted on 2026-08-21; it is an FEM result from the
+literature (Mashhadiali et al.; Yildirim), cited as theirs, and was never a
+proof obligation here. S3 `coord_coverage` was proved, together with
 `hexRing_card`, and `no_coord_collision` was restated with the separation
-hypothesis it requires. See `docs/audit-log.md`.</sub>
+hypothesis it requires. S1 `arnold_tongue_A4_coupling` is the amendment: the
+2026-08-21 note said it had been deleted with §4 of `G6Crystal.lean`, and it
+had not. §4 itself was not withdrawn in the artifact until 2026-09-11, and S1
+survived alongside it, reading
+`∀ δ : ℝ, ‖δ‖ < noise_tolerance → True` — a conclusion of `True` behind an
+implication, which the vacuity scan's `: True := trivial` pattern does not
+match. Both are now gone, and `verify-proofs.yml` carries a second scan for the
+implication form. See `docs/audit-log.md`.</sub>
 
 ---
 
