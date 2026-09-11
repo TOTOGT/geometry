@@ -21,14 +21,29 @@ lean_lib Orthogenesis
   copy is authoritative. NASAGaps.lean stays as a tombstone with no declarations
   -- see its header for why an emptied file is doing work there.
 
-  The root-level .lean files still outside every target are CardiacHopfReduction,
-  CollatzDescent, CycleCoupling, DomainCheck, FoldCentralCharge, LadderBound,
-  NbonacciLadder, SmokeBox and SpiralReturnObstruction. That is a known gap, not
-  an endorsement: no claim resting on them should be treated as checked.
+  Nine root-level .lean files are still outside every target, and they are not
+  all in the same condition. The distinction this lakefile keeps making applies
+  here too: a hand run proves a file on the day it is run and nothing afterwards.
 
-  DomainCheck.lean is the newest entry and the one that most wants a target: it
-  exists so that a reader can re-run the domain result in Book 4 Ch 12 against
-  their own kernel, and a file nothing compiles cannot keep that promise.
+    Hand-audited 2026-09-09, reports in tools/verify-audit/2026-09-09/ --
+      CycleCoupling, NbonacciLadder, SmokeBox, SpiralReturnObstruction.
+      Kernel-checked on that date against the v4.32.0 pin, with no undeclared
+      vacuity (see Orthogenesis/Architecture/KNOWN_PLACEHOLDERS.txt for how a
+      `True`-conclusion theorem is declared rather than left to pass silently).
+      What they lack is not a check. It is a check that repeats.
+
+    No audit report on record --
+      CardiacHopfReduction, CollatzDescent (346 L), FoldCentralCharge,
+      LadderBound (172 L), DomainCheck. Nothing is known either way about
+      these, which is a different and weaker position than the four above.
+      CollatzDescent and LadderBound carry the most unaudited mathematics in
+      the repository.
+
+  DomainCheck.lean elaborated clean under `lake env lean` on 2026-09-11 -- five
+  theorems, no sorry, no warnings -- but has no .axioms.txt beside it and no
+  target. It exists so a reader can re-run the domain result in Book 4 Ch 12
+  against their own kernel, and a file nothing compiles cannot keep that
+  promise. It is the cheapest of the five to close.
 -/
 @[default_target]
 lean_lib SaturnHexagon
