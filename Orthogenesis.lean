@@ -2,6 +2,8 @@ import Orthogenesis.Geometry.HexGrid
 import Orthogenesis.Geometry.Growth
 import Orthogenesis.Geometry.Cell
 import Orthogenesis.Geometry.Colony
+import Orthogenesis.Geometry.GaussBonnet
+import Orthogenesis.Geometry.HexForm
 import Orthogenesis.Architecture.G6Crystal
 import Orthogenesis.Architecture.MagneticLattice
 import Orthogenesis.Architecture.SeismicLattice
