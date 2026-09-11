@@ -190,6 +190,36 @@ jobs:
           fi
 
           python3 tools/axiom_gate.py /tmp/dm3.txt 28
+
+      # =================================================================
+      # AUTHORITATIVE STEP. Discrete Gauss-Bonnet -- candidate core for
+      # Volume XI (rung 28, Index Theory), the FLOOR volume named in WP-82.
+      # Three declarations. tetra_gauss_bonnet is gated alongside the two
+      # general statements on purpose: Triangulation is satisfied by an empty
+      # instance, so a witness is part of the claim, not an illustration.
+      # Runs the tracked probe, never a heredoc copy of it.
+      # =================================================================
+
+      - name: Kernel axiom check on discrete Gauss-Bonnet
+        run: |
+          set -u
+          PROBE=tools/verify-gaussbonnet/probe_gb.lean
+
+          set +e
+          lake env lean "$PROBE" > /tmp/gb.txt 2>&1
+          rc=$?
+          set -e
+
+          echo "----- discrete Gauss-Bonnet: axiom report -----"
+          cat /tmp/gb.txt
+          echo "-----------------------------------------------"
+
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::Gauss-Bonnet probe failed to elaborate (exit $rc)"
+            exit 1
+          fi
+
+          python3 tools/axiom_gate.py /tmp/gb.txt 8
       
       # =================================================================
       # AUTHORITATIVE STEP. Vacuity.
