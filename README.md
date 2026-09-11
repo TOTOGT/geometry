@@ -92,7 +92,7 @@ One call to `expand` = one NASA phase. A colony at depth 2 has passed through Ph
 | `no_coord_collision` | Expand preserves coord injectivity | ✓ proved | FN-H-101L |
 | `hex_beats_square` | Hexagon isoperimetric ratio > square | ✓ proved | FN-H-101L |
 | `nasa_payload_mono` | Phase 01 payload < Phase 02 | ✓ proved | FN-T-201L |
-| `coord_coverage` | Ring at distance k has 6k cells (k ≥ 1) | ◑ partial | FN-C-101L |
+| `coord_coverage` | Ring at distance k has 6k cells (k ≥ 1) | ✓ proved | FN-C-101L |
 | `arnold_tongue_A4` | A₄:₁ passive Schumann coupling | ○ open (S1) | FN-P-402L |
 | `hexagrid_collapse` | Progressive collapse superiority | ○ open (S2) | FN-H-101L |
 
@@ -156,7 +156,7 @@ All proved in `G6Crystal.lean` (20 facts, 0 sorry on dimensional claims).
 | Power | FN-P-101L, FN-P-402L | `g6_within_2pct_of_f4` + noise tolerance | ∼ |
 | ISRU | FN-U-103L | `expand_mono` + `FN_U_103L_six_layers` | ∼ |
 | Autonomous Systems | FN-A-104L, FN-A-105L | `expandN_mono` + neighbor traversal | ✓ |
-| Communications & PNT | FN-C-101L, FN-C-201L | `ring_card` (coord_coverage) | ◑ |
+| Communications & PNT | FN-C-101L, FN-C-201L | `ring_card` (coord_coverage) | ✓ |
 | Mobility | FN-M-302L | Hex path existence | ∼ |
 
 **Proved facts: `nasa_gap_closure_summary` collects the five fully closed gaps as a single theorem.**
@@ -222,11 +222,22 @@ All proved in `G6Crystal.lean` (20 facts, 0 sorry on dimensional claims).
 
 ## Open Obligations
 
-| Sorry | Name | Gap | Closure path |
-|-------|------|-----|-------------|
-| S1 | `arnold_tongue_A4_coupling` | FN-P-402L | ODE flow theory in Mathlib; AXLE Target 6 |
-| S2 | `hexagrid_collapse_resistance_superior` | FN-H-101L | FEM formalisation; Mashhadiali data |
-| S3 | `coord_coverage` (cardinality) | FN-C-101L | Ring-walk injectivity; Coverage.lean |
+| Sorry | Name | File | Closure path |
+|-------|------|------|-------------|
+| M2 | `heliSpin_incommensurate_aperiodic` | `Orthogenesis/Architecture/MagneticLattice.lean:240` | Irrationality of q/2π plus a Weyl equidistribution argument |
+| Q2 | `detune_from_ground_period` | `Orthogenesis/Architecture/SeismicLattice.lean:211` | A damped forced-oscillator structural-dynamics response model |
+
+Both are inside `lean_lib Orthogenesis` and appear in the build log as
+``declaration uses `sorry` ``. They are the only two admitted declarations the
+build can see.
+
+<sub>Corrections, 2026-08-21. The earlier S1/S2/S3 table named none of the
+repository's admitted declarations. S1 `arnold_tongue_A4_coupling` and S2
+`hexagrid_collapse_resistance_superior` were never `sorry`s — they read
+`: True := trivial` and were deleted with §4 of `G6Crystal.lean`; a retracted
+claim is not an open one. S3 `coord_coverage` was proved, together with
+`hexRing_card`, and `no_coord_collision` was restated with the separation
+hypothesis it requires. See `docs/audit-log.md`.</sub>
 
 ---
 
@@ -301,7 +312,7 @@ Commercial innovators and international partners: HQ-MoonBase@nasa.gov
 Pull requests that close proof obligations are welcome.
 - If you add a lemma, update the table above.
 - If you add a `sorry`, name it after the `FN-` gap it represents.
-- If you close `coord_coverage` (S3), update `Coverage.lean` and remove the `sorry`.
+- The two open obligations are M2 (`MagneticLattice.lean`) and Q2 (`SeismicLattice.lean`). Closing one means removing its `sorry` and updating the table above.
 
 ---
 

@@ -28,13 +28,27 @@ code and documented closure path. The current open obligations are:
 
 | ID | Name | Status |
 |----|------|--------|
-| S1 | `arnold_tongue_A4_coupling` | Open — requires ODE flow theory in Mathlib |
-| S2 | `hexagrid_collapse_resistance_superior` | Open — requires FEM formalisation |
-| S3 | `coord_coverage` | Open — ring-walk cardinality, tracked in `Coverage.lean` |
+| M2 | `heliSpin_incommensurate_aperiodic` (`MagneticLattice.lean:240`) | Open — needs irrationality of q/2π and a Weyl equidistribution argument |
+| Q2 | `detune_from_ground_period` (`SeismicLattice.lean:211`) | Open — needs a damped forced-oscillator response model |
 
-No `sorry` is hidden. The claim "0 sorry on structural claims" means the
-load-bearing theorems (`stage_bound`, `expand_mono`, `hex_beats_square`,
-`no_coord_collision`, `nasa_gap_closure_summary`) are all fully proved.
+Those two are the only admitted declarations inside a `lake build` target. Four
+more sit in files that are in no target — `CollatzDescent.lean` (2), the root
+copy of `Coverage.lean` (1), `AMonster/GenerativeWeave.lean` (1) — and the build
+never reads them. Six in total; the package is not sorry-free and no document
+should say that it is.
+
+No `sorry` is hidden. `stage_bound`, `expand_mono`, `expandN_mono`,
+`hex_beats_square`, `coord_coverage`, `no_coord_collision` and
+`nasa_gap_closure_summary` are proved, and the CI axiom gate
+(`tools/axiom_gate.py`) reports `[propext, Classical.choice, Quot.sound]` with
+no `sorryAx` for every theorem it covers. A kernel check certifies that a proof
+establishes its stated proposition; it says nothing about whether the
+proposition asserts anything, which is a separate audit.
+
+<sub>Corrections, 2026-08-21. The earlier S1/S2/S3 table named none of the
+repository's admitted declarations: S1 and S2 read `: True := trivial` and were
+deleted, S3 `coord_coverage` was proved. `no_coord_collision` was false as
+stated and now carries the separation hypothesis it requires.</sub>
 
 **2. Dependency integrity**
 The Mathlib revision is pinned. Do not update `lake-manifest.json` without
