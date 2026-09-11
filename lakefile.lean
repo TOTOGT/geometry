@@ -15,10 +15,20 @@ lean_lib Orthogenesis
   it had been kernel-verified. Declaring it a default target is what makes a
   regression fail the job rather than pass unnoticed.
 
-  The other root-level .lean files (CardiacHopfReduction, CollatzDescent,
-  Coverage, FoldCentralCharge, Growth, HexGrid, NASAGaps, SmokeBox) are still
-  outside every target. That is a known gap, not an endorsement: no claim
-  resting on them should be treated as checked.
+  Revised 2026-09-11. Coverage.lean, Growth.lean and HexGrid.lean are no longer
+  at the root: each was a stale ancestor of the copy under Orthogenesis/ (April
+  or June, against August in the tree), nothing imported them, and the built
+  copy is authoritative. NASAGaps.lean stays as a tombstone with no declarations
+  -- see its header for why an emptied file is doing work there.
+
+  The root-level .lean files still outside every target are CardiacHopfReduction,
+  CollatzDescent, CycleCoupling, DomainCheck, FoldCentralCharge, LadderBound,
+  NbonacciLadder, SmokeBox and SpiralReturnObstruction. That is a known gap, not
+  an endorsement: no claim resting on them should be treated as checked.
+
+  DomainCheck.lean is the newest entry and the one that most wants a target: it
+  exists so that a reader can re-run the domain result in Book 4 Ch 12 against
+  their own kernel, and a file nothing compiles cannot keep that promise.
 -/
 @[default_target]
 lean_lib SaturnHexagon
