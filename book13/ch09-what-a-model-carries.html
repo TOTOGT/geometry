@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch 9 — What a Model Carries | Principia Orthogona Vol XIII</title>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+td.mono{font-family:var(--mono);font-size:.78rem}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+td.zero{font-family:var(--mono);font-size:.8rem;text-align:right;color:var(--red);font-weight:700}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+</style>
+</head>
+<body>
+<div class="topnav">
+  <span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol XIII &middot; Coherence</a></span>
+  <span class="meta"><a href="ch08-known-limits.html">&larr; Ch 8</a> &nbsp;&middot;&nbsp; <a href="../book7/ch-beltrami.html">Beltrami &rarr;</a></span>
+</div>
+<div class="wp-head">
+  <div class="wp-kicker">Vol XIII &middot; Coherence &middot; Chapter 9 &middot; Open &middot; 2026-09-11</div>
+  <h1>What a Model <em>Carries</em></h1>
+  <div class="subtitle">Beltrami asked this volume&rsquo;s question in 1868, and answered it in the weakest of the three available ways &mdash; which is exactly why the answer was worth having</div>
+  <div class="metagrid"><div><strong>Status</strong>Open &middot; no kernel-checked core</div><div><strong>Rung</strong>30 &middot; Higher Category Theory</div><div><strong>Floor</strong>Volume XI &middot; rung 28 &middot; not yet written</div><div><strong>Companion</strong>Book 7 &middot; ch-beltrami</div></div>
+</div>
+<div class="wrap">
+
+<p class="lede">Chapter 3 asked whether two bracketings of the operator chain are equal on the nose or
+merely isomorphic. That question has an older form, and the corpus has been quoting its answer for
+years without noticing the shape of it. In 1868 Beltrami read Lobachevsky&rsquo;s plane off a
+surface of constant negative curvature. The standing question is what that reading transports.</p>
+
+<div class="eq">&#8459;<sub>2</sub> &nbsp;=?&nbsp; &#8771;? &nbsp;=?&nbsp; &sub;? &nbsp; &Psi;</div>
+
+<p>Three relations get called <em>the same</em> in ordinary mathematical speech, and they carry
+different amounts. <strong>Equality on the nose</strong> transports everything, including anything
+stated about the underlying representation. <strong>Isomorphism</strong> transports every property
+expressible in the signature, and nothing about the carrier. <strong>Interpretation</strong> &mdash;
+a structure-preserving map into a model of a different theory &mdash; transports only what the
+dictionary was written to cover, and in one direction.</p>
+
+<p>Beltrami&rsquo;s is the third, and it is provably not the second. Hilbert showed in 1901 that no
+complete regular surface of constant negative curvature embeds in
+$\mathbb{R}^{3}$, so the pseudosphere carries a proper piece of the hyperbolic plane. The two
+objects are not isomorphic; they cannot be. What the dictionary transports is narrower than
+either loose phrase suggests: <em>derivations</em>, and therefore <em>contradictions</em>. That is
+the entire content of the 1868 result, and it is enough to end a two-thousand-year search, because
+a proof of the parallel postulate would now be a contradiction inside Euclid.</p>
+
+<div class="eyebrow">Why this belongs at rung 30</div>
+<h2>Coherence is the same bookkeeping, one level up</h2>
+
+<p>An associator is needed when composition holds only up to isomorphism. A pentagon is needed when
+the associators themselves must agree. In both cases the mathematical content is not the weakening
+&mdash; it is the obligation to <em>write down what survives it</em>, and to check that the
+surviving data is consistent.</p>
+
+<p>A model is that obligation at the level of theories. Once &ldquo;is&rdquo; has been weakened to
+&ldquo;interprets,&rdquo; every subsequent sentence has to say which side it is about, and the
+failure mode is mechanical: a theorem proved about the model gets quoted as a theorem about the
+thing. The pseudosphere has a boundary and the hyperbolic plane does not; a statement about the
+edge is true of one and meaningless for the other. Nothing in the notation stops you from
+transporting it anyway.</p>
+
+<div class="gap">
+  <span class="lab">The question this volume has to answer about its own object</span>
+  <p><strong>If the contact formulation of G = U&#8728;F&#8728;K&#8728;C is a model</strong>, then
+  every metric-flavoured sentence in the corpus &mdash; curvature, geodesic, distance, threshold as
+  a length &mdash; needs a named dictionary and a statement of what it transports. None exists.</p>
+  <p style="margin-bottom:0"><strong>If it is the thing itself</strong>, then the metric vocabulary
+  is not available at all, and its appearances are borrowings. Darboux&rsquo;s theorem sharpens
+  this rather than softening it: contact structures have no local invariants, so no quantity
+  computed from the structure can distinguish one metric&rsquo;s geodesics from another&rsquo;s.
+  What remembers a metric is the choice of <em>form</em>, through its Reeb field. An equivalence
+  that holds for every contact structure is too strong to be informative about any of them.</p>
+</div>
+
+<p>The positive statement on the other side is a theorem and is worth having exactly because it is
+narrow: for a Riemannian manifold $(M,g)$, the restriction of the canonical Liouville 1-form to the
+unit cotangent bundle $S^{*}M$ is a contact form whose Reeb field generates the geodesic flow of
+$g$. Geodesic motion is Reeb dynamics &mdash; on a manifold built from the original one, by a
+construction that has to be named each time it is used.</p>
+
+<div class="eyebrow">Admissibility &middot; WP-82 &sect;4</div>
+<h2>This chapter is a reading list until it has a core</h2>
+
+<p>The standing bar for Part II is that each volume carries a machine-checked core: a Lean file that
+elaborates clean against a pinned Mathlib and reports its axioms, or the volume is a reading list
+with a DOI on it. This chapter does not have one, and saying so is the point of the status line
+above rather than a caveat under it.</p>
+
+<p>The candidate core is not a rung-30 object, which is the finding this chapter contributes.
+Tile a closed surface with geodesic triangles and the angle excesses add, because
+$\alpha+\beta+\gamma-\pi=\iint K\,dA$ is additive over the pieces; carry on until the surface
+closes and the total is fixed by topology alone at $2\pi\chi$. The discrete form of that is pure
+counting and needs no differential geometry: for a triangulated closed surface, summing the angle
+defect $2\pi-\sum\theta$ over vertices gives $2\pi V-\pi F$, and $3F = 2E$ makes that
+$2\pi(V-E+F)$. A local quantity integrating to a global invariant, with the local side elliptic
+&mdash; that is an index theorem, in its first and oldest instance.</p>
+
+<div class="gap">
+  <span class="lab">Routing &mdash; and a floor that is missing</span>
+  <p>Index theory is <strong>rung 28, Volume XI</strong>, which WP-82 classifies as FLOOR and
+  which this volume&rsquo;s own index already says comes first in reading order. XI is not
+  written. Neither is XII. Building a coherence chapter on top of an absent index volume repeats
+  the pattern this corpus keeps correcting, so the entry is recorded here and the work is not
+  claimed here.</p>
+  <p style="margin-bottom:0">Discrete Gauss&ndash;Bonnet is the smallest honest core XI could
+  carry: a finite statement, provable from $3F=2E$ and the Euclidean angle sum, with an axiom
+  report the kernel can produce. It is also the formal shadow of the oldest argument in the
+  subject &mdash; measure a triangle, repeat, and watch the surface close.</p>
+</div>
+
+<h2>Known limits of this chapter</h2>
+<p>No Lean artifact, so no axiom report, so no <em>Result</em> status. The three-way distinction
+between equality, isomorphism and interpretation is standard model theory and is not claimed as
+new; what is claimed is that the corpus has not said which of the three it means when it calls the
+contact formulation a description of the operator chain. The Reeb&ndash;geodesic statement is
+quoted from the literature and is not formalised here. And the reading of Beltrami as an
+interpretation rather than an isomorphism rests on Hilbert&rsquo;s embedding theorem, which
+constrains surfaces in $\mathbb{R}^{3}$ and says nothing about the abstract hyperbolic plane.</p>
+
+</div>
+
+<footer>
+  <div class="fwrap">
+    <div>
+      <strong style="color:var(--gold2)">Ch 9</strong><br>
+      Principia Orthogona &middot; Part II &middot; Vol XIII &middot; Rung 30<br>
+      <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; 2026<br>
+      ORCID 0009-0000-6496-2186 &middot; <a href="mailto:g6llc@proton.me">g6llc@proton.me</a>
+    </div>
+    <div class="disc">
+      <strong style="color:var(--gold2)">Open</strong><br>
+      This chapter has no machine-checked artifact and is not admissible under WP-82 &sect;4 until
+      it has one. Its candidate core belongs to Volume XI, which is unwritten.
+      CC BY 4.0 &middot; &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC.
+    </div>
+  </div>
+</footer>
+</body>
+</html>
