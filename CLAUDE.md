@@ -358,6 +358,41 @@ carry `Claude-Session:`, all from before this rule. They are left in place:
 removing them rewrites every downstream SHA and breaks the commit links recorded
 in `docs/audit-log.md`. The rule is forward-looking. Do not add more.
 
+## Every chapter carries a verify script
+
+**Set 2026-09-11 by Pablo. Applies to every chapter and working paper from here.**
+
+A page without a script is a page whose numbers have not been checked, including
+the ones nobody doubted. The rule earned itself: four verify scripts written on
+2026-09-09 and 2026-09-10 each found something, and one of them found an anchor
+was 24 theorems rather than the 18 quoted.
+
+Shape, as `book7/ch-feynman-verify.py` and `book3/ch44-verify.py` already have it:
+
+- **Numbered blocks, one per claim the page makes.** The page quotes nothing the
+  script does not print.
+- A `check(label, ok, detail)` helper printing PASS/FAIL, a `FAIL` list, and
+  `sys.exit(1)` when anything failed, so CI can gate on it later.
+- **Standard library only** unless there is a reason. `numpy` is a dependency a
+  reader may not have; `ch-feynman-verify.py` needs it and is the exception.
+- A closing **`[HONESTY]`** block naming, in two paragraphs, what the script
+  establishes and what it does not. An exhaustion over a finite box is evidence
+  and not proof, and has to say so in that block.
+- A docstring listing the blocks and naming the primary source.
+
+**The strongest block a script can carry is one that checks a source against
+itself.** `ch-escher-verify.py` block [3] checks de Smit and Lenstra's p.446
+figures — 157.6255960832 degrees, scale 22.5836845286 — against their own p.450
+exponential form for gamma. Those are different pages and different expressions
+of one number, and the paper never prints the comparison.
+
+**The second strongest is one that does what the Lean file declines to.**
+`HexForm.lean` proves the six hex neighbours have Q = 1 and its header says it
+does not prove they are the only such vectors. `ch-strang-verify.py` block [4]
+exhausts a box and finds exactly six. Proof and evidence, each labelled.
+
+Scripts live beside their page, named `<page-stem>-verify.py`.
+
 ## HANDOFF — 2026-09-11 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
 
 **From:** session `01DoNjEm4UxN5SZdBJyhP5o2` · account `grossiatwork@gmail.com` · model `claude-opus-5`, Cowork bridge.
