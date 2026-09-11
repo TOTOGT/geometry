@@ -59,7 +59,7 @@ variable {faces : Finset ι} {verts : Finset κ} (T : Triangulation faces verts)
 /-- The angle defect at a vertex: a full turn, minus the angles meeting there.
     On a flat patch the defect is zero; curvature is what the angles fail to
     close by. -/
-def defect (v : κ) : ℝ := 2 * Real.pi - ∑ f ∈ faces, T.θ f v
+noncomputable def defect (v : κ) : ℝ := 2 * Real.pi - ∑ f ∈ faces, T.θ f v
 
 /-- Summing the defect over every vertex gives `2πV − πF`.
 
@@ -98,7 +98,7 @@ end Triangulation
 /-- The regular tetrahedron, as a non-vacuity witness. Four vertices, four
     faces, each face the complement of one vertex, three equilateral triangles
     meeting at every vertex. -/
-def tetra : Triangulation (Finset.univ : Finset (Fin 4)) (Finset.univ : Finset (Fin 4)) where
+noncomputable def tetra : Triangulation (Finset.univ : Finset (Fin 4)) (Finset.univ : Finset (Fin 4)) where
   θ f v := if v = f then 0 else Real.pi / 3
   face_angle_sum := by
     intro f _
