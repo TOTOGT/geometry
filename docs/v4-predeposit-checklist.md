@@ -671,3 +671,63 @@ for.
 equations; the band is a consequence; neither claims a correspondence to anything
 outside the model. If V4 wants it, it is two rows in the invariants table and the
 paragraph above. See item 13 before printing the number.
+
+---
+
+## 19. TAXONOMY — the Minimum Orbit Theorem gates pointwise, and item 18 says that is a choice
+
+Filed the same way as 18: a question about a hypothesis, not a claim that anything
+is wrong, and no conjecture is offered or owed.
+
+`chPrev-prevention.html`, Theorem 1, models the world as nested orbits
+O₁ ⊂ O₂ ⊂ ⋯ ⊂ Oₙ with health Hᵢ and carrying capacity κᵢ\*. The chain converges
+to τ = 2 **iff Hᵢ ≥ κᵢ\* for all i**, a single failing orbit blocks everything, and
+the convergence rate is `minᵢ(Hᵢ/κᵢ*)`. The proof turns on K being a gate:
+`K[ψ] = ψ if H ≥ κ*, else 0`.
+
+Two features of that construction are worth naming, because item 18 bears on both.
+
+**The gate is instantaneous.** `H ≥ κ*` is a test at a moment. Item 18 showed, in
+the explicit system this framework is the abstraction of, that an orbit can fail
+the instantaneous test and still close its circuit contracted — throughout a band
+of width **1.8397**, where λ(z) > 0 at every instant and the one-turn multiplier
+is nevertheless as small as 10⁻⁴. Read through a pointwise gate, such an orbit
+scores as failed while it is in fact surviving per lap.
+
+**There is no period per orbit.** The theorem assigns one rate — `r = e^{−2} per
+step` — to every orbit and every step. In the explicit system `e^{−2}` is the
+*asymptotic per-unit-time* rate, and the per-lap factor is `e^{−4π}` at large
+height and strictly larger below it. One rate for all orbits is the same
+assumption as one clock for all orbits.
+
+**Put together, that is a question the theory can ask in its own vocabulary.**
+Nested physical systems do not share a clock: a cell and a biosphere have
+circuits differing by many orders of magnitude. If each orbit is scored per
+circuit rather than per instant, each acquires its own gap between the pointwise
+threshold and the lap-wise one — item 18's `z = 0` versus `z_c` — and the gap
+depends on that orbit's period. The binding constraint is then the orbit with the
+**largest gap**, which need not be the `argmin` of `Hᵢ/κᵢ*`.
+
+In the theorem's own image: Liebig's staves are all measured at once. A stave that
+is short *now* and lengthening over its own cycle is not necessarily the one
+setting the barrel.
+
+**What is established, and what is not.** Established: in the explicit dm³ system,
+pointwise and lap-wise thresholds differ, the gap is computable, and its width is
+1.8397 in the height coordinate. **Not** established: that the nested multi-orbit
+system has the same two-threshold structure — it cannot, as written, because it
+has no periods to integrate over. That is precisely what makes this a question
+about a hypothesis rather than a correction. Giving each Oᵢ a period Tᵢ\* and
+asking whether `minᵢ(Hᵢ/κᵢ*)` survives is the whole of it, and it is one
+paragraph of modelling, not a research programme.
+
+**Why it is worth stating at all.** The Prevention Theorem's practical claim is
+that intervention should target the weakest orbit. If "weakest" is read
+instantaneously, a policy triggers on orbits that were closing their own cycle,
+and misses orbits that look adequate at the sampling instant but do not survive a
+circuit. Which of those errors matters more is a question about the domain, not
+about the mathematics — but the two readings are not the same policy, and at
+present the theorem does not distinguish them.
+
+*No claim is made here about ethics, about Africa, or about any of the empirical
+identifications in that chapter. This is about one hypothesis in Theorem 1.*
