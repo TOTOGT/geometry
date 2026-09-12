@@ -171,6 +171,104 @@ if not have:
 check(True, 'the discriminator is validated and ready; the data step is manual')
 
 # ---------------------------------------------------------------------------
+head(5, 'NEGATIVE CONTROL: a state function that FAKES holonomy')
+print("""  Before trusting any positive result, the analysis must survive a system
+  that has a perfect state function. Here RMW depends ONLY on latitude --
+  nothing is path dependent -- and the SST control is CLIMATOLOGICAL, i.e.
+  a function of (lat, lon, day). Because the calendar day advances through a
+  storm's life, SST can return to its starting value at a DIFFERENT latitude:
+  seasonal warming offsets poleward motion. The loop closes; the storm has
+  moved.\n""")
+import random
+random.seed(11)
+kept = []
+for _ in range(4000):
+    lat0 = random.uniform(11, 20); day0 = random.uniform(200, 260)
+    net  = random.uniform(0.5, 6.0)
+    sh0  = random.uniform(4, 18); shamp = random.uniform(3, 12)
+    ph   = random.uniform(0, 2*math.pi)
+    n = 24; U = []; lats = []
+    for i in range(n + 1):
+        t   = i/n
+        lat = lat0 + net*t + 2.5*math.sin(2*math.pi*t)
+        day = day0 + 5*t
+        sst = 30.0 - 0.45*(lat - 10.0) + 0.09*(day - day0)
+        sh  = sh0 + shamp*math.sin(2*math.pi*t + ph)
+        U.append((sst, sh)); lats.append(lat)
+    if abs(U[-1][0]-U[0][0]) > 0.05 or abs(U[-1][1]-U[0][1]) > 0.15: continue
+    rmw = [18 + 1.6*(l - 10) for l in lats]          # pure state function of lat
+    A = sum(0.5*(a1*b2 - b1*a2) for (a1,a2),(b1,b2) in zip(U, U[1:]))
+    kept.append((A, rmw[-1]-rmw[0], lats[-1]-lats[0]))
+
+def corr(x, y):
+    n = len(x); mx = sum(x)/n; my = sum(y)/n
+    sxy = sum((a-mx)*(b-my) for a, b in zip(x, y))
+    sxx = sum((a-mx)**2 for a in x); syy = sum((b-my)**2 for b in y)
+    return sxy/math.sqrt(sxx*syy) if sxx*syy > 0 else 0.0
+def partial(x, y, z):
+    rxy, rxz, rzy = corr(x, y), corr(x, z), corr(z, y)
+    den = math.sqrt((1-rxz**2)*(1-rzy**2))
+    return (rxy - rxz*rzy)/den if den > 0 else 0.0
+
+A  = [k[0] for k in kept]; dR = [k[1] for k in kept]; dL = [k[2] for k in kept]
+print('     closed loops retained          : %d of 4000' % len(kept))
+print('     corr(signed area, dRMW)        : %+.4f   <- would read as a result' % corr(A, dR))
+print('     corr(dLatitude, dRMW)          : %+.4f   <- the actual cause' % corr(dL, dR))
+print('     PARTIAL corr(area, dRMW | dLat): %+.4f   <- collapses' % partial(A, dR, dL))
+check(abs(corr(dL, dR) - 1.0) < 1e-9,
+      'the simulated RMW is a perfect state function of latitude, by construction')
+check(abs(partial(A, dR, dL)) < 0.02,
+      'partialling out net latitude change removes the apparent area effect',
+      '%.4f' % partial(A, dR, dL))
+print("""
+     The raw correlation is modest in this parameterisation and its size
+     depends on how strong the seasonal term is against the latitude term --
+     over a 5-10 day storm life in real data it is not small. Two consequences
+     for the real run, both mandatory rather than advisory:
+
+       (a) Use the OBSERVED SST predictor (Reynolds), not the climatological
+           one. A climatological SST is a function of position and date, so a
+           loop in it is partly a re-encoding of the track, not a forcing.
+       (b) Report the PARTIAL correlation given net latitude change, always,
+           beside the raw one. A raw area-dRMW correlation is not a result.
+
+     And exclude extratropical transition. Storms that close an (SST, shear)
+     loop are disproportionately recurving ones, and RMW expands during ET for
+     reasons that have nothing to do with holonomy. That is a selection effect
+     sitting on top of the confound above.
+""")
+
+# ---------------------------------------------------------------------------
+head(6, 'INGEST: what the parser must handle, and what must not be assumed')
+print("""  The SHIPS developmental files are fixed-layout ASCII, UTF-8-BOM, one block
+  per storm per synoptic time, with rows for each predictor across forecast
+  hours. Three things a sketch parser typically gets wrong, each of which
+  fails silently rather than loudly:
+
+    MISSING VALUES. SHIPS codes missing data with sentinels (9999 and
+    relatives). float() accepts them. One such value inside a shear row moves
+    the loop's vertex to infinity and the shoelace area with it, and nothing
+    reports an error. Every field must be screened before it is used.
+
+    FIELD WIDTH AND NAME POSITION. Do not assume. The distribution ships a
+    'File Format and Predictor Descriptions (2023)' PDF; the widths and the
+    position of the variable label come from that document, read, not from a
+    guess at the first file. This corpus has a standing record of what an
+    unchecked parse costs -- a grep anchor that could never match, whose green
+    meant nothing for months.
+
+    PREDICTOR IDENTITY. 'SST' and the Reynolds observed-SST predictor are
+    different columns with different meanings, and block [5] is the reason the
+    difference decides the experiment.
+
+  Likewise EBTRK: the RMW column index must be read off that dataset's own
+  documentation rather than accepted on report, and the file's own header is
+  the authority. A column index is exactly the kind of claim that is cheap to
+  verify and expensive to be wrong about.
+""")
+check(True, 'ingest requirements recorded; no field layout is assumed here')
+
+# ---------------------------------------------------------------------------
 head('HONESTY', 'What a positive result would and would not establish.')
 print("""
   WOULD. That the observed control space (SST, shear) carries no state function
