@@ -608,3 +608,66 @@ is not the proof, which is equally trivial in both; it is the **name**. A
 well-formedness lemma named for well-formedness is honest bookkeeping. The same
 triviality named for the Monster asserts, in the only part a reader skims, a
 result no one has. Item 15 stands on that ground and not on the triviality.
+
+---
+
+## 18. TAXONOMY — z_c is the second height threshold, and the corpus names only the first
+
+Filed as taxonomy, not as conjecture. Nothing below needs deriving from anything;
+it is a computed property of the flow Volume II already states, read in the
+vocabulary the series already uses.
+
+Volume II §4.4 says the thing this whole framework is about:
+
+> The neutral stability at z = 0 is the mathematical content of the embodiment
+> threshold: **the orbit earns its stability by accumulating action.**
+
+Take that literally and one threshold is not enough, because there are two
+different moments at which stability is earned and they are 1.84 apart.
+
+| | what it marks | value |
+|---|---|---|
+| `z = 0` | the **rate** stops expanding: λ(0) = 0 | named in Volume II |
+| `z_c` | a full **lap** stops opening: one-turn monodromy = 1 | `ln((1−e^{−2π})/2π) = −1.839746…` |
+
+λ(z) = −2(1 − e^{−z}) is positive below z = 0 — the transverse direction is
+expanding at every instant there. But the orbit *climbs while it turns*, at
+ż = 1, so what a lap does is the integral and not the instant:
+
+```
+     z₀        λ(z₀)     one-turn multiplier    reading
+  −2.5000   +22.364988         1.271e+05        expanding, lap opens
+  −1.8397   +10.589881         1.000e+00        ← z_c, lap-wise neutral
+  −1.5000    +6.963378         2.679e-02        expanding pointwise, lap CLOSES
+  −1.0000    +3.436564         7.928e-04        expanding pointwise, lap CLOSES
+  −0.5000    +1.297443         9.373e-05        expanding pointwise, lap CLOSES
+   0.0000    −0.000000         2.567e-05        ← z = 0, pointwise neutral
+   0.5000    −0.786939         1.170e-05        contracting both ways
+```
+
+**The band z ∈ (z_c, 0) is the corpus's own pattern, measured.** In it the system
+is *losing locally and winning globally*: expanding at every instant, and still
+closing its circuit contracted, because it has accumulated enough height by the
+time the lap ends. That is overshoot followed by resistance, and here it has a
+width — 1.8397 — and two endpoints in closed form.
+
+Note also that at the named threshold z = 0 the lap is already contracting by a
+factor of 2.6×10⁻⁵. The orbit does not become safe at z = 0; it became safe at
+z_c, and by z = 0 it is safe with four orders of margin. `z = 0` marks where the
+*instantaneous* story changes and the corpus has sometimes read it as where the
+*orbit* changes. Those differ.
+
+**Why this is the useful form.** Every other named constant in the framework is
+radial (ε₀, r\*), curvature (κ\*), amplitude (τ), rate (μ_max) or period (T\*).
+`z = 0` and `z_c` are the only two in the height direction, which is the direction
+that carries accumulated action — so they are the pair that most directly states
+the taxonomy's own claim. And the distinction transports: **instantaneous
+neutrality is not the same threshold as survival of one cycle**, in any domain
+where a system is scored per circuit rather than per instant. That is a sentence
+about systems, not about this ODE, and it is the kind of thing the g-series is
+for.
+
+**No conjecture is owed and none is offered.** z_c is computed from the stated
+equations; the band is a consequence; neither claims a correspondence to anything
+outside the model. If V4 wants it, it is two rows in the invariants table and the
+paragraph above. See item 13 before printing the number.
