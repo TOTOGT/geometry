@@ -731,3 +731,38 @@ present the theorem does not distinguish them.
 
 *No claim is made here about ethics, about Africa, or about any of the empirical
 identifications in that chapter. This is about one hypothesis in Theorem 1.*
+
+---
+
+## 20. APPLIED — the Pacific trio, 1–5 September 2026, and what it did to items 18 and 19
+
+Full note: `docs/multiorbit-pacific-2026-09.md`. Three results, the first negative.
+
+**The trio is not nested, so Theorem 1 does not apply to it.** Lowell, Karina and
+Marie were peers strung across one basin — 550 mi WSW of Baja, 955 mi E of Hilo,
+600 mi S of Kauaʻi. `O₁ ⊂ O₂ ⊂ ⋯` is containment, and there is none here.
+`minᵢ(Hᵢ/κᵢ*)` has no referent: Karina's weakness gates nothing of Lowell's.
+
+**But the column the storms sit in is nested, and its clocks separate by ×1460.**
+eyewall (~1 day) ⊂ storm (~9 days) ⊂ season (~180 days) ⊂ ENSO (~4 years). Item 19
+said the theorem's single rate `e^{−2} per step` is one clock for all orbits and
+that nested physical systems do not share a clock. This is that, measured.
+
+**Lowell instantiates item 18's band, and meteorology already names it.** Cat 5 on
+2 Sep, Cat 3 / 125 mph on 4 Sep, Cat 5 / 160 mph / 922 mbar on 5 Sep — trough at
+0.78 of peak, lap closing at 1.00 and past it. A pointwise gate scores 4 September
+as failure; the storm was mid **eyewall replacement cycle**, which has a
+fluid-dynamical account this corpus does not supply and does not improve on.
+
+**And the cost is visible.** On 4 September *all three* were declining pointwise.
+Instantaneous intensity did not distinguish them and only Lowell closed a lap. To
+use the two-threshold reading you must already know whether a decline is cyclic or
+terminal — and on that day the judgement was meteorological, not geometric. The
+framework organises the observation after the classification is made; the
+classification carries the information.
+
+**The test that would earn something, stated so it cannot be dropped:** predict
+the *width* of the band — how far an orbit may decline and still close its circuit
+— from the periods alone, in advance, and match it against eyewall-replacement
+survival in best-track archives. That is a number. **It has not been computed.**
+Until it is, this is a vocabulary match and is to be cited as nothing more.
