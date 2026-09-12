@@ -401,8 +401,29 @@ whole review.
 repositories, `geometry/book4/` and `GTCT/book4/`. The deposit's headline
 numerical claim has a producing script under version control. Close it.
 
-**Item on `r*`'s last digit — WORSE, and the warning was removed instead of the
-defect.** The first pass counted 131 files carrying `0.77594059` against a
+**Item on `r*`'s last digit — DEFERRED by decision, 2026-09-12. Do not re-raise.**
+Author's call: too small a difference to chase. Recorded here with its size so
+that a later pass does not spend the same hour rediscovering it.
+
+The gap is **1.45×10⁻⁸ absolute, 1.87×10⁻⁸ relative** — `0.77594059` against a
+certified midpoint of `0.775940575502…`. Nothing in the corpus turns on it: the
+ordering the paper actually uses, `ε₀ = 1/3 < 2/3 < r* < κ* = √(7/9)`, holds for
+both values with margins of 0.109 and 0.106, seven orders of magnitude larger than
+the disagreement. No prediction, no Lean statement and no figure resolves to eight
+decimal places. A 133-file sweep to change a digit no argument reads is cost
+without a result.
+
+**What remains true, and is the part worth keeping in view.** The count went from
+131 to 133, only 4 files carry the certified digit, and the `CLAUDE.md:46` line
+the first pass quoted — "canonical r\* is now 0.77594059, not the 0.776 the audit
+names" — is no longer in `CLAUDE.md`. The defect is deferred; the *mechanism* is
+not, because it is the one this whole checklist is about: a note telling the next
+session about a known gap was removed while the gap stayed. If `r*` is ever
+restated to more than 8 decimal places, or cited in a context where 10⁻⁸ matters,
+this item reopens and the sweep is unavoidable — so the certified interval, not
+the rounded digit, is what any new citation should use.
+
+**Superseded first-pass text, kept for the record:** The first pass counted 131 files carrying `0.77594059` against a
 certified `0.77594058…`. Today it is **133**, and only **4** files carry the
 certified digit. The `CLAUDE.md:46` line the first pass quoted — "canonical r\*
 is now 0.77594059, not the 0.776 the audit names" — is **no longer in
