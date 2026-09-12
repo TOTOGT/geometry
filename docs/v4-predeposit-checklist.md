@@ -527,3 +527,84 @@ season. The material has a home already: `book6/wp82-the-missing-floor.html` §3
 and `book7/ch-grothendieck.html`, both in the corpus and both citable. One
 sentence of further work in V4 is the right size — *whether a K-theory class pairs
 to this index is open, and is Volume XI's first obligation* — and no more.
+
+---
+
+## CORRECTION to items 11 and 14 — 2026-09-12, same day, after reading the deposited source
+
+Items 11 and 14 accused the paper of treating asymptotic values as exact. **That
+accusation is wrong and is withdrawn.** It was written from the abstract and from
+the Volume II HTML without opening `TOGTnuclearPhysicsB_v3_triplealpha.tex`. The
+paper does the drift correctly, in full, and says so.
+
+The Proposition on the local SDE gives the fundamental solution of exactly the
+moving-rate problem:
+
+```
+Φ(t) = exp( ∫₀ᵗ −2(1 − e^{−s}) ds ) = e² e^{−2t} e^{−2e^{−t}}
+```
+
+and its proof states, in the paper's own words, *"at large t the decay rate
+−2(1 − e^{−t}) → −2 = μ_max exactly."* The arrow is there. The
+time-inhomogeneous SDE is written as time-inhomogeneous. The convergence is
+reported numerically — `Var/κ = 0.50455` at t = 5, `0.50003` at t = 10, `0.500000`
+by t = 15.
+
+**And the "finding" of item 11 is that Proposition, rederived.** Evaluating the
+paper's own Φ at one turn:
+
+```
+Φ(2π) = 2.567210665029×10⁻⁵      ← the paper's formula
+        2.567210665029×10⁻⁵      ← "7.36 × e^{−4π}" from item 11
+        agreement: 3.4×10⁻²¹
+```
+
+They are the same number. The variance integral reproduces the paper's three
+printed values to every digit. So item 11 did not find a defect; it independently
+confirmed a Proposition already in the deposit, and then reported the confirmation
+as though it were a correction. That is the precise failure this checklist exists
+to catch, committed by the checklist.
+
+**What actually survives, stated at its real size:**
+
+1. **An abstract/body mismatch, and nothing more.** The body marks μ_max = −2 and
+   c → 4 as limits; the abstract says "the canonical invariants (T\* = 2π,
+   μ_max = −2, τ = 2) … are closed form". One phrase in the abstract does not
+   carry a distinction the body makes carefully. That is worth one clause and is
+   not a FAIL. Items 11 and 14 are **downgraded to NOTE**.
+
+2. **z_c and the index are still new.** The paper integrates Φ from t = 0. It does
+   not ask where the one-turn monodromy crosses 1, and
+   `z_c = ln((1 − e^{−2π})/2π) = −1.839746254986` does not appear in it, nor does
+   the observation that `sign(1 − m)` is locally constant with a single
+   degeneracy. Item 12 stands, and item 13's η separation travels with it.
+
+3. **Item 17's recommendation is unchanged** and is now better supported: the
+   paper's dynamics need no correction, so the only reason to touch that section
+   in V4 is to add z_c — a small addition to a correct section, rather than a
+   repair.
+
+## On the g-series tag — no conjecture is owed
+
+Remark 22.3 cites `(T: nextLevel_layer_count_gt)` for "the g-series taxonomy
+identifies g = 33 as the first index at which G exhibits lock-in", and declares
+the nuclear-multiplicity correspondence analogical with no derivation offered.
+
+`nextLevel_layer_count_gt` proves `r.layer_count < (nextLevel r).layer_count`,
+where `nextLevel` adds 33. Unfolded, it is `n < n + 33` — true for any positive
+increment, and carrying no information about 33.
+
+**Under the taxonomy reading that is the right lemma, not a misattribution.** A
+taxonomy is a classification with an indexing, and what one machine-checks about
+an indexing is that it is well-formed: that the levels strictly increase, so the
+ordering is sound and no level collides with another. That is what this theorem
+says and all it needs to say. g = 33 is where the taxonomy *places* lock-in; it is
+a label, not a prediction, and a label owes no derivation. The remark already
+refuses the one claim that would owe one — the nuclear correspondence — and marks
+it as a modelling target.
+
+Contrast with `g6_is_minimum_monster : g6 = 33 := rfl` in item 15. The difference
+is not the proof, which is equally trivial in both; it is the **name**. A
+well-formedness lemma named for well-formedness is honest bookkeeping. The same
+triviality named for the Monster asserts, in the only part a reader skims, a
+result no one has. Item 15 stands on that ground and not on the triviality.
