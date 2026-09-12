@@ -392,3 +392,117 @@ whole review.
 * `α ∧ dα = −2r dr∧dθ∧dz ≠ 0` for every r > 0.
 * T\* = 2π is correct as the θ-period, which is the only period Γ has.
 * Item 9's `n_H` provenance: **passes**, as above. No Lean is cited for it.
+
+---
+
+## Re-measurements of first-pass items, 2026-09-12
+
+**Item 4 — RESOLVED.** `certify_rstar_rigorous.py` is now tracked in two
+repositories, `geometry/book4/` and `GTCT/book4/`. The deposit's headline
+numerical claim has a producing script under version control. Close it.
+
+**Item on `r*`'s last digit — WORSE, and the warning was removed instead of the
+defect.** The first pass counted 131 files carrying `0.77594059` against a
+certified `0.77594058…`. Today it is **133**, and only **4** files carry the
+certified digit. The `CLAUDE.md:46` line the first pass quoted — "canonical r\*
+is now 0.77594059, not the 0.776 the audit names" — is **no longer in
+`CLAUDE.md`**. So the note that told the next session about the problem is gone
+and the 133 files are not. That is the worse of the two possible outcomes: the
+checklist said "fix `CLAUDE.md` first, since it is what the next session reads",
+and what happened is that `CLAUDE.md` stopped saying it.
+
+**Item 10 scope.** `3.64` appears in 24 files; **22** of them are Hill-coefficient
+context. `3.628` appears in 2, one of which is this checklist. Note `D1` states it
+as `n ≈ 3.64.00 ± 0.05` in one line and `3.64 ± 0.4` elsewhere — the tolerance
+differs by a factor of eight between two statements of one prediction, and
+`3.64.00` is not a number.
+
+---
+
+## 14. FAIL — τ = 2 is the same limit as μ_max = −2, and Volume II writes the arrow itself
+
+**As written:** "The canonical invariants (T\* = 2π, μ_max = −2, τ = 2) … are
+closed form."
+
+**What checking finds.** Volume II §4.4, in the sentence that produces τ:
+
+> Generator: `LV = −4V(1 − e^{−z}) + σ²`, giving **c → 4**, `κ_noise = 1`, `τ = 2`.
+
+The arrow is in the source. `c → 4` is a limit as `z → ∞`, for the same reason
+λ(z) → −2 is, and `τ = √(c/κ_noise)` is therefore 2 in that limit and smaller
+below it. Two of the three "canonical invariants" are asymptotic values, and the
+same section of Volume II that states them also states the neutral height
+`λ(0) = 0` that proves they are not attained everywhere.
+
+**Do:** one clause, covering both. "T\* = 2π is exact; μ_max = −2 and τ = 2 are
+the asymptotic values of the reduced z → ∞ system" — the phrasing ε₀ = 1/3 already
+received on 2026-08-12, applied to the two constants that did not get it.
+
+## 15. FAIL — the `rfl` sweep item 9 asked for, run. Five more, and the withdrawn one is a build target.
+
+Item 9 said: "grep V4's Lean citations for `rfl` before deposit." Done.
+
+| declaration | statement after unfolding | file |
+|---|---|---|
+| `tau_is_two : tau = 2 := rfl` | `2 = 2` | `AXLE_v6.lean:555` |
+| `g6_is_33 : g6 = 33 := rfl` | `33 = 33` | `AXLE_v6.lean:554` |
+| `g6_is_minimum_monster : g6 = 33 := rfl` | `33 = 33` | `AXLE_v6.lean:561` |
+| `g64_is_kether_orthogon : g64 = 64 := rfl` | `64 = 64` | `AXLE_v6.lean:562` |
+| `g6_equals_schumann := rfl` | `33 = 33` | **18 files** |
+
+with `def g6 : ℕ := 33`, `def tau : ℕ := 2`, `def g64 : ℕ := 64` immediately above.
+
+**`tau_is_two` is the one that matters**, because τ = 2 is in the abstract as a
+canonical invariant and this is the only declaration whose name says it is proved.
+It proves nothing: τ is *defined* to be 2. `g6_is_minimum_monster` is worse in the
+other direction — the name asserts something about the Monster and the statement
+is `33 = 33`.
+
+**And `g6_equals_schumann` was withdrawn from the paper, not from the build.** It
+is in 18 files, and two of them — `AXLE_v5_1` and `Main_v6` — are explicit
+`[[lean_lib]]` roots in `lakefile.toml`. Lake compiles it. A withdrawal that
+reaches the prose and not the artifact leaves the artifact citable.
+
+**Do:** delete them, or rename to what they are (`g6_def : g6 = 33 := rfl` is
+honest; `g6_is_minimum_monster` is not). Nothing in the paper may cite any of them.
+
+## 16. The sweep needs to cover `decide` and `norm_num`, not only `rfl`
+
+Two lines below `tau_is_two`:
+
+```lean
+theorem det_M_equals_64 : tau ^ 6 = 64 := by decide
+theorem tau_embodiment  : tau ^ 6 = 2 ^ 6 := by decide
+```
+
+These are `2^6 = 64` and `64 = 64`. Same defect, different tactic, and a grep for
+`rfl` misses both — while `det_M_equals_64` carries a name asserting a
+determinant. Volume II §4.4 also says the threshold values are "Verified by
+`norm_num` in Lean 4"; `norm_num` on chosen numerals verifies arithmetic, not that
+the numerals are the system's.
+
+**Do:** sweep `rfl`, `decide`, `norm_num` and `simp` alike, under one test —
+*could this statement be false if the framework were wrong?* If not, it is not
+evidence for the framework.
+
+## 17. RECOMMENDATION — what to do with the K-theory material in V4
+
+**The finding goes in. The programme stays out.**
+
+*In*, because item 11 is not optional: μ_max = −2 must be re-scoped in V4 whatever
+else happens, and a correction that cannot say what *is* invariant invites the
+obvious question. Item 12 answers it in two lines and a closed form, so the
+invariants table gains `z_c = ln((1 − e^{−2π})/2π)` and the index `sign(1 − m)`
+beside T\*, ε₀, κ\* and r\*. That converts a withdrawal into a result, in the part
+of the paper where closed-form constants already live, and costs a paragraph.
+Item 13 travels with it, in the same paragraph, for the reason given there.
+
+*Out*, because K-theory is not this paper. The title has four parts and none is
+rung 28; WP-82 says in its own header that it contains no formal results and that
+the measurement is the contribution; and the index question is a question — three
+untested candidates and no class exhibited. Adding a fifth part to a deposit that
+still carries items 1, 2, 5, 7, 8 and 15 unresolved is how a deposit slips a
+season. The material has a home already: `book6/wp82-the-missing-floor.html` §3b
+and `book7/ch-grothendieck.html`, both in the corpus and both citable. One
+sentence of further work in V4 is the right size — *whether a K-theory class pairs
+to this index is open, and is Volume XI's first obligation* — and no more.
