@@ -155,6 +155,29 @@ currently says where the line is. Either the framework has something to say abou
 non-rival dynamics that Romer does not, or its scope is narrower than advertised
 and should be stated so.
 
+**Where to test it: geology and linguistics.** These are the two poles of the
+boundary, which is why they are the right pair. Geology is maximally *rival* and
+maximally dissipative — erosion, deposition, subduction, every process one-way and
+every gram of rock in one place at a time. Linguistics is maximally *non-rival* —
+a sound change spreads through a population without depleting anyone who already
+has it, and a language can be given away entire without being lost.
+
+If the operator sequence holds unchanged in both, the generality claim survives its
+hardest test. If it needs different terms at each pole, the register has found the
+line it was looking for.
+
+The two fields also share a method, which is the reason the comparison can be made
+at all: both reconstruct unobservable past states from present residue by regular
+correspondence — stratigraphic correlation on one side, the comparative method and
+regular sound laws on the other. Neither can rerun its experiment. Both are the
+same epistemic situation as the archaeoacoustics chapters, and as this corpus.
+
+*To check before writing, not to assert:* the nineteenth-century historical sciences
+are widely said to have borrowed method from one another (Lyell's uniformitarianism,
+Schleicher's family trees, the Neogrammarians' exceptionless sound laws). The
+direction and strength of that borrowing is a real historiographical question and
+this register does not currently know the answer.
+
 **Cost.** Reading, not computing. The relevant literature is thirty-five years old
 and was written for economists, which is the degree this author already holds.
 
