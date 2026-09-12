@@ -178,6 +178,35 @@ Schleicher's family trees, the Neogrammarians' exceptionless sound laws). The
 direction and strength of that borrowing is a real historiographical question and
 this register does not currently know the answer.
 
+**The better test is not the poles. It is tourism and music.** A pole only tells
+you what happens far from the line. Two fields carry the boundary *inside*
+themselves, and those are where its position can actually be measured.
+
+*Tourism* is the congestible case. A view, a shoreline, a plaza is non-rival at low
+density — one more person looking costs nobody anything — and becomes rival above a
+threshold, where each additional visitor subtracts from every other. The field has
+a standing name for that threshold, **carrying capacity**, and a standing economics
+for goods of this shape (club and congestible goods, after Buchanan 1965). That is
+a fold with the rival/non-rival transition as its own control parameter: one smooth
+description up to a threshold, branches after it. No other field on this list has
+the boundary as its central object.
+
+*Music* splits instead of folding. The composition is non-rival — a tune given away
+is not lost, and every performance since Josquin has confirmed it. The performance
+is rival — one room, one night, finite seats, and the reverberation is a property of
+that room and no other. Content non-rival, carrier rival, cleanly separable. Which
+is the same split as the echea: the tuning is non-rival and anyone may build another
+pot, while the pot itself is one object in one wall. It is also the split between a
+score and a Q.
+
+So the programme is: **geology and linguistics to bracket the claim, tourism and
+music to locate the line.** Tourism because the threshold is the subject; music
+because the two kinds of good come apart cleanly enough to be studied separately.
+
+*Noted for the record:* the author holds a Bacharelado em Turismo from
+UnB / UPIS (2003) — the qualification that has looked least relevant on every
+application he has made, and the one whose literature owns this concept.
+
 **Cost.** Reading, not computing. The relevant literature is thirty-five years old
 and was written for economists, which is the degree this author already holds.
 
