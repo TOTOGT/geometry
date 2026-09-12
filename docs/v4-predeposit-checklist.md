@@ -267,3 +267,128 @@ is exactly the level at which `stable_branch` looked fine for months.
 
 The honest summary: today's file is the only one in this corpus that this session
 watched a kernel accept.
+
+---
+
+# Second pass — 2026-09-12
+
+Added after integrating the dm³ flow rather than reading it. Everything below is
+reproducible by `book7/ch-grothendieck-verify.py`, blocks [3], [4] and [4b],
+standard library only.
+
+## 10. FAIL — n_H ≈ 3.64. The formula gives 3.628.
+
+**Item 9 asked the right question and this answers it: the provenance passes.**
+`ALGEBRAIC_PROOFS_CH7_CRYSTALLINE_RETURN.md`, Step 4, derives the Hill
+coefficient as `n = |μ_max|·π/√3 = 2·π/√3`. So μ_max = −2 is genuinely in it, as
+the factor 2, and no Lean declaration is cited in support. The sentence "derived
+from μ_max = −2, not fitted" is fine as physics. **No action on item 9.**
+
+**The numeral is another matter.** `2π/√3 = 3.6275987285…`, which is 3.628, or
+3.63 to two decimals. **3.64 is wrong by 0.0124.** The source document states
+both: Statement (c) says "≈ 3.64", Step 4 of its own proof says "≈ 3.628". A
+referee who divides will get 3.628.
+
+It has propagated: `ch18-zeolite-noncommutativity.html` ("n ≈ 3.64 ± 0.4"), the
+HVEH proof copies under `docs/ml-evidence/`, and the deposit abstract.
+
+Nothing depends on the difference — the corroborating measurement is
+Coelho-Sampaio's laminin–integrin `n ≈ 3.6`, which 3.628 matches at least as well.
+**Do:** print the number the formula gives. Fix Statement (c) to agree with Step 4,
+then sweep.
+
+## 11. FAIL — μ_max = −2 is listed among the canonical invariants, and it is a limit
+
+**As written:** "The canonical invariants (T\* = 2π, μ_max = −2, τ = 2) … are
+closed form".
+
+**What checking finds.** The transverse eigenvalue on Γ = {r = 1} is, exactly,
+
+```
+λ(z) = ∂_r ṙ |_{r=1} = 1 − 3 + 2e^{−z} = −2(1 − e^{−z})
+```
+
+confirmed to fourteen digits. It equals −2 **only as z → ∞**. At z = 0 it is
+exactly 0 — the neutral height Volume II already names. So μ_max = −2 is the
+asymptotic rate, not a value the system takes.
+
+**This is the ε₀ defect again, with the same term responsible.** The correction
+notice of 2026-08-12 on `chEps-gronwall.html` withdrew the word *basin* for
+exactly this reason: the seven ε₀ proofs are correct for the reduced ODE obtained
+in the limit z → ∞ where e^{−z} → 0, and the full system's coupling
+`2(r−1)e^{−z}` is sign-aware. That correction has already reached this abstract —
+it now says "outer stability radius", not "basin". μ_max has not had its turn.
+
+**And the consequence is larger than a word.** On Γ the third equation reads
+`ż = 1`. Γ closes in (r, θ) and in no other projection: **it is a helix**. So the
+monodromy of one turn does not integrate a constant:
+
+```
+∫₀^{2π} λ(z₀+t) dt  =  −4π + 2e^{−z₀}(1 − e^{−2π})
+```
+
+RK4 on the variational equation agrees with that to 4×10⁻¹² at nine heights.
+
+| z₀ | multiplier | ÷ e^(−4π) |
+|---:|---|---:|
+| 0 | 2.567×10⁻⁵ | **7.36** |
+| 1 | 7.268×10⁻⁶ | 2.08 |
+| 5 | 3.535×10⁻⁶ | 1.014 |
+| → ∞ | 3.487×10⁻⁶ | 1 |
+
+`e^{−4π}` is the limit, not the value. **Do:** state μ_max = −2 and T\* = 2π as
+invariants *of the z → ∞ reduced system*, exactly as ε₀ = 1/3 now is. Part IV
+consumes μ_max twice — the Hill coefficient, and
+`v₂ ∝ ε_part·exp(−|μ̂_max| τ_hydro)` — so the paper should say which regime the
+prediction is made in. If the intended regime is asymptotic, the fix is one clause
+and nothing else changes.
+
+## 12. WHAT SURVIVES — an invariant that does not move
+
+Worth adding rather than only correcting. The multiplier drifts over eight orders
+of magnitude; the **fixed-point index of the return map** does not. For an
+isolated fixed point with P′(1) = m ≠ 1 it is `sign(1 − m)`, and here:
+
+```
+z_c = ln((1 − e^{−2π})/2π) = −1.839746254986…
+```
+
+is the single height at which m = 1 exactly. Above it the index is **+1**, below
+it **−1**, and it is undefined only at z_c itself. Integer, locally constant,
+jumping only at degeneracy — which is what an index is, and what `e^{−4π}` is not.
+This also says the flow has exactly one bifurcation in the base point, in closed
+form, which the corpus did not previously record.
+
+Volume XI's inherited question sharpens accordingly: *is there a K-theory class
+whose pairing is this index?* Not checked, not ruled out. See
+`book7/ch-grothendieck.html` and `book6/wp82-the-missing-floor.html` §3b.
+
+## 13. PRE-EMPT — the Tribonacci near-coincidence, killed before deposit
+
+This paper is titled *Seven Proofs of the Tribonacci Constant*. Item 12 introduces
+a new constant into the same system, and:
+
+```
+|z_c| = 1.839746254986…
+η     = 1.839286755214…     (root of x³ = x² + x + 1)
+```
+
+They agree to two decimal places and differ by **4.6×10⁻⁴**. In a corpus where η
+appears in every volume, someone will notice, and the paper should have noticed
+first.
+
+**It is a coincidence.** η satisfies its minimal polynomial to 2.2×10⁻¹⁶; z_c
+misses it by **2.5×10⁻³**. η is algebraic of degree 3; z_c is a logarithm of
+`(1 − e^{−2π})/2π`. They have no shared construction. **Do:** if z_c enters V4 at
+all, state the separation in the same paragraph that introduces it. A near-miss
+disclosed by the author is data; the same near-miss found by a referee is the
+whole review.
+
+## Passing checks, second pass
+
+* `λ(z) = −2(1 − e^{−z})` matches ∂_r ṙ at r = 1 to 1.4×10⁻¹⁴ — Volume II §4.3 is
+  exactly right about the eigenvalue.
+* Γ = {r = 1} is genuinely invariant: the radial field vanishes at every height.
+* `α ∧ dα = −2r dr∧dθ∧dz ≠ 0` for every r > 0.
+* T\* = 2π is correct as the θ-period, which is the only period Γ has.
+* Item 9's `n_H` provenance: **passes**, as above. No Lean is cited for it.

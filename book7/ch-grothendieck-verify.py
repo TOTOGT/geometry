@@ -203,6 +203,46 @@ check(not any(abs(v - round(v)) < 1e-9 for v in vals),
       'INDEX TEST: it is not an integer at any height tested')
 
 # ==========================================================================
+head('4b', 'WHAT SURVIVES: A LOCALLY CONSTANT INTEGER, AND ONE TRAP')
+print('  The multiplier moves. The integer it determines does not.')
+print('  Fixed-point index of the return map at an isolated fixed point with')
+print("  P'(1) = m != 1 is sign(1 - m). Integer. Locally constant.\n")
+
+zc = math.log((1 - math.exp(-T)) / (2 * math.pi))
+check(abs(exponent_closed(zc)) < 1e-12,
+      'there is exactly one degenerate height, z_c = ln((1-e^-2pi)/2pi) = %.12f' % zc,
+      '%.3e' % exponent_closed(zc))
+check(abs(math.exp(exponent_closed(zc)) - 1.0) < 1e-12,
+      'the one-turn multiplier is exactly 1 there')
+
+above = [z for z in (-1.8, -1, 0, 1, 5, 20) if z > zc]
+below = [z for z in (-6, -4, -3, -2.5, -2, -1.9) if z < zc]
+check(all(exponent_closed(z) < 0 for z in above),
+      'index = +1 at every height above z_c  (%d tested)' % len(above))
+check(all(exponent_closed(z) > 0 for z in below),
+      'index = -1 at every height below z_c  (%d tested)' % len(below))
+print('    So the flow has ONE bifurcation in the base point, at z_c, and the')
+print('    index is constant on each side. That is how an index behaves, and it')
+print('    is not e^-4pi -- it is what the drifting multiplier determines.')
+
+print('\n  And the trap, checked before it can be believed:')
+eta = 1.5
+for _ in range(200):
+    eta -= (eta ** 3 - eta ** 2 - eta - 1) / (3 * eta ** 2 - 2 * eta - 1)
+w = abs(zc)
+print('    |z_c|                     = %.12f' % w)
+print('    eta (Tribonacci constant) = %.12f' % eta)
+print('    difference                = %.12f' % (w - eta))
+check(abs(eta ** 3 - eta ** 2 - eta - 1) < 1e-12, 'eta is the root of x^3 = x^2 + x + 1')
+check(abs(w ** 3 - w ** 2 - w - 1) > 1e-6,
+      'z_c is NOT that root -- residual %.3e, so this is a coincidence' % abs(w ** 3 - w ** 2 - w - 1))
+check(abs(w - eta) > 1e-4,
+      'they differ at the 4th decimal (%.2e), having agreed to the 2nd' % abs(w - eta))
+print('    This corpus is full of eta. A number in the same system agreeing with')
+print('    it to two decimals and failing its minimal polynomial is exactly the')
+print('    thing to kill in advance, not to notice later.')
+
+# ==========================================================================
 head(5, 'CONTROL: THIS SCRIPT COMPUTED SOMETHING')
 check(len(HEIGHTS) >= 8, 'at least 8 heights were integrated', str(len(HEIGHTS)))
 check(exponent_numeric(0.0) != exponent_numeric(10.0),
