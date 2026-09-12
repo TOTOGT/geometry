@@ -122,6 +122,44 @@ volume.
 
 ---
 
+### 7. The rival / non-rival boundary on the framework's generality
+
+**The gap.** The corpus claims the operator sequence governs structural transitions
+"across seventeen orders of magnitude." Every system it has actually computed is
+**dissipative**: one turn of the dm³ helix costs a factor of 286,751; the Hypogeum
+gives back fourteen seconds and then silence; Q settles at ¼. Loops lose.
+
+**What broke it.** A teaching relationship, traced this week, runs the other way —
+both parties end with more than they started with. That is the exponent changing
+sign, and it is not a poetic reading: it happens because knowledge is **non-rival**.
+Telling someone does not deplete the teller. The conservation constraint that makes
+every mechanical cycle lossy simply does not bind.
+
+**This is not new, and that is the useful part.** Two established results already
+own this ground, both in economics:
+
+- **Arrow's information paradox** (Kenneth Arrow, *Economic Welfare and the
+  Allocation of Resources for Invention*, 1962): information cannot be valued by a
+  buyer without being disclosed, and once disclosed the buyer already has it. The
+  market failure is the formal shadow of "a gift that is earned."
+- **Romer's non-rivalry result** (Paul Romer 1990; Nobel Memorial Prize 2018; see
+  Jones, *Paul Romer: Ideas, Nonrivalry, and Endogenous Growth*, Scand. J. Econ.
+  2019): doubling rival inputs alone gives constant returns, F(A, λX) = λY, but
+  doubling objects *and* ideas gives **increasing** returns, F(λA, λX) > λY. That
+  inequality is the sign flip, stated rigorously, thirty-six years ago.
+
+**What it costs this corpus.** A boundary the generality claim has never
+acknowledged. Rival systems are lossy; non-rival ones can have growing modes. The
+operator sequence cannot be assumed to cross that line unchanged, and no chapter
+currently says where the line is. Either the framework has something to say about
+non-rival dynamics that Romer does not, or its scope is narrower than advertised
+and should be stated so.
+
+**Cost.** Reading, not computing. The relevant literature is thirty-five years old
+and was written for economists, which is the degree this author already holds.
+
+---
+
 ## IV. Housekeeping that is now overdue
 
 - Five untracked `.lean` files at the repository root: `ReactionDiffusionFold.lean`,
