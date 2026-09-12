@@ -222,18 +222,61 @@ footer a { color: var(--gold); text-decoration: none; }
     worked instance of exactly that, with experiments.
   </p>
 
-  <div class="block-sorry">
-    <span class="block-label">Two demonstrations attempted here and abandoned</span>
+  <div class="block-theorem">
+    <span class="block-label">The reversal experiment, fixed &mdash; and what the fix says</span>
     <div class="block-body">
-      A 1-D time-reversal refocusing simulation was built and discarded: re-emitting the
-      recorded field as a source term is not the correct adjoint, the refocused amplitude fell
-      to $10^{-30}$ and the peak landed 86 cells from the source. And a homogenisation test by
-      pulse arrival time refused to converge, because front arrival measures the
-      <em>geometric-optics</em> speed, 1.3333, regardless of what the effective medium does to
-      the body of the pulse &mdash; the experiment measured the wrong thing. Both are recorded
-      in <code>ch-nachbin-verify.py</code> block [4]. The effects are real and published; these
-      implementations of them were not, and a wrong implementation that produced a plausible
-      number would have been the worse outcome.
+      The first attempt here failed: a wave run forward, the <em>field</em> $u$ recorded at an
+      aperture, the recording reversed and re-injected as a source. Amplitude collapsed to
+      $10^{-30}$ and the peak landed 86 cells off. The diagnosis is mechanics rather than
+      numerics. The state of a wave is not $u$; it is $(u, v)$ with $v = u_t$, and reversal
+      flips the momentum, $T:(u,v)\mapsto(u,-v)$. Recording $u$ alone keeps half the state and
+      discards the half carrying direction, and no care in re-injection recovers it.
+      <p style="margin:.9rem 0 0">Done as mechanics, with a Störmer&ndash;Verlet integrator that
+      is itself exactly time-reversible: run forward 700 steps, flip $v$, run 700 more.</p>
+      <table class="cat" style="margin-top:.8rem">
+        <tr><th>damping $\gamma$</th><th>relative error on return</th></tr>
+        <tr><td>0</td><td><strong>3.6 &times; 10<sup>&minus;15</sup></strong></td></tr>
+        <tr><td>0.0005</td><td>2.4 &times; 10<sup>&minus;1</sup></td></tr>
+        <tr><td>0.002</td><td>6.5 &times; 10<sup>&minus;1</sup></td></tr>
+        <tr><td>0.03</td><td>9.6 &times; 10<sup>&minus;1</sup></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <p class="block-prose">
+    At $\gamma = 0$ the flow is <strong>symplectic</strong> and the pulse comes home to machine
+    precision. Turn damping on and it is not symplectic any more &mdash; a damped mechanical
+    system is the standard example of <strong>contact</strong> Hamiltonian dynamics, the extra
+    Reeb direction carrying the dissipated action &mdash; and the pulse does not come home at
+    all. The saturation near 1.0 is just the field having decayed to nothing.
+  </p>
+
+  <div class="block-axiom">
+    <span class="block-label">Which makes this a measurement of this series' own founding move</span>
+    <div class="block-body">
+      Volume I leaves symplectic geometry for contact geometry because Liouville forbids
+      attractors on a compact symplectic manifold and the framework needs post-fold stability.
+      That escape buys an attractor. The two columns above are what it costs, in numbers:
+      <strong>$3.6\times10^{-15}$ against $0.96$</strong>. A symplectic system returns; a contact
+      one does not. Every claim this corpus makes about irreversibility, folds that cannot be
+      undone, and history mattering is downstream of that single trade, and until now the trade
+      had been argued rather than measured.
+    </div>
+  </div>
+
+  <div class="block-sorry">
+    <span class="block-label">One demonstration still abandoned</span>
+    <div class="block-body">
+      Homogenisation by travel time. A layered medium was driven with a pulse and the arrival
+      time measured, expecting convergence to $\sqrt{\langle c^{-2}\rangle^{-1}} = 1.2649$ as the
+      layers thinned. Measured speeds sat at 1.31&ndash;1.35 across five thicknesses and did not
+      converge, because <em>front arrival</em> measures the geometric-optics speed 1.3333
+      whatever the effective medium does to the body of the pulse. The experiment measured the
+      wrong thing. Unlike the reversal test, this one has not been repaired: doing it properly
+      needs a phase-velocity measurement on a narrow-band wavetrain, not a pulse front.
+      <p style="margin:.9rem 0 0">And not demonstrated anywhere here: Nachbin's actual result,
+      that refocusing in a <em>random</em> medium is sharper than in a homogeneous one. That
+      needs the aperture construction block [4] deliberately sets aside.</p>
     </div>
   </div>
 

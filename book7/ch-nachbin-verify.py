@@ -96,29 +96,92 @@ print("""
      deriving which one applies and bounding the difference.""")
 
 # ---------------------------------------------------------------------------
-head(4, 'TWO NUMERICAL DEMONSTRATIONS ATTEMPTED, AND ABANDONED')
-print("""  Recorded because a chapter that only shows what worked is not a record.
+head(4, 'TIME REVERSAL IS A PHASE-SPACE OPERATION, NOT A REPLAY')
+print("""  The first attempt at this failed and the failure was instructive. A wave was
+  run forward, the FIELD u recorded at an aperture, the recording time-reversed
+  and re-injected as a source term. Amplitude collapsed to 1e-30 and the peak
+  landed 86 cells from the source.
 
-  TIME-REVERSAL REFOCUSING. Nachbin's 2003-04 papers with Fouque and Garnier
-  show that a wave sent through a RANDOM medium, recorded, time-reversed and
-  re-emitted, refocuses on its source more sharply than in a homogeneous one --
-  disorder improves resolution. A 1-D finite-difference version was built here
-  and abandoned: re-emitting the recorded field as a source term is not the
-  correct adjoint, the refocused amplitude fell to 1e-30 and the peak landed
-  86 cells from the source. The effect is real and published; this
-  implementation of it was wrong, and a wrong implementation that happened to
-  produce a pretty number would have been worse.
+  The diagnosis is mechanics, not numerics. The state of a wave is not u. It is
+  (u, v) with v = u_t -- position and momentum -- and reversing a trajectory
+  means flipping the momentum:
 
-  HOMOGENISATION BY TRAVEL TIME. A layered medium was driven with a pulse and
-  the arrival time measured, expecting convergence to sqrt(harmonic mean of
-  c^2) = 1.2649 as the layers thinned. Measured speeds sat at 1.31-1.35 across
-  five layer thicknesses and did not converge -- because FRONT ARRIVAL measures
-  the geometric-optics speed, the travel-time average 1.3333, no matter what the
-  effective medium does to the bulk of the pulse. The experiment measured the
-  wrong thing. Block [3] keeps what that mistake taught, which is worth more
-  than the simulation would have been.
+        T : (u, v)  ->  (u, -v)
+
+  Recording u alone keeps half the state and throws away the half that carries
+  direction. No amount of careful re-injection recovers it.
+
+  Done properly, with a Stormer-Verlet integrator that is itself exactly
+  time-reversible, the test is: run forward NT steps, flip v, run NT more, and
+  compare with where you started.\n""")
+
+N, dx, cwave, dt, NT = 400, 1.0, 1.0, 0.4, 700
+def _lap(u): return [(u[(i+1) % N] - 2*u[i] + u[(i-1) % N])/dx**2 for i in range(N)]
+def _step(u, v, gam):
+    a  = [cwave*cwave*L - 2*gam*vi for L, vi in zip(_lap(u), v)]
+    vh = [vi + 0.5*dt*ai for vi, ai in zip(v, a)]
+    un = [ui + dt*vhi for ui, vhi in zip(u, vh)]
+    a2 = [cwave*cwave*L - 2*gam*vhi for L, vhi in zip(_lap(un), vh)]
+    return un, [vhi + 0.5*dt*ai for vhi, ai in zip(vh, a2)]
+def _initial():
+    return [math.exp(-((i-120)/9.0)**2) for i in range(N)], [0.0]*N
+
+print('     %10s %18s %14s' % ('damping', '||u_rec - u_0||', 'rel err'))
+# NB: local names are underscored. An earlier version bound `u` here and
+# shadowed the soliton function u(x,t,c) from block [2]; block [5] then raised
+# TypeError instead of silently checking nothing. The script failing loudly is
+# the behaviour wanted, and the fix is a rename, not a broader except.
+rev = []
+for gam in (0.0, 0.0005, 0.002, 0.008, 0.03):
+    _u, _v = _initial(); _u0 = _u[:]
+    for _ in range(NT): _u, _v = _step(_u, _v, gam)
+    _v = [-x for x in _v]
+    for _ in range(NT): _u, _v = _step(_u, _v, gam)
+    num = math.sqrt(sum((a-b)**2 for a, b in zip(_u, _u0)))
+    den = math.sqrt(sum(a*a for a in _u0))
+    rev.append((gam, num/den))
+    print('     %10.4f %18.3e %14.3e' % (gam, num, num/den))
+
+check(rev[0][1] < 1e-12,
+      'with no damping the pulse returns to machine precision (%.1e)' % rev[0][1])
+check(all(rev[i][1] < rev[i+1][1] for i in range(len(rev)-1)),
+      'the recovery error grows monotonically with the damping')
+check(rev[-1][1]/rev[0][1] > 1e12,
+      'conservative and damped differ by %.0e in recovery' % (rev[-1][1]/rev[0][1]))
+print("""
+     At gamma = 0 the flow is SYMPLECTIC and the reversal is exact. Turn on
+     damping and it is no longer symplectic -- a damped mechanical system is the
+     standard example of CONTACT Hamiltonian dynamics, where the extra Reeb
+     direction carries the dissipated action -- and the pulse does not come back
+     at all. The saturation near 1.0 is simply the field having decayed to
+     nothing, so the reversed run has nothing left to reconstruct.
+
+     WHICH IS A MEASUREMENT OF THIS CORPUS'S OWN FOUNDING MOVE. Volume I escapes
+     from symplectic to contact geometry because Liouville forbids attractors on
+     a compact symplectic manifold and the framework needs post-fold stability.
+     That escape buys an attractor and it costs reversibility, and the two
+     columns above are the price in numbers: 3.6e-15 against 0.96.
+
+     NOT DEMONSTRATED HERE. Nachbin's actual result -- that refocusing in a
+     RANDOM medium is sharper than in a homogeneous one, disorder improving
+     resolution through multiple scattering. That needs the recording-aperture
+     construction this block deliberately sets aside, and it is not attempted.
 """)
-check(True, 'both failures are recorded rather than quietly dropped')
+
+# ---------------------------------------------------------------------------
+head('4b', 'ONE DEMONSTRATION STILL ABANDONED, AND WHY')
+print("""  HOMOGENISATION BY TRAVEL TIME. A layered medium was driven with a pulse and
+  the arrival time measured, expecting convergence to sqrt(harmonic mean of c^2)
+  = 1.2649 as the layers thinned. Measured speeds sat at 1.31-1.35 across five
+  thicknesses and did not converge -- because FRONT ARRIVAL measures the
+  geometric-optics speed, the travel-time average 1.3333, whatever the effective
+  medium does to the body of the pulse. The experiment measured the wrong thing.
+  Block [3] keeps what the mistake taught, which is worth more than the
+  simulation would have been. Unlike the time-reversal attempt above, this one
+  has not been repaired: doing it properly needs a phase-velocity measurement on
+  a narrow-band wavetrain, not a pulse front.
+""")
+check(True, 'the remaining failure is recorded rather than quietly dropped')
 
 # ---------------------------------------------------------------------------
 head(5, 'CONTROL: THIS SCRIPT COMPUTED SOMETHING')
