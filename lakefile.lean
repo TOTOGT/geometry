@@ -109,3 +109,19 @@ lean_lib ChladniPolygon
 -/
 @[default_target]
 lean_lib CardiacHopfReduction
+
+/-
+  ReactionDiffusionFold.lean is the Lean behind book6/ch-reaction-diffusion-fold.
+  Audited 2026-09-13 with tools/leancheck.sh --audit under the v4.32.0 pin: three
+  declarations, all on the permitted three axioms, report kept at
+  tools/verify-audit/2026-09-13/. It carried a "NOT yet been run through the
+  kernel" banner from 2026-09-10 until that run; the banner now records the run
+  and the target is what keeps it true after today.
+
+  The file proves the algebraic and spectral core only. Center-manifold existence
+  and the O(a^5) feedback bound are invoked as standard results, not formalized,
+  and the header says which is which -- the distinction the NAME EXCEEDS STATEMENT
+  entry in docs/defect-ledger.html exists to keep visible.
+-/
+@[default_target]
+lean_lib ReactionDiffusionFold
