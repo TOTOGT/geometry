@@ -2606,3 +2606,62 @@ assistant-error narrative — that belongs in `docs/audit-log.md`.
 **Retro-tagging is not automatic.** Deciding that an existing paper's subject is production is a
 judgement per paper. Do not sweep the back catalogue; propose candidates and let the author
 confirm.
+
+---
+
+## STATE — 2026-09-13
+
+**`lake build` is green.** 8688 jobs, geometry, `leanprover/lean4:v4.32.0`. Two
+linter warnings only (`G6Crystal.lean:355` unused binder, `NASAGaps.lean:72`
+`omega` doing nothing). The geometry cohort is whole.
+
+**The verification board is green and legible.** 39 PASS, 6 PASS-AS-DECLARED,
+nothing to decide. Read it with two commands and never by reading a log:
+
+```
+python3 tools/verdict_table.py   --day YYYY-MM-DD    # rung 2 -> verdicts.tsv
+python3 tools/verdict_summary.py --day YYYY-MM-DD    # rung 3 -> <20 lines
+```
+
+Neither invokes Lean; both work from artifacts already on disk. Method and the
+reduction ladder are in `docs/verification-checklist.md`, which also carries a
+status column naming what is still open.
+
+**`GATE-DECLARE` is the declaration form.** A file that admits theorems states
+them where the gate can read them:
+
+```
+-- GATE-DECLARE: sorries = Namespace.thm_a, Namespace.thm_b
+-- GATE-REASON: why, and the closure path
+```
+
+Declared-and-present is `PASS-AS-DECLARED`. Absence of the line is
+`UNDECLARED-STATUS` — its own verdict, never a pass and never a guess. Six files
+carry one today: `MagneticLattice`, `SeismicLattice`, `Ordinal` (GTCT),
+`AXLE_v8_1` and `counting` (AXLE), plus the `ZetaReflection` deposit by count.
+**A seventh file growing an undeclared sorry is now the only thing that goes red.**
+
+### Do not repeat these
+
+1. **Never elaborate a file against a toolchain it does not declare.** Seven are
+   declared across the Desktop; only `geometry` has a built Mathlib. `AXLE` is
+   `v4.14.0` and holds 129 files. Their failures measured nothing.
+2. **An address is `(path, sha256, date)`, not a name.** Three copies of
+   `ZetaReflection.lean` and two of `ReactionDiffusionFold.lean` share their
+   basenames *and* their declaration names.
+3. **Never re-verify a frozen deposit.** `docs/ml-evidence/deposits-*` are records
+   of a past state; checking them nightly manufactures false positives.
+4. **Declare scope, do not infer it.** A day directory without `order.txt` is a
+   targeted run.
+5. **A summary that grows with the corpus is not a summary.** A run's information
+   content is its delta; a clean night is three lines.
+
+### Still open
+
+- `overnight.sh` has no toolchain column in `corpus_roots.txt`, so items 1 and 3
+  above are still enforced by hand.
+- Mirror collapsing by sha is not done: 280 paths, 163 distinct basenames.
+- Steps 8-11 of the checklist (statement-vs-prose, name-as-claim, every-axis
+  sweeps, claim-to-gate tracing) are manual. Step 11 found two stale pages today.
+- `book6/MayaCalendar.lean` — 10 theorems, never audited, and
+  `ch-maya-codifying-cosmos.html` says so correctly. One `leancheck` run closes it.
