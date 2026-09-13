@@ -87,6 +87,45 @@ dependency instead of predicting it.
 - `AXLE/Journal/vol9.html` — colophon now cites the theorem rather than "tested
   against nine candidate rates."
 
+## Two git defects the push itself surfaced
+
+**A stranded lock hid four days of AXLE commits.** `AXLE/.git/index.lock`, zero
+bytes, created `2026-09-09 00:15:48` — the same second as `cf237e1`, by a git
+invocation issued through the desktop bridge. It was never cleared. Every `git add`
+and `git commit` in AXLE since has failed with *"Another git process seems to be
+running"*, and the `git push` that followed then reported **"Everything
+up-to-date"** — which is true, and reads as success.
+
+That is the defect this log keeps finding, in a new costume: an operation that did
+not happen, reported in words indistinguishable from one that did. Nothing was lost
+— the AXLE working tree still held all five modified tracked files, three from this
+pass and `lexical-generativity-ijl.html` and `theorem-registry.html` from other
+sessions. But no session had been told its commit failed.
+
+**Rule.** After a push script runs, read the commit back with
+`git show --stat HEAD`. The script's own echo is not evidence, and
+"Everything up-to-date" is not evidence that anything was committed.
+
+**An unrelated file rode into the WP-84 commit.** `08c4577` contains
+`tools/verify-audit/2026-09-12/geometry__CardiacHopfReduction.axioms.txt`, which the
+push script never added. It was already staged in geometry's index from an earlier
+session, and `git commit` takes the index, not the arguments to the preceding
+`git add`. The file is a legitimate audit report — five `CardiacHopf` declarations,
+all within the permitted three — sitting in the wrong commit. Not amended: the
+commit is pushed, and pushed history stands.
+
+**Rule.** A script that stages explicit paths must verify the index holds only those
+paths before committing. `git diff-index --cached --name-only HEAD` answers it as
+plumbing, without the index rewrite that makes `git status` unsafe through the
+bridge.
+
+**One line in `08c4577` corrected here rather than amended.** Its message says
+"Kernel evidence committed alongside the prose."
+`tools/verify-audit/2026-09-09/FoldingFrequency.axioms.txt` was already tracked —
+committed 2026-09-10 by the overnight full-corpus run along with some fifty other
+reports. The evidence is in the repo and the chapter's citation resolves; that
+commit did not put it there.
+
 ---
 
 # THE THIRD OVER-GENERALISED IN ONE WEEK, AND IT CONTRADICTED ITS OWN COMPANION (2026-09-05)
@@ -6126,3 +6165,158 @@ prompts and appending to `book6/wp94-coach-compliance.md`. It commits nothing.
   Superseded 2026-09-09: `--no-optional-locks` stops the lock being taken, and
   `mv` clears one that was. The generalisation from "cannot `rm`" to "cannot use
   git" was the error.
+
+
+---
+
+## Moved from CLAUDE.md, 2026-09-13 — the 2026-09-05 handoff narrative
+
+CLAUDE.md carried two handoff blocks; the 09-05 one opened the file above its own
+title. Its standing rules stayed in CLAUDE.md. Its dated narrative is below, verbatim.
+
+## What changed today, in one paragraph
+
+The overnight job became a job, an `--audit` began leaving evidence, Tier 1 was
+found to be a four-fold undercount caused by a glob, and a published claim was
+found to be an artefact of a grid. All four are the same defect wearing four
+costumes: **a measurement nobody could regenerate.** Every fix pushed in that
+direction — the numbers now come from artefacts on disk, and where they cannot,
+the tool says so.
+## The Saturn correction, and the class it named
+
+`hex_and_dec_forces_constant` is true and was carrying a sentence wider than
+itself: "the only field admitting both a hexagon and a decagon is the trivial
+one" is a fact about choosing THIRTY sectors. On sixty the periods are 10 and 6,
+gcd is 2, and `k mod 2` is a non-constant witness. The grid-free statement —
+rotations of order 6 and 10 generate C₃₀, so such a field shows thirty sides and
+neither polygon — is closed by `periodic_gcd`, kernel-audited 2026-09-05.
+
+Published as **WP-97, `book6/wp97-thirty-was-doing-the-work.html`**, with
+`wp97-verify.py`. §7 names the class WP-73's seven lacked: **OVER-GENERALISED** —
+true statement, wider prose, because a parameter fixed in the hypotheses reads in
+prose as a constant of nature. Unlike MISATTRIBUTED it is mechanisable and cheap:
+instantiate at a second value of every number in the hypotheses. A theorem whose
+hypotheses carry a numeral the surrounding prose never mentions is a warning.
+
+Provenance, recorded because the failure mode is the point: the finding came from
+"what about base 60", asked twice, and the first answer — that a base is notation
+and changes no number — was true and not responsive. Second time in a week that
+arguing with borrowed vocabulary cost a finding; the other was ε₀ = 1/3 described
+as "a chosen threshold" when it is a Grönwall bound. **When the words are wrong
+and the gesture is at a structure, go look at the structure.**
+## A.13 went to NASA
+
+**Submitted 2026-09-05** (ROSES-2025 A.13, Needs and Opportunities,
+`G6-AES-PROP-2026-13`, *Whose Flag Is It? Mapping the Decision Architecture for
+Outdoor-Activity Restriction During Wildfire Smoke Episodes*). Stated by Pablo;
+what is verifiable from this machine is that the four required documents exist
+in `~/Desktop/A13/`, all built 5 September:
+
+| file | pp | note |
+|---|---|---|
+| `A13_STM_ANONYMIZED_2026-09-05.pdf` | 8 | §1–12 = 6 of the 10 allowed pages; DAPR-anonymised |
+| `A13_TOTAL_BUDGET_2026-09-05.pdf` | 2 | **not** anonymised — Table A.13-4 requires this separately |
+| `A13_EXPERTISE_RESOURCES_2026-09-05.pdf` | 2 | |
+| `A13_OSDMP_2026-09-05.pdf` | 2 | |
+
+Alongside them: `A13_program_specific_data_answers_2026-09-05.md` (Q1–Q30 as
+entered) and `A13_proposal_summary_v2_2026-09-05.txt`.
+
+**Do not assume the NSPIRES-side items closed.** At last check these were open
+and a next session should verify rather than infer them from the submission:
+SciENcv biosketch and Current & Pending (SciENcv mandatory since 2026-09-01),
+research security training, and the training sentence into Expertise &
+Resources §7 — which would mean re-uploading that one file.
+
+Facts worth not relitigating: N&O proposals are **limited to one year** by the
+element text, so there is no year 2 or 3 to fill; the anonymised budget goes
+*inside* the proposal document (Table A.13-1) **and** a separate non-anonymised
+Total Budget is also required (Table A.13-4); NSPIRES warns if Q5 is answered
+when Q4 is No. Contact email on everything is `g6llc@proton.me`.
+## Open, in the order they should be taken
+
+1. **The 22 files outside every build target.** Give each a `lean_lib` entry, or
+   move it to `_to_delete/`. Until then they are unverifiable by construction.
+2. **`verify-proofs.yml` discards its own axiom reports** into `/tmp`. It gates
+   45 declarations named by hand in three heredocs, weekly, and only on pushed
+   commits. Make it upload or commit the reports, and consider driving it from
+   the tracked probes rather than heredocs — the dm³ step already does.
+3. **The `verify-stamp` step in `verify-proofs.yml` is commented out**, waiting
+   on `SaturnHexagon.lean` carrying a stamp generated under v4.32.0, which means
+   generating it from a CI run and not from a local tree.
+4. **`ZetaReflection` refactor: keep or revert.** If kept, `book4/ch12.html`
+   line 331 reads "eleven theorems… one admitted" and must become twelve and two.
+5. **`verify-book8/run.sh` counts `N` with an unanchored grep** that matches its
+   own probe docstring. `verify-polar` uses the anchored form. Fix, in its own
+   commit — moving a gate's N inside an unrelated commit is how a number drifts.
+6. **O7** — one supremum computation (sup‖Hess V‖) from either closing or moving
+   ε₀. Caveat recorded: ε₀ may live in a different norm than r.
+7. Untracked and awaiting a decision: `book4/ZetaScratch.lean` (the superseded
+   route — commit with a header saying so, or delete), `book5/.bak-saturn-smoke`,
+   `.bak-polar-*`, `tools/.leancheck.sh.bak-*`.
+## RH preprint — where reflection_law stands (30 Aug, end of day)
+
+`GTCT/book4/ZetaReflection.lean` went from two `sorry`s to one. Proved and
+kernel-audited today, none of them touching the zeros of ζ:
+`chiLog_real_on_critical_line`, `Zlog_conj`, `gCoef_odd_in_t`, `cCoef_even_in_t`.
+
+`reflection_law` needs exactly one input: `ζ'/ζ(s) + ζ'/ζ(1−s) = chiLog s`,
+verified to 30 digits (mpmath) at three interior points. Its docstring carries
+the route. Two traps recorded there, both found by checking advice rather than
+taking it:
+  · Go via `completedRiemannZeta_one_sub` (Λ(1−s) = Λ(s)), **not**
+    `riemannZeta_one_sub` — the latter is the asymmetric form with cos(πs/2),
+    and converting it to `chiLog` costs Legendre duplication and Euler
+    reflection.
+  · **Mathlib encodes Γ's poles as zeros** (`Gamma_eq_zero_iff`), so
+    `Γ(s/2) ≠ 0` is not free and must be carried as a hypothesis.
+
+`deposits/rh-arithmetic-contact-v1/RELATED-WORK.md` holds the verified
+bibliography — three citations right, two corrected — plus the claims rejected
+in audit. `GEMINI-PROMPT.md` beside it asks for checkable things instead of
+proof plans; use it rather than asking how to close the gap.
+## dnls has Lean CI already written — merge it before rebuilding one
+
+Found 30 Aug. `TOTOGT/dnls` has **0 open PRs**; what looks like open work is 16
+stale remote branches. Five are one stacked lineage whose tip,
+**`fix-lean-proof-errors`**, was written 13 July and never merged. It carries:
+
+- `.github/workflows/verify-proofs.yml` — *"Verify Lean proofs (real kernel
+  check)"*: runs `lake build` as the gate and scans for `sorry` from
+  actually-compiled source. This is the discipline this session rebuilt by hand.
+- `Pin mathlib to v4.32.0 tag` + `Align lean-toolchain with pinned mathlib`.
+
+Meanwhile **`dnls/main` carries `lean-toolchain v4.32.0-rc1` against
+`mathlib @ "master"`** — a release candidate against a moving target, the same
+defect class as GTCT's unsatisfiable pin. The branch fixes it and **merges into
+main with zero conflicts**.
+
+    https://github.com/TOTOGT/dnls/compare/main...fix-lean-proof-errors?expand=1
+
+**Do not write new Lean CI for this corpus before reading that workflow.** Merge
+it, then adapt it for geometry and GTCT rather than starting over.
+
+After it lands, nine branches are already contained in main and can be deleted
+by ancestry (never by name): TOTOGT-patch-1/4/5/6/7,
+feature/archive-rehomed-book3-files, feature/curate-repo-structure,
+feature/dnls-foundations-lean, house-rules. The four remaining stacked branches
+become contained too.
+## State at handoff
+
+- **Pushed:** GTCT, AXLE, geometry, 3M. All clean.
+- **`dnls` is pushed** (the blocking ruleset was removed 30 Aug). Its §6
+  "what counts as formally verified" sits on branch
+  `add-verification-and-coi-statement` at `c2a394a` and still needs a PR into
+  `main`: https://github.com/TOTOGT/dnls/compare/main...add-verification-and-coi-statement
+  The same six rules are duplicated in this file, so nothing is blocked on it.
+  Note `dnls` carries 16 remote branches, several looking abandoned — branch
+  hygiene there has drifted and is worth a pass.
+- **Book 4 is clean.** 50 HTML files, all `<div>` balanced, 0 missing tracked
+  files, 0 dead links or anchors (the repo's remaining 17 dead links and 4 dead
+  anchors are all outside book4). A font checker flagged `MathFallback` in
+  `ch11-catgt.html` and `gomc-opus.html`; that is a **false positive** — it is a
+  deliberate `@font-face` with `local()` sources and a `unicode-range` for Greek
+  and math glyphs, working as designed. Do not "fix" it.
+- One WIP commit preserves a previous session's book4 pricing edit (PayPal
+  links removed). Unreviewed — confirm it was intended.
+- Disk: 49 GB free, up from 26 GB. `tools/disk-survey.sh` finds the rest.

@@ -1,137 +1,15 @@
-# CLAUDE.md — totogt.github.io/geometry repo
+# HANDOFF — 2026-09-05, end of session
 
-**Read the Read-first section below and stop.** Open a later section only when
-you are about to touch the file it covers. Dated narrative for closed defects
-and audits lives in `docs/audit-log.md`, not here.
+Read this first. Everything below the second `---` is the standing house notes.
 
-This file primes Claude for the `~/geometry` working repo, which is the live HTML site
-for the Principia Orthogona series at totogt.github.io/geometry.
+## What changed today, in one paragraph
 
-Read `~/Desktop/dnls/CLAUDE.md` for the canonical house rules (filesystem map, repo table,
-style guide, licensing, what agents must NOT do). This file adds geometry-specific notes.
-
----
-
-## THE RULES — read this section; everything below it is reference
-
-Seventeen standing rules were spread over 2 600 lines, interleaved with dated
-narrative and forty defect records. Nothing moved when this index was written on
-2026-09-13 — the rules are where they were. What changed is that they can now be
-found without reading the file. Each line gives the rule and the heading to grep
-for. Six different sections are titled "What NOT to do"; they belong to the rule
-above each of them.
-
-| # | the rule, in one line | grep for |
-|---|---|---|
-| R1 | Three tiers, and only kernel-audited is evidence. A count without a tier is not a count. | `## Counting:` |
-| R2 | Dates are local to the desk, US Eastern, not UTC. Tools are already right; hand-typed dates are what go wrong. | `## Dates are local` |
-| R3 | macOS ships bash 3.2. No `mapfile`/`readarray`. `bash -n` will not catch it. | `## Bash 3.2` |
-| R4 | Read git through the bridge with `--no-optional-locks`, on every read. A stranded lock is recovered by `mv`, not `rm`. | `## Git, on this machine` |
-| R5 | Attribution goes in the handoff block. Never `Co-Authored-By:`, `Claude-Session:` or "Generated with" in a commit message. | `## Attribution` |
-| R6 | Every chapter carries a verify script. | `## Every chapter carries` |
-| R7 | All HTML lives in geometry. | `## CANONICAL: all HTML` |
-| R8 | File indexes are generated, never hand-maintained. | `## File indexes` |
-| R9 | A duplicate page is declared, or it is a finding. | `## Duplicate pages` |
-| R10 | Threshold, not scale — the guard on fold language. | `## Threshold, not scale` |
-| R11 | Every declaration named in prose must resolve, at the path cited. | `# RULE (2026-08-27): every declaration` |
-| R12 | A published number must be produced by a tool in `tools/`. | `# RULE (2026-08-27): a published number` |
-| R13 | What counts as the corpus. | `## What counts as the corpus` |
-| R14 | A mismatch is a defect only where something is distributed. | `# RULE (2026-08-28): a mismatch` |
-| R15 | Never report absence from a single search. | `# RULE (2026-08-28): never report` |
-| R16 | Where files live — the tiering rule. | `## Where files live` |
-| R17 | A WP whose finding is about machine-assisted production carries `#Machine Learning`. | `# RULE (2026-09-01):` |
-
-R4 is the one that proves the point. It was written on 2026-09-09, it is correct,
-and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
-expired narrative. The session of 2026-09-13 stranded git locks all evening
-without reading it. A rule that cannot be found is not in force.
-
-## HANDOFF — 2026-09-13 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
-
-**From:** session 018auR3JC4M1QXSXFKxvT8Qq · account grossiatwork@gmail.com · model claude-opus-5, Cowork bridge with the desk connected. Pushed by Pablo.
-
-### Structure of this file changed today
-Two handoff blocks existed: one dated 2026-09-05 opening the file, and one dated
-2026-09-11 at line 396 — so the file's own title sat at line 319, under 318 lines
-of eight-day-old state. Both are collapsed into this one. The rule sections that
-were inside the 09-05 block (Counting, Dates, Bash 3.2, Git, the overnight job,
-Not started) are kept below, unchanged. Its dated narrative — the Saturn
-correction note, A.13, the RH preprint status, dnls CI, the 09-05 state and open
-list — moved to `docs/audit-log.md`. The pre-restructure file is at
-`docs/ml-evidence/claude-md-2026-09-13/CLAUDE.md.pre-restructure`.
-
-### CardiacHopfReduction is through the kernel and is now a target
-Five declarations on `[propext, Classical.choice, Quot.sound]`; reports in
-`tools/verify-audit/2026-09-12/` and `2026-09-13/`. `field_simp` left
-`mu*r*(1-1) = 0` in `limit_cycle`; `ring` closes it. Declared
-`@[default_target]`, so `lake build` covers it and the audit repeats.
-
-`supercritical` keeps its name, which is cited elsewhere, but its docstring no
-longer claims what its statement does not: it proves `0 < L → -(1/L) < 0` and
-mentions no vector field. `radial_deriv_at_cycle` carries the content the name
-claims — the derivative at `r² = Lμ` is exactly `-2μ`.
-
-**That is a defect class the ledger does not have**: true, kernel-clean, and
-weaker than its name. Neither vacuity scan sees it, because the conclusion is an
-ordinary inequality rather than `True`, and the axiom gate reports axioms and not
-whether a statement earns its title. It is also WP-81's thesis with a dated
-specimen — the overstatement exists *because* the mathematics is right.
-
-### tools/leancheck.sh had a bug that broke every later audit
-`mktemp /tmp/leanprobe.XXXXXX.lean` — BSD mktemp substitutes only a trailing run
-of X's, so the `.lean` suffix made the template literal: created once, "File
-exists" ever after. The failure branch continues *before* `rm -f "$probe"`, by
-design, to keep the probe for inspection — so one failed audit left the literal
-file behind and poisoned every subsequent audit of any file. Now a unique
-directory with a fixed filename inside it, plus a guard.
-
-### tools/build_indexes.py emitted rows into gitignored .lake/
-`SKIP` held only `docs/ml-evidence/`, so the generator walked `.lake/packages/`
-and wrote rows linking importGraph's `html-template/index.html` and mathlib's
-`lakeprof_report_template.html` into both `index-root.html` and
-`master-index.html`. `.lake/` is gitignored, so those four links resolved at the
-desk and were dead in every clone and on the published site — which is why
-`audit.py` read 1 dead_link here and 4 on a fresh checkout. `SKIP` now carries
-`.lake/`, `_to_delete/` and `Claude outputs/`. `audit.py:55` already warned that
-`SKIP_DIRS` governs what is scanned and not what can be linked to; this was the
-other half of that warning.
-
-### `&Hcedil;` is not an HTML entity
-It rendered as the literal text `&Hcedil;al Saflieni` on four pages —
-`hypogeum_temple_resonance.html` (in its `<title>`), `book7/ch-nachbin.html` ×3,
-`book7/ch-grothendieck.html`. Replaced with `&#294;`, which is Ħ. Then the eleven
-`Ḥal Saflieni` (U+1E24, H with dot below) were normalised to `Ħ` (U+0126, the
-Maltese letter) — scoped to the full phrase, so bar Ḥiyya, Bayt al-Ḥikma and
-Maʿaseh Ḥoshev are untouched. Surfaced only because the indexes were regenerated.
-
-### WP-110, WP-111, WP-112, WP-113 shipped
-- **WP-110** *Not Rough Enough* — Cavalieri error on closed surfaces; γ ≈ 2 at
-  every roughness; reported as a null with a stated restriction.
-- **WP-111** *The Cardioid Is the Locus* — the main cardioid is the modulus-one
-  locus of the multiplier of z²+c in closed form; period q in the p/q bulb on
-  eight rationals; off the rationals the analogy fails arithmetically.
-- **WP-112** *The Ends, Not the Middle* — the exponent is fixed by the order at
-  which the area function vanishes at the ends of its support, not by interior
-  regularity. 2.003 at every H from 0.1 to 0.9. **WP-110's stated reason is
-  superseded**, in a dated box at the foot of that page.
-- **WP-113** *Three Terms in a Fingernail* — write head, read, warp; the first
-  two come out the same size.
-
-### Open
-- `docs/defect-ledger.html` stops on 24 August. WP-90's three, WP-91's
-  `collatz_converges`, the three-week §4 gap, and the class above are all
-  missing. The `found by` column is the asset — 3 of 27 defects found by the
-  kernel — and it is presented as a list rather than as a result.
-- Five root `.lean` files remain untracked: `ReactionDiffusionFold`,
-  `TurnaroundUniverse`, `ZetaScratch`, `probe_book8`, `probe_dm3`. They are what
-  made a `grep -rn` report a live declaration that was not. Grep with
-  `git ls-files`.
-- `_to_delete/` holds 72 zero-byte git lock files alongside real ML evidence.
-  Two classes in one store; a `_to_delete/locks/` subfolder separates them
-  without deleting anything.
-- 18 `tmp_obj_*` in `.git/objects`; `git gc --prune=now` at the desk.
-- The per-book `index-<slug>.html` pages have no search bar. `master-index.html`
-  has one and every row on every page already carries `data-hay`.
+The overnight job became a job, an `--audit` began leaving evidence, Tier 1 was
+found to be a four-fold undercount caused by a glob, and a published claim was
+found to be an artefact of a grid. All four are the same defect wearing four
+costumes: **a measurement nobody could regenerate.** Every fix pushed in that
+direction — the numbers now come from artefacts on disk, and where they cannot,
+the tool says so.
 
 ## The overnight job, if you are the session that runs it
 
@@ -228,6 +106,81 @@ macOS ships bash 3.2.57 as `/bin/bash`. `mapfile`/`readarray` is bash 4 and dies
 here. `bash -n` will not catch it — a missing builtin is not a syntax error.
 Anything written for this machine from elsewhere must be read for 3.2 by eye.
 
+## The Saturn correction, and the class it named
+
+`hex_and_dec_forces_constant` is true and was carrying a sentence wider than
+itself: "the only field admitting both a hexagon and a decagon is the trivial
+one" is a fact about choosing THIRTY sectors. On sixty the periods are 10 and 6,
+gcd is 2, and `k mod 2` is a non-constant witness. The grid-free statement —
+rotations of order 6 and 10 generate C₃₀, so such a field shows thirty sides and
+neither polygon — is closed by `periodic_gcd`, kernel-audited 2026-09-05.
+
+Published as **WP-97, `book6/wp97-thirty-was-doing-the-work.html`**, with
+`wp97-verify.py`. §7 names the class WP-73's seven lacked: **OVER-GENERALISED** —
+true statement, wider prose, because a parameter fixed in the hypotheses reads in
+prose as a constant of nature. Unlike MISATTRIBUTED it is mechanisable and cheap:
+instantiate at a second value of every number in the hypotheses. A theorem whose
+hypotheses carry a numeral the surrounding prose never mentions is a warning.
+
+Provenance, recorded because the failure mode is the point: the finding came from
+"what about base 60", asked twice, and the first answer — that a base is notation
+and changes no number — was true and not responsive. Second time in a week that
+arguing with borrowed vocabulary cost a finding; the other was ε₀ = 1/3 described
+as "a chosen threshold" when it is a Grönwall bound. **When the words are wrong
+and the gesture is at a structure, go look at the structure.**
+
+## A.13 went to NASA
+
+**Submitted 2026-09-05** (ROSES-2025 A.13, Needs and Opportunities,
+`G6-AES-PROP-2026-13`, *Whose Flag Is It? Mapping the Decision Architecture for
+Outdoor-Activity Restriction During Wildfire Smoke Episodes*). Stated by Pablo;
+what is verifiable from this machine is that the four required documents exist
+in `~/Desktop/A13/`, all built 5 September:
+
+| file | pp | note |
+|---|---|---|
+| `A13_STM_ANONYMIZED_2026-09-05.pdf` | 8 | §1–12 = 6 of the 10 allowed pages; DAPR-anonymised |
+| `A13_TOTAL_BUDGET_2026-09-05.pdf` | 2 | **not** anonymised — Table A.13-4 requires this separately |
+| `A13_EXPERTISE_RESOURCES_2026-09-05.pdf` | 2 | |
+| `A13_OSDMP_2026-09-05.pdf` | 2 | |
+
+Alongside them: `A13_program_specific_data_answers_2026-09-05.md` (Q1–Q30 as
+entered) and `A13_proposal_summary_v2_2026-09-05.txt`.
+
+**Do not assume the NSPIRES-side items closed.** At last check these were open
+and a next session should verify rather than infer them from the submission:
+SciENcv biosketch and Current & Pending (SciENcv mandatory since 2026-09-01),
+research security training, and the training sentence into Expertise &
+Resources §7 — which would mean re-uploading that one file.
+
+Facts worth not relitigating: N&O proposals are **limited to one year** by the
+element text, so there is no year 2 or 3 to fill; the anonymised budget goes
+*inside* the proposal document (Table A.13-1) **and** a separate non-anonymised
+Total Budget is also required (Table A.13-4); NSPIRES warns if Q5 is answered
+when Q4 is No. Contact email on everything is `g6llc@proton.me`.
+
+## Open, in the order they should be taken
+
+1. **The 22 files outside every build target.** Give each a `lean_lib` entry, or
+   move it to `_to_delete/`. Until then they are unverifiable by construction.
+2. **`verify-proofs.yml` discards its own axiom reports** into `/tmp`. It gates
+   45 declarations named by hand in three heredocs, weekly, and only on pushed
+   commits. Make it upload or commit the reports, and consider driving it from
+   the tracked probes rather than heredocs — the dm³ step already does.
+3. **The `verify-stamp` step in `verify-proofs.yml` is commented out**, waiting
+   on `SaturnHexagon.lean` carrying a stamp generated under v4.32.0, which means
+   generating it from a CI run and not from a local tree.
+4. **`ZetaReflection` refactor: keep or revert.** If kept, `book4/ch12.html`
+   line 331 reads "eleven theorems… one admitted" and must become twelve and two.
+5. **`verify-book8/run.sh` counts `N` with an unanchored grep** that matches its
+   own probe docstring. `verify-polar` uses the anchored form. Fix, in its own
+   commit — moving a gate's N inside an unrelated commit is how a number drifts.
+6. **O7** — one supremum computation (sup‖Hess V‖) from either closing or moving
+   ε₀. Caveat recorded: ε₀ may live in a different norm than r.
+7. Untracked and awaiting a decision: `book4/ZetaScratch.lean` (the superseded
+   route — commit with a header saying so, or delete), `book5/.bak-saturn-smoke`,
+   `.bak-polar-*`, `tools/.leancheck.sh.bak-*`.
+
 ## Git, on this machine
 
 **Read-only `git` through the Cowork device bridge is safe, prefixed
@@ -283,6 +236,75 @@ incidents and generalised past what they showed, and it cost several sessions th
 ability to read the state of the repo they were editing. A rule inferred from a
 failure should be tested against the failure before it is written down.
 
+## RH preprint — where reflection_law stands (30 Aug, end of day)
+
+`GTCT/book4/ZetaReflection.lean` went from two `sorry`s to one. Proved and
+kernel-audited today, none of them touching the zeros of ζ:
+`chiLog_real_on_critical_line`, `Zlog_conj`, `gCoef_odd_in_t`, `cCoef_even_in_t`.
+
+`reflection_law` needs exactly one input: `ζ'/ζ(s) + ζ'/ζ(1−s) = chiLog s`,
+verified to 30 digits (mpmath) at three interior points. Its docstring carries
+the route. Two traps recorded there, both found by checking advice rather than
+taking it:
+  · Go via `completedRiemannZeta_one_sub` (Λ(1−s) = Λ(s)), **not**
+    `riemannZeta_one_sub` — the latter is the asymmetric form with cos(πs/2),
+    and converting it to `chiLog` costs Legendre duplication and Euler
+    reflection.
+  · **Mathlib encodes Γ's poles as zeros** (`Gamma_eq_zero_iff`), so
+    `Γ(s/2) ≠ 0` is not free and must be carried as a hypothesis.
+
+`deposits/rh-arithmetic-contact-v1/RELATED-WORK.md` holds the verified
+bibliography — three citations right, two corrected — plus the claims rejected
+in audit. `GEMINI-PROMPT.md` beside it asks for checkable things instead of
+proof plans; use it rather than asking how to close the gap.
+
+## dnls has Lean CI already written — merge it before rebuilding one
+
+Found 30 Aug. `TOTOGT/dnls` has **0 open PRs**; what looks like open work is 16
+stale remote branches. Five are one stacked lineage whose tip,
+**`fix-lean-proof-errors`**, was written 13 July and never merged. It carries:
+
+- `.github/workflows/verify-proofs.yml` — *"Verify Lean proofs (real kernel
+  check)"*: runs `lake build` as the gate and scans for `sorry` from
+  actually-compiled source. This is the discipline this session rebuilt by hand.
+- `Pin mathlib to v4.32.0 tag` + `Align lean-toolchain with pinned mathlib`.
+
+Meanwhile **`dnls/main` carries `lean-toolchain v4.32.0-rc1` against
+`mathlib @ "master"`** — a release candidate against a moving target, the same
+defect class as GTCT's unsatisfiable pin. The branch fixes it and **merges into
+main with zero conflicts**.
+
+    https://github.com/TOTOGT/dnls/compare/main...fix-lean-proof-errors?expand=1
+
+**Do not write new Lean CI for this corpus before reading that workflow.** Merge
+it, then adapt it for geometry and GTCT rather than starting over.
+
+After it lands, nine branches are already contained in main and can be deleted
+by ancestry (never by name): TOTOGT-patch-1/4/5/6/7,
+feature/archive-rehomed-book3-files, feature/curate-repo-structure,
+feature/dnls-foundations-lean, house-rules. The four remaining stacked branches
+become contained too.
+
+## State at handoff
+
+- **Pushed:** GTCT, AXLE, geometry, 3M. All clean.
+- **`dnls` is pushed** (the blocking ruleset was removed 30 Aug). Its §6
+  "what counts as formally verified" sits on branch
+  `add-verification-and-coi-statement` at `c2a394a` and still needs a PR into
+  `main`: https://github.com/TOTOGT/dnls/compare/main...add-verification-and-coi-statement
+  The same six rules are duplicated in this file, so nothing is blocked on it.
+  Note `dnls` carries 16 remote branches, several looking abandoned — branch
+  hygiene there has drifted and is worth a pass.
+- **Book 4 is clean.** 50 HTML files, all `<div>` balanced, 0 missing tracked
+  files, 0 dead links or anchors (the repo's remaining 17 dead links and 4 dead
+  anchors are all outside book4). A font checker flagged `MathFallback` in
+  `ch11-catgt.html` and `gomc-opus.html`; that is a **false positive** — it is a
+  deliberate `@font-face` with `local()` sources and a `unicode-range` for Greek
+  and math glyphs, working as designed. Do not "fix" it.
+- One WIP commit preserves a previous session's book4 pricing edit (PayPal
+  links removed). Unreviewed — confirm it was intended.
+- Disk: 49 GB free, up from 26 GB. `tools/disk-survey.sh` finds the rest.
+
 ## Not started, deliberately
 
 ISO 13485 / orthobiologics. G6 LLC is moving into life sciences with a medical
@@ -291,6 +313,20 @@ it starts, the first question is regulatory classification — device vs
 21 CFR 1271 §361 HCT/P vs §351 biologic — because ISO 13485 is the right
 standard only for the first. Do not let dm³ become a design input or a
 marketing claim without evidence behind it.
+
+---
+
+# CLAUDE.md — totogt.github.io/geometry repo
+
+**Read the Read-first section below and stop.** Open a later section only when
+you are about to touch the file it covers. Dated narrative for closed defects
+and audits lives in `docs/audit-log.md`, not here.
+
+This file primes Claude for the `~/geometry` working repo, which is the live HTML site
+for the Principia Orthogona series at totogt.github.io/geometry.
+
+Read `~/Desktop/dnls/CLAUDE.md` for the canonical house rules (filesystem map, repo table,
+style guide, licensing, what agents must NOT do). This file adds geometry-specific notes.
 
 ---
 
@@ -356,6 +392,133 @@ does not prove they are the only such vectors. `ch-strang-verify.py` block [4]
 exhausts a box and finds exactly six. Proof and evidence, each labelled.
 
 Scripts live beside their page, named `<page-stem>-verify.py`.
+
+## HANDOFF — 2026-09-11 (OVERWRITE this block. Do not append. It reached 341 lines once by appending; dated narrative belongs in `docs/audit-log.md`.)
+
+**From:** session `01DoNjEm4UxN5SZdBJyhP5o2` · account `grossiatwork@gmail.com` · model `claude-opus-5`, Cowork bridge.
+Touched `~/Desktop/geometry` only. **No push credentials.** Everything below is committed-or-not on the desk.
+
+### Read this first: nothing from this session is kernel-checked
+
+Two new Lean files were written and neither has ever been compiled. The device VM has
+no `elan`/`lake` and the cloud container has no Mathlib, so CI is the only oracle and
+reaching it needs a push. Both files say so in their own headers, and
+`book13/ch09` carries `Status: Open` for the same reason. **Expect one or two
+iterations on tactic names.** Do not quote any of it as verified.
+
+### What this session added
+
+**Book 7 — three chapters, the non-Euclidean lineage that was entirely absent.**
+`ch-beltrami.html` (pseudosphere, relative consistency, Gauss–Bonnet, Laplace–Beltrami,
+the ISS helix at 4×10⁻⁶, Reeb–geodesic with the Darboux limit), `ch-felix-klein.html`
+(Cayley's absolute, signature picks the geometry, Erlangen and where it stops), and
+`ch-cardano.html` (del Ferro→Tartaglia→Cardano→Ferrari, casus irreducibilis, Abel–Galois,
+landing on `book4/ladder-polynomials.html`). Index cards and nav wired; Book 7 is now 46.
+
+**Vol XIII `ch09-what-a-model-carries.html`** — equality / isomorphism / interpretation, and
+which of the three Beltrami's 1868 dictionary is. Hilbert 1901 proves it is not an
+isomorphism. Status Open, no core, and it says so in its own metagrid.
+
+**WP-108 `one-lemma-from-hilbert.html`** — reduction of Ishiki's Question 15.6
+(arXiv:2609.09639v2). 𝕄₁ = {diam = 1} is closed hence Polish; Φ splits 𝕄∖{•} ≅ 𝕄₁ × (0,∞);
+Bessaga–Klee gives 𝕄₁ × ℝ ≅ ℓ²; retract of an AR is an AR. **Lemma A (open):** the discrete
+approximation property for 𝕄₁. The note explicitly refuses the ℓ²-factor shortcut.
+
+**Two candidate cores, both unverified:**
+- `Orthogenesis/Geometry/GaussBonnet.lean` — discrete Gauss–Bonnet, Σ defect = 2πχ from
+  `3F = 2E` and the Euclidean angle sum, with `tetra` as a non-vacuity witness (4π = 2π·2).
+  Candidate floor for **Volume XI, rung 28**, which is unwritten.
+- `Orthogenesis/Geometry/HexForm.lean` — the axial lattice carries `Q(q,r) = q² + qr + r²`,
+  the Eisenstein/A₂ norm form, discriminant −3, positive definite, six neighbours at Q = 1.
+  Candidate **linear-algebra floor**.
+- Both imported by `Orthogenesis.lean`; both probed by `tools/verify-gaussbonnet/probe_gb.lean`
+  (8 declarations) with a new CI gate step and `run.sh`. **The workflow file changed, so that
+  commit needs the desk or the web UI.**
+
+**Corrections propagated (the S1/S2/S3 tally was false in four files).** `README.md`,
+`SECURITY.md`, `book4/ch16-crystal-lattice.html`, `book6/g6-crystal.html`. S1 and S2 were
+never `sorry`s (`: True := trivial`, deleted); S3 `coord_coverage` is proved. The two real
+admitted declarations inside a build target are **M2** `heliSpin_incommensurate_aperiodic`
+(`MagneticLattice.lean:240`) and **Q2** `detune_from_ground_period` (`SeismicLattice.lean:211`).
+`v4.14.0` stamps corrected to `v4.32.0` in both HTML footers.
+
+**WP-82 §XV seed corrected in place.** Moonshine gives modular functions — one side of a
+correspondence, not half the distance. Replacements named: arithmetic via
+`book4/ladder-polynomials.html` (n-bonacci Galois groups, generically Sₙ, non-solvable from
+n = 5 — the honest entry is *which Artin L-function*, not a claim of automorphy); geometric
+via **W-algebras** and Feigin–Frenkel, z(ĝ) ≅ W(ᴸg), which needs no Galois side and is
+reachable from Vol VIII's VOA material.
+
+### Findings worth keeping, with the counts behind them
+
+- **Six vacuous theorems are live in build targets:** `MagneticLattice:259`,
+  `AcousticLattice:166/171/175`, `SeismicLattice:197/204`, all `: True := trivial`. None is
+  covered by the three axiom gates. This is the vacuity gap with names attached.
+- **The corpus reasons spectrally in 124 files and states the spectral theorem in 2.**
+  `linear algebra` 9 files, `vector space` 6, `quadratic form` 13. Book 1 has no matrix
+  material at all. Unlike Toruńczyk, this floor **is formalizable today** — Mathlib has the
+  spectral theorem for self-adjoint operators.
+- **`composition` is overloaded 138 ways.** Every use is categorical; Vol XIII ch05 is
+  literally *Thirty-Three Compositions* about weak composition — while the corpus's own
+  n-bonacci numbers count **integer compositions of m into parts ≤ n**, which is the
+  combinatorial meaning and is unclaimed. `partition` 28, `generating function` 10,
+  `Dedekind eta` 0, `q-series` 0, `W-algebra` 0, `Feigin` 0, `vertex operator` 7, `Virasoro` 5.
+- **The spine this suggests, every link standard and both ends already owned:**
+  compositions (ladder polynomials) → generating functions → partitions → η(τ) → modular
+  forms → Moonshine (Vol VIII) → W-algebra characters → Feigin–Frenkel → Langlands (Vol XV).
+  Not written. This is the best available replacement for WP-82's XV seed.
+- **`tools/audit.py` reports 1 dead_link across 700 files** and did so before this session
+  touched anything. Not located; `audit.py` prints counts, not rows.
+- A hand-rolled link checker reported **1 255** broken links. It was wrong: it counted
+  `/geometry/...` site-root paths as broken. Same lesson as the Ch 26 rung — check the
+  population before calling something a defect.
+
+### Still open from 2026-09-10, carried forward unchanged
+
+**0. THE AI FOR MATH SEED APPLICATION IS STILL THE PRIORITY.** Draft at
+`~/Documents/Claude/Projects/ai-for-math-seed-application.md`, 962 words, $95,000 / 12 months,
+tools-and-infrastructure. Rolling — no deadline, the 2026 main round closed in August, seed is
+the only live door. Apply through the fund page, **not** `renaissancephilanthropy.org/partner-with-us`.
+Both blockers were cleared 2026-09-04 (`vol1-proofs/LICENSE` MIT; `LICENSE-CONTENT` relicensed
+to CC BY 4.0). **Nothing stands between the draft and submission. Send it.**
+
+1. **SciENcv is mandatory from 1 Sept 2026** for ROSES A.13 (due **15 Oct**). No profile exists.
+2. **Is the A.13 PI an NSPIRES AOR for G6 LLC?** Five-minute check; the classic 11:50 pm failure.
+3. **A.13 duration and award ceiling unverified.** 1 year is an *inference*, never read stated;
+   the budget is built for 3 years / $432,000. If wrong, Years 2–3 ($298,000) come off.
+4. Three numbering decisions surfaced by `tools/numbering.py` — author's calls, not a session's.
+5. **WP-31B (`book6/wp30-how-to-audit.html`) stopped mid-audit.** Established: the label/filename
+   split is a recorded 2026-08-11 decision, not a defect; `value_iteration_midstream.py` exists;
+   √(1.05/9.493)=0.3326 and √(4.20/9.493)=0.6652, and 4.20 = 4×1.05 exactly, so the "ψ ≈ 0.50
+   correction" is exactly a factor of 4 in the unstated rent b₀; §7's "identically zero at σ = 0"
+   is loose — at σ = 0 it is −v²/2, zero only at v = 0.
+6. **Lost with an earlier session and still lost:** the IJL reference audit finding Petersen &
+   Potts wrong three ways (Erika not W.; *Findings of EACL 2023* not SCiL; 490–511 not 212–222),
+   Bond & Rudnicka's page range, and a rewritten §8.4 against C/K/F/U. **Redo before the IJL
+   manuscript moves.**
+
+### State at handoff — 2026-09-11
+
+**geometry:** `main` and `origin/main` are both at `b001c78` — in sync. The 2026-09-10 block
+recorded two commits as unpushed; they were already up, and the "ahead" count had been read off a
+remote-tracking ref that no session on the bridge can refresh, because `device_bash` has no
+network. **`git rev-list origin/main..main` is not evidence from here. Only the desk knows.**
+This session's work is committed but not pushed; the workflow change is held back deliberately
+(see below). Also pending on the desk: `bash ~/Downloads/push-book4-whole.sh`.
+
+**Litter:** `.git/index.lock` is present again (`device_bash` cannot unlink it; `mv` it into
+`.git/_stale-locks/`). ~1,300 orphaned `.git/objects/*/tmp_obj_*` — `git gc --prune=now` from
+the desk. Eleven untracked root `.lean` files appeared since 09-10; `Cell`, `Colony`,
+`DM3Bridge` and `G6Crystal` are **byte-identical** to their `Orthogenesis/` originals, so
+nothing is lost, but this is the root-duplicate trap reforming and edits there never reach CI.
+
+**Standing constraints from Pablo, both in force:**
+1. **No attribution trailers in commits.** Attribution goes in this block.
+2. **No audit narrative inside deliverables.** `docs/audit-log.md` is the place.
+
+### Scheduled
+Weekly task, **Sundays 09:00 ET**, testing David Grossi's writing-coach prompts and appending
+to `book6/wp94-coach-compliance.md`. Commits nothing.
 
 ## CANONICAL: all HTML lives in geometry (set 2026-08-30 by Pablo)
 
