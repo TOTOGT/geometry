@@ -81,8 +81,39 @@ spent wherever the text happens to stop. So:
 
 Rung 4 is where writing happens, and it is the only rung where it happens. Reports,
 Lean repairs, HTML, index and README updates are all *downstream of a computed
-answer* — never of a scan. The practical test: if a paragraph could not be
-regenerated from rung 3 alone, it is resting on something nobody can check.
+answer* — never of a scan.
+
+Two tests, and a paragraph must pass both.
+
+**Compression.** Could this paragraph be regenerated from rung 3 alone? If not, it
+is resting on something nobody can check.
+
+**Descent.** Does it carry the address of the data it was compressed from? Routine
+operation never reads downward — but *every artifact must publish the way down*,
+or it is checkable only by its author, which is the first failure wearing better
+clothes. Compression without a path back is not a summary; it is a claim.
+
+#### An address is a triple, not a name
+
+`(path, sha256, date)`. A name is not an address: a corpus with three copies of a
+file under one basename can cite a declaration accurately and still point at the
+wrong object, and a link to a file that has since changed is not a citation of the
+thing that was checked. The sha is what makes the reference survive the file.
+
+#### What each artifact must carry
+
+| In the artifact | The link it must publish |
+|---|---|
+| "machine-checked" | the gate file: declaration, project, file `(path, sha, date)`, toolchain pin, axiom manifest |
+| a number, constant, or figure | the verification script and the block inside it that recomputes it, plus the command to run it |
+| a measurement taken from elsewhere | the source deposit and its DOI, and whether this work re-derived it or took it as given |
+| a dataset or micrograph | where to obtain it, licence, and the accession or figure number |
+| an open obligation | the declaration name, the file, and the closure path |
+| the environment | the toolchain and library versions, pinned, so the run can be reconstructed |
+
+This is the same disclosure standard §6 of the interstitium chapter asks of the
+formal-verification movement. It applies here first, or asking it of anyone else is
+rhetoric.
 
 ---
 
