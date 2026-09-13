@@ -171,3 +171,55 @@ Classes: `MISMATCH`, `STALE`, `FAIL`, `FALSE`, `VACUOUS`, `UNTRUSTED`,
 
 One instance of any class is an anecdote. The count is the finding, and the count
 is the only thing that can say what the instrument systematically misses.
+
+---
+
+## Stage IV has an ancestry, and it is not ours
+
+Nothing in this document is new. Akṣapāda Gautama's *Nyāya Sūtra* already
+carries the whole apparatus, and carries it better specified than the version
+assembled here this week.
+
+Priority is not the claim and is not needed. The core of the text is placed
+around the 2nd century BCE and the redaction that survives is often put several
+centuries later; on either dating Aristotle's *Organon* is earlier, and the
+debate tradition Nyāya codifies is older than either text. What matters is that
+the two traditions are independent, and that Nyāya **kept three things the Greek
+form discarded as redundant** — the three this document spent a week
+rediscovering.
+
+**1. The worked instance travels with the rule.** The Greek syllogism is premises
+and conclusion. Nyāya's inference has five members: the claim (*pratijñā*), the
+reason (*hetu*), **the general rule together with an example** (*udāharaṇa*), its
+application to the case (*upanaya*), and the conclusion (*nigamana*). The third
+member exists so that an argument establishes not only validity but factual
+anchoring — the rule must be shown holding *somewhere*, in a case a listener can
+check. That is rung 4's descent test, stated two thousand years earlier: an
+argument carries the address of its evidence, not merely its form.
+
+**2. Failure is enumerated, not narrated.** *Nigrahasthāna* — points of defeat —
+is one of the sixteen categories of the system, and *hetvābhāsa* names five ways a
+reason can merely appear to be one: inconclusive, contradictory, counterbalanced,
+unproven, and mistimed. A catalogued taxonomy of how argument fails, built into
+the framework rather than accumulated by accident afterwards. That is stage IV,
+and Nyāya did not need to be wrong in public for years first to get it.
+
+**3. Warrant has a closed set of kinds.** The four *pramāṇa* — perception,
+inference, comparison, and testimony — are kinds of knowing, not degrees of
+confidence, and testimony is admitted as its own bounded source with its own
+conditions rather than smuggled in as weak perception. Our verdict set is a
+*pramāṇa* taxonomy and should be read as one: a kernel record and a page's
+assertion are different **kinds** of warrant, not the same warrant at different
+strengths. Confusing the two is the defect this whole document exists to prevent,
+and it is the one Nyāya ruled out by construction.
+
+The reason to record this is not decoration. The Cullman synopsis asks why the
+same short grammar keeps reappearing among people who were not in contact. Here
+is an instance inside the corpus's own toolchain: a checklist derived this week
+from a night of Lean failures reproduces, badly, a structure worked out in
+Sanskrit before the common era. If the pattern were an artifact of one lineage's
+habits it would not survive that distance. It is worth asking what else in
+*Nyāya* is already solved — the theory of *vyāpti*, invariable concomitance, is
+the obvious next place to look, since it is precisely the question of when a
+sweep over instances licenses a general claim, which step 10 currently answers by
+hand.
