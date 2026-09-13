@@ -213,6 +213,51 @@ assertion are different **kinds** of warrant, not the same warrant at different
 strengths. Confusing the two is the defect this whole document exists to prevent,
 and it is the one Nyāya ruled out by construction.
 
+### Two axes, and we inherited one
+
+The convergence is the first half of the point: two traditions, out of contact,
+both isolate inference as a thing with parts, both name the ways a reason fails,
+both build an apparatus for adjudicating a claim in public. That is the grammar
+reappearing.
+
+The second half is that they then developed **different axes**, and it is worth
+being exact about which, because the asymmetry is not a matter of one side being
+cleverer.
+
+*Where the Greek line went further.* Aristotle's schematic letters — *A belongs to
+all B* — abstract form from content, and that single move is what eventually made
+logic mechanisable. The Stoics added propositional connectives and their inference
+schemes. Nyāya's inference deliberately stays attached to content: the
+*udāharaṇa* is required *because* content matters, which is a strength for
+adjudication and an obstacle to formalisation. The line that runs to Frege, to
+Mathlib and to a Lean kernel is the Greek one, and it is not an accident that it
+is.
+
+*Where Nyāya went further.* On the question of when instances license a general
+claim, Greek *epagōgē* is thin and the problem stays open until Sextus and then
+Hume; Nyāya built *vyāpti* into a theory, with *upādhi* — the limiting condition
+that silently defeats a concomitance — as a named object to be searched for before
+the inference is granted. And the syllogistic stayed substantially unchanged from
+Aristotle to the nineteenth century, while the Indian tradition kept developing:
+Gaṅgeś́a's *Tattvacintāmaṇi* and the Navya-Nyāya after him built a technical
+language for relations and for negation of relational complexes that Ingalls and
+Matilal both argued is more expressive than the syllogism ever became.
+
+**And the instrument we use inherited the Greek axis only.** A Lean kernel is
+form abstracted from content, executed perfectly. Every defect this document
+catalogues lives on the other axis: whether the theorem says what was meant,
+whether a name claims more than its proof, whether a sweep holding one parameter
+fixed has established a concomitance or merely confirmed itself, whether
+"machine-checked" on a page and a gate record are the same kind of warrant. Those
+are *upādhi* questions and *pramāṇa* questions. The compiler cannot be blamed for
+being silent about them; it descends from the tradition that set them aside in
+order to become a compiler.
+
+So the checklist is not an eccentric addition to formal verification. It is the
+half of the apparatus that formalisation left behind on its way to being
+mechanical, arriving late and under-specified, and the useful move is to go
+read the tradition that kept it rather than to keep deriving it from failures.
+
 The reason to record this is not decoration. The Cullman synopsis asks why the
 same short grammar keeps reappearing among people who were not in contact. Here
 is an instance inside the corpus's own toolchain: a checklist derived this week
