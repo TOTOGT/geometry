@@ -98,3 +98,14 @@ lean_lib PolarPolygonCommonRefinement
 -/
 @[default_target]
 lean_lib ChladniPolygon
+
+/-
+  CardiacHopfReduction.lean is the Lean behind ch6b-cardiac.html. Audited by hand
+  2026-09-12 under the v4.32.0 pin. A hand run dates from the day it was run;
+  declaring the target is what makes a later regression fail the job.
+  Caution recorded where the file enters CI: `supercritical` proves
+  0 < L -> -(1/L) < 0 and mentions no vector field. `radial_deriv_at_cycle`
+  carries the content its name claims.
+-/
+@[default_target]
+lean_lib CardiacHopfReduction

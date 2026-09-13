@@ -124,7 +124,18 @@ for f in "${FILES[@]}"; do
   [ $AUDIT -eq 1 ] || continue
   # build a probe: the file, then #print axioms for every declaration in it
   ns=$(grep -m1 '^namespace ' "$f" | awk '{print $2}')
-  probe=$(mktemp /tmp/leanprobe.XXXXXX.lean)
+  # BSD mktemp substitutes only a TRAILING run of X's. With ".lean" after
+  # them macOS takes the template literally, creates that exact name once,
+  # and fails "File exists" ever after -- and the failure branch below
+  # continues BEFORE `rm -f "$probe"`, on purpose, to keep the probe. So one
+  # failed audit left the literal file behind and broke every later audit of
+  # any file until it was removed by hand. A unique DIRECTORY with a fixed
+  # filename inside it behaves identically on BSD and GNU.
+  probe_dir=$(mktemp -d "${TMPDIR:-/tmp}/leanprobe.XXXXXX")
+  probe="$probe_dir/probe.lean"
+  [ -n "$probe_dir" ] && [ -d "$probe_dir" ] || {
+    printf "        audit: probe could not be created -- not a result\n"
+    fail=$((fail+1)); pass=$((pass-1)); continue; }
   cp "$f" "$probe"
   grep -oE '^(theorem|lemma)[[:space:]]+[^[:space:]:({\[]+' "$f" \
     | awk '{print $2}' \

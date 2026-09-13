@@ -40,10 +40,15 @@ theorem radial_reduction (hL : L ≠ 0) :
     field ṙ = μr − r³/L — the sinus-rhythm limit cycle of amplitude r* = √(Lμ). -/
 theorem limit_cycle (hL : L ≠ 0) (h : r ^ 2 = L * μ) : μ * r - r ^ 3 / L = 0 := by
   have hr : r ^ 3 = r * r ^ 2 := by ring
-  rw [hr, h]; field_simp
+  rw [hr, h]; field_simp; ring
 
-/-- **Supercritical Hopf.** The cubic (first Lyapunov) coefficient is −1/L < 0 for
-    L > 0: the limit cycle is stable — the healthy rhythm, not a runaway. -/
+/-- Sign of −1/L. NOTE, 2026-09-12: this statement mentions no vector field. It
+    says that a positive real has a negative negative-reciprocal, and nothing
+    more. Reading −1/L as the cubic (first Lyapunov) coefficient of the reduced
+    field is an identification made in prose and not seen by the kernel; the
+    axiom gate cannot report that, because it reports axioms. The supercriticality
+    content is `radial_deriv_at_cycle` below. Kept under this name because the
+    name is cited elsewhere. -/
 theorem supercritical (hL : 0 < L) : -(1 / L) < 0 := by
   have : 0 < 1 / L := one_div_pos.mpr hL
   linarith
@@ -53,5 +58,16 @@ theorem supercritical (hL : 0 < L) : -(1 / L) < 0 := by
     there is no limit cycle. The saturation comes *only* from the slaved mode. -/
 theorem one_mode_no_saturation :
     x * (μ * x - ω * y) + y * (ω * x + μ * y) = μ * (x ^ 2 + y ^ 2) := by ring
+
+
+/-- **Supercritical, as a statement about the reduced field.** At the limit cycle
+    r² = Lμ the derivative of ṙ = μr − r³/L is exactly −2μ, so for μ > 0 the cycle
+    attracts. This is what `supercritical` is named for and does not say. -/
+theorem radial_deriv_at_cycle (hL : 0 < L) (h : r ^ 2 = L * μ) :
+    μ - 3 * r ^ 2 / L = -(2 * μ) := by
+  have hL' : L ≠ 0 := ne_of_gt hL
+  rw [h]
+  field_simp
+  try ring
 
 end CardiacHopf
