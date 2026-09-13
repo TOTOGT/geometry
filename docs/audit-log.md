@@ -6391,3 +6391,33 @@ sorry is now the only thing that can go red.
 
 Method written up in `docs/verification-checklist.md`; narrative in Book VI,
 *The Hydrated Lattice*, §6.
+
+### The same class, one about files and one about people
+
+The day's first real finding and its last are the same defect.
+
+The first: a gate reported `ZetaReflection: sorryAx present`, naming two theorems
+the RH paper calls proved. It had read one of three copies sharing that basename —
+a frozen August deposit that says of itself that both are ADMITTED. The live file
+is clean and the paper was exact. `MISATTRIBUTED`: the reason was real, and it
+belonged to a different object than the one named.
+
+The last: a suspicion that one account's sessions were producing the chapter
+bloat. The only instrument available to test it was `section_balance.py`, shipped
+an hour earlier with a header stating that it does not detect that defect — and
+the sample was 41 pages with 3 hits against an expected 1.1. Direction matched;
+the measurement could not carry it. Meanwhile the one signal that *is* sound —
+which commits still carry the forbidden `Co-Authored-By` / `Claude-Session`
+trailers — runs the other way: 33 of 545 on the account with the most commits,
+0 of 246 on the suspected one.
+
+Same shape. A real observation attached to the wrong object, with a name doing
+the work an address should do. Once about a file, once about a person.
+
+**The rule, and it is the harder half of the defect taxonomy.** Attributing a
+defect to a source before measuring it is `MISATTRIBUTED` whether the source is a
+file or an author. The corpus's practice — an address is `(path, sha256, date)`,
+never a name — has a counterpart here: a pattern is a rate with a denominator,
+never an impression. A clean signal that runs opposite to a guess is not a
+refutation of the guess; it is the notice that no measurement has been made yet,
+and the point at which changing how anyone works would be acting on nothing.
