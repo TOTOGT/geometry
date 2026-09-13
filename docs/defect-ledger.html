@@ -216,8 +216,10 @@ extended by three classes that this period produced and the ladder did not antic
     <tr><td class="by">24 Aug</td><td><code style="font-size:.8rem">PrincipiaVol1.lean §6</code></td><td><span class="cls c-vac">VACUOUS</span></td><td><code>UnfoldOp.stable_branch : ∀ x, ∃ n, IsFixedPt (map^[n]) (map x)</code> — n = 0 satisfies it for every map on every type. "Theorem D (stability)" has no content beyond Φ-decrease. Now proved as a theorem rather than left as a comment.</td><td class="by">reading the field</td></tr>
     <tr><td class="by">24 Aug</td><td><code style="font-size:.8rem">PrincipiaVol1.lean §12</code></td><td><span class="cls c-new">UNFALSIFIABLE GUARD</span></td><td><code>g6_equals_schumann := rfl</code> where both sides are <code>def … := 33</code>. It is 33 = 33, counted among the machine-checked facts, and asserting a Schumann identification the ledger already records as partly false. Withdrawn.</td><td class="by">reading the definitions</td></tr>
     <tr><td class="by">24 Aug</td><td><code style="font-size:.8rem">PrincipiaVol1.lean §6 · Vol I Assum. 3</code></td><td><span class="cls c-mis">MISMATCH</span></td><td><code>CompressionOp.contractive</code> reads <code>d(fx,fy) ≤ d(x,y)</code> — non-expansive, not contractive. The identity satisfies it, and the deposit's own witness <em>is</em> the identity.</td><td class="by">reading the field</td></tr>
+    <tr><td class="by">29 Aug</td><td><code style="font-size:.8rem">book6/wp84 &middot; FoldingFrequency.lean</code></td><td><span class="cls c-new">NEW &middot; NAME EXCEEDS STATEMENT</span></td><td>A true result about twelve sites was headed <em>a characterisation of twelve</em>. The sweep behind it held k = 6 and varied N, so N = 12 was the only value it could return; the finding was a property of the sweep&#8217;s own parameter, read as a property of the number. The general statement is <code>visibleModes N k = {N/2} &harr; N = 2k</code> &mdash; twelve at k = 6, twenty at k = 10. Arithmetic correct throughout. Entered retroactively on 13 Sep: the class did not exist when this was caught, and it is the earlier of the two instances.</td><td class="by human">generalising the theorem the file already proved</td></tr>
     <tr><td class="by">12 Sep</td><td><code style="font-size:.8rem">CardiacHopfReduction.lean</code></td><td><span class="cls c-new">NEW &middot; NAME EXCEEDS STATEMENT</span></td><td><code>supercritical (hL : 0 &lt; L) : -(1/L) &lt; 0</code> — true, kernel-clean, and mentioning no vector field, no normal form and no bifurcation. The name asserts a classification; the statement is a fact about the sign of a reciprocal. Passes every mechanical check there is, including <code>#print axioms</code>. Docstring now records what the statement does and does not contain.</td><td class="by human">reading the statement against its name</td></tr>
     <tr><td class="by">12 Sep</td><td><code style="font-size:.8rem">tools/leancheck.sh</code></td><td><span class="cls c-mis">MISMATCH</span></td><td><code>mktemp /tmp/leanprobe.XXXXXX.lean</code> assumes GNU behaviour. BSD <code>mktemp</code> substitutes only <em>trailing</em> X&#8217;s, so the suffix made the template literal and the probe never got a unique name. The failure branch then <code>continue</code>d before <code>rm -f</code>, so one failed probe persisted and every later audit in the same run inherited it. Replaced with <code>mktemp -d</code> and a guard.</td><td class="by">running it on the target platform</td></tr>
+    <tr><td class="by">13 Sep</td><td><code style="font-size:.8rem">.git/index.lock &mdash; AXLE, geometry</code></td><td><span class="cls c-stale">STALE</span></td><td>A zero-byte lock outliving the process that took it blocks every <code>add</code> and <code>commit</code> in a repository. AXLE carried one from 09-09 00:15 and was found on 09-13: four days in which no work reached the history. geometry carried one from 04:41 the same day. The failure is loud per use and silent in aggregate &mdash; nothing reports that commits have stopped landing, so the gap compounds. <code>tools/clear-stale-lock.sh</code> now checks for a live git process first and refuses rather than guess, which is the only part of the operation that needed a script.</td><td class="by">a commit that would not go through</td></tr>
   </tbody>
 </table>
 
@@ -273,13 +275,22 @@ is far likelier to be read as verified. The remedy is the cheap one: <em>a name 
 readable as a paraphrase of the statement, and where it cannot be, the statement&#8217;s scope
 belongs in the docstring.</em></p>
 
+<p style="margin-left:1.2rem;border-left:2px solid var(--rule);padding-left:1rem">The class
+was named for <code>supercritical</code> on 12 September and then found to have an earlier
+instance: WP-84, published 29 August, headed a result <em>a characterisation of twelve</em>
+when the sweep behind it could return nothing else. Two instances, three weeks apart, in
+unrelated work &mdash; which is the difference between a class and a one-off, and the reason
+this one is in the table twice rather than described once.</p>
+
 <p><strong>Silent drift.</strong> Not a new class — it is <strong>STALE</strong> — but worth
 naming as its own failure mode, because it looks like the others and is not. A verified
 artifact does not stay verified: the dependency moves, the pin is advanced past the code, and
 a file that built correctly on the day it was written stops building, with nothing to say so.
 The Volume I Lean carried a sorry count on its front through four published versions while
 Mathlib renamed four of the lemmas underneath it. The check is one line. What was missing was
-not care; it was something that runs the line again. <em>An earlier draft of this row filed
+not care; it was something that runs the line again. The <code>index.lock</code> entry of
+13 September is the same failure mode in the apparatus rather than the artifact: each blocked
+commit says so plainly, and nothing anywhere says that four days of them have accumulated. <em>An earlier draft of this row filed
 the same evidence as UNTRUSTED — “never built.” The deprecation dates say otherwise, and the
 distinction matters: “was never right” and “stopped being right” call for different
 responses.</em></p>
