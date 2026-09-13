@@ -78,7 +78,13 @@ def main():
                 fixed.append((o, r))
             else:
                 moved.append((o, r))
-        gone = [p for p in was if p not in now]
+        # A targeted run is not a shrunken corpus run. Comparing the two and
+        # announcing "44 files dropped" is a true count under a false sentence.
+        targeted = any(r.get("scope") == "targeted" for r in now.values())
+        gone = [] if targeted else [p for p in was if p not in now]
+        if targeted:
+            out.append("targeted run: %d file(s); the other %d in %s were not re-checked"
+                       % (len(now), max(0, len(was) - len(now)), base_day))
 
         if not (new_bad or fixed or moved or appeared or gone):
             out.append("changed since %s: nothing" % base_day)

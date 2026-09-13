@@ -22,9 +22,10 @@ DECLARE_RE  = re.compile(r"GATE-DECLARE:\s*sorries\s*=\s*(?P<v>.+?)\s*$")
 EXPECTED_RE = re.compile(r"EXPECTED under.{0,20}?:\s*(?P<d>\d+)\s+declarations,\s*(?P<s>\d+)\s+trusting\s+sorryAx")
 
 FIELDS = ["project","path","sha256","toolchain","verdict",
-          "declared_sorries","actual_sorries","declarations","expected_decls","note"]
+          "declared_sorries","actual_sorries","declarations","expected_decls","scope","note"]
 
-MAPS = []   # (from, to) prefix remaps, so a desk-absolute path resolves on any host
+MAPS = []           # (from, to) prefix remaps, so a desk-absolute path resolves on any host
+SEARCH_ROOTS = []   # used only when the day directory has no order.txt
 
 
 def localise(p):
@@ -134,6 +135,20 @@ def slug_to_path(day_dir):
     return mapping
 
 
+def scan_fallback(stem, search_roots):
+    """No order.txt (a targeted leancheck run writes none): find the stem on disk."""
+    hits = []
+    for root in search_roots:
+        if not os.path.isdir(root):
+            continue
+        for dirpath, dirnames, filenames in os.walk(root):
+            dirnames[:] = [d for d in dirnames
+                           if d not in (".lake", ".git", "_to_delete", "node_modules")]
+            if stem + ".lean" in filenames:
+                hits.append(os.path.join(dirpath, stem + ".lean"))
+    return hits
+
+
 def resolve(slug, mapping):
     """Slug is either <stem> (old) or <project>__<stem> (new)."""
     proj = None
@@ -141,6 +156,13 @@ def resolve(slug, mapping):
     if "__" in slug:
         proj, stem = slug.split("__", 1)
     cands = [localise(c) for c in mapping.get(stem, [])]
+    if not cands:
+        cands = scan_fallback(stem, SEARCH_ROOTS)
+        if proj:
+            narrowed = [c for c in cands if ("/%s/" % proj) in c or
+                        os.path.basename(os.path.dirname(c)) == proj]
+            if narrowed:
+                cands = narrowed
     if proj:
         narrowed = [c for c in cands if ("/%s/" % proj) in c]
         if narrowed:
@@ -169,11 +191,16 @@ def main():
     if not MAPS and os.path.isdir(auto):
         MAPS.append(("/Users/pablogrossi/Desktop", auto))
 
+    base = MAPS[0][1] if MAPS else os.path.dirname(os.path.abspath("."))
+    for d in ("geometry", "GTCT", "AXLE"):
+        SEARCH_ROOTS.append(os.path.join(base, d))
+
     day_dir = os.path.join(a.root, a.day)
     if not os.path.isdir(day_dir):
         sys.exit("no such day directory: %s" % day_dir)
 
     mapping = slug_to_path(day_dir)
+    scope = "corpus" if os.path.isfile(os.path.join(day_dir, "order.txt")) else "targeted"
     rows = []
     for fn in sorted(os.listdir(day_dir)):
         if not fn.endswith(".axioms.txt"):
@@ -226,6 +253,7 @@ def main():
                                  declared if isinstance(declared, str) else str(len(declared))),
             "actual_sorries": str(len(sorries)), "declarations": str(len(decls)),
             "expected_decls": "-" if exp_decls is None else str(exp_decls),
+            "scope": scope,
             "note": note or "-",
         })
 
