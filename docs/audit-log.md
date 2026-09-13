@@ -6339,3 +6339,55 @@ become contained too.
 - One WIP commit preserves a previous session's book4 pricing edit (PayPal
   links removed). Unreviewed — confirm it was intended.
 - Disk: 49 GB free, up from 26 GB. `tools/disk-survey.sh` finds the rest.
+
+## 2026-09-13 — the instrument, not the corpus
+
+A full night's Lean run returned 44 failures; six of them were about mathematics
+and the rest were about the report. Each defect below is the same shape: a true
+measurement under a sentence that licenses a wrong action.
+
+- **MISFRAMED — the toolchain.** `overnight.sh` elaborated all 280 files against
+  `geometry`'s `v4.32.0`, because it is the only project on disk with a built
+  Mathlib. `AXLE` declares `v4.14.0` and holds 129 of those files. A file failing
+  to compile under a toolchain it does not declare is not evidence about the file.
+  Seven distinct toolchains are declared across the Desktop; two are unpinned
+  (`stable`), so results under them are not reproducible.
+- **MISATTRIBUTED, averted — three copies, one name.** The gate reported
+  `ZetaReflection: sorryAx present`, naming `reflection_law` and
+  `chiLog_real_on_critical_line`. It had read a frozen August deposit, which says
+  of itself that both are ADMITTED. The live `GTCT/book4/ZetaReflection.lean`
+  (2026-09-08) has 18 declarations and no `sorryAx`; the RH paper's
+  "Proved, machine-checked (2026-09-08; admitted since 2026-08-30)" is exact.
+  Fix: an address is `(path, sha256, date)`, never a name. Frozen deposits should
+  not be re-verified at all.
+- **MISMATCH — a parser artifact read as a lost theorem.** `Bhaskara`'s "expected
+  11 theorems, found 10 — one was renamed, removed, or failed to elaborate" was
+  the gate's own parser dropping `Bhaskara.brahmagupta'`, a name ending in a
+  prime. Eleven declarations, eleven present.
+- **UNTRUSTED, nearly missed — wrapped output.** `#print axioms` wraps a long
+  axiom list across lines. A line-wise parser sees `[propext,` and misses the
+  `sorryAx` on the next line. `MagneticLattice`'s single admitted theorem sits
+  exactly there.
+- **STALE — pages understating the kernel.** `book6/ch-reaction-diffusion-fold.html`
+  ("not yet kernel-checked (compute pending)") and `book8/ch-turnaround.html`
+  (twice: "not yet been run through the kernel", and again in its status line)
+  both describe files that now pass, 3 and 6 declarations, permitted axioms only.
+  Stale in the safe direction is still a page disagreeing with a gate.
+- **MISFRAMED — scope inferred instead of declared.** A 3-file targeted run
+  compared against a 45-file corpus run reported "dropped 44 files". True count,
+  false sentence. Scope is now declared: a day directory without `order.txt` is a
+  targeted run.
+- **MISMATCH — the reader that could not see the declaration.** `DECLARE_RE` in
+  `verdict_table.py` lacked `re.M`, so a `GATE-DECLARE` line on the first line of
+  a file never matched. The line was present and the tool reported its absence.
+
+**What the six genuinely sorry-bearing files turned out to be.** Every one already
+declared its admitted theorems in prose — README's Open Obligations table, `OPEN
+(sorry)` in ch17 and ch18, `AXLE_v8_1`'s own "Honest admits" block. There was no
+hidden false claim anywhere in the corpus. What was missing was a form the gate
+could read, which is now `GATE-DECLARE: sorries = …`. Board at close: 39 PASS,
+6 PASS-AS-DECLARED, nothing to decide. A seventh file growing an *undeclared*
+sorry is now the only thing that can go red.
+
+Method written up in `docs/verification-checklist.md`; narrative in Book VI,
+*The Hydrated Lattice*, §6.
