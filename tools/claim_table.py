@@ -33,7 +33,10 @@ LABELS = {
     "machine-checked": (None, "kernel"),
     "kernel-checked": (None, "kernel"),
     "kernel-audited": (None, "kernel"),
-    "formalized": (None, "kernel"), "formalised": (None, "kernel"),
+    # NOT a warrant word on its own: "Cantor formalised this in 1874", "Plato
+    # formalized it". Counting the bare verb produced 52 false positives; it
+    # earns `kernel` only next to Lean. See tools/claims_pending.py.
+    "formalized in lean": (None, "kernel"), "formalised in lean": (None, "kernel"),
     "verified symbolically": (None, "recomputed"),
     "verified numerically": (None, "recomputed"),
     "empirical": (None, "measured"), "measured": (None, "measured"),
