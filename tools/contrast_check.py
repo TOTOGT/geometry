@@ -93,32 +93,66 @@ class Finder(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.target, self.stack, self.hit = target, [], None
         self.hits = []
+        self.open_collectors = []   # [depth, chars, muted_depth]
+        self.text_of = {}
         self.void = {'br','img','hr','meta','link','input','source','col','area','base','wbr'}
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         node = (tag, (a.get('class') or '').split(), a.get('id'), a.get('style') or '')
+        sets_colour = bool(re.search(r'(^|;)\s*color\s*:', node[3].lower()))
+        # a descendant that sets its own colour is not inheriting: mute it
+        for c in self.open_collectors:
+            c[0] += 1
+            if sets_colour and c[2] is None:
+                c[2] = c[0]
         if self.target is None:
             st = node[3].lower()
-            if 'background' in st and not re.search(r'(^|;)\s*color\s*:', st):
+            if 'background' in st and not sets_colour:
+                idx = len(self.hits)
                 self.hits.append(self.stack + [node])
+                self.open_collectors.append([0, [], None, idx])
         elif self.hit is None and self.target in node[1]:
             self.hit = self.stack + [node]
         if tag not in self.void:
             self.stack.append(node)
-    def handle_startendtag(self, tag, attrs): self.handle_starttag(tag, attrs); 
+    def handle_data(self, data):
+        for c in self.open_collectors:
+            if c[2] is None:
+                c[1].append(data)
+
+    def handle_startendtag(self, tag, attrs): self.handle_starttag(tag, attrs)
     def handle_endtag(self, tag):
+        for c in list(self.open_collectors):
+            if c[2] is not None and c[0] == c[2]:
+                c[2] = None
+            c[0] -= 1
+            if c[0] < 0:
+                self.text_of[c[3]] = ''.join(c[1])
+                self.open_collectors.remove(c)
         for i in range(len(self.stack)-1, -1, -1):
             if self.stack[i][0] == tag:
                 del self.stack[i:]; break
+
+    def close_all(self):
+        for c in self.open_collectors:
+            self.text_of[c[3]] = ''.join(c[1])
 
 def check(path, target):
     src = open(path, encoding='utf-8', errors='replace').read()
     css = '\n'.join(re.findall(r'<style[^>]*>(.*?)</style>', src, re.S))
     vars_ = parse_vars(css)
-    f = Finder(target); f.feed(src)
-    chains = f.hits if target is None else ([f.hit] if f.hit else [])
-    if not chains: return None
-    return [_resolve_chain(c, css, vars_) for c in chains]
+    f = Finder(target); f.feed(src); f.close_all()
+    if target is None:
+        out = []
+        for i, c in enumerate(f.hits):
+            txt = re.sub(r'\s+', ' ', f.text_of.get(i, '')).strip()
+            if len(txt) < 3:          # a swatch, bar or rule carries no text
+                continue
+            r = _resolve_chain(c, css, vars_)
+            out.append(r + (txt[:60],))
+        return out
+    if not f.hit: return None
+    return [_resolve_chain(f.hit, css, vars_) + ('',)]
 
 def _resolve_chain(chain, css, vars_):
     colour = bg = None
@@ -151,12 +185,12 @@ bad = 0
 for p in a.files:
     rs = check(p, a.cls)
     if not rs: continue
-    for ratio_, c, b in rs:
+    for ratio_, c, b, txt in rs:
         if ratio_ == '?': continue
         tag = 'UNREADABLE' if ratio_ < 3.0 else ('low' if ratio_ < 4.5 else 'ok')
         if tag == 'ok':
             if a.cls: print(f"  ok          {ratio_:5.2f}:1  {p}  text#{'%02x%02x%02x'%c} on #{'%02x%02x%02x'%b}")
             continue
         bad += 1
-        print(f"  {tag:<11} {ratio_:5.2f}:1  {p}  text#{'%02x%02x%02x'%c} on #{'%02x%02x%02x'%b}")
+        print(f"  {tag:<11} {ratio_:5.2f}:1  {p}  text#{'%02x%02x%02x'%c} on #{'%02x%02x%02x'%b}" + (f'  \u2014 \u201c{txt}\u201d' if txt else ''))
 print(f"\n  {bad} below 4.5:1")
