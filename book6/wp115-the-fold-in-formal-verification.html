@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-115 &middot; The Fold in Formal Verification &mdash; Principia Orthogona Vol VI</title>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+</style>
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a> &middot; WP-115</span>
+<span class="meta"><a href="wp114-the-index-must-come-from-the-source.html">&larr; WP-114 &middot; The Index Must Come From the Source &middot; WP-114 &middot; The Index Must Come From the Source</a></span>
+</div>
+
+<div class="wp-head">
+<div class="topictag">#Method</div>
+<div class="wp-kicker">Vol VI &middot; Roots &middot; WP-115 &middot; 2026-09-13 &middot; Cross-cutting &middot; Method</div>
+<h1>The Fold in <em>Formal Verification</em></h1>
+<div class="subtitle">A transition of the kind this series usually reads at four centuries' distance is happening in mathematics now, and can be watched mid-unfold. The five moves are named and checked against what the primary sources actually say &mdash; including what a deposit claiming a machine-checked proof does not disclose, and the whole class of failure a kernel is built not to see.</div>
+<div class="metagrid"><div><strong>Method</strong>the five moves named and checked one at a time<br>primary sources read directly, not through reporting</div><div><strong>Claim type</strong>a structural reading of a transition in progress<br>no priority claim, and no verdict on any contested announcement</div><div><strong>Verification</strong>the disclosure gap of &sect;2 is read off the deposit itself<br>operational checklist kept in <span class="mono">docs/verification-checklist.md</span></div></div>
+</div>
+
+<div class="wrap">
+
+<div class="lede">A kernel answers one question perfectly and is silent on every other. That silence is not a defect of any implementation; it is the shape of the tradition formal verification descends from. This paper reads the present computational turn as an instance of the series' own grammar, and locates the half of the apparatus that mechanisation left behind.</div>
+
+
+<h2>1 &middot; The five moves, checked one at a time</h2>
+
+<p>The grammar this series follows has five moves: a system of many degrees of freedom is compressed to its essential coordinates; a quantity curves toward a threshold it cannot exceed; at the threshold the description folds and a single smooth account gives way to branches; the system unfolds onto a new configuration; the cycle leaves an irreversible residue. The claim here is not that formal verification <em>resembles</em> that pattern. It is that each move can be named, and the naming checked.</p>
+
+<div class="box thm">
+<span class="lab">Compression</span>
+<p style="margin:0">For four centuries the essential coordinate of a mathematical claim was a referee's judgement: does this argument, read by an expert, compel assent? Peer review compresses an unbounded space of possible objections to the verdicts of a few trusted readers. Formalisation compresses differently &mdash; to a finite, enumerable axiom manifest and a compiler's yes or no. The degrees of freedom in <em>was this convincing</em> collapse to a short list that fits on a line.</p>
+</div>
+
+<div class="box thm">
+<span class="lab">Threshold</span>
+<p style="margin:0">Referee-based mathematics cannot scale past what a bounded number of trained specialists can read in a year, and it carries a nonzero rate of accepted human error. That is the ceiling the system was always curving toward and could not exceed: verification capacity bounded by expert reading time.</p>
+</div>
+
+<div class="box thm">
+<span class="lab">Fold</span>
+<p style="margin:0">At the threshold the single smooth account &mdash; write, submit, referee, accept &mdash; loses its one-to-one character and branches. One branch keeps the referee. On the other, the acceptance criterion is a compiler's verdict against a fixed axiom set. A proof of Fel's conjecture on syzygies of numerical semigroups, deposited February 2026, states that the argument <em>&ldquo;is fully formalized in Lean/Mathlib, and was produced automatically by AxiomProver from a natural-language statement of the conjecture&rdquo;</em> &mdash; a paper from the second branch, submitted to the institutions of the first.</p>
+</div>
+
+<div class="box thm">
+<span class="lab">Unfold</span>
+<p style="margin:0">The new configuration is being negotiated in public and is not settled. Palomar, built by the Lean FRO with ICARM and an advisory board including Tao, is described by him as <em>&ldquo;the analogue of a preprint server for Lean proofs,&rdquo;</em> and exists because <em>&ldquo;checking that a given Lean repository actually proves the claimed statement is somewhat non-trivial.&rdquo;</em> Its two gates &mdash; mechanical typechecking, and an alignment check between the informal statement and the formal one &mdash; are a first answer to a gap the field has only just acquired.</p>
+</div>
+
+<div class="box thm">
+<span class="lab">Residue</span>
+<p style="margin:0">Irreversible, and epistemic. Once a theorem carries a machine-checked, axiom-transparent proof, the unformalised version cannot be treated as equally warranted. This does not retroactively invalidate referee-certified mathematics. It changes what a <em>new</em> claim is expected to supply.</p>
+</div>
+
+<p>The reason to set this down while it is happening is the vantage. Most instances of this grammar are read long after the residue has set, by a historian who arrives when the branches are already a settled taxonomy. This one is being watched mid-unfold, by people who do not yet know which branch they are standing on. <span class="tag t-open">Open</span></p>
+
+<h2>2 &middot; The disclosure gap, checked rather than asserted</h2>
+
+<p>The Fel deposit states the formalisation and its automatic provenance. It does not state an axiom manifest, a toolchain version, or an independent verification status &mdash; and a reader therefore cannot tell from it which axioms the proof rests on, which Lean and Mathlib versions it typechecked under, or whether anyone outside the authoring group has rebuilt it. <span class="tag t-data">Read from the deposit</span></p>
+
+<p>That is not an accusation. It is the ordinary condition of a branch whose conventions have not been written yet: the first papers on a new criterion arrive before the criterion has a reporting standard. Naming the missing fields is what turns a complaint into a checklist.</p>
+
+<h2>3 &middot; What the checker cannot see</h2>
+
+<p>A kernel answers exactly one question &mdash; does this term have this type &mdash; and answers it perfectly. It does not answer whether the theorem says what its author believes it says. Between an intention in natural language and a statement in Lean there is a gap the compiler is blind to by construction, and machine assistance widens it, because a system that writes Lean fluently will also write statements that typecheck and mean something narrower, wider, or simply other than what was meant.</p>
+
+<p>The resulting failures share a shape. A declaration named for more than it establishes, with the word <em>unconditional</em> in a theorem resting on an admitted lemma. A statement whose quantifiers are tighter than the prose surrounding it &mdash; a sweep along one axis of a two-axis claim, confirming at nine points a conclusion the theorem never made. A tactic that is not a kernel check at all, leaving its own reduction axiom behind. A report that names a declaration but not which of three copies of a file it read. An error count taken before a failed <span class="mono">import</span> stopped elaboration, so that the file showing one error was hiding twenty-two and the file showing fifty-eight was telling the truth.</p>
+
+<div class="box warn">
+<span class="lab">None of these is a proof error</span>
+<p style="margin:0">Every one is a false claim standing next to a true proof, and every one survives the compiler untouched. That is the case for Palomar's second gate being an alignment check rather than a second typecheck.</p>
+</div>
+
+<h2>4 &middot; Why the count is the finding</h2>
+
+<p>A single instance of any of those is an anecdote and proves nothing about the method. The information is in the count, and a count of this kind accrues only one way: by being wrong in public, often, and recording which way each time. A field that reports only its successful formalisations will have no such record, and will be unable to say what its new instrument systematically misses.</p>
+
+<p>The operational form of that discipline &mdash; twelve steps in four stages, with a status column naming what is implemented and what is not &mdash; is kept separately, in <span class="mono">docs/verification-checklist.md</span>, because it is a thing to run rather than a thing to read. The dated record of misses, each with a class attached, is <span class="mono">docs/audit-log.md</span>.</p>
+
+<div class="box warn">
+<span class="lab">What this paper does not claim</span>
+<p>It does not assert that any particular contested announcement is settled science. It does not claim that machine-checking replaces refereeing: Tao states plainly that Palomar is not a peer-reviewed journal and <em>&ldquo;falls well short of what a proper human peer review&hellip; would give,&rdquo;</em> and nothing here says otherwise.</p>
+<p style="margin:0">Nor does it carry any other field's controversy across a boundary. That a second field displays the same five moves is not a licence to import one field's quarrels into another's. The grammar is used here as a structural pattern, checked against the specific moves a field actually made.</p>
+</div>
+
+<h2>References</h2>
+<ol style="margin-left:1.2rem;font-size:.9rem;line-height:1.8">
+<li>Chen, E., Cummins, C., Grubisic, D., Haller, L., Ono, K., Zhang, J., et al. (2026). Fel's Conjecture on Syzygies of Numerical Semigroups. <a href="https://arxiv.org/abs/2602.03716">arXiv:2602.03716</a>; Lean sources <a href="https://github.com/AxiomMath/fel-polynomial">AxiomMath/fel-polynomial</a>.</li>
+<li>Tao, T. (18 August 2026). Palomar &mdash; a registry of Lean verified mathematics. <a href="https://terrytao.wordpress.com/2026/08/18/palomar-a-registry-of-lean-verified-mathematics/">terrytao.wordpress.com</a>.</li>
+<li>Companion chapter: <a href="ch-interstitium-hydrated-lattice.html">The Hydrated Lattice</a> &mdash; the same five moves worked out in tissue.</li>
+<li>Method: <span class="mono">docs/verification-checklist.md</span>. Record: <span class="mono">docs/audit-log.md</span>.</li>
+</ol>
+
+
+</div>
+
+<footer>
+<div class="fwrap">
+<div>
+<a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a><br>
+WP-115 &middot; 2026-09-13 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a>
+</div>
+<div class="disc">Quotations from the Fel deposit and from Tao's Palomar announcement are given verbatim and cited to their sources. The claim that the deposit states no axiom manifest, toolchain version or independent verification status is a reading of that document as of 2026-09-13 and is checkable against it. Nothing here evaluates the correctness of any proof.</div>
+</div>
+</footer>
+
+</body>
+</html>

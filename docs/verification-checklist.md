@@ -195,132 +195,19 @@ is the only thing that can say what the instrument systematically misses.
 
 ---
 
-## Stage IV has an ancestry, and it is not ours
+## Where this came from
 
-Nothing in this document is new. Akṣapāda Gautama's *Nyāya Sūtra* already
-carries the whole apparatus, and carries it better specified than the version
-assembled here this week.
+Nothing in this document is new. The apparatus it reconstructs — keep the worked
+instance with the rule, enumerate the ways a reason fails, distinguish kinds of
+warrant — was worked out independently in Akṣapāda's *Nyāya Sūtra*, and the
+tradition that runs to Mathlib and to a proof-assistant kernel inherited the other
+axis of the same problem.
 
-Priority is not the claim and is not needed. The core of the text is placed
-around the 2nd century BCE and the redaction that survives is often put several
-centuries later; on either dating Aristotle's *Organon* is earlier, and the
-debate tradition Nyāya codifies is older than either text. What matters is that
-the two traditions are independent, and that Nyāya **kept three things the Greek
-form discarded as redundant** — the three this document spent a week
-rediscovering.
-
-**1. The worked instance travels with the rule.** The Greek syllogism is premises
-and conclusion. Nyāya's inference has five members: the claim (*pratijñā*), the
-reason (*hetu*), **the general rule together with an example** (*udāharaṇa*), its
-application to the case (*upanaya*), and the conclusion (*nigamana*). The third
-member exists so that an argument establishes not only validity but factual
-anchoring — the rule must be shown holding *somewhere*, in a case a listener can
-check. That is rung 4's descent test, stated two thousand years earlier: an
-argument carries the address of its evidence, not merely its form.
-
-**2. Failure is enumerated, not narrated.** *Nigrahasthāna* — points of defeat —
-is one of the sixteen categories of the system, and *hetvābhāsa* names five ways a
-reason can merely appear to be one: inconclusive, contradictory, counterbalanced,
-unproven, and mistimed. A catalogued taxonomy of how argument fails, built into
-the framework rather than accumulated by accident afterwards. That is stage IV,
-and Nyāya did not need to be wrong in public for years first to get it.
-
-**3. Warrant has a closed set of kinds.** The four *pramāṇa* — perception,
-inference, comparison, and testimony — are kinds of knowing, not degrees of
-confidence, and testimony is admitted as its own bounded source with its own
-conditions rather than smuggled in as weak perception. Our verdict set is a
-*pramāṇa* taxonomy and should be read as one: a kernel record and a page's
-assertion are different **kinds** of warrant, not the same warrant at different
-strengths. Confusing the two is the defect this whole document exists to prevent,
-and it is the one Nyāya ruled out by construction.
-
-### Two axes, and we inherited one
-
-The convergence is the first half of the point: two traditions, out of contact,
-both isolate inference as a thing with parts, both name the ways a reason fails,
-both build an apparatus for adjudicating a claim in public. That is the grammar
-reappearing.
-
-The second half is that they then developed **different axes**, and it is worth
-being exact about which, because the asymmetry is not a matter of one side being
-cleverer.
-
-*Where the Greek line went further.* Aristotle's schematic letters — *A belongs to
-all B* — abstract form from content, and that single move is what eventually made
-logic mechanisable. The Stoics added propositional connectives and their inference
-schemes. Nyāya's inference deliberately stays attached to content: the
-*udāharaṇa* is required *because* content matters, which is a strength for
-adjudication and an obstacle to formalisation. The line that runs to Frege, to
-Mathlib and to a Lean kernel is the Greek one, and it is not an accident that it
-is.
-
-*Where Nyāya went further.* On the question of when instances license a general
-claim, Greek *epagōgē* is thin and the problem stays open until Sextus and then
-Hume; Nyāya built *vyāpti* into a theory, with *upādhi* — the limiting condition
-that silently defeats a concomitance — as a named object to be searched for before
-the inference is granted. And the syllogistic stayed substantially unchanged from
-Aristotle to the nineteenth century, while the Indian tradition kept developing:
-Gaṅgeś́a's *Tattvacintāmaṇi* and the Navya-Nyāya after him built a technical
-language for relations and for negation of relational complexes that Ingalls and
-Matilal both argued is more expressive than the syllogism ever became.
-
-**And the instrument we use inherited the Greek axis only.** A Lean kernel is
-form abstracted from content, executed perfectly. Every defect this document
-catalogues lives on the other axis: whether the theorem says what was meant,
-whether a name claims more than its proof, whether a sweep holding one parameter
-fixed has established a concomitance or merely confirmed itself, whether
-"machine-checked" on a page and a gate record are the same kind of warrant. Those
-are *upādhi* questions and *pramāṇa* questions. The compiler cannot be blamed for
-being silent about them; it descends from the tradition that set them aside in
-order to become a compiler.
-
-So the checklist is not an eccentric addition to formal verification. It is the
-half of the apparatus that formalisation left behind on its way to being
-mechanical, arriving late and under-specified, and the useful move is to go
-read the tradition that kept it rather than to keep deriving it from failures.
-
-### Derived, not transmitted — and the third instance is this repository
-
-Neither system was copied from the other and neither was learned. Each was
-**derived**, from the same first principles, by people addressing the same
-problem: how does a claim earn assent, and how does it fail.
-
-The differences are the evidence. Transmission produces the same decomposition
-in local vocabulary. What is actually there is two systems that agree completely
-on *what the problem is* — inference has parts, reasons fail in nameable ways,
-warrant comes in kinds — and disagree on how to cut it: five members against two
-premises, an epistemology of *pramāṇa* against a theory of formal validity, the
-worked instance kept against the worked instance discarded. That is the signature
-of convergent derivation. Copying does not produce disagreement at the joints
-while producing agreement about where the joints are.
-
-Which changes what the observation is worth. A parallel is a curiosity. Two
-independent derivations mean the apparatus is a property of **the problem** — of
-inference held up to scrutiny — and not of a culture, a language, or a period.
-
-And there is a third instance, which is the reason to write this down here rather
-than in a history: **this repository derived it again, this month, from a night of
-Lean failures.** Nobody consulted Akṣapāda. The twelve steps came out of a report
-that named a frozen deposit as if it were a live file, a parser that dropped a
-declaration whose name ended in a prime, a wrapped axiom list hiding a `sorryAx`,
-and a sweep that varied one axis of a two-axis claim. From those, and only those,
-came: keep the worked instance with the rule; name the ways a reason fails;
-distinguish kinds of warrant. Three of Nyāya's central commitments, reached
-backwards from broken output.
-
-Two independent derivations across two millennia are suggestive. A third, whose
-provenance is documented commit by commit in `docs/audit-log.md` and can be
-audited by anyone who doubts it, is a different kind of evidence — because the
-usual objection to any such parallel is that transmission cannot be excluded, and
-here it can. The derivation is in the history of this repository.
-
-The practical consequence is the one worth acting on: stop deriving it from
-failures. *Vyāpti* — invariable concomitance, and *upādhi*, the limiting condition
-that defeats it — is precisely the question of when a sweep over instances
-licenses a general claim, which is step 10 and is currently answered by hand. That
-work has been done. Read it before rediscovering it a fourth time.
-
----
+That argument, and what it says is still missing from mechanised verification, is
+**[WP-116 · Akṣapāda Had the System](../book6/wp116-aksapada-had-the-system.html)**.
+The reading of the present computational turn as an instance of the series' own
+grammar is **[WP-115 · The Fold in Formal Verification](../book6/wp115-the-fold-in-formal-verification.html)**.
+Both are papers; this file is a thing to run.
 
 ## Building it: what exists, what is missing
 
@@ -383,48 +270,31 @@ nobody here has built, and the part Nyāya spent centuries on.
 
 ---
 
-## The registry, measured (v0, 2026-09-13)
+## The registry
 
-The labels already exist. `tools/claim_table.py --strict` harvests them into
-`docs/claims.tsv`: **3,998 claim-shaped occurrences across 520 pages.**
+`tools/claim_table.py --strict` harvests the status and warrant words already in
+use across the corpus into `docs/claims.tsv`, and prints the pending counts. It is
+a **measurement, not a document**: regenerate it rather than quoting a number from
+here.
 
-### The vocabulary is two axes collapsed into one list
+```
+python3 tools/claim_table.py --strict      # docs/claims.tsv + pending counts
+python3 tools/claims_pending.py            # triage the machine-warrant worklist
+```
 
-Counting uses across the corpus: `Open` 497, `Conjecture` 197, `Proved` 146,
-`Hypothesis` 129, `scaffold` 104, `machine-checked` 94, `kernel-checked` 59,
-`Formalized` 38, `placeholder` 37, `kernel-audited` 31, `Established` 29,
-`Empirical` 28, `Measured` 20.
-
-Two symptoms of the collapse are visible in that list. **Three words do one job** —
-*machine-checked*, *kernel-checked* and *kernel-audited* all name a kernel record.
-And **one word does two** — *Established* asserts both a standing and a source,
-and *Empirical* and *Measured* are warrants wearing the grammar of a status.
-
-The fix is Nyāya's, and it costs no new vocabulary: separate *what the claim's
-standing is* from *how it is known*.
+The vocabulary is two axes collapsed into one list, which is what the tools
+separate: three words do one job (*machine-checked*, *kernel-checked*,
+*kernel-audited* all name a kernel record) and one word does two (*Established*
+asserts a standing and a source at once). Hence:
 
 - **status** — `conjecture` · `open` · `argued` · `proved`
 - **warrant** — `kernel` · `recomputed` · `measured` · `cited` · `none`
 
-The pair is the claim. *Proved · kernel* and *Proved · cited* are different
-things; *Open · measured* is entirely legitimate and currently unsayable.
+The pair is the claim. *Proved · kernel* and *Proved · cited* are different things;
+*Open · measured* is legitimate and currently unsayable in one word.
 
-### What is pending to be tagged
-
-| | claims | pages |
-|---|---:|---:|
-| fully tagged — status **and** warrant | 446 | — |
-| `proved` with no warrant named | 1,131 | 309 |
-| warrant named with no status | 1,068 | 331 |
-| machine warrant, no address within 200 chars | 329 | 155 |
-| **machine warrant, no `.lean`/`.py` named anywhere on the page** | — | **61** |
-
-That last row is the one to act on: it is *pratijñā* without *hetu* — a page
-saying a thing is machine-checked with nothing on it naming what was checked.
-
-**Caveat, and it is load-bearing.** v0 matches a label wherever it appears, so a
-page that *discusses* machine-checking is scored as *claiming* it. This chapter is
-itself in the 61 for exactly that reason. The number is an upper bound on the
-defect and a lower bound on the work; v1 must distinguish a claim from a mention,
-which is the same claim-versus-mention problem the checker cannot solve either.
-Until it does, the 61 is a worklist to read, not a count to publish.
+**A caveat the tools cannot yet remove.** They match a label wherever it appears,
+so a page that *discusses* machine-checking scores as claiming it. Bare
+*formalised* is ordinary English — *Cantor formalised this in 1874* — and counting
+the verb produced 52 false positives before it was excluded. Treat the pending
+counts as a worklist to read, not a number to publish.
