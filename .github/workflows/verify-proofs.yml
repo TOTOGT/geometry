@@ -362,6 +362,15 @@ jobs:
           done
           exit 0
 
+      # The cron is not a clock. Of 1,153 runs in this repository on 2026-09-13,
+      # four were event:schedule - this workflow fired on three Mondays out of
+      # roughly ten. Push triggers fired on every push. So the reliable event is
+      # made to report on the unreliable one: any push after a schedule has gone
+      # quiet turns this red, which is the only notice that will actually arrive.
+      - name: Has any scheduled check gone quiet?
+        if: always()
+        run: python3 tools/cadence_check.py --strict
+
       # ------------------------------------------------------------------
       # THE RECEIPT. A workflow that says it runs weekly is a claim, and like
       # every other claim here it needs an address something can read offline.

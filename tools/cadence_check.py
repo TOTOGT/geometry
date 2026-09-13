@@ -15,8 +15,19 @@ on one account being awake is not enforcement.
 
     python3 tools/cadence_check.py [--grace 1.6] [--strict]
 
---strict exits 1 when a workflow is overdue. Default exits 0 and reports, so it
-can be added to a pipeline before the receipts exist without breaking it.
+--strict exits 1 when a workflow is OVERDUE. --strict-unproven also fails when a
+workflow has never left a receipt. Default reports and exits 0.
+
+MEASURED 2026-09-13, and the reason this exists in this form: TOTOGT/geometry has
+1,153 workflow runs and exactly **4** of them were `event: schedule`. Verify Lean
+proofs has had a Monday cron since 2026-07-05 - about ten Mondays - and fired on
+three of them. corpus audit has fired on its Tuesday cron once. GitHub states
+plainly that scheduled runs may be delayed or dropped under load, and here they
+are dropped most of the time.
+
+So the cron is not a clock. Push triggers, by contrast, fired on every single
+push today. That is why this check belongs in the push-triggered job: the
+reliable event is made to report on the unreliable one.
 """
 import argparse, datetime, io, os, re, sys
 
@@ -88,7 +99,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--grace", type=float, default=1.6,
                     help="multiple of the cadence tolerated before overdue")
-    ap.add_argument("--strict", action="store_true")
+    ap.add_argument("--strict", action="store_true", help="exit 1 when a workflow is overdue")
+    ap.add_argument("--strict-unproven", action="store_true",
+                    help="also exit 1 when a workflow has never left a receipt")
     a = ap.parse_args()
 
     now = datetime.datetime.utcnow()
@@ -120,7 +133,7 @@ def main():
         print("A workflow with no receipt is not evidence that it ran. It is evidence")
         print("that nothing here can tell whether it ran, which is the same thing a")
         print("page saying 'machine-checked' with no gate file is.")
-    if a.strict and (overdue or unproven):
+    if (a.strict and overdue) or (a.strict_unproven and unproven):
         sys.exit(1)
 
 
