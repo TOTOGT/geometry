@@ -216,6 +216,8 @@ extended by three classes that this period produced and the ladder did not antic
     <tr><td class="by">24 Aug</td><td><code style="font-size:.8rem">PrincipiaVol1.lean §6</code></td><td><span class="cls c-vac">VACUOUS</span></td><td><code>UnfoldOp.stable_branch : ∀ x, ∃ n, IsFixedPt (map^[n]) (map x)</code> — n = 0 satisfies it for every map on every type. "Theorem D (stability)" has no content beyond Φ-decrease. Now proved as a theorem rather than left as a comment.</td><td class="by">reading the field</td></tr>
     <tr><td class="by">24 Aug</td><td><code style="font-size:.8rem">PrincipiaVol1.lean §12</code></td><td><span class="cls c-new">UNFALSIFIABLE GUARD</span></td><td><code>g6_equals_schumann := rfl</code> where both sides are <code>def … := 33</code>. It is 33 = 33, counted among the machine-checked facts, and asserting a Schumann identification the ledger already records as partly false. Withdrawn.</td><td class="by">reading the definitions</td></tr>
     <tr><td class="by">24 Aug</td><td><code style="font-size:.8rem">PrincipiaVol1.lean §6 · Vol I Assum. 3</code></td><td><span class="cls c-mis">MISMATCH</span></td><td><code>CompressionOp.contractive</code> reads <code>d(fx,fy) ≤ d(x,y)</code> — non-expansive, not contractive. The identity satisfies it, and the deposit's own witness <em>is</em> the identity.</td><td class="by">reading the field</td></tr>
+    <tr><td class="by">12 Sep</td><td><code style="font-size:.8rem">CardiacHopfReduction.lean</code></td><td><span class="cls c-new">NEW &middot; NAME EXCEEDS STATEMENT</span></td><td><code>supercritical (hL : 0 &lt; L) : -(1/L) &lt; 0</code> — true, kernel-clean, and mentioning no vector field, no normal form and no bifurcation. The name asserts a classification; the statement is a fact about the sign of a reciprocal. Passes every mechanical check there is, including <code>#print axioms</code>. Docstring now records what the statement does and does not contain.</td><td class="by human">reading the statement against its name</td></tr>
+    <tr><td class="by">12 Sep</td><td><code style="font-size:.8rem">tools/leancheck.sh</code></td><td><span class="cls c-mis">MISMATCH</span></td><td><code>mktemp /tmp/leanprobe.XXXXXX.lean</code> assumes GNU behaviour. BSD <code>mktemp</code> substitutes only <em>trailing</em> X&#8217;s, so the suffix made the template literal and the probe never got a unique name. The failure branch then <code>continue</code>d before <code>rm -f</code>, so one failed probe persisted and every later audit in the same run inherited it. Replaced with <code>mktemp -d</code> and a guard.</td><td class="by">running it on the target platform</td></tr>
   </tbody>
 </table>
 
@@ -239,7 +241,7 @@ they do not support, because one side of that comparison is a sentence in Englis
 the <strong>MISATTRIBUTED</strong> class, and it is undecidable by construction. It took a
 person reading theorem statements against the prose they were cited under.</p>
 
-<h2>Four classes the ladder did not have</h2>
+<h2>Five classes the ladder did not have</h2>
 
 <p><strong>UNFALSIFIABLE GUARD.</strong> A check that cannot fail. <code>dm3_epsilon0</code>
 compared a hardcoded constant to itself and passed every build for months while the
@@ -259,6 +261,17 @@ section of a chapter was described in detail — word count, two verbatim quotat
 did not exist. It was caught because the file was checked before the commit. The remedy is
 mechanical and absolute: <em>verify every claimed edit against the file before reporting
 it.</em> A description of work is not the work.</p>
+
+<p><strong>NAME EXCEEDS STATEMENT.</strong> A theorem that is true, machine-checked, and
+weaker than what it is called. <code>supercritical</code> proves that &minus;1/L is negative
+when L is positive. That is correct and it is not a statement about a Hopf bifurcation, because
+no vector field appears in it. Every mechanical check passes, and must: the defect is entirely
+in the gap between the identifier and the proposition, and an identifier is not checked by
+anything. It is the <strong>MISATTRIBUTED</strong> class moved inside the file — there the
+claim sat in prose beside the theorem, here it sits in the theorem&#8217;s own name, where it
+is far likelier to be read as verified. The remedy is the cheap one: <em>a name must be
+readable as a paraphrase of the statement, and where it cannot be, the statement&#8217;s scope
+belongs in the docstring.</em></p>
 
 <p><strong>Silent drift.</strong> Not a new class — it is <strong>STALE</strong> — but worth
 naming as its own failure mode, because it looks like the others and is not. A verified
