@@ -9,6 +9,58 @@ Narrative version: Book VI, *The Hydrated Lattice*, §6.
 Status column: `done` — implemented and running. `partial` — implemented for some
 roots or some cases. `open` — not implemented.
 
+## Stage 0 · The reduction ladder
+
+Information is what a reader can hold. Data is what a machine crunches. The two
+must not meet, and the cost of confusing them is paid in attention and in error.
+
+Each rung below is produced from the one beneath it **by a program**. Nothing
+reads downward. If a question can only be answered by reading a lower rung, the
+rung above it is missing a field — that is the bug, and it is fixed by adding
+the field, never by reading the log.
+
+| Rung | What it is | Size | Read by |
+|------|-----------|------|---------|
+| 0 · Data | `run.log`, elaboration output, stack traces | unbounded | nothing; kept on disk, addressed by path |
+| 1 · Records | one gate file per declaration set | ~30 lines each | programs |
+| 2 · Table | one row per file | ~280 rows | programs; scanned by a person |
+| 3 · Information | the summary | under ~20 lines | a person, or a model |
+| 4 · Artifacts | audit entry, index and README updates, chapter revisions, Lean repairs | as needed | readers |
+
+### Rung 2 — the table
+
+One row per file, fixed fields, no prose:
+
+```
+project  path  sha256[:12]  toolchain  verdict  declared_sorries  actual_sorries  declarations  seconds
+```
+
+`verdict` is closed: `PASS` · `PASS-AS-DECLARED` · `UNDECLARED-SORRY` ·
+`AXIOM-VIOLATION` · `COUNT-MISMATCH` · `FAIL` · `NOT-VERIFIABLE`.
+
+### Rung 3 — the summary, and the delta rule
+
+**A run's information content is its delta.** A file that passed yesterday and
+passes today contributes nothing and must not be printed. The summary is:
+
+1. counts per verdict class, one line;
+2. every row whose verdict or sha changed since the last run;
+3. every row requiring a decision that a program cannot make.
+
+A clean night is three lines. A night with one new undeclared sorry is four, and
+the fourth is the one that matters. A summary that grows with the corpus is not a
+summary, and a report that prints 44 failures which are all the same fact has
+moved data into a place where only information belongs.
+
+### The consequence for authoring
+
+Rung 4 is where writing happens, and it is the only rung where it happens. Reports,
+Lean repairs, HTML, index and README updates are all *downstream of a computed
+answer* — never of a scan. The practical test: if a paragraph could not be
+regenerated from rung 3 alone, it is resting on something nobody can check.
+
+---
+
 ## I · Make the report refer to a definite object
 
 | # | Step | Status | Where |
