@@ -60,6 +60,92 @@ correction note, A.13, the RH preprint status, dnls CI, the 09-05 state and open
 list — moved to `docs/audit-log.md`. The pre-restructure file is at
 `docs/ml-evidence/claude-md-2026-09-13/CLAUDE.md.pre-restructure`.
 
+### OPEN AND FAILING — the corpus-audit workflow is red on GitHub
+Reported 2026-09-13. Reproduced locally against `_corpus/Desktop/geometry`, and
+**the hard gate passes here**: `terms.py --check` exits 0 (153 declared terms,
+all present; 2 disowned, mentioned only where declared) and `audit.py --all`
+exits 0 clean at 711 HTML. The only step in `corpus-audit.yml` that can fail the
+job is `Enforce the gates that have a right answer`, and it fails on one
+condition — `terms=0` absent from `_report/exit-codes.txt`. So either the
+battery step never reached `terms.py`, or a step before it died.
+
+Two candidates, neither confirmable from a sandboxed session:
+  · `Check out the other declared roots` needs `CORPUS_RO_TOKEN`. Without it
+    `steps.roots.outputs.have_all` is false, which the battery handles — but a
+    checkout failure before that point would not be handled.
+  · the battery runs `set -uo pipefail`; an unbound variable there exits before
+    `exit-codes.txt` is written, and the enforce step then fails on a missing
+    file rather than on a real gate.
+
+`duplicates.py` exits 1 with 31 undeclared groups. It is a warning in this
+workflow, not a gate, so it is not the cause — but four of those groups are new
+and are an artefact of two clones of this repository being declared roots
+(`~/Desktop/geometry` and `~/geometry`): `nasagaps`, `probe_book8`, `probe_dm3`
+and `reactiondiffusionfold` each list the same filename twice. `~/geometry` is
+behind and is the likelier thing to fix.
+
+NEXT SESSION: get the failing step's log — `gh run view --log-failed` on a
+machine with `gh`, or the Actions page — before changing anything. Do not patch
+the workflow against a guess; the local run is clean and the difference is in
+the runner.
+
+### Vol I: one canonical copy, and §17 now follows the Lean
+`vol1-mathematics.html` existed twice. The root copy was last edited 2026-08-20,
+lacked the Second Edition front matter and the corpus section, and still listed
+"Theorems A–D" among the machine-checked results. `book1/` is a strict superset,
+so root is now a redirect stub on the `hypogeum_temple_resonance.html` pattern;
+three `#sec5` deep links were repointed, because a redirect answers a filename
+and not a fragment.
+
+§17 now matches `PrincipiaVol1.lean`, which is stricter than the page was.
+Structures A–D are definitions and none is among the 58 theorems; O7 (the ε₀
+instantiation) was opened in V7 and had never reached the page. Every
+machine-checked item is a permalink into `TOTOGT/AXLE` at `700deb8` — the
+worktree blob and `origin/main` were compared first. Following the links
+corrected three claims: `basin_asymmetry` is `1/3 < 4/5`, not `3/4`, and its own
+docstring warns that writing it as ≈ r★ is an identification it is not;
+`mu_dm3_neg` proves `-2 < 0`, the sign of a literal, not a transverse exponent;
+ε₀ is cited through `epsilon0_of_eq_third_iff` rather than asserted.
+
+STILL OWED THERE: the hero badge reads "Current version (v6): 10.5281/zenodo.
+21146416" and the live deposit is v7. Needs the v7 DOI from Pablo.
+
+### tools/contrast_check.py — a new instrument, and 11 confirmed defects
+Resolves, for an element: the nearest ancestor setting a colour, the nearest
+setting an opaque background, `:root` custom properties, and the WCAG ratio.
+`--class NAME` checks one class; with no argument it scans every element whose
+inline style sets a background and no colour, which is the shape of the defect —
+the element paints a panel and then inherits `--text` from `body`.
+
+Found and fixed: the orthogenesis note unreadable on four pages (Enceladus,
+both GameTheory packs at ~1.06:1 black-on-black; `omega/ch-belief` at 1.21:1
+white-on-cream, the same fault inverted). All four now clear 13:1; the other 29
+pages carrying that note were already fine.
+
+NOT YET FIXED — 11 more in the first sixty root files, mostly Lean/AXLE code
+boxes at 1.15:1 (#1c1c1c on #1a2744): `ch-catgt-zeolite` (3),
+`ch-belousov-zhabotinsky`, `ch-energy-entropy`, `ch-lorenz-chaos`,
+`ch-mandelbrot-fractals`, `ch-poincare-einstein`, `ch-turing-morphogenesis`,
+`ch-recurrence-ladder` (2). The remaining ~650 files are unscanned.
+
+READ THE COUNT CAREFULLY. Before the has-text filter the same scan reported
+339 for root plus books 1–4. Most were colour swatches and rules with no text
+in them. The filter excludes descendants that set their own colour. Any number
+this tool prints is meaningless without it.
+
+### NAME EXCEEDS STATEMENT is a class, not a one-off
+Named 2026-09-12 for `supercritical` (true, kernel-clean, mentions no vector
+field). Then found in WP-84, published 29 August: a true result headed *a
+characterisation of twelve* when the sweep held k = 6 and could return nothing
+else. Two instances three weeks apart in unrelated work. Ledger is at 31 entries
+and five named classes; the retroactive WP-84 row is deliberate.
+
+### Sources
+`book6/ch-interstitium-hydrated-lattice.html` — the "two systems for 400 years"
+framing comes from *Inside the Interstitium, the Human Body's Hidden Pathways*,
+NYT Magazine, 11 May 2026, now linked in the references and marked secondary.
+The anatomy itself is cited to Benias/Theise 2018, which is where it belongs.
+
 ### CardiacHopfReduction is through the kernel and is now a target
 Five declarations on `[propext, Classical.choice, Quot.sound]`; reports in
 `tools/verify-audit/2026-09-12/` and `2026-09-13/`. `field_simp` left
