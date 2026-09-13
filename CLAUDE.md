@@ -2685,3 +2685,21 @@ carry one today: `MagneticLattice`, `SeismicLattice`, `Ordinal` (GTCT),
 rebuilds `master-index.html`, every `index-book*.html` and `index-root.html` from
 the files themselves. Editing an index by hand puts it out of agreement with the
 corpus on the next run, which is the whole argument of WP-114.
+
+**A chapter stays on its subject, and hands other subjects to their own pages.**
+A chapter is readable when a reader who came for its title gets that and not a
+second essay. When a section grows its own subject — its own literature, its own
+outbound links, its own vocabulary — it has become a paper and should be one, with
+the chapter keeping a short pointer. Book VI's interstitium chapter reached 30.6%
+of its own text given over to a case study about proof assistants, while the two
+sections that were the interstitium came to 6.9%; that became WP-115 and WP-116,
+and the chapter came back to 4.8% on the pointer.
+
+The same rule governs `docs/`: a tools file is a thing to run. When chapter-grade
+writing accumulates in one, it is buried from every reader of the book, and it
+belongs in the book with the tools file pointing at it.
+
+`tools/section_balance.py` ranks pages by how top-heavy they are, but **it does
+not detect this defect** — its header says why, at length. Size is not the signal
+and the divergence measure is size renamed. Use it to decide what to read; the
+cut is a judgement.
