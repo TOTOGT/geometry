@@ -298,3 +298,64 @@ failures. *Vyāpti* — invariable concomitance, and *upādhi*, the limiting con
 that defeats it — is precisely the question of when a sweep over instances
 licenses a general claim, which is step 10 and is currently answered by hand. That
 work has been done. Read it before rediscovering it a fourth time.
+
+---
+
+## Building it: what exists, what is missing
+
+Measured 2026-09-13: **96 pages** in this corpus assert a verification claim
+(*machine-checked*, *kernel-checked*, *verified symbolically*, *independently
+verified*). **47** verification scripts recompute what they accompany. The verdict
+table covers **45** Lean files. Nine defect classes are in use, all applied by hand.
+
+| Nyāya part | What it does | What exists here | What is missing |
+|---|---|---|---|
+| *pratijñā* | the claim, stated as a claim | the sentence on the page | claims are prose inside HTML; there is no registry in which a claim is an object with an id |
+| *hetu* | the reason offered for it | declaration name, gate record, `verdicts.tsv` | present for Lean, absent for most of the 96; nothing links claim to reason mechanically |
+| *udāharaṇa* | the rule **and** a checkable worked instance | 47 verification scripts; the address triple | not required. A page may assert and cite nothing, and nothing notices |
+| *upanaya* | *this case is of that kind* | — | nothing states that a given file instantiates the rule its page cites. This is where the frozen-deposit confusion lived |
+| *nigamana* | concluded, and marked as concluded | the published sentence | a page does not distinguish *claimed* from *established*; both are prose |
+| *pramāṇa* | a closed set of **kinds** of warrant | closed verdict set, for gate outcomes only | no warrant-kind on a published claim. "Machine-checked" and "independently verified numerically" are different *pramāṇa* and are written as though they were one thing at two strengths |
+| *hetvābhāsa* | named types of merely-apparent reason | 9 defect classes in `audit-log.md` | no mapping to the five, no detection of any of them |
+| *nigrahasthāna* | procedural defeat in adjudication | checklist stage III | entirely manual |
+| *vyāpti* / *upādhi* | when instances license the general claim, and the condition that silently defeats it | — | **the largest gap.** Step 10, wholly by hand. This is the WP-84 defect: a sweep over nine values of *N* at fixed *k*, confirming itself |
+
+### The five, mapped
+
+The nine classes already in use are the five *hetvābhāsa*, plus two that are not
+fallacies of reason at all. The correspondence was not designed:
+
+| *hetvābhāsa* | Reason that only looks like one | Our class |
+|---|---|---|
+| *savyabhicāra* | strays — holds also where the conclusion does not | `OVER-GENERALISED` |
+| *viruddha* | contradicts what it is offered to prove | `FALSE` |
+| *prakaraṇasama* | counterbalanced by an equal opposing reason | `UNTRUSTED` |
+| *sādhyasama* | itself unproved; assumes the thing | `VACUOUS`, and any theorem resting on `sorryAx` |
+| *kālātīta* | mistimed — offered after its moment has passed | `STALE` |
+
+`MISMATCH`, `MISATTRIBUTED` and `MISFRAMED` are not defects of reason; they are
+*nigrahasthāna*, failures of the adjudication rather than of the argument.
+Keeping them in one list obscures that, and is why a night's report could not
+separate a broken proof from a broken reader.
+
+### What to build, in order
+
+1. **`tools/claim_table.py` — the claim registry.** One row per asserted claim
+   across the 96 pages: page, claim id, warrant kind, *hetu* (declaration, or
+   script and block), address triple, gate verdict, date. This one artifact
+   supplies *pratijñā*, *hetu*, *upanaya* and *nigamana* together, and makes step
+   11 mechanical instead of a grep.
+2. **Warrant kind as a closed set** — the *pramāṇa* field, five values, each with
+   its own required address: `kernel` (gate record), `recomputed` (script and
+   block), `measured` (instrument and dataset), `cited` (deposit and DOI, and
+   whether re-derived), `argued` (no address, and must say so). A page that
+   cannot name its kind has not made a claim.
+3. **`tools/sweep_audit.py` — the *upādhi* check.** For a claim quantified over
+   parameters, verify the accompanying script varied *every* one. Nine agreeing
+   points along a single axis is not a concomitance. This is the only genuinely
+   new instrument on the list, and the one that would have caught WP-84 with
+   nobody reading the sweep.
+4. **Split the ledger** into reasons and procedures, per the table above.
+
+Items 1, 2 and 4 are bookkeeping the corpus already half-does. Item 3 is the part
+nobody here has built, and the part Nyāya spent centuries on.
