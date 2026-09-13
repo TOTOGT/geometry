@@ -6251,9 +6251,28 @@ when Q4 is No. Contact email on everything is `g6llc@proton.me`.
    commit — moving a gate's N inside an unrelated commit is how a number drifts.
 6. **O7** — one supremum computation (sup‖Hess V‖) from either closing or moving
    ε₀. Caveat recorded: ε₀ may live in a different norm than r.
-7. Untracked and awaiting a decision: `book4/ZetaScratch.lean` (the superseded
-   route — commit with a header saying so, or delete), `book5/.bak-saturn-smoke`,
-   `.bak-polar-*`, `tools/.leancheck.sh.bak-*`.
+7. Untracked and awaiting a decision: `book5/.bak-saturn-smoke`, `.bak-polar-*`,
+   `tools/.leancheck.sh.bak-*`.
+
+   **`book4/ZetaScratch.lean` — resolved 2026-09-13: removed from the tree.**
+   The item read "untracked and awaiting a decision". It was neither: the file
+   entered the history in `7860de0`, whose subject is the Eisenstein-norm
+   classification of closable hexagonal shells, so a decision recorded as open
+   had already been made inside a commit about something else, and the list
+   tracking it never learned. A byte-identical copy had also accumulated at the
+   repository root (2026-09-10); it is in `_to_delete/` with both hashes.
+
+   The removal is not about the duplication. `digamma_conj` is live at
+   `GTCT/book4/ZetaReflection.lean:404` and marked load-bearing there at :463.
+   This was a second copy of a load-bearing theorem, in a repository that does
+   not build it, outside every target, with an audit report containing the single
+   token `file:` — so on the day the two copies diverge, the unchecked one is the
+   one still sitting here. A second copy nobody builds is worse than no copy.
+
+   Not salvaged here: `conj_Gamma_conj_eq` and `deriv_Gamma_conj` do not appear
+   by name in `ZetaReflection.lean`, which proves `digamma_conj` by another route.
+   If those two are worth having they belong beside the theorem that uses them,
+   in GTCT, and not in this repository.
 ## RH preprint — where reflection_law stands (30 Aug, end of day)
 
 `GTCT/book4/ZetaReflection.lean` went from two `sorry`s to one. Proved and
