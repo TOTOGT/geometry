@@ -3,12 +3,19 @@
   Principia Orthogona · Book 8 · Pablo Nogueira Grossi · G6 LLC · 2026
   Companion to OrthogonalWitness.lean (the de Sitter bounce).
 
-  STATUS: The algebra is independently verified (numeric: the cycloid solves the
-          closed-dust Friedmann first integral (da/dt)² = a_max/a − 1 to ~1e−10,
-          with a(0)=0, a(π)=a_max, a(2π)=0). The Lean proofs are written to be
-          sound but have NOT yet been run through the kernel (compilation deferred
-          until a Mathlib build is available). Do not cite as machine-checked
-          until `lake build` passes.
+  STATUS, 2026-09-13: kernel-audited under the v4.32.0 pin. Six declarations —
+          a_le_max, a_nonneg, bang, crunch, turnaround, turnaround_is_ceiling —
+          on [propext, Classical.choice, Quot.sound] and nothing else. Report:
+          tools/verify-audit/2026-09-13/geometry__TurnaroundUniverse.axioms.txt
+          A hand run dates from the day it was run, so the file is a declared
+          build target from the same date.
+
+          WHAT THE SIX COVER. The cycloid's shape: non-negativity, the ceiling at
+          η = π, and the two zeros. They are statements about a(η) = R(1 − cos η),
+          not about the Friedmann equation — that the cycloid *solves* the
+          closed-dust first integral (da/dt)² = a_max/a − 1 is verified numerically
+          to ~1e−10 and is NOT among the six. The name of this file describes a
+          cosmology; the theorems in it describe a curve.
 
   THE PICTURE (classical — Friedmann 1922).
     A closed (k=+1), matter-dominated (dust) universe is the three-sphere S³ whose

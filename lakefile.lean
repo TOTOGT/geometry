@@ -125,3 +125,20 @@ lean_lib CardiacHopfReduction
 -/
 @[default_target]
 lean_lib ReactionDiffusionFold
+
+/-
+  book8/TurnaroundUniverse.lean is the recollapsing closed-dust companion to
+  OrthogonalWitness.lean, and sits beside it under the same srcDir. Audited
+  2026-09-13 under the v4.32.0 pin: six declarations, all on the permitted three,
+  report in tools/verify-audit/2026-09-13/.
+
+  Its six theorems are about the cycloid a(eta) = R(1 - cos eta) -- non-negativity,
+  the ceiling at eta = pi, the two zeros. That the cycloid SOLVES the closed-dust
+  Friedmann first integral is a numeric result to ~1e-10 and is not in the kernel.
+  Recorded here because the filename names a cosmology and the theorems name a
+  curve, which is the NAME EXCEEDS STATEMENT shape; the header carries the same
+  note where a reader of the file will meet it.
+-/
+@[default_target]
+lean_lib TurnaroundUniverse where
+  srcDir := "book8"
