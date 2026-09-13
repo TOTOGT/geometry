@@ -58,6 +58,10 @@ td{color:rgba(232,228,216,.85);}
 .tier .solid{color:var(--green);} .tier .spec{color:var(--red);} .tier .open{color:var(--teal);}
 .tier > div:nth-last-child(1),.tier > div:nth-last-child(2){border-bottom:none;}
 .mono{font-family:var(--mono);font-size:.82em;color:var(--teal);letter-spacing:.04em;}
+ol.steps{margin:.4rem 0 0 1.3rem;font-size:.9rem;line-height:1.75;color:rgba(232,228,216,.88);}
+ol.steps li{margin-bottom:.55rem;}
+ol.steps li b{color:var(--gold);font-weight:400;}
+.stage{font-family:var(--mono);font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);display:block;margin:1.3rem 0 .3rem;}
 ol.refs{margin:1rem 0 0 1.2rem;font-size:.85rem;color:rgba(232,228,216,.8);line-height:1.7;}
 ol.refs a{color:var(--gold);text-decoration:none;}
 .disclaimer{font-size:.78rem;color:var(--muted);line-height:1.7;border-top:1px solid var(--rule);margin-top:2.5rem;padding-top:1.3rem;}
@@ -334,6 +338,38 @@ footer a{color:var(--gold);text-decoration:none;}
       <p>A kernel answers exactly one question — does this term have this type — and answers it perfectly. It does not answer whether the theorem says what its author believes it says. Between an intention in natural language and a statement in Lean there is a gap the compiler is blind to by construction, and machine assistance widens it, because a system that writes Lean fluently will also write statements that typecheck and mean something narrower, wider, or simply other than what was meant.</p>
       <p>The resulting failures share a shape. A declaration named for more than it establishes, with the word <em>unconditional</em> in a theorem resting on an admitted lemma. A statement whose quantifiers are tighter than the prose surrounding it — a sweep along one axis of a two-axis claim, confirming at nine points a conclusion the theorem never made. A tactic that is not a kernel check at all, leaving its own reduction axiom behind. A report that names a declaration but not which of three copies of a file it read. None of these is a proof error. Every one is a false claim standing next to a true proof, and every one survives the compiler untouched.</p>
       <p>That is the case for Palomar's second gate being an alignment check between the informal statement and the formal one, rather than a second typecheck. And it is why this series keeps a dated defect log with a class attached to each entry — <span class="mono">MISMATCH</span>, <span class="mono">STALE</span>, <span class="mono">VACUOUS</span>, <span class="mono">MISATTRIBUTED</span>, <span class="mono">OVER-GENERALISED</span>, <span class="mono">MISFRAMED</span>. One instance of any of them is an anecdote and proves nothing about the method. The information is in the count, and a count of this kind accrues only one way: by being wrong in public, often, and recording which way each time. A field that reports only its successful formalisations will have no such record, and will be unable to say what its new instrument systematically misses.</p>
+    </div>
+    <div class="callout">
+      <span class="lab">The order that fixes them</span>
+      <p>Each stage below exists to make the next one mean something. Run them out of order and the later checks compare true statements against the wrong object, which is how a correct measurement ends up under a sentence that licenses a wrong action.</p>
+
+      <span class="stage">I · Make the report refer to a definite object</span>
+      <ol class="steps">
+        <li><b>Name the project and toolchain on every line,</b> not the basename. A corpus with three copies of one file cannot attach a verdict to anything until the report says which copy it read.</li>
+        <li><b>Refuse what this environment cannot verify, in one line, with the reason.</b> Frozen deposits, archive directories, build configuration, and any root declaring a different toolchain get <span class="mono">NOT-VERIFIABLE</span> — never an elaboration attempt. A file written for another toolchain failing to compile is not evidence about that file.</li>
+        <li><b>Deduplicate by content hash, never by name.</b> Report mirrors as identical-to. Name-deduplication silently skips the copy that has diverged, which is the one thing worth finding.</li>
+      </ol>
+
+      <span class="stage">II · Make the verdict mean something</span>
+      <ol class="steps" start="4">
+        <li><b>Print the axiom manifest and compare it to the permitted set.</b> The gate's verdict is the verdict; a search of the source text is not a check.</li>
+        <li><b>Name the tactics that are not kernel checks.</b> <span class="mono">native_decide</span> leaves its own reduction axiom behind. Silence lets it read as a kernel result.</li>
+        <li><b>Match declared obligations against actual ones.</b> A file that names its open sorries and has exactly those is <span class="mono">PASS-AS-DECLARED</span>. An undeclared sorry is the only red worth raising, and it is invisible while known ones are also red.</li>
+        <li><b>Assert the declaration count.</b> Expected <em>n</em>, found <em>n</em>. A theorem lost to a rename or a failed elaboration must fail the check rather than quietly shrink it.</li>
+      </ol>
+
+      <span class="stage">III · Make the claim mean what the page says</span>
+      <ol class="steps" start="8">
+        <li><b>Read the formal statement back against the sentence that cites it.</b> Do the quantifiers match the prose? This is the check no compiler performs, and where most of the defects are.</li>
+        <li><b>Treat the name as a claim.</b> <em>Unconditional</em>, <em>every</em>, <em>iff</em>, <em>optimal</em>, or a named constant in a declaration name asserts something. Verify the theorem asserts it too.</li>
+        <li><b>Vary every free axis.</b> A sweep that holds one parameter fixed confirms itself — nine agreeing points prove only that the ninth was computed the same way as the first.</li>
+        <li><b>Trace each published "machine-checked" to a gate file</b> naming that declaration, in that copy, on that date. No trace, no claim.</li>
+      </ol>
+
+      <span class="stage">IV · Make it a study rather than a chore</span>
+      <ol class="steps" start="12">
+        <li><b>Log every miss with a class and a date,</b> and leave the correction standing in the text rather than withdrawing it. One instance is an anecdote; the count is the finding, and the count is the only thing that can say what the instrument systematically misses.</li>
+      </ol>
     </div>
     <div class="honest">
       <span class="lab">What this case study does not claim</span>
