@@ -38,6 +38,12 @@ project  path  sha256[:12]  toolchain  verdict  declared_sorries  actual_sorries
 `verdict` is closed: `PASS` · `PASS-AS-DECLARED` · `UNDECLARED-SORRY` ·
 `AXIOM-VIOLATION` · `COUNT-MISMATCH` · `FAIL` · `NOT-VERIFIABLE`.
 
+### Implementation
+
+`tools/verdict_table.py` writes rung 2 (`verdicts.tsv`) from artifacts already on
+disk; it never invokes Lean. `tools/verdict_summary.py` writes rung 3, diffing
+against the most recent earlier table. Neither reads `run.log`.
+
 ### Rung 3 — the summary, and the delta rule
 
 **A run's information content is its delta.** A file that passed yesterday and
@@ -121,9 +127,9 @@ rhetoric.
 
 | # | Step | Status | Where |
 |---|------|--------|-------|
-| 1 | Every report line carries project root and toolchain, not the basename | partial | `tools/leancheck.sh` writes `<project>__<file>` gates as of 2026-09-12; older reports do not |
+| 1 | Every report line carries project root and toolchain, not the basename | done | `tools/verdict_table.py` derives both from the resolved source path and flags `AMBIGUOUS` when a basename has several copies |
 | 2 | Anything this environment cannot verify gets one `NOT-VERIFIABLE` line with the reason — frozen deposits, archives, `to_delete/`, lakefiles, and any root declaring a different toolchain | open | `tools/corpus_roots.txt` has no toolchain column |
-| 3 | Deduplicate by sha256, never by basename; report mirrors as identical-to | open | 280 paths, 163 distinct basenames |
+| 3 | Deduplicate by sha256, never by basename; report mirrors as identical-to | partial | every row carries its sha; mirror collapsing not yet done |
 
 Step 2 is the large one. Only `geometry` has a built Mathlib; every other root on
 disk declares a toolchain it cannot currently meet, so elaborating those files
@@ -135,8 +141,8 @@ against `geometry`'s toolchain measures nothing.
 |---|------|--------|-------|
 | 4 | `#print axioms` per declaration, compared against the permitted set; the gate is the verdict, never a grep | done | `tools/axiom_gate.py` |
 | 5 | Tactics that are not kernel checks are named as such | done | gate prints the `native_decide` / `Lean.ofReduceBool` line |
-| 6 | Declared obligations matched against actual ones; declared-and-present is `PASS-AS-DECLARED`, undeclared-and-present is the only red | open | files already declare theirs in Status / Open Obligations blocks — the gate does not read them |
-| 7 | Declaration count asserted: expected *n*, found *n* | partial | fires for some files; the parser mis-handles declaration names ending in a prime |
+| 6 | Declared obligations matched against actual ones; declared-and-present is `PASS-AS-DECLARED`, undeclared-and-present is the only red | done | `tools/verdict_table.py` reads `GATE-DECLARE: sorries = …` (preferred, named) or the incumbent `EXPECTED under \`--audit\`` counts; absence of both is `UNDECLARED-STATUS`, never a guess |
+| 7 | Declaration count asserted: expected *n*, found *n* | done | `COUNT-MISMATCH`; the parser handles names ending in a prime and rejoins axiom lists that `#print axioms` wraps across lines |
 
 Step 6 is the one that changes what the nightly job is for. Six files currently
 refuse the gate; every one of them declares its own sorries in prose, and every
