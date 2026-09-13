@@ -124,8 +124,32 @@ jobs:
           set -uo pipefail
           mkdir -p "$GITHUB_WORKSPACE/_report"
           R="$GITHUB_WORKSPACE/_report"
-          ROOTS=$(sed 's/#.*//' tools/corpus_roots.txt | sed 's/[[:space:]]*$//' | grep -v '^$' \
-                  | sed "s|^~|$GITHUB_WORKSPACE/_corpus|")
+          # GitHub runs every `run:` step under `bash -e`, so `set -uo pipefail` above
+          # ADDS pipefail to an already-errexit shell. Until 2026-09-13 the first
+          # command below was the census over $ROOTS; without CORPUS_RO_TOKEN those
+          # directories were never cloned, the census exited 2, pipefail propagated
+          # it and errexit killed the step at its first line. exit-codes.txt was
+          # never written, and the enforce step blamed terms.py for a missing file.
+          # Runs #23-#25 were 14s and 4KB: a job dying, not a corpus being audited.
+          # The partial-corpus rule at the top of this file was written and never
+          # reached. Two changes keep that promise: the root list is filtered to
+          # what actually exists, and no measurement can abort the battery.
+          ROOTS=""
+          MISSING=""
+          for r in $(sed 's/#.*//' tools/corpus_roots.txt | sed 's/[[:space:]]*$//' | grep -v '^$' \
+                     | sed "s|^~|$GITHUB_WORKSPACE/_corpus|"); do
+            if [ -d "$r" ]; then ROOTS="$ROOTS $r"; else MISSING="$MISSING $r"; fi
+          done
+          if [ -n "$MISSING" ]; then
+            echo "::warning::not checked out, excluded from every total below:$MISSING"
+            echo "> Roots absent from this run:\`$MISSING\`" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          [ -n "$ROOTS" ] || { echo "::error::no declared root is present; nothing can be measured"; exit 1; }
+
+          # Record an exit code without letting it abort the step. `if` context
+          # suppresses errexit, which a bare `cmd; echo $?` does not.
+          record() { n="$1"; shift; if "$@" > "$R/$n.txt" 2>&1; then rc=0; else rc=$?; fi
+                     echo "$n=$rc" >> "$R/exit-codes.txt"; }
 
           echo "## corpus audit — $(date -u +%F)" >> "$GITHUB_STEP_SUMMARY"
           if [ "${{ steps.roots.outputs.have_all }}" != "true" ]; then
@@ -134,25 +158,25 @@ jobs:
           fi
 
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          python3 tools/theorem_census.py --tracked $ROOTS 2>&1 | tee "$R/census.txt" | tail -14 >> "$GITHUB_STEP_SUMMARY"
+          python3 tools/theorem_census.py --tracked $ROOTS 2>&1 | tee "$R/census.txt" | tail -14 >> "$GITHUB_STEP_SUMMARY" || true
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
           echo '### axiom dependence' >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          python3 tools/axiom_dependence.py 2>&1 | tee "$R/axiom-dependence.txt" | head -22 >> "$GITHUB_STEP_SUMMARY"
+          python3 tools/axiom_dependence.py 2>&1 | tee "$R/axiom-dependence.txt" | head -22 >> "$GITHUB_STEP_SUMMARY" || true
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           python3 tools/axiom_dependence.py --json > "$R/axiom-dependence.json" 2>/dev/null || true
 
           echo '### zero-import scan' >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          bash tools/leanscan.sh 2>&1 | tee "$R/leanscan.txt" | tail -16 >> "$GITHUB_STEP_SUMMARY"
+          bash tools/leanscan.sh 2>&1 | tee "$R/leanscan.txt" | tail -16 >> "$GITHUB_STEP_SUMMARY" || true
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
           # These three already gate elsewhere; recorded here so one artifact holds the
           # whole picture. Their exit codes are preserved in the step outcome below.
-          python3 tools/duplicates.py  > "$R/duplicates.txt"  2>&1; echo "duplicates=$?"  >> "$R/exit-codes.txt"
-          python3 tools/audit.py --all > "$R/audit.txt"       2>&1; echo "audit=$?"       >> "$R/exit-codes.txt"
-          python3 tools/terms.py --check > "$R/terms.txt"     2>&1; echo "terms=$?"       >> "$R/exit-codes.txt"
+          record duplicates python3 tools/duplicates.py
+          record audit      python3 tools/audit.py --all
+          record terms      python3 tools/terms.py --check
           cat "$R/exit-codes.txt"
 
 
@@ -211,8 +235,17 @@ jobs:
         run: |
           set -u
           rc=0
-          grep -q '^terms=0'      "$GITHUB_WORKSPACE/_report/exit-codes.txt" || { echo "::error::terms.py --check failed"; rc=1; }
-          grep -q '^duplicates=0' "$GITHUB_WORKSPACE/_report/exit-codes.txt" || echo "::warning::duplicates.py reports undeclared groups"
+          E="$GITHUB_WORKSPACE/_report/exit-codes.txt"
+          # "did not run" and "ran and failed" are different findings. Reporting the
+          # first as the second is what sent 2026-09-13 chasing a green tool.
+          if [ ! -s "$E" ]; then
+            echo "::error::the battery wrote no exit codes - it aborted before any gate ran"; rc=1
+          elif ! grep -q '^terms=' "$E"; then
+            echo "::error::the battery never reached terms.py - no terms line in exit-codes.txt"; rc=1
+          elif ! grep -q '^terms=0' "$E"; then
+            echo "::error::terms.py --check ran and failed"; rc=1
+          fi
+          grep -q '^duplicates=0' "$E" 2>/dev/null || echo "::warning::duplicates.py reports undeclared groups"
           exit $rc
 
   # ---------------------------------------------------------------------------
