@@ -2615,10 +2615,20 @@ confirm.
 linter warnings only (`G6Crystal.lean:355` unused binder, `NASAGaps.lean:72`
 `omega` doing nothing). The geometry cohort is whole.
 
+**No chapter page now carries an unbacked or stale verification claim.** Four
+files were re-audited on 2026-09-13 — `CardiacHopfReduction`,
+`ReactionDiffusionFold`, `TurnaroundUniverse`, `book6/MayaCalendar` — and three
+pages were corrected: two that *understated* what the kernel had established
+(`book6/ch-reaction-diffusion-fold.html`, and `book8/ch-turnaround.html` in two
+separate places), and `book6/ch-maya-codifying-cosmos.html`, whose "not yet
+kernel-checked" was accurate until the file was repaired. Each now carries the
+address of what was checked rather than its name.
+
 **The verification board is green and legible.** 39 PASS, 6 PASS-AS-DECLARED,
 nothing to decide. Read it with two commands and never by reading a log:
 
 ```
+bash   tools/leancheck.sh --audit book6/MayaCalendar.lean   # path FROM THE PROJECT ROOT
 python3 tools/verdict_table.py   --day YYYY-MM-DD    # rung 2 -> verdicts.tsv
 python3 tools/verdict_summary.py --day YYYY-MM-DD    # rung 3 -> <20 lines
 ```
@@ -2663,5 +2673,15 @@ carry one today: `MagneticLattice`, `SeismicLattice`, `Ordinal` (GTCT),
 - Mirror collapsing by sha is not done: 280 paths, 163 distinct basenames.
 - Steps 8-11 of the checklist (statement-vs-prose, name-as-claim, every-axis
   sweeps, claim-to-gate tracing) are manual. Step 11 found two stale pages today.
-- `book6/MayaCalendar.lean` — 10 theorems, never audited, and
-  `ch-maya-codifying-cosmos.html` says so correctly. One `leancheck` run closes it.
+- Mathlib renames are invisible until something compiles the file.
+  `MayaCalendar.lean` sat broken on `ZMod.natCast_zmod_eq_zero_iff_dvd` — removed
+  in v4.32.0 with **no deprecated alias** — while its eight `rfl` theorems stayed
+  fine and nothing reported anything. Read the replacement off
+  `.lake/packages/mathlib/` rather than recalling it; a guessed name is a silent
+  wrong repair. Other files outside every build target carry the same exposure:
+  see the `OUTSIDE EVERY TARGET` rows in `docs/lean-4.32.0-ledger.md`.
+
+**Indexes are generated, never hand-edited.** `python3 tools/build_indexes.py`
+rebuilds `master-index.html`, every `index-book*.html` and `index-root.html` from
+the files themselves. Editing an index by hand puts it out of agreement with the
+corpus on the next run, which is the whole argument of WP-114.
