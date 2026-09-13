@@ -58,6 +58,27 @@ the fourth is the one that matters. A summary that grows with the corpus is not 
 summary, and a report that prints 44 failures which are all the same fact has
 moved data into a place where only information belongs.
 
+### An error count is not a health measure until the imports resolve
+
+A failed `import` stops elaboration. Everything after it is never seen, so the
+error count reports *errors before the stop*, not errors in the file. Two rows of
+one overnight run:
+
+```
+vol1-proofs/PrincipiaVol1.lean               FAIL 10s   (1 error)
+AXLE/NASA/MoonBase/.../PrincipiaVol1.lean    FAIL 69s  (58 errors)
+```
+
+The first looks like a one-line fix and the second like a wreck. Repairing the
+first file's single moved module turned its 1 into **22**, in two families that
+had been invisible. The second file's imports resolved, so its 58 were real and
+visible from the start. The report ranked them exactly backwards.
+
+So: a file whose first error is an unresolved import has **no measured error
+count at all**, and must be reported as `IMPORTS-UNRESOLVED` rather than as
+`FAIL (n)`. Any triage that sorts by error count is otherwise sorting by how
+early each file happened to stop.
+
 ### The price of a probe
 
 Every test is charged, and the charge does not scale with how much you learn from
