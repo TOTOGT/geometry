@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-114 &middot; The Index Must Come From the Source &mdash; Principia Orthogona Vol VI</title>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+</style></head>
+
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a> &middot; WP-114</span>
+<span class="meta"><a href="wp113-three-terms-in-a-fingernail.html">&larr; WP-113 &middot; Three Terms in a Fingernail</a></span>
+</div>
+
+<div class="wp-head">
+<div class="topictag" title="When variant accounts are a contradiction and when they are a family">#Method</div>
+<div class="wp-kicker">Vol VI &middot; Roots &middot; WP-114 &middot; 2026-09-13 &middot; Cross-cutting &middot; Verified by <span class="mono">wp114-verify.py</span></div>
+<h1>The Index Must Come From the <em>Source</em></h1>
+<div class="subtitle">Variant accounts of the same event are not automatically contradictions. Where a tradition supplies an index &mdash; a cycle, a branch, a vacuum &mdash; the variants are values of a function and the conflict dissolves. Where the reader supplies it, the manoeuvre succeeds every time, and a manoeuvre that never fails detects nothing. This paper separates the two cases, computes the discriminating power of each, and gives the scale at which even a legitimate index goes blunt.</div>
+<div class="metagrid">
+<div><strong>Method</strong>exhaustive enumeration over a finite propositional language<br>exact rational arithmetic on a stated null model, closed form in Stirling numbers</div>
+<div><strong>Claim type</strong>a criterion, with the chance baseline it has to beat<br>no corpus is counted here and no text is reinterpreted</div>
+<div><strong>Verification</strong><span class="mono">book6/wp114-verify.py</span> &mdash; 5 blocks, standard library only<br>runs in seconds; closes with an <span class="mono">[HONESTY]</span> block</div>
+</div>
+</div>
+
+<div class="wrap">
+
+<div class="lede">Two sources describe one event and disagree. There are two readings available. Either one of them is wrong, or they are describing two events that share a description and differ in something the reader has not been told. The second reading is not a dodge &mdash; whole literatures are built on it, and so is one branch of contemporary physics. It becomes a dodge at an identifiable point, and that point can be computed.</div>
+
+<h2>1 &middot; The manoeuvre, and the tradition's name for it</h2>
+
+<p>Sanskrit commentators have a technical term for it: <em>kalpa-bheda</em>, difference of kalpa. Where two Pur&#257;&#7751;ic accounts of an episode conflict, the accounts are taken to belong to different world-cycles. They are not rival reports competing for one slot; they are the same story told of different turns of the wheel. The device is not applied ad hoc by later apologists alone &mdash; the texts are built for it. The Vi&#7779;&#7751;u Pur&#257;&#7751;a (III.3) enumerates twenty-eight Vy&#257;sas, one for each dv&#257;para-yuga. Vy&#257;sa is an office, not a man, so the dictation of the Mah&#257;bh&#257;rata is itself a recurrent event, and asking which telling is the real one is a category error inside that frame.</p>
+
+<p>Formally the manoeuvre is the same in every case where it appears. A set of sentences that is jointly unsatisfiable is replaced by a family of sentences indexed by a parameter, and each member of the family is asserted only at its own index. What looked like <span class="mono">S &and; &not;S</span> becomes <span class="mono">S(k&#8321;) &and; &not;S(k&#8322;)</span>, which is consistent whenever <span class="mono">k&#8321; &ne; k&#8322;</span>. Contradiction is a property of statements, not of the world; restoring a suppressed index can remove it.</p>
+<p>A film strip is the everyday form of the same object: the sprocket axis is the base, and a frame hangs at each position along it. Nothing travels along the strip, and the whole strip exists at once &mdash; motion is what appears when it is read with an index. Choosing one account per index is, in the same vocabulary, choosing a <em>section</em>.</p>
+
+<div class="box thm">
+<span class="lab">The distinction this paper turns on</span>
+<p style="margin:0">An index is <strong>source-supplied</strong> when the source names it before the discrepancy is noticed &mdash; the text says which kalpa, the theory says which vacuum. It is <strong>reader-supplied</strong> when the interpreter introduces it afterwards, to absorb a conflict already in view. The two look identical on the page and behave completely differently.</p>
+</div>
+
+<h2>2 &middot; A reader-supplied index costs nothing, and is worth what it costs</h2>
+
+<p>Block [1] of the companion script enumerates every proposition over two variables that is neither unsatisfiable nor tautologous &mdash; fourteen of them &mdash; and examines all 455 sets of size two or three. Of those, 255 are jointly unsatisfiable. A reader free to assign an index after seeing the sentences rescues all 255. <span class="tag t-model">Model</span></p>
+
+<div class="box warn">
+<span class="lab">Limiting case &middot; an index that is a space</span>
+<p style="margin:0">Making the index continuous rather than enumerable sends <span class="mono">K &rarr; &infin;</span>. At <span class="mono">N</span> = 20 the chance baseline is 0.9094 at <span class="mono">K</span> = 10<sup>3</sup>, 0.99991 at 10<sup>6</sup> and 0.9999999 at 10<sup>9</sup>. Two points drawn from a continuum never coincide, so no collision is ever forced. An index set that is a <em>space</em> rather than a list forbids nothing at all: enriching the index is the one move that guarantees it cannot bite.</p>
+</div>
+
+<div class="box warn">
+<span class="lab">The same degeneracy, in a second guise</span>
+<p style="margin:0">Common descent behaves identically. Any two things share an ancestor if the search is allowed to go deep enough, so an unqualified claim of shared origin holds universally and separates nothing &mdash; the <span class="mono">K &rarr; &infin;</span> case again, with depth standing in for index size. The informative version always names the depth: philology names the ancestor copy, biology names and dates the last common ancestor, cosmology names nucleosynthesis or recombination. A shared origin with no depth attached forbids nothing.</p>
+</div>
+
+<div class="eq">jointly unsatisfiable sets: 255 &nbsp;&middot;&nbsp; rescued by reader-supplied index: 255 &nbsp;&middot;&nbsp; failures: 0</div>
+
+<p>The result is a triviality, and the triviality is the finding. Give each sentence its own index and the only sets that resist are the ones containing a sentence that is unsatisfiable on its own &mdash; which is to say, the ones where nothing was ever being described. The construction takes one line and works universally.</p>
+
+<p>A test that cannot fail returns no information when it passes. This is the same objection the defect ledger makes to a proof whose hypotheses are never checked, and the same one the null-result papers in this volume make to a fit that would have come out the same on noise. Observing that an indexed reading is <em>available</em> tells a reader nothing, because it is always available.</p>
+
+<h2>3 &middot; An index with teeth &mdash; and the scale at which they blunt</h2>
+
+<p>A source-supplied index behaves differently because it is committed in advance and can collide with itself. Block [2] states the chance baseline. Let <span class="mono">N</span> sentences bear on one question; each asserts it or denies it, and each carries a label drawn from the <span class="mono">K</span> the source provides. The indexed reading survives only if no single label carries both an assertion and a denial. Conditioning on the number of labels actually used gives a closed form, evaluated exactly:</p>
+
+<div class="eq">P(N, K) &nbsp;=&nbsp; &Sigma;<sub>m</sub> &nbsp;C(K, m) &middot; m! &middot; S(N, m) &middot; 2<sup>m</sup> &nbsp;/&nbsp; (2K)<sup>N</sup></div>
+
+<p>with <span class="mono">S(N, m)</span> the Stirling numbers of the second kind. Every term is positive, so the evaluation is stable as well as exact; it is checked against hand calculation at three points. For twenty sentences bearing on one question:</p>
+
+<table>
+<tr><th>K &mdash; labels the source provides</th><th>P(survives by chance)</th><th></th></tr>
+<tr><td class="n">8</td><td class="n">0.0002</td><td>a committed index; collisions are forced</td></tr>
+<tr><td class="n">20</td><td class="n">0.0111</td><td>one label per statement &mdash; still bites</td></tr>
+<tr><td class="n">50</td><td class="n">0.1508</td><td></td></tr>
+<tr><td class="n">138</td><td class="n">0.5000</td><td>half the discriminating power gone</td></tr>
+<tr><td class="n">400</td><td class="n">0.7885</td><td></td></tr>
+<tr><td class="n">1853</td><td class="n">0.9500</td><td>indistinguishable from no index at all</td></tr>
+</table>
+
+<p>Block [3] repeats the calculation at <span class="mono">N</span> = 10, 20, 30 and 40 and finds the half-power point scaling as the square of the number of statements, with a flat constant:</p>
+
+<div class="eq">K<sub>50</sub> &nbsp;&asymp;&nbsp; 0.344 &middot; N<sup>2</sup> &nbsp;&nbsp;(measured) &nbsp;&middot;&nbsp; 1 / (4 ln 2) = 0.361 &nbsp;(birthday estimate)</div>
+
+<p>The mechanism is the birthday collision: there are about <span class="mono">N&sup2;/2</span> pairs, each shares a label with probability <span class="mono">1/K</span>, and half of those disagree in sign. So the expected number of forced collisions is <span class="mono">N&sup2;/4K</span>, and the index stops discriminating once <span class="mono">K</span> reaches order <span class="mono">N&sup2;</span>. <span class="tag t-model">Model</span></p>
+
+<div class="box warn">
+<span class="lab">The consequence, stated plainly</span>
+<p style="margin:0">Legitimacy of provenance is necessary and not sufficient. An index the source genuinely supplies still explains nothing once the source is willing to supply enough of them. The quantity that matters is not who named the index but how large the index set is relative to the number of statements it is being asked to reconcile.</p>
+</div>
+
+<h2>4 &middot; The same demand, made in physics</h2>
+
+<p>String compactification is the case where the two senses of the word coincide: the extra dimensions really are a fibre, a Calabi&ndash;Yau sitting over each point of spacetime. But the plurality of worlds does not live in those dimensions. It lives in the choice &mdash; which manifold, which flux &mdash; and that choice is an index. The dimensions are the same six everywhere. <span class="tag t-data">Literature</span></p>
+
+<p>The quoted sizes of that index set are 10<sup>500</sup> for the flux-vacua estimate and far larger, around 10<sup>272000</sup>, in F-theory flux counting. Block [4] puts them against the blunting scale. The Standard Model has nineteen free parameters, twenty-six once neutrino masses and mixing are included, so the scale at which an index stops discriminating is of order 10<sup>2</sup>.</p>
+
+<div class="eq">blunting scale &asymp; 10<sup>2.4</sup> &nbsp;&middot;&nbsp; index set &asymp; 10<sup>500</sup> or 10<sup>272000</sup></div>
+
+<p>Hundreds of orders of magnitude past the point where the chance baseline reaches one. This is not a new objection &mdash; it is the standard motivation for the swampland programme, restated in the terms of block [3]. That programme is the attempt to show the assignment is not by chance: to find effective theories that get <em>no</em> label, so that the index excludes something after all. Its existence is the concession that size alone had blunted it. <span class="tag t-open">Open</span></p>
+
+<p>The parallel is offered as a parallel and not as support. String theory is without experimental confirmation, and a humanistic reading claim that leaned on it for authority would be borrowing from an account that is itself unsettled. What the two cases share is the demand, arrived at independently and a thousand years apart: name the index, and show that it forbids something.</p>
+
+<h3>4.1 &middot; The case where the question is decidable</h3>
+
+<p>General relativity supplies a worked instance in which <em>did the source supply the index?</em> has a computed answer rather than an argued one. Cutting a spacetime into frames is choosing a foliation. A generic spacetime supplies none: by the relativity of simultaneity, different observers slice the same block differently and no slicing is the correct one. There the index is reader-supplied, and the question of which slice is <em>now</em> has no answer to give.</p>
+
+<p>A spacetime is <em>static</em> exactly when it admits a hypersurface-orthogonal timelike Killing vector. Where one exists, the geometry hands over the slicing itself and the index is source-supplied. So in this case the criterion of section 5 reduces to the existence of a Killing field &mdash; a condition one computes. <span class="tag t-data">Literature</span></p>
+
+<p>The distinction that makes this work is worth keeping separate from the picture that motivates it. A <em>slice</em> is frozen because it contains no time. The <em>block</em> is not frozen at all: it contains the whole of time, which is why it needs no second time to change in. A layered account of the world does not abolish the index &mdash; it hands the index the entire job, because layers with no ordering on them are not a history of anything.</p>
+
+<h2>5 &middot; The rule</h2>
+
+<div class="box thm">
+<span class="lab">Criterion</span>
+<p><strong>The index has to come from the source, not the reader.</strong> Where the source names it before the discrepancy is in view, read variants as indexed. Where it does not, a discrepancy stays a discrepancy until evidence supplies one.</p>
+<p style="margin-bottom:0"><strong>And the index set has to be small.</strong> Against <span class="mono">N</span> statements, an index set of order <span class="mono">N&sup2;</span> or larger has no discriminating power left, whoever supplied it. An indexed reading earns its keep only by forbidding combinations that could have occurred.</p>
+<p style="margin-bottom:0"><strong>And the index has to be attested before the discrepancy it settles.</strong> Presence in the source is not sufficient. A pedigree attached once the conflict is already in view answers <em>the source supplied it</em> while doing the work of a reader. The standing case is Ayurveda's own descent from Brahm&#257; through the A&#347;vins to Indra, recited at the head of both sa&#7745;hit&#257;s: Zysk's reading places the empirical medicine in the &#347;rama&#7751;a and Buddhist ascetic milieu with the Vedic lineage fitted afterwards. Whether that reading is correct is a question for textual criticism &mdash; which is exactly the point. Attestation order is datable; provenance on its own is not.</p>
+</div>
+
+<p>Applied to the case that prompted the paper: <em>kalpa-bheda</em> is source-supplied, and correctly so. It is the tradition's own device, named in its own vocabulary, and the enumerated Vy&#257;sas show the index was in the architecture before any commentator needed it. Whether it also passes the second test is an empirical question about a specific corpus &mdash; how many cycles are actually named against how many variants are actually reconciled &mdash; and this paper does not answer it. It states what answering it would require.</p>
+
+<div class="gap">
+<span class="lab">Open &middot; what would falsify this</span>
+<p style="margin:0">The rule fails if a corpus can be exhibited whose index is supplied only by its readers and which nonetheless makes checkable predictions that could have come out otherwise. None is offered here. The rule is stated so that such a corpus would count against it.</p>
+</div>
+
+<h2>6 &middot; References</h2>
+
+<ol class="refs">
+<li>Vi&#7779;&#7751;u Pur&#257;&#7751;a, Book III, chapter 3 &mdash; the enumeration of the twenty-eight Vy&#257;sas. Wilson translation.</li>
+<li>Douglas, M. R. (2003). The statistics of string / M theory vacua. <em>JHEP</em> 0305:046.</li>
+<li>Taylor, W. &amp; Wang, Y.-N. (2015). The F-theory geometry with most flux vacua. <em>JHEP</em> 1512:164.</li>
+<li>Vafa, C. (2005). The string landscape and the swampland. <span class="mono">hep-th/0509212</span>.</li>
+<li>Zysk, K. G. (1991). <em>Asceticism and Healing in Ancient India: Medicine in the Buddhist Monastery.</em> Oxford University Press.</li>
+<li>Wujastyk, D. (2003). <em>The Roots of Ayurveda.</em> Penguin.</li>
+<li>Principia Orthogona, <a href="../docs/defect-ledger.html">Defect Ledger</a> &mdash; the <span class="mono">NAME EXCEEDS STATEMENT</span> class is the same failure with the index dropped.</li>
+<li>Principia Orthogona, <a href="wp113-three-terms-in-a-fingernail.html">WP-113</a>, <em>Three Terms in a Fingernail</em> (2026).</li>
+</ol>
+
+</div>
+
+<footer>
+<div class="fwrap">
+<div>
+<a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a><br>
+WP-114 &middot; 2026-09-13 &middot; G6 LLC &middot; CC BY-NC-ND 4.0<br>
+Verification: <span class="mono">book6/wp114-verify.py</span>
+</div>
+<div class="disc">Every number on this page is produced by the companion script. The probability model of sections 3 and 4 is a chance baseline under uniform, independent labelling; no tradition and no theory assigns indices that way, and the figure is the denominator a real claim must beat, not a measurement of any corpus. No text is counted or reinterpreted here. The landscape counts are reproduced from the cited literature.</div>
+</div>
+</footer>
+
+</body>
+</html>

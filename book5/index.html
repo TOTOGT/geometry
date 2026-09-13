@@ -120,8 +120,44 @@ footer a{color:var(--gold);text-decoration:none;}
   <!-- CHAPTERS -->
   <span class="section-label">Capítulos · Chapters</span>
   <h2 class="section-h2">Conteúdo / Table of Contents</h2>
+<div class="idx-find" style="margin:0 0 1rem 0;">
+  <input type="search" id="idx-q" placeholder="Search this book &mdash; title, subtitle or filename&hellip;" autocomplete="off"
+         style="width:100%;box-sizing:border-box;padding:.7rem 1rem;font:inherit;font-size:.95rem;border:1px solid var(--rule,rgba(201,168,76,.28));border-radius:2px;background:rgba(13,14,22,.5);color:inherit;">
+  <div id="idx-n" style="font-family:var(--mono,ui-monospace,monospace);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim,#8a8578);margin-top:.45rem;min-height:1em"></div>
+</div>
+<script>
+(function(){
+  var q=document.getElementById('idx-q'), n=document.getElementById('idx-n');
+  if(!q) return;
+  var rows=[].slice.call(document.querySelectorAll('.ch-row')).map(function(el){
+    return {el:el, hay:((el.textContent||'')+' '+(el.getAttribute('href')||'')).toLowerCase().replace(/\s+/g,' ')};
+  });
+  var heads=[].slice.call(document.querySelectorAll('.ch-section-head'));
+  function run(){
+    var s=q.value.trim().toLowerCase(), c=0;
+    rows.forEach(function(r){
+      var hit = !s || r.hay.indexOf(s)>=0;
+      r.el.style.display = hit ? '' : 'none';
+      if(hit) c++;
+    });
+    // a section head with nothing left under it is noise: hide it too
+    heads.forEach(function(h){
+      var sib=h.nextElementSibling, keep=false;
+      while(sib && !sib.classList.contains('ch-section-head')){
+        if(sib.classList.contains('ch-row') && sib.style.display!=='none'){ keep=true; break; }
+        sib=sib.nextElementSibling;
+      }
+      h.style.display = (!s || keep) ? '' : 'none';
+    });
+    n.textContent = s ? (c+' of '+rows.length+' shown') : '';
+  }
+  q.addEventListener('input', run);
+  q.addEventListener('search', run);
+})();
+</script>
   <div class="ch-list">
-    <a href="ch00.html" class="ch-row">
+
+<a href="ch00.html" class="ch-row">
       <span class="ch-n">Ch 00</span>
       <div class="ch-info"><strong>Como Começar / How to Begin</strong><span class="sub">O que trazer do Vol IV · As duas faces da moeda · Edição do Estudante · What to bring from Vol IV · The coin has two sides</span></div>
       <span class="badge b-prose">Orientação</span>

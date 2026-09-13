@@ -362,6 +362,32 @@ footer a:hover { color: var(--gold2); }
 
   <div class="ch-grid">
     <!-- META -->
+
+<div class="idx-find" style="margin:0 0 1rem 0;">
+  <input type="search" id="idx-q" placeholder="Search this book &mdash; title, subtitle or filename&hellip;" autocomplete="off"
+         style="width:100%;box-sizing:border-box;padding:.7rem 1rem;font:inherit;font-size:.95rem;border:1px solid var(--rule,rgba(201,168,76,.28));border-radius:2px;background:rgba(13,14,22,.5);color:inherit">
+  <div id="idx-n" style="font-family:var(--mono,ui-monospace,monospace);font-size:.62rem;letter-spacing:.06em;color:var(--dim,#6f6857);margin-top:.4rem;min-height:1em"></div>
+</div>
+<script>
+(function(){
+  var q=document.getElementById('idx-q'), n=document.getElementById('idx-n');
+  if(!q) return;
+  var rows=[].slice.call(document.querySelectorAll('.ch-row')).map(function(el){
+    return {el:el, hay:((el.textContent||'')+' '+(el.getAttribute('href')||'')).toLowerCase().replace(/\s+/g,' ')};
+  });
+  function run(){
+    var s=q.value.trim().toLowerCase(), c=0;
+    rows.forEach(function(r){
+      var hit = !s || r.hay.indexOf(s)>=0;
+      r.el.style.display = hit ? '' : 'none';
+      if(hit) c++;
+    });
+    n.textContent = s ? (c+' of '+rows.length+' shown') : '';
+  }
+  q.addEventListener('input', run);
+  q.addEventListener('search', run);
+})();
+</script>
     <a href="ch-do-not-trust-verify.html" class="ch-row" style="text-decoration:none;color:inherit;">
       <div class="ch-num">❖</div>
       <div>

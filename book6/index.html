@@ -180,9 +180,45 @@ footer a{color:var(--gold);text-decoration:none;}
   <span class="section-label">Contents · Roteiro</span>
   <h2 class="section-h2">118 Chapters &amp; Papers</h2>
 
+<div class="idx-find" style="margin:0 0 1rem 0;">
+  <input type="search" id="idx-q" placeholder="Search this book &mdash; title, subtitle or filename&hellip;" autocomplete="off"
+         style="width:100%;box-sizing:border-box;padding:.7rem 1rem;font:inherit;font-size:.95rem;border:1px solid var(--rule,rgba(201,168,76,.28));border-radius:2px;background:rgba(13,14,22,.5);color:inherit;">
+  <div id="idx-n" style="font-family:var(--mono,ui-monospace,monospace);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim,#8a8578);margin-top:.45rem;min-height:1em"></div>
+</div>
+<script>
+(function(){
+  var q=document.getElementById('idx-q'), n=document.getElementById('idx-n');
+  if(!q) return;
+  var rows=[].slice.call(document.querySelectorAll('.ch-row')).map(function(el){
+    return {el:el, hay:((el.textContent||'')+' '+(el.getAttribute('href')||'')).toLowerCase().replace(/\s+/g,' ')};
+  });
+  var heads=[].slice.call(document.querySelectorAll('.ch-section-head'));
+  function run(){
+    var s=q.value.trim().toLowerCase(), c=0;
+    rows.forEach(function(r){
+      var hit = !s || r.hay.indexOf(s)>=0;
+      r.el.style.display = hit ? '' : 'none';
+      if(hit) c++;
+    });
+    // a section head with nothing left under it is noise: hide it too
+    heads.forEach(function(h){
+      var sib=h.nextElementSibling, keep=false;
+      while(sib && !sib.classList.contains('ch-section-head')){
+        if(sib.classList.contains('ch-row') && sib.style.display!=='none'){ keep=true; break; }
+        sib=sib.nextElementSibling;
+      }
+      h.style.display = (!s || keep) ? '' : 'none';
+    });
+    n.textContent = s ? (c+' of '+rows.length+' shown') : '';
+  }
+  q.addEventListener('input', run);
+  q.addEventListener('search', run);
+})();
+</script>
   <div class="ch-list">
 
     <div class="ch-section-head">New · Economics &amp; Commodities</div>
+
     <a href="ch-bitter-cargo.html" class="ch-row">
       <span class="ch-n">Econ</span>
       <div class="ch-info"><strong>Bitter Cargo — Sugar, Cacao, Tea, Pepper: the Drug-Foods and Their Economics</strong><span class="sub">Four mild psychoactives the world learned to call food · who benefited, who was exploited · from the Aztec cacao pod and the sugar–slavery complex to 1.56M children in West-African cocoa (NORC 2020) and the shuttered Newark Mars plant · source-checked</span></div>
@@ -932,6 +968,17 @@ footer a{color:var(--gold);text-decoration:none;}
       <div class="ch-info"><strong>The Ends, Not the Middle</strong><span class="sub">Measurement &middot; The Cavalieri error exponent is fixed by the order at which the area function vanishes at the ends of its support, not by its regularity in between. With the H&ouml;lder exponent set by construction, the asymptotic exponent is 2.003 at every roughness from H = 0.1 to 0.9. Interior roughness sets only how many sections are needed before the law holds &mdash; which is why WP-110 found nothing.</span></div>
       <span class="badge b-live">Live</span>
     </a>
+    <a href="wp113-three-terms-in-a-fingernail.html" class="ch-row">
+      <span class="ch-n">WP-113</span>
+      <div class="ch-info"><strong>Three Terms in a Fingernail</strong><span class="sub">Measurement &middot; Keratin writes a time series into space at a fixed rate, and reading it back costs three separable things: a write head of finite width, a systematic sample in the p = 0 regime where error falls as 1/n, and an exchange rate nobody measured. The first two come out the same size, so cutting finer than 1 cm buys resolution that is not in the record.</span></div>
+      <span class="badge b-live">Live</span>
+    </a>
+    <a href="wp114-the-index-must-come-from-the-source.html" class="ch-row">
+      <span class="ch-n">WP-114</span>
+      <div class="ch-info"><strong>The Index Must Come From the Source</strong><span class="sub">Method &middot; Variant accounts are a contradiction only when the index is missing. A reader-supplied index rescues all 255 jointly unsatisfiable sets in a two-variable language &mdash; it never fails, so it detects nothing. A source-supplied index does bite, until the index set reaches order N&sup2;: measured half-power at K = 0.344 N&sup2;. Applied to kalpa-bheda and to the string landscape.</span></div>
+      <span class="badge b-live">Live</span>
+    </a>
+
 
 
 
