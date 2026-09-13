@@ -359,3 +359,51 @@ separate a broken proof from a broken reader.
 
 Items 1, 2 and 4 are bookkeeping the corpus already half-does. Item 3 is the part
 nobody here has built, and the part Nyāya spent centuries on.
+
+---
+
+## The registry, measured (v0, 2026-09-13)
+
+The labels already exist. `tools/claim_table.py --strict` harvests them into
+`docs/claims.tsv`: **3,998 claim-shaped occurrences across 520 pages.**
+
+### The vocabulary is two axes collapsed into one list
+
+Counting uses across the corpus: `Open` 497, `Conjecture` 197, `Proved` 146,
+`Hypothesis` 129, `scaffold` 104, `machine-checked` 94, `kernel-checked` 59,
+`Formalized` 38, `placeholder` 37, `kernel-audited` 31, `Established` 29,
+`Empirical` 28, `Measured` 20.
+
+Two symptoms of the collapse are visible in that list. **Three words do one job** —
+*machine-checked*, *kernel-checked* and *kernel-audited* all name a kernel record.
+And **one word does two** — *Established* asserts both a standing and a source,
+and *Empirical* and *Measured* are warrants wearing the grammar of a status.
+
+The fix is Nyāya's, and it costs no new vocabulary: separate *what the claim's
+standing is* from *how it is known*.
+
+- **status** — `conjecture` · `open` · `argued` · `proved`
+- **warrant** — `kernel` · `recomputed` · `measured` · `cited` · `none`
+
+The pair is the claim. *Proved · kernel* and *Proved · cited* are different
+things; *Open · measured* is entirely legitimate and currently unsayable.
+
+### What is pending to be tagged
+
+| | claims | pages |
+|---|---:|---:|
+| fully tagged — status **and** warrant | 446 | — |
+| `proved` with no warrant named | 1,131 | 309 |
+| warrant named with no status | 1,068 | 331 |
+| machine warrant, no address within 200 chars | 329 | 155 |
+| **machine warrant, no `.lean`/`.py` named anywhere on the page** | — | **61** |
+
+That last row is the one to act on: it is *pratijñā* without *hetu* — a page
+saying a thing is machine-checked with nothing on it naming what was checked.
+
+**Caveat, and it is load-bearing.** v0 matches a label wherever it appears, so a
+page that *discusses* machine-checking is scored as *claiming* it. This chapter is
+itself in the 61 for exactly that reason. The number is an upper bound on the
+defect and a lower bound on the work; v1 must distinguish a claim from a mention,
+which is the same claim-versus-mention problem the checker cannot solve either.
+Until it does, the 61 is a worklist to read, not a count to publish.
