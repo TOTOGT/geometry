@@ -60,7 +60,18 @@ ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).reso
 SITE   = "totogt.github.io/geometry"
 PREFIX = "/geometry/"
 REPO   = "geometry"
-SKIP   = ["docs/ml-evidence/"]
+SKIP   = ["docs/ml-evidence/", ".lake/", "_to_delete/", "_archive/scratch/",
+          "Claude outputs/"]
+# .lake/ added 2026-09-13. It is gitignored, so the two vendored templates
+# under it -- importGraph's html-template/index.html and mathlib's
+# lakeprof_report_template.html -- resolve at a desk that has built Mathlib
+# and are dead in every clone and on the published site. audit.py has skipped
+# .lake since 2026-09-10 for SCANNING; its own line 55 warns that SKIP_DIRS
+# controls what is scanned and not what can be linked TO, and this is the
+# other half of that warning. Measured before the change: audit.py reported
+# 1 dead_link at the desk and 4 on a fresh clone, the difference being
+# exactly these two rows duplicated across index-root and master-index.
+# _to_delete/ and "Claude outputs/" are staging, not corpus.
 
 # (output suffix, display name, predicate on the posix path)
 FOLDERS: list[tuple[str, str, str]] = [
