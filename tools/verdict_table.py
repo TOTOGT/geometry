@@ -18,7 +18,7 @@ DECL_RE  = re.compile(r"^'(?P<name>.+?)' (?:depends on axioms: \[(?P<ax>.*)\]|do
 #   -- EXPECTED under `--audit`:  18 declarations, 0 trusting sorryAx
 # Preferred extension, because counts cannot catch a swap (one closed, one opened):
 #   -- GATE-DECLARE: sorries = name_a, name_b      (or `none`)
-DECLARE_RE  = re.compile(r"GATE-DECLARE:\s*sorries\s*=\s*(?P<v>.+?)\s*$")
+DECLARE_RE  = re.compile(r"GATE-DECLARE:\s*sorries\s*=\s*(?P<v>.+?)\s*$", re.M)
 EXPECTED_RE = re.compile(r"EXPECTED under.{0,20}?:\s*(?P<d>\d+)\s+declarations,\s*(?P<s>\d+)\s+trusting\s+sorryAx")
 
 FIELDS = ["project","path","sha256","toolchain","verdict",

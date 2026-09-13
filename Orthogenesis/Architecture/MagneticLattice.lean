@@ -1,3 +1,5 @@
+-- GATE-DECLARE: sorries = Orthogenesis.Magnetism.heliSpin_incommensurate_aperiodic
+-- GATE-REASON: M2 in the repository README's Open Obligations table. Needs irrationality of q/2pi plus a Weyl equidistribution argument.
 /-
 # MagneticLattice.lean
 # =====================

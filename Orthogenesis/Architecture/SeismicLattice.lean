@@ -1,3 +1,5 @@
+-- GATE-DECLARE: sorries = Orthogenesis.Seismic.detune_from_ground_period
+-- GATE-REASON: Q2 in the repository README's Open Obligations table. Needs a damped forced-oscillator structural-dynamics response model.
 /-
 # SeismicLattice.lean
 # ===================
