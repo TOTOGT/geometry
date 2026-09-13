@@ -258,13 +258,43 @@ half of the apparatus that formalisation left behind on its way to being
 mechanical, arriving late and under-specified, and the useful move is to go
 read the tradition that kept it rather than to keep deriving it from failures.
 
-The reason to record this is not decoration. The Cullman synopsis asks why the
-same short grammar keeps reappearing among people who were not in contact. Here
-is an instance inside the corpus's own toolchain: a checklist derived this week
-from a night of Lean failures reproduces, badly, a structure worked out in
-Sanskrit before the common era. If the pattern were an artifact of one lineage's
-habits it would not survive that distance. It is worth asking what else in
-*Nyāya* is already solved — the theory of *vyāpti*, invariable concomitance, is
-the obvious next place to look, since it is precisely the question of when a
-sweep over instances licenses a general claim, which step 10 currently answers by
-hand.
+### Derived, not transmitted — and the third instance is this repository
+
+Neither system was copied from the other and neither was learned. Each was
+**derived**, from the same first principles, by people addressing the same
+problem: how does a claim earn assent, and how does it fail.
+
+The differences are the evidence. Transmission produces the same decomposition
+in local vocabulary. What is actually there is two systems that agree completely
+on *what the problem is* — inference has parts, reasons fail in nameable ways,
+warrant comes in kinds — and disagree on how to cut it: five members against two
+premises, an epistemology of *pramāṇa* against a theory of formal validity, the
+worked instance kept against the worked instance discarded. That is the signature
+of convergent derivation. Copying does not produce disagreement at the joints
+while producing agreement about where the joints are.
+
+Which changes what the observation is worth. A parallel is a curiosity. Two
+independent derivations mean the apparatus is a property of **the problem** — of
+inference held up to scrutiny — and not of a culture, a language, or a period.
+
+And there is a third instance, which is the reason to write this down here rather
+than in a history: **this repository derived it again, this month, from a night of
+Lean failures.** Nobody consulted Akṣapāda. The twelve steps came out of a report
+that named a frozen deposit as if it were a live file, a parser that dropped a
+declaration whose name ended in a prime, a wrapped axiom list hiding a `sorryAx`,
+and a sweep that varied one axis of a two-axis claim. From those, and only those,
+came: keep the worked instance with the rule; name the ways a reason fails;
+distinguish kinds of warrant. Three of Nyāya's central commitments, reached
+backwards from broken output.
+
+Two independent derivations across two millennia are suggestive. A third, whose
+provenance is documented commit by commit in `docs/audit-log.md` and can be
+audited by anyone who doubts it, is a different kind of evidence — because the
+usual objection to any such parallel is that transmission cannot be excluded, and
+here it can. The derivation is in the history of this repository.
+
+The practical consequence is the one worth acting on: stop deriving it from
+failures. *Vyāpti* — invariable concomitance, and *upādhi*, the limiting condition
+that defeats it — is precisely the question of when a sweep over instances
+licenses a general claim, which is step 10 and is currently answered by hand. That
+work has been done. Read it before rediscovering it a fourth time.
