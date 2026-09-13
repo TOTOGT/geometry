@@ -100,11 +100,13 @@ appear near the fold. It <em>is</em> the fold, in both senses of the word at onc
     true thing &mdash; a shared quotient by an involution with isolated fixed points, with
     <code>x &#8614; x&sup2;</code> as the smooth model of &#8477;/&plusmn;. The conflation of the two
     sides of the transform is answered in &sect;2 instead.</p>
-    <p><strong>&sect;4 understated. &mdash; APPLIED.</strong> The coincidence is a characterisation
-    of twelve, not a structural fact: the non-DC fixed modes are {6, 12, &hellip;} &cap; [1, N/2],
+    <p><strong>&sect;4 understated. &mdash; APPLIED.</strong> The coincidence is sharp, not a
+    structural fact: at six-fold symmetry the non-DC fixed modes are {6, 12, &hellip;} &cap; [1, N/2],
     and that set equals {N/2} <em>if and only if N = 12</em>. Verified algebraically and numerically
-    for N = 6, 12, 18, 24, 30, 36, 42, 48, 60. <code>Fin 12</code> becomes a characterisation rather
-    than an arbitrary choice, which is a stronger result than the one &sect;4 originally stated.</p>
+    for N = 6, 12, 18, 24, 30, 36, 42, 48, 60, and since generalised &mdash; the same argument at any
+    k gives N = 2k, kernel-checked in &sect;4's closing box. <code>Fin 12</code> is the k = 6 instance
+    of that theorem rather than an arbitrary choice, which is a stronger result than the one
+    &sect;4 originally stated.</p>
     <p><strong>&sect;2 relocated the assumption rather than resolving it. &mdash; APPLIED, and the
     relocation is now tagged.</strong> C as Poincar&eacute; sampling of a flow is lossless, so C
     cannot be where aliasing happens; F is where the flow ceases to be a diffeomorphism and aliasing
@@ -254,9 +256,10 @@ p = np.mean([np.roll(v, 2*j) for j in range(6)], axis=0)   # project onto C6-inv
 X = np.abs(np.fft.rfft(p))
 print([k for k, m in enumerate(X) if m > 1e-9])            # -> [0, 6]</div>
 
-<h3>The coincidence is a characterisation of twelve</h3>
+<h3>At six-fold symmetry the coincidence happens once</h3>
 <p>Nothing above says the hexagonal mode and the folding frequency coincide <em>in general</em>.
-They coincide at N = 12 and essentially nowhere else, and that is the sharper statement.</p>
+With the symmetry held at six-fold they coincide at N = 12 and nowhere else, and that is the
+sharper statement.</p>
 <p>For six-fold symmetry on N sites the rotation is through N/6 sites, so the fixed modes are the
 <span class="mono">k</span> with <span class="mono">(N/6)k &equiv; 0 (mod N)</span> &mdash; that is,
 the multiples of 6 in <span class="mono">[0, N/2]</span>. The non-constant ones are therefore
@@ -274,12 +277,14 @@ always <span class="mono">{6, 12, &hellip;}</span>, and that set equals
 <tr><td class="n">6</td><td class="n">1</td><td class="mono">{0}</td><td class="n">3</td><td>no</td></tr>
 </tbody>
 </table>
-<p>Verified by the same projection as above at each N. <span class="tag t-data">DATA</span>
-This changes what the paper is claiming. <span class="mono">PhaseVector := Fin 12 &rarr; &#8477;</span>
-has looked like an arbitrary choice of resolution; on this reading <b>twelve is the unique site
-count at which six-fold symmetry carries no harmonic content except the fold itself.</b> Any other
-count either separates the hexagonal mode from the folding frequency, or admits modes besides
-it.</p>
+<p>Verified by the same projection as above at each N, and below by theorem.
+<span class="tag t-data">DATA</span> <span class="mono">PhaseVector := Fin 12 &rarr; &#8477;</span>
+has looked like an arbitrary choice of resolution; <b>at six-fold symmetry it is the one site count
+that carries no harmonic content except the fold itself.</b> Any other count either separates the
+hexagonal mode from the folding frequency, or admits modes besides it.</p>
+
+<p>What the sweep cannot establish is that <em>twelve</em> is the distinguished quantity, because it
+holds k = 6 throughout. Vary both and the structure appears at every k.</p>
 
 <div class="box thm">
   <span class="lab">The statement</span>
@@ -290,28 +295,31 @@ it.</p>
   sample domain.</p>
 </div>
 
-<div class="box warn">
-<p><strong>Correction &mdash; 2026-09-09. Twelve is an instance, not a characterisation.</strong>
-<span class="tag t-model">MISFRAMED</span></p>
+<div class="box thm">
+<span class="lab">The general statement</span>
 
-<p>The sweep above holds <span class="mono">k = 6</span> and varies N. With k fixed the answer can
-only come back N = 12, so the table cannot see the thing it was asked to test. Vary both and the
-statement generalises immediately: for any k &gt; 0 on an even number of sites, the k-fold
-symmetric ring keeps exactly one non-constant mode &mdash; the folding frequency &mdash; if and
-only if N = 2k.</p>
+<p>For any <span class="mono">k &gt; 0</span> on an even number of sites, the k-fold symmetric ring
+keeps exactly one non-constant mode &mdash; the folding frequency &mdash; if and only if
+<span class="mono">N = 2k</span>.</p>
 
 <div class="eq">visibleModes N k = { N/2 }   &lt;=&gt;   N = 2k          (0 &lt; k, 2 | N)</div>
 
-<p>At k = 6 that returns N = 12, which is what this section found. At k = 10 it returns N = 20.
-Nothing distinguishes twelve except the k it was computed at, so the claim that
-<span class="mono">Fin 12</span> is <em>characterised</em> is withdrawn. What &sect;4 gained was
-generality, not specialness.</p>
+<p>At k = 6 it returns N = 12, which is what &sect;4 found by sweeping. At k = 10 it returns N = 20.
+The hexagon on twelve sites and the decagon on twenty are the same fact at two values of one
+parameter, and the theorem covers every other value at once.</p>
 
 <p><strong>Kernel-checked.</strong> Six declarations in
 <span class="mono">GTCT/book4/FoldingFrequency.lean</span>, no <span class="mono">sorry</span>,
 every one resting on <span class="mono">[propext, Classical.choice, Quot.sound]</span> and nothing
 else. Report: <span class="mono">tools/verify-audit/2026-09-09/FoldingFrequency.axioms.txt</span>.
 <span class="tag t-data">VERIFIED</span></p>
+
+<p>Stated exactly, because the gate and the file can count differently: the audit probes
+<span class="mono">theorem</span> and <span class="mono">lemma</span>, and here that is six of six
+&mdash; the file&rsquo;s only other declarations are the definition <span class="mono">visibleModes</span>,
+which carries no proof obligation, and two anonymous <span class="mono">example</span>s that
+instantiate the theorem. Every proof in the file is therefore audited, which is not something the
+gate guarantees in general.</p>
 
 <table>
 <thead><tr><th>declaration</th><th>statement</th></tr></thead>
@@ -334,6 +342,13 @@ arithmetic never uses it: only <span class="mono">0 &lt; k</span> and
 Saturn&rsquo;s south pole (S&aacute;nchez-Lavega et al., <em>Science Advances</em>,
 doi 10.1126/sciadv.aee4251), beside the long-known six-sided wave at the north. Two different k in
 the sky is a good reason to stop presenting one value of k as special.</p>
+</div>
+
+<div class="box warn">
+<span class="lab">Framing corrected &middot; 2026-09-09</span>
+<p style="margin-bottom:0">An earlier version of &sect;4 headed this result <em>a characterisation of
+twelve</em>. The arithmetic under that heading stands and the count is right; the word is withdrawn.
+Twelve is what the theorem returns at k = 6, and twenty is what it returns at k = 10.</p>
 </div>
 
 <div class="gap">

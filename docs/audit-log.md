@@ -1,3 +1,94 @@
+# TWELVE WAS THE INSTANCE, AND THE PAGE CLAIMED THE KERNEL BEFORE THE KERNEL RAN (2026-09-13)
+
+**What was built.** `GTCT/book4/FoldingFrequency.lean` — the WP-84 arithmetic as a
+general theorem rather than a table:
+
+    visibleModes N k = { N/2 }   <=>   N = 2k          (0 < k, 2 | N)
+
+Six declarations, no `sorry`, every one resting on `[propext, Classical.choice,
+Quot.sound]` and nothing else. Compiles in 289 s against Mathlib under Lean 4.32.0.
+Report: `tools/verify-audit/2026-09-09/FoldingFrequency.axioms.txt`.
+
+The gate probes `theorem` and `lemma`, and here that is **six of six**. The file's
+only other declarations are the definition `visibleModes`, which carries no proof
+obligation, and two anonymous `example`s instantiating the theorem. Every proof in
+the file is audited — worth stating, because `Bhaskara.lean` audited eleven of
+twelve and the difference between those two situations is invisible in the summary
+line both print.
+
+**Class: OVER-GENERALISED — one word, not the arithmetic.** WP-84 §4 was headed
+*"The coincidence is a characterisation of twelve."* The sweep under that heading
+holds k = 6 and varies N. With k fixed the answer can only come back N = 12, so the
+table cannot see whether twelve is distinguished among all (N, k). It is not: the
+theorem returns 12 at k = 6 and 20 at k = 10.
+
+What survives is the sentence that followed the heading — at six-fold symmetry,
+twelve is the one site count carrying no harmonic content except the fold. That was
+checked independently against every N up to 20,000 and holds. Only the word
+*characterisation* is withdrawn. The distinction matters: a retraction of the
+arithmetic would have taken `PhaseVector := Fin 12 → ℝ` with it, and nothing here
+does.
+
+**Prompted by Saturn, and not applied to it.** A ten-sided wave at the south pole
+(Sánchez-Lavega et al., *Science Advances*, doi 10.1126/sciadv.aee4251, 2 September
+2026) beside the long-known six-sided wave at the north is a reason to stop
+presenting one value of k as special. It is not evidence for the theorem, which is
+about a discretely sampled ring; the polar wavenumbers are set by the width and
+shear of a circumpolar jet. The two share the integers 6 and 10. WP-84 and
+`FoldingFrequency.lean` both say so in their own text.
+
+## The page asserted the audit before the audit existed
+
+`wp84-the-fold-is-the-folding-frequency.html` carried **"Kernel-checked. Six
+declarations … Report: `tools/verify-audit/…/FoldingFrequency.axioms.txt`"**
+while the Lean file was still failing to compile. The count, the axiom set and the
+report path were all written from what the file was expected to produce.
+
+Every one of them turned out to be right. That is the part worth recording, because
+a claim that happens to be true is indistinguishable in the published page from one
+that was checked — which is the exact defect `--audit` and the `verify-audit/`
+directory were introduced to remove. Evidence-shaped prose written ahead of the
+evidence is the same failure as an audit that leaves nothing behind, arriving from
+the other direction.
+
+**Rule.** A page may not name a report path, a
+declaration count or an axiom set until that report exists on disk. Cite nothing
+prospectively; write the sentence after the gate prints, not before.
+
+## A debugging note: two runs spent on a file that did not exist
+
+`leancheck --audit` reported `FoldingFrequency.lean:86:40 unknown identifier 'k'`
+twice, byte-identical. The diagnosis — that `rintro rfl` on `m = k` eliminates `k`
+rather than `m`, stranding `dvd_refl k` — was applied to a copy in the container and
+never reached the disk, because the device bridge was down at the moment of writing.
+Reading the file on disk afterwards showed line 86 column 40 was `_`, not `k`;
+column 40 on **line 72** is `k`. The reported position and the reported message
+never agreed, and three compile cycles were spent before anyone checked the bytes.
+
+Resolved by removing the fragile point rather than locating it. Both membership
+tuples now read `⟨by omega, by omega, dvd_rfl⟩`: `dvd_rfl` takes its argument
+implicitly and `omega` reads the context, so neither can name a variable `subst`
+has eliminated, whichever side it chooses. Compiles clean.
+
+**Two rules from it.** Read the file on the target disk before diagnosing an error
+reported from it — a fix that was never written is indistinguishable from a fix that
+did not work, and both produce the identical error message on re-run. And where a
+tactic's behaviour is unspecified in the direction you depend on, remove the
+dependency instead of predicting it.
+
+## Applied
+
+- `book6/wp84-the-fold-is-the-folding-frequency.html` — §4 heading and its referee
+  response now state the surviving claim; the general theorem and its audit lead;
+  the framing withdrawal is a dated note beneath them rather than the section's
+  headline.
+- `AXLE/Journal/vol7.html`, `vol8.html` — dated erratum appended to the notices
+  page. Both issues are published; the body stands as circulated.
+- `AXLE/Journal/vol9.html` — colophon now cites the theorem rather than "tested
+  against nine candidate rates."
+
+---
+
 # THE THIRD OVER-GENERALISED IN ONE WEEK, AND IT CONTRADICTED ITS OWN COMPANION (2026-09-05)
 
 **Class: OVER-GENERALISED.** Mine, in `book6/wp99-paying-for-what-the-kernel-can-see.html` §6.
