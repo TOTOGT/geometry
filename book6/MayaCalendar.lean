@@ -50,9 +50,9 @@ theorem grand_is_triple_cosmic : grandAlign = 3 * cosmicAlign := by rfl
     Tzolk'in, since 260 ∣ 780. -/
 theorem tzolkin_mars_absorption (d : ℕ) (h : (d : ZMod mars) = 0) :
     (d : ZMod tzolkin) = 0 := by
-  have dvd_mars : mars ∣ d := (ZMod.natCast_zmod_eq_zero_iff_dvd d mars).mp h
+  have dvd_mars : mars ∣ d := (ZMod.natCast_eq_zero_iff d mars).mp h
   have factor   : tzolkin ∣ mars := by decide          -- 260 ∣ 780
-  exact (ZMod.natCast_zmod_eq_zero_iff_dvd d tzolkin).mpr (dvd_trans factor dvd_mars)
+  exact (ZMod.natCast_eq_zero_iff d tzolkin).mpr (dvd_trans factor dvd_mars)
 
 /-- Grand alignment: any day count that simultaneously returns the Tzolk'in,
     Haab', Venus and Mars cycles to their origin is a multiple of 113,880 days. -/
@@ -60,10 +60,10 @@ theorem grand_alignment (d : ℕ)
     (h1 : (d : ZMod tzolkin) = 0) (h2 : (d : ZMod haab) = 0)
     (h3 : (d : ZMod venus)   = 0) (h4 : (d : ZMod mars) = 0) :
     113880 ∣ d := by
-  have dt : tzolkin ∣ d := (ZMod.natCast_zmod_eq_zero_iff_dvd d tzolkin).mp h1
-  have dh : haab    ∣ d := (ZMod.natCast_zmod_eq_zero_iff_dvd d haab).mp h2
-  have dv : venus   ∣ d := (ZMod.natCast_zmod_eq_zero_iff_dvd d venus).mp h3
-  have dm : mars    ∣ d := (ZMod.natCast_zmod_eq_zero_iff_dvd d mars).mp h4
+  have dt : tzolkin ∣ d := (ZMod.natCast_eq_zero_iff d tzolkin).mp h1
+  have dh : haab    ∣ d := (ZMod.natCast_eq_zero_iff d haab).mp h2
+  have dv : venus   ∣ d := (ZMod.natCast_eq_zero_iff d venus).mp h3
+  have dm : mars    ∣ d := (ZMod.natCast_eq_zero_iff d mars).mp h4
   have dcr : calendarRound ∣ d := Nat.lcm_dvd dt dh
   have dca : cosmicAlign   ∣ d := Nat.lcm_dvd dcr dv
   have dga : grandAlign    ∣ d := Nat.lcm_dvd dca dm
