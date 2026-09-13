@@ -52,6 +52,31 @@ the fourth is the one that matters. A summary that grows with the corpus is not 
 summary, and a report that prints 44 failures which are all the same fact has
 moved data into a place where only information belongs.
 
+### The price of a probe
+
+Every test is charged, and the charge does not scale with how much you learn from
+it. Two consequences, and the second is the one that gets forgotten.
+
+**A probe that cannot surprise you is not a test.** Write both outcomes down
+before running it, and what each one settles. If you cannot name the result that
+would change your mind, the run is reassurance, and it is billed at the same rate
+as evidence. This is the same discipline the chapters apply to a claim, turned on
+the instrument.
+
+**A long input is not read evenly.** The end is answered; the middle is skimmed.
+That is a property of the reader and not a defect in the writing, and it cannot be
+argued with — a corpus handed over whole buys one paragraph's worth of attention,
+spent wherever the text happens to stop. So:
+
+- **One decision per summary, and it goes last.** Counts first, delta second, the
+  question needing a human at the bottom, where attention actually lands.
+- **Two decisions are two summaries.** Concatenated, the second is the one that
+  gets answered and the first is the one you will believe was considered.
+- **What must survive belongs on disk, not in a conversation.** Anything carried
+  forward only in context is being carried at falling resolution, and the fall is
+  invisible from inside. This directory exists for that reason and not for
+  tidiness.
+
 ### The consequence for authoring
 
 Rung 4 is where writing happens, and it is the only rung where it happens. Reports,
