@@ -41,6 +41,8 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -359,3 +361,31 @@ jobs:
             esac
           done
           exit 0
+
+      # ------------------------------------------------------------------
+      # THE RECEIPT. A workflow that says it runs weekly is a claim, and like
+      # every other claim here it needs an address something can read offline.
+      # Without this, "the audit runs on Tuesdays" is checkable only by opening
+      # a tab, which is how it went twelve days unnoticed. Written only for
+      # clock-driven and manual runs: push runs are not what is being verified.
+      # tools/cadence_check.py reads the ledger and reports what is overdue.
+      # ------------------------------------------------------------------
+      - name: Leave a dated receipt
+        if: always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        working-directory: .
+        env:
+          VERDICT: ${{ job.status }}
+        run: |
+          set -u
+          git config user.name  "corpus-audit"
+          git config user.email "noreply@github.com"
+          printf '%s\t%s\t%s\t%s\t%s\n' \
+            "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "verify-proofs.yml" "${{ github.run_id }}" \
+            "${GITHUB_SHA:0:12}" "$VERDICT" >> docs/ci-receipts.tsv
+          git add docs/ci-receipts.tsv
+          git commit -m "ci: receipt for verify-proofs.yml run ${{ github.run_id }} [skip ci]" || exit 0
+          for i in 1 2 3; do
+            git pull --rebase --quiet origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i*5))
+          done
+          echo "::warning::receipt could not be pushed after 3 attempts"

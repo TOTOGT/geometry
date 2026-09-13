@@ -2703,3 +2703,22 @@ belongs in the book with the tools file pointing at it.
 not detect this defect** — its header says why, at length. Size is not the signal
 and the divergence measure is size renamed. Use it to decide what to read; the
 cut is a judgement.
+
+**A scheduled check leaves a receipt, or it is a claim.** `corpus-audit.yml` was
+created 2026-09-01 and its Tuesday cron went unremarked for twelve days, because
+its only output was a GitHub summary page. That is `pratijñā` without `hetu` at
+the level of the instrument, and `kālātīta` when it expires unnoticed — the same
+two defects the corpus catalogues on its pages.
+
+Both workflows now append to `docs/ci-receipts.tsv` on clock-driven and manual
+runs (not on push: the clock is what is being verified). Check it from anywhere,
+offline, with no credentials:
+
+```
+python3 tools/cadence_check.py            # reports; --strict exits 1 when overdue
+```
+
+A workflow with no receipt is not evidence that it ran. It is evidence that
+nothing here can tell whether it ran, which is exactly what a page saying
+machine-checked with no gate file is.
+

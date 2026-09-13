@@ -47,6 +47,9 @@ permissions:
 jobs:
   source-audit:
     runs-on: ubuntu-latest
+    # write, only so the run can leave its own dated receipt (last step)
+    permissions:
+      contents: write
     steps:
       - name: Check out geometry
         uses: actions/checkout@v4
@@ -151,6 +154,44 @@ jobs:
           python3 tools/audit.py --all > "$R/audit.txt"       2>&1; echo "audit=$?"       >> "$R/exit-codes.txt"
           python3 tools/terms.py --check > "$R/terms.txt"     2>&1; echo "terms=$?"       >> "$R/exit-codes.txt"
           cat "$R/exit-codes.txt"
+
+
+      - name: Report any scheduled check that has gone quiet
+        if: always()
+        working-directory: _corpus/Desktop/geometry
+        run: |
+          echo '### cadence' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python3 tools/cadence_check.py | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      # ------------------------------------------------------------------
+      # THE RECEIPT. A workflow that says it runs weekly is a claim, and like
+      # every other claim here it needs an address something can read offline.
+      # Without this, "the audit runs on Tuesdays" is checkable only by opening
+      # a tab, which is how it went twelve days unnoticed. Written only for
+      # clock-driven and manual runs: push runs are not what is being verified.
+      # tools/cadence_check.py reads the ledger and reports what is overdue.
+      # ------------------------------------------------------------------
+      - name: Leave a dated receipt
+        if: always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        working-directory: _corpus/Desktop/geometry
+        env:
+          VERDICT: ${{ job.status }}
+        run: |
+          set -u
+          git config user.name  "corpus-audit"
+          git config user.email "noreply@github.com"
+          printf '%s\t%s\t%s\t%s\t%s\n' \
+            "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "corpus-audit.yml" "${{ github.run_id }}" \
+            "${GITHUB_SHA:0:12}" "$VERDICT" >> docs/ci-receipts.tsv
+          git add docs/ci-receipts.tsv
+          git commit -m "ci: receipt for corpus-audit.yml run ${{ github.run_id }} [skip ci]" || exit 0
+          for i in 1 2 3; do
+            git pull --rebase --quiet origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i*5))
+          done
+          echo "::warning::receipt could not be pushed after 3 attempts"
 
       - name: Publish the report
         if: always()
