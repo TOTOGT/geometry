@@ -29,7 +29,7 @@ code and documented closure path. The current open obligations are:
 | ID | Name | Status |
 |----|------|--------|
 | M2 | `heliSpin_incommensurate_aperiodic` (`MagneticLattice.lean:240`) | Open — needs irrationality of q/2π and a Weyl equidistribution argument |
-| Q2 | `detune_from_ground_period` (`SeismicLattice.lean:211`) | Open — needs a damped forced-oscillator response model |
+| Q2 | `detune_bounds_amplification` (`SeismicLattice.lean`) | **Closed 2026-09-14.** Restated so that closing it means something: the response model is now the hypothesis `hA`, not a hope. The previous form concluded a tautology |
 
 Those two are the only admitted declarations inside a `lake build` target. Four
 more sit in files that are in no target — `CollatzDescent.lean` (2), the root
