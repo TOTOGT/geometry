@@ -426,7 +426,7 @@ def main() -> None:
                     + "\n".join(f'<div class="row"><span class="mono">{esc(f)}</span></div>'
                                  for f in other) + "\n</div>")
     (ROOT / "index-excluded.html").write_text(page(
-        f"Excluded from the index &middot; {REPO}",
+        f"Excluded from the index \u00b7 {REPO}",   # a literal, not an entity: page() escapes the title
         f"{SITE} &middot; what the crawl leaves out", "Excluded by Rule",
         "Tracked HTML files the generated indexes do not list. Each is excluded by a "
         "declared path rule, not by oversight. The largest group is superseded evidence "
