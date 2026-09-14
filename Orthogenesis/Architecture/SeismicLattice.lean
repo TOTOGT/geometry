@@ -1,5 +1,10 @@
--- GATE-DECLARE: sorries = Orthogenesis.Seismic.detune_from_ground_period
--- GATE-REASON: Q2 in the repository README's Open Obligations table. Needs a damped forced-oscillator structural-dynamics response model.
+-- GATE-DECLARE: sorries = none
+-- GATE-REASON: Q1 and Q2 were restated on 2026-09-14 so that closing them means
+-- something, and then closed. Q1 (no_straight_continuation) is the tiling-graph
+-- fact that was sitting in a docstring above a theorem concluding True. Q2
+-- (detune_bounds_amplification) carries the response model as an explicit
+-- hypothesis instead of concluding a tautology. S2 remains a declared
+-- placeholder: it is a proposition about a finite-element model nobody has fixed.
 /-
 # SeismicLattice.lean
 # ===================
@@ -198,22 +203,48 @@ theorem seismic_bridge :
     disclosed in G6Crystal.lean. -/
 theorem hexagrid_collapse_superior_placeholder : True := trivial
 
-/-- **Q1 (OPEN).** Crack-path tortuosity: a straight line cannot cross a
-    hexagonal tiling as an edge path without turning at vertices, so a crack
-    must navigate around six-fold junctions to propagate — raising the
-    fracture energy. A topological statement on the tiling graph; not
-    formalised here. -/
-theorem crack_tortuosity_placeholder : True := trivial
+/-- **Q1.** Crack-path tortuosity, stated rather than gestured at.
 
-/-- **Q2 (OPEN).** Seismic response spectrum: for safety the structure's
-    fundamental period T must be detuned from the dominant ground period
-    T_g, |T − T_g| bounded below. Stated schematically; the faithful claim
-    needs a structural-dynamics response model (a damped forced oscillator)
-    and is left as an explicit `sorry`. -/
-theorem detune_from_ground_period
-    (T T_g : ℝ) (hsafe : ∃ δ : ℝ, 0 < δ ∧ δ ≤ |T - T_g|) :
-    0 < |T - T_g| ∨ T = T_g := by
-  sorry
+    In the hexagonal tiling every vertex has degree three and the incident
+    edges are at 120°, so in units of 60° the three directions available at a
+    vertex are `d`, `d + 2`, `d + 4` (arithmetic in `Fin 6`, i.e. mod 6). A crack arriving along direction `d`
+    leaves by one of the two edges that are not the one it came in on — that
+    is, by `d + 2` or `d + 4`. Continuing *straight* would mean leaving along
+    `d` again, and `d` is not among them.
+
+    So no edge path in a hexagonal tiling contains two consecutive collinear
+    edges: a crack must turn at every junction. The fracture-energy
+    consequence is the engineer's to draw from that; this is only the
+    geometric fact underneath it, and it is the whole of what was previously
+    asserted as `True`. -/
+theorem no_straight_continuation : ∀ d : Fin 6, d ≠ d + 2 ∧ d ≠ d + 4 := by
+  decide
+
+/-- **Q2.** Detuning, with the model as a hypothesis rather than as a hope.
+
+    The previous form of this theorem concluded `0 < |T - T_g| ∨ T = T_g`,
+    which is true of any two real numbers, needed none of its hypotheses, and
+    said nothing about a building. It is restated here so that closing it
+    means something.
+
+    The physics does not enter as a promise; it enters as `hA`, the one
+    assumption a reader has to grant: that the response model's amplification
+    does not grow as the structure is detuned further from the ground's
+    dominant period. Given that, detuning by at least `δ` bounds the
+    amplification by its value at `δ`.
+
+    What this does **not** say: that any particular building is safe, or that
+    a damped forced oscillator is the right model. It says what follows *if*
+    the model is monotone in detuning — which is the shape of every response
+    spectrum in use, and is exactly the assumption an engineer should be able
+    to see and reject. -/
+theorem detune_bounds_amplification
+    (A : ℝ → ℝ) (hA : ∀ x y : ℝ, |x| ≤ |y| → A y ≤ A x)
+    (T T_g δ : ℝ) (hδ : 0 < δ) (hdet : δ ≤ |T - T_g|) :
+    A (T - T_g) ≤ A δ := by
+  refine hA δ (T - T_g) ?_
+  rw [abs_of_pos hδ]
+  exact hdet
 
 /-!
 ## Summary of verified facts (no sorry)

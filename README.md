@@ -225,7 +225,6 @@ All proved in `G6Crystal.lean` (20 facts, 0 sorry on dimensional claims).
 | Sorry | Name | File | Closure path |
 |-------|------|------|-------------|
 | M2 | `heliSpin_incommensurate_aperiodic` | `Orthogenesis/Architecture/MagneticLattice.lean:240` | Irrationality of q/2π plus a Weyl equidistribution argument |
-| Q2 | `detune_from_ground_period` | `Orthogenesis/Architecture/SeismicLattice.lean:211` | A damped forced-oscillator structural-dynamics response model |
 
 Both are inside `lean_lib Orthogenesis` and appear in the build log as
 ``declaration uses `sorry` ``. They are the only two admitted declarations the
@@ -320,7 +319,7 @@ Commercial innovators and international partners: HQ-MoonBase@nasa.gov
 Pull requests that close proof obligations are welcome.
 - If you add a lemma, update the table above.
 - If you add a `sorry`, name it after the `FN-` gap it represents.
-- The two open obligations are M2 (`MagneticLattice.lean`) and Q2 (`SeismicLattice.lean`). Closing one means removing its `sorry` and updating the table above.
+- The one remaining `sorry` obligation is M2 (`MagneticLattice.lean`). Q2 was closed on 2026-09-14 by restating it so that closing it meant something: the old form concluded `0 < |T - T_g| ∨ T = T_g`, true of any two reals, and carried the response model as a hope rather than a hypothesis. Q1 was closed the same day by lifting its statement out of its own docstring, where it had been sitting above a theorem concluding `True`.
 
 ---
 

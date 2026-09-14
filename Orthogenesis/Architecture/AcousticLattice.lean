@@ -165,14 +165,33 @@ theorem acoustic_bridge :
     Fourier/diffraction theory; not formalised here. -/
 theorem full_diffraction_spectrum_placeholder : True := trivial
 
-/-- **A2 (OPEN).** Intentionality: whether the effect was designed by the
-    Maya or is incidental to a periodic staircase. An archaeological /
-    historical question, explicitly NOT a theorem. -/
-theorem intentionality_placeholder : True := trivial
+/-!
+### A2 and A3 are not propositions, and are no longer declared  (2026-09-14)
 
-/-- **A3 (OPEN).** The quetzal-match: that the descending chirp *is* the call
-    of the resplendent quetzal. A perceptual claim, outside formal reach. -/
-theorem quetzal_match_placeholder : True := trivial
+Two entries stood here as `theorem _ : True := trivial`, and their own
+docstrings said what was wrong with them: A2 was "an archaeological /
+historical question, explicitly NOT a theorem", A3 "a perceptual claim,
+outside formal reach". Both judgements were correct and both were then
+written as theorems anyway.
+
+**A2 — intentionality.** Whether the Maya designed the descending chirp or it
+is incidental to any periodic staircase. A question about people in the past.
+No proof assistant will ever settle it, and no amount of work here reduces the
+distance to an answer.
+
+**A3 — the quetzal match.** That the chirp *is* the call of the resplendent
+quetzal. A perceptual and empirical claim, settled by recordings and listeners.
+It belongs to a verification script run against published audio, not to a
+kernel.
+
+Keeping them as declarations put two permanent non-obligations into a register
+of open obligations, which inflates the debt and implies the project believes
+a prover could one day discharge them. It cannot. The claims survive here as
+prose, where they are the right shape; what is lost is only the false promise.
+
+A1 is different and remains a declared obligation: the full diffraction
+spectrum is a proposition about a model, formalisable once the model is fixed.
+-/
 
 /-!
 ## Summary of verified facts (no sorry)
@@ -185,8 +204,10 @@ theorem quetzal_match_placeholder : True := trivial
   mu_max_neg, T_star_pos   dm³ invariant signs                          ✓
   acoustic_bridge          proved core, bundled                         ✓
 
-Open, disclosed:  A1 full diffraction spectrum · A2 intentionality
-                  · A3 quetzal perceptual match.
+Open, disclosed:  A1 full diffraction spectrum (a proposition about a model).
+
+Not propositions, no longer declared:  A2 intentionality (historical)
+                  · A3 quetzal perceptual match (empirical). See §5.
 -/
 
 end Orthogenesis.Acoustic
