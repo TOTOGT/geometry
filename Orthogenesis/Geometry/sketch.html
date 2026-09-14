@@ -2,217 +2,143 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Orthogenesis · Cell Blueprint</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orthogenesis &middot; Geometry &mdash; the layer the architecture stands on</title>
+<meta name="description" content="The Lean 4 geometry layer beneath the G6 Crystal architecture: HexGrid, Cell, Colony, Growth, HexForm, GaussBonnet. Six files, fifteen declarations, no sorry, all inside the Orthogenesis build target.">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: #060e1c;
-  font-family: 'Courier New', monospace;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 28px 16px 40px;
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
 }
-h1 {
-  font-size: 13px;
-  letter-spacing: .22em;
-  color: #4fc3f7;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-p.sub {
-  font-size: 11px;
-  color: #2a5a8a;
-  letter-spacing: .1em;
-  margin-bottom: 20px;
-}
-svg {
-  max-width: 800px;
-  width: 100%;
-  border: 1px solid #1a3a60;
-  background: #060e1c;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
 </style>
 </head>
 <body>
-<h1>Orthogenesis · Cell Blueprint</h1>
-<p class="sub">Lean 4 · HexGrid · Cell · Colony · Growth</p>
-<svg id="cvs" viewBox="-400 -340 1100 680" xmlns="http://www.w3.org/2000/svg"></svg>
+<div class="topnav">
+<span class="crumbs"><a href="../../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Orthogenesis &middot; Geometry</span>
+<span class="meta"><a href="../../nasa-architecture.html">NASA Architecture &rarr;</a></span>
+</div>
 
-<script>
-const NS = "http://www.w3.org/2000/svg";
-const svg = document.getElementById("cvs");
+<div class="wp-head">
+<div class="topictag">#Geometry</div>
+<div class="wp-kicker">Orthogenesis &middot; Geometry &middot; Lean 4 &middot; leanprover/lean4:v4.32.0 &middot; page 2026-09-14</div>
+<h1>Cell <em>Blueprint</em></h1>
+<div class="subtitle">The geometry layer the architecture stands on. Six Lean files &mdash; a hex grid, a cell, a colony, its growth, the hexagonal form and a discrete Gauss&ndash;Bonnet &mdash; carrying fifteen declarations with no <span class="mono">sorry</span>. Everything in the NASA gap ledger is built from these.</div>
+<div class="metagrid">
+<div><strong>Files</strong>6 in <span class="mono">Orthogenesis/Geometry/</span><br>all imported by <span class="mono">Orthogenesis.lean</span></div>
+<div><strong>Status</strong>15 declarations, no <span class="mono">sorry</span><br>compiles; no axiom report yet</div>
+<div><strong>Depends on nothing</strong>no material, no gravity, no atmosphere<br>which is why the results travel</div>
+</div>
+</div>
 
-// ── palette ──────────────────────────────────────────────────────────
-const NAVY   = "#060e1c";
-const GRID   = "#0d2240";
-const BLUE   = "#4fc3f7";
-const MID    = "#1e6090";
-const DIM    = "#124060";
-const GOLD   = "#c9a84c";
-const CREAM  = "#a8d8ea";
-const FAINT  = "#0a1830";
+<div class="wrap">
 
-// ── helpers ───────────────────────────────────────────────────────────
-const S = NS;
-function e(tag, attrs, txt) {
-  const el = document.createElementNS(S, tag);
-  for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v);
-  if (txt !== undefined) el.textContent = txt;
-  return el;
-}
-function append(...els) { els.forEach(x => svg.appendChild(x)); }
+<div class="lede">This page used to say &ldquo;Lean 4 &middot; HexGrid &middot; Cell &middot; Colony &middot; Growth&rdquo; and nothing else. The files it named are the ones every architecture claim in this corpus is built on, so they are worth more than a list.</div>
 
-// Hex (pointy-top, size px)
-const SZ = 54, SQ3 = Math.sqrt(3);
-function hxy(q, r) { return { x: SZ*(q + r*0.5), y: SZ*(SQ3/2)*r }; }
-function hpts(cx, cy, r) {
-  return Array.from({length:6}, (_,i) => {
-    const a = Math.PI/180*(60*i - 30);
-    return `${cx + r*Math.cos(a)},${cy + r*Math.sin(a)}`;
-  }).join(" ");
-}
-function hex(cx, cy, r, fill, stroke, sw, op, extra={}) {
-  return e("polygon", {points:hpts(cx,cy,r), fill, stroke, "stroke-width":sw, opacity:op, ...extra});
-}
-function ring(n) {
-  if (!n) return [{q:0,r:0}];
-  const D = [[1,0],[0,1],[-1,1],[-1,0],[0,-1],[1,-1]];
-  const out = []; let q=n, r=-n;
-  for (let d=0;d<6;d++) for (let i=0;i<n;i++) { out.push({q,r}); q+=D[d][0]; r+=D[d][1]; }
-  return out;
-}
+<h2>1 &middot; The six files</h2>
 
-// ── defs (grid pattern + arrowhead) ──────────────────────────────────
-const defs = e("defs", {});
+<table style="width:100%;border-collapse:collapse;margin:1.4rem 0;font-size:.88rem">
+<tr><th style="background:var(--paper3);font-family:var(--mono);font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:left;padding:.5rem .6rem;border:1px solid var(--rule)">File</th><th style="background:var(--paper3);font-family:var(--mono);font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:left;padding:.5rem .6rem;border:1px solid var(--rule)">Decls</th><th style="background:var(--paper3);font-family:var(--mono);font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:left;padding:.5rem .6rem;border:1px solid var(--rule)">What it establishes</th></tr>
+<tr><td style="padding:.5rem .6rem;border:1px solid var(--rule);font-family:var(--mono);font-size:.76rem">HexGrid.lean</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">2</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">Axial coordinates, and that every cell has exactly six neighbours, all distinct</td></tr>
+<tr><td style="padding:.5rem .6rem;border:1px solid var(--rule);font-family:var(--mono);font-size:.76rem">Cell.lean</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">0</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">The unit: a coordinate and a stage. Definitions only</td></tr>
+<tr><td style="padding:.5rem .6rem;border:1px solid var(--rule);font-family:var(--mono);font-size:.76rem">Colony.lean</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">4</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">A set of cells and its <span class="mono">expand</span>; reachability is monotone &mdash; the basis of the NASA autonomy row</td></tr>
+<tr><td style="padding:.5rem .6rem;border:1px solid var(--rule);font-family:var(--mono);font-size:.76rem">Growth.lean</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">1</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">Stage-gating: a cell at stage <em>n</em> cannot appear before stage <em>n</em>&minus;1 exists</td></tr>
+<tr><td style="padding:.5rem .6rem;border:1px solid var(--rule);font-family:var(--mono);font-size:.76rem">HexForm.lean</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">5</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">The hexagon itself &mdash; the isoperimetric optimum the habitation row rests on</td></tr>
+<tr><td style="padding:.5rem .6rem;border:1px solid var(--rule);font-family:var(--mono);font-size:.76rem">GaussBonnet.lean</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">3</td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">Discrete Gauss&ndash;Bonnet on the tiling: curvature is bookkeeping, and it closes</td></tr>
+</table>
 
-const pat = e("pattern", {id:"bg", width:"27", height:"27", patternUnits:"userSpaceOnUse"});
-pat.appendChild(e("rect",{width:"27",height:"27",fill:NAVY}));
-pat.appendChild(e("path",{d:"M 27 0 L 0 0 0 27",fill:"none",stroke:GRID,"stroke-width":"0.5"}));
-defs.appendChild(pat);
+<h2>2 &middot; Why this layer is the one that travels</h2>
 
-function mkArr(id, col) {
-  const m = e("marker",{id, markerWidth:"8",markerHeight:"8",refX:"6",refY:"3",orient:"auto"});
-  m.appendChild(e("polygon",{points:"0 0, 8 3, 0 6",fill:col}));
-  return m;
-}
-defs.appendChild(mkArr("aB", BLUE));
-defs.appendChild(mkArr("aG", GOLD));
-defs.appendChild(mkArr("aD", MID));
-svg.appendChild(defs);
+<p>Not one of these files mentions a material, a gravity, an atmosphere or a load. That is not modesty &mdash; it is the reason the results hold equally in vacuum, in Newark soil and at Chich&eacute;n Itz&aacute;. Everything above this layer carries a hypothesis; everything in it carries none.</p>
 
-// ── background ────────────────────────────────────────────────────────
-append(e("rect",{x:"-400",y:"-340",width:"1100",height:"680",fill:"url(#bg)"}));
+<p>Which theorem may be cited where, and which may not, is set out in <a href="../../book6/wp119-which-theorem-travels.html">WP-119 &middot; Which Theorem Travels</a>. The short version: the tiling and the graphene honeycomb are duals, both carry D&#8326; symmetry, and only the tiling carries the load-sharing result. Sharing a symmetry group is the weakest possible reason to think two results are one result.</p>
 
-// ── outer rings (faint context) ───────────────────────────────────────
-for (const {q,r} of ring(3))
-  append(hex(...Object.values(hxy(q,r)), SZ*0.93, DIM, GRID, "1", "1"));
-for (const {q,r} of ring(2))
-  append(hex(...Object.values(hxy(q,r)), SZ*0.93, "#0a2040", MID, "1.2", "1"));
+<div class="box warn">
+<span class="lab">Compiles is not audited</span>
+<p style="margin:0">All six are imported by <span class="mono">Orthogenesis.lean</span> and build with the target, so they are known to elaborate. None currently carries a <span class="mono">#print axioms</span> report, so nothing has checked what their theorems rest on. That is a real gap, it is listed as <span class="mono">declared, no gate</span> in <a href="../../docs/lean-4.32.0-ledger.md">the ledger</a>, and it is stated here rather than left for a reader to discover.</p>
+</div>
 
-// ── ring 1 ─────────────────────────────────────────────────────────────
-for (const {q,r} of ring(1)) {
-  const {x,y} = hxy(q,r);
-  // dashed spoke from center
-  append(e("line",{x1:"0",y1:"0",x2:x,y2:y,
-    stroke:BLUE,"stroke-width":"1","stroke-dasharray":"5 4",opacity:"0.3"}));
-}
-for (const {q,r} of ring(1)) {
-  const {x,y} = hxy(q,r);
-  append(hex(x, y, SZ*0.93, "#082038", BLUE, "1.8", "1"));
-  // coord label
-  append(e("text",{x,y:y-6,"text-anchor":"middle","dominant-baseline":"middle",
-    "font-family":"'Courier New',monospace","font-size":"13",fill:BLUE,opacity:"0.9"},
-    `(${q},${r})`));
-  // stage badge
-  append(e("text",{x,y:y+12,"text-anchor":"middle","dominant-baseline":"middle",
-    "font-family":"'Courier New',monospace","font-size":"11",fill:MID},"n=1"));
-}
+<h2>3 &middot; What is built on it</h2>
 
-// ── seed cell (stage 0) ───────────────────────────────────────────────
-// glow halos
-append(e("circle",{cx:"0",cy:"0",r:SZ*1.1,fill:BLUE,opacity:"0.04"}));
-append(e("circle",{cx:"0",cy:"0",r:SZ*0.75,fill:BLUE,opacity:"0.07"}));
-// main hex
-append(hex(0, 0, SZ*0.93, "#0d2a48", BLUE, "2.4", "1"));
-// inner dashed outline
-append(hex(0, 0, SZ*0.62, "none", BLUE, "1", "0.5",{"stroke-dasharray":"5 4"}));
-// crosshair
-[-1,1].forEach(s => {
-  append(e("line",{x1:s*SZ*0.55,y1:0,x2:s*2,y2:0,stroke:BLUE,"stroke-width":"1.5",opacity:"0.7"}));
-  append(e("line",{x1:0,y1:s*SZ*0.55,x2:0,y2:s*2,stroke:BLUE,"stroke-width":"1.5",opacity:"0.7"}));
-});
-append(e("circle",{cx:"0",cy:"0",r:"4",fill:BLUE}));
-// center label
-append(e("text",{x:"0",y:"-8","text-anchor":"middle","dominant-baseline":"middle",
-  "font-family":"'Courier New',monospace","font-size":"15",fill:BLUE},"(0,0)"));
-append(e("text",{x:"0",y:"12","text-anchor":"middle","dominant-baseline":"middle",
-  "font-family":"'Courier New',monospace","font-size":"12",fill:MID},"n=0"));
+<table style="width:100%;border-collapse:collapse;margin:1.4rem 0;font-size:.88rem">
+<tr><td style="padding:.5rem .6rem;border:1px solid var(--rule);font-family:var(--mono);font-size:.76rem"><a href="../../nasa-architecture.html">NASA Architecture</a></td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">The Moon Base gap ledger &mdash; thirteen NASA functional gap codes, twelve theorems</td></tr>
+<tr><td style="padding:.5rem .6rem;border:1px solid var(--rule);font-family:var(--mono);font-size:.76rem"><a href="../../book4/ch18-seismic-lattice.html">Ch 18 &middot; Seismic</a></td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">Load share, crack tortuosity, detuning</td></tr>
+<tr><td style="padding:.5rem .6rem;border:1px solid var(--rule);font-family:var(--mono);font-size:.76rem"><a href="../../book4/ch19-acoustic-lattice.html">Ch 19 &middot; Acoustic</a></td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">The staircase chirp</td></tr>
+<tr><td style="padding:.5rem .6rem;border:1px solid var(--rule);font-family:var(--mono);font-size:.76rem"><a href="https://totogt.github.io/AXLE/AULA/g6-earth-house.html">G6 Earth House</a></td><td style="padding:.5rem .6rem;border:1px solid var(--rule)">The same geometry as compressed-earth-block housing</td></tr>
+</table>
 
-// ── radius annotation ─────────────────────────────────────────────────
-// from center to ring-1 cell (q=1,r=0)
-{
-  const {x,y} = hxy(1,0);
-  const mx = x*0.5 - 4, my = y*0.5 - 22;
-  append(e("line",{x1:"3",y1:"-3",x2:x-6,y2:y+3,
-    stroke:GOLD,"stroke-width":"1.5","stroke-dasharray":"none",
-    "marker-end":"url(#aG)",opacity:"0.85"}));
-  append(e("text",{x:mx,y:my,"text-anchor":"middle",
-    "font-family":"'Courier New',monospace","font-size":"15",fill:GOLD},"R(1) = g"));
-}
+</div>
 
-// ── axial axes ────────────────────────────────────────────────────────
-function axis(x2, y2, label, lx, ly, id) {
-  append(e("line",{x1:"0",y1:"0",x2,y2,
-    stroke:MID,"stroke-width":"1.8","marker-end":`url(#${id})`}));
-  append(e("text",{x:lx,y:ly,"text-anchor":"middle",
-    "font-family":"'Courier New',monospace","font-size":"18",fill:CREAM,opacity:"0.6"},label));
-}
-axis(220, 0, "q", 238, 4, "aD");
-const rax = Math.PI/3;
-axis(Math.cos(rax)*210, -Math.sin(rax)*210, "r",
-  Math.cos(rax)*228+6, -Math.sin(rax)*228-4, "aD");
+<footer>
+<div class="fwrap">
+<div>
+<a href="../../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="../../master-index.html">Master index</a><br>
+Orthogenesis &middot; Geometry &middot; 2026-09-14 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a>
+</div>
+<div class="disc">Declaration counts are read from the files in <span class="mono">Orthogenesis/Geometry/</span> and go stale on their own; the ledger at <span class="mono">docs/lean-4.32.0-ledger.md</span> is regenerated and is the authority. These files compile as part of the <span class="mono">Orthogenesis</span> target and do not yet carry axiom reports.</div>
+</div>
+</footer>
 
-// ── legend panel (right) ──────────────────────────────────────────────
-const LX = 360, LY = -310;
-const rows = [
-  { col: BLUE,    label: "Stage 0  —  seed", formula: "R(0) = g⁰ = 1",  cells: "1 cell" },
-  { col: BLUE,    label: "Stage 1  —  ring", formula: "R(1) = g",        cells: "6 cells" },
-  { col: MID,     label: "Stage 2  —  ring", formula: "R(2) = g²",       cells: "12 cells" },
-  { col: DIM,     label: "Stage 3  —  ring", formula: "R(3) = g³",       cells: "18 cells" },
-];
-rows.forEach(({col, label, formula, cells}, i) => {
-  const y0 = LY + i*44 + 20;
-  append(e("rect",{x:LX-2,y:y0-10,width:"12",height:"12",fill:col,opacity:"0.7",rx:"2"}));
-  append(e("text",{x:LX+18,y:y0+2,"text-anchor":"start",
-    "font-family":"'Courier New',monospace","font-size":"13",fill:col,opacity:"0.9"},label));
-  append(e("text",{x:LX+18,y:y0+18,"text-anchor":"start",
-    "font-family":"'Courier New',monospace","font-size":"12",fill:GOLD,opacity:"0.8"},formula));
-  append(e("text",{x:LX+18,y:y0+32,"text-anchor":"start",
-    "font-family":"'Courier New',monospace","font-size":"11",fill:DIM},cells));
-});
-
-// ── bottom spec strip ─────────────────────────────────────────────────
-const specs = [
-  ["Cell.center",   "hexToVec2 c.coord"],
-  ["Cell.radius",   "R P c.stage = g^n"],
-  ["Colony.expand", "∀ c ∈ C · neighbors(c) at n+1"],
-  ["HexCoord",      "axial (q, r) ∈ ℤ²"],
-];
-specs.forEach(([k,v], i) => {
-  const sx = -370 + i*200, sy = 280;
-  append(e("text",{x:sx,y:sy,"text-anchor":"start",
-    "font-family":"'Courier New',monospace","font-size":"12",fill:BLUE,opacity:"0.8"},k));
-  append(e("text",{x:sx,y:sy+17,"text-anchor":"start",
-    "font-family":"'Courier New',monospace","font-size":"11",fill:MID},v));
-});
-
-// ── border ────────────────────────────────────────────────────────────
-// vertical separator between diagram and legend
-append(e("line",{x1:"330",y1:"-330",x2:"330",y2:"330",
-  stroke:"#1a3a60","stroke-width":"1","stroke-dasharray":"6 4"}));
-append(e("rect",{x:"-400",y:"-340",width:"1100",height:"680",
-  fill:"none",stroke:"#1a3a60","stroke-width":"2"}));
-</script>
 </body>
 </html>

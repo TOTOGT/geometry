@@ -204,10 +204,11 @@ footer .disc{max-width:520px;color:#6f6a5c}
 <tr><td class="m">SeismicLattice.lean</td><td>17</td><td>1 (Q2)</td><td>PASS-AS-DECLARED</td></tr>
 <tr><td class="m">DM3Bridge.lean</td><td>14</td><td>0</td><td>no gate report on disk</td></tr>
 <tr><td class="m">ToyModel.lean</td><td>14</td><td>0</td><td>no gate report on disk</td></tr>
-<tr><td class="m">Coverage.lean</td><td>6</td><td>0</td><td><strong>outside every build target</strong> &mdash; unchecked</td></tr>
+<tr><td class="m">Coverage.lean</td><td>6</td><td>0</td><td>in the <span class="mono">Orthogenesis</span> target; compiles. No gate report yet</td></tr>
 </table>
 
-<p>The last row is the one to read. A file outside every target can stop compiling and nothing will say so, and no claim resting on it is verified. It is listed here rather than omitted, because the omission is what would mislead.</p>
+<p>The rows to read are the last three. <strong>Compiles</strong> and <strong>kernel-audited</strong> are different things: a file inside the build target is known to elaborate, but without a <span class="mono">#print axioms</span> report nothing has checked what its theorems rest on. Three files are in that state. They are listed rather than omitted, because the omission is what would mislead.</p>
+<p class="fignote">Corrected 2026-09-14: this table previously recorded <span class="mono">Coverage.lean</span> as outside every build target, following <span class="mono">docs/lean-4.32.0-ledger.md</span> and the errata of 2026-09-11. It has since been added to <span class="mono">Orthogenesis.lean</span> and builds with the target (job 8684 of the 2026-09-13 <span class="mono">lake build</span>). The claim was stale in the pessimistic direction, which is the safer way to be wrong and still wrong.</p>
 
 <h2>4 &middot; The errata, which is the point</h2>
 
@@ -234,18 +235,63 @@ footer .disc{max-width:520px;color:#6f6a5c}
 
 <p>A retired entry is commented out with the date and reason, never deleted &mdash; because a bare list loses its own history the moment an entry goes, and would say six while carrying no trace that it once said seven.</p>
 
-<h2>6 &middot; Reading</h2>
+<h2>6 &middot; Verify this yourself, in about five minutes</h2>
+
+<p>Nothing on this page needs to be taken on trust, and the fastest way to judge it is to run the same checks the repository runs. No account, no credentials.</p>
+
+<div class="figbox">
+<div class="figcap">From a clone of <span class="mono">github.com/TOTOGT/geometry</span></div>
+<pre style="font-family:var(--mono);font-size:.78rem;line-height:1.7;margin:0;overflow-x:auto">
+<span style="color:var(--dim)"># the twelve gap theorems, and what each rests on</span>
+grep -n "^theorem" Orthogenesis/Architecture/NASAGaps.lean
+
+<span style="color:var(--dim)"># every declaration in the repo, what it rests on, and what has no gate</span>
+python3 tools/toolchain_ledger.py --write && head -12 docs/lean-4.32.0-ledger.md
+
+<span style="color:var(--dim)"># the declared-vacuity register: declared-open is fine, undeclared-open fails CI</span>
+cat Orthogenesis/Architecture/KNOWN_PLACEHOLDERS.txt
+
+<span style="color:var(--dim)"># the kernel check itself, on one file (needs Lean + a built Mathlib)</span>
+bash tools/leancheck.sh --audit Orthogenesis/Architecture/SeismicLattice.lean
+</pre>
+<p class="fignote">The audit reports this page cites are committed under <span class="mono">tools/verify-audit/&lt;date&gt;/</span>, one per file, with the axiom list for every declaration. They are the evidence, not a summary of it.</p>
+</div>
+
+<h2>7 &middot; Where to go from here</h2>
 
 <table class="filetab">
-<tr><th>Document</th><th>What it is</th></tr>
-<tr><td class="m"><a href="Orthogenesis/NASA.md">Orthogenesis/NASA.md</a></td><td>The errata in full, with the identifier corrections and the two entries that narrow rather than fall</td></tr>
-<tr><td class="m"><a href="book6/wp119-which-theorem-travels.html">WP-119 &middot; Which Theorem Travels</a></td><td>The transfer ledger: which of these theorems may be cited on the Moon, in Newark, and at Chich&eacute;n Itz&aacute; &mdash; and which may not</td></tr>
-<tr><td class="m"><a href="book6/g6-crystal.html">The G6 Crystal</a></td><td>The geometry: the module, the invariants, the scaling</td></tr>
-<tr><td class="m"><a href="book4/ch17-magnetic-lattice.html">Ch 17 &middot; Magnetic Lattice</a></td><td>Shubnikov census, helimagnet periodicity; M2 open</td></tr>
-<tr><td class="m"><a href="book4/ch18-seismic-lattice.html">Ch 18 &middot; Seismic Lattice</a></td><td>Which polygons tile, and which spreads a load thinnest; Q2 open</td></tr>
+<tr><th colspan="2">If you are checking the mathematics</th></tr>
+<tr><td class="m"><a href="book4/ch16-crystal-lattice.html">Ch 16 &middot; The Crystalline Lattice</a></td><td>The geometry the rest depends on</td></tr>
+<tr><td class="m"><a href="book4/ch18-seismic-lattice.html">Ch 18 &middot; Seismic Lattice</a></td><td>Load share, crack tortuosity, detuning &mdash; the structural face</td></tr>
+<tr><td class="m"><a href="book4/ch17-magnetic-lattice.html">Ch 17 &middot; Magnetic Lattice</a></td><td>Shubnikov census; one open obligation, named</td></tr>
+<tr><td class="m"><a href="book4/ch19-acoustic-lattice.html">Ch 19 &middot; Acoustic Lattice</a></td><td>Where two claims were found not to be propositions at all</td></tr>
+<tr><td class="m"><a href="Orthogenesis/Geometry/sketch.html">Orthogenesis &middot; Geometry</a></td><td>The layer underneath: hex grid, cell, colony, growth, hexagonal form, discrete Gauss&ndash;Bonnet. Fifteen declarations, no <span class="mono">sorry</span>, and no mention of a material anywhere</td></tr>
+<tr><td class="m"><a href="docs/lean-4.32.0-ledger.md">Lean v4.32.0 ledger</a></td><td>Every tracked declaration, what it rests on, what has no gate</td></tr>
+
+<tr><th colspan="2">If you are checking whether it builds anything</th></tr>
+<tr><td class="m"><a href="https://totogt.github.io/AXLE/AULA/g6-earth-house.html">G6 Earth House</a></td><td>The same geometry as compressed-earth-block housing &mdash; the terrestrial case, costed</td></tr>
+<tr><td class="m"><a href="https://totogt.github.io/AXLE/AULA/biosynthetic-building-course/">Biosynthetic Building</a></td><td>The course that teaches the build</td></tr>
+<tr><td class="m"><a href="ch-seismic.html">The Stone Fold</a></td><td>Seismic geometry in ancient architecture &mdash; the precedents</td></tr>
+<tr><td class="m"><a href="book6/g6-crystal.html">G6 Crystal</a></td><td>The unifying conjecture, cited as a conjecture</td></tr>
+
+<tr><th colspan="2">If you are checking the method</th></tr>
+<tr><td class="m"><a href="book6/wp119-which-theorem-travels.html">WP-119 &middot; Which Theorem Travels</a></td><td>Which of these results may be cited on the Moon, in Newark, at Chich&eacute;n Itz&aacute; &mdash; and which may not</td></tr>
 <tr><td class="m"><a href="book6/wp73-the-stamp-and-the-triple.html">WP-73 &middot; The Stamp and the Triple</a></td><td>Why a verification claim needs artifact, toolchain and library together</td></tr>
-<tr><td class="m"><a href="docs/lean-4.32.0-ledger.md">Lean v4.32.0 ledger</a></td><td>Every tracked declaration, what it rests on, and which files are outside every target</td></tr>
+<tr><td class="m"><a href="book6/wp115-the-fold-in-formal-verification.html">WP-115 &middot; The Fold in Formal Verification</a></td><td>The class of failure a kernel is built not to see</td></tr>
+<tr><td class="m"><a href="docs/verification-checklist.md">The verification checklist</a></td><td>Twelve steps, four stages, with a status column saying what is not yet implemented</td></tr>
+<tr><td class="m"><a href="docs/audit-log.md">The audit log</a></td><td>Every defect found in this corpus, dated and classed. Including the ones on this page</td></tr>
+
+<tr><th colspan="2">The response documents</th></tr>
+<tr><td class="m"><a href="Orthogenesis/NASA.md">Errata, 21 August 2026</a></td><td>The three withdrawn claims in full, with the identifier corrections</td></tr>
+<tr><td class="m"><a href="https://zenodo.org/communities/principia-orthogona">Zenodo community</a></td><td>Deposits with DOIs &mdash; concept DOI <span class="mono">10.5281/zenodo.19162012</span></td></tr>
+<tr><td class="m"><a href="https://github.com/TOTOGT/geometry">github.com/TOTOGT/geometry</a></td><td>The corpus, its tools, and the CI that judges it</td></tr>
+<tr><td class="m"><a href="master-index.html">Master index</a></td><td>Every page, with its scope stated in the footer</td></tr>
 </table>
+
+<div class="box thm">
+<span class="lab">The one thing worth knowing about this corpus</span>
+<p style="margin:0">Corrections are published in place rather than withdrawn silently, and the register of defects is public and dated. The errata above was produced by an internal audit, not by a reviewer; the stale row corrected on this page today was found the same way. That is the standard being offered &mdash; not that nothing here is wrong, but that what is wrong is findable, by you, without asking.</p>
+</div>
 
 <div class="box thm">
 <span class="lab">What this page does not claim</span>
