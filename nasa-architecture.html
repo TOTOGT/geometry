@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NASA Architecture &mdash; the G6 Crystal Moon Base response &middot; Principia Orthogona</title>
+<meta name="description" content="G6 LLC's response to the NASA Moon Base RFI (80JSC026MoonBase_RFI), organised by NASA functional gap code. Every closure claim is bound to a named Lean theorem judged by a build; the claims that failed were withdrawn by their author before any reviewer saw them.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+</style>
+<style>
+.gapgrid{display:grid;grid-template-columns:120px 1fr 92px;border:1px solid var(--rule);margin:1.6rem 0;font-size:.92rem}
+.gapgrid>div{padding:.7rem .85rem;border-bottom:1px solid var(--rule)}
+.gapgrid .code{font-family:var(--mono);font-size:.68rem;letter-spacing:.02em;color:var(--accent2);display:flex;align-items:center}
+.gapgrid .st{font-family:var(--mono);font-size:.66rem;text-align:center;display:flex;align-items:center;justify-content:center}
+.gapgrid .head{background:var(--paper3);font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.ok{color:var(--accent3);font-weight:600}.part{color:var(--gold);font-weight:600}.open{color:var(--red);font-weight:600}
+.filetab{width:100%;border-collapse:collapse;margin:1.4rem 0;font-size:.86rem}
+.filetab th{background:var(--paper3);font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:left;padding:.5rem .6rem;border:1px solid var(--rule)}
+.filetab td{padding:.5rem .6rem;border:1px solid var(--rule);vertical-align:top}
+.filetab td.m{font-family:var(--mono);font-size:.76rem}
+</style>
+
+
+<style>
+.herowrap{background:#0f1116;color:#ece7da;border-bottom:3px solid #7a3410;padding:0;overflow:hidden}
+.heroin{max-width:1060px;margin:0 auto;padding:3rem 2.2rem 2.4rem;display:grid;
+        grid-template-columns:1fr 400px;gap:2.6rem;align-items:center}
+.heroin h1{color:#f3eee1;font-size:clamp(2rem,5vw,3.3rem);line-height:1.04;margin:0 0 .7rem;font-weight:500;letter-spacing:-.01em}
+.heroin h1 em{color:#d8a44a;font-style:normal}
+.herokick{font-family:var(--mono);font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;color:#c08a4e;margin-bottom:1.1rem}
+.herosub{font-size:1.02rem;line-height:1.62;color:#b9b2a1;max-width:46ch;margin-bottom:1.6rem}
+.bignums{display:flex;gap:2.2rem;flex-wrap:wrap;border-top:1px solid #2c2f38;padding-top:1.2rem}
+.bignums div{line-height:1.1}
+.bignums b{display:block;font-family:var(--mono);font-size:1.75rem;color:#d8a44a;font-weight:500}
+.bignums span{font-family:var(--mono);font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:#8d8676}
+.herofig{filter:drop-shadow(0 8px 26px rgba(0,0,0,.55))}
+.figbox{border:1px solid var(--rule);background:var(--paper2);padding:1.4rem 1.5rem;margin:1.8rem 0}
+.figcap{font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-bottom:.9rem}
+.fignote{font-size:.84rem;color:var(--dim);margin-top:.9rem;line-height:1.6}
+@media(max-width:820px){.heroin{grid-template-columns:1fr;padding:2.2rem 1.4rem 1.8rem}
+ .herofig{max-width:320px;margin:0 auto}}
+</style>
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Orthogenesis &middot; Architecture</span>
+<span class="meta"><a href="master-index.html">Master index &rarr;</a></span>
+</div>
+
+<div class="herowrap">
+<div class="heroin">
+<div>
+<div class="herokick">Orthogenesis &middot; Architecture &middot; G6 LLC</div>
+<h1>NASA <em>Architecture</em></h1>
+<p class="herosub">A lunar habitat whose every structural dimension follows from two invariants &mdash; and whose every gap-closure claim is bound to a named theorem that a build must accept before the claim may stand.</p>
+<div class="bignums">
+<div><b>13</b><span>NASA gap codes</span></div>
+<div><b>12</b><span>gap theorems</span></div>
+<div><b>2 of 8</b><span>rows fully closed</span></div>
+<div><b>3</b><span>claims withdrawn</span></div>
+</div>
+</div>
+<div class="herofig"><svg viewBox="0 0 272 304" width="100%" role="img" aria-label="Hexagonal colony: a seed module and two rings of neighbours, with the six mating interfaces marked on the seed"><polygon points="66.50,92.89 50.25,121.04 17.75,121.04 1.50,92.89 17.75,64.74 50.25,64.74" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="66.50,151.78 50.25,179.93 17.75,179.93 1.50,151.78 17.75,123.63 50.25,123.63" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="66.50,210.67 50.25,238.82 17.75,238.82 1.50,210.67 17.75,182.52 50.25,182.52" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="117.50,63.44 101.25,91.59 68.75,91.59 52.50,63.44 68.75,35.30 101.25,35.30" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="117.50,122.33 101.25,150.48 68.75,150.48 52.50,122.33 68.75,94.19 101.25,94.19" fill="#8a7340" fill-opacity="0.42" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="117.50,181.22 101.25,209.37 68.75,209.37 52.50,181.22 68.75,153.08 101.25,153.08" fill="#8a7340" fill-opacity="0.42" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="117.50,240.11 101.25,268.26 68.75,268.26 52.50,240.11 68.75,211.97 101.25,211.97" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="168.50,34.00 152.25,62.15 119.75,62.15 103.50,34.00 119.75,5.85 152.25,5.85" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="168.50,92.89 152.25,121.04 119.75,121.04 103.50,92.89 119.75,64.74 152.25,64.74" fill="#8a7340" fill-opacity="0.42" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="168.50,151.78 152.25,179.93 119.75,179.93 103.50,151.78 119.75,123.63 152.25,123.63" fill="#7a3410" fill-opacity="0.92" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.85"/><polygon points="168.50,210.67 152.25,238.82 119.75,238.82 103.50,210.67 119.75,182.52 152.25,182.52" fill="#8a7340" fill-opacity="0.42" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="168.50,269.56 152.25,297.70 119.75,297.70 103.50,269.56 119.75,241.41 152.25,241.41" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="219.50,63.44 203.25,91.59 170.75,91.59 154.50,63.44 170.75,35.30 203.25,35.30" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="219.50,122.33 203.25,150.48 170.75,150.48 154.50,122.33 170.75,94.19 203.25,94.19" fill="#8a7340" fill-opacity="0.42" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="219.50,181.22 203.25,209.37 170.75,209.37 154.50,181.22 170.75,153.08 203.25,153.08" fill="#8a7340" fill-opacity="0.42" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="219.50,240.11 203.25,268.26 170.75,268.26 154.50,240.11 170.75,211.97 203.25,211.97" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="270.50,92.89 254.25,121.04 221.75,121.04 205.50,92.89 221.75,64.74 254.25,64.74" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="270.50,151.78 254.25,179.93 221.75,179.93 205.50,151.78 221.75,123.63 254.25,123.63" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><polygon points="270.50,210.67 254.25,238.82 221.75,238.82 205.50,210.67 221.75,182.52 254.25,182.52" fill="#c4bba8" fill-opacity="0.16" stroke="#12141a" stroke-width="1.1" stroke-opacity="0.45"/><line x1="168.50" y1="151.78" x2="152.25" y2="179.93" stroke="#f6f3ec" stroke-width="2.6" stroke-linecap="round"/><circle cx="160.38" cy="165.85" r="3.1" fill="#f6f3ec" stroke="#7a3410" stroke-width="1.4"/><line x1="152.25" y1="179.93" x2="119.75" y2="179.93" stroke="#f6f3ec" stroke-width="2.6" stroke-linecap="round"/><circle cx="136.00" cy="179.93" r="3.1" fill="#f6f3ec" stroke="#7a3410" stroke-width="1.4"/><line x1="119.75" y1="179.93" x2="103.50" y2="151.78" stroke="#f6f3ec" stroke-width="2.6" stroke-linecap="round"/><circle cx="111.62" cy="165.85" r="3.1" fill="#f6f3ec" stroke="#7a3410" stroke-width="1.4"/><line x1="103.50" y1="151.78" x2="119.75" y2="123.63" stroke="#f6f3ec" stroke-width="2.6" stroke-linecap="round"/><circle cx="111.62" cy="137.71" r="3.1" fill="#f6f3ec" stroke="#7a3410" stroke-width="1.4"/><line x1="119.75" y1="123.63" x2="152.25" y2="123.63" stroke="#f6f3ec" stroke-width="2.6" stroke-linecap="round"/><circle cx="136.00" cy="123.63" r="3.1" fill="#f6f3ec" stroke="#7a3410" stroke-width="1.4"/><line x1="152.25" y1="123.63" x2="168.50" y2="151.78" stroke="#f6f3ec" stroke-width="2.6" stroke-linecap="round"/><circle cx="160.38" cy="137.71" r="3.1" fill="#f6f3ec" stroke="#7a3410" stroke-width="1.4"/><text x="136.00" y="156.78" text-anchor="middle" fill="#f6f3ec" font-size="15" font-weight="600" font-family="JetBrains Mono,ui-monospace,monospace" letter-spacing="0.06em">G¹</text><text x="136.00" y="171.78" text-anchor="middle" fill="#f6f3ec" font-size="7.5" font-weight="400" font-family="JetBrains Mono,ui-monospace,monospace" letter-spacing="0.06em">seed</text><text x="187.00" y="126.33" text-anchor="middle" fill="#c9b78a" font-size="8.5" font-weight="500" font-family="JetBrains Mono,ui-monospace,monospace" letter-spacing="0.06em">ring 1</text><text x="238.00" y="96.89" text-anchor="middle" fill="#8d8676" font-size="8.5" font-weight="500" font-family="JetBrains Mono,ui-monospace,monospace" letter-spacing="0.06em">ring 2</text></svg></div>
+</div>
+</div>
+
+<div class="wrap">
+
+<div class="lede">G6 LLC's response to the NASA Moon Base RFI is a geometry: a hexagonal module whose dimensions follow from two invariants, scaled into a colony. What makes it worth reading is not the geometry. It is that every gap-closure claim on this page is bound to a named theorem, that the theorems are judged by a build rather than asserted beside one, and that the claims which failed that test were withdrawn in public by their author before any reviewer saw them.</div>
+
+<h2>1 &middot; Provenance</h2>
+
+<table class="filetab">
+<tr><th>Solicitation</th><td>Notice ID <span class="mono">80JSC026MoonBase_RFI</span></td></tr>
+<tr><th>Requirements source</th><td>NASA Moon Base User&rsquo;s Guide, <span class="mono">NP-2026-04-6806-HQ</span>, April 2026 &mdash; functional gap codes <span class="mono">FN-xxx-L</span></td></tr>
+<tr><th>Response</th><td>submitted 14 April 2026 &middot; corrected 21 May 2026 &middot; <strong>errata 21 August 2026</strong></td></tr>
+<tr><th>Deposit</th><td><span class="mono">doi:10.5281/zenodo.19162012</span> (concept DOI &mdash; the deposited text still carries the &sect;4 section withdrawn on 2026-08-21)</td></tr>
+<tr><th>Respondent</th><td>G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; EIN 33-2880433 &middot; SAM.gov registered &middot; ORCID 0009-0000-6496-2186</td></tr>
+</table>
+
+<div class="figbox">
+<div class="figcap">Figure 1 &middot; why the cell is a hexagon</div>
+<svg viewBox="0 0 430 130" width="100%" role="img" aria-label="Perimeter required to enclose unit area: hexagon 3.7224, square 4.0000, triangle 4.5590"><text x="0" y="30" font-size="10.5" fill="#12141a" font-family="Georgia,serif">hexagon</text><rect x="74" y="18" width="244.9" height="15" rx="2" fill="#7a3410"/><text x="322.9" y="30" font-size="10" fill="#6f6857" font-family="JetBrains Mono,ui-monospace,monospace">3.7224</text><text x="0" y="60" font-size="10.5" fill="#12141a" font-family="Georgia,serif">square</text><rect x="74" y="48" width="263.2" height="15" rx="2" fill="#8a7340"/><text x="341.2" y="60" font-size="10" fill="#6f6857" font-family="JetBrains Mono,ui-monospace,monospace">4.0000</text><text x="0" y="90" font-size="10.5" fill="#12141a" font-family="Georgia,serif">triangle</text><rect x="74" y="78" width="300.0" height="15" rx="2" fill="#c4bba8"/><text x="378.0" y="90" font-size="10" fill="#6f6857" font-family="JetBrains Mono,ui-monospace,monospace">4.5590</text><text x="0" y="120" font-size="9.5" fill="#6f6857" font-family="Georgia,serif">perimeter enclosing unit area &#8212; lower is less wall per habitable m²</text></svg>
+<p class="fignote">Among regular tilings, the hexagon encloses a given area with the least perimeter: <span class="mono">3.7224</span> against <span class="mono">4.0000</span> for the square and <span class="mono">4.5590</span> for the triangle, per unit area. On a surface where every square metre of pressure wall is mass delivered from Earth, that ratio is the whole argument. It is also the one claim here that is both machine-checked (<span class="mono">FN_H_101L_isoperimetric</span>) and checkable by hand.</p>
+</div>
+
+<h2>2 &middot; The gap ledger</h2>
+
+<p>The criterion the response asked NASA to apply is stated in the ledger itself: <strong>a <span class="mono">sorry</span> is an open gap; closing a <span class="mono">sorry</span> closes a NASA functional gap.</strong> The table below is generated from that file's own status marks, not from the submission.</p>
+
+<div class="gapgrid">
+<div class="head code">Gap</div><div class="head">Response, and the theorem that carries it</div><div class="head st">Status</div>
+
+<div class="code">FN-H-101L<br>FN-H-102L</div>
+<div><strong>Habitation.</strong> Pressurised habitable environment, short and month-plus duration. G&sup1; hex module at 19.1 m side, scaling to the G&#8310; structure. <span class="mono">FN_H_101L_isoperimetric</span> &middot; <span class="mono">FN_H_102L_phase02_cluster</span>. The hexagon is the isoperimetric optimum among regular tilings; the pressure-vessel step is asserted, not derived.</div>
+<div class="st"><span class="ok">&#10003;</span> structural<br><span class="part">&sim;</span> vessel</div>
+
+<div class="code">FN-L-101L</div>
+<div><strong>Logistics.</strong> Interface standardisation. <span class="mono">FN_L_101L_hex_interfaces</span> &middot; <span class="mono">FN_L_101L_unique_interface</span>: six mating interfaces per cell, all distinct, so any two neighbouring cells mate on exactly one.</div>
+<div class="st"><span class="ok">&#10003;</span></div>
+
+<div class="code">FN-T-201L<br>FN-T-202L</div>
+<div><strong>Transportation.</strong> Stage-gated delivery and payload growth. <span class="mono">FN_T_201L_payload_monotone</span> &middot; <span class="mono">FN_T_202L_payload_ratio</span> (Phase 02 / Phase 01 = 15) &middot; <span class="mono">FN_T_201L_stage_gated</span>: cells at stage <em>n</em> cannot appear before stage <em>n&minus;1</em> exists.</div>
+<div class="st"><span class="ok">&#10003;</span></div>
+
+<div class="code">FN-P-101L<br>FN-P-402L</div>
+<div><strong>Power generation.</strong> <strong>No response.</strong> The May submission recorded these as partially addressed by an Arnold-tongue passive resonance argument. That response was withdrawn in full on 21 August 2026 and no partial credit is claimed. See &sect;4 below &mdash; the withdrawal is the most load-bearing thing on this page.</div>
+<div class="st"><span class="open">&#9675;</span> reopened</div>
+
+<div class="code">FN-U-103L</div>
+<div><strong>ISRU.</strong> <span class="mono">FN_U_103L_six_layers</span> &middot; <span class="mono">FN_U_103L_expand_models_ISRU</span>: the colony expand operation models seeding from local material. Site-specific ISRU data is required before this is more than structural.</div>
+<div class="st"><span class="part">&sim;</span> partial</div>
+
+<div class="code">FN-A-104L<br>FN-A-105L</div>
+<div><strong>Autonomous systems.</strong> <span class="mono">FN_A_104L_reachability</span>: colony reachability is monotone under expansion. Full autonomy is not addressed. A second theorem here was <em>deleted</em> on 2026-08-21 for vacuity rather than left in place.</div>
+<div class="st"><span class="ok">&#10003;</span> reach<br><span class="open">&#9675;</span> autonomy</div>
+
+<div class="code">FN-C-101L<br>FN-C-201L</div>
+<div><strong>Communications and PNT.</strong> <span class="mono">FN_C_101L_ring_count</span> gives the ring structure; the coverage question itself is tracked in <span class="mono">Coverage.lean</span>, which is outside every build target and therefore unchecked.</div>
+<div class="st"><span class="open">&#9675;</span> open</div>
+
+<div class="code">FN-M-302L</div>
+<div><strong>Mobility.</strong> <strong>No response.</strong> Reopened 21 August 2026. Unlike FN-A-104L there is no non-vacuous theorem elsewhere that carries it.</div>
+<div class="st"><span class="open">&#9675;</span> reopened</div>
+</div>
+
+<p>A thirteenth declaration, <span class="mono">nasa_gap_closure_summary</span>, collects the closures so that the table's status is decided by whether that theorem compiles.</p>
+
+<h2>3 &middot; What is checked, and by what</h2>
+
+<p>The twelve gap theorems are probed <em>by name</em> in <span class="mono">.github/workflows/verify-proofs.yml</span> and judged by <span class="mono">tools/axiom_gate.py</span>, which fails the job on <span class="mono">sorryAx</span> or on a missing declaration. The file sits inside the <span class="mono">Orthogenesis</span> default build target, so <span class="mono">lake build</span> compiles it; before 21 August 2026 it was in no target at all and had never been compiled by anything.</p>
+
+<table class="filetab">
+<tr><th>File</th><th>Decls</th><th>Admitted</th><th>Gate</th></tr>
+<tr><td class="m">NASAGaps.lean</td><td>12</td><td>0</td><td>probed by name in CI, per theorem</td></tr>
+<tr><td class="m">G6Crystal.lean</td><td>33</td><td>0</td><td>kernel-audited</td></tr>
+<tr><td class="m">AcousticLattice.lean</td><td>11</td><td>3 declared</td><td>OK &mdash; no <span class="mono">sorryAx</span>, permitted axioms only</td></tr>
+<tr><td class="m">MagneticLattice.lean</td><td>20</td><td>1 (M2)</td><td>PASS-AS-DECLARED</td></tr>
+<tr><td class="m">SeismicLattice.lean</td><td>17</td><td>1 (Q2)</td><td>PASS-AS-DECLARED</td></tr>
+<tr><td class="m">DM3Bridge.lean</td><td>14</td><td>0</td><td>no gate report on disk</td></tr>
+<tr><td class="m">ToyModel.lean</td><td>14</td><td>0</td><td>no gate report on disk</td></tr>
+<tr><td class="m">Coverage.lean</td><td>6</td><td>0</td><td><strong>outside every build target</strong> &mdash; unchecked</td></tr>
+</table>
+
+<p>The last row is the one to read. A file outside every target can stop compiling and nothing will say so, and no claim resting on it is verified. It is listed here rather than omitted, because the omission is what would mislead.</p>
+
+<h2>4 &middot; The errata, which is the point</h2>
+
+<p>An internal audit on 20&ndash;21 August 2026 found that three claims in &sect;5 of the May submission were not supported by the artifacts they cited, and that the verification metric the submission proposed to NASA did not measure what it was said to measure. <strong>None of the errors were found by a reviewer.</strong></p>
+
+<div class="box warn">
+<span class="lab">Power generation: four independent failures, any one sufficient</span>
+<p><strong>Units.</strong> The supporting theorem compared a dimensionless count of limit cycles against a number of hertz. The comparison is a true statement about two real numbers and an empty one about the world &mdash; and the Lean kernel does not carry units, so it certified something not physically well-formed.</p>
+<p><strong>Wrong mode.</strong> The frequency was taken from the lossless idealisation, which places the fundamental at 10.59 Hz rather than the observed 7.83 Hz.</p>
+<p><strong>Back-fitted constant.</strong> The multiplier that reached the target figure was the factor required to reach it, not a rotation number derived from anything.</p>
+<p style="margin:0"><strong>No cavity.</strong> Schumann resonance is a property of the Earth&ndash;ionosphere cavity. The Moon has none. In the environment the response was written for, the coupling is not mistuned &mdash; it is absent.</p>
+</div>
+
+<div class="box warn">
+<span class="lab">&ldquo;Twenty facts proved without sorry&rdquo; was true and misleading</span>
+<p style="margin:0">There was indeed no <span class="mono">sorry</span> in the file. There were also three items its own header called open obligations. Both were true at once, because the obligations were written as theorems concluding <span class="mono">True</span>. Such a statement compiles, contains no <span class="mono">sorry</span>, and passes <span class="mono">#print axioms</span> on the standard three &mdash; it is indistinguishable from a real theorem to every automated check, including this repository&rsquo;s. The criterion the submission asked NASA to apply could not see it.</p>
+</div>
+
+<p>The corrections reduce the claimed scope. No correction expands it. What survives is stated as plainly: the hexagonal isoperimetric optimum, the dimensional derivation from the dm&sup3; invariants, phase payload monotonicity and the hex-grid colony results are non-vacuous and unchanged. The withdrawal costs the <em>physical</em> justification of the aspect ratio, not the geometric one.</p>
+
+<h2>5 &middot; Declared vacuity</h2>
+
+<p>The response to finding a vacuous theorem was not to delete the category but to make it declarable. <span class="mono">Orthogenesis/Architecture/KNOWN_PLACEHOLDERS.txt</span> is append-only and lists every statement whose conclusion is <span class="mono">True</span>, so that CI can tell a known vacuity from a new one. The rule is one line: <strong>declared-open is acceptable; undeclared-open fails the build.</strong> Six entries are active.</p>
+
+<p>A retired entry is commented out with the date and reason, never deleted &mdash; because a bare list loses its own history the moment an entry goes, and would say six while carrying no trace that it once said seven.</p>
+
+<h2>6 &middot; Reading</h2>
+
+<table class="filetab">
+<tr><th>Document</th><th>What it is</th></tr>
+<tr><td class="m"><a href="Orthogenesis/NASA.md">Orthogenesis/NASA.md</a></td><td>The errata in full, with the identifier corrections and the two entries that narrow rather than fall</td></tr>
+<tr><td class="m"><a href="book6/g6-crystal.html">The G6 Crystal</a></td><td>The geometry: the module, the invariants, the scaling</td></tr>
+<tr><td class="m"><a href="book4/ch17-magnetic-lattice.html">Ch 17 &middot; Magnetic Lattice</a></td><td>Shubnikov census, helimagnet periodicity; M2 open</td></tr>
+<tr><td class="m"><a href="book4/ch18-seismic-lattice.html">Ch 18 &middot; Seismic Lattice</a></td><td>Which polygons tile, and which spreads a load thinnest; Q2 open</td></tr>
+<tr><td class="m"><a href="book6/wp73-the-stamp-and-the-triple.html">WP-73 &middot; The Stamp and the Triple</a></td><td>Why a verification claim needs artifact, toolchain and library together</td></tr>
+<tr><td class="m"><a href="docs/lean-4.32.0-ledger.md">Lean v4.32.0 ledger</a></td><td>Every tracked declaration, what it rests on, and which files are outside every target</td></tr>
+</table>
+
+<div class="box thm">
+<span class="lab">What this page does not claim</span>
+<p style="margin:0">No flight hardware exists. No physical test has been performed. Nothing here is a NASA endorsement, a contract, or a statement by NASA; the gap codes are cited from a public guide and the responses are G6 LLC&rsquo;s own. Six of the eight gap rows are partial or open and are marked so; two are closed. The geometric results are machine-checked; the engineering claims that would turn a geometry into a habitat are not, and are not asserted.</p>
+</div>
+
+</div>
+
+<footer>
+<div class="fwrap">
+<div>
+<a href="index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="master-index.html">Master index</a><br>
+Orthogenesis &middot; Architecture &middot; 2026-09-14 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a> &middot; EIN 33-2880433 &middot; SAM.gov registered
+</div>
+<div class="disc">Not a NASA publication and not an endorsement. Functional gap codes are cited from a public NASA guide; the responses are G6 LLC's own and several are open. The status marks on this page are read from <span class="mono">Orthogenesis/Architecture/NASAGaps.lean</span>, and where a file has no gate report or lies outside every build target, the table says so rather than omitting the row.</div>
+</div>
+</footer>
+
+</body>
+</html>

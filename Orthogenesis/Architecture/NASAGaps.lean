@@ -4,7 +4,11 @@
 -- closes a NASA functional gap.
 --
 -- Source: NASA Moon Base User's Guide, NP-2026-04-6806-HQ, April 2026
--- Toolchain: Lean 4 + Mathlib v4.14.0
+-- Toolchain: Lean 4 + Mathlib v4.32.0 (the repository pin). This file is inside
+-- the Orthogenesis default target and builds with it; the twelve gap theorems
+-- are probed by name in .github/workflows/verify-proofs.yml and judged by
+-- tools/axiom_gate.py. The header read v4.14.0 until 2026-09-14, which was the
+-- toolchain at the time of the RFI response and has not been current since.
 -- AXLE: github.com/TOTOGT/AXLE
 -- Zenodo: 10.5281/zenodo.19162012  (concept DOI; the deposited text still
 --   carries the §4 Schumann section withdrawn here on 2026-08-21)
