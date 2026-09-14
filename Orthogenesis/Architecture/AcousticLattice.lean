@@ -168,7 +168,7 @@ theorem full_diffraction_spectrum_placeholder : True := trivial
 /-!
 ### A2 and A3 are not propositions, and are no longer declared  (2026-09-14)
 
-Two entries stood here as `theorem _ : True := trivial`, and their own
+Two entries stood here as theorems whose conclusion was `True`, and their own
 docstrings said what was wrong with them: A2 was "an archaeological /
 historical question, explicitly NOT a theorem", A3 "a perceptual claim,
 outside formal reach". Both judgements were correct and both were then

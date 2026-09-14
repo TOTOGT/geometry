@@ -238,8 +238,13 @@ jobs:
           grep -v '^#' "$BASE" | grep . | sort > /tmp/declared.txt
           cat /tmp/declared.txt
           echo "----- actual -----"
-          grep -n ': True := trivial' Orthogenesis/Architecture/*.lean \
-            | grep -v ':[0-9]*: *--' \
+          # Must be a DECLARATION, not a line that mentions one. Until 2026-09-14
+          # this grepped for the shape anywhere, so a doc comment describing a
+          # retired placeholder registered as a live one and failed the job. A
+          # scanner that cannot tell a mention from a claim is the defect this
+          # scan exists to catch, committed by the scan.
+          grep -nE '^[[:space:]]*theorem[[:space:]]+[A-Za-z0-9_'"'"']+[[:space:]]*:[[:space:]]*True[[:space:]]*:=[[:space:]]*trivial' \
+            Orthogenesis/Architecture/*.lean \
             | sed -E 's/^([^:]+):[0-9]+:[[:space:]]*theorem[[:space:]]+([A-Za-z0-9_'"'"']+).*/\1:\2/' \
             | sort > /tmp/actual.txt
           cat /tmp/actual.txt
