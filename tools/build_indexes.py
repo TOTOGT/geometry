@@ -292,7 +292,7 @@ def row_html(rel: str, title: str, n: int, prefix: str = "") -> str:
 
 
 def page(title: str, eyebrow: str, heading: str, sub: str, stats: str,
-         extra: str, body: str) -> str:
+         extra: str, body: str, scope: str = "") -> str:
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -318,6 +318,7 @@ def page(title: str, eyebrow: str, heading: str, sub: str, stats: str,
   Generated {date.today().isoformat()} by <span class="mono">tools/build_indexes.py</span>
   from a filesystem crawl &mdash; not from the hand-built nav. Re-run it after adding or
   moving pages; these counts are derived and go stale on their own.<br>
+  {scope}
   Principia Orthogona &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; 2026 &middot;
   <a class="back" href="https://zenodo.org/communities/principia-orthogona">Zenodo community</a>
 </footer>
@@ -374,18 +375,68 @@ def main() -> None:
             f'<a href="index-{slug}.html" style="color:var(--clay)">open folder index</a>'
             f'</span></h2>\n{rows}\n</div>')
 
+    # A count with no scope is a claim with no address. The index is not "every
+    # HTML file" and never was - it skips superseded evidence copies, staging and
+    # archive scratch on purpose, because a superseded copy listed as a live page
+    # is worse than an omission. State the denominator and name what fell out.
+    try:
+        import subprocess
+        tracked = [f for f in subprocess.run(
+            ["git", "--no-optional-locks", "ls-files", "*.html"],
+            cwd=ROOT, capture_output=True, text=True, timeout=60).stdout.split() if f]
+    except Exception:
+        tracked = []
+    listed_now = set(files)
+    excluded = sorted(f for f in tracked if f not in listed_now)
+    if tracked:
+        scope_note = (
+            f'Scope: {total} of {len(tracked)} tracked HTML files. '
+            f'{len(excluded)} are excluded by rule, not by accident &mdash; '
+            + ", ".join(f'<span class="mono">{esc(k)}</span>' for k in SKIP)
+            + f' &mdash; and are listed at '
+              f'<a class="back" href="index-excluded.html">index-excluded.html</a>. '
+              f'A superseded copy listed as a live page is worse than an omission.<br>')
+    else:
+        scope_note = ('Scope: git was not available, so the denominator could not be '
+                      'read. This count is the crawl only.<br>')
+
     stats = (f'<div class="stat"><b>{total}</b><span>total files</span></div>'
              f'<div class="stat"><b style="color:var(--amber)">{orphans}</b><span>orphaned</span></div>'
              f'<div class="stat"><b>{len(FOLDERS)}</b><span>books / folders</span></div>')
     (ROOT / "master-index.html").write_text(page(
         f"Master Index · {REPO} · Principia Orthogona",
         f"{SITE} &middot; full repo crawl", "Master Index",
-        f"Every HTML file in the {REPO} repo, generated directly from the filesystem "
-        f"&mdash; not the hand-built nav. Search across all {total} chapters, papers and "
+        f"Every HTML file in the {REPO} repo except those excluded by rule &mdash; see the "
+        f"footer for the scope and the count. Generated directly from the filesystem, "
+        f"not the hand-built nav. Search across all {total} chapters, papers and "
         f"pages at once. Amber tags mark files with zero inbound links from anywhere else "
         f"in the repo; the generated indexes themselves are excluded as link sources, so "
         f"they cannot mask an orphan.",
-        stats, f'<div class="folderlinks">{links}</div>', "\n".join(blocks)), encoding="utf-8")
+        stats, f'<div class="folderlinks">{links}</div>', "\n".join(blocks),
+        scope=scope_note), encoding="utf-8")
+
+    ex_rows = "\n".join(
+        f'<div class="group"><h2>{esc(k)}</h2>\n'
+        + "\n".join(f'<div class="row"><span class="mono">{esc(f)}</span></div>'
+                     for f in excluded if f.startswith(k)) + "\n</div>"
+        for k in SKIP if any(f.startswith(k) for f in excluded))
+    other = [f for f in excluded if not any(f.startswith(k) for k in SKIP)]
+    if other:
+        ex_rows += ('\n<div class="group"><h2>Not covered by any skip rule</h2>\n'
+                    + "\n".join(f'<div class="row"><span class="mono">{esc(f)}</span></div>'
+                                 for f in other) + "\n</div>")
+    (ROOT / "index-excluded.html").write_text(page(
+        f"Excluded from the index &middot; {REPO}",
+        f"{SITE} &middot; what the crawl leaves out", "Excluded by Rule",
+        "Tracked HTML files the generated indexes do not list. Each is excluded by a "
+        "declared path rule, not by oversight. The largest group is superseded evidence "
+        "copies: listing one as a live page would report a retired file as current, "
+        "which is a worse failure than leaving it out.",
+        f'<div class="stat"><b>{len(excluded)}</b><span>excluded</span></div>'
+        f'<div class="stat"><b>{len(tracked)}</b><span>tracked</span></div>',
+        "", ex_rows or '<p class="empty">Nothing is excluded.</p>',
+        scope=f'Companion to <a class="back" href="master-index.html">master-index.html</a>, '
+              f'which lists the other {total}.<br>'), encoding="utf-8")
 
     print(f"{total} files, {orphans} orphaned, {len(FOLDERS) + 1} pages written")
     for slug, _, _ in FOLDERS:
