@@ -12,3 +12,4 @@ import Orthogenesis.Architecture.DM3Bridge
 import Orthogenesis.Architecture.Coverage
 import Orthogenesis.Architecture.ToyModel
 import Orthogenesis.Architecture.NASAGaps
+import Orthogenesis.Disaster.DisasterTheory

@@ -6421,3 +6421,70 @@ never a name — has a counterpart here: a pattern is a rate with a denominator,
 never an impression. A clean signal that runs opposite to a guess is not a
 refutation of the guess; it is the notice that no measurement has been made yet,
 and the point at which changing how anyone works would be acting on nothing.
+
+---
+
+## 2026-09-15 — The file existed only inside the page that claimed it had been checked
+
+`chDis-disaster.html` is a Zenodo-deposited preprint. Its abstract read: *All
+claims are formally verified in AXLE … Fourteen core theorems are presented, all
+sorry-free.* Corollary 2 read: *The fourteen Lean 4 theorems in §5 constitute a
+formal proof of all four parts of the Disaster Theorem … machine-checkable,
+sorry-free, and depends only on Mathlib4.* §5 displayed the file in full, under
+the banner `-- 14 theorems proved · zero sorry · AXLE verified`.
+
+`DisasterTheory.lean`, `CatastropheF.lean` and `ChaosMu.lean` do not exist in
+AXLE's working tree and have never existed anywhere in its history. The Lean
+source existed only inside the HTML.
+
+That is `MISATTRIBUTED` and would be the whole entry, except for what the listing
+itself says. D2 asserted
+
+    deriv (fun x => whitney_fold (1/3) x) 0 = 0
+
+where `whitney_fold a x = x^3 + a*x`. The derivative is `3x² + a`, which at
+`a = 1/3, x = 0` is `1/3`. The statement is `FALSE`, so `simp [whitney_fold];
+ring` closes nothing and the file as displayed could not have compiled under any
+toolchain. **The page carries its own proof that it was never run.** That is a
+stronger finding than the missing file, and it is available to any reader without
+access to the repository — which is the only kind of finding a published preprint
+can be audited by.
+
+Nine of the remaining entries are `NAME EXCEEDS STATEMENT`. D11 was docstringed
+"bijection between catastrophes and operators" and proved `(7 : ℕ) = 7 := by
+rfl` — `VACUOUS` under a structural name. D7, "the n-bonacci cascade is strictly
+increasing toward τ", compares five decimal literals.
+
+**The repair.** The file now exists at
+`Orthogenesis/Disaster/DisasterTheory.lean` — in geometry, not AXLE, because
+AXLE pins `v4.14.0`, has no `.lake`, and has no workflow, so a file deposited
+there would be exactly as uncheckable as one that does not exist. It is imported
+by `Orthogenesis.lean` and therefore elaborated on every push. D2 is restated as
+the true statement (at `a = ε₀` the fold has *no* critical point; the fold is at
+`a = 0`, which is what D3's own docstring was already saying), every docstring is
+reduced to what its theorem says, the derivative identity is a declared `sorry`
+under `GATE-DECLARE`, and a closing block names the five obligations the chapter
+makes and the file does not discharge. The page states the correction.
+
+**The class, measured.** `tools/decl_resolve.py` has enforced "every declaration
+named in prose must resolve at the path cited" since 2026-08-27. It had never
+been run across the corpus, because it takes a `claims.json` nobody ever built.
+The tool was present; its input was not. That is the reduction ladder's own
+failure mode — a rung reading from a table that was never generated — occurring
+in the instrument built to catch it.
+
+`tools/lean_addresses.py`, added today, needs no input: it takes the rung below,
+asking only whether the *file* exists anywhere under any root a reader could be
+sent to. Across 776 pages and 152 `.lean` files in four repositories:
+
+    57 names resolve nowhere, cited by 106 pages
+     2 resolve only under another case — open on macOS, 404 on GitHub
+
+`ZeoliteCommutation.lean` alone is cited by eleven pages.
+
+Beneath all of it: 36 pages assert that something is *proved in AXLE*. AXLE has
+no `.lake`, no `.github/workflows`, and no axiom report. Nothing in it has ever
+been elaborated by anything but a hand run. The three missing files are not an
+exception in that repository. They are the visible end of a repository that
+compiles nothing, and a citation to it has never been a verification claim,
+whatever the sentence around it said.

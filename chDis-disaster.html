@@ -146,6 +146,7 @@
       <tr><td>Contact</td><td>g6llc@proton.me · +1 (646) 342-3751</td></tr>
       <tr><td>Series</td><td>Principia Orthogona</td></tr>
       <tr><td>Archive</td><td>Zenodo · doi:10.5281/zenodo.19117399 (concept DOI, always latest)</td></tr>
+      <tr><td>Lean file</td><td><a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Disaster/DisasterTheory.lean" target="_blank">Orthogenesis/Disaster/DisasterTheory.lean</a> · geometry repo, <code>Orthogenesis</code> target</td></tr>
       <tr><td>AXLE repository</td><td><a href="https://github.com/TOTOGT/AXLE" target="_blank">github.com/TOTOGT/AXLE</a></td></tr>
       <tr><td>Company page</td><td><a href="https://grossi-ops.github.io/g6/" target="_blank">grossi-ops.github.io/g6/</a></td></tr>
       <tr><td>License</td><td>CC BY 4.0</td></tr>
@@ -168,7 +169,7 @@
       <p>We introduce <em>Disaster Theory</em>, a contact-geometric framework unifying catastrophe theory (Thom 1972) and chaos theory (Lorenz 1963) via the dm³ operator chain G = U∘F∘K∘C on a contact 3-manifold (M, ξ).</p>
       <p>Our main result is the <strong>Disaster Theorem</strong>: the dm³ operator chain is a catastrophe-traversing, chaos-resolving map whose (i) F-operator realises the Whitney A₁ fold with singularity parameter ε₀ = 1/3; (ii) transverse Lyapunov exponent satisfies μ_max = −2 at all points in the basin of attraction; and (iii) unique global attractor is τ = 2 (the embodiment threshold), which is fold-free (no A₁ catastrophe persists at τ).</p>
       <p>The seven elementary catastrophes of Thom's classification (A₁, A₂, A₃, A₄, D₄⁺, D₄⁻, D₅) map bijectively to the seven operators and constants of the dm³ chain. The n-bonacci recurrence sequence φ → η → Δ → Σ → Ω → τ is the A-series unfolding sequence: each rung crosses one catastrophe boundary and reduces the effective Lyapunov exponent toward −∞. The full cascade constitutes a mathematical theory of recovery from catastrophe and chaos simultaneously.</p>
-      <p>All claims are formally verified in <strong>AXLE</strong> (Algebraic eXpression Language for Evaluation), a Lean 4 / Mathlib4 proof environment. Fourteen core theorems are presented, all sorry-free.</p>
+      <p>The framework above is argued, not formally verified. The Lean 4 listing in §5 is elementary support for four numeric side-conditions — ε₀ = 1/3, μ_max = −2, τ = 2, and the contraction factor e⁻² — and does not formalise the Disaster Theorem. See the verification status note below §5.</p>
     </div>
   </div>
 </section>
@@ -235,7 +236,7 @@
     </div>
 
     <div class="corollary-box">
-      <strong>Corollary 2 (Formal).</strong> The fourteen Lean 4 theorems in §5 constitute a formal proof of all four parts of the Disaster Theorem in the AXLE proof environment. The proof is machine-checkable, sorry-free, and depends only on Mathlib4.
+      <strong>Corollary 2 (Formal) — withdrawn 2026-09-15.</strong> This corollary read: "The fourteen Lean 4 theorems in §5 constitute a formal proof of all four parts of the Disaster Theorem in the AXLE proof environment." They do not. Of the fourteen entries, one is a definition and nine conclude arithmetic about numerals. The Disaster Theorem is not formalised. What the §5 file does carry is listed in the verification status note below it.
     </div>
   </div>
 </section>
@@ -316,48 +317,52 @@
 <!-- §5 LEAN THEOREMS -->
 <section style="background:white">
   <div class="section-inner">
-    <h2>§5 · Lean 4 Formal Verification — Fourteen Theorems</h2>
-    <p>The following theorems formally verify the Disaster Theorem in <strong>AXLE</strong> (Algebraic eXpression Language for Evaluation) at <a href="https://github.com/TOTOGT/AXLE" target="_blank">github.com/TOTOGT/AXLE</a>. All proofs are sorry-free and depend only on Mathlib4.</p>
+    <h2>§5 · The Lean File</h2>
+    <p>Sixteen declarations, at <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Disaster/DisasterTheory.lean" target="_blank">Orthogenesis/Disaster/DisasterTheory.lean</a> in the <a href="https://github.com/TOTOGT/geometry" target="_blank">geometry</a> repository, inside the <code>Orthogenesis</code> build target. They establish the four numeric side-conditions the framework uses and nothing beyond them; each docstring below states what its own theorem states. One obligation is left open with an explicit <code>sorry</code>, declared in the file’s <code>GATE-DECLARE</code> header.</p>
 
     <div class="lean-block">
-<span class="lean-comment">-- DisasterTheory.lean</span>
+<span class="lean-comment">-- Orthogenesis/Disaster/DisasterTheory.lean (geometry repo)</span>
 <span class="lean-comment">-- AXLE · Principia Orthogona · G6 LLC · 2026</span>
 <span class="lean-comment">-- DOI: 10.5281/zenodo.19117399 (concept DOI, always latest)</span>
 
 <span class="lean-kw">namespace</span> <span class="lean-type">dm3.DisasterTheory</span>
 
-<span class="lean-comment">-- PART I: CATASTROPHE (from CatastropheF.lean)</span>
+<span class="lean-comment">-- PART I: THE FOLD</span>
 
-<span class="lean-comment">/-- D1. Whitney A₁ normal form -/</span>
+<span class="lean-comment">/-- D1. Whitney A₂ normal form. A definition. -/</span>
 <span class="lean-kw">noncomputable def</span> <span class="lean-type">whitney_fold</span> (a x : ℝ) : ℝ := x^<span class="lean-num">3</span> + a * x
 
-<span class="lean-comment">/-- D2. Fold singularity at ε₀ = 1/3 -/</span>
-<span class="lean-kw">theorem</span> <span class="lean-type">fold_at_eps0</span> :
-    deriv (<span class="lean-kw">fun</span> x => whitney_fold (<span class="lean-num">1</span>/<span class="lean-num">3</span>) x) <span class="lean-num">0</span> = <span class="lean-num">0</span> := <span class="lean-kw">by</span>
-  simp [whitney_fold]; ring
+<span class="lean-comment">/-- D2′. At a = ε₀ = 1/3 the fold has NO critical point. Replaces the</span>
+<span class="lean-comment">    published D2, which asserted a critical point at a = 1/3 and is false:</span>
+<span class="lean-comment">    the derivative of x³ + a·x is 3x² + a, equal to 1/3 at a = 1/3, x = 0.</span>
+<span class="lean-comment">    The fold of this unfolding is at a = 0. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">no_critical_point_at_eps0</span> (x : ℝ) :
+    <span class="lean-num">0</span> &lt; <span class="lean-num">3</span> * x^<span class="lean-num">2</span> + <span class="lean-num">1</span>/<span class="lean-num">3</span> := <span class="lean-kw">by</span> positivity
 
-<span class="lean-comment">/-- D3. Fold is resolved above ε₀: f'(x) > 0 for a > 1/3 -/</span>
+<span class="lean-comment">/-- D3. 1/3 &lt; a → 0 &lt; 3a. Arithmetic. The claim this docstring made,</span>
+<span class="lean-comment">    that f′(x) &gt; 0 above ε₀, is a separate theorem in the file. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">fold_resolved_above_eps0</span>
     {a : ℝ} (ha : <span class="lean-num">1</span>/<span class="lean-num">3</span> < a) : <span class="lean-num">0</span> < <span class="lean-num">3</span> * a := <span class="lean-kw">by</span> linarith
 
-<span class="lean-comment">/-- D4. τ = 2 is fold-free -/</span>
+<span class="lean-comment">/-- D4. (2 : ℝ) &gt; 1/3. Arithmetic on two numerals. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">tau_fold_free</span> : (<span class="lean-num">2</span> : ℝ) > <span class="lean-num">1</span>/<span class="lean-num">3</span> := <span class="lean-kw">by</span> norm_num
 
-<span class="lean-comment">-- PART II: CHAOS (from ChaosMu.lean)</span>
+<span class="lean-comment">-- PART II: THE EXPONENT</span>
 
-<span class="lean-comment">/-- D5. μ_max = -2 implies stability -/</span>
+<span class="lean-comment">/-- D5. (-2 : ℝ) &lt; 0. Arithmetic. Nothing here mentions a spectrum. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">mu_max_negative</span> : (<span class="lean-num">-2</span> : ℝ) < <span class="lean-num">0</span> := <span class="lean-kw">by</span> norm_num
 
 <span class="lean-comment">/-- D6. Contraction at rate e^{-2} -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">contraction_at_rate_neg2</span> : Real.exp (<span class="lean-num">-2</span>) < <span class="lean-num">1</span> :=
   Real.exp_lt_one_iff.mpr (by norm_num)
 
-<span class="lean-comment">/-- D7. n-Bonacci cascade is strictly increasing toward τ -/</span>
-<span class="lean-kw">theorem</span> <span class="lean-type">nbonacci_cascade</span> :
+<span class="lean-comment">/-- D7. Five decimal literals in increasing order. Not a statement about</span>
+<span class="lean-comment">    the roots of xⁿ = xⁿ⁻¹ + ⋯ + 1. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">nbonacci_literals_increasing</span> :
     (<span class="lean-num">1.618</span> : ℝ) < <span class="lean-num">1.839</span> ∧ <span class="lean-num">1.839</span> < <span class="lean-num">1.927</span> ∧
     <span class="lean-num">1.927</span> < <span class="lean-num">1.966</span> ∧ <span class="lean-num">1.966</span> < <span class="lean-num">1.984</span> ∧ <span class="lean-num">1.984</span> < <span class="lean-num">2</span> := by norm_num
 
-<span class="lean-comment">-- PART III: UNIFICATION (new in DisasterTheory.lean)</span>
+<span class="lean-comment">-- PART III: THE ORDERING</span>
 
 <span class="lean-comment">/-- D8. The fold-chaos-attractor sequence: ε₀ < φ < τ -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">disaster_order</span> :
@@ -373,8 +378,10 @@
     x * Real.exp (<span class="lean-num">-2</span>) < x := <span class="lean-kw">by</span>
   nlinarith [Real.exp_pos (<span class="lean-num">-2</span>), Real.exp_lt_one_iff.mpr (by norm_num : (<span class="lean-num">-2</span> : ℝ) < <span class="lean-num">0</span>)]
 
-<span class="lean-comment">/-- D11. Thom 7 = dm³ 7: bijection between catastrophes and operators -/</span>
-<span class="lean-kw">theorem</span> <span class="lean-type">thom_dm3_bijection</span> :
+<span class="lean-comment">/-- D11. (7 : ℕ) = 7. This is rfl. No map between the seven catastrophes</span>
+<span class="lean-comment">    and the seven operators is defined; the numeral agreement is an</span>
+<span class="lean-comment">    observation, not a bijection. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">seven_eq_seven</span> :
     (<span class="lean-num">7</span> : ℕ) = <span class="lean-num">7</span> := <span class="lean-kw">by</span> rfl
 
 <span class="lean-comment">/-- D12. ε₀ = 1/3 is in the open unit interval -/</span>
@@ -387,8 +394,9 @@
   have : Real.exp (<span class="lean-num">-2</span>) < <span class="lean-num">1</span> := Real.exp_lt_one_iff.mpr (by norm_num)
   linarith
 
-<span class="lean-comment">/-- D14. Disaster Theorem (summary): fold at 1/3, exponent -2, attractor 2, all consistent -/</span>
-<span class="lean-kw">theorem</span> <span class="lean-type">disaster_theorem_summary</span> :
+<span class="lean-comment">/-- D14. The four numeric side-conditions, conjoined. Not the Disaster</span>
+<span class="lean-comment">    Theorem and does not imply it. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">disaster_constants_consistent</span> :
     (<span class="lean-num">1</span> : ℝ)/<span class="lean-num">3</span> > <span class="lean-num">0</span> ∧       <span class="lean-comment">-- fold exists</span>
     (<span class="lean-num">-2</span> : ℝ) < <span class="lean-num">0</span> ∧          <span class="lean-comment">-- chaos resolved</span>
     (<span class="lean-num">2</span> : ℝ) > <span class="lean-num">1</span>/<span class="lean-num">3</span> ∧          <span class="lean-comment">-- attractor beyond fold</span>
@@ -398,7 +406,24 @@
 
 <span class="lean-kw">end</span> <span class="lean-type">dm3.DisasterTheory</span>
 
-<span class="lean-proved">-- 14 theorems proved · zero sorry · AXLE verified · G6 LLC 2026</span>
+<span class="lean-comment">-- GATE-DECLARE: sorries = dm3.DisasterTheory.whitney_fold_deriv</span>
+    </div>
+  </div>
+</section>
+
+<!-- VERIFICATION STATUS -->
+<section style="background:#f6f3ec">
+  <div class="section-inner">
+    <h2>Verification status of this chapter</h2>
+    <div class="corollary-box" style="border-left:3px solid #8b1a1a">
+      <p style="margin-bottom:.7rem"><strong>Corrected 2026-09-15.</strong> Until this date the chapter stated that all claims were formally verified in AXLE, that fourteen theorems were sorry-free and machine-checkable, and that they constituted a formal proof of all four parts of the Disaster Theorem. Three things were wrong with that.</p>
+      <ol style="margin:0 0 .7rem 1.2rem;line-height:1.9;font-size:.92rem">
+        <li><strong>The address did not resolve.</strong> <code>DisasterTheory.lean</code>, <code>CatastropheF.lean</code> and <code>ChaosMu.lean</code> were cited at <code>github.com/TOTOGT/AXLE</code>. None of the three has ever existed there — not in the working tree, not anywhere in that repository’s history. The Lean source existed only inside this page.</li>
+        <li><strong>The listing could not have compiled.</strong> D2 asserted <code>deriv (fun x =&gt; x³ + (1/3)x) 0 = 0</code>. The derivative is <code>3x² + 1/3</code>, which at <code>x = 0</code> is <code>1/3</code>. The statement is false, so no tactic closes it. This is an internal proof, independent of the missing file, that the sorry-free banner was never earned.</li>
+        <li><strong>The names exceeded the statements.</strong> Of the fourteen entries, one was a definition and nine concluded arithmetic about numerals under docstrings naming structural results. The clearest was D11, docstringed “bijection between catastrophes and operators” and proved <code>(7 : ℕ) = 7 := by rfl</code>.</li>
+      </ol>
+      <p style="margin-bottom:.7rem">The mathematics of the framework is unaffected by any of this, because none of it was resting on the Lean. What was wrong was the reporting.</p>
+      <p style="margin-bottom:0">The file now exists, at <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Disaster/DisasterTheory.lean">Orthogenesis/Disaster/DisasterTheory.lean</a> in the geometry repository, which pins Lean 4.32.0 and builds; it is imported by <code>Orthogenesis.lean</code> and therefore elaborated by CI on every push. It carries D2 restated as the true statement, every docstring reduced to what its theorem says, one declared <code>sorry</code> on the derivative identity, and a closing block naming the five obligations the chapter makes and the file does not discharge — first among them the Disaster Theorem itself.</p>
     </div>
   </div>
 </section>
@@ -431,8 +456,8 @@
       <ol style="margin:.5rem 0 0 1.2rem;line-height:2.2;font-size:.9rem">
         <li>The Thom–dm³ dictionary (§3): mapping all seven Thom catastrophes to the dm³ operator chain.</li>
         <li>The identification of the n-bonacci recurrence ladder as an <em>A-series catastrophe unfolding sequence</em>.</li>
-        <li>The proof that μ_max = −2 is the universal chaos-exit exponent for dm³ systems (seven independent proofs, two environments: analytic and Lean 4).</li>
-        <li>The Disaster Theorem itself (§2): the first formally verified, sorry-free theorem unifying catastrophe theory and chaos theory in a single mathematical framework.</li>
+        <li>The claim that μ_max = −2 is the universal chaos-exit exponent for dm³ systems. The argument is analytic. The Lean in §5 proves −2 &lt; 0 and e⁻² &lt; 1; it does not reach the exponent claim.</li>
+        <li>The Disaster Theorem itself (§2), as a stated and argued unification of catastrophe theory and chaos theory. It is not formally verified; the priority claimed is for the statement.</li>
         <li>The term and concept of "Disaster Theory" as a mathematical discipline distinct from (but containing) both Catastrophe Theory and Chaos Theory.</li>
       </ol>
     </div>
@@ -457,7 +482,7 @@
       <a href="chDis-disaster.html" class="crosslink-card" style="background:#253568;border-left:3px solid var(--gold)">
         <div class="cl-label">You are here</div>
         <div class="cl-title">Disaster Theory</div>
-        <div class="cl-sub">Unified framework · 14 Lean theorems · IP · Zenodo preprint</div>
+        <div class="cl-sub">Unified framework · argued, not verified · IP · Zenodo preprint</div>
       </a>
     </div>
     <div class="crosslink-row" style="grid-template-columns:1fr 1fr 1fr">
