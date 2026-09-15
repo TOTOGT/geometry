@@ -26,7 +26,7 @@ BLOCKS
       the degeneracy claim is correct.
   [6] The vector field has no zeros anywhere, which is the sense in which
       the Hopf reading is frozen rather than autonomous.
-  [7] The paper's own source, read: one bibitem, zero citations.
+  [7] The paper's own source, read: the bibitem, and its citations.
   [8] Control.
 
 PRIMARY SOURCE. S. H. Strogatz, "Nonlinear Dynamics and Chaos", 2nd ed.,
@@ -233,7 +233,7 @@ print('     this in its exercises ("freeze z"; solution 4 disqualifies the')
 print('     codimension-one normal forms). The theorem and the abstract do not.')
 
 # ---------------------------------------------------------------------------
-head(7, 'THE SOURCE CHECKED AGAINST ITSELF: A BIBITEM THAT IS NEVER CITED')
+head(7, 'THE SOURCE CHECKED AGAINST ITSELF: THE BIBITEM, AND ITS CITATIONS')
 import os
 TEX = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'book6',
                    'differential-equations', 'helix-toy-model', 'helix_toy_model.tex')
@@ -245,19 +245,29 @@ else:
     n_bib  = src.count('\\bibitem{Strogatz}')
     n_cite = src.count('\\cite{Strogatz}') + src.count('cite{Strogatz,') + src.count(',Strogatz}')
     n_ex   = src.count('7.1.1')
-    n_f1   = src.count("f'(1)=-2") + src.count("f'(1) = -2") + src.count("f'(1)=&-2")
+    flat   = ' '.join(src.split())
     print('     \\bibitem{Strogatz}   occurrences : %d' % n_bib)
-    print('     \\cite{Strogatz}      occurrences : %d' % n_cite)
-    print('     "7.1.1"              occurrences : %d' % n_ex)
+    print('     \\cite{Strogatz}      occurrences : %d   (0 before 2026-09-15)' % n_cite)
+    print('     "7.1.1"              occurrences : %d   (0 before 2026-09-15)' % n_ex)
     check(n_bib == 1, 'the textbook is in the bibliography exactly once')
-    check(n_cite == 0, 'and it is cited in the body exactly zero times', str(n_cite))
-    check(n_ex == 0, 'Example 7.1.1 is never named in the paper that is built on it')
+    check(n_cite >= 1, 'and it is now cited in the body, where its data are used', str(n_cite))
+    check(n_ex >= 1, 'Example 7.1.1 is now named in the paper that is built on it')
     check("f(1)=0" in src.replace(' ', '') and "f'(1)=-2" in src.replace(' ', ''),
           'the closure conditions f(1) = 0 and f\'(1) = -2 are in the source as stated')
-print('\n     A bibliography entry that is never cited is a reading, not a source.')
-print('     Nothing here says the paper took anything improperly -- Example 7.1.1')
-print('     is the standard first example of a limit cycle and belongs to nobody.')
-print('     What it says is that the reader is never told where to look.')
+    print()
+    for phrase, what in (
+            ('no periodic orbit', 'the flow is stated to have no periodic orbit'),
+            ('Guckenheimer and Holmes', 'the sense of "degenerate" is attributed'),
+            ('p.~256', 'and separated from the Strogatz p. 256 sense'),
+            ('frozen', 'the frozen-z reading of Theorem 5.1 is stated'),
+            ('Corrections', 'the revision is listed in a Corrections section')):
+        check(phrase in flat, what, phrase)
+print('\n     This block began life reporting the opposite: one bibitem, zero')
+print('     citations, and no mention of 7.1.1 anywhere in the paper built on it.')
+print('     The four clauses were carried into the source on 2026-09-15, listed')
+print('     there under Corrections, and the block now checks the repaired state.')
+print('     Example 7.1.1 is the standard first example of a limit cycle and')
+print('     belongs to nobody; what was missing was the pointer, and it is there.')
 
 # ---------------------------------------------------------------------------
 head(8, 'CONTROL: THIS SCRIPT COMPUTED SOMETHING')
@@ -284,7 +294,7 @@ print("""
   The three-dimensional field has no zero.
 
   NOT ESTABLISHED. That anything in the helix model is wrong. Every theorem
-  checked here is true as stated. The finding is about provenance and about
+  checked here is true as stated. The finding was about provenance and about
   one word: numbers the series quotes as results of its own are the textbook
   example's, and "degenerate Hopf" names a different phenomenon in Strogatz
   p. 256 than it does in the paper. Neither is a mathematical error, and this
@@ -292,10 +302,12 @@ print("""
   dependent escape, the contact-Hamiltonian no-go, or the cosmological
   reading -- those are the model's own and are outside its scope.
 
-  WHAT WOULD SETTLE THE NAMING. State the sense: the paper's degeneracy is a
-  vanishing first Lyapunov coefficient, which is Guckenheimer and Holmes'
-  usage and is in the same bibliography. One clause naming which book's sense
-  is meant costs nothing and removes the collision.
+  THE NAMING IS SETTLED. As of 2026-09-15 the source states the sense --
+  Guckenheimer and Holmes', a vanishing first Lyapunov coefficient, not
+  Strogatz p. 256's nonlinear centre -- says where z is held fixed in the
+  Hopf theorem, says that the flow has no periodic orbit and that T* is the
+  period of the (r, theta) projection, and cites Example 7.1.1 at the places
+  its data are used. Block [7] checks that state rather than the old one.
 """)
 
 print('=' * 70)

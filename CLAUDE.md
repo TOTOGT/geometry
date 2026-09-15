@@ -91,6 +91,27 @@ for Strogatz Example 7.3.1. The 3-D flows have no periodic orbit at all (ż = 1)
 WP-122's missing return map seen from the other side. WP-120 was an unexplained numbering
 gap and is now used.
 
+### WP-22 revised — the three owed clauses are in, and the figures are back
+`book6/differential-equations/helix-toy-model/` — `.tex` and PDF revised together, PDF
+rebuilt clean (pdflatex ×2, no undefined refs, 10→12 pages). Four clarifications in a new
+dated **Corrections** section: Γ is a helix and the flow has no periodic orbit (T\* is the
+(r,θ) projection's period); "degenerate" is Guckenheimer–Holmes' sense, not Strogatz
+p. 256's; Theorem 5.1 is about the frozen planar subsystem and the 3-D field has no zero;
+and Example 7.1.1 is cited where its data are used (`\cite{Strogatz}` went 0→5, `7.1.1`
+0→3). Nothing withdrawn.
+
+**The figure blocker was bigger than the earlier note said**: *four* of five figures were
+missing from the source directory and none had ever been tracked, so the paper had been
+unbuildable from its own sources since `f8a7a54`. `helix_toy_model.py` in the same folder
+regenerates all five and reprints the paper's numerical report; run it with `MPLBACKEND=Agg`
+(scipy is now installed on the desk). The four are tracked now; `fig1_helix3d.png` was left
+at its committed bytes.
+
+`book7/ch-strogatz-verify.py` block [7] exited 1 after the edit — it had asserted
+`\cite{Strogatz} == 0` — and now checks the repaired state instead. `ch-strogatz.html` and
+`wp120-how-many-closed-orbits.html` updated so neither reads as a live defect. Pre-revision
+`.tex` in `docs/ml-evidence/wp22-2026-09-15/`.
+
 The previous handoff's open items below are carried forward unchanged.
 
 ### Carried forward from 2026-09-13 — pushed by Pablo.

@@ -1,3 +1,71 @@
+# WP-22 REVISED: FOUR CLAUSES CARRIED INTO THE SOURCE, AND THE DOCUMENT REBUILDS AGAIN (2026-09-15)
+
+**What was done.** `book6/differential-equations/helix-toy-model/helix_toy_model.tex` and
+its PDF, revised together. Four clarifications, listed in the paper's own new
+**Corrections** section, dated. **No result is withdrawn and no theorem changes content.**
+PDF rebuilt with `pdflatex` twice, clean: no undefined references, no undefined citations,
+10 pages to 12.
+
+1. **Γ is a helix, not a periodic orbit of the flow.** ż = 1, so z(t) = z₀ + t is strictly
+   increasing, nothing returns, and the flow has no periodic orbit at all; T\* = 2π is the
+   period of the (r, θ) projection. The first edition wrote "a periodic orbit of period
+   T\* = 2π (a helix in (r, θ, z), since θ̇ = ż = 1)" — the parenthesis was right and the
+   phrase it qualified was not. Abstract and §2 now say it directly.
+2. **The sense of "degenerate" is named.** Guckenheimer & Holmes — a vanishing first
+   Lyapunov coefficient — and not Strogatz p. 256, where the term means a nonlinear centre
+   with a continuous band of closed orbits and no limit cycle on either side. Both books are
+   in the paper's own bibliography. The claim was and remains correct by Strogatz's Rule of
+   Thumb 1 (p. 254); only the word needed a qualifier. §5 is retitled accordingly.
+3. **Theorem 5.1 is about the frozen planar subsystem.** A new paragraph before the theorem
+   says so: z is a dynamical variable swept at unit rate, not a parameter; the field
+   (ṙ, θ̇, ż) has ż ≡ 1 and hence no zero, so there is no equilibrium to bifurcate. The
+   caveat had existed only in the exercises ("freeze z"; solution 4 disqualifies the
+   codimension-one normal forms at z = 0). The theorem is retitled *Degenerate Hopf at
+   r = 0, frozen z*.
+4. **The radial data are Strogatz Example 7.1.1 and are now cited as such.** Removing ż and
+   taking f = f_cub leaves r' = r(1−r²), θ̇ = 1 — p. 199. Γ, T\* = 2π and the value −2
+   imposed as f'(1) all come from there. `\bibitem{Strogatz}` stood in the bibliography with
+   `\cite{Strogatz}` used zero times and the string `7.1.1` absent; the counts are now 5 and
+   3, at the places the data are used.
+
+**Added while there.** §2 now records that both canonical closures have exactly one positive
+root, so each frozen slice carries exactly one circular orbit — a count, not an assumption —
+and that the same statement fails for the additive coupling r(1−r²) + a(r−1), which
+factorises as −(r−1)(r²+r−a) and carries a second circular orbit. Cross-references to
+ch-strogatz, WP-120 and WP-122 with their URLs.
+
+**THE BLOCKER IS GONE, AND IT WAS LARGER THAN REPORTED.** The 2026-09-15 entry below records
+that `hopf_diagram.png` was missing so the PDF could not be rebuilt. Measured properly:
+**four** of the five figures the document `\includegraphics` were absent from the source
+directory — `helix_split.png`, `basin_boundary.png`, `hopf_diagram.png`, `cosmo_parallel.png`
+— and none had ever been tracked (`git log --all --diff-filter=A` returns nothing for any of
+them). Only `fig1_helix3d.png` was there. So the paper had been unbuildable from its own
+sources since it was added in `f8a7a54`, and nothing said so.
+
+The repair was already written: `helix_toy_model.py`, sitting in the same directory, states
+in its docstring that it "reproduces every numerical claim in the paper and regenerates all
+figures", and it does. Run under `MPLBACKEND=Agg` (scipy installed on the desk for it), it
+regenerated all five and reprinted the paper's numerical report — μ → −2 by base point,
+z₀\*(ε₀) at three ε₀, the bounded closure recovering where the cubic blows up, and the
+double-log basin fit C = 3.677, max resid 0.105 — matching the text. The four missing figures
+are now tracked beside the source; `fig1_helix3d.png` was left at its committed bytes rather
+than churned.
+
+**A verify script caught its own subject moving.** `book7/ch-strogatz-verify.py` block [7]
+read this `.tex` and asserted `\cite{Strogatz} == 0` and `"7.1.1" == 0`. After the revision it
+exited 1. That is the instrument working: the block now checks the repaired state (citations
+present, Example 7.1.1 named, "no periodic orbit" stated, the Guckenheimer-Holmes sense
+attributed and separated from p. 256, the frozen-z reading stated, a Corrections section
+present) and prints the old counts beside the new ones. `ch-strogatz.html` and
+`wp120-how-many-closed-orbits.html` were updated in the same pass so neither still describes
+a live defect; both keep the finding and date its closure.
+
+**Evidence.** `docs/ml-evidence/wp22-2026-09-15/` holds the pre-revision `.tex` and a README
+declaring the cluster, per the 2026-09-01 ruling.
+
+**Checks.** `audit.py --all` clean at 723 HTML; `terms.py --check` OK at 153 declared terms;
+indexes and master index regenerated; all three verify scripts exit 0.
+
 # HOW MANY CLOSED ORBITS — WP-120, AND THE GAP FILLED (2026-09-15)
 
 **What was built.** `book6/wp120-how-many-closed-orbits.html` and `book6/wp120-verify.py`
