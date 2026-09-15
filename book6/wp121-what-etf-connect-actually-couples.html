@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-121 &middot; What ETF Connect Actually Couples &mdash; Principia Orthogona Vol VI</title>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.taglegend{display:flex;gap:.7rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;color:var(--dim);background:var(--paper2);border:1px solid var(--rule);padding:.7rem .9rem;margin:1.2rem 0}
+.t-thm{background:#e6eef6;color:#17435f;border:1px solid #9dbcd4}
+</style></head>
+
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a> &middot; WP-121</span>
+<span class="meta"><a href="wp118-the-remedy-is-time.html">&larr; WP-118 &middot; The Remedy Is Time</a></span>
+</div>
+
+<div class="wp-head">
+<div class="topictag" title="A coupling between two markets, and what the corpus can say about couplings">#Coupling</div>
+<div class="wp-kicker">Vol VI &middot; Roots &middot; WP-121 &middot; 2026-09-15 &middot; Cross-cutting &middot; Kernel-checked: <span class="mono">Orthogenesis/Resonance/TripleChamber.lean</span></div>
+<h1>What ETF Connect Actually <em>Couples</em></h1>
+<div class="subtitle">The Brazil&ndash;China ETF Connect programme is described by its architects as financial integration. Structurally it is a coupling between two resonant systems, and coupling has a signature that can be stated as a theorem rather than as an expectation. The signature is not damping. It is splitting: where there was one mode there are now two, one below the old frequency and one above, arriving together and in proportion. This paper states what the available theorems do and do not license, and derives from them the one quantity the programme currently leaves unmeasured.</div>
+<div class="metagrid">
+<div><strong>Source</strong>Gullo &amp; Forne (2026), <em>Macau Journal of Brazilian Studies</em> 9(I):65&ndash;70<br>B3 / CVM / CSRC primary documents as cited there</div>
+<div><strong>Claim type</strong>a structural reading with its analogy declared<br>no price series is modelled and no return is forecast here</div>
+<div><strong>Verification</strong><span class="mono">Orthogenesis/Resonance/TripleChamber.lean</span> &mdash; 12 declarations<br>kernel-checked 2026-09-15 under the <span class="mono">v4.32.0</span> pin, none admitted</div>
+</div>
+</div>
+
+<div class="wrap">
+
+<div class="lede">Two markets that trade with each other are coupled through one channel. Two markets whose investors hold each other's index funds are coupled through a second. The question a connection raises is not whether the second channel is good or bad &mdash; it is what a second channel does to a system that already had one. That question has an answer, and the answer is neither &ldquo;diversification&rdquo; nor &ldquo;contagion&rdquo;. It is both, in a fixed ratio, and the ratio is the thing to measure.</div>
+
+<h2>1 &middot; The instrument, as built</h2>
+
+<p>The Brazil&ndash;China ETF Connect programme permits the reciprocal cross-listing of exchange-traded funds, so that an investor in either country reaches the other's equity market through domestic infrastructure &mdash; no foreign brokerage account, no offshore custody. It was discussed between the parties from 2014 and reached its first listings in 2025. <span class="tag t-data">Data</span></p>
+
+<p>Stage one is complete. Three Chinese equity-index ETFs trade on B3, as B3's own listing registry records them: <span class="tag t-data">Data</span></p>
+
+<table>
+<tr><th>Code</th><th>Name as listed</th><th>Fund management</th><th>Listed</th></tr>
+<tr><td class="mono">PKIN11</td><td>B-INDEX ETF CONNECT CHINA UNIVERSAL CSI 300 FUNDO DE &Iacute;NDICE</td><td>Banco Bradesco S.A.</td><td class="n">2025-05-27</td></tr>
+<tr><td class="mono">TECX11</td><td>B-INDEX ETF CONNECT CHINA AMC CHINEXT FUNDO DE &Iacute;NDICE</td><td>Banco Bradesco S.A.</td><td class="n">2025-05-27</td></tr>
+<tr><td class="mono">SILK11</td><td>IT NOW MSCI CHINA A50 FUNDO DE &Iacute;NDICE</td><td>Ita&uacute; Unibanco S.A.</td><td class="n">2025-07-11</td></tr>
+</table>
+
+<p>The index partners are named in the fund documentation rather than the ticker: China Universal AM and China AMC behind PKIN11, China AMC behind TECX11, E-Fund Management behind SILK11. <span class="mono">TECX11</span> tracks ChiNext &mdash; the hundred largest and most liquid A-shares on the Shenzhen ChiNext board, weighted toward technology, healthcare, biotechnology and clean energy &mdash; and is the one of the three with no domestic analogue. That is the case for the programme in a single line: it lists something that did not previously exist in the Brazilian market at all.</p>
+
+<figure style="margin:1.6rem 0;border:1px solid var(--rule);background:#fff;padding:1rem 1rem .6rem">
+<svg viewBox="0 0 880 300" width="100%" role="img" aria-label="The two legs of ETF Connect: Chinese index ETFs listed on B3, live; Ibovespa ETFs listed in China, approved but not listed.">
+  <rect x="0" y="0" width="430" height="300" fill="#fdeaea"/>
+  <rect x="450" y="0" width="430" height="300" fill="#dfeaf4"/>
+  <text x="20" y="28" font-family="Georgia,serif" font-size="15" fill="#8b1a1a">Chinese exchanges &#183; SSE / SZSE</text>
+  <text x="470" y="28" font-family="Georgia,serif" font-size="15" fill="#17435f">B3 &#183; S&#227;o Paulo</text>
+
+  <!-- LIVE LEG: Chinese index ETFs on B3 -->
+  <rect x="470" y="60" width="180" height="46" fill="#fff" stroke="#8b1a1a" stroke-width="1.5"/>
+  <text x="482" y="79" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#8b1a1a">PKIN11 &#183; TECX11</text>
+  <text x="482" y="97" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#8b1a1a">SILK11</text>
+  <text x="662" y="79" font-family="Georgia,serif" font-size="13" fill="#242833">Chinese index ETFs,</text>
+  <text x="662" y="96" font-family="Georgia,serif" font-size="13" fill="#242833">listed on B3</text>
+  <line x1="60" y1="83" x2="462" y2="83" stroke="#8b1a1a" stroke-width="2"/>
+  <polygon points="470,83 458,77 458,89" fill="#8b1a1a"/>
+  <text x="60" y="74" font-family="Georgia,serif" font-size="12.5" fill="#8b1a1a">Chinese equity exposure</text>
+  <text x="60" y="104" font-family="ui-monospace,Menlo,monospace" font-size="11" fill="#6f6857">LIVE &#183; 27 May 2025, 11 Jul 2025</text>
+
+  <!-- UNBUILT LEG: Ibovespa ETFs in China -->
+  <rect x="60" y="190" width="180" height="46" fill="#fff" stroke="#6f6857" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="72" y="209" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#6f6857">Ibovespa ETF</text>
+  <text x="72" y="227" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#6f6857">(no ticker)</text>
+  <line x1="820" y1="213" x2="252" y2="213" stroke="#6f6857" stroke-width="2" stroke-dasharray="6 4"/>
+  <polygon points="244,213 256,207 256,219" fill="#6f6857"/>
+  <text x="470" y="204" font-family="Georgia,serif" font-size="12.5" fill="#6f6857">Brazilian equity exposure</text>
+  <text x="470" y="234" font-family="ui-monospace,Menlo,monospace" font-size="11" fill="#6f6857">CSRC-APPROVED &#183; NOT LISTED</text>
+
+  <line x1="440" y1="0" x2="440" y2="300" stroke="#c4bba8" stroke-width="1"/>
+  <text x="20" y="284" font-family="ui-monospace,Menlo,monospace" font-size="10.5" fill="#6f6857">&#945; = 1 today. The design is &#945; = 0. Solid = built; dashed = approved and unbuilt.</text>
+</svg>
+<figcaption style="font-family:var(--mono);font-size:.62rem;line-height:1.7;color:var(--dim);margin-top:.6rem">
+<strong>Figure 1.</strong> The two legs of ETF Connect. B3's own programme diagram shows both arrows as symmetric &mdash; a Chinese asset manager building Brazilian ETFs on one side, a Brazilian asset manager building Chinese ETFs on the other. Only the lower-to-upper leg carries traffic. Redrawn from the programme infographic published with Gullo &amp; Forne (2026) and on B3's ETF Connect page, with the built and unbuilt legs distinguished.
+</figcaption>
+</figure>
+
+<p>Stage two is not. The listing of Ibovespa-tracking ETFs on Chinese exchanges has been approved by the China Securities Regulatory Commission and has not yet happened. B3’s own programme page, which lists the three Brazilian tickers above with their dates, records no listing on the other side; its timeline goes as far as “project operationalization and official listing of ETFs in Brazil and China” without naming a Chinese-listed vehicle. Until one exists, the connection carries traffic in one direction.</p>
+
+<p>The legal scaffolding is a stack of memoranda: CVM&ndash;CSRC in June 2024 on investor protection and market integrity; B3 with the Shanghai Stock Exchange and B3 with the Shenzhen Stock Exchange in March 2025 on operational process. Eligibility runs through CVM Resolution 175, Annex V, which admits only indices whose full methodology is public &mdash; composition, per-asset weighting, rebalancing criteria and frequency, and whatever else replication requires. Surveillance is BSM under CVM Resolution 135, and the operational controls &mdash; auction price limits, erroneous-order rejection, message-rate throttles, connectivity safeguards &mdash; are the ones B3 applies to every listed security. The authors are explicit that there is <em>no</em> operational or risk-management distinction between an ETF Connect product and any other ETF on the exchange.</p>
+
+<div class="box">
+<span class="lab">Why that last sentence is the interesting one</span>
+<p style="margin:0">A new instrument that is operationally identical to the old ones introduces no new microstructure risk, which is exactly right and is not the same as introducing no new risk. What it introduces is a new <em>path</em>. Microstructure controls act on orders. A path acts on correlations, and no order-level control can see it.</p>
+</div>
+
+<h2>2 &middot; A connection is a coupling, and coupling has a signature</h2>
+
+<p>Strip the finance away and the object is two systems, each with its own characteristic response, joined by an aperture of adjustable width. That object has been studied in this corpus under a different name. <span class="mono">Orthogenesis/Resonance/TripleChamber.lean</span> carries a scalar mode</p>
+
+<div class="eq">lam_triple A &gamma; &kappa; = A / (1 + &gamma;&middot;&kappa;)&sup2;</div>
+
+<p>where &kappa; is the coupling strength and &gamma; &gt; 0 a geometry constant. Three results from that file bear on the present case. All three were kernel-checked on 2026-09-15 against the repository's <span class="mono">v4.32.0</span> pin, with nothing admitted.</p>
+
+<div class="box thm">
+<span class="lab">C1 &middot; coupling lowers the fundamental &mdash; triple_chamber_strictAntiOn_nonneg</span>
+<p style="margin:0">For <span class="mono">A &gt; 0</span>, <span class="mono">&gamma; &gt; 0</span>, the map <span class="mono">&kappa; &#8614; lam_triple A &gamma; &kappa;</span> is strictly antitone on <span class="mono">&kappa; &ge; 0</span>. Opening the aperture wider always lowers the shared fundamental. <span class="tag t-thm">Kernel</span></p>
+</div>
+
+<div class="box thm">
+<span class="lab">C2 &middot; coupling splits the mode &mdash; triple_mode_splitting_brackets</span>
+<p style="margin:0">For <span class="mono">&omega;&#8320; &gt; 0</span>, <span class="mono">&kappa; &gt; 0</span>, <span class="mono">&delta; &gt; 0</span> and <span class="mono">&kappa;&delta; &lt; 1</span>, the two coupled modes <span class="mono">&omega;&plusmn; = &omega;&#8320;&middot;&radic;(1 &plusmn; &kappa;&delta;)</span> strictly bracket the uncoupled mode: <span class="mono">&omega;&#8331; &lt; &omega;&#8320; &lt; &omega;&#8330;</span>. Where there was one mode there are now two, one on each side, and the bracket widens with <span class="mono">&kappa;&delta;</span>. <span class="tag t-thm">Kernel</span></p>
+</div>
+
+<div class="box thm">
+<span class="lab">C3 &middot; detuning bounds amplification &mdash; detune_bounds_amplification</span>
+<p style="margin:0">In <span class="mono">Orthogenesis/Architecture/SeismicLattice.lean</span>: for any response function <span class="mono">A</span> antitone in <span class="mono">|&middot;|</span>, if the forcing period is detuned from the system's own period by at least <span class="mono">&delta; &gt; 0</span>, then the amplification is bounded above by <span class="mono">A(&delta;)</span>. Separation in period buys a ceiling on response. <span class="tag t-thm">Kernel</span></p>
+</div>
+
+<p>C2 is the one that matters, and it is the one the policy language obscures. The vocabulary of integration suggests that connecting two markets averages them &mdash; that risk is shared out and each side becomes a little more like the mean. C2 says something else. The coupled system does not settle onto the old frequency; it abandons it. Two new modes appear, symmetrically placed on either side, and the size of the split is set by the product <span class="mono">&kappa;&delta;</span>: the coupling strength times the mismatch between the two systems.</p>
+
+<p>Read back into the instrument: the lower branch is the diversification benefit the programme is sold on &mdash; a slow, cheap, real channel through which a Brazilian portfolio acquires exposure to Chinese technology that Brazilian equities do not contain. The upper branch is the co-movement channel, through which a shock in either market reaches the other by a route that did not exist in 2023. Neither can be had alone. They are the two roots of the same quadratic, and they appear at the same value of &kappa;.</p>
+
+<h2>3 &middot; What these theorems do not say</h2>
+
+<p>They are not a financial model, and nothing here should be read as one. Three limits, stated plainly.</p>
+
+<p><strong>No quantity here is a price.</strong> <span class="mono">lam_triple</span> is a scalar with a stated functional form. Nothing in the file maps it to a return, a volatility, or an index level, and this paper defines no such map. The claim being made is structural &mdash; that a connection is a coupling, and couplings split modes &mdash; not numerical. <span class="tag t-open">Open</span></p>
+
+<p><strong>The response function in C3 is a hypothesis, not a measurement.</strong> <span class="mono">detune_bounds_amplification</span> takes antitonicity of <span class="mono">A</span> as given. Whether any real amplification response of a market to a foreign shock is antitone in the period mismatch is an empirical question, and this corpus has not asked it of any price series. The theorem tells you what follows <em>if</em>; establishing the <em>if</em> is work nobody here has done. <span class="tag t-open">Open</span></p>
+
+<p><strong>C2 assumes a symmetric coupling.</strong> The two-chamber splitting result treats one &kappa; joining two systems. The present instrument does not have one &kappa;. It has a channel that is open in one direction and approved but unbuilt in the other. That is not a small &kappa;; it is a different object, and this corpus has no theorem about it. Which is the substantive point of the next section rather than a disclaimer.</p>
+
+<h2>4 &middot; The asymmetry is the measurable</h2>
+
+<p>Today a Brazilian investor can hold the CSI 300, ChiNext and MSCI China A 50 through B3. A Chinese investor cannot yet hold the Ibovespa through the SSE or the SZSE. The connection exists and is one-sided.</p>
+
+<p>The authors treat this as an incomplete cycle &mdash; stage two &ldquo;will close the initial cycle of mutual market access and consolidate ETF Connect as a balanced two-way mechanism.&rdquo; That is right as a description of intent. It is also, structurally, the statement that the instrument now in the market is not the instrument the design describes, and that the difference has a name.</p>
+
+<div class="box warn">
+<span class="lab">What a one-sided coupling is</span>
+<p style="margin:0">A symmetric aperture splits a shared mode. A one-way aperture does not: it transmits without returning. In the financial reading, Brazilian capital acquires a sensitivity to Chinese equity that Chinese capital does not acquire to Brazilian equity. The diversification branch accrues to one side. The co-movement branch accrues to one side. They are the <em>same</em> side, and it is the smaller market.</p>
+</div>
+
+<p>This is not an argument against the programme. It is an argument that the interval between stage one and stage two is a distinct regime with its own properties, that it is the regime the market is in right now, and that nothing in the published design characterises it. The quantity it leaves unmeasured is the asymmetry itself:</p>
+
+<div class="eq">&alpha;(t) = (&kappa;<sub>BR&rarr;CN</sub>(t) &minus; &kappa;<sub>CN&rarr;BR</sub>(t)) / (&kappa;<sub>BR&rarr;CN</sub>(t) + &kappa;<sub>CN&rarr;BR</sub>(t))</div>
+
+<p>with &kappa; in each direction proxied by something a data vendor already computes &mdash; assets under management in cross-listed vehicles as a share of the receiving market's free float, or turnover in those vehicles as a share of domestic index turnover. Today &alpha; = 1 by construction, because one term is zero. The design target is &alpha; = 0. Nobody publishes the path between, and the path between is where the instrument lives.</p>
+
+<h2>5 &middot; Eleven years, and why that is the finding</h2>
+
+<p>The programme was discussed from 2014. The first ETFs listed in 2025. The regulatory memoranda that made it possible were signed in June 2024 and March 2025 &mdash; ten and eleven years into the conversation.</p>
+
+<p>This corpus has a series of papers on what happens when a decision is compressed below the time required to understand it (<a href="wp32-forced-urgency-gap.html">WP-32</a>), what that looks like when it reaches a county (<a href="wp117-forced-urgency-comes-to-the-county.html">WP-117</a>), and what the remedy is (<a href="wp118-the-remedy-is-time.html">WP-118</a>). The finding of that series is that the minimal effective intervention against a forced decision is an <em>interval</em> &mdash; not more information, not better analysis, but a stretch of calendar time in which a public can form. The papers argue it from the failure side, by cataloguing what happens when the interval is absent.</p>
+
+<p>ETF Connect is the same claim from the other side. Two regulators in two legal systems with no shared language of securities law, two exchanges, two currencies with different convertibility regimes, and asset managers on both sides &mdash; and the thing was built. What it cost was eleven years. No single participant was in a position to shorten that, and the record does not suggest anyone tried. The MOUs are not preliminaries to the work; they <em>are</em> the work, and they took the time they took.</p>
+
+<div class="box">
+<span class="lab">The generalisation, and its limit</span>
+<p style="margin:0">A cross-border financial mechanism that is durable appears to be one whose construction period is long relative to any single political cycle in either jurisdiction &mdash; long enough that it outlives the coalition that started it. This is an observation about one case, offered as a hypothesis, and one case cannot establish it. It would be tested against the other ETF-connect programmes the same article names: China&ndash;Japan and China&ndash;Singapore. Their construction intervals are public. Nobody in this corpus has collected them. <span class="tag t-open">Open</span></p>
+</div>
+
+<h2>6 &middot; What to measure</h2>
+
+<p>Four quantities, all constructible from data that B3, the SSE, the SZSE and a market-data vendor already hold. None requires a model.</p>
+
+<table>
+<tr><th>Quantity</th><th>Definition</th><th>Why</th></tr>
+<tr><td class="mono">&alpha;(t)</td><td>normalised directional asymmetry of cross-listed AUM, as above</td><td>says which regime the instrument is in; today 1, by design 0, unpublished in between</td></tr>
+<tr><td class="mono">&kappa;&delta;</td><td>coupling &times; mismatch: cross-listed share &times; the gap between the two markets' dominant cycle lengths</td><td>C2 makes this the single parameter setting the width of the split; it is not currently reported by anyone</td></tr>
+<tr><td class="mono">&delta;</td><td>separation between Brazil's and China's dominant equity-cycle periods</td><td>C3 makes detuning the thing that buys a ceiling on amplification; if &delta; is small the ceiling is high whatever &kappa; is</td></tr>
+<tr><td class="mono">&tau;<sub>build</sub></td><td>years from first bilateral discussion to first listing, per programme</td><td>the WP-118 claim, tested across the China&ndash;Japan, China&ndash;Singapore and China&ndash;Brazil cases</td></tr>
+</table>
+
+<p>Of these, &delta; is the one that would most change how the programme reads. If Brazilian and Chinese equity cycles are well separated in period, C3 says the connection is comparatively safe at any coupling the programme is likely to reach, and the diversification case is strong on its own terms. If they are close &mdash; and both are commodity-sensitive, which is a reason to suspect they might be &mdash; then the split in C2 is wide and the co-movement branch is not a tail risk but a design feature. That is a measurement, not an argument, and it has not been made.</p>
+
+<h2>7 &middot; What is claimed</h2>
+
+<p>That a market connection is structurally a coupling; that the corpus holds three kernel-checked theorems about couplings; that those theorems, read as structure and not as a model, say the connection splits a shared mode rather than damping one, that the split scales with coupling times mismatch, and that separation in period bounds the response; that the instrument as currently built is one-sided and therefore outside what C2 describes; and that the asymmetry, the mismatch, and the build interval are three measurable quantities nobody publishes.</p>
+
+<p>Nothing here forecasts a return, values an instrument, or recommends a position. The author is not a licensed advisor and this is not investment advice.</p>
+
+<div class="taglegend">
+<span><span class="tag t-thm">Kernel</span> checked by the Lean kernel at a cited address</span>
+<span><span class="tag t-data">Data</span> from the cited primary source</span>
+<span><span class="tag t-open">Open</span> stated, not established here</span>
+</div>
+
+<h2>Addresses</h2>
+
+<p>Every theorem cited above resolves to a file inside a build target. The two addresses, with the source hash of the run that produced the report:</p>
+
+<table>
+<tr><th>Result</th><th>File</th><th>sha256 (source)</th></tr>
+<tr><td class="mono">C1, C2</td><td class="mono">Orthogenesis/Resonance/TripleChamber.lean</td><td class="mono">03b85939d291c8d9&hellip;</td></tr>
+<tr><td class="mono">C3</td><td class="mono">Orthogenesis/Architecture/SeismicLattice.lean</td><td class="mono">0919b81851f7&hellip;</td></tr>
+</table>
+
+<p>Reports are in <span class="mono">tools/verify-audit/2026-09-15/</span> and <span class="mono">tools/verify-audit/2026-09-14/</span>. The TripleChamber file was ported into a build target on 2026-09-15 from a copy in the AXLE repository that had never been compiled by anything; the port found that its T1, as written there, was false over the whole real line and true on &kappa; &ge; 0, which is the form used above. The audit log for that day carries the rest.</p>
+
+<h2>References</h2>
+
+<ol class="refs">
+<li>Gullo, S. R. L. &amp; Forne, T. R. S. (2026). From Trade to Capital Markets: How ETF Connect Deepens the Brazil&ndash;China Economic Partnership. <em>Macau Journal of Brazilian Studies</em> 9(I):65&ndash;70. The source of every figure, ticker and date in &sect;1.</li>
+<li>B3. <em>ETF Connect Brazil and China.</em> <span class="mono">b3.com.br/en_us/products-and-services/trading/equities/etf-connect-brazil-and-china.htm</span></li>
+<li>Comiss&atilde;o de Valores Mobili&aacute;rios. <em>Resolution No. 175, Annex V</em> &mdash; index eligibility and disclosure requirements for listed index funds.</li>
+<li>Comiss&atilde;o de Valores Mobili&aacute;rios. <em>Resolution No. 135</em> &mdash; the basis of BSM market supervision.</li>
+<li>B3. <em>Trading Operational Procedures Manual</em>; <em>Clearinghouse Risk Management Manual.</em></li>
+<li>Principia Orthogona, <a href="wp32-forced-urgency-gap.html">WP-32</a>, <em>The Forced Urgency Gap</em> (2026).</li>
+<li>Principia Orthogona, <a href="wp117-forced-urgency-comes-to-the-county.html">WP-117</a>, <em>Forced Urgency Comes to the County</em> (2026).</li>
+<li>Principia Orthogona, <a href="wp118-the-remedy-is-time.html">WP-118</a>, <em>The Remedy Is Time</em> (2026).</li>
+<li>Principia Orthogona, <a href="../banking-butterfly-preprint.html">The Banking Butterfly</a> &mdash; the corpus's earlier application of fold geometry to a financial system.</li>
+</ol>
+
+</div>
+
+<footer>
+<div class="fwrap">
+<div>
+<a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a><br>
+WP-121 &middot; 2026-09-15 &middot; G6 LLC &middot; CC BY-NC-ND 4.0<br>
+Verification: <span class="mono">Orthogenesis/Resonance/TripleChamber.lean</span>
+</div>
+<div class="disc">The theorems cited here are about a scalar mode under a stated functional form. Their transfer to two equity markets is an analogy, declared as such in &sect;3, and no quantity in this paper is calibrated against any price series. Sections 1 and 4 rest entirely on Gullo &amp; Forne (2026) and the B3 and CVM documents cited there; where this paper disagrees with that article it disagrees about structure, not about fact. Nothing here is investment advice.</div>
+</div>
+</footer>
+
+</body>
+</html>
