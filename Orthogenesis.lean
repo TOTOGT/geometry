@@ -13,3 +13,6 @@ import Orthogenesis.Architecture.Coverage
 import Orthogenesis.Architecture.ToyModel
 import Orthogenesis.Architecture.NASAGaps
 import Orthogenesis.Disaster.DisasterTheory
+import Orthogenesis.Disaster.CatastropheF
+import Orthogenesis.Disaster.ChaosMu
+import Orthogenesis.Resonance.TripleChamber
