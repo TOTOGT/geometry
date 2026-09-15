@@ -6844,3 +6844,52 @@ session a scanner has read prose about the defect as an instance of the defect �
 after the vacuity scan reading a quoted `True := trivial`, and `DECLARE_RE`
 missing a line-one match. A checker that cannot distinguish a mention from a use
 will eventually be satisfied by silence, which is the failure mode that matters.
+
+---
+
+## 2026-09-15 — Book X opens, and book13 had no address at all
+
+Book X — *Trade, Power and the Continent* — is the political-economy volume:
+political science and mathematics, trade and economics. The glyph does two
+jobs. X is ten and this is the tenth book. X is also the Africa term in BRIX,
+the variable standing for a continent that has ratified a continental trade
+treaty and has not yet acquired a voice to negotiate under it. The series
+numbers the book; the second meaning is its subject.
+
+Chapter 1 defines the volume's first measurable. Trade statistics record where
+a commodity went — Brazil shipped 416.4 Mt of iron ore in 2025 for $28.9bn,
+67% of it to one destination — and record nothing about what is already
+promised. Destination concentration and contractual commitment produce
+identical export tables, and only one of them is reversible. Three figures
+close the gap: `E`, committed volume over national output; `C`, the
+concentration of that commitment in one counterparty; `T`, the weighted
+remaining term. None is published by anyone, for any country, for any
+commodity.
+
+The chapter's own load-bearing claim is that a long-horizon supply commitment
+is the **sale of an option** — the credible ability to transact with somebody
+else — and that no accounting standard records it as sold. The cash is booked,
+the delivery obligation is booked, the extinguished bargaining position is
+not. That is stated in prose and is not formalised, and the chapter says so in
+its OPEN block rather than in a footnote.
+
+It also keeps a correction on the page instead of behind it. The drafts ran
+"iron ore → steel → Brazilian aircraft", which does not close: airframes are
+aluminium, titanium and composites. The examples that do close are bauxite and
+niobium. Brazil's niobium share is **not stated**, because it has not been
+verified for that chapter, and an unverified number is exactly what this
+corpus spent 2026-09-15 removing from three other chapters.
+
+**And the defect found while registering the volume.** `tools/build_indexes.py`
+carries the list that decides what has an address. `book13` — eleven
+category-theory chapters, committed, live on the site — has never appeared in
+it. Nothing linked them, no generated index carried them, and
+`index-book13.html` did not exist until today. Eleven chapters at no address,
+in the corpus that has spent a month cataloguing exactly that failure, sitting
+inside the one file whose job is to prevent it.
+
+Both are registered now, `audit.py` reports clean across 727 HTML files, and
+the lesson is the one already in this log on 2026-09-15: a checker that reads
+its own scope from a hand-maintained list inherits every omission in the list.
+The list is not the corpus. Nothing here yet derives the scan set from the
+filesystem, and until something does, this will happen again.
