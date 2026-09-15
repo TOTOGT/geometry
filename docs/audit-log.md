@@ -1,3 +1,66 @@
+# THE HELIX IS EXAMPLE 7.1.1, AND FOUR OF ITS NUMBERS CAME WITH IT (2026-09-15)
+
+**What was built.** `book7/ch-strogatz.html` and `book7/ch-strogatz-verify.py` — the
+Scientist Gallery chapter for Steven Strogatz, and eight verification blocks, standard
+library only, exit 0.
+
+**What was verified.** The radial field of the Book 6 helix toy model (WP-22,
+`book6/differential-equations/helix-toy-model/helix_toy_model.tex`) in its canonical cubic
+closure is Strogatz, *Nonlinear Dynamics and Chaos*, 2nd ed., Example 7.1.1, p. 199:
+`r' = r(1 - r^2)`, `theta' = 1`. Integrated from six starting radii, every trajectory
+lands on r = 1 to fourteen places; theta advances at unit rate, so T* = 2*pi is
+`theta' = 1` and nothing else; and `d/dr[r - r^3]` at r = 1 is -2.
+
+`mu_max = -2` is the closure condition `f'(1) = -2`, imposed on every admissible closure
+by eq. (closure-cond) and satisfied by both canonical closures because they were required
+to satisfy it. The content of the exponent theorem is therefore the *invariance* and not
+the value: the correction term `2e^{-z_0}(1 - e^{-t})` is bounded in t, so
+`|mu + 2| <= 2e^{-z_0}/t`. Closed form checked against RK4 from four base points to 1e-12
+relative.
+
+The per-period exponent is `-4pi + 2e^{-z_0}(1 - e^{-2pi})`, closed form and midpoint
+quadrature agreeing to 1e-8. It reaches -4pi only in the limit — the base-point dependence
+`ch-grothendieck` reported when it measured the multiplier as an index candidate.
+
+**Class: PROVENANCE, not error.** Every theorem examined is true as stated. Four of the
+numbers the series quotes for Gamma — the cycle, T* = 2*pi, mu_max = -2, and the
+multiplier e^{-4pi} = 3.487342e-06 — are fixed by the textbook example before the contact
+structure enters. Five results are the model's own, and each involves z: the invariance of
+the exponent under an integrable modulation, the neutral line z = 0, the closure-dependent
+finite-time escape, the drift of the multiplier, and the contact-Hamiltonian no-go.
+
+**One bibitem, zero citations.** Block [7] reads WP-22's source: `\bibitem{Strogatz}`
+appears once, `\cite{Strogatz}` zero times, the string `7.1.1` zero times. Across the
+geometry repository the name occurs in that one bibliography line and nowhere else
+(`git grep -ril strogatz`, 1 file). Example 7.1.1 is the standard first example of a limit
+cycle and belongs to nobody; what is absent is the pointer that would let a reader ask
+which properties arrived with it.
+
+**OPEN, owed to WP-22 at its next rebuild — two clauses.**
+
+1. *Name the sense of "degenerate."* Strogatz p. 256 reserves *degenerate Hopf
+   bifurcation* for the case with no limit cycles on either side and a continuous band of
+   closed orbits — a nonlinear centre, his damped-pendulum example. WP-22's degeneracy is a
+   vanishing first Lyapunov coefficient, which is Guckenheimer & Holmes' usage and the
+   second entry in the same bibliography. The claim itself is correct by Strogatz's own
+   Rule of Thumb 1 (p. 254): block [5] tabulates the generic radius falling to 1e-3 as
+   z -> 0 against the model's pinned 1. Only the word needs a qualifier.
+2. *Say where z is frozen.* The 2x2 Jacobian in the degenerate-Hopf theorem is that of the
+   (x,y) subsystem at a held-fixed z. In the flow `z' = 1` everywhere, so the
+   three-dimensional field has no zero: block [6] scans r in [0,4] x z in [-4,4] and finds
+   `min |(r', theta', z')| = sqrt(2)`. WP-22 makes both points in its exercises — one says
+   "freeze z", and solution 4 disqualifies the codimension-one normal forms because the
+   whole field vanishes at z = 0 — but the theorem and the abstract do not carry the caveat
+   their own exercises do.
+
+Neither clause was applied to the `.tex` in this pass. `hopf_diagram.png` is absent from
+`book6/differential-equations/helix-toy-model/`, so the distributed PDF cannot be rebuilt
+from source as it stands, and editing the source alone would put the `.tex` and the linked
+PDF out of step. Restoring or regenerating that figure is the prerequisite.
+
+**Registered.** `book7/index.html` — gallery card and gap-table row. `audit.py --all`
+clean at 720 HTML; `terms.py --check` OK at 153 declared terms.
+
 # TWELVE WAS THE INSTANCE, AND THE PAGE CLAIMED THE KERNEL BEFORE THE KERNEL RAN (2026-09-13)
 
 **What was built.** `GTCT/book4/FoldingFrequency.lean` — the WP-84 arithmetic as a

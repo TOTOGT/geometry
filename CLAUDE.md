@@ -46,11 +46,26 @@ and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
 expired narrative. The session of 2026-09-13 stranded git locks all evening
 without reading it. A rule that cannot be found is not in force.
 
-## HANDOFF — 2026-09-13 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
+## HANDOFF — 2026-09-15 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
-**From:** session 018auR3JC4M1QXSXFKxvT8Qq · account grossiatwork@gmail.com · model claude-opus-5, Cowork bridge with the desk connected. Pushed by Pablo.
+**From:** session 01VfocLTqvCDL1gYodEh6sWK · account grossiatwork@gmail.com · model claude-opus-5, Cowork bridge with the desk connected.
 
-### Structure of this file changed today
+### Book 7: ch-strogatz, and the provenance of the helix's constants
+`book7/ch-strogatz.html` + `ch-strogatz-verify.py` (8 blocks, stdlib only, exit 0),
+registered in `book7/index.html`. The Book 6 helix toy model's radial field in its
+cubic closure is Strogatz Example 7.1.1, p. 199. Γ = {r=1}, T\* = 2π, μ_max = −2 and
+e^−4π all arrive with the example — μ_max = −2 as the imposed closure condition
+f′(1) = −2, not as a derived value. What is the model's own is everything involving z.
+Two clauses are owed to WP-22 at its next rebuild (the sense of "degenerate", and where
+z is frozen); neither was applied to the `.tex`, because `hopf_diagram.png` is missing
+from `book6/differential-equations/helix-toy-model/` and the linked PDF cannot be
+rebuilt from source until it is restored. Full entry in `docs/audit-log.md`.
+
+The previous handoff's open items below are carried forward unchanged.
+
+### Carried forward from 2026-09-13 — pushed by Pablo.
+
+### Structure of this file changed on 2026-09-13
 Two handoff blocks existed: one dated 2026-09-05 opening the file, and one dated
 2026-09-11 at line 396 — so the file's own title sat at line 319, under 318 lines
 of eight-day-old state. Both are collapsed into this one. The rule sections that
