@@ -6893,3 +6893,64 @@ the lesson is the one already in this log on 2026-09-15: a checker that reads
 its own scope from a hand-maintained list inherits every omission in the list.
 The list is not the corpus. Nothing here yet derives the scan set from the
 filesystem, and until something does, this will happen again.
+
+---
+
+## 2026-09-15 · WP-41 audited a second time, and the arrow that was never drawn
+
+An external technical evaluation of `book6/wp41-planetary-triage.html` was
+supplied to the author. Two of its findings were checked against the page and
+both hold.
+
+**Defect 1 — NUMBER EXCEEDS DERIVATION.** §3 assesses three receiving regions
+bottom-up: US Mountain West 2–5M, Andes 3–8M, other high-altitude zones 5–10M.
+The section then states a total of "~200–500M over 30–50 years", which is
+roughly twenty times its own components. The large figure is not derived in §3;
+it is carried back from the scenario in §2 and the abstract, where it was
+assumed. Consequences of the small figure, none of which were drawn: the
+movable share of the 2.3bn is 0.4–1.0%, not 9–22%; the relocation cost at the
+paper's own $100k–$200k per person is $1–4.6T, not $20T–$100T; and §11's own
+modelling task, sized at "5–10M additional residents", is written to the small
+number. Neither figure is sourced. Corrected on the page; the abstract now
+carries a standing-corrections block naming all three open corrections to that
+paper.
+
+Note the shape. The paper contains two answers to one question and carried the
+larger into its conclusion. The operator claim was the interesting part and the
+wrong part; the arithmetic sat in the section that was merely instrumental, and
+instrumental sections do not get read. This is the third distinct defect found
+in one paper, and the first two were found by asking about the interesting
+claim.
+
+**Defect 2 — THE MISSING RETURN.** The arc ran WP39 → WP40 → WP41 → WP66 →
+WP67 → WP68 without once returning to WP39. Six papers asked which atmospheric
+process could be called K. None asked what an operator must do to be a K. WP41's
+own August addendum reaches the edge of the question — "the substitution simply
+does not inherit its order-dependence, which was the whole reason to want a K" —
+and withdraws one candidate rather than characterising the class.
+
+Read backwards, WP39's T2(i) is a screen, and the proof never used the squaring.
+`GateScreen.lean` (kernel-checked 2026-09-15, Lean v4.33.0-rc1 + Mathlib
+eba3d887fc, sha256 `09c97f67e9ee2f67b7442f09c4136309924b93730c69a7276c76ffda261340c5`,
+nothing admitted) generalises it: **the gate commutes with every layer-local
+intervention that fixes zero, in every column state.** Aerosol, seeding,
+microplastic loading — all layer-local, all disqualified, all by the same line.
+What fails the screen acts on h, and nothing that acts on h at regional scale is
+deployable. Published as `book6/wp123-what-k-must-be.html`.
+
+**The part that should be uncomfortable.** The screen was already written down.
+`ch03-operator-sequence.html` — the chapter that defines G = U∘F∘K∘C, and which
+predates WP41 — carries it as a caution: "K as a 0/1 gate and F as a pointwise
+fold commute exactly. Non-commutativity in this framework comes from inter-site
+coupling inside F, not from the gate." That is the theorem in prose, minus the
+quantifier, on a page in Book 3. WP41 was drafted anyway; WP66 re-derived it
+from the other end nine months later; WP123 now proves it. Three arrivals at
+one fact, none of which consulted the previous.
+
+The defect class is not a wrong theorem. It is a corpus that does not read
+itself — the same class as the 55 dangling `.lean` names, as `book13`'s eleven
+unaddressed chapters, as WP-114's index, and as WP-122's return map sitting in
+a textbook exercise. Every one of these was already present and already
+findable. Nothing in the repository currently reads a new paper against the
+cautions already in the corpus, and until something does, this will happen
+again.
