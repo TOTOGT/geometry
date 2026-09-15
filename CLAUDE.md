@@ -48,257 +48,81 @@ without reading it. A rule that cannot be found is not in force.
 
 ## HANDOFF — 2026-09-15 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
-**From:** session 01VfocLTqvCDL1gYodEh6sWK · account grossiatwork@gmail.com · model claude-opus-5, Cowork bridge with the desk connected.
+**From:** session 01DfPorRiUiwcVdUj5rYnWRj · account sluhcdf@gmail.com · model claude-opus-5, Cowork bridge with the desk connected. Earlier blocks for ch-strogatz, WP-122, WP-120 and WP-22 are in git history and in `docs/audit-log.md`; their still-live items are carried forward under **Open** below.
 
-### Book 7: ch-strogatz, and the provenance of the helix's constants
-`book7/ch-strogatz.html` + `ch-strogatz-verify.py` (8 blocks, stdlib only, exit 0),
-registered in `book7/index.html`. The Book 6 helix toy model's radial field in its
-cubic closure is Strogatz Example 7.1.1, p. 199. Γ = {r=1}, T\* = 2π, μ_max = −2 and
-e^−4π all arrive with the example — μ_max = −2 as the imposed closure condition
-f′(1) = −2, not as a derived value. What is the model's own is everything involving z.
-Two clauses are owed to WP-22 at its next rebuild (the sense of "degenerate", and where
-z is frozen); neither was applied to the `.tex`, because `hopf_diagram.png` is missing
-from `book6/differential-equations/helix-toy-model/` and the linked PDF cannot be
-rebuilt from source until it is restored. Full entry in `docs/audit-log.md`.
+**State at handoff: 5 commits ahead of origin, not pushed.** `git push` at the desk.
 
-### Book 6: WP-122, the return map the series never wrote
-Strogatz Example 8.7.1 (p. 282) gives the Poincaré map of the transverse attractor in
-closed form, `P(r) = [1 + e^{-4π}(r^{-2} - 1)]^{-1/2}`, checked against RK4 to 1e-15.
-`P'(1) = e^{-4π}` is the multiplier ch-feynman and ch-grothendieck already print.
-Consequences measured: chEps-gronwall's Grönwall bound is loose at ε₀ = 1/3 by a factor
-of 8.5e4 (ε₀ is not withdrawn — it is a correct bound radius, and this says what it is a
-radius of); the flow has **no** return map at all, because ż = 1 means nothing returns to
-a section {z = z₀}, so the per-period object is a time-2π flow map and that is why its
-exponent drifts with base point. Two open items for the author, both in
-`docs/audit-log.md`: chRho-spectral Argument V (units, multiplier count, and a scaling
-whose two factors cancel — 12.5% gap), untouched because it is reader-facing; and finding
-the right substitute for a return map on a flow with a monotone coordinate. WP-120 is an
-unexplained numbering gap.
+### The Disaster cluster is closed in the kernel, and three published theorems were false
+Four files now exist under `Orthogenesis/`, all imported by `Orthogenesis.lean`, all kernel-checked with nothing admitted. Reports with source sha256 in `tools/verify-audit/2026-09-15/`.
 
-### Book 6: WP-120, the count nobody took — and the gap filled
-Γ is called *the* limit cycle throughout and had never been counted; uniqueness is
-asserted once in the corpus and that row is about the discrete Collatz cycle. For
-radial-only fields the count is a root count, no Dulac needed: Book 6's model has **one**
-circular orbit per frozen slice, Vol II's has **two**. The factorisation
-`r(1-r²)+a(r-1) = -(r-1)(r²+r-a)` with a = 2e^{-z} gives a second orbit at
-`r₂ = (-1+√(1+8e^{-z}))/2`, eigenvalues `a-2` and `(1-r₂)√(1+4a)`, colliding at z = 0 —
-so **the neutral line is a transcritical bifurcation of cycles**, and r₂ is Γ's basin
-boundary in the slice. Neither r₂ nor `√(1+8e^{-z})` was anywhere in the repo. A guard is
-written into the paper: r₂(z) sweeps all of (0,1), so matching it to r★ or κ* is not
-evidence. For θ-dependent fields, `g = 1/r³` is a Dulac function for |μ|<1 and index
-theory (Thm 6.8.2) forces every closed orbit to encircle the origin, giving **exactly one**
-for Strogatz Example 7.3.1. The 3-D flows have no periodic orbit at all (ż = 1), which is
-WP-122's missing return map seen from the other side. WP-120 was an unexplained numbering
-gap and is now used.
+| file | decls | what it settles |
+|---|---|---|
+| `Disaster/DisasterTheory.lean` | 19 | `published_D2_is_false` — chDis §5's D2 asserted `deriv (x³+x/3) 0 = 0`; it is `1/3` |
+| `Disaster/CatastropheF.lean` | 8 | `published_T2_is_false` (chF's T2 was chDis's D2 copied verbatim), `published_T3_is_false` (asserted `∃!` critical point under a hypothesis excluding all of them) |
+| `Disaster/ChaosMu.lean` | 9 | `published_T1_is_false` — quantified over `0 ≤ t`, fails at `t = 0` |
+| `Resonance/TripleChamber.lean` | 12 | ported from AXLE; its T1 claimed `StrictAnti` over all of ℝ and is false — true on `κ ≥ 0` |
 
-### WP-22 revised — the three owed clauses are in, and the figures are back
-`book6/differential-equations/helix-toy-model/` — `.tex` and PDF revised together, PDF
-rebuilt clean (pdflatex ×2, no undefined refs, 10→12 pages). Four clarifications in a new
-dated **Corrections** section: Γ is a helix and the flow has no periodic orbit (T\* is the
-(r,θ) projection's period); "degenerate" is Guckenheimer–Holmes' sense, not Strogatz
-p. 256's; Theorem 5.1 is about the frozen planar subsystem and the 3-D field has no zero;
-and Example 7.1.1 is cited where its data are used (`\cite{Strogatz}` went 0→5, `7.1.1`
-0→3). Nothing withdrawn.
+`DisasterTheory.lean`, `CatastropheF.lean` and `ChaosMu.lean` had **never existed in AXLE**, in tree or history, while three chapters cited them as verified. `AXLE/Disaster/README.md` is the marker at the address readers were sent to. chDis, chF and chMu carry corrected listings and status notes.
 
-**The figure blocker was bigger than the earlier note said**: *four* of five figures were
-missing from the source directory and none had ever been tracked, so the paper had been
-unbuildable from its own sources since `f8a7a54`. `helix_toy_model.py` in the same folder
-regenerates all five and reprints the paper's numerical report; run it with `MPLBACKEND=Agg`
-(scipy is now installed on the desk). The four are tracked now; `fig1_helix3d.png` was left
-at its committed bytes.
+**AXLE compiles nothing.** No `.lake`, no `.github/workflows`, no axiom report, pinned `v4.14.0`. 36 pages assert proof "in AXLE". Treat every such citation as unbacked until the file is in a geometry build target.
 
-`book7/ch-strogatz-verify.py` block [7] exited 1 after the edit — it had asserted
-`\cite{Strogatz} == 0` — and now checks the repaired state instead. `ch-strogatz.html` and
-`wp120-how-many-closed-orbits.html` updated so neither reads as a live defect. Pre-revision
-`.tex` in `docs/ml-evidence/wp22-2026-09-15/`.
+### Standing up Lean in a container — the recipe, because elan fails
+`elan-init` dies on `failed to parse latest release tag` (it calls the GitHub API, which the proxy refuses). Bypass it:
+```
+curl -sSL -o lean.tar.zst https://github.com/leanprover/lean4/releases/download/v4.32.0/lean-4.32.0-linux.tar.zst
+tar --use-compress-program=unzstd -xf lean.tar.zst          # ~4s
+export PATH=$PWD/lean-4.32.0-linux/bin:$PATH
+# lakefile.toml requiring mathlib rev v4.32.0, then:
+lake update && lake exe cache get                            # cache works; ~9s decompress
+```
+Release assets download fine; only the API call is blocked. Elaborate from the pin in a clean container, not at the desk — that is the difference between "it worked here" and a run anyone can repeat.
 
-The previous handoff's open items below are carried forward unchanged.
+### `tools/lean_addresses.py` — new instrument
+The rung below `decl_resolve.py`, which has enforced R11 since 2026-08-27 against a `claims.json` **nobody ever built**. Needs no input: does the *file* exist anywhere under any root. Strips `<style>`/`<script>` and tags first (CSS selectors like `pre.lean-block` read as filenames otherwise — nine false hits on the first run), and reports `CASE_ONLY` separately (opens on macOS, 404s on GitHub).
+```
+python3 tools/lean_addresses.py . --roots ~/Desktop/AXLE ~/Desktop/GTCT ~/Desktop/vol1-proofs
+```
+**55 names resolve nowhere across 102 page-citations; 2 resolve only under another case.** `ZeoliteCommutation.lean` alone is cited by eleven pages. `EXEMPT` holds (page, name) pairs that are deliberate illustrations — never exempt a bare name.
 
-### Carried forward from 2026-09-13 — pushed by Pablo.
+### Book X opened — `book10/`
+Political science and mathematics; trade and economics; and the history of science, custody and transmission. X is ten and X is the Africa term in BRIX. Three chapters and a door:
+- `ch01-the-encumbrance-ratio.html` — E, C, T. Destination concentration ≠ contractual commitment. Brazil 2025: 416.4 Mt, $28.9bn, 67% to one destination. **Carries its own correction in a box** (iron ore does not feed an airframe; bauxite and niobium do). Brazil's niobium share is deliberately **not stated** — unverified.
+- `ch02-the-ishango-bone-is-in-brussels.html` — H, I, R. British Museum Act 1963 s.5 (return not among the permitted grounds) vs the Belgian law of 30 June 2022 (opens a route, puts a bilateral treaty in the doorway). Declines to say whether that law reaches the object.
+- `ch03-the-numbers-in-dead-aid.html` — ~40 figures from Moyo (2009) ch.3–4 with page numbers, the case against her at full strength, and the finding: **no updated version of that table exists anywhere.**
+- `contribute.html` — the volume is open to contribution, built on Sirolli rather than an editorial process.
 
-### Structure of this file changed on 2026-09-13
-Two handoff blocks existed: one dated 2026-09-05 opening the file, and one dated
-2026-09-11 at line 396 — so the file's own title sat at line 319, under 318 lines
-of eight-day-old state. Both are collapsed into this one. The rule sections that
-were inside the 09-05 block (Counting, Dates, Bash 3.2, Git, the overnight job,
-Not started) are kept below, unchanged. Its dated narrative — the Saturn
-correction note, A.13, the RH preprint status, dnls CI, the 09-05 state and open
-list — moved to `docs/audit-log.md`. The pre-restructure file is at
-`docs/ml-evidence/claude-md-2026-09-13/CLAUDE.md.pre-restructure`.
+**The warrant:** Appendix L.2 of `Principia_Orthogona_Complete_v8.pdf` (sha256 `96971cc0b760ac99…`, in `~/Documents/Claude/Projects/MATHS for life/`) already said Africa was the first priority for international implementation, addressed to BRICS foreign ministries. Nothing was built on it. Book X is that address. The position has since moved BRICS → BRIX and the index says so.
 
-### OPEN AND FAILING — the corpus-audit workflow is red on GitHub
-Reported 2026-09-13. Reproduced locally against `_corpus/Desktop/geometry`, and
-**the hard gate passes here**: `terms.py --check` exits 0 (153 declared terms,
-all present; 2 disowned, mentioned only where declared) and `audit.py --all`
-exits 0 clean at 711 HTML. The only step in `corpus-audit.yml` that can fail the
-job is `Enforce the gates that have a right answer`, and it fails on one
-condition — `terms=0` absent from `_report/exit-codes.txt`. So either the
-battery step never reached `terms.py`, or a step before it died.
+### `build_indexes.py` FOLDERS — and the defect it was hiding
+`book10` and `book13` added. **`book13` — eleven committed, live category-theory chapters — had never been in that list.** No generated index carried them; `index-book13.html` did not exist until today. Eleven chapters at no address, inside the one file whose job is to prevent that. `audit.py` clean across 730 files. **The list is not the corpus**; nothing yet derives the scan set from the filesystem, and until something does this recurs.
 
-Two candidates, neither confirmable from a sandboxed session:
-  · `Check out the other declared roots` needs `CORPUS_RO_TOKEN`. Without it
-    `steps.roots.outputs.have_all` is false, which the battery handles — but a
-    checkout failure before that point would not be handled.
-  · the battery runs `set -uo pipefail`; an unbound variable there exits before
-    `exit-codes.txt` is written, and the enforce step then fails on a missing
-    file rather than on a real gate.
+### WP-121 — `book6/wp121-what-etf-connect-actually-couples.html`
+Brazil–China ETF Connect. A connection is a coupling; coupling splits a shared mode rather than damping it. The instrument as built is one-sided (PKIN11, TECX11 on 2025-05-27; SILK11 on 2025-07-11; no Ibovespa ETF listed in China, and B3's own page records none), so the live regime sits outside what the splitting theorem describes. Defines α. Cites `Orthogenesis/Resonance/TripleChamber.lean`.
 
-`duplicates.py` exits 1 with 31 undeclared groups. It is a warning in this
-workflow, not a gate, so it is not the cause of the red build.
+### The G⁶ Chamber — a published Artifact, **private**
+`https://claude.ai/artifact/TVU73A8m3APcd8USR7js1T` · capabilities `db` + `room` · contract 0.2.49 · **sharing: owner only.** A working forum, not a page about one: 11 threads in `threads/<id>` with `threads/<id>/posts/<pid>` below them. Not in this repo — to change it, republish from the session that owns it or pass the URL as `url`; read/write its store with the `ArtifactData` tool, never `Artifact action:"write_db"` (that is a different tool and will be rejected).
 
-CORRECTED 2026-09-15. An earlier note here attributed four of those groups —
-`nasagaps`, `probe_book8`, `probe_dm3`, `reactiondiffusionfold` — to two clones
-of this repository being declared corpus roots. That was wrong twice over.
-`tools/corpus_roots.txt` declares `~/Desktop/geometry` and not `~/geometry`, and
-its own comment block already excludes second checkouts by name. The four groups
-came from `theorem_census.py --tracked .` and are duplicate basenames *inside the
-single checkout*:
+Six powers: US $32.38tn · BRIX (Brazil·India·China·Africa) $31.24tn · EU $23.03tn · CANZUK $9.17tn · Japan $4.38tn · Korea $1.93tn = 80.9% of world output. Russia and Mexico are the named absences and both are threads, not positions. Links out to Book X and WP-121.
 
-    NASAGaps.lean              root tombstone + Orthogenesis/Architecture/  (intended, see lakefile)
-    ReactionDiffusionFold.lean root (audited, build target) + book6/        (real, fixed)
-    probe_book8.lean           tools/verify-book8/ + tools/probes/          (real, fixed)
-    probe_dm3.lean             tools/verify-dm3/  + tools/probes/           (real, fixed)
+### The rule the work now operates under
+**We cannot fix the problems in Russia, nor in Mexico, nor in Africa.** Listen to the people inside the problem; help with what *they* say they need; and do the one thing distance is good for — publish the number they are not placed to publish for themselves, because they are a party to it. That is why every Book X chapter ends in a measurable rather than a recommendation, and why the Chamber's hardest threads are questions. Sirolli's rule, stated in `book10/contribute.html` with the Zambia tomato story and the attribution.
 
-Two clones do exist on the Mac — `~/Desktop/geometry` (canonical, current) and
-`~/geometry` (HEAD f4e6214, 2026-08-13, a month stale, not a declared root).
-Nothing should be run from the second. The mount names through the bridge are
-`Desktop--geometry` and `pablogrossi--geometry`, which are easy to confuse; every
-command in a session must anchor on the first.
+`ch02` and `ch03` each carry the admission that they were written from Newark without asking anyone with standing to correct them. Keep that habit; it is the only thing that makes the rule credible.
 
-NEXT SESSION: get the failing step's log — `gh run view --log-failed` on a
-machine with `gh`, or the Actions page — before changing anything. Do not patch
-the workflow against a guess; the local run is clean and the difference is in
-the runner.
-
-### Vol I: one canonical copy, and §17 now follows the Lean
-`vol1-mathematics.html` existed twice. The root copy was last edited 2026-08-20,
-lacked the Second Edition front matter and the corpus section, and still listed
-"Theorems A–D" among the machine-checked results. `book1/` is a strict superset,
-so root is now a redirect stub on the `hypogeum_temple_resonance.html` pattern;
-three `#sec5` deep links were repointed, because a redirect answers a filename
-and not a fragment.
-
-§17 now matches `PrincipiaVol1.lean`, which is stricter than the page was.
-Structures A–D are definitions and none is among the 58 theorems; O7 (the ε₀
-instantiation) was opened in V7 and had never reached the page. Every
-machine-checked item is a permalink into `TOTOGT/AXLE` at `700deb8` — the
-worktree blob and `origin/main` were compared first. Following the links
-corrected three claims: `basin_asymmetry` is `1/3 < 4/5`, not `3/4`, and its own
-docstring warns that writing it as ≈ r★ is an identification it is not;
-`mu_dm3_neg` proves `-2 < 0`, the sign of a literal, not a transverse exponent;
-ε₀ is cited through `epsilon0_of_eq_third_iff` rather than asserted.
-
-STILL OWED THERE: the hero badge reads "Current version (v6): 10.5281/zenodo.
-21146416" and the live deposit is v7. Needs the v7 DOI from Pablo.
-
-### tools/contrast_check.py — a new instrument, and 11 confirmed defects
-Resolves, for an element: the nearest ancestor setting a colour, the nearest
-setting an opaque background, `:root` custom properties, and the WCAG ratio.
-`--class NAME` checks one class; with no argument it scans every element whose
-inline style sets a background and no colour, which is the shape of the defect —
-the element paints a panel and then inherits `--text` from `body`.
-
-Found and fixed: the orthogenesis note unreadable on four pages (Enceladus,
-both GameTheory packs at ~1.06:1 black-on-black; `omega/ch-belief` at 1.21:1
-white-on-cream, the same fault inverted). All four now clear 13:1; the other 29
-pages carrying that note were already fine.
-
-NOT YET FIXED — 11 more in the first sixty root files, mostly Lean/AXLE code
-boxes at 1.15:1 (#1c1c1c on #1a2744): `ch-catgt-zeolite` (3),
-`ch-belousov-zhabotinsky`, `ch-energy-entropy`, `ch-lorenz-chaos`,
-`ch-mandelbrot-fractals`, `ch-poincare-einstein`, `ch-turing-morphogenesis`,
-`ch-recurrence-ladder` (2). The remaining ~650 files are unscanned.
-
-READ THE COUNT CAREFULLY. Before the has-text filter the same scan reported
-339 for root plus books 1–4. Most were colour swatches and rules with no text
-in them. The filter excludes descendants that set their own colour. Any number
-this tool prints is meaningless without it.
-
-### NAME EXCEEDS STATEMENT is a class, not a one-off
-Named 2026-09-12 for `supercritical` (true, kernel-clean, mentions no vector
-field). Then found in WP-84, published 29 August: a true result headed *a
-characterisation of twelve* when the sweep held k = 6 and could return nothing
-else. Two instances three weeks apart in unrelated work. Ledger is at 31 entries
-and five named classes; the retroactive WP-84 row is deliberate.
-
-### Sources
-`book6/ch-interstitium-hydrated-lattice.html` — the "two systems for 400 years"
-framing comes from *Inside the Interstitium, the Human Body's Hidden Pathways*,
-NYT Magazine, 11 May 2026, now linked in the references and marked secondary.
-The anatomy itself is cited to Benias/Theise 2018, which is where it belongs.
-
-### CardiacHopfReduction is through the kernel and is now a target
-Five declarations on `[propext, Classical.choice, Quot.sound]`; reports in
-`tools/verify-audit/2026-09-12/` and `2026-09-13/`. `field_simp` left
-`mu*r*(1-1) = 0` in `limit_cycle`; `ring` closes it. Declared
-`@[default_target]`, so `lake build` covers it and the audit repeats.
-
-`supercritical` keeps its name, which is cited elsewhere, but its docstring no
-longer claims what its statement does not: it proves `0 < L → -(1/L) < 0` and
-mentions no vector field. `radial_deriv_at_cycle` carries the content the name
-claims — the derivative at `r² = Lμ` is exactly `-2μ`.
-
-**That is a defect class the ledger does not have**: true, kernel-clean, and
-weaker than its name. Neither vacuity scan sees it, because the conclusion is an
-ordinary inequality rather than `True`, and the axiom gate reports axioms and not
-whether a statement earns its title. It is also WP-81's thesis with a dated
-specimen — the overstatement exists *because* the mathematics is right.
-
-### tools/leancheck.sh had a bug that broke every later audit
-`mktemp /tmp/leanprobe.XXXXXX.lean` — BSD mktemp substitutes only a trailing run
-of X's, so the `.lean` suffix made the template literal: created once, "File
-exists" ever after. The failure branch continues *before* `rm -f "$probe"`, by
-design, to keep the probe for inspection — so one failed audit left the literal
-file behind and poisoned every subsequent audit of any file. Now a unique
-directory with a fixed filename inside it, plus a guard.
-
-### tools/build_indexes.py emitted rows into gitignored .lake/
-`SKIP` held only `docs/ml-evidence/`, so the generator walked `.lake/packages/`
-and wrote rows linking importGraph's `html-template/index.html` and mathlib's
-`lakeprof_report_template.html` into both `index-root.html` and
-`master-index.html`. `.lake/` is gitignored, so those four links resolved at the
-desk and were dead in every clone and on the published site — which is why
-`audit.py` read 1 dead_link here and 4 on a fresh checkout. `SKIP` now carries
-`.lake/`, `_to_delete/` and `Claude outputs/`. `audit.py:55` already warned that
-`SKIP_DIRS` governs what is scanned and not what can be linked to; this was the
-other half of that warning.
-
-### `&Hcedil;` is not an HTML entity
-It rendered as the literal text `&Hcedil;al Saflieni` on four pages —
-`hypogeum_temple_resonance.html` (in its `<title>`), `book7/ch-nachbin.html` ×3,
-`book7/ch-grothendieck.html`. Replaced with `&#294;`, which is Ħ. Then the eleven
-`Ḥal Saflieni` (U+1E24, H with dot below) were normalised to `Ħ` (U+0126, the
-Maltese letter) — scoped to the full phrase, so bar Ḥiyya, Bayt al-Ḥikma and
-Maʿaseh Ḥoshev are untouched. Surfaced only because the indexes were regenerated.
-
-### WP-110, WP-111, WP-112, WP-113 shipped
-- **WP-110** *Not Rough Enough* — Cavalieri error on closed surfaces; γ ≈ 2 at
-  every roughness; reported as a null with a stated restriction.
-- **WP-111** *The Cardioid Is the Locus* — the main cardioid is the modulus-one
-  locus of the multiplier of z²+c in closed form; period q in the p/q bulb on
-  eight rationals; off the rationals the analogy fails arithmetically.
-- **WP-112** *The Ends, Not the Middle* — the exponent is fixed by the order at
-  which the area function vanishes at the ends of its support, not by interior
-  regularity. 2.003 at every H from 0.1 to 0.9. **WP-110's stated reason is
-  superseded**, in a dated box at the foot of that page.
-- **WP-113** *Three Terms in a Fingernail* — write head, read, warp; the first
-  two come out the same size.
+### A scanner that reads prose about a defect as an instance of it — third occurrence
+`axiom_gate.py` failed my first report on the string `sorryAx` appearing in my own header comment "No sorryAx". After the vacuity scan reading a quoted `True := trivial`, and `DECLARE_RE` missing a line-one match. **Write "none admitted", never the token.** A checker that cannot distinguish a mention from a use will eventually be satisfied by silence.
 
 ### Open
-- `docs/defect-ledger.html` stops on 24 August. WP-90's three, WP-91's
-  `collatz_converges`, the three-week §4 gap, and the class above are all
-  missing. The `found by` column is the asset — 3 of 27 defects found by the
-  kernel — and it is presented as a list rather than as a result.
-- Five root `.lean` files remain untracked: `ReactionDiffusionFold`,
-  `TurnaroundUniverse`, `ZetaScratch`, `probe_book8`, `probe_dm3`. They are what
-  made a `grep -rn` report a live declaration that was not. Grep with
-  `git ls-files`.
-- `_to_delete/` holds 72 zero-byte git lock files alongside real ML evidence.
-  Two classes in one store; a `_to_delete/locks/` subfolder separates them
-  without deleting anything.
-- 18 `tmp_obj_*` in `.git/objects`; `git gc --prune=now` at the desk.
-- The per-book `index-<slug>.html` pages have no search bar. `master-index.html`
-  has one and every row on every page already carries `data-hay`.
+- **Push.** 5 commits ahead of origin.
+- **M2:** `heliSpin_incommensurate_aperiodic` in `MagneticLattice.lean` — the last `sorry` in the architecture cluster. Irrationality of q/2π + Weyl equidistribution.
+- **55 dangling `.lean` names** across 102 page-citations. `ZeoliteCommutation.lean` (11 pages) is the biggest single win.
+- **36 pages assert proof "in AXLE."** Either port the file into a geometry target or strike the claim.
+- **Brazil's niobium share** — unverified and deliberately absent from `book10/ch01`. If it is what it appears to be it is the strongest single fact in that volume.
+- **Recompute the Moyo table for 2026.** Same rows, current sources. A few weeks, and it does not require agreeing with her.
+- `docs/defect-ledger.html` stops on 24 August. WP-90's three, WP-91's `collatz_converges` and the three-week §4 gap are missing. The `found by` column is the asset — 3 of 27 found by the kernel — and it reads as a list rather than a result.
+- Five root `.lean` files untracked: `ReactionDiffusionFold`, `TurnaroundUniverse`, `ZetaScratch`, `probe_book8`, `probe_dm3`. Grep with `git ls-files`.
+- `_to_delete/` mixes git lock files with real ML evidence; `_to_delete/locks/` separates them without deleting anything. **This session added many more** — the bridge cannot `rm`, so every commit through it strands `index.lock`, `HEAD.lock` and `tmp_obj_*`. R4 applies; `mv`, then `git gc --prune=now` at the desk.
+- The per-book `index-<slug>.html` pages have no search bar; `master-index.html` has one and every row already carries `data-hay`.
 
 ## The overnight job, if you are the session that runs it
 
