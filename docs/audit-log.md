@@ -6488,3 +6488,56 @@ been elaborated by anything but a hand run. The three missing files are not an
 exception in that repository. They are the visible end of a repository that
 compiles nothing, and a citation to it has never been a verification claim,
 whatever the sentence around it said.
+
+### Same day, later — the defect was in three chapters, and two more theorems were false
+
+Closing `DisasterTheory.lean` meant standing up Lean 4.32.0 and Mathlib in a
+clean container and actually running it, which then cost nothing to point at the
+two sibling chapters citing the other two missing files. Both are worse than
+chDis was.
+
+`chF-catastrophe.html` §4, "Seven Theorems … proved in AXLE … all sorry-free":
+
+- **T2 false.** `deriv (fun x => whitney_fold (1/3) x) 0 = 0`. Byte-for-byte the
+  same statement, with the same tactic, as chDis's D2. The defect did not appear
+  twice; it was copied.
+- **T3 false, and of a worse kind.** It asserted `∃! x, deriv … x = 0` under the
+  hypothesis `0 < a`. For `0 < a` the derivative `3x² + a` is positive
+  everywhere, so no critical point exists. The theorem asserted the existence of
+  an object its own hypothesis excludes — not an overstatement but a
+  contradiction, and the published "proof" ran `use 0` on a goal where `0` is
+  not a witness.
+- **T4 empty.** `∃ f, f x = x⁴ + ax² + bx` is `rfl` under an existential and is
+  true for any right-hand side whatsoever. It was docstringed "cusp unfolds the
+  fold".
+- T5, T6, T7 arithmetic on numerals; T1 a definition. **None of the seven
+  carried the content its name claimed.**
+
+`chMu-lyapunov.html` §4, same banner:
+
+- **T1 false at `t = 0`**, where `∀ t, 0 ≤ t → δ₀·exp(μt) < δ₀` reads
+  `δ₀ · 1 < δ₀`. The hypothesis needed `0 < t`. T1 was the only one of the seven
+  that quantified over anything and the only one about decay over time. The
+  chapter names μ_max in its title and never states a proposition about it.
+
+**Three files, three chapters, three false theorems, all published under a
+machine-checkable banner against a repository that compiles nothing.** Each
+refutation is now a theorem rather than a remark — `published_D2_is_false`,
+`published_T2_is_false`, `published_T3_is_false`, `published_T1_is_false` — at
+`Orthogenesis/Disaster/`, kernel-checked against the v4.32.0 pin with nothing
+admitted, imported by `Orthogenesis.lean` so CI elaborates them. Reports in
+`tools/verify-audit/2026-09-15/`.
+
+Two notes on method, both of which cost time today.
+
+The elaboration was done in a clean container from the toolchain pin, not on the
+author's machine. That is the difference between "it worked here" and a run
+anyone can repeat; the reports carry the source sha256 so the claim is about a
+specific file and not about a name.
+
+And `axiom_gate.py` failed the first report I wrote, on the string `sorryAx`
+appearing in my own header comment "No sorryAx". That is the third time this
+session a scanner has read prose about the defect as an instance of the defect —
+after the vacuity scan reading a quoted `True := trivial`, and `DECLARE_RE`
+missing a line-one match. A checker that cannot distinguish a mention from a use
+will eventually be satisfied by silence, which is the failure mode that matters.

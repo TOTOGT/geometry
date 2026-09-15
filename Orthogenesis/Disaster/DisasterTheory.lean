@@ -1,15 +1,14 @@
--- GATE-DECLARE: sorries = dm3.DisasterTheory.whitney_fold_deriv
--- GATE-REASON: the derivative identity is the one statement in this file that
--- needs a real analysis lemma rather than arithmetic, and it is the statement
--- the chapter got wrong. It is declared open rather than proved with a tactic
--- nobody has run, because the defect this file exists to repair was exactly a
--- proof nobody had run.
+-- GATE-DECLARE: sorries = none
+-- GATE-REASON: kernel-checked 2026-09-15 under the v4.32.0 pin. 19 declarations,
+-- none admitted, every one on the permitted three axioms except seven_eq_seven,
+-- which depends on none. Report: tools/verify-audit/2026-09-15/.
 /-
 # DisasterTheory.lean
 # ===================
-# The Lean displayed in §5 of
+# The Lean behind §5 of
 #   https://totogt.github.io/geometry/chDis-disaster.html
-# "Disaster Theory — A Contact-Geometric Unification of Catastrophe and Chaos".
+# "Disaster Theory — A Contact-Geometric Unification of Catastrophe and Chaos"
+# (Zenodo, doi:10.5281/zenodo.19117399).
 #
 # WHY THIS FILE IS HERE AND NOT IN AXLE
 # -------------------------------------
@@ -19,10 +18,10 @@
 # existed only inside the HTML that claimed it had been checked.
 #
 # It is placed under Orthogenesis/ rather than in AXLE because AXLE pins
-# leanprover/lean4:v4.14.0 and has no built Mathlib, so a file deposited there
-# would be as uncheckable as one that does not exist. This repository pins
-# v4.32.0 and builds. An address that resolves into a target is the only kind
-# worth citing.
+# leanprover/lean4:v4.14.0, has no .lake and no workflow, so a file deposited
+# there would be as uncheckable as one that does not exist. This repository
+# pins v4.32.0 and builds. An address that resolves into a target is the only
+# kind worth citing. AXLE/Disaster/README.md points here.
 #
 # WHAT CHANGED FROM THE PUBLISHED LISTING
 # ---------------------------------------
@@ -32,25 +31,26 @@
 #         deriv (fun x => whitney_fold (1/3) x) 0 = 0 := by
 #       simp [whitney_fold]; ring
 #
-# and is false. The derivative of x³ + ax is 3x² + a, which at a = 1/3, x = 0
-# is 1/3, not 0. No tactic closes it, so the listing as published could not
-# have compiled — which is an internal proof, independent of the missing file,
-# that the "sorry-free, machine-checkable" banner above it was never earned.
+# and is false. The derivative of x³ + a·x is 3x² + a, which at a = 1/3, x = 0
+# is 1/3, not 0. No tactic closes it, so the listing as published could not have
+# compiled — an internal proof, independent of the missing file, that the
+# "sorry-free, machine-checkable" banner above it was never earned.
 #
-# The true statement is the opposite of the one the name asserts, and is the
-# statement the rest of the section needs: at a = ε₀ = 1/3 the Whitney fold has
-# NO critical point. The fold is at a = 0. ε₀ is where it is already resolved,
-# which is what D3's docstring says. D2 is restated accordingly and renamed.
+# That is now a theorem here rather than a remark: `published_D2_is_false`
+# carries the refutation in the kernel. `fold_at_zero_parameter` gives the
+# statement D2 was reaching for — the fold of this unfolding is at a = 0 — and
+# `no_critical_point_at_eps0` gives what is true at a = ε₀ = 1/3, which is the
+# opposite of what D2 asserted and is what D3's own docstring already said.
 #
 # NAMES THAT EXCEED THEIR STATEMENTS
 # ----------------------------------
 # Of the fourteen entries as published, one (D1) is a definition and nine
 # conclude arithmetic about numerals while their docstrings name structural
-# results. D11 is the clearest: it was docstringed "bijection between
-# catastrophes and operators" and proved (7 : ℕ) = 7 by rfl. Those are kept
-# here verbatim, because they are true and cheap, but each docstring now says
-# what its theorem says. The bijection is stated as an open obligation below,
-# where a reader can see that nothing has been proved about it.
+# results. D11 is the clearest: docstringed "bijection between catastrophes and
+# operators" and proved (7 : ℕ) = 7 by rfl. Those are kept here verbatim,
+# because they are true and cheap, but each docstring now says what its own
+# theorem says. The structural claims are listed as open obligations at the end,
+# where a reader can see that nothing has been proved about them.
 #
 # WHAT IS STILL NOT HERE
 # ----------------------
@@ -62,6 +62,7 @@ import Mathlib.Tactic
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.Calculus.Deriv.Pow
 import Mathlib.Analysis.Calculus.Deriv.Mul
+import Mathlib.Analysis.Calculus.Deriv.Add
 
 namespace dm3.DisasterTheory
 
@@ -71,27 +72,52 @@ namespace dm3.DisasterTheory
 definition. It is not evidence of anything. -/
 noncomputable def whitney_fold (a x : ℝ) : ℝ := x ^ 3 + a * x
 
-/-- The derivative identity `d/dx (x³ + a·x) = 3x² + a`, on which D2′ and D3′
-depend for their reading. Declared open: see the GATE-DECLARE line. -/
+/-- The derivative of the unfolding: `d/dx (x³ + a·x) = 3x² + a`. Everything
+in Part I reads off this. -/
+theorem whitney_fold_hasDerivAt (a x : ℝ) :
+    HasDerivAt (fun y => whitney_fold a y) (3 * x ^ 2 + a) x := by
+  have h1 : HasDerivAt (fun y : ℝ => y ^ 3) (3 * x ^ 2) x := by
+    simpa using hasDerivAt_pow 3 x
+  have h2 : HasDerivAt (fun y : ℝ => a * y) a x := by
+    simpa using (hasDerivAt_id x).const_mul a
+  simpa [whitney_fold, Pi.add_def] using HasDerivAt.add h1 h2
+
+/-- The same, as an equation on `deriv`. -/
 theorem whitney_fold_deriv (a x : ℝ) :
-    deriv (fun y => whitney_fold a y) x = 3 * x ^ 2 + a := by
-  sorry
+    deriv (fun y => whitney_fold a y) x = 3 * x ^ 2 + a :=
+  (whitney_fold_hasDerivAt a x).deriv
 
-/-- D2′. At `a = ε₀ = 1/3` the fold has no critical point: `3x² + 1/3 > 0` for
-every real `x`. Replaces the published D2, which asserted a critical point at
-`a = 1/3` and is false; the fold of `x³ + a·x` is at `a = 0`. -/
-theorem no_critical_point_at_eps0 (x : ℝ) : 0 < 3 * x ^ 2 + 1 / 3 := by
-  positivity
+/-- **D2 as published is false.** The chapter asserted
+`deriv (fun x => whitney_fold (1/3) x) 0 = 0`. It is `1/3`. Kept as a theorem
+rather than a comment: the refutation of a published claim belongs in the same
+kernel as the claims that replaced it. -/
+theorem published_D2_is_false :
+    deriv (fun y => whitney_fold (1 / 3) y) 0 ≠ 0 := by
+  rw [whitney_fold_deriv]; norm_num
 
-/-- D3. `1/3 < a → 0 < 3a`. Arithmetic. The published docstring read "f′(x) > 0
-for a > 1/3", which is D3′ below, not this. -/
+/-- D2′. At `a = ε₀ = 1/3` the unfolding is strictly increasing everywhere, so
+it has **no** critical point. This is the opposite of what the published D2
+asserted, and is what D3's docstring already said. -/
+theorem no_critical_point_at_eps0 (x : ℝ) :
+    deriv (fun y => whitney_fold (1 / 3) y) x > 0 := by
+  rw [whitney_fold_deriv]; positivity
+
+/-- D2″. The statement D2 was reaching for: the fold of `x³ + a·x` sits at
+`a = 0`, not at `a = ε₀`. -/
+theorem fold_at_zero_parameter :
+    deriv (fun y => whitney_fold 0 y) 0 = 0 := by
+  rw [whitney_fold_deriv]; norm_num
+
+/-- D3. `1/3 < a → 0 < 3a`. Arithmetic. The published docstring read
+"f′(x) > 0 for a > 1/3", which is D3′ below, not this. -/
 theorem fold_resolved_above_eps0 {a : ℝ} (ha : 1 / 3 < a) : 0 < 3 * a := by
   linarith
 
 /-- D3′. The statement D3's docstring was making: above `ε₀` the unfolding is
 strictly increasing everywhere, so no fold survives. -/
 theorem no_critical_point_above_eps0 {a : ℝ} (ha : 1 / 3 < a) (x : ℝ) :
-    0 < 3 * x ^ 2 + a := by
+    deriv (fun y => whitney_fold a y) x > 0 := by
+  rw [whitney_fold_deriv]
   have : (0 : ℝ) < a := by linarith
   positivity
 
@@ -131,11 +157,11 @@ theorem chaos_between_fold_and_tau :
 theorem ladder_contraction (x : ℝ) (hx : 0 < x) : x * Real.exp (-2) < x := by
   nlinarith [Real.exp_pos (-2), contraction_at_rate_neg2]
 
-/-- D11. `(7 : ℕ) = 7`. This is `rfl`. It was published under the docstring
-"bijection between catastrophes and operators", which it does not state. Thom's
-seven elementary catastrophes and the seven dm³ operators are both counted by
-hand; no map between them is defined here. Kept so the numeral agreement is on
-the record as an observation and not as a theorem. -/
+/-- D11. `(7 : ℕ) = 7`. This is `rfl` and depends on no axioms at all. It was
+published under the docstring "bijection between catastrophes and operators",
+which it does not state. Thom's seven elementary catastrophes and the seven dm³
+operators are both counted by hand; no map between them is defined here. Kept so
+the numeral agreement is on the record as an observation, not as a theorem. -/
 theorem seven_eq_seven : (7 : ℕ) = 7 := rfl
 
 /-- D12. `0 < 1/3 < 1`. Arithmetic on numerals. -/
@@ -151,8 +177,8 @@ theorem safe_ball_contracts : (1 : ℝ) / 3 * Real.exp (-2) < 1 / 3 := by
 conjunction of arithmetic facts about numerals. It is not the Disaster Theorem
 and does not imply it; see the OPEN block below. -/
 theorem disaster_constants_consistent :
-    (1 : ℝ) / 3 > 0 ∧ (-2 : ℝ) < 0 ∧ (2 : ℝ) > 1 / 3 ∧ Real.exp (-2) < 1 := by
-  exact ⟨by norm_num, by norm_num, by norm_num, contraction_at_rate_neg2⟩
+    (1 : ℝ) / 3 > 0 ∧ (-2 : ℝ) < 0 ∧ (2 : ℝ) > 1 / 3 ∧ Real.exp (-2) < 1 :=
+  ⟨by norm_num, by norm_num, by norm_num, contraction_at_rate_neg2⟩
 
 /-!
 ## OPEN — what the chapter claims and this file does not prove

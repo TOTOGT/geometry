@@ -194,7 +194,7 @@
 
     <h3>The plasmapause as physical A₁ fold</h3>
     <p>The plasmapause — the sharp outer boundary of the Earth's plasmasphere at roughly L = 4–5 Earth radii — is the premier physical realisation of the Whitney A₁ fold in geophysics. Electron density drops by two orders of magnitude across a boundary thinner than 100 km. This is not a gradual transition: it is a fold in the smooth map from radial distance to plasma density. The fold singularity persists under all small perturbations of the solar wind — it is structurally stable in Thom's sense.</p>
-    <p>The coupling constant κ₁₂ = ε₀ = 1/3 (proved in <a href="ch-schumann-dual.html">the Schumann dual-cavity chapter</a> and formally verified in <code>TripleChamber.lean</code>) is the distance parameter at which the A₁ fold sits. The fold is not an accident of the specific physical system — it is the canonical A₁ singularity of the F-operator evaluated at the dm³ stability radius<sup><a href="book4/ch10.html" title="ε₀ = 1/3 is the coarse, symmetric Grönwall estimate; Book 4, Ch 10 refines the true inner boundary to r* ≈ 0.776 (basin asymmetry) and notes such model quantities do not translate cleanly to reality">[Ch 10]</a></sup>.</p>
+    <p>The coupling constant κ₁₂ = ε₀ = 1/3 is argued in <a href="ch-schumann-dual.html">the Schumann dual-cavity chapter</a>. <code>TripleChamber.lean</code> in AXLE <em>defines</em> κ₁₂ := ε₀ and proves the triple-chamber eigenvalue is antitone in κ — a resonance result, not a fold location; and AXLE has no build, so nothing in it is machine-checked. That κ₁₂ is the parameter at which the fold sits is a claim of this chapter, not a theorem. The fold is not an accident of the specific physical system — it is the canonical A₁ singularity of the F-operator evaluated at the dm³ stability radius<sup><a href="book4/ch10.html" title="ε₀ = 1/3 is the coarse, symmetric Grönwall estimate; Book 4, Ch 10 refines the true inner boundary to r* ≈ 0.776 (basin asymmetry) and notes such model quantities do not translate cleanly to reality">[Ch 10]</a></sup>.</p>
   </div>
 </section>
 
@@ -253,49 +253,55 @@
 <!-- §4 LEAN THEOREMS -->
 <section>
   <div class="section-inner">
-    <h2>§4 · Lean 4 Formal Verification — Seven Theorems</h2>
-    <p>The following theorems have been proved in <strong>AXLE</strong> (Algebraic eXpression Language for Evaluation), the Lean 4 / Mathlib4 formal proof environment at <a href="https://github.com/TOTOGT/AXLE" target="_blank">github.com/TOTOGT/AXLE</a>. All proofs are sorry-free.</p>
+    <h2>§4 · The Lean File</h2>
+    <p>Eight declarations at <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Disaster/CatastropheF.lean" target="_blank">Orthogenesis/Disaster/CatastropheF.lean</a>, kernel-checked 2026-09-15 against the <code>v4.32.0</code> pin, none admitted, inside the <code>Orthogenesis</code> build target. Two of them refute theorems this section previously published as verified. The listing below is the published one with each docstring reduced to what its theorem states; see the verification status note after it.</p>
 
     <div class="lean-block">
-<span class="lean-comment">-- TripleChamber.lean / CatastropheF.lean</span>
-<span class="lean-comment">-- AXLE · Principia Orthogona · dm³ framework</span>
+<span class="lean-comment">-- Orthogenesis/Disaster/CatastropheF.lean (geometry repo)</span>
+<span class="lean-comment">-- Principia Orthogona · dm³ framework · kernel-checked 2026-09-15</span>
 
 <span class="lean-kw">namespace</span> <span class="lean-type">dm3.CatastropheF</span>
 
-<span class="lean-comment">/-- T1. Whitney A₁ normal form: x³ + ax at critical point a = ε₀ -/</span>
+<span class="lean-comment">/-- T1. Whitney A₂ normal form. A definition. -/</span>
 <span class="lean-kw">noncomputable def</span> <span class="lean-type">whitney_fold</span> (a x : ℝ) : ℝ := x^<span class="lean-num">3</span> + a * x
 
-<span class="lean-comment">/-- T2. Fold singularity is at the dm³ stability radius ε₀ = 1/3 -/</span>
-<span class="lean-kw">theorem</span> <span class="lean-type">fold_singularity_at_eps0</span> :
-    (deriv (<span class="lean-kw">fun</span> x => whitney_fold (<span class="lean-num">1</span>/<span class="lean-num">3</span>) x) <span class="lean-num">0</span> = <span class="lean-num">0</span>) := <span class="lean-kw">by</span>
-  simp [whitney_fold, deriv_add, deriv_pow, deriv_const_mul]
-  ring
+<span class="lean-comment">/-- **T2 as published is false.** It asserted deriv ... 0 = 0; the derivative</span>
+<span class="lean-comment">    is 3x² + a, equal to 1/3 at a = 1/3, x = 0. Same statement and same</span>
+<span class="lean-comment">    tactic as the D2 of chDis-disaster.html. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">published_T2_is_false</span> :
+    deriv (<span class="lean-kw">fun</span> x => whitney_fold (<span class="lean-num">1</span>/<span class="lean-num">3</span>) x) <span class="lean-num">0</span> ≠ <span class="lean-num">0</span> := <span class="lean-kw">by</span>
+  rw [whitney_fold_deriv]; norm_num
 
-<span class="lean-comment">/-- T3. The fold has exactly one critical point for a > 0 -/</span>
-<span class="lean-kw">theorem</span> <span class="lean-type">fold_unique_critical_point</span>
-    {a : ℝ} (ha : <span class="lean-num">0</span> < a) :
-    ∃! x : ℝ, deriv (<span class="lean-kw">fun</span> t => whitney_fold a t) x = <span class="lean-num">0</span> := <span class="lean-kw">by</span>
-  simp [whitney_fold]
-  use <span class="lean-num">0</span>; constructor
-  · ring
-  · intro y hy; nlinarith [sq_nonneg y, ha]
+<span class="lean-comment">/-- T2′. The fold sits at a = 0, and only there. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">fold_exactly_at_zero</span> {a : ℝ} :
+    (∃ x : ℝ, deriv (<span class="lean-kw">fun</span> t => whitney_fold a t) x = <span class="lean-num">0</span>) ↔ a ≤ <span class="lean-num">0</span>
 
-<span class="lean-comment">/-- T4. Cusp (A₂) unfolds the fold (A₁) — one extra control parameter -/</span>
+<span class="lean-comment">/-- **T3 as published is false.** It asserted a unique critical point for</span>
+<span class="lean-comment">    a > 0. There is none: 3x² + a > 0 everywhere. The theorem asserted the</span>
+<span class="lean-comment">    existence of an object its own hypothesis excludes. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">published_T3_is_false</span> {a : ℝ} (ha : <span class="lean-num">0</span> < a) :
+    ¬ ∃ x : ℝ, deriv (<span class="lean-kw">fun</span> t => whitney_fold a t) x = <span class="lean-num">0</span> := <span class="lean-kw">by</span>
+  rintro ⟨x, hx⟩
+  rw [whitney_fold_deriv] at hx
+  nlinarith [sq_nonneg x]
+
+<span class="lean-comment">/-- T4 as published. True and empty: ∃ f, f x = e is rfl under an</span>
+<span class="lean-comment">    existential, for any expression e. It states nothing about unfolding. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">cusp_unfolds_fold</span>
     (a b x : ℝ) :
     ∃ f : ℝ → ℝ, f x = x^<span class="lean-num">4</span> + a * x^<span class="lean-num">2</span> + b * x := <span class="lean-kw">by</span>
   exact ⟨<span class="lean-kw">fun</span> x => x^<span class="lean-num">4</span> + a * x^<span class="lean-num">2</span> + b * x, rfl⟩
 
-<span class="lean-comment">/-- T5. The A-series unfolds: fold (A₁) < cusp (A₂) in codimension -/</span>
+<span class="lean-comment">/-- T5. 1 &lt; 2 &lt; 3 &lt; 4. Arithmetic on numerals; no codimension is defined. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">a_series_codim_increases</span> :
     (<span class="lean-num">1</span> : ℕ) < <span class="lean-num">2</span> ∧ <span class="lean-num">2</span> < <span class="lean-num">3</span> ∧ <span class="lean-num">3</span> < <span class="lean-num">4</span> := <span class="lean-kw">by</span> norm_num
 
-<span class="lean-comment">/-- T6. The fold is resolved for a > ε₀: no real critical points of f' = 0 in (−ε₀, ε₀) -/</span>
+<span class="lean-comment">/-- T6. 1/3 &lt; a → 0 &lt; 3a. Arithmetic. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">fold_resolved_above_eps0</span>
     {a : ℝ} (ha : <span class="lean-num">1</span>/<span class="lean-num">3</span> < a) :
     <span class="lean-num">0</span> < <span class="lean-num">3</span> * a := <span class="lean-kw">by</span> linarith
 
-<span class="lean-comment">/-- T7. τ = 2 is fold-free: the A-series unfolding is complete at τ -/</span>
+<span class="lean-comment">/-- T7. 2 &gt; 1/3 + 1/9 + 1/27 + 1/81. Arithmetic on numerals. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">tau_is_fold_free</span> :
     (<span class="lean-num">2</span> : ℝ) > <span class="lean-num">1</span>/<span class="lean-num">3</span> + <span class="lean-num">1</span>/<span class="lean-num">9</span> + <span class="lean-num">1</span>/<span class="lean-num">27</span> + <span class="lean-num">1</span>/<span class="lean-num">81</span> := <span class="lean-kw">by</span> norm_num
 
@@ -305,6 +311,24 @@
     </div>
   </div>
 </section>
+
+<!-- VERIFICATION STATUS -->
+<section style="background:#f6f3ec">
+  <div class="section-inner">
+    <h2>Verification status of this section</h2>
+    <div style="border:1px solid #d9a8a8;background:#fdeaea;padding:1.1rem 1.3rem">
+      <p style="margin-bottom:.7rem"><strong>Corrected 2026-09-15.</strong> &sect;4 stated that these seven theorems had been proved in AXLE and that all proofs were sorry-free. <code>CatastropheF.lean</code> has never existed in that repository, in its tree or in its history; the source existed only on this page. Checking it revealed more than a missing file.</p>
+      <ul style="margin:0 0 .7rem 1.2rem;line-height:1.85;font-size:.92rem">
+        <li><strong>T2 was false.</strong> The derivative of x&sup3; + ax is 3x&sup2; + a, which at a = 1/3, x = 0 is 1/3, not 0. The fold of this unfolding is at a = 0. The identical statement, with the identical tactic, was published as D2 of <a href="chDis-disaster.html">chDis-disaster.html</a>.</li>
+        <li><strong>T3 was false, and worse.</strong> It asserted a unique critical point for a &gt; 0. For a &gt; 0 the derivative is strictly positive everywhere, so there is none. The theorem asserted the existence of an object its own hypothesis excludes.</li>
+        <li><strong>T4 was empty.</strong> <code>&exist; f, f x = x&#8308; + ax&sup2; + bx</code> is <code>rfl</code> under an existential, true for any expression on the right. It says nothing about the cusp, the fold, or unfolding.</li>
+        <li><strong>T5, T6, T7</strong> are arithmetic on numerals, under names asserting codimension and completeness of an unfolding. T1 is a definition.</li>
+      </ul>
+      <p style="margin-bottom:0">Of the seven, none carried the content its name claimed. The file now exists at <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Disaster/CatastropheF.lean">Orthogenesis/Disaster/CatastropheF.lean</a> in the geometry repository, which pins Lean 4.32.0 and builds. Both refutations are theorems there rather than remarks &mdash; <code>published_T2_is_false</code> and <code>published_T3_is_false</code> &mdash; alongside <code>fold_exactly_at_zero</code>, which locates the fold, and a closing block naming what this chapter claims and the file does not prove. Kernel report: <code>tools/verify-audit/2026-09-15/</code>.</p>
+    </div>
+  </div>
+</section>
+
 
 <!-- §5 PHYSICAL REALISATIONS -->
 <section style="background:white">

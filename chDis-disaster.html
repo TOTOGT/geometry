@@ -318,7 +318,7 @@
 <section style="background:white">
   <div class="section-inner">
     <h2>§5 · The Lean File</h2>
-    <p>Sixteen declarations, at <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Disaster/DisasterTheory.lean" target="_blank">Orthogenesis/Disaster/DisasterTheory.lean</a> in the <a href="https://github.com/TOTOGT/geometry" target="_blank">geometry</a> repository, inside the <code>Orthogenesis</code> build target. They establish the four numeric side-conditions the framework uses and nothing beyond them; each docstring below states what its own theorem states. One obligation is left open with an explicit <code>sorry</code>, declared in the file’s <code>GATE-DECLARE</code> header.</p>
+    <p>Nineteen declarations, at <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Disaster/DisasterTheory.lean" target="_blank">Orthogenesis/Disaster/DisasterTheory.lean</a> in the <a href="https://github.com/TOTOGT/geometry" target="_blank">geometry</a> repository, inside the <code>Orthogenesis</code> build target. Kernel-checked 2026-09-15 against the <code>v4.32.0</code> pin: none admitted, every one on the permitted three axioms except <code>seven_eq_seven</code>, which depends on none. They establish the four numeric side-conditions the framework uses, and the derivative identity Part I reads off — nothing beyond that; each docstring states what its own theorem states.</p>
 
     <div class="lean-block">
 <span class="lean-comment">-- Orthogenesis/Disaster/DisasterTheory.lean (geometry repo)</span>
@@ -331,6 +331,22 @@
 
 <span class="lean-comment">/-- D1. Whitney A₂ normal form. A definition. -/</span>
 <span class="lean-kw">noncomputable def</span> <span class="lean-type">whitney_fold</span> (a x : ℝ) : ℝ := x^<span class="lean-num">3</span> + a * x
+
+<span class="lean-comment">/-- The derivative of the unfolding. Everything in Part I reads off this. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">whitney_fold_deriv</span> (a x : ℝ) :
+    deriv (<span class="lean-kw">fun</span> y => whitney_fold a y) x = <span class="lean-num">3</span> * x^<span class="lean-num">2</span> + a :=
+  (whitney_fold_hasDerivAt a x).deriv
+
+<span class="lean-comment">/-- **D2 as published is false.** The refutation of a published claim belongs</span>
+<span class="lean-comment">    in the same kernel as the claims that replaced it. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">published_D2_is_false</span> :
+    deriv (<span class="lean-kw">fun</span> y => whitney_fold (<span class="lean-num">1</span>/<span class="lean-num">3</span>) y) <span class="lean-num">0</span> ≠ <span class="lean-num">0</span> := <span class="lean-kw">by</span>
+  rw [whitney_fold_deriv]; norm_num
+
+<span class="lean-comment">/-- D2″. The statement D2 was reaching for: the fold sits at a = 0. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">fold_at_zero_parameter</span> :
+    deriv (<span class="lean-kw">fun</span> y => whitney_fold <span class="lean-num">0</span> y) <span class="lean-num">0</span> = <span class="lean-num">0</span> := <span class="lean-kw">by</span>
+  rw [whitney_fold_deriv]; norm_num
 
 <span class="lean-comment">/-- D2′. At a = ε₀ = 1/3 the fold has NO critical point. Replaces the</span>
 <span class="lean-comment">    published D2, which asserted a critical point at a = 1/3 and is false:</span>
@@ -406,7 +422,7 @@
 
 <span class="lean-kw">end</span> <span class="lean-type">dm3.DisasterTheory</span>
 
-<span class="lean-comment">-- GATE-DECLARE: sorries = dm3.DisasterTheory.whitney_fold_deriv</span>
+<span class="lean-proved">-- 19 declarations · none admitted · kernel-checked 2026-09-15 · v4.32.0</span>
     </div>
   </div>
 </section>
@@ -423,7 +439,7 @@
         <li><strong>The names exceeded the statements.</strong> Of the fourteen entries, one was a definition and nine concluded arithmetic about numerals under docstrings naming structural results. The clearest was D11, docstringed “bijection between catastrophes and operators” and proved <code>(7 : ℕ) = 7 := by rfl</code>.</li>
       </ol>
       <p style="margin-bottom:.7rem">The mathematics of the framework is unaffected by any of this, because none of it was resting on the Lean. What was wrong was the reporting.</p>
-      <p style="margin-bottom:0">The file now exists, at <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Disaster/DisasterTheory.lean">Orthogenesis/Disaster/DisasterTheory.lean</a> in the geometry repository, which pins Lean 4.32.0 and builds; it is imported by <code>Orthogenesis.lean</code> and therefore elaborated by CI on every push. It carries D2 restated as the true statement, every docstring reduced to what its theorem says, one declared <code>sorry</code> on the derivative identity, and a closing block naming the five obligations the chapter makes and the file does not discharge — first among them the Disaster Theorem itself.</p>
+      <p style="margin-bottom:0">The file now exists, at <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Disaster/DisasterTheory.lean">Orthogenesis/Disaster/DisasterTheory.lean</a> in the geometry repository, which pins Lean 4.32.0 and builds; it is imported by <code>Orthogenesis.lean</code> and therefore elaborated by CI on every push. Nineteen declarations, kernel-checked on 2026-09-15 against the <code>v4.32.0</code> pin with nothing admitted; the report is at <code>tools/verify-audit/2026-09-15/</code>. Point 2 above is now a theorem rather than a remark: <code>published_D2_is_false</code> carries the refutation in the kernel, beside <code>fold_at_zero_parameter</code> (the statement D2 was reaching for) and <code>no_critical_point_at_eps0</code> (what is true at ε₀). Every other docstring is reduced to what its theorem says, and a closing block names the five obligations the chapter makes and the file does not discharge — first among them the Disaster Theorem itself.</p>
     </div>
   </div>
 </section>

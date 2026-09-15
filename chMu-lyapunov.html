@@ -214,47 +214,58 @@
 
 <section>
   <div class="section-inner">
-    <h2>§4 · Lean 4 Formal Verification — Seven Theorems</h2>
-    <p>All theorems proved in <strong>AXLE</strong> (Algebraic eXpression Language for Evaluation) at <a href="https://github.com/TOTOGT/AXLE" target="_blank">github.com/TOTOGT/AXLE</a>. All proofs are sorry-free.</p>
+    <h2>§4 · The Lean File</h2>
+    <p>Nine declarations at <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Disaster/ChaosMu.lean" target="_blank">Orthogenesis/Disaster/ChaosMu.lean</a>, kernel-checked 2026-09-15 against the <code>v4.32.0</code> pin, none admitted, inside the <code>Orthogenesis</code> build target. One of them refutes the theorem this section previously published as T1. Each docstring below states what its own theorem states; see the verification status note after the listing.</p>
 
     <div class="lean-block">
-<span class="lean-comment">-- ChaosMu.lean</span>
-<span class="lean-comment">-- AXLE · Principia Orthogona · dm³ framework</span>
+<span class="lean-comment">-- Orthogenesis/Disaster/ChaosMu.lean (geometry repo)</span>
+<span class="lean-comment">-- Principia Orthogona · dm³ framework · kernel-checked 2026-09-15</span>
 
 <span class="lean-kw">namespace</span> <span class="lean-type">dm3.ChaosMu</span>
 
-<span class="lean-comment">/-- T1. Negative Lyapunov exponent implies stability -/</span>
-<span class="lean-kw">theorem</span> <span class="lean-type">lyapunov_negative_implies_stable</span>
-    {μ : ℝ} (hμ : μ &lt; <span class="lean-num">0</span>) (δ₀ : ℝ) (hδ : <span class="lean-num">0</span> &lt; δ₀) :
-    ∀ t : ℝ, <span class="lean-num">0</span> ≤ t → δ₀ * Real.exp (μ * t) &lt; δ₀ := <span class="lean-kw">by</span>
-  intro t ht
-  nlinarith [Real.exp_pos (μ * t),
-             Real.exp_lt_one_iff.mpr (mul_neg_of_neg_of_pos hμ (lt_of_lt_of_le hδ.le ht))]
+<span class="lean-comment">/-- **T1 as published is false**, at t = 0, where it reads δ₀ · 1 &lt; δ₀.</span>
+<span class="lean-comment">    The hypothesis needs 0 &lt; t, not 0 ≤ t. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">published_T1_is_false</span> :
+    ¬ ∀ (μ : ℝ), μ &lt; <span class="lean-num">0</span> → ∀ (d : ℝ), <span class="lean-num">0</span> &lt; d → ∀ t : ℝ, <span class="lean-num">0</span> ≤ t →
+      d * Real.exp (μ * t) &lt; d := <span class="lean-kw">by</span>
+  intro h
+  have := h (<span class="lean-num">-1</span>) (by norm_num) <span class="lean-num">1</span> (by norm_num) <span class="lean-num">0</span> (le_refl <span class="lean-num">0</span>)
+  simp at this
 
-<span class="lean-comment">/-- T2. dm³ transverse Lyapunov exponent is negative -/</span>
+<span class="lean-comment">/-- T1′. The corrected statement: strict contraction for every positive time. -/</span>
+<span class="lean-kw">theorem</span> <span class="lean-type">lyapunov_strict_for_positive_time</span>
+    {μ : ℝ} (hμ : μ &lt; <span class="lean-num">0</span>) {d : ℝ} (hd : <span class="lean-num">0</span> &lt; d) {t : ℝ} (ht : <span class="lean-num">0</span> &lt; t) :
+    d * Real.exp (μ * t) &lt; d := <span class="lean-kw">by</span>
+  have h : Real.exp (μ * t) &lt; <span class="lean-num">1</span> :=
+    Real.exp_lt_one_iff.mpr (mul_neg_of_neg_of_pos hμ ht)
+  nlinarith [Real.exp_pos (μ * t)]
+
+<span class="lean-comment">/-- T2. (-2 : ℝ) &lt; 0. Arithmetic. No spectrum appears. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">dm3_mu_max_is_negative</span> :
     (<span class="lean-num">-2</span> : ℝ) &lt; <span class="lean-num">0</span> := <span class="lean-kw">by</span> norm_num
 
-<span class="lean-comment">/-- T3. Chaos boundary: fold exists at ε₀ = 1/3 ∈ (0,1) -/</span>
+<span class="lean-comment">/-- T3. 0 &lt; 1/3 &lt; 1. Arithmetic. No boundary and no fold appear. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">chaos_boundary_at_eps0</span> :
     (<span class="lean-num">0</span> : ℝ) &lt; <span class="lean-num">1</span>/<span class="lean-num">3</span> ∧ (<span class="lean-num">1</span> : ℝ)/<span class="lean-num">3</span> &lt; <span class="lean-num">1</span> := <span class="lean-kw">by</span> norm_num
 
-<span class="lean-comment">/-- T4. Contraction rate e^{-2} &lt; 1: Banach fixed-point bound -/</span>
+<span class="lean-comment">/-- T4. exp (-2) &lt; 1. No map and no complete space appear. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">contraction_rate_e_neg2</span> :
     Real.exp (<span class="lean-num">-2</span>) &lt; <span class="lean-num">1</span> := <span class="lean-kw">by</span>
   exact Real.exp_lt_one_iff.mpr (by norm_num)
 
-<span class="lean-comment">/-- T5. n-Bonacci constants are strictly increasing toward τ = 2 -/</span>
+<span class="lean-comment">/-- T5. Five decimal literals in increasing order. Not about the roots</span>
+<span class="lean-comment">    of xⁿ = xⁿ⁻¹ + ⋯ + 1. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">nbonacci_increasing_toward_tau</span> :
     (<span class="lean-num">1.618</span> : ℝ) &lt; <span class="lean-num">1.839</span> ∧ <span class="lean-num">1.839</span> &lt; <span class="lean-num">1.927</span> ∧
     <span class="lean-num">1.927</span> &lt; <span class="lean-num">1.966</span> ∧ <span class="lean-num">1.966</span> &lt; <span class="lean-num">1.984</span> ∧ <span class="lean-num">1.984</span> &lt; <span class="lean-num">2</span> := <span class="lean-kw">by</span>
   norm_num
 
-<span class="lean-comment">/-- T6. Feigenbaum limit (≈3.569...) is not τ = 2 -/</span>
+<span class="lean-comment">/-- T6. 3.569945672 ≠ 2. Two numerals differ; the Feigenbaum constant is</span>
+<span class="lean-comment">    not defined here. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">feigenbaum_not_tau</span> :
     (<span class="lean-num">3.569945672</span> : ℝ) ≠ <span class="lean-num">2</span> := <span class="lean-kw">by</span> norm_num
 
-<span class="lean-comment">/-- T7. τ = 2 is the fold-free stable fixed point -/</span>
+<span class="lean-comment">/-- T7. 2 &gt; 0 ∧ exp (-4) &lt; 1. -/</span>
 <span class="lean-kw">theorem</span> <span class="lean-type">tau_is_stable_fixed_point</span> :
     (<span class="lean-num">2</span> : ℝ) &gt; <span class="lean-num">0</span> ∧ Real.exp (<span class="lean-num">-2</span> * <span class="lean-num">2</span>) &lt; <span class="lean-num">1</span> := <span class="lean-kw">by</span>
   exact ⟨by norm_num, Real.exp_lt_one_iff.mpr (by norm_num)⟩
@@ -265,6 +276,19 @@
     </div>
   </div>
 </section>
+
+<!-- VERIFICATION STATUS -->
+<section style="background:#f6f3ec">
+  <div class="section-inner">
+    <h2>Verification status of this section</h2>
+    <div style="border:1px solid #d9a8a8;background:#fdeaea;padding:1.1rem 1.3rem">
+      <p style="margin-bottom:.7rem"><strong>Corrected 2026-09-15.</strong> &sect;4 stated that all seven theorems had been proved in AXLE, sorry-free. <code>ChaosMu.lean</code> has never existed in that repository, in its tree or in its history; the source existed only on this page.</p>
+      <p style="margin-bottom:.7rem"><strong>T1 was false.</strong> It quantified over 0 &le; t. At t = 0 it reads &delta;&#8320; &middot; 1 &lt; &delta;&#8320;. The hypothesis needed 0 &lt; t. T1 was the only one of the seven that quantified over anything, the only one about decay over time &mdash; and it was the one that was wrong. T2 through T7 are arithmetic on numerals and two statements about <code>exp</code>; none of them mentions a Lyapunov exponent, a flow, or a spectrum, which is to say the section named the quantity in its title and never stated a proposition about it.</p>
+      <p style="margin-bottom:0">The file now exists at <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Disaster/ChaosMu.lean">Orthogenesis/Disaster/ChaosMu.lean</a> in the geometry repository, which pins Lean 4.32.0 and builds. It carries <code>published_T1_is_false</code>, the corrected strict statement for t &gt; 0, the non-strict statement that does hold on t &ge; 0, and a closing block naming the three obligations this chapter makes and the file does not discharge &mdash; &mu;<sub>max</sub> = &minus;2 first among them. Kernel report: <code>tools/verify-audit/2026-09-15/</code>.</p>
+    </div>
+  </div>
+</section>
+
 
 <section style="background:white">
   <div class="section-inner">
