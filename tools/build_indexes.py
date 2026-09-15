@@ -84,9 +84,12 @@ FOLDERS: list[tuple[str, str, str]] = [
     ("book7", "Book VII — The Scientists", "book7"),
     ("book8", "Book VIII — Cosmological / Quantum", "book8"),
     ("book10", "Book X — Trade, Power and the Continent", "book10"),
-    # book13 predates this list and was indexed nowhere until 2026-09-15: eleven
+    # book13 predates this list and was indexed nowhere until 2026-09-15: nine
     # chapters that existed at no address. Exactly the defect docs/audit-log.md
     # catalogues, occurring in the file that decides what has an address.
+    # The count was first written here as "eleven", which is `ls book13 | wc -l`
+    # -- nine chapters plus index.html plus ch-mathlib-verify.py. A directory
+    # listing is not a chapter count. Corrected 2026-09-16.
     ("book13", "Book XIII — Category Theory", "book13"),
     ("omega", "Omega Point", "omega"),
     ("HVEH", "HVEH", "HVEH"),

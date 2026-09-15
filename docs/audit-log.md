@@ -6881,9 +6881,9 @@ verified for that chapter, and an unverified number is exactly what this
 corpus spent 2026-09-15 removing from three other chapters.
 
 **And the defect found while registering the volume.** `tools/build_indexes.py`
-carries the list that decides what has an address. `book13` — eleven
+carries the list that decides what has an address. `book13` — nine
 category-theory chapters, committed, live on the site — has never appeared in
-it. Nothing linked them, no generated index carried them, and
+it. [The count read "eleven" until 2026-09-16; see that day's entry.] Nothing linked them, no generated index carried them, and
 `index-book13.html` did not exist until today. Eleven chapters at no address,
 in the corpus that has spent a month cataloguing exactly that failure, sitting
 inside the one file whose job is to prevent it.
@@ -6948,9 +6948,74 @@ from the other end nine months later; WP123 now proves it. Three arrivals at
 one fact, none of which consulted the previous.
 
 The defect class is not a wrong theorem. It is a corpus that does not read
-itself — the same class as the 55 dangling `.lean` names, as `book13`'s eleven
+itself — the same class as the 55 dangling `.lean` names, as `book13`'s nine
 unaddressed chapters, as WP-114's index, and as WP-122's return map sitting in
 a textbook exercise. Every one of these was already present and already
 findable. Nothing in the repository currently reads a new paper against the
 cautions already in the corpus, and until something does, this will happen
 again.
+
+---
+
+## 2026-09-16 · Chasing X, XI, XII, XIII — and the count that was a directory listing
+
+Four volume numbers checked against the filesystem and against what the corpus
+says about itself. Three defects, one clean.
+
+**XIII — MISCOUNTED, and by the worst possible method.** `book13/` holds
+`ch01`–`ch09`, an `index.html` and `ch-mathlib-verify.py`. Nine chapters.
+Yesterday's entry, the `build_indexes.py` comment and `CLAUDE.md` all say
+**eleven**. Eleven is `ls book13 | wc -l`: nine chapters, plus the index that
+lists them, plus the script that checks them. A directory listing was read as a
+chapter count and promoted to a claim in three files — inside the entry whose
+whole subject is numbers about addresses being wrong. Corrected in
+`build_indexes.py` and in this log; `CLAUDE.md` line 97 carries it too and is
+corrected in the same commit.
+
+The general form is worth stating because it will recur: **`wc -l` on a
+container counts the container's furniture.** Any census that does not name
+what it is counting will silently include the index of the thing and the test
+of the thing among the things.
+
+**X — ADDRESSED BY THE GENERATOR, ABSENT FROM THE NAVIGATION.** `book10` is in
+the FOLDERS list, `index-book10.html` is generated, and the orphan column reads
+zero. It reads zero because three pages link into it, and all three were written
+in the last two days: WP-123's references and the two correction blocks now on
+WP-41. `series-hub.html` — the page a human uses to find a volume — has no row
+for it. Neither does the root `index.html`. A reader arriving at the site cannot
+reach Book X by navigating; they can only arrive through a correction notice on
+a working paper about climate triage.
+
+This is yesterday's defect one level up. Registering a folder with the generator
+makes the *derived* index true. It does not put the volume in the *authored*
+navigation, and the authored navigation is what anybody reads. Book XIII has the
+same shape: its nine chapters are reached only from body text inside individual
+chapters of Books VI, VII and VIII, never from a hub.
+
+`series-hub.html` stops at **Vol IX**. Volumes X and XIII exist, are live, are
+generated-indexed, and are not on it.
+
+**XI — CLEAN, and the only one of the four that is.** Volume XI is declared
+unwritten and is named as such: `book7/ch-grothendieck.html` calls it "the
+unwritten Volume XI" and `wp82-the-missing-floor.html` gives it a seed — the
+transverse Floquet multiplier as an index candidate, the thing Volume XI would
+have to ground. An unwritten volume that says it is unwritten and names what it
+would need is not a defect; it is the correct way to hold a gap open.
+
+One update it has not received: WP-122 computed the whole return map that seed
+sits inside, in closed form. The seed grew and nobody told Volume XI.
+
+**XII — NAMED NOWHERE.** Zero occurrences of "Volume XII", "Vol XII" or
+"Book XII" anywhere in the corpus: not as written, not as unwritten, not as
+planned, not as abandoned. The series runs I–IX (IX being Ω), X, XI-unwritten,
+[silence], XIII. Either the numbering skips a slot deliberately and has never
+said so, or a volume was planned and lost its only record. This log cannot tell
+which, and that is the point: **XI is a gap with an address and XII is a gap
+without one.** The difference is not what is written; it is whether the absence
+was declared.
+
+`[OPEN]` What is Volume XII, and was the number ever assigned?
+
+**What none of this is.** No chapter is wrong, no theorem is affected, and
+`audit.py` was clean across 732 pages both before and after. Every defect here
+is a statement about the corpus made by the corpus and not checked against it.
