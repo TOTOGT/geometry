@@ -61,6 +61,20 @@ z is frozen); neither was applied to the `.tex`, because `hopf_diagram.png` is m
 from `book6/differential-equations/helix-toy-model/` and the linked PDF cannot be
 rebuilt from source until it is restored. Full entry in `docs/audit-log.md`.
 
+### Book 6: WP-122, the return map the series never wrote
+Strogatz Example 8.7.1 (p. 282) gives the Poincaré map of the transverse attractor in
+closed form, `P(r) = [1 + e^{-4π}(r^{-2} - 1)]^{-1/2}`, checked against RK4 to 1e-15.
+`P'(1) = e^{-4π}` is the multiplier ch-feynman and ch-grothendieck already print.
+Consequences measured: chEps-gronwall's Grönwall bound is loose at ε₀ = 1/3 by a factor
+of 8.5e4 (ε₀ is not withdrawn — it is a correct bound radius, and this says what it is a
+radius of); the flow has **no** return map at all, because ż = 1 means nothing returns to
+a section {z = z₀}, so the per-period object is a time-2π flow map and that is why its
+exponent drifts with base point. Two open items for the author, both in
+`docs/audit-log.md`: chRho-spectral Argument V (units, multiplier count, and a scaling
+whose two factors cancel — 12.5% gap), untouched because it is reader-facing; and finding
+the right substitute for a return map on a flow with a monotone coordinate. WP-120 is an
+unexplained numbering gap.
+
 The previous handoff's open items below are carried forward unchanged.
 
 ### Carried forward from 2026-09-13 — pushed by Pablo.

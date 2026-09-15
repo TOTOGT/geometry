@@ -1,3 +1,78 @@
+# THE RETURN MAP WAS IN THE EXERCISE (2026-09-15)
+
+**What was built.** `book6/wp122-the-return-map-was-in-the-exercise.html` and
+`book6/wp122-verify.py` — eight blocks, standard library only, exit 0. Registered in
+`book6/index.html`.
+
+**What was verified.** Strogatz Example 8.7.1 (2nd ed., p. 282) gives the Poincare map of
+the corpus's transverse attractor in closed form:
+
+    P(r) = [ 1 + e^{-4pi} ( r^{-2} - 1 ) ]^{-1/2}
+
+Checked against RK4 over one period from eight radii between 0.02 and 40: agreement at
+1e-15 relative. `P'(1) = e^{-4pi} = 3.487342356e-06` exactly — the multiplier `ch-feynman`
+and `ch-grothendieck` already print is the derivative of this map at its fixed point.
+
+Exponent/multiplier bookkeeping confirmed correct: `(1/T*) ln|P'(1)| = -2`, per Strogatz's
+Liapunov-exponent definition (p. 374, Example 10.5.1). Recorded as a PASS before the
+correction below, because the two are conflated in exactly one place and used correctly
+everywhere else checked.
+
+**The Gronwall radius, measured.** `chEps-gronwall.html` Proof IV is correct: the bound
+`exp((mu_max + 6 eps) T*)` reaches 1 at `eps_0 = 1/3`. Against it, the exact supremum of
+`|P'|` on `|rho| <= 1/3` is `1.176970e-05`, attained at `rho = -1/3` — the bound is loose
+there by a factor of `8.496e4`. `|P'|` does not reach 1 until `r = 0.015049224`, so P
+contracts on a ball about three times wider in rho. Twenty iterates of P from initial radii
+spanning 1e-6 to 1e4 all land on Gamma to 1e-8: the basin of the uncoupled transverse flow
+has no boundary but the axis. **`eps_0 = 1/3` is not withdrawn** — it is a correct Gronwall
+radius, and what this measures is what it is a radius of. Vol I's note that writing
+`eps_0 ~ r_star` is an unwarranted identification stands and is now quantified.
+
+**A vacuous pass, caught in this script's own first draft.** Fixed-step RK4 on
+`r' = r - r^3` returns `nan` for `r_0 >~ 30` (stiff). The block tested
+`if abs(r - 1.0) > 1e-8: fail`, and every comparison against `nan` is false, so two `nan`
+rows passed as convergence. The guard now tests `isfinite` first; the `nan` rows are kept
+in the printed table deliberately. Same class as the `: True := trivial` findings —
+a check that cannot fail.
+
+**OPEN — chRho-spectral.html, Argument V of seven.** Three separable items, each with a fix
+on a numbered page:
+
+1. *Units.* The paragraph calls -2 an eigenvalue of the linearised Poincare map. -2 is the
+   exponent; the multiplier is `e^{-4pi}`. The two differ by `5.735e5`.
+2. *Count.* Strogatz p. 281: a surface of section for an n-dimensional flow is
+   (n-1)-dimensional, so P linearises to (n-1)x(n-1) — one multiplier for the planar
+   transverse system, two on a contact 3-manifold. A spectrum listed as `{-2, +i, -i}` fits
+   neither, and a modulus-one entry asserts a neutral direction the system does not have.
+3. *Scaling.* The page reads `t_1/(2pi) ~ 2.25 ~ tau * eps_0^{-1} * (1/3)`. Computed:
+   `eps_0^{-1} * (1/3) = 1` identically, so eps_0 does not enter the expression and the
+   right-hand side is `tau = 2`; `t_1/(2pi) = 2.249611375552`; the gap is 12.4806 %.
+
+The file also carries no `[MODEL]` / `[OPEN]` / `[VERIFIED]` tag on any of the seven
+arguments, which the house rules require. The other six were not examined and nothing here
+is a verdict on them, on RH, or on whether a contact reading of the critical strip is worth
+pursuing. Not edited — this is a reader-facing page and the correction is the author's call.
+
+**OPEN — the flow has no return map.** The full model has `z' = 1` everywhere, so no
+trajectory returns to a section `{z = z_0}`. What the series computes over one period is a
+time-2pi flow map, not a first return; the two agree on the transverse coordinate and
+nowhere else, and the base-point drift `-4pi + 2e^{-z_0}(1 - e^{-2pi})` is that gap
+measured. Finding the right substitute — a section in extended phase space, a pullback
+attractor, or a compactifying rescaling of z — is handed forward. Until then "Poincare map"
+should not name an object on the 3-manifold. In `chEps-gronwall`'s planar reduction the
+term is correct, because there the time-2pi map is the first return.
+
+**Instruments named, not yet adopted.** Trapping region + Poincare-Bendixson (Strogatz
+§7.3, pp. 205-206) — Example 7.3.1 perturbs this same system and proves the cycle survives
+for mu < 1 inside `0.999 sqrt(1-mu) < r < 1.001 sqrt(1+mu)`, by two inequalities holding for
+all theta; block [7] checks the annulus at five values of mu. That is the analytic form of
+the certificate `wp62-three-open-paths.html` asks for. Also unused: Dulac's criterion
+(§7.2) for ruling out a second closed orbit, which the series has never done.
+
+**Registered.** `audit.py --all` clean at 722 HTML; `terms.py --check` OK at 153 declared
+terms; indexes regenerated. Note for whoever numbers the next paper: **WP-120 is an
+unexplained gap** — no file, and no reference to it anywhere in the repository.
+
 # THE HELIX IS EXAMPLE 7.1.1, AND FOUR OF ITS NUMBERS CAME WITH IT (2026-09-15)
 
 **What was built.** `book7/ch-strogatz.html` and `book7/ch-strogatz-verify.py` — the

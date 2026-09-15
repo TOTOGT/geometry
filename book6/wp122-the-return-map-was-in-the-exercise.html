@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-122 &middot; The Return Map Was in the Exercise &mdash; Principia Orthogona Vol VI</title>
+<meta name="description" content="Strogatz Example 8.7.1 computes the Poincaré map of this corpus's transverse attractor in closed form. Four instruments the series has been working without, one bound that is loose by 85,000, and one paragraph whose arithmetic does not close."/>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+</style>
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a> &middot; WP-122</span>
+<span class="meta"><a href="wp121-what-etf-connect-actually-couples.html">&larr; WP-121 &middot; What ETF Connect Actually Couples</a></span>
+</div>
+
+<div class="wp-head">
+<div class="wp-kicker">Vol VI &middot; Roots &middot; WP-122 &middot; 2026-09-15 &middot; Dynamical systems &middot; Instruments</div>
+<h1>The Return Map Was in the <em>Exercise</em></h1>
+<div class="subtitle">Strogatz computes the Poincar&eacute; map of this corpus's transverse attractor in closed form, on page 282, as a worked example. The series has been using its derivative at one point and nothing else. Here is what the whole map gives &mdash; a bound tightened by a factor of eighty-five thousand, a basin certificate of the kind WP-62 asked for, and one paragraph whose arithmetic does not close.</div>
+<div class="metagrid"><div><strong>Method</strong>textbook instruments applied to the corpus's own objects<br>eight verification blocks, standard library only</div><div><strong>Claim type</strong>an instrument audit, not a new theorem<br>every result quoted is Strogatz's or follows in one line</div><div><strong>Verified 2026-09-15</strong><span class="mono">book6/wp122-verify.py</span>, exit 0<br>closed form against RK4 to 1e-15 relative</div></div>
+</div>
+
+<div class="wrap">
+
+<div class="lede">The series has an attracting cycle, a period, a transverse exponent and a Floquet multiplier, and it has had them for two years. What it has never had is a return map. The map exists, it is elementary, it is on page 282 of the book already sitting in WP-22's bibliography, and it answers questions the corpus has been answering with estimates.</div>
+
+<h2>1 &middot; The map</h2>
+
+<p>The transverse system, as <a href="../book7/ch-strogatz.html">ch-strogatz</a> establishes, is Strogatz's Example 7.1.1: $\dot r = r(1-r^2)$, $\dot\theta = 1$. Because $\dot\theta = 1$, a trajectory crosses any ray $\theta = \text{const}$ at intervals of exactly $2\pi$, so that ray is a surface of section and the first-return map is available in closed form. Example 8.7.1, page 282:</p>
+
+<div class="eq">P(r) = [ 1 + e^(-4&pi;) ( r^(-2) &minus; 1 ) ]^(-1/2)</div>
+
+<p>Block [1] of the verify script integrates $\dot r = r(1-r^2)$ over $t \in [0, 2\pi]$ from eight starting radii between $0.02$ and $40$ and compares. Agreement is at the $10^{-15}$ level &mdash; the map is not an approximation to the flow, it <em>is</em> the flow, sampled once per turn.</p>
+
+<div class="box thm">
+<span class="lab">Where the corpus's number lives</span>
+Differentiating at the fixed point gives $P'(1) = e^{-4\pi} = 3.487342356\times10^{-6}$. That is the transverse Floquet multiplier <a href="../book7/ch-feynman.html">ch-feynman</a> uses for its periodic-orbit weight and <a href="../book7/ch-grothendieck.html">ch-grothendieck</a> measures as an index candidate. It is one number read off a function the series has never written down.
+</div>
+
+<h3>The bookkeeping, checked first</h3>
+<p>Strogatz's Liapunov exponent for a $p$-cycle (p.&nbsp;374, Example 10.5.1) is $\lambda = \frac1p\ln|(f^p)'(x_0)|$; per unit time for a flow, $\frac1{T^*}\ln|\text{multiplier}|$. Block [2] runs it: $\frac{1}{2\pi}\ln e^{-4\pi} = -2$ exactly. <strong>The series' use of $\mu_{\max} = -2$ alongside $e^{-4\pi}$ is correct</strong> &mdash; they are one fact in two units. That is stated here before &sect;4, which is about the one place they are conflated.</p>
+
+<h2>2 &middot; What the whole map buys: the Gr&ouml;nwall radius</h2>
+
+<p><a href="../chEps-gronwall.html">chEps-gronwall</a> Proof IV writes $\rho = r-1$, $f(\rho) = -\rho(1+\rho)(2+\rho)$ &mdash; which block [3] confirms is $r(1-r^2)$ rewritten &mdash; bounds $|P'|$ by Gr&ouml;nwall as $\exp\!\big((\mu_{\max} + 6\varepsilon)T^*\big)$ on $|\rho| \le \varepsilon$, and reads off $\varepsilon_0 = 1/3$ as the radius where that bound reaches&nbsp;1. The derivation is correct. The bound is very loose.</p>
+
+<div class="tblwrap">
+<table>
+<tr><th>quantity on |&rho;| &le; 1/3</th><th>value</th></tr>
+<tr><td>Gr&ouml;nwall bound on |P&prime;| at &epsilon; = 1/3</td><td class="n">1.000000</td></tr>
+<tr><td>exact sup |P&prime;|, attained at &rho; = &minus;1/3</td><td class="n">1.176970 &times; 10<sup>&minus;5</sup></td></tr>
+<tr><td>the bound exceeds the truth by</td><td class="n">8.496 &times; 10<sup>4</sup></td></tr>
+<tr><td>radius at which |P&prime;| actually reaches 1</td><td class="n">r = 0.015049224</td></tr>
+</table>
+</div>
+
+<p>So $P$ is a contraction from $r \approx 0.0150$ outward &mdash; a ball about three times wider in $\rho$ than $|\rho| \le 1/3$, and the contraction inside it is five orders of magnitude stronger than the bound admits.</p>
+
+<div class="box warn">
+<span class="lab">What &epsilon;<sub>0</sub> = 1/3 is, and what it is not</span>
+It is the radius at which a Gr&ouml;nwall estimate saturates. Block [4] iterates the exact map twenty times from initial radii spanning ten decades, $10^{-6}$ to $10^{4}$, and every one lands on $\Gamma$ to $10^{-8}$ &mdash; the basin of the uncoupled transverse flow is all of $r > 0$, with no boundary but the axis. Whatever $\varepsilon_0$, $r_\star$ and $\kappa^*$ are thresholds <em>of</em>, it is not convergence of this flow. Vol&nbsp;I's own note already warns that writing $\varepsilon_0 \approx r_\star$ is an identification it is not, and <a href="../r-star-mess.html">The r&#9733; Mess</a> records what that constant has cost; this paper adds only the exact number that settles the $\varepsilon_0$ half.
+</div>
+
+<div class="box">
+<span class="lab">A defect the same block turned up in its own first draft</span>
+Fixed-step RK4 on $\dot r = r - r^3$ returns <span class="mono">nan</span> for $r_0 \gtrsim 30$; the equation is stiff out there and the integrator overshoots. The first version of block [4] tested <span class="mono">if abs(r - 1.0) &gt; 1e-8: fail</span> &mdash; and every comparison against <span class="mono">nan</span> is false, so two <span class="mono">nan</span> rows passed as convergence. The guard now tests <span class="mono">isfinite</span> first. The <span class="mono">nan</span> rows are kept in the printed table on purpose.
+</div>
+
+<h2>3 &middot; Three more instruments, and what each one is for here</h2>
+
+<div class="tblwrap">
+<table>
+<tr><th>instrument</th><th>where</th><th>the corpus question it answers</th></tr>
+<tr><td><strong>Trapping region + Poincar&eacute;&ndash;Bendixson</strong></td><td>&sect;7.3, pp.&nbsp;205&ndash;206</td><td>Example 7.3.1 perturbs this very system to $\dot r = r(1-r^2) + \mu r\cos\theta$ and proves a closed orbit survives for $\mu &lt; 1$, inside $0.999\sqrt{1-\mu} &lt; r &lt; 1.001\sqrt{1+\mu}$. The proof is two inequalities that hold for every $\theta$ because $|\cos| \le 1$. <a href="wp62-three-open-paths.html">WP-62</a> asks what it takes for a basin result to be &ldquo;publishable as a certificate rather than an illustration&rdquo;; this is the analytic answer, and block [7] checks the annulus at five values of $\mu$.</td></tr>
+<tr><td><strong>Dulac's criterion</strong></td><td>&sect;7.2, pp.&nbsp;201&ndash;204</td><td>Rules out closed orbits in a simply connected region by exhibiting one function $g$ with $\nabla\cdot(g\mathbf{f}) &lt; 0$. The series asserts $\Gamma$ is <em>the</em> cycle and has nowhere proved there is no other. One mention in the corpus, in <a href="wp92-a-cusp-that-is-real-and-a-fold-that-was-not.html">WP-92</a>.</td></tr>
+<tr><td><strong>Liapunov functions</strong></td><td>&sect;7.2, p.&nbsp;203</td><td>The same $V$-decreases argument the contact chapters use informally, with the two conditions stated as conditions. Strogatz is candid that there is no systematic way to construct one, which is itself worth quoting in a chapter that produces one.</td></tr>
+</table>
+</div>
+
+<h2>4 &middot; One paragraph whose arithmetic does not close</h2>
+
+<p><a href="../chRho-spectral.html">chRho-spectral</a>, Argument&nbsp;V of seven, reads: <em>&ldquo;the linearised Poincar&eacute; map at $\Gamma$ has eigenvalues $\{\mu_{\max}, \pm i\} = \{-2, \pm i\}$&hellip; the first zero at $t_1 \approx 14.135$ gives $t_1/(2\pi) \approx 2.25 \approx \tau\cdot\varepsilon_0^{-1}\cdot(1/3)$ &mdash; within the dm&sup3; scaling of the first spectral gap.&rdquo;</em> Block [5] runs it.</p>
+
+<div class="tblwrap">
+<table>
+<tr><th>as written</th><th>computed</th><th></th></tr>
+<tr><td>$t_1/(2\pi)$</td><td class="n">2.249611375552</td><td></td></tr>
+<tr><td>$\varepsilon_0^{-1}\cdot(1/3)$</td><td class="n">1.000000000000</td><td>the two factors cancel</td></tr>
+<tr><td>$\tau\cdot\varepsilon_0^{-1}\cdot(1/3)$</td><td class="n">2.000000000000</td><td>so the right-hand side is $\tau$</td></tr>
+<tr><td>relative gap</td><td class="n">12.4806 %</td><td></td></tr>
+</table>
+</div>
+
+<div class="gap">
+<span class="lab">Three separate things, and each has a fix on a numbered page</span>
+<p><strong>The units.</strong> $-2$ is an exponent and $e^{-4\pi}$ is the multiplier; a return map's eigenvalues are multipliers. The two numbers differ by a factor of $5.7\times10^{5}$. Strogatz p.&nbsp;374 gives the conversion, and &sect;1 above shows the corpus elsewhere applies it correctly.</p>
+<p><strong>The count.</strong> Strogatz p.&nbsp;281: a surface of section for an $n$-dimensional flow is $(n-1)$-dimensional, so the linearisation of $P$ is $(n-1)\times(n-1)$ &mdash; one multiplier for the planar transverse system, two on a contact 3-manifold. A spectrum listed as three numbers fits neither, and a modulus-one entry would assert a neutral direction this system does not have.</p>
+<p><strong>The scaling.</strong> $\varepsilon_0^{-1}\cdot(1/3) = 1$ identically, so $\varepsilon_0$ does not appear in the expression at all; the right-hand side is $\tau = 2$ wearing two cancelling factors. And $2.2496$ against $2$ is a 12.5&nbsp;% gap presented as agreement. This is vocabulary-correspondence in its exact form &mdash; two numbers near each other, joined by an expression that looks structural and is not.</p>
+<p><strong>Scope.</strong> The other six arguments on that page were not examined and nothing here is a verdict on them, on RH, or on whether a contact reading of the critical strip is worth pursuing. The page also carries no <span class="tag t-model">MODEL</span> / <span class="tag t-open">OPEN</span> tag on any of the seven, which the house rules require.</p>
+</div>
+
+<h2>5 &middot; The one the corpus cannot borrow</h2>
+
+<p>Every result above is about the <em>uncoupled</em> transverse system. The full model is $\dot r = f(r)(1-e^{-z})$, $\dot\theta = 1$, $\dot z = 1$, and it has no Poincar&eacute; map at all: $\dot z = 1$ everywhere, so no trajectory ever returns to a section $\{z = z_0\}$. What the series computes over one period is a <strong>time-$2\pi$ flow map</strong>, not a first-return map. The two agree on the transverse coordinate and nowhere else, and the drift of the per-period exponent with base point &mdash; $-4\pi + 2e^{-z_0}(1-e^{-2\pi})$, reaching $-4\pi$ only in the limit &mdash; is exactly that gap, measured.</p>
+
+<div class="box">
+<span class="lab">Open, and handed forward</span>
+Find the right substitute for a return map on a flow with a monotone coordinate. The candidates are standard &mdash; a section in the extended phase space, an asymptotic (pullback) attractor in the non-autonomous sense, or a rescaling of $z$ that compactifies the sweep &mdash; and choosing among them is the work. Until then, &ldquo;Poincar&eacute; map&rdquo; should not appear in the series for an object on the 3-manifold. In <a href="../chEps-gronwall.html">chEps-gronwall</a>'s planar reduction the term is correct, because there the time-$2\pi$ map <em>is</em> the first return.
+</div>
+
+<h2>6 &middot; What this paper does not claim</h2>
+<ul>
+<li>Nothing here is a new theorem. Every result is Strogatz's, or one line from it.</li>
+<li>$\varepsilon_0 = 1/3$ is not withdrawn. Proof IV derives it correctly; this paper says what it is a radius of, and gives the exact figure the bound was standing in for.</li>
+<li>No claim is made about the coupled contact model, whose global behaviour the closed-form map does not cover.</li>
+<li>The $\theta$ sweep in block [7] is an exhaustion over 2000 angles and is evidence; the two inequalities printed above it are the proof.</li>
+<li>Argument V's arithmetic is arithmetic. It bears on that paragraph and on nothing else on that page.</li>
+</ul>
+
+<h2>References</h2>
+<ol class="refs">
+<li>S. H. Strogatz, <em>Nonlinear Dynamics and Chaos</em>, 2nd ed., Westview 2015 / CRC 2018, ISBN 978-0-8133-4910-7. &sect;7.1 p.&nbsp;199 &middot; &sect;7.2 pp.&nbsp;201&ndash;204 &middot; &sect;7.3 pp.&nbsp;205&ndash;206 &middot; &sect;8.7 pp.&nbsp;281&ndash;282 &middot; &sect;10.5 pp.&nbsp;373&ndash;374.</li>
+<li><span class="mono">book6/wp122-verify.py</span> &mdash; 8 blocks, standard library only, exit 0. Closed form against RK4 at eight radii; exponent-from-multiplier; Gr&ouml;nwall bound against exact supremum and the unit-slope radius by bisection; twenty iterates of $P$ over ten decades with an <span class="mono">isfinite</span> guard; Argument V's arithmetic; the section-dimension count; the trapping annulus at five values of $\mu$; a control block.</li>
+<li><a href="../book7/ch-strogatz.html">ch-strogatz</a> &mdash; which of the helix's constants came with Example 7.1.1, and which are the contact structure's.</li>
+<li><a href="differential-equations/helix-toy-model/helix_toy_model.pdf">WP-22</a> &middot; <a href="../chEps-gronwall.html">chEps-gronwall</a> &middot; <a href="../chRho-spectral.html">chRho-spectral</a> &middot; <a href="../r-star-mess.html">The r&#9733; Mess</a> &middot; <a href="wp62-three-open-paths.html">WP-62</a> &middot; <a href="wp92-a-cusp-that-is-real-and-a-fold-that-was-not.html">WP-92</a> &middot; <a href="../book7/ch-feynman.html">ch-feynman</a> &middot; <a href="../book7/ch-grothendieck.html">ch-grothendieck</a></li>
+</ol>
+
+</div>
+
+<footer>
+<div class="fwrap">
+<div>
+<a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a><br>
+WP-122 &middot; 2026-09-15 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a>
+</div>
+<div class="disc">An instrument audit, not a new result. Every computation is on the uncoupled transverse system; nothing here is a claim about the coupled contact model, about the Riemann hypothesis, or about the six arguments of chRho-spectral that were not examined. The closed-form return map and the trapping annulus are Strogatz's, cited to page.</div>
+</div>
+</footer>
+
+</body>
+</html>
