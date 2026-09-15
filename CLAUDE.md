@@ -107,11 +107,26 @@ Two candidates, neither confirmable from a sandboxed session:
     file rather than on a real gate.
 
 `duplicates.py` exits 1 with 31 undeclared groups. It is a warning in this
-workflow, not a gate, so it is not the cause — but four of those groups are new
-and are an artefact of two clones of this repository being declared roots
-(`~/Desktop/geometry` and `~/geometry`): `nasagaps`, `probe_book8`, `probe_dm3`
-and `reactiondiffusionfold` each list the same filename twice. `~/geometry` is
-behind and is the likelier thing to fix.
+workflow, not a gate, so it is not the cause of the red build.
+
+CORRECTED 2026-09-15. An earlier note here attributed four of those groups —
+`nasagaps`, `probe_book8`, `probe_dm3`, `reactiondiffusionfold` — to two clones
+of this repository being declared corpus roots. That was wrong twice over.
+`tools/corpus_roots.txt` declares `~/Desktop/geometry` and not `~/geometry`, and
+its own comment block already excludes second checkouts by name. The four groups
+came from `theorem_census.py --tracked .` and are duplicate basenames *inside the
+single checkout*:
+
+    NASAGaps.lean              root tombstone + Orthogenesis/Architecture/  (intended, see lakefile)
+    ReactionDiffusionFold.lean root (audited, build target) + book6/        (real, fixed)
+    probe_book8.lean           tools/verify-book8/ + tools/probes/          (real, fixed)
+    probe_dm3.lean             tools/verify-dm3/  + tools/probes/           (real, fixed)
+
+Two clones do exist on the Mac — `~/Desktop/geometry` (canonical, current) and
+`~/geometry` (HEAD f4e6214, 2026-08-13, a month stale, not a declared root).
+Nothing should be run from the second. The mount names through the bridge are
+`Desktop--geometry` and `pablogrossi--geometry`, which are easy to confuse; every
+command in a session must anchor on the first.
 
 NEXT SESSION: get the failing step's log — `gh run view --log-failed` on a
 machine with `gh`, or the Actions page — before changing anything. Do not patch
