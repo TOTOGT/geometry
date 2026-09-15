@@ -52,6 +52,26 @@ it is not yet filed. Drafts are in `docs/axle-issues-to-file.md`.
 is that those copies are evidence, not sources. Correcting it would destroy the
 record of what was published.
 
+## Filed 2026-09-15 — the nine now have numbers
+
+Opened as #26–#34 from `tools/file-axle-issues.sh` (and its no-install twin,
+`docs/file-axle-issues.html`). Confirmed at the source at two points, #30 and
+#34, before the numbers were written back.
+
+| # | obligation | source | cited in |
+|---|---|---|---|
+| 26 | Regeneration loop invariant after g₆ cycles — transfinite | `regeneration_loop_invariant.lean` | GameTheory (both) |
+| 27 | Floquet multipliers for the spiral return map | `Main_v6.lean` | GameTheory (both) |
+| 28 | IPR_trib > IPR_fib — formal bound | `SwarmSimulator.lean` | GameTheory (both) |
+| 29 | Spectral measure of the transfer operator at a Whitney fold | `FoldEvents.lean` | GameTheory (both) |
+| 30 | LCH construction for Legendrian action positivity | `MarketThreshold.lean` | GameTheory (both) |
+| 31 | Kernel dimension from contact topology | — | `book8/ch6-quantum.html` |
+| 32 | O7 — asymmetric inner boundary vs the symmetric Grönwall bound | `PrincipiaVol1.lean` | `ch-recurrence-ladder.html` |
+| 33 | Global Positivity Theorem as a Lean proposition | — | `book4/ch14.html` |
+| 34 | Non-integrability from Baker's theorem | — | `book4/ch14.html` |
+
+Every "not yet filed" wording in the corpus has been replaced with its number.
+
 ## Rule
 
 A number in this corpus is a citation. Before writing one, check it here or at
