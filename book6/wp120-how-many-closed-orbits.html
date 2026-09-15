@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-120 &middot; How Many Closed Orbits &mdash; Principia Orthogona Vol VI</title>
+<meta name="description" content="The series calls Γ the limit cycle and never counts them. Two of Strogatz's instruments settle it: index theory and Dulac's criterion. One of the two toy models turns out to have a second circular orbit, and the neutral line is where the two collide."/>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+</style>
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a> &middot; WP-120</span>
+<span class="meta"><a href="wp122-the-return-map-was-in-the-exercise.html">WP-122 &middot; The Return Map Was in the Exercise &rarr;</a></span>
+</div>
+
+<div class="wp-head">
+<div class="wp-kicker">Vol VI &middot; Roots &middot; WP-120 &middot; 2026-09-15 &middot; Dynamical systems &middot; Instruments</div>
+<h1>How Many <em>Closed Orbits</em></h1>
+<div class="subtitle">The series calls &Gamma; <em>the</em> limit cycle ten to seventeen times a page and has never counted them. Two instruments settle it, both from chapters the corpus already owns. One of the two toy models turns out to carry a second circular orbit that nothing in the corpus names &mdash; and the neutral line at $z=0$ is where the two collide.</div>
+<div class="metagrid"><div><strong>Method</strong>index theory and Dulac's criterion, applied to the corpus's own fields<br>eight verification blocks, standard library only</div><div><strong>Claim type</strong>a count, with proofs; one elementary new object<br>no claim about the three-dimensional flows &mdash; see &sect;5</div><div><strong>Verified 2026-09-15</strong><span class="mono">book6/wp120-verify.py</span>, 23 checks, exit 0<br>divergence formulas against numerical differentiation</div></div>
+</div>
+
+<div class="wrap">
+
+<div class="lede">A definite article is a claim. Across the corpus &Gamma; = {r = 1} is <em>the</em> limit cycle, and the only place uniqueness is asserted anywhere in the series is one row of chRho-spectral's open-obligation table, about the discrete Collatz cycle. For the continuous &Gamma; nothing has been proved, nothing has been claimed, and the word has been standing in for both.</div>
+
+<h2>1 &middot; When the count is free</h2>
+
+<p>If $\dot r$ depends on $r$ alone and $\dot\theta &gt; 0$, there is nothing to prove. A closed orbit needs $r(t)$ periodic; $r$ is monotone wherever $\dot r \ne 0$; a monotone periodic function is constant. So <strong>the closed orbits are exactly the circles $r = $ root of $f$ in $r &gt; 0$</strong>, and the count is a root count. Dulac is not needed and index theory is not needed.</p>
+
+<p>Applied to <a href="differential-equations/helix-toy-model/helix_toy_model.pdf">Book&nbsp;6's</a> $\dot r = f(r)(1-e^{-z})$ &mdash; the modulation is a positive factor for $z&gt;0$, so the roots are $f$'s own &mdash; both canonical closures give <strong>exactly one</strong>, at $r=1$. That is the whole answer for that model, and it took a root scan.</p>
+
+<h2>2 &middot; Vol II has two, and the neutral line is where they meet</h2>
+
+<p><a href="../vol2-toymodel.html">Volume II's</a> toy model is $\dot r = r(1-r^2) + 2(r-1)e^{-z}$. Write $a = 2e^{-z}$ and factorise &mdash; block [5] checks this is an identity:</p>
+
+<div class="eq">r(1 &minus; r&sup2;) + a(r &minus; 1)  =  &minus;(r &minus; 1)(r&sup2; + r &minus; a)</div>
+
+<p>Besides $r=1$ there is a second positive root. The frozen slice has two circular orbits, not one:</p>
+
+<div class="eq">r&#8322;(a) = ( &minus;1 + &radic;(1 + 4a) ) / 2,   with a = 2e^(&minus;z), so  r&#8322;(z) = ( &minus;1 + &radic;(1 + 8e^(&minus;z)) ) / 2</div>
+
+<p>and the two radial eigenvalues are $a-2$ at $r=1$ and $(1-r_2)\sqrt{1+4a}$ at $r=r_2$. Both checked against numerical differentiation at six values of $z$.</p>
+
+<div class="tblwrap">
+<table>
+<tr><th>z</th><th>a = 2e<sup>&minus;z</sup></th><th>r&#8322;</th><th>eigenvalue at &Gamma;</th><th>eigenvalue at r&#8322;</th></tr>
+<tr><td class="n">1.50</td><td class="n">0.446260</td><td class="n">0.33442215</td><td class="n">&minus;1.553740</td><td class="n">+1.110746</td></tr>
+<tr><td class="n">0.75</td><td class="n">0.944733</td><td class="n">0.59303847</td><td class="n">&minus;1.055267</td><td class="n">+0.889649</td></tr>
+<tr><td class="n">0.25</td><td class="n">1.557602</td><td class="n">0.84447074</td><td class="n">&minus;0.442398</td><td class="n">+0.418209</td></tr>
+<tr><td class="n">0.00</td><td class="n">2.000000</td><td class="n">1.00000000</td><td class="n">0.000000</td><td class="n">0.000000</td></tr>
+<tr><td class="n">&minus;0.25</td><td class="n">2.568051</td><td class="n">1.17870511</td><td class="n">+0.568051</td><td class="n">&minus;0.599986</td></tr>
+<tr><td class="n">&minus;0.75</td><td class="n">4.234000</td><td class="n">1.61754576</td><td class="n">+2.234000</td><td class="n">&minus;2.615363</td></tr>
+</table>
+</div>
+
+<div class="box thm">
+<span class="lab">The neutral line, renamed</span>
+$r_2 = 1$ exactly at $a = 2$, that is at $z = 0$, and both eigenvalues vanish together there. So the corpus's neutral line is not merely a place where an eigenvalue changes sign: it is <strong>the collision of two circular orbits, which pass through each other and exchange stability</strong> &mdash; a transcritical bifurcation of cycles. For $z &gt; 0$ the inner circle $r_2 &lt; 1$ is repelling, and it is the <strong>basin boundary</strong> of $\Gamma$ in that slice. For $z &lt; 0$ the roles are swapped and $\Gamma$ is the repeller.
+</div>
+
+<p>Book&nbsp;6's model has no second orbit at all. <strong>The two toy models the series runs in parallel are not variants of one another</strong>: a multiplicative modulation $f(r)(1-e^{-z})$ preserves the root set, an additive coupling $+\,a(r-1)$ adds a root. Whichever is meant, the difference has to be stated where both are cited.</p>
+
+<div class="box warn">
+<span class="lab">A guard, before anyone matches a decimal</span>
+$r_2(z)$ is strictly increasing in $a$ with $r_2 \to 0$ and $r_2 \to 1$ at the ends, so as $z$ runs over $(0,\infty)$ it takes <em>every</em> value in $(0,1)$ exactly once. Block [6] finds the $z$ that produces $0.25$, $0.5$, $0.773$, $0.882$ and $0.99$, to $10^{-9}$ each. A one-parameter family that sweeps an interval meets every constant in it, so a numerical agreement between $r_2(z)$ and a stored constant &mdash; $r_\star$, $\kappa^*$, anything &mdash; <strong>is not evidence</strong>. It would become evidence only if the $z$ at which it matched were independently fixed. None is.
+</div>
+
+<h2>3 &middot; When you do need Dulac</h2>
+
+<p>The moment $\dot r$ depends on $\theta$, the free count is gone. Strogatz's Example 7.3.1 is the case at hand, because it perturbs the corpus's own field:</p>
+
+<div class="eq">&#7770; = r(1 &minus; r&sup2;) + &mu; r cos&theta;,      &theta;&#775; = 1</div>
+
+<p>Plain Bendixson fails: $\nabla\cdot F = 2 - 4r^2 + 2\mu\cos\theta$ changes sign at $r = 1/\sqrt2$. A Dulac function is needed, and Strogatz is candid on p.&nbsp;204 that there is no algorithm for finding one, listing $g = 1$, $1/x^ay^b$, $e^{ax}$, $e^{ay}$ as the candidates that occasionally work. The polar analogue of the second works here:</p>
+
+<div class="eq">g(r) = 1/r&sup3;   &rArr;   div(gF) = &minus;(1/r) [ (1 + &mu; cos&theta;) / r&sup2; + 1 ]</div>
+
+<p>strictly negative on all of $r&gt;0$ exactly when $|\mu| &lt; 1$ &mdash; the same threshold under which Example 7.3.1's trapping annulus works. Block [2] checks the closed form against numerical differentiation at nine points, scans a grid at six values of $\mu$, and confirms the sign flips once $\mu = 1.5$.</p>
+
+<h3>Index theory supplies the missing half</h3>
+
+<p>Dulac as printed requires a <em>simply connected</em> region and concludes <em>no</em> closed orbits. The punctured plane is not simply connected, and there <em>is</em> a closed orbit, so the theorem does not apply as written. Two things bridge the gap.</p>
+
+<p>First, <strong>Theorem 6.8.2, p.&nbsp;180</strong>: any closed orbit must enclose fixed points whose indices sum to $+1$. Block [3] scans $r \in (0.01, 4]$ on an $800\times720$ grid and finds $\min|F| = 0.0168$, so the origin is the only fixed point; the winding number on circles of radius $0.05$ through $5.0$ is $+1$ on every one. A closed orbit avoiding the origin would enclose nothing and sum to zero. So every closed orbit encircles the origin, and any two are nested with an annulus between them inside $r &gt; 0$.</p>
+
+<div class="box thm">
+<span class="lab">And second, one extra line of Strogatz's own proof</span>
+If $C_1$ lies inside $C_2$, both closed orbits, and the annulus $A$ between them lies in $R$, then Green's theorem gives
+$$\iint_A \nabla\cdot(g\mathbf{F})\,dA \;=\; \oint_{C_2} g\mathbf{F}\cdot\mathbf{n}\,d\ell \;-\; \oint_{C_1} g\mathbf{F}\cdot\mathbf{n}\,d\ell \;=\; 0,$$
+because $\mathbf{F}$ is tangent to each orbit and so orthogonal to $\mathbf{n}$. If $\nabla\cdot(g\mathbf{F})$ has one sign on $R$, the left-hand side cannot vanish. Hence <strong>$R$ contains at most one closed orbit</strong>.
+<p style="margin:.9rem 0 0"><strong>This is not the theorem printed on p.&nbsp;204.</strong> It is that theorem's proof run on an annulus instead of a disc, and it is the form that gives uniqueness rather than absence. A reader should check the line rather than take it on the citation.</p>
+</div>
+
+<h2>4 &middot; Exactly one</h2>
+
+<p>Existence for $|\mu| &lt; 1$ is Example 7.3.1's trapping annulus, checked in <a href="wp122-the-return-map-was-in-the-exercise.html">WP-122</a> block [7]. Uniqueness is the paragraph above. Together, for every $|\mu| &lt; 1$, the perturbed system has <strong>exactly one closed orbit</strong>. Block [4] corroborates by integrating from five starting radii between $0.05$ and $3.0$ at three values of $\mu$ and finding a spread of $10^{-13}$ on the return ray &mdash; corroboration, not proof: three values of $\mu$ against a theorem that covers all of them.</p>
+
+<h2>5 &middot; And the three-dimensional flows have no periodic orbit to be unique</h2>
+
+<p>Book&nbsp;6's model has $\dot z = 1$ identically, so $z(t) = z_0 + t$ is strictly increasing and <strong>no trajectory returns to its starting point</strong>. That flow has no periodic orbit at all. $\Gamma = \{r=1\}$ is a helix, and a helix is a closed orbit of the $(r,\theta)$ <em>projection</em>, not of the flow &mdash; which is the same fact <a href="wp122-the-return-map-was-in-the-exercise.html">WP-122</a> reports as the absence of a return map, seen from the other side.</p>
+
+<p>Vol&nbsp;II's $\dot z = r^2 - 2(r-1)^2e^{-z}$ is $1$ on $\Gamma$ and positive on a tube around it: block [7] scans $|r-1| \le 0.4$, $z \in [0,12]$ and finds $\min \dot z = 0.040000$, at $(r,z) = (0.600, 0.00)$, with the analytic bound $(1-\delta)^2 &gt; 2\delta^2$ holding whenever $\delta &lt; 1/(1+\sqrt2) = 0.4142$. So no periodic orbit lies in that tube either. Outside it $\dot z$ does change sign for Vol&nbsp;II, so this is a statement about a neighbourhood of $\Gamma$; Book&nbsp;6's $\dot z = 1$ needs no neighbourhood.</p>
+
+<div class="gap">
+<span class="lab">What follows for the vocabulary</span>
+&ldquo;Limit cycle&rdquo; is correct for the planar transverse system and for the frozen slices. For the object on the contact 3-manifold it is loose: that object is a helical orbit, and the series' own WP-22 says as much in a parenthesis &mdash; <em>&ldquo;a periodic orbit of period $T^*=2\pi$ (a helix in $(r,\theta,z)$, since $\dot\theta=\dot z=1$)&rdquo;</em> &mdash; where the parenthesis contradicts the phrase it qualifies. Counting them settles which reading is meant: on the 3-manifold there are none.
+</div>
+
+<h2>6 &middot; What this paper does not claim</h2>
+<ul>
+<li>No uniqueness result for the corpus's three-dimensional flows, because they have no periodic orbits for it to be about. That is &sect;5's finding, not a limitation of the method.</li>
+<li>$r_2$ is elementary. It falls out of a factorisation anyone can do in a line; what is reported is that the corpus does not have it &mdash; neither the second orbit nor the expression $\sqrt{1+8e^{-z}}$ appears anywhere in the repository.</li>
+<li>The annulus form of Dulac used in &sect;3 is an extension of Strogatz's proof, stated with its extra line, not a quotation of his theorem.</li>
+<li>The grid scans in blocks [2], [3] and [7] are exhaustions over finite boxes and are evidence; the analytic inequality is printed beside each.</li>
+<li>Nothing here bears on the discrete Collatz cycle $\Gamma_\mathbb{Z}$, whose uniqueness is the open obligation chRho-spectral records and remains open.</li>
+</ul>
+
+<h2>References</h2>
+<ol class="refs">
+<li>S. H. Strogatz, <em>Nonlinear Dynamics and Chaos</em>, 2nd ed., Westview 2015 / CRC 2018, ISBN 978-0-8133-4910-7. Theorem 6.8.1 p.&nbsp;179 &middot; Theorem 6.8.2 p.&nbsp;180 &middot; Dulac's criterion p.&nbsp;204 &middot; Example 7.3.1 p.&nbsp;206.</li>
+<li><span class="mono">book6/wp120-verify.py</span> &mdash; 8 blocks, 23 checks, standard library only, exit 0. Polar divergence against Cartesian numerical divergence; $g=1/r^3$ analytic against numerical, scanned at six values of $\mu$ and failing at $\mu=1.5$; the fixed-point scan and winding numbers; the uniqueness corroboration; the factorisation as an identity and both eigenvalue formulas; the sweep guard; the $\dot z$ tube.</li>
+<li><a href="wp122-the-return-map-was-in-the-exercise.html">WP-122</a> &mdash; the closed-form return map, the Gr&ouml;nwall radius measured, and the trapping annulus that supplies existence here.</li>
+<li><a href="../book7/ch-strogatz.html">ch-strogatz</a> &middot; <a href="differential-equations/helix-toy-model/helix_toy_model.pdf">WP-22</a> &middot; <a href="../vol2-toymodel.html">vol2-toymodel</a> &middot; <a href="../vol2-contact.html">vol2-contact</a> &middot; <a href="../sessao2-teorema-bacia.html">Sess&atilde;o S2</a> &middot; <a href="../chRho-spectral.html">chRho-spectral</a> &middot; <a href="wp92-a-cusp-that-is-real-and-a-fold-that-was-not.html">WP-92</a></li>
+</ol>
+
+</div>
+
+<footer>
+<div class="fwrap">
+<div>
+<a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Vol VI &middot; Roots</a><br>
+WP-120 &middot; 2026-09-15 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a>
+</div>
+<div class="disc">A count, with proofs, on planar fields and frozen slices. No claim is made about the three-dimensional contact flows beyond &sect;5, which finds they have no periodic orbits; none about the discrete Collatz cycle; and none about whether $r_2$ matters beyond being there. The annulus form of Dulac is an extension of the printed theorem's proof and is flagged as such.</div>
+</div>
+</footer>
+
+</body>
+</html>

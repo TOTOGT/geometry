@@ -1,3 +1,100 @@
+# HOW MANY CLOSED ORBITS — WP-120, AND THE GAP FILLED (2026-09-15)
+
+**What was built.** `book6/wp120-how-many-closed-orbits.html` and `book6/wp120-verify.py`
+— 8 blocks, 23 checks, standard library only, exit 0. Registered in `book6/index.html`.
+The WP-120 number was an unexplained gap (no file, no reference anywhere in the repository);
+it is now used deliberately rather than left open.
+
+**The question.** Gamma = {r = 1} is called *the* limit cycle across the corpus, ten to
+seventeen times on the pages that use the phrase. Uniqueness is asserted exactly once
+anywhere in the series — one row of `chRho-spectral.html`'s open-obligation table — and
+there it is about the discrete Collatz cycle. For the continuous Gamma nothing had been
+claimed and nothing proved; the definite article was carrying both.
+
+**Radial-only fields: the count is free.** If r' depends on r alone and theta' > 0, a
+closed orbit needs r periodic, r is monotone where r' is nonzero, and a monotone periodic
+function is constant. So the closed orbits are exactly the circles at positive roots of f.
+Book 6's `r' = f(r)(1 - e^{-z})`: the modulation is a positive factor for z > 0, and both
+canonical closures have exactly one positive root. **One circular orbit.**
+
+**Vol II has two, and this is new.** `r' = r(1-r^2) + 2(r-1)e^{-z}`. With a = 2e^{-z} the
+field factorises — checked as an identity at 16 (a, r) pairs —
+
+    r(1-r^2) + a(r-1)  =  -(r - 1)(r^2 + r - a)
+
+so besides r = 1 there is a second positive root `r_2(a) = (-1 + sqrt(1+4a))/2`, i.e.
+`r_2(z) = (-1 + sqrt(1 + 8e^{-z}))/2`. Radial eigenvalues: `a - 2` at Gamma and
+`(1 - r_2) sqrt(1+4a)` at r_2, both checked against numerical differentiation at six values
+of z. They vanish together at a = 2, that is at z = 0, where r_2 = 1 exactly.
+
+**So the neutral line has a name it was not being given.** It is not only a sign change in
+an eigenvalue: it is the collision of two circular orbits, which pass through each other
+and exchange stability — a transcritical bifurcation of cycles. For z > 0 the inner circle
+r_2 < 1 is repelling and is the basin boundary of Gamma in the frozen slice; for z < 0 the
+roles swap. Neither the second orbit nor the string `sqrt(1+8e^{-z})` appears anywhere in
+the repository (`git grep`, several spellings).
+
+**And the two toy models are not variants of each other.** A multiplicative modulation
+`f(r)(1-e^{-z})` preserves the root set; an additive coupling `+ a(r-1)` adds a root.
+Wherever both are cited the difference has to be stated.
+
+**Guard, written into the paper and into block [6].** r_2(z) is strictly increasing in a
+with limits 0 and 1, so as z runs over (0, infinity) it attains *every* value in (0,1)
+exactly once; the block finds the z producing 0.25, 0.5, 0.773, 0.882 and 0.99 to 1e-9
+each. A numerical agreement between r_2(z) and r_star, kappa* or any other stored constant
+of that interval is therefore **not evidence**, and would become evidence only if the z at
+which it matched were independently fixed. None is. The guard is in the paper so the
+finding cannot be turned into a correspondence later.
+
+**theta-dependent fields: Dulac, with the function.** Plain Bendixson fails on Strogatz's
+Example 7.3.1 (`r' = r(1-r^2) + mu r cos theta`, `theta' = 1`) because
+`div F = 2 - 4r^2 + 2 mu cos theta` changes sign at r = 1/sqrt(2). Taking g = 1/r^3,
+
+    div(gF) = -(1/r) [ (1 + mu cos theta)/r^2 + 1 ]
+
+strictly negative on all of r > 0 exactly when |mu| < 1 — the same threshold as Example
+7.3.1's trapping annulus. Checked against numerical differentiation at nine points, scanned
+at six values of mu, and confirmed to change sign at mu = 1.5. Strogatz's own candidate
+list on p. 204 is g = 1, 1/(x^a y^b), e^{ax}, e^{ay}; 1/r^3 is the polar analogue of the
+second, and he says plainly there is no algorithm.
+
+**Index theory supplies the other half.** Theorem 6.8.2, p. 180: any closed orbit encloses
+fixed points whose indices sum to +1. Block [3] scans r in (0.01, 4] on 800 x 720 and finds
+min|F| = 0.0168, so the origin is the only fixed point, and the winding number is +1 on
+circles from 0.05 to 5.0. Hence every closed orbit encircles the origin and any two are
+nested with an annulus between them in r > 0.
+
+**The annulus form of Dulac, flagged as an extension.** Strogatz p. 204 requires a simply
+connected region and concludes *no* closed orbits, which does not apply to the punctured
+plane where one exists. What applies is his own proof run on an annulus: Green's theorem
+over the annulus between two nested closed orbits gives 0 on the right because F is tangent
+to each, so a one-signed div(gF) is a contradiction, and R holds at most one closed orbit.
+This is stated in the paper as an extension with its extra line, not as a quotation, so a
+reader checks the line rather than the citation.
+
+**Result.** Existence (Example 7.3.1's annulus, checked in WP-122) plus uniqueness gives
+**exactly one** closed orbit for every |mu| < 1. Corroborated by integration from five radii
+at three values of mu, spread 1e-13 on the return ray — corroboration only; three values
+against a theorem covering all of them.
+
+**And nothing on the 3-manifold has a periodic orbit to be unique.** Book 6: z' = 1
+identically, so z(t) = z_0 + t is injective and the flow has no periodic orbit at all;
+Gamma is a helix, a closed orbit of the (r, theta) projection and not of the flow. Vol II:
+z' = r^2 - 2(r-1)^2 e^{-z} is 1 on Gamma and positive on the tube |r-1| <= 0.4, z >= 0
+(scanned min 0.040000 at (0.600, 0.00); analytic bound `(1-d)^2 > 2d^2` for
+`d < 1/(1+sqrt2) = 0.414214`), so no periodic orbit lies there either. Outside that tube
+Vol II's z' does change sign, so the statement is about a neighbourhood; Book 6's needs none.
+This is the same fact WP-122 reports as the absence of a return map, seen from the other side.
+
+**OPEN — a vocabulary consequence.** "Limit cycle" is right for the planar system and for
+frozen slices, loose for the object on the contact 3-manifold. WP-22 writes "a periodic
+orbit of period T* = 2pi (a helix in (r, theta, z), since theta' = z' = 1)", where the
+parenthesis contradicts the phrase it qualifies. Not edited — it is the author's call, and
+it belongs with the two clauses already owed to WP-22 at its next rebuild.
+
+**Registered.** `audit.py --all` clean at 723 HTML; `terms.py --check` OK at 153 declared
+terms; indexes regenerated.
+
 # THE RETURN MAP WAS IN THE EXERCISE (2026-09-15)
 
 **What was built.** `book6/wp122-the-return-map-was-in-the-exercise.html` and

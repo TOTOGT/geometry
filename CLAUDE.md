@@ -75,6 +75,22 @@ whose two factors cancel — 12.5% gap), untouched because it is reader-facing; 
 the right substitute for a return map on a flow with a monotone coordinate. WP-120 is an
 unexplained numbering gap.
 
+### Book 6: WP-120, the count nobody took — and the gap filled
+Γ is called *the* limit cycle throughout and had never been counted; uniqueness is
+asserted once in the corpus and that row is about the discrete Collatz cycle. For
+radial-only fields the count is a root count, no Dulac needed: Book 6's model has **one**
+circular orbit per frozen slice, Vol II's has **two**. The factorisation
+`r(1-r²)+a(r-1) = -(r-1)(r²+r-a)` with a = 2e^{-z} gives a second orbit at
+`r₂ = (-1+√(1+8e^{-z}))/2`, eigenvalues `a-2` and `(1-r₂)√(1+4a)`, colliding at z = 0 —
+so **the neutral line is a transcritical bifurcation of cycles**, and r₂ is Γ's basin
+boundary in the slice. Neither r₂ nor `√(1+8e^{-z})` was anywhere in the repo. A guard is
+written into the paper: r₂(z) sweeps all of (0,1), so matching it to r★ or κ* is not
+evidence. For θ-dependent fields, `g = 1/r³` is a Dulac function for |μ|<1 and index
+theory (Thm 6.8.2) forces every closed orbit to encircle the origin, giving **exactly one**
+for Strogatz Example 7.3.1. The 3-D flows have no periodic orbit at all (ż = 1), which is
+WP-122's missing return map seen from the other side. WP-120 was an unexplained numbering
+gap and is now used.
+
 The previous handoff's open items below are carried forward unchanged.
 
 ### Carried forward from 2026-09-13 — pushed by Pablo.
