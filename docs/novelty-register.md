@@ -52,6 +52,53 @@ the reason this file exists, and it has already been caught once here — see ro
 | N09 | closure-dependent finite-time escape | WP-22 §4 | `KNOWN-GENERAL` / `UNRESOLVED` | finite-time escape, blow-up, super-linear closure | web pass ×2 | 2026-09-16 | finite-time escape is standard background | escape itself is prior art and was never the claim. The unresolved part is the **dependence on closure** — that a cubic closure escapes below z₀\*(ε₀) and any bounded closure does not |
 | N10 | second circular orbit r₂ = (−1+√(1+8e^(−z)))/2, transcritical collision with Γ at z = 0 | WP-120 §2 | `UNMATCHED-BROAD` | exact expression; second limit cycle; transcritical bifurcation of cycles | corpus (`git grep`); web pass ×2 | 2026-09-16 | expression occurs in unrelated contexts | formula occurrence is not prior art; no match for its role here |
 
+## N08 — the span, computed 2026-09-16
+
+Prop. 3.8's hypothesis is `D^X = TM`. It was never checked against this system. It is a
+computation, not a search, and it comes out as follows.
+
+Write the flow with the modulation as its own generator:
+
+    X = X1 - X2 + X3 + X4,     X1 = f(r) d_r,   X2 = f(r) e^{-z} d_r,
+                               X3 = d_theta,    X4 = d_z
+
+The only non-vanishing bracket is `[X4, X2] = -X2` — `[X1,X2] = (f f' e^{-z} - f e^{-z} f') d_r
+= 0` identically, `[X4,X1] = 0`, and nothing depends on θ — so **V = span{X1,X2,X3,X4} is a
+4-dimensional solvable Lie algebra**, verified numerically for both canonical closures
+(max |[X1,X2]| ≤ 2.7e-7, max |[X4,X2] + X2| ≤ 1.4e-8 over a grid).
+
+X1 and X2 are both multiples of `d_r`, so `D^V = span{ f(r) d_r, d_theta, d_z }`:
+
+| where | rank D^V | Prop. 3.8 |
+|---|---|---|
+| M \ {r = 1} | **3 = dim M** | hypothesis holds |
+| the invariant cylinder r = 1 | 2 | hypothesis fails |
+
+M is 3-dimensional, i.e. odd. **So off the cylinder r = 1, this Vessiot–Guldberg algebra
+admits no Lie–Hamilton structure relative to any Poisson bivector.** Contact geometry is not
+a stylistic choice for this system; for this decomposition it is forced. And the single locus
+where the obstruction lapses is the invariant cylinder — the object the paper is about.
+
+**Scope, stated because it is easy to overclaim here.** The system is autonomous, so the
+minimal Vessiot–Guldberg algebra is ⟨X⟩ itself, of rank 1, and Prop. 3.8 is silent on that
+one. What is obstructed is the decomposition above — the one that carries the `e^{-z}`
+modulation as a separate generator, which is the decomposition with the content. Whether
+*every* VG algebra of this system is obstructed is not settled here and is the open question
+the computation leaves.
+
+**What this does to the row.** It does not make Prop. 3.8 prior art for WP-22 §7 — the two
+theorems remain different, one a parity-of-rank obstruction on Poisson bivectors, the other a
+locking identity forcing H → −∞. It changes the *relation*: Prop. 3.8 sits **upstream of the
+setting**, as part of the reason the setting is contact at all. The row stays
+`PRIOR-ART-CANDIDATE`, and the equation-level comparison it calls for now has a first result.
+
+**The proof of Prop. 3.8 does not rest on peer review, and need not.** Λ^♯ : T\*M → TM has
+image the tangent space to a symplectic leaf; a symplectic leaf carries a nondegenerate skew
+form and is therefore even-dimensional; if every field of the system is Λ-Hamiltonian it lies
+in that image, and if those fields span TM then TM has even rank. Three sentences, checkable
+without the journal. Published is not true — WP-90 reports three defects in a peer-reviewed
+paper — so results are verified here, not cited on authority. This one verifies.
+
 ## Searches still owed on N08
 
 Searching for the theorem has not worked and is not expected to. Search its **ingredients**,
