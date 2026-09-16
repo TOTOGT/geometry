@@ -128,12 +128,44 @@ check(bic and bic > 0, 'Bicategory/ is populated -- the associator is available'
 check(qc and qc > 0,  'Quasicategory/ is populated -- Chapter 6 has a target', str(qc))
 
 # --------------------------------------------------------------------------
-head(5, 'CONTROL: THIS SCRIPT MEASURED SOMETHING')
+head(5, 'AND THE CHAPTERS, NOT ONLY THE INDEX PAGE')
+print('  The correction of 2026-09-12 landed on index.html. It did not reach the')
+print('  eight chapter metagrids or Chapter 4\'s table, which carried 1113 / 48 / 112')
+print('  for four more days while this script passed -- because this script read')
+print('  one file. A number is published wherever it is printed.\n')
+import glob as _glob
+CH_EXPECT = {'CategoryTheory': None, 'CategoryTheory/Bicategory': None,
+             'CategoryTheory/Monoidal': None}
+for k in CH_EXPECT: CH_EXPECT[k] = count(k)
+print('     measured now:  CategoryTheory/ %s   Bicategory/ %s   Monoidal/ %s'
+      % (CH_EXPECT['CategoryTheory'], CH_EXPECT['CategoryTheory/Bicategory'],
+         CH_EXPECT['CategoryTheory/Monoidal']))
+stale = []
+for f in sorted(_glob.glob(os.path.join(HERE, 'ch*.html'))):
+    body = open(f, encoding='utf-8').read()
+    m = re.search(r'CategoryTheory\s*(\d+)\s*files', body)
+    if m and int(m.group(1)) != CH_EXPECT['CategoryTheory']:
+        stale.append((os.path.basename(f), 'metagrid', m.group(1)))
+    for rel, key in (('CategoryTheory/', 'CategoryTheory'),
+                     ('CategoryTheory/Bicategory/', 'CategoryTheory/Bicategory'),
+                     ('CategoryTheory/Monoidal/', 'CategoryTheory/Monoidal')):
+        for mm in re.finditer(r'<td class="mono">' + re.escape(rel) +
+                              r'</td><td class="n">(\d+)</td>', body):
+            if int(mm.group(1)) != CH_EXPECT[key]:
+                stale.append((os.path.basename(f), rel, mm.group(1)))
+for f, where, val in stale:
+    print('     STALE  %-34s %-28s %s' % (f, where, val))
+check(not stale, 'no chapter carries a superseded Mathlib count', str(stale[:3]))
+print('     index.html keeps 1113 / 48 / 112 deliberately, as the record of what')
+print('     the earlier reading said; that is a quotation, not a live number.')
+
+# --------------------------------------------------------------------------
+head(6, 'CONTROL: THIS SCRIPT MEASURED SOMETHING')
 check(count('CategoryTheory') > 500, 'the walk found a real CategoryTheory tree',
       str(count('CategoryTheory')))
 check(len(areas) > 10, 'more than ten top-level areas were counted', str(len(areas)))
 check(len(CLAIMS) == 5 and len(flat) > 2000, 'index.html was read and parsed')
-print('    A vacuous pass is a pass. Block [5] exists so that block [2] cannot')
+print('    A vacuous pass is a pass. Block [6] exists so that block [2] cannot')
 print('    report success by having matched nothing against nothing.')
 
 # --------------------------------------------------------------------------

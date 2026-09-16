@@ -1,3 +1,97 @@
+# THE RULER RE-MEASURED: WP-82 REPRODUCES 12/12, AND HAS MOVED (2026-09-16)
+
+**What was built.** `book6/wp82-verify.py` — 6 blocks, exit 0. WP-82's rung table now
+carries a second, dated column and the volume-XIII entry carries its date.
+
+**The table is not wrong. It is dated, and nothing had re-run it.** WP-82 states its own
+method — "tracked `*.html` and `*.md` files containing at least one case-insensitive
+match, taken at commit `654fb06` on 2026-08-29." Re-run at that commit, **all twelve
+published numbers reproduce exactly**, the rung-30 zero included. The paper was right on
+the day.
+
+**The rung-30 zero was right too, and an earlier note in this log saying otherwise is
+withdrawn.** `book13/ch06-past-two.html` carries the ∞-category vocabulary, and book13 was
+stubbed on 2026-08-28 in `9d78ff8` — the same day as `654fb06`, but *after* it. The file
+does not exist in the tree the table was taken from (`git cat-file -e 654fb06:book13/…`
+fails). A date comparison at day resolution said "stale on arrival"; the commit order says
+it was current.
+
+**Re-measured at HEAD, same method:**
+
+| rung | pattern | 2026-08-29 | 2026-09-16 |
+|---|---|---:|---:|
+| 28 | k-theory | 0 | 7 |
+| 28 | index theorem | 1 | 4 |
+| 28 | atiyah | 1 | 3 |
+| 29 | operator algebra | 76 | 100 |
+| 29 | von neumann | 7 | 11 |
+| 30 | ∞-categor / infinity-categor | 0 | 3 |
+| 31 | sheaf / sheaves | 1 | 6 |
+| 32 | motivic / langlands | 3 | 7 |
+| 33 | noncommutative | 9 | 17 |
+| 33 | connes | 15 | 27 |
+| 33 | spectral triple | 7 | 14 |
+| — | moonshine | 25 | 28 |
+
+Rung 28 goes 2 → 14 file-mentions, rung 33 goes 31 → 58. **The inversion the paper reported
+has narrowed from 15.5:1 to 4.1:1 and has not reversed.**
+
+**And the composition matters more than the total.** Of the seven files that now say
+"k-theory": one chapter (`book7/ch-grothendieck.html`), three index/listing pages, the audit
+log, a checklist, and WP-82 itself. Block [3] prints the breakdown, because reporting
+0 → 7 without it overstates the floor by a factor of seven. The floor is **started**, not
+built.
+
+**Why this needed a tool.** A dated measurement with no script behind it can only be
+re-derived by hand, and on 2026-09-15 a hand reading of the rung-30 row as a live count
+produced a wrong conclusion about Volume XIII — that book13 was ordinary category theory
+squatting on a reserved number. It is not: every book13 chapter's metagrid reads
+`Rung 30 · Higher Category Theory`, ch03 is kernel-checked against
+`CategoryTheory.Bicategory`, and WP-82 marks the XIII–XV placement `ASSUME` rather than
+reserving it. There was no collision. The row was not wrong; the reading was.
+
+## Book XIII: the Mathlib numbers reached the index page and not the chapters
+
+`book13/index.html` was corrected on 2026-09-12 from 1113 / 48 / 112 to **1089 / 44 / 108**
+and records the earlier reading in its own text. The correction did not travel: all eight
+chapter metagrids still read `CategoryTheory 1113 files · measured 2026-08-29`, and
+Chapter 4's table still read 1113 / 48 / 112. `ch-mathlib-verify.py` passed throughout
+**because it read one file**.
+
+Fixed: eight metagrids to `1089 · measured 2026-09-12`, Chapter 4's three table rows to
+1089 / 44 / 108. Re-measured against the local checkout today and confirmed.
+`ch-mathlib-verify.py` gains block [5], which walks every `ch*.html` in the volume and fails
+on any superseded count; index.html keeps 1113 / 48 / 112 deliberately, as a quotation of
+what the earlier reading said. **A number is published wherever it is printed.**
+
+## The construction-order argument, measured for XI, XII and XIII
+
+book13's reason for being written first is recorded in `ch-mathlib-verify.py`: *"Mathlib has
+no K-theory, so Volume XI cannot have a machine-checked core, and CategoryTheory/ is large
+enough that Volume XIII's work is instantiation rather than construction."* Measured against
+the checkout at `.lake/packages/mathlib`, that generalises:
+
+| volume | rung | Mathlib support | reading |
+|---|---|---|---|
+| **XIII** | 30 | `CategoryTheory/` 1089, `Bicategory/` 44, `Monoidal/` 108, `SimplicialSet/` 68, `Quasicategory/` 6 | instantiation |
+| **XII** | 29 | `CStarAlgebra/` 44, `InnerProductSpace/` 53, `Normed/Algebra/` 12, **`VonNeumannAlgebra/` 1** | half instantiation, half construction |
+| **XI** | 28 | no `KTheory/` under any of five plausible paths; one K-adjacent file in all of Mathlib — `GroupTheory/MonoidLocalization/GrothendieckGroup.lean` | construction |
+
+So the order forced by the verification machine is **XIII, then XII, then XI** — the reverse
+of rung order. Two consequences worth recording before those volumes are written:
+
+1. **XII is not one volume by this measure.** WP-82 §3 assigns it "Operator Algebras — C\*-
+   and von Neumann". The C\*- half has 44 files behind it; the von Neumann half has one. A
+   volume claiming both claims a machine-checked core for a half that has no library.
+2. **XI's entire Mathlib floor is the Grothendieck group of a commutative monoid** — which is
+   precisely the object `book7/ch-grothendieck.html` was built around. Anything above K₀ is
+   construction, not instantiation.
+
+Not written up as a paper; recorded here as the measurement.
+
+**Checks.** `audit.py --all` clean at 732 HTML; `wp82-verify.py` and `ch-mathlib-verify.py`
+exit 0.
+
 # WP-22 REVISED: FOUR CLAUSES CARRIED INTO THE SOURCE, AND THE DOCUMENT REBUILDS AGAIN (2026-09-15)
 
 **What was done.** `book6/differential-equations/helix-toy-model/helix_toy_model.tex` and

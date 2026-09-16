@@ -46,11 +46,39 @@ and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
 expired narrative. The session of 2026-09-13 stranded git locks all evening
 without reading it. A rule that cannot be found is not in force.
 
-## HANDOFF — 2026-09-15 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
+## HANDOFF — 2026-09-16 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
-**From:** session 01DfPorRiUiwcVdUj5rYnWRj · account sluhcdf@gmail.com · model claude-opus-5, Cowork bridge with the desk connected. Earlier blocks for ch-strogatz, WP-122, WP-120 and WP-22 are in git history and in `docs/audit-log.md`; their still-live items are carried forward under **Open** below.
+**From:** session 01VfocLTqvCDL1gYodEh6sWK · account grossiatwork@gmail.com · model claude-opus-5, Cowork bridge with the desk connected. Earlier blocks for ch-strogatz, WP-122, WP-120, WP-22 and the 09-15 session are in git history and in `docs/audit-log.md`; their still-live items are carried forward under **Open** below.
 
-**State at handoff: 5 commits ahead of origin, not pushed.** `git push` at the desk.
+### WP-82 re-measured, and the reading that needed it
+`book6/wp82-verify.py` re-runs WP-82's own stated method at the commit the paper names:
+**all twelve published numbers reproduce exactly**, the rung-30 zero included. The table was
+never wrong — it is dated, and nothing had re-run it. At HEAD every row has risen; rung 28
+goes 2 → 14 file-mentions and rung 33 goes 31 → 58, so the inversion has narrowed from
+15.5:1 to 4.1:1 without reversing. Of the seven files now saying "k-theory", **one is a
+chapter** — the floor is started, not built, and block [3] prints the breakdown so the
+0 → 7 cannot be quoted bare.
+
+**There was no XIII collision.** A hand reading of the rung-30 row as a live count produced
+one on 09-15; book13 *is* rung 30 (every metagrid, ch03 kernel-checked against
+`CategoryTheory.Bicategory`), and WP-82 marks XIII–XV `ASSUME` rather than reserving it.
+
+**book13's Mathlib correction of 09-12 reached index.html and not the eight chapters**,
+which carried 1113 / 48 / 112 for four more days while `ch-mathlib-verify.py` passed —
+because it read one file. Fixed to 1089 / 44 / 108; the script gains block [5], which walks
+every chapter. A number is published wherever it is printed.
+
+**Construction order, measured** (`.lake/packages/mathlib`): XIII `CategoryTheory/` 1089 +
+`Bicategory/` 44 + `SimplicialSet/` 68 → instantiation. XII `CStarAlgebra/` 44 but
+`VonNeumannAlgebra/` **1** → the C\*- half is reachable, the von Neumann half is not, and
+WP-82 §3 assigns XII both. XI: **no K-theory directory at all**; the one K-adjacent file in
+Mathlib is `GroupTheory/MonoidLocalization/GrothendieckGroup.lean`, which is the object
+ch-grothendieck was built around. Forced order is **XIII → XII → XI**, the reverse of rung
+order. Full table in `docs/audit-log.md`.
+
+**NEXT:** WP-124 is agreed — a cell measurement against Strogatz Figure 1.3.1 (PDF p. 25,
+printed p. 10, §1.3 *A Dynamical View of the World*), in WP-82's form: declared method,
+declared commit, a verify script. Not started.
 
 ### The Disaster cluster is closed in the kernel, and three published theorems were false
 Four files now exist under `Orthogenesis/`, all imported by `Orthogenesis.lean`, all kernel-checked with nothing admitted. Reports with source sha256 in `tools/verify-audit/2026-09-15/`.
