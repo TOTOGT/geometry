@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stephen Smale &middot; Book 7: Scientist Gallery &middot; Principia Orthogona</title>
+<meta name="description" content="Twenty-two chapters of this corpus compute a return map and none asks what its itinerary is. The answer is a restriction, not a discovery: a radial speed that depends on r alone gives a monotone return map, entropy exactly zero, for every f."/>
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none;
+             transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+      border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .04em; line-height: 1.15;
+         margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 640px; margin: 0 auto 1.5rem; }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .08em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem;
+   border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+em { font-style: italic; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-math { background: rgba(17, 17, 24, 0.9); border: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; font-family: 'Courier New', monospace;
+            line-height: 1.7; overflow-x: auto; font-size: .9rem; white-space: pre; }
+.block-axiom { background: rgba(201, 168, 76, 0.08); border-left: 3px solid var(--gold);
+             padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-theorem { background: rgba(74, 158, 255, 0.08); border-left: 3px solid var(--op-c);
+               padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry { background: rgba(255, 159, 64, 0.08); border-left: 3px solid var(--amber);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry strong { color: var(--amber); }
+.tbl-wrap { overflow-x: auto; margin: 1.5rem 0; }
+table.cat { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .88rem; }
+table.cat th { text-align:left; font-family:'Courier New',monospace; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+table.cat td { padding: .55rem .6rem; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+table.cat td:first-child { color: var(--gold); font-weight: 600; white-space: nowrap; }
+table.cat td.n { font-family:'Courier New',monospace; text-align:right; color: var(--text); font-weight: 400; }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .9rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .8rem; }
+.pull-wrap { background: rgba(201, 168, 76, 0.08); border-left: 4px solid var(--gold);
+           padding: 2rem; margin: 3rem 0; border-radius: 2px; font-style: italic;
+           line-height: 1.85; }
+.pull-cite { font-size: .85rem; color: var(--dim); display: block; margin-top: 1rem; font-style: normal; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); }
+a { color: var(--gold); }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none;
+          transition: color .2s; }
+.ch-nav a:hover { color: var(--gold); }
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<nav>
+  <a href="../living-book.html" class="nav-logo">&#9884; Principia Orthogona &middot; G1&ndash;G7</a>
+  <div class="nav-links">
+    <a href="../book6/index.html">G6</a>
+    <a href="index.html">G7</a>
+    <a href="ch-conley.html">ch-conley</a>
+    <a href="ch-van-der-pol.html">ch-van-der-pol</a>
+    <a href="../book6/wp122-the-return-map-was-in-the-exercise.html">WP-122</a>
+    <a href="../book6/wp82-the-missing-floor.html">WP-82</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">G7 &middot; The Scientist Gallery &middot; Attribution Series</div>
+  <h1>Stephen Smale</h1>
+  <p class="hero-sub">Twenty-two chapters here compute a return map. None has ever asked what its itinerary is. The answer turns out to be a restriction rather than a discovery, and it holds for every member of the family at once.</p>
+</div>
+
+<div class="page">
+
+  <div class="section-label">Part I &middot; A Question Never Put</div>
+
+  <h2>Twenty-two return maps and no itinerary</h2>
+  <p class="block-prose">
+    A return map is what you build when you want to replace a flow by a map: pick a section,
+    follow each point until it comes back, and study the map instead of the differential
+    equation. Strogatz introduces it at &sect;8.7, p.&nbsp;281. This corpus builds them
+    constantly &mdash;
+    <a href="../book6/wp122-the-return-map-was-in-the-exercise.html">WP-122</a> produced one in
+    closed form &mdash; and has never once asked the question the construction exists to answer.
+  </p>
+  <p class="block-prose">
+    Counted at HEAD with <code>tools/corpus_count.py</code>, entity-aware, with this page and its
+    script classified out:
+  </p>
+  <div class="tbl-wrap">
+  <table class="cat">
+    <tr><th>pattern</th><th>files</th><th>chapters</th></tr>
+    <tr><td>limit cycle</td><td class="n">120</td><td class="n">110</td></tr>
+    <tr><td>return map</td><td class="n">34</td><td class="n">22</td></tr>
+    <tr><td>Poincar&eacute; section / map</td><td class="n">15</td><td class="n">12</td></tr>
+    <tr><td>symbolic dynamics</td><td class="n">1</td><td class="n">1</td></tr>
+    <tr><td>topological entropy</td><td class="n">1</td><td class="n">1</td></tr>
+    <tr><td><strong>horseshoe</strong></td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td><strong>shift map</strong></td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td><strong>Sharkovskii</strong></td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td><strong>logistic map</strong></td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td><strong>lap number</strong></td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td>Smale</td><td class="n">2</td><td class="n">2</td></tr>
+    <tr><td>Levinson</td><td class="n">6</td><td class="n">4</td></tr>
+    <tr><td>Cartwright</td><td class="n">0</td><td class="n">0</td></tr>
+  </table>
+  </div>
+  <p class="block-prose">
+    The same shape <a href="ch-van-der-pol.html">ch-van-der-pol</a> found: the phenomenon is
+    everywhere and the object that reads it is nowhere. What follows is the answer, and it is
+    worth saying at the top that it is negative &mdash; and that the negative is sharper than the
+    positive would have been, because it holds for the whole family and not for one system.
+  </p>
+
+  <div class="section-label">Part II &middot; Smale</div>
+
+  <h2>Rio, 1960</h2>
+  <p class="block-prose">
+    Stephen Smale was born in Flint, Michigan, in 1930, took his doctorate at Michigan in 1957
+    under <strong>Raoul Bott</strong>, and had the Fields Medal by 1966. The Bott is worth a
+    pause: his advisor's name is the one attached to <em>Bott periodicity</em>, which is rung 28
+    &mdash; the floor <a href="../book6/wp82-the-missing-floor.html">WP-82</a> says this series
+    never built. Measured here, the bare pattern <code>/bott/</code> matches <strong>789</strong>
+    tracked files and every single one of them is the word <em>bottom</em>;
+    &ldquo;Bott periodicity&rdquo; reaches exactly one chapter, and
+    <a href="ch-conley.html">ch-conley</a> put it there earlier today.
+    &ldquo;Raoul Bott&rdquo; appeared in <strong>no file at all</strong> before this page. The
+    gallery's two newest chapters are a student of Moser's and a student of Bott's, and both of
+    those teachers are gaps.
+  </p>
+  <p class="block-prose">
+    In 1960 Smale was in Rio de Janeiro, and he had conjectured something close to the opposite
+    of what he is now famous for: that structurally stable systems were, in essence, tame. Norman
+    Levinson wrote to him and pointed him at papers by Mary Cartwright and J.&nbsp;E. Littlewood
+    on a second-order equation from radio engineering &mdash; the <em>forced</em> van der Pol
+    oscillator. Levinson's own 1949 paper had found, in that equation, infinitely many periodic
+    solutions where Smale's conjecture said there should be finitely many. Smale did not argue
+    with the analysis. In his own account he says he recast it: <em>&ldquo;So I put what I did in
+    a very geometric context so I could understand it.&rdquo;</em> The geometric context was a
+    rectangle stretched, folded, and laid back across itself &mdash; the horseshoe.
+  </p>
+  <div class="pull-wrap">
+    The counterexample came out of a vacuum-tube circuit, through two English analysts and one
+    letter, to a topologist on a beach. <a href="ch-van-der-pol.html">ch-van-der-pol</a> opened
+    the electronics lineage in this gallery with van der Pol's radio work; this is where that
+    lineage terminates, in the object that made chaos a theorem rather than an anecdote.
+    <span class="pull-cite">S. Smale, &ldquo;Finding a Horseshoe on the Beaches of Rio&rdquo;, The Mathematical Intelligencer 20 (1998), no.&nbsp;1.</span>
+  </div>
+
+  <div class="section-label">Part III &middot; The Corpus's Return Map, Computed</div>
+
+  <h2>Closed form, and it integrates</h2>
+  <p class="block-prose">
+    For ṙ = r(1&minus;r&sup2;), θ̇ = 1, one turn is exactly t = 2π, so the return map to any ray is
+    the time-2π flow map. Block&nbsp;[1] gives it in closed form and checks it against RK4 at
+    eight radii, worst disagreement 8&times;10<sup>&minus;15</sup>:
+  </p>
+  <div class="block-math">P(r) = r e^{2π} / √(1 + (e^{4π} − 1) r²)
+
+P′(r) = e^{2π} / (1 + (e^{4π} − 1) r²)^{3/2}
+
+P′(1) = e^{−4π} = 3.487342356208997 × 10⁻⁶      the transverse multiplier
+|P′| = 1  at  r* = 0.015049224003               the neutral radius</div>
+  <p class="block-prose">
+    P′ is a positive quantity divided by a positive quantity. It is never zero and never negative,
+    at any radius &mdash; checked on a grid of 2001 points in block&nbsp;[2]. So P is strictly
+    increasing, and a strictly increasing map has nothing to fold.
+  </p>
+
+  <div class="section-label">Part IV &middot; Entropy Zero, and How Not to Prove It</div>
+
+  <h2>Lap numbers, and the rows that prove nothing</h2>
+  <p class="block-prose">
+    The lap number ℓ(g) counts maximal monotone intervals; Misiurewicz and Szlenk give the
+    topological entropy of a piecewise-monotone interval map as
+    lim (1/n)&nbsp;log&nbsp;ℓ(g<sup>n</sup>). Block&nbsp;[3] computes it for P, and prints
+    something it would have been easy to leave out:
+  </p>
+  <div class="block-math">   n     laps   (1/n)log laps    range of P^n on (0,3]
+   1        1        0.000000         9.995e-01
+   2        1        0.000000         7.244e-01
+   3        1        0.000000         2.121e-05
+   4        1        0.000000         7.395e-11
+   6        1        0.000000         0.000e+00   <-- collapsed onto 1.0
+   8        1        0.000000         0.000e+00   <-- collapsed onto 1.0
+  12        1        0.000000         0.000e+00   <-- collapsed onto 1.0</div>
+  <p class="block-prose">
+    <strong>The n&nbsp;&ge;&nbsp;6 rows are not evidence.</strong> P contracts by
+    e<sup>&minus;4&pi;</sup> per turn, so by the sixth iterate the whole of (0,&nbsp;3] has landed
+    on the single double-precision number nearest 1.0, and a lap count of 1 is then a true
+    statement about a constant function rather than about this one. Four rows carry information
+    and three are an artefact of the arithmetic. The script says so and asserts only on the four.
+    The reason the entropy is zero is the next section, not this table.
+  </p>
+  <p class="block-prose">
+    The same instrument on a map that does fold, so that a reading of 0 can be believed: the
+    logistic map at &mu;&nbsp;=&nbsp;4 gives ℓ(L<sup>n</sup>)&nbsp;=&nbsp;2<sup>n</sup> exactly, and
+    (1/n)&nbsp;log&nbsp;ℓ&nbsp;=&nbsp;log&nbsp;2&nbsp;=&nbsp;0.693147180559945 at every n tested.
+    <em>&ldquo;Logistic map&rdquo; is another zero in the table above</em> &mdash; the most famous
+    single cell of Strogatz's Figure&nbsp;1.3.1, and this page is the first to write it down here.
+  </p>
+
+  <div class="section-label">Part V &middot; Why It Cannot Fold, for Any f</div>
+
+  <div class="block-theorem">
+    <span class="block-label">The restriction</span>
+    <p>Let ṙ = f(r), θ̇ = &omega;&nbsp;&gt;&nbsp;0 on the punctured plane, with f smooth. The return
+    map P to a ray is the time-T flow map of a <em>scalar autonomous</em> ODE, T&nbsp;=&nbsp;2π/ω.
+    Differentiating the flow in its initial condition gives v′ = f′(r(s))&thinsp;v, v(0) = 1, so</p>
+    <p style="text-align:center;margin:1rem 0">
+      dP/dr<sub>0</sub> = exp( &int;<sub>0</sub><sup>T</sup> f′(r(s)) ds )
+    </p>
+    <p style="margin-bottom:0">which is an exponential, hence strictly positive, for
+    <em>every</em> f and every T. So P is a strictly increasing homeomorphism,
+    ℓ(P<sup>n</sup>) = 1 for all n, and h(P) = 0. Orbits of a scalar autonomous equation cannot
+    cross, and a fold is a crossing. &#8718;</p>
+  </div>
+  <p class="block-prose">
+    Block&nbsp;[5] checks the identity on four fields, two of them deliberately <em>not</em>
+    monotone &mdash; Example&nbsp;7.1.1's, <a href="../book6/wp120-how-many-closed-orbits.html">WP-120</a>'s
+    frozen field at a&nbsp;=&nbsp;5.4366, sin(3r)&nbsp;&minus;&nbsp;0.3, and r&nbsp;&minus;&nbsp;r&#8309;
+    &mdash; and sweeps T, which turns out to be the methodological part:
+  </p>
+  <div class="block-math">                              log dP over [0.12, 2.02]      rel. err vs central difference
+  T = 0.2   r(1-r²)              [ −1.481,  +0.190]            7.0e−09   (30 pts)
+            −(r−1)(r²+r−a)       [ −1.089,  +1.234]            4.4e−09   (30 pts)
+            sin(3r) − 0.3        [ −0.598,  +0.572]            4.6e−09   (30 pts)
+            r − r⁵               [ −3.700,  +0.200]            3.0e−08   (30 pts)
+
+  T = 2π    r(1-r²)              [−14.720,  −6.121]            1.6e−03   (30 pts)
+            −(r−1)(r²+r−a)       [−110.31, −19.961]            1.6e−01   ( 1 pt )
+            sin(3r) − 0.3        [−18.073, −10.501]            2.0e−02   (30 pts)
+            r − r⁵               [−28.722, −14.391]            1.5e−01   ( 5 pts)</div>
+  <p class="block-prose">
+    At T&nbsp;=&nbsp;0.2 the identity verifies against a central difference to about
+    10<sup>&minus;8</sup>. By T&nbsp;=&nbsp;2π the derivative for WP-120's field is
+    e<sup>&minus;110</sup>, the two perturbed flows land on the same double, and the difference
+    quotient reports nonsense &mdash; only one of thirty sample points is even comparable. The
+    integral still returns the number. <strong>A derivative that small is computed, not
+    measured</strong>, and a script that had only differenced would have reported a fold where
+    there is none.
+  </p>
+
+  <div class="section-label">Part VI &middot; The Third Restriction on the Same Family</div>
+
+  <p class="block-prose">
+    This is now the third property of the corpus's closure family traced to one source, the radial
+    speed being a function of r alone:
+  </p>
+  <div class="tbl-wrap">
+  <table class="cat">
+    <tr><th>restriction</th><th>consequence</th><th>where</th></tr>
+    <tr><td>circle-preserving</td><td>every admissible closed orbit is a circle, so van der Pol's is in no closure</td><td><a href="ch-van-der-pol.html">ch-van-der-pol</a></td></tr>
+    <tr><td>uniqueness route tied to it</td><td>the Dulac function g = 1/r&sup3; does not survive the move off circles</td><td><a href="../book6/wp120-how-many-closed-orbits.html">WP-120</a></td></tr>
+    <tr><td>entropy zero</td><td>the return map is monotone, for every f; no horseshoe is available</td><td>here</td></tr>
+  </table>
+  </div>
+  <div class="block-axiom">
+    <span class="block-label">An open question, put plainly</span>
+    <p style="margin-bottom:0">The corpus's operator chain is G = U&thinsp;&SmallCircle;&thinsp;F&thinsp;&SmallCircle;&thinsp;K&thinsp;&SmallCircle;&thinsp;C,
+    and F is the <em>Fold</em>. The published return map cannot fold, and by Part&nbsp;V no member
+    of the family can. Those two statements are not in contradiction &mdash; F acts on the operator
+    chain, not on a return map &mdash; but nothing in the corpus has ever said which of the two
+    senses of &ldquo;fold&rdquo; it means where, and a reader is entitled to ask. Stated as a
+    question, not as a defect.</p>
+  </div>
+
+  <div class="section-label">Part VII &middot; What a Horseshoe Would Need</div>
+  <p class="block-prose">
+    Poincar&eacute;&ndash;Bendixson forbids chaos in the plane outright, so Part&nbsp;V's
+    restriction is not the binding one for a planar system; what it adds is <em>which feature</em>
+    is responsible, which is the part that transfers. Escaping needs three dimensions, and the
+    corpus has them &mdash; the contact manifold of Volume&nbsp;II. But there the obstruction is
+    the one <a href="ch-conley.html">ch-conley</a> found from the other side: on &Gamma;,
+    <strong>ż ≡ 1</strong>. The height climbs at unit rate forever, no orbit returns to a section,
+    and a return map to that section does not exist to have an itinerary. The two chapters meet on
+    the same fact from opposite directions &mdash; one looking for a compact invariant set and one
+    looking for recurrence, both stopped by the same identically-equal-to-one.
+  </p>
+  <p class="block-prose">
+    Which is also the honest place to say what would change it. Smale's horseshoe came from a
+    <em>forced</em> oscillator: a periodic drive, making the system non-autonomous, which is
+    exactly the hypothesis Part&nbsp;V's one-line proof needs and does not have. The corpus's
+    modulation e<sup>&minus;z</sup> is not periodic; it is monotone. A periodic modulation in place
+    of a monotone one is the smallest change to this corpus's own equations that could produce
+    what Levinson found, and it has not been tried here.
+  </p>
+
+  <div class="section-label">Sources</div>
+  <table class="refs">
+    <tr><td>Smale 1998</td><td>S. Smale, &ldquo;Finding a Horseshoe on the Beaches of Rio&rdquo;, <em>The Mathematical Intelligencer</em> <strong>20</strong>, no.&nbsp;1.</td></tr>
+    <tr><td>Smale 1967</td><td>S. Smale, &ldquo;Differentiable dynamical systems&rdquo;, <em>Bulletin of the American Mathematical Society</em> <strong>73</strong>.</td></tr>
+    <tr><td>Levinson 1949</td><td>N. Levinson, &ldquo;A second order differential equation with singular solutions&rdquo;, <em>Annals of Mathematics</em> <strong>50</strong>.</td></tr>
+    <tr><td>Cartwright&ndash;Littlewood</td><td>M. L. Cartwright and J. E. Littlewood, on non-linear differential equations of the second order, 1945. For the history and its reception see J. Guckenheimer, &ldquo;The legacy of the Cartwright&ndash;Littlewood collaboration&rdquo;, <em>J. London Math. Soc.</em>, 2026.</td></tr>
+    <tr><td>Misiurewicz&ndash;Szlenk</td><td>The lap-number formula for the entropy of a piecewise-monotone interval map, used in block&nbsp;[3] and block&nbsp;[4].</td></tr>
+    <tr><td>Strogatz</td><td>S. H. Strogatz, <em>Nonlinear Dynamics and Chaos</em>, 2nd ed. &sect;8.7 pp.&nbsp;281&ndash;282 (Poincar&eacute; maps); &sect;10.5; Figure&nbsp;1.3.1 p.&nbsp;10.</td></tr>
+    <tr><td>in-corpus</td><td><a href="../book6/wp122-the-return-map-was-in-the-exercise.html">WP-122</a> &middot; <a href="../book6/wp120-how-many-closed-orbits.html">WP-120</a> &middot; <a href="ch-conley.html">ch-conley</a> &middot; <a href="ch-van-der-pol.html">ch-van-der-pol</a> &middot; <a href="../book6/wp82-the-missing-floor.html">WP-82</a></td></tr>
+    <tr><td>verification</td><td><code>book7/ch-smale-verify.py</code> &mdash; seven blocks, standard library only, entity-aware counts via <code>tools/corpus_count.py</code>. Every number on this page is printed by it.</td></tr>
+  </table>
+
+  <div class="block-axiom" style="font-size:.86rem;">
+    <span class="block-label">Priority &mdash; R18</span>
+    <p style="margin-bottom:0">No priority is claimed. Smale's horseshoe, the Misiurewicz&ndash;Szlenk
+    lap-number formula, and the monotonicity of scalar autonomous flow maps are all classical and
+    are used as such. What is new to this corpus is that its own published return map has been put
+    through them, and that the resulting restriction was stated for the family rather than for one
+    system.</p>
+  </div>
+
+</div>
+
+<div class="ch-nav">
+  <a href="ch-conley.html">&larr; Conley</a>
+  <a href="index.html">Book 7 index</a>
+  <a href="ch-van-der-pol.html">van der Pol &rarr;</a>
+</div>
+
+<footer>
+  &#9884; Principia Orthogona &middot; Book 7 &middot; The Scientist Gallery &middot;
+  <a href="../living-book.html">the living book</a>
+</footer>
+
+</body>
+</html>

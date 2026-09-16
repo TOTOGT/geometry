@@ -52,46 +52,80 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_EXT = ('*.html', '*.md')
 
 
-def _tracked(ref, ext):
-    """Tracked paths matching ext. `git ls-tree` does not honour a *.html
-    pathspec the way `ls-files` and `grep` do -- it returns nothing and exits 0,
-    which is a silent empty answer and exactly the failure class this module is
-    about. So: list everything, filter here."""
-    r = subprocess.run(['git', '--no-optional-locks', 'ls-tree', '-r', '--name-only', ref],
-                       cwd=REPO, capture_output=True, text=True)
+_CACHE = {}
+
+
+def _blobs(ref, ext):
+    """{path: entity-unescaped text} for tracked files matching ext, read in ONE
+    pass with `git cat-file --batch`. Reading them one `git show` at a time is
+    788 subprocesses per pattern and made the first caller of this module time
+    out; the batch form is a single subprocess for the whole corpus, and the
+    result is cached per (ref, ext) so a script with a dozen patterns pays once."""
+    key = (ref, tuple(ext))
+    if key in _CACHE:
+        return _CACHE[key]
     import fnmatch
-    pats = ['*' + e[1:] if e.startswith('*') else e for e in ext]
-    out = []
-    for l in r.stdout.splitlines():
-        l = l.strip()
-        if l and any(fnmatch.fnmatch(l, p) for p in pats):
-            out.append(l)
+    r = subprocess.run(['git', '--no-optional-locks', 'ls-tree', '-r', ref],
+                       cwd=REPO, capture_output=True, text=True)
+    want = []
+    for line in r.stdout.splitlines():
+        # <mode> <type> <sha>\t<path>
+        if '\t' not in line:
+            continue
+        meta, path = line.split('\t', 1)
+        parts = meta.split()
+        if len(parts) < 3 or parts[1] != 'blob':
+            continue
+        if any(fnmatch.fnmatch(path, pat) for pat in ext):
+            want.append((parts[2], path))
+    out = {}
+    if want:
+        proc = subprocess.run(['git', '--no-optional-locks', 'cat-file', '--batch'],
+                              cwd=REPO,
+                              input=('\n'.join(sha for sha, _ in want) + '\n').encode(),
+                              capture_output=True)
+        buf = proc.stdout
+        pos = 0
+        for _, path in want:
+            nl = buf.find(b'\n', pos)
+            if nl < 0:
+                break
+            hdr = buf[pos:nl].split()
+            if len(hdr) < 3:
+                pos = nl + 1
+                continue
+            size = int(hdr[2])
+            raw = buf[nl + 1:nl + 1 + size]
+            pos = nl + 1 + size + 1          # blob, then the trailing newline
+            out[path] = _html.unescape(raw.decode('utf-8', 'replace'))
+    _CACHE[key] = out
     return out
+
+
+def _tracked(ref, ext):
+    """`git ls-tree -r --name-only HEAD -- '*.html'` returns NOTHING and exits 0
+    where `ls-files` and `grep` honour the same pathspec: a silent empty answer,
+    which is the failure class this module exists for. Filter in Python."""
+    return sorted(_blobs(ref, ext))
 
 
 def _text(path, ref):
     if ref in (None, 'WORKTREE'):
         try:
             with open(os.path.join(REPO, path), encoding='utf-8', errors='replace') as fh:
-                raw = fh.read()
+                return _html.unescape(fh.read())
         except OSError:
             return ''
-    else:
-        r = subprocess.run(['git', '--no-optional-locks', 'show', '%s:%s' % (ref, path)],
-                           cwd=REPO, capture_output=True, text=True)
-        raw = r.stdout
-    # Unescape entities so Li&eacute;nard reads as Liénard. Tags are NOT stripped:
-    # a caller who wants prose-only text can strip them, but stripping here would
-    # silently change what "a file contains this word" means.
-    return _html.unescape(raw)
+    return _blobs(ref, DEFAULT_EXT).get(path) or _blobs(ref, ('*',)).get(path, '')
 
 
 def files(pattern, ref='HEAD', ext=DEFAULT_EXT, strip_tags=False):
     """Tracked files whose entity-unescaped text matches `pattern` (case-insensitive)."""
     rx = re.compile(pattern, re.I)
     out = []
+    blobs = _blobs(ref, ext) if ref not in (None, 'WORKTREE') else None
     for path in _tracked(ref, ext):
-        t = _text(path, ref)
+        t = blobs[path] if blobs is not None else _text(path, ref)
         if strip_tags:
             t = re.sub(r'<[^>]+>', ' ', t)
         if rx.search(t):

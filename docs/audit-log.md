@@ -1,3 +1,68 @@
+# SMALE: THE RETURN MAP CANNOT FOLD, AND NOT BECAUSE OF THE PARAMETERS (2026-09-16)
+
+**What was built.** `book7/ch-smale.html` and `book7/ch-smale-verify.py` — 7 blocks, standard
+library only, exit 0, entity-aware counts through `tools/corpus_count.py`. Registered in
+`book7/index.html`; the three generated indexes re-run.
+
+**The measurement.** Twenty-two chapters compute a return map and twelve name a Poincaré section
+or map; **horseshoe 0, shift map 0, Sharkovskii 0, lap number 0, logistic map 0**, symbolic
+dynamics 1, topological entropy 1. Smale 2, Levinson 4, Cartwright 0. The corpus builds the
+object and has never asked the question the object exists to answer.
+
+**WP-122's return map in closed form.** P(r) = r·e^2π / √(1 + (e^4π − 1)r²), against RK4 at
+eight radii, worst 8×10⁻¹⁵. P′(r) = e^2π/(1+(e^4π−1)r²)^(3/2); P′(1) = e^−4π =
+3.487342356208997×10⁻⁶; |P′| = 1 at r\* = 0.015049224003. P′ > 0 at all 2001 sampled radii.
+
+**Entropy zero — and a table that mostly proves nothing.** Lap numbers of P^n are 1 at every n,
+but P contracts by e^−4π per turn, so by n = 6 the whole of (0,3] lands on the single double
+nearest 1.0 and a lap count of 1 is then true of a constant function. **Four rows carry
+information; three are an artefact of double precision.** The script prints the range of P^n
+beside each row and asserts only on the four. Contrast, same instrument, on a map that folds:
+the logistic map at μ = 4 gives ℓ(L^n) = 2^n exactly and log 2 = 0.693147180559945 at every n.
+
+**The restriction, which is the finding.** For ṙ = f(r), θ̇ = ω > 0, the return map is the time-T
+flow map of a *scalar autonomous* ODE, so dP/dr₀ = exp(∫₀ᵀ f′(r(s))ds) — an exponential, hence
+strictly positive, **for every f**. P is a monotone homeomorphism, ℓ(P^n) = 1 for all n, h(P) = 0.
+Orbits of a scalar autonomous equation cannot cross and a fold is a crossing. So no member of the
+closure family, and no radial-plus-rigid-rotation system whatever, has a horseshoe in its return
+map. Checked on four fields including two non-monotone ones.
+
+**A methodological result from the T sweep.** At T = 0.2 the identity verifies against a central
+difference to ~1e-8. At T = 2π the derivative for WP-120's field is e^−110, both perturbed flows
+land on the same double, and only 1 of 30 sample points is comparable at all — the difference
+quotient reports nonsense while the integral still returns the number. **A derivative that small
+is computed, not measured.** A script that had only differenced would have reported a fold where
+there is none.
+
+**Third restriction on the same family, same source.** Circle-preserving (ch-van-der-pol);
+uniqueness route tied to circles (WP-120); entropy zero (here). All three follow from the radial
+speed being a function of r alone.
+
+**An open question, stated not asserted.** The operator chain is G = U∘F∘K∘C and F is the *Fold*.
+The published return map cannot fold and by the above no member of the family can. The two senses
+of "fold" are not in contradiction — F acts on the chain, not on a return map — but nothing in the
+corpus says which sense is meant where. Recorded as a question.
+
+**Where it meets ch-conley.** Escaping planar entropy needs three dimensions; the corpus has them;
+and there the obstruction is ż ≡ 1 on Γ — no orbit returns to a section, so there is no return map
+to have an itinerary. ch-conley was stopped by the same identity looking for a compact invariant
+set. Two chapters, opposite directions, one fact.
+
+**And what would change it.** Smale's horseshoe came from a *forced* oscillator — a periodic
+drive, non-autonomous, which is exactly the hypothesis the one-line proof needs and lacks. The
+corpus's modulation e^−z is monotone, not periodic. A periodic modulation is the smallest change
+to these equations that could produce what Levinson found. Not tried here.
+
+**Instrument note.** Smale's advisor was Raoul Bott. `/bott/` matches 789 tracked files and every
+one is the word *bottom*; "Bott periodicity" reaches one chapter, put there by ch-conley the same
+day; **"Raoul Bott" was in no file at all** before this page. Two chapters added in one day, a
+student of Moser's and a student of Bott's, and both teachers were gaps.
+
+**Not established.** That the corpus's 3-D flow has no chaos — block [5] is about planar systems
+with constant angular speed, and Poincaré–Bendixson already forbids planar chaos independently;
+what block [5] adds is *which* feature is responsible. The lap counts are evidence over a finite
+grid, not proof; the proof is the variational argument, which is classical. No priority claimed.
+
 # THE INSTRUMENT HAS A THIRD FAILURE MODE, AND IT MAKES FALSE ZEROS (2026-09-16)
 
 **Found while propagating the Conley chapter.** `book7/ch-van-der-pol-verify.py` block [6]
