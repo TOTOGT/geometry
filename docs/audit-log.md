@@ -1,3 +1,79 @@
+# VAN DER POL: THE CLOSURE FAMILY IS CIRCLE-PRESERVING (2026-09-16)
+
+**What was built.** `book7/ch-van-der-pol.html` and `book7/ch-van-der-pol-verify.py` —
+7 blocks, standard library only, exit 0. Registered in `book7/index.html`. Row N11 added to
+`docs/novelty-register.md`.
+
+**The finding.** Strogatz prints Example 7.1.2 one page after 7.1.1. 7.1.1 is this corpus's
+transverse attractor; 7.1.2 is van der Pol. Counted on tracked `*.html`/`*.md` at HEAD,
+excluding `docs/` and this chapter: **"limit cycle" 108 chapters, "van der Pol" 0,
+"Liénard" 0, "memristor" 0, "Chua" 2** (both the game-theory pack).
+
+Measured over one settled turn:
+
+| mu | r_min | r_max | r_max/r_min | period |
+|---:|---:|---:|---:|---:|
+| 0.1 | 1.9369 | 2.0668 | 1.067 | 6.2870 |
+| 1.0 | 1.5317 | 2.8300 | 1.848 | 6.6630 |
+| 1.5 | 1.4134 | 3.3608 | 2.378 | 7.0960 |
+| 5.0 | 1.1825 | 7.7015 | 6.513 | 11.6120 |
+
+Example 7.1.1 needs no integration: ratio 1.000, period 2π, both exact.
+
+**So WP-22's closure family is circle-preserving, and had not said so.** The conditions
+f(1)=0, f'(1)=−2, f(r)(r−1)<0 with θ̇=1 make the radial speed a function of r alone, so on a
+closed orbit r is constant and the orbit is a circle. Every ratio above exceeds 1, so
+**van der Pol lies in no admissible closure.** Not a defect — a restriction, and everything
+WP-22 proves is proved about circular cycles. Naming it costs one clause and tells a reader
+how far the results reach.
+
+**And WP-120's uniqueness route is tied to the same restriction.** g = 1/r³ on a
+5,400-point grid: Example 7.3.1 min −1245.3369 / max −0.2525, one sign; van der Pol
+min −1647.9492 / max +814.5996, sign change. The Dulac route works because that cycle is a
+circle. **Liénard's Theorem (Strogatz p. 212) never assumed one** — five conditions, all
+verified here for van der Pol with F(x) = ⅓μx(x²−3) and a = √3 exactly (Example 7.4.1,
+p. 213) — and settles it, in 1928. Both routes are correct; one travels.
+
+**The generative half.** The question is now well posed: what does the contact construction
+look like over a non-circular cycle? Drop θ̇ = 1, or let the radial speed depend on θ, and
+the period, the multiplier and the neutral line all have to be recomputed rather than read
+off. Liénard says the cycle is still there and still unique. Nothing in the corpus says what
+happens to the contact form.
+
+**The electronics lineage, recorded where it belongs.** Strogatz §7.4 p. 212: the work on
+nonlinear oscillations "was initially motivated by the development of radio and vacuum tube
+technology, and later it took on a mathematical life of its own." van der Pol's equation is a
+vacuum-tube circuit; Figure 1.3.1's nonlinear n=2 cell reads "Nonlinear electronics (van der
+Pol, Josephson)" and Chua's circuit sits in the chaos cell. **Nonlinear electronics produced
+the mathematics this corpus runs on, and the corpus holds almost none of its names.**
+
+**Chua's completeness argument, cited as a precedent for the method and not as a result.**
+Four circuit variables give six pairwise relations; two are definitions, three are the
+resistor, capacitor and inductor, and the sixth — flux against charge — had no element. Chua
+predicted it in 1971 (*Memristor — The Missing Circuit Element*, IEEE Trans. Circuit Theory
+CT-18, 507–519); claimed physically by HP Labs in 2008 (Nature 453). That is WP-82's method
+on its rung ladder and Figure 1.3.1's on its cells — enumerate, find the empty relation,
+treat the gap as a prediction — at its most successful known instance.
+
+**N11 opened as a row, not a claim.** A memristor's pinched hysteresis loop against the
+corpus's subcritical fold (HVEH Proof III; the shutdown-vs-startup setpoint gap still
+`[OPEN]`). Verdict `UNRESOLVED`, corpora searched: **none yet**. The resemblance is currently
+at the level of the word *hysteresis*, which is the match the register exists to refuse.
+
+**A self-reference, caught by the script failing on its own commit.** Block [6] counts with
+`git grep` at HEAD. Excluding `docs/` and this chapter was not enough: publishing the chapter
+also put "van der Pol" into `book7/index.html` and two generated index pages, and the script
+went red on the first run after the commit. That is **WP-82 block [3]'s finding arriving on
+schedule — a file count counts the listings and the ruler.** The block now classifies every
+hit as chapter / listing / audit / self, prints the composition, and asserts on **chapters**:
+`limit cycle` 119 files but **108 chapters**; `van der Pol` 5 files but **0 chapters**. It is
+written to fail when a second *chapter* names the example, which is the notification that the
+gap has been closed by use. The raw file count was never the number to quote and the page now
+quotes chapters.
+
+**Checks.** `ch-van-der-pol-verify.py` exit 0; `novelty_check.py` exit 0; `audit.py --all`
+clean at 733 HTML; `terms.py --check` OK at 153 terms; indexes regenerated.
+
 # THE NOVELTY REGISTER, AND WHY UNMATCHED IS NOT NOVEL (2026-09-16)
 
 **What was built.** `docs/novelty-register.md` (ten rows) and `tools/novelty_check.py`
