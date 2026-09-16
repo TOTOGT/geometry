@@ -6994,16 +6994,10 @@ would need is not a defect; it is the correct way to hold a gap open.
 One update it has not received: WP-122 computed the whole return map that seed
 sits inside, in closed form. The seed grew and nobody told Volume XI.
 
-**XII — NAMED NOWHERE.** Zero occurrences of "Volume XII", "Vol XII" or
-"Book XII" anywhere in the corpus: not as written, not as unwritten, not as
-planned, not as abandoned. The series runs I–IX (IX being Ω), X, XI-unwritten,
-[silence], XIII. Either the numbering skips a slot deliberately and has never
-said so, or a volume was planned and lost its only record. This log cannot tell
-which, and that is the point: **XI is a gap with an address and XII is a gap
-without one.** The difference is not what is written; it is whether the absence
-was declared.
-
-`[OPEN]` What is Volume XII, and was the number ever assigned?
+**XII — [WITHDRAWN 2026-09-16, see below.]** This entry said Volume XII was
+named nowhere in the corpus. It is named in `wp82-the-missing-floor.html` §3,
+which assigns XI–XVI. The finding was an artifact of the search pattern, not of
+the corpus.
 
 **What none of this is.** No chapter is wrong, no theorem is affected, and
 `audit.py` was clean across 732 pages both before and after. Every defect here
@@ -7076,3 +7070,70 @@ what the beginning was trying to find. Before filing a defect as "they should
 have known", check the dates and check whether the knowledge existed. The class
 is *hindsight presented as negligence*, and it is the first entry in this log to
 commit it.
+
+
+---
+
+## 2026-09-16 · Volume XII was named all along — and two number collisions the search should have found
+
+Withdrawn on the same day it was filed. This morning's entry said Volume XII is
+"named nowhere in the corpus", searching for `Volume XII`, `Vol XII` and
+`Book XII`. WP-82 §3 writes it as a bare `XII` in a table cell. Present under
+another form, which looks exactly like absence — the same class as receiving
+capacity being counted every year under the heading "tourism". **A pattern that
+matches a label does not measure a concept, and an absence produced by a search
+is a fact about the search.**
+
+**What WP-82 §3 actually assigns.** Six volumes against rungs 28–33 of the
+"33 Levels" graphic:
+
+| Vol | Rung | Subject | Kind |
+|-----|------|---------|------|
+| XI | 28 | K-Theory & Index Theory | FLOOR |
+| XII | 29 | Operator Algebras — C*- and von Neumann | CONSOLIDATION |
+| XIII | 30 | Higher Category Theory & ∞-Categories | NEW |
+| XIV | 31 | Derived Algebraic Geometry | NEW |
+| XV | 32 | Motivic Homotopy / Langlands | BRIDGE |
+| XVI | 33 | Noncommutative Geometry | CEILING |
+
+**Collision 1 — XIII is occupied by a different subject.** WP-82 reserves XIII
+for higher category theory and ∞-categories, noting "Zero files use the
+vocabulary." `book13/` on disk is ordinary category theory: ch01 *Never a
+Diagram*, ch02 *What Category*, ch03 *On the Nose*, ch04 *Associator Pentagon*,
+ch05 *Thirty-Three Compositions*. `build_indexes.py` registers it as "Book XIII
+— Category Theory". Rung 30 is where the operator chain "stops being a diagram
+and becomes a structure"; book13 is largely about the chain still being a
+diagram. Either the plan was superseded and nothing says so, or the number was
+taken while reserved.
+
+The irony is on the record already. WP-82 was published as WP-81, a number that
+was held, and renumbered — its own note reads: "The number was taken without
+checking whether it was free — the same class of unmeasured absence this paper
+is about." It happened again to the volume numbers in the same paper.
+
+**Collision 2 — X had a prior occupant.** WP-82's limitations say: "Volume X
+carries a deposit DOI in the AXLE header but no title appears anywhere in the
+repository, so the arc from IX to XI has a segment this paper cannot see."
+`book10/` — Book X, Trade, Power and the Continent — was created on 2026-09-14
+into that slot. Whether it inherits that DOI or collides with it is not
+established here. `[OPEN]`
+
+**And the ruler.** WP-82's is "33 Levels of Mathematical Mastery", a circulating
+graphic ordering fields by difficulty. WP-82 says plainly that the ruler is
+damaged — it skips a numeral, jumps 28 → 33, and the placement of XIII–XV is
+"an ordering chosen here, not one recovered from the source" `[ASSUME]`.
+
+Strogatz, *Nonlinear Dynamics and Chaos* 2nd ed., Figure 1.3.1 (p. 10) is the
+same genre of object built on a different principle: two axes, number of state
+variables (n = 1, 2, ≥3, ≫1, continuum) against linear/nonlinear, with the
+bottom-right cell labelled **"The frontier"**. Both axes are properties of the
+system rather than of the student. He states the principle, marks where the
+mathematics runs out, and invites the reader to move things or add axes — "the
+point is to think about classifying systems on the basis of their dynamics."
+
+A one-dimensional ladder can only say *higher*. A grid can say *where*. The
+correction WP-82 needs is not a better ladder. `[OPEN]`
+
+Primary source now held and checkable: the 2018 printing, 532 pages, at the
+desk. Every page citation in WP-122 and `book7/ch-strogatz.html` was written
+without it and can now be verified against it. None has been.
