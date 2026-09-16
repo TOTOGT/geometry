@@ -1,3 +1,82 @@
+# CONLEY: THE THIRD CANDIDATE IS CLOSED (2026-09-16)
+
+**What was built.** `book7/ch-conley.html` and `book7/ch-conley-verify.py` — 7 blocks,
+standard library only, exit 0. Registered in `book7/index.html`; the three generated indexes
+re-run.
+
+**Why.** WP-82 §3b, having shown that λ⊥ = e^−4π moves with z₀ and so is not an index, left a
+sharp inherited question — *is there a K-theory class whose pairing is constant along this
+helix?* — and named three candidates: an asymptotic index at z → ∞, a relative class on
+(M, {z ≤ c}), and a Conley invariant of the isolated invariant set.
+`book7/ch-grothendieck-verify.py` repeats all three and states that none is checked.
+Counted at HEAD with this page and its script classified out, **"Conley" occurs in exactly
+three files — WP-82, ch-grothendieck.html and that script — and is applied in none of them.**
+One rung lower: **"index theorem" is in 5 chapters and "Fredholm" in 0**, so the corpus names
+an index theorem without naming the class of operator an index belongs to.
+
+**The no-go, and it needs no numerics.** On Γ = {r = 1} the third equation reads ż ≡ 1. For
+every compact N, z ≤ Z on N for some finite Z, and z(t) = z(0) + t exceeds it in finite time,
+so **Inv(N) ∩ Γ = ∅ for every compact N.** Block [2] integrates it rather than asserting it —
+orbits from z₀ = −5, 0, +5 leave z ≤ 10 and z ≤ 100 at exactly the predicted times with
+r = 1 held to fifteen digits — and then proves the stronger statement, that a whole tube has
+empty invariant set, from ż ≥ (1−d)² − 2d²e^−z₀, a bound attained at r = 1−d:
+
+| z₀ | d | bound m | grid min |
+|---:|---:|---:|---:|
+| 0.0 | 0.372792 | 0.115442 | 0.115442 |
+| −1.0 | 0.270137 | 0.135973 | 0.135973 |
+| −5.0 | 0.049373 | 0.180125 | 0.180125 |
+| −10.0 | 0.004268 | 0.189146 | 0.189146 |
+
+Candidate three fails for the reason λ⊥ failed: Γ closes in the (r,θ) projection and in no
+other, and compactness is what both instruments were asking for.
+
+**What survives, in the frozen-z family — stated as a family, not the flow.** Blocks [3]–[5].
+The factorisation r(1−r²) + a(r−1) = −(r−1)(r²+r−a) is checked exactly over a 61×80 rational
+grid. Below the neutral line the exit set of the largest annulus isolating r = 1 alone is
+**both** boundary circles; above it the exit set is **empty**; at z = 0 exactly, r₂ = 1 and no
+annulus isolates r = 1 alone. Integral homology by Smith normal form on a CW chain complex:
+
+| exit set | N/L | CH₀ | CH₁ | CH₂ | χ |
+|---|---|---:|---:|---:|---:|
+| empty | A₊ | ℤ | ℤ | 0 | 0 |
+| both circles | A/∂A | 0 | ℤ | ℤ | 0 |
+| one circle | A/L | 0 | 0 | 0 | 0 |
+
+**All three Euler characteristics are 0**, so χ separates nothing — worth recording, since χ is
+what a reader reaches for. The homology does separate them, by a degree shift equal to the
+unstable dimension. So a genuine deformation-invariant index exists on each side and **it is not
+the same index on the two sides**: the answer for this candidate is *no*, and the obstruction is
+the fold at z = 0, not a missing tool.
+
+**The result that closes it.** Block [6]. Replace ṙ by k·r(1−r²): the multiplier over T = 2π is
+e^−4πk, running from 3.487342×10⁻⁶ at k = 1 to underflow at k = 100, while the isolating block
+N = [½, 2] stays valid for every k > 0 because the *sign* of ṙ on the two boundary circles is
+k-independent. The index is (ℤ, ℤ, 0) throughout. A Conley index is a homotopy type and the
+multiplier is a derivative; no homotopy invariant can be a strictly monotone function of a
+parameter that leaves the homotopy type fixed. **e^−4π cannot be an index of this kind.**
+Candidate three is closed rather than left open; WP-82's other two stand, and are now the only
+two left.
+
+**A limit of the instrument, for WP-82 §4.** §4 records that a `0` may mean "zero in that
+spelling". The dual failure is not recorded and is live: an unanchored pattern returns noise.
+At HEAD, `/gns/` matches 68 files and `/\bGNS\b/` matches 0 — the hits are *designs* and
+*assignments*; `/bott/` matches 810 and `/bott periodicity/` matches 0 — the hits are *bottom*.
+Block [7] checks both pairs on every run. A grep count without an anchor is not a measurement.
+The page carries this as a footed note; the patch to WP-82 itself is not yet made.
+
+**Two conventions re-earned.** Block [7] classifies this page and its script out and asserts on
+*chapters*, because publishing moves the file column by construction — ch-van-der-pol block [6]'s
+lesson, arriving on schedule. And the control token `zzz-no-such-token-zzz`, copied from two
+existing verify scripts, is present in both of them and therefore matches; a control for absence
+has to use a string no script has written down.
+
+**Not established.** Nothing here is Conley theory applied to the flow — the flow has no compact
+isolated invariant set, which is the finding. Blocks [3]–[6] work with the frozen family. The
+homology is arithmetic on a hand-chosen CW model, not an index pair built by the theory, so
+WP-82's admissibility bar for Volume XI is not met by it. No priority is claimed: the Conley
+index, its continuation property and its behaviour at a transcritical bifurcation are classical.
+
 # VAN DER POL: THE CLOSURE FAMILY IS CIRCLE-PRESERVING (2026-09-16)
 
 **What was built.** `book7/ch-van-der-pol.html` and `book7/ch-van-der-pol-verify.py` —
