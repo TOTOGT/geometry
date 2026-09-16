@@ -1,3 +1,81 @@
+# THE NOVELTY REGISTER, AND WHY UNMATCHED IS NOT NOVEL (2026-09-16)
+
+**What was built.** `docs/novelty-register.md` (ten rows) and `tools/novelty_check.py`
+(4 blocks, exit 0). Rule R18 added to CLAUDE.md.
+
+**What it is for.** The mathematics here is derived from first principles without reading
+the literature first. That is the method, and it is not in question. Its one consequence is:
+**priority runs on publication date, not on route.** A result derived cleanly in 2026 that
+someone published in 1928 is re-derived — the derivation happened, the method is vindicated,
+and the novelty claim fails anyway. So the claim rests entirely on a search run before
+publishing, looking *for* the prior art rather than for its absence. That makes R15 —
+*a failed search is a fact about the search* — load-bearing at the highest stakes in the
+corpus.
+
+**Two registers that were being conflated.** A literature pass here is a **priority check**,
+not an attribution fix. Nothing in the Strogatz pass of 2026-09-15/16 was a missing citation
+in the ordinary sense; the sources had not been read. The earlier framing of those findings
+as "missing pointers" is withdrawn and restated as priority findings. Consequence for
+writing: a citation in this corpus is a pointer for the reader — *"this is classical, see X
+p. N"* — never *"following X"*. `book6/wp58-galactic-fold.html` is the model, deriving
+`r - r^3` from the flat-rotation-curve effective force and printing the derivation.
+
+**The scale, closed:** `KNOWN-EXACT` → `KNOWN-GENERAL` → `PRIOR-ART-CANDIDATE` →
+`UNRESOLVED` → `UNMATCHED-LIMITED` → `UNMATCHED-BROAD`. Never found / not-found. The word
+*novel* is not in the vocabulary and the checker fails if it appears in a verdict.
+
+**Four rows come back KNOWN-EXACT**, all from the Strogatz pass: Γ / T\* / μ = −2
+(Example 7.1.1 p. 199), the closed-form return map (Example 8.7.1 p. 282), uniqueness of the
+cycle (Liénard's Theorem p. 212, Example 7.4.1 p. 213 — Liénard 1928, Levinson–Smith 1942),
+and the trapping annulus (Example 7.3.1 p. 206).
+
+**A keyword-level similarity is not a prior-art match, and the register caught that on its
+first pass.** An external search returned "definitely prior art at the level of the general
+claim" for the contact-Hamiltonian obstruction, citing two papers. Both are real and both
+were checked at source:
+
+- de Lucas & Rivas, *Contact Lie systems: theory and applications*, arXiv:2207.04038
+  (July 2022) / J. Phys. A 2023. The result is **Proposition 3.8 in the published version and
+  3.7 in the arXiv version** — record both; a proposition number that moves between preprint
+  and journal is how a citation dies later. Verbatim: *"If (M,Λ,X) is a Lie–Hamilton system
+  and D^X = TM, then M is even-dimensional."* That is a **dimension obstruction on Poisson
+  structures**, not a contact no-go.
+- Colombo & López-Gordón, *Egorov-type semiclassical limits for open quantum systems with a
+  bi-Lindblad structure*, Anal. Math. Phys. **16**:118 (2026), Remark 2.9 — compatible
+  Jacobi–Nijenhuis recursion operators do not yield a maximal family of dissipated quantities
+  in involution. An **integrability obstruction**.
+
+Neither states WP-22 §7's theorem — impose θ̇ ≡ 1, get ℋ = p + g(θ,z), the locking identity,
+c → −2 forcing H → −∞. What the three share is the phrase "no-go" and the setting. Row N08
+is `PRIOR-ART-CANDIDATE`, not `KNOWN`: both papers are the right neighbourhood and must be
+read line by line before any priority claim. **Priority date for de Lucas–Rivas is the arXiv
+date, July 2022, not the journal date.**
+
+**And the converse bites.** Row N06, base-point drift of the per-period exponent, looked
+pre-empted by published statements that a monodromy matrix depends on its base point. The
+standard result is the opposite for the quantity that matters: ChaosBook §5.3 — *"Jp
+evaluated anywhere along the cycle has the same set of Floquet multipliers"*, the matrices
+being related by similarity. So the adjacent literature runs **against** equivalence: a
+genuine periodic-orbit monodromy has base-point-invariant multipliers, which makes the
+corpus's drift a diagnostic that the object is a time-2π flow map and not a monodromy —
+ż = 1, no return, no periodic orbit, which is what WP-122 concluded independently. The row
+carries a requirement with it: **the claim must be stated in multipliers or exponents, not
+in the matrix**, or it collides with a true and uninteresting statement.
+
+**Finite-time escape (N09) is background prior art and was never the claim.** A citation
+proving escape exists cannot pre-empt a theorem about when *closure* changes the escape
+property. `KNOWN-GENERAL` on the phenomenon, `UNRESOLVED` on the closure-dependence.
+
+**Searches still owed on N08.** Searching for the theorem has not worked and will not.
+Search its ingredients: the locking identity in algebraic form; contact Hamiltonians with a
+cyclic coordinate at identically fixed velocity; the obstruction between a transverse
+attractor and a positive constant expansion rate, phrased without "no-go".
+
+**Not covered.** Patents. Different corpus, different priority rules, different disclosure
+bar; HVEH and the SAF work need their own search and no row here speaks to patentability.
+
+**Checks.** `novelty_check.py` exit 0; `audit.py --all` clean at 732 HTML.
+
 # THE RULER RE-MEASURED: WP-82 REPRODUCES 12/12, AND HAS MOVED (2026-09-16)
 
 **What was built.** `book6/wp82-verify.py` — 6 blocks, exit 0. WP-82's rung table now

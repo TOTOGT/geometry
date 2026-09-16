@@ -40,6 +40,7 @@ above each of them.
 | R15 | Never report absence from a single search. | `# RULE (2026-08-28): never report` |
 | R16 | Where files live — the tiering rule. | `## Where files live` |
 | R17 | A WP whose finding is about machine-assisted production carries `#Machine Learning`. | `# RULE (2026-09-01):` |
+| R18 | A priority claim carries its search, or it is not a claim. Unmatched is not novel. | `## Novelty and priority` |
 
 R4 is the one that proves the point. It was written on 2026-09-09, it is correct,
 and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
@@ -340,6 +341,59 @@ of the handoff costs the next session more than the edit was worth.
 carry `Claude-Session:`, all from before this rule. They are left in place:
 removing them rewrites every downstream SHA and breaks the commit links recorded
 in `docs/audit-log.md`. The rule is forward-looking. Do not add more.
+
+## Novelty and priority — unmatched is not novel
+
+**Set 2026-09-16.** The mathematics here is derived from first principles, without
+reading the literature first. That is the working method and it is not in question.
+It has one consequence, and the consequence is the whole of this rule:
+
+**Priority runs on publication date, not on route.** A result derived cleanly here in
+2026 that someone published in 1928 is re-derived. The derivation still happened, the
+method is still vindicated, and the novelty claim still fails. So a novelty claim rests
+entirely on a search — run before publishing, looking *for* the prior art rather than
+for its absence.
+
+**Which makes R15 load-bearing at the highest stakes in the corpus.** *A failed search
+is a fact about the search.* "Not in Strogatz" is not "novel"; it is "not in Strogatz".
+Nothing in this repository may assert novelty on the strength of a search that came
+back empty.
+
+**The instrument is `docs/novelty-register.md`**, checked by `tools/novelty_check.py`.
+Every claim gets a row: the claim, where it is stated, a verdict from a closed
+six-value vocabulary, the terms searched, the corpora searched, the date, the candidate
+hits, and an equation-level disposition. The checker fails on a missing search record,
+a verdict outside the vocabulary, or the word *novel* appearing as a verdict.
+
+    KNOWN-EXACT → KNOWN-GENERAL → PRIOR-ART-CANDIDATE → UNRESOLVED
+                → UNMATCHED-LIMITED → UNMATCHED-BROAD
+
+never a binary found / not-found.
+
+**A keyword-level similarity is not a prior-art match.** Two papers containing "no-go
+theorem" in contact geometry are not prior art for each other, and the register has
+already caught that once (row N08). The converse bites too: adjacent literature can run
+*against* a match. Row N06's claim looked pre-empted by published statements that a
+monodromy matrix depends on its base point — until the standard result turned out to be
+that the *multipliers* are base-point **invariant**, which makes the corpus's drift a
+diagnostic rather than a rediscovery. Both directions are why comparison is at equation
+level or it has not happened.
+
+**Citations, in this corpus, are pointers and not attributions.** Write *"this is
+classical, see X p. N"*, never *"following X"*, for anything derived here. Where a page
+prints its own derivation it says so, and the printed derivation is what earns the
+claim — a route cannot be audited by a reader or a tool, only printed work can.
+`book6/wp58-galactic-fold.html` is the model.
+
+**Patents are a separate search.** Different corpus, different priority rules, different
+disclosure bar. The register says so on its face and speaks to no patent question.
+
+### What NOT to do
+
+Do not write "novel", "new", "first" or "unprecedented" about a result on the strength of
+a search that returned nothing. Record what was searched and when, and let the row read
+`UNMATCHED-BROAD`. A reader who sees the search can weigh it; a reader who sees "novel"
+has been asked to take it on trust, and the first prior-art hit destroys the page it sits on.
 
 ## Every chapter carries a verify script
 
