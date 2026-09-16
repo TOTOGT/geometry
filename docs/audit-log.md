@@ -1,3 +1,66 @@
+# GELFAND: IS "THE OPERATOR ALGEBRA" AN ALGEBRA? (2026-09-16)
+
+**What was built.** `book7/ch-gelfand.html` and `book7/ch-gelfand-verify.py` — 8 blocks,
+standard library only, exact over ℚ where exactness is available, exit 0. Registered in
+`book7/index.html`; the three generated indexes re-run.
+
+**The measurement.** operator algebra **100 files / 74 chapters**; semigroup 28, monoid 10,
+Gelfand 4, operator norm 3, C\*-algebra 1, \*-algebra 1, commutant 1; **von Neumann algebra 0,
+Banach algebra 0, Gelfand–Naimark 0, Wedderburn 0.** WP-82 §3 gives Volume XII both halves and
+notes the phrase "has never had a volume". The prior question is whether the thing is an algebra.
+
+**First finding — it is a monoid.** Block [1] checks the corpus's own page against itself,
+flattened so a phrase split by an `<em>` cannot silently miss: HVEH Proof I states G = U∘F∘K∘C,
+calls K "multiplication by a radial mask", calls F **"the nonlinear self-amplification"**, says
+"F is not pointwise", and attributes the non-commutativity to advection; Vol I Theorem 5.3 states
+the four do not commute. An algebra is a vector space; **a nonlinear map is not an element of
+one**, and no page supplies a sum, a scalar multiple, an involution or a norm for the four.
+Composition gives associativity and an identity, which is a monoid. Nothing is wrong with a
+monoid — the finding is that the name promises a different object, and that Gelfand, Naimark and
+GNS have nothing to act on until one is supplied.
+
+**Second finding — the algebra that is there, and its complete structure.** The corpus's own
+refutation is already a finite linear statement: *a static gate composed with a sitewise map
+commutes; a gate and an inter-site coupling do not.* On n sites, K = diag(χ), S = the cyclic
+shift: [K,S]_ij = (χ_i − χ_j)S_ij, zero **iff** χ is constant — checked exactly over all 120
+masks for n = 3..6. Then, with p the minimal period of χ under the shift:
+
+> **dim C\*(K,S) = n·p  ·  A ≅ (M_p(ℂ))^⊕(n/p)  ·  dim A′ = n/p**
+
+Exhaustive over **all 248 masks for n = 3..7, zero violations**, algebra generated to closure
+rather than truncated, both dimensions computed. Wedderburn data then forced: Σn_i² = (n/p)p² = np,
+Σm_i² = n/p with every m_i = 1, Σn_i m_i = n.
+
+The reading: **the algebra is exactly as large as the gate is asymmetric.** Constant mask → the
+smallest algebra the shift admits. Mask with no symmetry → the whole of M_n(ℂ), which is simple
+and therefore distinguishes nothing. The informative cases are in between, where the number of
+Wedderburn blocks *is* the symmetry of the gate.
+
+**Two expectations corrected by the computation**, both worth recording because both were the
+kind of thing a hand reading would have kept: a first pass truncated the generation at word
+length 8 and reported dim 33 at n = 6 where the commutant forces 36; and the alternating mask at
+n = 4 is **not** the full matrix algebra — it is M_2 ⊕ M_2, dim 8, commutant 2.
+
+**Gelfand–Naimark, and what Theorem 5.3 actually says.** At p = 1 the algebra is the circulants,
+commutative of dimension n, so it is C(X) with X the n-th roots of unity and the Gelfand
+transform the DFT — exhibited at n = 4, 6, 8, worst residual 5e-16. So **Vol I's "C, K, F, U do
+not commute" is, in this model, the statement p > 1**, i.e. that the algebra is not an algebra of
+functions on a space. That is exactly the sentence WP-82 needs for the step from rung 29 to rung
+33, and seventy-four chapters have been one theorem away from it.
+
+**GNS, which reads 2 — both files written today.** Block [6] runs it on the trace τ(a) =
+(1/n)Tr(a): faithful, so nothing is quotiented, dim ℋ = n² at n = 2, 3, 4 as the rank of the Gram
+matrix of ⟨a,b⟩ = τ(b\*a), cyclic vector Ω = I reproducing τ to zero error over ℚ. Three lines of
+linear algebra, and the step the phrase has promised a hundred times.
+
+**Not established.** That the finite model is the corpus's system — it is not; K and F act on a
+continuum and F is nonlinear. Whether the continuum algebra is a crossed product, and whether p
+has a continuum analogue, is untouched. The Lean names on the source page (`gate_commutes`,
+`coupling_not_commute` in `ZeoliteCommutation.lean`) are **not** relied on: that file is already
+recorded here as resolving nowhere under any root, so block [3] re-derives the finite statement
+rather than citing it. No priority claimed — Gelfand–Naimark, GNS, Burnside and Wedderburn are
+classical and the period rule is an exercise in them.
+
 # SMALE: THE RETURN MAP CANNOT FOLD, AND NOT BECAUSE OF THE PARAMETERS (2026-09-16)
 
 **What was built.** `book7/ch-smale.html` and `book7/ch-smale-verify.py` — 7 blocks, standard
