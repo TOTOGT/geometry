@@ -47,20 +47,23 @@ def count(patterns, ref):
     for p in patterns: s |= files(p, ref)
     return len(s), s
 
-BASE = '654fb06'          # the commit WP-82 names
-ROWS = [                  # (rung, field, patterns, number printed in the paper)
-    ('28', 'K-Theory & Index Theory',   ['k-theory'],                          0),
-    ('28', '  index theorem',           ['index theorem'],                     1),
-    ('28', '  Atiyah',                  ['atiyah'],                            1),
-    ('29', 'Operator Algebras',         ['operator algebra'],                 76),
-    ('29', '  von Neumann',             ['von neumann'],                       7),
-    ('30', 'Higher Category Theory',    ['∞-categor', 'infinity-categor'],     0),
-    ('31', 'Derived Algebraic Geometry',['sheaf', 'sheaves'],                   1),
-    ('32', 'Motivic / Langlands',       ['motivic', 'langlands'],               3),
-    ('33', 'Noncommutative Geometry',   ['noncommutative'],                     9),
-    ('33', '  Connes',                  ['connes'],                            15),
-    ('33', '  spectral triple',         ['spectral triple'],                    7),
-    ('--', 'Monstrous Moonshine',       ['moonshine'],                         25),
+BASE   = '654fb06'        # the commit WP-82's first column names
+SECOND = 'd97154e'        # the commit its second column names, added 2026-09-16
+                          # after six rows moved inside a single day. A date is
+                          # not a commit; both columns now name one.
+ROWS = [                  # (rung, field, patterns, col-1 @BASE, col-2 @SECOND)
+    ('28', 'K-Theory & Index Theory',   ['k-theory'],                          0, 9),
+    ('28', '  index theorem',           ['index theorem'],                     1, 6),
+    ('28', '  Atiyah',                  ['atiyah'],                            1, 5),
+    ('29', 'Operator Algebras',         ['operator algebra'],                 76, 100),
+    ('29', '  von Neumann',             ['von neumann'],                       7, 12),
+    ('30', 'Higher Category Theory',    ['∞-categor', 'infinity-categor'],     0, 3),
+    ('31', 'Derived Algebraic Geometry',['sheaf', 'sheaves'],                   1, 7),
+    ('32', 'Motivic / Langlands',       ['motivic', 'langlands'],               3, 7),
+    ('33', 'Noncommutative Geometry',   ['noncommutative'],                     9, 17),
+    ('33', '  Connes',                  ['connes'],                            15, 27),
+    ('33', '  spectral triple',         ['spectral triple'],                    7, 15),
+    ('--', 'Monstrous Moonshine',       ['moonshine'],                         25, 28),
 ]
 
 # ---------------------------------------------------------------------------
@@ -74,7 +77,7 @@ print('  on 2026-08-29."\n')
 print('     %5s %-28s %10s %10s' % ('rung', 'field', 'printed', 'recomputed'))
 ok_repro = True
 base_n = {}
-for rung, field, pats, printed in ROWS:
+for rung, field, pats, printed, printed2 in ROWS:
     n, _ = count(pats, BASE)
     base_n[field] = n
     flag = '' if n == printed else '   <-- MISMATCH'
@@ -87,20 +90,31 @@ print('     book13/ch06-past-two.html does not exist in that tree. The measureme
 print('     is sound and so is its date; what it is not is current.')
 
 # ---------------------------------------------------------------------------
-head(2, 'THE SAME METHOD AT HEAD, AND THE DRIFT')
-print('     %5s %-28s %10s %10s %10s' % ('rung', 'field', '2026-08-29', 'HEAD', 'drift'))
+head(2, 'THE SECOND COLUMN, AT THE COMMIT IT NAMES -- AND TODAY')
+print('  The second column was first published against HEAD rather than a named')
+print('  commit, and six of its twelve rows moved inside a single day. A date is')
+print('  not a commit. It now names %s, and reproduces there the way the first' % SECOND)
+print('  column reproduces at %s. The live HEAD column is printed for information' % BASE)
+print('  and asserted only for monotonicity.\n')
+print('     %5s %-28s %10s %10s %8s %8s' % ('rung', 'field', '@' + BASE, '@' + SECOND, 'recomp', 'HEAD'))
 head_n = {}
-for rung, field, pats, printed in ROWS:
-    n, _ = count(pats, 'HEAD')
-    head_n[field] = n
-    d = n - base_n[field]
-    print('     %5s %-28s %10d %10d %+10d' % (rung, field, base_n[field], n, d))
-check(all(head_n[f] >= base_n[f] for _, f, _, _ in ROWS),
-      'no row went down, so nothing was lost from the corpus')
-r28_b = sum(base_n[f] for r_, f, _, _ in ROWS if r_ == '28')
-r28_h = sum(head_n[f] for r_, f, _, _ in ROWS if r_ == '28')
-r33_b = sum(base_n[f] for r_, f, _, _ in ROWS if r_ == '33')
-r33_h = sum(head_n[f] for r_, f, _, _ in ROWS if r_ == '33')
+ok_repro2 = True
+for rung, field, pats, printed, printed2 in ROWS:
+    n2, _ = count(pats, SECOND)
+    nh, _ = count(pats, 'HEAD')
+    head_n[field] = nh
+    flag = '' if n2 == printed2 else '   <-- MISMATCH'
+    print('     %5s %-28s %10d %10d %8d %8d%s'
+          % (rung, field, base_n[field], printed2, n2, nh, flag))
+    if n2 != printed2: ok_repro2 = False
+check(ok_repro2,
+      'every one of the %d numbers in the second column reproduces at %s' % (len(ROWS), SECOND))
+check(all(head_n[f] >= base_n[f] for _, f, _, _, _ in ROWS),
+      'no row went down between %s and HEAD, so nothing was lost from the corpus' % BASE)
+r28_b = sum(base_n[f] for r_, f, _, _, _ in ROWS if r_ == '28')
+r28_h = sum(head_n[f] for r_, f, _, _, _ in ROWS if r_ == '28')
+r33_b = sum(base_n[f] for r_, f, _, _, _ in ROWS if r_ == '33')
+r33_h = sum(head_n[f] for r_, f, _, _, _ in ROWS if r_ == '33')
 print('\n     rung 28 total : %3d  ->  %3d' % (r28_b, r28_h))
 print('     rung 33 total : %3d  ->  %3d' % (r33_b, r33_h))
 print('     ratio 33 : 28 : %.1f  ->  %.1f' % (r33_b / max(r28_b, 1), r33_h / max(r28_h, 1)))
@@ -114,23 +128,31 @@ head(3, 'WHAT THE DRIFT IS MADE OF')
 print('  A file count counts every file that says the word, including index pages,')
 print('  the audit log, and the ruler itself. The composition matters more than the')
 print('  total, so here it is.\n')
-n_k, set_k = count(['k-theory'], 'HEAD')
+n_k, set_k = count(['k-theory'], SECOND)
+def kind_of(f):
+    if 'wp82' in f:                                    return 'the ruler itself'
+    if f == 'CLAUDE.md':                               return 'project scaffolding'
+    if (f.endswith('index.html') or f.startswith('index-')
+            or f.startswith('master-index')):          return 'index / listing'
+    if f.startswith('docs/'):                          return 'audit narrative'
+    return 'CHAPTER'
 for f in sorted(set_k):
-    kind = ('the ruler itself' if 'wp82' in f else
-            'index / listing'  if f.endswith('index.html') else
-            'audit narrative'  if f.startswith('docs/') else
-            'CHAPTER')
-    print('     %-44s %s' % (f, kind))
-chapters = [f for f in set_k if not f.endswith('index.html')
-            and not f.startswith('docs/') and 'wp82' not in f]
+    print('     %-46s %s' % (f, kind_of(f)))
+chapters = [f for f in set_k if kind_of(f) == 'CHAPTER']
 print()
-check(n_k == 7, 'k-theory is in %d files at HEAD' % n_k, str(n_k))
-check(len(chapters) == 1,
-      'exactly %d of them is a chapter -- the rest are listings, the log, and this paper'
-      % len(chapters), str(len(chapters)))
-print('     So the floor is STARTED, not built: one chapter (%s)' % (chapters[0] if chapters else '-'))
-print('     plus the echoes a new chapter produces in navigation. Reporting 0 -> 7')
-print('     without this breakdown would overstate it by a factor of seven.')
+check(n_k == 9, 'k-theory is in %d files at %s' % (n_k, SECOND), str(n_k))
+check(len(chapters) == 2,
+      'exactly %d of them are chapters -- the rest are listings, the log, CLAUDE.md '
+      'and this paper' % len(chapters), str(sorted(chapters)))
+print('     So the floor is STARTED, not built: %d chapters (%s)'
+      % (len(chapters), ', '.join(sorted(chapters))))
+print('     plus the echoes a new chapter produces in navigation. Reporting 0 -> 9')
+print('     without this breakdown would overstate it by a factor of four and a half.')
+print()
+print('     CLAUDE.md is separated out here because it is not a chapter and not a')
+print('     listing: it is scaffolding that names the vocabulary in a handoff note.')
+print('     The earlier version of this block had no bucket for it and counted it')
+print('     as a chapter, which is the same one-look failure the paper is about.')
 
 # ---------------------------------------------------------------------------
 head(4, "THE TWO VOLUME CLAIMS IN §3")
@@ -159,7 +181,12 @@ for phrase, what in (
 # ---------------------------------------------------------------------------
 head(5, 'CONTROL: THIS SCRIPT COMPUTED SOMETHING')
 check(len(files('moonshine', 'HEAD')) > 0, 'git grep returned files rather than nothing')
-check(len(files('zzzz-no-such-token-zzzz', 'HEAD')) == 0, 'and returns none for a token that is absent')
+# assembled, not written down: a literal control token matches itself once the
+# script is committed, and the one this file used is also in
+# book7/ch-van-der-pol-verify.py, so a grep for it returns files.
+ABSENT = 'qqx' + '-no-file-contains-this-' + 'qqx'
+check(files(ABSENT, 'HEAD') == set(), 'and returns none for a token no file contains',
+      str(files(ABSENT, 'HEAD')))
 check(len(ROWS) == 12 and len(base_n) == 12, 'all twelve rows were measured at both refs')
 print('    A vacuous pass is a pass. Block [5] exists so that block [1] cannot')
 print('    report a perfect reproduction by having matched nothing against nothing.')
@@ -172,7 +199,7 @@ print("""
   the day, and its rung-30 zero was right too. Re-run at HEAD, every row has
   risen: rung 28 from 2 file-mentions to %d, rung 33 from %d to %d, and the
   inversion the paper reported has narrowed from %.1f:1 to %.1f:1 without
-  reversing. Of the seven files that now say "k-theory", one is a chapter.
+  reversing. Of the %d files that say "k-theory" at %s, %d are chapters.
 
   NOT ESTABLISHED. That the floor is built. A file count measures vocabulary,
   not content -- it was the right instrument for the paper's question, which was
@@ -186,7 +213,8 @@ print("""
   the rung-30 row as a live count produced a wrong conclusion about Volume XIII.
   The row was not wrong. The reading was, and re-running the measurement is what
   would have caught it in one command.
-""" % (r28_h, r33_b, r33_h, r33_b / max(r28_b, 1), r33_h / max(r28_h, 1)))
+""" % (r28_h, r33_b, r33_h, r33_b / max(r28_b, 1), r33_h / max(r28_h, 1),
+       n_k, SECOND, len(chapters)))
 
 print('=' * 70)
 if fails:

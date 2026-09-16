@@ -1,3 +1,71 @@
+# THE INSTRUMENT HAS A THIRD FAILURE MODE, AND IT MAKES FALSE ZEROS (2026-09-16)
+
+**Found while propagating the Conley chapter.** `book7/ch-van-der-pol-verify.py` block [6]
+went red on its own terms — it was written to fail when a second chapter named van der Pol,
+and it did, the same day. Updating it exposed something larger. The Liénard row read **0
+chapters for a word printed twice on the page doing the counting.**
+
+**The cause.** The corpus is HTML and writes accented names as character entities. The pattern
+`/li[eé]nard/` matches neither the literal nor the entity form, so every page that spells the
+name properly is invisible to it. Measured at `d97154e`, tracked `*.html`/`*.md`:
+
+| pattern | plain `git grep` | entity-aware | low by |
+|---|---:|---:|---:|
+| Liénard | 2 | 5 | 60% |
+| Poincaré | 58 | 68 | 15% |
+| Gödel | 23 | 27 | 15% |
+| Poincaré–Bendixson | 12 | 14 | 14% |
+
+**68 tracked HTML files carry at least one accented entity**, so this is not a corner case.
+Every published count in this corpus for a name with a diacritic is low until it is re-taken.
+
+**The instrument.** `tools/corpus_count.py` — shortlists with `git grep -l`, then matches
+against the file's text with entities unescaped, so `Li&eacute;nard` and `Li<em>é</em>nard`
+both match. Tracked files only (R13), standard library only. It also prints the gap against
+plain `git grep`, so the difference is visible rather than assumed. Writing it caught a fourth
+thing: `git ls-tree -r --name-only HEAD -- '*.html'` returns **nothing and exits 0** where
+`ls-files` and `grep` honour the same pathspec — a silent empty answer, which is the same
+failure class. The module filters in Python instead.
+
+**Three modes now recorded, where WP-82 §4 recorded one.**
+
+1. Wrong spelling — `k-theory` does not match `K theory`. A 0 means "zero in that spelling".
+   (WP-82 §4, already recorded.)
+2. Substring inflation — `/gns/` returns 68 files via *designs* and *assignments*; `/bott/`
+   returns 810 via *bottom*. Both anchor to 0. Checked by `ch-conley-verify.py` [7].
+3. Entity blindness — the table above. Checked by `ch-van-der-pol-verify.py` [6].
+
+**Propagated.** `book7/ch-van-der-pol-verify.py` switched to `-ilE` and an entity-aware
+Liénard pattern, its van-der-Pol assertion updated to name the exact two-chapter set so a
+third arrival still notifies; `book7/ch-van-der-pol.html` carries a dated update box and its
+original counts are now marked as measured on the day. `book7/ch-conley.html`'s instrument
+note carries all three modes.
+
+**And a fifth, small.** Two verify scripts shipped the control token `zzz` + `-no-such-token-`
++ `zzz` as a literal, which means each file contains it and a grep for it returns those files.
+`book6/wp82-verify.py` and `book7/ch-van-der-pol-verify.py` now assemble the control token at
+run time instead. A control for absence cannot be a string any file writes down.
+
+---
+
+# WP-82's SECOND COLUMN NOW NAMES A COMMIT (2026-09-16)
+
+**Why.** The 2026-09-16 column was published against `HEAD`, and `book6/wp82-verify.py` only
+printed it — the page said the script "computes both and fails if either drifts", and for the
+second column that was not so. Publishing `book7/ch-conley.html` moved six of its twelve rows
+**within the same day**: k-theory 7→9, index theorem 4→6, Atiyah 3→5, von Neumann 11→12,
+sheaf 6→7, spectral triple 14→15.
+
+**What changed.** The column now names commit `d97154e`, the way the first names `654fb06`.
+`wp82-verify.py` block [2] recomputes both columns at the commits they name and asserts both;
+live `HEAD` is still printed, asserted only for monotonicity. A date is not a commit.
+
+**Block [3] gained a bucket.** Its classifier had `the ruler / index / docs / CHAPTER` and no
+place for `CLAUDE.md`, which names the vocabulary in a handoff note and was being counted as a
+chapter. With `project scaffolding` separated out, k-theory at `d97154e` is **9 files, 2 of
+them chapters** (`ch-grothendieck.html`, `ch-conley.html`) — the floor is started, not built.
+The [HONESTY] block now computes those two numbers instead of stating them.
+
 # CONLEY: THE THIRD CANDIDATE IS CLOSED (2026-09-16)
 
 **What was built.** `book7/ch-conley.html` and `book7/ch-conley-verify.py` — 7 blocks,

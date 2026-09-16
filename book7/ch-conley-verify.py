@@ -315,8 +315,14 @@ for name, loose, tight in (('GNS', r'gns', r'\bGNS\b'), ('Bott', r'bott', r'bott
 print('\n  "gns" is inside "designs" and "assignments"; "bott" is inside "bottom".')
 print('  A grep count without an anchor is not a measurement.')
 check(len(files(r'moonshine')) > 0, 'control: git grep returns files rather than nothing')
-check(files(r'qqx-token-that-is-not-in-this-corpus-qqx') == [], 'control: and none for a token chosen so that no other script uses it',
-      str(files(r'qqx-token-that-is-not-in-this-corpus-qqx')))
+# The control token is ASSEMBLED at run time rather than written down. A literal
+# would match itself the moment this script is committed -- which is what the
+# copied token 'zzz-no-such-token-zzz' does: it is present in book6/wp82-verify.py
+# and book7/ch-van-der-pol-verify.py, so a grep for it returns two files. A control
+# for absence cannot be a string any file contains, this one included.
+ABSENT = 'qqx' + '-no-file-contains-this-' + 'qqx'
+check(files(ABSENT) == [], 'control: and none for a token no file contains',
+      str(files(ABSENT)))
 
 # ---------------------------------------------------------------------------
 print('\n' + '=' * 70 + '\n  [HONESTY]\n' + '=' * 70)

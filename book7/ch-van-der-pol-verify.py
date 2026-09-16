@@ -158,7 +158,8 @@ print('     correct; only one of them travels.')
 # ---------------------------------------------------------------------------
 head(6, 'THE CORPUS, COUNTED')
 def files(pat):
-    r = subprocess.run(['git', '--no-optional-locks', 'grep', '-lic', '-e', pat,
+    # -E, not basic regex: the entity-aware patterns below need alternation.
+    r = subprocess.run(['git', '--no-optional-locks', 'grep', '-ilE', pat,
                         'HEAD', '--', '*.html', '*.md'],
                        cwd=REPO, capture_output=True, text=True)
     return [l.split(':', 1)[1] for l in r.stdout.splitlines() if ':' in l]
@@ -173,35 +174,64 @@ def classify(f):
 def chapters(pat):
     return [f for f in files(pat) if classify(f) == 'CHAPTER']
 
+# 2026-09-16. This page writes the name as `Li&eacute;nard`, and so does WP-120,
+# so /li[eé]nard/ -- the pattern this block shipped with -- matched neither of
+# them and reported 0 for a word printed twice on this very page. Sixty-eight
+# tracked HTML files carry accented entities; Poincare reads 58 plain and 68
+# entity-aware. tools/corpus_count.py is the general instrument; this is the
+# one-line form of it.
+LIENARD = r'li(e|é|&eacute;|&#233;)nard'
+
 print('     %-22s %8s %9s' % ('pattern', 'files', 'chapters'))
-for pat in ('limit cycle', 'van der pol', 'li[eé]nard', 'relaxation oscillat', 'memristor'):
-    print('     %-22s %8d %9d' % (pat.replace('[eé]', 'e'), len(files(pat)), len(chapters(pat))))
+for pat in ('limit cycle', 'van der pol', LIENARD, 'relaxation oscillat', 'memristor'):
+    label = 'lienard' if pat is LIENARD else pat
+    print('     %-22s %8d %9d' % (label, len(files(pat)), len(chapters(pat))))
 
 print('\n     composition of the "van der pol" hits:')
 for f in sorted(files('van der pol')):
     print('       %-44s %s' % (f, classify(f)))
 check(len(chapters('limit cycle')) > 100, 'the phenomenon is in more than a hundred chapters')
-check(chapters('van der pol') == [],
-      'and no chapter but this one names the other canonical example',
-      str(chapters('van der pol')))
-check(chapters('li[eé]nard') == [], 'nor the theorem that settles it',
-      str(chapters('li[eé]nard')))
+
+# 2026-09-16. When this block was written it asserted that NO chapter but this
+# one names van der Pol, and it said in as many words that the assertion was
+# there to fail when a second chapter picked the vocabulary up. It failed the
+# same day. Two chapters now use it, and the assertion is updated rather than
+# relaxed -- it still names the exact set, so a third arrival is still a failure
+# and still a notification.
+USERS = ['book6/wp120-how-many-closed-orbits.html',   # cites Lienard's Theorem for
+                                                      # the reach the Dulac route lacks
+         'book7/ch-conley.html']                      # the gallery neighbour
+check(sorted(chapters('van der pol')) == USERS,
+      'and exactly two other chapters now name the example -- the gap closed by use',
+      str(sorted(chapters('van der pol'))))
+check(chapters(LIENARD) == ['book6/wp120-how-many-closed-orbits.html'],
+      'and the theorem that settles it is now cited where it was owed',
+      str(chapters(LIENARD)))
+check(len(files(LIENARD)) > len(files(r'li[eé]nard')),
+      'the entity-aware pattern finds files the plain one misses (%d vs %d)'
+      % (len(files(LIENARD)), len(files(r'li[eé]nard'))))
 print('\n     The raw file count is NOT the number to quote. Publishing this chapter')
 print('     put "van der Pol" into the Book 7 index and two generated index pages,')
 print('     which is WP-82 block [3]\'s finding arriving on schedule: a file count')
 print('     counts the listings and the ruler. This block asserts on chapters.')
-print('     It is written to fail when a SECOND chapter names the example -- that')
-print('     failure is the notification that the gap has been closed by use.')
-print('\n     This block is written to keep failing once the gap is really closed:')
-print('     a THIRD file naming van der Pol -- one that is not this chapter -- will')
-print('     break it, which is the notification that the example has been used.')
+print('     It was written to fail when a SECOND chapter named the example. It')
+print('     failed on 2026-09-16, the same day: WP-120 and ch-conley both use it.')
+print('     The assertion now names the exact set, so a THIRD arrival still fails.')
+print('\n     And the Lienard row above was 0 until 2026-09-16 for a reason worth')
+print('     keeping: this page writes the name `Li&eacute;nard`, so the pattern the')
+print('     block shipped with matched neither this page nor WP-120. A false zero')
+print('     on a word printed twice on the page doing the counting. See')
+print('     tools/corpus_count.py.')
 
 # ---------------------------------------------------------------------------
 head(7, 'CONTROL: THIS SCRIPT COMPUTED SOMETHING')
 check(abs(F(a)) < 1e-12 and F(1.0) < 0, 'F was evaluated and has the right sign either side of a')
 check(len(v_vdp) == len(pts) == 5400, 'the divergence grid has %d points' % len(pts))
 check(len(files('moonshine')) > 0, 'git grep returned files rather than nothing')
-check(len(files('zzz-no-such-token-zzz')) == 0, 'and none for a token that is absent')
+# assembled, not written down: a literal control token matches itself once the
+# script is committed, and this one is also in book6/wp82-verify.py.
+ABSENT = 'qqx' + '-no-file-contains-this-' + 'qqx'
+check(files(ABSENT) == [], 'and none for a token no file contains', str(files(ABSENT)))
 print('    A vacuous pass is a pass. Block [7] exists so that block [6] cannot')
 print('    report zero van der Pol files by failing to reach the repository.')
 
