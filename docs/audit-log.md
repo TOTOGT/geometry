@@ -6938,22 +6938,11 @@ microplastic loading — all layer-local, all disqualified, all by the same line
 What fails the screen acts on h, and nothing that acts on h at regional scale is
 deployable. Published as `book6/wp123-what-k-must-be.html`.
 
-**The part that should be uncomfortable.** The screen was already written down.
-`ch03-operator-sequence.html` — the chapter that defines G = U∘F∘K∘C, and which
-predates WP41 — carries it as a caution: "K as a 0/1 gate and F as a pointwise
-fold commute exactly. Non-commutativity in this framework comes from inter-site
-coupling inside F, not from the gate." That is the theorem in prose, minus the
-quantifier, on a page in Book 3. WP41 was drafted anyway; WP66 re-derived it
-from the other end nine months later; WP123 now proves it. Three arrivals at
-one fact, none of which consulted the previous.
-
-The defect class is not a wrong theorem. It is a corpus that does not read
-itself — the same class as the 55 dangling `.lean` names, as `book13`'s nine
-unaddressed chapters, as WP-114's index, and as WP-122's return map sitting in
-a textbook exercise. Every one of these was already present and already
-findable. Nothing in the repository currently reads a new paper against the
-cautions already in the corpus, and until something does, this will happen
-again.
+**A third claim was made here and is withdrawn — see the 2026-09-16 entry.**
+This entry originally said the screen "was already written down" in
+`ch03-operator-sequence.html` and that WP41 was drafted in spite of it. That is
+false, and WP-123 §5 carried the same error for a day. It is corrected below
+and on the page.
 
 ---
 
@@ -7019,3 +7008,71 @@ was declared.
 **What none of this is.** No chapter is wrong, no theorem is affected, and
 `audit.py` was clean across 732 pages both before and after. Every defect here
 is a statement about the corpus made by the corpus and not checked against it.
+
+
+---
+
+## 2026-09-16 · WP-123 §5 withdrawn and rewritten — hindsight presented as negligence
+
+Corrected the same day it was published, on the author's objection, which was
+right.
+
+**What was claimed.** WP-123 §5 was titled "The rule was already written". It
+quoted `ch03-operator-sequence.html` — "K as a 0/1 gate and F as a pointwise
+fold commute exactly. Non-commutativity in this framework comes from inter-site
+coupling inside F, not from the gate" — called it "K1, in prose, without the
+quantifier", and said WP41 was drafted anyway. Yesterday's audit-log entry said
+the same, and so did `tools/build_indexes.py`'s neighbours in tone: the arc
+"spent six papers searching a slot the theorem had already closed", and "the
+screen costs one line and the arc did not run it for two years."
+
+**Two things wrong with that, one technical and one about what research is.**
+
+*Technical — NAME EXCEEDS STATEMENT, and the name was mine.* ch03's caution is
+not K1. It pairs the gate with **the fold**, and its target is a derivation: it
+exists to forbid a spurious boundary term ∝ δ(η − η*). K1 pairs the gate with a
+**proposed intervention** and quantifies over the whole class. Getting from the
+first to the second requires noticing that the candidate occupying the K slot is
+itself layer-local — which is WP66 §2's observation, and is not in ch03. The
+algebra rhymes. The claim is different. Reading the earlier sentence as the
+later theorem is only possible once you hold the later theorem, which is the
+exact defect this log spends most of its length cataloguing, committed in the
+paper that catalogues it.
+
+*About the method.* Nobody knew WP39→WP40→WP41 would not work until WP66–WP68.
+Had it been known, the papers would not have been written. On the evidence
+available, an ice-nucleation aerosol at 2–4 km was the obvious occupant of the K
+slot and a reasonable one: right altitude, threshold character, and the only
+object in the frame a person can actually release. WP66's disqualifying
+observation is not available until somebody writes down a specific deployment at
+a specific altitude. WP67's half — the thing has been running for fifty years
+and has produced no measurable effect — cannot be reasoned to at all; it was
+found by looking.
+
+Propose, develop, test, fail, turn. That is what the arc did and it is what
+anyone does. K1 is its **residue**, not its correction, and the one line is
+cheap only because six papers were expensive. The value is entirely prospective:
+the next candidate gets screened by someone who never has to run this arc.
+
+**What changed.** §5 is rewritten as "What the one line cost". The resemblance to
+ch03 is kept and stated as a resemblance, with the difference spelled out. The
+lede, subtitle, §1, the §4 finding box, §8's closing line, the Book 6 index blurb
+and WP-41's standing-corrections block (c) all carried the same framing and are
+all corrected. A note on Kepler is added: the *Astronomia Nova* came out of the
+polyhedral programme worked thoroughly enough to reach an eight-arcminute
+residual in Mars, and what decided it was a measurement rather than an argument.
+This arc turned in months rather than Kepler's twenty-five years, for the same
+reason — WP67 went and looked.
+
+**The one defect that survives unchanged** is WP-41 §3's arithmetic: three
+capacities of 2–5M, 3–8M and 5–10M and a stated total of ~200–500M. That needed
+nothing learned later. Both figures are on one page in one section. It is worth
+keeping the two apart — one is the cost of finding out, the other is a section
+nobody re-read.
+
+**The general rule this log now owes itself.** An audit written from the end of
+an arc can always make the beginning look negligent, because the audit holds
+what the beginning was trying to find. Before filing a defect as "they should
+have known", check the dates and check whether the knowledge existed. The class
+is *hindsight presented as negligence*, and it is the first entry in this log to
+commit it.
