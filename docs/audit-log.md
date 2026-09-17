@@ -8214,3 +8214,61 @@ already owns. Two shapes recur: entries *occupied by person and empty by phrase*
 undergraduate course. Fifty-four of the sixty-one entries have not been sense-audited;
 on the evidence of the seven that were, there is no reason to assume they are clean.
 `[OPEN]`
+
+## 2026-09-17 · later — the Lean was never chased, and two published numbers were wrong
+
+**Withdrawn: "AXLE compiles nothing."** It was carried in the handoff block and
+repeated in conversation, and it was never tested — the Cowork Linux VM has no
+`elan`, `lake` or `lean` on PATH, so nothing in this session could have tested it.
+`lake env lean book6/lean/grothendieckAddGroup_nat_equiv_int.lean` run by the
+author on the desk **elaborates**: three errors and an axiom report, which is a
+toolchain working, not a toolchain absent. The claim is struck; the replacement
+claim is per-file and stated below. `[FIXED]`
+
+**Corrected: "55 Lean names resolve nowhere across 102 page-citations."** That was
+measured under **2 of the 11 roots** in `tools/corpus_roots.txt` — the R15 failure
+recorded on 2026-09-16, committed again. All eleven roots are now mounted and
+searched (AXLE, geometry, GTCT, vol1-proofs, 3M, dnls, b3s, grossi-ops, Projects,
+~/geometry, Downloads). 812 pages against 202 distinct corpus `.lean` basenames:
+
+    36 resolve nowhere in this corpus
+     2 resolve only under another case  (main.lean → Main.lean;
+                                         discretedm3.lean → discreteDm3.lean)
+     5 resolve UPSTREAM in .lake/packages
+    74 citations in all
+
+**The 5 upstream names were a defect in the checker, not in the corpus.**
+`GrothendieckGroup.lean`, `ClassGroup.lean`, `ClassNumber.lean`, `Convolution.lean`
+and `Deligne.lean` are Mathlib files that WP-82, `book4/ch12`, `book4/rh-paper` and
+`book6/archive` cite **accurately** — WP-82 names
+`Mathlib/GroupTheory/MonoidLocalization/GrothendieckGroup.lean` (Best & Dillies,
+2025) in the sentence that makes its argument. `.lake` is in `SKIP_DIRS` so
+Mathlib's 4,543 files do not drown the corpus's, and the effect was to report
+someone else's correctly-cited file as the corpus's dangling claim.
+`lean_addresses.py` now carries `upstream_names()` and a third finding class,
+`UPSTREAM`, which prints but does not set the exit code. **An absence report that
+does not say whose file is absent is not a measurement.** `[FIXED]`
+
+**The Lean census, all reachable roots, comments stripped.** 351 `.lean` files,
+**3,188 theorem/lemma declarations**, **384 `sorry` tokens in 98 files** — so 253
+files carry no literal `sorry`. Per root: AXLE 129 files / 1,378 decls / 187
+sorries; geometry 53 / 384 / 7; GTCT 37 / 212 / 28; grossi-ops 48 / 434 / 27;
+Projects 35 / 204 / 79; ~/geometry 28 / 229 / 6; dnls 4 / 152 / 46; 3M 7 / 55 / 4;
+vol1-proofs 7 / 136 / **0**; b3s 3 / 4 / 0.
+
+**That census is an upper bound on cleanliness and must not be published as a
+proof count.** `sorryAx` arrives transitively: a file with no literal `sorry` can
+still depend on one through an import, which is exactly what the author's run
+showed. Only `#print axioms` settles it, and only `lake env lean` produces that.
+`vol1-proofs` at 136 declarations and zero literal sorries is the strongest
+candidate for a real axiom report, and it has not been run.
+
+**Volume XI, concretely.** `book6/lean/grothendieckAddGroup_nat_equiv_int.lean`
+(61 lines) is **not proved**: `depends on axioms: [propext, sorryAx,
+Classical.choice, Quot.sound]`. Three errors, the first being
+`AddLocalization.mk_eq_zero_iff` — an unknown constant in the pinned Mathlib, so
+the bridge lemma is named but does not exist under that name.
+`book6/lean/VolXI_K0_Floor.lean` (183 lines) already states the bar in its own
+docstring — "elaborates clean AND reports its axioms without sorryAx" — and says
+what is missing is a definition and a bridge lemma, not a field. Nothing to
+correct there; it is honest and in progress. `[OPEN]`

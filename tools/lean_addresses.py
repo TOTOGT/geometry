@@ -17,7 +17,13 @@ back with a verdict either way.
 
 FINDINGS:
 
-  DANGLING   the page names <X>.lean; no root contains a file of that name.
+  DANGLING   the page names <X>.lean; no root contains a file of that name, and
+             neither does `.lake/packages`. This is the corpus's own claim, and
+             its address resolves nowhere.
+  UPSTREAM   the name is a Mathlib or dependency file, found under
+             `.lake/packages`. The page is citing someone else's file correctly.
+             Reported so the count of the corpus's OWN dangling claims is honest;
+             not a finding, and it does not set the exit code.
   CASE_ONLY  a file of that name exists under a different case. It opens on a
              macOS checkout and 404s on GitHub and on any Linux clone, so the
              page is right for its author and wrong for every reader.
@@ -62,8 +68,37 @@ EXEMPT = {
 }
 
 
+def upstream_names(roots):
+    """basename -> path, for .lean files inside `.lake/packages` — Mathlib and the
+    other dependencies. These are DELIBERATELY outside `existing_names`, because a
+    page citing `Mathlib/GroupTheory/MonoidLocalization/GrothendieckGroup.lean` is
+    citing upstream correctly and is not making a claim about this corpus.
+
+    Found 2026-09-17: without this split the check reported 41 dangling names, and
+    5 of them -- GrothendieckGroup, ClassGroup, ClassNumber, Convolution, Deligne
+    -- were Mathlib files the corpus cites accurately. An absence report that does
+    not say WHOSE file is absent is not a measurement; it is a list of strings the
+    checker could not see, and `.lake` is in SKIP_DIRS precisely so that Mathlib's
+    6000 files do not drown the corpus's 351. The names still have to be resolved,
+    just not against this corpus's roots."""
+    out = {}
+    for root in roots:
+        root = os.path.abspath(os.path.expanduser(root))
+        for dp, dns, fns in os.walk(root):
+            if '.lake' not in dp and 'lake-packages' not in dp:
+                dns[:] = [d for d in dns
+                          if d in ('.lake', 'lake-packages') or d not in SKIP_DIRS]
+                continue
+            dns[:] = [d for d in dns if d not in ('.git', '__pycache__')]
+            for f in fns:
+                if f.endswith('.lean'):
+                    out.setdefault(f, os.path.relpath(os.path.join(dp, f), root))
+    return out
+
+
 def existing_names(roots):
-    """basename -> [paths]. Every .lean file under every root."""
+    """basename -> [paths]. Every .lean file under every root, EXCLUDING
+    `.lake/packages` — see upstream_names."""
     out = {}
     for root in roots:
         root = os.path.abspath(os.path.expanduser(root))
@@ -80,7 +115,8 @@ def prose(path):
     return TAG.sub(' ', STYLE.sub(' ', t))
 
 
-def scan(site, have):
+def scan(site, have, upstream=None):
+    upstream = upstream or {}
     lower = {k.lower(): k for k in have}
     site = os.path.abspath(os.path.expanduser(site))
     findings = []
@@ -94,6 +130,9 @@ def scan(site, have):
             pages += 1
             for name in sorted(set(NAME.findall(prose(os.path.join(dp, f))))):
                 if name in have or (rel, name) in EXEMPT:
+                    continue
+                if name in upstream:
+                    findings.append(('UPSTREAM', rel, name, upstream[name]))
                     continue
                 alt = lower.get(name.lower())
                 findings.append(('CASE_ONLY' if alt else 'DANGLING', rel, name, alt or ''))
@@ -147,11 +186,13 @@ if __name__ == '__main__':
         site, roots = (argv[0] if argv else '.'), []
     roots = [site] + roots
     have = existing_names(roots)
+    up = upstream_names(roots)
     if not have:
         print('no .lean files found under any root — nothing checked')
         sys.exit(2)
-    pages, F = scan(site, have)
-    print(f'{pages} pages scanned against {len(have)} .lean files in {len(roots)} root(s)')
+    pages, F = scan(site, have, up)
+    print(f'{pages} pages scanned against {len(have)} corpus .lean files in '
+          f'{len(roots)} root(s), plus {len(up)} upstream files in .lake/packages')
     if not F:
         print('  clean — every .lean file named in prose exists')
         sys.exit(0)
@@ -159,14 +200,16 @@ if __name__ == '__main__':
     for kind, rel, name, extra in F:
         by.setdefault((kind, name, extra), []).append(rel)
     nd = sum(1 for k, n, x in by if k == 'DANGLING')
-    nc = len(by) - nd
-    print(f'  {nd} names resolve nowhere, {nc} resolve only under another case;'
-          f' {len(F)} citations in all\n')
-    for kind in ('DANGLING', 'CASE_ONLY'):
+    nc = sum(1 for k, n, x in by if k == 'CASE_ONLY')
+    nu = sum(1 for k, n, x in by if k == 'UPSTREAM')
+    print(f'  {nd} names resolve nowhere in this corpus, {nc} resolve only under'
+          f' another case, {nu} resolve upstream in .lake/packages and are not'
+          f' this corpus\'s claims; {len(F)} citations in all\n')
+    for kind in ('DANGLING', 'CASE_ONLY', 'UPSTREAM'):
         for (k, name, extra), pgs in sorted(
                 by.items(), key=lambda kv: (-len(kv[1]), kv[0][1])):
             if k != kind:
                 continue
             tail = f'  [on disk: {extra}]' if extra else ''
             print(f'  {k:<9} {name:<34} {len(pgs):>2}  {", ".join(sorted(pgs))}{tail}')
-    sys.exit(1)
+    sys.exit(1 if (nd or nc) else 0)

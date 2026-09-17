@@ -154,9 +154,21 @@ committed — assemble it at run time.
 - **`ch-smale`'s open question**, recorded not asserted: the chain is G = U∘F∘K∘C with F the *Fold*,
   and no return map in the family can fold. The corpus has never said which sense it means where.
 - **chRho-spectral Argument V** — three defects, untouched, reader-facing, author's call.
-- **AXLE compiles nothing**, and 55 Lean names resolve nowhere across 102 page-citations. Per R15
-  that is *unresolved under the roots searched* (2 of 11 in `tools/corpus_roots.txt`) — **not**
-  "the files do not exist". `tools/lean_addresses.py` still owes a run against all eleven roots.
+- **The Lean, now chased across all eleven roots** (done 2026-09-17; "AXLE compiles nothing" is
+  **withdrawn** — never tested, and untestable from the Cowork VM, which has no `elan`/`lake`/`lean`
+  on PATH; the author's own `lake env lean` elaborates). Measured: **351 `.lean` files, 3,188
+  theorem/lemma declarations, 384 `sorry` tokens in 98 files**, 253 files with no literal `sorry`.
+  `lean_addresses.py` against all eleven roots: **36 resolve nowhere, 2 case-only, 5 UPSTREAM**
+  (Mathlib files WP-82 and book4 cite *correctly* — the old 55/102 counted those as corpus
+  failures). The checker now has `upstream_names()` and an `UPSTREAM` class that prints without
+  setting the exit code.
+  **The sorry census is an upper bound, not a proof count** — `sorryAx` arrives transitively
+  through imports, so only `#print axioms` under `lake env lean` settles a file. **`vol1-proofs`
+  is the one to run first: 136 declarations, zero literal sorries, never axiom-checked.**
+  **Volume XI:** `book6/lean/grothendieckAddGroup_nat_equiv_int.lean` is **not proved** —
+  `[propext, sorryAx, Classical.choice, Quot.sound]`, and `AddLocalization.mk_eq_zero_iff` is an
+  unknown constant in the pinned Mathlib. `book6/lean/VolXI_K0_Floor.lean` states the right bar in
+  its own docstring and is in progress; nothing there to correct.
 - **`dm3brand.html` is hand-typed** from `theorem_census.py` and stale by content (geometry 287→378)
   and by method (two diverged tool copies, the older counting `_to_delete/` and `docs/ml-evidence/`).
   `verification-registry.html` is hand-written and frozen by design.
