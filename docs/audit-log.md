@@ -1,3 +1,95 @@
+# THE RULER COUNTED ITSELF: PRINCIPIA MATHEMATICA, AND A VICIOUS CIRCLE IN WP-82 (2026-09-17)
+
+**What was built.** `book7/ch-whitehead-russell.html` + `-verify.py` (8 blocks, 25 checks, exit 0);
+`book13/ch-types-the-range-of-a-variable.html` (Book 13 chapter 10, PARTIAL); and
+`tools/self_reference.py`, a new instrument. `book6/wp82-verify.py` and
+`book6/wp82-the-missing-floor.html` are corrected. Source: *Principia Mathematica* Vol I, 2nd ed.,
+Whitehead and Russell, supplied as a scan.
+
+**The measurement.** **"Lean" is in 470 tracked files and 405 chapters** — the corpus runs on a
+dependent type theory. **"theory of types" 0. vicious circle 0. propositional calculus 0. Sheffer 0.
+axiom of reducibility 0. definite description 0. logicism 0.** Whitehead 1, Principia Mathematica 1,
+Frege 1, Russell 3. Meanwhile paradox 27 chapters, self-reference 9, Gödel 27, incompleteness 39,
+Cantor 18, diagonal argument 8. **The corpus discusses the phenomenon at length and holds none of
+the machinery built for it.**
+
+**The defect, and it is in the flagship measurement.** `tools/self_reference.py` implements PM's
+vicious-circle principle (Vol I, Introduction ch. II): no object may be defined in terms of a
+totality containing itself. Applied to WP-82:
+
+- `book6/wp82-the-missing-floor.html` is **not in the tree at `654fb06`**, the commit its first
+  column names — `book6/wp81` is the last working paper in that commit. **0 of 12 rows** of column
+  one contain the ruler.
+- At `d97154e`, which column two names, the paper is in the tree and matches **all 12 of its own
+  patterns**, because it prints them in its Pattern column. **12 of 12 rows.**
+
+Two columns, two totalities, and **a spurious +1 in every row of the second**.
+
+**The fix is Russell's: stratify the range.** `files()` now excludes the ruler at both refs, and at
+`654fb06` that changes nothing — which is how the exclusion is known to be the right one rather
+than a convenient one. Block [2] recomputes and asserts **both** the unstratified and the
+stratified column, so the difference is printed rather than absorbed.
+
+| | @654fb06 | with ruler | stratified |
+|---|---:|---:|---:|
+| k-theory | 0 | 9 | **8** |
+| index theorem | 1 | 6 | **5** |
+| Atiyah | 1 | 5 | **4** |
+| operator algebra | 76 | 100 | **99** |
+| von Neumann | 7 | 12 | **11** |
+| ∞-categor | 0 | 3 | **2** |
+| sheaf / sheaves | 1 | 7 | **6** |
+| motivic / langlands | 3 | 7 | **6** |
+| noncommutative | 9 | 17 | **16** |
+| Connes | 15 | 27 | **26** |
+| spectral triple | 7 | 15 | **14** |
+| moonshine | 25 | 28 | **27** |
+
+**Rung 28: 2 → 17. Rung 33: 31 → 56. Inversion 3.3 : 1, not 3.0 : 1.** The finding survives and
+the numbers moved. Block [3]'s k-theory assertion moves 9 → 8; its `kind_of()` keeps the
+`the ruler itself` bucket so a future `wp82*` file is classified rather than counted.
+
+**The instrument, and the two design findings in it.** The tool asks, per verify script, what
+totality it counts over and whether the counter is inside it — **CORPUS-WIDE** (greps tracked files
+by extension, or walks the repo) versus **NARROW** (named files, or a tree outside the corpus such
+as `.lake/packages/mathlib`). Over 57 scripts: **0 vicious, 8 guarded, 48 narrow, 1 unread.**
+
+Both design findings are the failure the tool exists to catch, and both are printed in the chapter:
+
+1. **Testing vocabulary rather than range over-reports.** The first version flagged six scripts
+   because they *contained* a word they counted. In every case the counted set was Mathlib's tree,
+   a Lean file, or a single `.tex` — the counter was not in range, and none was a circle. The
+   principle is about the range of a variable, not the words used.
+2. **Resolving a script's page by its stem mis-files it.** `book6/wp82-verify.py` belongs to
+   `book6/wp82-the-missing-floor.html`, a longer title than the script carries, so the tool
+   reported "no page" and filed it as clean. Fixed by falling back to the leading token.
+   The guard detector also missed `exclude_finding` (wp109's named guard) and `kind_of` — both are
+   real stratifications written under other names.
+
+**wp109 was already correct.** `book6/wp109-verify.py` carries an explicit narrow exclusion and a
+comment recording that a broader first attempt was wrong: excluding every file that merely *names*
+wp109 dropped two genuine CFT chapters and took the count 20 → 17. "A page is part of the finding
+if it would not exist without it, not if it cites it." That is the right rule and it predates this
+entry.
+
+**The PM computations, all exhaustive and exact.** The four stroke definitions reproduce their
+truth tables; the stroke realises **16 of 16** binary truth functions by enumeration, with ~p the
+shortest at (p|p); **Nicod's single primitive proposition, as printed in the second-edition
+Introduction, is a tautology on all 32 rows** — a source checked against itself; the rule of
+inference is sound on all 8; *54.43 holds with no mismatch in every finite universe from 2 to 6;
+and the diagonal set is outside the image of **all 65 536** maps from a 4-element set to its power
+set. The authors' own caveat is quoted and respected: the Axiom of Reducibility is "not the sort of
+axiom with which we can rest content", and without it "Cantor's proof that 2ⁿ > n breaks down
+unless n is finite" — the exhaustion is entirely inside the finite case they say survives.
+
+**Not established.** No type hierarchy is constructed and nothing about Lean's kernel is verified.
+The descent from ramified types through Church to Martin-Löf to Lean is a historical reading,
+stated to place the instrument, not checked. The blocks are exhaustions over finite sets — evidence
+and not proof. Nothing addresses Gödel. The tool cannot see a pathspec or a pattern built at run
+time, so a clean report is consistent with a script assembling a bad pattern; it reports four
+labelled buckets rather than a verdict so a clean line can be checked instead of believed. No
+priority claimed: PM is 1910–1913.
+
 # NEWTON: THE DEFINITIONAL FORM, AND THE MEASURE THAT WENT UNNAMED (2026-09-17)
 
 **What was built.** `book7/ch-newton.html` and `book7/ch-newton-verify.py` — 6 blocks, standard

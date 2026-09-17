@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Range of a Variable &middot; Book 13 &middot; Principia Orthogona</title>
+<meta name="description" content="A type is a range, and a vicious circle is a range that contains the quantifier. tools/self_reference.py tests every verify script in the corpus for it: 1 vicious, 6 guarded, 48 narrow."/>
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none;
+             transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+      border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .04em; line-height: 1.15;
+         margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 640px; margin: 0 auto 1.5rem; }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .08em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem;
+   border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+em { font-style: italic; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-math { background: rgba(17, 17, 24, 0.9); border: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; font-family: 'Courier New', monospace;
+            line-height: 1.7; overflow-x: auto; font-size: .9rem; white-space: pre; }
+.block-axiom { background: rgba(201, 168, 76, 0.08); border-left: 3px solid var(--gold);
+             padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-theorem { background: rgba(74, 158, 255, 0.08); border-left: 3px solid var(--op-c);
+               padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry { background: rgba(255, 159, 64, 0.08); border-left: 3px solid var(--amber);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry strong { color: var(--amber); }
+.tbl-wrap { overflow-x: auto; margin: 1.5rem 0; }
+table.cat { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .88rem; }
+table.cat th { text-align:left; font-family:'Courier New',monospace; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+table.cat td { padding: .55rem .6rem; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+table.cat td:first-child { color: var(--gold); font-weight: 600; white-space: nowrap; }
+table.cat td.n { font-family:'Courier New',monospace; text-align:right; color: var(--text); font-weight: 400; }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .9rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .8rem; }
+.pull-wrap { background: rgba(201, 168, 76, 0.08); border-left: 4px solid var(--gold);
+           padding: 2rem; margin: 3rem 0; border-radius: 2px; font-style: italic;
+           line-height: 1.85; }
+.pull-cite { font-size: .85rem; color: var(--dim); display: block; margin-top: 1rem; font-style: normal; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); }
+a { color: var(--gold); }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none;
+          transition: color .2s; }
+.ch-nav a:hover { color: var(--gold); }
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<nav>
+  <a href="../living-book.html" class="nav-logo">&#9884; Principia Orthogona &middot; G1&ndash;G13</a>
+  <div class="nav-links">
+    <a href="index.html">Book 13</a>
+    <a href="../book7/ch-whitehead-russell.html">Whitehead &amp; Russell</a>
+    <a href="../book7/ch-newton.html">ch-newton</a>
+    <a href="../book6/wp82-the-missing-floor.html">WP-82</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">G13 &middot; Rung 30 &middot; The Instrument</div>
+  <h1>The Range of a Variable</h1>
+  <p class="hero-sub">A type is a range. A vicious circle is a range that contains the thing quantifying over it. Stated that way it becomes a test a script can run, and this corpus has three instances in two days to show for it.</p>
+</div>
+
+<div class="page">
+
+  <div class="section-label">Part I &middot; Why This Belongs in Book 13</div>
+
+  <p class="block-prose">
+    Volume&nbsp;XIII is rung 30 and it is where this corpus's Lean and Mathlib work lives, which is
+    the reason the type theory belongs here rather than in the gallery.
+    <a href="../book7/ch-whitehead-russell.html">ch-whitehead-russell</a> measures the position:
+    <strong>&ldquo;Lean&rdquo; occurs in 470 tracked files and 405 chapters, and &ldquo;theory of
+    types&rdquo; in none.</strong> Lean's kernel is a dependent type theory. Types were invented
+    in <em>Principia Mathematica</em>, for one purpose, and that purpose is a problem this
+    repository keeps having.
+  </p>
+
+  <div class="section-label">Part II &middot; The Rule, and the Operative Clause</div>
+
+  <div class="block-theorem">
+    <span class="block-label">The vicious-circle principle &mdash; PM Vol I, Introduction ch. II</span>
+    <p style="margin-bottom:0">No object may be defined in terms of a totality that includes
+    itself. The theory of logical types enforces it, and it enforces it by stratifying
+    <strong>the range of a variable</strong>: a function may not take itself as argument, because
+    its range is of lower type than the function is.</p>
+  </div>
+  <p class="block-prose">
+    The operative clause is the last one. A statement is not in danger because of the
+    <em>words</em> it uses; it is in danger when the <em>set it quantifies over</em> contains the
+    statement. That distinction is the whole difference between a test that works and one that
+    does not, and it is what the instrument below is built on.
+  </p>
+
+  <div class="section-label">Part III &middot; Three Instances, Two Days</div>
+
+  <p class="block-prose">
+    The shape recurred three times in this corpus before it had a name:
+  </p>
+  <div class="tbl-wrap">
+  <table class="cat">
+    <tr><th>where</th><th>the circle</th><th>the patch</th></tr>
+    <tr><td><a href="../book7/ch-van-der-pol.html">ch-van-der-pol</a> block&nbsp;[6]</td><td>asserted &ldquo;van der Pol&rdquo; appears in no chapter. Publishing the chapter put the phrase into the Book 7 index and two generated index pages, so the count it asserted on included the act of asserting it.</td><td>a <code>classify()</code> returning <code>'self'</code></td></tr>
+    <tr><td>two verify scripts</td><td>shipped a <em>literal</em> control token meant to match nothing. Each file then contained it, so each found the other.</td><td>assemble the token at run time</td></tr>
+    <tr><td><a href="../book6/wp82-the-missing-floor.html">WP-82</a>'s rung table</td><td>counts the paper that prints it &mdash; 12 of 12 rows in its second column, 0 of 12 in its first, because the paper is not in the tree at the commit the first column names.</td><td>exclude the ruler from the range, at both refs</td></tr>
+  </table>
+  </div>
+  <p class="block-prose">
+    Each was fixed by hand, in the file where it appeared, and the class was never named. A
+    hand-written self-exclusion, once per script, <em>is</em> the ramified-type dodge: stratify,
+    and forbid the level from quantifying over itself. Naming it is what lets the dodge be checked
+    rather than remembered.
+  </p>
+
+  <div class="section-label">Part IV &middot; The Instrument</div>
+
+  <p class="block-prose">
+    <code>tools/self_reference.py</code> asks, for every <code>*-verify.py</code> in the
+    repository, what totality it counts over, and whether the counter is inside it:
+  </p>
+  <div class="block-math">CORPUS-WIDE   it greps tracked files by extension, or walks the repo and
+              filters by suffix. The range is a set of repo files, and the
+              script's own page — sometimes the script — is in it.
+
+NARROW        it opens named files, or ranges over a tree outside the corpus
+              such as .lake/packages/mathlib. The range cannot contain the
+              counter, so the principle is not engaged.
+
+VICIOUS       corpus-wide, counts a pattern, the counter is in range,
+              and there is no stratification.
+GUARDED       the same, and it stratifies.</div>
+  <div class="block-math">57 verify scripts tracked
+
+  vicious  0
+  guarded  8      wp82, ch-conley, ch-smale, ch-gelfand, ch-feigin, ch-newton,
+                  ch-van-der-pol, ch-whitehead-russell
+  narrow  48
+  unread   1      corpus-wide, no pattern this tool can read</div>
+  <p class="block-prose">
+    It read <strong>1 vicious</strong> on its first run, and the row was WP-82.
+    <code>wp82-verify.py</code>'s <code>files()</code> now excludes the ruler at both refs, and
+    block&nbsp;[2] asserts the stratified and the unstratified column separately so the difference
+    is printed rather than absorbed. Stratified, rung 28 goes 2&nbsp;&rarr;&nbsp;17, rung 33 goes
+    31&nbsp;&rarr;&nbsp;56, and the inversion narrows to 3.3&nbsp;:&nbsp;1.
+  </p>
+  <p class="block-prose">
+    The eight <code>GUARDED</code> rows are the instructive ones. Every chapter written from
+    WP-82's gaps this week is corpus-wide, is inside its own range, and carries a stratification
+    &mdash; because each one's count block went red on its own commit and was patched then. The
+    tool turns eight separate acts of discipline into a property checkable in one command, and
+    <code>--strict</code> exits 1 on any vicious row, so it can gate CI rather than be remembered.
+  </p>
+
+  <div class="section-label">Part V &middot; What the Instrument Cannot See</div>
+  <div class="block-sorry">
+    <span class="block-label">Limits, stated</span>
+    <p style="margin-bottom:.7rem">The range is inferred from string literals and call shapes, not
+    by running anything. A script that builds its pathspec at run time reads as
+    <code>NARROW</code> whether or not it is. A pattern assembled from pieces is invisible &mdash;
+    which is precisely the trick that fixes the control-token bug, so <strong>a clean report here
+    is consistent with a script that assembles a bad pattern.</strong></p>
+    <p style="margin-bottom:0">Two findings about the tool's own design are worth printing, because
+    both are the failure it exists to catch. Testing <em>vocabulary</em> rather than <em>range</em>
+    over-reports: six scripts contain a word they count while the counted set is Mathlib's tree or
+    a single <code>.tex</code> file, and none of those is a circle. And resolving a script's page
+    by its stem alone mis-files <code>book6/wp82-verify.py</code>, whose page is
+    <code>book6/wp82-the-missing-floor.html</code> &mdash; a longer title than the script carries.
+    The tool reports what it examined, in four labelled buckets, rather than a bare verdict, so a
+    clean line can be checked instead of believed.</p>
+  </div>
+
+  <div class="section-label">Part VI &middot; What This Does Not Claim</div>
+  <p class="block-prose">
+    No type hierarchy is constructed here, and nothing about Lean's kernel is verified. The
+    descent from Russell's ramified types through Church's simple types to Martin-L&ouml;f and to
+    Lean's dependent type theory is a historical reading, stated to place the instrument, and it is
+    not the subject of a check. What is established is narrower and is the part worth keeping:
+    <strong>stated as a condition on ranges rather than on words, the vicious-circle principle is
+    mechanically testable over this repository, and it found a live instance in the corpus's own
+    flagship measurement.</strong>
+  </p>
+
+  <div class="section-label">Sources</div>
+  <table class="refs">
+    <tr><td>PM Vol I</td><td>A. N. Whitehead and B. Russell, <em>Principia Mathematica</em>, Volume&nbsp;I, 2nd edition, Cambridge University Press. Introduction ch.&nbsp;II, <em>The Theory of Logical Types</em>; &lowast;12, <em>The Hierarchy of Types and the Axiom of Reducibility</em>.</td></tr>
+    <tr><td>instrument</td><td><code>tools/self_reference.py</code> &mdash; standard library only. <code>--strict</code> exits 1 on any <code>VICIOUS</code> row, so this can gate CI.</td></tr>
+    <tr><td>in-corpus</td><td><a href="../book7/ch-whitehead-russell.html">ch-whitehead-russell</a> &middot; <a href="../book7/ch-newton.html">ch-newton</a> &middot; <a href="../book6/wp82-the-missing-floor.html">WP-82</a> &middot; <a href="../book7/ch-van-der-pol.html">ch-van-der-pol</a> &middot; <code>tools/corpus_count.py</code></td></tr>
+  </table>
+
+</div>
+
+<div class="ch-nav">
+  <a href="../book7/ch-whitehead-russell.html">&larr; Whitehead &amp; Russell</a>
+  <a href="index.html">Book 13 index</a>
+  <a href="../book6/wp82-the-missing-floor.html">WP-82 &rarr;</a>
+</div>
+
+<footer>
+  &#9884; Principia Orthogona &middot; Book 13 &middot; Rung 30 &middot;
+  <a href="../living-book.html">the living book</a>
+</footer>
+
+</body>
+</html>

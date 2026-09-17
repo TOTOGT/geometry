@@ -35,35 +35,51 @@ def check(ok, msg, detail=''):
 def head(n, t):
     print('\n' + '=' * 70 + '\n  [%s]  %s\n' % (n, t) + '=' * 70)
 
-def files(pattern, ref):
-    """WP-82's method: tracked *.html and *.md, case-insensitive, file count."""
+RULER = 'book6/wp82-the-missing-floor.html'
+
+def files(pattern, ref, keep_ruler=False):
+    """WP-82's method: tracked *.html and *.md, case-insensitive, file count.
+
+    STRATIFIED, 2026-09-17. The ruler is one of the files the ruler measures,
+    and the two columns did not agree about it. At 654fb06 the paper was not in
+    the tree at all -- book6/wp81 is the last wp in that commit -- so column one
+    ranges over a corpus without it. At d97154e the paper is in the tree and
+    matches ALL TWELVE of its own patterns, so column two counted itself twelve
+    times. Two columns, two different totalities.
+
+    Principia Mathematica's rule (Vol I, Introduction ch. II) is that no object
+    may be defined in terms of a totality containing itself, and its remedy is
+    to stratify the range of the variable. So the range here excludes the ruler
+    at BOTH refs: at 654fb06 that changes nothing, which is the check that the
+    exclusion is the right one rather than a convenient one."""
     r = subprocess.run(['git', '--no-optional-locks', 'grep', '-lic', '-e', pattern,
                         ref, '--', '*.html', '*.md'],
                        cwd=REPO, capture_output=True, text=True)
-    return set(l.split(':', 1)[1] for l in r.stdout.splitlines() if ':' in l)
+    out = set(l.split(':', 1)[1] for l in r.stdout.splitlines() if ':' in l)
+    return out if keep_ruler else out - {RULER}
 
-def count(patterns, ref):
+def count(patterns, ref, keep_ruler=False):
     s = set()
-    for p in patterns: s |= files(p, ref)
+    for p in patterns: s |= files(p, ref, keep_ruler)
     return len(s), s
 
 BASE   = '654fb06'        # the commit WP-82's first column names
 SECOND = 'd97154e'        # the commit its second column names, added 2026-09-16
                           # after six rows moved inside a single day. A date is
                           # not a commit; both columns now name one.
-ROWS = [                  # (rung, field, patterns, col-1 @BASE, col-2 @SECOND)
-    ('28', 'K-Theory & Index Theory',   ['k-theory'],                          0, 9),
-    ('28', '  index theorem',           ['index theorem'],                     1, 6),
-    ('28', '  Atiyah',                  ['atiyah'],                            1, 5),
-    ('29', 'Operator Algebras',         ['operator algebra'],                 76, 100),
-    ('29', '  von Neumann',             ['von neumann'],                       7, 12),
-    ('30', 'Higher Category Theory',    ['∞-categor', 'infinity-categor'],     0, 3),
-    ('31', 'Derived Algebraic Geometry',['sheaf', 'sheaves'],                   1, 7),
-    ('32', 'Motivic / Langlands',       ['motivic', 'langlands'],               3, 7),
-    ('33', 'Noncommutative Geometry',   ['noncommutative'],                     9, 17),
-    ('33', '  Connes',                  ['connes'],                            15, 27),
-    ('33', '  spectral triple',         ['spectral triple'],                    7, 15),
-    ('--', 'Monstrous Moonshine',       ['moonshine'],                         25, 28),
+ROWS = [                  # (rung, field, patterns, col-1 @BASE, col-2 @SECOND, stratified)
+    ('28', 'K-Theory & Index Theory',   ['k-theory'],                          0, 9, 8),
+    ('28', '  index theorem',           ['index theorem'],                     1, 6, 5),
+    ('28', '  Atiyah',                  ['atiyah'],                            1, 5, 4),
+    ('29', 'Operator Algebras',         ['operator algebra'],                 76, 100, 99),
+    ('29', '  von Neumann',             ['von neumann'],                       7, 12, 11),
+    ('30', 'Higher Category Theory',    ['∞-categor', 'infinity-categor'],     0, 3, 2),
+    ('31', 'Derived Algebraic Geometry',['sheaf', 'sheaves'],                   1, 7, 6),
+    ('32', 'Motivic / Langlands',       ['motivic', 'langlands'],               3, 7, 6),
+    ('33', 'Noncommutative Geometry',   ['noncommutative'],                     9, 17, 16),
+    ('33', '  Connes',                  ['connes'],                            15, 27, 26),
+    ('33', '  spectral triple',         ['spectral triple'],                    7, 15, 14),
+    ('--', 'Monstrous Moonshine',       ['moonshine'],                         25, 28, 27),
 ]
 
 # ---------------------------------------------------------------------------
@@ -77,7 +93,7 @@ print('  on 2026-08-29."\n')
 print('     %5s %-28s %10s %10s' % ('rung', 'field', 'printed', 'recomputed'))
 ok_repro = True
 base_n = {}
-for rung, field, pats, printed, printed2 in ROWS:
+for rung, field, pats, printed, printed2, printed3 in ROWS:
     n, _ = count(pats, BASE)
     base_n[field] = n
     flag = '' if n == printed else '   <-- MISMATCH'
@@ -90,31 +106,73 @@ print('     book13/ch06-past-two.html does not exist in that tree. The measureme
 print('     is sound and so is its date; what it is not is current.')
 
 # ---------------------------------------------------------------------------
-head(2, 'THE SECOND COLUMN, AT THE COMMIT IT NAMES -- AND TODAY')
+head(2, 'THE SECOND COLUMN -- AND THE RULER INSIDE IT')
 print('  The second column was first published against HEAD rather than a named')
-print('  commit, and six of its twelve rows moved inside a single day. A date is')
-print('  not a commit. It now names %s, and reproduces there the way the first' % SECOND)
-print('  column reproduces at %s. The live HEAD column is printed for information' % BASE)
-print('  and asserted only for monotonicity.\n')
-print('     %5s %-28s %10s %10s %8s %8s' % ('rung', 'field', '@' + BASE, '@' + SECOND, 'recomp', 'HEAD'))
+print('  commit, and six of its twelve rows moved inside a single day. It now')
+print('  names %s. But naming the commit exposed the larger thing.\n' % SECOND)
+print('  THE RULER IS ONE OF THE FILES THE RULER MEASURES. At %s the paper is' % BASE)
+print('  not in the tree at all -- book6/wp81 is the last wp in that commit -- so')
+print('  the first column ranges over a corpus WITHOUT it. At %s the paper is' % SECOND)
+print('  in the tree and matches ALL TWELVE of its own patterns, because it prints')
+print('  them. Two columns, two different totalities, and the drift between them')
+print('  carried a spurious +1 in every row.\n')
+print('  Principia Mathematica, Vol I, Introduction ch. II: no object may be')
+print('  defined in terms of a totality that includes itself, and the remedy is to')
+print('  stratify the range. files() now excludes the ruler at BOTH refs. At %s' % BASE)
+print('  that changes nothing, which is how we know the exclusion is the right one')
+print('  rather than a convenient one.\n')
+print('     %5s %-28s %8s %9s %9s %8s %7s'
+      % ('rung', 'field', '@' + BASE, 'with', 'without', 'recomp', 'HEAD'))
 head_n = {}
 ok_repro2 = True
-for rung, field, pats, printed, printed2 in ROWS:
-    n2, _ = count(pats, SECOND)
+ok_repro3 = True
+ruler_rows = 0
+for rung, field, pats, printed, printed2, printed3 in ROWS:
+    n_with, set_with = count(pats, SECOND, keep_ruler=True)
+    n_wo,   _         = count(pats, SECOND)
     nh, _ = count(pats, 'HEAD')
     head_n[field] = nh
-    flag = '' if n2 == printed2 else '   <-- MISMATCH'
-    print('     %5s %-28s %10d %10d %8d %8d%s'
-          % (rung, field, base_n[field], printed2, n2, nh, flag))
-    if n2 != printed2: ok_repro2 = False
-check(ok_repro2,
-      'every one of the %d numbers in the second column reproduces at %s' % (len(ROWS), SECOND))
-check(all(head_n[f] >= base_n[f] for _, f, _, _, _ in ROWS),
+    if RULER in set_with: ruler_rows += 1
+    f2 = '' if n_with == printed2 else ' <-- MISMATCH'
+    f3 = '' if n_wo == printed3 else ' <-- MISMATCH'
+    print('     %5s %-28s %8d %9d %9d %8d %7d%s%s'
+          % (rung, field, base_n[field], printed2, printed3, n_wo, nh, f2, f3))
+    if n_with != printed2: ok_repro2 = False
+    if n_wo != printed3: ok_repro3 = False
+check(ok_repro2, 'the %d unstratified numbers reproduce at %s' % (len(ROWS), SECOND))
+check(ok_repro3, 'and so do the %d stratified ones' % len(ROWS))
+check(ruler_rows == len(ROWS),
+      'the ruler is inside ALL %d rows of the second column -- it prints every '
+      'pattern it counts' % len(ROWS), str(ruler_rows))
+# the rung totals the PAGE quotes, at the commit the page names, stratified.
+sec_n = {}
+for rung, field, pats, printed, printed2, printed3 in ROWS:
+    sec_n[field] = printed3
+s28 = sum(sec_n[f] for r_, f, _, _, _, _ in ROWS if r_ == '28')
+s33 = sum(sec_n[f] for r_, f, _, _, _, _ in ROWS if r_ == '33')
+b28 = sum(base_n[f] for r_, f, _, _, _, _ in ROWS if r_ == '28')
+b33 = sum(base_n[f] for r_, f, _, _, _, _ in ROWS if r_ == '33')
+print('\n     stratified, at %s -- the figures the page quotes:' % SECOND)
+print('       rung 28 total : %3d  ->  %3d' % (b28, s28))
+print('       rung 33 total : %3d  ->  %3d' % (b33, s33))
+print('       ratio 33 : 28 : %.1f  ->  %.1f' % (b33 / max(b28, 1), s33 / max(s28, 1)))
+check((b28, s28, b33, s33) == (2, 17, 31, 56),
+      'rung 28 goes 2 -> 17 and rung 33 goes 31 -> 56, stratified',
+      str((b28, s28, b33, s33)))
+check(abs(s33 / s28 - 3.294117647058823) < 1e-12,
+      'and the inversion narrows to 3.3 : 1, not 3.0 : 1', '%.4f' % (s33 / s28))
+
+base_with, _ = count(['moonshine'], BASE, keep_ruler=True)
+base_wo, _ = count(['moonshine'], BASE)
+check(base_with == base_wo,
+      'and inside NO row of the first column, because it is not in that tree: '
+      'stratifying leaves %s unchanged' % BASE, '%d vs %d' % (base_with, base_wo))
+check(all(head_n[f] >= base_n[f] for _, f, _, _, _, _ in ROWS),
       'no row went down between %s and HEAD, so nothing was lost from the corpus' % BASE)
-r28_b = sum(base_n[f] for r_, f, _, _, _ in ROWS if r_ == '28')
-r28_h = sum(head_n[f] for r_, f, _, _, _ in ROWS if r_ == '28')
-r33_b = sum(base_n[f] for r_, f, _, _, _ in ROWS if r_ == '33')
-r33_h = sum(head_n[f] for r_, f, _, _, _ in ROWS if r_ == '33')
+r28_b = sum(base_n[f] for r_, f, _, _, _, _ in ROWS if r_ == '28')
+r28_h = sum(head_n[f] for r_, f, _, _, _, _ in ROWS if r_ == '28')
+r33_b = sum(base_n[f] for r_, f, _, _, _, _ in ROWS if r_ == '33')
+r33_h = sum(head_n[f] for r_, f, _, _, _, _ in ROWS if r_ == '33')
 print('\n     rung 28 total : %3d  ->  %3d' % (r28_b, r28_h))
 print('     rung 33 total : %3d  ->  %3d' % (r33_b, r33_h))
 print('     ratio 33 : 28 : %.1f  ->  %.1f' % (r33_b / max(r28_b, 1), r33_h / max(r28_h, 1)))
@@ -130,6 +188,9 @@ print('  the audit log, and the ruler itself. The composition matters more than 
 print('  total, so here it is.\n')
 n_k, set_k = count(['k-theory'], SECOND)
 def kind_of(f):
+    # the ruler is now excluded by files() before it reaches here; the bucket is
+    # kept so that a future file named wp82* is still classified rather than
+    # counted as a chapter.
     if 'wp82' in f:                                    return 'the ruler itself'
     if f == 'CLAUDE.md':                               return 'project scaffolding'
     if (f.endswith('index.html') or f.startswith('index-')
@@ -140,14 +201,15 @@ for f in sorted(set_k):
     print('     %-46s %s' % (f, kind_of(f)))
 chapters = [f for f in set_k if kind_of(f) == 'CHAPTER']
 print()
-check(n_k == 9, 'k-theory is in %d files at %s' % (n_k, SECOND), str(n_k))
+check(n_k == 8, 'k-theory is in %d files at %s, stratified -- 9 with the ruler'
+      % (n_k, SECOND), str(n_k))
 check(len(chapters) == 2,
       'exactly %d of them are chapters -- the rest are listings, the log, CLAUDE.md '
       'and this paper' % len(chapters), str(sorted(chapters)))
 print('     So the floor is STARTED, not built: %d chapters (%s)'
       % (len(chapters), ', '.join(sorted(chapters))))
-print('     plus the echoes a new chapter produces in navigation. Reporting 0 -> 9')
-print('     without this breakdown would overstate it by a factor of four and a half.')
+print('     plus the echoes a new chapter produces in navigation. Reporting 0 -> 8')
+print('     without this breakdown would overstate it by a factor of four.')
 print()
 print('     CLAUDE.md is separated out here because it is not a chapter and not a')
 print('     listing: it is scaffolding that names the vocabulary in a handoff note.')
