@@ -106,16 +106,21 @@ naturals -- because the first half needs the projective-module monoid, which
 is exactly what Mathlib does not yet have. Stating this separately is the
 point: it isolates what is missing.
 
-`AddGrothendieckGroup` is the `to_additive` name of `GrothendieckGroup`. -/
+`GrothendieckAddGroup` is the `to_additive` name of `GrothendieckGroup`.
+NOT `GrothendieckAddGroup` -- `to_additive` rewrites the token `Group` into
+`AddGroup` in place, it does not prefix the whole name. Verified 2026-09-17 by
+grepping the built olean: `GrothendieckAddGroup` 1 hit, `GrothendieckAddGroup`
+0 hits. Guessing this from the naming convention is how the previous round
+produced seven errors; the olean is the authority. -/
 
 /-- **K₀ of a field, second half.** The Grothendieck group of `(ℕ, +)` is `ℤ`.
     This is where Volume XI's first theorem bottoms out. -/
-theorem addGrothendieckGroup_nat_equiv_int :
-    Nonempty (AddGrothendieckGroup ℕ ≃+ ℤ) := by
+theorem grothendieckAddGroup_nat_equiv_int :
+    Nonempty (GrothendieckAddGroup ℕ ≃+ ℤ) := by
   sorry
   -- HONEST SORRY. The intended proof: `ℤ` is a commutative group, `Nat.cast`
-  -- is an `AddMonoidHom ℕ →+ ℤ`, so `AddGrothendieckGroup.lift` supplies a
-  -- hom `AddGrothendieckGroup ℕ →+ ℤ`. Injectivity comes from `ℕ` being
+  -- is an `AddMonoidHom ℕ →+ ℤ`, so `GrothendieckAddGroup.lift` supplies a
+  -- hom `GrothendieckAddGroup ℕ →+ ℤ`. Injectivity comes from `ℕ` being
   -- cancellative; surjectivity from every integer being a difference of
   -- naturals. Each step is available; assembling them was not attempted here
   -- because the file could not be compiled to check the assembly.
@@ -171,6 +176,6 @@ def volXI_obligation : String :=
 And if it does not elaborate, it establishes that the API was misread, which
 is also worth knowing and is why the file says so at the top. -/
 
-#print axioms addGrothendieckGroup_nat_equiv_int
+#print axioms grothendieckAddGroup_nat_equiv_int
 
 end PrincipiaOrthogona.VolXI
