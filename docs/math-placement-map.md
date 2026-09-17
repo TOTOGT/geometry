@@ -49,15 +49,15 @@ The trigger. Producing scripts: `book7/ch-ramanujan-verify.py` (80-digit) and
 
 | Object | IV · worked | VI · finding | VII · person | X · custody | XI · algebra | XIII · check |
 |---|---|---|---|---|---|---|
-| Singular moduli `alpha_n` | **to write** | — | `ch-ramanujan` VI(a,b) | notebooks, unlabelled | CM theory | — |
+| Singular moduli `alpha_n` | `book4/ch-modular-equations-and-pi.html` §1 | — | `ch-ramanujan` VI(a,b) | notebooks, unlabelled | CM theory | — |
 | Watson's algorithm | — | — | `ch-ramanujan` VI(c) | notebook p. 320 | — | — |
-| The 1/pi series | **to write** | — | `ch-ramanujan` VI(d) | — | — | — |
+| The 1/pi series | `book4/ch-modular-equations-and-pi.html` §2 | — | `ch-ramanujan` VI(d) | — | — | — |
 | `9801 = 99^2` bridge | — | — | `ch-ramanujan` VI(d) | — | — | — |
-| Pell, `eps^6 = 9801 + 1820 sqrt29` | **to write** | — | `ch-ramanujan` VI(e) | — | **core candidate** | — |
-| Reading a damaged source | — | — | `ch-ramanujan` VI(f) | OCR loss | — | **to write** |
+| Pell, `eps^6 = 9801 + 1820 sqrt29` | `book4/ch-modular-equations-and-pi.html` §3 | — | `ch-ramanujan` VI(e) | — | **core candidate** | — |
+| Reading a damaged source | — | — | `ch-ramanujan` VI(f) | `book10/ch05-the-notebooks-and-what-reached-us.html` §5 | — | `book13/ch10-what-a-check-establishes.html` Rule 2 |
 | Heegner 163 | — | `book6/wp82-the-missing-floor.html` | `ch-ramanujan` VI(g) | — | class-number floor | — |
-| `k_210` discrepancy | — | — | `ch-ramanujan` sorry-box | **the live case** | — | limits of arithmetic |
-| Four instrument failures | — | — | `ch-ramanujan` sorry-box | — | — | **to write** |
+| `k_210` discrepancy | — | — | `ch-ramanujan` sorry-box | `book10/ch05-the-notebooks-and-what-reached-us.html` §4 — **open** | — | limits of arithmetic |
+| Four instrument failures | — | — | `ch-ramanujan` sorry-box | — | — | `book13/ch10-what-a-check-establishes.html` Rule 3 |
 
 Rows marked **to write** are placements this map asserts and the corpus has not
 yet built. They are the map's own open items, and `placement_check.py` prints
@@ -70,6 +70,14 @@ them as `PLANNED` rather than letting them read as done.
 Vols XI, XII, XIV, XVI-XX have no directory. Two of them already have an
 identity implied by statements elsewhere in the corpus; the rest do not, and
 saying so is the point of this section.
+
+### XI — the algebraic floor · **first compile 2026-09-17**
+`book6/lean/VolXI_K0_Floor.lean` was compiled for the first time against the
+vendored Mathlib at 81a5d257c8. It did not elaborate: seven errors, all
+`unknownIdentifier`, all one cause — `GrothendieckGroup` is
+`Algebra.GrothendieckGroup`. The API was read correctly and namespaced wrongly.
+Fixed with one `open`; one declared `sorry` remains, so `#print axioms` still
+reports `sorryAx` and XI does not yet clear WP-82's bar.
 
 ### XI — the algebraic floor · **identity already implied**
 CLAUDE.md: *"Volume XI still has no machine-checked core."* Material already

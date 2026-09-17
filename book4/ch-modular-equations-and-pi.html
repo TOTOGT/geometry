@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modular Equations and &pi; &mdash; Principia Orthogona, Book IV</title>
+<meta name="description" content="How to turn a singular modulus into a series for 1/pi, worked at N=58, with the recipe stated so it runs at other N."/>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem;margin-top:2.2rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-conj{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+</style>
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Book IV &middot; GTCT</a> &middot; Modular equations and &pi;</span>
+<span class="meta"><a href="../book7/ch-ramanujan.html">Chapter R &rarr;</a></span>
+</div>
+
+<div class="wp-head">
+<div class="wp-kicker">Book IV &middot; 2026-09-17 &middot; The object, worked</div>
+<h1>Modular Equations and <em>&pi;</em></h1>
+<div class="subtitle">Vol&nbsp;VII tells you Ramanujan wrote a series for $1/\pi$ and that 9801 was already in this corpus. This chapter is the other half: how the machine runs, what you turn to get a series out of it, and what to do at an $N$ nobody has worked.</div>
+<div class="metagrid"><div><strong>Role</strong>Vol IV works the object<br>the finding is Vol VII's, the algebra Vol XI's</div><div><strong>Prerequisite</strong>none beyond square roots<br>and willingness to run a script</div><div><strong>Producing script</strong><span class="mono">book7/ch-ramanujan-1pi-verify.py</span><br>120-digit, standard library only</div></div>
+</div>
+
+<div class="wrap">
+<div class="topictag">Explanation layer &middot; placed here by the rule in docs/math-placement-map.md</div>
+
+<div class="lede">A modular equation is a machine with one dial. You set the dial to an integer $N$, and what comes out is a series for $1/\pi$ whose convergence rate you chose in advance. This chapter turns the dial at $N = 58$, slowly, and then says what changes at other $N$.</div>
+
+<h2>1 &middot; The one object</h2>
+
+<p>Start with the elliptic modulus $k(q)$, a ratio of theta series &mdash; an infinite sum, transcendental, with no reason on its face to be nice anywhere. Evaluate it at a very particular place:</p>
+
+<div class="eq">k<sub>N</sub> = k(e<sup>&minus;&pi;&radic;N</sup>),&nbsp;&nbsp;&nbsp;&alpha;<sub>N</sub> = k<sub>N</sub><sup>2</sup></div>
+
+<p>At those points &mdash; and only at those points &mdash; the transcendental collapses into radicals. At $N = 58$:</p>
+
+$$\alpha_{58} = (13\sqrt{58} - 99)^2\,(99 - 70\sqrt 2)^2 \approx 6.506 \times 10^{-10}$$
+
+<p>That is not an approximation dressed as an identity. Computed from the theta series at 120 digits and from the radicals independently, the two agree to eighty places. The reason it happens at all is complex multiplication, and the reason it happens <em>here</em> is Vol&nbsp;XI's business, not this chapter's.</p>
+
+<div class="box warn">
+<span class="lab">The trap, stated before you can fall in it</span>
+$\alpha_N = k_N^2$, not $k_N$. The theta ratio $(\theta_2/\theta_3)$ gives $k$; you want its <em>square</em>, so the fourth power of the ratio. The producing script for this material got that wrong on its first run and the disagreement showed up at the fifth digit, which is exactly far enough in to look like a deep problem and exactly shallow enough to be a typo.
+</div>
+
+<h2>2 &middot; The dial, and what it controls</h2>
+
+<p>From $\alpha_N$ build the class invariant</p>
+
+<div class="eq">g<sub>N</sub><sup>12</sup> = (k&prime;<sub>N</sub>)&sup2; / (2 k<sub>N</sub>),&nbsp;&nbsp;&nbsp;k&prime; = &radic;(1 &minus; &alpha;)</div>
+
+<p>and then the quantity that actually sets the series:</p>
+
+<div class="eq">x<sub>N</sub> = 1 / (64 (g<sub>N</sub><sup>12</sup> + g<sub>N</sub><sup>&minus;12</sup>)&sup2;)</div>
+
+<p>At $N = 58$ that is exactly $1/396^4$, which is why $396^{4n}$ is the denominator of Ramanujan's series and why it gains eight digits a term. <strong>The dial controls the convergence rate.</strong> Larger $N$, smaller $x_N$, more digits per term. Chudnovsky's series is the same machine at a larger discriminant, paying 14 digits a term instead of 8.</p>
+
+<h2>3 &middot; Why you must add before you invert</h2>
+
+<p>This is the step that looks like bookkeeping and is not. $g_{58}^{12}$ is <em>not</em> an integer:</p>
+
+$$g_{58}^{12} = \varepsilon^6 = 9801 + 1820\sqrt{29}, \qquad \varepsilon = \tfrac{5+\sqrt{29}}{2} \approx 19601.99999489\ldots$$
+
+<p>It sits a hair under 19602 and a hair over 19601 and equals neither. But $\varepsilon$ is the fundamental unit of $\mathbb{Q}(\sqrt{29})$ with norm $-1$, so $\varepsilon^6$ has norm $+1$, which says</p>
+
+$$9801^2 - 29\cdot 1820^2 = 1$$
+
+<p>&mdash; Pell's equation &mdash; and <em>that</em> says the conjugate is the inverse. So the irrational halves cancel on addition:</p>
+
+$$g^{12} + g^{-12} = (9801 + 1820\sqrt{29}) + (9801 - 1820\sqrt{29}) = 19602 \quad\text{exactly}$$
+
+<p>Use $g^{12}$ alone and you land within eight significant figures of the right answer and are wrong. Add first and the answer is an integer. <strong>The cancellation is the whole reason the constants in these series are integers at all.</strong></p>
+
+<h2>4 &middot; The recipe, so it runs at other $N$</h2>
+
+<div class="box thm">
+<span class="lab">Procedure</span>
+<ol style="margin:.4rem 0 0 1.2rem">
+<li>Pick $N$. Compute $\alpha_N = k(e^{-\pi\sqrt N})^2$ from theta series at high precision. Do not look it up.</li>
+<li>Form $g_N^{12} = (1-\alpha_N)/(2\sqrt{\alpha_N})$.</li>
+<li>Compute $S = g_N^{12} + g_N^{-12}$. <strong>If $S$ is not an integer to your working precision, stop</strong> &mdash; either the precision is short or $N$ is not a discriminant where this closes.</li>
+<li>$x_N = 1/(64 S^2)$. The series denominator is $x_N^{-n}$; $\log_{10}(1/x_N)$ minus the growth of the factorial ratio is your digits per term, and you can read it off before computing a single term.</li>
+<li>The linear coefficients ($1103$ and $26390$ at $N=58$) are <em>not</em> produced by this procedure. See &sect;5.</li>
+</ol>
+</div>
+
+<h2>5 &middot; What this chapter does not give you <span class="tag t-open">OPEN</span></h2>
+
+<ol>
+<li><strong>1103 and 26390 are not derived anywhere here.</strong> Everything else reduces to 99: $9801 = 99^2$, $396 = 4\cdot 99$, $19602 = 2\cdot 99^2$. Those two do not, and no step above produces them. They come from the general theorem, which this corpus has tested at one point and not transcribed.</li>
+<li>Step 3's stopping rule is a <em>practical</em> test, not a criterion. It tells you when you have failed, not when you will succeed.</li>
+<li>Nothing here proves the series converges to $1/\pi$. It is verified numerically to 104 digits, which is evidence and not proof.</li>
+</ol>
+
+<h2>6 &middot; Where the rest of this lives</h2>
+
+<ul>
+<li><a href="../book7/ch-ramanujan.html">Vol VII, Chapter R</a> &mdash; the person, and the finding that 9801 was already in the corpus unused.</li>
+<li><a href="../book6/wp82-the-missing-floor.html">Vol VI, WP-82</a> &mdash; Heegner numbers and the class-number floor; 163 is the $N$ behind Chudnovsky.</li>
+<li>Vol XI &mdash; why the class invariants are units at all, and the Pell structure. Its Lean core is <span class="mono">book6/lean/VolXI_K0_Floor.lean</span>, which first compiled on 2026-09-17 and does not yet clear its bar.</li>
+<li><a href="../book13/ch10-what-a-check-establishes.html">Vol XIII, Ch 10</a> &mdash; what the numerical verification above does and does not establish.</li>
+</ul>
+</div>
+
+<footer>
+<div class="fwrap">
+<div><a href="index.html">Book IV &middot; GTCT</a> &middot; Modular equations and &pi;<br>Pablo Nogueira Grossi &middot; G6 LLC, Newark, NJ 07104, USA<br><a href="mailto:g6llc@proton.me">g6llc@proton.me</a> &middot; ORCID 0009-0000-6496-2186</div>
+<div class="disc">Every number recomputed by the producing script at 120 digits. The procedure in &sect;4 is stated so it fails loudly at an N where it does not apply.</div>
+</div>
+</footer>
+</body>
+</html>
