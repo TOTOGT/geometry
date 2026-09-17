@@ -8272,3 +8272,33 @@ the bridge lemma is named but does not exist under that name.
 docstring — "elaborates clean AND reports its axioms without sorryAx" — and says
 what is missing is a definition and a bridge lemma, not a field. Nothing to
 correct there; it is honest and in progress. `[OPEN]`
+
+## 2026-09-17 · item 2 of the register, closed in the negative
+
+`book7/dm3-transverse-modes-verify.py`, six blocks, exit 0. Built instead of
+another audit, and chosen by reading `docs/missing-instruments.md` rather than
+scanning the corpus — R19's first use.
+
+The Jacobian on Γ is `[[−2 + 2e^{−z}, 0], [2, 0]]`; both z-derivatives vanish
+identically because every `e^{−z}` term carries `(r − 1)`. One-turn monodromy
+`M(z₀) = [[m(z₀), 0], [2I(z₀), 1]]` with `m(z₀) = exp(−4π + 2K e^{−z₀})`, matched
+to RK4 below 1e-9 at six base points. That exponent is the same `E(z)` the
+q-factor instrument uses, and `m(z_c) = 1` at its pole — two instruments, one
+object, which is worth more than either.
+
+**γ(f) does not exist for this flow.** `eig M = {m(z₀), 1}`, the 1 being
+translation along the helix, so the transverse spectrum is one number per base
+point. A rank-one transverse direction cannot carry a frequency-resolved damping
+under any Floquet set-up. Structural, not technical. The register's open question
+— whether the right object is a cocycle over z-translation — is answered yes, and
+`m(z₀)^n` is wrong by a factor of order one or more, so treating Γ as a closed
+orbit is not a small error. `e^{−4π}` is the z → +∞ limit of the cocycle and the
+multiplier of no orbit; the ratio is exactly `exp(2K e^{−z₀})`.
+
+Consequence recorded for the vocabulary: "overshoot", "fold" and "resistance" are
+not modes of this linearisation with a frequency and a width each. `[FIXED]`
+
+Also honest, and in block [5]: beyond z₀ ≈ 36.7 the excess `2K e^{−z₀}` falls
+below float64 epsilon and the ratio rounds to 1. The check now asserts the
+crossover where the epsilon argument puts it, rather than quietly testing a
+smaller range. A fact about the arithmetic, not the flow.

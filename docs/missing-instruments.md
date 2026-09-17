@@ -39,7 +39,47 @@ period. That division is the whole of acoustics' relationship with time.
 
 ## II. Buildable now, with what is in the repository
 
-### 2. γ(f) — a frequency-resolved damping
+### 2. γ(f) — a frequency-resolved damping — **CLOSED 2026-09-17: NOT AVAILABLE**
+
+**Answered by `book7/dm3-transverse-modes-verify.py`, six blocks, exit 0.** The open
+technical question below — whether the right object is a monodromy cocycle over the
+z-translation — is settled: it is, and it is explicit.
+
+The Jacobian on Γ is `[[−2 + 2e^{−z}, 0], [2, 0]]`, checked against the true field at nine
+heights. Both z-derivatives vanish **identically**, because every `e^{−z}` term in the field
+carries a factor `(r − 1)`. So the system is lower-triangular, the transverse equation is
+autonomous, and the one-turn monodromy is
+
+    M(z₀) = [[m(z₀), 0], [2 I(z₀), 1]],   m(z₀) = exp(−4π + 2K e^{−z₀}),  K = 1 − e^{−2π}
+
+agreeing with RK4 to better than 1e-9 at six base points. Its exponent **is** the `E(z)` of
+item 1 above — the q-factor logarithmic decrement and the transverse Floquet multiplier are
+one object, and `m(z_c) = 1` at the same `z_c = ln(K/2π)` that item 1 reports as a pole.
+
+**Why γ(f) does not exist here.** `eig M(z₀) = {m(z₀), 1}` by triangularity, and the 1 is
+translation along the helix — the flow direction, not a mode. The transverse spectrum is a
+single number for every base point. A frequency-resolved damping needs a family of modes to
+attach frequencies to; a rank-one transverse direction cannot supply one, under any Floquet
+set-up. **Not a technical obstruction — a structural one.**
+
+**Consequence for the vocabulary.** "Overshoot", "fold" and "resistance" are *not* modes of
+the transverse linearisation with a frequency and a width each. Whatever separates them is in
+the nonlinear terms or in the z-dependence of the single multiplier. Pages using them as modes
+are speaking loosely and should say so.
+
+**The cocycle, and what it costs to ignore it.** `m_n(z₀) = Π_{j<n} m(z₀ + 2πj)`, matched to
+RK4 for n = 1..4 at three base points. `m(z₀)^n` — the closed-orbit answer — is wrong by a
+factor of order 1 or more, e.g. at z₀ = −1, n = 4: cocycle 3.40e−20 against 3.95e−13.
+**e^{−4π} is the z → +∞ limit of this cocycle and the multiplier of no orbit**; the ratio is
+exactly `exp(2K e^{−z₀})`, which is 2.5e6 at z₀ = −2 and exp(2K) = 7.3615 at z₀ = 0. This is
+`ch-conley`'s conclusion reached from the other side, now in closed form.
+
+**Still open, and a different question:** a genuine spectrum could exist for a different
+object — a PDE or lattice version of the flow with many degrees of freedom, or the
+linearisation about a different invariant set. None of that is examined. What is closed is
+γ(f) *for the transverse linearisation about Γ*.
+
+<details><summary>Original statement of the gap, 12 September</summary>
 
 **The gap.** dm³ has one γ. The medieval echea says damping is properly a
 *function of frequency* and is set at the boundary, one mode at a time. There is
@@ -59,6 +99,8 @@ the right object is probably a monodromy **cocycle** over the z-translation.
 That is an honest open technical question, not a blocker.
 
 **Cost.** Days. Highest value-per-hour item on this list.
+
+</details>
 
 ### 3. An admissibility test for the holonomy programme
 
