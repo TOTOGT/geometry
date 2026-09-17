@@ -1,7 +1,87 @@
+# NEWTON: THE DEFINITIONAL FORM, AND THE MEASURE THAT WENT UNNAMED (2026-09-17)
+
+**What was built.** `book7/ch-newton.html` and `book7/ch-newton-verify.py` — 6 blocks, standard
+library only, 33 checks, exit 0. Registered in `book7/index.html`; the three generated indexes
+re-run. Source: the *Principia*, Motte translation as revised by Chittenden (public domain),
+supplied as a scan; passages located by OCR.
+
+**The measurement.** "Principia" is in **814 tracked files and 712 chapters**. definition 233,
+lemma 123, corollary 67, Newton 25, "measure of" 19, centripetal 1. And **Scholium 0, Rules of
+Reasoning / Regulae 0, quantity of matter 0, vis insita 0, motive quantity 0, "absolute …
+accelerative" 0, hypotheses non fingo 0.** The series borrows the name and the outer furniture
+and has never opened the apparatus.
+
+**The form.** Every Definition I–VIII has one shape — *"the ⟨quantity⟩ of X is the measure of the
+same, arising from / proportional to ⟨Y⟩."* Two consequences: **a definition is not finished until
+the measure is fixed**, and **one quantity can have several measures** — a centripetal force has
+three, given consecutive numbers and named absolute (VI), accelerative (VII) and motive (VIII)
+expressly "for distinction's sake". Block [1] checks the relation on Newton's own terms: motion is
+mass × velocity, so motive = accelerative × mass; three bodies at one place have three motive
+measures and one accelerative measure.
+
+**The finding, and it has teeth.** λ⊥ = e^−4π is an **accelerative** measure — literally
+"proportional to the velocity which it generates in a given time", a contraction rate over one
+period — and the Conley index is an **absolute** one. Block [2] applies Newton's own test, change
+the test body and see which measure follows it, with the parametrisation as the test body: under
+ṙ → k·r(1−r²), which moves neither Γ nor its stability type nor the isolating block's boundary
+signs,
+
+| k | λ = −2k | accelerative e^(λ·2π) | absolute CH_* |
+|---:|---:|---:|---|
+| 1 | −2 | 3.487342e−06 | (ℤ, ℤ, 0) |
+| 3 | −6 | 4.241151e−17 | (ℤ, ℤ, 0) |
+| 10 | −20 | 2.660393e−55 | (ℤ, ℤ, 0) |
+| 100 | −200 | underflow | (ℤ, ℤ, 0) |
+
+**Fifty-plus orders of magnitude in one column and nothing at all in the other.** That is
+Definition VII against Definition VI. WP-82 §3b reached the same wall by finding the multiplier
+monotone in z₀; ch-smale by finding that no homotopy invariant can be a monotone function of a
+parameter it does not feel. **Newton had the vocabulary for the confusion in 1687** — not the
+theorem, the vocabulary, which is what makes the confusion unavailable.
+
+**The same form names the other three findings.** ch-gelfand's "operator algebra" is a quantity
+with no measure fixed — no norm — which the definitional form refuses for Newton's reason; the
+chapter then supplies dim = n·p. ch-feigin is the Scholium's absolute-versus-relative: block [3]
+checks that α(m³−m) is a cocycle for every α, so the **class** is absolute and one-dimensional
+while **the 12 is a unit** and c(1) = 0 is the convention that picks the representative.
+
+**The Regulae beside the corpus's own rules** — offered as a reading, not a result. Rule I ↔ the
+`ASSUME` tag. Rule II ↔ R14 and one-number-everywhere. Rule III ↔ the `DATA`/`MODEL` split and
+every `[HONESTY]` block saying an exhaustion over a finite box is evidence, not proof. **Rule IV ↔
+the dated measurement**, and it earned itself this week: WP-82's second column was correct and
+stopped being current inside a single day. Rule IV does not call that an error — it calls it the
+ordinary fate of a proposition collected from phenomena and says to make it more accurate or
+record the exception. The column now names a commit. The General Scholium's refusal to feign a
+hypothesis is the register of every `OPEN` tag, and of four statements made this week that could
+have been dressed up and were not.
+
+**Part V fixes eight shared terms** — quantity, measure, absolute measure, accelerative measure,
+unit, restriction, no-go, Scholium — as the corpus's common language from here.
+
+**Not established.** No new mathematics; blocks [2] and [3] re-run published computations. The
+reading of Newton is a reading, quoted from a translation, and the mapping onto the tier tags is
+proposed, not proved — it earns its place only if it stops a measure going unnamed again, which is
+a claim about future pages. No priority claimed: the *Principia* is 1687 and the point is that the
+apparatus was available the whole time.
+
+---
+
+# THE DRAFT ISBNs ARE NOT CITED (2026-09-17)
+
+`ch-conley` block [8] and its boxed note cited the IMPA edition as "March 2026, ISBN
+979-8-9954416-6-3". **ISBNs in that folder are drafts.** Worse, this repository already records
+(2026-08-30) that this particular number is allocated to **Book III**, not to the series, so the
+citation attached a draft number to the wrong volume. Both citations now give the edition by title
+and by the date in its own front matter and say the ISBN is deliberately omitted. The priority note
+in the earlier entry is corrected the same way: **the date is the record; the ISBN carries no
+weight.**
+
 # THE PUBLISHED NORMAL FORM, AND THE HTML SYSTEM, COMPARED (2026-09-16)
 
-**Source.** The IMPA edition — *Principia Orthogona*, March 2026, ISBN 979-8-9954416-6-3,
-ORCID 0009-0000-6496-2186 — supplied as PDF. It prints the **universal contact normal form**:
+**Source.** The IMPA edition of *Principia Orthogona*, dated March 2026 in its own front matter,
+ORCID 0009-0000-6496-2186, supplied as PDF. Its printed ISBN is **not** cited here: ISBNs in that
+folder are drafts, and this one is separately recorded below (2026-08-30) as allocated to Book III
+rather than to the series. It prints the **universal contact normal form**:
 
 > ρ̇ = μ_max(1 − e^−βz)ρ + O(ρ²),  θ̇ = ω + O(ρ),  ż = ω − |μ_max|ρ²e^−βz + O(ρ³)
 
@@ -30,7 +110,8 @@ property of the **canonical normal form as published in March 2026**, not of one
 written later. The chapter carries this as a boxed statement before Part IV.
 
 **Priority note (R18).** The normal form, its three canonical invariants and μ_max = −2 are
-published with an ISBN and dated March 2026 — six months before the Strogatz reading. That is
+dated March 2026 in the edition's own front matter — six months before the Strogatz reading. The
+date is the record; the ISBN is a draft and carries no weight here. That is
 the corpus's own priority record for the object, independent of any textbook. It is a record of
 *what was derived here and when*; it is not a claim that the object is unmatched in the
 literature, and no such claim is made. The Conley index, its continuation property, Liénard's

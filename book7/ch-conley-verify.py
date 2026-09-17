@@ -337,7 +337,8 @@ check(files(ABSENT) == [], 'control: and none for a token no file contains',
 
 # ---------------------------------------------------------------------------
 head(8, "AGAINST THE PUBLISHED NORMAL FORM -- TWO SOURCES, ONE OBJECT")
-print('  The IMPA edition (Principia Orthogona, March 2026, ISBN 979-8-9954416-6-3)')
+print('  The IMPA edition (Principia Orthogona, dated March 2026 in its own front')
+print('  matter; its ISBN is a draft and is deliberately not cited here)')
 print('  prints the universal contact normal form as\n')
 print('     rhodot = mu_max (1 - e^-bz) rho + O(rho^2)')
 print('     thetadot = omega + O(rho)')
