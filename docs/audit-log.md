@@ -8412,3 +8412,50 @@ regression: the term was project scaffolding and never a chapter, which is the
 distinction `wp82-verify` block [3] already draws. The check now names any entry
 that moves the other way and asserts its lost hits were scaffolding rather than
 chapters. `[FIXED]`
+
+## 2026-09-17 · the verify-audit directory existed all along
+
+**`tools/verify-audit/2026-09-09/` holds a corpus-wide axiom audit: 69 `.axioms.txt`
+reports, 46 `.gate` files and a `verdicts.tsv` of 45 rows.** Of the gate lines, 22
+read *"OK: N theorems, no sorryAx, no axiom outside the permitted set"*; 6 read
+*"sorryAx present — a theorem is admitted, not proved"*, with 3 more naming
+`claimN` and 2 naming `TOGT.gN_unconditional_closure`. Thirteen `verdicts.tsv`
+rows carry AMBIGUOUS notes where 2–4 copies share a file name. One gate line is
+worth lifting out on its own: *"native_decide leaves Lean.ofReduceBool and is NOT
+a kernel check."*
+
+This session said twice that the corpus had no machine-checked core outside
+`vol1-proofs`, and once that nobody knew whether anything passed. Both statements
+were made with this directory in the repository, last touched 2026-09-15. It was
+found by following a failing check rather than by searching for it. R19's reading
+order should have named it; `docs/` was on the list and `tools/verify-audit/` was
+not. **Any corpus-wide claim about proof state reads `tools/verify-audit/<date>/`
+first — `verdicts.tsv` for the ledger, `*.gate` for the verdicts.**
+
+**Two flagship "unresolved" Lean names resolve.** `book6/ch-the-present-king-of-france.html`
+tabulates `Chain.lean` at 23 citing pages and `ZeoliteCommutation.lean` at 11,
+under a two-root search, and — to its credit — says outright that "more than twenty
+repositories have not been searched" and that the honest state of all 66 names is
+"unresolved, not absent". That work is now done, eleven roots:
+
+    36  resolve nowhere
+     2  resolve only under another case
+     5  resolve UPSTREAM in Mathlib, never this corpus's claims
+    74  citations in all
+
+`Chain.lean` is at `GTCT/Chain.lean` with two further copies in GTCT.
+`ZeoliteCommutation.lean` is at `io-clone/zeolite_operator_order/`, the eleventh
+root, and its gate in this repository reads **OK: 6 theorems, no sorryAx**. The
+chapter gains a dated *Searched* block recording all of it; nothing in the original
+text needed retracting, because the original text had already refused the absence
+claim. Its verify script's stale `>= 20` threshold on the most-cited unresolved
+name is rebased to `>= 10`, since resolving `Chain.lean` moved the top of that
+table. `[FIXED]`
+
+**A near-miss worth recording.** A sweep of the three Ramanujan-family chapters
+reported `book7/ch-ramanujan-1pi-verify.py` as "0 pass, 0 fail, exit 0" — a silent
+detector. It is not: that script prints `ok` where the others print `PASS`, and it
+runs 18 checks with 0 failures. The sweep counted the wrong token. Same shape as
+the sense collision in `ch-the-map-on-page-ten`: right string, wrong referent,
+arithmetic correct. Caught before it was reported. **A sweep over scripts must
+count each script's own vocabulary, or read its exit code and nothing else.**

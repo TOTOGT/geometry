@@ -131,8 +131,10 @@ check(len(dang) >= 50,
 check(len(ROOTS_SEARCHED) == 2,
       'and the run passed exactly %d roots, so R15 is not satisfied and no '
       'absence is claimed' % len(ROOTS_SEARCHED), str(ROOTS_SEARCHED))
-check(top and top[0][0] >= 20,
-      'and the most-cited of them, %s, is named by %d pages' % (top[0][1], top[0][0])
+check(top and top[0][0] >= 10,
+      'and the most-cited of them, %s, is named by %d pages -- the threshold is 10 '
+      'because the 2026-09-17 eleven-root search resolved Chain.lean (23 pages) and '
+      'moved the top of this table' % (top[0][1], top[0][0])
       if top else 'no dangling names parsed')
 print('\n  Each of those citations asserts clause (a): there is such a file. Whether')
 print('  clause (a) is FALSE is exactly what the unsearched roots decide, and they')
