@@ -154,6 +154,60 @@ p(200) = 3,972,999,029,388</div>
 
   <hr class="gold-rule">
 
+  <h2>VI · The Singular Moduli, and the Limit of Verification</h2>
+
+  <p>In his first notebook, in scattered places and without a word of proof, Ramanujan recorded the values of over one hundred class invariants and over thirty singular moduli. He did not say what they were. Berndt, Chan and Zhang, who spent years establishing all of them, put it plainly: <em>"In all cases, Ramanujan simply recorded in his notebooks the values or factors of singular moduli without explaining their meanings. It took us several years to discover that these radical expressions were singular moduli."</em> Not to prove them. To work out what they were <em>of</em>.</p>
+
+  <div class="proof-block">
+    <span class="proof-label">Connection VI · The Object</span>
+    <div class="proof-title">What a singular modulus is, and why it has no business being a radical</div>
+    <p>For the elliptic modulus $k(q)$, the singular modulus is $k_n = k(e^{-\pi\sqrt{n}})$, and Ramanujan writes $\alpha_n = k_n^2$. The associated Ramanujan–Weber class invariants are</p>
+    <div class="math-block">G_n = \{4\alpha_n(1-\alpha_n)\}^{-1/24}, \qquad g_n = 2^{-1/12}(1-\alpha_n)^{1/12}\alpha_n^{-1/24}</div>
+    <p>$k$ is defined by a ratio of theta series — a transcendental object built from an infinite sum. There is no reason on its face that evaluating it at $q = e^{-\pi\sqrt{n}}$ should produce anything expressible in radicals at all. It does, because complex multiplication forces it: $G_n$ and $g_n$ are algebraic, and for $n$ in the right residue classes they are <em>units</em> in real quadratic fields. Ramanujan wrote down the units. He did not write down that they were units.</p>
+    <span class="qed">↳ transcendental input, algebraic output ·</span>
+  </div>
+
+  <div class="proof-block">
+    <span class="proof-label">Connection VI(b) · The Check</span>
+    <div class="proof-title">Forty digits, two independent routes, eighteen values</div>
+    <p>The companion file <code>book7/ch-ramanujan-verify.py</code> computes $\alpha_n$ directly from the theta series in 80-digit arithmetic — standard library only, $\pi$ by Machin's formula — and compares it against each radical expression evaluated from its square roots. Nothing is looked up.</p>
+    <div class="math-block">\alpha_{2},\ \alpha_{6},\ \alpha_{10},\ \alpha_{18},\ \alpha_{22},\ \alpha_{30},\ \alpha_{42},\ \alpha_{58},\ \alpha_{70},\ \alpha_{78},\ \alpha_{102},\ \alpha_{130},\ \alpha_{190}
+\text{worst relative error over the thirteen: } 1.0 \times 10^{-75}</div>
+    <p>Plus $\alpha_4$, $\alpha_{12}$, $\alpha_{28}$, $\alpha_{60}$ from the $n = 4p$ family, and $\alpha_{16} = (\sqrt2+1)^4(2^{1/4}-1)^8$. Every one agrees to the precision of the instrument.</p>
+    <p>Two of the numbers are worth naming because they check the apparatus rather than the claim: the script recovers $G_3 = 1.05946309435929526\ldots = 2^{1/12}$ and $G_7 = 1.18920711500272106\ldots = 2^{1/4}$, which are the values in Weber's tables. And $\alpha_1 = 1/2$ exactly, with $G_1 = 1$ — the lemniscatic point, where Gauss began.</p>
+    <span class="qed">↳ eighteen values confirmed at 10⁻⁷⁵ ·</span>
+  </div>
+
+  <div class="proof-block">
+    <span class="proof-label">Connection VI(c) · The Integers</span>
+    <div class="proof-title">Watson's algorithm sends units to integers and integers back to a modulus</div>
+    <p>Theorem 1.2, which Watson extracted from page 320 of the first notebook, is an algorithm. Set $g_n^6 = uv$, then</p>
+    <div class="math-block">u^2 + 1/u^2 = 2U, \qquad v^2 + 1/v^2 = 2V, \qquad W = \sqrt{U^2+V^2-1}, \qquad 2S = U+V+W+1</div>
+    <div class="math-block">\alpha_n = \{\sqrt{S}-\sqrt{S-1}\}^2\{\sqrt{S-U}-\sqrt{S-U-1}\}^2\{\sqrt{S-V}-\sqrt{S-V-1}\}^2\{\sqrt{S-W}-\sqrt{S-W-1}\}^2</div>
+    <p>Run on the paper's own table of $u$ and $v$ for twelve values of $n$, it reproduces every $\alpha_n$ — and $U$, $V$, $W$ and $S$ come out <strong>integers in all twelve rows</strong>, verified to thirty places. $n = 58$ gives $U = 1$, $V = W = 9801$, $S = 9802$. $n = 190$ gives $2889$, $27379$, $27531$, $28900$. The inputs $u$ and $v$ are units in real quadratic fields; the machinery flattens them to integers and the integers back to a transcendental evaluation. That is the whole surprise of complex multiplication, visible in a table.</p>
+    <span class="qed">↳ twelve rows, all four quantities integral ·</span>
+  </div>
+
+  <div class="sorry-box">
+    <span class="sorry-label">Recorded discrepancy · unresolved here</span>
+    <p>In his second letter to Hardy, Ramanujan asserted a value for $k_{210}$ as a product of eight powers of units. Transcribed from the scanned page exactly as printed and evaluated in 80-digit arithmetic, that product equals <strong>$\alpha_{210}$, not $k_{210}$</strong> — the square of the labelled quantity — agreeing to 78 significant figures, while disagreeing with $\sqrt{\alpha_{210}}$ at relative error 1.</p>
+    <p>Two explanations are available and arithmetic cannot choose between them. Either the eight exponents were misread from the scan and every one should be halved, or the expression is $\alpha_{210}$ carrying Ramanujan's own label rather than the paper's notation. Resolving it needs the printed page. What is <em>not</em> in question: the radicals are right, and the value is exact. Only the exponent on it is open.</p>
+  </div>
+
+  <h2>VII · Why This Chapter Is Also About This Corpus</h2>
+
+  <p>Berndt, Chan and Zhang say one more thing, about Watson's proof of the algorithm above: <em>"Watson's proof of Theorem 1.2 is a verification; it does not shed any light on how Ramanujan might have discovered the formula."</em> They add that they looked for a more transparent proof and did not find one.</p>
+
+  <p>That sentence is the sharpest available statement of what this series does and where it stops. The corpus carries forty-six verification scripts. They recompute the numbers out of the prose they accompany, they are written to fail loudly, and they have overturned published claims here more than once. They are the reason anything in these volumes can be checked without trusting the author. <strong>And not one of them has ever explained anything.</strong> A script that confirms $\alpha_{190}$ to seventy-five digits knows nothing about why Ramanujan wrote it down, and neither does the person who ran it.</p>
+
+  <p>This is the same shape as the acoustic vessels in <a href="ch-nachbin.html">the Nachbin chapter</a>: a correct answer arrived at without the apparatus, and an apparatus arriving centuries later able to confirm it and unable to reconstruct it. Vitruvius wrote down what builders already did. Watson wrote down what Ramanujan already knew. In both cases the mathematics is the late-arriving party, and in both cases what it supplies is certification, not insight.</p>
+
+  <p>The honest position for a series built on verification is to say so in its own pages. Verification is the floor, not the ceiling. It is what makes a claim safe to build on; it is not what makes it understood. Ramanujan is in this gallery because he is the strongest counterexample available to the belief that those are the same thing.</p>
+
+  <p style="font-family:'Courier New',monospace;font-size:.78rem;color:var(--dim);border-left:2px solid var(--rule);padding-left:1rem;margin:2rem 0">
+    Verified in <code>book7/ch-ramanujan-verify.py</code> — seven blocks, standard library only, 80-digit decimal arithmetic. Source of the claims tested: B. C. Berndt, H. H. Chan and L.-C. Zhang, <em>Ramanujan's Singular Moduli</em>, The Ramanujan Journal <strong>1</strong>, 53–74 (1997). The closed forms are theirs and Ramanujan's; the arithmetic is this project's; the explanation is nobody's.
+  </p>
+
   <h2>The Operator Assignment</h2>
   <table style="width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:.78rem;margin-top:1rem;">
     <tr style="background:var(--surface);">
