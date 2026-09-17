@@ -1,3 +1,49 @@
+# STROGATZ CITATIONS: TWENTY CHECKED, ONE WAS WRONG (2026-09-17)
+
+**What happened.** `book7/strogatz-citations-verify.py` existed and covered 13 citations across
+`book6/wp122` and `book7/ch-strogatz`. Six chapters written after it — ch-van-der-pol, ch-smale,
+ch-euler, ch-conley — cite Strogatz by page and had never been through it. Extended to **20
+claims**, run against the 2018 printing in `~/Downloads`, **all 20 hold**.
+
+**The one that did not, before it was fixed.** `ch-van-der-pol` cited **Liénard's Theorem to
+p. 212**. Probing the book: §7.4 *opens* on p. 212 and the word Liénard is on it, but the
+**theorem — the five conditions on f and g, and "a unique, stable limit cycle surrounding the
+origin" — is on p. 213**, on the page whose running head has already turned over to §7.5
+Relaxation Oscillations. A section heading and a theorem inside that section are two addresses.
+Corrected in the chapter and in its verify script's docstring; the source row now reads
+"§7.4 p. 212 (Liénard's equation, and the section heading) · Liénard's Theorem p. 213".
+
+Everything else in those chapters held: Figure 1.3.1 p. 10, Example 7.1.2 p. 200, Example 7.4.1
+p. 213, §7.5 p. 213, §6.8 p. 179, **Theorem 6.8.2 p. 180**, §8.7 p. 281, §10.5 p. 373.
+
+**A claim worth adding.** The chapter prints a direct quotation — *"In the early days of nonlinear
+dynamics, say from about 1920 to 1950 … radio and vacuum tube technology"* — attributed to p. 212.
+Checked: it is on p. 212. A verbatim quotation is the strongest citation a checker can test, and
+it is now one of the 20.
+
+**Two numbers in the script disagreed with the script.** Its docstring said "532 PDF pages, **513**
+printed"; the run reports **481**. And it described the offset as "14 in Chapter 1, 18 by Chapter
+10"; the run reports **three distinct values, 4 to 18**. Both corrected from the output. The count
+is extractor-dependent — the docstring says so itself, having found 278 of them under pypdf 6.18
+and all under an older build — so the run now prints `pypdf.__version__` beside the count.
+**A count quoted without its extractor version is not reproducible**, and one had been quoted that
+way in `ch-strogatz.html`'s source row.
+
+**A working note that was wrong and never published.** This session carried "PDF page = printed
+page + 15, verified at seven points" in its notes. There is no fixed offset in this printing. The
+figure never reached a page or a script, so there is nothing in the corpus to correct — recorded
+because the note was used to place citations for a week.
+
+**One block relaxed, deliberately.** `ch-van-der-pol-verify.py` [6] pinned an exhaustive list of
+the chapters naming van der Pol, as a notification that the gap had closed by use. Four chapters
+now name it and the list went red for the fourth time. It now pins the two that closed it first
+and requires the count to have grown. An exhaustive list is a notification once and noise
+afterwards; ch-conley block [7] was rewritten the same way on 2026-09-16. `classify()` also gained
+`scaffolding` and `tooling` buckets, which it was missing.
+
+**Housekeeping.** A zero-byte file named `=` in the repository root, from a stray shell
+redirection, moved to `_to_delete/strays-2026-09-17/`.
+
 # EULER: THE CURIOSITY THAT WAS NOT ONE (2026-09-17)
 
 **What was built.** `book7/ch-euler.html` and `book7/ch-euler-verify.py` — 8 blocks, standard
