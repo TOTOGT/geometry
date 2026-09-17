@@ -126,6 +126,42 @@ theorem grothendieckAddGroup_nat_equiv_int :
   -- cancellative; surjectivity from every integer being a difference of
   -- naturals. Each step is available; assembling them was not attempted here
   -- because the file could not be compiled to check the assembly.
+  --
+  -- API READ OFF THE VENDORED MATHLIB SOURCE, 2026-09-17. Four facts, each
+  -- grepped from .lake/packages/mathlib rather than recalled, because the first
+  -- compile failed on a name that does not exist:
+  --
+  --  1. `AddLocalization.mk_eq_zero_iff` DOES NOT EXIST. That was the first
+  --     error of the 2026-09-17 run. The pair that does the work is
+  --     `Localization.mk_eq_mk_iff : mk a b = mk c d ↔ r S ⟨a,b⟩ ⟨c,d⟩`
+  --     (MonoidLocalization/Basic.lean:224) composed with
+  --     `r_iff_exists : r S x y ↔ ∃ c : S, ↑c * (↑y.2 * x.1) = c * (x.2 * y.1)`
+  --     (Basic.lean:191), additivised by `to_additive`.
+  --
+  --  2. `GrothendieckGroup M` is an `abbrev` for `Localization (⊤ : Submonoid M)`
+  --     (GrothendieckGroup.lean:36), so it is REDUCIBLY the localization and the
+  --     whole `Localization` API applies without translation. In particular
+  --     `AddLocalization.induction_on` (Basic.lean:293) is the eliminator to
+  --     reach for, not a bespoke one.
+  --
+  --  3. `lift` is an `Equiv`, not a function:
+  --     `lift : (M →* G) ≃ (GrothendieckGroup M →* G)` (GrothendieckGroup.lean:81),
+  --     and `lift_apply` (line 88) unfolds an application. So the hom wanted here
+  --     is `GrothendieckAddGroup.lift (Nat.castAddMonoidHom ℤ)` and the coercion
+  --     has to be applied before it will behave as a map.
+  --
+  --  4. NOTHING IN MATHLIB EQUATES ANY LOCALIZATION WITH `ℤ`. Grepped: the only
+  --     files mentioning GrothendieckGroup are its own, Finite.lean, and
+  --     AffineMonoid/Embedding.lean. So this theorem is genuinely absent
+  --     upstream and is not being reproved out of ignorance — which is worth
+  --     knowing before the next attempt, and is the kind of check R18 asks for.
+  --
+  -- The shape that follows from 1–4: `AddEquiv.ofBijective` on the lifted hom,
+  -- surjectivity from `z = ↑z.toNat - ↑(-z).toNat` by `omega`, injectivity by
+  -- `induction_on` twice and then `mk_eq_mk_iff` with `r_iff_exists`, where the
+  -- witness is trivial because the submonoid is `⊤`. NOT COMPILED HERE: the
+  -- environment that wrote this comment has no `lake`, and an uncompiled proof
+  -- is a guess. It is left as the next command to run, not as a claim.
 
 /-! ### §3 · The arithmetic side, which Mathlib already holds -/
 

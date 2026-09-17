@@ -8502,3 +8502,37 @@ directory. All eighteen Figure 1.3.1 entries recorded as zero were tested agains
 its 213 files: **eighteen for eighteen, still zero.** The seventeen gaps survive
 the addition, so `ch-the-map-on-page-ten`'s numbers hold and the exclusion cost
 nothing on that measurement.
+
+## 2026-09-17 · Volume XI's sorry — the Mathlib API read off the source
+
+`book6/lean/VolXI_K0_Floor.lean` carries one declared `sorry`:
+`Nonempty (GrothendieckAddGroup ℕ ≃+ ℤ)`. The placement map calls compiling this
+file XI's unblock, and the file's own comment said the assembly was never
+attempted because it could not be compiled. It compiles now.
+
+Four API facts added to the file, each **grepped from
+`.lake/packages/mathlib`** rather than recalled, since the first compile failed
+on a name that does not exist:
+
+1. **`AddLocalization.mk_eq_zero_iff` does not exist** — that was the run's first
+   error. The working pair is `Localization.mk_eq_mk_iff` (Basic.lean:224) with
+   `r_iff_exists` (Basic.lean:191), additivised by `to_additive`.
+2. `GrothendieckGroup M` is an **`abbrev`** for `Localization (⊤ : Submonoid M)`
+   (GrothendieckGroup.lean:36), so the whole `Localization` API applies
+   unchanged and `AddLocalization.induction_on` is the eliminator.
+3. `lift` is an **`Equiv`**, not a function (line 81), so it must be coerced
+   before it behaves as a map; `lift_apply` unfolds an application.
+4. **Nothing in Mathlib equates any localization with `ℤ`.** The only files
+   naming GrothendieckGroup are its own, `Finite.lean` and
+   `AffineMonoid/Embedding.lean`. So the theorem is genuinely absent upstream
+   and is not being reproved out of ignorance — the R18 check, done.
+
+The proof shape that follows is written into the file as a comment and
+explicitly **not compiled**: this environment has no `lake`, and an uncompiled
+Lean proof is a guess, not a contribution. Left as the next command to run.
+
+Related, from the same day's Book IV work: `book4/ch-euclidean-algorithm.html`
+now gives the classical route to the fundamental unit — expansion, convergent at
+norm −1, cube, square — reaching `eps^6 = 9801 + 1820 sqrt29`. XI's core
+candidate in the placement map is the Pell row, so the arithmetic side of XI has
+a worked chapter behind it even while the Lean side has a sorry. `[OPEN]`
