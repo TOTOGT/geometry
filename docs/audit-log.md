@@ -8372,3 +8372,43 @@ hurricane basin is not one. `[FIXED]`
 The East Pacific file did not download (only the Atlantic landed) and was not
 used, so Lowell/Karina/Marie remain only in the reconstruction instrument; 2026 is
 past this file's 2025 end regardless. `[OPEN, low value]`
+
+## 2026-09-17 · the Strogatz chapter rewritten to his register, and the confession removed
+
+Two corrections to `book7/ch-the-map-on-page-ten.html`, neither of them about the
+mathematics.
+
+**Audit narrative was in a reader-facing chapter.** The page carried a
+block-theorem headed "the sense test failed the same way on its first run",
+narrating how a companion pattern accepted 83 of 93 plasma files. That is a
+process finding and it belongs here, where it already is, not in a chapter under
+the author's byline. Cut, 1,173 characters. What survives in the chapter is the
+transferable rule stated impersonally — print the breakdown, not the total —
+because that is method a reader can use. The 83/93 and `reconnect` 304 figures
+stay in the verify script, which is a tool and the right place for them.
+
+**The page did not read like the book it is about.** Measured, rather than
+argued: Strogatz's own §1.3, two pages from the figure, runs 49 sentences, mean
+19.9 words, longest 48, em-dashes 6.2 per thousand words, 31% of sentences under
+15 words. The draft ran mean 24.5, longest **182**, em-dashes at nearly double his
+rate, and opened its second section on pypdf extraction before the reader had a
+reason to care. Rewritten: 2,248 words, mean 14.2, longest 68, em-dashes 1.8 per
+thousand, 65% under 15 words. Five tables cut to three. The method section moved
+to the back. The page now closes where it should — on what the blanks say, which
+is that they sit in the top-left corner among the circuits and springs, not at
+the frontier where Strogatz put his dragons.
+
+`ch-the-map-on-page-ten-verify.py` gains block **[9]**, which recomputes
+Strogatz's register from pp. 9 and 11 of the PDF and holds the chapter to it. It
+is a register check and not a quality check, and it says so. No other instrument
+in the corpus measures prose.
+
+**And block [8] learned something.** Its self-count check required HEAD's zeros to
+be a subset of BASELINE's, and it failed: `Iterated maps` reads 1 at `b42750e` and
+0 at HEAD. The single baseline hit was `CLAUDE.md` — the old handoff block's own
+WP-124 note listing `logistic map`, `iterated map`, `circle map`, `standard map`
+as reading 0 chapters. Overwriting that block removed the phrase. Not a content
+regression: the term was project scaffolding and never a chapter, which is the
+distinction `wp82-verify` block [3] already draws. The check now names any entry
+that moves the other way and asserts its lost hits were scaffolding rather than
+chapters. `[FIXED]`

@@ -35,7 +35,9 @@ BLOCKS
   [5] The linear row: 18 entries, 8 at zero, and which ones.
   [6] SENSE COLLISION: seven entries audited by companion pattern.
   [7] The audit's own failure, by breakdown.
-  [8] Control.
+  [8] Control, and the self-count.
+  [9] Readability against Strogatz's own pp. 9 and 11 -- the brief was "readable
+      like his book is", and his register is two pages from the figure.
 
 PRIMARY SOURCE.
   S. H. Strogatz, "Nonlinear Dynamics and Chaos", 2nd ed., Westview/CRC, 2018
@@ -523,8 +525,92 @@ print('\n      entries at zero:  %d at BASELINE,  %d at HEAD' % (len(zeros), len
 check(len(zeros_now) < len(zeros),
       'run at HEAD the instrument would report the gaps as covered -- by this page '
       'having named them', '%d vs %d' % (len(zeros_now), len(zeros)))
-check(set(zeros_now) < set(zeros),
-      'and every entry it would drop is one this page describes')
+SCAFFOLD = ('CLAUDE.md', 'docs/')
+gained = sorted(set(zeros_now) - set(zeros))
+if gained:
+    print('\n      entries that went the OTHER way, zero at HEAD but not at BASELINE:')
+    for e in gained:
+        pat = [p for r, c, x, p in GRID if x == e][0]
+        was = _all_files(pat, ref=BASELINE)
+        kind = ('project scaffolding' if all(
+            f.startswith(SCAFFOLD) for f in was) else 'CHAPTERS')
+        print('      %-26s was %d file(s) at BASELINE: %s  [%s]'
+              % (e, len(was), ', '.join(was), kind))
+        check(kind == 'project scaffolding',
+              '%r lost its only hits, and they were scaffolding rather than '
+              'chapters' % e, ', '.join(was))
+check(set(zeros_now) - set(gained) <= set(zeros),
+      'apart from those, every entry HEAD would drop is one this page describes')
+
+
+# ---------------------------------------------------------------------------
+head(9, "READABILITY, MEASURED AGAINST THE BOOK ITSELF")
+print("""  The brief for this page was "readable like his book is". That is checkable
+  rather than arguable: Strogatz's own section 1.3 is two pages away from the
+  figure, so his register can be measured and the page held to it.
+
+  Reference, recomputed from pp. 9 and 11 when the PDF is supplied, and quoted
+  from the 2026-09-17 run otherwise: 49 sentences, mean 19.9 words, longest 48,
+  em-dashes 6.2 per thousand words, 31 per cent of sentences under 15 words.\n""")
+
+def prose_stats(text):
+    body = re.sub(r'<(style|script)\b.*?</\1>', ' ', text, flags=re.S | re.I)
+    body = re.sub(r'<[^>]+>', ' ', body)
+    dashes = body.count('&mdash;') + body.count('\u2014')
+    body = body.replace('&mdash;', ' ').replace('&middot;', ' ')
+    body = re.sub(r'&[a-z]+;', ' ', body)
+    words = body.split()
+    sents = [x for x in re.split(r'(?<=[.!?])\s+', ' '.join(words))
+             if len(x.split()) > 2]
+    L = [len(x.split()) for x in sents]
+    return dict(words=len(words), sents=len(L), mean=sum(L) / len(L),
+                longest=max(L), dash_k=1000.0 * dashes / len(words),
+                short=100.0 * sum(1 for x in L if x < 15) / len(L))
+
+REF = dict(sents=49, mean=19.9, longest=48, dash_k=6.2, short=31.0)
+if PDF and hit:
+    t = ' '.join(norm(reader.pages[hit[0] + d].extract_text() or '')
+                 for d in (-1, 1))
+    t = re.sub(r'Strogatz-CROPPED2\.pdf\s+\d+\s+\S+\s+\S+\s+\S+', ' ', t)
+    R = prose_stats(t)
+    print('      Strogatz pp. 9+11, recomputed now: %d sentences, mean %.1f, '
+          'longest %d' % (R['sents'], R['mean'], R['longest']))
+    check(abs(R['mean'] - REF['mean']) < 1.5 and abs(R['sents'] - REF['sents']) <= 3,
+          'the reference figures reproduce from the PDF',
+          'mean %.1f, %d sentences' % (R['mean'], R['sents']))
+    REF = R
+else:
+    print('      (PDF absent -- using the quoted reference figures)')
+
+CH = os.path.join(HERE, 'ch-the-map-on-page-ten.html')
+C = prose_stats(open(CH, encoding='utf-8').read())
+print('\n      %-26s %10s %10s' % ('', 'chapter', 'Strogatz'))
+for k, lab in (('words', 'words'), ('sents', 'sentences'),
+               ('mean', 'mean words/sentence'), ('longest', 'longest sentence'),
+               ('dash_k', 'em-dashes per 1000w'), ('short', '% under 15 words')):
+    a = C[k]; b = REF.get(k, float('nan'))
+    fmt = '%10.1f' if isinstance(a, float) else '%10d'
+    print(('      %-26s ' + fmt + ' ' + ('%10.1f' if b == b else '%10s'))
+          % (lab, a, b if b == b else '--'))
+print()
+check(C['mean'] <= REF['mean'] + 1.0,
+      'mean sentence length is at or below his', '%.1f vs %.1f' % (C['mean'], REF['mean']))
+check(C['longest'] <= 2 * REF['longest'],
+      'no sentence runs past twice his longest', '%d vs %d' % (C['longest'], REF['longest']))
+check(C['dash_k'] <= REF['dash_k'],
+      'em-dashes per thousand words at or below his rate',
+      '%.1f vs %.1f' % (C['dash_k'], REF['dash_k']))
+check(C['short'] >= REF['short'],
+      'at least his share of sentences run under fifteen words',
+      '%.0f%% vs %.0f%%' % (C['short'], REF['short']))
+check(C['words'] < 3000, 'and the page stays under three thousand words',
+      str(C['words']))
+print("""
+      This is a register check, not a quality check. It cannot tell whether a
+      sentence is clear, only whether the page is built out of the same lengths
+      his is. A page can pass every line above and still be unreadable. It is
+      here because no other instrument in the corpus measures prose at all, and
+      a chapter written to be read has a target it can be held to.""")
 
 print("""
 ======================================================================
