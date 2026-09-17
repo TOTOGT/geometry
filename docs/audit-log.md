@@ -1,3 +1,66 @@
+# NINE PAGES, NO PROOFS — THE CITATIONS THAT POINT NOWHERE (2026-09-17)
+
+**What was built.** `book6/ch-the-present-king-of-france.html` and its verify script — 6 blocks,
+standard library only, 16 checks, exit 0. Registered in `book6/index.html` as a named chapter
+rather than a numbered working paper: the subject is a story and a WP number reads dry.
+`tools/lean_addresses.py` gains three EXEMPT pairs.
+
+**The story it is told through.** Ramanujan's first letter to Hardy, 16 January 1913 — nine pages,
+some 120 theorems across the first two letters, almost no proofs. Hardy's reply of 8 February:
+**he asked for the proofs.** Not "this is wrong", not "this is marvellous" — he already believed a
+great deal of it, and asked anyway. That same year, in the same college, Whitehead and Russell
+brought out Volume III of a book that spends ~360 pages reaching 1+1=2. One address, one year: the
+highest pitch of proof-discipline ever attempted and nine pages of unproved assertion.
+
+Hardy's grounds for believing the continued-fraction formulas — they *"must be true, because, if
+they were not true, no one would have had the imagination to invent them"* — is an argument from
+the improbability of the forgery, and he never called it a proof. **He kept two ledgers**, what he
+believed and what had been demonstrated, sorted the nine pages into wrong / already known / new,
+and published which was which. Some were wrong.
+
+**The finding.** `tools/lean_addresses.py`, live: **66 names resolve nowhere, 2 resolve only under
+another case, 142 citations in all.** `Chain.lean` is cited by **23 pages**;
+`ZeoliteCommutation.lean` by 11; then 5, 4, 4, 4, 4. Twenty-three pages send a reader to an address
+where no file exists.
+
+**What Russell changes.** The repository has filed these as *defects to repair*, and "repair"
+concedes that something is there to mend — the Meinong reading in a work shirt. On the 1905
+analysis, "the proof in Chain.lean establishes P" unpacks into three claims, the first being that
+such a file exists. It does not. **So the sentence is false as currently published** — not
+unverified, not pending. Block [1] evaluates all three readings over every (F, G) pair on domains
+up to four elements: with nothing answering to the description, "the F is G" and "the F is not-G"
+are *both* false while "not (the F is G)" is true, so excluded middle is untouched.
+
+**And it fixes how a retraction must be written.** Block [2]: with the file missing, only the
+**wide** reading is true. A correction saying *"the proof there is incomplete"* takes narrow scope
+and therefore **concedes that a proof exists** — false when the file is missing. The true sentence
+is *"there is no such file"*, and it is shorter. Some corrections in this corpus are written the
+wrong way round.
+
+**Mention is not use — and the tool was already right.** This page names `Chain.lean` and
+`ZeoliteCommutation.lean`; `book7/ch-gelfand.html` names the latter precisely to say it does *not*
+rely on it. A name-counter would count all three as citations. `lean_addresses.py` has exempted by
+**(page, name) pair and never by name alone** from the start, with the note that "a blanket name
+exemption would hide a real dangling citation elsewhere" — Russell's use/mention distinction,
+implemented correctly by someone who did not stop to name it. Three pairs added; that took
+`ZeoliteCommutation.lean` from 12 citing pages to 11. The name did not become less dangling; one of
+the twelve was never using it.
+
+**The ledger the corpus already keeps.** "proof" in 422 chapters, "unproved/unproven" in 26,
+"without proof" in 11, "notebook" in 33, Ramanujan in 16, Hardy in 7, Littlewood in 4. And
+**"theory of descriptions" 0, "On Denoting" 0, use/mention 0.** The habit is there; the name for it
+was not.
+
+**Three replacements are tabled on the page** for the sentences the corpus currently writes.
+
+**Not established.** That any page is wrong about its mathematics — a false citation is a fact
+about the citation, not the theorem, which may be true, provable, or proved where the tool cannot
+see. The counts inherit `lean_addresses.py`'s limits: it asks whether a *file* of that name exists
+under the roots given, not whether a declaration inside it exists or elaborates, and a root not
+passed is a root not searched. Exemptions are hand-curated. Strawson's 1950 objection — that such a
+sentence presupposes rather than asserts existence, and is therefore neither true nor false — is
+not addressed and is not obviously wrong. No priority claimed: "On Denoting" is 1905.
+
 # THE RULER COUNTED ITSELF: PRINCIPIA MATHEMATICA, AND A VICIOUS CIRCLE IN WP-82 (2026-09-17)
 
 **What was built.** `book7/ch-whitehead-russell.html` + `-verify.py` (8 blocks, 25 checks, exit 0);

@@ -48,7 +48,13 @@ NAME = re.compile(r'\b([A-Za-z][A-Za-z0-9_]*(?:[-_][A-Za-z0-9_]+)*\.lean)(?![-./
 EXEMPT = {
     ('docs/defect-ledger.html', 'XXXXXX.lean'),
     ('course-16weeks.html', 'claim.lean'),
-    # named on the page precisely to report that they resolve nowhere
+    # named on the page precisely to report that they resolve nowhere.
+    # Russell's use/mention distinction, kept by hand: a page that NAMES a file
+    # in order to say it is not relied on is not citing it. See
+    # book6/ch-the-present-king-of-france.html.
+    ('book7/ch-gelfand.html', 'ZeoliteCommutation.lean'),
+    ('book6/ch-the-present-king-of-france.html', 'ZeoliteCommutation.lean'),
+    ('book6/ch-the-present-king-of-france.html', 'Chain.lean'),
     ('chDis-disaster.html', 'CatastropheF.lean'),
     ('chDis-disaster.html', 'ChaosMu.lean'),
     ('chDis-disaster.html', 'DisasterTheory.lean'),
