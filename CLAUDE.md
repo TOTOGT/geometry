@@ -41,11 +41,45 @@ above each of them.
 | R16 | Where files live — the tiering rule. | `## Where files live` |
 | R17 | A WP whose finding is about machine-assisted production carries `#Machine Learning`. | `# RULE (2026-09-01):` |
 | R18 | A priority claim carries its search, or it is not a claim. Unmatched is not novel. | `## Novelty and priority` |
+| R19 | **Read the ledger before measuring.** `docs/claims.tsv`, `docs/ci-receipts.tsv`, `docs/audit-log.md` and the handoff block are the corpus's memory. A number already in them is settled; cite it, do not re-derive it. R6 and R12 say a number needs a producing tool — they do not say run it again. | `## Read the ledger first` |
 
 R4 is the one that proves the point. It was written on 2026-09-09, it is correct,
 and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
 expired narrative. The session of 2026-09-13 stranded git locks all evening
 without reading it. A rule that cannot be found is not in force.
+
+## Read the ledger first (R19, set 2026-09-17 by Pablo)
+
+Every session so far has re-derived what earlier sessions had already settled, and it is the
+rules that cause it: R6 and R12 reward producing a number, and nothing rewarded reading one.
+The cost is the author's session capacity, which is finite and was 75% spent on the week this
+rule was written.
+
+**Before measuring anything, read — in this order, it is four calls:**
+
+1. the handoff block above — what the last session settled and what it left open
+2. `docs/ci-receipts.tsv` — the CI truth. **Three lines. Read it every time.** On 2026-09-17 it
+   said `verify-proofs.yml` FAILED on 2026-09-14 while `tools/axioms.txt` showed a clean local
+   run, and a session had already called Volume I publisher-ready on the strength of the file.
+3. `docs/claims.tsv` (3,833 rows: page · claim_id · label · status · warrant · reference) and
+   `docs/claims-pending.tsv` — whether the claim is already classified
+4. `docs/audit-log.md` — search it for the subject before opening it as new
+
+**A number already in those is settled. Cite it with its date and its producing artifact. Do not
+run it again.** If it looks wrong, say which row and why, then re-run that one thing — not the
+survey around it.
+
+Worked examples, all from 2026-09-17, all avoidable by one read:
+
+- `vol1-proofs` was proposed for a fresh axiom check. It has had a five-stage gate in CI since
+  2026-08-25, `tools/axioms.txt` on disk, and a CLAUDE.md section titled **do not rebuild it**.
+- `certify_rstar.py` was queued for a DOI edit to `20360288` per this file. A canonical v1.1 in
+  `~/geometry/applications/stjohns-meco/` had already superseded it with GTCT V4 `21708678`.
+- "AXLE compiles nothing" was repeated from a handoff and had never been run. One `lake env lean`
+  refuted it.
+
+The corresponding duty: **a session that settles something writes it into the ledger**, not only
+into prose. A result recorded only in narrative will be re-derived.
 
 ## HANDOFF — 2026-09-17 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
