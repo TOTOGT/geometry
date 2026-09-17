@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galperin's Billiard · Book 4 · Principia Orthogona</title>
+<meta name="description" content="Two blocks, a wall, and no circle anywhere — yet the collisions count out the digits of pi. The physical view and the configuration-space wedge, side by side, because only the second one explains the first."/>
+<style>
+:root{--void:#04040a;--surface:#0c0d14;--card:#0f1019;--gold:#c9a84c;--teal:#0abab5;
+--amber:#f59e0b;--text:#e8e4d8;--dim:#6b6757;--rule:rgba(201,168,76,.14)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:var(--void);color:var(--text);font-size:17px;line-height:1.75}
+nav{position:sticky;top:0;z-index:50;background:rgba(4,4,10,.96);border-bottom:1px solid var(--rule);
+padding:.6rem 1.4rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem}
+nav a{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--dim);text-decoration:none}
+nav a:hover{color:var(--gold)}
+.wrap{max-width:1080px;margin:0 auto;padding:2rem 1.2rem 4rem}
+h1{font-size:1.9rem;line-height:1.25;margin-bottom:.3rem}
+.sub{color:var(--dim);font-style:italic;margin-bottom:1.6rem}
+h2{font-size:1.15rem;margin:2.2rem 0 .7rem;color:var(--gold)}
+p{margin-bottom:1rem}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.2rem 0}
+@media(max-width:780px){.panels{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--rule);border-radius:3px;padding:.8rem}
+.panel h3{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.12em;
+text-transform:uppercase;color:var(--teal);margin-bottom:.5rem}
+canvas{width:100%;display:block;background:#07070d;border-radius:2px}
+.controls{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;margin:1rem 0;
+background:var(--card);border:1px solid var(--rule);border-radius:3px;padding:.8rem 1rem}
+label{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.08em;
+text-transform:uppercase;color:var(--dim)}
+select,button{font-family:'Courier New',monospace;font-size:.72rem;background:#15161f;
+color:var(--text);border:1px solid var(--rule);border-radius:2px;padding:.4rem .7rem;cursor:pointer}
+button:hover,select:hover{border-color:var(--gold);color:var(--gold)}
+input[type=range]{accent-color:var(--teal);width:130px}
+.readout{display:flex;gap:1.6rem;flex-wrap:wrap;font-family:'Courier New',monospace;
+font-size:.78rem;margin:.8rem 0 0;padding:.8rem 1rem;background:var(--card);
+border:1px solid var(--rule);border-radius:3px}
+.readout b{color:var(--gold);font-weight:400}
+.big{font-size:1.5rem;color:var(--teal);letter-spacing:.05em}
+.match{color:var(--teal)}.nomatch{color:var(--amber)}
+.note{border-left:3px solid var(--teal);background:rgba(10,186,181,.06);
+padding:1.1rem 1.2rem;margin:1.6rem 0;border-radius:2px;font-size:.94rem}
+.note b{color:var(--teal)}
+code{font-family:'Courier New',monospace;font-size:.88em;color:var(--teal)}
+footer{border-top:1px solid var(--rule);margin-top:3rem;padding-top:1.2rem;
+font-size:.78rem;color:var(--dim)}
+footer a{color:var(--dim)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html">&#9884; Principia Orthogona</a>
+  <div><a href="index.html">Book 4</a> &nbsp; <a href="../book7/ch-hardy.html">Hardy</a> &nbsp; <a href="galperin-billiards-verify.py">verify.py</a></div>
+</nav>
+
+<div class="wrap">
+  <h1>Galperin's Billiard</h1>
+  <p class="sub">Two blocks, a wall, perfectly elastic collisions. No circle appears anywhere in the statement of the problem. The collisions count out the digits of &pi;.</p>
+
+  <div class="controls">
+    <label>mass ratio</label>
+    <select id="ratio">
+      <option value="0">1 &nbsp;(100&#8304;) &rarr; 3</option>
+      <option value="1" selected>100 &nbsp;(100&sup1;) &rarr; 31</option>
+      <option value="2">10 000 &nbsp;(100&sup2;) &rarr; 314</option>
+      <option value="3">1 000 000 &nbsp;(100&sup3;) &rarr; 3141</option>
+    </select>
+    <button id="play">Play</button>
+    <button id="step">Step</button>
+    <button id="end">Skip to end</button>
+    <button id="reset">Reset</button>
+    <label>speed</label><input type="range" id="speed" min="1" max="100" value="22">
+  </div>
+
+  <div class="panels">
+    <div class="panel">
+      <h3>Physical view &mdash; what happens</h3>
+      <canvas id="phys" width="520" height="260"></canvas>
+    </div>
+    <div class="panel">
+      <h3>Configuration space &mdash; why it is &pi;</h3>
+      <canvas id="conf" width="520" height="260"></canvas>
+    </div>
+  </div>
+
+  <div class="readout">
+    <span>collisions <b class="big" id="count">0</b></span>
+    <span>target <b id="target">31</b></span>
+    <span>wedge angle &theta; <b id="theta">—</b></span>
+    <span>&lceil;&pi;/&theta;&rceil;&minus;1 <b id="pred">—</b></span>
+    <span id="verdict"></span>
+  </div>
+
+  <h2>The two panels are the same motion</h2>
+  <p>On the left, a small block is struck by a heavy one and rattles between it and the wall. Nothing about that picture suggests &pi;. On the right is the identical system in coordinates <code>y&#8321; = &radic;m&#8321;&middot;x&#8321;</code>, <code>y&#8322; = &radic;m&#8322;&middot;x&#8322;</code>, where kinetic energy becomes the squared length of the velocity vector.</p>
+
+  <p>In those coordinates the speed can never change, so every collision is a <em>reflection</em>, and the allowed region &mdash; the small block right of the wall, the big block right of the small one &mdash; is a <strong>wedge</strong>. The whole problem becomes a straight line bouncing inside a wedge of angle <code>&theta; = arctan&radic;(m&#8321;/m&#8322;)</code>, and the number of bounces is just how many times &theta; fits into &pi;.</p>
+
+  <div class="note">
+    <p><b>Why the digits of &pi; and not merely something near &pi;.</b> With m&#8322;/m&#8321; = 100&#8319;, the angle is &theta; = arctan(10&#8315;&#8319;), and arctan&nbsp;x &rarr; x as x &rarr; 0. So &pi;/&theta; &rarr; &pi;&times;10&#8319;, and taking the integer part reads off &pi;'s decimal expansion one digit at a time. The blocks are not computing &pi;. They are turning through a fixed total angle, and the count of reflections is forced by geometry.</p>
+    <p style="margin-top:.8rem"><b>The exact count is &lceil;&pi;/&theta;&rceil; &minus; 1</b>, not &lceil;&pi;/&theta;&rceil;. The equal-mass case is what exposes the difference: there &theta; = &pi;/4 exactly, &pi;/&theta; = 4, and the answer is 3. An earlier draft of the companion script had the formula without the &minus;1 and was wrong on every row by exactly one.</p>
+  </div>
+
+  <h2>What is computed here</h2>
+  <p>This page advances the system <em>event to event</em> rather than by time steps: the next wall bounce and the next block&ndash;block meeting are each solved for exactly, and the earlier one is taken. There is no tunnelling and no step size, so the collision count is not an artefact of resolution. The same physics, in exact rational arithmetic, is in <a href="galperin-billiards-verify.py"><code>galperin-billiards-verify.py</code></a>, which reproduces 3, 31, 314 with no rounding anywhere and confirms the closed form out to 31415926.</p>
+
+  <p>The result is Gregory Galperin's, <em>Playing pool with &pi;</em>, Regular and Chaotic Dynamics <strong>8</strong> (2003) 375&ndash;394. It reached this project through Grant Sanderson's exposition &mdash; <em>cited</em> for the mathematics, <em>told</em> for the route, in the provenance grading this series adopted in <a href="../book7/ch-hardy.html">the Hardy chapter</a>.</p>
+
+  <footer>
+    Book 4 &middot; Principia Orthogona &middot; &copy; 2026 Pablo Nogueira Grossi &middot; G6 LLC &middot; Newark, New Jersey<br>
+    ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a> &middot; g6llc@proton.me
+  </footer>
+</div>
+
+<script>
+(function(){
+const phys=document.getElementById('phys'),pc=phys.getContext('2d');
+const conf=document.getElementById('conf'),cc=conf.getContext('2d');
+const $=id=>document.getElementById(id);
+const PI_D="314159265358979";
+
+let n=1, m1=1, m2=100, S, playing=false, raf=null, path=[], done=false;
+
+function fresh(){
+  m1=1; m2=Math.pow(100,n);
+  S={x1:1.6, v1:0, x2:4.2, v2:-1, w1:.55, w2:.55+.35*Math.min(n,3), count:0};
+  path=[]; done=false; pushPath();
+  const th=Math.atan(Math.sqrt(m1/m2));
+  $('theta').textContent=th.toExponential(4);
+  $('pred').textContent=Math.ceil(Math.PI/th)-1;
+  $('target').textContent=PI_D.slice(0,n+1);
+  $('count').textContent='0'; $('verdict').textContent='';
+  draw();
+}
+function pushPath(){ path.push([Math.sqrt(m1)*S.x1, Math.sqrt(m2)*S.x2]); }
+
+// --- exact event-to-event stepping -----------------------------------------
+function nextEvent(){
+  let tw=Infinity, tb=Infinity;
+  if(S.v1<0) tw = S.x1/(-S.v1);                      // small block reaches wall
+  const gap=(S.x2-(S.x1+S.w1)), rel=S.v1-S.v2;
+  if(rel>0) tb = gap/rel;                            // blocks meet
+  return {t:Math.min(tw,tb), wall:(tw<=tb)};
+}
+function advance(t){ S.x1+=S.v1*t; S.x2+=S.v2*t; }
+function finished(){ return S.v1>=0 && S.v2>=S.v1; }
+
+function doEvent(){
+  if(done) return false;
+  if(finished()){ done=true; verdict(); return false; }
+  const e=nextEvent();
+  if(!isFinite(e.t)){ done=true; verdict(); return false; }
+  advance(e.t);
+  if(e.wall){ S.v1=-S.v1; }
+  else{
+    const a=S.v1,b=S.v2;
+    S.v1=((m1-m2)*a+2*m2*b)/(m1+m2);
+    S.v2=((m2-m1)*b+2*m1*a)/(m1+m2);
+  }
+  S.count++; pushPath();
+  $('count').textContent=S.count;
+  return true;
+}
+function verdict(){
+  const want=parseInt(PI_D.slice(0,n+1),10);
+  const el=$('verdict');
+  el.textContent = S.count===want ? '✓ matches π to '+(n+1)+' digits' : '✗ got '+S.count+', expected '+want;
+  el.className = S.count===want ? 'match' : 'nomatch';
+}
+
+// --- drawing ----------------------------------------------------------------
+function draw(){
+  // physical
+  const W=phys.width,H=phys.height,floor=H-52;
+  pc.clearRect(0,0,W,H); pc.fillStyle='#07070d'; pc.fillRect(0,0,W,H);
+  const sc=Math.min(74, (W-70)/Math.max(6, S.x2+S.w2+1));
+  const ox=44;
+  pc.strokeStyle='#c9a84c'; pc.lineWidth=3;
+  pc.beginPath(); pc.moveTo(ox,floor-92); pc.lineTo(ox,floor); pc.stroke();
+  pc.strokeStyle='rgba(201,168,76,.25)'; pc.lineWidth=1;
+  pc.beginPath(); pc.moveTo(ox,floor); pc.lineTo(W-8,floor); pc.stroke();
+  const s1=Math.max(16,22), s2=Math.max(24,22+9*Math.min(n,3));
+  pc.fillStyle='#0abab5';
+  pc.fillRect(ox+S.x1*sc, floor-s1, S.w1*sc, s1);
+  pc.fillStyle='#c9a84c';
+  pc.fillRect(ox+S.x2*sc, floor-s2, S.w2*sc, s2);
+  pc.fillStyle='#6b6757'; pc.font='10px Courier New';
+  pc.fillText('m = 1', ox+S.x1*sc, floor+16);
+  pc.fillText('M = '+m2.toLocaleString(), ox+S.x2*sc, floor+16);
+
+  // configuration space
+  const w=conf.width,h=conf.height;
+  cc.clearRect(0,0,w,h); cc.fillStyle='#07070d'; cc.fillRect(0,0,w,h);
+  if(path.length){
+    let mx=0,my=0;
+    for(const p of path){ mx=Math.max(mx,p[0]); my=Math.max(my,p[1]); }
+    mx=Math.max(mx,1); my=Math.max(my,1);
+    const pad=26, sx=(w-2*pad)/mx, sy=(h-2*pad)/my, k=Math.min(sx,sy);
+    const X=v=>pad+v*k, Y=v=>h-pad-v*k;
+    // wedge: y1 = 0 wall, and the line y2 = sqrt(m2/m1) y1
+    cc.strokeStyle='rgba(201,168,76,.45)'; cc.lineWidth=1.5;
+    cc.beginPath(); cc.moveTo(X(0),Y(0)); cc.lineTo(X(0),Y(my)); cc.stroke();
+    const slope=Math.sqrt(m2/m1);
+    cc.beginPath(); cc.moveTo(X(0),Y(0));
+    const xEnd=Math.min(mx, my/slope); cc.lineTo(X(xEnd),Y(xEnd*slope)); cc.stroke();
+    // trajectory
+    cc.strokeStyle='#0abab5'; cc.lineWidth=1.2; cc.beginPath();
+    path.forEach((p,i)=> i?cc.lineTo(X(p[0]),Y(p[1])):cc.moveTo(X(p[0]),Y(p[1])));
+    cc.stroke();
+    const last=path[path.length-1];
+    cc.fillStyle='#f59e0b'; cc.beginPath(); cc.arc(X(last[0]),Y(last[1]),3,0,7); cc.fill();
+    cc.fillStyle='#6b6757'; cc.font='10px Courier New';
+    cc.fillText('y₁ = √m₁·x₁', w-96, h-8);
+    cc.fillText('y₂ = √m₂·x₂', 6, 14);
+    cc.fillStyle='rgba(201,168,76,.7)';
+    cc.fillText('θ = '+Math.atan(Math.sqrt(m1/m2)).toExponential(2), 6, h-8);
+  }
+}
+
+// --- loop -------------------------------------------------------------------
+function tick(){
+  if(!playing){ raf=null; return; }
+  const per=Math.max(1, Math.round(parseInt($('speed').value,10)/6));
+  for(let i=0;i<per;i++){ if(!doEvent()){ playing=false; $('play').textContent='Play'; break; } }
+  draw();
+  raf=playing?requestAnimationFrame(tick):null;
+}
+$('play').onclick=()=>{ if(done) return; playing=!playing;
+  $('play').textContent=playing?'Pause':'Play'; if(playing&&!raf) tick(); };
+$('step').onclick=()=>{ playing=false; $('play').textContent='Play'; doEvent(); draw(); };
+$('end').onclick=()=>{ playing=false; $('play').textContent='Play';
+  let guard=0; while(doEvent() && guard++<2000000){} draw(); };
+$('reset').onclick=()=>{ playing=false; $('play').textContent='Play'; fresh(); };
+$('ratio').onchange=e=>{ playing=false; $('play').textContent='Play';
+  n=parseInt(e.target.value,10); fresh(); };
+window.addEventListener('resize',draw);
+fresh();
+})();
+</script>
+</body>
+</html>
