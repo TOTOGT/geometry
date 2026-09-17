@@ -107,11 +107,12 @@ is exactly what Mathlib does not yet have. Stating this separately is the
 point: it isolates what is missing.
 
 `GrothendieckAddGroup` is the `to_additive` name of `GrothendieckGroup`.
-NOT `GrothendieckAddGroup` -- `to_additive` rewrites the token `Group` into
-`AddGroup` in place, it does not prefix the whole name. Verified 2026-09-17 by
-grepping the built olean: `GrothendieckAddGroup` 1 hit, `GrothendieckAddGroup`
-0 hits. Guessing this from the naming convention is how the previous round
-produced seven errors; the olean is the authority. -/
+`to_additive` rewrites the token "Group" into "AddGroup" IN PLACE; it does not
+prefix the whole identifier. So the name is Grothendieck-Add-Group and not
+Add-Grothendieck-Group, which is what this file assumed and what the second
+compile rejected. Settled by grepping the built olean, since to_additive
+generates the declaration at elaboration time and it appears nowhere in the
+Mathlib source: one hit for the right spelling, zero for the wrong one. -/
 
 /-- **K₀ of a field, second half.** The Grothendieck group of `(ℕ, +)` is `ℤ`.
     This is where Volume XI's first theorem bottoms out. -/
