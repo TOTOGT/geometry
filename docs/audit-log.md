@@ -1,3 +1,60 @@
+# FEIGIN: THE FLOOR UNDER VOLUME XV'S CORRECTED SEED (2026-09-16)
+
+**What was built.** `book7/ch-feigin.html` and `book7/ch-feigin-verify.py` — 8 blocks, standard
+library only, exact over ℚ throughout, 38 checks, exit 0. Registered in `book7/index.html`; the
+three generated indexes re-run.
+
+**Why.** WP-82 §3's own correction of 2026-09-11 withdrew the Moonshine seed for Volume XV —
+*"Moonshine supplies modular functions — the automorphic side... half of a correspondence is not
+half the distance"* — and named Feigin–Frenkel instead: at the critical level the centre of the
+affine vertex algebra is the classical W-algebra of the Langlands dual, duality inside vertex
+algebra theory with no Galois side. Measured at HEAD, entity-aware, this page classified out:
+E8 141 chapters, Moonshine 22, vertex operator 8, central charge 7, Virasoro 7, Kac–Moody 2,
+Langlands 2, critical level 1, **W-algebra 1 — and that one is WP-82 itself**. Everything the
+theorem is *stated in terms of* reads 0: **Sugawara 0, dual Coxeter number 0, Zamolodchikov 0.**
+
+**Virasoro derived, not quoted.** Witt from vector fields, exact on 2197 integer triples. Then
+H²(Witt) computed: **1 at every window tested** — (N,M) = (5,2), (6,3), (7,3), (8,4), (9,4),
+(10,5), with dim Z| − dim B| = 1 in each. Which is why Virasoro is *the* central extension.
+
+**A truncation lesson, the second in two days.** A raw truncation to |n| ≤ N drops every cocycle
+condition reaching outside the window, so the cocycle space is inflated at the edge and the
+answer is wrong. The fix is to solve on [−N,N] and **restrict to pairs inside [−M,M] before
+quotienting.** Same shape as ch-gelfand, where an algebra generated to a fixed word length
+reported dim 33 where the commutant forces 36.
+
+**And the −m is forced.** Degree-zero cocycles are exactly span{m, m³} — m² and m⁵ are checked
+and are *not* cocycles, so the reading is not an artefact of the ansatz. The degree-zero
+coboundaries are c(m) = 2m·f(L₀), exactly the multiples of m. So every representative is m³ + t·m,
+and **t = −1 is the unique value with c(1) = 0**, which is the statement that L₋₁, L₀, L₁ span an
+uncentred sl₂. The 12 is a normalisation; the −m is not. c(2) = 1/2, i.e. [L₂,L₋₂] = 4L₀ + c/2.
+
+**Root systems from Cartan matrices alone.** Reflection closure, highest root, symmetriser,
+coroot coefficients. Fifteen simple types, every h^∨ agreeing with the known value. E₈: **h^∨ = 30,
+240 roots, dim 248**, highest root (2,3,4,6,5,4,3,2).
+
+**Langlands duals by transposition.** A, D, E self-dual; G₂ and F₄ self-dual up to relabelling;
+B_n ↔ C_n. **E₈ is self-dual**, so the centre at its critical level is W(e₈) and not some other
+algebra to be hunted for.
+
+**The critical level, with a check that is not circular.** c(k) = k·dim g/(k + h^∨), undefined
+where the Sugawara normalisation 1/(2(k+h^∨)) is — that is the critical level, and the Virasoro
+description of ĝ breaks exactly there. The test: **at level 1, simply laced, c must equal the
+rank.** Nothing in the computation was arranged to make that true, so it tests h^∨ and dim g
+together. It holds for every type tested; for E₈, 248/31 = 8.
+
+> **For E₈: c(k) = 248k/(k+30), critical level k = −30, centre W(e₈).**
+
+**What is NOT established, and it is the larger half.** No W-algebra is constructed. The theorem
+is quoted; what is computed is the data it is stated in terms of. The Sugawara operator is not
+built, the centre at the critical level is not exhibited, the isomorphism is not checked in any
+case, not even sl₂. The reason is printed rather than hidden: **a W-algebra is not a Lie algebra** —
+W₃'s bracket closes only on the composite field :TT: − (3/10)∂²T, so the structure "constants"
+depend on the central charge and none of the Witt/Virasoro machinery extends for free. That needs
+OPEs and normal ordering, neither of which is in this corpus. **By WP-82's own admissibility bar,
+Volume XV is not opened by this page.** It supplies the floor under the seed and an honest measure
+of the distance. No priority claimed; all of it is classical.
+
 # GELFAND: IS "THE OPERATOR ALGEBRA" AN ALGEBRA? (2026-09-16)
 
 **What was built.** `book7/ch-gelfand.html` and `book7/ch-gelfand-verify.py` — 8 blocks,
