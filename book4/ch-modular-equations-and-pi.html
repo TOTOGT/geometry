@@ -81,145 +81,184 @@ footer .disc{max-width:520px;color:#6f6a5c}
 <div class="wp-head">
 <div class="wp-kicker">Book IV &middot; 2026-09-17 &middot; The object, worked</div>
 <h1>Modular Equations and <em>&pi;</em></h1>
-<div class="subtitle">Ramanujan wrote a formula for $1/\pi$ that gains eight correct digits every time you add a term. This chapter shows you where it comes from, and how to build your own.</div>
+<div class="subtitle">Two numbers show up in Ramanujan's formula for $1/\pi$. The same two numbers show up somewhere they have no business being. This is the chase.</div>
 <div class="metagrid"><div><strong>Role</strong>Vol IV works the object<br>the finding is Vol VII's, the algebra Vol XI's</div><div><strong>Prerequisite</strong>none beyond square roots<br>and willingness to run a script</div><div><strong>Producing script</strong><span class="mono">book7/ch-ramanujan-1pi-verify.py</span><br>120-digit, standard library only</div></div>
 </div>
 
 <div class="wrap">
 
-<div class="topictag">Explanation layer &middot; Vol VII has the story, Vol XI has the proofs</div>
+<div class="topictag">Explanation layer &middot; you should be able to read this cold</div>
 
-<div class="lede">Here is the formula. Everything in this chapter is about where the numbers in it come from.</div>
+<h2>1 &middot; A formula that is too good</h2>
+
+<p>In 1914 Ramanujan published this, with no derivation:</p>
 
 $$\frac{1}{\pi} \;=\; \frac{2\sqrt 2}{9801}\sum_{n=0}^{\infty}\frac{(4n)!\,(1103 + 26390\,n)}{(n!)^4\,396^{4n}}$$
 
-<p>Take one term and you have $1/\pi$ to eight decimal places. Take twelve and you have it to a hundred. It is the most efficient formula for $\pi$ anyone had found for seventy years, and Ramanujan published it in 1914 without saying where it came from.</p>
+<p>Take just the first term &mdash; set $n = 0$, so the sum is only $1103$ &mdash; and you get $1/\pi$ correct to <strong>eight decimal places</strong>. Add the next term, sixteen places. The one after that, twenty-four. Eight more digits every single time, forever.</p>
 
-<p>Look at the two odd numbers in it: <strong>9801</strong> out front, and <strong>396</strong> underneath. Hold on to those. They are the same number twice.</p>
+<p>Nobody beat it for seventy years.</p>
 
-<h2>1 &middot; A function that has no business being nice</h2>
+<p>Before we go anywhere, look at the two strange numbers sitting in it. There is <strong>9801</strong> out in front. There is <strong>396</strong> buried in the denominator. Nothing about the formula explains why those and not others.</p>
 
-<p>Start somewhere that looks unrelated. There is a function called the elliptic modulus, written $k(q)$. It is built as a ratio of two infinite sums. Nothing about it is tidy.</p>
+<p>Keep them in mind. We are going to walk away from this formula entirely, and when we come back they will be waiting.</p>
 
-<p>Now evaluate it at a very particular kind of place &mdash; at $q = e^{-\pi\sqrt N}$, for a whole number $N$. Write the answer as $\alpha_N$, which by convention means $k$ <em>squared</em>.</p>
+<h2>2 &middot; Somewhere else entirely</h2>
 
-<p>Something strange happens. The infinite sums collapse. At $N = 58$ you get:</p>
+<p>Forget $\pi$ for a moment.</p>
+
+<p>There is a function called the elliptic modulus, written $k(q)$. You build it by dividing one infinite sum by another. It is the kind of object that has no closed form, takes ugly values, and does not simplify.</p>
+
+<p>Now do something arbitrary-looking to it. Pick a whole number &mdash; say $58$ &mdash; and evaluate $k$ at the point $q = e^{-\pi\sqrt{58}}$. Square the answer and call it $\alpha_{58}$.</p>
+
+<p>You have taken a transcendental function and fed it a transcendental input. You should get mud.</p>
+
+<p>Here is what you get:</p>
 
 $$\alpha_{58} = (13\sqrt{58} - 99)^2\,(99 - 70\sqrt 2)^2$$
 
-<p>Square roots. Whole numbers. No infinite sum anywhere. Compute it both ways at 120 digits &mdash; grinding through the theta series, and evaluating those radicals &mdash; and the two agree to eighty places.</p>
+<p>Square roots and whole numbers. The infinite sums are gone. You can check it: grind the theta series out to 120 digits, evaluate those radicals separately, and the two agree to eighty places.</p>
 
-<p>And there is 99 again, twice over, in a formula written down for a completely different reason.</p>
+<p>That is already surprising. But look at what is in there.</p>
 
-<div class="box warn">
-<span class="lab">One convention, and it will bite you</span>
-$\alpha_N$ is $k$ <strong>squared</strong>. If you compute the theta ratio and forget to square it, everything downstream is wrong by a factor you will not spot for a while.
-<br><br>
-This is not a hypothetical. It is the oldest live bug in this material. Ramanujan's second letter to Hardy gives a value for $k_{210}$ that turns out, when you compute it, to be $\alpha_{210}$ &mdash; the square of what it is labelled. That discrepancy is still unresolved. Whichever way it goes, the moral holds: <strong>write down which one you mean.</strong>
-</div>
+<p><strong>99.</strong> Twice.</p>
 
-<h2>2 &middot; The dial</h2>
+<h2>3 &middot; The coincidence, sharpened</h2>
 
-<p>From $\alpha_N$ you build one more quantity, the class invariant:</p>
+<p>Go back and look at the two numbers we were told to remember.</p>
 
-$$g_N^{12} = \frac{(k'_N)^2}{2k_N}, \qquad k' = \sqrt{1-\alpha}$$
+$$9801 = 99^2, \qquad\qquad 396 = 4 \times 99$$
 
-<p>And from that, the number that actually drives the series:</p>
+<p>So a formula for $\pi$ and a value of an elliptic function &mdash; two things with no visible connection &mdash; are both built out of 99.</p>
 
-$$x_N = \frac{1}{64\,(g_N^{12} + g_N^{-12})^2}$$
+<p>Either that is an accident, or these are the same object seen from two sides. The rest of this chapter is finding out which.</p>
 
-<p>At $N = 58$ this comes out to exactly $1/396^4$.</p>
+<h2>4 &middot; Following it down</h2>
 
-<p>That is where the 396 comes from. It is not a choice. You picked $N = 58$ and the formula handed you 396.</p>
+<p>From $\alpha_{58}$ you can build a related quantity called the class invariant:</p>
 
-<p>This is the useful part. <strong>$N$ is a dial, and it sets your convergence rate.</strong> Bigger $N$ means smaller $x_N$, which means a bigger number downstairs, which means more digits per term. Ramanujan turned it to 58 and got 8 digits a term. The Chudnovsky brothers turned it to 163 and got 14. You can read the rate off before computing a single term.</p>
+$$g_{58}^{12} = \frac{(k')^2}{2k}, \qquad k' = \sqrt{1-\alpha}, \quad k = \sqrt{\alpha}$$
 
-<h2>3 &middot; Why you add before you invert</h2>
-
-<p>This next step looks like housekeeping. It is the heart of the thing.</p>
-
-<p>Compute $g_{58}^{12}$ numerically and you get:</p>
+<p>Compute it. Here is what comes out:</p>
 
 $$g_{58}^{12} = 19601.99999489847\ldots$$
 
-<p>It is <em>almost</em> 19602. It is a bit closer to 19602 than to 19601. It is neither. If you round it, you have made something up.</p>
+<p>Stop on that for a second.</p>
 
-<p>What it actually is:</p>
+<p>It is <em>almost</em> a whole number. Not quite. Five decimal places of agreement and then it drifts. If you were sloppy you would write down 19602 and move on, and you would have invented something.</p>
 
-$$g_{58}^{12} = \varepsilon^6 = 9801 + 1820\sqrt{29}, \qquad \varepsilon = \frac{5+\sqrt{29}}{2}$$
+<p>So why is it so close? A number that misses an integer by five parts in a million is not doing that by chance.</p>
 
-<p>There is 9801 a third time. And $\varepsilon$ is not a random number &mdash; it is the fundamental unit of $\mathbb{Q}(\sqrt{29})$, the smallest building block of a whole system of numbers.</p>
+<h2>5 &middot; What it actually is</h2>
 
-<p>Units have norms. This one has norm $-1$. So $\varepsilon^6$ has norm $+1$. Written out, that statement is:</p>
+$$g_{58}^{12} = 9801 + 1820\sqrt{29}$$
+
+<p>There is 99 a third time &mdash; $9801$ again, now as the whole-number part of something irrational.</p>
+
+<p>And this is not a random expression. It is $\varepsilon^6$, where</p>
+
+$$\varepsilon = \frac{5+\sqrt{29}}{2}$$
+
+<p>is the <em>fundamental unit</em> of $\mathbb{Q}(\sqrt{29})$ &mdash; roughly, the smallest multiplicative building block of that number system, the thing every other unit is a power of.</p>
+
+<p>Units have a norm: multiply the number by its conjugate. For $\varepsilon$ that norm is $-1$. So for $\varepsilon^6$ it is $(-1)^6 = +1$.</p>
+
+<p>Write that out. Norm $+1$ for $9801 + 1820\sqrt{29}$ says:</p>
 
 $$9801^2 - 29\cdot 1820^2 = 1$$
 
-<p>Pell's equation. Exactly 1, in whole numbers.</p>
+<p>Check it: $96{,}059{,}601 - 96{,}059{,}600 = 1$. That is <strong>Pell's equation</strong>, and it lands exactly on 1.</p>
 
-<p>Now, norm $+1$ means something very concrete: the conjugate is the inverse. So</p>
+<h2>6 &middot; Why the near-miss was a near-miss</h2>
+
+<p>Here is the payoff, and it explains &sect;4.</p>
+
+<p>Norm $+1$ means the conjugate <em>is</em> the inverse:</p>
 
 $$g^{-12} = 9801 - 1820\sqrt{29}$$
 
-<p>and when you add the two together, the $\sqrt{29}$ parts cancel:</p>
+<p>So $g^{12}$ and $g^{-12}$ are a matched pair straddling $9801$ &mdash; one a hair above, one a hair below. And $g^{-12}$ is tiny, about $0.000051$. That is your five parts in a million. <strong>The near-miss was the inverse, hiding.</strong></p>
+
+<p>Now add them. The $\sqrt{29}$ terms are equal and opposite:</p>
 
 $$g^{12} + g^{-12} = 19602$$
 
-<p>Exactly. Not 19601.99999. Thirty zeros after the decimal point, and you can prove it rather than measure it.</p>
+<p>Exactly. Thirty zeros after the decimal point, and not because anyone measured carefully &mdash; because Pell's equation says so.</p>
 
-<p>That is why the series has whole numbers in it. An irrational quantity plus its own inverse, where Pell's equation guarantees the halves cancel.</p>
+<p>And $19602 = 2 \times 99^2$.</p>
+
+<h2>7 &middot; Closing the loop</h2>
+
+<p>One step left. The quantity that sets the series denominator is</p>
+
+$$x_N = \frac{1}{64\,(g^{12} + g^{-12})^2}$$
+
+<p>We know that bracket exactly now. So:</p>
+
+$$64 \times 19602^2 = 24{,}591{,}257{,}856$$
+
+<p>And:</p>
+
+$$396^4 = 24{,}591{,}257{,}856$$
+
+<p>The same number. Both sides are $256 \times 99^4$.</p>
 
 <div class="box thm">
-<span class="lab">And the loop closes</span>
-$19602 = 2 \times 99^2$. Put it back into the dial:
-$$64 \times 19602^2 = 24{,}591{,}257{,}856 = 396^4$$
-Both sides are $256 \times 99^4$. The 9801 in front of the series and the 396 underneath it are the same 99, arriving by two different roads.
+<span class="lab">So it was not a coincidence</span>
+The $9801$ in front of Ramanujan's series and the $396$ underneath it come from the same place: the unit group of $\mathbb{Q}(\sqrt{29})$, reached by evaluating an elliptic function at $e^{-\pi\sqrt{58}}$.
+<br><br>
+A transcendental function turns algebraic at special points. The algebra turns out to be a unit group. The unit's norm makes the answer a whole number. That chain has a name &mdash; <strong>complex multiplication</strong> &mdash; and it is the reason formulas like this exist at all.
 </div>
 
-<h2>4 &middot; Building your own</h2>
+<h2>8 &middot; Now you can build your own</h2>
 
-<p>The procedure, so you can run it at an $N$ nobody has worked:</p>
+<p>Nothing above used $58$ in an essential way. It is a dial, and it sets your convergence rate: bigger $N$, bigger denominator, more digits per term. Ramanujan turned it to $58$ and got eight digits. The Chudnovsky brothers turned it to $163$ and got fourteen &mdash; that is the formula every $\pi$ record has used since 1989.</p>
 
 <div class="box">
 <span class="lab">Recipe</span>
 <ol style="margin:.4rem 0 0 1.2rem">
-<li>Pick $N$. Compute $\alpha_N$ from the theta series at high precision. Don't look it up &mdash; computing it is the check.</li>
+<li>Pick $N$. Compute $\alpha_N$ from the theta series at high precision. Compute it &mdash; do not look it up. Computing it is your check.</li>
 <li>Form $g_N^{12} = (1-\alpha_N)/(2\sqrt{\alpha_N})$.</li>
-<li>Add: $S = g_N^{12} + g_N^{-12}$.</li>
-<li><strong>Is $S$ a whole number?</strong> If not, stop. Either your precision is too low, or $N$ is not one of the values where this closes.</li>
-<li>$x_N = 1/(64S^2)$. That is your denominator, and $\log_{10}(1/x_N)$ minus the growth of $(4n)!/(n!)^4$ is your digits per term.</li>
+<li>Add the inverse: $S = g_N^{12} + g_N^{-12}$.</li>
+<li><strong>Is $S$ a whole number?</strong> If it is ragged, stop. Your precision is short, or this $N$ is not one where the trick closes.</li>
+<li>$x_N = 1/(64S^2)$, and $\log_{10}(1/x_N)$ minus the growth of $(4n)!/(n!)^4$ tells you your digits per term before you compute one.</li>
 </ol>
 </div>
 
-<p>Step 4 is the whole safety net. If $S$ comes out ragged, something is wrong and you find out immediately instead of after building a series that does not converge.</p>
+<div class="box warn">
+<span class="lab">The one thing that will trip you</span>
+$\alpha$ is $k$ <strong>squared</strong>. The theta ratio gives you $k$; square it. Forget, and everything downstream is wrong in a way you will not notice for a while.
+<br><br>
+This is an old trap, not a modern one. Ramanujan's second letter to Hardy gives a value labelled $k_{210}$ which, when you actually evaluate it, is $\alpha_{210}$ &mdash; the square of what it says. That one is still unresolved. Write down which one you mean.
+</div>
 
-<h2>5 &middot; What this chapter cannot tell you</h2>
+<h2>9 &middot; What nobody here can tell you</h2>
 
-<p>Go back to the formula at the top. Five numbers appear in it. Four of them we have now accounted for:</p>
+<p>Go back to the formula one last time. We have now accounted for almost everything in it.</p>
 
 <div class="tblwrap">
 <table>
-<thead><tr><th>Number</th><th>Where it comes from</th></tr></thead>
+<thead><tr><th>Number</th><th>Where it came from</th></tr></thead>
 <tbody>
-<tr><td class="mono">9801</td><td>$99^2$ &mdash; and the rational part of $\varepsilon^6$</td></tr>
-<tr><td class="mono">396</td><td>$4 \times 99$ &mdash; handed to you by the dial at $N=58$</td></tr>
-<tr><td class="mono">2&radic;2</td><td>normalisation</td></tr>
-<tr><td class="mono">4n, n</td><td>the shape of the general theorem</td></tr>
-<tr><td class="mono">1103, 26390</td><td><strong>not explained here</strong></td></tr>
+<tr><td class="mono">9801</td><td>$99^2$ &mdash; the whole-number part of $\varepsilon^6$</td></tr>
+<tr><td class="mono">396</td><td>$4\times 99$ &mdash; handed over by the dial at $N = 58$</td></tr>
+<tr><td class="mono">19602</td><td>$2\times 99^2$ &mdash; exact, because Pell closes</td></tr>
+<tr><td class="mono">1103, 26390</td><td style="color:var(--red)"><strong>no idea</strong></td></tr>
 </tbody>
 </table>
 </div>
 
-<p>1103 and 26390 do not reduce to 99. Nothing in this chapter produces them. They come out of the general theorem, which this project has tested at a single point and never written out in full. <span class="tag t-open">OPEN</span></p>
+<p>Those last two do not reduce to 99. Nothing in this chapter produces them. They fall out of the general theorem, which this project has tested at exactly one point and never written out in full. <span class="tag t-open">OPEN</span></p>
 
-<p>Two smaller things. Step 4's test tells you when you have failed, not when you will succeed. And nothing here <em>proves</em> the series converges to $1/\pi$ &mdash; it is checked to 104 digits, which is good evidence and is not a proof.</p>
+<p>Two smaller honesties. Step 4 of the recipe tells you when you have failed, not when you will succeed. And none of this <em>proves</em> the series converges to $1/\pi$ &mdash; it is checked to 104 digits, which is excellent evidence and is not a proof.</p>
 
-<h2>6 &middot; Where the rest of it lives</h2>
+<h2>10 &middot; Where to go next</h2>
 
 <ul>
-<li><a href="../book7/ch-ramanujan.html">Vol VII, Chapter R</a> &mdash; Ramanujan himself, and how 9801 sat in this corpus for months before anyone noticed what it was.</li>
-<li><a href="../book10/ch05-the-notebooks-and-what-reached-us.html">Vol X, Ch 5</a> &mdash; the notebooks, and why the $k_{210}$ label is still open.</li>
-<li>Vol XI &mdash; why these things are units at all. That is complex multiplication, and it is the reason any of this works.</li>
-<li><a href="../book6/wp82-the-missing-floor.html">Vol VI, WP-82</a> &mdash; Heegner numbers. 163 is the last one, and it is the $N$ behind Chudnovsky.</li>
+<li><a href="../book7/ch-ramanujan.html">Vol VII, Chapter R</a> &mdash; Ramanujan himself. Also: this corpus computed $9801$ at $N=58$ months ago and did not notice what it was.</li>
+<li><a href="../book10/ch05-the-notebooks-and-what-reached-us.html">Vol X, Ch 5</a> &mdash; the notebooks, and why $k_{210}$ is still open.</li>
+<li><a href="../book6/wp82-the-missing-floor.html">Vol VI, WP-82</a> &mdash; Heegner numbers. $163$ is the last one, and it is the $N$ behind Chudnovsky.</li>
+<li>Vol XI &mdash; why any of these are units. That is complex multiplication proper, and it is the engine under this whole chapter.</li>
 </ul>
 
 </div>
