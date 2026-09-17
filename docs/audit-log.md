@@ -8333,3 +8333,42 @@ the register's own note describes this environment as asymmetric — cooler wate
 shear, higher latitude east — which is the conjecture's own escape clause. The
 trio was never a test case; the value of the exercise is that establishing so cost
 hours. `[FIXED]`
+
+## 2026-09-17 · item 4 on real tracks — HURDAT2, and the 8 = 2³ trap
+
+`book8/hurdat-symmetry-verify.py`, five blocks, exit 0. The earlier instrument's
+honesty block named HURDAT2 as the remedy for its prose-reconstructed positions;
+this is that run. File fetched through the browser straight to `~/Downloads`
+(7,071,568 bytes, 57,513 lines) so none of it passed through the session — 1,988
+storms, 36,351 TS/HU six-hourly rows, 30,544 synoptic epochs, zero unparseable
+coordinates, lat/lon confirmed in basin range before any test ran.
+
+    co-active   epochs   test                               observed     null
+        3          588   closest angle within 5 deg of 90      10.0%    11.1%
+        4           72   four points a rectangle within 5      0.0%     0.0%
+
+Ratio 0.91 on the corner test — co-active storms are marginally *further* from a
+right angle than positions drawn at random from the same geography. On the direct
+d = 2 test not one of 72 four-storm epochs is a rectangle, and median worst-corner
+deviation is 80.7 deg observed against 72.0 deg for the null. **No support for the
+d = 2 symmetry-image prediction in 175 years of Atlantic tracks.** Same verdict as
+the prose trio, now with 660 configurations and a null instead of one
+reconstruction.
+
+**The cheaper guard, added to the earlier instrument as block [6]: `d <= k`.**
+Z_2^d needs d mutually orthogonal mirrors and R^k admits at most k, so a cyclone
+field (a surface, k = 2) can only offer counts 1 and 3 — the seven-point case is
+geometrically unavailable to storms whatever the data says. Recorded because the
+NCEI 2002 report gives September 2002 as the most active month on record with
+**eight** named formations, and 8 = 2^3 fits source-plus-seven exactly. It is the
+most attractive d = 3 candidate in the Atlantic record and the geometry kills it
+before a single position is looked up. A matching headcount is not evidence — the
+vocabulary-correspondence failure, caught this time before it was written down.
+
+Still not a falsification of the conjecture, which speaks about configurations
+that HAVE a mirror symmetry. What is established is that co-occurrence in a
+hurricane basin is not one. `[FIXED]`
+
+The East Pacific file did not download (only the Atlantic landed) and was not
+used, so Lowell/Karina/Marie remain only in the reconstruction instrument; 2026 is
+past this file's 2025 end regardless. `[OPEN, low value]`

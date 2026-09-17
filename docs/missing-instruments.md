@@ -163,6 +163,36 @@ count, is exactly what this configuration supplies. **The trio was never a test 
 test was cheap enough to establish that.** A symmetric environment with an identified source
 would be one.
 
+**Now settled on real tracks, not a reconstruction.** `book8/hurdat-symmetry-verify.py`,
+five blocks, exit 0, against **NOAA HURDAT2 Atlantic 1851–2025** (7,071,568 bytes, 57,513
+lines, retrieved 2026-09-17 from nhc.noaa.gov/data). Parses to 1,988 storms and 36,351 TS/HU
+six-hourly positions over 30,544 synoptic epochs, zero unparseable coordinates.
+
+| co-active storms | epochs | test | observed | climatological null |
+|---|---|---|---|---|
+| 3 | 588 | closest angle within 5° of 90° | **10.0%** | 11.1% |
+| 4 | 72 | four-point rectangle within 5° | **0.0%** | 0.0% |
+
+Observed/null ratio on the corner test is **0.91** — storms co-active at the same synoptic
+hour are *very slightly further* from a right angle than positions drawn at random from the
+same geography. On the direct d = 2 test, not one of the 72 four-storm epochs is a rectangle,
+and the median worst-corner deviation is **80.7° observed against 72.0° for the null**, so real
+quadruples are further from rectangles than random ones. Both tests fire correctly on exact
+fixtures first.
+
+**Verdict: the d = 2 symmetry-image prediction has no support in 175 years of Atlantic
+tracks.** Same answer the prose trio gave, now with the reconstruction removed, a null
+attached, and 660 configurations instead of one. The corpus should stop offering storm
+groupings as evidence for a symmetry-image mechanism.
+
+**Also added, and it is the cheaper guard:** `d ≤ k`, because ℤ₂^d needs d mutually orthogonal
+mirrors and ℝ^k admits at most k. A cyclone field is a surface, k = 2, so the only counts
+available to it are **1 and 3** — the seven-point case cannot apply to storms at all. Written
+down because NOAA's 2002 report records September 2002 as the most active month on record with
+**eight** named formations, and 8 = 2³ fits a source-plus-seven cardinality exactly. It is the
+most attractive d = 3 candidate in the record and the geometry refutes it before any position
+is looked up. A matching headcount is not evidence.
+
 <details><summary>Original statement of the gap, 12 September</summary>
 
 **The gap.** Multi-orbit theory (`docs/multiorbit-pacific-2026-09.md`,

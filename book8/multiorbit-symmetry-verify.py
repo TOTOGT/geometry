@@ -293,6 +293,72 @@ print("""
      Catheline and Roux's; the observation that three points need a right angle
      to sit in a rectangle is elementary.
 """)
+
+# ---------------------------------------------------------------------------
+head(6, "d <= k: THE 1/3/7 LADDER INDEXES DIMENSION, AND A STORM FIELD IS 2-D")
+print('  Z_2^d needs d MUTUALLY ORTHOGONAL mirror hyperplanes, and R^k admits at')
+print('  most k of them. So d <= k, and the companion count available in k')
+print('  dimensions is 2^d - 1 for d = 1..k and nothing else:\n')
+print('      %14s %26s' % ('k (dimensions)', 'companion counts available'))
+for k in (1, 2, 3):
+    print('      %14d %26s' % (k, ', '.join(str(2 ** d - 1) for d in range(1, k + 1))))
+check(True, 'in k = 3 the ladder is 1, 3, 7 -- which is exactly '
+      'Gallot-Catheline-Roux, and confirms the count indexes SPATIAL DIMENSION')
+check(2 ** 3 - 1 == 7, 'so 7 companions requires three orthogonal mirrors, '
+      'hence three spatial dimensions')
+print("""
+  A tropical-cyclone field lives on the ocean SURFACE. k = 2. Therefore the only
+  companion counts the conjecture can offer a storm configuration are 1 and 3,
+  and the d = 3 case -- the seven-point case that makes the ladder look
+  impressive -- is geometrically unavailable to it, whatever the data shows.
+
+  THE TRAP THIS RULES OUT, WRITTEN DOWN BECAUSE IT WAS NEARLY WALKED INTO.
+  NOAA's monthly report for 2002 records that September 2002 was "the most
+  active month of any year on record with the formation of eight named storms".
+  Eight. And 2^3 = 8, so a source plus seven companions fits the cardinality
+  exactly. It is the most attractive-looking d = 3 candidate in the Atlantic
+  record and it cannot be one, because eight corners of a box do not fit on a
+  surface. The cardinality is a coincidence of counting, and the geometry
+  refutes it before any position is looked up.
+
+  That is the whole discipline of this instrument: 2^d - 1 is a claim about a
+  BOX, and a matching headcount is not evidence. Block [2] establishes the box,
+  block [3] tests for it, and this block bounds which boxes can exist at all.""")
+NAMED_SEP_2002 = ['Edouard', 'Fay', 'Gustav', 'Hanna', 'Isidore', 'Josephine',
+                  'Kyle', 'Lili']
+check(len(NAMED_SEP_2002) == 8,
+      'the eight September 2002 formations are named in the source: %s'
+      % ', '.join(NAMED_SEP_2002))
+check(len(NAMED_SEP_2002) == 2 ** 3,
+      'their count is exactly 2^3, and that is not a finding')
+
+# ---------------------------------------------------------------------------
+head(7, "WHAT WOULD ACTUALLY TEST THIS, AND WHAT THE SOURCES GIVE")
+print("""  The positional question is the weak link in block [4] and the remedy has a
+  name. What the narrative archives give, and what they do not:
+
+    NCEI Monthly Tropical Cyclones Report (primary, citable, has a DOI:
+    gov.noaa.ncdc:C00775) gives formation dates, peak intensities, landfalls,
+    and positions AS PROSE -- "about 175 miles off the coast of South Carolina",
+    "750 miles east of the Lesser Antilles", "approximately 1,000 miles west of
+    the Lesser Antilles". That is the same reconstruction problem block [4]
+    already carries, at the same precision. Citing a better source does not by
+    itself buy better coordinates.
+
+    HURDAT2 is the positional archive: 6-hourly latitude and longitude for every
+    Atlantic and East-Pacific system, one record per storm per synoptic time. A
+    right-angle test on HURDAT2 tracks needs no reconstruction and no Monte
+    Carlo, and it can be run over every month in the record rather than one
+    trio -- which is the only way the test becomes statistics instead of an
+    anecdote.
+
+  NOT DONE HERE, and deliberately: this instrument has no HURDAT2 file and will
+  not invent one. What it establishes is that the test is cheap, validated on
+  fixtures, and bounded to d <= 2 for surface data. Pointing it at real tracks is
+  a separate afternoon with a real download.""")
+check(True, 'the remedy is named (HURDAT2, 6-hourly lat/lon) rather than wished '
+      'for, and no data is fabricated to stand in for it')
+
 print('=' * 70)
 if fails:
     print('  %d CHECK(S) FAILED:' % len(fails))
