@@ -413,11 +413,53 @@ else:
               "§4 already said so. What it is NOT is unforced blow-up, and no\n"
               "part of this audit says otherwise.")
 
+# ------------------------------------------------------------------------ gaps
+# Added 2026-09-17 per WP-125, which measured 515 named checks against 22
+# recorded gaps corpus-wide. Every entry below is derived from this script's
+# own scope, not from anything new: a check-list is not a coverage claim, and
+# this block is where that difference gets written down.
+GAPS = [
+ ("this audits the STATEMENT layer only, never the proofs",
+  "the docstring says so in its second paragraph and the distinction is the "
+  "whole point of WP-107; nothing here bears on whether the Lean proofs are "
+  "correct, only on which Prop they are proofs OF"),
+ ("blocks [5] and [6] SKIP without --repo, and a default run is therefore "
+  "partial",
+  "the escape search for sorry / admit / native_decide / axiom does not run, "
+  "so a clean exit from a default invocation says nothing about escapes"),
+ ("the Euler side is structurally unaudited and cannot be audited this way",
+  "block [6] establishes WHY -- the Euler file is 'adapted' rather than "
+  "copied, and links main rather than a commit -- which converts an unknown "
+  "into a specific finding but does not close it"),
+ ("the Euler comparison has no fixed referent",
+  "the Navier-Stokes reference pins a 40-hex commit; the Euler one does not, "
+  "so any Euler diff is against a moving target and is not reproducible"),
+ ("blocks [1]-[4] fetch over HTTPS and trust that upstream still serves what "
+  "it served",
+  "no hash of the fetched bytes is recorded here, so link rot or a silent "
+  "upstream edit would change this script's answer without changing this "
+  "script; pinning a digest would close it"),
+ ("'byte-identical after normalisation' is only as strong as the normalisation",
+  "block [4] normalises the adaptations the copy's own header declares; an "
+  "adaptation the header does not declare would be normalised away or "
+  "reported, depending on its shape, and this script does not enumerate which"),
+]
+
+def print_gaps():
+    print()
+    print("=" * 70)
+    print("WHAT THIS SCRIPT DOES NOT CHECK  (%d)" % len(GAPS))
+    print("=" * 70)
+    for i, (g, why) in enumerate(GAPS, 1):
+        print("  %d. %s\n       -> %s" % (i, g, why))
+
 # ---------------------------------------------------------------------- verdict
+print_gaps()
 print()
 if SKIP:
     print("SKIPPED (no --repo): " + ", ".join(SKIP))
 if FAIL:
     print("FAILED: " + ", ".join(FAIL))
     sys.exit(1)
-print("ALL CHECKS PASSED" + (" (partial -- see SKIPPED)" if SKIP else ""))
+print("ALL CHECKS PASSED" + (" (partial -- see SKIPPED)" if SKIP else "")
+      + "  ·  %d gaps recorded above remain open." % len(GAPS))

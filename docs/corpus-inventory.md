@@ -9,8 +9,8 @@ regenerating it is the only correct way to update it.
 | with a module docstring | 116 |
 | **without one** | **6** |
 | named checks | 515 |
-| scripts carrying an explicit gap list | 5 |
-| gap entries | 22 |
+| scripts carrying an explicit gap list | 6 |
+| gap entries | 26 |
 
 A script with no docstring cannot be placed by this tool, and is the
 first thing to fix -- not because documentation is virtuous but because
@@ -191,10 +191,16 @@ Open (6):
 > WP-106 asks whether contact geometry over Q_p carries arithmetic that contact
 > geometry over R does not, and answers: not at a point, and yes at the lattice.
 
-### `book6/wp107-verify.py`  ·  424 lines, 34 checks
+### `book6/wp107-verify.py`  ·  466 lines, 34 checks
 > wp107-verify.py  --  regenerates every COMPUTED number in
 > book6/wp107-the-statement-was-not-theirs.html.
 > WP-107 audits the STATEMENT layer of OpenAI's Navier-Stokes / Euler release: not
+
+Open (4):
+  - this audits the STATEMENT layer only, never the proofs
+  - the Euler side is structurally unaudited and cannot be audited this way
+  - the Euler comparison has no fixed referent
+  - 'byte-identical after normalisation' is only as strong as the normalisation
 
 ### `book6/wp109-verify.py`  ·  206 lines, 13 checks
 > wp109-verify.py — companion to book6/wp109-only-in-two.html.
