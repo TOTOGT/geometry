@@ -54,6 +54,7 @@ The trigger. Producing scripts: `book7/ch-ramanujan-verify.py` (80-digit) and
 | The 1/pi series | `book4/ch-modular-equations-and-pi.html` §2 | — | `ch-ramanujan` VI(d) | — | — | — |
 | `9801 = 99^2` bridge | — | — | `ch-ramanujan` VI(d) | — | — | — |
 | Pell, `eps^6 = 9801 + 1820 sqrt29` | `book4/ch-modular-equations-and-pi.html` §3 | — | `ch-ramanujan` VI(e) | — | **core candidate** | — |
+| **The Euclidean algorithm** | `book4/ch-euclidean-algorithm.html` — worked 2026-09-17 | — | Euclid, *Elements* VII.1–2 | — | the route to `eps`: expansion → convergent at norm −1 → unit | Lamé exhibited, not proved |
 | Reading a damaged source | — | — | `ch-ramanujan` VI(f) | `book10/ch05-the-notebooks-and-what-reached-us.html` §5 | — | `book13/ch10-what-a-check-establishes.html` Rule 2 |
 | Heegner 163 | — | `book6/wp82-the-missing-floor.html` | `ch-ramanujan` VI(g) | — | class-number floor | — |
 | `k_210` discrepancy | — | — | `ch-ramanujan` sorry-box | `book10/ch05-the-notebooks-and-what-reached-us.html` §4 — **open** | — | limits of arithmetic |

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Euclidean Algorithm &middot; Book IV &middot; Principia Orthogona</title>
+<meta name="description" content="Euclid is named in 36 files of this corpus and his algorithm in none. Worked here: the divisions are the continued fraction, the worst case is the Fibonacci ladder, and running it on the square root of 29 reaches 9801 by division alone."/>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem;margin-top:2.2rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-conj{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+</style>
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head><body>
+
+<nav>
+  <a href="../living-book.html" class="nav-logo">&#9884; Principia Orthogona &middot; G1&ndash;G13</a>
+  <div class="nav-links">
+    <a href="index.html">G4</a>
+    <a href="ch-modular-equations-and-pi.html">modular equations</a>
+    <a href="../book7/ch-ramanujan-1pi.html">Ramanujan &middot; 1/&pi;</a>
+    <a href="../book6/wp82-the-missing-floor.html">WP-82</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">G4 &middot; GTCT Dimensional Theory &middot; The Object, Worked</div>
+  <h1>The Euclidean Algorithm</h1>
+  <p class="hero-sub">Euclid is named in thirty-six files of this corpus. His algorithm is named in none. This page works it, and follows it until it arrives at a number the corpus already publishes.</p>
+</div>
+
+<div class="page">
+
+  <div class="section-label">The gap</div>
+
+  <p class="block-prose">This corpus computes class numbers by counting reduced
+  forms. It runs a Pell solution as load-bearing work in the Ramanujan 1/&pi;
+  material. It gives Volume XI an identity that is entirely the algebraic floor.
+  All of that rests on one procedure.</p>
+
+  <p class="block-prose">Counted at commit <code>cc9a045</code>, before this page
+  existed: <strong>Euclid</strong> appears in 36 files, <strong>Elements</strong>
+  in 48, <strong>Euclidean</strong> in 24. <strong>Euclidean algorithm</strong>
+  appears in <strong>none</strong>. <code>gcd</code> appears in six.</p>
+
+  <p class="block-prose">So the corpus invokes the man across seven books and
+  never states the procedure. This is Book IV, whose test is whether a reader can
+  do something after reading. Here is the doing.</p>
+
+  <div class="section-label">The algorithm</div>
+
+  <p class="block-prose">Replace the pair <em>(a, b)</em> by <em>(b, a mod b)</em>
+  and repeat until the second entry is zero. What is left is the greatest common
+  divisor. It terminates because the remainder is a non-negative integer that
+  strictly decreases, and a decreasing sequence of non-negative integers is
+  finite.</p>
+
+  <div class="block-math">a = 1071, b = 462        1071 = 2&times;462 + 147
+                        462 = 3&times;147 +  21
+                        147 = 7&times;21  +   0     gcd = 21
+
+quotients: [2, 3, 7]</div>
+
+  <p class="block-prose">Keep the quotients. Most presentations throw them away,
+  and they are the whole of what follows.</p>
+
+  <p class="block-prose">The extended form returns more. Running the recursion
+  backwards gives integers <em>x</em> and <em>y</em> with
+  <em>ax + by</em> = gcd, so the algorithm hands back a certificate and not only
+  an answer. That is why it is load-bearing rather than merely old. Every modular
+  inverse in this corpus is one of those <em>x</em> values.</p>
+
+  <div class="section-label">The divisions are a continued fraction</div>
+
+  <p class="block-prose">Take the quotient list from the run above and read it as
+  a continued fraction. <code>[2, 3, 7]</code> means
+  2 + 1/(3 + 1/7), which is 1071/462 exactly. This is not an analogy. The
+  divisions Euclid performs and the partial quotients of <em>a/b</em> are the same
+  numbers, produced by the same steps, and the verification script checks it on
+  two thousand random pairs.</p>
+
+  <p class="block-prose">One computation, two readings. The algorithm is a gcd
+  routine if you keep the last remainder and a continued-fraction expansion if you
+  keep the quotients.</p>
+
+  <div class="section-label">The worst case is this corpus's own ladder</div>
+
+  <p class="block-prose">Which input makes it slowest? Every step divides, so the
+  cheapest possible step is a quotient of 1, which merely subtracts. A run where
+  every quotient is 1 is the slowest run, and the numbers that produce it are the
+  Fibonacci numbers.</p>
+
+  <div class="block-math">  F(n+1)     F(n)   steps   quotients
+      55       34       8   [1, 1, 1, 1, 1, 1, 2]
+      89       55       9   [1, 1, 1, 1, 1, 1, 1, 2]
+     144       89      10   [1, 1, 1, 1, 1, 1, 1, 1, 2]</div>
+
+  <p class="block-prose">An exhaustive search over every pair below 400 finds the
+  worst case at a consecutive Fibonacci pair, and the cost is exactly the index.
+  This is Lam&eacute;'s theorem of 1844, the first serious complexity result in
+  mathematics: the number of steps is at most five times the number of digits in
+  the smaller input, and the bound is attained here.</p>
+
+  <p class="block-prose">So the slowest input to the oldest algorithm is
+  <strong>&phi;</strong>, which is the second constant of this corpus's operator
+  chain. The connection is Lam&eacute;'s and not ours. It is worth stating anyway,
+  because the ladder appears here as a worst case rather than as a growth law, and
+  the corpus has met it only in the second role.</p>
+
+  <div class="section-label">Run it on &radic;29</div>
+
+  <p class="block-prose">The algorithm also runs on an irrational, where it never
+  terminates but becomes periodic. For &radic;29 the expansion is
+  <code>[5; 2, 1, 1, 2, 10]</code> with period five.</p>
+
+  <p class="block-prose">Truncating it gives convergents, and each convergent
+  <em>p/q</em> can be tested against <em>p&sup2; &minus; 29q&sup2;</em>. The first
+  four give 5, &minus;5, 4, and then:</p>
+
+  <div class="block-math">  70&sup2; &minus; 29 &times; 13&sup2;  =  4900 &minus; 4901  =  &minus;1</div>
+
+  <p class="block-prose">The fourth convergent solves the negative Pell equation.
+  And running the ordinary integer algorithm on 70/13 returns
+  <code>[5, 2, 1, 1, 2]</code>, which is exactly one period of &radic;29.</p>
+
+  <div class="section-label">Where it arrives</div>
+
+  <p class="block-prose">Because 29 &equiv; 1 mod 4, the ring of integers is
+  <em>&integers;[(1+&radic;29)/2]</em> and the fundamental unit is
+  &epsilon; = (5 + &radic;29)/2, of norm &minus;1. The convergent just found is
+  &epsilon;&sup3;. Square it:</p>
+
+  <div class="block-math">  &epsilon;&#8310;  =  9801 + 1820&radic;29,   norm +1</div>
+
+  <p class="block-prose">And <strong>9801 = 99&sup2;</strong> is the denominator
+  in Ramanujan's 1/&pi; series, the number
+  <a href="../book7/ch-ramanujan-1pi.html">Chapter R&pi;</a> is named for and
+  <code>docs/math-placement-map.md</code> places in Volume XI as a core
+  candidate.</p>
+
+  <p class="block-prose">There is a last detail worth the run. Euclid on 70/13
+  returns one period of &radic;29. Euclid on <strong>9801/1820</strong> returns
+  <code>[5, 2, 1, 1, 2, 10, 2, 1, 1, 2]</code>, which is <em>two</em>. The
+  corpus's number is two turns of the same wheel.</p>
+
+  <div class="block-axiom">
+    <span class="block-label">What this route does and does not show</span>
+    <p style="margin-bottom:0">9801 is reachable from Euclid by division alone:
+    expand &radic;29, take the convergent where the norm first reaches &minus;1,
+    cube the unit it names, square that. No modular form is written down. That is
+    a fact about this <em>route</em> and not an explanation of the 1/&pi; series,
+    which comes from singular moduli and modular equations and is worked in
+    <a href="ch-modular-equations-and-pi.html">the chapter next door</a>. Reading
+    the arrival of the same integer as an explanation would be exactly the error
+    the placement map warns about in its own section 2.</p>
+  </div>
+
+  <div class="section-label">What a reader can do with this</div>
+
+  <p class="block-prose">Three things, in order of how much they buy.</p>
+
+  <p class="block-prose">Compute a modular inverse, which is the extended form and
+  two lines of code. Expand any quadratic irrational and read off its unit, which
+  is what Volume XI needs and does not yet have in Lean. And test a claimed
+  fundamental unit: if the period of the continued fraction and the power of the
+  unit disagree, one of them is wrong, and the algorithm says which.</p>
+
+  <div class="section-label">Sources</div>
+  <table class="refs">
+    <tr><td>Euclid</td><td><em>Elements</em>, VII.1&ndash;2 (the algorithm for numbers) and X.2&ndash;3 (for magnitudes, where non-termination is the definition of incommensurability).</td></tr>
+    <tr><td>Lam&eacute;</td><td>G. Lam&eacute;, 1844: the step count is bounded by five times the digit count of the smaller input, attained on consecutive Fibonacci numbers.</td></tr>
+    <tr><td>in-corpus</td><td><a href="ch-modular-equations-and-pi.html">ch-modular-equations-and-pi</a> &middot; <a href="../book7/ch-ramanujan-1pi.html">ch-ramanujan-1pi</a> &middot; <a href="../book6/wp82-the-missing-floor.html">WP-82</a> &middot; <code>book6/wp82-k0-floor-verify.py</code> &middot; <code>docs/math-placement-map.md</code> &sect;2</td></tr>
+    <tr><td>verification</td><td><code>book4/ch-euclidean-algorithm-verify.py</code> &mdash; eight blocks, standard library only. Every number on this page is printed by it.</td></tr>
+  </table>
+
+  <div class="block-sorry" style="font-size:.86rem;padding:1.1rem 1.3rem;">
+    <span class="block-label">Scholium &mdash; scope</span>
+    <p style="margin-bottom:0">Lam&eacute;'s theorem is exhibited, not proved:
+    block [4] shows the bound attained on Fibonacci pairs and searches every pair
+    under 400, which is evidence. The periodicity of the expansion of &radic;n for
+    non-square <em>n</em> is used and not proved. The corpus counts in block [7]
+    are pinned to commit <code>cc9a045</code>, because this page names every term
+    it counts and would otherwise be evidence for its own claim. No priority is
+    claimed: the algorithm is <em>Elements</em> VII, B&eacute;zout is 1779,
+    Lam&eacute; is 1844, and the unit is classical.</p>
+  </div>
+
+</div>
+
+<div class="ch-nav">
+  <a href="ch-modular-equations-and-pi.html">&larr; Modular equations and &pi;</a>
+  <a href="index.html">Book IV index</a>
+  <a href="../book7/ch-ramanujan-1pi.html">Ramanujan &middot; 1/&pi; &rarr;</a>
+</div>
+
+<footer>
+  &#9884; Principia Orthogona &middot; Book IV &middot; GTCT Dimensional Theory &middot;
+  <a href="../living-book.html">the living book</a>
+</footer>
+
+</body>
+</html>
