@@ -53,7 +53,25 @@ from collections import Counter
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(REPO, 'tools'))
-from corpus_count import files, _blobs                      # noqa: E402
+from corpus_count import files as _all_files, _blobs        # noqa: E402
+
+# THE BASELINE. This page, its script, book7/index.html and docs/audit-log.md are
+# tracked files of the corpus they measure, and they name every entry in the
+# figure -- so once committed the measurement counts itself. Run at HEAD after the
+# commit, "RC circuit" reads 3 rather than 0 and the seventeen zeros collapse to
+# seven: the instrument would report the corpus as having covered the gaps by
+# describing them. WP-82's rung table made exactly this mistake and read 12/12 on
+# a column whose true value was 0.
+#
+# So every count below is taken at a pinned commit -- the last one before this
+# measurement began -- and block [8] prints the drift at HEAD so the self-count is
+# visible rather than assumed. The numbers on the page are the numbers at BASELINE.
+BASELINE = 'b42750e'
+
+
+def files(pattern, ref=BASELINE, **kw):
+    return _all_files(pattern, ref=ref, **kw)
+
 
 fails = []
 def check(ok, msg, detail=''):
@@ -384,7 +402,7 @@ print('  WP-82 section 4 records three ways this corpus\'s counting lies: wrong 
 print('  substring inflation, HTML entities. Each produces a visibly wrong number. This')
 print('  one does not: the string is right, the anchor is right, the entities are handled,')
 print('  the arithmetic is right, and the referent is a different subject.\n')
-TXT = _blobs('HEAD', ('*.html', '*.md'))
+TXT = _blobs(BASELINE, ('*.html', '*.md'))
 NEVER = r'(?!x)x'                        # matches nothing: no second sense coded
 AUDIT = [
  ('Life',              r'\blife\b',
@@ -478,14 +496,35 @@ print('      mode -- while auditing the fourth. It was caught because this block
 print('      breakdown and not a total.')
 
 # ---------------------------------------------------------------------------
-head(8, "CONTROL")
+head(8, "CONTROL, AND THE SELF-COUNT")
 ABSENT = 'qqx' + '-no-file-contains-this-' + 'qqx'
 check(len(files(ABSENT)) == 0, 'a token no file contains returns 0 files')
-nfig = len(files(r'figure 1\.3\.1'))
-check(nfig >= 3, '"Figure 1.3.1" was already cited in three tracked files before this '
-      'page -- ch-smale-verify, ch-van-der-pol, strogatz-citations-verify', str(nfig))
-raw = len(files(r'\bchaos\b'))
-check(raw == 69, 'the unaudited control count for "chaos" is still 69', str(raw))
+check(len(files(r'\bchaos\b')) == 69,
+      'the unaudited control count for "chaos" is 69 at BASELINE',
+      str(len(files(r'\bchaos\b'))))
+check(len(files(r'figure 1\.3\.1')) >= 3,
+      '"Figure 1.3.1" was already cited in at least three tracked files before this '
+      'page -- ch-smale-verify, ch-van-der-pol, strogatz-citations-verify',
+      str(len(files(r'figure 1\.3\.1'))))
+print('\n  the self-count, which is why the numbers above are pinned to %s:\n' % BASELINE)
+print('      %-14s %10s %8s %10s' % ('entry', 'BASELINE', 'HEAD', 'inflation'))
+drift = 0
+for pat, name in ((r'\brc circuit', 'RC circuit'), (r'\brlc circuit', 'RLC circuit'),
+                  (r'\bchaos\b', 'chaos'), (r'fixed point', 'fixed points'),
+                  (r'\blife\b', 'Life'), (r'plasmas?\b', 'Plasmas')):
+    base = len(files(pat))
+    now = len(_all_files(pat, ref='HEAD'))
+    drift += now - base
+    print('      %-14s %10d %8d %10s' % (name, base, now, '%+d' % (now - base)))
+check(drift > 0, 'the corpus has moved since BASELINE, this page being part of the move',
+      str(drift))
+zeros_now = [e for r, c, e, pat in GRID if len(_all_files(pat, ref='HEAD')) == 0]
+print('\n      entries at zero:  %d at BASELINE,  %d at HEAD' % (len(zeros), len(zeros_now)))
+check(len(zeros_now) < len(zeros),
+      'run at HEAD the instrument would report the gaps as covered -- by this page '
+      'having named them', '%d vs %d' % (len(zeros_now), len(zeros)))
+check(set(zeros_now) < set(zeros),
+      'and every entry it would drop is one this page describes')
 
 print("""
 ======================================================================

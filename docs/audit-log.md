@@ -8196,6 +8196,17 @@ into a verified count. It was caught only because the block prints a per-term
 breakdown instead of a total. **Print breakdowns.** That is the transferable
 result of the day and it is worth more than the tables. `[FIXED]`
 
+**And the page closed its own gaps.** Run at HEAD after the commit, the same
+script reports `RC circuit` at 3 rather than 0 and **the seventeen zeros collapse
+to none** — every gap covered by the page that names it, with nothing in the
+corpus changed except that the gaps were written down. This is WP-82's rung table
+again: a column read 12/12 because the paper printing the table was one of the
+twelve and the true value was 0. Fixed by pinning every count in the chapter and
+the script to commit `b42750e`, the last before this measurement began, and
+printing the drift at HEAD in block [8] so the self-count is visible rather than
+assumed. Any future page that measures the corpus and then joins it needs the same
+pin. `[FIXED before publication]`
+
 **Queue.** Seventeen zeros, ranked in the chapter by how much machinery the corpus
 already owns. Two shapes recur: entries *occupied by person and empty by phrase*
 (Smale 12 files, Levinson 6, van der Pol 9 — and `forced nonlinear oscillator` 0,

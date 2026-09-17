@@ -43,7 +43,13 @@ that is plainly visible on the page.
          Acoustics     19                 5             9   (archaeoacoustics)
          shocks        19                 7             7   (price, income, bill)
 
-     Nothing about `files()` detects this, and nothing in this module will: only
+     A measurement published INSIDE this corpus also joins it: after
+     book7/ch-the-map-on-page-ten.html was committed, the seventeen entries it
+     records as absent all read non-zero, because the page names them. Any script
+     that measures the corpus and is then tracked by it must pass an explicit
+     `ref` pinned to a commit predating the work, and print the drift at HEAD.
+
+     Nothing about `files()` detects the sense collision, and nothing here will: only
      a sense the pattern does not encode can. Callers publishing a count for a
      word that has more than one sense in this corpus must audit it and print
      BOTH numbers. The audit written for the six above failed by failure mode 2
