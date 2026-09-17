@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-wp125-verify.py -- the corpus records what it checked and not what it didn't.
+wp125-verify.py -- the corpus knows its limits and cannot be asked about them.
+
+CORRECTED 2026-09-17, after publication. The first version of this script
+recognised exactly two syntactic shapes of gap record and concluded that 4.1%
+of scripts recorded any limit at all. That was wrong by an order of magnitude:
+51% do, almost entirely in PROSE the detector could not see. The paper's own
+gap [1] predicted precisely this failure and the headline was published anyway,
+which is the more useful lesson: writing a limitation down is not heeding it.
+
+The finding that survives is different, and better.
 
 Producing script for book6/wp125-what-was-not-checked.html.
 
@@ -33,6 +42,16 @@ def rule(t=""):
     if t: print(t); print("=" * 78)
 
 CHECK_RE = re.compile(r'check\(\s*["\']([^"\']{4,90})["\']')
+
+# Prose limits records. These are the shapes the corpus actually uses, found
+# by reading the 57 scripts the first version of this script scored as zero.
+PROSE_RE = re.compile(
+    r'HONESTY|NOT ESTABLISHED|not established|does not establish|'
+    r'WHAT (THIS|IT) (SCRIPT )?DOES NOT|what this script does not|'
+    r'WHAT IS NOT (SETTLED|KNOWN)|UNRESOLVED|LIMITS OF|known limits|'
+    r'WOULD REFUTE|not claimed|NOT CLAIMED|SKIPPED|\[OPEN\]', re.I)
+STRUCT_RE = re.compile(r'\ngaps\s*=\s*\[|\nGAPS\s*=\s*\[')
+
 
 def gaps_of(src):
     """Count DISTINCT gap entries. Two syntactic shapes are in use and they
@@ -85,6 +104,7 @@ def survey(tree_at=None):
             return r.stdout
 
     n, checks, gaps, withgaps, nodoc = 0, 0, 0, 0, 0
+    struct, prose, neither = 0, 0, 0
     for rel in files:
         try:
             src = read(rel)
@@ -97,31 +117,44 @@ def survey(tree_at=None):
         g = gaps_of(src)
         gaps += g
         if g: withgaps += 1
+        if STRUCT_RE.search(src):   struct += 1
+        elif PROSE_RE.search(src):  prose += 1
+        else:                       neither += 1
         try:
             if not ast.get_docstring(ast.parse(src)): nodoc += 1
         except SyntaxError:
             nodoc += 1
-    return dict(scripts=n, checks=checks, gaps=gaps, withgaps=withgaps, nodoc=nodoc)
+    return dict(scripts=n, checks=checks, gaps=gaps, withgaps=withgaps,
+                nodoc=nodoc, struct=struct, prose=prose, neither=neither)
 
 rule("1 . THE WORKING TREE")
 now = survey()
-for k in ("scripts", "checks", "gaps", "withgaps", "nodoc"):
-    print("      %-10s %d" % (k, now[k]))
-ratio = now["checks"] / max(now["gaps"], 1)
-print("\n      checks per recorded gap: %.1f" % ratio)
-print("      scripts recording any gap at all: %d of %d  (%.1f%%)"
-      % (now["withgaps"], now["scripts"], 100.0 * now["withgaps"] / now["scripts"]))
+print("      %-26s %d" % ("producing scripts", now["scripts"]))
+print("      %-26s %d" % ("named checks", now["checks"]))
+print("      %-26s %d" % ("no docstring", now["nodoc"]))
+print()
+print("      HOW A SCRIPT RECORDS ITS LIMITS:")
+print("      %-26s %3d   machine-readable" % ("structured gaps = [...]", now["struct"]))
+print("      %-26s %3d   prose only" % ("honesty / limits block", now["prose"]))
+print("      %-26s %3d   nothing recognisable" % ("neither", now["neither"]))
+recorded = now["struct"] + now["prose"]
+print()
+print("      records limits in SOME form : %d of %d  (%.0f%%)"
+      % (recorded, now["scripts"], 100.0 * recorded / now["scripts"]))
+print("      a TOOL can read them in     : %d of %d  (%.0f%%)"
+      % (now["struct"], now["scripts"], 100.0 * now["struct"] / now["scripts"]))
 
-check("the corpus records far more checks than gaps",
-      ratio > 10, "%.1f checks per gap" % ratio)
-check("fewer than one script in ten records a gap",
-      now["withgaps"] / now["scripts"] < 0.10,
-      "%d of %d" % (now["withgaps"], now["scripts"]))
+check("most scripts DO record their limits",
+      recorded > now["scripts"] / 2,
+      "%d of %d -- the first version of this script said 5" % (recorded, now["scripts"]))
+check("almost none of it is machine-readable",
+      now["struct"] / now["scripts"] < 0.10,
+      "%d structured against %d in prose" % (now["struct"], now["prose"]))
+check("and a large minority record nothing at all",
+      now["neither"] > now["scripts"] / 4,
+      "%d scripts, %.0f%%" % (now["neither"], 100.0 * now["neither"] / now["scripts"]))
 
-rule("2 . WHERE THE CHECKS ARE, AND WHERE THE GAPS ARE NOT")
-print("""
-      The asymmetry is not spread evenly. The most heavily verified scripts in
-      the corpus record no gaps at all. Counting by script:""")
+rule("2 . THE MOST-CHECKED SCRIPTS, AND HOW THEY RECORD LIMITS")
 heavy = []
 for d in sorted(os.listdir(ROOT)):
     p = os.path.join(ROOT, d)
@@ -132,28 +165,47 @@ for d in sorted(os.listdir(ROOT)):
             if not f.endswith(".py"): continue
             rel = os.path.relpath(os.path.join(dirpath, f), ROOT)
             src = open(os.path.join(dirpath, f), encoding="utf-8", errors="ignore").read()
-            heavy.append((rel, len(CHECK_RE.findall(src)), gaps_of(src)))
+            kind = ("structured" if STRUCT_RE.search(src)
+                    else "prose" if PROSE_RE.search(src) else "NOTHING")
+            heavy.append((rel, len(CHECK_RE.findall(src)), gaps_of(src), kind))
 heavy.sort(key=lambda r: -r[1])
-for path, c, g in heavy[:6]:
-    print("      %-44s %3d checks   %d gaps" % (path, c, g))
-top5_gaps = sum(g for _, _, g in heavy[:5])
-check("the five most-checked scripts record zero gaps between them",
-      top5_gaps == 0, "%d checks, %d gaps" % (sum(c for _, c, _ in heavy[:5]), top5_gaps))
+print("      %-42s %6s %6s  %s" % ("script", "checks", "gaps", "limits recorded as"))
+for path, c, g, kind in heavy[:8]:
+    print("      %-42s %6d %6d  %s" % (path, c, g, kind))
+top8 = heavy[:8]
+struct8 = sum(1 for _, _, _, k in top8 if k == "structured")
+none8 = sum(1 for _, _, _, k in top8 if k == "NOTHING")
+check("machine-readable gap records are rare even among the most-checked",
+      struct8 <= 2,
+      "%d of the top 8 carry a structured list (one of them backfilled today)"
+      % struct8)
+print("""
+      ch-feynman-verify.py is the case that overturned this script's first
+      conclusion. It has 25 named checks and scored ZERO gaps, because its
+      record of limits is an HONESTY block in prose -- four things it does not
+      establish, plus a statement of what would refute its chapter. That is a
+      better gap record than most structured lists in the corpus, and the
+      detector could not see it.""")
 
 rule("3 . WHAT THIS MEANS, STATED NARROWLY")
 print("""
-      A verification script that reports only passes asserts a completeness it
-      never established. The claim "all checks passed" is true and says nothing
-      about the checks that were not written.
+      The corpus is not unaware of its limits. Fifty-one per cent of its
+      scripts state them, some at length and with more care than the structured
+      lists: ch-feynman-verify.py carries an HONESTY block with four things it
+      does NOT establish and a statement of what would refute its chapter.
 
-      This is the same error as asserting a near-integer, which the Ramanujan
-      1/pi work met twice in one afternoon: both are claims about the part that
-      was not looked at. g_58^12 = 19601.99999 passes any test you write for
-      19602 if you choose the tolerance after seeing the number.
+      The defect is that a tool cannot read any of it.
 
-      It is also the specific thing that blocks a corpus from asking for its own
-      next input. A gap list is a request. 509 assertions of what is known and
-      16 records of what is not is a machine that cannot say what it needs.""")
+      A gap record has two jobs. It tells a READER what was not checked, and it
+      tells a MACHINE what to go and get. The corpus does the first well and the
+      second almost not at all -- 5 scripts of 122 in a form anything could
+      parse. Whatever is built on top of these scripts later reads the second
+      kind, and there are five.
+
+      So the original claim was too strong and the structural point survives
+      unchanged: a gap list is a request, and a request nobody can parse is not
+      a request. What needs doing is not writing limits down. It is giving the
+      ones already written a shape.""")
 
 rule("4 . SELF-COUNT, AND DRIFT FROM THE BASELINE")
 base = survey(BASELINE)
@@ -178,9 +230,15 @@ else:
 
 rule("5 . WHAT IS NOT KNOWN")
 gaps = [
- ("the gap detector recognises two syntactic shapes, not the idea of a gap",
-  "a script that discusses its limits in prose without a gaps list reads as "
-  "zero here; the true count is a floor, and the ratio an upper bound"),
+ ("THIS GAP WAS WRITTEN, PUBLISHED, AND NOT HEEDED",
+  "the first version said the detector recognises two syntactic shapes and "
+  "that the count was a floor -- then printed 4.1% as a headline anyway. The "
+  "true figure is 51%. Recording a limitation is not the same as acting on "
+  "one, and nothing in this corpus currently distinguishes the two"),
+ ("the prose detector is a keyword list, so it over- and under-counts",
+  "'SKIPPED' catches a script that merely skips a block; a limits paragraph "
+  "using none of the keywords still reads as zero. The 57 is an estimate with "
+  "error in both directions, and no entry count is attempted for prose"),
  ("'named check' means a call to check() -- a convention, not a law",
   "scripts using assert or bare prints are undercounted, and three scripts "
   "have no docstring at all and cannot be placed"),

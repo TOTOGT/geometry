@@ -8,9 +8,9 @@ regenerating it is the only correct way to update it.
 | producing scripts | 122 |
 | with a module docstring | 116 |
 | **without one** | **6** |
-| named checks | 515 |
+| named checks | 516 |
 | scripts carrying an explicit gap list | 6 |
-| gap entries | 26 |
+| gap entries | 27 |
 
 A script with no docstring cannot be placed by this tool, and is the
 first thing to fix -- not because documentation is virtuous but because
@@ -242,15 +242,16 @@ Open (4):
 > WHY THIS FILE EXISTS. The corpus's transverse dynamics live on Strogatz's
 > Example 7.1.1, r' = r(1 - r^2), theta' = 1 (Nonlinear Dynamics and Chaos,
 
-### `book6/wp125-verify.py`  ·  211 lines, 6 checks
-> wp125-verify.py -- the corpus records what it checked and not what it didn't.
-> Producing script for book6/wp125-what-was-not-checked.html.
-> Measures the ratio of named checks to recorded gaps across every producing
+### `book6/wp125-verify.py`  ·  269 lines, 7 checks
+> wp125-verify.py -- the corpus knows its limits and cannot be asked about them.
+> CORRECTED 2026-09-17, after publication. The first version of this script
+> recognised exactly two syntactic shapes of gap record and concluded that 4.1%
 
-Sections: 1 . THE WORKING TREE · 2 . WHERE THE CHECKS ARE, AND WHERE THE GAPS ARE NOT · 3 . WHAT THIS MEANS, STATED NARROWLY · 4 . SELF-COUNT, AND DRIFT FROM THE BASELINE · 5 . WHAT IS NOT KNOWN
+Sections: 1 . THE WORKING TREE · 2 . THE MOST-CHECKED SCRIPTS, AND HOW THEY RECORD LIMITS · 3 . WHAT THIS MEANS, STATED NARROWLY · 4 . SELF-COUNT, AND DRIFT FROM THE BASELINE · 5 . WHAT IS NOT KNOWN
 
-Open (6):
-  - the gap detector recognises two syntactic shapes, not the idea of a gap
+Open (7):
+  - THIS GAP WAS WRITTEN, PUBLISHED, AND NOT HEEDED
+  - the prose detector is a keyword list, so it over- and under-counts
   - 'named check' means a call to check() -- a convention, not a law
   - no claim is made that any particular script SHOULD have gaps
   - this script's gap counter double-counted before it was cross-checked
