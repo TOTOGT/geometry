@@ -2,14 +2,17 @@
 """
 The Present King of France -- what a name does when there is nothing to name.
 
-WHY THIS FILE EXISTS. tools/lean_addresses.py reports that 66 Lean file names
-cited in this corpus resolve nowhere under any search root, across 142
-citations. Chain.lean is cited by 23 pages. ZeoliteCommutation.lean by 11. The
-pages that cite them say a thing is proved there.
+WHY THIS FILE EXISTS. tools/lean_addresses.py reports 66 Lean file names cited
+in this corpus that it cannot resolve UNDER THE ROOTS IT WAS GIVEN -- here two
+of them, this repository and AXLE -- across 142 citations. Chain.lean is cited
+by 23 pages, ZeoliteCommutation.lean by 11.
 
-The repository has been treating that as a list of defects to fix. Russell's
-1905 analysis says something sharper and less comfortable: those sentences are
-not pending, and they are not meaningless. They are FALSE, now, as printed.
+UNRESOLVED IS NOT ABSENT. More than twenty other repositories exist and have not
+been searched, and R15 in CLAUDE.md is explicit: never report absence from a
+single search. Two roots is a single search. So this script measures where we
+have looked, and blocks [1] and [2] establish what follows ONCE a name is
+confirmed absent -- which for these 66 is work not yet done. The logic is
+unconditional; its application to any particular name is not.
 
 BLOCKS
   [1] The 1905 analysis, made exact and exhaustive over small domains.
@@ -103,8 +106,9 @@ print('  such file" is the true sentence, and it is shorter.')
 
 # ---------------------------------------------------------------------------
 head(3, "THE CORPUS, EVALUATED UNDER THE UNPACKING")
+ROOTS_SEARCHED = [REPO, os.path.expanduser('~/mnt/AXLE')]
 r = subprocess.run([sys.executable, os.path.join(REPO, 'tools', 'lean_addresses.py'),
-                    REPO, '--roots', os.path.expanduser('~/mnt/AXLE')],
+                    REPO, '--roots', ROOTS_SEARCHED[1]],
                    cwd=REPO, capture_output=True, text=True)
 out = r.stdout + r.stderr
 dang = [l for l in out.splitlines() if l.strip().startswith('DANGLING')]
@@ -121,16 +125,21 @@ top.sort(reverse=True)
 print('      %-40s %s' % ('name cited', 'pages citing it'))
 for n, name in top[:8]:
     print('      %-40s %d' % (name, n))
-check(len(dang) >= 50, 'at least fifty names resolve nowhere', str(len(dang)))
+check(len(dang) >= 50,
+      'at least fifty names are unresolved UNDER THE TWO ROOTS SEARCHED -- which '
+      'is a statement about where we looked, not about what exists', str(len(dang)))
+check(len(ROOTS_SEARCHED) == 2,
+      'and the run passed exactly %d roots, so R15 is not satisfied and no '
+      'absence is claimed' % len(ROOTS_SEARCHED), str(ROOTS_SEARCHED))
 check(top and top[0][0] >= 20,
       'and the most-cited of them, %s, is named by %d pages' % (top[0][1], top[0][0])
       if top else 'no dangling names parsed')
-print('\n  Each of those citations asserts clause (a): there is such a file. Clause')
-print('  (a) is false. So every sentence built on it is false -- not "unverified",')
-print('  not "pending", not "to be restored". False, as currently published.')
-print('  R11 has been treating these as defects to repair, which quietly grants')
-print('  that there is something to repair. That is the Meinong reading wearing a')
-print('  work shirt.')
+print('\n  Each of those citations asserts clause (a): there is such a file. Whether')
+print('  clause (a) is FALSE is exactly what the unsearched roots decide, and they')
+print('  have not been searched. What is established is conditional: for any name')
+print('  that comes back absent from a full search, every sentence built on it is')
+print('  false -- not "unverified", not "pending", not "to be restored". Until then')
+print('  the right tag is OPEN, and the right next action is to pass the roots.')
 
 # ---------------------------------------------------------------------------
 head(4, "MENTION IS NOT USE -- AND THE CORPUS ALREADY KNEW IT")
@@ -212,7 +221,12 @@ print("""
   writing corrections: a retraction of a missing-file citation must take wide
   scope, because the narrow reading concedes that a proof exists.
 
-  WHAT IT DOES NOT ESTABLISH. That any particular page is wrong about its
+  WHAT IT DOES NOT ESTABLISH. THAT ANY OF THE 66 NAMES IS ABSENT. The run behind
+  block [3] passed two roots, this repository and AXLE, and more than twenty
+  other repositories exist unsearched. R15 forbids reporting absence from a
+  single search, and two roots is a single search. Every consequence drawn from
+  the analysis is written as a conditional on a name being confirmed absent, and
+  none of the 66 has been. Nor that any particular page is wrong about its
   mathematics. A citation being false is a statement about the citation, not
   about the theorem it gestures at -- the theorem may be true, may be provable,
   may be proved somewhere this tool cannot see. The counts come from

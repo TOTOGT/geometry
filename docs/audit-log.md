@@ -1,3 +1,33 @@
+# CORRECTION — "66 FILES THAT DO NOT EXIST" WAS ABSENCE FROM A SINGLE SEARCH (2026-09-17)
+
+**What was wrong.** The chapter, its index card, its verify script and the commit message all said
+the corpus cites Lean files that **do not exist**. The run behind that number passed **two roots** —
+this repository and AXLE. **More than twenty other repositories exist and were not searched.**
+
+**R15 is explicit: never report absence from a single search.** Two roots is a single search. The
+tool's own limits section says it too — "a root not passed is a root not searched" — and that
+sentence was written into the page's scholium in the same pass that the overclaim was written into
+its body.
+
+**The true statement.** 66 names are **unresolved under the two roots searched**, across 142
+citations. Unresolved is not absent. Nothing about absence is established for any of the 66.
+
+**What changed.** The chapter now scopes the measurement to the two roots, carries the R15 point in
+a box immediately after the table, and states every consequence of Russell's analysis as a
+conditional on a name being *confirmed absent after a full search* — with `OPEN` named as the
+correct tag until then. A fourth row was added to the replacement table for the pre-search case:
+"asserted at an address this corpus has not resolved" — and search. The verify script gains
+`ROOTS_SEARCHED` and a check asserting that exactly two roots were passed, so the scope cannot
+drift out of the record. The index card and the [HONESTY] block are rewritten to lead with it.
+
+**The logic is untouched.** Blocks [1] and [2] are exhaustive over predicates on domains up to four
+elements and establish what follows once a description fails to denote. That was never in question;
+what was wrong was asserting that these particular descriptions fail.
+
+**Open, and the actual next action.** Run `tools/lean_addresses.py` with every repository passed as
+a root. Only then does any name deserve the word absent, and only then do the replacement sentences
+in the chapter's table apply to it.
+
 # NINE PAGES, NO PROOFS — THE CITATIONS THAT POINT NOWHERE (2026-09-17)
 
 **What was built.** `book6/ch-the-present-king-of-france.html` and its verify script — 6 blocks,
@@ -18,16 +48,18 @@ the improbability of the forgery, and he never called it a proof. **He kept two 
 believed and what had been demonstrated, sorted the nine pages into wrong / already known / new,
 and published which was which. Some were wrong.
 
-**The finding.** `tools/lean_addresses.py`, live: **66 names resolve nowhere, 2 resolve only under
-another case, 142 citations in all.** `Chain.lean` is cited by **23 pages**;
+**The finding — scoped, see the correction dated 2026-09-17 at the head of this log.**
+`tools/lean_addresses.py`, run with **two roots** (this repository and AXLE): **66 names unresolved
+under those roots, 2 resolve only under another case, 142 citations in all.** Unresolved is not
+absent; twenty-odd repositories were not searched. `Chain.lean` is cited by **23 pages**;
 `ZeoliteCommutation.lean` by 11; then 5, 4, 4, 4, 4. Twenty-three pages send a reader to an address
-where no file exists.
+this corpus cannot currently resolve.
 
 **What Russell changes.** The repository has filed these as *defects to repair*, and "repair"
 concedes that something is there to mend — the Meinong reading in a work shirt. On the 1905
 analysis, "the proof in Chain.lean establishes P" unpacks into three claims, the first being that
-such a file exists. It does not. **So the sentence is false as currently published** — not
-unverified, not pending. Block [1] evaluates all three readings over every (F, G) pair on domains
+such a file exists. Whether it does is what the unsearched roots decide. **So, conditionally on a name
+being confirmed absent, the sentence is false as published** — not unverified, not pending. Block [1] evaluates all three readings over every (F, G) pair on domains
 up to four elements: with nothing answering to the description, "the F is G" and "the F is not-G"
 are *both* false while "not (the F is G)" is true, so excluded middle is untouched.
 
