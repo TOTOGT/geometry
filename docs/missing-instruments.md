@@ -124,7 +124,46 @@ else does.
 **Cost.** A day, and it does not need the CIRA files. **Do this before the data
 arrives, not after.**
 
-### 4. The symmetry-image count in multi-orbit theory
+### 4. The symmetry-image count in multi-orbit theory — **CLOSED 2026-09-17**
+
+**Answered by `book8/multiorbit-symmetry-verify.py`, five blocks, exit 0.**
+
+**The conjecture is much stronger than "expect three companions."** ℤ₂^d acting by d
+orthogonal reflections sends a generic point to an orbit of 2^d points that are *not* in
+general position: for d = 2 they are **the four corners of a rectangle** centred on the
+mirrors' intersection. Verified on 400 random mirror pairs and random points, every corner a
+right angle to 1e-9. So the count carries a geometric constraint that three observed systems
+can be tested against **without locating the mirrors**:
+
+> Three points are three corners of some rectangle **iff** one of their triangle's angles is
+> exactly 90°. If one is, the fourth corner is *predicted*.
+
+Test validated on three fixtures before use — exact rectangle reads 90.000000 and predicts
+(3, 2); equilateral reads 60.000000; collinear reads 0.0. All three fire.
+
+**Verdict on the Pacific trio: falsified as a symmetry-image set, for every d.** Positions
+reconstructed from the prose bearings in `multiorbit-pacific-2026-09.md` (Lowell 600 mi S of
+Kauaʻi, Karina 955 mi E of Hilo, Marie 550 mi WSW of Cabo San Lucas). Triangle angles
+**10.0° / 161.1° / 8.9°** — the closest to a right angle is 71° away. Monte Carlo over the
+reconstruction (landmark ±0.15°, distance ±8%, bearing ±11°): median 161.4°, 5–95% band
+[137.3°, 178.0°], and **0 of 20,000 draws** within 5° of a right angle.
+
+**Why it dies for every d, not just d = 2.** The trio is collinear to **1.4%** — the
+separations are 2,143 km, 2,391 km and 4,473 km, so the triangle inequality is tight to 61 km.
+d = 1 gives an orbit of 2 points, so three systems cannot be one orbit at all; d = 2 needs a
+right angle; d ≥ 3 contains rectangles as 2-faces, and three collinear points share no 2-face
+of a box. This quantifies what the register already said in words — the storms are *strung*,
+not nested.
+
+**What this does NOT falsify: the conjecture itself.** A claim about where companions appear
+*when a mirror symmetry is present* is untouched by a configuration with no mirror symmetry —
+and the register's own note records the Pacific environment as asymmetric (cooler water,
+shear, higher latitude east). The conjecture's escape clause, "only asymmetry does" break the
+count, is exactly what this configuration supplies. **The trio was never a test case, and the
+test was cheap enough to establish that.** A symmetric environment with an identified source
+would be one.
+
+<details><summary>Original statement of the gap, 12 September</summary>
 
 **The gap.** Multi-orbit theory (`docs/multiorbit-pacific-2026-09.md`,
 `book8/ch12-container.html`, `chPrev-prevention.html`) has no group-theoretic
@@ -141,6 +180,8 @@ re-read the Lowell/Karina/Marie geometry against it. The trio failed the
 band-width test structurally; it has not been asked this question.
 
 **Cost.** Hours. Low risk: the result is a clean falsification either way.
+
+</details>
 
 ---
 

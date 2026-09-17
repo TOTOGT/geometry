@@ -8302,3 +8302,34 @@ Also honest, and in block [5]: beyond z₀ ≈ 36.7 the excess `2K e^{−z₀}` 
 below float64 epsilon and the ratio rounds to 1. The check now asserts the
 crossover where the epsilon argument puts it, rather than quietly testing a
 smaller range. A fact about the arithmetic, not the flow.
+
+## 2026-09-17 · item 4 closed — the Pacific trio is collinear to 1.4%
+
+`book8/multiorbit-symmetry-verify.py`, five blocks, exit 0. Chosen over item 3
+because item 3's inputs (published cyclone scale heights and decorrelation times)
+are not in the repository and sourcing them is where a fabricated number would
+enter; item 4 needs only `docs/multiorbit-pacific-2026-09.md`.
+
+**The conjecture was being read too weakly.** "2^d − 1 companions" is not a count
+of arbitrary companions: a ℤ₂^d orbit is a *box*, and for d = 2 it is the four
+corners of a rectangle. That converts the count into a configuration test needing
+no knowledge of where the mirrors are — three points sit in a rectangle iff one
+triangle angle is 90°, and if one does, the fourth corner is predicted. Validated
+on an exact rectangle (90.000000, fourth corner recovered), an equilateral (60°)
+and a collinear triple (0°) before being used.
+
+**Pacific trio: falsified for every d.** Angles 10.0° / 161.1° / 8.9°; closest to
+a right angle is 71° off. Monte Carlo over the prose-to-coordinate reconstruction
+— landmark ±0.15°, distance ±8%, bearing ±11° — gives median 161.4°, 5–95% band
+[137.3°, 178.0°], and **0 of 20,000 draws** within 5°. The reason is collinearity:
+2,143 + 2,391 − 4,473 = 61 km, tight to **1.4%** of the long side. d = 1 orbits
+have 2 points; d = 2 needs a right angle; d ≥ 3 has rectangles as 2-faces and
+three collinear points share no 2-face. The register's word "strung" now has a
+number.
+
+**Recorded so it is not over-read:** this falsifies the *trio*, not the
+conjecture. The conjecture speaks about configurations with a mirror symmetry, and
+the register's own note describes this environment as asymmetric — cooler water,
+shear, higher latitude east — which is the conjecture's own escape clause. The
+trio was never a test case; the value of the exercise is that establishing so cost
+hours. `[FIXED]`
