@@ -47,353 +47,80 @@ and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
 expired narrative. The session of 2026-09-13 stranded git locks all evening
 without reading it. A rule that cannot be found is not in force.
 
-## HANDOFF — 2026-09-16 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
+## HANDOFF — 2026-09-17 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
-**From:** session 01VfocLTqvCDL1gYodEh6sWK · account grossiatwork@gmail.com · model claude-opus-5, Cowork bridge with the desk connected. Earlier blocks for ch-strogatz, WP-122, WP-120, WP-22 and the 09-15 session are in git history and in `docs/audit-log.md`; their still-live items are carried forward under **Open** below.
+**From:** session 01VfocLTqvCDL1gYodEh6sWK · account grossiatwork@gmail.com · model claude-opus-5, Cowork bridge with the desk connected. Earlier blocks are in git history and in `docs/audit-log.md`; still-live items are carried forward under **Open**.
 
-### WP-82 re-measured, and the reading that needed it
-`book6/wp82-verify.py` re-runs WP-82's own stated method at the commit the paper names:
-**all twelve published numbers reproduce exactly**, the rung-30 zero included. The table was
-never wrong — it is dated, and nothing had re-run it. At HEAD every row has risen; rung 28
-goes 2 → 14 file-mentions and rung 33 goes 31 → 58, so the inversion has narrowed from
-15.5:1 to 4.1:1 without reversing. Of the seven files now saying "k-theory", **one is a
-chapter** — the floor is started, not built, and block [3] prints the breakdown so the
-0 → 7 cannot be quoted bare.
+### Four Book 7 chapters, built from the gaps WP-82 identified
+All four carry a verify script, stdlib only, exit 0. Each block [corpus-count] classifies its own
+page out and asserts on **chapters**, so publishing cannot move the number it quotes.
 
-**There was no XIII collision.** A hand reading of the rung-30 row as a live count produced
-one on 09-15; book13 *is* rung 30 (every metagrid, ch03 kernel-checked against
-`CategoryTheory.Bicategory`), and WP-82 marks XIII–XV `ASSUME` rather than reserving it.
+| chapter | the finding |
+|---|---|
+| `ch-conley` | **Candidate three is closed.** For every compact N, Inv(N) ∩ Γ = ∅, because ż ≡ 1 on Γ. A tube is empty too, bound attained. In the frozen family an index exists on each side of the neutral line and they differ — (ℤ,ℤ,0) above, (0,ℤ,ℤ) below, all three χ = 0. And ṙ → k·ṙ moves the multiplier over 60 orders while leaving the block conditions fixed: **e^−4π cannot be an index of this kind.** WP-82's other two candidates stand. |
+| `ch-smale` | **The return map cannot fold, for any f.** For ṙ = f(r), θ̇ = ω, dP/dr₀ = exp(∫f′) — positive always, so entropy exactly 0. Third restriction traced to the radial speed depending on r alone. Block [3] prints the range of P^n and asserts only on the 4 rows that carry information. |
+| `ch-gelfand` | **It is a monoid, and here is the algebra.** F is stated nonlinear on the corpus's own page, so the chain is not an algebra. Linearised: dim C\*(K,S) = n·p, A ≅ (M_p)^⊕(n/p), dim A′ = n/p, p the mask period — **248 masks, n = 3..7, zero violations.** Vol I Thm 5.3 becomes "p > 1", which is the rung 29 → 33 sentence. |
+| `ch-feigin` | **The floor under XV's corrected seed.** H²(Witt) = 1 computed; the −m in m³−m is *forced* by the Möbius sl₂, the 12 is convention. h^∨, root counts and dim g for 15 types from Cartan matrices alone. **E₈: h^∨ = 30, self-dual, critical level k = −30, centre W(e₈).** Non-circular check: level 1 simply laced gives c = rank. Says plainly no W-algebra is built and why. |
 
-**book13's Mathlib correction of 09-12 reached index.html and not the eight chapters**,
-which carried 1113 / 48 / 112 for four more days while `ch-mathlib-verify.py` passed —
-because it read one file. Fixed to 1089 / 44 / 108; the script gains block [5], which walks
-every chapter. A number is published wherever it is printed.
+### `tools/corpus_count.py` — the grep instrument makes false zeros
+**The corpus is HTML and writes accented names as entities, which no plain pattern matches.**
+At `d97154e`: Liénard **5 not 2**, Poincaré **68 not 58**, Gödel 27 not 23, Poincaré–Bendixson 14
+not 12. **68 tracked HTML files carry an accented entity**, so every published count for a name
+with a diacritic is low until re-taken. Found because `ch-van-der-pol-verify` [6] reported 0
+chapters for a word printed twice on the page doing the counting.
 
-**Construction order, measured** (`.lake/packages/mathlib`): XIII `CategoryTheory/` 1089 +
-`Bicategory/` 44 + `SimplicialSet/` 68 → instantiation. XII `CStarAlgebra/` 44 but
-`VonNeumannAlgebra/` **1** → the C\*- half is reachable, the von Neumann half is not, and
-WP-82 §3 assigns XII both. XI: **no K-theory directory at all**; the one K-adjacent file in
-Mathlib is `GroupTheory/MonoidLocalization/GrothendieckGroup.lean`, which is the object
-ch-grothendieck was built around. Forced order is **XIII → XII → XI**, the reverse of rung
-order. Full table in `docs/audit-log.md`.
-
-**NEXT:** WP-124 is agreed — a cell measurement against Strogatz Figure 1.3.1 (PDF p. 25,
-printed p. 10, §1.3 *A Dynamical View of the World*), in WP-82's form: declared method,
-declared commit, a verify script. Not started.
-
-### The Disaster cluster is closed in the kernel, and three published theorems were false
-Four files now exist under `Orthogenesis/`, all imported by `Orthogenesis.lean`, all kernel-checked with nothing admitted. Reports with source sha256 in `tools/verify-audit/2026-09-15/`.
-
-| file | decls | what it settles |
-|---|---|---|
-| `Disaster/DisasterTheory.lean` | 19 | `published_D2_is_false` — chDis §5's D2 asserted `deriv (x³+x/3) 0 = 0`; it is `1/3` |
-| `Disaster/CatastropheF.lean` | 8 | `published_T2_is_false` (chF's T2 was chDis's D2 copied verbatim), `published_T3_is_false` (asserted `∃!` critical point under a hypothesis excluding all of them) |
-| `Disaster/ChaosMu.lean` | 9 | `published_T1_is_false` — quantified over `0 ≤ t`, fails at `t = 0` |
-| `Resonance/TripleChamber.lean` | 12 | ported from AXLE; its T1 claimed `StrictAnti` over all of ℝ and is false — true on `κ ≥ 0` |
-
-`DisasterTheory.lean`, `CatastropheF.lean` and `ChaosMu.lean` had **never existed in AXLE**, in tree or history, while three chapters cited them as verified. `AXLE/Disaster/README.md` is the marker at the address readers were sent to. chDis, chF and chMu carry corrected listings and status notes.
-
-**AXLE compiles nothing.** No `.lake`, no `.github/workflows`, no axiom report, pinned `v4.14.0`. 36 pages assert proof "in AXLE". Treat every such citation as unbacked until the file is in a geometry build target.
-
-### Standing up Lean in a container — the recipe, because elan fails
-`elan-init` dies on `failed to parse latest release tag` (it calls the GitHub API, which the proxy refuses). Bypass it:
+The module shortlists with `git grep -l`, then matches the file's text with entities unescaped,
+and prints the gap against plain `git grep` so the difference is visible. **Read all blobs in one
+`git cat-file --batch`** — the first version did one `git show` per file and timed out at 788×13
+subprocesses. Import it, don't re-roll a grep:
+```python
+sys.path.insert(0, os.path.join(REPO, 'tools')); from corpus_count import files
 ```
-curl -sSL -o lean.tar.zst https://github.com/leanprover/lean4/releases/download/v4.32.0/lean-4.32.0-linux.tar.zst
-tar --use-compress-program=unzstd -xf lean.tar.zst          # ~4s
-export PATH=$PWD/lean-4.32.0-linux/bin:$PATH
-# lakefile.toml requiring mathlib rev v4.32.0, then:
-lake update && lake exe cache get                            # cache works; ~9s decompress
-```
-Release assets download fine; only the API call is blocked. Elaborate from the pin in a clean container, not at the desk — that is the difference between "it worked here" and a run anyone can repeat.
+**Three failure modes now recorded in WP-82 §4** where it recorded one: wrong spelling; substring
+inflation (`/gns/` 68 via *designs*, `/bott/` 789 via *bottom*, both 0 anchored); entity
+blindness. And a fourth: `git ls-tree -r --name-only HEAD -- '*.html'` returns nothing and exits 0
+where `ls-files` honours the same pathspec.
 
-### `tools/lean_addresses.py` — new instrument
-The rung below `decl_resolve.py`, which has enforced R11 since 2026-08-27 against a `claims.json` **nobody ever built**. Needs no input: does the *file* exist anywhere under any root. Strips `<style>`/`<script>` and tags first (CSS selectors like `pre.lean-block` read as filenames otherwise — nine false hits on the first run), and reports `CASE_ONLY` separately (opens on macOS, 404s on GitHub).
-```
-python3 tools/lean_addresses.py . --roots ~/Desktop/AXLE ~/Desktop/GTCT ~/Desktop/vol1-proofs
-```
-**55 names resolve nowhere across 102 page-citations; 2 resolve only under another case.** `ZeoliteCommutation.lean` alone is cited by eleven pages. `EXEMPT` holds (page, name) pairs that are deliberate illustrations — never exempt a bare name.
+**Two other traps, both live.** A *literal* control token for absence matches itself once the
+script is committed — `wp82-verify` and `ch-van-der-pol-verify` both shipped the same one, so each
+found the other. Assemble it at run time. And **a truncation is not the object**: an algebra
+generated to a fixed word length read dim 33 where the commutant forces 36, and a cocycle space on
+a truncated window is inflated at the edge. Generate to closure; or solve wide and restrict narrow
+before quotienting.
 
-### Book X opened — `book10/`
-Political science and mathematics; trade and economics; and the history of science, custody and transmission. X is ten and X is the Africa term in BRIX. Three chapters and a door:
-- `ch01-the-encumbrance-ratio.html` — E, C, T. Destination concentration ≠ contractual commitment. Brazil 2025: 416.4 Mt, $28.9bn, 67% to one destination. **Carries its own correction in a box** (iron ore does not feed an airframe; bauxite and niobium do). Brazil's niobium share is deliberately **not stated** — unverified.
-- `ch02-the-ishango-bone-is-in-brussels.html` — H, I, R. British Museum Act 1963 s.5 (return not among the permitted grounds) vs the Belgian law of 30 June 2022 (opens a route, puts a bilateral treaty in the doorway). Declines to say whether that law reaches the object.
-- `ch03-the-numbers-in-dead-aid.html` — ~40 figures from Moyo (2009) ch.3–4 with page numbers, the case against her at full strength, and the finding: **no updated version of that table exists anywhere.**
-- `contribute.html` — the volume is open to contribution, built on Sirolli rather than an editorial process.
-
-**The warrant:** Appendix L.2 of `Principia_Orthogona_Complete_v8.pdf` (sha256 `96971cc0b760ac99…`, in `~/Documents/Claude/Projects/MATHS for life/`) already said Africa was the first priority for international implementation, addressed to BRICS foreign ministries. Nothing was built on it. Book X is that address. The position has since moved BRICS → BRIX and the index says so.
-
-### `build_indexes.py` FOLDERS — and the defect it was hiding
-`book10` and `book13` added. **`book13` — nine committed, live category-theory chapters — had never been in that list.** No generated index carried them; `index-book13.html` did not exist until today. Nine chapters at no address, inside the one file whose job is to prevent that. (Written here as "eleven" until 2026-09-16: that was `ls book13 | wc -l` — nine chapters plus the index plus the verify script. A directory listing is not a chapter count.) **`series-hub.html` still stops at Vol IX**: Books X and XIII are generated-indexed but have no row in the authored navigation, and Book X's only inbound links are the three written on 2026-09-15. `audit.py` clean across 730 files. **The list is not the corpus**; nothing yet derives the scan set from the filesystem, and until something does this recurs.
-
-### WP-121 — `book6/wp121-what-etf-connect-actually-couples.html`
-Brazil–China ETF Connect. A connection is a coupling; coupling splits a shared mode rather than damping it. The instrument as built is one-sided (PKIN11, TECX11 on 2025-05-27; SILK11 on 2025-07-11; no Ibovespa ETF listed in China, and B3's own page records none), so the live regime sits outside what the splitting theorem describes. Defines α. Cites `Orthogenesis/Resonance/TripleChamber.lean`.
-
-### The G⁶ Chamber — a published Artifact, **private**
-`https://claude.ai/artifact/TVU73A8m3APcd8USR7js1T` · capabilities `db` + `room` · contract 0.2.49 · **sharing: owner only.** A working forum, not a page about one: 11 threads in `threads/<id>` with `threads/<id>/posts/<pid>` below them. Not in this repo — to change it, republish from the session that owns it or pass the URL as `url`; read/write its store with the `ArtifactData` tool, never `Artifact action:"write_db"` (that is a different tool and will be rejected).
-
-Six powers: US $32.38tn · BRIX (Brazil·India·China·Africa) $31.24tn · EU $23.03tn · CANZUK $9.17tn · Japan $4.38tn · Korea $1.93tn = 80.9% of world output. Russia and Mexico are the named absences and both are threads, not positions. Links out to Book X and WP-121.
-
-### The rule the work now operates under
-**We cannot fix the problems in Russia, nor in Mexico, nor in Africa.** Listen to the people inside the problem; help with what *they* say they need; and do the one thing distance is good for — publish the number they are not placed to publish for themselves, because they are a party to it. That is why every Book X chapter ends in a measurable rather than a recommendation, and why the Chamber's hardest threads are questions. Sirolli's rule, stated in `book10/contribute.html` with the Zambia tomato story and the attribution.
-
-`ch02` and `ch03` each carry the admission that they were written from Newark without asking anyone with standing to correct them. Keep that habit; it is the only thing that makes the rule credible.
-
-### A scanner that reads prose about a defect as an instance of it — third occurrence
-`axiom_gate.py` failed my first report on the string `sorryAx` appearing in my own header comment "No sorryAx". After the vacuity scan reading a quoted `True := trivial`, and `DECLARE_RE` missing a line-one match. **Write "none admitted", never the token.** A checker that cannot distinguish a mention from a use will eventually be satisfied by silence.
+### WP-82's second column now names a commit
+It was published against `HEAD`, and publishing `ch-conley` moved **six of its twelve rows inside
+one day** (k-theory 7→9, index theorem 4→6, Atiyah 3→5, von Neumann 11→12, sheaf 6→7, spectral
+triple 14→15). It now names `d97154e`; `wp82-verify` [2] asserts both columns at the commits they
+name and prints live HEAD for information only. Block [3] gained a `project scaffolding` bucket
+for `CLAUDE.md`: k-theory is **9 files, 2 of them chapters** — the floor is started, not built.
 
 ### Open
-- **Push.** 5 commits ahead of origin.
-- **M2:** `heliSpin_incommensurate_aperiodic` in `MagneticLattice.lean` — the last `sorry` in the architecture cluster. Irrationality of q/2π + Weyl equidistribution.
-- **55 dangling `.lean` names** across 102 page-citations. `ZeoliteCommutation.lean` (11 pages) is the biggest single win.
-- **36 pages assert proof "in AXLE."** Either port the file into a geometry target or strike the claim.
-- **Brazil's niobium share** — unverified and deliberately absent from `book10/ch01`. If it is what it appears to be it is the strongest single fact in that volume.
-- **Recompute the Moyo table for 2026.** Same rows, current sources. A few weeks, and it does not require agreeing with her.
-- `docs/defect-ledger.html` stops on 24 August. WP-90's three, WP-91's `collatz_converges` and the three-week §4 gap are missing. The `found by` column is the asset — 3 of 27 found by the kernel — and it reads as a list rather than a result.
-- Five root `.lean` files untracked: `ReactionDiffusionFold`, `TurnaroundUniverse`, `ZetaScratch`, `probe_book8`, `probe_dm3`. Grep with `git ls-files`.
-- `_to_delete/` mixes git lock files with real ML evidence; `_to_delete/locks/` separates them without deleting anything. **This session added many more** — the bridge cannot `rm`, so every commit through it strands `index.lock`, `HEAD.lock` and `tmp_obj_*`. R4 applies; `mv`, then `git gc --prune=now` at the desk.
-- The per-book `index-<slug>.html` pages have no search bar; `master-index.html` has one and every row already carries `data-hay`.
+- **WP-124** — agreed, measured, three tiers designed, **not built**. Strogatz Figure 1.3.1, PDF
+  p. 25 / printed p. 10. `logistic map`, `iterated map`, `circle map`, `standard map` all read 0
+  chapters; `ch-smale` planted the logistic map as a contrast but WP-124 is still owed.
+- **WP-82's other two index candidates** — the asymptotic index at z → ∞ and a relative class on
+  (M, {z ≤ c}). Untouched, and now the only two left.
+- **Volume XI still has no machine-checked core.** `ch-conley` block [5] is arithmetic on a
+  hand-chosen CW model, not an index pair built by the theory. Mathlib has no K-theory directory.
+- **Volume XV is not opened.** `ch-feigin` supplies the data, not the theorem. A W-algebra is not
+  a Lie algebra; W₃ closes on :TT: − (3/10)∂²T and that needs OPEs and normal ordering.
+- **Book 7 roster** from Strogatz §1.1, still unwritten: Birkhoff (1 mention), Andronov (1),
+  Winfree (1), Cartwright (0), Takens (5), Feigenbaum (7, no chapter). Moser and Raoul Bott are
+  now both named as gaps by their own students' chapters.
+- **`ch-smale`'s open question**, recorded not asserted: the chain is G = U∘F∘K∘C with F the
+  *Fold*, and no return map in the family can fold. Different senses of the word; the corpus has
+  never said which it means where.
+- **chRho-spectral Argument V** — three defects, untouched, reader-facing, author's call.
+- **AXLE compiles nothing**, and 55 Lean names resolve nowhere across 102 page-citations.
+  `ZeoliteCommutation.lean` is cited by eleven pages; `ch-gelfand` deliberately re-derives its
+  finite statement rather than citing it.
+- **Patent novelty search** (separate corpus/rules) for HVEH and SAF.
 
-## The overnight job, if you are the session that runs it
-
-**It is now a script.** Do not re-read a prose run-order and re-type it.
-
-    cd ~/Desktop/geometry
-    bash tools/overnight.sh --dry-run     # the order, and nothing compiled
-    bash tools/overnight.sh               # ~275 files, hours
-    python3 tools/toolchain_ledger.py --write
-    cd ~/Desktop/AXLE && python3 scripts/build_theorem_registry.py
-
-`overnight.sh` is a DRIVER and judges nothing. It reads the declared roots from
-`tools/corpus_roots.txt`, sorts into priority order — no `import` line, then
-contains `sorry`, then the rest — and hands each file to `tools/leancheck.sh`,
-whose verdict is `tools/axiom_gate.py`'s. It is resumable: a report already
-written today is skipped, so an interruption costs the remaining files and not
-the night. A root it cannot read is REPORTED, never skipped — a run over five
-roots of eleven is a different measurement, not a smaller one.
-
-Measured 2026-09-05: **275 tracked `.lean` across 11 roots — 30 with no import
-line, 133 containing `sorry`, 112 the rest.** The 2026-08-30 handoff said 17 and
-168; the tool recomputes rather than repeating.
-
-Zero-import is a HEURISTIC for "never elaborated", not a proof of it.
-`PolarTriadClosure.lean` and `PolarPolygonCommonRefinement.lean` import nothing
-because they need nothing, and both compile.
-
-**`--audit` now leaves an artefact**, which it did not before today. Reports land
-at `tools/verify-audit/<date>/<stem>.axioms.txt`. Until 2026-09-05 the probe went
-to `mktemp`, was read for two counts, and `rm -f`'d — so a full-corpus run printed
-to a terminal and left the repo unable to tell an audited file from one never
-checked. **Commit the reports.** They are what Tier 1 is read from.
-
-**Nothing needs installing.** Mathlib v4.32.0 is built at `~/Desktop/geometry/.lake`.
-Do **not** run `lake exe cache get` — six sessions did, leaving 30 GB of duplicates.
-Measured 2026-09-10: `.lake` is **7.8 G** of the repo's 8.0 G, which is the build and
-not duplication.
-
-**Run it at the desk, never through the Cowork bridge.** `corpus_roots.txt` names
-`~/Desktop/...`; on the bridge `~` is the session root and the desk is under `~/mnt`,
-so all eleven roots resolve to nothing. Before 2026-09-10 that printed eleven
-`UNREADABLE ROOT` lines and then `corpus: 0 tracked .lean files … priority 1: 0`,
-which reads like *nothing to do* to a tired reader at 2 a.m. **`overnight.sh` now
-exits 2 and says so when every root is unreadable** — a run that read nothing is a
-failed run, not an empty corpus. Do not "fix" `corpus_roots.txt` to bridge paths;
-the file is correct for the machine the job runs on.
-
-**The gate is `#print axioms`, not a clean compile**, and the verdict is
-`tools/axiom_gate.py`'s, never a grep. A grep for `sorryAx` is a forbidden list;
-WP-73 §6 gives the two ways that is wrong, and I reintroduced it in three separate
-places today before noticing. Enumerate the permitted three.
-
-## Counting: read this before publishing any total
-
-Three tiers, and only the first is evidence.
-
-| tier | what it is | where it comes from | 2026-09-05 |
-|---|---|---|---|
-| 1 | kernel-audited | `axioms.txt` written by a gate run | **133** corpus / 45 in geometry |
-| 2 | sorry-free | text scan, `theorem_census.py` | 1 815 grouped |
-| 3 | declarations written | text scan | 1 995 grouped |
-
-Tier 1 read **32** until today. The undercount was a glob in
-`AXLE/scripts/build_theorem_registry.py`, which swept two hardcoded shapes and
-missed `vol1-proofs/tools/axioms.txt` — 82 audited declarations, the largest
-report in the corpus. It now reads `tools/corpus_roots.txt`, the same root set
-every other published number uses.
-
-`tools/toolchain_ledger.py` is the per-file view: which files have a kernel
-record, what their declarations rest on, and which sit `OUTSIDE EVERY TARGET`.
-**22 geometry files are in no `lake build` target** — 137 declarations that can
-stop compiling with nothing saying so. That is exactly how `SaturnHexagon.lean`
-stood broken for a month. It is the largest open item in this repo.
-
-What the ledger CANNOT do: tell STALE from still-true. A gate report carries no
-toolchain and no library, only a filesystem timestamp. `CS/verify-stamp` is the
-instrument that binds the triple (WP-73 §2). An old date is an invitation to run
-it, not a substitute.
-
-`book5/index.html` line 103 still reads `1.080 teoremas · 0 sorry`. The corpus
-has 270 admitted declarations, so "0 sorry" is false at corpus scope. Left alone
-deliberately — 1 080 is a branded milestone and not a census. Ask before changing.
-
-## Dates are local to the desk
-
-US Eastern, the machine with the Mathlib build. Not UTC. A sandbox session
-running UTC stamped five hand-typed dates a day ahead on 5 September and produced
-a ledger apparently predating its own evidence. Tools read the clock they run on
-and are already right; only hand-typed dates can be wrong. See `tools/CONVENTIONS.md`.
-
-## Bash 3.2
-
-macOS ships bash 3.2.57 as `/bin/bash`. `mapfile`/`readarray` is bash 4 and dies
-here. `bash -n` will not catch it — a missing builtin is not a syntax error.
-Anything written for this machine from elsewhere must be read for 3.2 by eye.
-
-## Git, on this machine
-
-**Read-only `git` through the Cowork device bridge is safe, prefixed
-`--no-optional-locks`.** Verified 2026-09-09 in this repo: the command below
-returns its answer and leaves no `.git/index.lock` behind. The flag tells git not
-to take the opportunistic index-refresh lock, which is the only lock a read
-command ever wants. Put it on every read — `status`, `diff`, `log`, `grep`,
-`ls-files` — rather than trying to remember which of them refreshes the index:
-
-    git --no-optional-locks status --short
-    git --no-optional-locks diff --stat
-    git --no-optional-locks log origin/main -- <file>
-
-**If a lock is stranded anyway, the session can recover it without the desk.**
-The bridge cannot `rm` inside `.git/` — `Operation not permitted`, confirmed
-again 2026-09-09 — but it *can* `mv`, and moving the path is enough to get it
-out of git's way:
-
-    mv .git/index.lock .git/_stale-locks/index.lock-$(date +%s%N)
-
-**The moved files are litter and only the desk can remove them.** Sessions put
-them in `.git/_stale-locks/` so the desk clears them in one command. Fifty-four
-had accumulated loose in `geometry/.git` by 2026-09-09 — every one zero bytes,
-every one `HEAD.lock`, all from before the flag was known — and were swept into
-that directory:
-
-    rm -rf ~/Desktop/geometry/.git/_stale-locks
-    rm -f  ~/Desktop/*/.git/.stale-*.lock ~/Desktop/*/.git/index.lock
-
-**`git add` and `git commit` also work through the bridge.** Measured 2026-09-09
-on commit `38e0f5a`: both succeeded. Git creates its objects as `tmp_obj_*` and
-renames them into place — the rename is what matters and it works — then tries to
-unlink whatever it did not use, and *that* is what prints `Operation not
-permitted`. The warnings are litter reports, not failures. Two kinds are left
-behind:
-
-    .git/objects/??/tmp_obj_*        unused temporaries
-    .git/HEAD.lock                   after the commit, already released
-
-Neither blocks anything: `git --no-optional-locks status` returns 0 with
-`HEAD.lock` present, and `git fsck` is clean. Sweep them into `.git/_stale-locks/`
-at the end of a session that committed. 1,520 `tmp_obj_*` had accumulated in
-`geometry/.git/objects` before anyone looked.
-
-Sandboxed sessions still have no push credentials. **Push is the one operation
-that must happen at the desk, and it is credentials that require it, not locks.**
-
-**Superseded, and worth saying why.** Until 2026-09-09 this section and a bullet
-under *Read first* banned `git` through the bridge outright, on the grounds that
-any call strands a lock the bridge cannot remove. Both halves of that were wrong:
-the flag prevents the lock, and `mv` clears one. The ban was written from two real
-incidents and generalised past what they showed, and it cost several sessions the
-ability to read the state of the repo they were editing. A rule inferred from a
-failure should be tested against the failure before it is written down.
-
-## Not started, deliberately
-
-ISO 13485 / orthobiologics. G6 LLC is moving into life sciences with a medical
-device. Pablo asked to defer the QMS write-up until the corpus is ready. When
-it starts, the first question is regulatory classification — device vs
-21 CFR 1271 §361 HCT/P vs §351 biologic — because ISO 13485 is the right
-standard only for the first. Do not let dm³ become a design input or a
-marketing claim without evidence behind it.
-
----
-
-## Attribution — it goes in the handoff, not in commit messages
-
-**Set 2026-09-04 by Pablo. Applies to every session.**
-
-Do **not** put `Co-Authored-By:`, `Claude-Session:`, `🤖 Generated with…` or any
-equivalent trailer in a commit message. The books are the user's work. A tool
-that helped does not get a byline on 717 commits.
-
-Attribution belongs in **one place**: the handoff block, in the form already used
-below —
-
-    **From:** session `<session id>` · account `<account email>` · model `<model>`
-
-The account email is the load-bearing field. Sessions run under different
-accounts (`brodananda@gmail.com`, `sluhcdf@gmail.com`, others), and months later
-the only way to find which conversation produced a given artifact is to know
-which account held it. A commit trailer cannot answer that question; the handoff
-block can.
-
-**If a session is running out of context ("no gas"), write the handoff before
-anything else.** A session that spends its last tokens on one more edit instead
-of the handoff costs the next session more than the edit was worth.
-
-**Existing trailers.** 31 commits carry `Co-Authored-By: Claude Opus 5` and 27
-carry `Claude-Session:`, all from before this rule. They are left in place:
-removing them rewrites every downstream SHA and breaks the commit links recorded
-in `docs/audit-log.md`. The rule is forward-looking. Do not add more.
-
-## Novelty and priority — unmatched is not novel
-
-**Set 2026-09-16.** The mathematics here is derived from first principles, without
-reading the literature first. That is the working method and it is not in question.
-It has one consequence, and the consequence is the whole of this rule:
-
-**Priority runs on publication date, not on route.** A result derived cleanly here in
-2026 that someone published in 1928 is re-derived. The derivation still happened, the
-method is still vindicated, and the novelty claim still fails. So a novelty claim rests
-entirely on a search — run before publishing, looking *for* the prior art rather than
-for its absence.
-
-**Which makes R15 load-bearing at the highest stakes in the corpus.** *A failed search
-is a fact about the search.* "Not in Strogatz" is not "novel"; it is "not in Strogatz".
-Nothing in this repository may assert novelty on the strength of a search that came
-back empty.
-
-**The instrument is `docs/novelty-register.md`**, checked by `tools/novelty_check.py`.
-Every claim gets a row: the claim, where it is stated, a verdict from a closed
-six-value vocabulary, the terms searched, the corpora searched, the date, the candidate
-hits, and an equation-level disposition. The checker fails on a missing search record,
-a verdict outside the vocabulary, or the word *novel* appearing as a verdict.
-
-    KNOWN-EXACT → KNOWN-GENERAL → PRIOR-ART-CANDIDATE → UNRESOLVED
-                → UNMATCHED-LIMITED → UNMATCHED-BROAD
-
-never a binary found / not-found.
-
-**A keyword-level similarity is not a prior-art match.** Two papers containing "no-go
-theorem" in contact geometry are not prior art for each other, and the register has
-already caught that once (row N08). The converse bites too: adjacent literature can run
-*against* a match. Row N06's claim looked pre-empted by published statements that a
-monodromy matrix depends on its base point — until the standard result turned out to be
-that the *multipliers* are base-point **invariant**, which makes the corpus's drift a
-diagnostic rather than a rediscovery. Both directions are why comparison is at equation
-level or it has not happened.
-
-**Citations, in this corpus, are pointers and not attributions.** Write *"this is
-classical, see X p. N"*, never *"following X"*, for anything derived here. Where a page
-prints its own derivation it says so, and the printed derivation is what earns the
-claim — a route cannot be audited by a reader or a tool, only printed work can.
-`book6/wp58-galactic-fold.html` is the model.
-
-**Patents are a separate search.** Different corpus, different priority rules, different
-disclosure bar. The register says so on its face and speaks to no patent question.
-
-### What NOT to do
-
-Do not write "novel", "new", "first" or "unprecedented" about a result on the strength of
-a search that returned nothing. Record what was searched and when, and let the row read
-`UNMATCHED-BROAD`. A reader who sees the search can weigh it; a reader who sees "novel"
-has been asked to take it on trust, and the first prior-art hit destroys the page it sits on.
+### Housekeeping on this machine
+Git leaves stranded `.git/objects/*/tmp_obj_*` and occasionally `.git/HEAD.lock` because deletion
+in a connected folder is not permitted. **Move them to `_to_delete/`, never `rm`** — the folder
+exists for this. A stranded `HEAD.lock` blocks the next commit, so sweep after each one.
 
 ## Every chapter carries a verify script
 

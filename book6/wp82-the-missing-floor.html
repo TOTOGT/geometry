@@ -365,6 +365,37 @@ and is not yet written. The ceiling this floor is meant to hold up is
 "zero in that form", not "absent from the corpus". The finding is strong enough to survive a
 second pass but has not had one. <span class="tag t-open">OPEN</span></p>
 
+<p><strong>The instrument fails in three ways, and this paper originally recorded one.</strong>
+Added 2026-09-16, each checked on every run of a named script.
+<span class="tag t-data">DATA</span></p>
+
+<ol>
+<li><strong>Wrong spelling</strong> &mdash; the paragraph above. A <code>0</code> means zero in
+that spelling.</li>
+
+<li><strong>Substring inflation.</strong> An unanchored pattern matches inside longer words, so a
+non-zero count can be pure noise. Measured at <code>d97154e</code>: <code>/gns/</code> matches
+68 files and <code>/\bGNS\b/</code> matches 0 &mdash; the hits are <em>designs</em> and
+<em>assignments</em>; <code>/bott/</code> matches 789 and <code>bott periodicity</code> matches
+1 &mdash; the rest are <em>bottom</em>. Checked by
+<a href="../book7/ch-conley-verify.py"><code>book7/ch-conley-verify.py</code></a> block&nbsp;[7].</li>
+
+<li><strong>Entity blindness &mdash; the one that makes false zeros on visible text.</strong> The
+corpus is HTML and writes accented names as character entities, which no plain pattern matches.
+Entity-aware at <code>d97154e</code>: Li&eacute;nard <strong>5, not 2</strong>;
+Poincar&eacute; <strong>68, not 58</strong>; G&ouml;del 27, not 23;
+Poincar&eacute;&ndash;Bendixson 14, not 12. Sixty-eight tracked HTML files carry at least one
+accented entity, so every published count in this corpus for a name with a diacritic is low
+until it is re-taken. The instrument is <code>tools/corpus_count.py</code>; the case that found
+it is <a href="../book7/ch-van-der-pol.html">ch-van-der-pol</a>, whose block&nbsp;[6] reported
+0 chapters for a word printed twice on the page doing the counting.</li>
+</ol>
+
+<p>A fourth, smaller, belongs with them because it is the same class:
+<code>git ls-tree -r --name-only HEAD -- '*.html'</code> returns <em>nothing</em> and exits 0
+where <code>ls-files</code> and <code>grep</code> honour the same pathspec &mdash; a silent empty
+answer. <span class="tag t-data">DATA</span></p>
+
 <p><strong>The ruler is damaged.</strong> The source graphic breaks its own numbering — rung 9
 carries no numeral — and jumps from 28 straight to 33, so rungs 29 through 32 are absent from it.
 Of the four, only 29 is forced by the mathematics; the placement of higher category theory,
