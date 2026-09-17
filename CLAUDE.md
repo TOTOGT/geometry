@@ -51,76 +51,123 @@ without reading it. A rule that cannot be found is not in force.
 
 **From:** session 01VfocLTqvCDL1gYodEh6sWK · account grossiatwork@gmail.com · model claude-opus-5, Cowork bridge with the desk connected. Earlier blocks are in git history and in `docs/audit-log.md`; still-live items are carried forward under **Open**.
 
-### Four Book 7 chapters, built from the gaps WP-82 identified
-All four carry a verify script, stdlib only, exit 0. Each block [corpus-count] classifies its own
-page out and asserts on **chapters**, so publishing cannot move the number it quotes.
+### READ THIS FIRST — a measurement published inside the corpus joins the corpus
+`book7/ch-the-map-on-page-ten` measured 17 entries of Strogatz's Figure 1.3.1 as absent. Committed,
+the same script re-read **RC circuit 0 → 3 and all seventeen zeros → none.** Nothing changed but the
+gaps being written down: the chapter, `book7/index.html` and `docs/audit-log.md` all name them.
+This is WP-82's rung table again, where a column read 12/12 because the paper printing it was one of
+the twelve and the true value was 0.
+
+**The rule, now in `tools/corpus_count.py`:** any script that measures the corpus and is then tracked
+by it passes an explicit `ref` pinned to a commit predating the work, and prints the drift at HEAD.
+`ch-the-map-on-page-ten-verify.py` pins `BASELINE = 'b42750e'` and block [8] is `CONTROL, AND THE
+SELF-COUNT`. Classifying the page out (the older `keep_ruler` habit) is not enough once index pages
+and the audit log name the same entries.
+
+### Five Book 7 chapters, built from the gaps WP-82 identified
+All carry a verify script, stdlib only, exit 0.
 
 | chapter | the finding |
 |---|---|
 | `ch-conley` | **Candidate three is closed.** For every compact N, Inv(N) ∩ Γ = ∅, because ż ≡ 1 on Γ. A tube is empty too, bound attained. In the frozen family an index exists on each side of the neutral line and they differ — (ℤ,ℤ,0) above, (0,ℤ,ℤ) below, all three χ = 0. And ṙ → k·ṙ moves the multiplier over 60 orders while leaving the block conditions fixed: **e^−4π cannot be an index of this kind.** WP-82's other two candidates stand. |
-| `ch-smale` | **The return map cannot fold, for any f.** For ṙ = f(r), θ̇ = ω, dP/dr₀ = exp(∫f′) — positive always, so entropy exactly 0. Third restriction traced to the radial speed depending on r alone. Block [3] prints the range of P^n and asserts only on the 4 rows that carry information. |
-| `ch-gelfand` | **It is a monoid, and here is the algebra.** F is stated nonlinear on the corpus's own page, so the chain is not an algebra. Linearised: dim C\*(K,S) = n·p, A ≅ (M_p)^⊕(n/p), dim A′ = n/p, p the mask period — **248 masks, n = 3..7, zero violations.** Vol I Thm 5.3 becomes "p > 1", which is the rung 29 → 33 sentence. |
-| `ch-feigin` | **The floor under XV's corrected seed.** H²(Witt) = 1 computed; the −m in m³−m is *forced* by the Möbius sl₂, the 12 is convention. h^∨, root counts and dim g for 15 types from Cartan matrices alone. **E₈: h^∨ = 30, self-dual, critical level k = −30, centre W(e₈).** Non-circular check: level 1 simply laced gives c = rank. Says plainly no W-algebra is built and why. |
+| `ch-smale` | **The return map cannot fold, for any f.** For ṙ = f(r), θ̇ = ω, dP/dr₀ = exp(∫f′) — positive always, so entropy exactly 0. Third restriction traced to the radial speed depending on r alone. |
+| `ch-gelfand` | **It is a monoid, and here is the algebra.** Linearised: dim C\*(K,S) = n·p, A ≅ (M_p)^⊕(n/p), dim A′ = n/p, p the mask period — **248 masks, n = 3..7, zero violations.** Vol I Thm 5.3 becomes "p > 1". |
+| `ch-feigin` | **The floor under XV's corrected seed.** H²(Witt) = 1 computed; the −m in m³−m is *forced*, the 12 is convention. **E₈: h^∨ = 30, self-dual, critical level k = −30.** Says plainly no W-algebra is built. |
+| `ch-euler` | **χ = 0 on all three Conley indices is Euler's number behaving normally** — an even degree shift, which an alternating sum cannot see. χ was the wrong invariant there, not a weak one. Index +1 about the origin at every radius 0.3–10. |
 
-### `tools/corpus_count.py` — the grep instrument makes false zeros
-**The corpus is HTML and writes accented names as entities, which no plain pattern matches.**
-At `d97154e`: Liénard **5 not 2**, Poincaré **68 not 58**, Gödel 27 not 23, Poincaré–Bendixson 14
-not 12. **68 tracked HTML files carry an accented entity**, so every published count for a name
-with a diacritic is low until re-taken. Found because `ch-van-der-pol-verify` [6] reported 0
-chapters for a word printed twice on the page doing the counting.
+### `ch-the-map-on-page-ten` — WP-124, built as a named chapter (this closes WP-124)
+Figure 1.3.1, printed p. 10, PDF index 24 in the 2018 printing (front-matter offset 14 **there** —
+there is no fixed offset; the book takes 3 distinct values, 4..18).
 
-The module shortlists with `git grep -l`, then matches the file's text with entities unescaped,
-and prints the gap against plain `git grep` so the difference is visible. **Read all blobs in one
-`git cat-file --batch`** — the first version did one `git show` per file and timed out at 788×13
-subprocesses. Import it, don't re-roll a grep:
-```python
-sys.path.insert(0, os.path.join(REPO, 'tools')); from corpus_count import files
-```
-**Three failure modes now recorded in WP-82 §4** where it recorded one: wrong spelling; substring
-inflation (`/gns/` 68 via *designs*, `/bott/` 789 via *bottom*, both 0 anchored); entity
-blindness. And a fourth: `git ls-tree -r --name-only HEAD -- '*.html'` returns nothing and exits 0
-where `ls-files` honours the same pathspec.
+- **The figure has FIVE columns, not four.** `n = 1`, `n = 2`, `n ≥ 3`, `n >> 1`, **`Continuum`** —
+  thirteen positioned glyph runs on the single line `x = 163.2`. Ten cells, not eight.
+- **The column of an entry is NOT recoverable from the PDF.** The page is set rotated and pypdf
+  merges a whole row-line into one run: `'Fixed points Pendulum Strange attra'` arrives as one string
+  at one coordinate. *Position is a figure's content; the strings are captions.* The chapter publishes
+  the **row** — linear and nonlinear glyph bands `x ∈ [197,280]` and `x ∈ [310,458]` are disjoint,
+  exactly one of 236 runs falls between — plus only the **eight columns Strogatz states in prose**.
+  Those eight read **260, 119, 71, 69, 6, 3, 0, 0**, and the only two at zero are the **RC and RLC
+  circuits he uses to explain what the horizontal axis means.**
+- **61 entries at BASELINE: 44 occupied, 17 at zero, 8 of the 17 in the linear row**, which has only
+  18 entries. RC circuit, RLC circuit, mass and spring, 2-body problem, coupled harmonic oscillators,
+  equilibrium statistical mechanics, radioactive decay, viscous fluids. WP-82's missing floor in one
+  pass, because those are the systems that give the page a scale.
+- Class labels placed by a y-offset of ~23 units calibrated on the four Strogatz confirms in prose;
+  it holds only because the columns are ~80 units apart.
 
-**Two other traps, both live.** A *literal* control token for absence matches itself once the
-script is committed — `wp82-verify` and `ch-van-der-pol-verify` both shipped the same one, so each
-found the other. Assemble it at run time. And **a truncation is not the object**: an algebra
-generated to a fixed word length read dim 33 where the commutant forces 36, and a cocycle space on
-a truncated window is inflated at the edge. Generate to closure; or solve wide and restrict narrow
-before quotienting.
+### The counting instrument has a FOURTH failure mode, and it has no symptom
+Recorded in `tools/corpus_count.py`. **Sense collision:** right string, right anchor, entities
+handled, arithmetic correct, **different subject**.
 
-### WP-82's second column now names a commit
-It was published against `HEAD`, and publishing `ch-conley` moved **six of its twelve rows inside
-one day** (k-theory 7→9, index theorem 4→6, Atiyah 3→5, von Neumann 11→12, sheaf 6→7, spectral
-triple 14→15). It now names `d97154e`; `wp82-verify` [2] asserts both columns at the commits they
-name and prints live HEAD for information only. Block [3] gained a `project scaffolding` bucket
-for `CLAUDE.md`: k-theory is **9 files, 2 of them chapters** — the floor is started, not built.
+| entry | string | dynamical | other sense |
+|---|---|---|---|
+| Life | 151 | **11** | the English word (140 files) |
+| Plasmas | 93 | **35** | plasma cells, blood plasma, a nav link |
+| Turbulence | 49 | **10** | "messy flow" |
+| Economics | 45 | **19** | project economics; a site-map label |
+| Acoustics | 19 | **5** | archaeoacoustics — a different field |
+| shocks | 19 | **7** | price, income, bill shock |
+| Levinson | 8 | **6** | Evans & Levinson, linguistics |
+
+**Every published count for a word with more than one sense in this corpus is a string count wearing
+a sense's name.** 54 of the 61 entries are unaudited; on this evidence do not assume they are clean.
+
+**And the audit failed by failure mode 2 on its first run.** The companion pattern for `Plasmas`
+accepted **83 of 93** because it contained `reconnect` and `fusion` — 304 and 43 hits, against
+`tokamak` 2 and `stellar plasma` 1. Caught only because the block printed a per-term breakdown
+instead of a total. **Print breakdowns.** Earlier modes, all live: wrong spelling; substring inflation
+(`/gns/` 68 via *designs*, `/bott/` 789 via *bottom*); entity blindness (Liénard 5 not 2, Poincaré 68
+not 58); and `git ls-tree -r --name-only HEAD -- '*.html'` returns nothing and exits 0 where
+`ls-files` honours the same pathspec. A *literal* control token for absence matches itself once
+committed — assemble it at run time.
 
 ### Open
-- **WP-124** — agreed, measured, three tiers designed, **not built**. Strogatz Figure 1.3.1, PDF
-  p. 25 / printed p. 10. `logistic map`, `iterated map`, `circle map`, `standard map` all read 0
-  chapters; `ch-smale` planted the logistic map as a contrast but WP-124 is still owed.
+- **`certify_rstar.py` — eleven copies, not seven, and CLAUDE.md's instruction is stale.** None
+  cites `20360288`. Seven cite `19117400`, three `19117399`, one (`vol2-v5/deposit/`) nothing. But
+  `~/geometry/applications/stjohns-meco/certify_rstar.py` is **CANONICAL VERSION 1.1 (2026-07-30)**,
+  295 lines against the others' 260, whose provenance reads **GTCT Version 4, DOI
+  10.5281/zenodo.21708678** and which carries the e^−z / e^−r coupling erratum (the e^−r system has
+  inner boundary ≈0.641 and is not the one certified). **The fix is to propagate v1.1, not to edit
+  DOI strings to 20360288.** Author's call; not done.
+- **`229 Ballantine` appears in 16 tracked files across AXLE and geometry** — but as the *Ballantine
+  Estate acquisition proposal* and the *Hour House Adult ESL* venue (`AULA/229.html`,
+  `CropCircles.html`, `229-ballantine.html`, `229 Ballantine Pkway.webp`), never as the author's
+  address. The hard rule says the string must never appear; honouring it literally deletes the
+  property proposal. **Rule needs narrowing to author-address contexts, or the pages need moving.**
+  Author's call; nothing edited.
 - **WP-82's other two index candidates** — the asymptotic index at z → ∞ and a relative class on
   (M, {z ≤ c}). Untouched, and now the only two left.
 - **Volume XI still has no machine-checked core.** `ch-conley` block [5] is arithmetic on a
-  hand-chosen CW model, not an index pair built by the theory. Mathlib has no K-theory directory.
-- **Volume XV is not opened.** `ch-feigin` supplies the data, not the theorem. A W-algebra is not
-  a Lie algebra; W₃ closes on :TT: − (3/10)∂²T and that needs OPEs and normal ordering.
-- **Book 7 roster** from Strogatz §1.1, still unwritten: Birkhoff (1 mention), Andronov (1),
-  Winfree (1), Cartwright (0), Takens (5), Feigenbaum (7, no chapter). Moser and Raoul Bott are
-  now both named as gaps by their own students' chapters.
-- **`ch-smale`'s open question**, recorded not asserted: the chain is G = U∘F∘K∘C with F the
-  *Fold*, and no return map in the family can fold. Different senses of the word; the corpus has
-  never said which it means where.
+  hand-chosen CW model, not an index pair built by the theory.
+- **Volume XV is not opened.** `ch-feigin` supplies the data, not the theorem.
+- **Book 7 roster** still unwritten: Birkhoff (1 mention), Andronov (1), Winfree (1), Cartwright (0),
+  Takens (5), Feigenbaum (7, no chapter). Moser and Raoul Bott named as gaps by their own students'
+  chapters.
+- **The seventeen zeros are a chapter queue**, ranked in the chapter. Two shapes recur: entries
+  *occupied by person and empty by phrase* (Smale 12 files, Levinson 6, van der Pol 9 — yet
+  `forced nonlinear oscillator` 0, `anharmonic` 0), and a linear row whose gaps are the first systems
+  in an undergraduate course.
+- **Galilean Confluence (chE)** and **`chapters-diagram.html` rebuild** — both still owed.
+- **Vol 10 of the AXLE journal is unfinished** (page 6 = Part 5, `what_the_plague_made_easy.md`);
+  needs `b3s` connected. Vol 11 page 6 needs typesetting from `the_boy_who_carried_nothing.md`.
+  Vol 11 carries `NOT YET SET · DO NOT PUBLISH THIS PAGE`. Links for Vol 10 go live in Vol 9.
+- **`ch-smale`'s open question**, recorded not asserted: the chain is G = U∘F∘K∘C with F the *Fold*,
+  and no return map in the family can fold. The corpus has never said which sense it means where.
 - **chRho-spectral Argument V** — three defects, untouched, reader-facing, author's call.
-- **AXLE compiles nothing**, and 55 Lean names resolve nowhere across 102 page-citations.
-  `ZeoliteCommutation.lean` is cited by eleven pages; `ch-gelfand` deliberately re-derives its
-  finite statement rather than citing it.
+- **AXLE compiles nothing**, and 55 Lean names resolve nowhere across 102 page-citations. Per R15
+  that is *unresolved under the roots searched* (2 of 11 in `tools/corpus_roots.txt`) — **not**
+  "the files do not exist". `tools/lean_addresses.py` still owes a run against all eleven roots.
+- **`dm3brand.html` is hand-typed** from `theorem_census.py` and stale by content (geometry 287→378)
+  and by method (two diverged tool copies, the older counting `_to_delete/` and `docs/ml-evidence/`).
+  `verification-registry.html` is hand-written and frozen by design.
 - **Patent novelty search** (separate corpus/rules) for HVEH and SAF.
 
 ### Housekeeping on this machine
-Git leaves stranded `.git/objects/*/tmp_obj_*` and occasionally `.git/HEAD.lock` because deletion
-in a connected folder is not permitted. **Move them to `_to_delete/`, never `rm`** — the folder
-exists for this. A stranded `HEAD.lock` blocks the next commit, so sweep after each one.
+Git leaves stranded `.git/objects/*/tmp_obj_*`, `.git/index.lock` and `.git/HEAD.lock` because
+deletion in a connected folder is **off by default** — and a stranded lock blocks the next commit,
+so sweep after every one. Either move them to `_to_delete/` (the folder exists for this) or request
+delete permission once per session for the folder, after which `rm -f .git/index.lock` works. Never
+`rm` anything else. The `--no-optional-locks` flag in `corpus_count.py` exists for the same reason.
 
 ## Every chapter carries a verify script
 
