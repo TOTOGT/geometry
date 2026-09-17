@@ -213,6 +213,55 @@ print("    the work of his that most people have actually encountered.")
 
 # ---------------------------------------------------------------------------
 print()
+print("[5] Relativity's standing military application, computed.")
+print("    Hardy named relativity. GPS is a US Department of Defense")
+print("    navigation constellation, first satellite 1978, and it does not")
+print("    work without both special and general relativistic corrections.")
+print("    This is not a one-off in 1945. It runs every day.")
+print()
+
+c    = 299792458.0            # m/s, exact by definition
+GM   = 3.986004418e14         # m^3/s^2, WGS-84 Earth gravitational parameter
+R_E  = 6371000.0              # m, mean Earth radius
+r_gps = 26559800.0            # m, GPS semi-major axis (~20180 km altitude)
+day  = 86400.0                # s
+om_E = 7.2921150e-5           # rad/s, Earth rotation rate
+
+v_sat = math.sqrt(GM / r_gps)
+v_surf = om_E * R_E
+
+sr_sat  = -(v_sat ** 2) / (2 * c * c)          # satellite runs slow (velocity)
+sr_surf = -(v_surf ** 2) / (2 * c * c)         # ground clock also moving
+sr_net  = sr_sat - sr_surf
+gr_net  = (GM / (c * c)) * (1.0 / R_E - 1.0 / r_gps)   # satellite runs fast (potential)
+net     = sr_net + gr_net
+
+print("      satellite orbital speed      %10.1f m/s" % v_sat)
+print("      ground clock speed (equator) %10.1f m/s" % v_surf)
+print()
+print("      special relativity  %+.4e   -> %+8.2f us/day" % (sr_net, sr_net * day * 1e6))
+print("      general relativity  %+.4e   -> %+8.2f us/day" % (gr_net, gr_net * day * 1e6))
+print("      net                 %+.4e   -> %+8.2f us/day" % (net,    net    * day * 1e6))
+print()
+drift_s = net * day
+print("      uncorrected positional error: %.1f km per day" % (drift_s * c / 1000.0))
+
+check("special relativity slows the satellite clock", sr_net < 0)
+check("general relativity speeds it up by more", gr_net > -sr_net)
+check("the net is between 35 and 42 microseconds per day",
+      35e-6 < drift_s < 42e-6, "%.2f us/day" % (drift_s * 1e6))
+check("uncorrected drift exceeds 10 km of position per day",
+      drift_s * c > 10000.0, "%.1f km/day" % (drift_s * c / 1000))
+print()
+print("    Both of Einstein's theories, with opposite signs, in a system whose")
+print("    purpose includes guiding munitions. Hardy wrote that no warlike")
+print("    purpose had been found for relativity and that it seemed 'very")
+print("    unlikely that anyone will do so for many years'. The bomb arrived in")
+print("    five. The navigation system arrived in thirty-eight and has not")
+print("    stopped since.")
+
+# ---------------------------------------------------------------------------
+print()
 if FAIL:
     print("FAILED: " + "; ".join(FAIL)); raise SystemExit(1)
 print("All checks passed.")
