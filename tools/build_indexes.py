@@ -194,6 +194,39 @@ def crawl(files: list[str]) -> tuple[dict[str, int], dict[str, str]]:
     return {k: len(v) for k, v in inbound.items()}, titles
 
 
+# The curated conventions. SOURCE OF TRUTH is the table in CLAUDE.md under
+# "## Filename conventions at the root — Book 3"; this function implements it, and
+# if the two drift the table wins. Order matters: Roman-numeral chapters must be
+# tested before the operator pattern, because chIV- also matches ch[A-Z].
+LABELS = [
+    (re.compile(r"^(index-|master-index|directory\.|hub\.)"), "generated index"),
+    (re.compile(r"^dm3-1\d\d-w\d\d\.html$"),                  "course week"),
+    (re.compile(r"^dm3-"),                                     "framework page"),
+    (re.compile(r"^for-"),                                     "venue page"),
+    (re.compile(r"^series-"),                                  "series apparatus"),
+    (re.compile(r"^sample-chapter"),                           "sample · public"),
+    (re.compile(r"^(sessao|session)\d"),                        "IMPA session"),
+    (re.compile(r"^capitulo"),                                 "chapter · PT"),
+    (re.compile(r"^ch(I{1,3}|IV|VI{0,3}|IX|XI{0,3})-"),         "Roman chapter"),
+    (re.compile(r"^ch\d"),                                     "numbered chapter"),
+    (re.compile(r"^ch[A-Z]"),                                  "operator chapter"),
+    (re.compile(r"^ch-"),                                      "named chapter"),
+    (re.compile(r"(machine|soundworks|resonance|wellness)"),    "applied"),
+    (re.compile(r"^sim"),                                      "simulation"),
+    (re.compile(r"(portal|impa)"),                              "portal"),
+]
+
+
+def label_of(rel: str) -> str:
+    """The curated convention a file belongs to, or '' for a one-off named for its
+    subject -- which is the intended state for the remainder, not a gap."""
+    base = rel.split("/")[-1]
+    for rx, lab in LABELS:
+        if rx.search(base):
+            return lab
+    return ""
+
+
 def bucket(rel: str) -> str:
     """Which index a file belongs to. A folder entry's third field is a top-level
     directory name, or a list of them when several small folders share one index."""
@@ -245,6 +278,7 @@ main{padding:0 1.5rem 4rem; max-width:920px; margin:0 auto;}
 .row .path{color:var(--muted); font-size:.78rem; margin-left:.6rem;}
 .tag{font-family:ui-monospace,monospace; font-size:.68rem; padding:.15rem .5rem;
   border-radius:2px; white-space:nowrap; flex-shrink:0;}
+.tag.kind{background:rgba(122,148,113,.14);color:var(--moss);border:1px solid rgba(122,148,113,.3);margin-right:.4rem}
 .tag.orphan{background:rgba(210,162,76,.14); color:var(--amber); border:1px solid rgba(210,162,76,.35);}
 .tag.linked{background:rgba(122,148,113,.12); color:var(--moss); border:1px solid rgba(122,148,113,.25);}
 .hidden{display:none !important;}
@@ -291,12 +325,16 @@ def esc(s: str) -> str:
 
 def row_html(rel: str, title: str, n: int, prefix: str = "") -> str:
     orphan = n == 0
-    hay = esc(f"{title} {rel}".lower())
+    lab = label_of(rel)
+    # the label joins the search haystack, so "course week" finds all 48
+    hay = esc(f"{title} {rel} {lab}".lower())
     tag = ('<span class="tag orphan">orphaned</span>' if orphan else
            f'<span class="tag linked">{n} link{"" if n == 1 else "s"}</span>')
-    return (f'<div class="row" data-hay="{hay}" data-orphan="{"1" if orphan else "0"}">\n'
+    kind = f'<span class="tag kind">{esc(lab)}</span>' if lab else ""
+    return (f'<div class="row" data-hay="{hay}" data-orphan="{"1" if orphan else "0"}"'
+            f' data-label="{esc(lab)}">\n'
             f'  <a href="{esc(prefix + rel)}">{esc(title)}'
-            f'<span class="path mono">{esc(rel)}</span></a>\n  {tag}\n</div>')
+            f'<span class="path mono">{esc(rel)}</span></a>\n  {kind}{tag}\n</div>')
 
 
 def page(title: str, eyebrow: str, heading: str, sub: str, stats: str,
