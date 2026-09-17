@@ -1,3 +1,60 @@
+# EULER: THE CURIOSITY THAT WAS NOT ONE (2026-09-17)
+
+**What was built.** `book7/ch-euler.html` and `book7/ch-euler-verify.py` — 8 blocks, standard
+library only, 26 checks, exit 0. Registered in `book7/index.html`; the three generated indexes
+re-run. Source: R. E. Bradley and C. E. Sandifer (eds.), *Leonhard Euler: Life, Work and Legacy*,
+Elsevier 2007 — in particular Richeson on the polyhedral formula and Hopkins–Wilson on Königsberg.
+
+**The measurement.** χ is in **89 files and 76 chapters**; Euler 56 chapters; Runge–Kutta/RK4 16;
+Euler characteristic 17; Euler product 14; Gauss–Bonnet 7; Poincaré–Hopf 1; Königsberg 1; graph
+theory 1. And **index of a vector field 0, hairy ball 0, polyhedron formula 0, Euler's method 0,
+Euler–Lagrange 0, Basel problem 0.** Sixteen chapters integrate with Runge–Kutta and none names the
+method Euler wrote first, of which it is the refinement.
+
+**The finding — ch-conley's aside had a reason.** `ch-conley` block [5] printed that all three of
+its Conley indices have χ = 0 and that χ therefore separates nothing, recorded as a curiosity
+because χ is what a reader reaches for first. It is not a curiosity. All three quotients are built
+from the annulus, χ(A) = 0, and the two that differ — (ℤ,ℤ,0) and (0,ℤ,ℤ) — differ by a shift of
+**two** degrees, the unstable dimension. **χ is an alternating sum, so an even shift leaves it
+fixed.** χ was never going to see the difference: it is the wrong invariant there, not a weak one.
+Euler's construction answers *how many cells, counted with sign* — not *which cells, in which
+degree*. Block [3] computes χ by two independent routes, cell counts and Betti numbers, agreeing on
+six spaces: sphere 2, disk 1, torus 0, annulus 0, and both Conley quotients 0.
+
+**Euler's own statement and its hypothesis.** To Goldbach, 14 November 1750: *"In every solid
+enclosed by plane faces, the number of faces along with the number of solid angles exceeds the
+number of edges by two."* E230 (statement, 1750) and E231 (proof, 1751), both published 1758.
+Block [1] gives 2 on nine solids in integer arithmetic. Block [2] shows the hypothesis does work:
+a polyhedral torus gives **0** at every grid size tested, and so does the cylinder — **which is
+where Γ lives.** Richeson's chapter records that Euler's proof has a flaw, found and repaired in
+the century after; the observation stands.
+
+**The corpus's own field, and a misreading corrected.** Block [6]: ṙ = −(r−1)(r²+r−a), θ̇ = 1. On
+r = 1 the field is (0, +1), |F| = 1; on r₂ = 1.884652 it is (−7.9e−16, +1.884652), |F| = 1.884652.
+**The field does not vanish on either invariant circle** — ṙ does, θ̇ does not, and an invariant
+circle is not a fixed point. The only planar zero is the origin, every circle about it has index
+**exactly +1** from R = 0.3 to R = 10, and a small loop enclosing nothing has index 0. That is
+Strogatz Theorem 6.8.2 satisfied on the corpus's own equations.
+
+**And it joins ch-conley from the other side.** That chapter's no-go turned on the 3-D flow having
+no fixed point anywhere, because θ̇ ≡ 1. A surface admits a nowhere-zero field only when χ = 0. The
+cylinder's is 0 (block [2] counted it); the sphere's is 2 (block [3] computed it), which is why you
+cannot comb a hairy ball. The corpus's flow being zero-free and its surface being a cylinder are
+not two facts.
+
+**Königsberg — an attribution error, in someone else's ledger.** Hopkins and Wilson: **Euler did
+not draw the graph.** Graphs of that kind do not appear until the second half of the nineteenth
+century. The picture universally credited to him was drawn by someone else 130 years later and
+attributed backwards, and it has been repeated for a century by people in a position to check.
+Same class as `book6/ch-the-present-king-of-france.html`. Neither of this corpus's two Königsberg
+mentions repeats it, which is luck rather than diligence.
+
+**Not established.** Poincaré–Hopf, or the hairy ball theorem. Block [6] computes χ for two
+surfaces and indices for particular fields; the remark joining the zero-free flow to χ = 0 is a
+reading of two computed facts, not a derivation. Winding numbers are numerical quadrature landing
+within 1e-6 of integers — evidence, not proof. Euler's proof and the question of which hypotheses
+make the theorem true are not assessed. No priority claimed.
+
 # CORRECTION — "66 FILES THAT DO NOT EXIST" WAS ABSENCE FROM A SINGLE SEARCH (2026-09-17)
 
 **What was wrong.** The chapter, its index card, its verify script and the commit message all said
