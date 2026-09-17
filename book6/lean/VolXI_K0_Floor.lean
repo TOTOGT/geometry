@@ -5,7 +5,24 @@
 
   STATUS, STATED FIRST AND PLAINLY.
   ---------------------------------
-  This file has NOT been compiled. It was written against the Mathlib source
+  FIRST COMPILED 2026-09-17 against the vendored Mathlib at commit 81a5d257c8
+  (toolchain leanprover/lean4:v4.32.0) -- the exact commit this file was written
+  against, confirmed by `git log` in .lake/packages/mathlib. It did NOT
+  elaborate. Seven errors, all `unknownIdentifier`, all one cause: the API was
+  read correctly and namespaced wrongly. `GrothendieckGroup` is
+  `Algebra.GrothendieckGroup`. Adding `open Algebra` is the fix.
+
+  That is the good failure mode. The file claimed Mathlib has the pieces and
+  named them; the compiler agreed the pieces exist and disagreed about where.
+  WP-82's "Mathlib has no K-theory" survives as a statement about naming, which
+  is what §3 already said.
+
+  ONE `sorry` REMAINS and is declared below. Until it is discharged this file
+  does not clear WP-82's bar -- `#print axioms` will report `sorryAx` and that
+  is the honest reading.
+
+  The superseded status note follows, kept because it was the claim under test:
+  This file had NOT been compiled. It was written against the Mathlib source
   read at commit 81a5d257c8 (toolchain leanprover/lean4:v4.32.0) on
   2026-09-17, but no Lean toolchain was reachable from the machine that wrote
   it. Until someone runs
@@ -45,6 +62,16 @@ import Mathlib
 namespace PrincipiaOrthogona.VolXI
 
 open Function
+open Algebra          -- GrothendieckGroup lives in the `Algebra` namespace, not at
+                      -- the root. This was the whole of the 2026-09-17 error list:
+                      -- seven errors, one missing `open`.
+
+set_option autoImplicit false
+-- Mathlib turns autoImplicit off for exactly the reason it bit here. With it ON,
+-- an unknown identifier becomes a silently bound implicit variable, so
+-- `GrothendieckGroup M` reported "Function expected at GrothendieckGroup / but
+-- this term has type ?m.1" instead of "unknown identifier". The diagnosis was
+-- buried one layer down. Off, the first error names the real fault.
 
 /-! ### §1 · Instrument check
 
