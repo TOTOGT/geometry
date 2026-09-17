@@ -8133,3 +8133,73 @@ correction WP-82 needs is not a better ladder. `[OPEN]`
 Primary source now held and checkable: the 2018 printing, 532 pages, at the
 desk. Every page citation in WP-122 and `book7/ch-strogatz.html` was written
 without it and can now be verified against it. None has been.
+
+## 2026-09-17 · The map on page ten, and the count that was right about the wrong subject
+
+The `[OPEN]` from 2026-09-16 above — Strogatz's Figure 1.3.1 as a grid where a
+one-dimensional ladder can only say *higher* — is closed. `book7/ch-the-map-on-page-ten.html`
+places this corpus on that figure; `book7/ch-the-map-on-page-ten-verify.py` is
+eight blocks and passes with and without the PDF.
+
+**Two corrections to what this session believed about the figure.** The earlier
+note here was right that there are five columns, and the chapter as first drafted
+said four and called it eight cells. It is **five columns by two rows — ten
+cells**: `n = 1`, `n = 2`, `n ≥ 3`, `n >> 1`, `Continuum`, recovered from thirteen
+positioned glyph runs on the single line `x = 163.2`. And the first draft
+published a per-cell table for all sixty-one entries. It should not have. The page
+is set rotated and pypdf emits **one text run for a whole row-line spanning
+several columns** — `'Fixed points Pendulum Strange attra'` arrives as one string
+at one coordinate. So the *column* of an entry is not recoverable from the PDF,
+and the chapter now publishes the **row** (the linear and nonlinear glyph bands,
+`x ∈ [197,280]` and `x ∈ [310,458]`, are disjoint — exactly one of the 236 runs
+falls between them) plus only the **eight columns Strogatz states in prose**.
+Position is a figure's content; the strings are captions. A figure read through a
+text extractor loses the thing it exists to convey. `[FIXED before publication]`
+
+**The measurement.** 61 entries, entity-aware at HEAD: **44 occupied, 17 at
+zero**, and 8 of the 17 fall in the linear row, which has only 18 entries in it —
+RC circuit, RLC circuit, mass and spring, 2-body problem, coupled harmonic
+oscillators, equilibrium statistical mechanics, radioactive decay, viscous fluids.
+WP-82's missing floor, found in one pass, because those are the systems Strogatz
+puts on the page to give the rest of it a scale. The eight prose-anchored entries
+read **260, 119, 71, 69, 6, 3, 0, 0** — and the only two at zero are the RC and
+RLC circuits, the pair he uses to explain what the horizontal axis *means*.
+
+**A fourth failure mode of the counting instrument, now recorded in
+`tools/corpus_count.py`.** WP-82 §4 has three: wrong spelling, substring
+inflation, HTML entities. Each produces a visibly wrong number. This one has no
+symptom — **sense collision**: the string is right, the anchor is right, the
+entities are handled, the arithmetic is right, and the referent is a different
+subject.
+
+    entry              string   dynamical   other sense
+    Life                  151          11             –   (the English word)
+    Plasmas                93          35            31   (plasma cells, blood plasma)
+    Turbulent fluids       49          10            12   ("messy flow")
+    Economics              45          19            23   (project economics)
+    Acoustics              19           5             9   (archaeoacoustics)
+    shocks                 19           7             7   (price, income, bill)
+    Levinson                8           6             2   (Evans & Levinson, linguistics)
+
+`Life` is the figure's own punchline — Strogatz's hardest named cell — and 140 of
+its 151 files are the ordinary English word. Every count this corpus has published
+for a word with more than one sense in it was a string count wearing a sense's
+name. Figure 1.3.1 exposed this because the figure's cells are *senses*, not
+strings.
+
+**And the audit failed the same way on its first run.** The first companion
+pattern for `Plasmas` accepted **83 of 93** — it contained `reconnect` and
+`fusion`, which matched **304** and **43** times respectively while `tokamak`
+matched twice and `stellar plasma` once. That is WP-82's *second* failure mode,
+committed while auditing the fourth, and it would have promoted the false positive
+into a verified count. It was caught only because the block prints a per-term
+breakdown instead of a total. **Print breakdowns.** That is the transferable
+result of the day and it is worth more than the tables. `[FIXED]`
+
+**Queue.** Seventeen zeros, ranked in the chapter by how much machinery the corpus
+already owns. Two shapes recur: entries *occupied by person and empty by phrase*
+(Smale 12 files, Levinson 6, van der Pol 9 — and `forced nonlinear oscillator` 0,
+`anharmonic` 0), and a linear row whose gaps are the first systems in an
+undergraduate course. Fifty-four of the sixty-one entries have not been sense-audited;
+on the evidence of the seven that were, there is no reason to assume they are clean.
+`[OPEN]`

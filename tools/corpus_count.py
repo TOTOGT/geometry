@@ -29,6 +29,28 @@ that is plainly visible on the page.
      is not a corner case. Every published count for a name with a diacritic is
      low until it is taken through this module.
 
+  4. SENSE COLLISION (found 2026-09-17, book7/ch-the-map-on-page-ten-verify.py).
+     This module fixes 1-3. It cannot fix the fourth, and the fourth is the only
+     one with no symptom: the string is right, the anchor is right, the entities
+     are handled, the arithmetic is right, and the referent is a different
+     subject. Measured while placing the corpus on Strogatz's Figure 1.3.1:
+
+         entry     string   dynamical sense   other sense
+         Life         151                11             -   (the English word)
+         Plasmas       93                35            31   (plasma cells, blood)
+         Turbulence    49                10            12   ("messy flow")
+         Economics     45                19            23   (project economics)
+         Acoustics     19                 5             9   (archaeoacoustics)
+         shocks        19                 7             7   (price, income, bill)
+
+     Nothing about `files()` detects this, and nothing in this module will: only
+     a sense the pattern does not encode can. Callers publishing a count for a
+     word that has more than one sense in this corpus must audit it and print
+     BOTH numbers. The audit written for the six above failed by failure mode 2
+     on its first run -- a companion pattern containing `reconnect` and `fusion`
+     accepted 83 of the 93 plasma files -- and was caught only because the script
+     printed the per-term breakdown instead of the total. Print breakdowns.
+
 USE
 
     from tools.corpus_count import files, count      # or add tools/ to sys.path
