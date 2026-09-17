@@ -8459,3 +8459,46 @@ runs 18 checks with 0 failures. The sweep counted the wrong token. Same shape as
 the sense collision in `ch-the-map-on-page-ten`: right string, wrong referent,
 arithmetic correct. Caught before it was reported. **A sweep over scripts must
 count each script's own vocabulary, or read its exit code and nothing else.**
+
+## 2026-09-17 · the root's conventions curated, and the fourth ledger miss
+
+**Curated into CLAUDE.md** as `## Filename conventions at the root — Book 3`: a
+table covering all 301 root-level `.html` files. Chapters account for 126 —
+`chN-` 67, `ch{Greek}-` 27, `ch-` 27, `capitulo-` 2, plus 6 `sessao`/`session`
+IMPA pairs. The largest single body at the root is **`dm3-1NN-wNN.html`, 48 pages:
+three courses (101, 102, 103) of sixteen weeks each**, a teaching programme that
+no convention described. Also written down: `for-<venue>` (bienal, brazil-china,
+ichep), `series-<part>` (hub, intro, layer-map), and the generated `index-*`
+family. What remains outside the conventions is one-off pages named for their
+subject, which is the intended state rather than a gap.
+
+Two same-book duplicate pairs recorded as unresolved: `spectral-radius` /
+`spectral-radius-v2`, and `GameTheory_Full_Pack` / `GameTheory_Full_Pack.FIXED`.
+The `.FIXED` copy is one of `index-root`'s eight orphans and double-counts in any
+measurement touching game-theory vocabulary — it inflated the `shocks` sense audit
+earlier today. Left alone because both are same-book pairs where a version suffix,
+not a directory, carries the claim about which is current; the nine Book 3 / Book 4
+pairs resolved on newer-wins do not settle these.
+
+**The miss, recorded because it is the fourth of the same kind today.** This
+session described the root as sprawl, then reported that Book 3 was not in this
+repository and that its body was 24 pages in AXLE "on the wrong side of the
+canonical-HTML rule". `CLAUDE.md` § Site structure opens with
+`geometry/ root = Book 3 (G3) chapters, prelude, overture, portals`, four lines
+above where the new section was inserted. The section had been grepped for a
+heading and never read. **Withdrawn:** the canonical rule was never violated;
+Book 3's HTML is in geometry, at the root, since March.
+
+The other three misses today were the same shape — `vol1-proofs` proposed for an
+axiom check it has gated in CI since 25 August; `certify_rstar.py` queued for a
+DOI edit a canonical v1.1 had superseded; `tools/verify-audit/` unknown while
+claiming no machine-checked core existed. R19 said read the ledger and named four
+files. The rule needs the stronger form: **read the section, not its heading**, and
+`CLAUDE.md` § Site structure and § Where files live are part of the ledger.
+
+**One thing the misses did not cost.** `Projects/book/` holds 209 pages including
+the full Greek-operator set and is excluded from `corpus_roots.txt` as a working
+directory. All eighteen Figure 1.3.1 entries recorded as zero were tested against
+its 213 files: **eighteen for eighteen, still zero.** The seventeen gaps survive
+the addition, so `ch-the-map-on-page-ten`'s numbers hold and the exclusion cost
+nothing on that measurement.

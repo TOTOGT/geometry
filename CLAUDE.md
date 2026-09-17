@@ -922,6 +922,51 @@ Any new content added to G5 must be measured against this constraint before incl
 - Spiral map: `book4/living-book.html` — the G1–G5 hub
 - Standard typography: follow `prelude.html` (Georgia 18px, line-height 1.75, #e8e4d8)
 
+## Filename conventions at the root — Book 3
+
+The line above already says it: **`geometry/` root = Book 3.** It is stated there
+because it is load-bearing and gets forgotten — the top level predates `book4/`,
+`book6/` and `book7/`, since when it was written the whole repository was Book 3
+and later volumes got directories as they were opened. A session reading
+`index-root.html` is reading a book, not a junk drawer; its 292 rows are Book 3's
+own index. Treat every root-level page as curated content. This section adds what
+that section lacked: the conventions covering all 301 files.
+
+**301 `.html` files at the root.** Chapters account for 126 of them and the
+conventions below account for the rest. Anything still outside them is a one-off
+named for its subject, which is the intended state, not a gap.
+
+| Pattern | Count | What it is |
+|---|---|---|
+| `chN-<theme>.html` | 67 | Numbered chapter, no zero padding (`ch9-phi`, `ch4-neural`). |
+| `ch{Greek}-<theme>.html` | 27 | Operator chapter, mixed case (`chPI-recurrence`, `chEta-tribonacci`, `chRho-spectral`, `chT-tubulin`, `chΛ`→`chLambda-polylaminin`). Canonical for Greek-coded chapters. |
+| `ch-<name>.html` | 27 | Named chapter (`ch-lorenz-chaos`, `ch-belousov-zhabotinsky`, `ch-curie`). |
+| `capitulo-<theme>.html` | 2 | Portuguese chapter, paired with a `ch-` English one. |
+| `sessao{N}-…` / `session{N}-…` | 6 | IMPA session pairs, Portuguese / English. Intentionally bilingual — confirm before touching either side. |
+| **`dm3-1NN-wNN.html`** | **48** | **Course week page. Three courses — 101, 102, 103 — of sixteen weeks each, `w01`–`w16`. This is a 48-week teaching programme and it is the largest single body at the root.** |
+| `dm3-<topic>.html` | 4 | Other framework pages (`dm3brand`, and see the note on it under the registries). |
+| `for-<venue>.html` | 3 | Venue- or audience-specific page: `for-bienal`, `for-brazil-china`, `for-ichep`. |
+| `series-<part>.html` | 3 | Series apparatus: `series-hub`, `series-intro`, `series-layer-map`. |
+| `sample-chapter-<theme>.html` | — | Public demo chapter, paywall-facing. |
+| `*-machine.html`, `*-soundworks.html`, `*-resonance.html`, `*-wellness*` | 12 | Applied and wellness pages. |
+| `sim*.html` | 3 | Simulations. |
+| `index-*.html`, `master-index`, `directory`, `hub` | 20 | **Generated** — see the next section. Never hand-edit. |
+
+**Two duplicate pairs live at the root and are not resolved.**
+`spectral-radius.html` / `spectral-radius-v2.html`, and
+`GameTheory_Full_Pack.html` / `GameTheory_Full_Pack.FIXED.html` — the `.FIXED`
+copy is one of the eight orphans in `index-root` and double-counts in any corpus
+measurement that touches game-theory vocabulary. The nine Book 3 / Book 4 pairs
+were resolved on 2026-09-17 by newer-wins with links repointed; these two were
+not, because both are same-book pairs where the version suffix, not the
+directory, carries the claim about which is current.
+
+**`math.DS` appears in zero files.** The arXiv category this corpus's own subject
+sits under is named nowhere in it, and `docs/math-placement-map.md` has no row for
+Volume III. The material is present and heavy — 50 root files mention limit
+cycles, 16 mention Lorenz — so the gap is in the vocabulary and the map, not in
+the work.
+
 ## File indexes — generated, never hand-maintained
 
 `master-index.html` + `index-<folder>.html` (16 pages, repo root) are produced by
