@@ -1,3 +1,48 @@
+# THE PUBLISHED NORMAL FORM, AND THE HTML SYSTEM, COMPARED (2026-09-16)
+
+**Source.** The IMPA edition — *Principia Orthogona*, March 2026, ISBN 979-8-9954416-6-3,
+ORCID 0009-0000-6496-2186 — supplied as PDF. It prints the **universal contact normal form**:
+
+> ρ̇ = μ_max(1 − e^−βz)ρ + O(ρ²),  θ̇ = ω + O(ρ),  ż = ω − |μ_max|ρ²e^−βz + O(ρ³)
+
+with (μ_max, ω, β) named as the canonical invariants of the dm³ system, the corpus's instance
+being (−2, 1, 1), and "Transverse Lyapunov exponent: μ_max = −2" stated separately. WP-82 §3b
+instead states the contact-exact system on (ℝ²_{>0} × ℝ, α = dz − r²dθ). **Neither source prints
+the comparison**, so `book7/ch-conley-verify.py` gained block [8], which makes it exactly —
+expanding in ρ = r − 1 with u = e^−z as an indeterminate, over ℚ.
+
+| | order ≤ 1 in ρ |
+|---|---|
+| corpus ṙ | −2ρ + 2ρu |
+| published ρ̇ | −2ρ + 2ρu |
+| **identical** | λ(z) = −2(1 − e^−z) in both |
+| corpus ż | 1 + 2ρ |
+| published ż | 1 |
+| difference | **+2ρ** |
+
+**Both give ż = ω = 1 on Γ, exactly.** The +2ρ is not a discrepancy to resolve: α = dz − r²dθ
+forces ż = r²θ̇ = 1 + 2ρ + ρ² on the Reeb direction, where the normal form writes the constant ω.
+The published form is the ρ → 0 truncation; the §3b system is its contact-exact realisation.
+
+**Why it matters.** ch-conley's no-go uses only ż > 0 on Γ, and the published form gives
+ż|_Γ = ω for **every** ω > 0. So *no compact isolating neighbourhood contains any of Γ* is a
+property of the **canonical normal form as published in March 2026**, not of one HTML variant
+written later. The chapter carries this as a boxed statement before Part IV.
+
+**Priority note (R18).** The normal form, its three canonical invariants and μ_max = −2 are
+published with an ISBN and dated March 2026 — six months before the Strogatz reading. That is
+the corpus's own priority record for the object, independent of any textbook. It is a record of
+*what was derived here and when*; it is not a claim that the object is unmatched in the
+literature, and no such claim is made. The Conley index, its continuation property, Liénard's
+theorem and Poincaré–Bendixson remain classical and are cited as such wherever used.
+
+**Also, and it is the block firing as designed.** `ch-conley-verify.py` [7] asserted that Conley
+was named in exactly three files and applied in none, and said it would fail when the vocabulary
+was picked up. It failed the same day: ch-smale, ch-gelfand and ch-feigin all cite the chapter.
+The assertion now pins the part that does not churn — that WP-82 and ch-grothendieck.html, the
+two that named the candidate without checking it, are still present — and prints the composition.
+`classify()` gained `tooling` (for `tools/`) and `scaffolding` (for `CLAUDE.md`) buckets.
+
 # FEIGIN: THE FLOOR UNDER VOLUME XV'S CORRECTED SEED (2026-09-16)
 
 **What was built.** `book7/ch-feigin.html` and `book7/ch-feigin-verify.py` — 8 blocks, standard

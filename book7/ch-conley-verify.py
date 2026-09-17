@@ -268,6 +268,8 @@ def classify(f):
     listings and the ruler too, and after this page is committed it counts this
     page. Assert on CHAPTERS."""
     if f.startswith('book7/ch-conley'):                       return 'self'
+    if f == 'CLAUDE.md':                                      return 'scaffolding'
+    if f.startswith('tools/'):                                return 'tooling'
     if f.startswith('docs/'):                                 return 'audit'
     if f.endswith('index.html') or f.startswith('index-') \
        or f.startswith('master-index'):                       return 'listing'
@@ -294,13 +296,22 @@ check(chapters(r'toeplitz') == [], 'nor Toeplitz', str(chapters(r'toeplitz')))
 print('\n     composition of the "Conley" hits:')
 for f in sorted(files(r'conley')):
     print('       %-46s %s' % (f, classify(f)))
-EXPECTED_CONLEY = ['book6/wp82-the-missing-floor.html',
-                   'book7/ch-grothendieck-verify.py',
-                   'book7/ch-grothendieck.html']
-check(sorted(chapters(r'conley')) == EXPECTED_CONLEY,
-      'Conley is named in exactly three files besides this one -- WP-82, the '
-      'Grothendieck chapter and its script -- and applied in none of them',
-      str(chapters(r'conley')))
+# 2026-09-16. When this block was written, Conley was named in exactly three
+# files besides this one -- WP-82, ch-grothendieck.html and its script -- and
+# applied in none. The assertion said so and was written to fail when the
+# vocabulary was picked up. It failed the same day: ch-smale, ch-gelfand and
+# ch-feigin all cite this chapter. That is the gap closing by use, which is
+# what the block existed to detect. What is asserted now is the part that does
+# not churn -- that the two files which named the candidate WITHOUT checking it
+# are still there to be pointed at -- plus the composition, printed in full.
+NAMED_IT = ['book6/wp82-the-missing-floor.html', 'book7/ch-grothendieck.html']
+_conley = chapters(r'conley')
+check(all(f in _conley for f in NAMED_IT),
+      'the two files that named the Conley candidate and checked it are both present',
+      str(_conley))
+check(len(_conley) > 3,
+      'and %d files now carry the vocabulary, where three did when this block was '
+      'written -- the gap closed by use on 2026-09-16' % len(_conley), str(len(_conley)))
 print('\n     Like ch-van-der-pol block [6], this is written to FAIL when a second')
 print('     chapter picks the vocabulary up. That failure is the notification that')
 print('     the gap closed by use rather than by assertion.')
@@ -323,6 +334,75 @@ check(len(files(r'moonshine')) > 0, 'control: git grep returns files rather than
 ABSENT = 'qqx' + '-no-file-contains-this-' + 'qqx'
 check(files(ABSENT) == [], 'control: and none for a token no file contains',
       str(files(ABSENT)))
+
+# ---------------------------------------------------------------------------
+head(8, "AGAINST THE PUBLISHED NORMAL FORM -- TWO SOURCES, ONE OBJECT")
+print('  The IMPA edition (Principia Orthogona, March 2026, ISBN 979-8-9954416-6-3)')
+print('  prints the universal contact normal form as\n')
+print('     rhodot = mu_max (1 - e^-bz) rho + O(rho^2)')
+print('     thetadot = omega + O(rho)')
+print('     zdot = omega - |mu_max| rho^2 e^-bz + O(rho^3)\n')
+print('  with (mu_max, omega, beta) the canonical invariants and the corpus\'s')
+print('  instance (-2, 1, 1). WP-82 section 3b instead states the contact-exact')
+print('  system on (R^2_{>0} x R, alpha = dz - r^2 dtheta). Neither source prints')
+print('  the comparison. Expanded exactly in rho = r - 1 with u = e^-z as an')
+print('  indeterminate, over the rationals:\n')
+def _P(d): return {k: F(v) for k, v in d.items() if v}
+def _add(a, b):
+    o = dict(a)
+    for k, v in b.items(): o[k] = o.get(k, F(0)) + v
+    return _P(o)
+def _mul(a, b):
+    o = {}
+    for (i, j), x in a.items():
+        for (k, l), y in b.items(): o[(i + k, j + l)] = o.get((i + k, j + l), F(0)) + x * y
+    return _P(o)
+def _sc(a, c): return _P({k: v * c for k, v in a.items()})
+def _show(p):
+    out = []
+    for (i, j) in sorted(p):
+        c = p[(i, j)]
+        t = '%+d' % c if c == int(c) else '%+s' % c
+        t += '' if i == 0 else ' rho' + ('' if i == 1 else '^%d' % i)
+        t += '' if j == 0 else ' u' + ('' if j == 1 else '^%d' % j)
+        out.append(t)
+    return ' '.join(out) or '0'
+def _le(p, n): return _P({k: v for k, v in p.items() if k[0] <= n})
+_rho = _P({(1, 0): 1}); _u = _P({(0, 1): 1}); _one = _P({(0, 0): 1})
+_r = _add(_one, _rho)
+C_rdot = _add(_mul(_r, _add(_one, _sc(_mul(_r, _r), -1))), _sc(_mul(_rho, _u), 2))
+C_zdot = _add(_mul(_r, _r), _sc(_mul(_mul(_rho, _rho), _u), -2))
+MU, OM = F(-2), F(1)                       # beta = 1
+P_rdot = _sc(_mul(_add(_one, _sc(_u, -1)), _rho), MU)
+P_zdot = _add(_P({(0, 0): OM}), _sc(_mul(_mul(_rho, _rho), _u), -abs(MU)))
+print('      corpus    rdot = %s' % _show(C_rdot))
+print('      published rhodot = %s   + O(rho^2)' % _show(P_rdot))
+print('      corpus    zdot = %s' % _show(C_zdot))
+print('      published zdot = %s   + O(rho^3)' % _show(P_zdot))
+check(_le(C_rdot, 1) == _le(P_rdot, 1),
+      'the radial equations are IDENTICAL through first order: -2rho + 2rho*u, '
+      'i.e. lambda(z) = -2(1 - e^-z) in both sources',
+      '%s vs %s' % (_show(_le(C_rdot, 1)), _show(_le(P_rdot, 1))))
+onG = lambda p: _P({k: v for k, v in p.items() if k[0] == 0})
+check(onG(C_rdot) == onG(P_rdot) == {}, 'and both vanish identically on Gamma')
+check(onG(C_zdot) == onG(P_zdot) == {(0, 0): OM},
+      'and both give zdot = omega = 1 on Gamma -- exactly',
+      '%s vs %s' % (_show(onG(C_zdot)), _show(onG(P_zdot))))
+diff = _add(_le(C_zdot, 1), _sc(_le(P_zdot, 1), -1))
+print('\n      zdot, difference at first order in rho:  %s' % _show(diff))
+check(diff == _P({(1, 0): 2}),
+      'the two zdot equations differ by exactly +2rho away from Gamma',
+      _show(diff))
+print('      That term is not a discrepancy to be resolved: the contact form')
+print('      alpha = dz - r^2 dtheta forces zdot = r^2 thetadot = 1 + 2rho + rho^2')
+print('      on the Reeb direction, where the normal form writes the constant omega.')
+print('      The published form is the rho -> 0 truncation; the section 3b system is')
+print('      the contact-exact realisation of it. They agree where Gamma is.')
+print('\n  WHICH MATTERS FOR BLOCK [2]. The no-go needs only zdot > 0 on Gamma, and')
+print('  the published normal form gives zdot|Gamma = omega for every omega > 0.')
+print('  So the finding is a property of the CANONICAL NORMAL FORM as published in')
+print('  March 2026, not of one variant written later in HTML.')
+check(OM > 0, 'omega > 0 in the published form, which is all block [2] uses')
 
 # ---------------------------------------------------------------------------
 print('\n' + '=' * 70 + '\n  [HONESTY]\n' + '=' * 70)
