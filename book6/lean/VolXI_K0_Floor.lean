@@ -5,34 +5,35 @@
 
   STATUS, STATED FIRST AND PLAINLY.
   ---------------------------------
-  FIRST COMPILED 2026-09-17 against the vendored Mathlib at commit 81a5d257c8
-  (toolchain leanprover/lean4:v4.32.0) -- the exact commit this file was written
-  against, confirmed by `git log` in .lake/packages/mathlib. It did NOT
-  elaborate. Seven errors, all `unknownIdentifier`, all one cause: the API was
-  read correctly and namespaced wrongly. `GrothendieckGroup` is
-  `Algebra.GrothendieckGroup`. Adding `open Algebra` is the fix.
+  ELABORATES, 2026-09-17, against the vendored Mathlib at commit 81a5d257c8
+  (toolchain leanprover/lean4:v4.32.0). Zero errors. One warning, for the one
+  `sorry` declared in §2, and the axiom report reads:
 
-  That is the good failure mode. The file claimed Mathlib has the pieces and
-  named them; the compiler agreed the pieces exist and disagreed about where.
-  WP-82's "Mathlib has no K-theory" survives as a statement about naming, which
-  is what §3 already said.
+      'PrincipiaOrthogona.VolXI.grothendieckAddGroup_nat_equiv_int'
+          depends on axioms: [propext, sorryAx, Quot.sound]
 
-  ONE `sorry` REMAINS and is declared below. Until it is discharged this file
-  does not clear WP-82's bar -- `#print axioms` will report `sorryAx` and that
-  is the honest reading.
+  propext and Quot.sound are Lean's own; sorryAx is the declared gap. Every
+  other declaration in this file type-checks, which means §1 and §3 are no
+  longer claims about Mathlib's API -- they are uses of it.
 
-  The superseded status note follows, kept because it was the claim under test:
-  This file had NOT been compiled. It was written against the Mathlib source
-  read at commit 81a5d257c8 (toolchain leanprover/lean4:v4.32.0) on
-  2026-09-17, but no Lean toolchain was reachable from the machine that wrote
-  it. Until someone runs
+  It took three rounds and both faults were names, not mathematics:
+    round 1, seven errors -- `GrothendieckGroup` is `Algebra.GrothendieckGroup`
+    round 2, one error    -- the to_additive name is `GrothendieckAddGroup`;
+                             to_additive rewrites the token "Group" into
+                             "AddGroup" in place, it does not prefix
+    round 3, clean.
 
-      lake env lean book6/lean/VolXI_K0_Floor.lean
+  WHAT THIS SETTLES. WP-82 recorded "Mathlib has no K-theory, so Volume XI
+  cannot have a machine-checked core." The first half is true of the NAME and
+  the second half does not follow. This file uses the group completion, its
+  universal property, the class group, the class number and its positivity, and
+  the compiler accepts all of it. Volume XI's obstacle was never a missing
+  theory. It was a missing definition and a bridge lemma, and §2 names both.
 
-  and it elaborates, this is a draft and not evidence. WP-82's admissibility
-  bar for Volume XI is "a Lean file that elaborates clean against a pinned
-  Mathlib and reports its axioms." This file does not yet clear it. It exists
-  so that the distance to clearing it is known rather than guessed.
+  WHAT IT DOES NOT SETTLE. The `sorry` stands. Until it is discharged this file
+  does not clear WP-82's admissibility bar, which asks for a file that
+  elaborates clean AND reports its axioms without sorryAx. Half of that bar is
+  now met.
 
   WHAT WP-82 SAID, AND WHAT IS ACTUALLY THERE.
   --------------------------------------------
