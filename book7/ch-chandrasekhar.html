@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter C &middot; Subrahmanyan Chandrasekhar &middot; Principia Orthogona G7</title>
+<meta name="description" content="Seven fields and one question: when does a balance stop being the only one available? The Maclaurin-Jacobi bifurcation computed to seven places, and the same shape in a tree - with the tree's answer contested and the fluid's not."/>
+<script>MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --void:#04040a; --surface:#0c0d14; --card:#10111c;
+  --gold:#c9a84c; --teal:#0abab5; --green:#10b981;
+  --r-color:#9ca3f5; /* bifurcation violet */
+  --text:#e8e4d8; --dim:#6b6757; --rule:rgba(201,168,76,0.14);
+  --op-c:#60a5fa; --op-k:#a78bfa; --op-f:#f472b6; --op-u:#34d399;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:Georgia,serif;background:var(--void);color:var(--text);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-logo{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;flex-wrap:wrap;}
+.nav-links a{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+
+.hero{padding:5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(156,163,245,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-eyebrow{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--r-color);border:1px solid currentColor;padding:.2rem .7rem;display:inline-block;margin-bottom:2rem;}
+.op-chain{font-family:'Courier New',monospace;font-size:.75rem;letter-spacing:.15em;margin-bottom:1.8rem;display:flex;justify-content:center;gap:.7rem;flex-wrap:wrap;}
+.op-dot{display:inline-block;padding:.2rem .7rem;border-radius:2px;border:1px solid currentColor;}
+.op-c{color:var(--op-c)!important;border-color:var(--op-c)!important;}
+.op-k{color:var(--op-k)!important;border-color:var(--op-k)!important;}
+.op-f{color:var(--op-f)!important;border-color:var(--op-f)!important;}
+.op-u{color:var(--op-u)!important;border-color:var(--op-u)!important;}
+.op-active{background:rgba(156,163,245,.12)!important;color:var(--r-color)!important;border-color:var(--r-color)!important;}
+.hero h1{font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;color:var(--gold);letter-spacing:.04em;margin:.8rem 0 .5rem;line-height:1.1;}
+.hero-sub{font-size:1rem;color:var(--dim);font-style:italic;max-width:620px;margin:0 auto 1.5rem;}
+.value{font-family:'Courier New',monospace;font-size:.8rem;letter-spacing:.12em;color:rgba(156,163,245,.6);margin-top:.8rem;}
+
+.page{max-width:800px;margin:0 auto;padding:4rem 2rem 6rem;}
+h2{font-size:1.15rem;font-weight:400;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin:3.5rem 0 1.2rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;}
+p{margin-bottom:1.1rem;}
+em{color:var(--gold);font-style:normal;}
+
+.proof-block{border-left:3px solid var(--r-color);padding:1.4rem 1.8rem;margin:1.8rem 0;background:rgba(156,163,245,.04);}
+.proof-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--r-color);display:block;margin-bottom:.5rem;}
+.proof-title{font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.7rem;}
+.math-block{font-family:'Courier New',monospace;font-size:.85rem;color:var(--teal);background:var(--surface);border:1px solid rgba(10,186,181,.15);padding:.9rem 1.3rem;margin:1rem 0;overflow-x:auto;white-space:pre;line-height:1.7;}
+.qed{display:block;text-align:right;color:var(--r-color);font-size:1.1rem;margin-top:.6rem;}
+.sorry-box{border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.05);padding:1rem 1.4rem;margin:1.5rem 0;border-radius:2px;}
+.sorry-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#ef4444;display:block;margin-bottom:.4rem;}
+.gold-rule{border:none;border-top:1px solid rgba(201,168,76,.25);margin:2.5rem 0;}
+
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem 0;border-top:1px solid rgba(156,163,245,.2);margin-top:3rem;}
+.chapter-nav a{color:var(--r-color);text-decoration:none;font-family:'Courier New',monospace;font-size:.78rem;letter-spacing:.08em;border:1px solid rgba(156,163,245,.25);padding:.5rem 1rem;border-radius:2px;transition:all .2s;}
+.chapter-nav a:hover{background:rgba(156,163,245,.08);}
+footer{text-align:center;padding:2rem;font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.08em;color:var(--dim);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+.tag{font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid currentColor;padding:.1rem .4rem;border-radius:2px;white-space:nowrap;}
+.t-data{color:var(--teal);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">&#9884; Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="index.html">Book 7</a>
+    <a href="#question">The one question</a>
+    <a href="#jacobi">Jacobi</a>
+    <a href="#tree">The tree</a>
+    <a href="../book8/ch8-8-chandrasekhar.html">&sect;8.8 the limit</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Chapter C &middot; 18 September 2026</div>
+  <div class="op-chain">
+    <span class="op-dot op-c">C &middot; one balance</span>
+    <span>&#8728;</span>
+    <span class="op-dot op-k">K &middot; a load parameter</span>
+    <span>&#8728;</span>
+    <span class="op-dot op-active">F &middot; a second solution appears</span>
+    <span>&#8728;</span>
+    <span class="op-dot op-u">U &middot; the symmetry goes</span>
+  </div>
+  <h1>Subrahmanyan Chandrasekhar</h1>
+  <p class="hero-sub">1910&ndash;1995 &middot; Lahore &middot; Madras &middot; Cambridge &middot; Chicago. Seven fields, seven books, and underneath all of them one question asked over and over.</p>
+  <div class="value">Jacobi bifurcation at e = 0.8126700 &middot; computed here to 7 places</div>
+</div>
+
+<div class="page">
+
+<h2>1 &middot; A man who kept leaving</h2>
+
+<p>Chandrasekhar worked in a way almost nobody does. He would enter a field, work it for roughly a decade, write the definitive monograph, and then leave it &mdash; permanently &mdash; for something else.</p>
+
+<div class="math-block">1939  An Introduction to the Study of Stellar Structure
+1942  Principles of Stellar Dynamics
+1950  Radiative Transfer
+1961  Hydrodynamic and Hydromagnetic Stability
+1969  Ellipsoidal Figures of Equilibrium
+1983  The Mathematical Theory of Black Holes
+1995  Newton's Principia for the Common Reader</div>
+
+<p>Seven subjects that look unrelated on a library shelf. He said the pattern was about wanting a perspective on a whole area before it became habit. But read the list again with one question in mind and it stops looking like seven subjects.</p>
+
+<hr class="gold-rule">
+
+<h2>2 &middot; The meeting</h2>
+
+<p>On the boat from Madras to Cambridge in 1930, aged nineteen, he worked out what happens when you make a degenerate electron gas relativistic. The answer was that above a certain mass, degeneracy pressure cannot hold a star up at all &mdash; the result now in <a href="../book8/ch8-8-chandrasekhar.html">&sect;8.8 of Book VIII</a>.</p>
+
+<p>At the Royal Astronomical Society on 11 January 1935 he presented it. Arthur Eddington &mdash; the most eminent astrophysicist alive, who had read the work in advance and had been friendly about it &mdash; followed him to the podium and dismantled it in public, on grounds that were essentially aesthetic: a star collapsing without limit was absurd, therefore something must prevent it.</p>
+
+<p>Eddington was wrong and the room believed him. Chandrasekhar was twenty-four. He finished the stellar-structure book, published it in 1939, and did not return to the subject for thirty years.</p>
+
+<p>That is usually told as a story about injustice, and it is one. But it is also the reason the rest of this chapter exists, because what he did next was to spend those thirty years on a question the white dwarf had only half-asked.</p>
+
+<hr class="gold-rule">
+
+<h2 id="question">3 &middot; The one question</h2>
+
+<p>The white dwarf result is a <em>limit</em>. There is a mass beyond which no cold star exists, and beyond it nothing exists at all &mdash; the configuration simply has no continuation.</p>
+
+<p>But most of nature's critical points are not like that. Most of them look like this:</p>
+
+<p style="margin-left:1.5rem; border-left:2px solid var(--r-color); padding-left:1rem;"><em>A family of equilibria, parametrised by some load. Below a critical value there is one solution and it is symmetric. Above it there are two, the symmetric one is still a solution, and it is no longer the stable one.</em></p>
+
+<p>Nothing breaks at the critical value. The configuration does not fail. <strong>It stops being unique.</strong> And the interesting question is not <em>when</em> but <em>along which branch</em>.</p>
+
+<p>That is a bifurcation, and it is what Hydrodynamic Stability is about, and Ellipsoidal Figures, and a good deal of the black hole book. Read the list in &sect;1 again and it is one subject.</p>
+
+<hr class="gold-rule">
+
+<h2 id="jacobi">4 &middot; The cleanest example he left</h2>
+
+<p>Take a mass of incompressible fluid, held together by its own gravity, rotating uniformly. Give it no angular momentum and it is a sphere. Spin it and it flattens into an oblate spheroid &mdash; a <em>Maclaurin spheroid</em>, worked out in 1742, one for every eccentricity $e$:</p>
+
+$$\frac{\Omega^2}{\pi G\rho} \;=\; \frac{2\sqrt{1-e^2}}{e^3}(3-2e^2)\arcsin e \;-\; \frac{6(1-e^2)}{e^2}$$
+
+<p>That sequence runs all the way to $e=1$, a disc. For a century it looked like the whole story. It is not. In 1834 Jacobi found that <em>triaxial</em> ellipsoids &mdash; three unequal axes, not bodies of revolution at all &mdash; can also rotate in equilibrium, and their sequence touches the Maclaurin sequence at one point.</p>
+
+<p>Where? The Jacobi condition is $a_1^2a_2^2A_{12} = a_3^2A_3$, with the $A$'s the ellipsoidal index symbols. Evaluate it <em>on</em> the axisymmetric sequence and solve:</p>
+
+<div class="proof-block">
+  <span class="proof-label">Computed &mdash; 7 places, against Chandrasekhar 1969</span>
+  <div class="proof-title">$e_{\rm bif} = 0.8126700$, &nbsp;$\Omega^2/\pi G\rho = 0.3742297$, &nbsp;$a_3/a_1 = 0.5827242$</div>
+  <p>Below that eccentricity the spheroid is the only figure there is. Above it there are two, and the symmetric one is no longer the stable one. A self-gravitating body stops being a body of revolution &mdash; not because anything gave way, but because a second solution came into existence.</p>
+  <span class="qed">&#8718;</span>
+</div>
+
+<p>(The index symbols satisfy $A_1+A_2+A_3=2$ identically, whatever the axes. The script checks that at three shapes before it trusts a single quadrature. An identity that costs nothing is the cheapest insurance there is.)</p>
+
+<hr class="gold-rule">
+
+<h2>5 &middot; Two critical points &mdash; and the physics picks</h2>
+
+<p>The Maclaurin sequence has a <em>second</em> distinguished point. $\Omega^2$ does not increase forever along it: it peaks at $e = 0.9299557$ and then falls. Past there, a flatter spheroid spins <em>slower</em>.</p>
+
+<div class="math-block">bifurcation        e = 0.8126700   &Omega;&sup2; = 0.3742297
+&Omega;&sup2; maximum       e = 0.9299557   &Omega;&sup2; = 0.4493314</div>
+
+<p>Two different critical points on one sequence. Which one does a star meet?</p>
+
+<p>It depends on what you hold. Spin a body up at fixed angular <em>velocity</em> and the maximum at 0.930 is the wall. But add angular <em>momentum</em> &mdash; which is what accretion actually does &mdash; and angular momentum is still rising at $e = 0.813$ and keeps rising past 0.930. So an accreting body passes the bifurcation first and leaves the symmetric branch long before the maximum is anywhere near.</p>
+
+<p>Same body, same equations, two answers to "when does it go unstable," and the question is underspecified until you say what is being held fixed. <em>Chandrasekhar wrote a book about that distinction.</em> It is the kind of thing that looks like pedantry until it decides your answer.</p>
+
+<hr class="gold-rule">
+
+<h2 id="tree">6 &middot; The tree is solving the same kind of problem</h2>
+
+<p>Now leave astrophysics entirely.</p>
+
+<p>A tree grows upward. It is a column loaded by its own weight, and a column loaded by its own weight has a critical height. Below it, straight is the only shape. Above it, straight is still a solution and is no longer the stable one, and a bent shape exists.</p>
+
+<p>Greenhill solved this in 1881, and the answer comes out of a Bessel function. The critical height is set by the first zero of $J_{-1/3}$:</p>
+
+$$h_c = \left(\tfrac94 z^2\right)^{1/3}\left(\frac{EI}{\rho g A}\right)^{1/3}, \qquad z = 1.8663509$$
+
+$$\Rightarrow\quad h_c = 0.7882846\left(\frac{E}{\rho g}\right)^{1/3}D^{2/3}$$
+
+<p>For oak-like wood &mdash; $E \approx 11$ GPa, $\rho \approx 700$ kg/m³ &mdash; a half-metre trunk could stand 58 metres before buckling under nothing but itself.</p>
+
+<p>Invert $h_c \propto D^{2/3}$ and you get $D \propto h^{3/2}$: McMahon's <em>elastic similarity</em>, the proposal that trees are built in fixed proportion to their own buckling height.</p>
+
+<p>And this is a pitchfork, in the same technical sense as &sect;4. A family of equilibria, one load parameter, a symmetry (straightness), a critical value where a second branch appears and the symmetric one stops being stable. Nothing breaks. It stops being unique.</p>
+
+<hr class="gold-rule">
+
+<h2>7 &middot; Except the tree's answer is contested, and the fluid's is not</h2>
+
+<p>Here is where the chapter has to be careful, because the parallel is real and it is easy to oversell.</p>
+
+<p>Leonardo, around 1500, wrote down what happens at a fork: the daughter cross-sections sum to the parent's. In modern terms $\sum d_i^{\Delta} = d_{\rm parent}^{\Delta}$ with $\Delta = 2$. Measured across many species, $\Delta$ runs from about 1.8 to 2.3. Three mechanisms compete to explain it:</p>
+
+<div class="math-block">hydraulic (pipe model, Murray's law)   &Delta; = 2 or 3
+elastic similarity (McMahon 1973)      from buckling, &sect;6
+wind-induced stress (Eloy 2011)        1.93 &lt; &Delta; &lt; 2.21</div>
+
+<p><a href="https://arxiv.org/abs/1105.2591">Eloy (2011)</a>, who derived the exponent from the requirement of constant fracture probability under wind, <em>rejects both of the others</em>: the sapwood can be as little as 5% of a mature branch's cross-section, so hydraulics is unlikely to govern the whole architecture; and elastic similarity assumes trees respond to branch deflection, which they have no evident way to sense.</p>
+
+<p>So the tree is indeed solving a balance problem. But which balance &mdash; its own weight, its plumbing, or the wind &mdash; is an open question, and the measured range of $\Delta$ is wide enough to accommodate all three answers.</p>
+
+<p>Compare &sect;4, where one integral gives $0.8126700$ and there is nothing to argue about.</p>
+
+<div class="sorry-box">
+  <span class="sorry-label">What is shared, stated narrowly</span>
+  <p><strong>Literally shared:</strong> an equilibrium family with one load parameter; a symmetry held by the family; a critical value where a second branch appears and the symmetric one stops being stable; and the fact that nothing fails there.</p>
+  <p><strong>Not shared:</strong> the equations &mdash; incompressible self-gravitating fluid on one side, Euler&ndash;Bernoulli beams on the other, with no map between them. Not the numbers: 0.8126700 and 1.8663509 have nothing to do with each other. And not the epistemic status &mdash; &sect;4 is a computation, &sect;7 is a controversy.</p>
+  <p>A corpus that let <em>both are bifurcations</em> slide into <em>both are the same mathematics</em> would be doing numerology with a better vocabulary.</p>
+</div>
+
+<hr class="gold-rule">
+
+<h2>8 &middot; Why he is in this gallery</h2>
+
+<p>Because the method is portable and the results are not.</p>
+
+<p>Take a configuration. Find the parameter it is loaded by. Find where it stops being the only solution. Name the branch it leaves along. Then &mdash; and this is the part most people skip &mdash; say precisely what is being held fixed, because otherwise the question has more than one answer and you will get the wrong one confidently.</p>
+
+<p>He did that to rotating fluids, to convecting layers, to magnetised plasmas, to Couette flow, to perturbed black holes, and in the end to Newton's propositions. The tree is doing it too, in a problem he never looked at, with an answer still being argued over.</p>
+
+<p>He got the Nobel in 1983, forty-eight years after the meeting, partly for the work Eddington had laughed at. He kept editing the <em>Astrophysical Journal</em> for nineteen years, and finished the Principia book in the last year of his life.</p>
+
+<hr class="gold-rule">
+
+<h2>9 &middot; What is open</h2>
+
+<p>Six gaps in the script. The one that matters most: <strong>stability is not computed.</strong> &sect;4 finds where the Jacobi branch <em>meets</em> the Maclaurin sequence. It does not compute which branch is stable on which side &mdash; that needs the second variation of the energy &mdash; and it does not distinguish viscous from dissipationless stability, which for this very sequence give <em>different</em> critical points. Chandrasekhar's book is largely about that difference, and this chapter has not earned it yet.</p>
+
+<p style="color:var(--dim);font-size:.9rem;margin-top:2rem;">Producing script: <code>book7/ch-chandrasekhar-verify.py</code> &mdash; 7 sections, 6 gaps, runs in 0.7s. <span class="tag t-data">CITED</span>: Chandrasekhar, <em>Ellipsoidal Figures of Equilibrium</em> (1969) for the published bifurcation values; <a href="https://arxiv.org/abs/1105.2591">Eloy, Phys. Rev. Lett. 107, 258101 (2011)</a> for the branching exponents and the rejection of the hydraulic and elastic-similarity accounts. The Chandrasekhar limit is deliberately <em>not</em> in this chapter &mdash; a limit and a branch point are different things &mdash; and is derived in <a href="../book8/ch8-8-chandrasekhar.html">Book VIII &sect;8.8</a>, with its lower companion in <a href="../book8/ch8-8b-brown-dwarfs.html">&sect;8.8b</a>.</p>
+
+<div class="chapter-nav">
+  <a href="index.html">Book 7 &middot; contents</a>
+  <a href="../book8/ch8-8-chandrasekhar.html">&sect;8.8 &middot; the limit &rarr;</a>
+</div>
+
+</div>
+
+<footer>
+  Principia Orthogona &middot; Book 7 &middot; <a href="../index.html">index</a> &middot; G6 LLC
+</footer>
+
+</body>
+</html>
