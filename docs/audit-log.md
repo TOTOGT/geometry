@@ -8630,3 +8630,102 @@ session's; this entry records that it was checked against the file and holds.
 **What is not established here.** Whether `grossi-ops.github.io/TO` is deployed
 from a repository anyone still edits, and what else among the 64 lines of drift
 between the two copies matters. `[OPEN]`
+
+---
+
+## 2026-09-18 · Auditing grossi-ops.github.io/TO — the equations were the typo, and the Reeb field is not the helix
+
+Full audit of the TO hub at the author's request, after the r★ correction was made
+but landed on a path the site does not serve. `tools/to_hub_verify.py`, stdlib
+only, five blocks, exit 0.
+
+### The deploy, first
+
+Pages serves this repo from `/docs`. The corrected file went to the repository
+root, so the live page never changed. Three copies existed at the moment of the
+audit — root `index.html` with r★ = 0.77594058, and `docs/index.html` and
+`tornhub.html` both still at 0.773, with `docs/index.html` the one being served.
+**A correction that lands on an unserved path is indistinguishable from no
+correction.** This is the same class as the `book4/hub.html` finding of
+2026-09-16, one level further in: there the repository was right and the copy was
+stale; here the copy was right and the served file was stale.
+
+### The equations were the typo, not the constants  `[VERIFIED]`
+
+The page printed ṙ = r(1−r²) + 2(r−1)·e^(−r) and ż = r² − 2(r−1)²·e^(−r), and two
+lines below printed λ(z) = −2(1−e^(−z)) → μ_max = −2. Those cannot both hold, and
+the arithmetic says which is wrong:
+
+| reading | f′(1) at Γ | inner zero of ṙ |
+|---|---|---|
+| as printed, e^(−r) | **−2 + 2/e = −1.264241118** | **0.641494576** |
+| e^(−z) | −2(1−e^(−z)) exactly, → −2 as z→∞ | — |
+
+So with e^(−z) the page's own λ and μ_max are exact; with e^(−r) neither holds and
+r★ is not a zero at all (ṙ(0.77594058) = +0.1025). **The constants were right and
+the exponent was wrong.** This also independently confirms the coupling erratum
+recorded in the handoff — the e^(−r) system's inner boundary is ≈0.641 — without
+appeal to `certify_rstar.py` v1.1, which could not be found: the path the handoff
+names does not exist, and none of the nine copies on this desk carries "v1.1",
+"CANONICAL" or any erratum text. `[OPEN]`
+
+### The Reeb field is not the helix — and the helix is Legendrian  `[VERIFIED]`
+
+Two pages in this corpus say the helical attractor is an orbit of the Reeb field.
+For α = dz − r²dθ the Reeb field is R = ∂_z — α(R) = 1 and ι_R dα = 0, both
+checked — and its integral curves are (r₀, θ₀, z₀+t), holding r and θ **constant**.
+That is a vertical line: no winding, no period, not a helix.
+
+The helix is real and belongs to the **dynamics**: on Γ = {r=1} the dm³ flow has
+ṙ = 0, θ̇ = 1, ż = 1, so the orbit is (1, t, z₀+t), a circular helix of pitch 2π,
+which is where T* = 2π comes from.
+
+And the contact form supplies something sharper than the claim it was miscredited
+with: **Γ is Legendrian.** α(∂_θ + ∂_z) = 1 − r², which vanishes exactly at r = 1
+and nowhere else in that family. The limit cycle of the dynamics sits precisely on
+the Legendrian locus of α. Whether that is construction or coincidence of the
+chosen α is not established here. `[OPEN]`
+
+The correction is therefore not to delete the helix, which is what "the name is
+wrong" would suggest, but to say **which flow it belongs to**. The defect is a
+conflation of two vector fields on one manifold, not a mislabelled curve.
+
+### The Lean, stated exactly
+
+The file kernel-checks. That was never in question and the page may say so. What
+the kernel certifies is narrower than the page claimed:
+
+- `AXLE/NASA/MoonBase/AXLE_lean_files/Chain_updated.lean` has **no sorry** and
+  **three** axioms — `inner_basin_is_asymmetric`, `outer_basin_unbounded`,
+  `poincare_collatz`. The page said two and never named the third. An axiom is
+  accepted *by being assumed*, so `#print axioms` is the verdict and the absence
+  of `sorry` is not.
+- `GTCT/Chain_updated.lean` is an earlier, divergent copy of the same filename in
+  which `spiral_return_exists` and `poincare_collatz` are real `sorry`s. Two files,
+  one name, opposite status — R9 in Lean.
+- **`spiral_return_exists` assumes its conclusion.** It takes
+  `h_second_circuit : G.iter 128 x₀ ≠ x₀` and closes the goal with
+  `exact h_second_circuit`; `h_nontrivial` is never used. The prose said it proves
+  "the G⁶⁴-orbit does not return to x₀ — the circuit is generative, not periodic."
+  It proves the implication, not the antecedent. The earlier copy is honest about
+  this in its own comment — "requires the full dynamics of G; left as sorry pending
+  AXLE integration" — and the later copy closed it by promoting the missing step to
+  a hypothesis and marking it `CLOSED`.
+- The cited source path `GTCT/lean/GTCT/Operators/Chain_updated.lean` does not
+  exist. `g64_equals_two_to_6` does not exist in either file.
+
+**A theorem that assumes its conclusion still kernel-checks.** That is the whole
+reason the gate reads `#print axioms` and a human reads the hypotheses.
+
+### Everything else corrected on the page
+
+ε₀ = 1/3 relabelled as the Grönwall saturation radius rather than a measured basin
+edge (WP-122); the four-constant "hierarchy" marked as four constants measuring
+three different things; "these are exact mathematical identities" replaced, since
+the parameters differ row by row and identity would require them to agree;
+"17 orders of magnitude" qualified against a table whose ω spans about four; the
+anyon paragraph corrected — non-abelian anyons were created in **2023**
+(Quantinuum May 2023, Google Quantum AI and Cornell after; Quanta reported it
+9 May 2023), not 28 February 2026, and the priority claim is withdrawn rather than
+reworded, because the physics was three years earlier; the street address removed
+from the footer.
