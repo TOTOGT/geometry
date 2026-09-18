@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter &phi;R &middot; The Fraction That Knows &phi; &middot; Principia Orthogona G7</title>
+<meta name="description" content="A continued fraction of nothing but 1s and powers of q, evaluated at e^-2pi, turns out to be a root of a quadratic over Q(sqrt5). The golden ratio is not decoration on it. It is forced."/>
+<script>MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --void:#04040a; --surface:#0c0d14; --card:#10111c;
+  --gold:#c9a84c; --teal:#0abab5; --green:#10b981;
+  --r-color:#f97316; /* Ramanujan orange — the colour of Madras */
+  --text:#e8e4d8; --dim:#6b6757; --rule:rgba(201,168,76,0.14);
+  --op-c:#60a5fa; --op-k:#a78bfa; --op-f:#f472b6; --op-u:#34d399;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:Georgia,serif;background:var(--void);color:var(--text);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-logo{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;flex-wrap:wrap;}
+.nav-links a{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+
+.hero{padding:5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(249,115,22,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-eyebrow{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--r-color);border:1px solid currentColor;padding:.2rem .7rem;display:inline-block;margin-bottom:2rem;}
+.op-chain{font-family:'Courier New',monospace;font-size:.75rem;letter-spacing:.15em;margin-bottom:1.8rem;display:flex;justify-content:center;gap:.7rem;flex-wrap:wrap;}
+.op-dot{display:inline-block;padding:.2rem .7rem;border-radius:2px;border:1px solid currentColor;}
+.op-c{color:var(--op-c)!important;border-color:var(--op-c)!important;}
+.op-k{color:var(--op-k)!important;border-color:var(--op-k)!important;}
+.op-f{color:var(--op-f)!important;border-color:var(--op-f)!important;}
+.op-u{color:var(--op-u)!important;border-color:var(--op-u)!important;}
+.op-active{background:rgba(249,115,22,.12)!important;color:var(--r-color)!important;border-color:var(--r-color)!important;}
+.hero h1{font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;color:var(--gold);letter-spacing:.04em;margin:.8rem 0 .5rem;line-height:1.1;}
+.hero-sub{font-size:1rem;color:var(--dim);font-style:italic;max-width:620px;margin:0 auto 1.5rem;}
+.value{font-family:'Courier New',monospace;font-size:.8rem;letter-spacing:.12em;color:rgba(249,115,22,.6);margin-top:.8rem;}
+
+.page{max-width:800px;margin:0 auto;padding:4rem 2rem 6rem;}
+h2{font-size:1.15rem;font-weight:400;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin:3.5rem 0 1.2rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;}
+p{margin-bottom:1.1rem;}
+em{color:var(--gold);font-style:normal;}
+
+.proof-block{border-left:3px solid var(--r-color);padding:1.4rem 1.8rem;margin:1.8rem 0;background:rgba(249,115,22,.04);}
+.proof-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--r-color);display:block;margin-bottom:.5rem;}
+.proof-title{font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.7rem;}
+.math-block{font-family:'Courier New',monospace;font-size:.85rem;color:var(--teal);background:var(--surface);border:1px solid rgba(10,186,181,.15);padding:.9rem 1.3rem;margin:1rem 0;overflow-x:auto;white-space:pre;line-height:1.7;}
+.qed{display:block;text-align:right;color:var(--r-color);font-size:1.1rem;margin-top:.6rem;}
+.sorry-box{border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.05);padding:1rem 1.4rem;margin:1.5rem 0;border-radius:2px;}
+.sorry-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#ef4444;display:block;margin-bottom:.4rem;}
+.gold-rule{border:none;border-top:1px solid rgba(201,168,76,.25);margin:2.5rem 0;}
+
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem 0;border-top:1px solid rgba(249,115,22,.2);margin-top:3rem;}
+.chapter-nav a{color:var(--r-color);text-decoration:none;font-family:'Courier New',monospace;font-size:.78rem;letter-spacing:.08em;border:1px solid rgba(249,115,22,.25);padding:.5rem 1rem;border-radius:2px;transition:all .2s;}
+.chapter-nav a:hover{background:rgba(249,115,22,.08);}
+footer{text-align:center;padding:2rem;font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.08em;color:var(--dim);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">&#9884; Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="index.html">Book 7</a>
+    <a href="ch-ramanujan.html">&larr; Chapter R</a>
+    <a href="ch-hardy.html">Chapter H</a>
+    <a href="#five">Why the 5</a>
+    <a href="#letter">The letter</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Chapter &phi;R &middot; 18 September 2026</div>
+  <div class="op-chain">
+    <span class="op-dot op-c">C &middot; a q-series</span>
+    <span>&#8728;</span>
+    <span class="op-dot op-k">K &middot; one special point</span>
+    <span>&#8728;</span>
+    <span class="op-dot op-active">F &middot; a quadratic</span>
+    <span>&#8728;</span>
+    <span class="op-dot op-u">U &middot; &phi;</span>
+  </div>
+  <h1>The Fraction That Knows &phi;</h1>
+  <p class="hero-sub">Nothing in it but ones and powers of $q$. Evaluate it at one particular place and it becomes a root of a quadratic &mdash; and the quadratic is the golden ratio's.</p>
+  <div class="value">R(e<sup>&minus;2&pi;</sup>) &middot; 1/R &minus; R = 1 + &radic;5 = 2&phi; &middot; verified to 118 places</div>
+</div>
+
+<div class="page">
+
+<h2>1 &middot; The most innocent object on the page</h2>
+
+<p>Here is a continued fraction. It has no constants in it. Just 1s, and powers of a variable:</p>
+
+$$R(q) \;=\; \cfrac{q^{1/5}}{1 + \cfrac{q}{1 + \cfrac{q^2}{1 + \cfrac{q^3}{1 + \ddots}}}}$$
+
+<p>Feed it a number smaller than 1 and it converges. Nothing about it suggests it knows anything.</p>
+
+<p>Now pick a value of $q$. Not a round one &mdash; a transcendental one:</p>
+
+$$q = e^{-2\pi} = 0.001867442731707988814\ldots$$
+
+<p>An infinite nest of fractions, fed a transcendental input. You should get a number with no structure at all. Here is what you get:</p>
+
+$$R(e^{-2\pi}) = 0.2840790438404122960282918323931261690910\ldots$$
+
+<p>Which looks like nothing. So let us ask it a question.</p>
+
+<h2>2 &middot; Ask it for its polynomial</h2>
+
+<p>Take that number, square it, and try this combination:</p>
+
+$$R^2 + (1+\sqrt 5)\,R - 1$$
+
+<p>At 120-digit precision, that expression evaluates to</p>
+
+$$-8 \times 10^{-120}$$
+
+<p>which is zero to every digit the instrument has. <strong>$R(e^{-2\pi})$ is a root of a quadratic.</strong></p>
+
+<p>And if it is a root of a quadratic, you can solve for it the way you solved for roots at school:</p>
+
+$$R = \frac{-(1+\sqrt 5) + \sqrt{(1+\sqrt5)^2 + 4}}{2}$$
+
+<p>That recovers all 120 digits. An infinite continued fraction, reproduced exactly by the quadratic formula.</p>
+
+<h2>3 &middot; The same thing, said so you can see it</h2>
+
+<p>Divide that quadratic through by $R$ and rearrange. What it says is:</p>
+
+$$\frac{1}{R} - R \;=\; 1 + \sqrt 5 \;=\; 2\varphi$$
+
+<p>Check it numerically &mdash; both sides come out $3.2360679774997896964091736687\ldots$, agreeing to 118 places.</p>
+
+<div class="proof-block">
+<span class="proof-label">The statement</span>
+<div class="proof-title">A continued fraction differs from its own reciprocal by exactly twice the golden ratio</div>
+<p>No approximation. No fitting. $\varphi$ is not a number that happens to be nearby &mdash; it is the number this object was always going to produce.</p>
+<span class="qed">&#8627; verified to 118 places &middot;</span>
+</div>
+
+<h2>4 &middot; Is it luck?</h2>
+
+<p>Fair question. $e^{-2\pi}$ is one point among infinitely many. Try four others and compute $1/R - 1 - R$, which should be $\sqrt 5 = 2.2360679\ldots$ if the pattern is real:</p>
+
+<table style="width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:.78rem;margin:1.2rem 0;">
+<tr style="background:var(--surface);">
+  <th style="padding:.5rem .8rem;border:1px solid var(--rule);color:var(--gold);text-align:left;">$q$</th>
+  <th style="padding:.5rem .8rem;border:1px solid var(--rule);color:var(--gold);text-align:left;">$1/R - 1 - R$</th>
+  <th style="padding:.5rem .8rem;border:1px solid var(--rule);color:var(--gold);text-align:left;"></th></tr>
+<tr><td style="padding:.45rem .8rem;border:1px solid var(--rule);">$e^{-\pi}$</td><td style="padding:.45rem .8rem;border:1px solid var(--rule);">0.4438792507555781&hellip;</td><td style="padding:.45rem .8rem;border:1px solid var(--rule);"></td></tr>
+<tr><td style="padding:.45rem .8rem;border:1px solid var(--rule);color:var(--r-color);"><strong>$e^{-2\pi}$</strong></td><td style="padding:.45rem .8rem;border:1px solid var(--rule);color:var(--r-color);"><strong>2.2360679774997896&hellip;</strong></td><td style="padding:.45rem .8rem;border:1px solid var(--rule);color:var(--r-color);"><strong>$= \sqrt5$</strong></td></tr>
+<tr><td style="padding:.45rem .8rem;border:1px solid var(--rule);">$e^{-3\pi}$</td><td style="padding:.45rem .8rem;border:1px solid var(--rule);">5.4347699048208446&hellip;</td><td style="padding:.45rem .8rem;border:1px solid var(--rule);"></td></tr>
+<tr><td style="padding:.45rem .8rem;border:1px solid var(--rule);">$e^{-4\pi}$</td><td style="padding:.45rem .8rem;border:1px solid var(--rule);">11.264324681743790&hellip;</td><td style="padding:.45rem .8rem;border:1px solid var(--rule);"></td></tr>
+<tr><td style="padding:.45rem .8rem;border:1px solid var(--rule);">$e^{-2\pi\sqrt5}$</td><td style="padding:.45rem .8rem;border:1px solid var(--rule);">15.548491078846857&hellip;</td><td style="padding:.45rem .8rem;border:1px solid var(--rule);"></td></tr>
+</table>
+
+<p>One point out of five. It is not generic. Something is true at $e^{-2\pi}$ that is false a millimetre away.</p>
+
+<h2 id="five">5 &middot; Why there is a 5 in it at all</h2>
+
+<p>You may have wondered about the $q^{1/5}$ on top. It looks arbitrary. It is the whole explanation.</p>
+
+<p>There are two famous series, discovered by Rogers in 1894 and by Ramanujan independently:</p>
+
+$$G(q) = \sum_{n\ge 0}\frac{q^{n^2}}{(q;q)_n} = \prod_{n\ge 0}\frac{1}{(1-q^{5n+1})(1-q^{5n+4})}$$
+
+$$H(q) = \sum_{n\ge 0}\frac{q^{n^2+n}}{(q;q)_n} = \prod_{n\ge 0}\frac{1}{(1-q^{5n+2})(1-q^{5n+3})}$$
+
+<p>A sum over partitions on the left; a product over residue classes <em>mod 5</em> on the right. Both verified here, sum against product, to over 100 places.</p>
+
+<p>And the continued fraction is not a separate object at all:</p>
+
+$$R(q) = q^{1/5}\,\frac{H(q)}{G(q)}$$
+
+<p>Also checked, to 118 places. So the $1/5$ in the exponent is the 5 in $5n+1$, $5n+4$, $5n+2$, $5n+3$. The four residue classes mod 5 that are not $0$, split into two pairs.</p>
+
+<div class="proof-block">
+<span class="proof-label">The reveal</span>
+<div class="proof-title">Every 5 in this chapter is the same 5</div>
+<p>The residue classes are mod 5. So $R$ carries $q^{1/5}$. So the field that shows up is $\mathbb{Q}(\sqrt5)$. And $\varphi = \tfrac{1+\sqrt5}{2}$ generates the ring of integers of that field.</p>
+<p>The golden ratio is not a guest. It is what $\mathbb{Q}(\sqrt5)$ looks like when you write it down.</p>
+<span class="qed">&#8627; one 5, four appearances &middot;</span>
+</div>
+
+<h2 id="letter">6 &middot; The letter</h2>
+
+<p>On 16 January 1913 an unknown clerk in Madras posted a list of results to a Cambridge professor. Among them was the value of this fraction at $e^{-2\pi}$, written as</p>
+
+$$R(e^{-2\pi}) = \sqrt{\frac{5+\sqrt5}{2}} - \frac{1+\sqrt5}{2}$$
+
+<p>and a second one, at $e^{-2\pi\sqrt5}$, carrying a $5^{3/4}$ and a fifth root. Both verified here, to 119 and 118 places.</p>
+
+<p>Hardy's account of reading them is the most quoted sentence in his correspondence, and it is worth having exactly:</p>
+
+<div class="proof-block">
+<span class="proof-label">Hardy</span>
+<p>They &ldquo;defeated me completely; I had never seen anything in the least like them before.&rdquo; And: they &ldquo;must be true, because, if they were not true, no one would have the imagination to invent them.&rdquo;</p>
+</div>
+
+<p>Note what the argument is. Not that he had checked them. That the <em>space of false statements of that shape is empty</em> &mdash; nobody could have made them up. It is an argument from the density of the search space, offered a century before anyone in this corpus wrote one down.</p>
+
+<h2>7 &middot; The same machine as the 9801</h2>
+
+<p><a href="ch-ramanujan.html">Chapter R</a>, &sect;VI, follows a different object to a very similar place. There, the elliptic modulus evaluated at $e^{-\pi\sqrt{58}}$ turns algebraic, the algebra is the unit group of $\mathbb{Q}(\sqrt{29})$, and a Pell equation makes the answer a whole number &mdash; which is where the 9801 in Ramanujan's series for $1/\pi$ comes from.</p>
+
+<p>Here: a $q$-series evaluated at $e^{-2\pi}$ turns algebraic, the algebra is $\mathbb{Q}(\sqrt5)$, and the golden ratio falls out.</p>
+
+<p>One machine, two discriminants. It has a name &mdash; <strong>complex multiplication</strong> &mdash; and it is the reason both chapters exist. Volume XI owes the theorem; its Lean floor compiles as of yesterday with one declared gap.</p>
+
+<p>Worth noticing where this lands. $\varphi$ is the second rung of this series' recurrence ladder, $\pi \to \varphi \to \mu \to \eta \to \ldots$, and it usually arrives through Fibonacci. Here it arrives through a continued fraction evaluated at a point built out of $\pi$, by a route with no counting in it at all.</p>
+
+<h2>8 &middot; What this chapter does not do</h2>
+
+<ol>
+<li><strong>It proves nothing.</strong> Everything above is verified to 120 digits, which is evidence. The Rogers&ndash;Ramanujan identities have real proofs &mdash; Rogers 1894, Ramanujan independently, Schur 1917 &mdash; and this reproduces none of them.</li>
+<li><strong>The closed forms are taken from the letter, not derived.</strong> Why $R(e^{-2\pi})$ should be algebraic at all is complex multiplication, and that chapter is unwritten.</li>
+<li><strong>The second value is transcribed and not understood.</strong> The $5^{3/4}$ and the fifth root are checked numerically and explained nowhere here.</li>
+<li><strong>No criterion is given</strong> for which $q$ make $R$ algebraic. &sect;4 tests five points. That is a demonstration, not a theorem.</li>
+</ol>
+
+<p style="font-family:'Courier New',monospace;font-size:.78rem;color:var(--dim);border-left:2px solid var(--rule);padding-left:1rem;margin:2rem 0">
+Verified in <code>book7/ch-rogers-ramanujan-verify.py</code> &mdash; ten blocks, standard library only, 120-digit decimal, $\pi$ by Machin before anything is tested against it. Exits non-zero rather than rounding to agreement. Four gaps printed on every run.
+</p>
+
+</div>
+</body>
+</html>
