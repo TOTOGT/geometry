@@ -8583,3 +8583,50 @@ generated projective modules under ⊕. §2 of the file proves the second half o
 have. That is a gap in Mathlib, not in the file. `[OPEN]`
 
 WP-82 (`book6/wp82-the-missing-floor.html` §3) restated to match.
+
+---
+
+## 2026-09-18 · "Across series" reached one repository — grossi-ops.github.io/TO has served a withdrawn r★ for 77 days
+
+**The finding.** `https://grossi-ops.github.io/TO` is live, returns 200, and is
+byte-for-byte the pre-correction `book4/hub.html`. It prints **r\* ≈ 0.773** in
+four places: the dm³ contact equations block, the `poincare_collatz_contracting`
+row, the `inner_basin_is_asymmetric` row, and the hierarchy line
+`ε₀=1/3 < 2/3 < r*≈0.773 < κ*≈0.882 < 1`.
+
+That value was withdrawn here on **2026-07-03**, commit `4beb902`, whose subject
+line is **"Fix dm3 math: r\*=0.77594059 across series"**. It was not across the
+series. It was across this repository. Seventy-seven days later a second live
+address is still publishing the number the commit message says was fixed
+everywhere.
+
+`geometry/book4/hub.html` carries 0.776 in all four places and is correct. No
+page needs writing. A deploy needs doing, and this session cannot reach that
+repository.
+
+**The class.** Not a wrong number — a correction whose scope was asserted rather
+than checked. `r-star-mess.html` already names the shape ("one number, four
+values, five repositories"); what this adds is that the repair inherited the
+same defect as the thing it repaired. A commit message is not a survey. **"Across
+series" is a claim about other repositories and must be produced by something
+that reads them, or it is not a claim** — R18 and R15 in the same sentence.
+
+**And a second r★ that is not this one.** A parallel session spent 2026-09-17
+correcting `TOTOGT/io/index.html`, the CatGT / Helical Selectivity page, whose
+`r* = a√(J/λ)` is a radius in lattice spacings in the DNLS model — a different
+object from the dm³ inner-basin boundary, sharing a symbol. Both are called r\*
+on live pages with no disambiguation anywhere. `[OPEN]`
+
+**A real defect on that page, verified here independently.** `Projects/io/index.html`
+(the stale working copy, 2026-07-18) states: "The Reeb vector field R = ∂z
+satisfies ι_R dα = 0 and α(R) = 1. Its integral curves (r₀, θ₀, z₀ + t) are
+helical lines." The curve written is correct and the name is wrong — r and θ are
+held constant while z advances, which in cylindrical coordinates is a straight
+vertical line. A helix needs θ to advance with z. NAME EXCEEDS STATEMENT, the
+same class as `ch-strogatz`'s "degenerate" and as WP-123 §5. Prediction 3 rests
+on a "Reeb-helix signature" and falls with it. The correction is the other
+session's; this entry records that it was checked against the file and holds.
+
+**What is not established here.** Whether `grossi-ops.github.io/TO` is deployed
+from a repository anyone still edits, and what else among the 64 lines of drift
+between the two copies matters. `[OPEN]`
