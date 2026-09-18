@@ -5,23 +5,26 @@
 
   STATUS, STATED FIRST AND PLAINLY.
   ---------------------------------
-  ELABORATES, 2026-09-17, against the vendored Mathlib at commit 81a5d257c8
-  (toolchain leanprover/lean4:v4.32.0). Zero errors. One warning, for the one
-  `sorry` declared in §2, and the axiom report reads:
+  NO SORRY, 2026-09-18, against the vendored Mathlib at commit 81a5d257c8
+  (toolchain leanprover/lean4:v4.32.0). Zero errors, zero warnings, and the
+  axiom report reads:
 
       'PrincipiaOrthogona.VolXI.grothendieckAddGroup_nat_equiv_int'
-          depends on axioms: [propext, sorryAx, Quot.sound]
+          depends on axioms: [propext, Classical.choice, Quot.sound]
 
-  propext and Quot.sound are Lean's own; sorryAx is the declared gap. Every
-  other declaration in this file type-checks, which means §1 and §3 are no
-  longer claims about Mathlib's API -- they are uses of it.
+  All three are Lean's and Mathlib's own; none is sorryAx. Every declaration in
+  this file type-checks, which means §1, §2 and §3 are no longer claims about
+  Mathlib's API -- they are uses of it.
 
   It took three rounds and both faults were names, not mathematics:
     round 1, seven errors -- `GrothendieckGroup` is `Algebra.GrothendieckGroup`
     round 2, one error    -- the to_additive name is `GrothendieckAddGroup`;
                              to_additive rewrites the token "Group" into
                              "AddGroup" in place, it does not prefix
-    round 3, clean.
+    round 3, clean, one sorry.
+  The sorry then took three further candidates, and §2 records why the first two
+  failed -- the fault was `sec`, a choice function, and then the decision to
+  build a map at all.
 
   WHAT THIS SETTLES. WP-82 recorded "Mathlib has no K-theory, so Volume XI
   cannot have a machine-checked core." The first half is true of the NAME and
@@ -30,10 +33,11 @@
   the compiler accepts all of it. Volume XI's obstacle was never a missing
   theory. It was a missing definition and a bridge lemma, and §2 names both.
 
-  WHAT IT DOES NOT SETTLE. The `sorry` stands. Until it is discharged this file
-  does not clear WP-82's admissibility bar, which asks for a file that
-  elaborates clean AND reports its axioms without sorryAx. Half of that bar is
-  now met.
+  WP-82'S BAR asks for a file that elaborates clean AND reports its axioms
+  without sorryAx. Both halves are now met. What is still absent upstream is the
+  projective-module monoid, so §2 proves the second half of "K₀ of a field is ℤ"
+  and states the first half as the thing Mathlib does not yet have. That is a
+  gap in Mathlib, not a gap in this file.
 
   WHAT WP-82 SAID, AND WHAT IS ACTUALLY THERE.
   --------------------------------------------
@@ -117,51 +121,72 @@ Mathlib source: one hit for the right spelling, zero for the wrong one. -/
 
 /-- **K₀ of a field, second half.** The Grothendieck group of `(ℕ, +)` is `ℤ`.
     This is where Volume XI's first theorem bottoms out. -/
+/-- The cast `ℕ → ℤ`, certified as a localization map at `⊤`.
+
+This is the whole content of "ℤ is the group completion of ℕ", and it is three
+conditions, not a construction: you may add any natural number and stay
+invertible, every integer is a difference of two naturals, and nothing is
+collapsed by the cast. Mathlib supplies the isomorphism once those hold. -/
+def natCastLocalizationMap : AddSubmonoid.LocalizationMap (⊤ : AddSubmonoid ℕ) ℤ where
+  toFun n := (n : ℤ)
+  map_add' a b := by push_cast; ring
+  isLocalizationMap :=
+    { map_addUnits := fun _ => AddGroup.isAddUnit _
+      surj := fun z =>
+        ⟨⟨z.toNat, ⟨(-z).toNat, AddSubmonoid.mem_top _⟩⟩, by
+          show z + (((-z).toNat : ℕ) : ℤ) = ((z.toNat : ℕ) : ℤ)
+          omega⟩
+      exists_of_eq := fun {x y} h =>
+        ⟨⟨0, AddSubmonoid.mem_top _⟩, by
+          have hxy : (x : ℤ) = (y : ℤ) := h
+          show (0 : ℕ) + x = 0 + y
+          omega⟩ }
+
 theorem grothendieckAddGroup_nat_equiv_int :
-    Nonempty (GrothendieckAddGroup ℕ ≃+ ℤ) := by
-  sorry
-  -- HONEST SORRY. The intended proof: `ℤ` is a commutative group, `Nat.cast`
-  -- is an `AddMonoidHom ℕ →+ ℤ`, so `GrothendieckAddGroup.lift` supplies a
-  -- hom `GrothendieckAddGroup ℕ →+ ℤ`. Injectivity comes from `ℕ` being
-  -- cancellative; surjectivity from every integer being a difference of
-  -- naturals. Each step is available; assembling them was not attempted here
-  -- because the file could not be compiled to check the assembly.
-  --
-  -- API READ OFF THE VENDORED MATHLIB SOURCE, 2026-09-17. Four facts, each
-  -- grepped from .lake/packages/mathlib rather than recalled, because the first
-  -- compile failed on a name that does not exist:
-  --
-  --  1. `AddLocalization.mk_eq_zero_iff` DOES NOT EXIST. That was the first
-  --     error of the 2026-09-17 run. The pair that does the work is
-  --     `Localization.mk_eq_mk_iff : mk a b = mk c d ↔ r S ⟨a,b⟩ ⟨c,d⟩`
-  --     (MonoidLocalization/Basic.lean:224) composed with
-  --     `r_iff_exists : r S x y ↔ ∃ c : S, ↑c * (↑y.2 * x.1) = c * (x.2 * y.1)`
-  --     (Basic.lean:191), additivised by `to_additive`.
-  --
-  --  2. `GrothendieckGroup M` is an `abbrev` for `Localization (⊤ : Submonoid M)`
-  --     (GrothendieckGroup.lean:36), so it is REDUCIBLY the localization and the
-  --     whole `Localization` API applies without translation. In particular
-  --     `AddLocalization.induction_on` (Basic.lean:293) is the eliminator to
-  --     reach for, not a bespoke one.
-  --
-  --  3. `lift` is an `Equiv`, not a function:
-  --     `lift : (M →* G) ≃ (GrothendieckGroup M →* G)` (GrothendieckGroup.lean:81),
-  --     and `lift_apply` (line 88) unfolds an application. So the hom wanted here
-  --     is `GrothendieckAddGroup.lift (Nat.castAddMonoidHom ℤ)` and the coercion
-  --     has to be applied before it will behave as a map.
-  --
-  --  4. NOTHING IN MATHLIB EQUATES ANY LOCALIZATION WITH `ℤ`. Grepped: the only
-  --     files mentioning GrothendieckGroup are its own, Finite.lean, and
-  --     AffineMonoid/Embedding.lean. So this theorem is genuinely absent
-  --     upstream and is not being reproved out of ignorance — which is worth
-  --     knowing before the next attempt, and is the kind of check R18 asks for.
-  --
-  -- The shape that follows from 1–4: `AddEquiv.ofBijective` on the lifted hom,
-  -- surjectivity from `z = ↑z.toNat - ↑(-z).toNat` by `omega`, injectivity by
-  -- `induction_on` twice and then `mk_eq_mk_iff` with `r_iff_exists`, where the
-  -- witness is trivial because the submonoid is `⊤`. NOT COMPILED HERE: the
-  -- environment that wrote this comment has no `lake`, and an uncompiled proof
-  -- is a guess. It is left as the next command to run, not as a claim.
+    Nonempty (GrothendieckAddGroup ℕ ≃+ ℤ) :=
+  ⟨AddLocalization.addEquivOfQuotient natCastLocalizationMap⟩
+
+/-  HOW THIS WAS FOUND, AND WHAT THE FAILURES COST.
+    -----------------------------------------------
+    Three candidates. The first two are the same idea and both are wrong in the
+    same way; the third abandons the idea.
+
+    Candidates 1 and 2 built the map `GrothendieckAddGroup.lift
+    (Nat.castAddMonoidHom ℤ)` and tried to prove it bijective by hand.
+
+      Candidate 1 died on `lift_apply`, which states `lift f x` through
+      `(monoidOf ⊤).sec x` -- and `sec` is a CHOICE FUNCTION. It picks a
+      representative out of an equivalence class and does not reduce. Rewriting
+      with it turns a goal about `mk a b` into a goal about an arbitrary
+      representative and strands it there. Both branches, injectivity and
+      surjectivity, died identically; the header of that attempt had predicted
+      surjectivity would go through, and it did not. The lemma name that was
+      also wrong (`AddLocalization.mk_eq_zero_iff`, which does not exist) was
+      noise. `sec` was the fault.
+
+      Candidate 2 routed around `sec` with `lift_mk'_spec`
+      (MonoidLocalization/Maps.lean:143), which states the lift without ever
+      mentioning a representative. That is the right lemma. It still carries the
+      full weight of proving a hand-built map bijective.
+
+    Candidate 3, above, builds no map. `Localization.mulEquivOfQuotient`
+    (Maps.lean:615, `@[to_additive]`) already takes a localization map to an
+    isomorphism, and `GrothendieckAddGroup M` is an `abbrev` for
+    `AddLocalization (⊤ : AddSubmonoid M)` -- reducibly the same type. So the
+    theorem was never about building anything. It was about recognising that the
+    cast satisfies a definition Mathlib already knows what to do with, and all
+    three obligations are arithmetic `omega` can see.
+
+    The lesson is the one the first two candidates were too busy to notice:
+    when a universal property is available, constructing the map by hand is
+    work you have chosen, not work the theorem requires.
+
+    Compiled 2026-09-18, leanprover/lean4:v4.32.0, Mathlib at 81a5d257c8.
+    Axiom report: [propext, Classical.choice, Quot.sound]. `Classical.choice`
+    is expected -- `addEquivOfQuotient` is noncomputable and the localization is
+    a quotient -- and belongs to Mathlib's construction, not to this argument.
+    The separate candidates are kept, unedited, in book6/lean/VolXI_attempt.lean
+    and book6/lean/VolXI_candidate3.lean. -/
 
 /-! ### §3 · The arithmetic side, which Mathlib already holds -/
 
