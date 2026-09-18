@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
 plt.rcParams.update({"font.family":"serif","font.size":13,"axes.linewidth":1.0,
                      "savefig.bbox":"tight","savefig.pad_inches":0.03})
-EPS=2.0; RSTAR=0.77594059
+EPS=2.0; RSTAR=0.77594058
 GOLD="#c8891f"; BLUE="#1c5a8c"; RED="#b03030"; INK="#22222a"
 
 def run(r0,z0=0.0,T=14.0):

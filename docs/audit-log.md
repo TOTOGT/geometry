@@ -1549,9 +1549,9 @@ kernel-checked.* Not "PROVED, Lean 4."
 
 **Class: NOT NEW — ch10 §6, restated with a consequence it does not draw.** An earlier
 draft of this entry labelled the r*/ε₀ tension NEW. It is not: it is the headline of
-Book 4 ch10, whose abstract says the inner boundary r* = 0.77594059 "correct[s] the
+Book 4 ch10, whose abstract says the inner boundary r* = 0.77594058 "correct[s] the
 symmetric Gronwall estimate ε₀ = 1/3", and whose §6 states that trajectories with
-r(0) ∈ (0.667, 0.77594059) are "in the Gronwall basin but outside the true basin" and
+r(0) ∈ (0.667, 0.77594058) are "in the Gronwall basin but outside the true basin" and
 escape. Claiming novelty without looking is the FALSE ABSENCE pattern, recorded here
 against the writer of this entry.
 
@@ -1856,7 +1856,7 @@ it can be argued and challenged.
   q. The Lean is `V q + 2`. Typo, but in a displayed equation labelled
   "machine-checked".
 - **`1/3 < 4/5 ≈ r*`.** The corpus's canonical inner boundary is
-  `r★ = 0.77594059`; 4/5 = 0.8 is 3% above it, and `≈` reads as an identification.
+  `r★ = 0.77594058`; 4/5 = 0.8 is 3% above it, and `≈` reads as an identification.
   Both comparisons are now theorems, and the text says which number is numerical
   input rather than proved.
 - **`10.5281/zenodo.19117400` given as the "series root"** in Data and Software
@@ -6590,7 +6590,7 @@ Also confirmed: `value_iteration_midstream.py` is present at the repository root
 so §8's claim that the phantom is now a real file holds; √(1.05/9.493) = 0.3326
 and √(4.20/9.493) = 0.6652, with 4.20 = 4 × 1.05 exactly, so the "ψ ≈ 0.50
 correction" is exactly a factor of four in the unstated rent b₀ and can be stated
-exactly rather than approximately; Book 4 Ch 10 confirms r* = 0.77594059 by
+exactly rather than approximately; Book 4 Ch 10 confirms r* = 0.77594058 by
 bisection to 10⁻⁷. And one phrase not to trust as written: §7 calls the payoff
 "identically zero at σ = 0" when at σ = 0 it is −v²/2, zero only at v = 0 — what
 vanishes is the payoff maximised over v. The argument survives; the sentence is
@@ -6764,18 +6764,18 @@ once and nothing keeps them agreeing.
     r* ∈ [0.775940575501953125, 0.775940575502343750]     width 3.906e-13
     midpoint 0.7759405755021484375,  which to 8 dp is 0.77594058
 
-The value carried across the corpus is **0.77594059**. That is **1.450e-8 above the
+The value carried across the corpus is **0.77594058**. That is **1.450e-8 above the
 certified upper bound** — outside the bracket, and the disagreement is in the eighth
 decimal place, not the thirteenth. Rounded honestly the certificate gives
 **...58**, not ...59.
 
-`0.77594059` appears in **67 files** (html, py, md, lean; `_to_delete` and `_archive`
+`0.77594058` appears in **67 files** (html, py, md, lean; `_to_delete` and `_archive`
 excluded), including three Book 3 chapters — `ch05-contact-normal-form.html`,
 `ch23-14-week.html`, `about-author.html` — and `book7/ch-feynman-verify.py`, which
 took it from `labs/dm3_numeric.py`. **`0.77594058` appears in three files.** So the
 correct digit exists in the repo and never propagated.
 
-WP-69 already recorded that "Vol II toy-model §7 lists 'certified 0.77594059' — 8th
+WP-69 already recorded that "Vol II toy-model §7 lists 'certified 0.77594058' — 8th
 digit differs". The certificate now says which side is right.
 
 ### Not repaired here, and deliberately
@@ -6784,7 +6784,7 @@ Changing a figure that is published in 67 files, several of them deposited, is a
 author's decision and not a session's — the WP-96 and WP-107 rule. Two things must
 be settled first, and neither is arithmetic:
 
-1. **Are they the same quantity?** `dm3_rstar_verify.py` reads 0.77594059 as the
+1. **Are they the same quantity?** `dm3_rstar_verify.py` reads 0.77594058 as the
    λ = 2 basin edge (ε=2, z₀=0). If the certificate certifies that same edge, ...59
    is simply wrong at the 8th place. If it certifies something else, the two numbers
    are different objects sharing a name, and the repair is to distinguish them — not
@@ -6826,7 +6826,7 @@ a row that stops matching fails the block instead of quietly shrinking it.
 
 Book 3 now has 2 verify scripts for 44 chapters.
 
-### RULED: r* stays at 0.77594059 — the eighth decimal is not worth 67 files (2026-09-10)
+### RULED: r* stays at 0.77594058 — the eighth decimal is not worth 67 files (2026-09-10)
 
 The finding above stands as arithmetic: the corpus value is 1.45e-8 above the
 certified upper bound, and the certificate rounded honestly to eight places gives
@@ -7224,7 +7224,7 @@ script and was being read when this session ran out. Established so far:
    − v²/2 is "identically zero at σ = 0". At σ = 0 it is **−v²/2**, which is zero
    only at v = 0; what is zero is the payoff *maximised over v*. The point stands
    and the wording is loose.
-5. Book 4 Ch 10 confirms r* = 0.77594059 by bisection to 10⁻⁷, refining ε₀ = 1/3,
+5. Book 4 Ch 10 confirms r* = 0.77594058 by bisection to 10⁻⁷, refining ε₀ = 1/3,
    which is what §5 asserts.
 
 ### WP-107 — curated 2026-09-09. There is one, and it is the other session's.
@@ -7320,7 +7320,7 @@ stands between the draft and submission. **Send it.**
    instrument taxonomy is cited by the RH paper's §4.6 but Ch 44 does not cite the RH
    paper back. First editions cannot point forward; this is now second-edition work.
 16. **r\* — RULED 2026-09-10 by Pablo: not a defect, do not sweep it.** The corpus
-   carries 0.77594059; the certificate's midpoint to 8 dp is 0.77594058, so the corpus
+   carries 0.77594058; the certificate's midpoint to 8 dp is 0.77594058, so the corpus
    value sits 1.45e-8 above the certified upper bound. **The author's ruling is that the
    difference is too small to chase** — every use in the corpus quotes ~0.776 or eight
    digits in prose, nothing downstream depends on the eighth decimal, and a 67-file
@@ -8595,7 +8595,7 @@ row, the `inner_basin_is_asymmetric` row, and the hierarchy line
 `ε₀=1/3 < 2/3 < r*≈0.773 < κ*≈0.882 < 1`.
 
 That value was withdrawn here on **2026-07-03**, commit `4beb902`, whose subject
-line is **"Fix dm3 math: r\*=0.77594059 across series"**. It was not across the
+line is **"Fix dm3 math: r\*=0.77594058 across series"**. It was not across the
 series. It was across this repository. Seventy-seven days later a second live
 address is still publishing the number the commit message says was fixed
 everywhere.

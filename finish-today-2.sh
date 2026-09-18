@@ -29,7 +29,7 @@ P290: rebuild poster and long abstract from source, with corrections
 The original PO_10 .tex existed in no repository -- only the built PDF.
 Source reconstructed here so the document is editable again.
 
-  - rstar 0.80 -> 0.77594059 (0.80 matches no lambda in the family)
+  - rstar 0.80 -> 0.77594058 (0.80 matches no lambda in the family)
   - the numerical section now DECLARES its section z(0) = 0; the theorem
     hypothesises z(0) >= log 2, and the two were silently different
   - scaling law lambda = eps*exp(-z0) added, which reconciles them:

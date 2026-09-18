@@ -1,7 +1,7 @@
 import numpy as np, matplotlib
 matplotlib.use("Agg"); import matplotlib.pyplot as plt
 plt.rcParams.update({"font.family":"serif","font.size":15,"savefig.bbox":"tight","savefig.pad_inches":0.06})
-GOLD="#c8891f"; BLUE="#1c5a8c"; RED="#b03030"; INK="#22222a"; RSTAR=0.77594059
+GOLD="#c8891f"; BLUE="#1c5a8c"; RED="#b03030"; INK="#22222a"; RSTAR=0.77594058
 fig,ax=plt.subplots(figsize=(7.2,3.0))
 L,R=0.40,3.10; f=lambda x:(x-L)/(R-L)
 ax.axhspan(0,1,xmin=0,xmax=f(RSTAR),color=RED,alpha=.15)

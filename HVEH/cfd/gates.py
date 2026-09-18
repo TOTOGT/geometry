@@ -20,7 +20,7 @@ instead of judged by eye.
        passes through unchanged is a flow meter, not a generator.
 
     3. core_stability     no vortex breakdown for r < r*
-       The Rankine core must survive. r* = 0.77594059 is where the blades
+       The Rankine core must survive. r* = 0.77594058 is where the blades
        start; inside it there are none, by design.
 
 WHAT A THRESHOLD IS HERE
@@ -55,7 +55,7 @@ import argparse
 import json
 import sys
 
-R_STAR = 0.77594059          # normalised; blades occupy r* <= r <= 1
+R_STAR = 0.77594058          # normalised; blades occupy r* <= r <= 1
 
 DEFAULTS = {
     # Ratio of rotational power extracted to axial-thrust power. 5.0 is the

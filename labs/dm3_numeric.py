@@ -15,7 +15,7 @@ Three things, in order:
       Prediction: mu -> -2.
 
   (2) BASIN SCAN — bisection on r(0) for the inner boundary r*.
-      Corpus value r* ~ 0.77594059. Grönwall's symmetric ball |rho| < 1/3
+      Corpus value r* ~ 0.77594058. Grönwall's symmetric ball |rho| < 1/3
       would put the boundary at 0.667; it does not. The ball is a strict
       SUBSET of the basin and the basin is NOT symmetric about r = 1.
 
@@ -136,7 +136,7 @@ if __name__ == "__main__":
     lo, hi = bisect_basin()
     print(f"  bracket   : [{lo:.10f}, {hi:.10f}]   width {hi-lo:.2e}")
     print(f"  r* approx : {0.5*(lo+hi):.8f}")
-    print(f"  corpus    : 0.77594059")
+    print(f"  corpus    : 0.77594058")
     print(f"  Gronwall  : 1 - 1/3 = 0.66666667   (symmetric ball, conservative)")
     print(f"  outer edge: none - the basin is unbounded above r = 1")
     print("\n  The symmetric eps0 = 1/3 ball is a strict SUBSET of the basin.")

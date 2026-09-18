@@ -89,7 +89,7 @@ file_one "O7 — the asymmetric inner boundary against the symmetric Gronwall bo
 \`PrincipiaOrthogona1/PrincipiaVol1.lean\`.
 
 epsilon_0 = |mu_max| / (2 (1 + sup||Hess V||)) is the symmetric Gronwall bound.
-The numerical inner boundary r* ~ 0.77594059 is asymmetric, and is numerical
+The numerical inner boundary r* ~ 0.77594058 is asymmetric, and is numerical
 input from the dm3 integration rather than a theorem.
 
 The file states the three-way disagreement: the formula at H = 3 gives 1/4,

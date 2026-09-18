@@ -41,7 +41,7 @@ boundary r* ~ 0.77594 lies strictly above 2/3.
 Dependencies : Python >= 3.9, scipy >= 1.9, numpy >= 1.22
 Run          : python3 certify_rstar.py
 Expected output (on any IEEE-754 compliant machine) :
-    r* = 0.77594059  (to 8 decimal places)
+    r* = 0.77594058  (to 8 decimal places)
 
 Reproducibility note
 ---------------------

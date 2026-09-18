@@ -8,7 +8,7 @@ System (PO_10 abstract, eq. 1):
     z' = r^2 - eps*(r-1)^2*exp(-z)
 
 FINDING: eps and z0 enter only through lambda = eps*exp(-z0).
-    lambda = 2  ->  r* = 0.775941   (eps=2, z0=0)      <- the 0.77594059 in the corpus
+    lambda = 2  ->  r* = 0.775941   (eps=2, z0=0)      <- the 0.77594058 in the corpus
     lambda = 1  ->  r* = 0.572235   (eps=2, z0=log 2)  <- the abstract's stated hypothesis
 The value 0.80 printed in PO_10_Pablo_Grossi.pdf matches no lambda in play.
 
@@ -57,6 +57,6 @@ if __name__ == '__main__':
         print(f" {lam:5.2f}    {vals[0]:.6f}    {max(vals) - min(vals):.1e}")
 
     print("\nagainst the two circulating values:")
-    print(f"  corpus 0.77594059  ->  lambda=2, i.e. eps=2 with z0=0     : {rstar(0.0, 2.0):.8f}")
+    print(f"  corpus 0.77594058  ->  lambda=2, i.e. eps=2 with z0=0     : {rstar(0.0, 2.0):.8f}")
     print(f"  abstract z(0)>=log2 ->  lambda=1, i.e. eps=2 with z0=log2 : {rstar(np.log(2), 2.0):.8f}")
     print("  PDF 0.80            ->  matches no lambda in play")

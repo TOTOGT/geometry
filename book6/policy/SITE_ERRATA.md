@@ -9,7 +9,7 @@ throughout: cite **10.5281/zenodo.19117399** (always resolves to latest).
 
 | Find | Replace |
 |---|---|
-| `r*≈0.773 basin` (Ch 10 blurb) | `r*≈0.77594059 basin (certified)` |
+| `r*≈0.773 basin` (Ch 10 blurb) | `r*≈0.77594058 basin (certified)` |
 | `doi:10.5281/zenodo.19117400` | `doi:10.5281/zenodo.19117399` |
 | `0 Sorry in Chain.lean` (stats strip) | `0 sorrys in Chain_updated.lean (registry copy)` |
 
@@ -17,8 +17,8 @@ throughout: cite **10.5281/zenodo.19117399** (always resolves to latest).
 
 | Find | Replace |
 |---|---|
-| `r* ≈ 0.8` (all instances: Theorem 3.2, §3.4 box, Fig 3.1 caption, summary) | `r* ≈ 0.77594059` |
-| `the true boundary is r* ≈ 0.8` | `the true boundary is r* = 0.77594059 (certified by bisection, tol 1e-7)` |
+| `r* ≈ 0.8` (all instances: Theorem 3.2, §3.4 box, Fig 3.1 caption, summary) | `r* ≈ 0.77594058` |
+| `the true boundary is r* ≈ 0.8` | `the true boundary is r* = 0.77594058 (certified by bisection, tol 1e-7)` |
 | footer `doi.org/10.5281/zenodo.19117400` | `doi.org/10.5281/zenodo.19117399` |
 
 Note: ch03 prints the dm³ ODE with `e^{-z}` — already correct there.
@@ -35,17 +35,17 @@ No change to √(5/9) — it is the **correct, derived** chain contraction
 (κ²_chain ≤ (2/3)² + (1/3)² = 5/9 from σ_min ≥ 2/3 and ‖u_i w_iᵀ‖ ≤ 1/3).
 Optionally add: "κ_chain here is distinct from the dm³ basin marker
 κ* = √(7/9) ≈ 0.882 used in Ch 10; the two cannot coincide since
-√(5/9) < r* = 0.77594059."
+√(5/9) < r* = 0.77594058."
 
 ## GTCT repo (`github.com/TOTOGT/GTCT`)
 
 1. **`Chain_updated.lean` at repo root is the stale 2026-04-18 draft**
    (2 sorrys, `r_star := 0.8`). Replace with the registry-indexed copy from
    `AXLE:NASA/MoonBase/AXLE_lean_files/Chain_updated.lean`, and update its
-   constant to `r_star : ℝ := 0.77594059`.
+   constant to `r_star : ℝ := 0.77594058`.
 2. Repo **About/description** cites "(Version 2) … zenodo.20360288" — update
    to Version 4, DOI 10.5281/zenodo.21708678 (or series 19117399).
-3. `FINDINGS.md` still documents r* ≈ 0.773 → update to 0.77594059.
+3. `FINDINGS.md` still documents r* ≈ 0.773 → update to 0.77594058.
 4. `dm3_simulation.py` — verify coupling term is `e^{-z}` before shipping in
    the V4 deposit.
 

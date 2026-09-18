@@ -115,7 +115,7 @@ def ws_level(k, level=0.0, T=300, eps=1e-10, rtol=1e-13):
 r_star = ws_level(3)
 r_starstar = ws_level(1, T=60)
 print("\n[7] r_star      = W^s(S_-) cap {z=0} = %.13f" % r_star)
-print("    Vol II toy-model §7 lists 'certified 0.77594059' -- 8th digit differs")
+print("    Vol II toy-model §7 lists 'certified 0.77594058' -- 8th digit differs")
 print("[8] r_starstar  = W^s(S_+) cap {z=0} = %.10f   (not previously reported)" % r_starstar)
 
 # ---- [9] Theorem 1 verified in the exact (untruncated) system -----------

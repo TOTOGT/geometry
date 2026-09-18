@@ -45,7 +45,7 @@ T_STAR  = 2.0 * math.pi     # dm3_Tstar_pos
 MU_MAX  = -2.0              # dm3_mumax_neg
 TAU     = 2.0               # dm3_tau_eq_abs_mumax
 EPS0    = 1.0 / 3.0         # dm3_epsilon0
-R_STAR  = 0.77594059        # basin edge, labs/dm3_numeric.py
+R_STAR  = 0.77594058        # basin edge, labs/dm3_numeric.py
 
 
 # ═════════════════════════════════════════════════════════════════════

@@ -196,11 +196,11 @@ citations for `rfl` before deposit.
 Not in the paper, but they will contradict it after publication.
 
 **`r*` is wrong in the 8th decimal, in 131 files.** `geometry/CLAUDE.md:46` reads
-"canonical r\* is now 0.77594059, not the 0.776 the audit names". The deposit's
+"canonical r\* is now 0.77594058, not the 0.776 the audit names". The deposit's
 certified midpoint is `0.7759405755021484…`, which is `0.77594058` at 8 decimal
-places — not `0.77594059`.
+places — not `0.77594058`.
 
-`0.77594059` appears in **131** files across `geometry`, `AXLE`, `GTCT` and `3M`
+`0.77594058` appears in **131** files across `geometry`, `AXLE`, `GTCT` and `3M`
 (`.html`, `.md`, `.py`, `.lean`). Every one of them disagrees in the last digit
 with the interval the paper certifies. The correction that made the constant more
 precise never propagated to the constant itself.
@@ -405,7 +405,7 @@ numerical claim has a producing script under version control. Close it.
 Author's call: too small a difference to chase. Recorded here with its size so
 that a later pass does not spend the same hour rediscovering it.
 
-The gap is **1.45×10⁻⁸ absolute, 1.87×10⁻⁸ relative** — `0.77594059` against a
+The gap is **1.45×10⁻⁸ absolute, 1.87×10⁻⁸ relative** — `0.77594058` against a
 certified midpoint of `0.775940575502…`. Nothing in the corpus turns on it: the
 ordering the paper actually uses, `ε₀ = 1/3 < 2/3 < r* < κ* = √(7/9)`, holds for
 both values with margins of 0.109 and 0.106, seven orders of magnitude larger than
@@ -415,7 +415,7 @@ without a result.
 
 **What remains true, and is the part worth keeping in view.** The count went from
 131 to 133, only 4 files carry the certified digit, and the `CLAUDE.md:46` line
-the first pass quoted — "canonical r\* is now 0.77594059, not the 0.776 the audit
+the first pass quoted — "canonical r\* is now 0.77594058, not the 0.776 the audit
 names" — is no longer in `CLAUDE.md`. The defect is deferred; the *mechanism* is
 not, because it is the one this whole checklist is about: a note telling the next
 session about a known gap was removed while the gap stayed. If `r*` is ever
@@ -423,10 +423,10 @@ restated to more than 8 decimal places, or cited in a context where 10⁻⁸ mat
 this item reopens and the sweep is unavoidable — so the certified interval, not
 the rounded digit, is what any new citation should use.
 
-**Superseded first-pass text, kept for the record:** The first pass counted 131 files carrying `0.77594059` against a
+**Superseded first-pass text, kept for the record:** The first pass counted 131 files carrying `0.77594058` against a
 certified `0.77594058…`. Today it is **133**, and only **4** files carry the
 certified digit. The `CLAUDE.md:46` line the first pass quoted — "canonical r\*
-is now 0.77594059, not the 0.776 the audit names" — is **no longer in
+is now 0.77594058, not the 0.776 the audit names" — is **no longer in
 `CLAUDE.md`**. So the note that told the next session about the problem is gone
 and the 133 files are not. That is the worse of the two possible outcomes: the
 checklist said "fix `CLAUDE.md` first, since it is what the next session reads",

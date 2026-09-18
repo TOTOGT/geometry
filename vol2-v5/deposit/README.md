@@ -47,7 +47,7 @@ verify-vol2.zip      run.sh, probe_vol2.lean, axiom_gate.py and its fixtures.
 figures.py           Regenerates the figures from the exact section 4.3
                      equations.
 certify_rstar.py     Numerical certificate for the inner-basin boundary
-                     r* = 0.77594059 (DOP853, rtol 1e-12, atol 1e-14,
+                     r* = 0.77594058 (DOP853, rtol 1e-12, atol 1e-14,
                      bisection tolerance 1e-7).
 dashboard.html       Interactive exploration of the dm3 figures. RK4 integrator
                      over the exact section 4.3 equations, d3 rendering.
