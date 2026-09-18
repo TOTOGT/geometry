@@ -119,8 +119,6 @@ compile rejected. Settled by grepping the built olean, since to_additive
 generates the declaration at elaboration time and it appears nowhere in the
 Mathlib source: one hit for the right spelling, zero for the wrong one. -/
 
-/-- **K₀ of a field, second half.** The Grothendieck group of `(ℕ, +)` is `ℤ`.
-    This is where Volume XI's first theorem bottoms out. -/
 /-- The cast `ℕ → ℤ`, certified as a localization map at `⊤`.
 
 This is the whole content of "ℤ is the group completion of ℕ", and it is three
@@ -142,6 +140,8 @@ def natCastLocalizationMap : AddSubmonoid.LocalizationMap (⊤ : AddSubmonoid �
           show (0 : ℕ) + x = 0 + y
           omega⟩ }
 
+/-- **K₀ of a field, second half.** The Grothendieck group of `(ℕ, +)` is `ℤ`.
+    This is where Volume XI's first theorem bottoms out. -/
 theorem grothendieckAddGroup_nat_equiv_int :
     Nonempty (GrothendieckAddGroup ℕ ≃+ ℤ) :=
   ⟨AddLocalization.addEquivOfQuotient natCastLocalizationMap⟩
