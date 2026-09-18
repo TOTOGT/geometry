@@ -57,6 +57,7 @@ The trigger. Producing scripts: `book7/ch-ramanujan-verify.py` (80-digit) and
 | **`26390 = sqrt58 tanh(6 log eps)`** | — | — | `book7/ch-1103-and-26390.html` §5 | — | the regulator, entering a series | — |
 | **`1103` cornered, not derived** | — | `book7/ch-1103-and-26390.html` §6 — the bound | `book7/ch-1103-and-26390.html` §7 | — | `8*1103` inside `alpha(58)` — **open door** | bounded uniqueness only |
 | **The series machine** | — | `book7/ch-the-last-of-six.html` — five steps, one input | `book7/ch-the-last-of-six.html` §4 | — | **the list stops at 58; class numbers grow** | sweep over N ≤ 600, bound stated |
+| **A constant that is forced** | `book8/ch8-8-chandrasekhar.html` §2–4 — the vanishing exponent | — | Chandrasekhar; Schenberg in `book7/ch-what-a-child-can-enter.html` | — | `M_Pl^3/(mu_e m_u)^2`, i.e. `alpha_G^{-3/2}` | Sirius B to 0.9%, ZTF to +26% — **both kept** |
 | Pell, `eps^6 = 9801 + 1820 sqrt29` | `book4/ch-modular-equations-and-pi.html` §3 | — | `ch-ramanujan` VI(e) | — | **core candidate** | — |
 | **The Euclidean algorithm** | `book4/ch-euclidean-algorithm.html` — worked 2026-09-17 | — | Euclid, *Elements* VII.1–2 | — | the route to `eps`: expansion → convergent at norm −1 → unit | Lamé exhibited, not proved |
 | Reading a damaged source | — | — | `ch-ramanujan` VI(f) | `book10/ch05-the-notebooks-and-what-reached-us.html` §5 | — | `book13/ch10-what-a-check-establishes.html` Rule 2 |
