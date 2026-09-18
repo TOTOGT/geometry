@@ -8536,3 +8536,50 @@ now gives the classical route to the fundamental unit — expansion, convergent 
 norm −1, cube, square — reaching `eps^6 = 9801 + 1820 sqrt29`. XI's core
 candidate in the placement map is the Pell row, so the arithmetic side of XI has
 a worked chapter behind it even while the Lean side has a sorry. `[OPEN]`
+
+---
+
+## 2026-09-18 · Volume XI's sorry is discharged — and the proof was not a construction
+
+`book6/lean/VolXI_K0_Floor.lean` now compiles with **no `sorry`** against the
+pinned checkout (`mathlib 81a5d257c8`, toolchain `v4.32.0`). The report:
+
+```
+'PrincipiaOrthogona.VolXI.grothendieckAddGroup_nat_equiv_int'
+    depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+No `sorryAx`. That is WP-82's admissibility bar, in full. `[VERIFIED]`
+
+`Classical.choice` is expected and is Mathlib's, not the argument's:
+`addEquivOfQuotient` is noncomputable and the localization is a quotient.
+
+**What the theorem turned out to need.** Nothing built. Mathlib's
+`Localization.mulEquivOfQuotient` (Maps.lean:615, `@[to_additive]`) already
+carries a localization map to an isomorphism, and `GrothendieckAddGroup M` is an
+`abbrev` for `AddLocalization (⊤ : AddSubmonoid M)` — reducibly the same type.
+So the whole task was certifying that the cast ℕ → ℤ **is** a localization map
+at ⊤, which is three arithmetic conditions (`AddSubmonoid.IsLocalizationMap`,
+Basic.lean:87–90): every integer is an additive unit, every integer is a
+difference of two naturals, the cast collapses nothing. `omega` sees all three.
+
+**Correcting yesterday's entry.** Point 3 above — "`lift` is an `Equiv`, so it
+must be coerced before it behaves as a map" — was true and was a dead end.
+Candidate 1 followed it and died on `lift_apply`, which states the lift through
+`(monoidOf ⊤).sec`, a **choice function** that picks a representative and does
+not reduce; both branches stranded identically, including the one the header had
+predicted would go through. Candidate 2 routed around `sec` with `lift_mk'_spec`
+(Maps.lean:143), which is the right lemma and still carries the full burden of
+proving a hand-built map bijective. Candidate 3 dropped the map.
+
+The rule, which is general and not an anecdote: **when a universal property is
+available, constructing the map by hand is work you have chosen, not work the
+theorem requires.** Both failing candidates are kept unedited at
+`book6/lean/VolXI_attempt.lean` and `book6/lean/VolXI_candidate3.lean`.
+
+**What is still missing upstream** is unchanged: the monoid of finitely
+generated projective modules under ⊕. §2 of the file proves the second half of
+"K₀ of a field is ℤ" and states the first half as the thing Mathlib does not
+have. That is a gap in Mathlib, not in the file. `[OPEN]`
+
+WP-82 (`book6/wp82-the-missing-floor.html` §3) restated to match.
