@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter TS &middot; The Salesman Is Not Stuck &middot; Principia Orthogona G7</title>
+<meta name="description" content="TSP measured rather than asserted: a five-city Brazilian sales tour solved to proven optimality in 0.04 ms, the exact wall located at about n=25, heuristics within 0.04 percent, and why a sales force is a districting problem and not a routing one."/>
+<script>MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --void:#04040a; --surface:#0c0d14; --card:#10111c;
+  --gold:#c9a84c; --teal:#0abab5; --green:#10b981;
+  --r-color:#4ade80; /* route green */
+  --text:#e8e4d8; --dim:#6b6757; --rule:rgba(201,168,76,0.14);
+  --op-c:#60a5fa; --op-k:#a78bfa; --op-f:#f472b6; --op-u:#34d399;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:Georgia,serif;background:var(--void);color:var(--text);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-logo{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;flex-wrap:wrap;}
+.nav-links a{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+
+.hero{padding:5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(74,222,128,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-eyebrow{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--r-color);border:1px solid currentColor;padding:.2rem .7rem;display:inline-block;margin-bottom:2rem;}
+.op-chain{font-family:'Courier New',monospace;font-size:.75rem;letter-spacing:.15em;margin-bottom:1.8rem;display:flex;justify-content:center;gap:.7rem;flex-wrap:wrap;}
+.op-dot{display:inline-block;padding:.2rem .7rem;border-radius:2px;border:1px solid currentColor;}
+.op-c{color:var(--op-c)!important;border-color:var(--op-c)!important;}
+.op-k{color:var(--op-k)!important;border-color:var(--op-k)!important;}
+.op-f{color:var(--op-f)!important;border-color:var(--op-f)!important;}
+.op-u{color:var(--op-u)!important;border-color:var(--op-u)!important;}
+.op-active{background:rgba(74,222,128,.12)!important;color:var(--r-color)!important;border-color:var(--r-color)!important;}
+.hero h1{font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;color:var(--gold);letter-spacing:.04em;margin:.8rem 0 .5rem;line-height:1.1;}
+.hero-sub{font-size:1rem;color:var(--dim);font-style:italic;max-width:620px;margin:0 auto 1.5rem;}
+.value{font-family:'Courier New',monospace;font-size:.8rem;letter-spacing:.12em;color:rgba(74,222,128,.6);margin-top:.8rem;}
+
+.page{max-width:800px;margin:0 auto;padding:4rem 2rem 6rem;}
+h2{font-size:1.15rem;font-weight:400;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin:3.5rem 0 1.2rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;}
+p{margin-bottom:1.1rem;}
+em{color:var(--gold);font-style:normal;}
+
+.proof-block{border-left:3px solid var(--r-color);padding:1.4rem 1.8rem;margin:1.8rem 0;background:rgba(74,222,128,.04);}
+.proof-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--r-color);display:block;margin-bottom:.5rem;}
+.proof-title{font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.7rem;}
+.math-block{font-family:'Courier New',monospace;font-size:.85rem;color:var(--teal);background:var(--surface);border:1px solid rgba(10,186,181,.15);padding:.9rem 1.3rem;margin:1rem 0;overflow-x:auto;white-space:pre;line-height:1.7;}
+.qed{display:block;text-align:right;color:var(--r-color);font-size:1.1rem;margin-top:.6rem;}
+.sorry-box{border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.05);padding:1rem 1.4rem;margin:1.5rem 0;border-radius:2px;}
+.sorry-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#ef4444;display:block;margin-bottom:.4rem;}
+.gold-rule{border:none;border-top:1px solid rgba(201,168,76,.25);margin:2.5rem 0;}
+
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem 0;border-top:1px solid rgba(74,222,128,.2);margin-top:3rem;}
+.chapter-nav a{color:var(--r-color);text-decoration:none;font-family:'Courier New',monospace;font-size:.78rem;letter-spacing:.08em;border:1px solid rgba(74,222,128,.25);padding:.5rem 1rem;border-radius:2px;transition:all .2s;}
+.chapter-nav a:hover{background:rgba(74,222,128,.08);}
+footer{text-align:center;padding:2rem;font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.08em;color:var(--dim);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+.tag{font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid currentColor;padding:.1rem .4rem;border-radius:2px;white-space:nowrap;}
+.t-data{color:var(--teal);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">&#9884; Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="index.html">Book 7</a>
+    <a href="#instance">The instance</a>
+    <a href="#wall">The wall</a>
+    <a href="#says">What it says</a>
+    <a href="#force">A sales force</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Chapter TS &middot; 18 September 2026</div>
+  <div class="op-chain">
+    <span class="op-dot op-c">C &middot; NP-hard</span>
+    <span>&#8728;</span>
+    <span class="op-dot op-k">K &middot; three qualifiers</span>
+    <span>&#8728;</span>
+    <span class="op-dot op-active">F &middot; all dropped</span>
+    <span>&#8728;</span>
+    <span class="op-dot op-u">U &middot; 0.04 ms</span>
+  </div>
+  <h1>The Salesman Is Not Stuck</h1>
+  <p class="hero-sub">The standard newspaper example of computational impossibility, measured. The wall is real, it is at about twenty-five cities, and almost nobody has twenty-five cities.</p>
+  <div class="value">n = 5 &rarr; 0.04 ms &middot; n = 12 &rarr; 19 ms &middot; both proven optimal</div>
+</div>
+
+<div class="page">
+
+<h2 id="instance">1 &middot; Start with an instance somebody actually has</h2>
+
+<p>A salesman based in S&atilde;o Paulo has clients in Rio, Belo Horizonte, Bras&iacute;lia and Curitiba. What order?</p>
+
+<div class="math-block">S&atilde;o Paulo &rarr; Curitiba &rarr; Bras&iacute;lia &rarr; Belo Horizonte &rarr; Rio &rarr; S&atilde;o Paulo
+2743 km great-circle &middot; PROVEN OPTIMAL &middot; solved in 0.04 milliseconds</div>
+
+<p>Not a good tour. <em>The</em> tour &mdash; there is provably nothing shorter. Add seven more cities and the answer is still exact:</p>
+
+<div class="math-block">n =  5    2743 km    0.04 ms
+n = 10    4417 km    4.57 ms
+n = 12    6896 km   19.54 ms</div>
+
+<p>Twelve cities is about twenty million distinct tours, and the machine ruled all of them out in nineteen milliseconds. Whatever NP-hardness is a statement about, it is not a statement about this.</p>
+
+<p>So why does everyone know this problem as the one that cannot be solved?</p>
+
+<hr class="gold-rule">
+
+<h2 id="wall">2 &middot; The wall is real. Here is where it is.</h2>
+
+<p>The exact method above is Held&ndash;Karp: dynamic programming over subsets, $O(n^2 2^n)$. Timed:</p>
+
+<div class="math-block">n = 10    0.002 s
+n = 12    0.010 s
+n = 14    0.092 s
+n = 16    0.490 s
+n = 18    2.496 s</div>
+
+<p>Every extra city roughly doubles the work. Extrapolate the measured $n=18$ figure:</p>
+
+<div class="math-block">n = 20         12 s
+n = 25        616 s
+n = 30      8 hours
+n = 40      1.6 years
+n = 50      2626 years</div>
+
+<p>That is not a rhetorical flourish; it is the measured constant times $n^2 2^n$. The wall exists and it arrives suddenly, somewhere around twenty-five cities, and it is worth knowing about.</p>
+
+<p>It is also not where the interesting part is.</p>
+
+<hr class="gold-rule">
+
+<h2>3 &middot; You almost never need the optimum</h2>
+
+<p>Two local-search moves &mdash; 2-opt (uncross a pair of edges) and Or-opt (lift a short run of cities and reinsert it) &mdash; measured against the <em>proven</em> optimum, averaged over thirty random instances:</p>
+
+<div class="math-block">n     nearest nb    + 2-opt    + Or-opt
+8         6.42%      0.30%       0.00%
+10        8.63%      0.52%       0.00%
+12       10.90%      1.13%       0.04%</div>
+
+<p>A few dozen lines of code land within four hundredths of one percent of an answer that is provably the best there is.</p>
+
+<hr class="gold-rule">
+
+<h2>4 &middot; And you can certify it without solving it</h2>
+
+<p>This is the part that gets left out, and it is the one that matters operationally. The Held&ndash;Karp 1-tree bound relaxes the tour to a spanning structure and then pushes node potentials until the relaxation nearly <em>is</em> a tour. It never produces a tour. It brackets one from below:</p>
+
+<div class="proof-block">
+  <span class="proof-label">Measured against true optima</span>
+  <div class="proof-title">the 1-tree bound reaches 99.0&ndash;99.7% of the optimum</div>
+  <p>So the working procedure is: run the heuristic, run the bound, and if they close to within a fraction of a percent, stop. You have a tour <em>and a certificate</em>, and you never solved the problem the headline says you cannot solve.</p>
+  <span class="qed">&#8718;</span>
+</div>
+
+<hr class="gold-rule">
+
+<h2 id="says">5 &middot; What &ldquo;NP-hard&rdquo; actually says</h2>
+
+<p>The theorem: no algorithm is known that solves <em>every</em> instance in time polynomial in $n$, and if one existed then P = NP. Three qualifiers ride along, and the headline drops all three.</p>
+
+<p><strong>Worst case.</strong> It quantifies over the hardest instance at each size, not the one you have. Nothing in it forbids every instance you will ever meet from being easy.</p>
+
+<p><strong>Asymptotic.</strong> It is a claim about $n\to\infty$. At $n=5$ it makes no claim whatsoever, and &sect;1 took forty microseconds.</p>
+
+<p><strong>Exact.</strong> It is about finding the optimum, not about getting close. &sect;3 got within 0.04% and &sect;4 proved it had.</p>
+
+<p>And for the Euclidean case &mdash; which is what a map is &mdash; the theory runs the other way: Arora and Mitchell showed in 1998 that Euclidean TSP admits a PTAS, an approximation scheme reaching any fixed $\varepsilon$ in polynomial time.</p>
+
+<p>Meanwhile the exact wall keeps moving. &sect;2's algorithm dies near $n=25$. <a href="https://www.math.uwaterloo.ca/tsp/pla85900/index.html">Concorde</a>, using branch-and-cut rather than enumeration, solved an <strong>85,900-city</strong> instance to proven optimality &mdash; certified and published.</p>
+
+<p>Five cities and eighty-five thousand cities are both solved exactly. The famous impossibility lives in the gap between them, and it is a gap about <em>algorithms</em>, not about salesmen.</p>
+
+<hr class="gold-rule">
+
+<h2>6 &middot; So what is actually hard about a real route</h2>
+
+<p>Not the combinatorics. &sect;1 solved a national sales tour exactly, in milliseconds, in a hundred lines of Python. What a real problem has that this one does not:</p>
+
+<p><strong>Time windows.</strong> A meeting at 14:00 Tuesday is a constraint no distance matrix contains, and TSP with time windows is a genuinely harder problem than TSP.</p>
+
+<p><strong>The metric is wrong.</strong> &sect;1 minimises great-circle distance. What is actually being minimised is hours, or fare, or fatigue &mdash; and the flight schedule between two Brazilian cities does not care how far apart they are.</p>
+
+<p><strong>Asymmetry.</strong> Real travel times are not symmetric and need not satisfy the triangle inequality, which most of the good theory assumes.</p>
+
+<p><strong>The data.</strong> Every figure above came from twelve pairs of coordinates. A real system's difficulty is almost entirely in keeping its inputs current, and none of that is a computational question.</p>
+
+<hr class="gold-rule">
+
+<h2 id="force">7 &middot; One salesman is solved. A sales force is a different problem.</h2>
+
+<p>Now the version that actually costs money. A company covering a country does not have one salesman visiting twelve cities; it has a field operation, and the question is not what order but <em>how many people, based where</em>.</p>
+
+<p>That is p-median, not TSP: choose $k$ bases minimising the weighted distance from every client to its nearest one. Over the same twelve Brazilian metros, weighted by metro population:</p>
+
+<div class="math-block">k   bases                                           wtd km/visit
+1   S&atilde;o Paulo                                       499.7
+2   S&atilde;o Paulo, Recife                               336.6
+3   S&atilde;o Paulo, Rio, Recife                          247.1
+4   S&atilde;o Paulo, Rio, Bras&iacute;lia, Recife               163.4
+5   S&atilde;o Paulo, Rio, Bras&iacute;lia, Porto Alegre, Recife   110.7</div>
+
+<p>Each base buys about a third off the remaining distance, steadily. There is no knee in that curve and therefore no natural $k$ &mdash; <em>the decision is not hiding in the geometry</em>, and anyone who tells you the optimiser chose the headcount is mistaken about what the optimiser did.</p>
+
+<p>What the geometry does say is this:</p>
+
+<div class="math-block">S&atilde;o Paulo + Rio + Campinas       54.4% of weighted demand
+the six southeast/centre metros  74.7%</div>
+
+<p>Over half the weight sits in three adjacent metros. <strong>A field operation on this map does not have a travelling salesman problem worth solving. It has a concentration.</strong></p>
+
+<p>And that is the general lesson, which is why this chapter is in a book about people who got the question right. Optimising the route saves a percentage of travel. Getting the districting wrong costs a multiple of headcount. The second lever is far larger than the first, and only the first is famous &mdash; so the famous problem is the one that gets solved, over and over, next to the expensive one that does not.</p>
+
+<hr class="gold-rule">
+
+<h2>8 &middot; What is open</h2>
+
+<p>Eight gaps in the script. The two worth stating here:</p>
+
+<p><strong>No large-instance gap is claimed.</strong> Running 2-opt at $n=1000$ against the 1-tree bound gives a spread of 11&ndash;13%, and that conflates heuristic suboptimality with looseness of the bound at that size. The bound's own quality at $n=1000$ was not established, so no figure is quoted. Published results put 2-opt near 5% above optimal at large $n$ &mdash; the sub-1% numbers in &sect;3 are a small-$n$ effect and must not be read as a claim about large instances.</p>
+
+<p><strong>&sect;7's weights are population, not clients.</strong> Commodity counterparties cluster by crop and by port, not by headcount. The concentration finding is robust to the weights being roughly wrong; the exact base sequence is not.</p>
+
+<p style="color:var(--dim);font-size:.9rem;margin-top:2rem;">Producing script: <code>book7/ch-the-salesman-verify.py</code> &mdash; 7 sections, 8 gaps. <span class="tag t-data">CITED</span>: Applegate, Bixby, Chv&aacute;tal, Cook, Espinoza, Goycoolea &amp; Helsgaun, <em>Certification of an optimal TSP tour through 85,900 cities</em>, Operations Research Letters 37 (2009) 11&ndash;15; Arora (1998) and Mitchell (1999) for the Euclidean PTAS. Related: <a href="../book6/wp126-not-the-parameter.html">WP-126</a>, where the lever that matters is also not the one being optimised.</p>
+
+<div class="chapter-nav">
+  <a href="index.html">Book 7 &middot; contents</a>
+  <a href="../book6/wp126-not-the-parameter.html">WP-126 &rarr;</a>
+</div>
+
+</div>
+
+<footer>
+  Principia Orthogona &middot; Book 7 &middot; <a href="../index.html">index</a> &middot; G6 LLC
+</footer>
+
+</body>
+</html>
