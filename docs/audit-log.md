@@ -9027,3 +9027,57 @@ closes it, and checks the `.lean` files hash to the bytes the toolchain actually
 read. A saved `#print axioms` report proves nothing about a file that has since
 changed. It caught exactly that during this commit: a ninth theorem was added, the
 stale report was still on disk, and the script refused. `[CLOSED]`
+
+---
+
+### 2026-09-19 — exercises that tell a student to defend a claim
+
+Raised by the author, on finding that `ch00-introduction.html` asked the reader to
+write a paragraph defending &ldquo;exact mathematical identity&rdquo; against &ldquo;analogy&rdquo; —
+a claim the corpus had by then withdrawn. The objection is about who carries the
+cost: the author keeps the claim, the student walks into a seminar and defends it,
+and the correction arrives in the student's face rather than the author's.
+
+Census of the ~90 prompt panels for loaded verbs (defend / justify / argue that /
+prove that / explain why X is licensed). Six matched; four are legitimate — they
+ask a student to justify a reading of evidence, which is the exercise. Two were
+not, plus two lines of prose:
+
+| where | what it said | state |
+|---|---|---|
+| `ch06-pedagogy.html` l.218 | &ldquo;can say — and defend with the full mathematical apparatus&rdquo; | rewritten |
+| `ch06-pedagogy.html` l.312 | &ldquo;a student who can defend **all three** sentences has proven they understand the entire system&rdquo; | rewritten |
+| `ch06-pedagogy.html` prompt D1 | &ldquo;I can defend the three seed sentences&rdquo; | rewritten |
+| `book4/chE-gtct-alt.html` B2 | &ldquo;defend the claim that this — not entropy — is the real reason time cannot be reversed&rdquo; | rewritten as a test |
+| `ch00-introduction.html` B2 | the analogy/identity exercise | corrected earlier today |
+| `ch24-seed-sentences.html` | Seed 3 defence | corrected earlier today |
+
+**`ch06-pedagogy.html` l.312 is a half-applied correction, and an old one.** On
+23 August 2026 a session rewrote the Sentence 3 bullet to read &ldquo;Your task is not
+to defend it.&rdquo; Three lines below, the closing sentence of the same paragraph still
+read &ldquo;a student who can defend all three sentences has proven they understand the
+entire system.&rdquo; It stood for 27 days, in direct contradiction to the bullet above
+it, because the correction was applied to the string that was searched for and not
+to the paragraph it was in. Same class as the two half-applied corrections logged
+on 2026-09-18. The lesson is the same one: search for the *claim*, not for the
+sentence that states it.
+
+**`book4/chE-gtct-alt.html` is the worse of the two prompts** even though it is the
+&ldquo;alternate telling&rdquo;. It asked for a defence of a claim about thermodynamics — that
+operator non-commutativity, not entropy, is the real reason time cannot be
+reversed. A student who wrote that paragraph and took it anywhere near a physics
+department would be dismantled, and correctly. The prompt now asks the student to
+separate &ldquo;G is not reversible&rdquo; from &ldquo;time is not reversible&rdquo; and to say what would
+have to be shown to displace the measured statement.
+
+**A section was added to `ch06-pedagogy.html`** rather than only deleting the bad
+prompts, at the author's direction: students ought to know that mistakes are part
+of the process. It prints the identity claim's whole arc — eleven pages, the
+untested standard test, 0 of 55, the falsifying data sitting on the same page as
+the claim — and says that the sequence is ordinary rather than shameful, and that
+the failure mode would have been leaving the claim up after the number came back.
+The standard it sets is not &ldquo;can you defend your sentence&rdquo; but &ldquo;can you say what
+would make you drop it, and would you recognise that thing if it arrived.&rdquo;
+
+`tools/audit.py`: 27 dead_link, 2 double_escaped, unchanged. `contrast_check`:
+0 below 4.5:1. `novelty_check`: all checks passed. `[CLOSED]`
