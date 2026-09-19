@@ -118,6 +118,14 @@ become knowledge rather than a result:""",
 '<td>Klein <em>et al.</em>, antigen presentation and selection in the thymus</td></tr>\n'
 '</table>\n</div>',
 
+'''<div class="box"><div class="box-label">Reading the primary sources</div>
+<p class="block-prose"><strong>&ldquo;Klein-thymus&rdquo; names a laboratory, not a book.</strong>
+There is no textbook by that title; what there is, is a body of papers out of Ludger Klein&rsquo;s
+group in Munich and the reviews that consolidated them. The 2014 <em>Nature Reviews
+Immunology</em> review is open access at <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4757912/">PMC4757912</a>;
+the textbook chapters below are where it has been synthesised for teaching, and are the
+faster route in for a reader who is not an immunologist.</p></div>''',
+
 """<strong>The AIRE story is in the textbook chapter, not the further-reading list.</strong>
 A mechanism enters a first-year text when the field has stopped arguing about whether it is
 true, and central tolerance by promiscuous tissue-antigen expression made that passage
@@ -151,7 +159,7 @@ build(
         "the branches <span class=\"tag t-computed\">COMPUTED</span>"),
  ],
  refs=[
-  "L. Klein, B. Kyewski, P. M. Allen and K. A. Hogquist, &ldquo;Positive and negative selection of the T cell repertoire: what thymocytes see (and don&rsquo;t see)&rdquo;, <em>Nat. Rev. Immunol.</em> 14, 2014, 377&ndash;391.",
+  "L. Klein, B. Kyewski, P. M. Allen and K. A. Hogquist, &ldquo;Positive and negative selection of the T cell repertoire: what thymocytes see (and don&rsquo;t see)&rdquo;, <em>Nat. Rev. Immunol.</em> 14, 2014, 377&ndash;391. &middot; doi <a href=\"https://doi.org/10.1038/nri3667\">10.1038/nri3667</a> &middot; PMID 24830344 &middot; open access at <a href=\"https://pmc.ncbi.nlm.nih.gov/articles/PMC4757912/\">PMC4757912</a>.",
   "B. Kyewski and L. Klein, &ldquo;A central role for central tolerance&rdquo;, <em>Annu. Rev. Immunol.</em> 24, 2006.",
   "M. S. Anderson <em>et al.</em>, &ldquo;Projection of an immunological self shadow within the thymus by the Aire protein&rdquo;, <em>Science</em> 298, 2002.",
   "T. Takaba <em>et al.</em>, &ldquo;Fezf2 orchestrates a thymic program of self-antigen expression for immune tolerance&rdquo;, <em>Cell</em> 163, 2015.",

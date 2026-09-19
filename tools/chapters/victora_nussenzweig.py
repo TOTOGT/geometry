@@ -116,6 +116,13 @@ P5 = [
 'review this chapter is built on</td></tr>\n'
 '</table>\n</div>',
 
+'''<div class="box"><div class="box-label">Reading the primary sources</div>
+<p class="block-prose"><strong>&ldquo;Victora-Nussenzweig&rdquo; names two laboratories, not a
+book.</strong> The 2012 <em>Annual Review of Immunology</em> article is the consolidation
+(PMID 22224772); the 2010 <em>Cell</em> paper is the experiment. Rockefeller deposits its
+authors&rsquo; work in its Digital Commons and the primary papers are indexed in PubMed
+Central, which is the route in if a library portal is not to hand.</p></div>''',
+
 """The 2010 <em>Cell</em> paper is eighteen months older than the review, and the review is
 in the textbook chapter. <strong>Cyclic re-entry had been a model since the 1990s and an
 argument for as long</strong>; photoactivating a cell in one zone and finding it in the
@@ -150,7 +157,7 @@ build(
         "cyclic re-entry &mdash; the branch re-entering the chain"),
  ],
  refs=[
-  "G. D. Victora and M. C. Nussenzweig, &ldquo;Germinal centers&rdquo;, <em>Annu. Rev. Immunol.</em> 30, 2012, 429&ndash;457.",
+  "G. D. Victora and M. C. Nussenzweig, &ldquo;Germinal centers&rdquo;, <em>Annu. Rev. Immunol.</em> 30, 2012, 429&ndash;457. &middot; doi <a href=\"https://doi.org/10.1146/annurev-immunol-020711-075032\">10.1146/annurev-immunol-020711-075032</a> &middot; PMID 22224772.",
   "G. D. Victora <em>et al.</em>, &ldquo;Germinal center dynamics revealed by multiphoton microscopy with a photoactivatable fluorescent reporter&rdquo;, <em>Cell</em> 143, 2010, 592&ndash;605.",
   "A. D. Gitlin, Z. Shulman and M. C. Nussenzweig, &ldquo;Clonal selection in the germinal centre by regulated proliferation and hypermutation&rdquo;, <em>Nature</em> 509, 2014.",
   "C. D. C. Allen, T. Okada and J. G. Cyster, &ldquo;Germinal-center organization and cellular dynamics&rdquo;, <em>Immunity</em> 27, 2007.",
