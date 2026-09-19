@@ -14,6 +14,11 @@ is found, never the source of truth.
 
     python3 tools/floor_texts.py [--downloads DIR] [--min-pages N]
 
+External SOFTWARE does not belong in the output of this script. It scans PDFs on
+disk and rewrites docs/floor-texts.tsv wholesale, so a hand-added row would be
+silently wiped. Libraries live in docs/external-tools.tsv, addressed by DOI and
+version rather than by a hash of a paper about them.
+
 Writes docs/floor-texts.tsv. Exit 0 always -- absence here is data, not failure.
 """
 import hashlib, os, re, sys
