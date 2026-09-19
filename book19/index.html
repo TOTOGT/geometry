@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book XIX &middot; AXLE and the Manual &mdash; Principia Orthogona</title>
+<meta name="description" content="A corpus that writes Lean daily, read against the three Lean books it holds and had never opened."/>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+</style>
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XIX</span>
+<span class="meta"><a href="../book18/index.html">Book XVIII &middot; The Chain Rule</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XIX &middot; opened 2026-09-19 &middot; The practice, read against its manual</div>
+<h1>AXLE and the Manual</h1>
+<div class="subtitle">This corpus writes Lean daily, keeps an axiom gate, and has spent a month making rules about declarations resolving at the path cited. It holds three Lean books — the language's design thesis, the Mathlib tutorial, and the reference — and had opened none of them. This volume reads AXLE against them.</div>
+<div class="metagrid"><div><strong>Method</strong>the corpus's own Lean, checked against the three texts<br>every claim kernel-reported or page-addressed</div><div><strong>Claim type</strong>an audit of practice, and exposition<br>no new mathematics</div><div><strong>Sources</strong>Ullrich 255 pp &middot; Avigad &amp; Massot 214 pp &middot; Avigad, de Moura &amp; Kong 206 pp<br>sha256 in <span class="mono">docs/floor-texts.tsv</span></div></div>
+</div>
+<div class="wrap">
+
+<div class="lede">The gap this volume closes is not knowledge of mathematics. It is that a practice was built by inference from error messages, next to a shelf that explains it, for two years.</div>
+
+<h2>1 &middot; The three books, and what each is for</h2>
+<div class="tblwrap"><table>
+<tr><th>text</th><th>pp</th><th>what it answers</th></tr>
+<tr><td>S. Ullrich, <em>An Extensible Theorem Proving Frontend</em> (Lean 4 thesis)</td><td class="n">255</td><td>why elaboration, macros and the kernel are separated — the design, not the usage</td></tr>
+<tr><td>J. Avigad &amp; P. Massot, <em>Mathematics in Lean</em>, release v4.19.0 (11 Jun 2026)</td><td class="n">214</td><td>how Mathlib is meant to be used, idiom by idiom</td></tr>
+<tr><td>J. Avigad, L. de Moura &amp; S. Kong, <em>Theorem Proving in Lean</em></td><td class="n">206</td><td>the reference: dependent types, tactics, axioms</td></tr>
+</table></div>
+
+<p>The third is the one that bears directly on this corpus's standing rules. The axiom gate reads <span class="mono">#print axioms</span> and accepts <span class="mono">[propext, Classical.choice, Quot.sound]</span>; the reference is where those three are introduced and where what an <span class="mono">axiom</span> declaration <em>does</em> to a development is set out. The gate was written correctly by inference. It has never been checked against the text that defines it.</p>
+
+<h2>2 &middot; What the audit already has to work with</h2>
+
+<p>This volume does not start empty. The 2026-09-18 audit of the hub page produced findings that are properly Lean-practice findings and belong here:</p>
+
+<ul>
+<li><strong>A theorem that assumes its conclusion kernel-checks.</strong> <span class="mono">spiral_return_exists</span> takes <span class="mono">h_second_circuit : G.iter 128 x₀ ≠ x₀</span> and closes with <span class="mono">exact h_second_circuit</span>. The kernel certifies the implication; the prose claimed the antecedent. This is the central lesson of the whole volume in one declaration.</li>
+<li><strong>An axiom is accepted by being assumed</strong>, so the absence of <span class="mono">sorry</span> is not the verdict and <span class="mono">#print axioms</span> is. The hub said two axioms where the file has three.</li>
+<li><strong>Two divergent files share the name <span class="mono">Chain_updated.lean</span></strong>, one sorry-free and one not, and the page cited a third path that does not exist.</li>
+<li><strong>110 <span class="mono">.lean</span> names cited across the corpus resolve nowhere</strong>, per <span class="mono">tools/lean_addresses.py</span>.</li>
+<li><strong>"AXLE compiles nothing" was carried in a handoff and had never been run</strong>; one <span class="mono">lake env lean</span> refuted it.</li>
+</ul>
+
+<div class="box warn">
+<span class="lab">The shape of every item above</span>
+Each is a claim about a proof that was true of the words and false of the file, or true of the file and never checked. That is the failure mode a manual prevents and an error message does not — an error message tells you what broke, never what you were entitled to say.
+</div>
+
+<h2>3 &middot; Chapters</h2>
+<div class="tblwrap"><table>
+<tr><th>ch</th><th>title</th><th>state</th></tr>
+<tr><td>1</td><td>What the Kernel Certifies &mdash; implication versus antecedent, axioms versus sorry, and the gate read against the reference</td><td>planned</td></tr>
+<tr><td>2</td><td>The Idioms AXLE Reinvented &mdash; corpus tactics and structures against <em>Mathematics in Lean</em>, chapter by chapter</td><td>planned</td></tr>
+<tr><td>3</td><td>Elaborator, Macro, Kernel &mdash; Ullrich's separation, and which corpus complaints are about which layer</td><td>planned</td></tr>
+<tr><td>4</td><td>Addresses &mdash; why 110 declaration names resolve nowhere, and the smallest rule that would have prevented it</td><td>planned</td></tr>
+</table></div>
+
+<h2>4 &middot; What this volume will not claim</h2>
+<ul>
+<li>That AXLE's proofs are wrong. Those that check, check; the findings are about what was said <em>about</em> them.</li>
+<li>That reading the manual would have prevented the mathematics. It would have prevented the prose.</li>
+<li>Any count of theorems without a tier. R1 applies here more than anywhere: a count without a tier is not a count.</li>
+</ul>
+
+</div>
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XIX &middot; AXLE and the Manual<br>
+Opened 2026-09-19 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">An audit of practice and an exposition, not new mathematics. No text is reproduced. Kernel claims are reported by the kernel; page claims are located by script.</div>
+</div></footer>
+</body>
+</html>

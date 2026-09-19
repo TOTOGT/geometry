@@ -92,6 +92,8 @@ FOLDERS: list[tuple[str, str, str]] = [
     # listing is not a chapter count. Corrected 2026-09-16.
     ("book13", "Book XIII — Category Theory", "book13"),
     ("book17", "Book XVII — The Machine Floor", "book17"),
+    ("book18", "Book XVIII — The Chain Rule", "book18"),
+    ("book19", "Book XIX — AXLE and the Manual", "book19"),
     ("omega", "Omega Point", "omega"),
     ("HVEH", "HVEH", "HVEH"),
     ("AMonster", "A Monster's Law", "AMonster"),

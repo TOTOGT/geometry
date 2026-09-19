@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book XVIII &middot; The Chain Rule &mdash; Principia Orthogona</title>
+<meta name="description" content="Leibniz to automatic differentiation: the calculus lineage that ends in backpropagation, and the middle of it that is not on this desk."/>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+</style>
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XVIII</span>
+<span class="meta"><a href="../book17/index.html">Book XVII &middot; The Machine Floor</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XVIII &middot; opened 2026-09-19 &middot; The calculus lineage</div>
+<h1>The Chain Rule</h1>
+<div class="subtitle">Leibniz wrote dy/dx as a ratio of differentials. That notation composes, and because it composes it can be mechanised. Backpropagation is reverse-mode automatic differentiation, and automatic differentiation is the Leibniz chain rule run by a machine. This volume follows that one line from 1684 to a training loop.</div>
+<div class="metagrid"><div><strong>Method</strong>exposition from primary texts, page-addressed<br>the thesis is a lineage, not a theorem</div><div><strong>Claim type</strong>historical and mathematical, no new results<br>the corpus's own G = U∘F∘K∘C is a chain rule</div><div><strong>Status</strong>opened; the middle of the lineage is not held<br>see &sect;3, which is the honest part</div></div>
+</div>
+<div class="wrap">
+
+<div class="lede">The corpus composes five operators and calls the composition non-commutative. Composition of differentiable maps has had a calculus since 1684, and the rule for differentiating it is the one thing every machine-learning framework implements. This volume is about why that rule is the bridge, and it opens by admitting which end of the bridge is missing.</div>
+
+<h2>1 &middot; The thesis</h2>
+
+<p>Newton's fluxion notation, $\dot{x}$, names a rate. Leibniz's $dy/dx$ names a <em>ratio of differentials</em>, and that is the difference that matters here: written as a ratio, the chain rule
+$$\frac{dz}{dx} \;=\; \frac{dz}{dy}\cdot\frac{dy}{dx}$$
+reads as cancellation and <strong>composes without bookkeeping</strong>. A notation that composes can be applied mechanically to an arbitrary composite, which is precisely what an automatic-differentiation engine does: it walks a composition graph and multiplies local derivatives. Reverse-mode is that walk taken from the output backwards, and reverse-mode on a scalar loss is backpropagation.</p>
+
+<p>Nothing in that chain is new mathematics, and this volume claims none. What it claims is that the corpus already stands on it: <span class="mono">G = U ∘ F ∘ K ∘ C</span> is a composite map, its order-dependence is a statement about composition, and the derivative of that composite is the Leibniz rule. <a href="../book17/ch01-the-names-it-already-has.html">Book XVII ch 1</a> locates the standard statement at Deisenroth p.&nbsp;146 and automatic differentiation at p.&nbsp;164.</p>
+
+<h2>2 &middot; Chapters</h2>
+<div class="tblwrap"><table>
+<tr><th>ch</th><th>title</th><th>state</th></tr>
+<tr><td>1</td><td>A Ratio, Not a Rate &mdash; why Leibniz's notation composes and Newton's does not, and what that cost each tradition</td><td>planned</td></tr>
+<tr><td>2</td><td>The Rule Itself &mdash; the chain rule for composite and vector-valued maps, Jacobians, and the corpus's operator chain as an instance</td><td>planned</td></tr>
+<tr><td>3</td><td>Mechanising It &mdash; forward and reverse mode, why reverse mode wins on a scalar loss, and what backpropagation actually is</td><td>planned</td></tr>
+<tr><td>4</td><td>Euler in the Middle &mdash; what the eighteenth century did with the notation before anyone could run it</td><td>planned</td></tr>
+</table></div>
+
+<h2>3 &middot; What is not on this desk</h2>
+
+<div class="box warn">
+<span class="lab">The middle of the lineage is missing, and the volume says so before it starts</span>
+<p style="margin:0 0 .7rem">A scan of every PDF of sixty pages or more in the author's Downloads on 2026-09-19 found <strong>no Leibniz</strong> — not the 1684 <em>Nova Methodus</em>, not a collected works, not a secondary study — and <strong>no calculus textbook of any kind</strong>: no Spivak, no Apostol, no Rudin, no Stewart.</p>
+<p style="margin:0">What is held is both endpoints. Newton's <em>Principia</em>, 594 pp. Bradley's <em>Leonhard Euler: Life, Work and Legacy</em>, 543 pp. Deisenroth's <em>Mathematics for Machine Learning</em>, 417 pp, where the rule is stated on p.&nbsp;146 and mechanised on p.&nbsp;164. A volume about the line from Leibniz to backpropagation currently holds the century before and the century after, and nothing in between.</p>
+</div>
+
+<p>Under this series' own rule that an address is a name plus a place plus a hash, that is not a small gap — it is the difference between exposition and recollection. Chapter 1 is not written until a Leibniz source is held and entered in <span class="mono">docs/floor-texts.tsv</span>. <span class="mono">[OPEN]</span></p>
+
+<h2>4 &middot; What this volume will not claim</h2>
+<ul>
+<li>That the corpus invented or anticipated automatic differentiation. It did not; it composes maps, which is older than all of us.</li>
+<li>That Newton's notation is inferior mathematics. The claim is about composability of notation under mechanisation, which is a narrower and later concern than anything at issue in 1687.</li>
+<li>Any priority. The 2026-09-18 audit withdrew a priority claim on this corpus's own hub page after the dates were checked; that lesson applies here in advance.</li>
+</ul>
+
+</div>
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XVIII &middot; The Chain Rule<br>
+Opened 2026-09-19 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">Exposition, not new results. Opened with its central primary source unheld and said so; no chapter is written until that source has an address.</div>
+</div></footer>
+</body>
+</html>
