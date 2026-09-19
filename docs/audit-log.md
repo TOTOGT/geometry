@@ -9081,3 +9081,45 @@ would make you drop it, and would you recognise that thing if it arrived.&rdquo;
 
 `tools/audit.py`: 27 dead_link, 2 double_escaped, unchanged. `contrast_check`:
 0 below 4.5:1. `novelty_check`: all checks passed. `[CLOSED]`
+
+---
+
+### 2026-09-19 — the 0-of-55 computation is now a theorem
+
+`tools/coherence_similarity.py` compared eleven rows and reported no similar
+pairs. That is evidence about eleven rows, and it depends on the table having
+been parsed correctly.
+
+`book21/Spiral.lean` proves the statement the computation was an instance of.
+Similar matrices have the same trace and the same determinant; for a planar
+system with eigenvalues μ ± iω that is τ = 2μ and Δ = μ² + ω², so μ and ω² are
+invariants. Two spiral sinks with different μ are therefore not conjugate by
+any invertible matrix whatsoever — `different_mu_not_similar`. The closest
+pair in the corpus's own table is instantiated as
+`immune_is_not_market` (μ = −0.44 against −0.67), with no arithmetic left to
+trust. Ten theorems, gate clean.
+
+Only the direction the falsification needs is proved: different invariants
+forbid similarity. The converse, same invariants imply similarity, needs
+rational canonical form and is not proved — it would only be required to show
+two rows ARE the same, and none are. The header says so.
+
+The same file records the weakness of the shared description: with eigenvalues
+μ ± iω, the discriminant τ² − 4Δ is −4ω², negative with no further hypothesis.
+So "spiral sink" says only μ < 0 and ω ≠ 0. Eleven systems meeting that have
+almost nothing in common.
+
+**The citation was checked against the file, and one phrase was withdrawn.**
+`book21/spiral-pages-verify.py` opens
+`Nonlinear_Dynamics_and_Chaos_2018_Steven_H._Strogatz.pdf` (sha256 e4c3681c…,
+532pp, already in `docs/floor-texts.tsv` with rung and volume blank), confirms
+§5.2 "Classification of Linear Systems" at printed pp. 129–138, the
+discriminant on pp. 132, 135 and 138, and Figure 5.2.8 on p. 138. It refuses
+outright if the sha does not match, because every page number in the header
+then describes a copy the reader does not have.
+
+A first draft of the header called §5.2 "the trace–determinant plane". That
+phrase is not in this printing — Strogatz gives the diagram without naming the
+plane. Common usage is not a quotation, and the phrase was removed rather than
+left in his mouth. `[CLOSED]`
+
