@@ -1,5 +1,13 @@
 /-
-THE FLOOR · Rung 1 — Counting, and the first thing that goes wrong.
+Volume XII — rung 12. Counting, and the first thing that goes wrong.
+
+Rung 11 (book11/Numerals.lean) comes first: what a numeral names, and why
+two different numerals never name one number. This rung assumes that much
+and no more.
+
+As there, the Lean file is the certificate, not the lesson. The learner
+works with marks and stones; this is what tells the teacher the rules being
+taught are the true ones.
 
 HOW TO READ THIS FILE
 

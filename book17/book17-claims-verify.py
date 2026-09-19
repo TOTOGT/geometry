@@ -42,7 +42,7 @@ SHA = {
     "book17/Book17Core.lean":
         "0901b310ad6bc5a1f0dfae94f36150a648f5999eeb86eb3e9df6a4b8e11fcf32",
     "book17/Book17Mathlib.lean":
-        "7d7a49f814795f37e552e727eb9e94d4d04393b395eb730c7b2a1bd0d81ea47a",
+        "fb5f055fccc2f0c0662f25cba8e5f7008209e93a3a6329be15a5685d2c65060a",
 }
 
 REPORTS = [

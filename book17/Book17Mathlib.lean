@@ -1,5 +1,8 @@
 /-
-Book XVII, ch. 1 and index: the elementary rows, checked.
+Volume XVII — rung 17. The elementary rows, checked.
+
+Book XVII's index and chapter 1 print these as facts about how a
+total-function kernel behaves. Here they are as theorems.
 
 Every claim below is one the two pages print.  Each is stated here as a
 theorem and closed; the `#print axioms` block at the foot is the report the
