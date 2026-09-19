@@ -8757,3 +8757,43 @@ GTCT's inbound links, so they keep their names.
 `geometry/book4` is 64 files; `GTCT/book4` holds 36, all of them now either
 shared or pointers. **Zero chapters exist only in GTCT.** Sixteen shared chapters
 still need reading — `python3 tools/book4_reconcile.py`.
+
+---
+
+## 2026-09-19 · The floor WP-82 asked for is in ~/Downloads, and has been
+
+WP-82 measured the corpus against the 33-rung ruler and found the distribution
+inverted — rung 33 in 31 file-mentions, rung 28 in **zero** — and recommended
+building the floor before the ceiling. A scan of `~/Downloads` on 2026-09-19
+found the floor texts already on the machine:
+
+| rung | vol | text | pp |
+|---|---|---|---|
+| 28 | XI | Weibel, *The K-book: an introduction to Algebraic K-theory* | 576 |
+| 29 | XII | van Neerven, *Functional Analysis* (CUP) | 732 |
+| 33 | XVI | Connes & Marcolli, *Noncommutative Geometry, Quantum Fields and Motives* | 705 |
+| — | — | Deisenroth, Faisal & Ong, *Mathematics for Machine Learning* | 417 |
+| — | — | Lehman, Leighton & Meyer, *Mathematics for Computer Science* | 1048 |
+| — | — | Hefferon, *Linear Algebra* 4e · Evans & Rosenthal, *Probability and Statistics* | 525 · 774 |
+
+5,309 pages of primary source, none of it cited anywhere in the corpus.
+`tools/floor_texts.py` gives each one an address — (path, sha256, pages,
+citation) — in `docs/floor-texts.tsv`, exit 0, eight held and none missing.
+
+**The finding is not that the books were missing. It is that they had no
+address**, which in this corpus is the same thing: WP-122's return map was in
+the exercise, the Strogatz page numbers were never opened, receiving capacity
+was counted every year under "tourism", Volume XII was "named nowhere" because
+the search looked for the wrong string. Every one of those was already held and
+unaddressed. So is the floor.
+
+**Why it matters beyond the rungs.** The 2026-09-17 audit of the Axiom Math
+posting measured the corpus for machine-learning evidence and found PyTorch in 1
+file, JAX in 2, TensorFlow, reinforcement learning and program synthesis in
+none. The one book that closes that gap is Deisenroth, 417 pages, downloaded and
+unread. The corpus's weakest measured area and the text that founds it were on
+the same disk.
+
+`[OPEN]` The book that covers these topics needs a home. XI, XII, XIII and XVI
+are spoken for in WP-82 §3 and XIII already collides with `book13/` on disk, so
+this one takes a name and not a numeral until the author assigns one.
