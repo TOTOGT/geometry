@@ -18,7 +18,7 @@ Writes docs/floor-texts.tsv. Exit 0 always -- absence here is data, not failure.
 """
 import hashlib, os, re, sys
 
-MIN_PAGES = 60
+MIN_PAGES = 12   # was 60 until 2026-09-19, which hid three primary sources at 13, 37 and 47pp
 
 # Markers that identify the author's OWN work, so it is counted separately
 # rather than mixed in with primary sources.

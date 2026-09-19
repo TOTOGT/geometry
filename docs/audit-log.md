@@ -8877,3 +8877,44 @@ sample pages each: fourteen return 900–2,000 characters per page. **Two return
 `whiteheadrussell-principiamathematicavolumei.pdf` (719 pp) and
 `aMathematiciansApology-HARDY.pdf` (80 pp) are image scans. They can be read by a human
 and cannot be cited by this corpus's own method. Held is not the same as addressable.
+
+---
+
+## 2026-09-19 · WP-94's three open rows, checked within the hour — one withdrawn
+
+Three primary sources arrived in Downloads at 02:48–02:49 and are exactly the three rows
+WP-94 marked `OPEN` and Book XIX ch 1 had listed as open an hour earlier: Paulson's
+*The Foundation of a Generic Theorem Prover* (Isabelle, 37 pp), Huet, Kahn &
+Paulin-Mohring's *Coq Proof Assistant: A Tutorial* v8.0 (47 pp), and Denney, Fischer &
+Schumann's *Using Automated Theorem Provers to Certify Auto-Generated Aerospace Software*
+(NASA Ames, 13 pp).
+
+**None of them was in the ledger, because the scanner's floor was 60 pages.** A threshold
+is a filter and a filter manufactures absence; the three sources most relevant to the
+chapter written that morning were all below it. `MIN_PAGES` lowered to 12. The ledger
+went from 39 third-party texts to **112**.
+
+**Isabelle — checked negative.** `sorry` 0, `oops` 0. The vocabulary for an unfinished
+step in Isabelle's foundational paper is `axiom` (79) and `assumption` (42). Consistent
+with `sorry` arriving later with Isar, but this source cannot date anything and no dated
+source is held. WP-94 §4's pivot stays open — now open against evidence rather than
+against nothing.
+
+**Coq — the row overstated itself.** WP-94 gives "`admit` a step closed by fiat;
+`Admitted` for the whole lemma." The tutorial attests `Admitted` **once**, p. 17, and the
+standalone `admit` tactic **not at all** — the single lowercase match is the substring
+inside `Admitted`, which is the same substring-inflation defect this log already records
+for `/gns/` via *designs* and `/bott/` via *bottom*. One tutorial is not the manual, so
+the claim narrows rather than falls.
+
+**Aerospace — the fifth row is withdrawn.** `assumption` **0**, `assume` **0**. What the
+paper uses is `axiom` (12) and `trust` (2) — **the proof-carrying-code vocabulary of row
+four.** On this evidence the table has four words, not five, and the fifth row was a guess
+about a community rather than a reading of one. It may hold for the assurance-case
+literature proper (DO-178C, goal-structuring notation), where *assumption* is a term of
+art. None of that is held. **Withdrawn, not corrected.**
+
+The pattern is the volume's thesis in one pass: three claims stated from working
+familiarity, checked against sources within an hour of their arriving, yielding one
+narrowing, one withdrawal and one honest negative. No new mathematics. Only opening
+the file.
