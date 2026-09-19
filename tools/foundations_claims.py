@@ -8,8 +8,14 @@ untagged assumption is decoration.
 
 THE FINDING THIS WAS WRITTEN TO MEASURE. The four foundational documents carry
 ~97 numbered claims between them and NONE of the corpus's evidence tags
-(SHOWN / CITED / MODEL / CONJECTURE / OPEN), while the 59 chapters of Book IV
-that rest on them are tagged throughout. The base is the only unmarked layer.
+(SHOWN / CITED / MODEL / CONJECTURE / OPEN). The base is thinly marked.
+
+CORRECTED 2026-09-19. This docstring used to end "while the 59 chapters of
+Book IV that rest on them are tagged throughout. The base is the only unmarked
+layer." Both halves were wrong. tools/superstructure_census.py counted Book IV:
+31 of its 59 files carry neither a numbered claim nor a tag, and only 11 carry
+any tag at all. Book IV is not tagged throughout, and the base is not the only
+unmarked layer -- it is the layer whose claims someone had actually counted.
 
 Separately, 82 theorems ARE kernel-checked for Volume I -- in TOTOGT/vol1-proofs,
 another repository -- and nothing here maps one onto the other. So no reader,

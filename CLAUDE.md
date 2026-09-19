@@ -84,32 +84,56 @@ Worked examples, all from 2026-09-17, all avoidable by one read:
 The corresponding duty: **a session that settles something writes it into the ledger**, not only
 into prose. A result recorded only in narrative will be re-derived.
 
-## HANDOFF — 2026-09-18 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
+## HANDOFF — 2026-09-19 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
-**From:** session 013NuSwNqBhsZhV1iB3LjYzs · model claude-opus-5, Cowork bridge with the desk connected. Earlier blocks are in git history and in `docs/audit-log.md`.
+**From:** session 013NuSwNqBhsZhV1iB3LjYzs · model claude-opus-5, Cowork bridge, desk connected (it dropped once mid-session and came back). Earlier blocks are in git history and in `docs/audit-log.md`.
 
-### READ THIS FIRST — three standing rules were broken all day because they were not read
-- **R5 violated in every commit of 2026-09-18.** Each carries `Co-Authored-By:` and `Claude-Session:`. R5 says attribution goes in this block and never in a commit message. Roughly twenty commits are affected; they are in history and are not being rewritten. **Stop doing it.**
-- **R4 violated all evening.** Git was read without `--no-optional-locks`, which is why locks stranded after nearly every commit, and delete permission was requested for the folder rather than using `mv`. R4 says exactly this and was written after the same thing happened on 2026-09-13. Second occurrence.
-- **A second handoff file was opened**, `docs/HANDOFF-2026-09-18.md`, against this block's own instruction. It is kept as the long-form appendix and is referenced below; **this block is canonical.**
+### READ THIS FIRST — standing rules broken on 2026-09-18, still true
+- **R5 was violated in every commit of 2026-09-18.** Each carries `Co-Authored-By:` and `Claude-Session:`. R5 says attribution goes in this block and never in a commit message. Roughly twenty commits are affected; they are in history and are not being rewritten. **Today's commits are clean. Keep it that way.**
+- **R4.** `--no-optional-locks` on every git read. Delete permission was requested for this folder once and declined, so a stranded lock is recovered with `mv .git/index.lock .git/stale-locks/`, never `rm`. **Git leaves `.git/index.lock` behind after every write in this sandbox** — it cannot unlink it. Move it between commands or the next command fails. This happened again today.
+- **One handoff block.** `docs/HANDOFF-2026-09-18.md` is the long-form appendix from that day; **this block is canonical.**
 
-### What was built, 2026-09-18
-Ten pages, nine producing scripts. Vol XI's `sorry` discharged — `book6/lean/VolXI_K0_Floor.lean` compiles with no `sorryAx`, axiom report `[propext, Classical.choice, Quot.sound]`, gated by `book6/lean/VolXI_K0_Floor-verify.sh` against a committed report. Book VII: `ch-rogers-ramanujan`, `ch-1103-and-26390`, `ch-the-last-of-six`, `ch-chandrasekhar`, `ch-the-salesman`. Book VIII: `ch8-8-chandrasekhar`, `ch8-8b-brown-dwarfs`. Book VI: `wp126-not-the-parameter`, `wp127-no-silk-road-for-biomass`. Book X: `ch06-the-price-of-the-thing`.
+### What was built, 2026-09-19
+Two tools, one correction, and a finding that reorders the work.
+
+`tools/superstructure_census.py` (new, `1ffa282`) reads Books III and IV and counts. It proposes no tag and edits nothing, because the base layer was mapped claim by claim — 34 claims is a size a person holds — and Book IV is 59 files, where hand-mapping before knowing the shape is guessing at scale.
+
+`tools/foundations_evidence.py` had a bug that shipped 2026-09-18: `names()` stripped the namespace and returned a set of **short** names. Thirteen declarations exist under **both** `PrincipiaVol1` and `AutophagyDm3`, so the set collapsed 82 theorems to 69 — while the header line kept printing "58 + 24", which is 82. **The script contradicted itself in its own first line of output for a day.** Fixed. The count was the small half: four base-layer rows — **Propositions 4.2, 4.4, 6.1 and Theorem A** — cite a bare name that does not identify a theorem. `mu_dm3_neg` exists twice, in different files, proving different things. Those rows are marked `??` and recorded as gap S6.
+
+### The Book IV claim was false and is corrected
+R21 and `tools/foundations_claims.py` both said *"Book IV's 59 chapters are tagged throughout. The base is the only unmarked layer."* The census counted them:
+
+- **31 of Book IV's 59 files carry neither a numbered claim nor a tag.**
+- **11 files carry any tag at all.** 26 files carry 68 numbered claims between them.
+- The base was never the only unmarked layer. It was the layer someone had counted.
+
+Corrected in `CLAUDE.md` and in the tool's docstring, both dated.
+
+### Three findings that reorder the tagging job
+- **F1 — not one claim in either book names a Lean theorem.** Book III: 2 claims, 0 Lean names. Book IV: 68 claims, 0 Lean names. The base layer matched 16 of 34 by topic; here the join has no starting point, so a topic match would be built out of resemblance alone.
+- **F2 — the tag vocabulary diverged and nobody reconciled it.** The base layer proposes SHOWN / CITED / MODEL / CONJECTURE / OPEN. Book IV's pages carry OPEN, COMPUTED, PROVED, CITED, MODEL, CONJECTURE. **PROVED is the stronger word, in use in the superstructure, where the weaker one was chosen for the foundations.** Settling this is the author's call.
+- **F3 — claim numbers collide.** Ten numbers in Book IV are used by more than one chapter. **`Theorem 1` belongs to five** (`ch10`, `ch11-catgt`, `ch24`, `chE-gtct-alt`, `gomc-opus`); `Theorem 5.1` to four; `Theorem B` and `Theorem 6.1` to three each. A cross-reference to a bare number does not resolve in this corpus.
+
+**So the order is not what it looked like.** Tagging Book IV cannot begin until F3 is fixed and F2 is settled — a tag on `Theorem 5.1` is useless while four chapters have one. Both are Pablo's call, and both are cheap once decided.
+
+### Book III is thinner than the index implies
+Its chapters live **at the repo root**, not under `book3/` — `vol3-minibeast.html`, `livro3-brasil.html` (PT), `minibeast-pilot.html`, `ch-seismic.html`. `book3/` holds only the index and the ESL vocabulary companion. `impa-portal.html` is linked from `book3/index.html` but is a shared portal (book1, book2 and book4 link it too) and is not Book III content. **Two numbered claims in the whole book, no tags.** Whether that is a gap or simply what an applied volume looks like is a judgement nobody has made in writing.
 
 ### r* — CLOSED
 `0.77594058` across the board, 224 occurrences in 78 files (`f1db753`). It is the correct 8-dp rounding of every high-precision form here; `0.77594059` was the rounding of none of them and `70d08d7` called it "the certified" value. **Thirteen high-precision forms remain, diverging at the 11th decimal — deliberately untouched.** `[OPEN]`
 
 ### Open — in priority order
-1. **Tag the base layer (R21).** `tools/foundations_claims.py` enumerates it: **50 numbered claims across Book I, Book II, toy, gcm — 9 evidence tags between them**, while Book IV's 59 chapters are tagged throughout. Per Pablo's order: book1 → book2 → toy → gcm → what books 3 and 4 rest on → **GTCT**.
-2. **The join does not exist.** 82 theorems are kernel-checked for Volume I in `TOTOGT/vol1-proofs`. **29 of 82 are named in the four documents; 53 are not.** No mapping from a numbered Result to a Lean name exists in either repo, so "Volume I is machine-verified" is a statement about a file, not about the document citing it.
-3. **The assumed-conclusion gap (R20).** `spiral_return_exists` takes *"the 128-orbit does not return"* as a hypothesis and closes `exact h_second_circuit`. Kernel-checks clean. **No instrument here looks for a hypothesis that is the conclusion.** The offending theorem is in `io`/`AXLE`, not geometry.
-4. **22 theorems depend on `sorryAx`**, named in `tools/verify-audit/2026-09-09/`. Every published page citing one **does** disclose it — checked 2026-09-18, `book4/ch12.html` included. No undisclosed claim found. `[SHOWN]`
-5. **WP-41's per-person cost, corrected twice** (`2ba1377`): $100–200k is the price of a *destination*, not of moving — people move themselves for hundreds to thousands, and IOM recorded 7,904 deaths on migration routes in 2025. And the figure is denominated in a currency whose meaning is conditional on the scenario not arriving. Neither end re-derived. `[OPEN]`
-6. **Green Lean comes home (R22).** `vol1-proofs`' 82 theorems belong in geometry once CI is green. It has not been rebuilt — no toolchain on this desk. Step 2 of 4.
-7. Carried: WP-124 collision (owner's call); `ch-strogatz` and Chapter R §VI readability; k₂₁₀ needs the printed page; 60 of 122 scripts record no limits.
+1. **F3 then F2, then Book IV tagging.** Nothing downstream is worth doing first. The collision list is printed by `python3 tools/superstructure_census.py`.
+2. **The join does not exist.** 82 theorems are kernel-checked for Volume I in `TOTOGT/vol1-proofs`; **29 are named in the four base documents, 53 are not, and 0 are named anywhere in Books III or IV.** "Volume I is machine-verified" remains a statement about a file, not about the document citing it.
+3. **Eighteen of thirty-four base-layer claims are UNMATCHED** (53%) — a reading job, not a script. `UNMATCHED` is not `UNPROVED`; the script cannot tell "no Lean exists" from "topic matching missed it", and 53% is too large to leave undecided.
+4. **The assumed-conclusion gap (R20).** `spiral_return_exists` takes *"the 128-orbit does not return"* as a hypothesis and closes `exact h_second_circuit`. Kernel-checks clean. **No instrument here looks for a hypothesis that is the conclusion.** The offending theorem is in `io`/`AXLE`, not geometry.
+5. **22 theorems depend on `sorryAx`**, named in `tools/verify-audit/2026-09-09/`. Every published page citing one **does** disclose it — checked 2026-09-18, `book4/ch12.html` included. No undisclosed claim found. `[SHOWN]`
+6. **Green Lean comes home (R22).** `vol1-proofs` branch `port-v4.32` is on the remote at `5e49766` — the v4.14→v4.32 port, **not built on this desk, no toolchain**. CI is the judge. Green → the file moves into geometry with its axiom report and the 82 claims get tagged. Red → the error list is the next work, and it is a list now, not an unknown. Step 2 of 4.
+7. **WP-41's per-person cost, corrected twice** (`2ba1377`): $100–200k is the price of a *destination*, not of moving — people move themselves for hundreds to thousands, and IOM recorded 7,904 deaths on migration routes in 2025. And the figure is denominated in a currency whose meaning is conditional on the scenario not arriving. Neither end re-derived. `[OPEN]`
+8. Carried: WP-124 collision (owner's call); `ch-strogatz` and Chapter R §VI readability; k₂₁₀ needs the printed page; 60 of 122 scripts record no limits; WP-127 gaps Q5 (the 12–22% yield band is unsourced) and Q7 (ILUC/CORSIA/ReFuelEU/RenovaBio certification, which gates the SAF commercial thread); Book X ch06 gap P3 (Moyo vs coordination — the one genuinely unfinished argument).
 
 ### Other repositories — full table in `docs/HANDOFF-2026-09-18.md` §5
-Unpushed: **vol1-proofs 2** (fixed today — build restored at the v4.14 pin, counts reconciled to 82, forward debt in its `docs/MATHLIB-FORWARD-v4.32.md`; **NOT rebuilt, no toolchain on this desk — do not link it anywhere until CI is green**), **neuro 5** (needs credentials; public, names a clinic), **AXLE 1**. Five more have dirty trees, **not inspected**. Fifteen local repos is itself the mechanism behind "I trust things are done and they aren't."
+**vol1-proofs**: branch `port-v4.32` pushed at `5e49766`; `main` restored at the v4.14 pin, counts reconciled to 82, forward debt in `docs/MATHLIB-FORWARD-v4.32.md`. **Do not link it anywhere until CI is green.** Unpushed elsewhere: **neuro 5** (needs credentials; public, names a clinic), **AXLE 1**. Five more have dirty trees, **not inspected**. Fifteen local repos is itself the mechanism behind "I trust things are done and they aren't."
 
 ### Parked, working
 A PatternBoost-style loop in the session scratchpad: exact maximum-Sidon ground truth by DFS to n=40 (2 nodes → 960,537, the wall visible), then a 3-layer transformer + local search that **matched the exact optimum k=8 at n=40 in 20 s**, every candidate checked exactly rather than trusted. Needs a home and a verify script if it is wanted.
@@ -143,8 +167,13 @@ without opening the file. `[OPEN]`
 books 3 and 4 rest on → GTCT.**
 
 `tools/foundations_claims.py` measures why. The four foundational documents
-carry **50 numbered claims and 9 evidence tags between them**; Book IV's 59
-chapters are tagged throughout. The base is the only unmarked layer.
+carry **50 numbered claims and 9 evidence tags between them**.
+
+**Corrected 2026-09-19.** This rule used to continue "Book IV's 59 chapters are
+tagged throughout. The base is the only unmarked layer." `tools/superstructure_census.py`
+counted them: **31 of Book IV's 59 files carry neither a numbered claim nor a
+tag, and 11 carry any tag at all.** The base was not the only unmarked layer.
+It was the layer that had been counted.
 
 An evidence tag on a chapter standing on an untagged assumption is decoration.
 Tag the base first, then what rests on it.
