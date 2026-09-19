@@ -198,7 +198,82 @@ for g in [
  "    R22 and the port branch. If the port fails, the 'SHOWN' rows above are",
  "    resting on a build nobody has reproduced since the pin moved.",
 ]: print("  "+g)
+
+print()
+print("="*78); print("3 -- THE EIGHTEEN UNMATCHED, READ ONE BY ONE (2026-09-19)"); print("="*78)
+print("""  UNMATCHED meant "this script's topic matching found nothing". It could not
+  tell that apart from "no Lean exists". Both documents and the Lean were read
+  on 2026-09-19 and the eighteen are now decided. THE HEADLINE IS THAT MOST OF
+  THEM HAVE NO LEAN AT ALL -- which is a fine thing for a claim to be, and a
+  bad thing for a corpus to leave undeclared.""")
+for row in [
+ ("BOOK I", ""),
+ ("Theorem 12.1", "NO LEAN. Symplectic preservation, F*omega = omega. Nothing in the"),
+ ("",            "82 touches differential forms."),
+ ("Theorem 3.1",  "NO LEAN. Sequential consistency of K then F."),
+ ("Theorem 5.1",  "NO LEAN. Well-posedness of G = U.F.K.C on piecewise-C2 paths."),
+ ("Theorem 5.2",  "NO LEAN. Local determination."),
+ ("Theorem 5.4",  "CUTS AGAINST IT. Irreducibility says no operator can be removed."),
+ ("",             "compression_permits_identity proves there EXISTS a compression"),
+ ("",             "operator equal to the identity. In that instance C removes"),
+ ("",             "nothing. Same shape as 5.3: the Lean bounds the claim rather"),
+ ("",             "than supporting it, and nothing on the page says so."),
+ ("BOOK II", ""),
+ ("Theorem 3.5",  "NUMERIC INSTANCE ONLY. The claim is an equivalence."),
+ ("",             "dPhi_at_threshold proves 0 < dPhi (9/50) -- one point, one"),
+ ("",             "direction, no equivalence."),
+ ("Theorem 3.2",  "ARITHMETIC ONLY. gronwall_contraction_below_stability_radius and"),
+ ("",             "noiseTolerance evaluate the canonical constants; neither proves"),
+ ("",             "the implication the theorem states."),
+ ("Theorem 3.4",  "NO LEAN. The converse direction has nothing."),
+ ("Lemma 3.1",    "NO LEAN. See section 4 for why mu_dm3_neg is not evidence."),
+ ("Lemma 3.3",    "ALREADY DISCLOSED. The document itself prints SORRY on this one."),
+ ("Proposition 2.1","ADJACENT, NOT THE CLAIM. contactCoeff_neg gives contactCoeff rho"),
+ ("",             "< 0 for rho > 0. The claim is that H_diss smoothly regularizes S."),
+ ("Proposition 4.3","A DEFINITION IS NOT EVIDENCE. The claim is that the system TAKES"),
+ ("",             "the contact normal form with (mu_max, omega, beta) = (-2, 1, 1)."),
+ ("",             "canonicalTriple ASSIGNS mu_max := -2. Assigning a value is not"),
+ ("",             "deriving it."),
+ ("Theorem B",    "THREE DIFFERENT CLAIMS UNDER ONE LABEL -- and it is stated, not"),
+ ("",             "merely listed, in all three: Book II's is Threshold Equivalence,"),
+ ("",             "the toy model's is the invariant torus with mu_perp = -3, gcm's"),
+ ("",             "is closure under unification, tau_12 <= min(tau_1, tau_2)."),
+]:
+    k,v = row
+    if v == "": print("  " + "-"*60 if k else ""); print("  %s"%k) if k else None
+    else: print("    %-17s %s" % (k, v))
+
+print()
+print("="*78); print("4 -- MINUS TWO AND MINUS THREE"); print("="*78)
+print("""  Two Lyapunov exponents run through this corpus and nothing reconciles them.
+
+      PrincipiaVol1.mu_canonical   -(V'' 1) / 2 = -3     docstring: "Canonical
+                                                         Lyapunov exponent from
+                                                         Whitney fold"
+      PrincipiaVol1.mu_dm3_neg     (-2 : R) < 0          docstring: "dm3
+                                                         transverse Lyapunov
+                                                         exponent mumax = -2"
+
+  They sit four lines apart in PrincipiaVol1.lean. The first DERIVES -3. The
+  second proves that the literal -2 is negative -- the identification of mumax
+  with -2 is in the docstring, not in the theorem. canonicalTriple then ASSIGNS
+  mu_max := -2 by definition.
+
+  The documents do the same thing. The toy model's Theorem B gives the
+  transverse Lyapunov exponent as -3. Book II's Proposition 4.3 gives
+  mu_max = -2 in the contact normal form.
+
+  These may well be two different quantities -- a canonical exponent from the
+  Whitney fold and a transverse exponent of the limit cycle are not obviously
+  the same number. THAT IS THE POINT: nothing in either repo says which, and a
+  reader meeting mu_canonical four lines above mu_dm3_neg has no way to tell
+  whether -2 and -3 are a distinction or a discrepancy. `[OPEN]`
+
+  What would settle it: one sentence in PrincipiaVol1.lean naming the two
+  quantities, and one in Book II saying which of them Proposition 4.3 uses.""")
+
 print(); print("="*78)
 print("Proposal only. Theorem 5.3 was the one repair applied, 2026-09-18.")
-print("5 gaps recorded above remain open.")
+print("The eighteen UNMATCHED were read and decided 2026-09-19 -- section 3.")
+print("6 gaps recorded above remain open.")
 print("="*78)
