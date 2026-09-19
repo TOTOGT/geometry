@@ -9492,3 +9492,52 @@ promoted without being checked, in mathematics exactly as in a citation.
 
 `tools/audit.py` unchanged at 27 dead_link, 2 double_escaped. `[CLOSED]`
 
+---
+
+### 2026-09-19 — the series rule goes on the cover, and the cover was not where it looked
+
+The author: *it goes in the cover page of the entire series, and I think that is
+the master index.* It is not, and the distinction matters more than the naming.
+
+`master-index.html` is **generated** — `tools/build_indexes.py` rewrites it from
+scratch on every run, and this session ran that generator twice today. Anything
+hand-typed into it is destroyed by the next build, silently, with the file still
+looking finished. A standing statement that a build can erase is not standing;
+it is pending deletion.
+
+The series cover is `series-hub.html` (title: *Principia Orthogona · Series Hub
+· All Volumes*). The root `index.html` is the G6 site front door, not the
+series.
+
+So the rule now sits in three places, deliberately:
+
+| where | how it got there |
+|---|---|
+| `series-hub.html` | written in, after the h1, as the cover epigraph |
+| `master-index.html` | emitted by the generator |
+| `tools/build_indexes.py` | as the constant `DIDACTIC`, with a comment saying why it is there and not in the output |
+
+`tools/series_rule_check.py` checks all three and fails if the rule is in the
+output but not in the generator — the state that looks fine today and is gone
+after the next build. Wired into `corpus-audit.yml`. Verified by running the
+generator **twice** and confirming the text survived, which is the only test
+that actually distinguishes the two cases.
+
+**The content, per the author: this is a didactic for polymaths.** The thesis is
+that a result with a person attached is contingent — somebody wanted something,
+tried something, could have been wrong — and that stripping the person off
+promotes it to something found rather than made. The polymath is the reader most
+exposed, because in a field you trained in the community carries the memory of
+which conventions were arbitrary and which results were contested; crossing into
+a field you did not train in, you get the polished surface with the argument
+sanded off and nobody to point at the seams.
+
+Three questions, on the page, for anything you did not grow up inside: who made
+this and what were they trying to do; what did it cost them to be wrong; where
+does it resolve. And the line that ties the series' two halves together —
+anonymity is what lets a claim get promoted without being checked, in
+mathematics exactly as in a citation. The apparatus in this corpus is one rule
+applied twice.
+
+`tools/audit.py` unchanged at 27 dead_link, 2 double_escaped. `[CLOSED]`
+

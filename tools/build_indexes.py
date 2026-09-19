@@ -388,6 +388,31 @@ def row_html(rel: str, title: str, n: int, prefix: str = "",
             f'<span class="path mono">{esc(rel)}</span></a>\n  {kind}{ev}{tag}\n</div>')
 
 
+# ---------------------------------------------------------------------------
+# The series rule, emitted onto the master index.
+#
+# It lives HERE and not in master-index.html because master-index.html is
+# generated: anything hand-typed into it is destroyed by the next run of this
+# script, silently, with the file still looking finished. A standing statement
+# that can be erased by a build is not standing. Put it in the generator and it
+# survives every regeneration by construction -- which is the same argument the
+# statement itself makes about names on results.
+# ---------------------------------------------------------------------------
+DIDACTIC = """<div class="didactic" style="max-width:52rem;margin:1.6rem auto;padding:1.1rem 1.35rem;border-left:3px solid rgba(201,168,76,.75);background:rgba(128,128,128,.07);border-radius:0 6px 6px 0;font-size:.95rem;line-height:1.75;text-align:left">
+<p style="margin:0 0 .55rem;font-family:ui-monospace,Menlo,monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;opacity:.8">The rule this series is built on</p>
+<p style="margin:0 0 .8rem;font-size:1.06rem"><strong>People are passed over a lot, and then the mathematics gets another status.</strong></p>
+<p style="margin:0 0 .8rem">A result with a person attached is contingent. Somebody wanted something, tried something, was working in a place at a time, and could have been wrong. Strip the person off and the same result reads as if it were <em>found</em> rather than made &mdash; ownerless, timeless, above the ordinary business of being argued with. The promotion is unearned, and it is invisible, because nothing on the page says a name was removed.</p>
+<p style="margin:0 0 .8rem"><strong>This is a didactic for polymaths, and that is not a flourish.</strong> Someone who works across fields is the reader most exposed to it. In a field you trained in, the community carries the memory: you were told which conventions are arbitrary, which results were contested for thirty years, which definition won a vote. Crossing into a field you did not train in, you get the polished surface with the argument sanded off &mdash; and no one to tell you where the seams were. What you cannot see, you cannot doubt in the right place.</p>
+<p style="margin:0 0 .55rem">So the method, in three questions, asked of anything you did not grow up inside:</p>
+<ol style="margin:0 0 .8rem 1.2rem">
+<li><strong>Who made this, and what were they trying to do?</strong> A result you cannot attribute is a result you cannot yet argue with.</li>
+<li><strong>What did it cost them to be wrong?</strong> Conventions adopted cheaply and defended for a century look identical to theorems, until you ask.</li>
+<li><strong>Where does it resolve?</strong> A file, a page number, a script that recomputes it. If the answer is &ldquo;it is well known&rdquo;, you have found the seam.</li>
+</ol>
+<p style="margin:0">That is also why every volume here names its people, and why every claim carries the path it resolves at. <strong>Anonymity is what lets a claim get promoted without being checked</strong> &mdash; in mathematics exactly as in a citation. The apparatus in this series is one rule applied twice.</p>
+</div>"""
+
+
 def page(title: str, eyebrow: str, heading: str, sub: str, stats: str,
          extra: str, body: str, scope: str = "") -> str:
     return f"""<!DOCTYPE html>
@@ -521,7 +546,7 @@ def main() -> None:
         f"type <span class=\"mono\">untagged</span> in the box to see only those, or a "
         f"tag word to see every page that carries it. Two vocabularies are in use and "
         f"this page reports both rather than choosing between them.",
-        stats, f'<div class="folderlinks">{links}</div>', "\n".join(blocks),
+        stats, DIDACTIC + f'<div class="folderlinks">{links}</div>', "\n".join(blocks),
         scope=scope_note), encoding="utf-8")
 
     ex_rows = "\n".join(
