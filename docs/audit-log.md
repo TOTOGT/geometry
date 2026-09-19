@@ -9380,3 +9380,65 @@ double_escaped; all relative hrefs on the new pages and the index resolve.
 verifier: every `bookNN/ch*.html` should be linked from `bookNN/index.html`, and
 two volumes failing it on one day says the next one will too. `[OPEN]`
 
+---
+
+### 2026-09-19 — the overlooked-mathematicians gallery, reproduced and then audited
+
+A nineteen-card gallery was supplied for Book VII: *The Mathematicians History
+Overlooked*, Hypatia to Mochizuki, each card carrying a name, a date range, a
+one-line contribution, a formula and a subject tag. Five claims per card,
+nineteen cards, ninety-five claims, all rendered at the same level of
+confidence — which is what a handsome card does.
+
+The cards are kept verbatim in `book7/gallery-overlooked-data.tsv` so the audit
+runs against the data rather than against the prose, and
+`book7/gallery-overlooked-verify.py` recomputes every count (exit 0).
+
+**The useful output: 5 of 19 already have a chapter here, 14 do not.** Hypatia,
+Omar Khayyam and Madhava are in Volume IX; Sophie Germain and Grothendieck in
+Volume VII. The fourteen without are a commissioning list with the gaps already
+marked, which is what a gallery is good for in a volume whose rule is that a
+chapter exists when there is a person whose encounter with an object is the
+point. The verifier also fails in the *other* direction: a card marked
+&ldquo;no chapter&rdquo; for whom a chapter later appears fails the script, because a
+page that under-reports its own corpus is wrong where nobody looks.
+
+**Two entries fail the gallery's own premise.** Grothendieck is among the most
+celebrated mathematicians of the twentieth century, a Fields Medallist and the
+reason a generation of algebraic geometers speak as they do. Mochizuki is the
+subject of one of the most public disputes in modern number theory. Neither was
+overlooked. Two cards in nineteen weaken the thesis the other seventeen make.
+
+**Two subject tags do not match the contribution.** Aryabhata's refined value of
+&pi; and al-Kashi's sixteen decimal places are both tagged *Number Theory*; they
+are approximation and computation. Liu Hui's polygon method for the same
+constant is tagged *Geometry*, correctly — and the disagreement between the
+three cards is how the error becomes visible.
+
+**Two formula slots carry someone else's work.** Seki Takakazu's card credits
+him correctly with determinants and then prints `ax² + bx + c = 0` — the same
+formula as Brahmagupta's card eleven places earlier. Nārāyaṇa Paṇḍita's card
+prints `(a+b)² = a² + 2ab + b²`, which belongs to nobody in particular and
+certainly not to a man remembered for magic squares. A formula slot on a card
+of this kind reads as *this is the thing this person gave us*; filling it
+because the design wants a line of monospace teaches the reader something false
+and looks exactly as authoritative as the card beside it that is right.
+
+**The epigraph is attested and unsourced.** &ldquo;Algebra is but written geometry
+and geometry is but figured algebra&rdquo; is given to Sophie Germain. It appears on
+MacTutor's Germain quotations page with **no source attached**, while the letter
+to Gauss on the same page carries a date, 1807. Attested in a reference work and
+not traced to a document — a real state, and different from both sourced and
+spurious.
+
+**Not claimed:** that the biographical notes are wrong (nothing checked
+contradicted them, and what was checked is listed), that the dates are settled
+(several are `c.` for good reason), or that fourteen missing chapters is a
+criticism of the gallery. It is the gallery's contribution.
+
+The verifier's own count of rendered status markers was wrong on the first run
+— it counted the words in the legend prose as well as the cards, giving 15 and
+0 against a true 14 and 5. Fixed by counting the card markup instead of the
+rendered text. `tools/audit.py` unchanged at 27 dead_link, 2 double_escaped.
+`[CLOSED]`
+
