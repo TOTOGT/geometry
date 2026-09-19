@@ -8954,4 +8954,76 @@ strong reading on its own figures.
 
 **Four pages still carry the unhedged form** — `vol2-dashboard.html`,
 `ch-e-gtct.html`, `ch24-seed-sentences.html` (which defends it) and the TO deploy.
-Not edited here; an author's call on published pages. `[OPEN]`
+Not edited here; an author's call on published pages. `[CLOSED 2026-09-19]`
+
+---
+
+### 2026-09-19 — the identity claim, corrected on the pages; and the count of pages was wrong
+
+Deferring was the defect. One session declining to edit does nothing when several
+sessions have already let the claim through; "an author's call" is what allowed it
+to stand. The pages are corrected.
+
+**The count in the entry above was itself produced by the search that made it.**
+"Four pages" came from one grep. `grep -rln "exact mathematical identit"` over
+`--include=*.html` returns **eleven** files, thirteen occurrences:
+
+| file | occurrences | state before |
+|---|---|---|
+| `vol2-dashboard.html` | 1 | corrected earlier today |
+| `ch-e-gtct.html` | 1 | corrected earlier today |
+| `ch07-four-orbits.html` | 1 | corrected earlier today — **not on the list of four** |
+| `ch20-coherence-bridge.html` | 1 | corrected earlier today — **not on the list of four** |
+| `ch00-introduction.html` | 2 | uncorrected — one is a student exercise that presupposes it |
+| `ch24-seed-sentences.html` | 1 | hedged on a different ground, not this one |
+| `journey.html` | 1 | uncorrected — a JS topic string, invisible to a prose reader |
+| `minibeast-pilot.html` | 3 | uncorrected |
+| `book4/hub.html` | 1 | uncorrected — the page the test's own data is parsed from |
+| `book4/chIV-preface-impa.html` | 1 | uncorrected |
+| `vol2-v5/deposit/dashboard.html` | 1 | uncorrected — a duplicate of `vol2-dashboard.html` (R9) |
+| `book17/_to_delete/_b.html` | 1 | scratch, pending deletion; declared, not edited |
+
+Two of the four named were not among the pages actually carrying it, and seven
+pages carrying it were not named. The entry above was written from a search
+narrower than the corpus and then read back as if it were a census — the same
+shape as the "no calculus textbook of any kind" error, and the reason R15 exists.
+
+`book4/hub.html` is the sharpest of them: it is the page `tools/coherence_similarity.py`
+**parses the table out of**. The data that falsifies the claim and the claim itself
+were on one screen.
+
+All eleven live pages now carry the withdrawal block or, for `journey.html`, a
+corrected topic line. `tools/audit.py`: 27 dead_link, 2 double_escaped, unchanged
+— no new finding introduced. `[CLOSED]`
+
+---
+
+### 2026-09-19 — `[documented]` is not a verification marker
+
+Book XVII's index and chapter 1 printed a list of total-function-kernel facts
+marked `[documented]`. The marker meant: read somewhere, not run here. Book XVII's
+whole thesis is that a subject taught early is not thereby settled, and it was
+resting that thesis on recollection.
+
+Run: `book17/Book17Core.lean` (12 theorems, no imports) and
+`book17/Book17Mathlib.lean` (9 theorems, Mathlib v4.33.0-rc1). Both gate clean
+under `tools/axiom_gate.py` — no `sorryAx`, nothing outside
+`[propext, Classical.choice, Quot.sound]`.
+
+Two rows came back sharper than the prose that cited them:
+
+- `Filter.Tendsto f l₁ l₂` unfolds **definitionally** to `Filter.map f l₁ ≤ l₂`,
+  so "limits are filters" closes by `Iff.rfl`. It is not an analogy or a
+  reformulation; it is the definition.
+- `variance_of_not_memLp`: a real random variable with no second moment does not
+  make `variance` undefined. It makes it **zero**, and the zero is a theorem.
+
+One row was added rather than verified: `(-7 : Int) / 2 = -4`. Lean's integer
+division is Euclidean, so the remainder is never negative — not what C, or a
+Python `int()` that rounds toward zero, returns.
+
+`book17/book17-claims-verify.py` pairs each published string with the theorem that
+closes it, and checks the `.lean` files hash to the bytes the toolchain actually
+read. A saved `#print axioms` report proves nothing about a file that has since
+changed. It caught exactly that during this commit: a ninth theorem was added, the
+stale report was still on disk, and the script refused. `[CLOSED]`
