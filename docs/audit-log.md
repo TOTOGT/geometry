@@ -8847,7 +8847,9 @@ its middle.
 ## 2026-09-19 (later still) · The ledger was right, and wrong sixty minutes later
 
 `book17/index.html` and `book18/index.html` both published **"no calculus textbook of
-any kind."** It was true of the scan that produced it and false by 02:39, when
+any kind."** (XVII was corrected first; XVIII's patch failed on a string mismatch and was
+corrected in the following commit — recorded here because a half-applied correction is
+worse than none.) It was true of the scan that produced it and false by 02:39, when
 `Advanced_Calculus.pdf` (Loomis & Sternberg, revised edition, 592 pp) and
 `math1a_2021.pdf` (Knill, *Introduction to Calculus*, Harvard Math 1a, 311 pp) appeared
 in Downloads. Re-run: **39 third-party texts, not 37.**
@@ -8868,3 +8870,10 @@ end. None were unreadable in this run; the bug was latent, not the cause.
 collected works, not a secondary study. Book XVIII's chapters 2–4 become writable;
 chapter 1 stays blocked, because its argument is about what Leibniz's notation does that
 Newton's does not, and a modern textbook restating the rule cannot warrant that.
+
+**Text-layer census, run the same day.** The volumes' warrant is that page numbers are
+*located by script*, which requires a text layer. Sixteen held texts checked at three
+sample pages each: fourteen return 900–2,000 characters per page. **Two return zero** —
+`whiteheadrussell-principiamathematicavolumei.pdf` (719 pp) and
+`aMathematiciansApology-HARDY.pdf` (80 pp) are image scans. They can be read by a human
+and cannot be cited by this corpus's own method. Held is not the same as addressable.
