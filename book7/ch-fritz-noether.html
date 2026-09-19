@@ -148,11 +148,25 @@ That is an index theorem &mdash; a topological invariant equal to an analytic on
 
 <p>What it is not is e<sup>&minus;4&pi;</sup>. The only non-zero indices this geometry admits are ∓ the winding number: integers, and for Γ that is &minus;1. e<sup>&minus;4&pi;</sup> = 3.487342356&times;10<sup>&minus;6</sup> is not an integer, so it is not the index of anything, here or elsewhere.</p>
 
-<h2>4 &middot; What is owed</h2>
+<h2>4 &middot; The kernel now reports it</h2>
 
-<p>WP-82's bar for Volume XI is <em>&ldquo;an index, computed, verified, and reported by the kernel&rdquo;</em> &mdash; a Lean file that elaborates clean against a pinned Mathlib and reports its axioms. <strong>This is not that.</strong> It is exact arithmetic on basis vectors plus two citations. The index is computed and it is verified; it is not kernel-reported, and the volume does not open until it is.</p>
+<p>WP-82's bar for Volume XI is <em>&ldquo;an index, computed, verified, and reported by the kernel.&rdquo;</em> <span class="mono">ToeplitzIndex.lean</span> does that, and needs no Mathlib to do it.</p>
 
-<p>What has changed is that there is now something to formalise. Before this chapter the obstruction was that no operator existed to write a theorem about. <span class="mono">[OPEN]</span></p>
+<div class="box thm">
+<span class="lab">ToeplitzIndex.lean &middot; Lean v4.33.0-rc1, no imports &middot; sha256 <span class="mono">1d42bf0977&hellip;</span></span>
+<pre style="margin:.6rem 0 0;font-size:.85em;line-height:1.5;overflow-x:auto">def toeplitz (k : Int) (n : Nat) : Option Nat :=
+  if 0 &le; (n : Int) + k then some ((n : Int) + k).toNat else none
+
+theorem mem_ker   : toeplitz k n = none &harr; (n : Int) + k &lt; 0
+theorem mem_coker : (&forall; n, toeplitz k n &ne; some m) &harr; (m : Int) &lt; k
+theorem toeplitz_index (k : Int) :
+    (kerCount k : Int) - (cokerCount k : Int) = -k</pre>
+<div style="margin-top:.7rem">Seven declarations, none admitted. <span class="mono">tools/axiom_gate.py</span>: <strong>OK &mdash; 7 theorems, no sorryAx, no axiom outside the permitted set.</strong></div>
+</div>
+
+<p>Two things about what that is and is not. <strong>It needs no Mathlib</strong>, which is a stronger position than the bar asked for &mdash; the dependency is Lean core and nothing else, so the file cannot drift with a Mathlib bump. And <strong>it formalises the count, not the analysis.</strong> The kernel now certifies that the kernel and cokernel of the basis action are the finite sets this chapter claims, and that their difference is &minus;k for every k. That T<sub>k</sub> is bounded, that it is Fredholm, that the index is a homotopy invariant, and Noether's theorem itself, are all still outside Lean &mdash; named in the file's own scope block before the first theorem.</p>
+
+<p>So the arithmetic underneath Volume XI's index is kernel-reported, and the analytic content is not. That is a smaller claim than &ldquo;Volume XI opens&rdquo;, and it is the true one. <span class="mono">[the count VERIFIED &middot; the analysis OPEN]</span></p>
 
 <h2>5 &middot; Status</h2>
 <ul>
@@ -160,14 +174,14 @@ That is an index theorem &mdash; a topological invariant equal to an analytic on
 <li>Index of the differential one: <strong>0, for every a</strong>, and by a theorem rather than by computation. <span class="mono">[VERIFIED]</span></li>
 <li>Index of the Toeplitz one: <strong>&minus;winding</strong>, and &minus;1 on Γ. <span class="mono">[VERIFIED]</span></li>
 <li>Agreement with the K¹ class of <a href="ch-atiyah.html">ch-atiyah</a>: <strong>yes</strong>, by Noether 1921. <span class="mono">[standard]</span></li>
-<li>Kernel-checked core for Volume XI. <span class="mono">[OPEN &mdash; and now writable]</span></li>
+<li>Kernel-checked core for Volume XI: <strong><span class="mono">ToeplitzIndex.lean</span>, seven declarations, gate OK.</strong> The count is reported by the kernel; Fredholmness, homotopy invariance and Noether&rsquo;s theorem are not. <span class="mono">[count VERIFIED &middot; analysis OPEN]</span></li>
 </ul>
 
 <h2>6 &middot; References</h2>
 <ol class="refs">
 <li>F. Noether, <em>Über eine Klasse singulärer Integralgleichungen</em>, Math. Ann. 82 (1921) &mdash; the first index theorem; Noetherian operators are named for it. Biography: <a href="https://mathshistory.st-andrews.ac.uk/Biographies/Noether_Fritz/">MacTutor</a>.</li>
 <li><a href="../book6/wp82-the-missing-floor.html">WP-82 &sect;3b</a> &middot; <a href="ch-atiyah.html">ch-atiyah</a> &middot; <a href="ch-conley.html">ch-conley</a> &middot; <a href="ch-grothendieck.html">ch-grothendieck</a></li>
-<li><span class="mono">book7/ch-fritz-noether-verify.py</span> &mdash; five blocks, standard library only, exit 0, 2026-09-19.</li>
+<li><span class="mono">book7/ch-fritz-noether-verify.py</span> &mdash; five blocks, standard library only, exit 0 &middot; <span class="mono">ToeplitzIndex.lean</span> &mdash; Lean v4.33.0-rc1, no imports, sha256 <span class="mono">1d42bf09774442fd2ce637899545041f5887c601fa0ff05f1386e4740edf1168</span>, 2026-09-19.</li>
 </ol>
 
 </div>
