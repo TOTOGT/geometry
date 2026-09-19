@@ -128,6 +128,21 @@ Set today by Pablo: *"when you run index, master index, tags go in the master in
 
 These may well be two different quantities — a canonical exponent from the Whitney fold and a transverse exponent of the limit cycle need not be the same number. **That is the point:** nothing in either repo says which, so a reader meeting the two theorems four lines apart cannot tell a distinction from a discrepancy. What settles it is one sentence in `PrincipiaVol1.lean` naming the two quantities and one in Book II saying which Proposition 4.3 uses. `[OPEN]`
 
+### Proved labels are PAGE-level, and the granularity that matters is per-claim
+
+**Set 2026-09-19 by Pablo: *"some of the theorems are proven, parts are conjectures."*** That is the normal state of a page in this corpus, not a defect, and the label added today does not yet express it.
+
+`tools/proved_labels.py` appended a **Proved · kernel-checked** block to 95 pages — 254 links to Lean, file and line, zero dead. What that block says is true and narrow: *these named declarations are kernel-checked and live here*. What it does **not** say, and must not be read as saying, is that the page is proved. A page routinely holds proved theorems, cited results, modelling assumptions and open conjectures side by side, and a reader who sees one green block at the foot of it may take the whole page as settled.
+
+**So the block is a floor, not a verdict.** It is better than the previous state — where the proof existed, had been moved here, and nothing on the page pointed at it — and it is two steps short of right:
+
+1. **Per-claim, not per-page.** Each numbered Theorem/Proposition/Lemma should carry its own label beside it, linked to the declaration that bears on *that* claim. The page-level block cannot distinguish Theorem 3 (proved) from Conjecture 7 (open) and currently implies nothing about either.
+2. **The claim→declaration join still does not exist.** `tools/foundations_evidence.py` §3 has it for the base layer's 34 claims, by hand. For the other 298 claims on 127 untagged pages there is no map, and the page-level block was possible only because it needs no map — it links what the page *names*, not what the page *claims*.
+
+**The eight sorryAx pages are the same point in sharper form.** `book4/ch12` and `book4/rh-paper` (Book IV), and `ch-d2-academic`, `ch-d2-parashurama`, `ch-ocio`, `series-layer-map`, `GameTheory_Full_Pack` and `GameTheory_Full_Pack.FIXED` (Book III, at the root). All eight disclose — re-checked 2026-09-19, not inherited from the ledger. They are not defective pages: they are pages where part is proved and part is not, and the honest label for them is per-claim or nothing. Three declarations account for six of them, so closing `g6_unconditional_closure` alone clears four. And the two GameTheory packs are a **duplicate pair with identical titles** — R9, neither declared nor recorded as a finding. `[OPEN]`
+
+**The aim is per-claim labels throughout, linked to Lean, with conjectures marked as conjectures.** Nothing about today's pass forecloses it; the page-level block is idempotent and a per-claim pass can be laid over it and the block then retired.
+
 ### ε₀ = 1/3 is an input, not a result — formalized 2026-09-19
 Pursuing the −2/−3 question to the bottom turned up a second and larger gap, and `book2/lean/StabilityRadius.lean` now makes it machine-visible.
 
