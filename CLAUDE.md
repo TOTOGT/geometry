@@ -1029,6 +1029,9 @@ nothing else in this file answered it. The series descends:
 | IX | **Omega Point — The Convergence Series** | **logic and philosophy** |
 | X | Custody, Transmission, and the Continent | **the floor — and it is not linear** |
 
+**Books 10 and 11 are the live work front as of 2026-09-19.** Everything above
+them is written; the series is not waiting on Books I–IX.
+
 The floor not being linear is the point, not a caveat. Book X returns to custody
 and transmission, which is where Book I's reader came from; the series does not
 terminate in a foundation, it closes on the human question it opened under. This
@@ -1092,8 +1095,14 @@ like this, and **this is a proposal, not a decision**:
 than scope** — neither appears anywhere in 782 files, and the gallery opens with
 Germain's epigraph.
 
-Volumes XI and above (`book11` … `book33`) sit outside the ten-book arc and are
-not governed by any of this.
+**Corrected 2026-09-19 by Pablo.** An earlier version of this section said
+volumes XI and above "sit outside the ten-book arc". They do not. *"The series
+will move up and down into the very basics — not rung 33, volume 33."* The
+numbering is not a ladder and a higher number is not a higher rung: Vol XI asks
+what a numeral names, Vol XII asks what goes wrong when you count, Vol XVII is
+the machine floor. **Those are the basics, and the series descends into them
+after Book X, not above it.** The same non-linearity as the floor itself. A
+volume number is an address, never an altitude.
 - Ring nav: G3 · Part I/II/III/IV → G4 → G5 (injected as `.po-ring-strip` after `</nav>`)
 - Spiral map: `book4/living-book.html` — the G1–G5 hub
 - Standard typography: follow `prelude.html` (Georgia 18px, line-height 1.75, #e8e4d8)

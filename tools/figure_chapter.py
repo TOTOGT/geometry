@@ -17,12 +17,13 @@ import html as H, io, os, re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REF  = os.path.join(ROOT, "book7", "ch-grothendieck.html")
+REF9 = os.path.join(ROOT, "omega", "ch-hypatia.html")
 
-def _style():
-    s = io.open(REF, encoding="utf-8").read()
+def _style(ref=None):
+    s = io.open(ref or REF, encoding="utf-8").read()
     m = re.search(r"<style>(.*?)</style>", s, re.S)
     if not m:
-        raise SystemExit("no <style> in the reference chapter %s" % REF)
+        raise SystemExit("no <style> in the reference chapter")
     return m.group(1)
 
 def build(slug, name, hero_sub, description, parts,
@@ -121,3 +122,102 @@ TAGCSS = """
 .tag.t-open{color:#c1613b;border-color:#c1613b;background:rgba(193,97,59,.12);}
 .tag.t-computed{color:#6f9bd1;border-color:#6f9bd1;background:rgba(111,155,209,.12);}
 """
+
+
+# ---------------------------------------------------------------------------
+# Book IX -- the Gallery of Mathematical Mystics. A different shell: parchment,
+# a keyword in the hero, operator tags. The style is read from omega/ch-hypatia.html.
+# ---------------------------------------------------------------------------
+def build9(slug, name, years, keyword, subtitle, description, crumb, optags,
+           parts, place_rows=(), refs=(), prev=None, nxt=None, verify=None, accent="#2f6f8f"):
+    body = []
+    for h2, blocks in parts:
+        if h2: body.append("<h2>%s</h2>\n\n" % h2)
+        for b in blocks:
+            b = b.strip()
+            body.append((b if b.startswith("<") else "<p>%s</p>" % b) + "\n\n")
+    if place_rows:
+        body.append('<h2>Place in the Series</h2>\n<div class="op-map">\n<table>\n'
+                    '  <tr><th>Element</th><th>In this chapter</th><th>In dm&sup3;</th></tr>\n')
+        for a, b, c in place_rows:
+            body.append('  <tr><td class="mono">%s</td><td>%s</td><td>%s</td></tr>\n' % (a, b, c))
+        body.append("</table>\n</div>\n\n")
+    if verify:
+        body.append('<h2>Verification</h2>\n<p>Every number on this page is produced by '
+                    '<span style="font-family:var(--mono);font-size:.85rem">%s</span>, which '
+                    'records in its own closing block what it establishes and what it does '
+                    'not.</p>\n\n' % H.escape(verify))
+    if refs:
+        body.append('<h2>References</h2>\n<p style="font-size:.9rem;line-height:1.85">\n'
+                    + "<br>\n".join(refs) + "\n</p>\n")
+
+    style = _style(REF9).replace("--hyp:#2f6f8f;", "--hyp:%s;" % accent)
+    tags = "\n    ".join('<span class="op-tag %s">%s</span>' % (c, t) for c, t in optags)
+    page = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{name} &mdash; {sub} | Omega Point</title>
+<meta name="description" content="{desc}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={{tex:{{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]}},options:{{skipHtmlTags:['script','noscript','style','textarea','pre']}}}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>{style}</style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="omega-point-index.html">Omega Point &middot; The Convergence Series</a>
+  <div class="links">
+    <a href="omega-point-index.html#gallery">Gallery</a>
+    <a href="ch-al-kindi.html">Al-Kindi</a>
+    <a href="ch-rumi.html">Rumi</a>
+    <a href="https://totogt.github.io/geometry/">Principia Orthogona</a>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <span><a href="omega-point-index.html">Omega Point</a> &rsaquo; Gallery &rsaquo; {name}</span>
+  <span>{crumb}</span>
+</div>
+
+<header class="hero">
+  <div class="eyebrow">Gallery of Mathematical Mystics &middot; Omega Point</div>
+  <div class="year">{years}</div>
+  <div class="keyword">{kw}</div>
+  <h1>{name}</h1>
+  <p class="subtitle">{sub}</p>
+  <div class="op-tags">
+    {tags}
+  </div>
+</header>
+
+<main class="main">
+
+{body}
+</main>
+
+<div class="footer-nav">
+  <a href="{pv}">&larr; {pvn}</a>
+  <a href="omega-point-index.html#gallery">Gallery</a>
+  <a href="{nx}">{nxn} &rarr;</a>
+</div>
+
+<footer class="prov-foot">
+  Principia Orthogona &middot; Book IX &middot; Omega Point &middot; The Convergence Series<br>
+  Pablo Nogueira Grossi &middot; G6 LLC, Newark, New Jersey &middot; ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a><br>
+  &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC &middot; Licence CC BY-NC-ND 4.0
+</footer>
+
+</body>
+</html>
+""".format(name=name, sub=subtitle, desc=H.escape(description, quote=True), style=style,
+           crumb=crumb, years=years, kw=keyword, tags=tags, body="".join(body),
+           pv=prev[0], pvn=prev[1], nx=nxt[0], nxn=nxt[1])
+    out = os.path.join(ROOT, "omega", "ch-%s.html" % slug)
+    io.open(out, "w", encoding="utf-8").write(page)
+    print("wrote omega/ch-%s.html  (%d bytes)" % (slug, len(page.encode("utf-8"))))
+    return out
