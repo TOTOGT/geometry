@@ -1037,13 +1037,63 @@ constraint removes options rather than pushing toward an end — *"A curvatura n
 puxa o desenvolvimento para a frente; ela remove opções."* A series ordered by
 removal of options does not end where a ladder would.
 
-**Practical consequence.** A figure chapter goes to **Book VII** when the person
-put a brick in dm³'s wall and the chapter names which brick. It goes to **Book IX**
-when the person belongs to the convergence lineage — the long descent through
-logic, philosophy and transmission that `ch-pingala`, `ch-baudhayana`,
-`ch-al-kindi`, `ch-cusa`, `ch-pacioli`, `ch-zacuto` and `ch-madhava` already
-trace. Volumes XI and above (`book11` … `book33`) sit outside the ten-book arc
-and are not governed by this.
+**Practical consequence — and it is narrower than it looks.**
+
+**Book IX is the Gallery of Mathematical Mystics.** That is the corpus's own name
+for it, carried in the `<title>` of every figure chapter there, and Pablo's rule
+for who belongs, set 2026-09-19: *"there the people are mystics — science and
+math at some point was a mystical and spiritual endeavor."* **The test is not
+that the figure is old, or Eastern, or uncredited. It is that the mathematics and
+the devotional practice were the same act.** Pingala counting syllables of sacred
+chant. Baudhayana laying out a fire altar. Rumi, for whom the contact manifold is
+prayer. Hildegard's viriditas. Zacuto's tables, carried out of Spain. The sixteen
+already there:
+
+> Abraham of Ur · Hermes Trismegistus · Pingala · Baudhayana · Madhava of
+> Sangamagrama · Ramanujan · Al-Kindi · Rumi · Roger Bacon · Hildegard of Bingen
+> · Marguerite Porete · Pope Sylvester II · Luca Pacioli · Nicholas of Cusa ·
+> Rabbi Abraham Zacuto · Teilhard de Chardin
+
+**Book VII is the Scientist Gallery** — who put a brick in dm³'s wall, and the
+chapter names which brick. Seventy figure chapters. Secular by default.
+
+**These are two different galleries and a figure does not belong to both.**
+Ramanujan is the edge case the corpus already resolved by doing it twice:
+`omega/ch-ramanujan.html` is the mystic, `book7/ch-ramanujan.html` and
+`book7/ch-ramanujan-1pi.html` are the bricks. That is the pattern to follow when
+a person is genuinely both, not a duplication to clean up. **Declare it under R9.**
+
+**The "Mathematicians History Overlooked" gallery is a third register and has no
+home yet.** Uncredited is not the same as mystical and not the same as
+brick-in-the-wall. Of its nineteen, `ch-madhava` and `ch-ramanujan` are already
+Book IX mystics and `ch-grothendieck` is already a Book VII brick — the rest sort
+like this, and **this is a proposal, not a decision**:
+
+| | to Book IX, mystics | because |
+|---|---|---|
+| Hypatia | strong | Neoplatonist; taught Plotinus and Porphyry beside Apollonius |
+| Omar Khayyam | strong | the Rubáiyát and the cubic solved by conics are one person |
+| Nārāyaṇa Paṇḍita | strong | bhadra-gaṇita — magic squares are ritual objects |
+| Gangeśa Upādhyāya | strong | Navya-Nyāya is a darśana, not a technique |
+| Brahmagupta, Aryabhata | likely | the siddhānta tradition — *Brāhmasphuṭasiddhānta* is "the correctly established doctrine of Brahma" |
+| Virahanka | already there | under Pingala's name, not his own. **Worth its own chapter.** |
+| Seki Takakazu | argue it | sangaku were votive tablets hung at shrines |
+
+| | to Book VII, bricks | because |
+|---|---|---|
+| Sophie Germain | clear | elasticity and the Germain primes; and she belongs beside Noether, Kovalevskaya and Mirzakhani, who are already there |
+| Al-Khwarizmi | clear | already substantial in `wp27-ethics-of-algebra` — the chapter is half-written |
+| Al-Karaji, Abu'l-Wafa, Al-Kashi, Al-Biruni | clear | technical work — algebra, trigonometry, computation, geodesy |
+| Liu Hui | clear | a commentator on method |
+| Bhaskara II | clear | chakravala is a technique |
+| Shinichi Mochizuki | clear | living, and Book VIII may fit better |
+
+**Sophie Germain and Hypatia are the two absences that read as oversight rather
+than scope** — neither appears anywhere in 782 files, and the gallery opens with
+Germain's epigraph.
+
+Volumes XI and above (`book11` … `book33`) sit outside the ten-book arc and are
+not governed by any of this.
 - Ring nav: G3 · Part I/II/III/IV → G4 → G5 (injected as `.po-ring-strip` after `</nav>`)
 - Spiral map: `book4/living-book.html` — the G1–G5 hub
 - Standard typography: follow `prelude.html` (Georgia 18px, line-height 1.75, #e8e4d8)
