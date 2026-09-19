@@ -224,6 +224,70 @@ jobs:
           python3 tools/axiom_gate.py /tmp/gb.txt 8
       
       # =================================================================
+      # AUTHORITATIVE STEP. The floor rungs that import nothing.
+      # Added 2026-09-19. book11/Numerals.lean and book12/Counting.lean are the
+      # bottom of the floor ladder. They import NOTHING, so they elaborate with
+      # the bare `lean` binary in about a second and cannot drift with a Mathlib
+      # bump -- which is the whole reason the bottom rung was written that way:
+      # it has to run where the 7GB library cannot be fetched.
+      #
+      # Verified by hand under both v4.32.0 (this repository's pin, and what
+      # this job installs) and v4.33.0-rc1, with byte-identical reports. A hand
+      # run dates from the day it was run. This step is what makes a later
+      # regression fail the job.
+      #
+      # The diff against the saved report is not decoration. A `#print axioms`
+      # file sitting beside a `.lean` proves nothing about that `.lean` unless
+      # something checks they still agree -- the exact gap tools/ladder_check.py
+      # was written for after a header edit silently invalidated one.
+      # =================================================================
+
+      - name: Kernel axiom check on the import-free floor rungs
+        run: |
+          set -u
+          set +e
+          lean book11/Numerals.lean > /tmp/rung11.txt 2>&1; r11=$?
+          lean book12/Counting.lean > /tmp/rung12.txt 2>&1; r12=$?
+          set -e
+
+          echo "----- rung 11: what a numeral names -----"
+          cat /tmp/rung11.txt
+          echo "----- rung 12: counting -----"
+          cat /tmp/rung12.txt
+          echo "-----------------------------"
+
+          if [ "$r11" -ne 0 ]; then
+            echo "::error::book11/Numerals.lean failed to elaborate (exit $r11)"; exit 1
+          fi
+          if [ "$r12" -ne 0 ]; then
+            echo "::error::book12/Counting.lean failed to elaborate (exit $r12)"; exit 1
+          fi
+
+          python3 tools/axiom_gate.py /tmp/rung11.txt 9
+          python3 tools/axiom_gate.py /tmp/rung12.txt 11
+
+          if ! diff -u book11/numerals.axioms.txt /tmp/rung11.txt; then
+            echo "::error::book11/numerals.axioms.txt is not what the kernel just said"; exit 1
+          fi
+          if ! diff -u book12/counting.axioms.txt /tmp/rung12.txt; then
+            echo "::error::book12/counting.axioms.txt is not what the kernel just said"; exit 1
+          fi
+          echo "OK: both import-free rungs re-proved, reports on disk match."
+
+      # =================================================================
+      # Addresses, not mathematics. ladder_check.py runs no Lean: it checks
+      # that every rung's volume agrees in three independent places (the
+      # ladder, the directory, the file's own header), that each .lean still
+      # hashes to the bytes the kernel read, and that each saved report gates
+      # at the recorded theorem count. It exists because a file was committed
+      # to book11/ on the strength of a stale placement map and nothing in the
+      # repository objected.
+      # =================================================================
+
+      - name: Floor ladder addresses and recorded hashes
+        run: python3 tools/ladder_check.py
+
+      # =================================================================
       # AUTHORITATIVE STEP. Vacuity.
       # `theorem X : True := trivial` compiles, has no sorry, and passes
       # #print axioms. No axiom check can see it. Declared ones are listed in

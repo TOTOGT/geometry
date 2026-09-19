@@ -30,7 +30,18 @@ machine computed it; where it says `by omega`, the machine did the arithmetic
 reasoning; where a name appears, that name is a theorem already in Lean's core
 and the `#print axioms` block at the foot says what the whole file rests on.
 
-Toolchain: Lean 4.33.0-rc1.
+TOOLCHAIN
+
+Checked under BOTH the repository pin and the newer release, with byte-identical
+`#print axioms` reports:
+
+    lean 4.32.0        (lean-toolchain, and what CI runs)
+    lean 4.33.0-rc1
+
+Nothing here imports anything, so there is no library that can move under it.
+That is the point of keeping this rung import-free: it cannot rot with a
+Mathlib bump, and it runs in about a second on a machine that has only the
+toolchain.
 -/
 
 /-! ## 1 · Every number is zero, or one more than another

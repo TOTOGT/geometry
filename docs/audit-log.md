@@ -9123,3 +9123,74 @@ phrase is not in this printing — Strogatz gives the diagram without naming the
 plane. Common usage is not a quotation, and the phrase was removed rather than
 left in his mouth. `[CLOSED]`
 
+---
+
+### 2026-09-19 — two rung ladders, and they collide at 11 and 33
+
+**This is open and it is the author's call.** Recorded here rather than
+resolved, because resolving it by guessing is what produced it.
+
+The corpus has a rung ladder already. WP-82 orders mathematical FIELDS by
+ascending difficulty: rung 28 is K-theory and index theory, rung 29 is rung 29,
+rung 33 is Noncommutative Geometry. `docs/floor-texts.tsv` carries that mapping
+as an overlay — 28 → XI, 29 → XII, 33 → XVI — and
+`.github/workflows/verify-proofs.yml` names discrete Gauss–Bonnet as a
+"candidate core for Volume XI (rung 28, Index Theory), the FLOOR volume named
+in WP-82."
+
+`docs/floor-ladder.tsv`, written today, orders TEACHING POSITIONS from the
+bottom, and on the author's instruction rung N = book N. The two ladders now
+disagree wherever they touch:
+
+| | WP-82's field ladder | today's floor ladder |
+|---|---|---|
+| rung 11 | — | what a numeral names (`book11/Numerals.lean`) |
+| rung 28 | K-theory, index theory → **Volume XI** | — |
+| rung 33 | Noncommutative Geometry → **Volume XVI** | the index of the shift (`book33/ShiftIndex.lean`) |
+
+Two consequences, both real:
+
+1. **Volume XI now holds counting.** Under WP-82 it holds index theory, has an
+   open programme, and had "no core yet" only because the core had not been
+   written. `book33/ShiftIndex.lean` — an index computation — is arguably XI's
+   core under the older scheme, which is where it was first committed before
+   being moved out on instruction.
+2. **`ShiftIndex.lean` sits at 33, where WP-82 puts Noncommutative Geometry.**
+   The shift index is not noncommutative geometry.
+
+`tools/ladder_check.py` cannot catch this. It verifies that a rung's three
+addresses agree with each other, which they do. It has no way to know that a
+different document numbers the same word differently. A second ladder is not
+drift inside one system; it is two systems, and the only fix is a decision
+about which numbering the word "rung" carries. `[OPEN]`
+
+---
+
+### 2026-09-19 — the new rungs were outside CI, and the toolchain did not match
+
+Five `.lean` files were added today. None was a `lake` target, so `lake build`
+never touched them and no CI step named a theorem in any of them. They were
+verified on one machine on one afternoon, which is the SaturnHexagon shape the
+`lakefile.lean` comments were written about: a hand run proves a file on the
+day it is run and nothing afterwards.
+
+Also: this repository pins `leanprover/lean4:v4.32.0` and Mathlib `v4.32.0`.
+Everything today was built against 4.33.0-rc1. The headers said so, but a
+header that records a divergence is not the same as a divergence that is
+checked.
+
+Closed for the two import-free rungs, which is where it could be closed today.
+`book11/Numerals.lean` and `book12/Counting.lean` were re-run under **v4.32.0,
+the repository pin**, and the `#print axioms` reports are **byte-identical** to
+the 4.33.0-rc1 runs. `verify-proofs.yml` now re-proves both with the bare
+`lean` binary, gates them at 9 and 11 theorems, and diffs the output against
+the saved reports — because a report sitting beside a `.lean` proves nothing
+unless something checks they still agree. Both workflows also now run
+`tools/ladder_check.py`.
+
+Still open: `book17/Book17Mathlib.lean`, `book21/Spiral.lean` and
+`book33/ShiftIndex.lean` were built against Mathlib **v4.33.0-rc1** while the
+repository pins **v4.32.0**. They are not CI-checked and have not been shown to
+elaborate at the pin. That is three files whose only evidence is one afternoon.
+`[OPEN]`
+
