@@ -2,49 +2,41 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2026 Pablo Nogueira Grossi / G6 LLC
 """
-floor_texts.py -- bind each WP-82 rung to a primary text that is ALREADY on this
-machine, and give it an address: (path, sha256, pages, title line).
+floor_texts.py -- derive the primary-text ledger from the filesystem.
 
-WHY. WP-82 measured the corpus against the 33-rung ruler and found the
-distribution inverted: rung 33 in 31 file-mentions, rung 28 in two, K-theory in
-zero. Its recommendation was to build the floor first. On 2026-09-19 a scan of
-~/Downloads found the floor texts already downloaded and never opened --
-Weibel for XI, van Neerven for XII, Connes-Marcolli for XVI, Deisenroth for the
-machine-learning gap. The corpus was re-deriving what it already held.
+WHY, AND WHY IT WAS REWRITTEN ON 2026-09-19. The first version of this script
+carried a hand-kept list of eight filenames. That is the defect `build_indexes.py`
+records about its own FOLDERS list -- the list is not the corpus -- committed in
+the tool written to cure it. A scan of every PDF in Downloads then found three
+Lean textbooks the hand list had never heard of, in a corpus whose core practice
+is Lean. So this version SCANS and classifies; the rung map is an overlay on what
+is found, never the source of truth.
 
-This is the anti-churn instrument: a text with an address is cited, not
-rediscovered (R19). Run it after adding a text; it rewrites docs/floor-texts.tsv.
+    python3 tools/floor_texts.py [--downloads DIR] [--min-pages N]
 
-    python3 tools/floor_texts.py [--downloads DIR]
-
-Needs pypdf only for the page count and title line; without it the rest still runs.
+Writes docs/floor-texts.tsv. Exit 0 always -- absence here is data, not failure.
 """
 import hashlib, os, re, sys
 
-# rung, volume, subject (WP-82 §3), expected filename in Downloads, short cite
-TEXTS = [
- (28, "XI",  "K-Theory & Index Theory",        "Kbook.pdf",
-  "C. A. Weibel, The K-book: an introduction to Algebraic K-theory, 2013"),
- (29, "XII", "Operator Algebras / functional analysis floor", "2112.11166v7.pdf",
-  "J. van Neerven, Functional Analysis, Cambridge Studies in Advanced Mathematics"),
- (33, "XVI", "Noncommutative Geometry",        "Connes–Marcolli Noncommutative Algebra.pdf",
-  "A. Connes and M. Marcolli, Noncommutative Geometry, Quantum Fields and Motives"),
- (None, "—",  "Machine learning: the mathematics", "MATHEMATICS FOR MACHINE LEARNING.pdf",
-  "M. P. Deisenroth, A. A. Faisal, C. S. Ong, Mathematics for Machine Learning, CUP 2020"),
- (None, "—",  "Discrete mathematics floor",     "mcs.pdf",
-  "E. Lehman, F. T. Leighton, A. R. Meyer, Mathematics for Computer Science, MIT 2018"),
- (None, "—",  "Linear algebra floor",           "LINEAR ALGEBRA.pdf",
-  "J. Hefferon, Linear Algebra, 4th edition"),
- (None, "—",  "Probability floor",              "Probability and Statistics- The Science of Uncertainty.pdf",
-  "M. J. Evans and J. S. Rosenthal, Probability and Statistics: The Science of Uncertainty"),
- (None, "—",  "Nonlinear dynamics floor",       "Nonlinear_Dynamics_and_Chaos_2018_Steven_H._Strogatz.pdf",
-  "S. H. Strogatz, Nonlinear Dynamics and Chaos, 2nd ed."),
-]
+MIN_PAGES = 60
 
-def sha256(p, blocks=1 << 20):
+# Markers that identify the author's OWN work, so it is counted separately
+# rather than mixed in with primary sources.
+OWN = re.compile(r"principia orthogona|g6 ?llc|generative orthogonal matrix|"
+                 r"topographical orthogenetic|topographical orthogonal|mini.?beast|"
+                 r"grossi", re.I)
+
+# filename -> (rung, volume) from WP-82 §3. An overlay, applied after the scan.
+RUNGS = {
+ "Kbook.pdf":                                   (28, "XI"),
+ "2112.11166v7.pdf":                            (29, "XII"),
+ "Connes–Marcolli Noncommutative Algebra.pdf":  (33, "XVI"),
+}
+
+def sha256(p, block=1 << 20):
     h = hashlib.sha256()
     with open(p, "rb") as f:
-        for b in iter(lambda: f.read(blocks), b""):
+        for b in iter(lambda: f.read(block), b""):
             h.update(b)
     return h.hexdigest()
 
@@ -52,37 +44,56 @@ def main():
     dl = os.path.expanduser("~/mnt/Downloads")
     if "--downloads" in sys.argv:
         dl = sys.argv[sys.argv.index("--downloads") + 1]
+    minp = MIN_PAGES
+    if "--min-pages" in sys.argv:
+        minp = int(sys.argv[sys.argv.index("--min-pages") + 1])
     try:
         import pypdf
     except ImportError:
-        pypdf = None
+        print("needs pypdf"); return 2
 
-    rows, missing = [], 0
-    for rung, vol, subject, fname, cite in TEXTS:
-        p = os.path.join(dl, fname)
-        if not os.path.exists(p):
-            print("  MISSING  %-5s %s" % (vol, fname)); missing += 1
-            rows.append(("%s" % (rung or ""), vol, subject, fname, "", "", "MISSING", cite))
+    third, own, small = [], [], 0
+    for fn in sorted(os.listdir(dl)):
+        if not fn.lower().endswith(".pdf"):
             continue
-        digest = sha256(p)
-        pages = ""
-        if pypdf:
-            try: pages = str(len(pypdf.PdfReader(p).pages))
-            except Exception: pages = "?"
-        print("  held     %-5s rung %-4s %-6s pp  %s  %s"
-              % (vol, rung or "-", pages, digest[:12] + "…", fname))
-        rows.append((str(rung or ""), vol, subject, fname, digest, pages, "HELD", cite))
+        p = os.path.join(dl, fn)
+        try:
+            r = pypdf.PdfReader(p)
+            n = len(r.pages)
+            head = re.sub(r"\s+", " ", (r.pages[0].extract_text() or ""))[:200]
+        except Exception:
+            continue
+        if n < minp:
+            small += 1
+            continue
+        (own if OWN.search(head) or OWN.search(fn) else third).append((n, fn, head))
+
+    print("  %d third-party texts >= %dpp, %d of the author's own, %d shorter files skipped\n"
+          % (len(third), minp, len(own), small))
 
     out = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                        "docs", "floor-texts.tsv")
     with open(out, "w", encoding="utf-8") as f:
-        f.write("rung\tvolume\tsubject\tfile\tsha256\tpages\tstatus\tcitation\n")
-        for r in rows:
-            f.write("\t".join(r) + "\n")
-    print("\n  wrote %s  (%d held, %d missing)" % (out, len(rows) - missing, missing))
-    print("  The floor texts are on the machine. WP-82 asked for the floor to be")
-    print("  built first; what was missing was not the books but their addresses.")
-    return 1 if missing else 0
+        f.write("rung\tvolume\tpages\tsha256\tfile\tfirst_line\n")
+        for n, fn, head in sorted(third, key=lambda x: -x[0]):
+            rung, vol = RUNGS.get(fn, ("", ""))
+            d = sha256(os.path.join(dl, fn))
+            f.write("%s\t%s\t%d\t%s\t%s\t%s\n" % (rung, vol, n, d, fn, head[:120].replace("\t", " ")))
+            print("  %-4s %-5s %5dpp  %s…  %s" % (rung or "-", vol or "-", n, d[:10], fn[:52]))
+
+    # The author's own PDFs are not primary sources; what matters about them is
+    # how many near-copies of one work are sitting in one folder.
+    print("\n  Own work in the same folder, grouped by opening line:")
+    groups = {}
+    for n, fn, head in own:
+        groups.setdefault(head[:60], []).append(fn)
+    for k, v in sorted(groups.items(), key=lambda kv: -len(kv[1])):
+        if len(v) > 1:
+            print("    %2d copies  %s" % (len(v), k[:70]))
+    dup = sum(len(v) - 1 for v in groups.values() if len(v) > 1)
+    print("    -> %d files are second-or-later copies of a work already present." % dup)
+    print("\n  wrote %s" % out)
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main())

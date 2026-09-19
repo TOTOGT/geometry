@@ -8797,3 +8797,47 @@ the same disk.
 `[OPEN]` The book that covers these topics needs a home. XI, XII, XIII and XVI
 are spoken for in WP-82 §3 and XIII already collides with `book13/` on disk, so
 this one takes a name and not a numeral until the author assigns one.
+
+---
+
+## 2026-09-19 (later) · The hand list was the defect, again — and three Lean books nobody had opened
+
+`tools/floor_texts.py` was written this morning with a hand-kept list of eight
+filenames. That is the defect `build_indexes.py` records about its own FOLDERS
+list — **the list is not the corpus** — committed inside the tool written to cure
+it. Rewritten to scan and classify; the WP-82 rung map is now an overlay on what
+is found, never the source.
+
+The scan found **37 third-party texts of 60pp or more**, against the eight the
+hand list knew. What the hand list had missed:
+
+| pp | text | why it matters |
+|---|---|---|
+| 255 | Ullrich, *An Extensible Theorem Proving Frontend* (the Lean 4 thesis) | **Lean's own design document** |
+| 214 | Avigad & Massot, *Mathematics in Lean*, release v4.19.0 (11 Jun 2026) | the standard Mathlib tutorial |
+| 206 | Avigad, de Moura & Kong, *Theorem Proving in Lean* (`file.pdf`) | the reference manual |
+| 719 | Whitehead & Russell, *Principia Mathematica* vol. I | — |
+| 594 | Newton, *Principia* · 543 Bradley, *Leonhard Euler* | — |
+| 175 | Borisov, Gabber et al., *On Endomorphisms of Affine Spaces and the Jacobian Problem* | the corpus has `JacobianCounterexample.lean` |
+| 100 | Ishiki, *The Topology of Gromov–Hausdorff Space* | — |
+| 115 | Andersson, Gustafson, Ingelman & Sjöstrand, *Parton Fragmentation and String Dynamics* | — |
+| 96 | Navrátil, *Geometric Quantum Mechanics* from the SL(3;ℤ) tribonacci | the corpus's own η₃ ≈ 1.8393 |
+
+**Three Lean textbooks, in a corpus whose central practice is Lean**, none cited
+anywhere in it. One of them is dated three months ago and names the release. The
+corpus has spent the month writing rules about declarations resolving at the path
+cited, and had never opened the manual for the language it writes them in.
+
+**And the folder has the repository's disease.** Of 36 of the author's own PDFs at
+60pp or more, **24 are second-or-later copies** of a work already present —
+fourteen openings of "Applications of Generative Orthogonal Matrix Compression
+Science", six of "PRINCIPIA ORTHOGONA SERIES · THE COMPLETE EDITION", three of
+Book 3. Same class as `docs/index.html` versus `tornhub.html`, as the two
+`Chain_updated.lean`, as `book4/hub.html` versus the TO deploy: copies that drift
+because nothing declares which is canonical. It is not a repository problem. It
+is a habit.
+
+`[OPEN]` No Leibniz text is held. No calculus textbook of any kind is held —
+no Spivak, Apostol, Rudin or Stewart. Newton and Euler are, at 594 and 543 pages.
+A volume on the calculus lineage into machine learning has its endpoints and not
+its middle.
