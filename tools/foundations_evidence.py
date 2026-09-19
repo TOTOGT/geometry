@@ -92,14 +92,34 @@ DOCS = [("Book I  · vol1-mathematics", "book1/vol1-mathematics.html", MAP_BOOK1
         ("gcm     · gcm-framework",    "gcm-framework.html",          MAP_GCM)]
 
 def names():
-    if not os.path.exists(AX): return set()
-    return {m.group(1) for m in
-            re.finditer(r"^'(?:PrincipiaVol1|AutophagyDm3)\.([^']+)'",
-                        io.open(AX,encoding="utf-8").read(), re.M)}
+    """Fully-qualified declarations, and the short-name -> namespaces index.
 
-L = names()
+    Corrected 2026-09-19. The first version of this function stripped the
+    namespace and returned a SET of short names. Thirteen declarations exist
+    under BOTH PrincipiaVol1 and AutophagyDm3, so the set collapsed 82 theorems
+    to 69 -- and the header line went on printing "58 + 24", which is 82. The
+    script contradicted itself in its own first line of output for a day.
+    It matters beyond the count: a row that cites `mu_dm3_neg` does not say
+    WHICH `mu_dm3_neg`, and the two are different theorems in different files.
+    """
+    if not os.path.exists(AX): return set(), {}
+    txt = io.open(AX,encoding="utf-8").read()
+    full = {m.group(1) for m in re.finditer(r"^'([^']+)'", txt, re.M)}
+    idx = {}
+    for f in full:
+        nsp, short = f.split(".", 1)
+        idx.setdefault(short, set()).add(nsp)
+    return full, idx
+
+FULL, IDX = names()
+L = set(IDX)                      # short names, for the MAP rows, which are short
+AMBIG = {k for k,v in IDX.items() if len(v) > 1}
 print("="*78); print("THE BASE LAYER -- CLAIMS AND THE LEAN THAT BEARS ON THEM"); print("="*78)
-print("  lean: TOTOGT/vol1-proofs tools/axioms.txt -- %d theorems (58 PrincipiaVol1 + 24 AutophagyDm3)" % len(L))
+print("  lean: TOTOGT/vol1-proofs tools/axioms.txt -- %d theorems (%d PrincipiaVol1 + %d AutophagyDm3)"
+      % (len(FULL),
+         sum(1 for f in FULL if f.startswith("PrincipiaVol1.")),
+         sum(1 for f in FULL if f.startswith("AutophagyDm3."))))
+print("  %d short names live in BOTH namespaces -- a bare name does not identify a theorem." % len(AMBIG))
 print("  order: book1 -> book2 -> toy -> gcm -> books 3 and 4 -> GTCT   (R21)")
 grand={}
 for label, doc, M in DOCS:
@@ -110,6 +130,8 @@ for label, doc, M in DOCS:
         print("    %-17s %-26s %-9s %s" % (k, tag, how, ", ".join(ns[:3]) + (" +%d"%(len(ns)-3) if len(ns)>3 else "") if ns else "--"))
         if note: print("    %-17s   %s" % ("", note))
         if missing: print("    %-17s   !! NOT IN THE REPORT: %s" % ("", ", ".join(missing)))
+        amb=[n for n in ns if n in AMBIG]
+        if amb: print("    %-17s   ?? AMBIGUOUS -- in both namespaces: %s" % ("", ", ".join(amb)))
 print()
 print("="*78); print("TALLY"); print("="*78)
 tot=sum(grand.values())
@@ -166,6 +188,11 @@ for g in [
  "    has 6 and 5; Book II imports Volume I and dm3 wholesale in Assumptions",
  "    1.1 and 1.2, which means Book II's whole edifice inherits Book I's",
  "    tags -- including 5.3's, which was wrong until today.",
+ "",
+ "S6  FOUR ROWS CITE A NAME THAT IS NOT UNIQUE. Propositions 4.2, 4.4 and 6.1",
+ "    and Theorem A rest on declarations that exist under both PrincipiaVol1",
+ "    and AutophagyDm3. Until each row names the namespace, those four say",
+ "    less than they appear to. Marked ?? above.",
  "",
  "S5  THE LEAN IS IN ANOTHER REPO and has not been rebuilt at v4.32 -- see",
  "    R22 and the port branch. If the port fails, the 'SHOWN' rows above are",
