@@ -9233,3 +9233,78 @@ commit, in five files, and fixed at the generator rather than per page.
 A separate pass confirms every relative `href` on the eight new pages and on
 `series-hub.html` resolves to a file that exists: 0 broken. `[CLOSED]`
 
+---
+
+### 2026-09-19 — Volume XIII, audited against the document it cites as its authority
+
+Raised by the author: Volume XIII "is not a book about maths as per WP-82 —
+claude took over and did whatever it felt like." Six findings, each recomputed
+by `book13/ch11-verify.py` (exit 0) rather than asserted.
+
+**F1 — rung 30 exists in this corpus only inside Volume XIII.** Eleven pages
+carry the masthead `Rung 30 · Higher Category Theory`; nothing outside
+`book13/` does. WP-82, which the volume names as its authority, names rungs
+**9, 28 and 33**. `docs/floor-ladder.tsv` has 11, 12, 14, 16, 17, 20, 21, 28,
+33. `tools/floor_texts.py`'s WP-82 overlay has 28, 29, 33. The number was
+self-assigned and then printed as though read off a table — which puts the
+volume outside `tools/ladder_check.py` by construction, since there is nothing
+for the check to compare against.
+
+**F2 — the artifact is cited three times and is not in this repository.**
+`AXLE/Vol13_Coherence.lean` is named by ch03 (twice), ch07 and the index. Copies
+inside `geometry`: zero. The file is real — it is in the AXLE repository on the
+author's machine and was read for this audit — but a reader of the published
+site follows the citation and arrives nowhere. What `geometry` does hold is the
+*report*, `tools/verify-audit/2026-09-09/Vol13_Coherence.axioms.txt`, which is a
+certificate for a file the reader cannot inspect.
+
+**F3 — the gate said 18; there are 9.** The saved report has eighteen
+`depends on axioms` lines and **nine distinct declarations**; every name appears
+twice. `tools/axiom_gate.py` counts lines, so the recorded verdict reads
+"OK: 18 theorems". ch03 of the same volume says "nine axiom probes", twice.
+Both numbers have described one file since 2026-09-09. The gate's axiom verdict
+was right and its count was not — a green verdict is not a single fact.
+
+**F4 — eight theorems and one declared control.** `Vol13.vacuity_control :
+True := trivial` is a deliberate fixture and the file says so. Good practice,
+and it means the honest headline is 8 + 1, not 9.
+
+**F5 — the two theorems that were supposed to settle the volume hold in every
+bicategory.** `assoc₂_hom_inv` and `assoc₂_inv_hom` close by `Iso.hom_inv_id`
+and `Iso.inv_hom_id`: the associator is an `Iso`, so its invertibility is true
+of arbitrary 1-morphisms in an arbitrary bicategory, by construction. Nothing in
+the file establishes that the operator chain lives in a bicategory rather than
+in the category of endofunctors, and the file's own comment says the series
+"has never claimed to be working at" level 2. ch03 — titled *the chapter that
+decides whether this volume needs to exist* — marks itself `Closed ·
+kernel-checked` on that basis. Choosing the setting and then observing that the
+setting has associators does not decide the question; it assumes it. NAME
+EXCEEDS STATEMENT.
+
+**F6 — the volume's contents page skipped a chapter.** Twelve chapter files;
+the table listed ten rows, with row 10 pointing at `ch-types-the-range-of-a-variable.html`.
+`ch10-what-a-check-establishes.html` had been on disk since 2026-09-17, linked
+from a Book X chapter and the generated master index but **not from its own
+volume**. It is the strongest chapter in the volume. Fixed in the same commit;
+the verifier now fails if any `book13/ch*.html` is missing from the index.
+
+**Not claimed.** That the Lean file is wrong — it is careful and its comments
+are honest. That higher category theory is the wrong subject — it is a real
+one, and none of it is here yet. That method chapters are worthless — ch10
+earns its place. The objection is to a volume whose *closed* chapters are all
+method and whose subject is unstarted.
+
+**One inherited argument, now overtaken.** `book13/ch-mathlib-verify.py` placed
+XIII before XI and XII because Mathlib has no K-theory, so XI "cannot have a
+machine-checked core". The script's own NOT ESTABLISHED section already warned
+that a file count measures a library's size and not its fit. Volume XXVIII now
+has a machine-checked core — `book28/ShiftIndex.lean`, four theorems, real
+kernels and cokernels — built with no K-theory in Mathlib at all, because the
+index of a shift is linear algebra. The obstacle was measured once and then
+inherited.
+
+`tools/audit.py`: 27 dead_link, 2 double_escaped, unchanged. One link in the new
+chapter pointed at `wp82-the-inverted-ladder.html`; the file is
+`wp82-the-missing-floor.html`. Caught before the commit, three references
+corrected. `[CLOSED]`
+
