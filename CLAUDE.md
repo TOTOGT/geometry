@@ -152,18 +152,29 @@ Its chapters live **at the repo root**, not under `book3/` — `vol3-minibeast.h
 ### Other repositories — full table in `docs/HANDOFF-2026-09-18.md` §5
 **vol1-proofs**: branch `port-v4.32` pushed at `5e49766`; `main` restored at the v4.14 pin, counts reconciled to 82, forward debt in `docs/MATHLIB-FORWARD-v4.32.md`. **Do not link it anywhere until CI is green.** Unpushed elsewhere: **neuro 5** (needs credentials; public, names a clinic), **AXLE 1**. Five more have dirty trees, **not inspected**. Fifteen local repos is itself the mechanism behind "I trust things are done and they aren't."
 
-### The mathematicians gallery — 16 chapters that do not exist
-Pablo produced a gallery page, *"The Mathematicians History Overlooked"*, with nineteen figures. **The page is not in this repo** — it was not found by `grep -ril "History Overlooked"`, so it lives outside the corpus and needs a home first (R7). Checked against what exists:
+### The figure chapters — Book VII and Book IX, read 2026-09-19
 
-| covered | where |
+**Book VII is "The Scientists"** — 83 pages, 70 of them `ch-<figure>.html`. Its own statement of purpose: *"dm³ does not appear from nowhere… Each of them put a brick in the wall. This volume names them and shows exactly which brick."* **Book IX is `omega/`** — "Omega Point · The Convergence Series", 52 pages, and it is where the pre-modern figures live: `ch-pingala`, `ch-baudhayana`, `ch-madhava`, `ch-al-kindi`, `ch-zacuto`, `ch-pacioli`, `ch-cusa`, `ch-hildegard`, `ch-ramanujan`.
+
+**Structurally Book VII is sound and thinly evidenced.**
+
+- `book7/index.html` links 68 `ch-` pages and **every one of them exists** — no dead links. Two files are not linked from it: **`ch-hardy.html` and `ch-ramanujan-1pi.html`**. A five-minute fix.
+- **40 of the 70 figure chapters carry no verify script**, against R6. `book7/` has 34 scripts for 83 pages. Among the missing: `ch-turing`, `ch-einstein`, `ch-maxwell`, `ch-noether`, `ch-curie`, `ch-dirac`, `ch-hopfield`, `ch-waddington`, `ch-kovalevskaya`, `ch-mirzakhani`. **Book IX has 0 verify scripts for 52 pages.**
+- **4 of Book VII's 83 pages carry any evidence tag** (7 tags between them); 13 make numbered claims. **Book IX: 1 page of 52 carries a tag.** `ch-grothendieck` — a chapter about a measurement and what it found missing — carries none. This is the R23 count seen from inside: the 126 untagged pages are mostly these.
+
+**The gallery Pablo produced — "The Mathematicians History Overlooked", nineteen figures — is not in this repo.** `grep -ril "History Overlooked"` finds nothing, and Book VII's own gallery `the-scientists.html` uses no portraits or medallions, so it is a new page and needs a home under R7. Searched on eighteen name variants each (R15 — not one pattern, several), here is what the corpus holds:
+
+| | figures |
 |---|---|
-| Madhava of Sangamagrama | `omega/ch-madhava.html` |
-| Alexander Grothendieck | `book7/ch-grothendieck.html` |
-| Virahanka (lineage) | `chMatra-hemachandra.html` at root, and `omega/ch-pingala.html` |
+| **has its own chapter (3)** | Madhava — `omega/ch-madhava.html` (31 mentions) · Grothendieck — `book7/ch-grothendieck.html` · Virahanka — covered by lineage in `omega/ch-pingala.html` (16) and `chMatra-hemachandra.html` (14), **never under his own name** |
+| **treated, but no figure chapter (5)** | Al-Khwarizmi — substantial in `wp27-ethics-of-algebra.html` (17) and `ch-d2-academic.html` (16) · Mochizuki — `book6/wp48-five-conjectures.html` (10) · Aryabhata — 4 files, in passing · Liu Hui — 2 files, one mention each · Brahmagupta — 2 files, one mention each · Bhaskara II — an index line |
+| **absent from the entire corpus (10)** | **Hypatia · Sophie Germain · Al-Biruni · Omar Khayyam · Al-Karaji · Abu'l-Wafa al-Buzjani · Gangeśa Upādhyāya · Nārāyaṇa Paṇḍita · Jamshid al-Kashi · Seki Takakazu** |
 
-**Sixteen have no chapter anywhere:** Hypatia, Aryabhata, Liu Hui, Brahmagupta, Al-Khwarizmi (named once in `book7/index.html`, no chapter), Al-Biruni, Omar Khayyam, Bhaskara II, Al-Karaji, Abu'l-Wafa al-Buzjani, Gangeśa Upādhyāya, Nārāyaṇa Paṇḍita, Jamshid al-Kashi, Seki Takakazu, Sophie Germain, Shinichi Mochizuki.
+**Sophie Germain is the one to notice.** The gallery opens with her epigraph — *"Algebra is but written geometry"* — and she does not appear anywhere in 782 files. Book VII already carries Noether, Kovalevskaya, Mirzakhani, Curie, Ada, Katherine Johnson and Tatiana. Hypatia and Germain are the two absences that look like oversight rather than scope.
 
-**Which book they belong to is not settled and matters.** `omega/` — "Omega Point · The Convergence Series", 52 chapters — already holds the historical-figure chapters (`ch-pingala`, `ch-baudhayana`, `ch-al-kindi`, `ch-zacuto`, `ch-pacioli`, `ch-cusa`, `ch-hildegard`, `ch-ramanujan`, `ch-madhava`). Pablo's note was *"for book7, chapters missing"* then *"some are in book 9"*. **There is no `book9/` directory**; omega appears to be what "Book 9" means, and if so this file should say so and `FOLDERS` in `tools/build_indexes.py` should label it. Ask before creating anything — sixteen chapters in the wrong book is a worse outcome than sixteen missing ones.
+**Where each belongs is now decidable:** Book VII names who put a brick in dm³'s wall; Book IX is the convergence lineage. Al-Khwarizmi, Brahmagupta, Liu Hui, Aryabhata, Bhaskara, Al-Karaji, Abu'l-Wafa, Al-Kashi, Nārāyaṇa, Gangeśa and Virahanka-by-name are Book IX company. Hypatia, Germain, Seki, Khayyam, Al-Biruni and Mochizuki are arguable either way and Pablo should say.
+
+**Loose end from today's move:** the five chapters brought over from GTCT are orphans in `book4` — nothing in geometry links to them yet (`index-book4.html` reports 4 orphaned, up from 1). They need index and ring-nav entries.
 
 ### Parked, working
 A PatternBoost-style loop in the session scratchpad: exact maximum-Sidon ground truth by DFS to n=40 (2 nodes → 960,537, the wall visible), then a 3-layer transformer + local search that **matched the exact optimum k=8 at n=40 in 20 s**, every candidate checked exactly rather than trusted. Needs a home and a verify script if it is wanted.
@@ -989,6 +1000,11 @@ Any new content added to G5 must be measured against this constraint before incl
 
 - `geometry/` root = Book 3 (G3) chapters, prelude, overture, portals
 - `geometry/book4/` = Book 4 (G4) chapters + G5 student edition + living-book.html
+- **`geometry/omega/` = Book 9** — "Omega Point · The Convergence Series", 52 pages.
+  **The folder is not named `book9/` and there is no `book9/` directory.** Set
+  2026-09-19 by Pablo, written here because a session that greps for `book9` finds
+  nothing and concludes Book 9 does not exist — which is what happened today.
+  `tools/build_indexes.py` labels it "Book IX — Omega Point" in `FOLDERS`.
 - Ring nav: G3 · Part I/II/III/IV → G4 → G5 (injected as `.po-ring-strip` after `</nav>`)
 - Spiral map: `book4/living-book.html` — the G1–G5 hub
 - Standard typography: follow `prelude.html` (Georgia 18px, line-height 1.75, #e8e4d8)
