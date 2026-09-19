@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abertura · Vol IV · GTCT · Principia Orthogona</title>
+
+<!-- Noto font stack — covers all 40 language scripts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC&family=Noto+Serif+TC&family=Noto+Serif+JP&family=Noto+Serif+KR&family=Noto+Serif+Devanagari&family=Noto+Serif+Bengali&family=Noto+Serif+Tamil&family=Noto+Serif+Telugu&family=Noto+Serif+Kannada&family=Noto+Serif+Malayalam&family=Noto+Serif+Gujarati&family=Noto+Serif+Gurmukhi&family=Noto+Serif+Hebrew&family=Noto+Serif+Ethiopic&family=Noto+Serif+Thai&family=Noto+Naskh+Arabic&family=Noto+Nastaliq+Urdu&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ── VARIABLES ──────────────────────────────────────────────────────── */
+:root {
+  --void:    #04040a;
+  --surface: #0c0d16;
+  --card:    #10111c;
+  --gold:    #c9a84c;
+  --teal:    #0ABAB5;
+  --text:    #e8e4d8;
+  --muted:   #6b6757;
+  --dim:     #2a2920;
+  --rule:    rgba(201,168,76,0.18);
+  --col-gap: 3rem;
+  --col-w:   46%;
+  --serif:   'Noto Serif', Georgia, serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--serif);
+  background: var(--void);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ────────────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(4,4,10,0.96); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+  padding: .6rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .6rem;
+}
+.nav-series {
+  font-family: var(--mono); font-size: .6rem;
+  letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+}
+.nav-controls { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.nav-chapter-links { display: flex; gap: 1.4rem; }
+.nav-chapter-links a {
+  font-family: var(--mono); font-size: .58rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s;
+}
+.nav-chapter-links a:hover, .nav-chapter-links a.cur { color: var(--gold); }
+
+/* ── LANGUAGE PICKER ────────────────────────────────────────────────── */
+.lang-picker {
+  display: flex; align-items: center; gap: .5rem;
+  font-family: var(--mono); font-size: .65rem;
+}
+.lang-picker label { color: var(--muted); letter-spacing: .1em; }
+.lang-picker select {
+  background: var(--surface); color: var(--gold);
+  border: 1px solid var(--rule); border-radius: 3px;
+  font-family: var(--mono); font-size: .7rem;
+  padding: .25rem .5rem; cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  padding-right: 1.4rem;
+}
+.lang-picker .sel-wrap { position: relative; }
+.lang-picker .sel-wrap::after {
+  content: '▾'; position: absolute; right: .4rem; top: 50%;
+  transform: translateY(-50%); color: var(--gold); pointer-events: none;
+  font-size: .6rem;
+}
+.script-note {
+  font-family: var(--mono); font-size: .58rem; color: var(--muted);
+  letter-spacing: .08em; padding: .15rem .5rem;
+  border: 1px solid var(--dim); border-radius: 2px;
+}
+
+/* ── HERO ───────────────────────────────────────────────────────────── */
+.hero {
+  padding: 5rem 2rem 3.5rem; text-align: center;
+  border-bottom: 1px solid var(--rule); position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 40%, rgba(201,168,76,.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .32em;
+  text-transform: uppercase; color: var(--teal);
+  border: 1px solid currentColor; padding: .2rem .65rem; display: inline-block; margin-bottom: 2rem;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; letter-spacing: .04em;
+  color: var(--gold); margin-bottom: .5rem; line-height: 1.2;
+}
+.hero-pt {
+  font-size: 1rem; color: var(--muted); font-style: italic;
+  margin-bottom: .3rem;
+}
+.hero-en {
+  font-size: .88rem; color: rgba(107,103,87,.7); font-style: italic;
+}
+.hero-eq {
+  margin-top: 1.8rem; font-family: var(--mono); font-size: .9rem;
+  letter-spacing: .12em; color: rgba(201,168,76,.45);
+}
+/* Language primary indicator */
+.lang-badge {
+  display: inline-flex; gap: .8rem; margin-top: 1.5rem; flex-wrap: wrap; justify-content: center;
+}
+.lang-badge span {
+  font-family: var(--mono); font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+  padding: .2rem .6rem; border-radius: 2px;
+}
+.lang-badge .primary { background: rgba(201,168,76,.15); color: var(--gold); border: 1px solid rgba(201,168,76,.4); }
+.lang-badge .secondary { background: rgba(107,103,87,.1); color: var(--muted); border: 1px solid var(--dim); }
+
+/* ── TWO-COLUMN LAYOUT ──────────────────────────────────────────────── */
+.page { max-width: 1240px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+
+.chapter-header {
+  text-align: center; margin-bottom: 3rem; padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+.chapter-header .ch-num {
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .3em;
+  color: var(--gold); text-transform: uppercase; display: block; margin-bottom: .6rem;
+}
+.chapter-header h2 { font-size: 1.5rem; font-weight: 400; color: var(--text); letter-spacing: .04em; }
+.chapter-header .ch-sub { font-style: italic; color: var(--muted); margin-top: .4rem; font-size: .9rem; }
+
+/* Two-column container — PT primary left, EN secondary right */
+.bilingual {
+  display: grid;
+  grid-template-columns: var(--col-w) var(--col-w);
+  gap: var(--col-gap);
+  justify-content: center;
+}
+@media (max-width: 820px) {
+  .bilingual { grid-template-columns: 1fr; }
+}
+
+/* Column headers */
+.col-header {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--muted);
+  padding-bottom: .6rem; border-bottom: 1px solid var(--rule);
+  margin-bottom: 2rem; display: flex; align-items: center; gap: .6rem;
+}
+.col-header .lang-flag { font-size: .9rem; }
+.col-header .lang-native { color: var(--gold); }
+/* PT column: gold accent */
+.col-pt .col-header { border-bottom-color: rgba(201,168,76,.4); }
+
+/* Content blocks */
+.block { margin-bottom: 2.5rem; }
+
+.block-section {
+  font-family: var(--mono); font-size: .58rem; letter-spacing: .25em;
+  text-transform: uppercase; color: var(--teal); display: block;
+  margin-bottom: .5rem;
+}
+
+.block-axiom, .block-theorem, .block-definition, .block-obs, .block-nota {
+  border-left: 2px solid var(--rule); padding: 1rem 1.4rem; margin: 1.5rem 0;
+  background: rgba(201,168,76,.025);
+}
+.block-axiom  { border-color: var(--gold); }
+.block-theorem{ border-color: var(--teal); }
+.block-definition { border-color: var(--muted); }
+.block-obs    { border-color: rgba(192,132,252,.5); background: rgba(192,132,252,.03); }
+.block-nota   { border-color: rgba(10,186,181,.4); background: rgba(10,186,181,.03); }
+
+.block-label {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .2em;
+  text-transform: uppercase; margin-bottom: .5rem; display: block;
+}
+.block-axiom .block-label   { color: var(--gold); }
+.block-theorem .block-label { color: var(--teal); }
+.block-definition .block-label { color: var(--muted); }
+.block-obs .block-label     { color: rgba(192,132,252,.9); }
+.block-nota .block-label    { color: var(--teal); }
+
+.block-body { font-size: .95rem; line-height: 1.82; color: var(--text); }
+
+.block-math {
+  font-family: var(--mono); font-size: .88rem; color: var(--gold);
+  background: var(--surface); border: 1px solid var(--dim);
+  padding: .8rem 1.2rem; margin: 1.2rem 0; letter-spacing: .04em; overflow-x: auto;
+  white-space: pre;
+}
+
+.block-prose { font-size: 1rem; line-height: 1.85; margin-bottom: 1.4rem; }
+.block-prose:last-child { margin-bottom: 0; }
+
+/* RTL support */
+.col-rtl { direction: rtl; text-align: right; }
+.col-rtl .block-axiom, .col-rtl .block-theorem,
+.col-rtl .block-definition, .col-rtl .block-obs, .col-rtl .block-nota {
+  border-left: none; border-right: 2px solid var(--rule);
+}
+.col-rtl .block-axiom { border-right-color: var(--gold); }
+.col-rtl .block-theorem { border-right-color: var(--teal); }
+
+/* Operator chain */
+.op-chain { display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; margin: 1rem 0; }
+.op { font-family: var(--mono); font-size: .78rem; padding: .2rem .55rem; border-radius: 2px; }
+.op-c { background: rgba(10,186,181,.12); color: #0ABAB5; border: 1px solid rgba(10,186,181,.3); }
+.op-k { background: rgba(224,90,58,.12); color: #e05a3a; border: 1px solid rgba(224,90,58,.3); }
+.op-f { background: rgba(80,200,120,.12); color: #50c878; border: 1px solid rgba(80,200,120,.3); }
+.op-u { background: rgba(192,132,252,.12); color: #c084fc; border: 1px solid rgba(192,132,252,.3); }
+.op-arr { color: var(--muted); font-size: .8rem; }
+
+/* Section divider */
+.section-rule { border: none; border-top: 1px solid var(--rule); margin: 3rem 0; }
+
+/* Chapter map table */
+.ch-map { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: .88rem; }
+.ch-map th {
+  font-family: var(--mono); font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); padding: .5rem .8rem; text-align: left;
+  background: rgba(201,168,76,.07); border-bottom: 1px solid var(--rule);
+}
+.ch-map td {
+  padding: .45rem .8rem; border-bottom: 1px solid rgba(201,168,76,.06);
+  vertical-align: top; line-height: 1.55; color: rgba(232,228,216,.8);
+}
+.ch-map td:first-child {
+  font-family: var(--mono); font-size: .78rem; color: var(--gold); white-space: nowrap;
+}
+.ch-map tr:hover td { background: rgba(255,255,255,.02); }
+
+/* overflow guards */
+.block, .block-math, .block-obs, .block-nota, .block-axiom,
+.block-theorem, .block-definition, table { overflow-x: auto; }
+mjx-container { overflow-x: auto; max-width: 100%; display: block !important; }
+
+/* ── FOOTER ─────────────────────────────────────────────────────────── */
+footer {
+  text-align: center; padding: 3rem 2rem;
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; color: var(--muted);
+  border-top: 1px solid var(--rule); margin-top: 4rem;
+}
+footer a { color: var(--gold); text-decoration: none; }
+
+/* ── CH-NAV ─────────────────────────────────────────────────────────── */
+.ch-nav {
+  background: rgba(4,4,10,.8); border-top: 1px solid var(--rule);
+  padding: .9rem 2rem; display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 1rem;
+  font-family: var(--mono); font-size: .6rem;
+}
+.ch-nav a {
+  color: var(--muted); text-decoration: none; padding: .3rem .8rem;
+  border: 1px solid var(--rule); transition: all .2s;
+}
+.ch-nav a:hover { color: var(--gold); border-color: rgba(201,168,76,.4); }
+.ch-nav .current { color: var(--gold); letter-spacing: .15em; text-transform: uppercase; }
+
+@media(max-width:700px){
+  nav { padding: .8rem 1rem; }
+  .page { padding-left: 1.2rem; padding-right: 1.2rem; }
+  .nav-chapter-links { display: none; }
+}
+</style>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$','$'],['\\(','\\)']],
+      displayMath: [['$$','$$'],['\\[','\\]']],
+    },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<!-- ─── NAV ─────────────────────────────────────────────────────────── -->
+<nav>
+  <span class="nav-series">Principia Orthogona · Vol IV · GTCT · G = U ∘ F ∘ K ∘ C</span>
+  <div class="nav-controls">
+    <div class="nav-chapter-links">
+      <a href="chIV-preface.html" class="cur">Abertura</a>
+      <a href="chIV-axioms.html">Cap 1</a>
+      <a href="chIV-field.html">Cap 2</a>
+      <a href="chIV-operators.html">Cap 3</a>
+      <a href="chIV-correspondence.html">Cap 4</a>
+      <a href="chIV-orthogonality.html">Cap 5</a>
+      <a href="chIV-recursion.html">Cap 6</a>
+      <a href="chIV-emergence.html">Cap 7</a>
+      <a href="chIV-time.html">Cap 8</a>
+    </div>
+    <div class="lang-picker">
+      <label>TRADUÇÃO</label>
+      <div class="sel-wrap">
+        <select id="langSelect" onchange="setLang(this.value)">
+          <!-- populated by JS -->
+        </select>
+      </div>
+    </div>
+    <span class="script-note" id="scriptNote">English</span>
+  </div>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-tag">Principia Orthogona · Vol IV · GTCT · Abertura · G6 LLC · Newark NJ · 2026</div>
+  <h1>A Teoria do Contato Generativo Temporal</h1>
+  <p class="hero-pt">Os fundamentos matemáticos de uma nova geometria dos sistemas dinâmicos</p>
+  <p class="hero-en">The mathematical foundations of a new geometry of dynamical systems</p>
+  <div class="lang-badge">
+    <span class="primary">🇧🇷 Português — idioma primário</span>
+    <span class="secondary">🇺🇸 English — translation available →</span>
+  </div>
+  <div class="hero-eq">G = U ∘ F ∘ K ∘ C · g₃₃ = 33 · τ = 2 · ε* = 1/3 · T* = 2π</div>
+</section>
+
+<!-- ─── BILINGUAL CONTENT ──────────────────────────────────────────── -->
+<div class="page">
+
+  <div class="chapter-header">
+    <span class="ch-num">Volume IV · GTCT · Abertura / Overture</span>
+    <h2 id="ch-title">Uma Nota ao Leitor Brasileiro · A Note to the Brazilian Reader</h2>
+    <p class="ch-sub" id="ch-sub">
+      Principia Orthogona · G6 LLC ·
+      <a href="https://doi.org/10.5281/zenodo.19117399" style="color:var(--gold);text-decoration:none;" target="_blank">DOI 10.5281/zenodo.19117399</a>
+    </p>
+  </div>
+
+  <div class="bilingual" id="bilingualGrid">
+
+    <!-- Column A: Portuguese (PRIMARY) -->
+    <div class="col-pt" id="colA">
+      <div class="col-header">
+        <span class="lang-flag">🇧🇷</span>
+        <span>Português</span>
+        <span class="lang-native">Idioma Primário</span>
+      </div>
+      <div id="contentA"><!-- filled by JS --></div>
+    </div>
+
+    <!-- Column B: Selected translation (default: English) -->
+    <div id="colB">
+      <div class="col-header" id="colBHeader"><!-- filled by JS --></div>
+      <div id="contentB"><!-- filled by JS --></div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ─── CH-NAV ────────────────────────────────────────────────────── -->
+<div class="ch-nav">
+  <a href="../book3/index.html">← Vol III · The Mini-Beast (EN)</a>
+  <span class="current">Vol IV · Abertura</span>
+  <a href="chIV-axioms.html">Cap 1 · Os Sete Axiomas →</a>
+</div>
+
+<footer>
+  Principia Orthogona · Vol IV · GTCT — Teoria do Contato Generativo Temporal &nbsp;·&nbsp;
+  G6 LLC · Newark NJ · 2026<br>
+  Pablo Nogueira Grossi · ORCID: 0009-0000-6496-2186<br>
+  <a href="https://doi.org/10.5281/zenodo.19117399">DOI 10.5281/zenodo.19117399</a>
+  &nbsp;·&nbsp; ISBN 979-8-9954416-8-7 &nbsp;·&nbsp;
+  <a href="https://github.com/TOTOGT/AXLE">AXLE ↗</a> &nbsp;·&nbsp;
+  MSC 2020: 37C10 · 37C75 · 53D10 · 34C05<br>
+  Idioma primário: Português (Brasil) · A partir do Vol IV, a Principia Orthogona é dirigida à comunidade matemática brasileira.
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   CONTENT
+   PT is the PRIMARY (left column, always shown).
+   All other languages are translations (right column, selectable).
+   Types: prose | axiom | theorem | definition | obs | nota | math | chain | table
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── PRIMARY TEXT (Português) ─────────────────────────────────────── */
+const PT = [
+
+  /* §0 — A Mudança de Idioma */
+  { type:"nota", label:"Nota sobre os Volumes I–III",
+    text:"Os Volumes I, II e III da <em>Principia Orthogona</em> foram escritos em inglês, dirigidos à comunidade internacional de pesquisadores em geometria de contato, sistemas dinâmicos e física matemática. A partir deste Volume IV, o idioma primário é o português. Essa mudança não é cosmética: é estrutural. A matemática que se desenvolve aqui cresceu do contato diário com a comunidade brasileira — em salas de aula, em conversas, nas margens de páginas —, e merece ser expressa na língua em que foi pensada."
+  },
+
+  /* §1 — Motivação */
+  { type:"section", text:"§1 · Motivação" },
+
+  { type:"prose",
+    text:"A geometria de contato estuda variedades ímpares-dimensionais equipadas com uma estrutura de hiperplano não-integrável. O objeto central é a forma de contato $\\alpha$, uma 1-forma satisfazendo a condição de não-degenerescência:"
+  },
+  { type:"math", text:"\\alpha \\wedge (d\\alpha)^n \\neq 0 \\quad \\text{em todo ponto de } M." },
+  { type:"prose",
+    text:"O leitor familiarizado com a geometria simpléctica reconhecerá a estrutura: uma variedade de contato de dimensão $2n+1$ é o análogo ímpar da variedade simpléctica de dimensão $2n$. A diferença fundamental é que, enquanto a geometria simpléctica codifica <em>posição e momento</em>, a geometria de contato codifica <em>posição, momento e fase</em>. É, portanto, a geometria natural dos sistemas dinâmicos com memória de fase — e essa é a observação de partida da teoria desenvolvida neste volume."
+  },
+  { type:"obs", label:"Observação 0.1",
+    text:"Não se assume familiaridade com os Volumes anteriores. Este volume é autocontido a partir dos sete axiomas do Capítulo 1. O leitor que desejar o contexto histórico e as aplicações pode consultar os Volumes I–III livremente disponíveis no Zenodo."
+  },
+
+  /* §2 — O que é a GTCT */
+  { type:"section", text:"§2 · O que é a GTCT" },
+
+  { type:"prose",
+    text:"A <strong>Teoria do Contato Generativo Temporal</strong> (GTCT) é uma estrutura matemática construída sobre sete axiomas em uma variedade de contato $M$. Seu objetivo é mostrar que uma única sequência de quatro operadores,"
+  },
+  { type:"chain" },
+  { type:"prose",
+    text:"— compressão, curvatura, dobramento, desdobramento — descreve a transição gerativa em qualquer sistema dinâmico que admita uma representação em geometria de contato. O resultado central, provado formalmente em Lean 4, é que o mapa de ciclo $R = O_{12} \\circ \\cdots \\circ O_1$ é uma contração e possui um único ponto fixo $x^*$."
+  },
+  { type:"theorem", label:"Teorema Principal (A7) · Contração do Ciclo",
+    text:"O mapa de ciclo $R = O_{12} \\circ \\cdots \\circ O_1$ é uma contração em $(M, d)$ com constante de Lipschitz $\\kappa \\leq \\sqrt{7/9} < 1$. Existe um único ponto fixo $x^* \\in M$ tal que $R^k(x) \\to x^*$ para todo $x \\in M$. As constantes estruturais são $g_{33} = 33$, $g_{64} = 64 = 2^6$, $\\varepsilon^* = 1/3$, $T^* = 2\\pi$."
+  },
+  { type:"obs", label:"Observação 0.2 · O que g₃₃ = 33 conta",
+    text:"O número 33 conta as restrições de ortogonalidade independentes geradas pelo ciclo de 12 fases: $\\binom{12}{2} = 66$ pares totais, menos 33 duplicatas simétricas de sinal, deixam 33 restrições quadráticas independentes sobre as correções de posto 1 $u_i w_i^T$. O papel detalhado é desenvolvido no Volume VI."
+  },
+
+  /* §3 — Mapa do Volume IV */
+  { type:"section", text:"§3 · Mapa deste Volume" },
+
+  { type:"prose",
+    text:"O Volume IV está organizado em oito capítulos, cada um construindo sobre o anterior de forma linear. O leitor que seguir os capítulos em ordem obterá a teoria completa; o leitor que buscar um resultado específico encontrará abaixo um índice de dependências lógicas."
+  },
+  { type:"table",
+    headers: ["Cap.", "Título", "Depende de", "Resultado principal"],
+    rows: [
+      ["1", "Os Sete Axiomas", "—", "A1–A7: fundações irreducíveis da GTCT"],
+      ["2", "O Campo Dimensional", "A1, A2", "Campo $\\Delta: M \\to \\mathbb{R}^{12}$, fases $\\delta_i$"],
+      ["3", "Os Quatro Operadores", "A1–A4", "C, K, F, U como difeomorfismos de contato"],
+      ["4", "A Bijeção Fase–Operador", "A5, A6", "Unicidade de $\\Phi$: Teor. 4.1"],
+      ["5", "Ortogonalidade", "A4, A6", "$g_{33} = 33$ restrições; Hip. Estruturais"],
+      ["6", "Recursão e Escada", "A5, A7", "Escada $k$-nacci: $\\eta_k \\to \\tau = 2$"],
+      ["7", "Emergência", "Cap. 3–6", "Atratores helicoidais em $M$"],
+      ["8", "Tempo e Fase", "A3, A5", "Campo temporal $T$; período $T^* = 2\\pi$"],
+    ]
+  },
+
+  /* §4 — Sobre a Verificação Formal */
+  { type:"section", text:"§4 · Verificação Formal em Lean 4" },
+
+  { type:"prose",
+    text:"Todos os resultados estruturais deste volume são verificados mecanicamente no assistente de provas Lean 4, usando a biblioteca Mathlib4. O repositório de código (<a href='https://github.com/TOTOGT/AXLE' style='color:var(--gold)'>TOTOGT/AXLE</a>) contém os arquivos Lean correspondentes a cada capítulo."
+  },
+  { type:"nota", label:"Nota sobre sorry",
+    text:"A convenção adotada nesta série é de honestidade absoluta quanto ao estado das provas. Toda afirmação marcada com <code style='color:var(--gold)'>sorry</code> no código Lean é uma obrigação aberta explicitamente declarada. Não existe nenhum <em>sorry</em> oculto. O Capítulo 5 documenta quais afirmações sobre as matrizes de operadores $A_i$ permanecem como hipóteses estruturais aguardando realização explícita no Volume VI."
+  },
+
+  /* §5 — Endereço ao Leitor Brasileiro */
+  { type:"section", text:"§5 · Uma Palavra ao Leitor Brasileiro" },
+
+  { type:"prose",
+    text:"Esta teoria cresceu na margem de uma linha de trem abandonada no North Ward de Newark, Nova Jersey — a antiga linha Boonton do Delaware, Lackawanna & Western Railroad, desativada em 2002. A 90 metros da janela do apartamento onde este texto foi escrito, os trilhos enferrujam entre o matagal. Um dia esperamos caminhar pela linha."
+  },
+  { type:"prose",
+    text:"A matemática aqui desenvolvida é independente de qualquer instituição. Ela foi construída ao longo de 25 anos, em paralelo com o trabalho de sala de aula como instrutor de inglês para imigrantes adultos em Elizabeth, NJ — engenheiros, enfermeiras, professores, agricultores, aprendendo inglês lado a lado sem saber que os padrões que cada um dominou em sua área são reconhecíveis através de línguas e profissões."
+  },
+  { type:"prose",
+    text:"É para a comunidade matemática brasileira — para os participantes da XII Bienal da SBM em Natal, para os pesquisadores da UFRJ, da UFMG, da Unicamp, da USP, de dezenas de outros lugares — que este volume foi escrito primeiro, e em português."
+  },
+  { type:"obs", label:"Observação Final · O cajueiro",
+    text:"O símbolo recorrente desta série é o cajueiro (<em>Anacardium occidentale</em>). O cajueiro de Pirangi, a 20 km do campus da UFRN em Natal, cobre 8.500 m² a partir de um único organismo. Suas raízes aéreas tocam o solo, tornam-se novos troncos, ramificam-se novamente. O que você vê nunca é o gerador. A fruta expõe a noz. A noz tende a uma floresta. <strong>G = U ∘ F ∘ K ∘ C.</strong>"
+  },
+
+];
+
+/* ── TRANSLATIONS ─────────────────────────────────────────────────── */
+const TRANSLATIONS = {
+
+  "en": [
+    { type:"nota", label:"Note on Volumes I–III",
+      text:"Volumes I, II, and III of the <em>Principia Orthogona</em> were written in English, addressed to the international research community in contact geometry, dynamical systems, and mathematical physics. From this Volume IV onward, the primary language is Portuguese. This shift is not cosmetic — it is structural. The mathematics developed here grew from daily contact with the Brazilian community, and deserves to be expressed in the language in which it was thought."
+    },
+    { type:"section", text:"§1 · Motivation" },
+    { type:"prose",
+      text:"Contact geometry studies odd-dimensional manifolds equipped with a non-integrable hyperplane structure. The central object is the contact form $\\alpha$, a 1-form satisfying the non-degeneracy condition:"
+    },
+    { type:"math", text:"\\alpha \\wedge (d\\alpha)^n \\neq 0 \\quad \\text{at every point of } M." },
+    { type:"prose",
+      text:"The reader familiar with symplectic geometry will recognize the structure: a contact manifold of dimension $2n+1$ is the odd-dimensional analogue of a symplectic manifold of dimension $2n$. The fundamental difference is that while symplectic geometry encodes <em>position and momentum</em>, contact geometry encodes <em>position, momentum, and phase</em>. It is therefore the natural geometry of dynamical systems with phase memory — and this is the starting observation of the theory developed in this volume."
+    },
+    { type:"obs", label:"Remark 0.1",
+      text:"No familiarity with previous Volumes is assumed. This volume is self-contained from the seven axioms of Chapter 1. Readers seeking historical context and applications may consult Volumes I–III, freely available on Zenodo."
+    },
+    { type:"section", text:"§2 · What is GTCT" },
+    { type:"prose",
+      text:"The <strong>Generative Temporal Contact Theory</strong> (GTCT) is a mathematical framework built on seven axioms on a contact manifold $M$. Its goal is to show that a single sequence of four operators,"
+    },
+    { type:"chain" },
+    { type:"prose",
+      text:"— compression, curvature, folding, unfolding — describes the generative transition in any dynamical system admitting a contact-geometric representation. The central result, formally proved in Lean 4, is that the cycle map $R = O_{12} \\circ \\cdots \\circ O_1$ is a contraction with a unique fixed point $x^*$."
+    },
+    { type:"theorem", label:"Main Theorem (A7) · Cycle Contraction",
+      text:"The cycle map $R = O_{12} \\circ \\cdots \\circ O_1$ is a contraction on $(M, d)$ with Lipschitz constant $\\kappa \\leq \\sqrt{7/9} < 1$. There exists a unique fixed point $x^* \\in M$ such that $R^k(x) \\to x^*$ for all $x \\in M$. The structural constants are $g_{33} = 33$, $g_{64} = 64 = 2^6$, $\\varepsilon^* = 1/3$, $T^* = 2\\pi$."
+    },
+    { type:"obs", label:"Remark 0.2 · What g₃₃ = 33 counts",
+      text:"The number 33 counts the independent orthogonality constraints generated by the 12-phase cycle: $\\binom{12}{2} = 66$ total pairs, minus 33 sign-symmetric duplicates, leave 33 independent quadratic constraints on the rank-1 corrections $u_i w_i^T$. Their detailed role is developed in Volume VI."
+    },
+    { type:"section", text:"§3 · Map of this Volume" },
+    { type:"prose",
+      text:"Volume IV is organized into eight chapters, each building linearly on the previous. The reader following chapters in order will obtain the complete theory; below is a logical dependency index for targeted reading."
+    },
+    { type:"table",
+      headers: ["Ch.", "Title", "Depends on", "Main result"],
+      rows: [
+        ["1", "The Seven Axioms", "—", "A1–A7: irreducible foundations of GTCT"],
+        ["2", "The Dimensional Field", "A1, A2", "Field $\\Delta: M \\to \\mathbb{R}^{12}$, phases $\\delta_i$"],
+        ["3", "The Four Operators", "A1–A4", "C, K, F, U as contact diffeomorphisms"],
+        ["4", "Phase–Operator Bijection", "A5, A6", "Uniqueness of $\\Phi$: Thm. 4.1"],
+        ["5", "Orthogonality", "A4, A6", "$g_{33} = 33$ constraints; Structural Hyp."],
+        ["6", "Recursion and the Ladder", "A5, A7", "$k$-nacci ladder: $\\eta_k \\to \\tau = 2$"],
+        ["7", "Emergence", "Ch. 3–6", "Helical attractors on $M$"],
+        ["8", "Time and Phase", "A3, A5", "Temporal field $T$; period $T^* = 2\\pi$"],
+      ]
+    },
+    { type:"section", text:"§4 · Formal Verification in Lean 4" },
+    { type:"prose",
+      text:"All structural results in this volume are mechanically verified in the Lean 4 proof assistant, using the Mathlib4 library. The code repository (<a href='https://github.com/TOTOGT/AXLE' style='color:var(--gold)'>TOTOGT/AXLE</a>) contains the Lean files corresponding to each chapter."
+    },
+    { type:"nota", label:"Note on sorry",
+      text:"The convention adopted in this series is one of absolute honesty about proof status. Every claim marked <code style='color:var(--gold)'>sorry</code> in the Lean code is an explicitly declared open obligation. There are no hidden sorrys. Chapter 5 documents which claims about the operator matrices $A_i$ remain as structural hypotheses awaiting explicit realization in Volume VI."
+    },
+    { type:"section", text:"§5 · A Word to the Brazilian Reader" },
+    { type:"prose",
+      text:"This theory grew on the edge of an abandoned rail line in the North Ward of Newark, New Jersey — the former Delaware, Lackawanna & Western Railroad Boonton Line, decommissioned in 2002. Seventy meters from the apartment window where this text was written, the rails rust among the underbrush. One day we hope to walk the line."
+    },
+    { type:"prose",
+      text:"The mathematics developed here is independent of any institution. It was built over 25 years, in parallel with classroom work as an English instructor for adult immigrants in Elizabeth, NJ — engineers, nurses, teachers, farmers, learning English side by side without knowing that the patterns each mastered in their field are recognizable across languages and professions."
+    },
+    { type:"prose",
+      text:"It is for the Brazilian mathematical community — for participants of the XII Bienal da SBM in Natal, for researchers at UFRJ, UFMG, Unicamp, USP, and dozens of other institutions — that this volume was written first, and in Portuguese."
+    },
+    { type:"obs", label:"Closing Remark · The Cajueiro",
+      text:"The recurring symbol of this series is the cashew tree (<em>Anacardium occidentale</em>). The Cajueiro de Pirangi, 20 km from the UFRN campus in Natal, covers 8,500 m² from a single organism. Its aerial roots touch the ground, become new trunks, branch again. What you see is never the generator. The fruit exposes the nut. The nut tends to a forest. <strong>G = U ∘ F ∘ K ∘ C.</strong>"
+    },
+  ],
+
+  "es": [
+    { type:"nota", label:"Nota sobre los Volúmenes I–III",
+      text:"Los Volúmenes I, II y III de la <em>Principia Orthogona</em> fueron escritos en inglés. A partir de este Volumen IV, el idioma primario es el portugués, dirigido a la comunidad matemática brasileña. La traducción al español está disponible aquí."
+    },
+    { type:"section", text:"§1 · Motivación" },
+    { type:"prose", text:"La geometría de contacto estudia variedades de dimensión impar equipadas con una estructura de hiperplano no integrable. La forma de contacto $\\alpha$ satisface la condición de no degeneración $\\alpha \\wedge (d\\alpha)^n \\neq 0$ en todo punto de $M$." },
+    { type:"obs", label:"Observación 0.1",
+      text:"No se asume familiaridad con los volúmenes anteriores. Este volumen es autocontenido a partir de los siete axiomas del Capítulo 1."
+    },
+    { type:"section", text:"§2 · ¿Qué es la GTCT?" },
+    { type:"prose", text:"La <strong>Teoría del Contacto Generativo Temporal</strong> construye sobre siete axiomas en una variedad de contacto $M$. La secuencia de cuatro operadores" },
+    { type:"chain" },
+    { type:"prose", text:"describe la transición generativa en cualquier sistema dinámico con representación de geometría de contacto. El resultado central es que el mapa de ciclo $R$ es una contracción con punto fijo único $x^*$." },
+    { type:"theorem", label:"Teorema Principal (A7)",
+      text:"El mapa $R = O_{12} \\circ \\cdots \\circ O_1$ es una contracción con constante de Lipschitz $\\kappa \\leq \\sqrt{7/9} < 1$. Existe un único punto fijo $x^*$. Constantes estructurales: $g_{33} = 33$, $\\varepsilon^* = 1/3$, $T^* = 2\\pi$."
+    },
+    { type:"obs", label:"Observación Final · El Cajuero",
+      text:"El cajuero de Pirangi, a 20 km del campus de la UFRN en Natal, cubre 8.500 m² desde un único organismo. Lo que ves nunca es el generador. El fruto expone la nuez. La nuez tiende a un bosque. <strong>G = U ∘ F ∘ K ∘ C.</strong>"
+    },
+  ],
+
+  "fr": [
+    { type:"nota", label:"Note sur les Volumes I–III",
+      text:"Les Volumes I, II et III de la <em>Principia Orthogona</em> ont été rédigés en anglais. À partir de ce Volume IV, la langue primaire est le portugais, adressé à la communauté mathématique brésilienne."
+    },
+    { type:"section", text:"§1 · Motivation" },
+    { type:"prose", text:"La géométrie de contact étudie les variétés de dimension impaire munies d'une structure d'hyperplan non intégrable. La forme de contact $\\alpha$ satisfait $\\alpha \\wedge (d\\alpha)^n \\neq 0$ en tout point de $M$." },
+    { type:"obs", label:"Remarque 0.1",
+      text:"Aucune familiarité avec les volumes précédents n'est supposée. Ce volume est autonome à partir des sept axiomes du Chapitre 1."
+    },
+    { type:"section", text:"§2 · Qu'est-ce que la GTCT?" },
+    { type:"prose", text:"La <strong>Théorie du Contact Génératif Temporel</strong> est construite sur sept axiomes sur une variété de contact $M$. La séquence d'opérateurs" },
+    { type:"chain" },
+    { type:"prose", text:"décrit la transition générative dans tout système dynamique admettant une représentation géométrique de contact. Le résultat central est que le map de cycle $R$ est une contraction avec un unique point fixe $x^*$." },
+    { type:"theorem", label:"Théorème Principal (A7)",
+      text:"$R = O_{12} \\circ \\cdots \\circ O_1$ est une contraction de constante de Lipschitz $\\kappa \\leq \\sqrt{7/9} < 1$. Il existe un unique point fixe $x^*$. Constantes structurelles: $g_{33} = 33$, $\\varepsilon^* = 1/3$, $T^* = 2\\pi$."
+    },
+    { type:"obs", label:"Remarque Finale · Le Cajueiro",
+      text:"Le cajueiro de Pirangi, à 20 km du campus de l'UFRN à Natal, couvre 8 500 m² depuis un seul organisme. Ce que vous voyez n'est jamais le générateur. Le fruit expose la noix. La noix tend vers une forêt. <strong>G = U ∘ F ∘ K ∘ C.</strong>"
+    },
+  ],
+
+  "de": [
+    { type:"nota", label:"Anmerkung zu den Bänden I–III",
+      text:"Die Bände I–III der <em>Principia Orthogona</em> wurden auf Englisch verfasst. Ab Band IV ist die Primärsprache Portugiesisch, gerichtet an die brasilianische Mathematikgemeinschaft."
+    },
+    { type:"section", text:"§1 · Motivation" },
+    { type:"prose", text:"Die Kontaktgeometrie studiert ungerade-dimensionale Mannigfaltigkeiten mit nicht-integrierbarer Hyperebenstruktur. Die Kontaktform $\\alpha$ erfüllt $\\alpha \\wedge (d\\alpha)^n \\neq 0$ überall auf $M$." },
+    { type:"section", text:"§2 · Was ist die GTCT?" },
+    { type:"prose", text:"Die <strong>Generative Temporale Kontakttheorie</strong> baut auf sieben Axiomen über eine Kontaktmannigfaltigkeit $M$ auf. Die Operatorfolge" },
+    { type:"chain" },
+    { type:"prose", text:"beschreibt den generativen Übergang in jedem dynamischen System mit kontaktgeometrischer Darstellung. Der zentrale Satz: die Zyklusabbildung $R$ ist eine Kontraktion mit eindeutigem Fixpunkt $x^*$." },
+    { type:"obs", label:"Schlussbemerkung · Der Cajueiro",
+      text:"Der Cajueiro de Pirangi, 20 km vom UFRN-Campus in Natal, bedeckt 8.500 m² aus einem einzigen Organismus. Was Sie sehen, ist niemals der Generator. Die Frucht enthüllt die Nuss. Die Nuss neigt zu einem Wald. <strong>G = U ∘ F ∘ K ∘ C.</strong>"
+    },
+  ],
+
+  "it": [
+    { type:"nota", label:"Nota sui Volumi I–III",
+      text:"I Volumi I, II e III della <em>Principia Orthogona</em> sono stati scritti in inglese. A partire da questo Volume IV, la lingua primaria è il portoghese, rivolto alla comunità matematica brasiliana."
+    },
+    { type:"prose", text:"La geometria di contatto studia varietà di dimensione dispari munite di una struttura di iperpiano non integrabile. La forma di contatto $\\alpha$ soddisfa $\\alpha \\wedge (d\\alpha)^n \\neq 0$ in ogni punto di $M$." },
+    { type:"chain" },
+    { type:"theorem", label:"Teorema Principale (A7)",
+      text:"La mappa di ciclo $R = O_{12} \\circ \\cdots \\circ O_1$ è una contrazione con costante di Lipschitz $\\kappa \\leq \\sqrt{7/9} < 1$ e un unico punto fisso $x^*$. Costanti strutturali: $g_{33} = 33$, $\\varepsilon^* = 1/3$, $T^* = 2\\pi$."
+    },
+    { type:"obs", label:"Osservazione Finale · Il Cajueiro",
+      text:"Il cajueiro de Pirangi, a 20 km dal campus dell'UFRN a Natal, copre 8.500 m² da un unico organismo. Quello che vedi non è mai il generatore. Il frutto espone il seme. Il seme tende a una foresta. <strong>G = U ∘ F ∘ K ∘ C.</strong>"
+    },
+  ],
+
+  "ru": [
+    { type:"nota", label:"Примечание о Томах I–III",
+      text:"Тома I, II и III <em>Principia Orthogona</em> написаны на английском. Начиная с Тома IV основным языком является португальский, обращённый к бразильскому математическому сообществу."
+    },
+    { type:"prose", text:"Контактная геометрия изучает нечётномерные многообразия с неинтегрируемой гиперплоскостной структурой. Контактная форма $\\alpha$ удовлетворяет $\\alpha \\wedge (d\\alpha)^n \\neq 0$ всюду на $M$." },
+    { type:"chain" },
+    { type:"theorem", label:"Главная Теорема (A7)",
+      text:"Цикловое отображение $R = O_{12} \\circ \\cdots \\circ O_1$ является сжатием с постоянной Липшица $\\kappa \\leq \\sqrt{7/9} < 1$ и единственной неподвижной точкой $x^*$. Структурные константы: $g_{33} = 33$, $\\varepsilon^* = 1/3$, $T^* = 2\\pi$."
+    },
+    { type:"obs", label:"Заключительное замечание · Кажуэйро",
+      text:"Кажуэйру-ди-Пиранжи, в 20 км от кампуса UFRN в Натале, занимает 8500 м² от единственного организма. То, что вы видите, никогда не является генератором. Плод обнажает орех. Орех стремится к лесу. <strong>G = U ∘ F ∘ K ∘ C.</strong>"
+    },
+  ],
+
+  "zh": [
+    { type:"nota", label:"关于第I–III卷的说明",
+      text:"《Principia Orthogona》第I、II、III卷以英文写成。从第IV卷起，主要语言为葡萄牙语，面向巴西数学界。"
+    },
+    { type:"prose", text:"接触几何研究配备了不可积超平面结构的奇维流形。接触形式 $\\alpha$ 在 $M$ 的每个点满足 $\\alpha \\wedge (d\\alpha)^n \\neq 0$。" },
+    { type:"chain" },
+    { type:"theorem", label:"主定理 (A7)",
+      text:"循环映射 $R = O_{12} \\circ \\cdots \\circ O_1$ 是 $(M,d)$ 上的压缩映射，Lipschitz常数 $\\kappa \\leq \\sqrt{7/9} < 1$，存在唯一不动点 $x^*$。结构常数：$g_{33} = 33$，$\\varepsilon^* = 1/3$，$T^* = 2\\pi$。"
+    },
+    { type:"obs", label:"结语 · 卡茹艾罗树",
+      text:"距纳塔尔UFRN校园20公里的皮朗日卡茹艾罗树，一株单体覆盖8500平方米。你所看到的永远不是生成者。果实暴露了坚果。坚果趋向森林。<strong>G = U ∘ F ∘ K ∘ C。</strong>"
+    },
+  ],
+
+  "ar": [
+    { type:"nota", label:"ملاحظة حول المجلدات I–III",
+      text:"كُتبت المجلدات الأولى من <em>Principia Orthogona</em> باللغة الإنجليزية. اعتباراً من هذا المجلد الرابع، اللغة الأساسية هي البرتغالية، موجَّهة إلى مجتمع الرياضيات البرازيلي."
+    },
+    { type:"prose", text:"تدرس هندسة الاتصال المشعبات الفردية الأبعاد المزوّدة ببنية مستوٍ فائق غير قابلة للتكامل. تستوفي صيغة الاتصال $\\alpha$ الشرط $\\alpha \\wedge (d\\alpha)^n \\neq 0$ في كل نقطة من $M$." },
+    { type:"chain" },
+    { type:"obs", label:"الملاحظة الختامية · شجرة الكاجوي",
+      text:"تغطي شجرة كاجويرو دي بيرانجي، على بُعد 20 كم من حرم UFRN في ناتال، مساحة 8500 م² من كائن واحد. ما تراه ليس أبداً المُولِّد. الثمرة تكشف النواة. النواة تتجه نحو غابة. <strong>G = U ∘ F ∘ K ∘ C.</strong>"
+    },
+  ],
+
+  "ja": [
+    { type:"nota", label:"第I–III巻についての注記",
+      text:"<em>Principia Orthogona</em> 第I・II・III巻は英語で書かれました。第IV巻からは、ブラジル数学コミュニティに向けて、ポルトガル語が主要言語となります。"
+    },
+    { type:"prose", text:"接触幾何学は、非可積分超平面構造を備えた奇数次元多様体を研究します。接触形式 $\\alpha$ は $M$ の全点で $\\alpha \\wedge (d\\alpha)^n \\neq 0$ を満たします。" },
+    { type:"chain" },
+    { type:"theorem", label:"主定理 (A7)",
+      text:"サイクル写像 $R = O_{12} \\circ \\cdots \\circ O_1$ はリプシッツ定数 $\\kappa \\leq \\sqrt{7/9} < 1$ の縮小写像であり、唯一の不動点 $x^*$ を持つ。構造定数: $g_{33} = 33$、$\\varepsilon^* = 1/3$、$T^* = 2\\pi$。"
+    },
+    { type:"obs", label:"結びの注 · カジュエイロ",
+      text:"ナタールのUFRNキャンパスから20kmにあるカジュエイロ・デ・ピランジは、一個体で8,500m²を覆います。見えているものは決して生成者ではありません。果実がナッツを露わにする。ナッツは森へと向かう。<strong>G = U ∘ F ∘ K ∘ C。</strong>"
+    },
+  ],
+
+};
+
+/* ── LANGUAGES REGISTRY ───────────────────────────────────────────── */
+const LANGUAGES = {
+  "en":    { name:"English",               native:"English",          dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                 flag:"🇺🇸" },
+  "es":    { name:"Spanish",               native:"Español",          dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                 flag:"🇪🇸" },
+  "fr":    { name:"French",                native:"Français",         dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                 flag:"🇫🇷" },
+  "de":    { name:"German",                native:"Deutsch",          dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                 flag:"🇩🇪" },
+  "it":    { name:"Italian",               native:"Italiano",         dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                 flag:"🇮🇹" },
+  "ru":    { name:"Russian",               native:"Русский",          dir:"ltr", script:"Cyrillic",    font:"'Noto Serif', serif",                 flag:"🇷🇺" },
+  "zh":    { name:"Mandarin (Simplified)", native:"普通话",            dir:"ltr", script:"CJK",         font:"'Noto Serif SC', serif",              flag:"🇨🇳" },
+  "ar":    { name:"Arabic",                native:"العربية",          dir:"rtl", script:"Arabic",      font:"'Noto Naskh Arabic', serif",          flag:"🇸🇦" },
+  "ja":    { name:"Japanese",              native:"日本語",             dir:"ltr", script:"CJK",         font:"'Noto Serif JP', serif",              flag:"🇯🇵" },
+  "hi":    { name:"Hindi",                 native:"हिन्दी",             dir:"ltr", script:"Devanagari",  font:"'Noto Serif Devanagari', serif",      flag:"🇮🇳" },
+  "ko":    { name:"Korean",                native:"한국어",             dir:"ltr", script:"Hangul",      font:"'Noto Serif KR', serif",              flag:"🇰🇷" },
+  "tr":    { name:"Turkish",               native:"Türkçe",           dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                 flag:"🇹🇷" },
+  "nl":    { name:"Dutch",                 native:"Nederlands",       dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                 flag:"🇳🇱" },
+  "pl":    { name:"Polish",                native:"Polski",           dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                 flag:"🇵🇱" },
+  "uk":    { name:"Ukrainian",             native:"Українська",       dir:"ltr", script:"Cyrillic",    font:"'Noto Serif', serif",                 flag:"🇺🇦" },
+  "el":    { name:"Greek",                 native:"Ελληνικά",         dir:"ltr", script:"Greek",       font:"'Noto Serif', serif",                 flag:"🇬🇷" },
+  "he":    { name:"Hebrew",                native:"עברית",            dir:"rtl", script:"Hebrew",      font:"'Noto Serif Hebrew', serif",          flag:"🇮🇱" },
+  "fa":    { name:"Persian",               native:"فارسی",            dir:"rtl", script:"Arabic",      font:"'Noto Naskh Arabic', serif",          flag:"🇮🇷" },
+  "zh-tw": { name:"Mandarin (Traditional)",native:"繁體中文",           dir:"ltr", script:"CJK",         font:"'Noto Serif TC', serif",              flag:"🇹🇼" },
+  "la":    { name:"Latin",                 native:"Lingua Latina",    dir:"ltr", script:"Latin",       font:"'Noto Serif', serif",                 flag:"🏛" },
+};
+
+/* ── OPERATOR CHAIN HTML ─────────────────────────────────────────── */
+function chainHTML() {
+  return `<div class="op-chain">
+    <span class="op op-c">C</span><span class="op-arr">∘</span>
+    <span class="op op-k">K</span><span class="op-arr">∘</span>
+    <span class="op op-f">F</span><span class="op-arr">∘</span>
+    <span class="op op-u">U</span>
+    <span style="color:var(--muted);font-size:.8rem;margin-left:.4rem">= G</span>
+  </div>`;
+}
+
+/* ── TABLE HTML ──────────────────────────────────────────────────── */
+function tableHTML(b) {
+  const ths = b.headers.map(h => `<th>${h}</th>`).join('');
+  const trs = b.rows.map(r =>
+    `<tr>${r.map((c,i) => `<td>${c}</td>`).join('')}</tr>`
+  ).join('');
+  return `<div style="overflow-x:auto;margin:1.5rem 0">
+    <table class="ch-map"><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table>
+  </div>`;
+}
+
+/* ── RENDER A BLOCK ──────────────────────────────────────────────── */
+function renderBlock(b) {
+  if (!b) return '';
+  switch(b.type) {
+    case "prose":
+      return `<p class="block-prose">${b.text}</p>`;
+    case "section":
+      return `<div style="font-family:var(--mono);font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);margin:2.5rem 0 .8rem;padding-top:1.5rem;border-top:1px solid var(--rule)">${b.text}</div>`;
+    case "axiom":
+      return `<div class="block-axiom"><span class="block-label">${b.label||'Axioma'}</span><div class="block-body">${b.text}</div></div>`;
+    case "theorem":
+      return `<div class="block-theorem"><span class="block-label">${b.label||'Teorema'}</span><div class="block-body">${b.text}</div></div>`;
+    case "definition":
+      return `<div class="block-definition"><span class="block-label">${b.label||'Definição'}</span><div class="block-body">${b.text}</div></div>`;
+    case "obs":
+      return `<div class="block-obs"><span class="block-label">${b.label||'Observação'}</span><div class="block-body">${b.text}</div></div>`;
+    case "nota":
+      return `<div class="block-nota"><span class="block-label">${b.label||'Nota'}</span><div class="block-body">${b.text}</div></div>`;
+    case "math":
+      return `<div class="block-math">${b.text}</div>`;
+    case "chain":
+      return chainHTML();
+    case "table":
+      return tableHTML(b);
+    default:
+      return `<p class="block-prose">${b.text||''}</p>`;
+  }
+}
+
+/* ── POPULATE SELECTOR ───────────────────────────────────────────── */
+const sel = document.getElementById('langSelect');
+const tiers = [
+  ["Principais · Academic",     ["en","es","fr","de","it"]],
+  ["Eslavo · Semítico",         ["ru","uk","ar","he","fa"]],
+  ["Asiático",                  ["zh","zh-tw","ja","ko","hi"]],
+  ["Outros",                    ["tr","nl","pl","el","la"]],
+];
+tiers.forEach(([label, codes]) => {
+  const grp = document.createElement('optgroup');
+  grp.label = label;
+  codes.forEach(code => {
+    const l = LANGUAGES[code];
+    if (!l) return;
+    const opt = document.createElement('option');
+    opt.value = code;
+    opt.textContent = `${l.flag} ${l.name} · ${l.native}`;
+    grp.appendChild(opt);
+  });
+  sel.appendChild(grp);
+});
+
+/* ── FALLBACK ────────────────────────────────────────────────────── */
+function getFallback(code) {
+  const l = LANGUAGES[code] || { native: code, script: 'Latin' };
+  return [
+    { type:"nota", label:`Tradução · ${l.native}`,
+      text:`Tradução para ${l.native} em preparação. Para contribuir: <a href="https://github.com/TOTOGT/AXLE" style="color:var(--gold)">github.com/TOTOGT/AXLE</a>` },
+    { type:"chain" },
+    { type:"obs", label:"",
+      text:`G = U ∘ F ∘ K ∘ C · g₃₃ = 33 · τ = 2 · ε* = 1/3 · T* = 2π` },
+  ];
+}
+
+/* ── RENDER ──────────────────────────────────────────────────────── */
+function renderContent(blocks) {
+  return blocks.map(renderBlock).join('');
+}
+
+function setLang(code) {
+  const l = LANGUAGES[code];
+  if (!l) return;
+
+  /* PT always in colA */
+  document.getElementById('contentA').innerHTML = renderContent(PT);
+
+  /* Translation in colB */
+  const blocks = TRANSLATIONS[code] || getFallback(code);
+  const colB = document.getElementById('colB');
+  colB.setAttribute('dir', l.dir);
+  colB.style.fontFamily = l.font;
+  colB.className = l.dir === 'rtl' ? 'col-rtl' : '';
+
+  document.getElementById('colBHeader').innerHTML =
+    `<span class="lang-flag">${l.flag}</span>
+     <span>${l.name}</span>
+     <span class="lang-native">${l.native}</span>`;
+
+  document.getElementById('contentB').innerHTML = renderContent(blocks);
+  document.getElementById('scriptNote').textContent = l.script;
+
+  /* RTL: flip columns */
+  const grid = document.getElementById('bilingualGrid');
+  if (l.dir === 'rtl') {
+    grid.style.direction = 'rtl';
+    document.getElementById('colA').style.order = '2';
+    colB.style.order = '1';
+  } else {
+    grid.style.direction = 'ltr';
+    document.getElementById('colA').style.order = '';
+    colB.style.order = '';
+  }
+}
+
+/* Init with English translation */
+setLang('en');
+</script>
+
+</body>
+</html>

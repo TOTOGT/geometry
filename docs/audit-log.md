@@ -8729,3 +8729,31 @@ anyon paragraph corrected — non-abelian anyons were created in **2023**
 9 May 2023), not 28 February 2026, and the priority claim is withdrawn rather than
 reworded, because the physics was three years earlier; the street address removed
 from the footer.
+
+## 2026-09-19 — five Book IV chapters moved from GTCT to geometry (R7)
+
+Moved on Pablo's instruction. All five existed only in `GTCT/book4/`; none
+collided with a name in `geometry/book4/`. Direction carried: GTCT → geometry,
+whole file, no merge required.
+
+| file | title | claims | tags |
+|---|---|---|---|
+| `chE-gtct.html` | Chapter E · The Generative Time Circuit | 7 | none |
+| `chIV-15.html` | Cap IV-15 · A Virada Complexa (PT) | 0 | none |
+| `chIV-axioms.html` | Cap 1 · Os Sete Axiomas (PT) | 0 | none |
+| `chIV-preface.html` | Abertura · Vol IV (PT) | 0 | none |
+| `chIV-preface-impa.html` | IMPA Edition · Preface | 0 | none |
+
+The GTCT copies were replaced with one-line pointer pages carrying
+`<link rel="canonical">` to the geometry URL — not deleted, not left as copies.
+
+Two things noted and not acted on. **`chE-gtct.html` and `chE-gtct-alt.html` are
+both "Chapter E" and are different chapters** (similarity 0.147, no shared
+paragraphs) — an R9 matter: a duplicate label, declared here. And three of the
+five are Portuguese pages under the `chIV-` prefix, which elsewhere in
+`geometry/book4/` marks English Roman-numeral chapters; renaming them would break
+GTCT's inbound links, so they keep their names.
+
+`geometry/book4` is 64 files; `GTCT/book4` holds 36, all of them now either
+shared or pointers. **Zero chapters exist only in GTCT.** Sixteen shared chapters
+still need reading — `python3 tools/book4_reconcile.py`.

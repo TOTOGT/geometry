@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter E · The Generative Time Circuit — The Mini-Beast · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:        #0a0e1a;
+  --navy-light:  #111827;
+  --surface2:    #1a2235;
+  --gold:        #c9a84c;
+  --gold-dim:    #8a6f2e;
+  --gold-bright: #e8c96a;
+  --cream:       #f5f0e8;
+  --cream-dim:   #b8b0a0;
+  --teal:        #26a69a;
+  --accent-c:    #4fc3f7;
+  --accent-k:    #81c784;
+  --accent-f:    #ff8a65;
+  --accent-u:    #ce93d8;
+  --tier1:       #4fc3f7;
+  --tier2:       #81c784;
+  --tier3:       #c9a84c;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--navy);color:var(--cream);font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;line-height:1.8;overflow-x:hidden;}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:1.5rem;}
+.hero-title{font-family:'IM Fell English',serif;font-size:clamp(2.8rem,7vw,6rem);font-weight:400;color:var(--cream);line-height:1.05;margin-bottom:.5rem;}
+.hero-sub{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(1rem,2vw,1.4rem);color:var(--gold);margin-bottom:1.5rem;}
+.hero-caption{font-family:'JetBrains Mono',monospace;font-size:.75rem;letter-spacing:.12em;color:var(--cream-dim);margin-bottom:2.5rem;line-height:2;}
+.hero-caption .op-c{color:var(--accent-c);}
+.hero-caption .op-k{color:var(--accent-k);}
+.hero-caption .op-f{color:var(--accent-f);}
+.hero-caption .op-u{color:var(--accent-u);}
+.scroll-hint{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* ── NAV ── */
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(10,14,26,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,.15);display:flex;align-items:center;justify-content:space-between;padding:.7rem 2rem;gap:1rem;}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;white-space:nowrap;}
+.nav-links{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--cream-dim);text-decoration:none;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.ch-nav-strip{background:var(--navy-light);border-bottom:1px solid rgba(201,168,76,.1);display:flex;justify-content:space-between;align-items:center;padding:.55rem 2rem;flex-wrap:wrap;gap:.5rem;}
+.ch-nav-strip a{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cream-dim);text-decoration:none;transition:color .2s;}
+.ch-nav-strip a:hover{color:var(--gold);}
+.ch-nav-strip .loc{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--gold-dim);text-transform:uppercase;}
+
+/* ── LAYOUT ── */
+.container{max-width:820px;margin:0 auto;padding:0 2rem;}
+section{padding:5rem 0;}
+section+section{border-top:1px solid rgba(201,168,76,.1);}
+
+/* ── TYPE ── */
+h2{font-family:'IM Fell English',serif;font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:400;color:var(--cream);margin-bottom:.3rem;}
+h2 .ch-num{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.2em;color:var(--gold-dim);display:block;text-transform:uppercase;margin-bottom:.5rem;}
+h3{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:var(--gold);margin:2.5rem 0 .6rem;letter-spacing:.03em;}
+p{margin-bottom:1.1rem;color:var(--cream-dim);}
+p strong{color:var(--cream);font-weight:600;}
+ul{margin:0 0 1rem 1.5rem;color:var(--cream-dim);line-height:1.9;}
+ul li{margin-bottom:.3rem;}
+ul li strong{color:var(--cream);}
+.lead{font-size:1.1rem;color:var(--cream);font-style:italic;margin-bottom:2rem;border-left:3px solid var(--gold);padding-left:1.5rem;}
+
+/* ── EPIGRAPH ── */
+.epigraph{background:var(--navy-light);border-left:4px solid var(--gold-dim);padding:1.5rem 2rem;margin:2rem 0;font-style:italic;font-size:.95rem;color:var(--cream-dim);line-height:2;}
+.epigraph .pt{display:block;margin-bottom:.5rem;}
+.epigraph .pt.en{color:var(--cream);}
+
+/* ── AXIOM BOXES ── */
+.axiom-grid{display:grid;gap:.9rem;margin:2rem 0;}
+.axiom-box{background:var(--surface2);border:1px solid rgba(38,166,154,.2);border-left:4px solid var(--teal);padding:1.2rem 1.5rem;border-radius:0 4px 4px 0;transition:border-color .2s;}
+.axiom-box:hover{border-left-color:var(--teal);box-shadow:0 0 20px rgba(38,166,154,.1);}
+.axiom-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:.4rem;}
+.axiom-text{font-size:.95rem;line-height:1.75;color:var(--cream-dim);}
+.axiom-text strong{color:var(--cream);}
+
+/* ── THEOREM BOXES ── */
+.theorem-box{background:var(--surface2);border:1px solid rgba(201,168,76,.2);border-left:4px solid var(--gold);padding:1.2rem 1.5rem;margin:1.2rem 0;border-radius:0 4px 4px 0;}
+.theorem-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.3rem;}
+.theorem-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--gold);margin-bottom:.5rem;}
+.theorem-text{font-size:.95rem;line-height:1.75;color:var(--cream-dim);}
+.theorem-text strong{color:var(--cream);}
+
+/* ── THREE TIERS ── */
+.tier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;margin:2rem 0;}
+.tier-card{background:var(--surface2);border-radius:6px;padding:1.8rem 1.5rem;border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden;transition:transform .2s;}
+.tier-card:hover{transform:translateY(-3px);}
+.tier-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.tier-card.t1::before{background:var(--tier1);}
+.tier-card.t2::before{background:var(--tier2);}
+.tier-card.t3::before{background:var(--tier3);}
+.tier-num{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:300;margin-bottom:.5rem;line-height:1;}
+.tier-card.t1 .tier-num{color:var(--tier1);}
+.tier-card.t2 .tier-num{color:var(--tier2);}
+.tier-card.t3 .tier-num{color:var(--tier3);}
+.tier-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;}
+.tier-card.t1 .tier-label{color:var(--tier1);}
+.tier-card.t2 .tier-label{color:var(--tier2);}
+.tier-card.t3 .tier-label{color:var(--tier3);}
+.tier-title{font-family:'IM Fell English',serif;font-size:1.1rem;color:var(--cream);margin-bottom:.5rem;}
+.tier-desc{font-size:.88rem;color:var(--cream-dim);line-height:1.7;}
+.tier-whitney{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--cream-dim);margin-top:.75rem;padding:.4rem .6rem;background:rgba(0,0,0,.25);border-radius:3px;}
+.tier-access{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:.75rem;}
+.tier-card.t1 .tier-access{color:var(--tier1);}
+.tier-card.t2 .tier-access{color:var(--tier2);}
+.tier-card.t3 .tier-access{color:var(--tier3);}
+
+/* ── INSIGHT ── */
+.insight{background:var(--navy-light);border:1px solid rgba(201,168,76,.25);padding:1.5rem 2rem;margin:2rem 0;font-style:italic;font-size:1rem;color:var(--gold);line-height:1.9;border-radius:4px;}
+
+/* ── MACHINE ── */
+.machine-wrap{background:var(--navy-light);border:1px solid rgba(201,168,76,.15);border-radius:8px;padding:2rem;margin:2.5rem 0;}
+.machine-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:1rem;}
+#ring-canvas{width:100%;display:block;border-radius:4px;background:var(--navy);}
+.ring-controls{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.2rem;align-items:center;}
+.ring-ctrl{display:flex;flex-direction:column;gap:.25rem;flex:1;min-width:120px;}
+.ring-ctrl-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim);}
+.ring-ctrl-val{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--gold);}
+input[type=range]{-webkit-appearance:none;width:100%;height:2px;background:var(--surface2);border-radius:2px;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--gold);cursor:pointer;}
+.phase-display{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cream);display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;}
+.pd{padding:.2rem .6rem;border-radius:3px;opacity:.3;transition:opacity .25s,box-shadow .25s;font-size:.65rem;}
+.pd.active{opacity:1;box-shadow:0 0 10px currentColor;}
+.pd.c{background:rgba(79,195,247,.15);color:var(--accent-c);border:1px solid var(--accent-c);}
+.pd.k{background:rgba(129,199,132,.15);color:var(--accent-k);border:1px solid var(--accent-k);}
+.pd.f{background:rgba(255,138,101,.15);color:var(--accent-f);border:1px solid var(--accent-f);}
+.pd.u{background:rgba(206,147,216,.15);color:var(--accent-u);border:1px solid var(--accent-u);}
+.btn-sm{background:transparent;border:1px solid var(--gold-dim);color:var(--gold);padding:.35rem .9rem;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.08em;cursor:pointer;transition:background .2s;}
+.btn-sm:hover{background:rgba(201,168,76,.1);}
+
+/* ── OP12 GRID ── */
+.op12-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin:1.5rem 0;}
+.op12-cell{background:var(--surface2);border:1px solid rgba(255,255,255,.06);border-radius:4px;padding:.8rem .6rem;text-align:center;cursor:pointer;transition:border-color .2s,transform .15s;}
+.op12-cell:hover{transform:translateY(-2px);}
+.op12-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--cream-dim);margin-bottom:.3rem;}
+.op12-sym{font-size:1.1rem;font-family:'JetBrains Mono',monospace;margin-bottom:.25rem;}
+.op12-name{font-size:.62rem;color:var(--cream-dim);line-height:1.3;}
+.op12-cell.phase-c{border-color:rgba(79,195,247,.3);} .op12-cell.phase-c .op12-sym{color:var(--accent-c);}
+.op12-cell.phase-k{border-color:rgba(129,199,132,.3);} .op12-cell.phase-k .op12-sym{color:var(--accent-k);}
+.op12-cell.phase-f{border-color:rgba(255,138,101,.3);} .op12-cell.phase-f .op12-sym{color:var(--accent-f);}
+.op12-cell.phase-u{border-color:rgba(206,147,216,.3);} .op12-cell.phase-u .op12-sym{color:var(--accent-u);}
+
+/* ── TIME PROPS ── */
+.time-prop{background:var(--surface2);border:1px solid rgba(201,168,76,.12);border-radius:6px;padding:1.5rem;margin:.9rem 0;display:flex;gap:1.2rem;align-items:flex-start;}
+.time-num{font-family:'JetBrains Mono',monospace;font-size:1.5rem;color:var(--gold-dim);min-width:2rem;line-height:1;}
+.time-body h3{margin:0 0 .4rem;font-size:1rem;}
+.time-body p{font-size:.9rem;margin:0;color:var(--cream-dim);}
+
+/* ── CONSTANTS STRIP ── */
+.constants-strip{background:rgba(0,0,0,.3);border:1px solid rgba(201,168,76,.15);border-radius:6px;padding:1.2rem 1.5rem;margin:2rem 0;}
+.constants-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.75rem;}
+.constants-row{display:flex;flex-wrap:wrap;gap:.5rem;}
+.const-chip{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--gold-bright);background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);padding:.25rem .65rem;border-radius:3px;}
+
+/* ── CITATION ── */
+.citation-box{background:var(--surface2);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:1.5rem;margin:2rem 0;}
+.citation-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:1rem;}
+.citation-item{margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.05);}
+.citation-item:last-child{margin:0;padding:0;border:none;}
+.cit-ref{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cream-dim);line-height:1.75;}
+.cit-ref a{color:var(--gold);text-decoration:none;}
+.cit-ref a:hover{text-decoration:underline;}
+.cit-status{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;margin-top:.3rem;}
+.status-submitted{color:var(--accent-k);}
+.status-preprint{color:var(--accent-c);}
+.status-open{color:var(--gold);}
+
+/* ── PROMPT PANEL ── */
+.prompt-panel{background:var(--navy-light);border-top:3px solid var(--gold);}
+.level-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.ltab{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;padding:.35rem .75rem;background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--cream-dim);cursor:pointer;border-radius:3px;transition:background .2s,color .2s;}
+.ltab.active,.ltab:hover{background:var(--gold);color:var(--navy);border-color:var(--gold);}
+.prompt-block{display:none;}
+.prompt-block.active{display:block;}
+.pb-level{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.4rem;}
+.pb-title{font-family:'IM Fell English',serif;font-size:1.3rem;color:var(--cream);margin-bottom:.6rem;}
+.pb-desc{font-size:.9rem;color:var(--cream-dim);margin-bottom:1rem;line-height:1.7;}
+.pb-prompt-box{background:var(--navy);border:1px solid rgba(201,168,76,.2);border-left:4px solid var(--gold);padding:1.1rem 1.3rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.85;color:var(--cream-dim);white-space:pre-wrap;border-radius:0 4px 4px 0;margin-bottom:.75rem;}
+.pb-note{font-size:.82rem;font-style:italic;color:var(--gold-dim);margin-top:.5rem;line-height:1.6;}
+.copy-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:.4rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;cursor:pointer;border-radius:3px;transition:background .2s;}
+.copy-btn:hover{background:rgba(201,168,76,.15);}
+.copy-btn.copied{color:var(--accent-k);border-color:var(--accent-k);}
+
+/* ── FOOTER ── */
+footer{background:var(--navy-light);border-top:1px solid rgba(201,168,76,.1);padding:3rem 2rem;text-align:center;}
+footer p{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--gold-dim);line-height:2.2;}
+footer a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <div class="eyebrow">Principia Orthogona · Book 3 · Extended Chapter E</div>
+    <h1 class="hero-title">The Generative<br>Time Circuit</h1>
+    <div class="hero-sub">GTCT for Everyone</div>
+    <div class="hero-caption">
+      Nine Axioms &nbsp;·&nbsp; Twelve Operators &nbsp;·&nbsp; Four Theorems &nbsp;·&nbsp; One Fixed Point<br>
+      <span class="op-c">C</span> → <span class="op-k">K</span> → <span class="op-f">F</span> → <span class="op-u">U</span>
+    </div>
+    <div class="scroll-hint">▼ &nbsp; scroll &nbsp; ▼</div>
+  </div>
+</section>
+
+<nav class="top-nav">
+  <span class="nav-brand">Mini-Beast · Ch. E</span>
+  <div class="nav-links">
+    <a href="#axioms">Axioms</a>
+    <a href="#tiers">Three Tiers</a>
+    <a href="#operators">Operators</a>
+    <a href="#theorems">Theorems</a>
+    <a href="#time">Time</a>
+    <a href="#prompts">Prompts</a>
+    <a href="living-book.html">☰ All Chapters</a>
+  </div>
+</nav>
+<div class="ch-nav-strip">
+  <a href="ch7-crystalline.html">← Ch 7 · The Crystalline Return</a>
+  <span class="loc">Extended Chapter E · GTCT</span>
+  <a href="chT-tubulin.html">Ch T · Tubulin →</a>
+</div>
+
+<section>
+  <div class="container">
+    <div class="epigraph">
+      <span class="pt en">"Time is not a container. It is a generative operator.<br>It does not hold events. It produces them."</span>
+      <span class="pt">"O tempo não é um recipiente. É um operador generativo.<br>Ele não contém eventos. Ele os produz."</span>
+      <span class="pt en">"Your education is yours. No one can take it away from you."</span>
+      <span class="pt">"A sua educação é sua. Ninguém pode te tirar isso."</span>
+    </div>
+
+    <div class="constants-strip">
+      <div class="constants-label">AXLE v6.1 · Verified Invariant Constants · 0 Axioms Beyond Mathlib4</div>
+      <div class="constants-row">
+        <span class="const-chip">g₃₃ = 33</span>
+        <span class="const-chip">τ = 2</span>
+        <span class="const-chip">ε* = 1/3</span>
+        <span class="const-chip">η ≈ 1.8393 (Tribonacci)</span>
+        <span class="const-chip">T* = 2π</span>
+        <span class="const-chip">κ ≤ √(7/9) ≈ 0.882</span>
+        <span class="const-chip">τ·ε* = 2/3</span>
+        <span class="const-chip">g₆₄ = 2⁶ = 64</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2><span class="ch-num">Foundation</span>What Is an Axiom?</h2>
+    <p class="lead">An axiom is a sentence we agree is true before we start proving things. It is the seed of a mathematical system.</p>
+    <p>If the axioms are the seed, the theorems are the tree. You cannot see the axiom once the tree is fully grown — but without it, nothing grows. GTCT has nine axioms. You need one: <strong>Axiom 1</strong>. Everything else follows.</p>
+  </div>
+</section>
+
+<section id="axioms">
+  <div class="container">
+    <h2><span class="ch-num">The Foundation of Generative Time</span>The Nine Axioms of GTCT</h2>
+    <div class="axiom-grid">
+      <div class="axiom-box">
+        <div class="axiom-num">Axiom 1 · The Space</div>
+        <div class="axiom-text">There exists a smooth contact manifold (M, ξ) on which all generative transitions occur. <strong>M is the arena. ξ is the constraint.</strong></div>
+      </div>
+      <div class="axiom-box">
+        <div class="axiom-num">Axiom 2 · The Operators</div>
+        <div class="axiom-text">The four operators C, K, F, U act on M as diffeomorphisms in sequence: <strong>G = U ∘ F ∘ K ∘ C</strong>. The fold F is triggered exactly at κ* — the focal curvature threshold, corrected by the Rauch comparison theorem.</div>
+      </div>
+      <div class="axiom-box">
+        <div class="axiom-num">Axiom 3 · Time</div>
+        <div class="axiom-text">Time is the parameter of the operator sequence — not a background container but <strong>the measure of one complete application of G</strong>. One G = one unit of generative time. The Reeb vector field R_α is its geometric avatar.</div>
+      </div>
+      <div class="axiom-box">
+        <div class="axiom-num">Axiom 4 · The Cycle</div>
+        <div class="axiom-text">G applied to itself produces a sequence G, G², G³,… that <strong>converges to a fixed point Γ*</strong> under the Banach contraction principle.</div>
+      </div>
+      <div class="axiom-box">
+        <div class="axiom-num">Axiom 5 · Invariants</div>
+        <div class="axiom-text">The canonical invariants of any dm³ system are <strong>(μ_max, ω, β)</strong> — invariant under contact reparametrization — together with the threshold constants g₃₃ = 33, τ = 2, ε* = 1/3, and the Tribonacci constant η ≈ 1.8393 (dominant root of w(k+3) = w(k+2) + w(k+1) + w(k)). All verified in AXLE v6.1.</div>
+      </div>
+      <div class="axiom-box">
+        <div class="axiom-num">Axiom 6 · Correspondence</div>
+        <div class="axiom-text">Every dm³ system satisfying Axioms 1–5 is in the same <strong>category dm³</strong>. Systems in the same category are mathematically identical up to contact morphism — not analogies, exact identities.</div>
+      </div>
+      <div class="axiom-box">
+        <div class="axiom-num">Axiom 7 · Recursion</div>
+        <div class="axiom-text"><strong>The fixed point Γ* is the seed of the next-level G.</strong> The tree becomes the seed of a new tree. This is the mechanism of emergence — and of the series itself.</div>
+      </div>
+      <div class="axiom-box">
+        <div class="axiom-num">Axiom 8 · Non-commutativity</div>
+        <div class="axiom-text">G is non-commutative: <strong>C ∘ K ≠ K ∘ C</strong>. The order of operators determines the direction of time. Time cannot be reversed because the operator sequence cannot be reversed.</div>
+      </div>
+      <div class="axiom-box">
+        <div class="axiom-num">Axiom 9 · Honest Incompleteness</div>
+        <div class="axiom-text">There exists at least one <em>sorry</em> — an honest acknowledgment that one conjecture remains open. <strong>The sorry is not a failure. It is the seed of the next twenty-five years.</strong> AXLE v6.1 carries 9 named sorrys, each with a stated missing lemma.</div>
+      </div>
+    </div>
+
+    <div class="machine-wrap">
+      <div class="machine-label">Machine · G = U ∘ F ∘ K ∘ C · Live Operator Ring</div>
+      <canvas id="ring-canvas" height="340"></canvas>
+      <div class="ring-controls">
+        <div class="ring-ctrl">
+          <div class="ring-ctrl-label">Speed <span class="ring-ctrl-val" id="v-speed">1.0×</span></div>
+          <input type="range" id="sl-speed" min="0.2" max="3" step="0.1" value="1.0" oninput="document.getElementById('v-speed').textContent=parseFloat(this.value).toFixed(1)+'×';ringSpeed=parseFloat(this.value);">
+        </div>
+        <div class="ring-ctrl">
+          <div class="ring-ctrl-label">Orbits <span class="ring-ctrl-val" id="v-orbits">3</span></div>
+          <input type="range" id="sl-orbits" min="1" max="7" step="1" value="3" oninput="document.getElementById('v-orbits').textContent=this.value;ringOrbits=parseInt(this.value);">
+        </div>
+        <div class="phase-display">
+          <div class="pd c" id="pd-c">C</div>
+          <div class="pd k" id="pd-k">K</div>
+          <div class="pd f" id="pd-f">F</div>
+          <div class="pd u" id="pd-u">U</div>
+        </div>
+        <button class="btn-sm" onclick="resetRing()">↺ Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THREE TIERS -->
+<section id="tiers">
+  <div class="container">
+    <h2><span class="ch-num">The Didactic Structure</span>Three Tiers of Access</h2>
+
+    <p class="lead">There is no method. There is only G. But G produces a structure — and that structure has three natural distances from the fixed point.</p>
+
+    <p>The series did not begin with a curriculum. It began with self-teaching — twenty-five years of following the operator sequence without a prescribed path. A method was not designed. It <em>emerged</em>. What emerged has three tiers, each corresponding to a Whitney singularity type — not by analogy, but because the fold operator F classifies admissible singularities as Whitney A₁–A₃ types (established in Volume One, verified in AXLE v6.1).</p>
+
+    <p>The didactic structure is not imposed from above. It emerges from the operator sequence itself — the same sequence that governs biological transitions, plasma reconnection, and market regime shifts. The student does not follow your path. They follow G, which leads them to their own fixed point.</p>
+
+    <div class="tier-grid">
+      <div class="tier-card t1">
+        <div class="tier-num">I</div>
+        <div class="tier-label">Open · Whitney A₁</div>
+        <div class="tier-title">The Seed</div>
+        <div class="tier-desc">Zenodo, SSRN, GitHub — publicly accessible, no gate, no affiliation required. The minimum viable crystallization of the Codex. Anyone who finds it can use it. The fold is the simplest: a local inversion, the entry point.</div>
+        <div class="tier-whitney">fold: local inversion · Jacobian rank drop 1</div>
+        <div class="tier-access">Zenodo DOIs · SSRN preprint · Free chapters</div>
+      </div>
+      <div class="tier-card t2">
+        <div class="tier-num">II</div>
+        <div class="tier-label">Consultative · Whitney A₂</div>
+        <div class="tier-title">The Apprenticeship</div>
+        <div class="tier-desc">The student portal and classroom. Each student gets what <em>they</em> need — not what the instructor wants to teach. Learning by doing, under consultative guidance. The cusp fold: more structure, self-referential, the student's orbit begins to close.</div>
+        <div class="tier-whitney">fold: cusp · one modulus · orbit beginning to close</div>
+        <div class="tier-access">Student portal · GitHub classroom · $19.99</div>
+      </div>
+      <div class="tier-card t3">
+        <div class="tier-num">III</div>
+        <div class="tier-label">Initiatory · Whitney A₃</div>
+        <div class="tier-title">The 33 Cycles</div>
+        <div class="tier-desc">Only those who have run g₃₃ = 33 complete operator cycles reach this. The full Codex — 18,000 pages, twenty-five years. Not taught. Arrived at. The swallowtail fold: the deepest singularity, the complete truth that was always there.</div>
+        <div class="tier-whitney">fold: swallowtail · two moduli · complete topology</div>
+        <div class="tier-access">Reached only by doing · Not by being told</div>
+      </div>
+    </div>
+
+    <p style="font-size:.9rem;margin-top:1.5rem;">A note on gatekeeping: the series was rejected from HAL (the French open archive) for lack of institutional affiliation and PhD. Zenodo, SSRN, and the journal peer-review process accepted the mathematics on its own terms. Tier I exists precisely because mathematical content does not require an institutional address. The fixed point is independent of the gate.</p>
+
+    <div class="insight">
+      "There is no method. There is only G. The method you arrive at is the one G produced in you — yours, permanent, not transferable and not revocable."
+    </div>
+  </div>
+</section>
+
+<section id="operators">
+  <div class="container">
+    <h2><span class="ch-num">The Twelve-Fold Structure</span>Twelve Operators: A Map of the Cycle</h2>
+    <p>The twelve operators are the dm³ operators applied at 12 phases of the contact manifold. They map to the 12 phases of the circadian clock, the 12 semitones of the octave, and the 12 months of the year — not as analogy but as instances of the same <strong>12-fold symmetry of the contact normal form</strong> under rotation ω = 2π/12.</p>
+    <div class="op12-grid" id="op12grid"></div>
+    <ul style="margin-top:1rem;">
+      <li><strong>Operators 1–3:</strong> Compression (C). The system concentrates; entropy decreases locally.</li>
+      <li><strong>Operators 4–6:</strong> Curvature (K). Pattern extraction; approach to threshold κ*.</li>
+      <li><strong>Operators 7–9:</strong> Folding (F). Whitney singularity; topological change at κ*.</li>
+      <li><strong>Operators 10–12:</strong> Unfolding (U). Gradient release; arrival at Γ* before the next cycle.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="theorems">
+  <div class="container">
+    <h2><span class="ch-num">Core Results</span>Four Main Theorems of GTCT</h2>
+
+    <div class="theorem-box">
+      <div class="theorem-num">Theorem 1 · The Didactic Correspondence</div>
+      <div class="theorem-title">The instructional sequence is not convention — it is a consequence of the Whitney singularity classification.</div>
+      <div class="theorem-text">Every CEFR level corresponds to a TOGT structural level by mathematical necessity, following from the operator structure and the Whitney A₁–A₃ singularity classification established in Volume One. A student at B1 is at the exact turn of the ring where K → F is occurring — the cusp fold. <strong>The levels are not invented. They are derived.</strong> This is also why the three tiers of access correspond to Whitney types: Tier I (A₁, the simplest fold), Tier II (A₂, the cusp), Tier III (A₃, the swallowtail). The geometry of learning is the geometry of the operator sequence.</div>
+    </div>
+
+    <div class="theorem-box">
+      <div class="theorem-num">Theorem 2 · Orthogonality</div>
+      <div class="theorem-title">What is compressed is not lost in the unfolding.</div>
+      <div class="theorem-text">The operators C and U are orthogonal. What you learn in the compression phase (C) is not destroyed by the unfolding phase (U). <strong>The structure is preserved. The fixed point contains all orbits.</strong> Proved as Theorem B in Generative Contact Mechanics (Zenodo 10.5281/zenodo.19122168): the category dm³ is closed under the unification operator.</div>
+    </div>
+
+    <div class="theorem-box">
+      <div class="theorem-num">Theorem 3 · Contraction</div>
+      <div class="theorem-title">Learning converges. The fixed point exists.</div>
+      <div class="theorem-text">G is a contraction: every application of G reduces the distance to the fixed point. <strong>Convergence is built in.</strong> Proved as Theorem A in the dm³ toy model (companion to Zenodo 10.5281/zenodo.19122168, submitted to SIAM J. Applied Dynamical Systems): the global attractor is the resonant orbit Γ₁₂, with canonical invariants (T*, μ_max, τ) = (2π, −2, 2) and stability radius ε₀ = 1/3.</div>
+    </div>
+
+    <div class="theorem-box">
+      <div class="theorem-num">Theorem 4 · The Fixed Point and Emergence</div>
+      <div class="theorem-title">What appears was not there before.</div>
+      <div class="theorem-text">The fixed point Γ* is not a steady state but an emergent structure — a new topology that did not exist before the sequence of G applications. <strong>Learning is not retrieval. It is creation.</strong> Proved as Theorem C in Volume One (Principia Orthogona, SSRN 6439626 / Nuclear Physics B, submitted): singularities are classified as Whitney A₁–A₃ types; the free-discontinuity variational principle places the framework in the Ambrosio–Tortorelli class.</div>
+    </div>
+  </div>
+</section>
+
+<section id="time">
+  <div class="container">
+    <h2><span class="ch-num">Understanding Time</span>Time as Five Properties</h2>
+    <p>GTCT does not tell us <em>how fast</em> time passes. It tells us <em>what</em> time is.</p>
+
+    <div class="time-prop">
+      <div class="time-num">I</div>
+      <div class="time-body"><h3>Order — Non-commutativity</h3>
+      <p>C ∘ K ≠ K ∘ C. The sequence matters. You cannot compress after you have recognized — recognition is recognition of the compressed form. This is why time cannot be reversed: the operator sequence cannot be reversed.</p></div>
+    </div>
+    <div class="time-prop">
+      <div class="time-num">II</div>
+      <div class="time-body"><h3>Novelty — Orthogonality</h3>
+      <p>U produces something genuinely new, not in the span of C. The future is not determined by the past. Each unfolding is a genuine creation. This is why the future is open and the past is closed.</p></div>
+    </div>
+    <div class="time-prop">
+      <div class="time-num">III</div>
+      <div class="time-body"><h3>Compression and Resolution</h3>
+      <p>C and F reduce then open. Systems oscillate between high organization (compressed) and high revelation (unfolded). Time is this breathing — the Reeb flow generating logarithmic spirals with growth factor η ≈ 1.8393.</p></div>
+    </div>
+    <div class="time-prop">
+      <div class="time-num">IV</div>
+      <div class="time-body"><h3>Irreversibility — Contraction</h3>
+      <p>You cannot undo G because G is a contraction. The distance to the fixed point only decreases. Irreversibility is purely structural — no thermodynamics required. C ∘ K ≠ K ∘ C is not about energy dissipation; it is about the topology of the operator sequence.</p></div>
+    </div>
+    <div class="time-prop">
+      <div class="time-num">V</div>
+      <div class="time-body"><h3>Emergence — The Fixed Point</h3>
+      <p>The fixed point is not a return to the start. It is a new structure that did not exist before. G applied to itself ω/2π times produces Γ* — both the completion of the current orbit and the seed of the next. The ring is not a circle. It is a spiral.</p></div>
+    </div>
+
+    <div class="insight">
+      "Your education is yours. No one can take it away from you." — Because the fixed point you reach is not a degree or a certificate. It is a structure in your understanding. It is permanent because it is mathematical.
+    </div>
+  </div>
+</section>
+
+<!-- CITATIONS -->
+<section>
+  <div class="container">
+    <h2><span class="ch-num">Research Record</span>Papers and Preprints</h2>
+    <div class="citation-box">
+      <div class="citation-label">Principia Orthogona · Open Access Record · April 2026</div>
+
+      <div class="citation-item">
+        <div class="cit-ref">Grossi, P.N. (2026). <em>Principia Orthogona Volumes I & II: The Mathematics of Generative Transitions / Contact Realization of Generative Transitions.</em><br>
+        Preprint: <a href="https://ssrn.com/abstract=6439626" target="_blank">SSRN 6439626</a> · Zenodo: <a href="https://doi.org/10.5281/zenodo.19379473" target="_blank">10.5281/zenodo.19379473</a></div>
+        <div class="cit-status status-submitted">● Submitted to Nuclear Physics B (transferred from Journal of Geometry and Physics) · Preprint live</div>
+      </div>
+
+      <div class="citation-item">
+        <div class="cit-ref">Grossi, P.N. (2026). <em>Generative Contact Mechanics: A Geometric Framework for Dissipative Systems with Structured Limit Cycles.</em> [with companion: <em>The dm³ Operator: Explicit Toy Model and Global Dynamical Analysis.</em>]<br>
+        Zenodo: <a href="https://doi.org/10.5281/zenodo.19122168" target="_blank">10.5281/zenodo.19122168</a> (both papers in one record)</div>
+        <div class="cit-status status-submitted">● GCM submitted to Journal of Geometric Mechanics · dm³ toy model submitted to SIAM J. Applied Dynamical Systems</div>
+      </div>
+
+      <div class="citation-item">
+        <div class="cit-ref">Grossi, P.N. (2026). <em>Principia Orthogona Volume I: The Mathematics of Generative Transitions.</em><br>
+        Zenodo: <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">10.5281/zenodo.19117400</a></div>
+        <div class="cit-status status-open">● Open access · No journal submission · Freely citable</div>
+      </div>
+
+      <div class="citation-item">
+        <div class="cit-ref">AXLE v6.1 — Lean 4/Mathlib4 formal verification. 0 axioms beyond Mathlib4. 8 verified constants. 9 honest sorrys.<br>
+        <a href="https://github.com/TOTOGT/AXLE" target="_blank">github.com/TOTOGT/AXLE</a></div>
+        <div class="cit-status status-open">● Open source · Active development</div>
+      </div>
+    </div>
+
+    <p style="font-size:.82rem;color:var(--cream-dim);font-style:italic;">Note: SIAM is an independent nonprofit society (Philadelphia, PA) — not affiliated with Elsevier. Nuclear Physics B is an Elsevier journal. These are two separate publishers with two separate submission processes.</p>
+  </div>
+</section>
+
+<section id="prompts" class="prompt-panel">
+  <div class="container">
+    <h2><span class="ch-num">Interactive Learning · Copy-Paste Prompts</span>Chapter E Prompt Panel</h2>
+    <p class="lead" style="border-left-color:var(--gold-dim)">Select your level. Copy the prompt. Open your LLM. Paste. Answer. Advance when ready.</p>
+
+    <div class="level-tabs">
+      <button class="ltab active" onclick="showLevel('a1',this)">A1</button>
+      <button class="ltab" onclick="showLevel('a2',this)">A2</button>
+      <button class="ltab" onclick="showLevel('b1',this)">B1</button>
+      <button class="ltab" onclick="showLevel('b2',this)">B2</button>
+      <button class="ltab" onclick="showLevel('c1',this)">C1</button>
+      <button class="ltab" onclick="showLevel('c2',this)">C2</button>
+      <button class="ltab" onclick="showLevel('d1',this)">D1</button>
+    </div>
+
+    <div id="pb-a1" class="prompt-block active">
+      <div class="pb-level">Level A1 · Tier I Access</div>
+      <div class="pb-title">One Letter Answer</div>
+      <div class="pb-desc">Chapter E says time is a generative operator, not a container. Which single operator in C→K→F→U is most like what we normally call time passing?</div>
+      <div class="pb-prompt-box" id="prompt-a1">Chapter E says 'Time is not a container. It is a generative operator.' Which operator in C→K→F→U is most like what we normally call 'time passing'? Answer in one letter.</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-a1',this)">Copy Prompt</button>
+      <div class="pb-note">Expected: U (unfolding). After you answer, ask the LLM why you might have answered differently.</div>
+    </div>
+
+    <div id="pb-a2" class="prompt-block">
+      <div class="pb-level">Level A2 · Tier I Access</div>
+      <div class="pb-title">Complete the Sentence</div>
+      <div class="pb-desc">Axiom 3 says one G = one unit of generative time. Fill in the blanks.</div>
+      <div class="pb-prompt-box" id="prompt-a2">Axiom 3 says 'One G = one unit of generative time.' Complete: 'This means time is measured not in _____, but in _____. One complete application of G takes the system from _____ to _____.' 1–2 sentences.</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-a2',this)">Copy Prompt</button>
+      <div class="pb-note">After you answer: Ask what happens if you apply G twice. What is two units of time?</div>
+    </div>
+
+    <div id="pb-b1" class="prompt-block">
+      <div class="pb-level">Level B1 · Tier I / Tier II boundary</div>
+      <div class="pb-title">Explain with Structure</div>
+      <div class="pb-desc">Theorem 3 connects contraction to the experience of learning. Explain both in 3–4 sentences.</div>
+      <div class="pb-prompt-box" id="prompt-b1">Theorem 3 says G is a contraction. Explain in 3–4 sentences: what does 'contraction' mean mathematically? Why does this guarantee that learning converges? What is the fixed point of a language learner?</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-b1',this)">Copy Prompt</button>
+      <div class="pb-note">After you answer: Apply contraction to a system you know — learning an instrument, mastering a sport.</div>
+    </div>
+
+    <div id="pb-b2" class="prompt-block">
+      <div class="pb-level">Level B2 · Tier II</div>
+      <div class="pb-title">Defend a Claim</div>
+      <div class="pb-desc">Axiom 8 (non-commutativity) is the most operationally consequential. Defend it with a paragraph.</div>
+      <div class="pb-prompt-box" id="prompt-b2">Axiom 8 says G is non-commutative: C∘K ≠ K∘C. Write a paragraph explaining why time cannot be reversed if this is true. What would a reversible G imply about the learning process? What does it imply about the three tiers of access?</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-b2',this)">Copy Prompt</button>
+      <div class="pb-note">After you answer: Ask whether causality is built into this axiom or is it a consequence.</div>
+    </div>
+
+    <div id="pb-c1" class="prompt-block">
+      <div class="pb-level">Level C1 · Tier II / Tier III boundary</div>
+      <div class="pb-title">Analyze the Whitney Classification</div>
+      <div class="pb-desc">Theorem 1 grounds the didactic correspondence in the Whitney singularity classification. Analyze this.</div>
+      <div class="pb-prompt-box" id="prompt-c1">Theorem 1 says the didactic correspondence is a consequence of the Whitney A₁–A₃ singularity classification. Analyze: what is a Whitney singularity? Why does classifying folds also classify levels of learning? Use the three-tier structure (open / consultative / initiatory) as your example. Essay paragraph.</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-c1',this)">Copy Prompt</button>
+      <div class="pb-note">After you answer: The LLM will ask you to identify which tier you are currently in, and what the next fold looks like.</div>
+    </div>
+
+    <div id="pb-c2" class="prompt-block">
+      <div class="pb-level">Level C2 · Tier III approach</div>
+      <div class="pb-title">State an Open Problem</div>
+      <div class="pb-desc">Axiom 9 — honest incompleteness. State your own sorry in AXLE format.</div>
+      <div class="pb-prompt-box" id="prompt-c2">Axiom 9 is called 'Honest Incompleteness.' Conjecture your own sorry — an open problem in any field you know. State it precisely: 'theorem X: [statement] := by sorry -- missing lemma: [what would close it]'. Then connect it to one of the nine axioms.</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-c2',this)">Copy Prompt</button>
+      <div class="pb-note">After you answer: The LLM will ask how your sorry relates to the Tribonacci constant η or g₃₃ = 33.</div>
+    </div>
+
+    <div id="pb-d1" class="prompt-block">
+      <div class="pb-level">Level D1 · Tier III · 33 Cycles</div>
+      <div class="pb-title">Original Research on Recursion</div>
+      <div class="pb-desc">Axiom 7 (Recursion) — the fixed point is the seed of the next G. Propose original research.</div>
+      <div class="pb-prompt-box" id="prompt-d1">I am working with Chapter E's Axiom 7 (Recursion): the fixed point is the seed of the next-level G. My research question about recursion in [biological / linguistic / physical / financial] systems: [student writes here]. Help me: (1) formulate this as a falsifiable claim, (2) connect it to one of the nine axioms and one AXLE verified constant, (3) write 200 words for a Zenodo upload at Tier I.</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-d1',this)">Copy Prompt</button>
+      <div class="pb-note">After you answer: Your work will be reviewed. The fixed point exists. It is yours. No institutional affiliation required.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>
+    Principia Orthogona · Book 3 · The Mini-Beast · Extended Chapter E<br>
+    The Generative Time Circuit — GTCT for Everyone<br>
+    Pablo Nogueira Grossi · G6 LLC · Newark, New Jersey · 2026<br>
+    ISBN 979-8-9954416-6-3 (eBook PDF) · ORCID: 0009-0000-6496-2186<br>
+    Zenodo: <a href="https://doi.org/10.5281/zenodo.19117400" target="_blank">10.5281/zenodo.19117400</a> ·
+    SSRN: <a href="https://ssrn.com/abstract=6439626" target="_blank">6439626</a><br><br>
+    <a href="living-book.html">☰ All Chapters</a> &nbsp;·&nbsp;
+    MSC 2020: 37C10, 37C75, 53D10, 92C20
+  </p>
+</footer>
+
+<script>
+(function(){
+
+// ── HERO CANVAS ───────────────────────────────────────
+const hc=document.getElementById('hero-canvas');
+const hx=hc.getContext('2d');
+let W,H,dpr;
+function rHero(){dpr=window.devicePixelRatio||1;W=hc.offsetWidth;H=hc.offsetHeight;hc.width=W*dpr;hc.height=H*dpr;hx.scale(dpr,dpr);}
+rHero();window.addEventListener('resize',rHero);
+let ht=0;
+const SPIRALS=4;
+const trails=Array.from({length:SPIRALS},()=>[]);
+const COLORS=['#4fc3f7','#81c784','#ff8a65','#ce93d8'];
+
+function heroLoop(){
+  hx.clearRect(0,0,W,H);
+  ht+=0.012;
+  const cx=W/2,cy=H/2;
+  for(let s=0;s<SPIRALS;s++){
+    const phase=s*Math.PI*2/SPIRALS;
+    const t2=ht+phase;
+    const decay=0.55+0.3*Math.sin(t2*0.3);
+    const r=(Math.min(W,H)*0.38)*decay;
+    const x=cx+r*Math.cos(t2*3);
+    const y=cy+r*Math.sin(t2*3);
+    trails[s].push({x,y});
+    if(trails[s].length>100)trails[s].shift();
+    for(let i=1;i<trails[s].length;i++){
+      const a=i/trails[s].length;
+      hx.beginPath();hx.moveTo(trails[s][i-1].x,trails[s][i-1].y);hx.lineTo(trails[s][i].x,trails[s][i].y);
+      hx.strokeStyle=COLORS[s]+Math.round(a*170).toString(16).padStart(2,'0');
+      hx.lineWidth=2*a;hx.stroke();
+    }
+    hx.beginPath();hx.arc(x,y,4,0,Math.PI*2);
+    hx.fillStyle=COLORS[s];hx.shadowColor=COLORS[s];hx.shadowBlur=16;hx.fill();hx.shadowBlur=0;
+  }
+  const grd=hx.createRadialGradient(cx,cy,0,cx,cy,45);
+  grd.addColorStop(0,'rgba(201,168,76,0.25)');grd.addColorStop(1,'rgba(201,168,76,0)');
+  hx.fillStyle=grd;hx.beginPath();hx.arc(cx,cy,45,0,Math.PI*2);hx.fill();
+  const vg=hx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*0.65);
+  vg.addColorStop(0,'rgba(10,14,26,0)');vg.addColorStop(1,'rgba(10,14,26,0.88)');
+  hx.fillStyle=vg;hx.fillRect(0,0,W,H);
+  requestAnimationFrame(heroLoop);
+}
+heroLoop();
+
+// ── RING MACHINE ──────────────────────────────────────
+const rc=document.getElementById('ring-canvas');
+const rx=rc.getContext('2d');
+let RW,RH,rdpr;
+let ringT=0,ringSpeed=1.0,ringOrbits=3;
+function rRing(){rdpr=window.devicePixelRatio||1;RW=rc.offsetWidth;RH=rc.offsetHeight;rc.width=RW*rdpr;rc.height=RH*rdpr;rx.scale(rdpr,rdpr);}
+rRing();window.addEventListener('resize',rRing);
+window.resetRing=function(){ringT=0;};
+const OP_NAMES=['C','K','K','K','K','K','F','F','F','U','U','U'];
+const OP_COLORS=['#4fc3f7','#81c784','#81c784','#81c784','#81c784','#81c784','#ff8a65','#ff8a65','#ff8a65','#ce93d8','#ce93d8','#ce93d8'];
+const PHASE_MAP=['c','k','k','k','k','k','f','f','f','u','u','u'];
+
+function ringLoop(){
+  if(!RW||!RH){rRing();}
+  rx.clearRect(0,0,RW,RH);
+  ringT+=0.025*ringSpeed;
+  const cx=RW/2,cy=RH/2;
+  const R=Math.min(RW,RH)*0.34;
+  const n=12;
+  for(let i=0;i<n;i++){
+    const angle=-Math.PI/2+i*Math.PI*2/n;
+    const nx2=cx+R*Math.cos(angle),ny2=cy+R*Math.sin(angle);
+    rx.beginPath();rx.arc(nx2,ny2,14,0,Math.PI*2);
+    rx.fillStyle=OP_COLORS[i]+'22';rx.strokeStyle=OP_COLORS[i]+'66';rx.lineWidth=1;rx.fill();rx.stroke();
+    rx.fillStyle=OP_COLORS[i];rx.font='bold 11px JetBrains Mono,monospace';rx.textAlign='center';rx.textBaseline='middle';rx.fillText(OP_NAMES[i],nx2,ny2);
+  }
+  for(let orb=0;orb<ringOrbits;orb++){
+    const tOffset=ringT+orb*Math.PI*2/ringOrbits;
+    const frac=((tOffset%(Math.PI*2))/(Math.PI*2)+1)%1;
+    const idx=Math.floor(frac*n);
+    const phaseIdx=PHASE_MAP[idx];
+    ['c','k','f','u'].forEach(p=>document.getElementById('pd-'+p).classList.remove('active'));
+    document.getElementById('pd-'+phaseIdx).classList.add('active');
+    const angle=-Math.PI/2+frac*Math.PI*2;
+    const pr=R+18;
+    const px=cx+pr*Math.cos(angle),py=cy+pr*Math.sin(angle);
+    rx.beginPath();rx.arc(px,py,5,0,Math.PI*2);
+    rx.fillStyle=OP_COLORS[idx];rx.shadowColor=OP_COLORS[idx];rx.shadowBlur=14;rx.fill();rx.shadowBlur=0;
+  }
+  const fpg=rx.createRadialGradient(cx,cy,0,cx,cy,22);
+  fpg.addColorStop(0,'rgba(201,168,76,0.3)');fpg.addColorStop(1,'rgba(201,168,76,0)');
+  rx.fillStyle=fpg;rx.beginPath();rx.arc(cx,cy,22,0,Math.PI*2);rx.fill();
+  rx.font='10px JetBrains Mono,monospace';rx.textAlign='center';rx.textBaseline='middle';rx.fillStyle='rgba(201,168,76,0.7)';rx.fillText('Γ*',cx,cy);
+  requestAnimationFrame(ringLoop);
+}
+ringLoop();
+
+// ── OP12 GRID ─────────────────────────────────────────
+const OP12=[
+  {n:1,sym:'C₁',name:'Initial\nCompression',phase:'c'},
+  {n:2,sym:'C₂',name:'Deep\nConcentration',phase:'c'},
+  {n:3,sym:'C₃',name:'Seed\nFormation',phase:'c'},
+  {n:4,sym:'K₁',name:'Pattern\nRecognition',phase:'k'},
+  {n:5,sym:'K₂',name:'Structure\nExtraction',phase:'k'},
+  {n:6,sym:'K₃',name:'Threshold\nApproach · κ*',phase:'k'},
+  {n:7,sym:'F₁',name:'Whitney A₁\nSimple Fold',phase:'f'},
+  {n:8,sym:'F₂',name:'Whitney A₂\nCusp',phase:'f'},
+  {n:9,sym:'F₃',name:'Whitney A₃\nSwallowtail',phase:'f'},
+  {n:10,sym:'U₁',name:'Gradient\nRelease',phase:'u'},
+  {n:11,sym:'U₂',name:'Emergent\nStructure',phase:'u'},
+  {n:12,sym:'U₃',name:'Fixed Point\n& New Seed',phase:'u'},
+];
+const grid=document.getElementById('op12grid');
+OP12.forEach(op=>{
+  const d=document.createElement('div');
+  d.className=`op12-cell phase-${op.phase}`;
+  d.innerHTML=`<div class="op12-num">${op.n}</div><div class="op12-sym">${op.sym}</div><div class="op12-name">${op.name.replace('\n','<br>')}</div>`;
+  grid.appendChild(d);
+});
+
+// ── PROMPTS ───────────────────────────────────────────
+window.showLevel=function(lvl,btn){
+  document.querySelectorAll('.prompt-block').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.ltab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pb-'+lvl).classList.add('active');
+  btn.classList.add('active');
+};
+window.copyPrompt=function(id,btn){
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>{
+    const o=btn.textContent;btn.textContent='✓ Copied';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent=o;btn.classList.remove('copied');},2000);
+  });
+};
+
+})();
+</script>
+</body>
+</html>

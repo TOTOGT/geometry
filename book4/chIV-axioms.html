@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cap 1 · Os Sete Axiomas · GTCT Vol IV · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void:#04040a; --surface:#0c0d16; --card:#10111c;
+  --gold:#c9a84c; --teal:#0ABAB5; --text:#e8e4d8;
+  --muted:#6b6757; --dim:#2a2920; --rule:rgba(201,168,76,0.18);
+  --col-gap:3rem; --col-w:46%;
+  --serif:'Noto Serif',Georgia,serif;
+  --mono:'JetBrains Mono','Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:18px;line-height:1.85;-webkit-font-smoothing:antialiased;}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-series{font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);}
+.nav-controls{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.nav-chapter-links{display:flex;gap:1.4rem;}
+.nav-chapter-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-chapter-links a:hover,.nav-chapter-links a.cur{color:var(--gold);}
+.lang-picker{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.65rem;}
+.lang-picker label{color:var(--muted);letter-spacing:.1em;}
+.lang-picker select{background:var(--surface);color:var(--gold);border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:.7rem;padding:.25rem 1.4rem .25rem .5rem;cursor:pointer;appearance:none;-webkit-appearance:none;}
+.lang-picker .sel-wrap{position:relative;}
+.lang-picker .sel-wrap::after{content:'▾';position:absolute;right:.4rem;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;font-size:.6rem;}
+.script-note{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.08em;padding:.15rem .5rem;border:1px solid var(--dim);border-radius:2px;}
+
+.hero{padding:5rem 2rem 3.5rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 40%,rgba(201,168,76,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--teal);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:2rem;}
+.hero h1{font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;letter-spacing:.04em;color:var(--gold);margin-bottom:.5rem;line-height:1.15;}
+.hero-pt{font-size:1.1rem;color:var(--muted);font-style:italic;margin-bottom:.3rem;}
+.hero-en{font-size:.95rem;color:rgba(107,103,87,.7);font-style:italic;margin-bottom:1.5rem;}
+.hero-eq{font-family:var(--mono);font-size:.88rem;letter-spacing:.12em;color:rgba(201,168,76,.4);margin-top:1rem;}
+.lang-badge{display:inline-flex;gap:.8rem;margin-top:1.5rem;flex-wrap:wrap;justify-content:center;}
+.lang-badge span{font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;padding:.2rem .6rem;border-radius:2px;}
+.lang-badge .primary{background:rgba(201,168,76,.15);color:var(--gold);border:1px solid rgba(201,168,76,.4);}
+.lang-badge .secondary{background:rgba(107,103,87,.1);color:var(--muted);border:1px solid var(--dim);}
+
+/* axiom pip strip */
+.axiom-strip{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:1.4rem 2rem;border-bottom:1px solid var(--rule);background:rgba(201,168,76,.02);}
+.ax-pip{width:42px;height:42px;border-radius:50%;border:1px solid rgba(201,168,76,.2);background:var(--card);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.75rem;color:var(--muted);cursor:pointer;transition:all .2s;}
+.ax-pip:hover,.ax-pip.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.08);box-shadow:0 0 12px rgba(201,168,76,.18);}
+
+.page{max-width:1240px;margin:0 auto;padding:4rem 2rem 6rem;}
+.chapter-header{text-align:center;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--rule);}
+.chapter-header .ch-num{font-family:var(--mono);font-size:.62rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.6rem;}
+.chapter-header h2{font-size:1.6rem;font-weight:400;color:var(--text);letter-spacing:.04em;}
+.chapter-header .ch-sub{font-style:italic;color:var(--muted);margin-top:.4rem;font-size:.9rem;}
+
+.bilingual{display:grid;grid-template-columns:var(--col-w) var(--col-w);gap:var(--col-gap);justify-content:center;}
+@media(max-width:820px){.bilingual{grid-template-columns:1fr;}}
+
+.col-header{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);padding-bottom:.6rem;border-bottom:1px solid var(--rule);margin-bottom:2rem;display:flex;align-items:center;gap:.6rem;}
+.col-header .lang-native{color:var(--gold);}
+.col-pt .col-header{border-bottom-color:rgba(201,168,76,.4);}
+
+.block{margin-bottom:2.5rem;}
+.block-section{font-family:var(--mono);font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:.5rem;}
+.section-rule{border:none;border-top:1px solid var(--rule);margin:3rem 0;}
+
+.block-axiom{border-left:3px solid var(--gold);padding:1.4rem 1.8rem;margin:1.2rem 0;background:rgba(201,168,76,.03);border-top:1px solid rgba(201,168,76,.1);border-right:1px solid rgba(201,168,76,.07);border-bottom:1px solid rgba(201,168,76,.07);}
+.block-axiom.lean{border-left-color:var(--teal);background:rgba(10,186,181,.03);border-top-color:rgba(10,186,181,.1);}
+.block-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;display:block;}
+.block-axiom .block-label{color:var(--gold);}
+.block-axiom.lean .block-label{color:var(--teal);}
+.axiom-title{font-size:1.1rem;font-weight:600;color:var(--gold);margin-bottom:.7rem;}
+.block-body{font-size:1rem;line-height:1.9;color:var(--text);}
+.block-math{font-family:var(--mono);font-size:.85rem;color:var(--teal);background:var(--surface);border:1px solid var(--dim);padding:.85rem 1.2rem;margin:.9rem 0;overflow-x:auto;white-space:pre;line-height:1.7;}
+.lean-badge{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:#22c55e;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);padding:.15rem .45rem;border-radius:2px;margin-left:.5rem;}
+.block-nota{border-left:2px solid rgba(10,186,181,.4);padding:1rem 1.4rem;margin:1.5rem 0;background:rgba(10,186,181,.03);}
+.block-nota .block-label{color:var(--teal);}
+.block-prose{font-size:1rem;line-height:1.9;margin-bottom:1.3rem;}
+
+/* overflow */
+.block,.block-math,.block-axiom,mjx-container{overflow-x:auto;max-width:100%;}
+mjx-container{display:block!important;}
+
+.ch-nav{background:rgba(4,4,10,.8);border-top:1px solid var(--rule);padding:.9rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-family:var(--mono);font-size:.6rem;}
+.ch-nav a{color:var(--muted);text-decoration:none;padding:.3rem .8rem;border:1px solid var(--rule);transition:all .2s;}
+.ch-nav a:hover{color:var(--gold);border-color:rgba(201,168,76,.4);}
+.ch-nav .current{color:var(--gold);letter-spacing:.15em;text-transform:uppercase;}
+
+footer{text-align:center;padding:3rem 2rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(--muted);border-top:1px solid var(--rule);margin-top:4rem;}
+footer a{color:var(--gold);text-decoration:none;}
+
+@media(max-width:700px){nav{padding:.8rem 1rem;}.page{padding-left:1.2rem;padding-right:1.2rem;}.nav-chapter-links{display:none;}}
+</style>
+<script>
+  MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<nav>
+  <span class="nav-series">Principia Orthogona · Vol IV · GTCT · G = U ∘ F ∘ K ∘ C</span>
+  <div class="nav-controls">
+    <div class="nav-chapter-links">
+      <a href="chIV-preface.html">Abertura</a>
+      <a href="chIV-axioms.html" class="cur">Cap 1</a>
+      <a href="chIV-field.html">Cap 2</a>
+      <a href="chIV-operators.html">Cap 3</a>
+      <a href="chIV-correspondence.html">Cap 4</a>
+      <a href="chIV-orthogonality.html">Cap 5</a>
+      <a href="chIV-recursion.html">Cap 6</a>
+      <a href="chIV-emergence.html">Cap 7</a>
+      <a href="chIV-time.html">Cap 8</a>
+    </div>
+    <div class="lang-picker">
+      <label>LÍNGUA</label>
+      <div class="sel-wrap">
+        <select id="langSelect" onchange="setLang(this.value)"></select>
+      </div>
+    </div>
+    <span class="script-note" id="scriptNote">English</span>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Principia Orthogona · Vol IV · GTCT · Capítulo 1 · G6 LLC · Newark NJ · 2026</div>
+  <h1>Os Sete Axiomas</h1>
+  <p class="hero-pt">Os fundamentos irredutíveis da Teoria do Contato Generativo Temporal</p>
+  <p class="hero-en">The irreducible foundations of the Generative Temporal Contact Theory</p>
+  <div class="lang-badge">
+    <span class="primary">🇧🇷 Português — idioma primário</span>
+    <span class="secondary">🇺🇸 English — tradução disponível →</span>
+  </div>
+  <div class="hero-eq">7 axiomas · todos verificados em Lean 4 · 0 sorry · nenhum derivável dos outros</div>
+</section>
+
+<div class="axiom-strip">
+  <div class="ax-pip active" onclick="jumpTo('ax1')" title="Ax 1 · Estrutura de Contato">1</div>
+  <div class="ax-pip" onclick="jumpTo('ax2')" title="Ax 2 · Cadeia G">2</div>
+  <div class="ax-pip" onclick="jumpTo('ax3')" title="Ax 3 · Campo Temporal">3</div>
+  <div class="ax-pip" onclick="jumpTo('ax4')" title="Ax 4 · Tríade de Invariantes">4</div>
+  <div class="ax-pip" onclick="jumpTo('ax5')" title="Ax 5 · Ciclo de Doze Fases">5</div>
+  <div class="ax-pip" onclick="jumpTo('ax6')" title="Ax 6 · Correspondência Fase–Operador">6</div>
+  <div class="ax-pip" onclick="jumpTo('ax7')" title="Ax 7 · Evolução Recursiva">7</div>
+</div>
+
+<div class="page">
+  <div class="chapter-header">
+    <span class="ch-num">Volume IV · GTCT · Capítulo 1</span>
+    <h2>Os Sete Axiomas · The Seven Axioms</h2>
+    <p class="ch-sub">
+      Todos verificados em Lean 4 com Mathlib4 · 0 <em>sorry</em> em Chain_updated.lean ·
+      <a href="https://doi.org/10.5281/zenodo.19117399" style="color:var(--gold);text-decoration:none;" target="_blank">DOI 10.5281/zenodo.19117399</a>
+    </p>
+  </div>
+
+  <div class="bilingual">
+    <div class="col-pt" id="colA">
+      <div class="col-header">
+        <span>🇧🇷</span><span>Português</span><span class="lang-native">Idioma Primário</span>
+      </div>
+      <div id="contentA"></div>
+    </div>
+    <div id="colB">
+      <div class="col-header" id="colBHeader"></div>
+      <div id="contentB"></div>
+    </div>
+  </div>
+</div>
+
+<div class="ch-nav">
+  <a href="chIV-preface.html">← Abertura</a>
+  <span class="current">Cap 1 · Os Sete Axiomas</span>
+  <a href="chIV-field.html">Cap 2 · O Campo de Contato →</a>
+</div>
+
+<footer>
+  Principia Orthogona · Vol IV · GTCT — Teoria do Contato Generativo Temporal ·
+  G6 LLC · Newark NJ · 2026<br>
+  Pablo Nogueira Grossi · ORCID: 0009-0000-6496-2186 ·
+  <a href="https://doi.org/10.5281/zenodo.19117399">DOI 10.5281/zenodo.19117399</a> ·
+  ISBN 979-8-9954416-8-7 ·
+  <a href="https://github.com/TOTOGT/AXLE">AXLE ↗</a>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONTENT  —  PT primary, translations selectable
+═══════════════════════════════════════════════════════════ */
+const PT = [
+  {type:"nota",label:"Nota Preliminar",
+   text:"Sete axiomas são o esqueleto de toda a teoria. Nenhum é derivável dos outros. Todos foram verificados mecanicamente em Lean 4 contra Mathlib4 com zero <em>sorry</em>. O que segue é a apresentação bilíngue de cada axioma: enunciado formal, intuição geométrica e a linha Lean 4 que o certifica."},
+
+  {type:"section",text:"§ 1 — Os Sete Axiomas"},
+
+  {type:"axiom",anchor:"ax1",num:"1",
+   label:"Axioma 1 — Estrutura de Contato",
+   title:"Variedade de Contato",
+   body:"Existe uma variedade suave de contato $M$ com forma de contato $\\alpha$ tal que $d\\alpha$ é não-degenerada em $\\ker\\alpha$. A estrutura de contato é o núcleo de $\\alpha$ — um campo de hiperplanos que <em>não pode ser integrado a uma folheação</em>. Esta é a condição de não-integrabilidade máxima: $\\alpha \\wedge d\\alpha \\neq 0$ em todo ponto.",
+   code:"(M, α)  contactmanifold\ndα|_{ker α}  non-degenerate  ✓ Lean 4\nα ∧ dα ≠ 0   everywhere"},
+
+  {type:"axiom",anchor:"ax2",num:"2",
+   label:"Axioma 2 — Cadeia Geradora G",
+   title:"$G = U \\circ F \\circ K \\circ C$",
+   body:"Existe $G = U \\circ F \\circ K \\circ C : M \\to M$. Cada operador tem papel distinto: $C$ é injetora e contrativa; $K$ decresce o potencial $\\Phi$ pelo limiar $\\kappa^*$; $F$ é não-injetora com singularidade Whitney $A_1$; $U$ decresce $\\Phi$ e dirige órbitas ao ponto fixo $x^*$.",
+   code:"G = U ∘ F ∘ K ∘ C : M → M  ✓ Lean 4\nC  injective, contractive\nK  Φ-decreasing at threshold κ*\nF  Whitney A₁  (fold singularity)\nU  Φ-decreasing, drives to x*"},
+
+  {type:"axiom",anchor:"ax3",num:"3",
+   label:"Axioma 3 — Campo Temporal",
+   title:"Campo Vetorial Temporal Não-Nulo",
+   body:"Existe um campo vetorial não-nulo $T$ em $M$ com fluxo $\\varphi_t$ satisfazendo $\\varphi_t^*\\alpha = e^{f(t)}\\alpha$ para alguma $f$ suave. Este é o campo temporal: não o tempo newtoniano, mas a reparametrização conforme que transforma o circuito de periódico em generativo.",
+   code:"T ≠ 0   vector field on M\nφ_t* α = e^{f(t)} α   conformal\nf : ℝ → ℝ   smooth  ✓ Lean 4"},
+
+  {type:"axiom",anchor:"ax4",num:"4",
+   label:"Axioma 4 — Tríade de Invariantes",
+   title:"Três Invariantes Globais",
+   body:"Três invariantes globais caracterizam o sistema. $I_1$ (Ortogonalidade): vetores de fase consecutivos são ortogonais em $\\mathbb{R}^{12}$, $\\langle\\delta_i,\\delta_{i+1}\\rangle = 0$. $I_2$ (Nilpotência): expoente crítico $\\varepsilon^* = 1/3$. $I_3$ (Colapso Espectral): $\\lambda_{\\max} = -2$. Esses três números são a assinatura da teoria.",
+   code:"I₁: ⟨δᵢ, δᵢ₊₁⟩ = 0    orthogonality\nI₂: ε* = 1/3             nilpotency\nI₃: λ_max = −2           spectral collapse\n✓ Lean 4"},
+
+  {type:"axiom",anchor:"ax5",num:"5",
+   label:"Axioma 5 — Ciclo de Doze Fases",
+   title:"$D_1 \\to D_2 \\to \\cdots \\to D_{12} \\to D_1$",
+   body:"A evolução dimensional procede por 12 fases $D_1, \\ldots, D_{12}$ com indexação cíclica $D_{i+12} \\equiv D_i$ e período $T^* = 2\\pi$. Não são 4 passos, mas 12 — correspondendo aos 12 operadores do mapa completo $\\Phi$ (Axioma 6).",
+   code:"D₁ → D₂ → ⋯ → D₁₂ → D₁\nD_{i+12} ≡ D_i   cyclic\nT* = 2π           Reeb period  ✓ Lean 4"},
+
+  {type:"axiom",anchor:"ax6",num:"6",
+   label:"Axioma 6 — Correspondência Fase–Operador",
+   title:"Bijeção $\\Phi : \\{D_i\\} \\to \\{O_i\\}$",
+   body:"Existe uma bijeção $\\Phi : \\{D_1,\\ldots,D_{12}\\} \\to \\{O_1,\\ldots,O_{12}\\}$ com $\\Phi(D_i) = O_i$. Cada fase tem exatamente um operador e cada operador tem exatamente uma fase. O ciclo é rígido. Axioma 6 postula a existência; o Capítulo 4 prova unicidade, injetividade e sobrejetividade.",
+   code:"Φ(D_i) = O_i   bijection\n|{Dᵢ}| = |{Oᵢ}| = 12  ✓ Lean 4"},
+
+  {type:"axiom",anchor:"ax7",num:"7",
+   label:"Axioma 7 — Evolução Recursiva",
+   title:"O Circuito é Generativo, Não Periódico",
+   body:"$R = O_{12} \\circ \\cdots \\circ O_1$ gera a sequência $x_0, x_{12}, x_{24}, \\ldots$ convergindo a $x^*$. Marcos: $g_{33} = 33$ (limiar de estabilidade) e $g_{64} = 64 = 2^6$ (saturação). <strong>Teorema T1 (Retorno Espiral, provado em AXLE):</strong> $G^{64}(x_0) \\neq x_0$. O circuito não retorna à origem. É generativo.",
+   code:"R = O₁₂ ∘ ⋯ ∘ O₁\nx_{12k} → x*   as k → ∞\ng₃₃ = 33   g₆₄ = 64 = 2⁶\nT1: G⁶⁴(x₀) ≠ x₀  ✓ Lean 4\n    G¹²⁸(x₀) ≠ x₀  ✓ Lean 4"},
+
+  {type:"section",text:"§ 2 — Estrutura dos Axiomas"},
+
+  {type:"nota",label:"Independência",
+   text:"Nenhum dos sete axiomas é derivável dos outros seis. Isso foi verificado por eliminação: para cada axioma existe um modelo que satisfaz os outros seis mas viola aquele. A independência não é acidental — é uma escolha de design que garante minimalidade ao sistema."},
+
+  {type:"nota",label:"Completude",
+   text:"Os sete axiomas são suficientes para provar os quatro teoremas principais do Vol IV (Capítulos 3–6). Nenhuma propriedade do sistema requer um oitavo axioma independente. O sistema é conjecturalmente completo para os objetivos desta teoria."},
+];
+
+/* translations */
+const TR = {
+  EN:{flag:"🇺🇸",native:"English",note:"English",blocks:[
+    {type:"nota",label:"Preliminary Note",
+     text:"Seven axioms are the skeleton of the entire theory. None is derivable from the others. All have been machine-verified in Lean 4 against Mathlib4 with zero <em>sorry</em>."},
+    {type:"section",text:"§ 1 — The Seven Axioms"},
+    {type:"axiom",anchor:"ax1",num:"1",label:"Axiom 1 — Contact Structure",title:"Contact Manifold",
+     body:"There exists a smooth contact manifold $M$ with contact form $\\alpha$ such that $d\\alpha$ is non-degenerate on $\\ker\\alpha$. The contact structure is the kernel of $\\alpha$ — a hyperplane field that <em>cannot be integrated into a foliation</em>. This is the condition of maximal non-integrability: $\\alpha\\wedge d\\alpha\\neq 0$ everywhere.",
+     code:"(M, α)  contact manifold\ndα|_{ker α}  non-degenerate  ✓ Lean 4\nα ∧ dα ≠ 0   everywhere"},
+    {type:"axiom",anchor:"ax2",num:"2",label:"Axiom 2 — Generative Operator Chain G",title:"$G = U \\circ F \\circ K \\circ C$",
+     body:"There exists $G = U \\circ F \\circ K \\circ C : M\\to M$. $C$ injective and contractive; $K$ decreases $\\Phi$ past threshold $\\kappa^*$; $F$ is non-injective with Whitney $A_1$ singularity; $U$ decreases $\\Phi$ and drives orbits to the fixed point $x^*$.",
+     code:"G = U ∘ F ∘ K ∘ C : M → M  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax3",num:"3",label:"Axiom 3 — Temporal Field",title:"Non-Vanishing Temporal Vector Field",
+     body:"A non-vanishing vector field $T$ on $M$ with flow $\\varphi_t^*\\alpha=e^{f(t)}\\alpha$ for some smooth $f$. This is the temporal field — the conformal reparametrisation that makes the circuit generative.",
+     code:"φ_t* α = e^{f(t)} α  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax4",num:"4",label:"Axiom 4 — Triad of Invariants",title:"Three Global Invariants",
+     body:"$I_1$ (Orthogonality): $\\langle\\delta_i,\\delta_{i+1}\\rangle=0$ in $\\mathbb{R}^{12}$. $I_2$ (Nilpotency): $\\varepsilon^*=1/3$. $I_3$ (Spectral Collapse): $\\lambda_{\\max}=-2$. These three numbers are the signature of the theory.",
+     code:"I₁: ⟨δᵢ,δᵢ₊₁⟩=0   I₂: ε*=1/3   I₃: λ=-2  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax5",num:"5",label:"Axiom 5 — Twelve-Phase Cycle",title:"$D_1\\to\\cdots\\to D_{12}\\to D_1$",
+     body:"Dimensional evolution through 12 phases $D_1,\\ldots,D_{12}$, cyclic $D_{i+12}\\equiv D_i$, period $T^*=2\\pi$.",
+     code:"D₁→⋯→D₁₂→D₁   T*=2π  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax6",num:"6",label:"Axiom 6 — Phase–Operator Correspondence",title:"Bijection $\\Phi:\\{D_i\\}\\to\\{O_i\\}$",
+     body:"A bijection $\\Phi(D_i)=O_i$. Each phase has exactly one operator; each operator exactly one phase. The cycle is rigid.",
+     code:"Φ(D_i)=O_i   |{Dᵢ}|=|{Oᵢ}|=12  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax7",num:"7",label:"Axiom 7 — Recursive Evolution",title:"The Circuit is Generative, Not Periodic",
+     body:"$R=O_{12}\\circ\\cdots\\circ O_1$ generates $x_0,x_{12},x_{24},\\ldots\\to x^*$. Milestones: $g_{33}=33$, $g_{64}=64=2^6$. <strong>Theorem T1 (Spiral Return, AXLE):</strong> $G^{64}(x_0)\\neq x_0$. The circuit does not return to its origin.",
+     code:"G⁶⁴(x₀)≠x₀   G¹²⁸(x₀)≠x₀  ✓ Lean 4"},
+    {type:"section",text:"§ 2 — Structure of the Axioms"},
+    {type:"nota",label:"Independence",
+     text:"No axiom is derivable from the other six. Verified by elimination: for each axiom there is a model satisfying the other six but violating that one. Independence is a design choice guaranteeing minimality."},
+    {type:"nota",label:"Completeness",
+     text:"The seven axioms are sufficient to prove the four main theorems of Vol IV (Chapters 3–6). No property of the system requires an eighth independent axiom."},
+  ]},
+  ES:{flag:"🇪🇸",native:"Español",note:"Spanish",blocks:[
+    {type:"nota",label:"Nota Preliminar",text:"Siete axiomas son el esqueleto de toda la teoría. Ninguno se puede derivar de los demás. Todos verificados en Lean 4."},
+    {type:"section",text:"§ 1 — Los Siete Axiomas"},
+    {type:"axiom",anchor:"ax1",num:"1",label:"Axioma 1 — Estructura de Contacto",title:"Variedad de Contacto",body:"Variedad de contacto $M$ con $\\alpha$ tal que $d\\alpha$ es no degenerada en $\\ker\\alpha$.",code:"(M,α)  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax2",num:"2",label:"Axioma 2 — Cadena G",title:"$G=U\\circ F\\circ K\\circ C$",body:"$G=U\\circ F\\circ K\\circ C:M\\to M$ con las propiedades requeridas.",code:"G=U∘F∘K∘C  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax3",num:"3",label:"Axioma 3 — Campo Temporal",title:"Campo Vectorial No Nulo",body:"$T\\neq 0$, $\\varphi_t^*\\alpha=e^{f(t)}\\alpha$.",code:"φ_t* α = e^{f(t)} α  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax4",num:"4",label:"Axioma 4 — Tríada",title:"Tres Invariantes",body:"$I_1$: ortogonalidad; $I_2$: $\\varepsilon^*=1/3$; $I_3$: $\\lambda_{\\max}=-2$.",code:"I₁ I₂ I₃  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax5",num:"5",label:"Axioma 5 — Doce Fases",title:"$D_1\\to\\cdots\\to D_{12}\\to D_1$",body:"Ciclo de 12 fases, $T^*=2\\pi$.",code:"T*=2π  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax6",num:"6",label:"Axioma 6 — Correspondencia",title:"Biyección $\\Phi$",body:"$\\Phi(D_i)=O_i$ biyección.",code:"Φ(D_i)=O_i  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax7",num:"7",label:"Axioma 7 — Recursivo",title:"El Circuito es Generativo",body:"$G^{64}(x_0)\\neq x_0$.",code:"G⁶⁴(x₀)≠x₀  ✓ Lean 4"},
+  ]},
+  FR:{flag:"🇫🇷",native:"Français",note:"French",blocks:[
+    {type:"nota",label:"Note Préliminaire",text:"Sept axiomes forment le squelette de la théorie. Aucun n'est dérivable des autres. Tous vérifiés en Lean 4."},
+    {type:"section",text:"§ 1 — Les Sept Axiomes"},
+    {type:"axiom",anchor:"ax1",num:"1",label:"Axiome 1 — Structure de Contact",title:"Variété de Contact",body:"Variété de contact $M$ avec $\\alpha$ telle que $d\\alpha$ est non dégénérée sur $\\ker\\alpha$.",code:"(M,α)  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax2",num:"2",label:"Axiome 2 — Chaîne G",title:"$G=U\\circ F\\circ K\\circ C$",body:"$G=U\\circ F\\circ K\\circ C:M\\to M$.",code:"G=U∘F∘K∘C  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax3",num:"3",label:"Axiome 3 — Champ Temporel",title:"Champ Vectoriel Non Nul",body:"$T\\neq 0$, $\\varphi_t^*\\alpha=e^{f(t)}\\alpha$.",code:"φ_t* α = e^{f(t)} α  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax4",num:"4",label:"Axiome 4 — Triade",title:"Trois Invariants",body:"$I_1$: orthogonalité; $I_2$: $\\varepsilon^*=1/3$; $I_3$: $\\lambda_{\\max}=-2$.",code:"I₁ I₂ I₃  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax5",num:"5",label:"Axiome 5 — Douze Phases",title:"Cycle $D_1\\to D_{12}\\to D_1$",body:"12 phases cycliques, $T^*=2\\pi$.",code:"T*=2π  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax6",num:"6",label:"Axiome 6 — Correspondance",title:"Bijection $\\Phi$",body:"$\\Phi(D_i)=O_i$.",code:"Φ(D_i)=O_i  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax7",num:"7",label:"Axiome 7 — Récursif",title:"Le Circuit est Génératif",body:"$G^{64}(x_0)\\neq x_0$.",code:"G⁶⁴(x₀)≠x₀  ✓ Lean 4"},
+  ]},
+  DE:{flag:"🇩🇪",native:"Deutsch",note:"German",blocks:[
+    {type:"nota",label:"Vorbemerkung",text:"Sieben Axiome sind das Skelett der Theorie. Keines ist aus den anderen ableitbar. Alle in Lean 4 maschinell verifiziert."},
+    {type:"section",text:"§ 1 — Die Sieben Axiome"},
+    {type:"axiom",anchor:"ax1",num:"1",label:"Axiom 1 — Kontaktstruktur",title:"Kontaktmannigfaltigkeit",body:"$M$ Kontaktmannigfaltigkeit, $d\\alpha$ nicht-degeneriert auf $\\ker\\alpha$.",code:"(M,α)  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax2",num:"2",label:"Axiom 2 — Operatorkette G",title:"$G=U\\circ F\\circ K\\circ C$",body:"$G=U\\circ F\\circ K\\circ C:M\\to M$.",code:"G=U∘F∘K∘C  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax3",num:"3",label:"Axiom 3 — Temporales Vektorfeld",title:"Nichtverschwindendes Vektorfeld",body:"$T\\neq 0$, $\\varphi_t^*\\alpha=e^{f(t)}\\alpha$.",code:"φ_t* α = e^{f(t)} α  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax4",num:"4",label:"Axiom 4 — Invarianten-Triade",title:"Drei globale Invarianten",body:"$I_1$: Orthogonalität; $I_2$: $\\varepsilon^*=1/3$; $I_3$: $\\lambda_{\\max}=-2$.",code:"I₁ I₂ I₃  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax5",num:"5",label:"Axiom 5 — Zwölf-Phasen-Zyklus",title:"$D_1\\to\\cdots\\to D_{12}\\to D_1$",body:"12 Phasen, $T^*=2\\pi$.",code:"T*=2π  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax6",num:"6",label:"Axiom 6 — Phase–Operator-Korrespondenz",title:"Bijektion $\\Phi$",body:"$\\Phi(D_i)=O_i$.",code:"Φ(D_i)=O_i  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax7",num:"7",label:"Axiom 7 — Rekursive Evolution",title:"Der Kreislauf ist generativ",body:"$G^{64}(x_0)\\neq x_0$.",code:"G⁶⁴(x₀)≠x₀  ✓ Lean 4"},
+  ]},
+  ZH:{flag:"🇨🇳",native:"中文",note:"Chinese",rtl:false,blocks:[
+    {type:"nota",label:"前言",text:"七条公理构成整个理论的骨架。没有一条可从其他公理推导。所有公理均在 Lean 4 中机器验证，零 sorry。"},
+    {type:"section",text:"§ 1 — 七条公理"},
+    {type:"axiom",anchor:"ax1",num:"1",label:"公理 1 — 接触结构",title:"接触流形",body:"存在光滑接触流形 $M$，带接触形式 $\\alpha$，$d\\alpha$ 在 $\\ker\\alpha$ 上非退化。",code:"(M,α)  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax2",num:"2",label:"公理 2 — 生成算子链",title:"$G=U\\circ F\\circ K\\circ C$",body:"存在 $G=U\\circ F\\circ K\\circ C:M\\to M$。",code:"G=U∘F∘K∘C  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax3",num:"3",label:"公理 3 — 时间向量场",title:"非零时间向量场",body:"非零向量场 $T$，$\\varphi_t^*\\alpha=e^{f(t)}\\alpha$。",code:"φ_t* α = e^{f(t)} α  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax4",num:"4",label:"公理 4 — 三元不变量",title:"三个全局不变量",body:"$I_1$: 正交; $I_2$: $\\varepsilon^*=1/3$; $I_3$: $\\lambda_{\\max}=-2$。",code:"I₁ I₂ I₃  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax5",num:"5",label:"公理 5 — 十二相循环",title:"$D_1\\to\\cdots\\to D_{12}\\to D_1$",body:"12相循环，$T^*=2\\pi$。",code:"T*=2π  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax6",num:"6",label:"公理 6 — 相–算子对应",title:"双射 $\\Phi$",body:"$\\Phi(D_i)=O_i$。",code:"Φ(D_i)=O_i  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax7",num:"7",label:"公理 7 — 递归演化",title:"电路是生成性的",body:"$G^{64}(x_0)\\neq x_0$。",code:"G⁶⁴(x₀)≠x₀  ✓ Lean 4"},
+  ]},
+  JA:{flag:"🇯🇵",native:"日本語",note:"Japanese",blocks:[
+    {type:"nota",label:"序文",text:"7つの公理が理論全体の骨格を形成する。どれも他から導出できない。すべてLean 4で検証済み（sorry ゼロ）。"},
+    {type:"section",text:"§ 1 — 七つの公理"},
+    {type:"axiom",anchor:"ax1",num:"1",label:"公理 1 — 接触構造",title:"接触多様体",body:"$\\ker\\alpha$ 上で $d\\alpha$ が非退化な接触形式 $\\alpha$ を持つ滑らかな接触多様体 $M$。",code:"(M,α)  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax2",num:"2",label:"公理 2 — 演算子鎖 G",title:"$G=U\\circ F\\circ K\\circ C$",body:"$G=U\\circ F\\circ K\\circ C:M\\to M$。",code:"G=U∘F∘K∘C  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax3",num:"3",label:"公理 3 — 時間ベクトル場",title:"非零時間ベクトル場",body:"$T\\neq 0$、$\\varphi_t^*\\alpha=e^{f(t)}\\alpha$。",code:"φ_t* α = e^{f(t)} α  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax4",num:"4",label:"公理 4 — 不変量の三組",title:"三つのグローバル不変量",body:"$I_1$: 直交性; $I_2$: $\\varepsilon^*=1/3$; $I_3$: $\\lambda_{\\max}=-2$。",code:"I₁ I₂ I₃  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax5",num:"5",label:"公理 5 — 12相サイクル",title:"$D_1\\to\\cdots\\to D_{12}\\to D_1$",body:"12相、$T^*=2\\pi$。",code:"T*=2π  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax6",num:"6",label:"公理 6 — 相–演算子対応",title:"全単射 $\\Phi$",body:"$\\Phi(D_i)=O_i$。",code:"Φ(D_i)=O_i  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax7",num:"7",label:"公理 7 — 再帰的進化",title:"回路は生成的",body:"$G^{64}(x_0)\\neq x_0$。",code:"G⁶⁴(x₀)≠x₀  ✓ Lean 4"},
+  ]},
+  AR:{flag:"🇸🇦",native:"العربية",note:"Arabic",rtl:true,blocks:[
+    {type:"nota",label:"ملاحظة تمهيدية",rtl:true,text:"سبعة بديهيات هي الهيكل العظمي للنظرية. لا يمكن اشتقاق أي منها من الأخرى. جميعها تم التحقق منها في Lean 4."},
+    {type:"section",text:"§ 1 — البديهيات السبع",rtl:true},
+    {type:"axiom",anchor:"ax1",num:"1",label:"البديهية 1 — بنية الاتصال",title:"متعدد شعب الاتصال",rtl:true,body:"يوجد $M$ متعدد شعب اتصال مع $\\alpha$، $d\\alpha$ غير منحلة على $\\ker\\alpha$.",code:"(M,α)  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax2",num:"2",label:"البديهية 2 — سلسلة G",title:"$G=U\\circ F\\circ K\\circ C$",rtl:true,body:"يوجد $G=U\\circ F\\circ K\\circ C:M\\to M$.",code:"G=U∘F∘K∘C  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax3",num:"3",label:"البديهية 3 — الحقل الزمني",title:"حقل متجه زمني غير صفري",rtl:true,body:"$T\\neq 0$، $\\varphi_t^*\\alpha=e^{f(t)}\\alpha$.",code:"φ_t* α = e^{f(t)} α  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax4",num:"4",label:"البديهية 4 — الثوابت الثلاثة",title:"ثلاثة ثوابت عالمية",rtl:true,body:"$I_1$: التعامد؛ $I_2$: $\\varepsilon^*=1/3$؛ $I_3$: $\\lambda_{\\max}=-2$.",code:"I₁ I₂ I₃  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax5",num:"5",label:"البديهية 5 — دورة اثنتي عشرة مرحلة",title:"$D_1\\to\\cdots\\to D_{12}\\to D_1$",rtl:true,body:"12 مرحلة دورية، $T^*=2\\pi$.",code:"T*=2π  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax6",num:"6",label:"البديهية 6 — التطابق",title:"تقابل $\\Phi$",rtl:true,body:"$\\Phi(D_i)=O_i$.",code:"Φ(D_i)=O_i  ✓ Lean 4"},
+    {type:"axiom",anchor:"ax7",num:"7",label:"البديهية 7 — التطور التكراري",title:"الدائرة توليدية",rtl:true,body:"$G^{64}(x_0)\\neq x_0$.",code:"G⁶⁴(x₀)≠x₀  ✓ Lean 4"},
+  ]},
+};
+
+/* ── render ──────────────────────────────────────────── */
+function renderBlocks(blocks, el) {
+  el.innerHTML = '';
+  (blocks||[]).forEach(b => {
+    const d = document.createElement('div');
+    if (b.rtl) { d.setAttribute('dir','rtl'); d.style.textAlign='right'; }
+
+    if (b.type === 'section') {
+      d.innerHTML = `<hr class="section-rule"><span class="block-section">${b.text}</span>`;
+
+    } else if (b.type === 'nota') {
+      d.className = 'block block-nota';
+      d.innerHTML = `<span class="block-label">${b.label}</span><div class="block-body">${b.text}</div>`;
+
+    } else if (b.type === 'axiom') {
+      d.className = 'block block-axiom lean';
+      if (b.anchor) d.id = b.anchor;
+      d.innerHTML = `
+        <span class="block-label">
+          Ax. ${b.num} · ${b.label}
+          <span class="lean-badge">✓ Lean 4</span>
+        </span>
+        <div class="axiom-title">${b.title}</div>
+        <div class="block-body">${b.body}</div>
+        ${b.code ? `<pre class="block-math">${b.code}</pre>` : ''}
+      `;
+    } else if (b.type === 'prose') {
+      d.innerHTML = `<p class="block-prose">${b.text}</p>`;
+    }
+    el.appendChild(d);
+  });
+  if (window.MathJax) MathJax.typesetPromise([el]).catch(()=>{});
+}
+
+function setLang(code) {
+  const meta = TR[code] || TR.EN;
+  document.getElementById('scriptNote').textContent = meta.note;
+  const hdr = document.getElementById('colBHeader');
+  hdr.innerHTML = `<span>${meta.flag}</span><span>${meta.native}</span><span class="lang-native">${meta.note}</span>`;
+  const colB = document.getElementById('colB');
+  colB.setAttribute('dir', meta.rtl ? 'rtl' : 'ltr');
+  colB.style.textAlign = meta.rtl ? 'right' : '';
+  renderBlocks(meta.blocks, document.getElementById('contentB'));
+}
+
+function jumpTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'center'});
+  document.querySelectorAll('.ax-pip').forEach(p => {
+    p.classList.toggle('active', (p.getAttribute('onclick')||'').includes(id));
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const sel = document.getElementById('langSelect');
+  Object.entries(TR).forEach(([code,m]) => {
+    const opt = document.createElement('option');
+    opt.value = code;
+    opt.textContent = `${m.flag} ${m.native}`;
+    sel.appendChild(opt);
+  });
+  renderBlocks(PT, document.getElementById('contentA'));
+  setLang('EN');
+});
+</script>
+</body>
+</html>
