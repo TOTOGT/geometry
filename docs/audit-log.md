@@ -9162,7 +9162,21 @@ Two consequences, both real:
 addresses agree with each other, which they do. It has no way to know that a
 different document numbers the same word differently. A second ladder is not
 drift inside one system; it is two systems, and the only fix is a decision
-about which numbering the word "rung" carries. `[OPEN]`
+about which numbering the word "rung" carries.
+
+**Settled the same day, by the author: the files move.** The rung number IS
+the volume number, and WP-82's field ladder supplies the rung numbers. So
+index theory is rung 28 and `ShiftIndex.lean` is Volume XXVIII — not XI, where
+it was first committed on a stale placement map, and not XXXIII, where it went
+on the reading that the floor ladder topped out at 33. `book33` is reserved for
+noncommutative geometry, a different subject with its own source on the shelf
+(Connes & Marcolli, 705pp, held).
+
+The overlay in `tools/floor_texts.py` was the thing carrying the second
+numbering: rung 28 → XI, 29 → XII, 33 → XVI. It now reads XXVIII, XXIX,
+XXXIII, and `docs/floor-texts.tsv` was regenerated. The comment in
+`verify-proofs.yml` calling Gauss–Bonnet a candidate core for "Volume XI
+(rung 28, Index Theory)" now says Volume XXVIII. `[CLOSED]`
 
 ---
 
@@ -9193,4 +9207,29 @@ Still open: `book17/Book17Mathlib.lean`, `book21/Spiral.lean` and
 repository pins **v4.32.0**. They are not CI-checked and have not been shown to
 elaborate at the pin. That is three files whose only evidence is one afternoon.
 `[OPEN]`
+
+---
+
+### 2026-09-19 — four volumes opened, and the links made live
+
+`book11`, `book12`, `book21` and `book28` each have an index and a chapter 1,
+built from Lean that was already verified rather than written first and
+justified afterwards. Every number on those pages is one the kernel reported,
+and each page links the `.lean` and its axiom report directly.
+
+Linked, front door inward: root `index.html` → `series-hub.html` → the volume
+card → the book index → the chapter → the `.lean` and its report.
+`series-hub.html` stopped at Volume IX, which had been an open item; it now
+carries nine further cards — X, XI, XII, XIII, XVII, XVIII, XIX, XXI, XXVIII.
+The ladder box on each new index links the volumes that exist and leaves the
+rest as plain numerals.
+
+`tools/audit.py`: 27 dead_link, 2 double_escaped — the pre-existing figures,
+unchanged. The generated pages briefly pushed double_escaped to 9: the
+`meta description` was built by escaping a subtitle that already contained
+entities, so `&mdash;` became `&amp;mdash;`. Caught by the audit before the
+commit, in five files, and fixed at the generator rather than per page.
+
+A separate pass confirms every relative `href` on the eight new pages and on
+`series-hub.html` resolves to a file that exists: 0 broken. `[CLOSED]`
 
