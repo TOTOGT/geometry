@@ -8841,3 +8841,30 @@ is a habit.
 no Spivak, Apostol, Rudin or Stewart. Newton and Euler are, at 594 and 543 pages.
 A volume on the calculus lineage into machine learning has its endpoints and not
 its middle.
+
+---
+
+## 2026-09-19 (later still) · The ledger was right, and wrong sixty minutes later
+
+`book17/index.html` and `book18/index.html` both published **"no calculus textbook of
+any kind."** It was true of the scan that produced it and false by 02:39, when
+`Advanced_Calculus.pdf` (Loomis & Sternberg, revised edition, 592 pp) and
+`math1a_2021.pdf` (Knill, *Introduction to Calculus*, Harvard Math 1a, 311 pp) appeared
+in Downloads. Re-run: **39 third-party texts, not 37.**
+
+**This was not a tool failure and should not be recorded as one.** The scan was correct
+when it ran. What failed is that two pages quoted a point-in-time ledger as a statement
+about the world, in a series whose own rule is that an address is a name plus a place
+plus a hash — and a hash is a claim about a moment. **A ledger cited without being re-run
+is a memory, not an address.**
+
+One real latent defect was found while diagnosing, and fixed: `floor_texts.py` caught
+every reader exception with a bare `continue`, so a file pypdf could not open vanished
+with no trace and would have been indistinguishable from a file that was not there. It
+now collects them and prints `UNREADABLE — not absent, unread`, and says so again at the
+end. None were unreadable in this run; the bug was latent, not the cause.
+
+**What actually remains not held is Leibniz** — not the 1684 *Nova Methodus*, not a
+collected works, not a secondary study. Book XVIII's chapters 2–4 become writable;
+chapter 1 stays blocked, because its argument is about what Leibniz's notation does that
+Newton's does not, and a modern textbook restating the rule cannot warrant that.

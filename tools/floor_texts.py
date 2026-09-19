@@ -52,7 +52,7 @@ def main():
     except ImportError:
         print("needs pypdf"); return 2
 
-    third, own, small = [], [], 0
+    third, own, unreadable, small = [], [], [], 0
     for fn in sorted(os.listdir(dl)):
         if not fn.lower().endswith(".pdf"):
             continue
@@ -61,15 +61,24 @@ def main():
             r = pypdf.PdfReader(p)
             n = len(r.pages)
             head = re.sub(r"\s+", " ", (r.pages[0].extract_text() or ""))[:200]
-        except Exception:
+        except Exception as e:
+            # NEVER swallow this. A file the reader cannot open is not an absent
+            # text; it is an unread one, and a scanner that drops it silently
+            # manufactures exactly the false absence this ledger exists to stop.
+            unreadable.append((fn, type(e).__name__))
             continue
         if n < minp:
             small += 1
             continue
         (own if OWN.search(head) or OWN.search(fn) else third).append((n, fn, head))
 
-    print("  %d third-party texts >= %dpp, %d of the author's own, %d shorter files skipped\n"
+    print("  %d third-party texts >= %dpp, %d of the author's own, %d shorter files skipped"
           % (len(third), minp, len(own), small))
+    if unreadable:
+        print("  %d UNREADABLE -- not absent, unread:" % len(unreadable))
+        for fn, err in unreadable:
+            print("      %-52s %s" % (fn[:52], err))
+    print()
 
     out = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                        "docs", "floor-texts.tsv")
@@ -93,6 +102,9 @@ def main():
     dup = sum(len(v) - 1 for v in groups.values() if len(v) > 1)
     print("    -> %d files are second-or-later copies of a work already present." % dup)
     print("\n  wrote %s" % out)
+    if unreadable:
+        print("  NOTE: %d file(s) could not be read. Absence below is not established"
+              " for them." % len(unreadable))
     return 0
 
 if __name__ == "__main__":
