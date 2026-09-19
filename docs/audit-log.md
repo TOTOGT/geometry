@@ -9308,3 +9308,75 @@ chapter pointed at `wp82-the-inverted-ladder.html`; the file is
 `wp82-the-missing-floor.html`. Caught before the commit, three references
 corrected. `[CLOSED]`
 
+---
+
+### 2026-09-19 — Book X chapters 7 and 8, and two defects in its own contents page
+
+**On the WP-82 filename.** The earlier entry recorded that a new chapter linked
+`wp82-the-inverted-ladder.html`. Settled: that file does not exist. WP-82 is
+`book6/wp82-the-missing-floor.html`, titled *The Missing Floor*, linked from
+twenty-plus pages; the live site serves it and returns **404** for the
+inverted-ladder URL. The phrase "inverted ladder" appears nowhere in the corpus
+— WP-82's own text says "the distribution is inverted". The filename was
+manufactured from the page's theme and then written into a link, which is a
+citation generated from a remembered gist rather than located. Named and
+recorded, because it is not the same defect as a typo.
+
+**ch07 — Up Before Right.** Gapminder's Misconception Study 2017: 14 countries,
+about 1,000 respondents each, 12 analysed three-option questions, mean 2.2
+(18.3 %) against a random 33.3 %. The arithmetic the study does not print:
+getting all twelve wrong by chance has probability (2/3)^12 = **0.77 %**, and
+15 % of respondents did — **19.5 times** the chance rate. Below-chance
+performance on three-option questions is not ignorance, which looks like 33 %.
+It requires a model, applied consistently, and wrong.
+
+Then Rosling's ordering claim from *Global population growth, box by box*
+(TED@Cannes 2010) tested on South Korea. For each of four World Bank series,
+the year at which half the whole 1960–2020 change had happened:
+
+| series | half reached |
+|---|---|
+| under-5 mortality | **1970.8** |
+| births per woman | **1975.0** |
+| life expectancy | **1984.7** |
+| GDP per capita | **1999.5** |
+
+Child survival, fertility, longevity, income — in that order, over 28.7 years.
+`book10/ch07-verify.py` recomputes all of it from
+`book10/ch07-korea-worldbank.tsv` (indicator codes and API path in the header)
+and fails if the four ever stop falling in that order. The chapter states what
+four dates do not establish: one country, and an ordering is not a mechanism.
+
+Also checked: Ha-Joon Chang's "life expectancy was 53" at his 1963 birth. The
+series gives **53.8 in 1960** and **55.0 in 1963**. The figure is real and three
+years older than the sentence carrying it. Recorded because this is the volume
+about what happens to a number in transit.
+
+**ch08 — You Never Asked.** Sirolli's Zambian project, with a table separating
+what is established (b. 1950; Italian NGO in Africa 1971–1977; southern Zambia,
+valley to the Zambezi; Italian tomatoes and courgettes; Sirolli Institute 1985;
+*Ripples from the Zambezi* 1995; TED 2012) from what is not. **This volume's
+ch02 prints "two hundred hippos" and that count was not located in any source
+reachable this session.** Marked `not located` rather than repeated a third
+time or silently dropped. The corpus liked a parable about not asking enough to
+pass on its most vivid number without checking it.
+
+**Two defects in `book10/index.html`, found while linking the new chapters.**
+
+1. `ch05-the-notebooks-and-what-reached-us.html` was not linked from its own
+   volume's contents — reachable only from ch06, a Book IV chapter, and the
+   generated index. **The same defect found in book13 the same day.** Two
+   volumes, one failure.
+2. The chapter-04 row carried **two** anchors: `ch04` under its own title, and
+   `ch06-the-price-of-the-thing.html` under chapter 4's title as well. The link
+   worked and the label was another chapter's. A dead link gets found; a live
+   link with the wrong name does not.
+
+Table rebuilt with rows 04–08. `tools/audit.py` unchanged at 27 dead_link, 2
+double_escaped; all relative hrefs on the new pages and the index resolve.
+`[CLOSED]`
+
+**Open.** An index-completeness check belongs in `tools/`, not in one chapter's
+verifier: every `bookNN/ch*.html` should be linked from `bookNN/index.html`, and
+two volumes failing it on one day says the next one will too. `[OPEN]`
+
