@@ -103,18 +103,21 @@ Two tools, one correction, and a finding that reorders the work.
 ### The Book IV claim was false and is corrected
 R21 and `tools/foundations_claims.py` both said *"Book IV's 59 chapters are tagged throughout. The base is the only unmarked layer."* The census counted them:
 
-- **31 of Book IV's 59 files carry neither a numbered claim nor a tag.**
-- **11 files carry any tag at all.** 26 files carry 68 numbered claims between them.
+- **32 of Book IV's 59 files carry neither a numbered claim nor a tag.**
+- **11 files carry any tag at all.** 24 files carry 65 numbered claims between them.
 - The base was never the only unmarked layer. It was the layer someone had counted.
 
 Corrected in `CLAUDE.md` and in the tool's docstring, both dated.
 
 ### Three findings that reorder the tagging job
-- **F1 — not one claim in either book names a Lean theorem.** Book III: 2 claims, 0 Lean names. Book IV: 68 claims, 0 Lean names. The base layer matched 16 of 34 by topic; here the join has no starting point, so a topic match would be built out of resemblance alone.
+- **F1 — not one claim in either book names a Lean theorem.** Book III: 2 claims, 0 Lean names. Book IV: 65 claims, 0 Lean names. The base layer matched 16 of 34 by topic; here the join has no starting point, so a topic match would be built out of resemblance alone.
 - **F2 — the tag vocabulary diverged and nobody reconciled it.** The base layer proposes SHOWN / CITED / MODEL / CONJECTURE / OPEN. Book IV's pages carry OPEN, COMPUTED, PROVED, CITED, MODEL, CONJECTURE. **PROVED is the stronger word, in use in the superstructure, where the weaker one was chosen for the foundations.** Settling this is the author's call.
-- **F3 — claim numbers collide.** Ten numbers in Book IV are used by more than one chapter. **`Theorem 1` belongs to five** (`ch10`, `ch11-catgt`, `ch24`, `chE-gtct-alt`, `gomc-opus`); `Theorem 5.1` to four; `Theorem B` and `Theorem 6.1` to three each. A cross-reference to a bare number does not resolve in this corpus.
+- **F3 — two numbers name two different claims each.** *This finding was wrong the first time and is corrected here.* Counted raw, ten numbers in Book IV appear in more than one chapter, and that is what this block said an hour ago. Checking each occurrence against its markup showed most are one chapter **citing** another — ch14 citing Conjecture 12.1, ch27 citing Proposition 26.2, ch04 citing Theorem 3.2, ch22 and ch23 citing Ch 5's Theorem 5.1 — and `Theorem B` was the regex eating `Theorem B.1`. What survives is two: **`Theorem 1`** is The Correspondence in `chE-gtct-alt` and the Helical Selectivity Principle in `ch11-catgt`/`gomc-opus`; **`Theorem 5.1`** is Bäcklund rigidity in `ch05` and the Orthogonality Theorem in `chIV-orthogonality`. Separately, `gomc-opus` is a Complete Pack that restates CatGT Part I's Corollaries 1 and 2 in condensed form — same claims, two texts, one number each: a quotation hazard, not a collision.
 
-**So the order is not what it looked like.** Tagging Book IV cannot begin until F3 is fixed and F2 is settled — a tag on `Theorem 5.1` is useless while four chapters have one. Both are Pablo's call, and both are cheap once decided.
+**So the order is not what it looked like, and F3 is much smaller than it looked.** Two renumberings and a vocabulary decision stand between here and tagging Book IV. Both are Pablo's call and both are cheap.
+
+### Checked and clean — ch05's Theorem 5.1
+`ch22-gauss-map` says Ch 5's Theorem 5.1 *"as printed contradicts Bäcklund"* and points at ch23 for the repair. That reads like an unflagged error in a published chapter, so it was checked: **ch05 carries the correction itself**, immediately after the theorem — the Pfaffian-rank argument, the note that the Sator correspondence of §5.2 is untouched, and a forward link to `ch23-duality-discriminant.html`. `ch23` delivers the repair in full. **No defect. The corpus is honest here.** Recorded so nobody spends the afternoon re-finding it.
 
 ### Book III is thinner than the index implies
 Its chapters live **at the repo root**, not under `book3/` — `vol3-minibeast.html`, `livro3-brasil.html` (PT), `minibeast-pilot.html`, `ch-seismic.html`. `book3/` holds only the index and the ESL vocabulary companion. `impa-portal.html` is linked from `book3/index.html` but is a shared portal (book1, book2 and book4 link it too) and is not Book III content. **Two numbered claims in the whole book, no tags.** Whether that is a gap or simply what an applied volume looks like is a judgement nobody has made in writing.
@@ -123,7 +126,7 @@ Its chapters live **at the repo root**, not under `book3/` — `vol3-minibeast.h
 `0.77594058` across the board, 224 occurrences in 78 files (`f1db753`). It is the correct 8-dp rounding of every high-precision form here; `0.77594059` was the rounding of none of them and `70d08d7` called it "the certified" value. **Thirteen high-precision forms remain, diverging at the 11th decimal — deliberately untouched.** `[OPEN]`
 
 ### Open — in priority order
-1. **F3 then F2, then Book IV tagging.** Nothing downstream is worth doing first. The collision list is printed by `python3 tools/superstructure_census.py`.
+1. **Renumber `Theorem 1` and `Theorem 5.1`, settle F2, then tag Book IV.** Nothing downstream is worth doing first. `python3 tools/superstructure_census.py` prints both lists. Its statement-vs-citation test is a **heuristic** — an environment class opening within 200 characters before the label — and it over-reports: `ch04`'s Theorem 3.2 and `ch23`'s Theorem 5.1 are citations sitting inside boxed remarks. Read the two lines it flags before acting on them.
 2. **The join does not exist.** 82 theorems are kernel-checked for Volume I in `TOTOGT/vol1-proofs`; **29 are named in the four base documents, 53 are not, and 0 are named anywhere in Books III or IV.** "Volume I is machine-verified" remains a statement about a file, not about the document citing it.
 3. **Eighteen of thirty-four base-layer claims are UNMATCHED** (53%) — a reading job, not a script. `UNMATCHED` is not `UNPROVED`; the script cannot tell "no Lean exists" from "topic matching missed it", and 53% is too large to leave undecided.
 4. **The assumed-conclusion gap (R20).** `spiral_return_exists` takes *"the 128-orbit does not return"* as a hypothesis and closes `exact h_second_circuit`. Kernel-checks clean. **No instrument here looks for a hypothesis that is the conclusion.** The offending theorem is in `io`/`AXLE`, not geometry.

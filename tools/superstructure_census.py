@@ -27,8 +27,18 @@ BOOK3 = ["vol3-minibeast.html", "livro3-brasil.html", "minibeast-pilot.html",
          "ch-seismic.html", "book3/vocab-seismic-geometry.html", "book3/index.html"]
 BOOK4 = sorted(glob.glob("book4/*.html"))
 
+# (?![.\d]) keeps a bare letter from swallowing an appendix label: "Theorem B.1"
+# is B.1, not a "Theorem B" shared by three chapters. The first version of this
+# regex made that mistake and reported it as a collision.
 CLAIM = re.compile(r'\b(Theorem|Proposition|Lemma|Corollary|Conjecture)\s+'
-                   r'([0-9]+(?:\.[0-9]+)*|[A-Z])\b')
+                   r'([0-9]+(?:\.[0-9]+)*|[A-Z](?![.\d]))\b')
+
+# A number that appears in two chapters is usually one chapter CITING another,
+# not two chapters claiming it. Telling them apart is what makes the collision
+# count mean anything. Heuristic: a STATEMENT opens an environment -- some
+# element whose class names a theorem-like box -- within 200 characters before
+# the label. It is a heuristic and it over-reports; see F3.
+ENVCLS = re.compile(r'class="[^"]*\b(thm|theorem|prop|cor|lemma|conj|env|claim)[a-z-]*\b', re.I)
 TAGV  = ["SHOWN","CITED","MODEL","CONJECTURE","OPEN","PARTIAL",
          "PROVED","COMPUTED","ASSUMPTION","DEFINITION"]
 TAG   = re.compile(r'>(' + "|".join(TAGV) + r')<')
@@ -48,7 +58,7 @@ def body(path):
     return s
 
 def scan(files):
-    rows, where = [], collections.defaultdict(list)
+    rows, where = [], collections.defaultdict(set)
     for f in files:
         if not os.path.exists(f):
             rows.append((f, None, None, None, [])); continue
@@ -56,7 +66,10 @@ def scan(files):
         cl = sorted({"%s %s" % (a,b_) for a,b_ in CLAIM.findall(b)})
         tg = TAG.findall(b)
         lr = sorted({n for n in SHORT if re.search(r'\b%s\b' % re.escape(n), b)})
-        for c in cl: where[c].append(os.path.basename(f))
+        for m in CLAIM.finditer(b):
+            k = "%s %s" % (m.group(1), m.group(2))
+            if ENVCLS.search(b[max(0,m.start()-200):m.start()]):
+                where[k].add(os.path.basename(f))
         rows.append((f, cl, tg, lr, cl))
     return rows, where
 
@@ -117,18 +130,31 @@ print("    the stronger word being used where the weaker one was chosen for the"
 print("    foundations. Deciding this is the author's call; recording it is not.")
 
 print()
-print("F3  CLAIM NUMBERS COLLIDE ACROSS CHAPTERS.")
+print("F3  TWO CLAIM NUMBERS ARE USED FOR DIFFERENT CLAIMS.")
+print("    Counted raw, ten numbers in Book IV appear in more than one chapter,")
+print("    and that was this script's first finding. It was wrong. Most are one")
+print("    chapter CITING another -- ch14 citing Conjecture 12.1, ch27 citing")
+print("    Proposition 26.2, ch04 citing Theorem 3.2, ch22 and ch23 citing Ch 5's")
+print("    Theorem 5.1 -- and \"Theorem B\" was the regex eating \"Theorem B.1\".")
+print("    Numbers STATED (not merely cited) in more than one chapter:")
 for label, d in (("Book III", d3), ("Book IV", d4)):
     if not d:
-        print("    %-9s no collisions." % label); continue
-    print("    %-9s %d numbers used by more than one chapter:" % (label, len(d)))
+        print("      %-9s none." % label); continue
     for k, v in sorted(d.items()):
-        print("        %-18s %s" % (k, ", ".join(v)))
-print("    A cross-reference to a bare number in this corpus does not resolve.")
+        print("      %-9s %-18s %s" % (label, k, ", ".join(sorted(v))))
+print("    Two of those are the heuristic over-reporting: ch04's Theorem 3.2 and")
+print("    ch23's Theorem 5.1 are citations that sit inside a boxed remark.")
+print("    What is left is real, and it is two numbers, not ten:")
+print("      Theorem 1   -- The Correspondence (chE-gtct-alt) vs the Helical")
+print("                     Selectivity Principle (ch11-catgt / gomc-opus)")
+print("      Theorem 5.1 -- Baecklund rigidity (ch05) vs the Orthogonality")
+print("                     Theorem (chIV-orthogonality)")
+print("    Separately, gomc-opus is a Complete Pack that restates CatGT Part I's")
+print("    Corollaries 1 and 2 in condensed form. Same claims, two texts, one")
+print("    number each -- a quotation hazard, not a collision.")
 
 print()
 print("="*78); print("THE WORK LIST"); print("="*78)
-worst = max(d4.items(), key=lambda kv: len(kv[1])) if d4 else (None, [])
 print("  %d of %d Book IV files carry neither claim nor tag -- narrative or"
       % (s4["silent"], s4["files"]))
 print("  apparatus, and not the tagging job. %d files carry %d numbered claims"
@@ -136,8 +162,9 @@ print("  apparatus, and not the tagging job. %d files carry %d numbered claims"
 print("  between them; %d files carry any tag at all." % s4["with_tag"])
 print()
 print("  The order that follows from the base-layer work:")
-print("    1. fix the numbering collisions -- a tag on %s is useless" % worst[0])
-print("       while %d chapters have one" % len(worst[1]))
+print("    1. renumber two claims -- Theorem 1 and Theorem 5.1 each name two")
+print("       different results. Everything else that looked like a collision")
+print("       was a citation.")
 print("    2. settle PROVED/COMPUTED vs SHOWN/CITED into one vocabulary")
 print("    3. THEN map claims to Lean, chapter by chapter, and only where a")
 print("       chapter names its evidence")
