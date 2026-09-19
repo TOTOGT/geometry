@@ -98,6 +98,8 @@ def main():
             "the card count": "nineteen",
             "the chapter count": "Five of nineteen",
             "the missing count": "fourteen",
+            "the author's thesis, not the curator's note":
+                "people are passed over a lot, and then the mathematics gets another status",
         }
         for label, s in checks.items():
             if s.lower() not in flat.lower():

@@ -9442,3 +9442,53 @@ The verifier's own count of rendered status markers was wrong on the first run
 rendered text. `tools/audit.py` unchanged at 27 dead_link, 2 double_escaped.
 `[CLOSED]`
 
+---
+
+### 2026-09-19 — the gallery was audited against a thesis its author does not hold
+
+Correction to the entry above. This page flagged Grothendieck and Mochizuki as
+&ldquo;failing the gallery's own premise&rdquo; on the reading that the gallery was
+about obscurity and neither man is obscure. The author's response: *that thesis
+was not mine — I think people are passed over a lot, and then math gets another
+status.*
+
+The reading was imported. It came from the curator's note printed at the foot of
+the cards, which this page then treated as the author's argument and audited
+against. **Auditing a thing against a claim its author does not make is the same
+defect class as a citation generated from a remembered gist** — both substitute
+something recalled for something located, and both produce a confident finding
+about nothing.
+
+**The thesis as given is stronger, and it changes what the two cards are.** A
+result with a person attached is contingent: somebody wanted something, tried
+something, was working somewhere at some time, and could have been wrong. A
+result whose person has been stripped reads as *found* rather than made —
+ownerless, timeless, above the ordinary business of being argued with. The
+promotion is unearned and invisible, because nothing on the page says a name was
+removed.
+
+Under that thesis Grothendieck and Mochizuki are not exceptions. They are the
+two ends of the range:
+
+| card | the person | the status |
+|---|---|---|
+| Grothendieck | removed himself — left the institution, then the subject, and asked for his work to be withdrawn | the mathematics carried on under his name without him; work outliving and detaching from its maker, in the century's most cited instance |
+| Mochizuki | inseparable from the work; acceptance turns on who will read it and on what terms | the mathematics has *not* been granted ownerless status, which is why it is still argued with |
+
+The flag on those two cards is now `status` rather than `premise`, rendered in
+blue rather than red, and the legend says it marks the argument's sharpest cases
+rather than its weakest. The lede and subtitle now carry the author's sentence
+instead of the curator's note, and
+`book7/gallery-overlooked-verify.py` fails if the page stops printing it — a
+thesis that can drift out of a page silently is the thing that produced this
+entry.
+
+**And it names why Volume VII exists.** Its rule is that a chapter exists when
+there is a person whose encounter with an object is the point. That is not a
+courtesy to the dead: it is the instrument this corpus uses everywhere else — a
+claim resolves at the path cited, a number arrives with the script that computed
+it, a proof names its file and its axioms. Anonymity is what lets a claim get
+promoted without being checked, in mathematics exactly as in a citation.
+
+`tools/audit.py` unchanged at 27 dead_link, 2 double_escaped. `[CLOSED]`
+
