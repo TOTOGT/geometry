@@ -1001,10 +1001,49 @@ Any new content added to G5 must be measured against this constraint before incl
 - `geometry/` root = Book 3 (G3) chapters, prelude, overture, portals
 - `geometry/book4/` = Book 4 (G4) chapters + G5 student edition + living-book.html
 - **`geometry/omega/` = Book 9** — "Omega Point · The Convergence Series", 52 pages.
-  **The folder is not named `book9/` and there is no `book9/` directory.** Set
-  2026-09-19 by Pablo, written here because a session that greps for `book9` finds
-  nothing and concludes Book 9 does not exist — which is what happened today.
+  **The folder is not named `book9/` and there is no `book9/` directory.**
   `tools/build_indexes.py` labels it "Book IX — Omega Point" in `FOLDERS`.
+  **`series-hub.html` already carried this mapping** — `Book 9 → omega/omega-point-index.html`,
+  in a list of every volume. A session on 2026-09-19 greped for `book9/`, found no
+  directory, and reported Book 9 missing. **R19 exists for this: the hub is the
+  ledger for the book map. Read it before measuring the tree.**
+
+## The shape of the first ten books
+
+**Set 2026-09-19 by Pablo:** *"the first ten books go from frontier math, the
+ceiling, into logic / philosophy — to the floor which is not linear."*
+
+This is the rule that answers "which book does this chapter belong in", and
+nothing else in this file answered it. The series descends:
+
+| | volume | register |
+|---|---|---|
+| I | GOMC — Operator Algebra | **the ceiling.** Frontier mathematics, stated formally |
+| II | TOGT — Contact Geometry | |
+| III | The Mini-Beast — Biology, Physics, Language | the descent begins: the math meets matter |
+| IV | GTCT — Formal Theory | |
+| V | The Seed — Completeness | |
+| VI | Roots — imaginary origin | |
+| VII | The Scientists / Scientist Gallery | **who put each brick in the wall** |
+| VIII | Dark Matter, Monster Group, Moonshine, Embryogenesis | |
+| IX | **Omega Point — The Convergence Series** | **logic and philosophy** |
+| X | Custody, Transmission, and the Continent | **the floor — and it is not linear** |
+
+The floor not being linear is the point, not a caveat. Book X returns to custody
+and transmission, which is where Book I's reader came from; the series does not
+terminate in a foundation, it closes on the human question it opened under. This
+is the same claim the ortogênese note in `series-hub.html` makes about form:
+constraint removes options rather than pushing toward an end — *"A curvatura não
+puxa o desenvolvimento para a frente; ela remove opções."* A series ordered by
+removal of options does not end where a ladder would.
+
+**Practical consequence.** A figure chapter goes to **Book VII** when the person
+put a brick in dm³'s wall and the chapter names which brick. It goes to **Book IX**
+when the person belongs to the convergence lineage — the long descent through
+logic, philosophy and transmission that `ch-pingala`, `ch-baudhayana`,
+`ch-al-kindi`, `ch-cusa`, `ch-pacioli`, `ch-zacuto` and `ch-madhava` already
+trace. Volumes XI and above (`book11` … `book33`) sit outside the ten-book arc
+and are not governed by this.
 - Ring nav: G3 · Part I/II/III/IV → G4 → G5 (injected as `.po-ring-strip` after `</nav>`)
 - Spiral map: `book4/living-book.html` — the G1–G5 hub
 - Standard typography: follow `prelude.html` (Georgia 18px, line-height 1.75, #e8e4d8)
