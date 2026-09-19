@@ -152,6 +152,19 @@ Its chapters live **at the repo root**, not under `book3/` — `vol3-minibeast.h
 ### Other repositories — full table in `docs/HANDOFF-2026-09-18.md` §5
 **vol1-proofs**: branch `port-v4.32` pushed at `5e49766`; `main` restored at the v4.14 pin, counts reconciled to 82, forward debt in `docs/MATHLIB-FORWARD-v4.32.md`. **Do not link it anywhere until CI is green.** Unpushed elsewhere: **neuro 5** (needs credentials; public, names a clinic), **AXLE 1**. Five more have dirty trees, **not inspected**. Fifteen local repos is itself the mechanism behind "I trust things are done and they aren't."
 
+### The mathematicians gallery — 16 chapters that do not exist
+Pablo produced a gallery page, *"The Mathematicians History Overlooked"*, with nineteen figures. **The page is not in this repo** — it was not found by `grep -ril "History Overlooked"`, so it lives outside the corpus and needs a home first (R7). Checked against what exists:
+
+| covered | where |
+|---|---|
+| Madhava of Sangamagrama | `omega/ch-madhava.html` |
+| Alexander Grothendieck | `book7/ch-grothendieck.html` |
+| Virahanka (lineage) | `chMatra-hemachandra.html` at root, and `omega/ch-pingala.html` |
+
+**Sixteen have no chapter anywhere:** Hypatia, Aryabhata, Liu Hui, Brahmagupta, Al-Khwarizmi (named once in `book7/index.html`, no chapter), Al-Biruni, Omar Khayyam, Bhaskara II, Al-Karaji, Abu'l-Wafa al-Buzjani, Gangeśa Upādhyāya, Nārāyaṇa Paṇḍita, Jamshid al-Kashi, Seki Takakazu, Sophie Germain, Shinichi Mochizuki.
+
+**Which book they belong to is not settled and matters.** `omega/` — "Omega Point · The Convergence Series", 52 chapters — already holds the historical-figure chapters (`ch-pingala`, `ch-baudhayana`, `ch-al-kindi`, `ch-zacuto`, `ch-pacioli`, `ch-cusa`, `ch-hildegard`, `ch-ramanujan`, `ch-madhava`). Pablo's note was *"for book7, chapters missing"* then *"some are in book 9"*. **There is no `book9/` directory**; omega appears to be what "Book 9" means, and if so this file should say so and `FOLDERS` in `tools/build_indexes.py` should label it. Ask before creating anything — sixteen chapters in the wrong book is a worse outcome than sixteen missing ones.
+
 ### Parked, working
 A PatternBoost-style loop in the session scratchpad: exact maximum-Sidon ground truth by DFS to n=40 (2 nodes → 960,537, the wall visible), then a 3-layer transformer + local search that **matched the exact optimum k=8 at n=40 in 20 s**, every candidate checked exactly rather than trusted. Needs a home and a verify script if it is wanted.
 
