@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch 1 &middot; What the Kernel Certifies &mdash; Book XIX</title>
+<meta name="description" content="Five communities, five words for one unproved step, and a corpus that printed one of them as though it meant another. The lexical entry WP-94 left open."/>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+</style>
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Book XIX</a> &middot; Ch 1</span>
+<span class="meta"><a href="index.html">&larr; AXLE and the Manual</a></span>
+</div>
+
+<div class="wp-head">
+<div class="wp-kicker">Book XIX &middot; Chapter 1 &middot; 2026-09-19 &middot; Lexicography</div>
+<h1>What the Kernel Certifies</h1>
+<div class="subtitle">Five verification communities have five words for one object: a step that is not finished. <a href="../book6/wp94-one-hole-five-words.html">WP-94</a> showed the words differ in <em>countability</em> and left the entry open. Two weeks later this corpus published one of them as though it meant another, and the grammar had already said why it could not.</div>
+<div class="metagrid"><div><strong>Warrant</strong><span class="mono">tools/book19_ch01_verify.py</span>, exit 0<br>addressed by section; TPiL carries no locatable page numbers</div><div><strong>Claim</strong>a lexical entry, and one field case<br>no new mathematics</div><div><strong>Sources</strong>Avigad, de Moura &amp; Kong, <em>Theorem Proving in Lean</em><br>Avigad &amp; Massot, <em>Mathematics in Lean</em> v4.19.0</div></div>
+</div>
+
+<div class="wrap">
+
+<div class="lede">Every system that checks proofs mechanically must provide a way to write down a step you have not done; without one, no large proof could be started. The escape hatch is universal. Its name is not &mdash; and the names are not translations of one another.</div>
+
+<h2>1 &middot; The five words</h2>
+
+<div class="tblwrap">
+<table>
+<tr><th>community</th><th>word</th><th>what it admits</th></tr>
+<tr><td>Lean / Mathlib</td><td><span class="mono">sorry</span></td><td>a step the author intends to return to</td></tr>
+<tr><td>Isabelle/HOL</td><td><span class="mono">sorry</span>, <span class="mono">oops</span></td><td>the same, plus abandoning a goal</td></tr>
+<tr><td>Coq / Rocq</td><td><span class="mono">admit</span>, <span class="mono">Admitted</span></td><td>a step, or a whole lemma, closed by fiat</td></tr>
+<tr><td>proof-carrying code</td><td><span class="mono">axiom</span>, <span class="mono">trust</span></td><td>a fact the checker will not verify and must be believed</td></tr>
+<tr><td>avionics assurance</td><td><span class="mono">assumption</span></td><td>a condition the argument is conditional on</td></tr>
+</table>
+<p style="font-size:.8rem;color:var(--dim);margin-top:.4rem">WP-94 §1. The Lean and proof-carrying-code rows are checked against primary sources; Isabelle, Coq and avionics are marked OPEN there and remain so here.</p>
+</div>
+
+<h2>2 &middot; Countability is the tell</h2>
+
+<p>WP-94's census over 3,207,496 running words found the difference is <strong>grammatical, not doctrinal</strong>. Cited, not recomputed:</p>
+
+<div class="box">
+<span class="lab">WP-94 §2, the numeral column</span>
+<span class="mono">sorry</span> takes a bare numeral <strong>905</strong> times &mdash; a word for a thing you count without a measure phrase, because counting is what you do to items on a list you intend to shorten. <span class="mono">gap</span>, the ordinary English word for the same object, takes a numeral <strong>26</strong> times and prefers a determiner. <span class="mono">axiom</span> runs the other way: it appears in the <em>plural</em> more often than the singular, because an axiom is not an item on a worklist but a member of a set you are trying to keep small.
+</div>
+
+<p>That is the whole entry. <strong><span class="mono">sorry</span> is a worklist noun; <span class="mono">axiom</span> is a set noun.</strong> A worklist can be emptied while the set is not. Nothing about the two words licenses reading a count of one as a statement about the other.</p>
+
+<h2>3 &middot; The field case, two weeks later</h2>
+
+<p>On 2026-09-18 a live page of this corpus printed <strong>&ldquo;0 sorry in Chain_updated.lean&rdquo;</strong> in a section headed <em>What has been proved</em>. The file has no <span class="mono">sorry</span> and the claim is true. It also carries <strong>three axioms</strong> &mdash; <span class="mono">inner_basin_is_asymmetric</span>, <span class="mono">outer_basin_unbounded</span>, <span class="mono">poincare_collatz</span> &mdash; and the page said two and never named the third.</p>
+
+<div class="box warn">
+<span class="lab">The grammar predicted the error</span>
+An empty worklist was published as though it were an empty set. That is not a slip of attention; it is the substitution WP-94 said the two words do not support, made in the direction the countability data predicts &mdash; from the word you can count down to zero, to the word you cannot.
+</div>
+
+<p>The same page displayed <span class="mono">spiral_return_exists</span> as proved. It takes <span class="mono">h_second_circuit : G.iter 128 x₀ ≠ x₀</span> and closes with <span class="mono">exact h_second_circuit</span>. The kernel certifies the implication; the prose claimed the antecedent. <strong>A theorem that assumes its conclusion kernel-checks.</strong></p>
+
+<h2>4 &middot; What the reference actually says, and what it does not</h2>
+
+<p>The corpus's axiom gate reads <span class="mono">#print axioms</span> and accepts <span class="mono">[propext, Classical.choice, Quot.sound]</span>. Located in <em>Theorem Proving in Lean</em>:</p>
+
+<div class="tblwrap">
+<table>
+<tr><th>term</th><th>where</th></tr>
+<tr><td><span class="mono">propext</span></td><td>ch.&nbsp;12 <em>Axioms and Computation</em>; §12.3 Function Extensionality &mdash; 6 pages</td></tr>
+<tr><td><span class="mono">Quot.sound</span></td><td>§12.4 <em>Quotients</em> &mdash; 2 pages</td></tr>
+<tr><td><span class="mono">noncomputable</span></td><td>ch.&nbsp;12 &mdash; 5 pages</td></tr>
+<tr><td><span class="mono">sorry</span></td><td>15 pages &middot; and 53 printed pages of <em>Mathematics in Lean</em>, first p.&nbsp;11</td></tr>
+<tr><td><span class="mono">#print axioms</span></td><td><strong>absent from the reference entirely</strong></td></tr>
+<tr><td><span class="mono">Classical.choice</span></td><td>not found under this spelling; the axiom is discussed in ch.&nbsp;12, the identifier is not</td></tr>
+</table>
+<p style="font-size:.8rem;color:var(--dim);margin-top:.4rem">TPiL carries no page numbers this reader can locate — 3 of 206 — so it is addressed by chapter and section, which is how the book is cited anyway.</p>
+</div>
+
+<div class="box warn">
+<span class="lab">The gate is named after a command its own reference never mentions</span>
+Chapter 12 defines the three axioms the gate accepts and explains why admitting them costs computability. The <em>command</em> that reports them appears nowhere in the book. The gate was assembled from the axioms' definitions plus tooling knowledge the reference does not carry &mdash; which is what building a practice next to an unopened shelf produces: correct, and unable to say why.
+</div>
+
+<h2>5 &middot; The entry, stated</h2>
+
+<ol>
+<li><span class="mono">sorry</span> counts. Its absence is a claim about a worklist and about nothing else.</li>
+<li><span class="mono">axiom</span> does not count; it belongs to a set. Its members must be <em>named</em>, because a number is not a description of a set.</li>
+<li><span class="mono">#print axioms</span> is the verdict, and it reports the second, not the first.</li>
+<li>A theorem's hypotheses are part of what it says. The kernel certifies an implication; only a reader certifies that the antecedent holds of anything.</li>
+</ol>
+
+<h2>6 &middot; Open</h2>
+<ul>
+<li>(i) The Isabelle, Coq and avionics rows are still stated from familiarity. WP-94 marks them OPEN; no primary source for them is held. <span class="mono">[OPEN]</span></li>
+<li>(ii) Whether Isabelle's <span class="mono">sorry</span> predates Lean's &mdash; WP-94 §4's pivot depends on it. <span class="mono">[OPEN]</span></li>
+<li>(iii) <span class="mono">Classical.choice</span> under its identifier spelling. <span class="mono">[OPEN]</span></li>
+</ul>
+
+<h2>7 &middot; References</h2>
+<ol class="refs">
+<li><a href="../book6/wp94-one-hole-five-words.html">WP-94 &middot; One Hole, Five Words</a> &mdash; the census and the countability finding, cited not recomputed.</li>
+<li>Avigad, de Moura &amp; Kong, <em>Theorem Proving in Lean</em> &middot; Avigad &amp; Massot, <em>Mathematics in Lean</em> v4.19.0. sha256 in <span class="mono">docs/floor-texts.tsv</span>.</li>
+<li><span class="mono">tools/book19_ch01_verify.py</span> &mdash; exit 0, 2026-09-19.</li>
+</ol>
+
+</div>
+
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; <a href="index.html">Book XIX</a><br>
+Ch 1 &middot; 2026-09-19 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">A lexical entry and one field case. No new mathematics. No text reproduced; addresses located by script.</div>
+</div></footer>
+</body>
+</html>
