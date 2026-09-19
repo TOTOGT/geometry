@@ -16,7 +16,8 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 Seventeen standing rules were spread over 2 600 lines, interleaved with dated
 narrative and forty defect records. Nothing moved when this index was written on
-2026-09-13 — the rules are where they were. What changed is that they can now be
+2026-09-13 — the rules are where they were. **There are twenty-three now**; R20
+to R23 were set after that date and their sections are in this file too. What changed is that they can now be
 found without reading the file. Each line gives the rule and the heading to grep
 for. Six different sections are titled "What NOT to do"; they belong to the rule
 above each of them.
@@ -45,6 +46,7 @@ above each of them.
 | R20 | **A theorem that assumes its conclusion still kernel-checks.** No axiom gate sees it; vacuity scanning catches a different shape. Read the hypotheses of any theorem cited as evidence. | `## The assumed-conclusion gap` |
 | R21 | **Tag the base before the superstructure.** An evidence tag on a chapter resting on an untagged assumption is decoration. | `## Foundations before superstructure` |
 | R22 | **Green Lean comes home.** A `.lean` file that lives in another repo but is run against geometry moves INTO geometry once it compiles clean. Out-of-repo Lean is a claim nobody here can check. | `## Green Lean comes home` |
+| R23 | **Evidence tags live in the master index.** A page's tags are a derived fact about that page, so by R8 they are generated, never hand-listed. `tools/build_indexes.py` reads them off every page and prints them on every row. | `## Evidence tags live in the master index` |
 
 R4 is the one that proves the point. It was written on 2026-09-09, it is correct,
 and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
@@ -116,6 +118,11 @@ Corrected in `CLAUDE.md` and in the tool's docstring, both dated.
 
 **So the order is not what it looked like, and F3 is much smaller than it looked.** Two renumberings and a vocabulary decision stand between here and tagging Book IV. Both are Pablo's call and both are cheap.
 
+### R23 — evidence tags now live in the master index
+Set today by Pablo: *"when you run index, master index, tags go in the master index, they should live there."* `tools/build_indexes.py` reads them off every page during the crawl it was already doing and prints, on each row: the evidence tags the page carries, how many numbered claims it makes, and an amber **`claims · untagged`** chip when it makes claims and carries none. The tag words join the search haystack, so the box on the page is the query language — type `untagged` for the work list, `shown` or `open` for everything claiming either.
+
+**The first run resized the whole tagging problem.** Across 762 files: **152 pages make numbered claims and 126 carry no evidence tag.** Not 34, not Book IV's 24 — one hundred and twenty-six. Every earlier count in this file was a count of the corner somebody had already looked at. Header stats on `master-index.html` now carry both numbers, so the next session cannot inherit a stale one.
+
 ### Checked and clean — ch05's Theorem 5.1
 `ch22-gauss-map` says Ch 5's Theorem 5.1 *"as printed contradicts Bäcklund"* and points at ch23 for the repair. That reads like an unflagged error in a published chapter, so it was checked: **ch05 carries the correction itself**, immediately after the theorem — the Pfaffian-rank argument, the note that the Sator correspondence of §5.2 is untouched, and a forward link to `ch23-duality-discriminant.html`. `ch23` delivers the repair in full. **No defect. The corpus is honest here.** Recorded so nobody spends the afternoon re-finding it.
 
@@ -131,9 +138,10 @@ Its chapters live **at the repo root**, not under `book3/` — `vol3-minibeast.h
 3. **Eighteen of thirty-four base-layer claims are UNMATCHED** (53%) — a reading job, not a script. `UNMATCHED` is not `UNPROVED`; the script cannot tell "no Lean exists" from "topic matching missed it", and 53% is too large to leave undecided.
 4. **The assumed-conclusion gap (R20).** `spiral_return_exists` takes *"the 128-orbit does not return"* as a hypothesis and closes `exact h_second_circuit`. Kernel-checks clean. **No instrument here looks for a hypothesis that is the conclusion.** The offending theorem is in `io`/`AXLE`, not geometry.
 5. **22 theorems depend on `sorryAx`**, named in `tools/verify-audit/2026-09-09/`. Every published page citing one **does** disclose it — checked 2026-09-18, `book4/ch12.html` included. No undisclosed claim found. `[SHOWN]`
-6. **Green Lean comes home (R22).** `vol1-proofs` branch `port-v4.32` is on the remote at `5e49766` — the v4.14→v4.32 port, **not built on this desk, no toolchain**. CI is the judge. Green → the file moves into geometry with its axiom report and the 82 claims get tagged. Red → the error list is the next work, and it is a list now, not an unknown. Step 2 of 4.
-7. **WP-41's per-person cost, corrected twice** (`2ba1377`): $100–200k is the price of a *destination*, not of moving — people move themselves for hundreds to thousands, and IOM recorded 7,904 deaths on migration routes in 2025. And the figure is denominated in a currency whose meaning is conditional on the scenario not arriving. Neither end re-derived. `[OPEN]`
-8. Carried: WP-124 collision (owner's call); `ch-strogatz` and Chapter R §VI readability; k₂₁₀ needs the printed page; 60 of 122 scripts record no limits; WP-127 gaps Q5 (the 12–22% yield band is unsourced) and Q7 (ILUC/CORSIA/ReFuelEU/RenovaBio certification, which gates the SAF commercial thread); Book X ch06 gap P3 (Moyo vs coordination — the one genuinely unfinished argument).
+6. **Book IV's two copies — the work list now exists.** `tools/book4_reconcile.py`, new 2026-09-19. The 2026-08-30 reading that *every* shared chapter differs was the copyright footer being counted as content: **10 of 31 are identical**, 4 are geometry-ahead, 1 (`index.html`) is GTCT-ahead, and **16 need reading**. Two things are one decision away and neither is done here, because both change a published site: the 10 identical GTCT copies can become pointers today per this file's own rule, and the **5 chapters that exist only in GTCT** (`chE-gtct`, `chIV-15`, `chIV-axioms`, `chIV-preface`, `chIV-preface-impa`) belong in geometry. Say the word and they move.
+7. **Green Lean comes home (R22).** `vol1-proofs` branch `port-v4.32` is on the remote at `5e49766` — the v4.14→v4.32 port, **not built on this desk, no toolchain**. CI is the judge. Green → the file moves into geometry with its axiom report and the 82 claims get tagged. Red → the error list is the next work, and it is a list now, not an unknown. Step 2 of 4.
+8. **WP-41's per-person cost, corrected twice** (`2ba1377`): $100–200k is the price of a *destination*, not of moving — people move themselves for hundreds to thousands, and IOM recorded 7,904 deaths on migration routes in 2025. And the figure is denominated in a currency whose meaning is conditional on the scenario not arriving. Neither end re-derived. `[OPEN]`
+9. Carried: WP-124 collision (owner's call); `ch-strogatz` and Chapter R §VI readability; k₂₁₀ needs the printed page; 60 of 122 scripts record no limits; WP-127 gaps Q5 (the 12–22% yield band is unsourced) and Q7 (ILUC/CORSIA/ReFuelEU/RenovaBio certification, which gates the SAF commercial thread); Book X ch06 gap P3 (Moyo vs coordination — the one genuinely unfinished argument).
 
 ### Other repositories — full table in `docs/HANDOFF-2026-09-18.md` §5
 **vol1-proofs**: branch `port-v4.32` pushed at `5e49766`; `main` restored at the v4.14 pin, counts reconciled to 82, forward debt in `docs/MATHLIB-FORWARD-v4.32.md`. **Do not link it anywhere until CI is green.** Unpushed elsewhere: **neuro 5** (needs credentials; public, names a clinic), **AXLE 1**. Five more have dirty trees, **not inspected**. Fifteen local repos is itself the mechanism behind "I trust things are done and they aren't."
@@ -278,9 +286,29 @@ notebooks and PDFs — not chapter HTML.
 **Why this rule exists.** Sessions run under different accounts and do not share
 memory. This file is the only channel between them, so a convention that is not
 written here does not survive the session that invented it. Book 4 is the proof:
-it exists in `geometry/book4/` (50 HTML files) and in `GTCT/book4/` (36), and as
-measured 2026-08-30 **every single shared chapter differs** — with drift running
-in *both* directions, so neither copy is simply newer:
+it exists in `geometry/book4/` and in `GTCT/book4/`, with drift running in *both*
+directions, so neither copy is simply newer.
+
+**Re-measured 2026-09-19 by `tools/book4_reconcile.py`.** `geometry/book4` now
+has **59** HTML files, `GTCT/book4` **36**, and **31 are shared**. The
+2026-08-30 reading — *"every single shared chapter differs"* — **was an artifact
+of counting the copyright footer as content.** Excluding copyright, licence,
+ISBN, doi and ORCID lines:
+
+| reading | chapters |
+|---|---|
+| **identical** | **10** — `ch-faraday`, `ch00-student-edition`, `chE-gtct-alt`, `chIV-appendices`, `chIV-correspondence`, `chIV-emergence`, `chIV-field`, `chIV-operators`, `chIV-recursion`, `chIV-time` |
+| geometry ahead | 4 — `ch01`, `ch04`, `ch06`, `gomc-opus` |
+| GTCT ahead | 1 — `index.html` (17 paragraphs geometry does not have) |
+| **BOTH WAYS — must be read** | **16** |
+
+**So the reconciliation is 16 chapters, not 31**, plus one file where GTCT is
+simply ahead. The worst are `ch07` (geometry 30 paragraphs / GTCT 82, similarity
+0.007), `ch08` (39/75, 0.013), `ch09` (38/29, 0.013), `ch12` (92/9) and `ch02`
+(57/36). `ch11-catgt` is 19/1 and `ch15` is 1/1 — nearly done. Run the tool for
+the current table; do not copy these numbers forward without re-running it.
+
+The old sizes, kept because they are what the 2026-08-30 session saw:
 
 ```
 ch07.html   geometry 35,207 B   GTCT 88,789 B     ← GTCT ahead
@@ -289,8 +317,13 @@ ch02.html   geometry 47,867 B   GTCT 25,212 B     ← geometry ahead
 ch12.html   geometry 35,138 B   GTCT 30,473 B     ← geometry ahead
 ```
 
-Fourteen chapters exist only in geometry (`ch15-complex-turn`, `ch16`–`ch20`
-lattices, `ch-hawking`, `ch06b`, `ch-build-2river`, `ch6-resonance`, …).
+**Twenty-eight** chapters exist only in geometry as of 2026-09-19 (the `ch16`–`ch20`
+lattices, `ch21`–`ch28`, `ch15-complex-turn`, `ch06b`, `ch-build-2river`,
+`rh-paper`, `living-book`, `galperin-billiards`, …) — it was fourteen on
+2026-08-30. **Five exist only in GTCT**: `chE-gtct`, `chIV-15`, `chIV-axioms`,
+`chIV-preface`, `chIV-preface-impa`. Those five are the only pages in Book IV
+that the canonical repo does not hold, and by this section's own rule they
+belong in geometry.
 
 **How to consolidate — this is a reconciliation, not a copy.** A blind
 `cp` in either direction is silent data loss. Per file: diff the two, merge the
@@ -985,6 +1018,36 @@ sits under is named nowhere in it, and `docs/math-placement-map.md` has no row f
 Volume III. The material is present and heavy — 50 root files mention limit
 cycles, 16 mention Lorenz — so the gap is in the vocabulary and the map, not in
 the work.
+
+## Evidence tags live in the master index
+
+**R23. Set 2026-09-19 by Pablo — "when you run index, master index, tags go in
+the master index, they should live there."**
+
+An evidence tag is a derived fact about a page, which puts it under R8: generated,
+never hand-maintained. `tools/build_indexes.py` now reads every page in the crawl
+it was already doing and prints, on each row of `master-index.html` and of the
+folder indexes:
+
+- every evidence tag the page carries, with a count when it carries one more than
+  once — **SHOWN, CITED, MODEL, CONJECTURE, OPEN, PARTIAL, PROVED, COMPUTED,
+  ASSUMPTION, DEFINITION**;
+- how many distinct numbered claims the page makes;
+- an **amber `claims · untagged`** chip when a page makes claims and carries no tag.
+
+The tag words join the search haystack, so the box on the page is the query
+language: type `untagged` for the tagging work list, `shown` for every page that
+claims it, `open` for every open question in the corpus.
+
+**What the first run found, 2026-09-19, across 762 files:** **152 pages make
+numbered claims and 126 of them carry no evidence tag at all.** Not 34, and not
+Book IV's 24 — one hundred and twenty-six. The base layer was never the only
+unmarked layer; it was the layer small enough that someone had counted it.
+
+**Two vocabularies are still in use** — the foundations propose SHOWN/CITED/MODEL/
+CONJECTURE/OPEN, Book IV's pages carry PROVED and COMPUTED. The index reads both
+and reports what each page says. Choosing between them is editorial and this
+script does not do it.
 
 ## File indexes — generated, never hand-maintained
 

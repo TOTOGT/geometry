@@ -160,10 +160,43 @@ def title_of(src: str, rel: str) -> str:
     return posixpath.basename(rel)
 
 
-def crawl(files: list[str]) -> tuple[dict[str, int], dict[str, str]]:
+# Epistemic tags live in the MASTER INDEX. Set 2026-09-19 by Pablo: the tags a
+# page carries are a derived fact about that page, and R8 says derived facts are
+# generated, never hand-maintained. Before this they existed only as markup
+# scattered through the chapters, so "which pages make claims and which of those
+# are marked" could not be answered without a one-off script.
+#
+# Two vocabularies are in use and neither has been retired -- the foundations
+# propose SHOWN/CITED/MODEL/CONJECTURE/OPEN, Book IV's pages carry
+# PROVED/COMPUTED as well. Both are read here. Reconciling them is an editorial
+# decision and this script does not make it; it reports what each page says.
+TAGWORDS = ("SHOWN", "CITED", "MODEL", "CONJECTURE", "OPEN", "PARTIAL",
+            "PROVED", "COMPUTED", "ASSUMPTION", "DEFINITION")
+TAGRX = re.compile(r">(" + "|".join(TAGWORDS) + r")<")
+# (?![.\d]) keeps "Theorem B.1" from being counted as a "Theorem B"
+CLAIMRX = re.compile(r"\b(?:Theorem|Proposition|Lemma|Corollary|Conjecture)\s+"
+                     r"(?:[0-9]+(?:\.[0-9]+)*|[A-Z](?![.\d]))\b")
+STRIPRX = re.compile(r"<(style|script).*?</\1>", re.S | re.I)
+
+
+def marks_of(src: str) -> tuple[dict[str, int], int]:
+    """The epistemic tags a page carries, and how many numbered claims it makes.
+
+    A page with claims and no tags is the tagging work list. A page with neither
+    is narrative or apparatus and is not part of that job.
+    """
+    body = STRIPRX.sub("", src)
+    tags: dict[str, int] = {}
+    for t in TAGRX.findall(body):
+        tags[t] = tags.get(t, 0) + 1
+    return tags, len(set(CLAIMRX.findall(body)))
+
+
+def crawl(files: list[str]) -> tuple[dict[str, int], dict[str, str], dict[str, tuple]]:
     known = set(files)
     inbound: dict[str, set[str]] = {f: set() for f in files}
     titles: dict[str, str] = {}
+    marks: dict[str, tuple] = {}
 
     def resolve(target: str, base_dir: str) -> str | None:
         if target.startswith(("http://", "https://", "mailto:", "javascript:", "data:", "//", "#")):
@@ -180,6 +213,7 @@ def crawl(files: list[str]) -> tuple[dict[str, int], dict[str, str]]:
     for rel in files:
         src = (ROOT / rel).read_text(encoding="utf-8", errors="replace")
         titles[rel] = title_of(src, rel)
+        marks[rel] = marks_of(src)
         base = posixpath.dirname(rel)
         for t in HREF.findall(src):
             r = resolve(t, base)
@@ -191,7 +225,7 @@ def crawl(files: list[str]) -> tuple[dict[str, int], dict[str, str]]:
                 if r and r != rel:
                     inbound[r].add(rel)
 
-    return {k: len(v) for k, v in inbound.items()}, titles
+    return {k: len(v) for k, v in inbound.items()}, titles, marks
 
 
 # The curated conventions. SOURCE OF TRUTH is the table in CLAUDE.md under
@@ -281,6 +315,9 @@ main{padding:0 1.5rem 4rem; max-width:920px; margin:0 auto;}
 .tag.kind{background:rgba(122,148,113,.14);color:var(--moss);border:1px solid rgba(122,148,113,.3);margin-right:.4rem}
 .tag.orphan{background:rgba(210,162,76,.14); color:var(--amber); border:1px solid rgba(210,162,76,.35);}
 .tag.linked{background:rgba(122,148,113,.12); color:var(--moss); border:1px solid rgba(122,148,113,.25);}
+.tag.ev{background:rgba(193,97,59,.12); color:var(--clay); border:1px solid rgba(193,97,59,.3); margin-right:.35rem;}
+.tag.claims{background:rgba(236,223,196,.07); color:var(--muted); border:1px solid var(--line); margin-right:.35rem;}
+.tag.untagged{background:rgba(210,162,76,.13); color:var(--amber); border:1px solid rgba(210,162,76,.35); margin-right:.35rem;}
 .hidden{display:none !important;}
 .empty{color:var(--muted); padding:2rem 0; font-style:italic; display:none;}
 footer{padding:2rem 1.5rem 3rem; color:var(--muted); font-size:.8rem; max-width:920px; margin:0 auto;}
@@ -323,18 +360,29 @@ def esc(s: str) -> str:
     return html.escape(s, quote=True)
 
 
-def row_html(rel: str, title: str, n: int, prefix: str = "") -> str:
+def row_html(rel: str, title: str, n: int, prefix: str = "",
+             mark: tuple | None = None) -> str:
     orphan = n == 0
     lab = label_of(rel)
-    # the label joins the search haystack, so "course week" finds all 48
-    hay = esc(f"{title} {rel} {lab}".lower())
+    tags, claims = mark if mark else ({}, 0)
+    # tag words and "untagged" join the search haystack, so typing "untagged"
+    # in the box IS the tagging work list, and "shown" is every page that claims it
+    hay_extra = " ".join(sorted(tags)) + (" untagged" if claims and not tags else "")
+    hay = esc(f"{title} {rel} {lab} {hay_extra}".lower())
     tag = ('<span class="tag orphan">orphaned</span>' if orphan else
            f'<span class="tag linked">{n} link{"" if n == 1 else "s"}</span>')
     kind = f'<span class="tag kind">{esc(lab)}</span>' if lab else ""
+    ev = "".join(f'<span class="tag ev">{esc(k)}{"" if v == 1 else "&times;%d" % v}</span>'
+                 for k, v in sorted(tags.items()))
+    if claims:
+        ev += (f'<span class="tag {"untagged" if not tags else "claims"}">'
+               f'{claims} claim{"" if claims == 1 else "s"}'
+               f'{"" if tags else " &middot; untagged"}</span>')
     return (f'<div class="row" data-hay="{hay}" data-orphan="{"1" if orphan else "0"}"'
-            f' data-label="{esc(lab)}">\n'
+            f' data-label="{esc(lab)}" data-claims="{claims}"'
+            f' data-tags="{esc(" ".join(sorted(tags)))}">\n'
             f'  <a href="{esc(prefix + rel)}">{esc(title)}'
-            f'<span class="path mono">{esc(rel)}</span></a>\n  {kind}{tag}\n</div>')
+            f'<span class="path mono">{esc(rel)}</span></a>\n  {kind}{ev}{tag}\n</div>')
 
 
 def page(title: str, eyebrow: str, heading: str, sub: str, stats: str,
@@ -375,7 +423,7 @@ def page(title: str, eyebrow: str, heading: str, sub: str, stats: str,
 
 def main() -> None:
     files = discover()
-    counts, titles = crawl(files)
+    counts, titles, marks = crawl(files)
 
     groups: dict[str, list[str]] = {slug: [] for slug, _, _ in FOLDERS}
     for rel in files:
@@ -389,7 +437,8 @@ def main() -> None:
     for slug, name, _ in FOLDERS:
         members = sorted(groups[slug], key=lambda r: titles[r].lower())
         n_orph = sum(1 for m in members if counts[m] == 0)
-        rows = "\n".join(row_html(m, titles[m], counts[m]) for m in members)
+        rows = "\n".join(row_html(m, titles[m], counts[m], mark=marks[m])
+                         for m in members)
         body = f'<div class="group"><h2>{esc(name)}</h2>\n{rows}\n</div>'
         stats = (f'<div class="stat"><b>{len(members)}</b><span>files</span></div>'
                  f'<div class="stat"><b style="color:var(--amber)">{n_orph}</b><span>orphaned</span></div>')
@@ -414,7 +463,8 @@ def main() -> None:
         members = sorted(groups[slug], key=lambda r: titles[r].lower())
         if not members:
             continue
-        rows = "\n".join(row_html(m, titles[m], counts[m]) for m in members)
+        rows = "\n".join(row_html(m, titles[m], counts[m], mark=marks[m])
+                         for m in members)
         blocks.append(
             f'<div class="group"><h2>{esc(name)} &nbsp;<span class="mono" '
             f'style="color:var(--muted); text-transform:none; letter-spacing:0;">&mdash; '
@@ -446,8 +496,12 @@ def main() -> None:
         scope_note = ('Scope: git was not available, so the denominator could not be '
                       'read. This count is the crawl only.<br>')
 
+    claiming = sum(1 for f in files if marks[f][1])
+    untagged = sum(1 for f in files if marks[f][1] and not marks[f][0])
     stats = (f'<div class="stat"><b>{total}</b><span>total files</span></div>'
              f'<div class="stat"><b style="color:var(--amber)">{orphans}</b><span>orphaned</span></div>'
+             f'<div class="stat"><b>{claiming}</b><span>pages making claims</span></div>'
+             f'<div class="stat"><b style="color:var(--amber)">{untagged}</b><span>claims, no tag</span></div>'
              f'<div class="stat"><b>{len(FOLDERS)}</b><span>books / folders</span></div>')
     (ROOT / "master-index.html").write_text(page(
         f"Master Index · {REPO} · Principia Orthogona",
@@ -457,7 +511,13 @@ def main() -> None:
         f"not the hand-built nav. Search across all {total} chapters, papers and "
         f"pages at once. Amber tags mark files with zero inbound links from anywhere else "
         f"in the repo; the generated indexes themselves are excluded as link sources, so "
-        f"they cannot mask an orphan.",
+        f"they cannot mask an orphan. "
+        f"<b>Evidence tags live here.</b> Each row shows the tags its page carries "
+        f"&mdash; SHOWN, CITED, MODEL, CONJECTURE, OPEN, PROVED, COMPUTED &mdash; and how "
+        f"many numbered claims it makes. A page with claims and no tag is marked amber; "
+        f"type <span class=\"mono\">untagged</span> in the box to see only those, or a "
+        f"tag word to see every page that carries it. Two vocabularies are in use and "
+        f"this page reports both rather than choosing between them.",
         stats, f'<div class="folderlinks">{links}</div>', "\n".join(blocks),
         scope=scope_note), encoding="utf-8")
 
