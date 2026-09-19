@@ -1,8 +1,15 @@
 /-
-Volume XI — the algebraic floor.
+Volume XXXIII — rung 33, the top of the floor ladder.
 
-`docs/math-placement-map.md` gives Volume XI the role "the algebraic floor" and
-records that it has no core yet. This is the core.
+This is the ceiling the rest of the ladder is climbing toward, which is why it
+is written first: a reader who skips to the end of the series lands here, and
+should find the payload rather than a summary.
+
+A note on where this file is NOT. `docs/math-placement-map.md` gives Volume XI
+the role "the algebraic floor" and lists its subject as number fields, units,
+class groups and K-theory. The shift index is none of those — it is an index
+computation on a free module — so it does not belong to XI, and an earlier
+draft of this file that claimed XI was wrong about its own address.
 
 WHAT IS PROVED HERE
 
