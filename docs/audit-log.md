@@ -8918,3 +8918,40 @@ The pattern is the volume's thesis in one pass: three claims stated from working
 familiarity, checked against sources within an hour of their arriving, yielding one
 narrowing, one withdrawal and one honest negative. No new mathematics. Only opening
 the file.
+
+---
+
+## 2026-09-19 · The Coherence Bridge similarity test: 0 of 55
+
+Book XVII ch 1's translation table found one row that is a genuine identity rather
+than a correspondence of practice: **similarity of matrices**, two matrices being
+similar exactly when they represent one linear map in different bases. That is the
+Coherence Bridge's claim in a standard term, and unlike the claim it comes with a
+decision procedure. `tools/coherence_similarity.py` parses the table out of
+`book4/hub.html` and runs it.
+
+| test | invariant | matching pairs |
+|---|---|---|
+| linear similarity | the eigenvalue pair μ ± iω | **0 of 55** |
+| similarity up to time-rescaling | the ratio μ/ω | **0 of 55** |
+| topological conjugacy `[standard]` | being a spiral sink | 11 of 11 |
+
+Closest pair under the most generous reading: Immune adaptation and Market
+volatility, μ/ω = −2.4444 against −2.3929. Near, not equal. Nothing else within 0.11.
+
+**The reading.** The claim is true at the level where it carries no information and
+false at every level where it would. Every 2D linear spiral sink is topologically
+conjugate to every other, so eleven of eleven qualify — and so would eleven damped
+oscillators picked at random. Ask for the same map in a new basis, or even the same
+map after rescaling the clock, and the count is zero.
+
+**`ch20-coherence-bridge.html` already had this right** without the number: "six
+systems have been shown to admit the same normal form with different invariants …
+it is not yet a categorical equivalence, and the difference matters." The chapter
+also already lists "parameter drift" among the ways to falsify itself. What this
+adds is that the falsification does not need new data — the table falsifies the
+strong reading on its own figures.
+
+**Four pages still carry the unhedged form** — `vol2-dashboard.html`,
+`ch-e-gtct.html`, `ch24-seed-sentences.html` (which defends it) and the TO deploy.
+Not edited here; an author's call on published pages. `[OPEN]`
