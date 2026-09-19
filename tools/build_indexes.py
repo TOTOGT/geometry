@@ -91,6 +91,7 @@ FOLDERS: list[tuple[str, str, str]] = [
     # -- nine chapters plus index.html plus ch-mathlib-verify.py. A directory
     # listing is not a chapter count. Corrected 2026-09-16.
     ("book13", "Book XIII — Category Theory", "book13"),
+    ("book17", "Book XVII — The Machine Floor", "book17"),
     ("omega", "Omega Point", "omega"),
     ("HVEH", "HVEH", "HVEH"),
     ("AMonster", "A Monster's Law", "AMonster"),
