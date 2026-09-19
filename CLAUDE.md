@@ -128,6 +128,19 @@ Set today by Pablo: *"when you run index, master index, tags go in the master in
 
 These may well be two different quantities — a canonical exponent from the Whitney fold and a transverse exponent of the limit cycle need not be the same number. **That is the point:** nothing in either repo says which, so a reader meeting the two theorems four lines apart cannot tell a distinction from a discrepancy. What settles it is one sentence in `PrincipiaVol1.lean` naming the two quantities and one in Book II saying which Proposition 4.3 uses. `[OPEN]`
 
+### ε₀ = 1/3 is an input, not a result — formalized 2026-09-19
+Pursuing the −2/−3 question to the bottom turned up a second and larger gap, and `book2/lean/StabilityRadius.lean` now makes it machine-visible.
+
+**There are two different functions called `V`.** PrincipiaVol1's is the cubic potential $V(q) = q^3 - 3q$, with $V'(1)=0$, $V''(1)=6$, $V(1)=-2$. Book II's, in Theorem 3.2, is a **stochastic Lyapunov function**: $\mathcal{L}V \le -cV + \kappa_{\text{noise}}\|\sigma\|^2$ with $\kappa_{\text{noise}} = \tfrac12\sup\|\mathrm{Hess}\,V\|$. Same letter, different objects, and nothing says so.
+
+**And the three numbers are three different things.** $-2$ is the *value* $V(1)$, and separately the asymptotic radial coefficient of Proposition 4.3's normal form $\dot\rho = -2(1-e^{-z})\rho$ — which **decreases toward $-2$ and never attains it**, being $0$ at $z=0$. $-3$ is $-V''(1)/2$, a Morse quantity at the critical point. `mu_dm3_neg` proves only that the literal $-2$ is negative.
+
+**Proposition 4.4 does not close.** It reads $\varepsilon_0 = |\mu_{\max}|/(2(1+\sup_\Gamma\|\mathrm{Hess}\,V\|)) = 2/(2(1+2)) = 1/3$, so it is **using $\sup\|\mathrm{Hess}\,V\| = 2$ and never deriving it.** If that $V$ were the cubic, $V''(1)=6$ and $\varepsilon_0 = 1/7$, giving $\tau\varepsilon_0 = 2/7$ rather than $2/3$. `stabilityRadius := 1/3` is a **definition** in the Lean, so `noiseTolerance` proves $2/3$ from an assumption. `epsilon0_eq_third_iff` now proves $\varepsilon_0 = 1/3 \iff S = 2$, which is the honest content.
+
+**This does not say Proposition 4.4 is wrong.** It says it is *underived*, which is more fixable: one sentence naming which `V` carries the bound and where the 2 comes from closes it. Until then ε₀ = 1/3 is an input in the shape of a result — R20 exactly. `[OPEN]`
+
+**The Lean is NOT BUILT** — no toolchain on this desk. `book2/lean/StabilityRadius-verify.py` checks every arithmetic claim in it and passes, so the file is falsifiable today; that is not a compile. One theorem there, `radialCoeff_gt_neg_two`, **cannot be checked numerically at all**: it holds for every real $z$, but in binary64 the coefficient rounds to exactly $-2$ past $z = 37.43$, where $e^{-z}$ falls below half an ulp. A floating-point search would report a counterexample and be wrong. That is a small concrete argument for formalising rather than sampling.
+
 ### Checked and clean — ch05's Theorem 5.1
 `ch22-gauss-map` says Ch 5's Theorem 5.1 *"as printed contradicts Bäcklund"* and points at ch23 for the repair. That reads like an unflagged error in a published chapter, so it was checked: **ch05 carries the correction itself**, immediately after the theorem — the Pfaffian-rank argument, the note that the Sator correspondence of §5.2 is untouched, and a forward link to `ch23-duality-discriminant.html`. `ch23` delivers the repair in full. **No defect. The corpus is honest here.** Recorded so nobody spends the afternoon re-finding it.
 
