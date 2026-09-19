@@ -174,7 +174,7 @@ carry **50 numbered claims and 9 evidence tags between them**.
 
 **Corrected 2026-09-19.** This rule used to continue "Book IV's 59 chapters are
 tagged throughout. The base is the only unmarked layer." `tools/superstructure_census.py`
-counted them: **31 of Book IV's 59 files carry neither a numbered claim nor a
+counted them: **32 of Book IV's 59 files carry neither a numbered claim nor a
 tag, and 11 carry any tag at all.** The base was not the only unmarked layer.
 It was the layer that had been counted.
 
