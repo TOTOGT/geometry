@@ -32,10 +32,17 @@ OWN = re.compile(r"principia orthogona|g6 ?llc|generative orthogonal matrix|"
                  r"grossi", re.I)
 
 # filename -> (rung, volume) from WP-82 §3. An overlay, applied after the scan.
+#
+# 2026-09-19: the volumes here were XI, XII and XVI, which read WP-82's rung
+# ladder through a second numbering that nothing wrote down. The rule now is
+# that the rung number IS the volume number, so rung 28 is Volume XXVIII and
+# not XI. Volume XI is the bottom of the teaching ladder (what a numeral
+# names); index theory is 28; noncommutative geometry is 33. See the entry
+# of that date in docs/audit-log.md for how the collision was found.
 RUNGS = {
- "Kbook.pdf":                                   (28, "XI"),
- "2112.11166v7.pdf":                            (29, "XII"),
- "Connes–Marcolli Noncommutative Algebra.pdf":  (33, "XVI"),
+ "Kbook.pdf":                                   (28, "XXVIII"),
+ "2112.11166v7.pdf":                            (29, "XXIX"),
+ "Connes–Marcolli Noncommutative Algebra.pdf":  (33, "XXXIII"),
 }
 
 def sha256(p, block=1 << 20):

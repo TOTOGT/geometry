@@ -1,15 +1,23 @@
 /-
-Volume XXXIII — rung 33, the top of the floor ladder.
+Volume XXVIII — rung 28, index theory.
 
-This is the ceiling the rest of the ladder is climbing toward, which is why it
-is written first: a reader who skips to the end of the series lands here, and
-should find the payload rather than a summary.
+WHERE THIS FILE LIVES, AND WHY IT MOVED TWICE
 
-A note on where this file is NOT. `docs/math-placement-map.md` gives Volume XI
-the role "the algebraic floor" and lists its subject as number fields, units,
-class groups and K-theory. The shift index is none of those — it is an index
-computation on a free module — so it does not belong to XI, and an earlier
-draft of this file that claimed XI was wrong about its own address.
+WP-82 orders the rungs by field: rung 28 is K-theory and index theory, rung 33
+is noncommutative geometry. The rule this corpus now follows is that the rung
+number IS the volume number, so index theory is Volume XXVIII and this file
+belongs here.
+
+It was committed first to book11, on the strength of a placement map that gave
+Volume XI the role "the algebraic floor"; then moved to book33, on the reading
+that the floor ladder's top rung was 33. Neither was right, and the reason is
+worth keeping: two documents were numbering the same word differently, and a
+file cannot be addressed correctly until that is settled. book33 is reserved
+for noncommutative geometry, which is a different subject with a different
+source on the shelf (Connes & Marcolli, 705pp, held).
+
+A reader who skips to the end of the ladder lands here, so the payload is
+stated before anything else.
 
 WHAT IS PROVED HERE
 
