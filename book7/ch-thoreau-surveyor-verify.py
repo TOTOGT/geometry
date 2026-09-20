@@ -26,7 +26,7 @@ days-per-degree, which is compared against the published rate).
 
 [4] checks the chronology, [5] reads the chapter file back.
 
-Standard library only.  python3 book7/ch-thoreau-verify.py
+Standard library only.  python3 book7/ch-thoreau-surveyor-verify.py
 """
 
 import math, os, re, sys
@@ -40,7 +40,7 @@ def head(n, t):
     print('\n' + '=' * 68 + '\n  [%s]  %s\n' % (n, t) + '=' * 68)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CHAPTER = os.path.join(HERE, 'ch-thoreau.html')
+CHAPTER = os.path.join(HERE, 'ch-thoreau-surveyor.html')
 
 # ==========================================================================
 head(1, "THOREAU'S RULE, TESTED ON BASINS")
