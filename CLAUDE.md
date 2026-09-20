@@ -89,91 +89,82 @@ into prose. A result recorded only in narrative will be re-derived.
 
 ## HANDOFF — 2026-09-20 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
-### Both repos pushed except one commit
+### State
 
-`geometry` is 1 ahead: `3f6cb0c` (axiom_gate) and `8dbaf5f` (CONVENTIONS R24)
-go up together. `io` is clean through `4d9e128`.
-
-### R24 was set today, and it is the day's whole lesson
-
-Every real find came from running something, not from reading it. The rule and
-its three incidents are in `tools/CONVENTIONS.md` §6 and summarised under
-`## The script runs before the sentence` below. It also exists as a skill,
-`claims-that-recompute`, so it travels between sessions.
+Both repos pushed. R24 was set today — the script runs before the sentence —
+in `tools/CONVENTIONS.md` §6, in the rules table, and as the skill
+`claims-that-recompute` so it survives a session.
 
 ### Book VII gained a Writers wing thesis and three chapters
 
-`ch-poe.html`, `ch-thoreau-surveyor.html`, `ch-freire.html`, each with a verify
-script, all exit 0. The wing's standfirst now names the trait: Ramos, dos
-Anjos, Levi, Poe and Thoreau each filed their most exact work in a container
-the reader was not expecting, and the gate ran on the genre before it reached
-the claim — `K∘F ≠ F∘K` at the scale of a discipline. Freire is the control:
-he made his idea available on purpose and the valley opened in a decade.
+`ch-poe`, `ch-thoreau-surveyor`, `ch-freire`, each with a verify script.
+Ramos, dos Anjos, Levi, Poe and Thoreau each filed their most exact work in a
+container the reader was not expecting — `K∘F ≠ F∘K` at the scale of a
+discipline. Freire is the control. Computed, not asserted: Thoreau's rule
+holds on convex outlines only; dark-sky covering fraction 1.4e-14; the dollar
+ballot at 707 households to 1, majority cast by the top 5.3%.
 
-Findings produced by the scripts, not asserted: Thoreau's length-crosses-
-breadth rule holds on convex outlines (exact on a circle, 0.7% on a 2:1
-ellipse, under 9% convex, 17%+ concave) — it is about the outline, not water,
-and Walden is the most favourable pond there is. The dark-sky covering
-fraction is 1.4e-14 and stars burn out ~1e14 times too soon to fill the sky.
-The dollar ballot, from Fed DFA 2026 Q2: 707 households to 1, majority cast by
-the top 5.3%.
+### CatGT V5 kernel-verified; the zeolite DNLS is open
 
-### I destroyed a chapter and restored it — check this pattern
+13 theorems on `[propext, Classical.choice, Quot.sound]`, Lean 4.33.0-rc1.
+The old `reeb_orbit_advances` proved a fact about a scalar potential, not
+about α_cat — R20 in the wild. The DNLS sign is corrected, and the two larger
+defects behind it are recorded: moments taken against an unnormalised density
+(2.06e-9 of the norm left), and a figure asserting "~2.1 Ų" that no run
+produces. Three breadth measures then split 1–2 on the direction, so it is
+reported open, with the successor's observable pre-registered in
+`io/zeolite_operator_order/DNLS_TWO_CHANNEL_DESIGN.md`.
 
-`book7/ch-thoreau.html` was taken (*Do Lago à Medula*, Thoreau & Arnold,
-Edição Brasil, linked from master-index, series-hub, index-root, index-book7,
-docs/claims.tsv, ch-tatiana). Writing there replaced it and git reported an
-edit, not a loss. Restored byte-identical to `5b8ffa2` (sha b99436dc…), new
-chapter renamed `ch-thoreau-surveyor.html`. `tools/chapter_links.py` now
-refuses a name in use and finds orphans: **19 across 17 volumes** — 9 in
-book4, 9 in book7, 1 in book6. It first said 75, because it read only
-`bookNN/index.html`, and `book4/index.html` is a 2 KB cover pointing at
-`contents.html`, which lists 68 chapters. Following one hop dropped it to 19
-(`db09a1b`). That is R15 committed by the instrument written to find missing
-links. Triage of the remaining 19 is the author's call, not the script's:
-working pages (wp56–59, tutor-card-*), instrument output, and a few that read
-as real chapters with no card anywhere.
+### gcm-framework — yesterday's callout, made
 
-### CatGT V5 is kernel-verified
+"Introduced by Gibbs" was wrong and Etnyre, named in the same sentence, says
+so: Lie introduced contact structures, they reappeared in Gibbs. That clause
+was also the corpus's only occurrence of "Gibbs". The page now states the
+identification — α_cat is α_G = dU − T dS − Ω dJ at dS = 0 — checked on
+200,000 random tangent vectors, exact, and differing off the adiabat by
+exactly T dS. Legendrian submanifolds are adiabats; restoring T dS is open.
 
-13 theorems, all on `[propext, Classical.choice, Quot.sound]`, no sorryAx,
-under Lean 4.33.0-rc1 / Mathlib v4.33.0-rc1 — nineteen minor versions above
-the v4.14.0 io pins. V5 arrived saying its corrections were *not* yet
-kernel-verified; they are now. The old `reeb_orbit_advances` proved a fact
-about a scalar potential F=z−r²θ, not about α_cat=dz−r²dθ, and any F=z+g(r,θ)
-would have proved it — vacuous under a load-bearing name, cited by index.html
-and paper.tex. That is R20 in the wild.
+### Unlisted pages are a backlog, not an exclusion list
 
-### The zeolite DNLS is open, and the observable is pre-registered
+`docs/unlisted.tsv` + `tools/chapter_links.py`. **0 undeclared orphans, 8
+unfinished chapters waiting.** Four of the original thirteen needed reading,
+not writing: one redirect stub, three duplicates where the index links the
+ROOT copy and in one case the longer text is the unlinked one. Those three
+stay REPORTED — which copy is canonical is an editorial call.
 
-Sign corrected to focusing. Two larger defects behind it: moments taken
-against an unnormalised density that dissipation had cut to 2.06e-9, so
-"final variance 3.0e-8" was measuring the decay of the norm (true value
-6.31); and the figure asserted "~2.1 Ų" as literal text no run produces.
-Then three breadth measures split 1–2 on the direction — taking the one that
-agreed would be choosing the measurement to fit the claim. Reported as open.
-`io/zeolite_operator_order/DNLS_TWO_CHANNEL_DESIGN.md` specs the successor
-(channel index ψ_L/ψ_B, folding rate κ(r), escape γ(r)) and pre-registers
-S(MCM-22) > S(ZSM-5) before the code exists.
+The count said 75 before the script followed one hop; `book4/index.html` is a
+cover pointing at `contents.html`, which lists 68 chapters. R15 committed by
+the instrument built to find missing links.
 
-### Watch
+### Vol IV IMPA preface: finished
 
-io CI on `db41e70` is the first time `ContactMorphism.lean` has ever been
-built in CI — it sat in the repo outside every lakefile target until
-2026-09-20. It runs against the pinned v4.14.0, not the 4.33.0-rc1 I verified
-CatGT_Main against. Red there is the target working, not a regression.
+Not a draft — it was unlinked. Now linked, translatable (25 languages, source
+English, autoDisplay off), and carrying a script that checks its own
+load-bearing claim: the group-1 gaps equal the periods exactly, so "the table
+is a helix" is arithmetic, not analogy. Destination corrected to LAW3M,
+19–23 October 2026, Natal, UFRN.
 
 ### Open — in priority order
 
-1. Push `geometry`.
-2. io CI result (above).
-3. Orphan triage, 19 pages.
-4. Book VII: a Fulk V / pedigree-collapse section, specced in conversation,
-   never written. The line: descent from Charlemagne is informative exactly
-   where it is unprovable and provable exactly where it is uninformative;
-   798→1143 is 11–14 generations, so pedigree collapse does not reach him.
-5. The DNLS successor model. New session.
+1. Eight unfinished chapters in `docs/unlisted.tsv`. Read each before writing;
+   the last one turned out to be finished already.
+2. The three book4 duplicates — pick the canonical copy.
+3. `/3M/` and `/3M/law3m.html` still title themselves "Helical Attractors",
+   the wording this series retired on 2026-09-19. Either the rename
+   propagates to GTCT or the reason it does not apply gets written down.
+   Whether the Reeb objection even reaches LAW3M's equations is unchecked.
+4. io CI: ContactMorphism's first build, at the pinned v4.14.0.
+5. The DNLS successor model. Its own session.
+6. A Fulk V / pedigree-collapse section for Book VII, specced in conversation.
 
+### Five instruments mistook a mention for a claim today
+
+axiom_gate on a comment; chapter_links on one file; the R24 section landing
+inside the R20 row because it matched that row's citation of the heading;
+the correction-box scanner on gcm-framework reading a retraction as the claim
+it retracts; and the pale-box contrast fix, where matching one exact style
+string found 14 of 17. Always the same shape: match the shallowest thing that
+resembles the question.
 
 ## The script runs before the sentence (R24, set 2026-09-20)
 
