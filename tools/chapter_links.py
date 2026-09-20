@@ -61,9 +61,45 @@ def linked(vol, depth=1):
         frontier = nxt
     return seen | set(frontier)
 
+DECL = os.path.join(ROOT, 'docs', 'unlisted.tsv')
+
+def declared():
+    """An unlisted chapter is declared, or it is a finding -- R9's shape."""
+    out = {}
+    if not os.path.exists(DECL):
+        return out
+    for line in open(DECL, encoding='utf-8'):
+        line = line.rstrip('\n')
+        if not line or line.startswith('#') or line.startswith('path\t'):
+            continue
+        parts = line.split('\t')
+        if len(parts) >= 2:
+            out[parts[0]] = parts[1]
+    return out
+
 def orphans(vol):
     have = linked(vol)
-    return [c for c in chapters(vol) if c not in have]
+    d = declared()
+    return [c for c in chapters(vol)
+            if c not in have and d.get('%s/%s' % (vol, c)) not in ('working', 'instrument')
+            and ('%s/%s' % (vol, c)) not in d]
+
+def backlog(vol):
+    """Declared unfinished and still unlinked. Reported every run: an
+    unfinished chapter is work, not noise."""
+    have, d = linked(vol), declared()
+    return [c for c in chapters(vol)
+            if c not in have and d.get('%s/%s' % (vol, c)) == 'unfinished']
+
+def stale_declarations():
+    """Declared unlisted, but the index reaches it now. The declaration rots
+    otherwise, and a stale declaration hides a page that came back."""
+    out = []
+    for path, status in declared().items():
+        vol, _, name = path.partition('/')
+        if os.path.isdir(os.path.join(ROOT, vol)) and name in linked(vol):
+            out.append((path, status))
+    return out
 
 def main(argv):
     # collision guard
@@ -88,8 +124,29 @@ def main(argv):
         print('  %-8s  %3d chapters, %3d linked from index, %d orphaned'
               % (vol, len(chapters(vol)), len(linked(vol) & set(chapters(vol))), len(o)))
         for f in o:
-            print('             orphan  %s/%s' % (vol, f))
-    print('\n  %d orphaned chapter(s) in %d volume(s)' % (total, len(vols)))
+            print('             ORPHAN   %s/%s  (undeclared)' % (vol, f))
+        for f in backlog(vol):
+            print('             backlog  %s/%s  unfinished' % (vol, f))
+    nb = sum(len(backlog(v)) for v in vols)
+    print('\n  %d undeclared orphan(s), %d unfinished chapter(s) waiting, in %d volume(s)'
+          % (total, nb, len(vols)))
+    missing = [d for d in sorted(os.listdir(ROOT))
+               if re.match(r'^book\d+$', d) and os.path.isdir(os.path.join(ROOT, d))
+               and not os.path.exists(os.path.join(ROOT, d, 'index.html'))]
+    for d in missing:
+        print('  NO INDEX  %s has no index.html, so nothing here can audit it'
+              % d)
+        total += 1
+    d = declared()
+    if d:
+        by = {}
+        for st in d.values():
+            by[st] = by.get(st, 0) + 1
+        print('  %d declared in docs/unlisted.tsv (%s)'
+              % (len(d), ', '.join('%s %d' % (k, v) for k, v in sorted(by.items()))))
+    for path, status in stale_declarations():
+        print('  STALE  %s is declared %s but the index reaches it now' % (path, status))
+        total += 1
     return 1 if (gate and total) else 0
 
 if __name__ == '__main__':
