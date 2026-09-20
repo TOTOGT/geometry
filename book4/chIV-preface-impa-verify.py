@@ -104,6 +104,14 @@ else:
           'the superseded August 2026 SBM Bienal line is gone, not left beside it')
     check('Magnetism, Magnetic Materials' in flat,
           "LAW3M is spelled out -- an acronym alone is not a citation")
+    # LAW3M means two different things on this page and both are ours to get
+    # right: the workshop in Natal, and the Law of Geometric Space Dynamics.
+    # A page naming one and linking the other without saying so sends the
+    # reader to a mathematics page expecting a conference.
+    check('Law of Geometric Space Dynamics' in flat,
+          'the other LAW3M is named, not just linked')
+    check('3M/law3m.html' in raw,
+          'and it links the page that exists -- /3M/LAW3M is a 404, /3M/law3m.html is not')
     check('8,500' in flat or '8500' in flat, 'the canopy figure is printed')
     print("\n      The 8,500 m² canopy is a cited figure about a real tree, not a")
     print("      computed one. It is checked for presence, not for truth.")
