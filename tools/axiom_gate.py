@@ -123,9 +123,23 @@ def main(argv):
     records, unparsed = parse(text)
     failed = False
 
-    if "sorryAx" in text:
-        print("::error::sorryAx present - a theorem is admitted, not proved")
+    # A gate must tell a mention from a claim. This used to be
+    # `if "sorryAx" in text`, which read the whole file -- so a report whose
+    # header comment said "no sorryAx" failed the gate for saying so, and the
+    # workaround was to strip every comment out of every report before
+    # committing it (see io/CatGT/*.axioms.txt, written bare for this reason).
+    # The claim lives in a parsed record's axiom list and nowhere else.
+    admitted = [name for name, axs in records
+                if any("sorryAx" in a for a in axs)]
+    if admitted:
+        for name in admitted:
+            print("::error::sorryAx in the axioms of %s"
+                  " - the theorem is admitted, not proved" % name)
         failed = True
+    elif "sorryAx" in text:
+        print("::notice::the string 'sorryAx' occurs in this report outside"
+              " every axiom list -- a comment or a note about it. No theorem"
+              " depends on it. Mention, not claim; the gate does not fail.")
 
     for line in unparsed:
         print("::error::axiom report line did not parse; the gate cannot read it:")
