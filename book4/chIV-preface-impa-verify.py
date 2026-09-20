@@ -112,6 +112,16 @@ else:
           'the other LAW3M is named, not just linked')
     check('3M/law3m.html' in raw,
           'and it links the page that exists -- /3M/LAW3M is a 404, /3M/law3m.html is not')
+    # "Helical attractor" was retired in the catalysis volume on 2026-09-19.
+    # This page may quote the phrase, because the site it links still uses it,
+    # but it may not assert it: every occurrence must sit with the reason it
+    # was retired and with the statement that the objection is unchecked here.
+    import re as _re
+    for m in _re.finditer(r'helical attractor', flat, _re.I):
+        w = flat[max(0, m.start() - 500): m.start() + 500].lower()
+        check('reeb' in w and ('not been checked' in w or 'unchecked' in w),
+              'the phrase at char %d sits with its retirement and the open question'
+              % m.start(), w[:120])
     check('8,500' in flat or '8500' in flat, 'the canopy figure is printed')
     print("\n      The 8,500 m² canopy is a cited figure about a real tree, not a")
     print("      computed one. It is checked for presence, not for truth.")
