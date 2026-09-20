@@ -38,9 +38,28 @@ def chapters(vol):
     return sorted(f for f in os.listdir(d)
                   if f.endswith('.html') and f != 'index.html')
 
-def linked(vol):
-    idx = open(os.path.join(ROOT, vol, 'index.html'), encoding='utf-8', errors='replace').read()
-    return set(re.findall(r'href="([^"#?]+\.html)"', idx))
+def linked(vol, depth=1):
+    """Pages reachable from the volume index, following local .html links one
+    hop by default.
+
+    One hop matters. book4/index.html is a 2 KB cover that links only to
+    contents.html, and 62 of this script's first run's 75 "orphans" were book4
+    chapters listed there. Reading index.html alone and reporting the rest
+    absent is R15 -- never report absence from a single search -- committed by
+    the instrument written to find missing links."""
+    seen, frontier = set(), ['index.html']
+    for _ in range(depth + 1):
+        nxt = []
+        for page in frontier:
+            path = os.path.join(ROOT, vol, page)
+            if page in seen or not os.path.exists(path):
+                continue
+            seen.add(page)
+            for href in re.findall(r'href="([^"#?]+\.html)"', open(path, encoding='utf-8', errors='replace').read()):
+                if '/' not in href:
+                    nxt.append(href)
+        frontier = nxt
+    return seen | set(frontier)
 
 def orphans(vol):
     have = linked(vol)
