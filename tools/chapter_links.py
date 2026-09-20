@@ -81,8 +81,13 @@ def orphans(vol):
     have = linked(vol)
     d = declared()
     return [c for c in chapters(vol)
-            if c not in have and d.get('%s/%s' % (vol, c)) not in ('working', 'instrument')
+            if c not in have and d.get('%s/%s' % (vol, c)) not in ('working', 'instrument', 'redirect')
             and ('%s/%s' % (vol, c)) not in d]
+
+def dupes(vol):
+    have, d = linked(vol), declared()
+    return [c for c in chapters(vol)
+            if c not in have and d.get('%s/%s' % (vol, c)) == 'duplicate']
 
 def backlog(vol):
     """Declared unfinished and still unlinked. Reported every run: an
@@ -127,6 +132,11 @@ def main(argv):
             print('             ORPHAN   %s/%s  (undeclared)' % (vol, f))
         for f in backlog(vol):
             print('             backlog  %s/%s  unfinished' % (vol, f))
+        dd = declared()
+        for f in chapters(vol):
+            if f not in linked(vol) and dd.get('%s/%s' % (vol, f)) == 'duplicate':
+                print('             DUPLICATE %s/%s  two versions; see docs/unlisted.tsv'
+                      % (vol, f))
     nb = sum(len(backlog(v)) for v in vols)
     print('\n  %d undeclared orphan(s), %d unfinished chapter(s) waiting, in %d volume(s)'
           % (total, nb, len(vols)))
