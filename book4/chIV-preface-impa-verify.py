@@ -96,6 +96,14 @@ else:
     check('pageLanguage' in raw and "'en'" in raw,
           "the source language is declared English")
     check('Cajueiro' in flat and 'Pirangi' in flat, 'the Cajueiro is named with its place')
+    # A dated engagement goes stale silently. Name it, date it, and check the
+    # page is not still advertising an event that has already happened.
+    check('LAW3M' in flat, 'the October 2026 engagement is named')
+    check('19' in flat and '23 October 2026' in flat, 'with its exact dates')
+    check('SBM Bienal' not in flat,
+          'the superseded August 2026 SBM Bienal line is gone, not left beside it')
+    check('Magnetism, Magnetic Materials' in flat,
+          "LAW3M is spelled out -- an acronym alone is not a citation")
     check('8,500' in flat or '8500' in flat, 'the canopy figure is printed')
     print("\n      The 8,500 m² canopy is a cited figure about a real tree, not a")
     print("      computed one. It is checked for presence, not for truth.")
