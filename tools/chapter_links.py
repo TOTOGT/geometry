@@ -134,8 +134,13 @@ def main(argv):
                if re.match(r'^book\d+$', d) and os.path.isdir(os.path.join(ROOT, d))
                and not os.path.exists(os.path.join(ROOT, d, 'index.html'))]
     for d in missing:
-        print('  NO INDEX  %s has no index.html, so nothing here can audit it'
-              % d)
+        pages = [f for f in os.listdir(os.path.join(ROOT, d)) if f.endswith('.html')]
+        if not pages:
+            print('  reserved  %s is an empty directory -- a rung with no pages yet,'
+                  ' not a finding' % d)
+            continue
+        print('  NO INDEX  %s holds %d page(s) and no index.html, so nothing'
+              ' here can audit it' % (d, len(pages)))
         total += 1
     d = declared()
     if d:
