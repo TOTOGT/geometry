@@ -125,8 +125,14 @@ Edição Brasil, linked from master-index, series-hub, index-root, index-book7,
 docs/claims.tsv, ch-tatiana). Writing there replaced it and git reported an
 edit, not a loss. Restored byte-identical to `5b8ffa2` (sha b99436dc…), new
 chapter renamed `ch-thoreau-surveyor.html`. `tools/chapter_links.py` now
-refuses a name in use and finds orphans: **75 across 17 volumes**, 12 in
-book7, 1 in book6. Triage is the author's call, not the script's.
+refuses a name in use and finds orphans: **19 across 17 volumes** — 9 in
+book4, 9 in book7, 1 in book6. It first said 75, because it read only
+`bookNN/index.html`, and `book4/index.html` is a 2 KB cover pointing at
+`contents.html`, which lists 68 chapters. Following one hop dropped it to 19
+(`db09a1b`). That is R15 committed by the instrument written to find missing
+links. Triage of the remaining 19 is the author's call, not the script's:
+working pages (wp56–59, tutor-card-*), instrument output, and a few that read
+as real chapters with no card anywhere.
 
 ### CatGT V5 is kernel-verified
 
@@ -161,7 +167,7 @@ CatGT_Main against. Red there is the target working, not a regression.
 
 1. Push `geometry`.
 2. io CI result (above).
-3. Orphan triage, 75 pages.
+3. Orphan triage, 19 pages.
 4. Book VII: a Fulk V / pedigree-collapse section, specced in conversation,
    never written. The line: descent from Charlemagne is informative exactly
    where it is unprovable and provable exactly where it is uninformative;
