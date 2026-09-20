@@ -171,6 +171,51 @@ Stated so it is not rediscovered a fourth time.
   It does **not** detect unsatisfiable hypotheses, which is the other thing
   "vacuous" means. Report it as what it checks.
 
+## 6. A claim ships with the script that re-derives it, and the script runs first
+
+Not "is checkable". Was checked, before the sentence was written. The finding
+is whatever the run says.
+
+The order matters and is the whole rule. `book7/ch-thoreau-surveyor.html` was
+going to say that Thoreau's length-crosses-breadth-at-the-deepest-point rule
+is exact under symmetry, because that is what it looks like. The script said
+convexity: exact on a circle, 0.7% of the length on a 2:1 ellipse, inside 9%
+on every convex basin, 17% or more on every concave one. Written first, the
+paragraph would have been wrong and confident, and nothing downstream would
+have caught it, because it reads well.
+
+Three things follow.
+
+**Measure generously, then report what you get.** Test a source's rule in the
+way most favourable to the source — nearest matching point, not the average;
+the model the rule itself presupposes. A rule that fails under generous
+measurement has failed. A rule that fails only under hostile measurement has
+not been tested.
+
+**Where a direction is at stake, fix the observable in writing before
+running.** On 2026-09-20 three reasonable breadth measures on the zeolite DNLS
+split 1–2 on the direction of the central prediction — spatial variance 0.76×
+against, delocalisation 1/IPR 1.30× for, effective mode count 0.51× against.
+Switching to the one that agreed, after seeing which way each pointed, would
+have been choosing the measurement to fit the claim. It does not stop being
+that when the number comes out the way the paper wants. The split is reported
+and the question left open; the successor model's observable is written down
+in `io/zeolite_operator_order/DNLS_TWO_CHANNEL_DESIGN.md` before its code
+exists.
+
+**Ask what the figure would read if the mechanism were absent, and run that
+control.** `dm3_dnls_zeolite_simulation.py` printed "final variance 3.0e-8"
+for a distribution whose variance is 6.31. The number was real and the code
+ran; the moments were taken against an unnormalised density that dissipation
+had reduced to 2.06e-9 of its initial norm, so the line was measuring the
+decay of the norm. The same file's figure asserted "~2.1 Ų" as literal text
+in a string — a number no run under any sign, normalisation or stopping time
+produces. Neither is visible to reading. The λ = 0 control found the first;
+grepping the figure for its own numbers found the second.
+
+This is rule 2 turned on prose. An instrument is checked before its verdict
+counts; a sentence carrying a number is an instrument.
+
 ## Dates are local to the machine that did the work
 
 US Eastern, the timezone of the machine with the Mathlib build. Not UTC.
