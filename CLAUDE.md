@@ -16,8 +16,8 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 Seventeen standing rules were spread over 2 600 lines, interleaved with dated
 narrative and forty defect records. Nothing moved when this index was written on
-2026-09-13 — the rules are where they were. **There are twenty-three now**; R20
-to R23 were set after that date and their sections are in this file too. What changed is that they can now be
+2026-09-13 — the rules are where they were. **There are twenty-four now**; R20
+to R24 were set after that date and their sections are in this file too. What changed is that they can now be
 found without reading the file. Each line gives the rule and the heading to grep
 for. Six different sections are titled "What NOT to do"; they belong to the rule
 above each of them.
@@ -47,6 +47,7 @@ above each of them.
 | R21 | **Tag the base before the superstructure.** An evidence tag on a chapter resting on an untagged assumption is decoration. | `## Foundations before superstructure` |
 | R22 | **Green Lean comes home.** A `.lean` file that lives in another repo but is run against geometry moves INTO geometry once it compiles clean. Out-of-repo Lean is a claim nobody here can check. | `## Green Lean comes home` |
 | R23 | **Evidence tags live in the master index.** A page's tags are a derived fact about that page, so by R8 they are generated, never hand-listed. `tools/build_indexes.py` reads them off every page and prints them on every row. | `## Evidence tags live in the master index` |
+| R24 | **The script runs before the sentence is written.** Not "is checkable" — was checked, first, and the finding is whatever the run says. Measure generously; fix the observable before running; run the control. | `## The script runs before` |
 
 R4 is the one that proves the point. It was written on 2026-09-09, it is correct,
 and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
@@ -86,126 +87,118 @@ Worked examples, all from 2026-09-17, all avoidable by one read:
 The corresponding duty: **a session that settles something writes it into the ledger**, not only
 into prose. A result recorded only in narrative will be re-derived.
 
-## HANDOFF — 2026-09-19 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
+## HANDOFF — 2026-09-20 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
-**From:** session 013NuSwNqBhsZhV1iB3LjYzs · model claude-opus-5, Cowork bridge, desk connected (it dropped once mid-session and came back). Earlier blocks are in git history and in `docs/audit-log.md`.
+### Both repos pushed except one commit
 
-### READ THIS FIRST — standing rules broken on 2026-09-18, still true
-- **R5 was violated in every commit of 2026-09-18.** Each carries `Co-Authored-By:` and `Claude-Session:`. R5 says attribution goes in this block and never in a commit message. Roughly twenty commits are affected; they are in history and are not being rewritten. **Today's commits are clean. Keep it that way.**
-- **R4.** `--no-optional-locks` on every git read. Delete permission was requested for this folder once and declined, so a stranded lock is recovered with `mv .git/index.lock .git/stale-locks/`, never `rm`. **Git leaves `.git/index.lock` behind after every write in this sandbox** — it cannot unlink it. Move it between commands or the next command fails. This happened again today.
-- **One handoff block.** `docs/HANDOFF-2026-09-18.md` is the long-form appendix from that day; **this block is canonical.**
+`geometry` is 1 ahead: `3f6cb0c` (axiom_gate) and `8dbaf5f` (CONVENTIONS R24)
+go up together. `io` is clean through `4d9e128`.
 
-### What was built, 2026-09-19
-Two tools, one correction, and a finding that reorders the work.
+### R24 was set today, and it is the day's whole lesson
 
-`tools/superstructure_census.py` (new, `1ffa282`) reads Books III and IV and counts. It proposes no tag and edits nothing, because the base layer was mapped claim by claim — 34 claims is a size a person holds — and Book IV is 59 files, where hand-mapping before knowing the shape is guessing at scale.
+Every real find came from running something, not from reading it. The rule and
+its three incidents are in `tools/CONVENTIONS.md` §6 and summarised under
+`## The script runs before the sentence` below. It also exists as a skill,
+`claims-that-recompute`, so it travels between sessions.
 
-`tools/foundations_evidence.py` had a bug that shipped 2026-09-18: `names()` stripped the namespace and returned a set of **short** names. Thirteen declarations exist under **both** `PrincipiaVol1` and `AutophagyDm3`, so the set collapsed 82 theorems to 69 — while the header line kept printing "58 + 24", which is 82. **The script contradicted itself in its own first line of output for a day.** Fixed. The count was the small half: four base-layer rows — **Propositions 4.2, 4.4, 6.1 and Theorem A** — cite a bare name that does not identify a theorem. `mu_dm3_neg` exists twice, in different files, proving different things. Those rows are marked `??` and recorded as gap S6.
+### Book VII gained a Writers wing thesis and three chapters
 
-### The Book IV claim was false and is corrected
-R21 and `tools/foundations_claims.py` both said *"Book IV's 59 chapters are tagged throughout. The base is the only unmarked layer."* The census counted them:
+`ch-poe.html`, `ch-thoreau-surveyor.html`, `ch-freire.html`, each with a verify
+script, all exit 0. The wing's standfirst now names the trait: Ramos, dos
+Anjos, Levi, Poe and Thoreau each filed their most exact work in a container
+the reader was not expecting, and the gate ran on the genre before it reached
+the claim — `K∘F ≠ F∘K` at the scale of a discipline. Freire is the control:
+he made his idea available on purpose and the valley opened in a decade.
 
-- **32 of Book IV's 59 files carry neither a numbered claim nor a tag.**
-- **11 files carry any tag at all.** 24 files carry 65 numbered claims between them.
-- The base was never the only unmarked layer. It was the layer someone had counted.
+Findings produced by the scripts, not asserted: Thoreau's length-crosses-
+breadth rule holds on convex outlines (exact on a circle, 0.7% on a 2:1
+ellipse, under 9% convex, 17%+ concave) — it is about the outline, not water,
+and Walden is the most favourable pond there is. The dark-sky covering
+fraction is 1.4e-14 and stars burn out ~1e14 times too soon to fill the sky.
+The dollar ballot, from Fed DFA 2026 Q2: 707 households to 1, majority cast by
+the top 5.3%.
 
-Corrected in `CLAUDE.md` and in the tool's docstring, both dated.
+### I destroyed a chapter and restored it — check this pattern
 
-### Three findings that reorder the tagging job
-- **F1 — not one claim in either book names a Lean theorem.** Book III: 2 claims, 0 Lean names. Book IV: 65 claims, 0 Lean names. The base layer matched 16 of 34 by topic; here the join has no starting point, so a topic match would be built out of resemblance alone.
-- **F2 — the tag vocabulary diverged and nobody reconciled it.** The base layer proposes SHOWN / CITED / MODEL / CONJECTURE / OPEN. Book IV's pages carry OPEN, COMPUTED, PROVED, CITED, MODEL, CONJECTURE. **PROVED is the stronger word, in use in the superstructure, where the weaker one was chosen for the foundations.** Settling this is the author's call.
-- **F3 — two numbers name two different claims each.** *This finding was wrong the first time and is corrected here.* Counted raw, ten numbers in Book IV appear in more than one chapter, and that is what this block said an hour ago. Checking each occurrence against its markup showed most are one chapter **citing** another — ch14 citing Conjecture 12.1, ch27 citing Proposition 26.2, ch04 citing Theorem 3.2, ch22 and ch23 citing Ch 5's Theorem 5.1 — and `Theorem B` was the regex eating `Theorem B.1`. What survives is two: **`Theorem 1`** is The Correspondence in `chE-gtct-alt` and the Helical Selectivity Principle in `ch11-catgt`/`gomc-opus`; **`Theorem 5.1`** is Bäcklund rigidity in `ch05` and the Orthogonality Theorem in `chIV-orthogonality`. Separately, `gomc-opus` is a Complete Pack that restates CatGT Part I's Corollaries 1 and 2 in condensed form — same claims, two texts, one number each: a quotation hazard, not a collision.
+`book7/ch-thoreau.html` was taken (*Do Lago à Medula*, Thoreau & Arnold,
+Edição Brasil, linked from master-index, series-hub, index-root, index-book7,
+docs/claims.tsv, ch-tatiana). Writing there replaced it and git reported an
+edit, not a loss. Restored byte-identical to `5b8ffa2` (sha b99436dc…), new
+chapter renamed `ch-thoreau-surveyor.html`. `tools/chapter_links.py` now
+refuses a name in use and finds orphans: **75 across 17 volumes**, 12 in
+book7, 1 in book6. Triage is the author's call, not the script's.
 
-**So the order is not what it looked like, and F3 is much smaller than it looked.** Two renumberings and a vocabulary decision stand between here and tagging Book IV. Both are Pablo's call and both are cheap.
+### CatGT V5 is kernel-verified
 
-### R23 — evidence tags now live in the master index
-Set today by Pablo: *"when you run index, master index, tags go in the master index, they should live there."* `tools/build_indexes.py` reads them off every page during the crawl it was already doing and prints, on each row: the evidence tags the page carries, how many numbered claims it makes, and an amber **`claims · untagged`** chip when it makes claims and carries none. The tag words join the search haystack, so the box on the page is the query language — type `untagged` for the work list, `shown` or `open` for everything claiming either.
+13 theorems, all on `[propext, Classical.choice, Quot.sound]`, no sorryAx,
+under Lean 4.33.0-rc1 / Mathlib v4.33.0-rc1 — nineteen minor versions above
+the v4.14.0 io pins. V5 arrived saying its corrections were *not* yet
+kernel-verified; they are now. The old `reeb_orbit_advances` proved a fact
+about a scalar potential F=z−r²θ, not about α_cat=dz−r²dθ, and any F=z+g(r,θ)
+would have proved it — vacuous under a load-bearing name, cited by index.html
+and paper.tex. That is R20 in the wild.
 
-**The first run resized the whole tagging problem.** Across 762 files: **152 pages make numbered claims and 126 carry no evidence tag.** Not 34, not Book IV's 24 — one hundred and twenty-six. Every earlier count in this file was a count of the corner somebody had already looked at. Header stats on `master-index.html` now carry both numbers, so the next session cannot inherit a stale one.
+### The zeolite DNLS is open, and the observable is pre-registered
 
-### −2 and −3 — a new `[OPEN]`
-`tools/foundations_evidence.py` §4. `PrincipiaVol1.mu_canonical` **derives −3** (`-(V'' 1)/2 = -3`, docstring: *"Canonical Lyapunov exponent from Whitney fold"*). Four lines below it, `mu_dm3_neg` proves **`(-2 : ℝ) < 0`** under the docstring *"dm³ transverse Lyapunov exponent μmax = −2"* — the identification of μmax with −2 is **in the docstring, not in the theorem**. `canonicalTriple` then assigns `mu_max := -2` by definition. The documents do the same: the toy model's Theorem B gives μ⊥ = **−3**, Book II's Proposition 4.3 gives μ_max = **−2**.
+Sign corrected to focusing. Two larger defects behind it: moments taken
+against an unnormalised density that dissipation had cut to 2.06e-9, so
+"final variance 3.0e-8" was measuring the decay of the norm (true value
+6.31); and the figure asserted "~2.1 Ų" as literal text no run produces.
+Then three breadth measures split 1–2 on the direction — taking the one that
+agreed would be choosing the measurement to fit the claim. Reported as open.
+`io/zeolite_operator_order/DNLS_TWO_CHANNEL_DESIGN.md` specs the successor
+(channel index ψ_L/ψ_B, folding rate κ(r), escape γ(r)) and pre-registers
+S(MCM-22) > S(ZSM-5) before the code exists.
 
-These may well be two different quantities — a canonical exponent from the Whitney fold and a transverse exponent of the limit cycle need not be the same number. **That is the point:** nothing in either repo says which, so a reader meeting the two theorems four lines apart cannot tell a distinction from a discrepancy. What settles it is one sentence in `PrincipiaVol1.lean` naming the two quantities and one in Book II saying which Proposition 4.3 uses. `[OPEN]`
+### Watch
 
-### Proved labels are PAGE-level, and the granularity that matters is per-claim
-
-**Set 2026-09-19 by Pablo: *"some of the theorems are proven, parts are conjectures."*** That is the normal state of a page in this corpus, not a defect, and the label added today does not yet express it.
-
-`tools/proved_labels.py` appended a **Proved · kernel-checked** block to 95 pages — 254 links to Lean, file and line, zero dead. What that block says is true and narrow: *these named declarations are kernel-checked and live here*. What it does **not** say, and must not be read as saying, is that the page is proved. A page routinely holds proved theorems, cited results, modelling assumptions and open conjectures side by side, and a reader who sees one green block at the foot of it may take the whole page as settled.
-
-**So the block is a floor, not a verdict.** It is better than the previous state — where the proof existed, had been moved here, and nothing on the page pointed at it — and it is two steps short of right:
-
-1. **Per-claim, not per-page.** Each numbered Theorem/Proposition/Lemma should carry its own label beside it, linked to the declaration that bears on *that* claim. The page-level block cannot distinguish Theorem 3 (proved) from Conjecture 7 (open) and currently implies nothing about either.
-2. **The claim→declaration join still does not exist.** `tools/foundations_evidence.py` §3 has it for the base layer's 34 claims, by hand. For the other 298 claims on 127 untagged pages there is no map, and the page-level block was possible only because it needs no map — it links what the page *names*, not what the page *claims*.
-
-**The eight sorryAx pages are the same point in sharper form.** `book4/ch12` and `book4/rh-paper` (Book IV), and `ch-d2-academic`, `ch-d2-parashurama`, `ch-ocio`, `series-layer-map`, `GameTheory_Full_Pack` and `GameTheory_Full_Pack.FIXED` (Book III, at the root). All eight disclose — re-checked 2026-09-19, not inherited from the ledger. They are not defective pages: they are pages where part is proved and part is not, and the honest label for them is per-claim or nothing. Three declarations account for six of them, so closing `g6_unconditional_closure` alone clears four. And the two GameTheory packs are a **duplicate pair with identical titles** — R9, neither declared nor recorded as a finding. `[OPEN]`
-
-**The aim is per-claim labels throughout, linked to Lean, with conjectures marked as conjectures.** Nothing about today's pass forecloses it; the page-level block is idempotent and a per-claim pass can be laid over it and the block then retired.
-
-### ε₀ = 1/3 is an input, not a result — formalized 2026-09-19
-Pursuing the −2/−3 question to the bottom turned up a second and larger gap, and `book2/lean/StabilityRadius.lean` now makes it machine-visible.
-
-**There are two different functions called `V`.** PrincipiaVol1's is the cubic potential $V(q) = q^3 - 3q$, with $V'(1)=0$, $V''(1)=6$, $V(1)=-2$. Book II's, in Theorem 3.2, is a **stochastic Lyapunov function**: $\mathcal{L}V \le -cV + \kappa_{\text{noise}}\|\sigma\|^2$ with $\kappa_{\text{noise}} = \tfrac12\sup\|\mathrm{Hess}\,V\|$. Same letter, different objects, and nothing says so.
-
-**And the three numbers are three different things.** $-2$ is the *value* $V(1)$, and separately the asymptotic radial coefficient of Proposition 4.3's normal form $\dot\rho = -2(1-e^{-z})\rho$ — which **decreases toward $-2$ and never attains it**, being $0$ at $z=0$. $-3$ is $-V''(1)/2$, a Morse quantity at the critical point. `mu_dm3_neg` proves only that the literal $-2$ is negative.
-
-**Proposition 4.4 does not close.** It reads $\varepsilon_0 = |\mu_{\max}|/(2(1+\sup_\Gamma\|\mathrm{Hess}\,V\|)) = 2/(2(1+2)) = 1/3$, so it is **using $\sup\|\mathrm{Hess}\,V\| = 2$ and never deriving it.** If that $V$ were the cubic, $V''(1)=6$ and $\varepsilon_0 = 1/7$, giving $\tau\varepsilon_0 = 2/7$ rather than $2/3$. `stabilityRadius := 1/3` is a **definition** in the Lean, so `noiseTolerance` proves $2/3$ from an assumption. `epsilon0_eq_third_iff` now proves $\varepsilon_0 = 1/3 \iff S = 2$, which is the honest content.
-
-**This does not say Proposition 4.4 is wrong.** It says it is *underived*, which is more fixable: one sentence naming which `V` carries the bound and where the 2 comes from closes it. Until then ε₀ = 1/3 is an input in the shape of a result — R20 exactly. `[OPEN]`
-
-**The Lean is NOT BUILT** — no toolchain on this desk. `book2/lean/StabilityRadius-verify.py` checks every arithmetic claim in it and passes, so the file is falsifiable today; that is not a compile. One theorem there, `radialCoeff_gt_neg_two`, **cannot be checked numerically at all**: it holds for every real $z$, but in binary64 the coefficient rounds to exactly $-2$ past $z = 37.43$, where $e^{-z}$ falls below half an ulp. A floating-point search would report a counterexample and be wrong. That is a small concrete argument for formalising rather than sampling.
-
-### Checked and clean — ch05's Theorem 5.1
-`ch22-gauss-map` says Ch 5's Theorem 5.1 *"as printed contradicts Bäcklund"* and points at ch23 for the repair. That reads like an unflagged error in a published chapter, so it was checked: **ch05 carries the correction itself**, immediately after the theorem — the Pfaffian-rank argument, the note that the Sator correspondence of §5.2 is untouched, and a forward link to `ch23-duality-discriminant.html`. `ch23` delivers the repair in full. **No defect. The corpus is honest here.** Recorded so nobody spends the afternoon re-finding it.
-
-### Book III is thinner than the index implies
-Its chapters live **at the repo root**, not under `book3/` — `vol3-minibeast.html`, `livro3-brasil.html` (PT), `minibeast-pilot.html`, `ch-seismic.html`. `book3/` holds only the index and the ESL vocabulary companion. `impa-portal.html` is linked from `book3/index.html` but is a shared portal (book1, book2 and book4 link it too) and is not Book III content. **Two numbered claims in the whole book, no tags.** Whether that is a gap or simply what an applied volume looks like is a judgement nobody has made in writing.
-
-### r* — CLOSED
-`0.77594058` across the board, 224 occurrences in 78 files (`f1db753`). It is the correct 8-dp rounding of every high-precision form here; `0.77594059` was the rounding of none of them and `70d08d7` called it "the certified" value. **Thirteen high-precision forms remain, diverging at the 11th decimal — deliberately untouched.** `[OPEN]`
+io CI on `db41e70` is the first time `ContactMorphism.lean` has ever been
+built in CI — it sat in the repo outside every lakefile target until
+2026-09-20. It runs against the pinned v4.14.0, not the 4.33.0-rc1 I verified
+CatGT_Main against. Red there is the target working, not a regression.
 
 ### Open — in priority order
-1. **Renumber `Theorem 1` and `Theorem 5.1`, settle F2, then tag Book IV.** Nothing downstream is worth doing first. `python3 tools/superstructure_census.py` prints both lists. Its statement-vs-citation test is a **heuristic** — an environment class opening within 200 characters before the label — and it over-reports: `ch04`'s Theorem 3.2 and `ch23`'s Theorem 5.1 are citations sitting inside boxed remarks. Read the two lines it flags before acting on them.
-2. **The join does not exist.** 82 theorems are kernel-checked for Volume I in `TOTOGT/vol1-proofs`; **29 are named in the four base documents, 53 are not, and 0 are named anywhere in Books III or IV.** "Volume I is machine-verified" remains a statement about a file, not about the document citing it.
-3. **The eighteen UNMATCHED were read and decided, 2026-09-19** — `tools/foundations_evidence.py` §3. **Eight have no Lean at all**, which is a fine thing for a claim to be and a bad thing to leave undeclared. Three have arithmetic on constants standing where an implication is claimed. **Theorem 5.4 (Irreducibility) has Lean that cuts against it**: `compression_permits_identity` proves a compression operator equal to the identity exists, so in that instance C removes nothing — the same shape as Theorem 5.3, and the page does not say so. **Proposition 4.3 rests on a definition**: `canonicalTriple` *assigns* `mu_max := -2`; assigning a value is not deriving it. Lemma 3.3 already prints its own SORRY. And `Theorem B` is three different claims under one label — Threshold Equivalence in Book II, the invariant torus in the toy model, closure under unification in gcm.
-   **Two tags to apply and one correction to write.** Nothing was edited in any document; §3 proposes, as §2 did for 5.3.
-4. **The assumed-conclusion gap (R20).** `spiral_return_exists` takes *"the 128-orbit does not return"* as a hypothesis and closes `exact h_second_circuit`. Kernel-checks clean. **No instrument here looks for a hypothesis that is the conclusion.** The offending theorem is in `io`/`AXLE`, not geometry.
-5. **22 theorems depend on `sorryAx`**, named in `tools/verify-audit/2026-09-09/`. Every published page citing one **does** disclose it — checked 2026-09-18, `book4/ch12.html` included. No undisclosed claim found. `[SHOWN]`
-6. **Book IV's two copies — the work list now exists.** `tools/book4_reconcile.py`, new 2026-09-19. The 2026-08-30 reading that *every* shared chapter differs was the copyright footer being counted as content: **10 of 31 are identical**, 4 are geometry-ahead, 1 (`index.html`) is GTCT-ahead, and **16 need reading**. Two things are one decision away and neither is done here, because both change a published site: the 10 identical GTCT copies can become pointers today per this file's own rule, and the **5 chapters that exist only in GTCT** (`chE-gtct`, `chIV-15`, `chIV-axioms`, `chIV-preface`, `chIV-preface-impa`) belong in geometry. Say the word and they move.
-7. **Green Lean comes home (R22).** `vol1-proofs` branch `port-v4.32` is on the remote at `5e49766` — the v4.14→v4.32 port, **not built on this desk, no toolchain**. CI is the judge. Green → the file moves into geometry with its axiom report and the 82 claims get tagged. Red → the error list is the next work, and it is a list now, not an unknown. Step 2 of 4.
-8. **WP-41's per-person cost, corrected twice** (`2ba1377`): $100–200k is the price of a *destination*, not of moving — people move themselves for hundreds to thousands, and IOM recorded 7,904 deaths on migration routes in 2025. And the figure is denominated in a currency whose meaning is conditional on the scenario not arriving. Neither end re-derived. `[OPEN]`
-9. Carried: WP-124 collision (owner's call); `ch-strogatz` and Chapter R §VI readability; k₂₁₀ needs the printed page; 60 of 122 scripts record no limits; WP-127 gaps Q5 (the 12–22% yield band is unsourced) and Q7 (ILUC/CORSIA/ReFuelEU/RenovaBio certification, which gates the SAF commercial thread); Book X ch06 gap P3 (Moyo vs coordination — the one genuinely unfinished argument).
 
-### Other repositories — full table in `docs/HANDOFF-2026-09-18.md` §5
-**vol1-proofs**: branch `port-v4.32` pushed at `5e49766`; `main` restored at the v4.14 pin, counts reconciled to 82, forward debt in `docs/MATHLIB-FORWARD-v4.32.md`. **Do not link it anywhere until CI is green.** Unpushed elsewhere: **neuro 5** (needs credentials; public, names a clinic), **AXLE 1**. Five more have dirty trees, **not inspected**. Fifteen local repos is itself the mechanism behind "I trust things are done and they aren't."
+1. Push `geometry`.
+2. io CI result (above).
+3. Orphan triage, 75 pages.
+4. Book VII: a Fulk V / pedigree-collapse section, specced in conversation,
+   never written. The line: descent from Charlemagne is informative exactly
+   where it is unprovable and provable exactly where it is uninformative;
+   798→1143 is 11–14 generations, so pedigree collapse does not reach him.
+5. The DNLS successor model. New session.
 
-### The figure chapters — Book VII and Book IX, read 2026-09-19
 
-**Book VII is "The Scientists"** — 83 pages, 70 of them `ch-<figure>.html`. Its own statement of purpose: *"dm³ does not appear from nowhere… Each of them put a brick in the wall. This volume names them and shows exactly which brick."* **Book IX is `omega/`** — "Omega Point · The Convergence Series", 52 pages, and it is where the pre-modern figures live: `ch-pingala`, `ch-baudhayana`, `ch-madhava`, `ch-al-kindi`, `ch-zacuto`, `ch-pacioli`, `ch-cusa`, `ch-hildegard`, `ch-ramanujan`.
+## The script runs before the sentence (R24, set 2026-09-20)
 
-**Structurally Book VII is sound and thinly evidenced.**
+Full statement and incidents: `tools/CONVENTIONS.md` §6. Skill:
+`claims-that-recompute`.
 
-- `book7/index.html` links 68 `ch-` pages and **every one of them exists** — no dead links. Two files are not linked from it: **`ch-hardy.html` and `ch-ramanujan-1pi.html`**. A five-minute fix.
-- **40 of the 70 figure chapters carry no verify script**, against R6. `book7/` has 34 scripts for 83 pages. Among the missing: `ch-turing`, `ch-einstein`, `ch-maxwell`, `ch-noether`, `ch-curie`, `ch-dirac`, `ch-hopfield`, `ch-waddington`, `ch-kovalevskaya`, `ch-mirzakhani`. **Book IX has 0 verify scripts for 52 pages.**
-- **4 of Book VII's 83 pages carry any evidence tag** (7 tags between them); 13 make numbered claims. **Book IX: 1 page of 52 carries a tag.** `ch-grothendieck` — a chapter about a measurement and what it found missing — carries none. This is the R23 count seen from inside: the 126 untagged pages are mostly these.
+R6 says every chapter carries a verify script. R12 says a published number
+must be produced by a tool. Neither says **when**. R24 does: the script runs
+*before* the sentence is written, and the finding is whatever the run says.
 
-**The gallery Pablo produced — "The Mathematicians History Overlooked", nineteen figures — is not in this repo.** `grep -ril "History Overlooked"` finds nothing, and Book VII's own gallery `the-scientists.html` uses no portraits or medallions, so it is a new page and needs a home under R7. Searched on eighteen name variants each (R15 — not one pattern, several), here is what the corpus holds:
+`ch-thoreau-surveyor.html` was about to say Thoreau's rule is exact under
+symmetry, because that is what it looks like. The script said convexity.
+Written first, that paragraph would have been wrong, confident, and
+uncatchable downstream, because it reads well.
 
-| | figures |
-|---|---|
-| **has its own chapter (3)** | Madhava — `omega/ch-madhava.html` (31 mentions) · Grothendieck — `book7/ch-grothendieck.html` · Virahanka — covered by lineage in `omega/ch-pingala.html` (16) and `chMatra-hemachandra.html` (14), **never under his own name** |
-| **treated, but no figure chapter (5)** | Al-Khwarizmi — substantial in `wp27-ethics-of-algebra.html` (17) and `ch-d2-academic.html` (16) · Mochizuki — `book6/wp48-five-conjectures.html` (10) · Aryabhata — 4 files, in passing · Liu Hui — 2 files, one mention each · Brahmagupta — 2 files, one mention each · Bhaskara II — an index line |
-| **absent from the entire corpus (10)** | **Hypatia · Sophie Germain · Al-Biruni · Omar Khayyam · Al-Karaji · Abu'l-Wafa al-Buzjani · Gangeśa Upādhyāya · Nārāyaṇa Paṇḍita · Jamshid al-Kashi · Seki Takakazu** |
+Three consequences:
 
-**Sophie Germain is the one to notice.** The gallery opens with her epigraph — *"Algebra is but written geometry"* — and she does not appear anywhere in 782 files. Book VII already carries Noether, Kovalevskaya, Mirzakhani, Curie, Ada, Katherine Johnson and Tatiana. Hypatia and Germain are the two absences that look like oversight rather than scope.
+- **Measure generously.** Test a source's rule in the way most favourable to
+  the source. A rule that fails under generous measurement has failed; one
+  that fails only under hostile measurement has not been tested.
+- **Fix the observable in writing before running**, where a direction is at
+  stake. Three breadth measures on the zeolite DNLS split 1–2 on 2026-09-20.
+  Taking the one that agreed, after seeing which way each pointed, is
+  choosing the measurement to fit the claim, and it does not stop being that
+  when the number lands where the paper wants it.
+- **Run the control.** Ask what the figure would read if the mechanism were
+  absent. A packet that spreads wider than free dispersion is not
+  self-trapping, whatever the prose around it says.
 
-**Where each belongs is now decidable:** Book VII names who put a brick in dm³'s wall; Book IX is the convergence lineage. Al-Khwarizmi, Brahmagupta, Liu Hui, Aryabhata, Bhaskara, Al-Karaji, Abu'l-Wafa, Al-Kashi, Nārāyaṇa, Gangeśa and Virahanka-by-name are Book IX company. Hypatia, Germain, Seki, Khayyam, Al-Biruni and Mochizuki are arguable either way and Pablo should say.
-
-**Loose end from today's move:** the five chapters brought over from GTCT are orphans in `book4` — nothing in geometry links to them yet (`index-book4.html` reports 4 orphaned, up from 1). They need index and ring-nav entries.
-
-### Parked, working
-A PatternBoost-style loop in the session scratchpad: exact maximum-Sidon ground truth by DFS to n=40 (2 nodes → 960,537, the wall visible), then a 3-layer transformer + local search that **matched the exact optimum k=8 at n=40 in 20 s**, every candidate checked exactly rather than trusted. Needs a home and a verify script if it is wanted.
+This is R2 — an instrument is checked before its verdict counts — turned on
+prose. A sentence carrying a number is an instrument.
 
 ## The assumed-conclusion gap
 
