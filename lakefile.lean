@@ -142,3 +142,17 @@ lean_lib ReactionDiffusionFold
 @[default_target]
 lean_lib TurnaroundUniverse where
   srcDir := "book8"
+
+/-
+  catgt/lean/CatGT_Main.lean is the Lean behind ch-catgt-zeolite.html and the V5 paper
+  "The Self-Trapping Selectivity Principle". It is a MIRROR: the canonical copy is
+  TOTOGT/io (CatGT/CatGT_Main.lean, pinned to v4.14.0); see catgt/lean/MIRROR_NOTE.md.
+  Hand-run by the author 2026-09-20 under this repo's v4.32.0 pin: no errors, 13 theorems,
+  all on [propext, Classical.choice, Quot.sound]. Declaring the target is what makes a later
+  regression fail the job instead of passing unnoticed. Not yet built with `lake build CatGT`
+  at the time this stanza was added -- run it once to confirm the target itself resolves.
+-/
+@[default_target]
+lean_lib CatGT where
+  srcDir := "catgt/lean"
+  roots := #[`CatGT_Main]
