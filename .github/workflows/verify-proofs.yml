@@ -26,6 +26,17 @@
 # any other claim here, and a pipeline buried in YAML cannot be run on a
 # fixture.
 
+# CATGT NOTE, 2026-09-21. catgt/lean/CatGT_Main.lean (a mirror of TOTOGT/io's
+# CatGT/CatGT_Main.lean, the Lean behind ch-catgt-zeolite.html and the V5 paper)
+# became a default `lean_lib` target on 2026-09-20, so `lake build` compiled it
+# from that commit on -- but no kernel step named any of its 13 theorems, so a
+# `sorry` there would have been a build warning and the job would have stayed
+# green. The step "Kernel axiom check on the CatGT theorems" closes that, using
+# the tracked probe tools/verify-catgt/probe_catgt.lean. What it does NOT
+# catch: a theorem that is true but says less than its name (the vacuity scans
+# below are textual and cover only Orthogenesis/); that check is a human reading
+# the statement.
+
 name: Verify Lean proofs (real kernel check)
 
 # STALE cannot be detected by a push trigger. Decay happens when a toolchain or
@@ -223,6 +234,40 @@ jobs:
 
           python3 tools/axiom_gate.py /tmp/gb.txt 8
       
+      # =================================================================
+      # AUTHORITATIVE STEP. CatGT_Main.lean (self-trapping selectivity, V5).
+      # Added 2026-09-21. Thirteen declarations, run from the tracked probe,
+      # never a heredoc copy. Kernel-checked by hand under v4.32.0 on
+      # 2026-09-20 (`lake env lean` and `lake build CatGT`); this step is what
+      # makes a later regression fail the job. It gates sorryAx and
+      # non-standard axioms only: it cannot tell that a theorem says less than
+      # its name. Theorem 1(i)'s dilation pairing lives in ContactMorphism.lean,
+      # which is NOT in this target, and 1(ii) is not formalised.
+      # This is a MIRROR: the canonical copy is TOTOGT/io, pinned to v4.14.0,
+      # which this job does not test. See catgt/lean/MIRROR_NOTE.md.
+      # =================================================================
+
+      - name: Kernel axiom check on the CatGT theorems (mirror of TOTOGT/io)
+        run: |
+          set -u
+          PROBE=tools/verify-catgt/probe_catgt.lean
+
+          set +e
+          lake env lean "$PROBE" > /tmp/catgt.txt 2>&1
+          rc=$?
+          set -e
+
+          echo "----- CatGT: axiom report -----"
+          cat /tmp/catgt.txt
+          echo "-------------------------------"
+
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::CatGT probe failed to elaborate (exit $rc)"
+            exit 1
+          fi
+
+          python3 tools/axiom_gate.py /tmp/catgt.txt 13
+
       # =================================================================
       # AUTHORITATIVE STEP. The floor rungs that import nothing.
       # Added 2026-09-19. book11/Numerals.lean and book12/Counting.lean are the
