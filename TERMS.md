@@ -103,6 +103,7 @@ have reported it. Now something does.
 - Nonsense-mediated decay (NMD)
 - Nucleic Acid Compiler (NAC)
 - Operator-order switch in MCM-22 (DRIFTS)
+- Os Sete Axiomas (PT)
 - Pascal Fries's Communication-Through-Coherence (CTC)
 - Payments and Market Infrastructures (CPMI)
 - Permanent magnet generator (PMG)
@@ -135,12 +136,14 @@ have reported it. Now something does.
 - Tatiana Sampaio's polylaminin (UFRJ)
 - Teorema T1 (GTCT)
 - Teoria de Contato Temporal Generativa (GTCT)
+- Teoria do Contato Generativo Temporal (GTCT)
 - The Forced Urgency Gap (FUG)
 - The galaxy-galaxy strong lensing (GGSL)
 - The Generative Contact Mechanics (GCM)
 - The Generative Time Circuit Theorem (GTCT)
 - The Jacobian Conjecture (JC)
 - The Kelvin-Helmholtz (KH)
+- The Mini-Beast (EN)
 - The pulsar timing array (PTA)
 - The Topologically Associating Domain (TAD)
 - The Zone of Proximal Development (ZPD)
@@ -158,8 +161,10 @@ have reported it. Now something does.
 - Um metal-organic framework (MOF)
 - UN Convention on Environmental Modification (ENMOD)
 - Upton NY (OKX)
+- Virada Complexa (PT)
 - Vit C (CRP)
 - Vol IV (GTCT)
+- Vol IV (PT)
 - Vol VI Main Target (AXLE)
 - Vygotsky's Zone of Proximal Development (ZPD)
 - We present Topographical Orthogenetic Architecture (TOA)
@@ -186,5 +191,5 @@ this file would not trip it, but `CLAUDE.md` records the same episode, and CI
 run #247 failed on that sentence — the corpus penalised for saying, accurately,
 that the term is not its own.
 
-- Harmonic Resonance Bands (HRB) @ CLAUDE.md, CLAUDE-ARCHIVE.md, docs/audit-log.md
-- Log-Psi Recurrence Operator @ CLAUDE.md, CLAUDE-ARCHIVE.md, docs/audit-log.md
+- Harmonic Resonance Bands (HRB) @ CLAUDE.md, CLAUDE-ARCHIVE.md, docs/audit-log.md, docs/corpus-inventory.md
+- Log-Psi Recurrence Operator @ CLAUDE.md, CLAUDE-ARCHIVE.md, docs/audit-log.md, docs/corpus-inventory.md

@@ -476,7 +476,7 @@ point it first.
 |---|---|---|
 | `vol1-proofs` | **82** (PrincipiaVol1 58 + AutophagyDm3 24) | **yes — 0 flagged** |
 | `geometry` (this repo) | **31** (SaturnHexagon 5 + NASAGaps 12 + G6Crystal 14) | no |
-| `io` | **16** (Theorem53 + CatGT) | no |
+| `io` | **16** (Theorem53 + CatGT) — 20 as of 2026-09-21, see Tier 1 | no |
 | **Total** | **129** | **82** |
 
 The defensible public claim is **82 real, 129 kernel-checked**. Saying 129 real
@@ -2231,7 +2231,7 @@ repo of record decides the number.
 Counts from `tools/theorem_census.py`, 2026-08-27. `DM3-lab` is the third
 most-referenced repo in the corpus (318 links) and has never been measured.
 
-## Tier 1 — kernel-audited: 173
+## Tier 1 — kernel-audited: 177
 
 | source | n | evidence |
 | --- | ---: | --- |
@@ -2239,7 +2239,7 @@ most-referenced repo in the corpus (318 links) and has never been measured.
 | `geometry/tools/verify-dm3` + `verify-book8` | 32 | live `axioms.txt` |
 | `GTCT/.github/badges/gctc-status.json` | 24 | CI badge, "24/24 proved", written 2026-08-01 |
 | `AXLE/tools/verify-vol2` | 19 | live `axioms.txt` |
-| `io/.github/workflows/verify-proofs.yml` | 16 | CatGT 9 + Theorem53/Zeolite 7, every push |
+| `io/.github/workflows/verify-proofs.yml` | 20 | CatGT 13 + Theorem53 7, every push. Counted 2026-09-21 as the `#print axioms` lines in the workflow (13 CatGT, 7 Theorem53); Verify proofs #66 (7e55ccc) and #67 (ec84753) green. Was 16 (CatGT 9 + 7). 173 -> 177. Files verified by paste only (ReebFlow 8, ReebFlowExtDeriv 11, ReebNoAttractor 9, ZeoliteCommutation 3) are NOT counted here: no gate re-runs them. |
 
 Not 51, and not 171: the io workflow probes 16, not 14 — `foldMap_not_odd` and
 `exists_order_dependent` sit in a step that a first reading missed. A number quoted from one repo's reports is a fifth of the real figure.
