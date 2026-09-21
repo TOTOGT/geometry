@@ -23,5 +23,10 @@ Status when copied (2026-09-20): compiled clean on Lean 4.32.0 / Mathlib v4.32.0
 checked on v4.14.0 (io's CI pin).
 
 Update (2026-09-20, late): in THIS repo (geometry) the folder is now wired as `lean_lib CatGT`
-in `lakefile.lean` (default target). That stanza has not yet been exercised with
-`lake build CatGT`; run it once. The dnls mirror is still not a build target.
+in `lakefile.lean` (default target). `lake build CatGT` was then run by the
+owner (2026-09-20): completed, 8656 jobs, 13/13 `#print axioms` on [propext, Classical.choice,
+Quot.sound], 5 unused-binder warnings, no errors. Still not checked on v4.14.0 (io's pin). The dnls
+mirror is still not a build target.
+
+Update (2026-09-21): CI (verify-proofs.yml) now gates the 13 theorems via
+tools/verify-catgt/probe_catgt.lean -- sorryAx and non-standard axioms only.

@@ -149,8 +149,9 @@ lean_lib TurnaroundUniverse where
   TOTOGT/io (CatGT/CatGT_Main.lean, pinned to v4.14.0); see catgt/lean/MIRROR_NOTE.md.
   Hand-run by the author 2026-09-20 under this repo's v4.32.0 pin: no errors, 13 theorems,
   all on [propext, Classical.choice, Quot.sound]. Declaring the target is what makes a later
-  regression fail the job instead of passing unnoticed. Not yet built with `lake build CatGT`
-  at the time this stanza was added -- run it once to confirm the target itself resolves.
+  regression fail the job instead of passing unnoticed. `lake build CatGT` was run by the
+  author on 2026-09-20 (8656 jobs, completed; 13/13 axiom lines on the permitted three; 5
+  unused-binder warnings). The 13 theorems are gated in CI by tools/verify-catgt/probe_catgt.lean.
 -/
 @[default_target]
 lean_lib CatGT where
