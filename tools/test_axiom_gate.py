@@ -76,7 +76,7 @@ CASES = [
      "FN_H_102L_phase02_cluster depends on Orthogenesis.G6Crystal"
      ".colony_depth1_cells._native.native_decide.ax_1_1"),
     ("clean but wrapped",         WRAPPED_CLEAN, 12, 0, "OK: 12 theorems"),
-    ("admitted theorem",          ADMITTED,      12, 1, "sorryAx present"),
+    ("admitted theorem",          ADMITTED,      12, 1, "sorryAx in the axioms of"),
     ("unreadable record",         MALFORMED,     13, 1, "did not parse"),
     ("primed names read",         PRIMED,         3, 0, ""),
     ("a theorem went missing",    CLEAN_12,      13, 1, "found 12"),
