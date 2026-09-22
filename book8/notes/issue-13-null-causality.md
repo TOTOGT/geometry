@@ -2,7 +2,38 @@
 
 **Status:** Working note. Captured the night of June 25/26, 2026.
 **Companion to:** `lorentzian-contact-survey.md`, `dm3-on-horizons-questions.md`.
-**Closes:** the `inner_basin_escape` sorry in `Chain_updated.lean` / `Main_v6.lean`.
+**Closes:** ~~the `inner_basin_escape` sorry~~ — **does not close it.** See correction below.
+
+---
+
+## Correction — 2026-09-22
+
+**Lemma 1 below is false.** $V(r) = \tfrac{1}{2}(r-1)^2$ gives $V'(r) = r-1$,
+which is zero only at $r=1$ — the attractor, not $r_*$. Numerically
+$V'(r_*) = r_* - 1 \approx -0.224 \ne 0$. "By definition of $r_*$: at the
+basin boundary, the Lyapunov gradient vanishes by construction" (the proof
+of Lemma 1, below) is simply wrong — $r_*$ is not defined that way anywhere
+in this corpus; it is a bisection-certified basin boundary of the coupled
+$(r,z)$ ODE (`book4/certify_rstar.py`), and `certify_rstar_rigorous.py`
+states outright that it has no known closed form, which already rules out
+it being a root of the linear function $r-1$.
+
+This falls through to Lemma 2 ($d\tau$ does not blow up at $r_*$, so $S$ is
+not shown null this way), Lemma 3 (vacuous once Lemma 2 fails), and the
+"Theorem (inner_basin_escape, restated)" below — none of it goes through.
+**AXLE Issue #13 (`inner_basin_escape`) is still open.** It was never
+attempted in Lean (see "What still needs to be checked" #2 below, which
+correctly flagged that Lemma 2 needed an explicit one-line check and
+correctly notes that check was never done — doing it is what surfaced this).
+
+What $r_*$ actually is, established the same day: `book4/ch10.html`,
+Proposition B.6 — the $z=0$ crossing of the stable manifold of the saddle
+$r_s = 2\cos(3\pi/7)$ of the coupled $(r,z)$ system, numerically certified
+to 13 significant figures against the independent bisection value. Real,
+but a different kind of object than a critical point of $V(r)$; whether
+$S = \{r = r_*\}$ is null under some metric built from *that* structure is
+open, not refuted here. Full writeup: `docs/audit-log.md`, 2026-09-22
+entries.
 
 ---
 
@@ -32,6 +63,12 @@ $\dfrac{dV}{dr}\bigg|_{r=r_*} = 0$.
 
 *Proof.* By definition of $r_*$: at the basin boundary, the Lyapunov gradient
 vanishes by construction. □
+
+> **False — see "Correction — 2026-09-22" above.** $V'(r) = r-1 \ne 0$ at
+> $r = r_* \approx 0.776$. There is no definition of $r_*$ anywhere in this
+> corpus under which the Lyapunov gradient vanishes there "by construction";
+> $r_*$ is a numerically certified basin-boundary value of a different,
+> coupled ODE.
 
 **Definition (Lorentzian metric induced by the Lyapunov function).**
 On the transverse $(r, z)$ slice of the contact manifold

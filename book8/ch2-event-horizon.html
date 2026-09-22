@@ -280,6 +280,13 @@ footer a:hover { color: var(--null); }
   <p style="margin-top:.4rem;"><em>Proof.</em> On S, V'(r*) = 0 (definition of basin boundary). Hence dτ |<sub>S</sub> diverges, and the induced metric on TS has signature (0, +) — null. <span class="math">∎</span></p>
 </div>
 
+<div class="box open">
+  <div class="box-label">Correction · 2026-09-22 <span class="status-open">PROOF INVALID</span></div>
+  <p>The proof step "On S, V'(r*) = 0" is false. V(r) = ½(r−1)² gives V'(r) = r − 1, which vanishes only at r = 1 (the limit cycle) — not at r* ≈ 0.776. Numerically V'(r*) = r* − 1 ≈ −0.224 ≠ 0. This is consistent with <code>book4/certify_rstar_rigorous.py</code>'s own docstring, which states r* has no known closed form and therefore cannot be a root of the linear function r − 1.</p>
+  <p style="margin-top:.4rem;">Consequence: dτ = dV/V'(r) does not blow up at r*, so this argument does not show S = {r = r*} is null. The theorem above should be read as unproved by this route, not merely unconfirmed — the specific proof given is wrong. This also removes the support this chapter's §3 closure and §7 photon-sphere prediction were built on; see the correction boxes there.</p>
+  <p style="margin-top:.4rem;">What r* actually is, independently established the same day: <code>book4/ch10.html</code>, Proposition B.6, shows r* is the z=0 crossing of the stable manifold of the saddle r<sub>s</sub> = 2cos(3π/7) of the underlying (r, z) ODE — a real, numerically certified characterization (matching the independent bisection certification to 13 significant figures), but a fundamentally different kind of object than a critical point of a one-variable potential V(r). Whether S = {r = r*} is null under some correctly-built Lorentzian metric derived from that structure is open, not refuted by this correction — only this specific construction is shown not to work. Full derivation: <code>docs/audit-log.md</code>, 2026-09-22 entries.</p>
+</div>
+
 <div class="figure">
   <div class="figure-head">
     <span class="figure-num">Figure 1</span>
@@ -394,6 +401,11 @@ footer a:hover { color: var(--null); }
   <div class="box-label">Theorem · Inner basin escape, via null causality <span class="status-proved">CLOSED</span></div>
   <p>For r₀ &lt; r*, there does not exist μ &lt; 0 such that |r(t) − 1| ≤ |r₀ − 1| · e<sup>μt</sup> for all t &gt; 0.</p>
   <p style="margin-top:.4rem;"><em>Proof.</em> Suppose such μ existed. Then the trajectory r(t) is timelike in g<sub>Lyap</sub> (its Lyapunov energy decreases exponentially, so |g<sub>Lyap</sub>(ṙ, ṙ)|<sup>1/2</sup> &gt; 0). It connects r₀ &lt; r* to r = 1 &gt; r*, hence crosses the fold S = {r = r*}. By Theorem §2, S is null. The standard causality theorem (O'Neill <em>Semi-Riemannian Geometry</em> §14.1; Hawking-Ellis Prop. 6.4.6) forbids timelike curves from crossing null hypersurfaces. Contradiction. <span class="math">∎</span></p>
+</div>
+
+<div class="box open">
+  <div class="box-label">Correction · 2026-09-22 <span class="status-open">CLOSURE DOES NOT HOLD</span></div>
+  <p>This proof's step "By Theorem §2, S is null" relies on the §2 theorem, which is corrected above: that theorem's proof does not establish S = {r = r*} is null. The contradiction this proof reaches is therefore not established, and AXLE Issue #14 (<code>inner_basin_escape</code>) is <strong>not closed</strong> by this argument — it reopens to its pre-chapter state. <code>book8/notes/issue-13-null-causality.md</code>, which this section cites as containing "the proof in clean form," carries the same gap; it was never formalized in Lean (the note says so itself), which is exactly why the error surfaced here first rather than at the kernel.</p>
 </div>
 
 <p>The honest reading of this closure: the Riemannian dm³ framework <em>contained</em> the Lorentzian information all along. The Whitney fold's degeneracy in the Lyapunov gradient is exactly the lightlike condition. Promoting to Lorentzian language is not adding new physics — it is recognising the geometric content the Lyapunov function was already carrying. The companion math note <code style="color:var(--gold);font-family:'Courier New',monospace;font-size:.85em">book8/notes/issue-13-null-causality.md</code> contains the proof in clean form. The Lean implementation is downstream of that note.</p>
@@ -641,8 +653,9 @@ footer a:hover { color: var(--null); }
 </div>
 
 <div class="box def">
-  <div class="box-label">Prediction · F7: ε₀-fraction of the photon sphere</div>
+  <div class="box-label">Prediction · F7: ε₀-fraction of the photon sphere <span class="status-open">DEPENDS ON A CORRECTED CLAIM</span></div>
   <p>The photon sphere (r = 3GM/c²) and the horizon (r = 2GM/c²) are separated by a factor of 3/2. The framework predicts that the locus where the Lyapunov gradient first vanishes — the "inner photon sphere" of unstable circular null geodesics — sits at r = (1 − ε₀) · r<sub>s</sub> = (2/3) · r<sub>s</sub>. Test: ray-tracing the inner photon orbits in Kerr and comparing the radius to (2/3) r<sub>+</sub>.</p>
+  <p style="margin-top:.4rem;"><em>2026-09-22:</em> "the locus where the Lyapunov gradient first vanishes" is r = 1, not r*, per the §2 correction above — the gradient V'(r) = r−1 has no other zero. This prediction's premise needs to be restated in terms of whatever the actual fold mechanism turns out to be (see §2 correction); as written it does not follow.</p>
 </div>
 
 <div class="box def">
@@ -655,6 +668,11 @@ footer a:hover { color: var(--null); }
 <h2 class="sec"><span>§9 &nbsp; What is closed and what is next</span><span class="sec-no">9 / 9</span></h2>
 
 <p>This chapter closes one open obligation in the AXLE tracker (AXLE Issue #14, inner_basin_escape), via the structural argument captured in §3 and detailed in <code style="color:var(--gold);font-family:'Courier New',monospace;font-size:.85em">book8/notes/issue-13-null-causality.md</code>. It identifies the Schwarzschild horizon as the canonical realisation of the Lorentzian Whitney fold. It promotes the dm³ operator chain to a causally-respecting setting, with three of the four operators surviving unchanged and F becoming a null hypersurface. It makes three falsifiable predictions for horizon physics.</p>
+
+<div class="box open">
+  <div class="box-label">Correction · 2026-09-22 <span class="status-open">CLAIM WITHDRAWN</span></div>
+  <p>The closure claimed in this paragraph does not hold — see the correction boxes in §2 and §3. AXLE Issue #14 is open again. The Schwarzschild-horizon identification and Prediction F7 (§7) inherit the same gap. What does survive: Chapter 1's Riemannian dark-matter result (unaffected, it makes no Lorentzian claim), and the independently-established fact (<code>book4/ch10.html</code>, Prop. B.6) that r* is the stable-manifold crossing of a closed-form saddle — a real result, just not the one this chapter used.</p>
+</div>
 
 <p>The next chapter — Book 8 Chapter 3 — is the dual problem on the other side of the horizon. If F<sub>L</sub> is the null hypersurface that bounds the trapped region from the outside, what is the structure of the interior? The dm³ chain on the Lorentzian interior should produce the singularity at the center as the limit of the operator chain applied infinitely many times — a chained sequence of folds collapsing to the central singular point. The constant that emerges is conjecturally the inverse of η, since the operator algebra is reversed in time. That conjecture is the seed of Chapter 3.</p>
 
