@@ -9799,3 +9799,83 @@ substantive content on both sides that a paragraph-diff alone cannot respons­ib
 `tools/duplicates.py` now reports 6 undeclared groups (down from 27), and exits 1 — by
 design, since those 6 are real open questions, not an oversight. Rerun without `--self-test`
 to see the current list.
+
+## 2026-09-22 (later) — Book XVII ch02, two Book VII bricks, three cross-references
+
+Requested live, in conversation: a Cartesian-plane / Distance-Formula chapter using two
+real cities, prompted by the "nested dolls" number-sets opening and the "reach for a
+graphing calculator" moment in Stitz & Zeager's open-source *Precalculus* (already held,
+`szprecalculus07042013.pdf`) — placed in Book XVII (the Machine Floor) per Pablo's own
+placement call, not Book 3, since the point is a *working tool*, not a description of one.
+
+**`book17/ch02-the-distance-a-plane-actually-flies.html`** (new). Plots Brasília and New
+York on the Distance Formula's own grid and keeps two numbers honestly apart: what
+Equation 1.1 literally computes from raw (lon, lat) — 62.25, unitless, a real output of the
+formula and not a distance — against the true great-circle distance, 6837.2 km (4248 mi),
+haversine, mean Earth radius 6371.0088 km. The gap is explained, not glossed: a degree of
+latitude is a constant 111.20 km everywhere; a degree of longitude shrinks with cos(lat) —
+107.00 km/deg at Brasília's latitude, 84.28 km/deg at New York's — and the flat formula has
+no cosine in it. Hook: Lula met NYC Mayor Zohran Mamdani in New York on 2026-09-21, ahead of
+the UN General Assembly's High-level Week (opens 2026-09-23) — checked live, both wire
+reports and un.org, that day, not assumed from training data.
+
+`book17/Book17Ch02.lean` — three small, self-contained real-number facts about the squared
+distance function (`distSq_symm`, `distSq_nonneg`, `sqrt_distSq_sq`) back the one genuinely
+formal claim on the page. **Same constraint as everywhere else in this project: no local
+Lean toolchain, so this file is UNTESTED** — `ring` and `positivity` should close the first
+two, the exact Mathlib name for the third (`Real.sq_sqrt`) is a best recollection, not
+confirmed. The page says this plainly in its own Part VI rather than dressing the Lean file
+up as checked. `book17/ch02-verify.py` recomputes every geographic/arithmetic figure fresh
+(standard library, no network) and confirms the page prints the same numbers it just
+computed — it does not and cannot check the Lean file.
+
+**Book VII gets two chapters it was missing: `ch-descartes.html` and `ch-leibniz.html`.**
+Both are corrections of a popular attribution, checked against live web sources
+(2026-09-22, not held/hashed PDFs — flagged as a lower evidence tier on both pages, honestly,
+rather than dressed up as Tier-1):
+
+- Descartes: *La Géométrie* (1637) uses one problem-specific reference axis, not the fixed
+  two-perpendicular-axis grid everyone calls Cartesian. That grid is Frans van Schooten's
+  1649 Latin edition and his students' (de Witt, Hudde, van Heuraet) added commentary.
+  Fermat worked independently with the same single-axis convention; Hipparchus/Ptolemy and
+  Nicole Oresme are earlier, unalgebraized ancestors of the two-axis picture.
+- Leibniz: `d` and `∫` are dated to the day in private 1675 manuscripts (29 Oct, 11 Nov);
+  first PUBLISHED 1684 (`Nova Methodus...`, *Acta Eruditorum*) and June 1686 respectively.
+  The stacked fraction `dy/dx` everyone writes is not Leibniz's own printed form — his 1684
+  paper sets it as a ratio, `dy ad dx` / `dy : dx`. Newton–Leibniz priority dispute stated
+  evenhandedly: independent co-discovery is the modern consensus; the Royal Society's 1712
+  report favoring Newton was produced under Newton's own presidency and is not treated as
+  impartial by historians today.
+
+Both new Book VII pages get their own presence-check verify scripts
+(`ch-descartes-verify.py`, `ch-leibniz-verify.py`) — a genuinely weaker tier than this
+corpus's usual PDF-hash pattern, stated as such on both pages and in both scripts' own
+`[HONESTY]` blocks: no network at verify time, so these confirm the page still says what its
+web sources said when checked, not that the web sources are correct.
+
+**Three small cross-reference edits**, each a single anchored string-replacement, verified
+unique before writing: `ch8-nested-infinities.html` gets the Matryoshka-dolls citation, with
+the inclusion-vs-cardinality distinction stated carefully (N, Z, Q are the same *size* —
+countable — despite nesting by inclusion; only Q⊂R changes cardinality, which previews
+Cantor's actual point two paragraphs later, rather than being confused with it);
+`book11/ch01-a-name-for-how-many.html` gets one box connecting "a numeral names how many" to
+"a coordinate pair names how many units to move"; `book7/index.html` gets both new gallery
+cards. `book17/index.html`'s planned-chapter table is renumbered (ch02 inserted; the
+existing "What Converges", "The Discrete Floor", "The First Loop That Learns" planned titles
+shift to 3/4/5 rather than being silently overwritten by ch02's arrival).
+
+Checked before committing: `tools/duplicates.py` still reports exactly 6 undeclared groups
+(unchanged — no new collisions introduced); `tools/build_indexes.py` runs clean, 797 files
+total (+3), book7 91/1 orphaned (unchanged orphan, the chcurie stub), book17 3/0 orphaned;
+every new/edited HTML file parses; `book17/ch02-verify.py`,
+`book7/ch-descartes-verify.py` and `book7/ch-leibniz-verify.py` all pass. Two real bugs
+caught and fixed by the verify scripts themselves before this entry was written: a
+line-wrap inside two quoted proper nouns broke an early, over-literal substring check
+(fixed by normalizing whitespace before matching, not by changing the HTML); an SVG
+plot-point mapping was computed correctly in a comment but the coordinates typed beside it
+did not match the comment's own formula (recomputed by hand and fixed before commit).
+
+Not done, and not claimed done: `book17/Book17Ch02.lean` has not been run against a kernel.
+Descartes/Leibniz sources are web pages, not the corpus's preferred held-and-hashed PDFs —
+re-confirming against primary editions (van Schooten's Latin text, a facsimile of the 1684
+*Acta Eruditorum*) is future work, marked `[OPEN]` on both pages.
