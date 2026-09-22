@@ -123,9 +123,9 @@ not all in XX:
 | Ellenberg part | placed in | state |
 |---|---|---|
 | Linearity | X (the non-linear floor) · XVIII (locally straight = the chain rule) | exists |
-| Inference | XX ch 1–2 | ch 1 blocked (Wald 1943 not held); ch 2 writable |
+| Inference | XX ch 1–2 | writable — Wald 1943 held (CRC 432 reprint), 2026-09-21 |
 | Expectation | XX ch 3 | writable |
-| Regression | XX ch 4–5 | ch 4 blocked (Galton 1886 not held; not in Evans & Rosenthal); ch 5 method writable |
+| Regression | XX ch 4–5 | ch 4 writable — Galton 1886 held (not in Evans & Rosenthal); ch 5 method writable, verdict open |
 | Existence — geometry | XIII ch 9 (Beltrami) | exists |
 | Existence — public opinion | X, a chapter on 55 states and one voice (Condorcet, Arrow) | **to write** — sources not held |
 

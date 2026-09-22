@@ -11,7 +11,8 @@ Blocks
       and the files on disk still hash to those rows
   [2] addresses in Evans & Rosenthal, located by text search, never copied
   [3] the HURDAT2 file: hash, storm count, year range, basins
-  [4] the primary sources the volume WANTS: searched for, by several patterns
+  [4] Wald 1943 and Galton 1886: ledger, hash, and the passages chs 1 and 4 rest on;
+      Condorcet and Arrow, still wanted, searched for by several patterns
   [5] the placements the index names exist at the paths it gives
   [HONESTY]
 
@@ -138,19 +139,73 @@ if DL and (DL / HU).exists():
 else:
     check("HURDAT2 file present", False, "not found in Downloads")
 
-# [4] wanted primary sources
-print("[4] wanted primary sources -- searched, by filename and by ledger first line")
+# [4] founding papers: held, in the ledger, and the passages the chapters rest on
+print("[4] founding papers (Wald 1943, Galton 1886) and what is still wanted")
+WA = "9-A method of estimating plane vulnerability ....pdf"
+GA = "Galton85.pdf"
+def pdfpages(name):
+    try:
+        t = subprocess.run(["pdftotext", "-layout", str(DL / name), "-"],
+                           capture_output=True, text=True, check=True).stdout
+        return t.split("\f")
+    except (FileNotFoundError, subprocess.CalledProcessError, TypeError):
+        return None
+def foot(pg):  # Wald reprint folios are printed as "-63-" / "— 1—"
+    ls = [l.strip() for l in pg.splitlines() if l.strip()]
+    m = re.search(r"(\d+)", ls[-1]) if ls else None
+    return int(m.group(1)) if m else None
+def jhead(pg):  # Galton: the journal page number sits in the running head
+    ls = [l.strip() for l in pg.splitlines() if l.strip()]
+    m = re.match(r"^(\d{3})\b", ls[0]) or re.search(r"\b(\d{3})$", ls[0]) if ls else None
+    return int(m.group(1)) if m else None
+for name, pages_ in ((WA, "100"), (GA, "21")):
+    r = rows.get(name)
+    check(f"ledger row: {name[:40]}", r is not None and r[0] == pages_, f"pages {r[0] if r else None}")
+    if r and DL and (DL / name).exists():
+        check(f"file still hashes to ledger: {name[:40]}", sha(DL / name) == r[1], r[1][:16])
+W = pdfpages(WA) if DL and (DL / WA).exists() else None
+if W:
+    parts = {}
+    for i, pg in enumerate(W):
+        m = re.search(r"(?m)^\s*PART\s+([IVX]+)\s*$", pg)
+        if m and m.group(1) not in parts:
+            parts[m.group(1)] = foot(pg)
+    check("Wald: eight Parts, I-VIII", list(parts) == ["I","II","III","IV","V","VI","VII","VIII"], str(parts))
+    check("Wald: Part I on p. 1, Part V (subdivision of the plane) on p. 56",
+          parts.get("I") == 1 and parts.get("V") == 56, f"I {parts.get('I')}, V {parts.get('V')}")
+    i1 = next((i for i, pg in enumerate(W) if re.search(r"SRG memo 85", pg)), None)
+    check("Wald: Part I footnote names SRG memo 85 and AMP memo 76.1",
+          i1 is not None and "AMP memo 76.1" in W[i1], f"PDF page {i1 + 1 if i1 is not None else None}")
+    ie = next((i for i, pg in enumerate(W) if re.search(r"vulnerability of the engines, the fuselage, and the fuel system", re.sub(r"\s+", " ", pg))), None)
+    check("Wald: the engines / fuselage / fuel-system worked example, p. 63",
+          ie is not None and foot(W[ie]) == 63, f"PDF page {ie + 1 if ie is not None else None}, printed {foot(W[ie]) if ie is not None else None}")
+    ir = next((i for i, pg in enumerate(W) if "for the observed data of this hypothetical example, the engine area is the most vulnerable" in re.sub(r"\s+", " ", pg)), None)
+    fl = re.sub(r"\s+", " ", W[ir]) if ir is not None else ""
+    check("Wald: in the HYPOTHETICAL example the engines are most vulnerable, p. 65",
+          ir is not None and foot(W[ir]) == 65 and "Engines .61 .39" in fl and "Fuselage .95 .05" in fl,
+          f"PDF page {ir + 1 if ir is not None else None}; engines downed by one hit .39, fuselage .05")
+    ia = next((i for i, pg in enumerate(W) if "guides for locating protective armor" in re.sub(r"\s+", " ", pg)), None)
+    check("Wald: 'guides for locating protective armor', the only place armor is named",
+          ia is not None and [i for i, pg in enumerate(W) if re.search(r"(?i)armou?r", pg)] == [ia],
+          f"PDF page {ia + 1 if ia is not None else None}, printed {foot(W[ia]) if ia is not None else None}")
+    iy = next((i for i, pg in enumerate(W) if re.search(r"Reprint\s*-\s*1943", pg)), None)
+    check("Wald: report form dates the memoranda 1943", iy is not None, f"PDF page {iy + 1 if iy is not None else None}")
+G = pdfpages(GA) if DL and (DL / GA).exists() else None
+if G:
+    flat = [re.sub(r"\s+", " ", pg) for pg in G]
+    ig = next((i for i, pg in enumerate(flat) if "two-thirds of the height-deviate of its mid-parentage" in pg), None)
+    check("Galton: the law of regression, 'two-thirds of the height-deviate of its mid-parentage', p. 252",
+          ig is not None and jhead(G[ig]) == 252, f"PDF page {ig + 1 if ig is not None else None}, journal page {jhead(G[ig]) if ig is not None else None}")
+    check("Galton: J. Anthropological Institute 15 (1886), pp. 246-263",
+          "Vol. 15 (1886), pp. 246-263" in flat[0], flat[0][flat[0].find("Source"):][:90])
+    heads = [jhead(pg) for pg in G]
+    check("Galton: journal pages 246 and 263 both present", 246 in heads and 263 in heads)
 names = [p.name for p in DL.iterdir()] if DL else []
 firsts = [l.split("\t")[5] if len(l.split("\t")) > 5 else ""
           for l in (ROOT / "docs/floor-texts.tsv").read_text(encoding="utf-8").splitlines()[1:]]
-wants = {
-    "Wald 1943, plane vulnerability memo": [r"(?i)wald", r"(?i)vulnerab", r"(?i)damage of survivors"],
-    "Galton 1886, regression towards mediocrity": [r"(?i)galton", r"(?i)mediocrity", r"(?i)hereditary stature"],
-    "Condorcet 1785, Essai": [r"(?i)condorcet", r"(?i)pluralit"],
-    "Arrow 1951, Social Choice and Individual Values": [r"(?i)arrow", r"(?i)social choice"],
-}
-for want, pats in wants.items():
-    hit = [s for s in names + firsts for p in pats if re.search(p, s)]
+for want, pats in {"Condorcet 1785, Essai": [r"(?i)condorcet", r"(?i)pluralit"],
+                   "Arrow 1951, Social Choice and Individual Values": [r"(?i)\barrow\b", r"(?i)social choice"]}.items():
+    hit = [x for x in names + firsts for p in pats if re.search(p, x)]
     print(f"     {'HELD?' if hit else 'not found'}: {want}  ({len(pats)} patterns){'  -> ' + hit[0][:60] if hit else ''}")
 
 # [5] placements
@@ -170,7 +225,9 @@ index prints are what the files say today. It checks that four other pages
 exist and carry one word each; it does not check that those pages do the job
 the index assigns them.
 
-It does not establish that a wanted source is absent. Block [4] searches
+Block [4] reads OCR text layers: Wald's reprint is a 2003 scan and its
+front matter is garbled, so only passages the script found verbatim are
+printed on the index. It does not establish that a wanted source is absent: it searches
 filenames and ledger first lines with a few patterns; a source under another
 name, or inside a scanned PDF with no text layer, would not be found. 'not
 found' means exactly that. And nothing here reads the chapters, which do not

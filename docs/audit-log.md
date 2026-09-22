@@ -9580,3 +9580,16 @@ not propagate. Left for chapter 2, which names it in advance as a case.
 **Pre-existing, noticed:** `tools/build_indexes.py` FOLDERS lists book20 now but
 still lacks book11, book12, book21 and book28, all of which are live.
 `[OPEN]`
+
+**Same night — both founding papers arrived.** Wald, CNA reprint CRC 432 (100 pp,
+2003 scan, rough OCR) and Galton 1886 (JSTOR, 21 pp) were downloaded, the ledger
+re-run (119 → 121 rows), and `book20/index-verify.py` block [4] rewritten from a
+search for absence into checks of the passages chapters 1 and 4 rest on. Chapters
+1 and 4 moved from blocked to writable; the index keeps the earlier state in its
+§4 box rather than erasing it. **What the script established about Wald that the
+retellings do not say:** the worked example is labelled *hypothetical* (engines
+downed by a single hit with probability .39, fuselage .05, p. 65), and armour is
+named exactly once in 100 pages — p. 89, the tables offered as "guides for
+locating protective armor". Chapter 1 is to be written from the method, not the
+anecdote. Galton's law is on p. 252 in one sentence; the converse warning follows
+on p. 253. Condorcet and Arrow remain not found. `[OPEN]` for Book X only.
