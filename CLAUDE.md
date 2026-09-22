@@ -262,6 +262,15 @@ Order of operations, so nothing green is moved twice:
 exists there (origin/port-v4.32), pinned to v4.32.0 / Mathlib 81a5d257c8 —
 geometry's exact revision. Do not link it until its badge is green.
 
+**Also found 2026-09-22, checking a loose end, not assuming it was isolated:**
+`origin/main` — the branch anyone lands on, the one the 82-theorem claim
+above is actually about — had been failing its own CI for nine days (green
+through run #6, red #7/#8/#10, 2026-09-13 through 09-21), because a fix for
+it (`12ab4ef`, 2026-09-18) existed locally and was never pushed. Fast-forward
+only, nothing to reconcile — see docs/audit-log.md for the full account. If
+this is read before Pablo has pushed `main`, check `git log origin/main -1`
+before trusting a green badge on sight.
+
 ### Why this kept not happening, and what it actually costs
 
 Not forgetfulness. A version conflict nobody had stated:

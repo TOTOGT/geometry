@@ -9931,3 +9931,53 @@ and is unrelated to this port; not touched, not committed, flagged to Pablo.
 Two separate repos, two separate pending pushes after this entry: `geometry` (this file plus
 `CLAUDE.md`'s R22 section) and `vol1-proofs` (`port-v4.32`, `fc2b49b`). Neither was pushed
 from this session — no push credentials here, by design; Pablo pushes both.
+
+## 2026-09-22 (later still, continued) — the loose end was a real one: vol1-proofs' `main` has been red on GitHub for nine days
+
+Asked to look into the uncommitted `tools/vacuity_fixtures.lean` change flagged in the previous
+entry. It led somewhere bigger than that one file.
+
+**The uncommitted fix itself, resolved first:** `import Mathlib` (the bare aggregator) was the
+only place in `vol1-proofs` that imported it; `lake build` never builds that aggregator unless
+something asks for it, so a local `lake env lean tools/vacuity_fixtures.lean` couldn't find it.
+The comment dated the fix 2026-08-29 but it was never committed — flagged, not explained, in two
+later commit messages (`6f6c6c0`, `5b6c477`) as "modified in this working tree by another
+session, deliberately left uncommitted." Two gitignored files still sitting in the working tree,
+`tools/vacuity_fixtures.out` and `tools/vacuity.out`, both dated 2026-08-29 01:57–01:59, are the
+actual output of a real local kernel run with the fix applied: `SCANNED: 6 theorems... FLAGGED:
+5` (the file's own documented expectation) and the real scan clean at `VACUOUS: 0` across 135 +
+29 theorems and two Prop-definition scans. Real evidence, 24 days old, that the fix works — not
+a guess. Committed on both `main` (`cb102f0`) and `port-v4.32` (`7e0cc45`), same content, since
+the file is identical on both branches.
+
+**What the investigation actually turned up, checking rather than assuming the fix was isolated:**
+CI history for `vol1-proofs`' `main` branch (fetched via the linked desktop's own browser, since
+this session has no GitHub credentials) shows green runs #1–#6 (2026-08-25 through 2026-09-07),
+then **red on every run since — #7, #8, #10 (2026-09-13, 09-14, 09-21)**. The cause: `6f6c6c0`
+(2026-09-13) changed `PrincipiaVol1.lean`'s `ExponentialBounds` import to the v4.32 path while
+`main` was — and still is — pinned to v4.14.0, where only the old path resolves. A later commit,
+`12ab4ef` (2026-09-18, "Restore the build at the pin"), reverted exactly that and wrote up the
+finding properly in `docs/MATHLIB-FORWARD-v4.32.md` instead of leaving it live in the real proof
+file. **That revert was never pushed.** `git fetch` + `git log origin/main` confirms
+`origin/main` is still sitting at `6f6c6c0` — the broken commit — while local `main` had already
+moved two commits past it, entirely unpushed, for nine days. `port-v4.32` (branched from the
+already-fixed local `main`) carries the fix and was pushed 2026-09-22, so CI has been green on
+that branch's build step since; `main` itself, the branch anyone lands on by default, has been
+showing red the entire time, for a bug that was already fixed on the machine that could have
+pushed it.
+
+**Checked directly rather than assumed:** `git merge-base --is-ancestor origin/main main`
+confirms this is a clean fast-forward, not a divergent history — nothing to reconcile, just a
+missing `git push`. `origin/port-v4.32` was already caught up to the local tip before this
+entry's commits.
+
+**Left alone:** whether CI's `import Mathlib` behavior differs from local (`lake exe cache get`
+plausibly fetches the aggregator's build artifacts on CI in a way the local partial install
+never did) is inferred from the run history, not independently confirmed — CI was demonstrably
+fine with the un-fixed import on runs #1–#6, so the `vacuity_fixtures.lean` fix is a real
+improvement in what the fixtures actually import, not a fix to a defect CI had ever shown.
+
+Three commits now sit locally in `vol1-proofs` unpushed: `main` is three ahead of `origin/main`
+(`12ab4ef`, `5b6c477` — pre-existing, undiscovered until now — plus `cb102f0`, new this entry),
+`port-v4.32` is one ahead of `origin/port-v4.32` (`7e0cc45`). Not pushed from this session, same
+as always — Pablo pushes both branches of `vol1-proofs`.
