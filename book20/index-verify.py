@@ -208,6 +208,66 @@ for want, pats in {"Condorcet 1785, Essai": [r"(?i)condorcet", r"(?i)pluralit"],
     hit = [x for x in names + firsts for p in pats if re.search(p, x)]
     print(f"     {'HELD?' if hit else 'not found'}: {want}  ({len(pats)} patterns){'  -> ' + hit[0][:60] if hit else ''}")
 
+
+# [4b] social choice sources, for the chapter placed in Book X (55 states, one voice)
+print("[4b] social choice sources for Book X")
+SC = {  # file -> (sha256, pages); short papers sit under floor_texts.py's 12-page floor, so hashed here
+    "Condorcet1785_ProbabiliteDecisions.pdf": ("775d898573e3401a448f4537b5be3d0638cb0a1e1196cc74b2a5b10f2efed2fa", 197),
+    "ArrowProof3.pdf": ("4e7665926a30838639e798e581ee45131566420837db7750c2fd26cfd3c2db41", 6),
+    "DP417.pdf": ("0743b37fb2a6292c3f264154a7128587d8d0039ab8b6e03253c7f76ad21a7672", 39),
+    "the_pre-history_of_kenneth_arrows_social_choice_and_individual_values_406.pdf":
+        ("1b9880ebbb51be71499d357bd9ac8b9743bde6add59414e8076b8a3b0e94fe07", 8),
+}
+for name, (h, n) in SC.items():
+    if DL and (DL / name).exists():
+        check(f"held, unchanged: {name[:44]}", sha(DL / name) == h, h[:16])
+    else:
+        check(f"held: {name[:44]}", False, "not found in Downloads")
+F = pdfpages("ArrowProof3.pdf") if DL and (DL / "ArrowProof3.pdf").exists() else None
+if F:
+    fl = [re.sub(r"\s+", " ", x) for x in F]
+    check("Fey 2014: theorem stated on p. 2 (Unanimity + IIA => a dictator)",
+          "If a social preference function satisfies Unanimity and IIA, then some indi- vidual is a dictator" in fl[1])
+    check("Fey 2014: fully general -- weak orders, any finite N, at least three alternatives",
+          "at least three alternatives" in fl[1] and "weak orders" in fl[1])
+S = pdfpages("DP417.pdf") if DL and (DL / "DP417.pdf").exists() else None
+if S:
+    fl = [re.sub(r"\s+", " ", x) for x in S]
+    i = next((k for k, x in enumerate(fl) if "first extended illustration of the paradox of voting" in x), None)
+    check("Suzumura 2001: Condorcet's first extended illustration concerns restrictions on commerce",
+          i is not None and "restriction placed on commerce" in fl[i], f"PDF page {i + 1 if i is not None else None}")
+    check("Suzumura 2001 cites Condorcet (1785, Discours preliminaire, p. clxxix) on Borda",
+          any("Discours préliminaire, p.clxxix" in x for x in fl))
+# Condorcet is a 1785 scan with no text layer. With --ocr, five pages are OCR'd and read.
+# Offset read off the book: PDF page 185 carries the folio clxxix that Suzumura cites -> roman = PDF - 6.
+if "--ocr" in sys.argv and DL and (DL / "Condorcet1785_ProbabiliteDecisions.pdf").exists():
+    import tempfile
+    def ocr(pg):
+        with tempfile.TemporaryDirectory() as d:
+            subprocess.run(["pdftoppm", "-f", str(pg), "-l", str(pg), "-r", "150", "-gray", "-png",
+                            str(DL / "Condorcet1785_ProbabiliteDecisions.pdf"), f"{d}/i"], check=True)
+            im = sorted(Path(d).glob("i*.png"))[0]
+            return subprocess.run(["tesseract", str(im), "-", "-l", "eng"], capture_output=True, text=True).stdout
+    try:
+        C = {pg: re.sub(r"\s+", " ", ocr(pg)) for pg in (58, 60, 63, 64, 185)}
+        check("Condorcet: offset -- PDF 185 is the 'imprimé en entier' page Suzumura cites as p. clxxix",
+              "imprim" in C[185] and "Ouvrage" in C[185])
+        check("Condorcet p. lii: the commerce example begins ('liberté du commerce')",
+              "commerce" in C[58] and "loix générales" in C[58])
+        check("Condorcet p. liv: the winning combination 'paroissoit avoir le moins de voix'",
+              "moins de voix" in C[60])
+        check("Condorcet p. lvii: three candidates, combination III -- any two propositions contradict the third",
+              "de deux quelconques des trois" in C[63] and "contraire" in C[63])
+        check("Condorcet p. lviii: 60 voters, 23 for A, 19 for B",
+              "60 Votans" in C[64] and "23" in C[64] and "19" in C[64])
+    except (FileNotFoundError, subprocess.CalledProcessError, IndexError) as e:
+        print(f"SKIP Condorcet OCR: {e}")
+else:
+    print("SKIP Condorcet passages (run with --ocr; needs pdftoppm and tesseract, ~45 s)")
+print("     not held: Arrow 1951 itself. Held instead: Fey's proof (2014), Suzumura's Handbook introduction")
+print("     (2001), Suppes's history (2005). 'Proving Social Choice Possible' (Lawrence, preprint) is held")
+print("     and deliberately not used: an unrefereed claim to overturn the theorem is not a source for it.")
+
 # [5] placements
 print("[5] placements named on the index")
 for path, needle in (("book13/ch09-what-a-model-carries.html", "Beltrami"),

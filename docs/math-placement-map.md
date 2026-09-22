@@ -127,7 +127,7 @@ not all in XX:
 | Expectation | XX ch 3 | writable |
 | Regression | XX ch 4–5 | ch 4 writable — Galton 1886 held (not in Evans & Rosenthal); ch 5 method writable, verdict open |
 | Existence — geometry | XIII ch 9 (Beltrami) | exists |
-| Existence — public opinion | X, a chapter on 55 states and one voice (Condorcet, Arrow) | **to write** — sources not held |
+| Existence — public opinion | X, a chapter on 55 states and one voice (Condorcet, Arrow) | **to write** — Condorcet 1785 held (cycle at Discours p. lvii), Fey 2014 proof held; Arrow 1951 not held |
 
 ### XIV, XVI–XIX (XII and XX now have identities) — **no identity, and none should be invented**
 Nothing in the corpus implies what these hold. Assigning them themes now would

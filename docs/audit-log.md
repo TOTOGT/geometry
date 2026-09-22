@@ -9593,3 +9593,23 @@ named exactly once in 100 pages — p. 89, the tables offered as "guides for
 locating protective armor". Chapter 1 is to be written from the method, not the
 anecdote. Galton's law is on p. 252 in one sentence; the converse warning follows
 on p. 253. Condorcet and Arrow remain not found. `[OPEN]` for Book X only.
+
+**Later the same night — social choice sources.** Condorcet 1785 (*Essai*, Gallica
+scan, 197 pp, no text layer), Fey 2014 (*A Straightforward Proof of Arrow's
+Theorem*, 6 pp), Suzumura 2001 (Handbook introduction, DP417), Suppes 2005
+(pre-history of Arrow's book) and Lawrence's preprint *Proving Social Choice
+Possible* arrived. The last is held and **not used**: an unrefereed claim to
+overturn a theorem is not a source for it. Arrow 1951 itself is still not held.
+Fey and Suppes fall under `floor_texts.py`'s 12-page floor, so
+`book20/index-verify.py` block [4b] hashes all four used sources itself.
+**Condorcet was read, not cited through Suzumura.** The whole book was OCR'd once
+(tesseract, English model: long s reads as f, accents survive); the verify script
+re-OCRs only the five pages it asserts, behind `--ocr`. Offset roman = PDF − 6,
+fixed by an independent citation: PDF 185 is the "imprimé en entier" footnote
+Suzumura cites as p. clxxix. Finding: the three-candidate **cycle** is at p. lvii
+(60-voter example p. lviii). The commerce example Suzumura calls Condorcet's
+"first extended illustration of the paradox of voting" (pp. lii–liv) is a
+different inconsistency — majorities on each of three propositions select the
+option that "seemed to have the fewest votes" — closer to what is now called the
+doctrinal paradox than to a cycle. Suzumura is not wrong to group them; the
+chapter must not conflate them.
