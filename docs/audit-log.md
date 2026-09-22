@@ -9541,3 +9541,42 @@ applied twice.
 
 `tools/audit.py` unchanged at 27 dead_link, 2 double_escaped. `[CLOSED]`
 
+
+---
+
+## 2026-09-21 · Book XX opened — Reading Data, and where Ellenberg's five parts go
+
+**Placement, by role (`docs/math-placement-map.md` §1).** Ellenberg's *How Not
+to Be Wrong* (held, 532 pp, ledger row added) was taken as a map of ground the
+series had not covered, and each of its five parts was placed where its role is
+rather than given a volume each. Linearity already lives in X and XVIII. The
+geometry half of Existence is already `book13/ch09-what-a-model-carries.html`
+(Beltrami, 1868). The public-opinion half (Condorcet, Arrow) is Book X's own
+question — one voice for 55 states — and is recorded as **to write**, sources
+not held. Inference, Expectation and Regression had no home in their register:
+XVII holds probability as the kernel defines it, XIII holds what a proof check
+certifies, and neither holds what a person may conclude from data. So **XX was
+opened and named after its material**, as the placement map requires.
+
+**Ledger first (R19).** `tools/floor_texts.py` re-run: 113 → 119 rows, six added
+(Ellenberg and five contact-topology texts downloaded 2026-09-21), none removed.
+
+**The script ran before the page (R24), and caught one error.**
+`book20/index-verify.py` reads the PDF-to-printed page offset off Evans &
+Rosenthal's own contents page (14) and locates each section by its heading. The
+address typed from a first look, §9.3 on p. 510, was the running head of the
+next page; §9.3 begins on p. 509. It also established that the held text never
+names regression to the mean — no Galton, no "toward the mean", no "regression
+effect", no "mediocrity" — so chapter 4 is blocked on Galton 1886, not writable
+from the textbook as first assumed. HURDAT2: 1,988 storms, 1851–2025, Atlantic
+only, sha256 `df63fabce0ad824d…`.
+
+**Found, not fixed — chapter 2's first case.** `g6_equals_schumann` is recorded in
+CLAUDE.md as vacuous (`33 = 33`) and withdrawn in Vol I V7, but
+`book5/chV-constants.html` still prints it with a paragraph reading the
+coincidence as meaningful, and so does `book5/index.html`. A withdrawal that did
+not propagate. Left for chapter 2, which names it in advance as a case.
+
+**Pre-existing, noticed:** `tools/build_indexes.py` FOLDERS lists book20 now but
+still lacks book11, book12, book21 and book28, all of which are live.
+`[OPEN]`

@@ -35,6 +35,7 @@ and Vol X (how it reached us) without any of those being a copy.
 | **XI** — *(no core yet)* | **The algebraic floor.** Number fields, units, class groups, K-theory. | Does the claim rest on an arithmetic invariant? |
 | **XIII** — Coherence | **The check.** What a verification establishes and what it does not. | Is the subject the instrument rather than the result? |
 | **XV** — *(not opened)* | **Representation theory.** Witt, E8, W-algebras, critical level. | Is it a statement about a Lie-algebraic structure? |
+| **XX** — Reading Data | **The inference.** What a pattern, an average or a trend licenses a person to conclude. | Is the subject what the *data* entitle you to say, rather than what a machine defines (XVII) or what a proof check certifies (XIII)? |
 
 **Corollary, and the reason this document exists:** a piece of math with only
 one role is not yet understood. If a result fits in exactly one volume, either
@@ -110,7 +111,25 @@ conventional; E8 with `h^vee = 30`, self-dual, critical level `k = -30`.
 
 **What would open it:** the theorem `ch-feigin` declines to assert.
 
-### XII, XIV, XVI–XX — **no identity, and none should be invented**
+### XX — Reading Data · **opened 2026-09-21, named after its material**
+The material arrived and fitted nowhere else in its register: Evans &
+Rosenthal (held since the ledger, never opened), the NOAA HURDAT2 Atlantic
+file, and Ellenberg's *How Not to Be Wrong* as a guide to structure. XVII keeps
+probability as the kernel defines it; XIII keeps what a proof check certifies;
+XX takes what a person may conclude from data. Addresses and counts:
+`book20/index-verify.py`. Ellenberg's five parts are placed across the series,
+not all in XX:
+
+| Ellenberg part | placed in | state |
+|---|---|---|
+| Linearity | X (the non-linear floor) · XVIII (locally straight = the chain rule) | exists |
+| Inference | XX ch 1–2 | ch 1 blocked (Wald 1943 not held); ch 2 writable |
+| Expectation | XX ch 3 | writable |
+| Regression | XX ch 4–5 | ch 4 blocked (Galton 1886 not held; not in Evans & Rosenthal); ch 5 method writable |
+| Existence — geometry | XIII ch 9 (Beltrami) | exists |
+| Existence — public opinion | X, a chapter on 55 states and one voice (Condorcet, Arrow) | **to write** — sources not held |
+
+### XIV, XVI–XIX (XII and XX now have identities) — **no identity, and none should be invented**
 Nothing in the corpus implies what these hold. Assigning them themes now would
 be the same error as the near-integer in section 2: asserting structure that
 has not been measured. They stay empty until material arrives that fits nowhere

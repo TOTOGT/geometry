@@ -94,6 +94,7 @@ FOLDERS: list[tuple[str, str, str]] = [
     ("book17", "Book XVII — The Machine Floor", "book17"),
     ("book18", "Book XVIII — The Chain Rule", "book18"),
     ("book19", "Book XIX — AXLE and the Manual", "book19"),
+    ("book20", "Book XX — Reading Data", "book20"),
     ("omega", "Book IX \u2014 Omega Point", "omega"),
     ("HVEH", "HVEH", "HVEH"),
     ("AMonster", "A Monster's Law", "AMonster"),
