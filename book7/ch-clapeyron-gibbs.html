@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clapeyron, Maxwell, Gibbs · The Geometry of Thermodynamics · Principia Orthogona Vol VII</title>
+<meta name="description" content="Clapeyron drew a parallelogram in 1834. Maxwell extended it in 1871 and read four thermodynamic relations off the picture, using Rankine's function in place of a word he still misunderstood. Gibbs corrected him in 1873 and built a surface whose tangent planes carry the same claim in three dimensions. All three constructions are one statement about a contact structure, checked here on an ideal gas and a van der Waals fluid, not asserted.">
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none;
+             transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+      border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .04em; line-height: 1.15;
+         margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 660px; margin: 0 auto 1.5rem; }
+.hero-eq { font-family: 'Courier New', monospace; font-size: .8rem;
+         letter-spacing: .06em; color: rgba(201,168,76,.55); margin-top: 1.2rem; }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .08em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem;
+   border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+em { font-style: italic; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-math { background: rgba(17, 17, 24, 0.9); border: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; font-family: 'Courier New', monospace;
+            line-height: 1.7; overflow-x: auto; font-size: .9rem; white-space: pre; }
+.block-axiom { background: rgba(201, 168, 76, 0.08); border-left: 3px solid var(--gold);
+             padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-theorem { background: rgba(74, 158, 255, 0.08); border-left: 3px solid var(--op-c);
+               padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-open { background: rgba(192, 132, 252, 0.08); border-left: 3px solid var(--op-k);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-open .block-label { color: var(--op-k); }
+table.cat { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .88rem; }
+table.cat th { text-align:left; font-family:'Courier New',monospace; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+table.cat td { padding: .55rem .6rem; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+table.cat td:first-child { color: var(--gold); font-weight: 600; }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .9rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .8rem; }
+.pull-wrap { background: rgba(201, 168, 76, 0.08); border-left: 4px solid var(--gold);
+           padding: 2rem; margin: 3rem 0; border-radius: 2px; font-style: italic;
+           line-height: 1.85; }
+.pull-cite { font-size: .85rem; color: var(--dim); display: block; margin-top: 1rem; font-style: normal; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none;
+          transition: color .2s; }
+.ch-nav a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../living-book.html" class="nav-logo">&#9775; Principia Orthogona &middot; G1&ndash;G7</a>
+  <div class="nav-links">
+    <a href="ch-maxwell.html">Maxwell (G4)</a>
+    <a href="ch-symplectic.html">Symplectic</a>
+    <a href="index.html">G7</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">G7 &middot; The Scientist Gallery &middot; Gaps: Contact Geometry</div>
+  <h1>Clapeyron, Maxwell, Gibbs</h1>
+  <p class="hero-sub">Clapeyron drew a parallelogram in 1834. Maxwell extended it in 1871 and read four relations off the picture &mdash; using a function of Rankine's, because he still misunderstood the word entropy. Gibbs corrected him in 1873 and built a surface whose tangent planes carry the same claim in three dimensions. All three are one statement, about a structure now called contact geometry, and this chapter checks the statement rather than admiring the picture.</p>
+  <div class="hero-eq">dU = TdS &minus; PdV &middot; &alpha; = dU &minus; TdS + PdV &middot; common tangent &hArr; G(&epsilon;&prime;) = G(&epsilon;&Prime;)</div>
+</div>
+
+<div class="page">
+
+  <div class="section-label">Part I &middot; The Parallelogram</div>
+
+  <h2>A quadrilateral that becomes a rectangle</h2>
+  <p class="block-prose">
+    Clapeyron was born in Paris in 1799. In 1834 the engineer gave Sadi
+    Carnot's 1824 argument &mdash; ten years unread, written for an audience
+    that was not yet looking for it &mdash; its first analytic picture. In his
+    <em>M&eacute;moire sur la puissance motrice de la chaleur</em>, Clapeyron drew the reversible cycle
+    Carnot had described in words as a closed curve on a pressure&ndash;volume
+    indicator diagram: two isothermal legs, two adiabatic legs, a quadrilateral
+    that becomes a parallelogram once the legs are shrunk to infinitesimal
+    size. At the time heat was still widely treated as a conserved substance;
+    the diagram outlived that belief by decades.
+  </p>
+  <p class="block-prose">
+    The quadrilateral is easier to see if the axes are changed. Plot the same
+    cycle not in pressure and volume but in entropy and temperature. An
+    isothermal leg holds temperature fixed, so it is horizontal; an adiabatic
+    leg holds entropy fixed (that is what reversible-and-adiabatic means), so
+    it is vertical. A four-sided reversible cycle between two temperatures and
+    two entropies is therefore <em>exactly</em> a rectangle in the (S,T) plane,
+    for any working substance whatever &mdash; not just in the infinitesimal
+    limit. What is not automatic is that the rectangle's area equals the
+    actual mechanical work delivered around the curved path back in the
+    pressure&ndash;volume plane. That equality is Carnot's theorem, and
+    <code>ch-clapeyron-gibbs-verify.py</code> §1 checks it directly: it builds
+    an ideal-gas Carnot cycle between 300&nbsp;K and 400&nbsp;K, integrates
+    the actual P&ndash;V work along all four legs, and compares the total
+    against (T<sub>2</sub>&minus;T<sub>1</sub>)(S<sub>2</sub>&minus;S<sub>1</sub>).
+    They agree to one part in a million, limited only by the numerical
+    integration.
+  </p>
+  <div class="block-theorem">
+    <span class="block-label">Checked &middot; §1</span>
+    The two adiabatic legs of an ideal-gas Carnot cycle contribute equal and
+    opposite work and cancel; the net work around the cycle equals the
+    (S,T)-rectangle's area to within 1 part in 10<sup>6</sup>; and the same
+    number falls out of the textbook efficiency formula
+    &eta; = 1 &minus; T<sub>c</sub>/T<sub>h</sub> applied to the heat taken in
+    at the hot isotherm. Three routes to the same number, computed
+    independently.
+  </div>
+
+  <div class="section-label">Part II &middot; The Four Relations, and a Wrong Word</div>
+
+  <h2>Maxwell's 1871 construction, and the entropy he did not yet have</h2>
+  <p class="block-prose">
+    James Clerk Maxwell used Clapeyron's parallelogram again in 1871, in his
+    textbook <em>Theory of Heat</em>, to reach the four relations that carry
+    his name today &mdash; without differential calculus applied to state
+    functions that did not yet exist under that name, and almost entirely by
+    plane geometry. He extended the isothermal and adiabatic sides of the
+    original parallelogram outward, built four further parallelograms sharing
+    its base or its height, and showed each also had unit area once the
+    scale is fixed by setting a unit rise in temperature equal to a unit
+    conversion of heat to work. Reading the resulting eight line-segments in
+    pairs as reciprocal slopes gives exactly the four Maxwell relations:
+  </p>
+  <div class="block-math">dU = TdS &minus; PdV   &rArr;   (&part;T/&part;V)<sub>S</sub> = &minus;(&part;P/&part;S)<sub>V</sub>
+dH = TdS + VdP   &rArr;   (&part;T/&part;P)<sub>S</sub> =  (&part;V/&part;S)<sub>P</sub>
+dG = &minus;SdT + VdP  &rArr;   &minus;(&part;S/&part;P)<sub>T</sub> = (&part;V/&part;T)<sub>P</sub>
+dA = &minus;SdT &minus; PdV  &rArr;   (&part;S/&part;V)<sub>T</sub> =  (&part;P/&part;T)<sub>V</sub></div>
+  <p class="block-prose">
+    Two things this modern layout hides. First, the thermodynamic potentials
+    H, G and A on the left did not exist as named objects in 1871; Maxwell's
+    geometry produced the relations without them. Second, the variable
+    playing the role of S above was not entropy in Maxwell's book at all.
+    Clausius had stated the first form of the second law in 1850, fifteen
+    years before he had a name for the quantity it turned on. Maxwell instead
+    used Rankine's <em>thermodynamic function</em> &Phi;, introduced in 1854
+    and identical in substance to the entropy Clausius eventually named in
+    1865 &mdash; and he used it because he still misunderstood what entropy
+    was. Maxwell believed, in 1871, that entropy meant the available energy of
+    a system, which does not have the dimensions temperature needs for a
+    conjugate variable; &Phi; did. The mistake was not a matter of taste, and
+    it was not harmless bookkeeping &mdash; it was Maxwell holding the wrong
+    concept while building an exactly right construction on top of it.
+  </p>
+  <div class="block-theorem">
+    <span class="block-label">Checked &middot; §2</span>
+    All four relations hold, independent of Maxwell's geometry, as ordinary
+    equalities of mixed partial derivatives of a single ideal-gas entropy
+    surface S(T,V): each side is built from the equation of state alone, by
+    finite differences, and the two sides of each relation agree to better
+    than one part in 10<sup>5</sup>. This is the modern content the
+    parallelogram was a geometric mnemonic for &mdash; Clairaut's equality of
+    mixed partials, applied to one potential instead of tracked through a
+    picture.
+  </div>
+
+  <div class="section-label">Part III &middot; Gibbs' Correction, and a Surface in Three Dimensions</div>
+
+  <h2>The tangent plane that fixes Maxwell's word</h2>
+  <p class="block-prose">
+    Josiah Willard Gibbs was born in New Haven in 1839 and died there in
+    1903. In 1873, in two papers for the <em>Transactions of the Connecticut
+    Academy</em>, he went further than a plane figure. Paper
+    I compared indicator diagrams; Paper II built a surface in the three
+    coordinates volume, entropy and internal energy &mdash; (V, S, U) &mdash;
+    whose shape encodes everything a single-phase substance's thermodynamics
+    can say. A vertical slice of that surface at constant volume gives energy
+    against entropy, whose slope is temperature; a slice at constant entropy
+    gives energy against volume, whose slope is minus the pressure. The
+    tangent plane at any point therefore carries both T and P at once, and
+    Gibbs used exactly that fact: if two points on the surface share a
+    tangent plane, the two states have the same temperature and the same
+    pressure, and can coexist. He showed algebraically that the quantity
+    U &minus; TS + PV &mdash; a Legendre transform of U, later named the Gibbs
+    free energy, G &mdash; is equal at any two such points, without
+    publishing the geometric argument that gets there.
+  </p>
+  <p class="block-prose">
+    Gibbs also corrected Maxwell's dimensional error, in print, politely.
+    Maxwell absorbed the correction into a later edition of <em>Theory of
+    Heat</em> and apologised to his readers for the earlier mistake. The two
+    men never fully overlapped in person on the subject, but they overlapped
+    in matter: in 1874 Maxwell built a clay model of Gibbs' (V,S,U) surface,
+    had it cast in plaster, and sent the cast to Gibbs at Yale &mdash; a
+    three-dimensional readers' report on a paper Maxwell had understood
+    quickly and almost no one else had understood at all.
+  </p>
+  <div class="block-theorem">
+    <span class="block-label">Checked &middot; §3</span>
+    A common tangent plane is not vacuous only where the surface is
+    non-convex &mdash; a smooth convex potential cannot have two distinct
+    points sharing one. A van der Waals fluid below its critical temperature
+    supplies a genuine case. The equal-area (Maxwell) construction is solved
+    here by bisection on the coexistence pressure alone, with no free-energy
+    formula anywhere in that step. At reduced temperature T<sub>r</sub> = 0.9
+    the solved coexistence pressure is P<sub>r</sub> &asymp; 0.6470, between
+    liquid and vapour volumes V<sub>r</sub> &asymp; 0.603 and 2.349; only
+    afterward is G evaluated independently at those two volumes, and the two
+    values agree to 1 part in 10<sup>8</sup>. Two rules bearing two different
+    names in the textbooks &mdash; Maxwell's equal-area construction and
+    Gibbs' common tangent &mdash; are checked here to be the same rule.
+  </div>
+
+  <div class="section-label">Part IV · What the Picture Actually Was</div>
+
+  <h2>A contact structure, not a coincidence</h2>
+  <p class="block-prose">
+    Put U, S, V, T and P in one five-dimensional space and write the 1-form
+    &alpha; = dU &minus; TdS + PdV. A thermodynamic potential U = U(S,V), with
+    T and P read off as its partial derivatives, is exactly a surface on
+    which &alpha; vanishes when pulled back &mdash; the modern definition of a
+    <strong>Legendrian submanifold</strong> of the contact manifold
+    (&#8477;<sup>5</sup>, &alpha;). Gibbs' tangent-plane condition is the
+    geometric picture of that vanishing. The equality of mixed partials that
+    makes each Maxwell relation true is exactly the closedness that keeps
+    such a surface from being an arbitrary, inconsistent graph. None of this
+    was named in 1873; the explicit contact-geometric formulation of
+    equilibrium thermodynamics is a twentieth-century reading &mdash; put
+    forward by Robert Hermann in 1973, developed by Ryszard Mrugała in 1978,
+    and given its best-known statement by Vladimir Arnold, who
+    argued at a Gibbs symposium in 1990 that Gibbs' geometric method just
+    <em>is</em> the contact-geometric method, encountered a century early and
+    without the name.
+  </p>
+  <div class="block-axiom">
+    <span class="block-label">Where this sits in the series</span>
+    <a href="ch-symplectic.html">ch-symplectic.html</a> states that a contact
+    manifold is the boundary of a symplectic one; this chapter is the
+    historical case that motivated the definition in the first place, worked
+    out on real thermodynamic surfaces rather than asserted about one. It
+    does not extend, and does not need, this series' own operator language to
+    make that case &mdash; the claim above is standard content in the
+    contact-geometry-of-thermodynamics literature, not a reading specific to
+    this corpus.
+  </div>
+
+  <div class="section-label">Part V &middot; A Remark, Correctly Labelled</div>
+
+  <h2>The line about Gibbs' papers</h2>
+  <p class="block-prose">
+    A remark is often repeated about Gibbs' 1876&ndash;1878 memoir <em>On the
+    Equilibrium of Heterogeneous Substances</em> &mdash; the paper that Papers
+    I and II were building toward &mdash; to the effect that only one other
+    scientist alive could follow it, and that when Maxwell died in 1879 the
+    number of people who fully understood Gibbs' work in his own lifetime
+    dropped to zero. The line is genuinely old and genuinely in circulation;
+    it is not, so far as this chapter's sourcing reaches, traceable to a
+    dated, first-hand attribution. It is carried here as folklore with real
+    historiographic standing, not as a documented quotation, and the claims
+    table below records it that way rather than silently upgrading it.
+  </p>
+
+  <h2>Claims and their status</h2>
+  <table class="cat">
+    <tr><th>Claim</th><th>Status</th></tr>
+    <tr><td>Clapeyron 1834, the P&ndash;V parallelogram from Carnot's 1824 argument</td><td>Verified</td></tr>
+    <tr><td>A reversible cycle is exactly a rectangle in the (S,T) plane; its area equals the P&ndash;V work</td><td>Verified numerically, ideal gas, <code>ch-clapeyron-gibbs-verify.py</code> §1</td></tr>
+    <tr><td>Maxwell 1871, <em>Theory of Heat</em>, four relations from the extended parallelogram</td><td>Verified</td></tr>
+    <tr><td>Maxwell used Rankine's &Phi;, not entropy S, because he misunderstood entropy's dimensions at the time</td><td>Verified; corrected in a later edition with an acknowledged apology</td></tr>
+    <tr><td>The four Maxwell relations, as equalities of mixed partial derivatives</td><td>Verified numerically, ideal gas, <code>ch-clapeyron-gibbs-verify.py</code> §2</td></tr>
+    <tr><td>Gibbs 1873, Papers I and II, the (V,S,U) surface and the tangent-plane condition</td><td>Verified</td></tr>
+    <tr><td>Common tangent plane &hArr; equal Gibbs free energy, G(&epsilon;&prime;) = G(&epsilon;&Prime;)</td><td>Verified numerically against the van der Waals equal-area construction, <code>ch-clapeyron-gibbs-verify.py</code> §3</td></tr>
+    <tr><td>Maxwell built a plaster model of Gibbs' surface and sent it to Gibbs, 1874</td><td>Widely reported historical detail; not independently re-verified here against a primary letter</td></tr>
+    <tr><td>Gibbs' <em>Scientific Papers</em>, Volume One, published posthumously in 1906</td><td>Verified</td></tr>
+    <tr><td>Contact geometry as the modern formal reading of Gibbs' construction (Hermann 1973, Mrugała, Arnold 1990)</td><td>Standard attribution in the literature; not a claim this corpus originates</td></tr>
+    <tr><td>&ldquo;Only one man could understand Gibbs' papers, and now he is dead&rdquo;</td><td><strong>Folklore, not a documented quotation</strong> &mdash; carried as attributed remark of disputed origin, not verified against a dated primary source</td></tr>
+  </table>
+
+  <h2>References</h2>
+  <table class="refs">
+    <tr><td>Clapeyron 1834</td><td><em>M&eacute;moire sur la puissance motrice de la chaleur</em>, <em>Journal de l'&Eacute;cole Polytechnique</em>, vol. 14.</td></tr>
+    <tr><td>Maxwell 1871</td><td><em>Theory of Heat</em>, 1st edition, Longmans, Green &amp; Co. &mdash; the four relations from the extended parallelogram, in Rankine's &Phi;.</td></tr>
+    <tr><td>Gibbs 1873</td><td>Paper I, indicator-diagram comparisons; Paper II, <em>A Method of Geometrical Representation of the Thermodynamic Properties of Substances by Means of Surfaces</em>. Both in <em>Transactions of the Connecticut Academy</em>, vol. 2.</td></tr>
+    <tr><td>Gibbs 1876&ndash;78</td><td><em>On the Equilibrium of Heterogeneous Substances</em>, Parts I and II, <em>Transactions of the Connecticut Academy</em>, vol. 3.</td></tr>
+    <tr><td>Gibbs 1906</td><td><em>The Scientific Papers of J. Willard Gibbs, Volume One: Thermodynamics</em>, ed. Bumstead &amp; Van Name, Longmans, Green &amp; Co. Published posthumously.</td></tr>
+    <tr><td>Wilson 1936</td><td>Edwin Bidwell Wilson, retrospective remarks on the reception of Gibbs' geometric papers, from having attended Gibbs' Yale lectures, 1901&ndash;02.</td></tr>
+    <tr><td>Hermann 1973</td><td><em>Geometry, Physics, and Systems</em> &mdash; an explicit contact-geometric formulation of thermodynamics.</td></tr>
+    <tr><td>Mrugała</td><td>Geometric formulation of equilibrium thermodynamics on a contact manifold, later in the 1970s.</td></tr>
+    <tr><td>Arnold 1990</td><td>On the geometrical method of Gibbs' thermodynamics as an early instance of contact geometry, presented at a Gibbs symposium.</td></tr>
+    <tr><td>Verification</td><td><code>book7/ch-clapeyron-gibbs-verify.py</code> &mdash; standard library only. §1 the Carnot rectangle and its work integral; §2 the four Maxwell relations from finite differences on an ideal gas; §3 the van der Waals equal-area construction and the matching Gibbs free energies; §4 the chronology; §5 this file, read back.</td></tr>
+    <tr><td>Internal</td><td><a href="ch-maxwell.html">ch-maxwell.html</a> &middot; <a href="ch-symplectic.html">ch-symplectic.html</a> &middot; <a href="index.html">G7 index</a></td></tr>
+  </table>
+
+  <div class="pull-wrap">
+    Three names are usually attached to three separate results &mdash; a
+    parallelogram, four relations, a surface. They are one result, in one
+    geometry, reached three times before the geometry had a name.
+  </div>
+
+</div>
+
+<div class="ch-nav">
+  <a href="ch-maxwell.html">&larr; James Clerk Maxwell</a>
+  <a href="index.html">Back to G7 Index</a>
+  <a href="ch-symplectic.html">Next: Symplectic Geometry &rarr;</a>
+</div>
+
+<footer>
+  <a href="index.html">Book 7</a><br>
+  &copy; 2026 Pablo Nogueira Grossi &middot; G6 LLC &middot; Newark, New Jersey &middot; CC BY-NC-ND 4.0<br>
+  ORCID <a href="https://orcid.org/0009-0000-6496-2186" target="_blank" rel="noopener">0009-0000-6496-2186</a>
+  &middot; Series <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" rel="noopener">Principia Orthogona community</a>
+</footer>
+</body>
+</html>
