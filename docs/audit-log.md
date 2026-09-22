@@ -9613,3 +9613,36 @@ different inconsistency — majorities on each of three propositions select the
 option that "seemed to have the fewest votes" — closer to what is now called the
 doctrinal paradox than to a cycle. Suzumura is not wrong to group them; the
 chapter must not conflate them.
+
+## 2026-09-22 — master-index.html undercounted Book I/II/III: bucket() only matched folders
+
+Regenerating indexes after Book II's non-archimedean addition (see the vol2-nonarchimedean
+commit) showed a stale count: master-index.html still listed Book II as one page, the same
+one it listed before the addition. Cause, traced before touching anything: `bucket()` in
+`tools/build_indexes.py` grouped a file by its top-level directory name only. Three
+volumes' flagship papers live as loose files at the repo ROOT by design (folder = supplementary
+chapters, root file = the paper itself) — `vol1-mathematics.html`, the `vol2-*.html` cluster,
+`vol3-minibeast.html` — and every one of them fell through to "root" and was counted among
+297 unrelated standalone pages instead of its own book. This did not start with the
+non-archimedean addition; it just made the gap visible, since Book II went from one real page
+missed to four.
+
+Two fixes, kept separate in scope from the content additions:
+- `book2/vol2-contact.html` was a second, stale copy of the root file (1040 lines vs. 1061,
+  last touched 2026-09-19), not linked from anywhere except `book2/index.html`'s own
+  auto-generated listing — `book2/index.html` itself already correctly links `../vol2-contact.html`
+  (the root copy). Moved to `_to_delete/book2__vol2-contact.html` rather than deleted outright,
+  matching the existing dedupe convention (`book4__chIV-axioms.html`, 2026-09-17).
+- `tools/build_indexes.py`: added `ROOT_FILE_BOOK`, an explicit dict from filename to book
+  slug for exactly this case, checked in `bucket()` before the folder-name match. Populated
+  from each file's own `<title>` claim, not guessed from the filename. This does NOT attempt
+  to catch every root-level file that might belong to a book by other naming conventions
+  (`chIV-*`, `sessao*-*`, `dm3-lab-index.html`, `gtct-index.html`, `overture.html`, and others
+  all plausibly belong to Book III/IV/V by their own titles) — that is a larger, title-by-title
+  sweep across the 291 remaining root files, not done here, and worth doing as its own pass
+  rather than folded into this fix.
+
+After: index-book1.html 4→5, index-book2.html 1→5, index-book3.html 2→3, index-root.html
+297→291 (the three moved out) −1 more for the deleted duplicate = 291. `tools/build_indexes.py`
+parses clean and the regenerated pages were read back to confirm no file appears twice and
+none of the three moved root files still appears under "root".

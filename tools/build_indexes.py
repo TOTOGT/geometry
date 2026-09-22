@@ -255,6 +255,26 @@ LABELS = [
 ]
 
 
+# Some volumes' flagship papers live as loose files at the repo ROOT (vol1-, vol2-,
+# vol3- naming) rather than inside their book's own subfolder -- a real split this
+# corpus uses on purpose (folder = supplementary chapters, root file = the paper
+# itself), but bucket() below only ever matched by top-level directory name, so
+# every one of these fell into "root" together with 297 unrelated standalone
+# pages and never showed up under its own book. Found 2026-09-22 auditing why
+# master-index.html still listed Book II as a single stale page after a real
+# addition. Listed here by the file's OWN <title> claim, not by guessing from the
+# filename -- e.g. vol1-mathematics.html's title begins "Moved", so it is the
+# live pointer for Book I's flagship paper, not a duplicate of it.
+ROOT_FILE_BOOK: dict[str, str] = {
+    "vol1-mathematics.html": "book1",
+    "vol2-contact.html": "book2",
+    "vol2-toymodel.html": "book2",
+    "vol2-dashboard.html": "book2",
+    "vol2-nonarchimedean.html": "book2",
+    "vol3-minibeast.html": "book3",
+}
+
+
 def label_of(rel: str) -> str:
     """The curated convention a file belongs to, or '' for a one-off named for its
     subject -- which is the intended state for the remainder, not a gap."""
@@ -267,7 +287,11 @@ def label_of(rel: str) -> str:
 
 def bucket(rel: str) -> str:
     """Which index a file belongs to. A folder entry's third field is a top-level
-    directory name, or a list of them when several small folders share one index."""
+    directory name, or a list of them when several small folders share one index.
+    Checked before that: ROOT_FILE_BOOK, for a book's flagship paper that lives as
+    a loose file at the repo root rather than inside the book's own folder."""
+    if rel in ROOT_FILE_BOOK:
+        return ROOT_FILE_BOOK[rel]
     top = rel.split("/")[0] if "/" in rel else ""
     for slug, _, prefix in FOLDERS:
         if not prefix:
