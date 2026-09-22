@@ -10022,3 +10022,56 @@ rebuilt against a real kernel," just now for a more precise and more fixable rea
 toolchain on this desk" alone would suggest — the four Lean-level families were the port's
 substance and are genuinely finished; `lake update` is infrastructure, one command, on whatever
 machine next has a real Lean install.
+
+## 2026-09-22 (same day, book8) — Lemma 1 of the Issue #13 null-causality note is false as written; the closure built on it does not hold
+
+Came up while looking for a genuine point of contact between this corpus's Lorentzian-contact
+work and Carolina Figueiredo's causal-geometry paper (arXiv:2004.10505, static spacetimes dual
+to Riemannian manifolds) — not a request to fix book8, but hand-deriving the math independently
+before writing any Lean turned up a real defect on its own.
+
+`book8/notes/issue-13-null-causality.md` proposes closing the `inner_basin_escape` sorry via a
+causality argument, and `book8/ch2-event-horizon.html` §2-3 presents the same argument as
+closed. Both rest on **Lemma 1**: "dV/dr at r = r\* equals 0 — by definition of r\*, at the
+basin boundary, the Lyapunov gradient vanishes by construction," for V(r) = ½(r-1)².
+
+V'(r) = r-1 for that V. It is zero only at r = 1 — the limit cycle, not the basin boundary.
+Checked where r\* actually comes from: `book4/certify_rstar.py` defines it as the boundary,
+found by bisection, between trajectories of a *different*, coupled (r, z) system (with an
+e^{-z} coupling term) that escape versus converge — not a root of any gradient equation.
+`book4/certify_rstar_rigorous.py` states it outright in its own docstring: r\* is "a genuine
+transcendental threshold of a coupled nonlinear planar ODE with no known closed form." r\* is
+not, and by that script's own account cannot be, a root of r-1.
+
+**Consequence.** Lemma 2 ("the fold is a null hypersurface because dτ = dV/V'(r) blows up at
+r\*") needs V'(r\*) = 0 to make dτ diverge there. Numerically, V'(r\*) = r\* - 1 ≈ -0.224 ≠ 0.
+dτ does not blow up at r\* under this construction. The null-hypersurface claim, the "AXLE
+Issue #13 CLOSED via causality" theorem in ch2-event-horizon.html §3, and the Schwarzschild
+photon-sphere prediction built on top of it later in the same chapter (§7, the (2/3)r_s claim)
+all sit downstream of a step that does not go through as argued.
+
+**Not attempted:** writing the Lean for this closure, which the note itself invites ("the Lean
+proof follows the math note"). Formalizing Lemma 1 as stated would mean stating and proving a
+false claim that happens to compile — exactly the CatGT/axle_togt_canonical pattern this
+corpus's own 2026-08-30 audit caught and fixed, one level up: not a false axiom this time, but
+a false premise dressed as "by construction." **Not attempted either:** repairing the argument
+on the spot by inventing a replacement Lyapunov-type function for the real coupled system whose
+gradient does vanish at r\* — if one exists, it is real applied-dynamics work (the rigorous
+certification script says no closed form for r\* is known at all), not something to improvise
+in the course of flagging the bug.
+
+**What this does not touch:** whether S = {r = r\*} is a null hypersurface of *some* correctly
+constructed Lorentzian metric on this system is still open, not refuted — only this specific
+route to it, through V(r) = ½(r-1)² and dτ = dV/V'(r), is shown not to work. The dark-matter
+result of book8 ch1 (Riemannian, r\* as a Whitney fold in the original sense) is untouched by
+this; it doesn't depend on the Lorentzian promotion.
+
+**On the Figueiredo connection that prompted the check:** genuinely the same neighborhood of
+mathematics — book8 ch2/ch9 and arXiv:2004.10505 both work in Lorentzian causal structure and
+cite the same standard reference (O'Neill, *Semi-Riemannian Geometry*) — but not the same
+construction. Her paper lifts a Lorentzian metric to a Riemannian dual via an added flat
+dimension and a null-geodesic projection (the Epstein/Fermat trick); book8's g_Lyap goes the
+other direction, by reparametrizing an existing coordinate through a Lyapunov gradient, no
+dimensional lift involved. Different mechanisms in the same field. Recorded here rather than
+forced into a shared theorem, per this corpus's own standing rule against exactly that move
+(the Coherence Bridge precedent).
