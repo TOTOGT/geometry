@@ -10075,3 +10075,87 @@ other direction, by reparametrizing an existing coordinate through a Lyapunov gr
 dimensional lift involved. Different mechanisms in the same field. Recorded here rather than
 forced into a shared theorem, per this corpus's own standing rule against exactly that move
 (the Coherence Bridge precedent).
+
+## 2026-09-22 (same day, follow-up) — the actual mechanism behind r\*, found and verified: a saddle's stable manifold, not a gradient zero
+
+Direct follow-up to the entry above, per instruction: fix the lemma if it can be fixed, then
+trace what that changes. Findings below are numerically verified to 13 significant figures
+against `book4/certify_rstar_rigorous.py`'s own certified interval, using the same tool that
+script uses (scipy, DOP853/high-precision integration) — reproducible, not asserted.
+
+**The real fixed points.** `book4/certify_rstar.py`'s coupled system
+
+    r_dot = r(1 - r^2) + 2(r-1) exp(-z)
+    z_dot = r^2 - 2(r-1)^2 exp(-z)
+
+has exactly three fixed points away from the degenerate case r=0. Solving the fixed-point
+equations by hand (eliminate exp(-z) between the two equations, factor out r=0) gives a cubic
+in r alone: **r^3 - r^2 - 2r + 1 = 0**. This is the minimal polynomial of 2cos(kπ/7); its three
+real roots are r = 2cos(π/7) ≈ 1.80194, r = -2cos(2π/7) ≈ -1.24698, r = 2cos(3π/7) ≈ 0.44504 —
+confirmed both algebraically (residual at 2cos(3π/7) is 1e-16, machine zero) and by an
+independent from-scratch 2D numerical root search (fsolve from 23 starting points) that found
+the same three points with no others. **All three are saddles** (real eigenvalues of opposite
+sign at each, checked by finite-difference Jacobian).
+
+**r\* is the saddle's stable-manifold crossing, not a critical point of anything.** The
+attractor per the script's own header is the invariant line r=1 (r_dot ≡ 0 there identically,
+z_dot = 1, so it's not even a classical fixed point — it's a degenerate invariant curve, the
+"helical limit cycle" once θ_dot=1 is restored). r\* is defined by bisection along the z=0
+slice between trajectories that escape (r→0) and converge (r→1). That is exactly the classic
+signature of a *separatrix*: the basin boundary of a 2D flow is generically the stable manifold
+of a saddle. Integrating backward from the saddle at (r,z) = (2cos(3π/7), z_s) — z_s recovered
+from the fixed-point condition, ≈ 1.134596 — along its stable eigendirection, to machine/solver
+precision (DOP853, rtol=1e-13):
+
+    z = 0 crossing:  r = 0.775940575502
+    certified r*:    r ∈ [0.7759405755019531, 0.7759405755023437]
+    |difference|:    1.5e-13  (inside the certified interval)
+
+This is not close — it is the same number to every digit the rigorous certification carries.
+**r\* is the z=0 crossing of the stable manifold of the saddle at r_s = 2cos(3π/7) in the
+coupled (r,z) system.** r_s itself is closed-form (an algebraic number, root of a solvable
+cubic). The crossing is not — tracing a stable manifold to a specific slice is a genuine
+nonlinear-ODE problem with no closed form, which is exactly what
+`certify_rstar_rigorous.py`'s docstring already said about r\* itself. That claim is not
+contradicted by this finding; it is now explained rather than just asserted.
+
+**What this means for Lemma 1, and why it cannot be patched the way it was attempted.** The
+original argument reached for a *local* condition — some V with V'(r\*) = 0, so a
+reparametrization dτ = dV/V'(r) blows up there. r\* is not that kind of object. It is a *global*
+property of the full 2D flow (which trajectory a given saddle's manifold happens to hit at
+z=0) — there is no way to recover it as a root of any single-variable function of r alone,
+because no such function exists that is faithful to the underlying dynamics; the z-coupling is
+not decorative, it is where the separatrix curvature comes from. Replacing V(r) = ½(r-1)² with
+some other V(r) cannot fix Lemma 1 — the fix is not "the right V," it is that the premise
+("r\* is a local extremum, by construction") is the wrong shape of claim for what r\* actually
+is. A corrected Lemma 1 would have to characterize r\* as a level set of the *stable manifold*
+itself (a curve in (r,z), transcendental, no closed form) intersected with {z=0} — not as a
+zero of a scalar function of r.
+
+**Consequence for what's downstream (the part asked to be traced).** `ch2-event-horizon.html`
+§3's "AXLE Issue #13 CLOSED via causality" and §7's Schwarzschild photon-sphere prediction
+((2/3)r_s) both depend on S = {r=r\*} being a null hypersurface via the dτ = dV/V'(r) blowup.
+Since no V(r) makes that blowup happen at the true r\*, both stay unsupported by this argument
+— not merely "using the wrong constant," as the previous entry left open, but resting on a
+construction that cannot be repaired by finding a better constant or a better V. A genuine
+null-hypersurface argument for S={r=r\*}, if one exists, would need to be built from the actual
+2D separatrix structure found here, not from a 1D potential. That is new work, not a quick
+substitution — not attempted here. `ch9-causal.html`'s causal-hierarchy reformulation was not
+re-checked against this finding; it was not read closely enough in this pass to know whether
+any of its PROVED entries route through the same S={r=r\*} construction specifically, or stand
+on the general contact-structure argument independent of it — open, flagged rather than
+assumed either way.
+
+**Not attempted:** writing Lean for the null-hypersurface claim, corrected or otherwise — the
+correct target for that claim (a transcendental separatrix curve, no closed form) is not a
+tractable Lean 4 statement without a real dynamical-systems library this corpus doesn't carry.
+**What would be honestly formalizable, if wanted:** the closed-form algebraic fact alone — that
+2cos(3π/7) is the unique root of r^3-r^2-2r+1=0 in (0,1) — is ordinary `Polynomial`/`nlinarith`
+territory and provable outright. It would establish exactly that fact and nothing about r\*
+itself, the separatrix, or the null-hypersurface claim; scoped and named accordingly if it's
+written.
+
+**Reproducibility.** Computed with the same tool family (scipy, DOP853 integration) the corpus's
+own `certify_rstar.py`/`certify_rstar_rigorous.py` already use for r\*, run against the exact
+right-hand side copied from `certify_rstar.py` (including its `exp(min(-z,200))` overflow
+clamp) — not a re-derivation of the ODE, a re-derivation of what r\* *is* within that ODE.
