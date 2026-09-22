@@ -268,6 +268,27 @@ print("     not held: Arrow 1951 itself. Held instead: Fey's proof (2014), Suzum
 print("     (2001), Suppes's history (2005). 'Proving Social Choice Possible' (Lawrence, preprint) is held")
 print("     and deliberately not used: an unrefereed claim to overturn the theorem is not a source for it.")
 
+# [4c] the IMO record behind the IMPA case (chapter 1). Snapshot read in a browser; the counts
+# below are computed from it, never typed.
+print("[4c] IMO record (book20/imo-snapshot.tsv)")
+T = [l.split("\t") for l in (ROOT / "book20/imo-snapshot.tsv").read_text(encoding="utf-8").splitlines()
+     if l and not l.startswith("#")][1:]
+hdr = {l.split("\t")[0][2:]: l.split("\t")[2] for l in (ROOT / "book20/imo-snapshot.tsv").read_text(encoding="utf-8").splitlines() if l.startswith("# 19") or l.startswith("# BRA") or l.startswith("# 2026T")}
+def rowsof(tag): return [r for r in T if r[0] == tag]
+p87 = [r for r in rowsof("1987") if r[5] == "42"]
+p81 = [r for r in rowsof("1981") if r[5] == "42"]
+check("1987: perfect scores counted from the table", len(p87) == 22, f"{len(p87)} of {hdr.get('1987')} contestants")
+check("1987: Teixeira and Ellenberg both 42", {"Ralph Costa Teixeira", "Jordan S. Ellenberg"} <= {r[1] for r in p87})
+check("1981: Saldanha 42", "Nicolau Corçao Saldanha" in {r[1] for r in p81}, f"{len(p81)} perfect of {hdr.get('1981')}")
+b42 = rowsof("BRA42")
+check("Brazil: exactly two perfect scores 1979-2026", len(b42) == 2, ", ".join(r[1] for r in b42))
+teix = [("1985", rowsof("TEIX1985")[0][5]), ("1986", rowsof("TEIX1986")[0][5]), ("1987", "42")]
+check("Teixeira: 13 -> 37 -> 42 over three IMOs", [t[1] for t in teix] == ["13", "37", "42"])
+b26 = rowsof("BRA2026"); aw = [r[4] for r in b26]
+check("Brazil 2026: five silver, one bronze", aw.count("S") == 5 and aw.count("B") == 1 and len(b26) == 6)
+t26 = {r[1]: r for r in rowsof("TEAM2026")}
+check("Brazil 2026: team rank 11 of 117", t26["BRA"][3] == "11" and hdr.get("2026T") == "117", f"rank {t26['BRA'][3]}, teams {hdr.get('2026T')}")
+
 # [5] placements
 print("[5] placements named on the index")
 for path, needle in (("book13/ch09-what-a-model-carries.html", "Beltrami"),
