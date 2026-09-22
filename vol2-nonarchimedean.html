@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Non-Archimedean Contact Geometry &middot; Principia Orthogona &middot; Volume II</title>
+<meta name="description" content="A direct-transcription definition of p-adic contact manifolds and Reeb vector fields, a proposed p-adic contact Darboux theorem with one named unverified gap, and an honest account of why the Collatz map still does not fit this framework. First draft, tagged (T)/(S)/(C) throughout.">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<script>MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea']}};</script>
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --op-c: #60a5fa; --op-k: #a78bfa;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; border-bottom: 1px solid var(--rule); }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .3em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .02em; line-height: 1.2; margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 680px; margin: 0 auto 1.5rem; }
+.status-band { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.35);
+              max-width: 680px; margin: 1.5rem auto 0; padding: 1rem 1.4rem; text-align: left;
+              font-size: .92rem; border-radius: 2px; }
+.status-band strong { color: var(--amber); }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .05em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem; border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-theorem { background: rgba(96,165,250,0.08); border-left: 3px solid var(--op-c);
+               padding: 1.4rem 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-open { background: rgba(167,139,250,0.08); border-left: 3px solid var(--op-k);
+            padding: 1.4rem 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-conjecture { background: rgba(245,158,11,0.08); border-left: 3px solid var(--amber);
+            padding: 1.4rem 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-open .block-label { color: var(--op-k); }
+.block-conjecture .block-label { color: var(--amber); }
+table.cat { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .87rem; }
+table.cat th { text-align:left; font-family:'Courier New',monospace; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+table.cat td { padding: .55rem .6rem; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+table.cat td:first-child { color: var(--gold); font-weight: 600; }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .87rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .78rem; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); font-size: .9em; }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none; }
+.ch-nav a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="living-book.html" class="nav-logo">&#9775; Principia Orthogona &middot; Vol II</a>
+  <div class="nav-links">
+    <a href="vol2-contact.html">Vol II &middot; Contact Realization</a>
+    <a href="vol2-toymodel.html">Toy Model</a>
+    <a href="series-hub.html">Series Hub</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Volume II &middot; Companion Paper &middot; First Draft</div>
+  <h1>Non-Archimedean Contact Geometry</h1>
+  <p class="hero-sub">A direct-transcription definition of p-adic contact manifolds and Reeb vector
+    fields, a proposed p-adic contact Darboux theorem with one specific unverified gap named
+    in advance, and an honest account of why the Collatz map still does not fit &mdash; the
+    same obstruction as in the real-contact case, recurring unchanged.</p>
+  <div class="status-band">
+    <strong>Status of this draft.</strong> This page proposes a definition, not a settled
+    theory. Every claim below is tagged <strong>(T)</strong> proved in full here,
+    <strong>(S)</strong> proof sketch with a named, explicit gap, or <strong>(C)</strong>
+    conjectural &mdash; a proposed research direction, not a result. Section&nbsp;3's central
+    theorem is <strong>(S)</strong>: it reduces to one named technical lemma from the existing
+    p-adic symplectic literature that has not been checked line-by-line against the contact
+    case. Sections&nbsp;4 and 5 are <strong>(C)</strong> throughout.
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="section-label">Abstract</div>
+  <p class="block-prose">
+    p-adic (non-archimedean) symplectic geometry is an active research direction: Crespo and
+    Pelayo have, over 2024&ndash;2025, constructed p-adic Hamiltonian vector fields, studied a
+    p-adic Jaynes&ndash;Cummings model, proved a p-adic analogue of Darboux's theorem, and
+    classified group actions on p-adic symplectic manifolds. No non-archimedean analogue of
+    <strong>contact</strong> geometry &mdash; the odd-dimensional, dissipation-admitting cousin
+    of symplectic geometry this series' Generative Contact Mechanics (GCM) framework depends on
+    &mdash; appears anywhere in that literature. This page proposes one, by the same
+    direct-transcription method already used for the p-adic symplectic case: replace
+    \(\mathbb{R}\) by \(\mathbb{Q}_p\) in the standard definitions, and verify that the
+    field-independent algebraic facts underneath them &mdash; that a non-degenerate alternating
+    form admits a symplectic basis, and the wedge-power combinatorics of a contact form &mdash;
+    carry over unchanged. It defines p-adic contact manifolds and Reeb vector fields, verifies
+    both on the standard model, states a p-adic contact Darboux theorem whose proof reduces to
+    one explicit gap, and closes by naming precisely why the Collatz map still resists this
+    framework &mdash; the same Smoothness Bridge obstruction as in <a href="chH-collatz.html">the
+    real-contact Collatz chapter</a>, recurring unchanged when the ambient geometry changes.
+  </p>
+
+  <div class="section-label">Part I &middot; The Precise Gap in the Existing Literature</div>
+  <h2>1. What p-adic symplectic geometry already has, and does not have</h2>
+  <p class="block-prose">
+    Symplectic geometry over \(\mathbb{Q}_p\) has real content. Crespo and Pelayo's definition
+    of a p-adic symplectic manifold is a direct transcription of the real one &mdash; a p-adic
+    analytic manifold with a closed, non-degenerate p-adic analytic 2-form &mdash; and given
+    such \((M,\omega)\) and a p-adic analytic \(H:M\to\mathbb{Q}_p\), they construct the unique
+    p-adic analytic Hamiltonian vector field \(X_H\) solving \(\iota_{X_H}\omega = dH\), exactly
+    as in the real case, computing its flow explicitly for the p-adic harmonic oscillator and a
+    p-adic Jaynes&ndash;Cummings model. They further prove a p-adic Moser path method and use it
+    to show every p-adic symplectic manifold is locally symplectomorphic to the standard model,
+    with no local invariants beyond dimension &mdash; exactly as in the real case.
+  </p>
+  <p class="block-prose">
+    What none of these papers contain is an odd-dimensional analogue admitting genuine
+    dissipation. That gap matters specifically for this series: this framework's own argument
+    (after Bravetti, Cruz &amp; Tapias, <em>Contact Hamiltonian mechanics</em>, 2017) is that
+    symplectic geometry cannot host a hyperbolic attracting limit cycle at all &mdash;
+    Liouville's theorem forbids volume contraction under a Hamiltonian flow. If a
+    non-archimedean version of this series' dm&sup3; construction is to exist, it needs a
+    non-archimedean <em>contact</em> structure, not a non-archimedean symplectic one. Part&nbsp;I
+    below supplies the definition that gap requires.
+  </p>
+
+  <div class="section-label">Part II &middot; p-adic Contact Manifolds</div>
+  <h2>2. Definition, standard model, Reeb field</h2>
+  <h3>2.1 Definition</h3>
+  <p class="block-prose">
+    Let \(p\) be a prime and let \(M\) be a \((2n{+}1)\)-dimensional p-adic analytic manifold in
+    the sense of Serre, as used by Crespo&ndash;Pelayo. A <strong>p-adic contact form</strong> on
+    \(M\) is a p-adic analytic 1-form \(\alpha\) such that \(\alpha\wedge(d\alpha)^n\) is a
+    nowhere-vanishing p-adic analytic \((2n{+}1)\)-form. The pair \((M,\alpha)\) is a
+    <strong>p-adic contact manifold</strong>. Two contact forms define the same p-adic contact
+    structure iff they differ by a nowhere-vanishing p-adic analytic function; the associated
+    hyperplane distribution \(\xi=\ker(\alpha)\) is then independent of the representative,
+    since the proof that two 1-forms with the same corank-1 kernel are proportional is linear
+    algebra over a field of characteristic 0, true over \(\mathbb{Q}_p\) without modification.
+    Every term in this definition &mdash; p-adic analytic manifold, 1-form, wedge product,
+    exterior derivative &mdash; is already defined and in routine use in the p-adic symplectic
+    literature; nothing here is p-specific.
+  </p>
+
+  <h3>2.2 The standard model</h3>
+  <p class="block-prose">
+    On \(M=(\mathbb{Q}_p)^{2n+1}\) with coordinates \((x_1,\dots,x_n,y_1,\dots,y_n,z)\), define
+    \(\alpha_0 = dz - \sum_i y_i\,dx_i\). Then \(d\alpha_0=\sum_i dx_i\wedge dy_i\), and the
+    wedge-power identity \((d\alpha_0)^n = n!\,(dx_1\wedge dy_1\wedge\cdots\wedge dx_n\wedge
+    dy_n)\) holds by the same combinatorial argument as the real case &mdash; cross terms with a
+    repeated index vanish, and \(n!\) counts orderings of the \(n\) distinct summands. This is
+    an identity in the exterior algebra over <em>any</em> commutative ring, so it transfers to
+    \(\mathbb{Q}_p\) unchanged, and it is checked here symbolically (exact rational arithmetic,
+    not a numerical approximation) for \(n=1,2,3,4\) rather than taken on faith.
+  </p>
+  <div class="block-theorem">
+    <span class="block-label">[T] &middot; checked &middot; verify.py §1</span>
+    \(\alpha_0\wedge(d\alpha_0)^n = n!\cdot dz\wedge dx_1\wedge dy_1\wedge\cdots\wedge
+    dx_n\wedge dy_n\), which is nowhere vanishing for every prime \(p\) since \(n!\) is a fixed
+    nonzero rational and \(\mathbb{Q}_p\) has characteristic 0. Unlike the \(p=2\) / \(p\bmod 4\)
+    case distinctions that appear elsewhere in the p-adic symplectic literature, this particular
+    non-degeneracy check carries no dependence on \(p\) at all. \((M,\alpha_0)\) is a p-adic
+    contact manifold for every prime.
+  </div>
+
+  <h3>2.3 The Reeb vector field</h3>
+  <p class="block-prose">
+    <strong>Proposition (Reeb vector field).</strong> Let \((M,\alpha)\) be a p-adic contact
+    manifold. There is a unique p-adic analytic vector field \(R\) with \(\alpha(R)=1\) and
+    \(\iota_R(d\alpha)=0\). Non-degeneracy of \(\alpha\wedge(d\alpha)^n\) forces \(d\alpha\)
+    restricted to \(\xi=\ker\alpha\) to be a non-degenerate alternating form on the
+    \(2n\)-dimensional \(\mathbb{Q}_p\)-vector space \(\xi_m\) at each point &mdash; a
+    linear-algebra fact independent of the base field in characteristic 0. Splitting
+    \(T_mM=\xi_m\oplus\mathbb{Q}_p\cdot v\) for any \(v\) with \(\alpha(v)\neq0\), the two
+    conditions determine \(R_m\) uniquely by inverting a matrix over \(\mathbb{Q}_p\) &mdash;
+    the same Cramer's-rule argument Crespo&ndash;Pelayo use for analytic dependence of \(X_H\)
+    on the base point. Analyticity of \(R\) follows because matrix inversion is p-adic analytic
+    away from where the determinant vanishes, which by non-degeneracy is never.
+  </p>
+  <div class="block-theorem">
+    <span class="block-label">[T] &middot; checked &middot; verify.py §2</span>
+    For the standard model, \(R=\partial/\partial z\): \(\alpha_0(\partial_z)=1\) and
+    \(d\alpha_0(\partial_z,\cdot)=0\) identically, since \(d\alpha_0\) involves only \(dx_i,
+    dy_i\). This matches this series' own real-contact toy model exactly &mdash; \(\alpha =
+    dz - r^2\,d\theta\) also has Reeb field \(\partial_z\) &mdash; a useful consistency check
+    that the definition reduces correctly under \(\mathbb{R}\to\mathbb{Q}_p\) in the one case
+    both settings share.
+  </div>
+
+  <div class="section-label">Part III &middot; Toward a p-adic Contact Darboux Theorem</div>
+  <h2>3. The one named, unverified gap</h2>
+  <p class="block-prose">
+    The real contact Darboux theorem says every point of a contact manifold has a neighbourhood
+    on which the contact form looks like the standard model. Its modern proof (Geiges,
+    <em>An Introduction to Contact Topology</em>) uses Moser's path method, and is in one
+    respect simpler than the symplectic Moser argument: solving for the isotopy-generating
+    vector field \(X_t\) is pure linear algebra (Cartan's formula \(\mathcal{L}_{X_t}\alpha_t =
+    f_t\alpha_t\), solvable pointwise from non-degeneracy of \(d\alpha_t\) on \(\ker\alpha_t\)),
+    with no primitive-form integration step of the kind the symplectic Moser argument needs.
+  </p>
+  <div class="block-open">
+    <span class="block-label">[S] &middot; proposed, one gap named</span>
+    <strong>Theorem (p-adic contact Darboux; proposed).</strong> Let \((M,\alpha)\) be a
+    \((2n{+}1)\)-dimensional p-adic contact manifold and \(m\in M\). There exist local p-adic
+    analytic coordinates centred at \(m\) in which \(\alpha = dz - \sum y_i\,dx_i\).<br><br>
+    <strong>Step 1 (T):</strong> every non-degenerate alternating form on a finite-dimensional
+    vector space over a field admits a symplectic basis &mdash; standard bilinear algebra, true
+    over \(\mathbb{Q}_p\) unmodified, matching \(\alpha\) to \(\alpha_0\) at \(m\) to first
+    order.<br><br>
+    <strong>Step 2, the named gap (S):</strong> the real proof interpolates \(\alpha_t =
+    (1-t)\alpha_0 + t\alpha\) over \(t\in[0,1]\) and integrates \(X_t\). Over \(\mathbb{Q}_p\)
+    this needs the same device Crespo&ndash;Pelayo built for their own p-adic symplectic Darboux
+    theorem &mdash; a p-adic analogue of Moser's path method. This draft has <em>not</em>
+    verified that construction line-by-line against the contact Cartan-formula equation above;
+    it proposes that it transfers, on the grounds that the contact version of the Moser equation
+    is more elementary (no primitive needed) than the symplectic one their method already
+    handles &mdash; but this is a specific, nameable piece of verification work still to do, not
+    a completed proof.
+  </div>
+  <p class="block-prose">
+    If Step 2 goes through, a p-adic contact classification by p-adic volume and a p-adic
+    Darboux&ndash;Weinstein theorem for Legendrian neighbourhoods should follow by the same
+    pattern as the symplectic case. Both are left <strong>(C)</strong>, pending Step 2.
+  </p>
+
+  <div class="section-label">Part IV &middot; Toward Dissipative p-adic Contact Dynamics</div>
+  <h2>4. What a non-archimedean dm&sup3; would need to say (proposed, conjectural)</h2>
+  <div class="block-conjecture">
+    <span class="block-label">[C] &middot; open question, not an answer</span>
+    Everything in Parts&nbsp;II&ndash;III is still conservative: it transcribes structure, not
+    dynamics with genuine loss. Given a p-adic contact manifold with Reeb field \(R\), one would
+    define a p-adic analytic generative Hamiltonian \(H = H_{\text{phase}}+H_{\text{diss}}\) as
+    in this series' GCM framework and seek the contact vector field solving the corresponding
+    Euler&ndash;Lagrange system &mdash; a linear-algebraic transcription, by the same
+    Cramer's-rule argument as the Reeb-field proposition above, since it needs no integration.
+    The open content is not that transcription, which looks routine, but what &ldquo;dissipative&rdquo;
+    and &ldquo;contraction rate&rdquo; should <em>mean</em> over \(\mathbb{Q}_p\), which has no
+    total order and hence no literal negative real eigenvalue. The natural substitute, already
+    standard in p-adic dynamics (Silverman, <em>The Arithmetic of Dynamical Systems</em>): a
+    linearised eigenvalue \(\lambda\) is p-adically contracting if \(|\lambda|_p < 1\) &mdash;
+    the same Hensel/Newton sense already used to classify fixed points of p-adic dynamical
+    systems. Under this substitution this series' stability threshold becomes \(|\lambda|_p<1\),
+    and an outer-stability-radius analogue would need a p-adic Gr&ouml;nwall-type inequality that
+    does not yet exist in this form. This whole section states what the right question is, not
+    an answer to it.
+  </div>
+
+  <div class="section-label">Part V &middot; Closing a Loop, Not Opening One</div>
+  <h2>5. Why Collatz still does not fit, precisely</h2>
+  <p class="block-prose">
+    Every object above, real or proposed, requires p-adic analyticity: the atlas, the contact
+    form, the Hamiltonian \(H\), all locally given by convergent power series. The Collatz map
+    on \(\mathbb{Z}_2\), \(T(n)=n/2\) for \(n\) even and \(T(n)=3n{+}1\) for \(n\) odd, is not
+    visibly a single p-adic analytic function on all of \(\mathbb{Z}_2\): it is analytic
+    separately on \(2\mathbb{Z}_2\) and on \(1+2\mathbb{Z}_2\), with no evident single convergent
+    power series agreeing with \(T\) on both cosets at once. This is the exact same obstruction
+    already named Gap&nbsp;G1 (the Smoothness Bridge) in <a href="chH-collatz.html">this series'
+    real-contact Collatz chapter</a> &mdash; dm&sup3;'s axioms need \(C^2\) flows, and Collatz is
+    only piecewise-defined &mdash; recurring unchanged when the ambient geometry moves from real
+    contact to p-adic contact or symplectic. This is also why the existing p-adic
+    Hamiltonian/integrable-systems literature studies transplanted classical-mechanics models
+    (oscillator, spin, Jaynes&ndash;Cummings) rather than arithmetic maps: those Hamiltonians are
+    honest single power series, and Collatz is not.
+  </p>
+  <p class="block-prose">
+    Two ways this could, in principle, be addressed, both left open: (i) find an actual p-adic
+    analytic function on \(\mathbb{Z}_2\) whose restriction to each parity coset recovers
+    Collatz's action there &mdash; an existence question, and a different, more demanding
+    requirement than the real-valued logarithmic near-conjugacy construction used elsewhere in
+    this series, which is analytic over \(\mathbb{R}\), not \(\mathbb{Q}_2\); or (ii) generalise
+    the Part&nbsp;II definition to an orbifold or groupoid built from finitely many p-adic
+    analytic charts glued along the residue-class boundaries, with its own non-degeneracy and
+    gluing conditions not developed here.
+  </p>
+
+  <h2>Open problems</h2>
+  <table class="cat">
+    <tr><th>#</th><th>Problem</th></tr>
+    <tr><td>OP1</td><td>Verify Step 2 of the Part III theorem against Crespo&ndash;Pelayo's actual p-adic Moser construction (arXiv:2508.15443); either complete the proof or identify precisely where the contact case diverges from the symplectic one.</td></tr>
+    <tr><td>OP2</td><td>Construct a genuine p-adic dissipative contact-Hamiltonian toy model (Part IV) and check whether an analogue of this series' canonical invariants can be derived from first principles rather than chosen &mdash; directly addressing the free-parameter critique this series has raised against its own real-case constants.</td></tr>
+    <tr><td>OP3</td><td>Resolve, or prove unresolvable, the analyticity obstruction of Part V for the Collatz map specifically.</td></tr>
+    <tr><td>OP4</td><td>Independent of Collatz: identify any existing arithmetic dynamical system already known to be p-adic analytic on all of \(\mathbb{Z}_p\), as a more tractable first test case than Collatz itself.</td></tr>
+  </table>
+
+  <h2>Claims and their status</h2>
+  <table class="cat">
+    <tr><th>Claim</th><th>Status</th></tr>
+    <tr><td>Definition of a p-adic contact manifold (direct transcription)</td><td>[T] &mdash; linear/exterior algebra over char.-0 fields, no p-dependence</td></tr>
+    <tr><td>Standard model wedge-power identity, \(\alpha_0\wedge(d\alpha_0)^n=n!\,dz\wedge\cdots\)</td><td>[T] &mdash; checked symbolically, exact arithmetic, verify.py &sect;1</td></tr>
+    <tr><td>Reeb field existence/uniqueness; \(R=\partial_z\) on the standard model</td><td>[T] &mdash; checked symbolically, verify.py &sect;2</td></tr>
+    <tr><td>p-adic contact Darboux theorem</td><td>[S] &mdash; Step 1 proved here; Step 2 named as an open, unverified reduction to Crespo&ndash;Pelayo's Moser lemma</td></tr>
+    <tr><td>Dissipative p-adic contact-Hamiltonian dynamics, \(|\lambda|_p&lt;1\) as the stability substitute</td><td>[C] &mdash; proposed question, no construction given</td></tr>
+    <tr><td>Collatz obstruction identified as the same Smoothness Bridge gap (G1) as the real-contact case</td><td>[T] as an observation about the definitions; the underlying real-contact Gap&nbsp;G1 itself is a separate, prior claim of this series, not re-derived here</td></tr>
+    <tr><td>Crespo&ndash;Pelayo arXiv papers [2]&ndash;[6]: existence, titles, authors, subject matter</td><td>Verified this session against arXiv directly &mdash; all five titles and author lists confirmed to match; see verify.py &sect;3</td></tr>
+    <tr><td>Content of Crespo&ndash;Pelayo's p-adic Moser lemma (arXiv:2508.15443) itself</td><td><strong>Not verified</strong> &mdash; arXiv's PDF returned no machine-readable text to this session; title/author/venue confirmed by independent web search only. This is exactly OP1, still open.</td></tr>
+    <tr><td>Ref. [1] (Pelayo&ndash;Voevodsky&ndash;Warren, Q_p from homotopy type theory, cited as the origin of the p-adic integrable-systems program)</td><td>Secondhand &mdash; not read directly by this draft's author, cited via Crespo&ndash;Pelayo's own paper; this session independently confirmed Crespo&ndash;Pelayo's introduction states almost exactly this, crediting reference [29] of their Jaynes&ndash;Cummings paper</td></tr>
+  </table>
+
+  <h2>References</h2>
+  <table class="refs">
+    <tr><td>[1]</td><td>A. Pelayo, V. Voevodsky, M. Warren. Construction of \(\mathbb{Q}_p\) from homotopy type theory and the origin of p-adic integrable systems, 2015 (cited secondhand, via [2]; not read directly).</td></tr>
+    <tr><td>[2]</td><td>L. Crespo, &Aacute;. Pelayo. <em>The p-adic Jaynes&ndash;Cummings model in symplectic geometry.</em> arXiv:2406.18415, 2024; J. Nonlinear Sci. 2025.</td></tr>
+    <tr><td>[3]</td><td>L. Crespo, &Aacute;. Pelayo. <em>Rigidity and flexibility in p-adic symplectic geometry.</em> arXiv:2505.07663, 2025.</td></tr>
+    <tr><td>[4]</td><td>L. Crespo, &Aacute;. Pelayo. <em>Group actions on p-adic symplectic manifolds.</em> arXiv:2512.15575, 2025.</td></tr>
+    <tr><td>[5]</td><td>L. Crespo, &Aacute;. Pelayo. <em>Darboux's Theorem in p-adic symplectic geometry.</em> arXiv:2508.15443, 2025.</td></tr>
+    <tr><td>[6]</td><td>L. Crespo, &Aacute;. Pelayo. <em>p-adic symplectic geometry of integrable systems and Weierstrass&ndash;Williamson theory I.</em> arXiv:2501.14444, 2025.</td></tr>
+    <tr><td>[7]</td><td>A. Bravetti, H. Cruz, D. Tapias. <em>Contact Hamiltonian mechanics.</em> Ann. Phys. 376 (2017) 17&ndash;39.</td></tr>
+    <tr><td>[8]</td><td>H. Geiges. <em>An Introduction to Contact Topology.</em> Cambridge University Press, 2008.</td></tr>
+    <tr><td>[9]</td><td>J. H. Silverman. <em>The Arithmetic of Dynamical Systems.</em> Springer GTM 241, 2007.</td></tr>
+    <tr><td>[10]</td><td>P. N. Grossi. <em>Generative Contact Mechanics: A Geometric Framework for Dissipative Systems with Structured Limit Cycles.</em> G6 LLC, 2026 (this series &mdash; <a href="gcm-framework.html">gcm-framework.html</a>, <a href="vol2-contact.html">Volume II</a>).</td></tr>
+    <tr><td>[11]</td><td>P. N. Grossi. The Collatz map as a dm&sup3; corollary (working draft), G6 LLC, 2026 (this series &mdash; <a href="chH-collatz.html">chH-collatz.html</a>).</td></tr>
+    <tr><td>Verification</td><td><code>vol2-nonarchimedean-verify.py</code> &mdash; standard library only (uses <code>fractions</code> for exact arithmetic). &sect;1 the wedge-power identity for \(n=1..4\); &sect;2 the Reeb-field equations on the standard model; &sect;3 the five external citations, checked against titles/authors confirmed on arXiv this session; &sect;4 the T/S/C tags and named gap are actually present in this page.</td></tr>
+  </table>
+
+</div>
+
+<div class="ch-nav">
+  <a href="vol2-contact.html">&larr; Volume II &middot; Contact Realization</a>
+  <a href="vol2-toymodel.html">Toy Model Paper</a>
+  <a href="chH-collatz.html">The Collatz Chapter &rarr;</a>
+</div>
+
+<footer>
+  <a href="series-hub.html">Principia Orthogona</a><br>
+  &copy; 2026 Pablo Nogueira Grossi &middot; G6 LLC &middot; Newark, New Jersey &middot; CC BY-NC-ND 4.0<br>
+  ORCID <a href="https://orcid.org/0009-0000-6496-2186" target="_blank" rel="noopener">0009-0000-6496-2186</a>
+</footer>
+</body>
+</html>
