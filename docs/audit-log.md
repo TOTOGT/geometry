@@ -9879,3 +9879,55 @@ Not done, and not claimed done: `book17/Book17Ch02.lean` has not been run agains
 Descartes/Leibniz sources are web pages, not the corpus's preferred held-and-hashed PDFs —
 re-confirming against primary editions (van Schooten's Latin text, a facsimile of the 1684
 *Acta Eruditorum*) is future work, marked `[OPEN]` on both pages.
+
+## 2026-09-22 (later still) — R22's status was stale: three of four fixes had already landed, silently, four days earlier
+
+Picked "the vol1-proofs port" off the CLAUDE.md/open-items menu as this session's next task.
+CLAUDE.md's R22 section read, as of this morning: "Scoped 2026-09-18... the remaining work is
+mechanical: apply the four, rebuild at v4.32... `[OPEN]` — not started, but no longer
+unscoped." That sentence was wrong on arrival at `vol1-proofs` — three of the four fixes had
+already been applied and committed the *same day* the scoping was written (`0ba9503`,
+2026-09-18), on a `port-v4.32` branch already pushed to `origin`. CLAUDE.md was never updated
+to say so. R19 says read the ledger before re-deriving; this is the other half of that rule —
+the ledger has to stay true, or reading it first just imports the staleness.
+
+**What was actually found, checked directly rather than assumed from the branch existing:**
+
+- `nsmul_eq_mul` (4 sites), `Ordinal.sup`→`⨆`/`iSup` family, and `Ordinal.IsLimit`→
+  `Order.IsSuccLimit` — all three already correctly applied in `PrincipiaVol1.lean` on
+  `port-v4.32`, confirmed present by direct `grep`, not by trusting the commit message.
+- The fourth — `Mathlib.Data.Complex.ExponentialBounds` — was **not** touched. Still importing
+  the v4.14.0 path, with a comment saying it needed to change but hadn't.
+- A first WebFetch of the branch's GitHub Actions page reported the CI run as "Success." This
+  was wrong — re-checked by fetching the specific run page directly (not the list view), which
+  reported **Failure**, and a screenshot of the job's step list confirmed a red X on exactly
+  the "Verify (gate self-test, build, probe, gate)" step. **Do not trust a summarized list view
+  of CI status; open the run.** The full log text was sign-in-gated and unreachable both via
+  WebFetch and via the linked desktop's own browser pane (repeated click attempts on the log
+  disclosure did not render its contents through the automation surface) — logged as a real
+  gap, not silently worked around.
+- Cause confirmed a different way: `geometry/.lake/packages/mathlib` is vendored at the exact
+  revision `vol1-proofs` now pins (`81a5d257c8`). Grepped it directly —
+  `Mathlib/Analysis/Complex/ExponentialBounds.lean` exists there; `Mathlib/Data/Complex/
+  ExponentialBounds.lean` does not. An unresolved import stops elaboration before anything
+  else in the file runs, consistent with `docs/MATHLIB-FORWARD-v4.32.md`'s own §1 note that a
+  failed import here reports as one error, not the real count. This is a primary-source
+  confirmation of the failure's cause, not a read of the CI log itself — stated as such.
+
+**Fixed:** `vol1-proofs/PrincipiaVol1.lean`, one import line, committed on `port-v4.32`
+(`fc2b49b`). All four families named in `docs/MATHLIB-FORWARD-v4.32.md` are now applied.
+`docs/MATHLIB-FORWARD-v4.32.md` itself rewritten (§3b split into §4/§5) to carry this account
+instead of the four-day-stale "position: two names unconfirmed." **Not claimed fixed-and-
+verified** — no local Lean toolchain here either; a delimiter/bracket-balance check on the
+file is a sanity pass, not a compile. `[OPEN]` stays `[OPEN]` in both documents until
+`port-v4.32`'s next CI run is actually green.
+
+**Left alone, flagged rather than folded in:** `vol1-proofs/tools/vacuity_fixtures.lean` has
+an uncommitted local change (`import Mathlib` → `import PrincipiaVol1` / `import
+AutophagyDm3_v2`, with a comment dated 2026-08-29) sitting in the working tree, on no branch's
+history (`git log --all` for that path shows only the original 2026-08-25 commit). It predates
+and is unrelated to this port; not touched, not committed, flagged to Pablo.
+
+Two separate repos, two separate pending pushes after this entry: `geometry` (this file plus
+`CLAUDE.md`'s R22 section) and `vol1-proofs` (`port-v4.32`, `fc2b49b`). Neither was pushed
+from this session — no push credentials here, by design; Pablo pushes both.

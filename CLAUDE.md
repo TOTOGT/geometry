@@ -258,8 +258,9 @@ Order of operations, so nothing green is moved twice:
 3. **then** it moves into geometry, with the report and the `lean-toolchain` pin;
 4. and the numbered claims it discharges get tagged, per R21.
 
-`vol1-proofs` is at step 2 and has **not been rebuilt** — there is no Lean
-toolchain on this desk. Do not link it until its badge is green.
+`vol1-proofs` is at step 2. **Updated 2026-09-22:** a `port-v4.32` branch
+exists there (origin/port-v4.32), pinned to v4.32.0 / Mathlib 81a5d257c8 —
+geometry's exact revision. Do not link it until its badge is green.
 
 ### Why this kept not happening, and what it actually costs
 
@@ -285,10 +286,28 @@ own vendored v4.32 tree — read, not recalled:**
 | `Ordinal.IsLimit` | — | **`Order.IsSuccLimit`** | `Ordinal/Arithmetic.lean:39` — *"an ordinal is a limit ordinal if it is neither 0 nor a successor"*; `isSuccLimit_iff` at :126 |
 | `Mathlib.Data.Complex.ExponentialBounds` | 1 | `Mathlib.Analysis.Complex.ExponentialBounds` | already applied in the forward doc |
 
-**Nothing in the port now requires a guess.** The remaining work is mechanical:
-apply the four, rebuild at v4.32, confirm the axiom report is still
-`[propext, Classical.choice, Quot.sound]` over 82 theorems, then move the file
-and tag the claims per R21. `[OPEN]` — not started, but no longer unscoped.
+**Nothing in the port now requires a guess.** The remaining work was mechanical
+— and turned out to be two separate sessions, not one:
+
+**2026-09-18, same day as the scoping above:** `0ba9503` applied three of the
+four (`nsmul_eq_mul`, `Ordinal.sup` family, `Ordinal.IsLimit`), bumped the pin,
+pushed `port-v4.32`. It skipped the fourth — the `ExponentialBounds` import,
+the one row that had never been in doubt. CI run #9 on that push (`5e49766`)
+**failed** in the Verify step. This file kept saying `[OPEN] — not started`
+for four days after that push actually happened; read the ledger, but also
+read the repo behind it — a scoped-and-dated entry here is not the same claim
+as a green build, and this one drifted from what was actually true on disk.
+
+**2026-09-22:** the fourth family applied (`fc2b49b`, same branch) — checked
+against the same vendored tree, not recalled. All four now sit in
+`PrincipiaVol1.lean`. **Still not rebuilt against a real kernel** — no Lean
+toolchain on this desk, and the CI log for run #9 is sign-in-gated so even the
+prior failure's exact stopping point was inferred from the vendored tree, not
+read from the log. `[OPEN]` until `port-v4.32`'s next CI run is green and the
+axiom report still reads 82 theorems / 0 sorry / the same three axioms — that
+run, not this paragraph, is what step 2 actually requires. Then, and only
+then: move the file per step 3, tag the claims per R21 (step 4). Full account:
+`vol1-proofs/docs/MATHLIB-FORWARD-v4.32.md` §4–5.
 
 ## Every chapter carries a verify script
 
