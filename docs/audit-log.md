@@ -9646,3 +9646,156 @@ After: index-book1.html 4→5, index-book2.html 1→5, index-book3.html 2→3, i
 297→291 (the three moved out) −1 more for the deleted duplicate = 291. `tools/build_indexes.py`
 parses clean and the regenerated pages were read back to confirm no file appears twice and
 none of the three moved root files still appears under "root".
+
+## 2026-09-22 — Book X ch09 drafted: "55 States, One Voice" (Condorcet, Arrow)
+
+Sourced but not drafted, per CLAUDE.md's open-items list. Drafted `book10/ch09-fifty-five-states-one-voice.html`
+and `book10/ch09-verify.py`, following the `ch08-you-never-asked.html` template. States two results exactly,
+with page numbers, and stops there:
+
+- Condorcet's paradox (1785): a pairwise-majority cycle, quoted via Suzumura (2001) and via Condorcet's own
+  words. Two different Condorcet examples are kept apart rather than folded together — the commerce
+  doctrinal-paradox example (*Discours préliminaire* pp. lii–liv, 15/11/12 voters) and the true three-candidate
+  cycle (pp. lvii–lviii, the 60-voter case, 23/19/18) — matching the distinction already logged above
+  (2026-09-2x entry on the p.lvii/p.clxxix offset).
+- Arrow's theorem (1951), quoted exactly from Fey's 2014 proof, p. 2. Arrow's own book is marked **not held**;
+  Fey's restatement is used instead and the chapter says so.
+- The AU's/AfCFTA's actual decision procedure is marked **not examined**. The chapter's only claim is that
+  "55 states, one voice" has the right shape (finite electorate, ≥3 alternatives) for the theorems to bind —
+  not that either institution has hit a cycle or an impossibility in practice.
+- Suppes (2005) checked live and confirmed to never mention Condorcet or voting — named as a genuinely
+  separate thread rather than padded into the source list to look thorough.
+
+`ch09-verify.py` re-hashes the four held PDFs, re-extracts Fey/Suzumura/Suppes with `pdftotext`, and (with
+`--ocr`) re-OCRs all five Condorcet pages fresh rather than trusting the earlier reading — including the page
+185/`clxxix` offset anchor. All checks pass. Wired into `book10/index.html` (new chapter row, "Six"→"Seven
+chapters") and `ch08`'s forward nav. `tools/build_indexes.py` regenerates clean: index-book10.html 10→11
+files, 0 orphaned; master-index.html 794→795. Commit script delivered, not yet run.
+
+## 2026-09-22 — Book XIII stub audit: no new defect, one of my own tool-path errors corrected
+
+Asked to look at whether book13's chapters were missing sources or Mathlib content. Finding: chapters 1, 4,
+5, 6, 8 are explicitly labeled "Stub · specification only" in their own status line — by design, not by
+oversight — and `book13/ch-mathlib-verify.py` keeps their Mathlib file-count claims in sync with the actual
+checkout. The real defects are the two `book13/ch11-what-this-volume-has-actually-proved.html` (2026-09-19)
+already caught: "Rung 30" is self-assigned (WP-82 and `docs/floor-ladder.tsv` only go up to 9/28/33), and
+`AXLE/Vol13_Coherence.lean` is cited from four pages but lives in a different repository than the one being
+published. Re-ran `book13/ch11-verify.py`, first with a wrong path for the Lean file (`~/Desktop/AXLE/...`
+instead of the mounted `~/mnt/Desktop/AXLE/...`), which wrongly suggested the file was unreachable — corrected
+in the same turn once the mount path was fixed. With the real file, `--lean` confirms every finding in ch11
+still holds exactly as stated (9 axiom probes, `vacuity_control` present, level-2 closing by
+`Iso.hom_inv_id`/`Iso.inv_hom_id`). Nothing in book13 was edited; both findings were already correctly
+diagnosed by the volume's own ch11.
+
+## 2026-09-22 — lakefile.lean: stale "nine root-level files outside every target" count
+
+Read while checking on the "17 Lean files outside every build target" open item from CLAUDE.md
+(not yet acted on beyond this). The summary comment at the top of `lakefile.lean` (revised
+2026-09-11) lists nine root-level `.lean` files with no build target, splitting them into
+"hand-audited" and "no audit report on record" — and lists `CardiacHopfReduction` in the
+second group. But `CardiacHopfReduction` *is* declared a target further down the same file
+(`@[default_target] lean_lib CardiacHopfReduction`), with its own comment block dated
+2026-09-12 citing a hand audit that day — and `tools/verify-audit/2026-09-12/geometry__CardiacHopfReduction.axioms.txt.gate`
+confirms it: "OK: 5 theorems, no sorryAx, no axiom outside the permitted set." The top comment
+was never updated after that 2026-09-12 change, so it has been wrong on two counts — count
+(nine, should be eight) and classification (CardiacHopfReduction is neither untargeted nor
+unaudited) — for ten days.
+
+Fixed: the top comment now says eight, drops CardiacHopfReduction from the "no audit report"
+list, and carries a dated note explaining what was stale and why, rather than silently
+correcting the number. Comment-only change — no target added, no `.lean` file touched, no
+build behavior affected. The eight genuinely-untargeted files (CycleCoupling, NbonacciLadder,
+SmokeBox, SpiralReturnObstruction, CollatzDescent, FoldCentralCharge, LadderBound, DomainCheck)
+were re-confirmed absent from every `lean_lib`/`lean_exe` declaration in the file before this
+was written, not just inherited from the old comment's claim.
+
+## 2026-09-22 — Duplicate-file curation: 21 of 27 undeclared groups resolved
+
+`tools/duplicates.py` reported 27 undeclared duplicate-title groups (the "5" figure from an
+earlier session menu was stale). Went through them individually — inbound-link resolution
+(proper relative-path resolution, not basename matching, which the earlier pass in this
+session had wrongly relied on and which conflates same-basename files in different
+directories) plus paragraph-set diffing plus a CLAUDE.md read for prior context on each.
+
+**10 groups: merged, redirect left in place** (following the `book7/chcurie.html`
+precedent — a small stub page, `<meta http-equiv="refresh">`, that records why — originals
+archived to `_to_delete/2026-09-22-duplicate-html/`, not deleted):
+
+- `ch-thoreau.html` → `book7/ch-thoreau.html` (100% identical; book7 copy explicitly
+  confirmed canonical by a 2026-09-20 commit)
+- `ch-curie.html` → `book7/ch-curie.html` (100% identical; a second, separate leftover
+  from the same Book IV→Book VII migration that produced the already-merged
+  `book7/chcurie.html`)
+- `ch-dirac.html` → `book7/ch-dirac.html` (35/36 paragraphs identical; the one difference
+  is a stale DOI byline in the root copy — the defect being corrected, not lost content)
+- `GameTheory_Full_Pack.FIXED.html` → `GameTheory_Full_Pack.html` (100% identical;
+  CLAUDE.md already named `.FIXED` an orphan)
+- `ch-t-tubulin.html` → `chT-tubulin.html` (100% identical; `chT-tubulin` is the
+  documented canonical spelling and carries 80+ real inbound links against 3)
+- `ch-t-tubulina.html` → `chT-tubulin.html` (100% identical in English despite the
+  Portuguese-looking filename — not a translation, a second accidental duplicate)
+- `capitulo-e-gtct-pt.html` → `capitulo-e-gtct.html` (100% identical Portuguese content
+  despite the `-pt` suffix implying a distinct variant)
+- `GTCT_V_Student_Edition.html` → `book5/GTCT_V_Student_Edition.html` (143/143 paragraphs
+  identical; book5/ is this edition's own book folder)
+- `AMonster/MonstersLaw.html` → `monsterlaw.html` (monsterlaw.html carries 4 more
+  paragraphs — a stated non-commutativity proposition and a correction — the retired
+  copy's 26 are a strict subset of the kept copy's 29)
+- `spectral-radius.html` → `spectral-radius-v2.html` (CLAUDE.md already flagged this as
+  an unresolved same-book version pair; v2 is a near-superset, 14/15 paragraphs preserved
+  plus 5 more. **One paragraph unique to the retired copy is not in v2** — the
+  polar-vortex/Saturn-hexagon empirical-certificate sentence — noted here rather than
+  silently dropped; recoverable from `_to_delete/2026-09-22-duplicate-html/spectral-radius.html`
+  if it belongs in v2.)
+
+**11 groups (across 15 file-pairs): declared intentional in `tools/duplicate_ledger.txt`**,
+not merged — real, independent content on both sides:
+
+- `Sportal.html` | `portal.html` — not actually one duplicated page: two separately-linked
+  portals (dm³ course track, 30 real inbound; History-of-Science/HVEH track, 17 real
+  inbound) sharing template content
+- The whole `HVEH/` ↔ `book4/` cluster (`ch-build-2river`, `ch02`, `chHALO`, `ch06b`,
+  `ch07`, `ch08`, `ch09` — 7 pairs) — CLAUDE.md already documents this as one directory
+  copied once with both copies since independently audited and edited; several pairs
+  (ch06b especially) now carry genuinely different technical framings of the same issue
+- `vol2-dashboard.html` | `vol2-v5/deposit/dashboard.html` — the deposit/ copy is a frozen
+  Zenodo-submission snapshot, not a live duplicate
+- `Enceladus.html` | `Enceladus-zenodo.html` — same pattern, a Zenodo-variant snapshot
+- `ch-recurrence-ladder.html` | `chapters-pi-phi-mu-eta-delta-sigma-omega.html` — only 54%
+  similar; CLAUDE.md's 2026-08-12 repair log treats them as two separately-maintained pages
+
+**1 file: retired outright, no redirect** — `omega/omega-point-v2-draft.html` (a
+self-declared draft, 42% similar to the live `omega/omega-point-index.html`, linked only
+from generated indexes; archived to `_to_delete/2026-09-22-superseded-draft/`).
+
+**6 groups: left UNDECLARED, deliberately, pending your own read.** Each has real,
+substantive content on both sides that a paragraph-diff alone cannot respons­ibly adjudicate:
+
+- `book7/ch-hawking.html` vs `ch-hawking.html` (92% similar) — the root copy carries 3
+  paragraphs not in book7's, including a specific claim about M_irr = √(A/16π) as a
+  Lyapunov-structure result and a WP70 §5 cross-reference. Could be an addition worth
+  merging INTO book7's copy rather than discarding.
+- `book7/ch-tatiana.html` vs `ch-tatiana.html` (88%) — the root copy has 2 Portuguese
+  paragraphs about the industrial partnership with Cristália (Itapira-SP) not present in
+  book7's version.
+- `book4/ch15-complex-turn.html` vs `ch15-complex-turn.html` (81%) — genuinely different
+  on both sides: the root copy states two corollaries are withdrawn on a dimension-parity
+  argument; the book4 copy still carries the `sorry`-status note on Theorem 15.2 that the
+  root copy's rewrite removed. This reads like two different points in the same proof's
+  revision history, not a copy/paste accident.
+- `book6/chDev-waddington.html` vs `chDev-waddington.html` (73%) — different framing
+  essays on both sides (root has an extended discussion of orthogenesis's 19th-century
+  history that book6's copy lacks; book6's has cross-links the root lacks).
+- `book1/vol2-dashboard.html` vs `vol2-contact.html` (71%) — book1's copy, despite sharing
+  vol2-contact's exact title, carries 8 paragraphs of claims-and-status tracking (Theorem
+  A/B/C statements, AXLE `VolumeTwo.lean` obligation references, dated closures — "Project
+  1080, June 22 2026") that vol2-contact.html does not have. This looks like it may be
+  tracking data that never made it into the paper, not a stale copy.
+- `book4/chE-gtct.html` / `ch-e-gtct.html` / `chE-gtct.html` (58%, three-way) — a genuine
+  three-file split, and `chE-gtct.html` is separately flagged `[OPEN] — NOT yet read` in
+  CLAUDE.md for an unrelated signature-based defect check. Needs a real read before any
+  merge decision, not a diff-based guess.
+
+`tools/duplicates.py` now reports 6 undeclared groups (down from 27), and exits 1 — by
+design, since those 6 are real open questions, not an oversight. Rerun without `--self-test`
+to see the current list.
