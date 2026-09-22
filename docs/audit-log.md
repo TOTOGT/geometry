@@ -9981,3 +9981,44 @@ Three commits now sit locally in `vol1-proofs` unpushed: `main` is three ahead o
 (`12ab4ef`, `5b6c477` — pre-existing, undiscovered until now — plus `cb102f0`, new this entry),
 `port-v4.32` is one ahead of `origin/port-v4.32` (`7e0cc45`). Not pushed from this session, same
 as always — Pablo pushes both branches of `vol1-proofs`.
+
+## 2026-09-22 (later still, continued again) — checked whether the fix landed: it didn't, and the manifest is why
+
+Asked to verify the pushes from the previous two entries. `geometry` main, `vol1-proofs` main,
+and `vol1-proofs` port-v4.32 all confirmed pushed (`git fetch` + comparing local/origin SHAs on
+all three). `vol1-proofs` main is CI-green (run #12, `cb102f0`, 1m32s) — that part of this
+session's work is actually done and closed.
+
+`port-v4.32` is not. CI run #11 (`fc2b49b`, the ExponentialBounds fix) and run #13 (`7e0cc45`,
+the vacuity_fixtures fix) are both still red — and both fail in 39–56s, faster than run #9's
+1m8s pre-fix failure. A real fix landing one import further into the file should fail *later*,
+not sooner, if it were failing for the same reason. It wasn't.
+
+Reading `lake-manifest.json` rather than continuing to fight the sign-in-gated CI log answered
+it: `0ba9503` (2026-09-18) bumped `lakefile.toml`'s mathlib `rev` to `81a5d257c8` but never
+regenerated the lockfile. `lake-manifest.json` still names `4bbdccd9c5f8` — the v4.14.0 rev —
+and every transitive dependency with it (`aesop`, `batteries`, `importGraph` still pinned to
+their `v4.14.0` tags, `proofwidgets` to `v0.0.47`). Lakefile and lockfile have been naming two
+different Mathlib revisions for the entire life of this branch. This session's own
+ExponentialBounds fix — correct for `81a5d257c8`, the rev `lakefile.toml` declares — would fail
+to resolve if Lake is actually building against the manifest's stale `4bbdccd9c5f8`, for exactly
+the same reason the original unfixed import failed. Stated as inference from the manifest's
+content, not as a read of the actual compiler error — that log remains unreachable from this
+session (sign-in required; the linked desktop's own browser pane could open the run pages and
+expand the annotation panel, which surfaced only "Process completed with exit code 1," no more).
+
+**Not hand-fixed, deliberately.** Correcting `lake-manifest.json` means resolving eight
+interdependent package revisions (`mathlib`, `aesop`, `batteries`, `importGraph`,
+`proofwidgets`, `Qq`, `plausible`, `LeanSearchClient`, `Cli`) to a mutually-compatible set at
+v4.32.0 — `lake update`'s job, which needs an actual Lake/Lean install this session does not
+have. Typing eight plausible-looking commit hashes into a JSON file so `git status` goes quiet
+is precisely the "compiles, but nobody checked" pattern this whole project exists to catch;
+worse here, since a wrong guess would not even show up as an obviously-wrong theorem — it would
+just be a manifest that resolves to *some* real commit of each package, silently the wrong one.
+
+`docs/MATHLIB-FORWARD-v4.32.md` §4-5 and CLAUDE.md's R22 section both rewritten to name the
+actual blocking step. R22's order of operations is otherwise unchanged: this is still "not
+rebuilt against a real kernel," just now for a more precise and more fixable reason than "no
+toolchain on this desk" alone would suggest — the four Lean-level families were the port's
+substance and are genuinely finished; `lake update` is infrastructure, one command, on whatever
+machine next has a real Lean install.

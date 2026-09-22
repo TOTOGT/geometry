@@ -308,15 +308,29 @@ read the repo behind it — a scoped-and-dated entry here is not the same claim
 as a green build, and this one drifted from what was actually true on disk.
 
 **2026-09-22:** the fourth family applied (`fc2b49b`, same branch) — checked
-against the same vendored tree, not recalled. All four now sit in
-`PrincipiaVol1.lean`. **Still not rebuilt against a real kernel** — no Lean
-toolchain on this desk, and the CI log for run #9 is sign-in-gated so even the
-prior failure's exact stopping point was inferred from the vendored tree, not
-read from the log. `[OPEN]` until `port-v4.32`'s next CI run is green and the
-axiom report still reads 82 theorems / 0 sorry / the same three axioms — that
-run, not this paragraph, is what step 2 actually requires. Then, and only
-then: move the file per step 3, tag the claims per R21 (step 4). Full account:
-`vol1-proofs/docs/MATHLIB-FORWARD-v4.32.md` §4–5.
+against the same vendored tree, not recalled. Pushed, CI ran (run #11) —
+**still red, in 45s, faster than the pre-fix failure.** That ruled out "the
+same problem, one step further in": something was failing before `lake build`
+even reached the fixed line.
+
+**Found reading `lake-manifest.json`, not the log (still sign-in-gated):**
+it was never regenerated when `0ba9503` bumped `lakefile.toml`'s mathlib
+`rev` to `81a5d257c8` — it still names `4bbdccd9c5f8` (the v4.14.0 rev), and
+every transitive dependency with it (`aesop`, `batteries`, `importGraph`
+still on their `v4.14.0` tags). Lakefile and lockfile now name two different
+Mathlib revisions for the same build, which Lake does not quietly split —
+either it refuses outright or it builds against the manifest's old rev, in
+which case this session's new-rev-correct import fails for the same reason
+the old one did. Consistent with what was observed; not read from the log
+itself, stated as inference.
+
+The four families were real fixes and are genuinely done. They were never
+sufficient alone: **the port also needs `lake update` run against a real
+Lake/Lean install**, to resolve a mutually-compatible revision set for eight
+packages at once — not something to hand-edit into the JSON, which would be
+exactly the "looks resolved, wasn't checked" failure mode R22 exists to
+catch. `[OPEN]`, and now correctly scoped to the step that actually blocks
+it. Full account: `vol1-proofs/docs/MATHLIB-FORWARD-v4.32.md` §4–5.
 
 ## Every chapter carries a verify script
 
