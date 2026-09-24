@@ -36,3 +36,10 @@ Update (2026-09-23): checked on v4.14.0 (io's pin) — owner ran
 (Lean/Mathlib v4.14.0): no errors, 13/13 `#print axioms` on [propext, Classical.choice,
 Quot.sound], 5 unused-binder warnings. Header comment updated in both copies (comment only,
 copies still identical).
+
+Update (2026-09-24): §4b (5 theorems, r* normalisation) and §4c (5 theorems, sech relation
+derived from the continuum DNLS equation) added; 23 theorems. Owner's runs: v4.14.0 via the
+AXLE checkout, no errors; v4.32.0 `lake build CatGT` completed (8656 jobs). The two
+derivative proofs carry `-- COMPAT` lines: `h1.cosh`/`h1.sinh` and `congr_deriv` replace
+`.comp`/`convert` because v4.32 returns Pi-form functions from `HasDerivAt.inv/div/mul`.
+Copies byte-identical. CI gate (verify-proofs.yml) now expects 23.

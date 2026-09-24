@@ -3,7 +3,8 @@
 -- The single tracked probe for catgt/lean/CatGT_Main.lean (2026-09-21). CI runs THIS
 -- file; there is no second copy in the workflow.
 --
--- Eighteen declarations (5 added 2026-09-23: §4b normalisation of r*). A `#print axioms` line proves the named theorem rests on
+-- Twenty-three declarations (5 added 2026-09-23: §4b normalisation of r*;
+-- 5 added 2026-09-24: §4c sech relation derived from the continuum equation). A `#print axioms` line proves the named theorem rests on
 -- no sorryAx; it does not prove the theorem says what its name says. In particular
 -- `helical_selectivity` is the monotonicity step under Theorem 1(iii), not Theorem 1.
 
@@ -27,3 +28,8 @@ import CatGT_Main
 #print axioms criticalRadiusNorm_pos
 #print axioms criticalRadiusNorm_antitone
 #print axioms selectivityFactorNorm_eq
+#print axioms sechProfile_hasDerivAt
+#print axioms sechProfile'_hasDerivAt
+#print axioms sech_solves_stationary
+#print axioms sech_stationary_forces
+#print axioms sech_width_fixed_norm_of_stationary
