@@ -30,3 +30,9 @@ mirror is still not a build target.
 
 Update (2026-09-21): CI (verify-proofs.yml) now gates the 13 theorems via
 tools/verify-catgt/probe_catgt.lean -- sorryAx and non-standard axioms only.
+
+Update (2026-09-23): checked on v4.14.0 (io's pin) — owner ran
+`lake env lean ~/Desktop/io/CatGT/CatGT_Main.lean` from the local AXLE checkout
+(Lean/Mathlib v4.14.0): no errors, 13/13 `#print axioms` on [propext, Classical.choice,
+Quot.sound], 5 unused-binder warnings. Header comment updated in both copies (comment only,
+copies still identical).
