@@ -2078,6 +2078,36 @@ borrowed one. *(`chIV-field.html` has a stray `</div>` — pre-existing, confirm
    deposit at all. The registry is asserting a Zenodo record for Book 3 that is a different
    volume's.
 
+## OPEN — one versioned Zenodo record per book (owner's decision, 2026-09-24)
+
+Books have no book-level DOI yet; only some chapters do. Model decided: **one Zenodo
+record per book, a new version whenever chapters are added**; cite the book's concept
+DOI (always resolves to the newest version); the version DOIs are dated snapshots.
+Chapters that already have DOIs stay as they are and are linked, not re-deposited.
+
+- [ ] Book 3 — the Living Book / "Mini-Beast" (`book4/living-book.html` says "Volume III";
+      its chapters live in the repo root). It never closes: each teaching meeting with a
+      doctoral researcher presenting in English adds a chapter. First record = the chapters
+      to date as PDF/zip + a changelog of which meetings added which chapters. Link existing
+      chapter records with `hasPart` (known: triple-alpha / autophagy chapter,
+      10.5281/zenodo.20221723, per `AXLE/TripleAlphaDm3.lean`) and add `isPartOf` on each
+      chapter record. Put the record in the `principia-orthogona` community.
+- [ ] Same model for the other books, largest first; a book's size does not change the model.
+- [ ] Once Book 3 has a concept DOI: add it to TOGT (Nuclear Physics B) §25.3 and its
+      bibliography — in V4 if it exists before V4 is published, otherwise V5.
+- [ ] Before minting anything, list every existing chapter DOI per book (Zenodo API,
+      `creators.orcid:0009-0000-6496-2186`) so nothing is deposited twice.
+
+Related, found the same day:
+- [ ] `vol1-mathematics.html` describes Volume I **V4**; current is **V7**
+      (10.5281/zenodo.22084842). `vol2-contact.html` describes Volume II **V2a**; current is
+      **V5** (10.5281/zenodo.22117968). Both pages are behind their deposits.
+- [ ] `vol1-mathematics.html:876` and `chEta-tribonacci.html:163` cite TOGT by its V1 DOI
+      (20682934); use the concept DOI 10.5281/zenodo.20682933.
+- [ ] `book1/vol1-proofs.html` (guide to TOGT V4, added 2026-09-24): its filename matches the
+      Lean repo TOTOGT/vol1-proofs, which it is not; `book1/index.html` says so. Update the
+      page when TOGT V4 is published (it already describes the V4 text).
+
 ## OPEN — the storefront
 
 `book4/ch02.html` and `book4/ch10.html` still price three products at **$47 with Buy on
