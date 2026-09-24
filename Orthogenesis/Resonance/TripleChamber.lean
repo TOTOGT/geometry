@@ -5,7 +5,8 @@
 /-
 # TripleChamber.lean — ported into a build target
 # ================================================
-# Origin: AXLE/TripleChamber.lean (June 2026, doi:10.5281/zenodo.20682934),
+# Origin: AXLE/TripleChamber.lean (June 2026; no Zenodo deposit — the DOI it
+# cited, 10.5281/zenodo.20682934, is TOGT V1, a different work),
 # written against leanprover/lean4:v4.14.0. AXLE has no `.lake` and no
 # workflow, so no version of that file has ever been elaborated by CI. It is
 # cited as "formally verified" by chF-catastrophe.html §1.

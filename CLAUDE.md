@@ -2098,15 +2098,54 @@ Chapters that already have DOIs stay as they are and are linked, not re-deposite
 - [ ] Before minting anything, list every existing chapter DOI per book (Zenodo API,
       `creators.orcid:0009-0000-6496-2186`) so nothing is deposited twice.
 
-Related, found the same day:
-- [ ] `vol1-mathematics.html` describes Volume I **V4**; current is **V7**
-      (10.5281/zenodo.22084842). `vol2-contact.html` describes Volume II **V2a**; current is
-      **V5** (10.5281/zenodo.22117968). Both pages are behind their deposits.
-- [ ] `vol1-mathematics.html:876` and `chEta-tribonacci.html:163` cite TOGT by its V1 DOI
-      (20682934); use the concept DOI 10.5281/zenodo.20682933.
+Related, found the same day (2026-09-24):
+- [x] `book1/vol1-mathematics.html` (canonical Vol I; root `vol1-mathematics.html` is a
+      redirect stub) said "current version (v6)"; now badges V7 (22084842) + all-versions
+      19117399, with a banner: V7 changes no mathematics. Page text stays the Second Edition
+      (only copy with the orthogenesis note). CORRECTION: an earlier line here said the
+      page described V4 and `vol2-contact.html` V2a — read from the stale `~/geometry`
+      clone. `vol2-contact.html` in this repo was already V5.
+- [x] `vol2-contact.html` ref [1] cited Vol I "Version 4 … v6 current" → V7.
+- [x] `book1/index.html` described the redirect stub as the current Vol I and Vol II as
+      V2a; fixed, and the ledger row for the deleted `.bak` removed.
+- [x] TOGT cited by its V1 DOI 20682934 → concept 20682933 in chEta-tribonacci, chDis-disaster,
+      chEps-gronwall, nj-innovation-portfolio, toa-preprint (×4), ch-schumann-dual (ref list).
+- [x] `ch-schumann-dual.html:704` called 10.5281/zenodo.20682934 "the current AXLE deposit
+      `dm3-dual-cavity` (22 theorems)". Checked 2026-09-24: no Zenodo deposit exists (104 records,
+      46 concepts under the author's name); `grossi-ops/Atratores` has no `lean/dm3-dual-cavity/`
+      (404, no commits, no releases). The files are at the AXLE root: Monotonicity (6), MultiChamber (4),
+      Examples (2) = 12 declarations, never built; TripleChamber (9) never built, T1 false — the
+      kernel-checked port is `Orthogenesis/Resonance/TripleChamber.lean`. Fixed: ch-schumann-dual
+      (lines ~274, ~441, §11, ref list), chF-catastrophe:197 (κ ≥ 0, published_T1_is_false),
+      book6/index.html (2 lines), the port's origin comment, AXLE TripleChamber header (+ nested copy).
+- [ ] AXLE `directory.html`: 24 links to `grossi-ops/Atratores/blob/main/lean/dm3-dual-cavity/…` are dead;
+      point them at the AXLE root files. That file has other people's uncommitted edits — wait for them.
+- [ ] Put AXLE's dual-cavity files (Monotonicity, MultiChamber, Examples) in a build target (or port them
+      into geometry like TripleChamber) so the "stated, not yet built" rows can become kernel-checked.
+- [ ] grossi-ops.github.io/Atratores front page (Book 4 Ch 10 material, sent to SBM) lists Vol I as
+      "v3 20298665" and Vol II as "v2a 20159456"; current are V7 22084842 and V5 22117968. Not edited —
+      separate repo, and the SBM submission is the author's call.
+- [x] `omega/ch-widening-gate.html:111` cited TOGT by 20682934 ("TOGT preprint") → 20682933.
+- [ ] Two clones exist: `~/geometry` (stale, last commit 2026-08-13) and `~/Desktop/geometry`
+      (canonical). Never read site state from `~/geometry`.
 - [ ] `book1/vol1-proofs.html` (guide to TOGT V4, added 2026-09-24): its filename matches the
-      Lean repo TOTOGT/vol1-proofs, which it is not; `book1/index.html` says so. Update the
-      page when TOGT V4 is published (it already describes the V4 text).
+      Lean repo TOTOGT/vol1-proofs, which it is not; `book1/index.html` says so.
+
+Volume II (no V6 for now; owner's decision 2026-09-24 — fix what can be fixed without one):
+- [x] AXLE `VolumeTwo.lean`: stale "All `sorry` below" header fixed; `thm_A_contact_realization_fold`
+      (conclusion `True`) and `thm_B_threshold_equivalence` (both sides by hypothesis) withdrawn
+      to comments + obligations OP-A/OP-B in §7; `thm_C_singularity_bijection` renamed
+      `thm_C_unique_preimages_A2_A3`; probe N 19 → 17. V5 cites commit e44e8d1, unaffected.
+      Verified by the author 2026-09-24 (`run.sh` GREEN, 17 declarations); committed AXLE 607721b.
+- [x] `AXLE/NASA/MoonBase/AXLE_lean_files/VolumeTwo.lean` (older copy, old names) replaced 2026-09-24 by the
+      canonical file plus a 6-line header naming it a copy; RFI-cited version is `git show 7246603:<path>`.
+- [ ] AXLE `theorem-registry.html` still lists thm_A/thm_B/thm_C_singularity_bijection as proved in both
+      VolumeTwo entries. Regenerate with `scripts/build_theorem_registry.py` once the other uncommitted
+      edits to that file are committed or discarded by their owner.
+- [ ] For a future Vol II V6 (bibliography, not fixable without a new version): Vol I is cited
+      as "preprint, HAL, 2026" → V7 10.5281/zenodo.22084842; toy model "submitted to SIAM" →
+      add Zenodo V3 21147306; D6 DNLS working paper has no DOI. Also regenerate Appendix A
+      (17 declarations, new names).
 
 ## OPEN — the storefront
 
