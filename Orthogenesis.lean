@@ -30,3 +30,4 @@ import Orthogenesis.Allostatic.AllostaticLoad
 import Orthogenesis.Matrix.GenerativeMatrix
 import Orthogenesis.Circadian.CircadianReeb
 import Orthogenesis.Neural.NeuralOscillations
+import Orthogenesis.Resonance.ResonanceModes
