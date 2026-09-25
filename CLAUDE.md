@@ -2078,6 +2078,14 @@ borrowed one. *(`chIV-field.html` has a stray `</div>` — pre-existing, confirm
    deposit at all. The registry is asserting a Zenodo record for Book 3 that is a different
    volume's.
 
+## RULE — units before data (owner, 2026-09-24)
+
+No invariant is compared to data until its units are derived from the metric. Same error class seen twice:
+CATGT r* = √(J/λ) (dimensionless) matched to pore radii in Å; Book 3 plasma κ* on a (B_z, ρ, T, J) manifold
+matched to 10⁻³ km⁻¹. Also open in the plasma room: where λ (d_f formula) comes from — λ = 0.6 gives d_f > 2,
+1.43 needs λ ≈ 0.133; which quantity μ_max = −0.42 is and how it relates to Vol II's −2. Lean:
+`Orthogenesis/Plasma/PlasmaRoom.lean` (added 2026-09-24; X-point = non-degenerate saddle, rank drop at the fold).
+
 ## OPEN — one versioned Zenodo record per book (owner's decision, 2026-09-24)
 
 Books have no book-level DOI yet; only some chapters do. Model decided: **one Zenodo
@@ -2085,7 +2093,24 @@ record per book, a new version whenever chapters are added**; cite the book's co
 DOI (always resolves to the newest version); the version DOIs are dated snapshots.
 Chapters that already have DOIs stay as they are and are linked, not re-deposited.
 
-- [ ] Book 3 — the Living Book / "Mini-Beast" (`book4/living-book.html` says "Volume III";
+- [x] Book 3 v1 PUBLISHED 2026-09-25: version 10.5281/zenodo.22947908, concept 10.5281/zenodo.22947907. Files match the pack (md5).
+      CADENCE (owner, 2026-09-24): a new version at each equinox; the web edition runs ahead, and each changed chapter carries a
+      "Book 3 v2 (web, dated …)" box. v2 due at the March 2027 equinox. v2 so far: ch03-plasma.html (space weather, auroras,
+      Vedic chanting; math under revision). DOIs added to about-series.html and living-book.html footer.
+      Zenodo metadata to fix on v1 (metadata edit, no new version): licence shows CC BY 4.0 — chapters are CC BY-NC-ND 4.0;
+      no related identifiers (ISBN, online edition, repo, Vol I V7, Vol II V5) — see the metadata sheet.
+      TOGT V4 is already published, so the Book 3 DOI goes into TOGT V5 §25.3.
+- [ ] TOGT V4 (22135179) as published: related identifiers still reference 19117399, 20298665, 20159456 (stale; replace with
+      22084842, 22117968, toy model 21147306, PoA records) — metadata edit, no new version. The uploaded PDF/zip are the build
+      before the living-book URL fix (§25.3 still points at book4/living-book.html) and old files ride along (V3 tex/pdf,
+      largeprint (1), files (31).zip, the metadata sheet). Those need V5.
+- [~] (was) Book 3: DOI RESERVED 10.5281/zenodo.22947908 (version 1, 2026-09-24). Pack built from geometry @ 504b962:
+      44 roster chapters, PDF 365 pp + HTML zip + CHANGELOG (git dates) + metadata, in `~/Desktop/Claude outputs/
+      Book3_MiniBeast_v1/`. Author uploads and publishes. After publish: record the concept DOI here, in
+      `about-series.html` ("Deposits and identifiers"), `living-book.html` (root: the Book 3 page), TOGT §25.3 + bibliography.
+      hasPart 20221723 deliberately NOT added: on Zenodo it is a version under Vol I's concept 19117399, and the
+      chapter is not on the Book 3 roster — author to decide.
+- [ ] (original plan) Book 3 — the Living Book / "Mini-Beast" (Book 3's page is root `living-book.html`; `book4/living-book.html` is the G1–G5 spiral, which says "Volume III";
       its chapters live in the repo root). It never closes: each teaching meeting with a
       doctoral researcher presenting in English adds a chapter. First record = the chapters
       to date as PDF/zip + a changelog of which meetings added which chapters. Link existing
