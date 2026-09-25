@@ -4,7 +4,7 @@ Produced by `tools/toolchain_ledger.py`. Toolchain pinned: `leanprover/lean4:v4.
 
 Nothing here is compiled by this tool. Each row reports whether a gate report already on disk names this file's declarations, and **what those declarations rest on**. Axiom reports are parsed by `tools/axiom_gate.py`, which holds the allowlist and rejoins Lean's wrapped output.
 
-**393 of 675 tracked declarations in this repo have a kernel record** — 34 of them resting on no axiom at all, 359 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
+**400 of 682 tracked declarations in this repo have a kernel record** — 34 of them resting on no axiom at all, 366 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
 
 | file | decls | audited | `axiom` | rests on | status | report | dated |
 |---|---:|---:|---:|---|---|---|---|
@@ -29,6 +29,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Figure8/GeronoLemniscate.lean` | 16 | 15 | 0 | 15 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__GeronoLemniscate.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Figure8/LunarAnalemma.lean` | 16 | 16 | 0 | 16 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__LunarAnalemma.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Market/MarketDynamics.lean` | 12 | 12 | 0 | 12 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Market__MarketDynamics.axioms.txt` | 2026-09-25 |
+| `Orthogenesis/Matrix/GenerativeMatrix.lean` | 7 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Matrix__GenerativeMatrix.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Neural/NeuralDynamics.lean` | 12 | 12 | 0 | 12 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Neural__NeuralDynamics.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Pedagogy/PedagogyDynamics.lean` | 9 | 9 | 0 | 9 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Pedagogy__PedagogyDynamics.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Plasma/PlasmaRoom.lean` | 27 | 27 | 0 | 27 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Plasma__PlasmaRoom.axioms.txt` | 2026-09-25 |
@@ -90,7 +91,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 
 | declarations | rests on |
 |---:|---|
-| 454 | `Classical.choice, Quot.sound, propext` |
+| 461 | `Classical.choice, Quot.sound, propext` |
 | 61 | `(none — axiom-free)` |
 | 50 | `Quot.sound, propext` |
 | 33 | `propext` |
