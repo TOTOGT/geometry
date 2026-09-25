@@ -2099,6 +2099,9 @@ Ch 20 Coherence Bridge: `Orthogenesis/Bridge/CoherenceBridge.lean` (2026-09-25).
 chapter's own linear model: similarity preserves trace/det, rescaled similarity preserves μ/ω; the six rows' μ and μ/ω are
 each strictly ordered, so no two rows are similar. All six are spiral sinks (shared form only). No category or contact
 morphisms defined anywhere — the category claim stays a claim.
+Ch 6 pedagogy: `Orthogenesis/Pedagogy/PedagogyDynamics.lean` (2026-09-25, 9/9). "Why This Program Works": Banach gives
+convergence only in the limit (after 14 steps distance |1−k|^14·|r₀−r*| ≠ 0); a contraction has ONE fixed point for every
+seed, so 'individual Γ*' needs a different G per student; non-commutativity ≠ irreversibility (x+1, 2x).
 
 ## OPEN — one versioned Zenodo record per book (owner's decision, 2026-09-24)
 
