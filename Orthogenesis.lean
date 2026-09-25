@@ -35,3 +35,4 @@ import Orthogenesis.Crystal.CrystallineReturn
 import Orthogenesis.Axiomatic.AxiomaticTurn
 import Orthogenesis.Lyapunov.LyapunovHorizon
 import Orthogenesis.Spectral.SpectralReach
+import Orthogenesis.Conclusion.FixedPointConclusion
