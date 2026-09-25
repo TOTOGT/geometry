@@ -2085,6 +2085,9 @@ CATGT r* = √(J/λ) (dimensionless) matched to pore radii in Å; Book 3 plasma 
 matched to 10⁻³ km⁻¹. Also open in the plasma room: where λ (d_f formula) comes from — λ = 0.6 gives d_f > 2,
 1.43 needs λ ≈ 0.133; which quantity μ_max = −0.42 is and how it relates to Vol II's −2. Lean:
 `Orthogenesis/Plasma/PlasmaRoom.lean` (added 2026-09-24; X-point = non-degenerate saddle, rank drop at the fold).
+Market room: `Orthogenesis/Market/MarketDynamics.lean` (2026-09-25, 12/12). Fisher κ* is unit-free (passes the rule);
+ch14's backtest proxy |σ''|/|σ'| scales with the time unit (fails it until the unit is stated). With the plasma λ = 0.6
+the market d_f = 1.78 falls in the printed 1.7–1.9 band; Theorem 4.3's α(q) formula is not the standard α = dτ/dq.
 
 ## OPEN — one versioned Zenodo record per book (owner's decision, 2026-09-24)
 

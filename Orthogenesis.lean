@@ -17,3 +17,4 @@ import Orthogenesis.Disaster.CatastropheF
 import Orthogenesis.Disaster.ChaosMu
 import Orthogenesis.Resonance.TripleChamber
 import Orthogenesis.Plasma.PlasmaRoom
+import Orthogenesis.Market.MarketDynamics
