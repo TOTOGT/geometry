@@ -2088,6 +2088,10 @@ matched to 10⁻³ km⁻¹. Also open in the plasma room: where λ (d_f formula)
 Market room: `Orthogenesis/Market/MarketDynamics.lean` (2026-09-25, 12/12). Fisher κ* is unit-free (passes the rule);
 ch14's backtest proxy |σ''|/|σ'| scales with the time unit (fails it until the unit is stated). With the plasma λ = 0.6
 the market d_f = 1.78 falls in the printed 1.7–1.9 band; Theorem 4.3's α(q) formula is not the standard α = dτ/dq.
+Ch 1 figure-eights: the four Lean files cited by ch01-one-equation.html lived only in TOTOGT/DM3-lab (no toolchain,
+no CI) and had never been built — 30 errors on first build. Rescued and fixed into Orthogenesis/Figure8/ (2026-09-25,
+92 declarations incl. A1Node.lean, which proves the shared A₁ node; Morse lemma itself not in Mathlib). DM3-lab copies
+are now stale — do not cite them.
 
 ## OPEN — one versioned Zenodo record per book (owner's decision, 2026-09-24)
 

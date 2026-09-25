@@ -18,3 +18,8 @@ import Orthogenesis.Disaster.ChaosMu
 import Orthogenesis.Resonance.TripleChamber
 import Orthogenesis.Plasma.PlasmaRoom
 import Orthogenesis.Market.MarketDynamics
+import Orthogenesis.Figure8.GeronoLemniscate
+import Orthogenesis.Figure8.BernoulliLemniscate
+import Orthogenesis.Figure8.Analemma
+import Orthogenesis.Figure8.LunarAnalemma
+import Orthogenesis.Figure8.A1Node

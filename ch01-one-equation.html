@@ -784,13 +784,14 @@
 <!-- ══════════════════════════════════════════════════════
      THE THREE CURVES
 ═══════════════════════════════════════════════════════ -->
+<div class="lean-status" style="margin:1rem var(--margin, 1.5rem);padding:.8rem 1rem;border-left:3px solid #6a8f5a;background:rgba(106,143,90,.14);font-size:.93em;line-height:1.65;color:inherit"><strong>Version — Book 3 v2 (web, dated 2026-09-25).</strong> This page is the live web edition, part of Book 3 version 2, to be deposited on Zenodo at the March 2027 equinox. Added since version 1: the Lean status of §2–§4 corrected. The four source files, first written in May 2026 in TOTOGT/DM3-lab, had never been built; they are now kernel-checked in <a href="https://github.com/TOTOGT/geometry/tree/main/Orthogenesis/Figure8" style="color:inherit;text-decoration:underline">TOTOGT/geometry · Orthogenesis/Figure8</a>, together with a new file that proves the shared A₁ node. Version 1, as taught and deposited: <a href="https://doi.org/10.5281/zenodo.22947908" style="color:inherit;text-decoration:underline">10.5281/zenodo.22947908</a>.</div>
 <section class="section-wide reveal" id="curves">
   <div style="padding: 0 var(--margin) 2rem">
     <span class="sec-tag">§ 2 · The Figure-Eight Trilogy</span>
     <h2>Three Curves, Formally Defined</h2>
     <p style="max-width: 60ch; color: var(--silver);">
-      Each panel below draws the curve in real time and links directly to the machine-verified
-      Lean 4 source file. Every theorem listed has been proved without <code>sorry</code>.
+      Each panel below draws the curve in real time. Every theorem listed is kernel-checked without
+      <code>sorry</code> in <a href="https://github.com/TOTOGT/geometry/tree/main/Orthogenesis/Figure8" style="color:inherit">Orthogenesis/Figure8</a> (Lean 4.32, 2026-09-25).
     </p>
   </div>
 
@@ -806,7 +807,7 @@
         fitting inside the unit square. The simplest algebraic figure-eight.
         Natural output of the TOGT compression operator on [0,1].
       </div>
-      <div class="panel-status">SORRY_COUNT: 0 · 8 THEOREMS PROVED</div>
+      <div class="panel-status">KERNEL-CHECKED 2026-09-25 · 16 DECLARATIONS · NO SORRY</div>
     </div>
 
     <!-- BERNOULLI -->
@@ -819,7 +820,7 @@
         Λ ≈ 2.6221, the real analogue of π. Three complete symmetries.
         Fits inside a square of side 2√2.
       </div>
-      <div class="panel-status">SORRY_COUNT: 0 · 13 THEOREMS PROVED</div>
+      <div class="panel-status">KERNEL-CHECKED 2026-09-25 · 20 DECLARATIONS · NO SORRY</div>
     </div>
 
     <!-- ANALEMMA -->
@@ -832,13 +833,13 @@
         A Lissajous curve at frequency ratio 2∶1. Proved: periodic, bounded,
         self-intersecting at exactly t=0 and t=π.
       </div>
-      <div class="panel-status">SORRY_COUNT: 0* · 11 THEOREMS PROVED</div>
+      <div class="panel-status">KERNEL-CHECKED 2026-09-25 · 15 DECLARATIONS · NO SORRY*</div>
     </div>
 
   </div>
 
   <p style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--gold-dim); padding: 0 var(--margin); margin-top: -1rem;">
-    * analemma_implicit_bwd tagged COMPILED-PENDING-VERIFICATION · all other theorems clean
+    * analemma_implicit_bwd: the May 2026 proof used a wrong witness (t = −arcsin y reaches (x, −y), not (x, y)); corrected to t = π − arcsin y and kernel-checked 2026-09-25
   </p>
 </section>
 
@@ -854,19 +855,22 @@
   <p>
     The three files below — <code>GeronoLemniscate.lean</code>,
     <code>BernoulliLemniscate.lean</code>, <code>Analemma.lean</code> —
-    are genuine Lean 4 source files, not pseudocode. They compile against
-    current Mathlib. The proof tactics are named and can be checked interactively
-    in VS Code with the Lean extension.
+    are genuine Lean 4 source files, not pseudocode. The May 2026 versions in TOTOGT/DM3-lab were
+    never built — that repository has no toolchain file and no CI for them — and on first build
+    (Lean 4.32, 2026-09-25) they produced 30 errors. The corrected files are kernel-checked in
+    <a href="https://github.com/TOTOGT/geometry/tree/main/Orthogenesis/Figure8" style="color:inherit">TOTOGT/geometry · Orthogenesis/Figure8</a> and run in its default build.
   </p>
 
   <p>
     The epistemic discipline applied throughout: no theorem is claimed above
     its actual proof status. <code>sorry_count: 0</code> means exactly that.
-    One theorem in <code>Analemma.lean</code> is tagged
-    <code>COMPILED-PENDING-VERIFICATION</code> because it depends on a
-    lemma chain whose Mathlib names require live verification — the mathematics
-    is correct but the tactic may need adjustment. That distinction is made
-    explicit in the file header.
+    One theorem in <code>Analemma.lean</code>, <code>analemma_implicit_bwd</code>, was tagged
+    <code>COMPILED-PENDING-VERIFICATION</code> with the note that “the mathematics is correct”.
+    The statement was true, but the proof used a wrong witness for the minus sign; it is now
+    corrected and checked. Three other statements were strengthened so that they prove what their
+    names say: <code>bernoulli_y_bound</code> (the old proof could only reach y² ≤ 2; the curve gives
+    y² ≤ 1/4), <code>bernoulli_radius_tight</code> and <code>lunar_narrower_than_solar</code>
+    (the old versions were arithmetic facts about numbers, not about the curves).
   </p>
 
   <!-- SAMPLE: GeronoLemniscate -->
@@ -932,7 +936,7 @@
       <tr><td class="thm-name">Gerono</td><td class="thm-name">gerono_parametric</td><td class="thm-stmt">γ(t) ∈ lemniscate</td><td class="thm-tactic">linear_combination</td><td class="thm-status">✓</td></tr>
       <tr><td class="thm-name">Gerono</td><td class="thm-name">gerono_symm_x/y</td><td class="thm-stmt">Both axis symmetries</td><td class="thm-tactic">ring_nf</td><td class="thm-status">✓</td></tr>
       <tr><td class="thm-name">Gerono</td><td class="thm-name">gerono_x/y_bound</td><td class="thm-stmt">x²≤1, y²≤1/4</td><td class="thm-tactic">nlinarith</td><td class="thm-status">✓</td></tr>
-      <tr><td class="thm-name">Gerono</td><td class="thm-name">gerono_self_intersect</td><td class="thm-stmt">preimages of (0,0) = kπ</td><td class="thm-tactic">sin_int_mul_pi</td><td class="thm-status">✓</td></tr>
+      <tr><td class="thm-name">Gerono</td><td class="thm-name">gerono_self_intersect · gerono_origin_iff</td><td class="thm-stmt">preimages of (0,0) = kπ (both directions)</td><td class="thm-tactic">sin_int_mul_pi · sin_eq_zero_iff</td><td class="thm-status">✓</td></tr>
       <tr><td class="thm-name">Bernoulli</td><td class="thm-name">bernoulli_symm_x/y/origin</td><td class="thm-stmt">3-fold symmetry</td><td class="thm-tactic">ring_nf</td><td class="thm-status">✓</td></tr>
       <tr><td class="thm-name">Bernoulli</td><td class="thm-name">bernoulli_right_tip</td><td class="thm-stmt">(√2, 0) ∈ lemniscate</td><td class="thm-tactic">sq_sqrt + nlinarith</td><td class="thm-status">✓</td></tr>
       <tr><td class="thm-name">Bernoulli</td><td class="thm-name">bernoulli_radius_bound</td><td class="thm-stmt">x²+y² ≤ 2</td><td class="thm-tactic">nlinarith</td><td class="thm-status">✓</td></tr>
@@ -990,8 +994,15 @@
   <p>
     All three curves have this. That is the honest claim — not that they are the same shape,
     but that they share the same local singular structure at their crossing points. This is
-    a meaningful mathematical observation, verified in each Lean file via the self-intersection
-    theorems.
+    a meaningful mathematical observation. The self-intersection theorems in each file only show
+    that two parameters reach the origin; the node itself is proved in
+    <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Figure8/A1Node.lean" style="color:inherit">A1Node.lean</a>: each implicit equation has zero gradient
+    and a non-degenerate indefinite quadratic part at the origin (determinants −1, −4, −4, −2),
+    changes sign in every neighbourhood of it, and — for the Gerono, solar and lunar curves — the
+    two branches cross with independent velocities; the parameters reaching the origin are exactly
+    t = kπ. The Morse lemma, which turns the first three facts into “two smooth branches” in
+    general, is not yet in Mathlib; for the parametrised curves the transverse crossing is checked
+    directly.
   </p>
 
   <div class="status-grid reveal">
