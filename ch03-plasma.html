@@ -93,7 +93,7 @@ footer a { color: var(--gold); text-decoration: none; }
 
 <div class="definition-box" style="font-size:0.95em">
   <div class="label">Version — Book 3 v2 (web, dated 2026-09-24)</div>
-  <p>This page is the live web edition, part of Book 3 version 2, which will be deposited on Zenodo at the March 2027 equinox. Added since version 1: the sections on space weather, the auroras, and Vedic chanting. The mathematics of this chapter is under revision (see <code>Orthogenesis/Plasma/PlasmaRoom.lean</code>). Version 1, as taught and deposited: <a href="https://doi.org/10.5281/zenodo.22947908">10.5281/zenodo.22947908</a>; all versions: <a href="https://doi.org/10.5281/zenodo.22947907">10.5281/zenodo.22947907</a>.</p>
+  <p>This page is the live web edition, part of Book 3 version 2, which will be deposited on Zenodo at the March 2027 equinox. Added since version 1: the sections on space weather, the auroras, and Vedic chanting; Assumption 3.2 corrected (the X-point is a non-degenerate saddle; the rank drop is at the fold); Lean status notes. The mathematics of this chapter is under revision (see <code>Orthogenesis/Plasma/PlasmaRoom.lean</code>). Version 1, as taught and deposited: <a href="https://doi.org/10.5281/zenodo.22947908">10.5281/zenodo.22947908</a>; all versions: <a href="https://doi.org/10.5281/zenodo.22947907">10.5281/zenodo.22947907</a>.</p>
 </div>
 
 
@@ -107,11 +107,13 @@ The magnetotail current sheet is the universe's largest natural laboratory for d
   <p>Let <span class="math">X</span> be the space of magnetotail plasma states with coordinates <span class="math">(B_z, ρ, T, J)</span> where <span class="math">B_z</span> is the z-component of magnetic field, <span class="math">ρ</span> is density, <span class="math">T</span> is temperature, and <span class="math">J</span> is current density. Equip <span class="math">X</span> with the metric induced by the MHD energy functional. The plasma configuration manifold is <span class="math">(X, g)</span> where <span class="math">g_ij = ∂²E_MHD/∂x^i∂x^j</span>.</p>
 </div>
 
+<div class="lean-status" style="margin:1rem 0;padding:.8rem 1rem;border-left:3px solid #6a8f5a;background:rgba(106,143,90,.12);font-size:.93em;line-height:1.65;color:inherit"><strong>Lean status (Book 3 v2, 2026-09-25) — Definition 3.1, the metric.</strong> At an X-point the Hessian is indefinite: for the flux ψ = (x² − y²)/2 it is diag(1, −1), determinant −1. An indefinite matrix is not a Riemannian metric, so g = ∂²E_MHD cannot serve as the metric at an X-point; a positive-definite metric on X still has to be chosen. (<code>xpointHessian_not_posDef</code>) <span style="opacity:.8">Kernel-checked in <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Plasma/PlasmaRoom.lean" style="color:inherit;text-decoration:underline">PlasmaRoom.lean</a>.</span></div>
 <div class="theorem-box">
   <div class="label">Assumption 3.2 — Morse Stability Functional</div>
-  <p>The MHD energy <span class="math">E_MHD : X → ℝ</span> satisfies Morse conditions away from separatrices: all critical points are non-degenerate, and the Hessian <span class="math">∂²E_MHD</span> loses rank exactly 1 at the X-point.</p>
+  <p>The MHD energy <span class="math">E_MHD : X → ℝ</span> satisfies Morse conditions: every critical point is non-degenerate, including each X-point, which is a non-degenerate saddle. The Hessian <span class="math">∂²E_MHD</span> loses rank exactly 1 only at the fold — the onset of reconnection, where an X-point and an O-point merge and annihilate.</p>
 </div>
 
+<div class="lean-status" style="margin:1rem 0;padding:.8rem 1rem;border-left:3px solid #6a8f5a;background:rgba(106,143,90,.12);font-size:.93em;line-height:1.65;color:inherit"><strong>Lean status (Book 3 v2, 2026-09-25) — Assumption 3.2, corrected.</strong> An X-point is a non-degenerate saddle, not a rank drop. In the fold family ψ_a = x³/3 − a·x + y²/2 an X-point (−√a, 0) and an O-point (√a, 0) exist for a &gt; 0, none for a &lt; 0, and they merge with singular Hessian at a = 0; every critical point is non-degenerate for a ≠ 0. So the Morse assumption holds generically and the rank drop sits at reconnection onset. (<code>fold_xpoint_saddle</code>, <code>fold_degenerate_at_zero</code>, <code>fold_generic_morse</code>) <span style="opacity:.8">Kernel-checked in <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Plasma/PlasmaRoom.lean" style="color:inherit;text-decoration:underline">PlasmaRoom.lean</a>.</span></div>
 <div class="definition-box">
   <div class="label">Definition 3.3 — X-Point Focal Curvature</div>
   <p>At the magnetic X-point, focal curvature: <span class="math">κ*(x) = min{‖Πx‖, √K_sec(x)} ≈ 0.8–1.2 × 10⁻³ km⁻¹</span></p>
@@ -125,6 +127,7 @@ The magnetotail current sheet is the universe's largest natural laboratory for d
   <p>where <span class="math">λ</span> is the compression ratio. For <span class="math">μ_max = −0.42</span> and <span class="math">λ ≈ 0.6</span>: <span class="math">d_f ≈ 1.43</span>. Verified against Cluster 2004 spectral data.</p>
 </div>
 
+<div class="lean-status" style="margin:1rem 0;padding:.8rem 1rem;border-left:3px solid #6a8f5a;background:rgba(106,143,90,.12);font-size:.93em;line-height:1.65;color:inherit"><strong>Lean status (Book 3 v2, 2026-09-25) — Theorem 3.4.</strong> With the printed μ_max = −0.42 and λ = 0.6 the formula d_f = 1 + log|μ_max| / log λ gives d_f ≈ 2.70, not 1.43; the formula stays in the curve range (1, 2) only when λ &lt; |μ_max|. The value 1.43 requires λ ≈ 0.133. Until λ is derived independently, Prediction 3 restates an input rather than testing one. (<code>plasma_fractalDim_ne_published</code>, <code>fractalDim_mem_Ioo</code>, <code>fractalDim_lamFor</code>) <span style="opacity:.8">Kernel-checked in <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Plasma/PlasmaRoom.lean" style="color:inherit;text-decoration:underline">PlasmaRoom.lean</a>.</span></div>
 <div class="theorem-box">
   <div class="label">Theorem 3.5 — Plasma Reconnection is dm³</div>
   <p>The plasma reconnection cycle is a dm³ orbit with canonical invariants:</p>
@@ -151,6 +154,7 @@ The magnetotail current sheet is the universe's largest natural laboratory for d
   </ol>
 </div>
 
+<div class="lean-status" style="margin:1rem 0;padding:.8rem 1rem;border-left:3px solid #6a8f5a;background:rgba(106,143,90,.12);font-size:.93em;line-height:1.65;color:inherit"><strong>Lean status (Book 3 v2, 2026-09-25) — Falsifiability 3.6.</strong> (1) κ* is compared in km⁻¹, but on a manifold coordinatised by (B_z, ρ, T, J) curvature has units of one over coordinate squared; the step that gives the metric physical length is not yet written, so the band is not yet comparable to spacecraft data (rule: units before data). (2) μ_max here is the transverse exponent of the normal form. A measured Alfvén-normalised rate v_in/v_A is ≥ 0, a different quantity, so the two are not expected to match; how −0.42 relates to Volume II’s −2 is open. (3) depends on λ, above. (<code>alfvenRate_ne_plasma_mu</code>) <span style="opacity:.8">Kernel-checked in <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Plasma/PlasmaRoom.lean" style="color:inherit;text-decoration:underline">PlasmaRoom.lean</a>.</span></div>
 <h2>Parameter Summary</h2>
 
 <table class="param-table">
