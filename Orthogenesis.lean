@@ -38,3 +38,4 @@ import Orthogenesis.Spectral.SpectralReach
 import Orthogenesis.Conclusion.FixedPointConclusion
 import Orthogenesis.Annealing.AnnealingRevision
 import Orthogenesis.Verification.SorryFree
+import Orthogenesis.Epistemology.PythagoreanComma
