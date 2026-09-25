@@ -92,7 +92,10 @@ for f in "${FILES[@]}"; do
   s=$(date +%s)
   out=$(lake env lean "$f" 2>&1); rc=$?
   e=$(date +%s)
-  n=$(printf '%s' "$out" | grep -c 'error')
+  # Count Lean's own error messages (file:line:col: error: ...), not every line
+  # that happens to contain the word -- a declaration named *_error_* printed by
+  # `#print axioms` was once counted as a failure (FixedPointConclusion, 2026-09-25).
+  n=$(printf '%s' "$out" | grep -cE ':[0-9]+:[0-9]+: error')
   if [ "$n" -eq 0 ] && [ $rc -eq 0 ]; then
     printf "  OK    %4ds  %s\n" $((e-s)) "$(basename "$f")"; pass=$((pass+1))
   else
@@ -116,7 +119,7 @@ for f in "${FILES[@]}"; do
     if [ $FULL -eq 1 ]; then
       printf '%s\n' "$out" | sed 's/^/          /'
     else
-      printf '%s\n' "$out" | grep -A 14 -E 'error' | head -70 | sed 's/^/          /'
+      printf '%s\n' "$out" | grep -A 14 -E ':[0-9]+:[0-9]+: error' | head -70 | sed 's/^/          /'
     fi
     continue
   fi
