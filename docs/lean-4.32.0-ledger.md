@@ -4,7 +4,7 @@ Produced by `tools/toolchain_ledger.py`. Toolchain pinned: `leanprover/lean4:v4.
 
 Nothing here is compiled by this tool. Each row reports whether a gate report already on disk names this file's declarations, and **what those declarations rest on**. Axiom reports are parsed by `tools/axiom_gate.py`, which holds the allowlist and rejoins Lean's wrapped output.
 
-**462 of 744 tracked declarations in this repo have a kernel record** — 36 of them resting on no axiom at all, 426 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
+**462 of 751 tracked declarations in this repo have a kernel record** — 36 of them resting on no axiom at all, 426 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
 
 | file | decls | audited | `axiom` | rests on | status | report | dated |
 |---|---:|---:|---:|---|---|---|---|
@@ -58,6 +58,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Architecture/Coverage.lean` | 6 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Architecture/DM3Bridge.lean` | 14 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Architecture/NASAGaps.lean` | 12 | 0 | 0 | — | declared, no gate | `—` | — |
+| `Orthogenesis/Conclusion/FixedPointConclusion.lean` | 7 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/Cell.lean` | 0 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/Colony.lean` | 4 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/GaussBonnet.lean` | 3 | 0 | 0 | — | declared, no gate | `—` | — |
