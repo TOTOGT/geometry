@@ -2092,6 +2092,13 @@ Ch 1 figure-eights: the four Lean files cited by ch01-one-equation.html lived on
 no CI) and had never been built — 30 errors on first build. Rescued and fixed into Orthogenesis/Figure8/ (2026-09-25,
 92 declarations incl. A1Node.lean, which proves the shared A₁ node; Morse lemma itself not in Mathlib). DM3-lab copies
 are now stale — do not cite them.
+Neural room: `Orthogenesis/Neural/NeuralDynamics.lean` (2026-09-25, 12/12). The stated invariants carry timescales of
+seconds (half-life > 1 s, fold time > 6.9 s), so ch16's 50–200 ms window is not derived from them; ch17's d = −log C
+fails the triangle inequality on a realisable correlation matrix (as the chapter warns); κ* band unit-free.
+Ch 20 Coherence Bridge: `Orthogenesis/Bridge/CoherenceBridge.lean` (2026-09-25). Proves the 2026-09-19 withdrawal on the
+chapter's own linear model: similarity preserves trace/det, rescaled similarity preserves μ/ω; the six rows' μ and μ/ω are
+each strictly ordered, so no two rows are similar. All six are spiral sinks (shared form only). No category or contact
+morphisms defined anywhere — the category claim stays a claim.
 
 ## OPEN — one versioned Zenodo record per book (owner's decision, 2026-09-24)
 

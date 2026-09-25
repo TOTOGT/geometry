@@ -23,3 +23,5 @@ import Orthogenesis.Figure8.BernoulliLemniscate
 import Orthogenesis.Figure8.Analemma
 import Orthogenesis.Figure8.LunarAnalemma
 import Orthogenesis.Figure8.A1Node
+import Orthogenesis.Neural.NeuralDynamics
+import Orthogenesis.Bridge.CoherenceBridge
