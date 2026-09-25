@@ -38,7 +38,7 @@ theorem banach_fixed (hf : ContractingWith K f) :
     Function.IsFixedPt f (ContractingWith.fixedPoint f hf) :=
   hf.fixedPoint_isFixedPt
 
-theorem banach_error_bound (hf : ContractingWith K f) (x : α) (n : ℕ) :
+theorem banach_apriori_bound (hf : ContractingWith K f) (x : α) (n : ℕ) :
     dist (f^[n] x) (ContractingWith.fixedPoint f hf) ≤ dist x (f x) * (K : ℝ) ^ n / (1 - K) :=
   hf.apriori_dist_iterate_fixedPoint_le x n
 
@@ -69,7 +69,7 @@ end Orthogenesis.FixedPointConclusion
 
 /-! ## Axiom probe -/
 #print axioms Orthogenesis.FixedPointConclusion.banach_fixed
-#print axioms Orthogenesis.FixedPointConclusion.banach_error_bound
+#print axioms Orthogenesis.FixedPointConclusion.banach_apriori_bound
 #print axioms Orthogenesis.FixedPointConclusion.first_revision_bound
 #print axioms Orthogenesis.FixedPointConclusion.expanding_has_fixed_point
 #print axioms Orthogenesis.FixedPointConclusion.identity_all_fixed

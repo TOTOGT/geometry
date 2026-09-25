@@ -4,7 +4,7 @@ Produced by `tools/toolchain_ledger.py`. Toolchain pinned: `leanprover/lean4:v4.
 
 Nothing here is compiled by this tool. Each row reports whether a gate report already on disk names this file's declarations, and **what those declarations rest on**. Axiom reports are parsed by `tools/axiom_gate.py`, which holds the allowlist and rejoins Lean's wrapped output.
 
-**462 of 751 tracked declarations in this repo have a kernel record** — 36 of them resting on no axiom at all, 426 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
+**469 of 751 tracked declarations in this repo have a kernel record** — 36 of them resting on no axiom at all, 433 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
 
 | file | decls | audited | `axiom` | rests on | status | report | dated |
 |---|---:|---:|---:|---|---|---|---|
@@ -22,6 +22,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Axiomatic/AxiomaticTurn.lean` | 4 | 4 | 0 | 2 axiom-free · 2 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Axiomatic__AxiomaticTurn.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Bridge/CoherenceBridge.lean` | 10 | 10 | 0 | 10 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Bridge__CoherenceBridge.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Circadian/CircadianReeb.lean` | 12 | 12 | 0 | 12 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Circadian__CircadianReeb.axioms.txt` | 2026-09-25 |
+| `Orthogenesis/Conclusion/FixedPointConclusion.lean` | 7 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Conclusion__FixedPointConclusion.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Crystal/CrystallineReturn.lean` | 15 | 15 | 0 | 15 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Crystal__CrystallineReturn.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Disaster/CatastropheF.lean` | 8 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-15/geometry__Orthogenesis__Disaster__CatastropheF.axioms.txt` | 2026-09-15 |
 | `Orthogenesis/Disaster/ChaosMu.lean` | 9 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-15/geometry__Orthogenesis__Disaster__ChaosMu.axioms.txt` | 2026-09-15 |
@@ -58,7 +59,6 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Architecture/Coverage.lean` | 6 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Architecture/DM3Bridge.lean` | 14 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Architecture/NASAGaps.lean` | 12 | 0 | 0 | — | declared, no gate | `—` | — |
-| `Orthogenesis/Conclusion/FixedPointConclusion.lean` | 7 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/Cell.lean` | 0 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/Colony.lean` | 4 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/GaussBonnet.lean` | 3 | 0 | 0 | — | declared, no gate | `—` | — |
@@ -99,7 +99,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 
 | declarations | rests on |
 |---:|---|
-| 512 | `Classical.choice, Quot.sound, propext` |
+| 519 | `Classical.choice, Quot.sound, propext` |
 | 63 | `(none — axiom-free)` |
 | 51 | `Quot.sound, propext` |
 | 41 | `propext` |
