@@ -4,7 +4,7 @@ Produced by `tools/toolchain_ledger.py`. Toolchain pinned: `leanprover/lean4:v4.
 
 Nothing here is compiled by this tool. Each row reports whether a gate report already on disk names this file's declarations, and **what those declarations rest on**. Axiom reports are parsed by `tools/axiom_gate.py`, which holds the allowlist and rejoins Lean's wrapped output.
 
-**375 of 657 tracked declarations in this repo have a kernel record** — 34 of them resting on no axiom at all, 341 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
+**384 of 666 tracked declarations in this repo have a kernel record** — 34 of them resting on no axiom at all, 350 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
 
 | file | decls | audited | `axiom` | rests on | status | report | dated |
 |---|---:|---:|---:|---|---|---|---|
@@ -29,6 +29,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Figure8/LunarAnalemma.lean` | 16 | 16 | 0 | 16 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__LunarAnalemma.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Market/MarketDynamics.lean` | 12 | 12 | 0 | 12 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Market__MarketDynamics.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Neural/NeuralDynamics.lean` | 12 | 12 | 0 | 12 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Neural__NeuralDynamics.axioms.txt` | 2026-09-25 |
+| `Orthogenesis/Pedagogy/PedagogyDynamics.lean` | 9 | 9 | 0 | 9 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Pedagogy__PedagogyDynamics.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Plasma/PlasmaRoom.lean` | 27 | 27 | 0 | 27 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Plasma__PlasmaRoom.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Resonance/TripleChamber.lean` | 10 | 9 | 0 | 9 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-15/geometry__Orthogenesis__Resonance__TripleChamber.axioms.txt` | 2026-09-15 |
 | `PolarPolygonCommonRefinement.lean` | 15 | 15 | 0 | 5 axiom-free · 10 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-09/PolarPolygonCommonRefinement.axioms.txt` | 2026-09-09 |
@@ -88,7 +89,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 
 | declarations | rests on |
 |---:|---|
-| 436 | `Classical.choice, Quot.sound, propext` |
+| 445 | `Classical.choice, Quot.sound, propext` |
 | 61 | `(none — axiom-free)` |
 | 50 | `Quot.sound, propext` |
 | 33 | `propext` |
