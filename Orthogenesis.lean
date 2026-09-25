@@ -33,3 +33,5 @@ import Orthogenesis.Neural.NeuralOscillations
 import Orthogenesis.Resonance.ResonanceModes
 import Orthogenesis.Crystal.CrystallineReturn
 import Orthogenesis.Axiomatic.AxiomaticTurn
+import Orthogenesis.Lyapunov.LyapunovHorizon
+import Orthogenesis.Spectral.SpectralReach
