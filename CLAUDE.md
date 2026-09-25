@@ -2102,6 +2102,7 @@ morphisms defined anywhere — the category claim stays a claim.
 Ch 6 pedagogy: `Orthogenesis/Pedagogy/PedagogyDynamics.lean` (2026-09-25, 9/9). "Why This Program Works": Banach gives
 convergence only in the limit (after 14 steps distance |1−k|^14·|r₀−r*| ≠ 0); a contraction has ONE fixed point for every
 seed, so 'individual Γ*' needs a different G per student; non-commutativity ≠ irreversibility (x+1, 2x).
+Ch 2 allostatic (taught path 28): `Orthogenesis/Allostatic/AllostaticLoad.lean` (2026-09-25, 9). Load index λ = Σ wᵢsᵢ: nonneg, ≤ Σw, monotone, unit weights = count. dm³ callout corrected: V = (r−1)² grows iff |r−1| grows (falls on approach to Γ); leaving radius ε₀ is V > ε₀² = 1/9, not V > 1/3 (r = 3/2 counterexample). about-author.html: v2 Lean section on lemniscate vs analemma (different curves, shared A₁ node). ch1.html (Cajueiro, off-roster) and other duplicate chapter versions: author says do not repeat.
 
 ## OPEN — one versioned Zenodo record per book (owner's decision, 2026-09-24)
 
