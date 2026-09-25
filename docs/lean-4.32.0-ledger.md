@@ -4,7 +4,7 @@ Produced by `tools/toolchain_ledger.py`. Toolchain pinned: `leanprover/lean4:v4.
 
 Nothing here is compiled by this tool. Each row reports whether a gate report already on disk names this file's declarations, and **what those declarations rest on**. Axiom reports are parsed by `tools/axiom_gate.py`, which holds the allowlist and rejoins Lean's wrapped output.
 
-**384 of 666 tracked declarations in this repo have a kernel record** — 34 of them resting on no axiom at all, 350 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
+**393 of 675 tracked declarations in this repo have a kernel record** — 34 of them resting on no axiom at all, 359 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
 
 | file | decls | audited | `axiom` | rests on | status | report | dated |
 |---|---:|---:|---:|---|---|---|---|
@@ -14,6 +14,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `ChladniPolygon.lean` | 4 | 4 | 0 | 4 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-09/ChladniPolygon.axioms.txt` | 2026-09-10 |
 | `CycleCoupling.lean` | 4 | 4 | 0 | 1 axiom-free · 3 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-09/CycleCoupling.axioms.txt` | 2026-09-10 |
 | `NbonacciLadder.lean` | 13 | 13 | 0 | 1 axiom-free · 12 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-09/NbonacciLadder.axioms.txt` | 2026-09-09 |
+| `Orthogenesis/Allostatic/AllostaticLoad.lean` | 9 | 9 | 0 | 9 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Allostatic__AllostaticLoad.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Architecture/AcousticLattice.lean` | 9 | 7 | 0 | 1 axiom-free · 6 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-14/geometry__Orthogenesis__Architecture__AcousticLattice.axioms.txt` | 2026-09-14 |
 | `Orthogenesis/Architecture/G6Crystal.lean` | 33 | 14 | 0 | 3 axiom-free · 11 standard | kernel-audited | `geometry/tools/verify-dm3/axioms.txt` | 2026-08-26 |
 | `Orthogenesis/Architecture/SeismicLattice.lean` | 17 | 15 | 0 | 1 axiom-free · 14 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-14/geometry__Orthogenesis__Architecture__SeismicLattice.axioms.txt` | 2026-09-14 |
@@ -89,7 +90,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 
 | declarations | rests on |
 |---:|---|
-| 445 | `Classical.choice, Quot.sound, propext` |
+| 454 | `Classical.choice, Quot.sound, propext` |
 | 61 | `(none — axiom-free)` |
 | 50 | `Quot.sound, propext` |
 | 33 | `propext` |
