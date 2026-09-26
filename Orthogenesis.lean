@@ -52,3 +52,4 @@ import Orthogenesis.Taxonomy.FoldScaling
 import Orthogenesis.Scale.ScaleChecks
 import Orthogenesis.Polylaminin.PolylamininChecks
 import Orthogenesis.Collatz.CollatzChecks
+import Orthogenesis.Epilogue.EpilogueChecks
