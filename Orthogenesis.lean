@@ -50,3 +50,4 @@ import Orthogenesis.Ocio.OcioChecks
 import Orthogenesis.Entropy.EntropyChecks
 import Orthogenesis.Taxonomy.FoldScaling
 import Orthogenesis.Scale.ScaleChecks
+import Orthogenesis.Polylaminin.PolylamininChecks
