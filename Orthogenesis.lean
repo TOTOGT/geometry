@@ -47,3 +47,4 @@ import Orthogenesis.Immune.CommitmentThreshold
 import Orthogenesis.Tubulin.TubulinChecks
 import Orthogenesis.Phi.SubcriticalApproach
 import Orthogenesis.Ocio.OcioChecks
+import Orthogenesis.Entropy.EntropyChecks
