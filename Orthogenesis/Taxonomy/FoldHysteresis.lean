@@ -37,19 +37,19 @@ theorem hasDerivAt_W (a q : ℝ) : HasDerivAt (W a) (dW a q) q := by
     (((hasDerivAt_pow 2 q).const_mul 3).div_const 2)).add ((hasDerivAt_id' q).const_mul a)
   refine h.congr_deriv ?_
   unfold dW
-  norm_num <;> ring
+  norm_num; ring
 
 theorem hasDerivAt_dW (a q : ℝ) : HasDerivAt (dW a) (d2W q) q := by
   have h := ((hasDerivAt_pow 3 q).sub ((hasDerivAt_id' q).const_mul 3)).add_const a
   refine h.congr_deriv ?_
   unfold d2W
-  norm_num <;> ring
+  norm_num
 
 theorem hasDerivAt_d2W (q : ℝ) : HasDerivAt d2W (d3W q) q := by
   have h := ((hasDerivAt_pow 2 q).const_mul 3).sub_const 3
   refine h.congr_deriv ?_
   unfold d3W
-  norm_num <;> ring
+  norm_num; ring
 
 /-! ## §2  The two folds -/
 
