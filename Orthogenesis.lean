@@ -42,3 +42,4 @@ import Orthogenesis.Epistemology.PythagoreanComma
 import Orthogenesis.Market.CircadianTrader
 import Orthogenesis.Matrix.CajueiroPrinciple
 import Orthogenesis.Taxonomy.GSeries
+import Orthogenesis.Taxonomy.FoldHysteresis
