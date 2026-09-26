@@ -4,7 +4,7 @@ Produced by `tools/toolchain_ledger.py`. Toolchain pinned: `leanprover/lean4:v4.
 
 Nothing here is compiled by this tool. Each row reports whether a gate report already on disk names this file's declarations, and **what those declarations rest on**. Axiom reports are parsed by `tools/axiom_gate.py`, which holds the allowlist and rejoins Lean's wrapped output.
 
-**590 of 876 tracked declarations in this repo have a kernel record** — 43 of them resting on no axiom at all, 547 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
+**592 of 878 tracked declarations in this repo have a kernel record** — 43 of them resting on no axiom at all, 549 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
 
 | file | decls | audited | `axiom` | rests on | status | report | dated |
 |---|---:|---:|---:|---|---|---|---|
@@ -46,6 +46,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Neural/NeuralDynamics.lean` | 12 | 12 | 0 | 12 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Neural__NeuralDynamics.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Neural/NeuralOscillations.lean` | 12 | 12 | 0 | 12 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Neural__NeuralOscillations.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Ocio/OcioChecks.lean` | 4 | 4 | 0 | 1 axiom-free · 3 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-26/geometry__Orthogenesis__Ocio__OcioChecks.axioms.txt` | 2026-09-26 |
+| `Orthogenesis/Overture/OvertureChecks.lean` | 2 | 2 | 0 | 2 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-26/geometry__Orthogenesis__Overture__OvertureChecks.axioms.txt` | 2026-09-26 |
 | `Orthogenesis/Pedagogy/PedagogyDynamics.lean` | 9 | 9 | 0 | 9 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Pedagogy__PedagogyDynamics.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Phi/SubcriticalApproach.lean` | 13 | 11 | 0 | 11 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Phi__SubcriticalApproach.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Plasma/PlasmaRoom.lean` | 27 | 27 | 0 | 27 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Plasma__PlasmaRoom.axioms.txt` | 2026-09-25 |
@@ -116,7 +117,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 
 | declarations | rests on |
 |---:|---|
-| 629 | `Classical.choice, Quot.sound, propext` |
+| 631 | `Classical.choice, Quot.sound, propext` |
 | 70 | `(none — axiom-free)` |
 | 56 | `Quot.sound, propext` |
 | 42 | `propext` |
