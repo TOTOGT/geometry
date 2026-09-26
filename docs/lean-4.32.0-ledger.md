@@ -4,7 +4,7 @@ Produced by `tools/toolchain_ledger.py`. Toolchain pinned: `leanprover/lean4:v4.
 
 Nothing here is compiled by this tool. Each row reports whether a gate report already on disk names this file's declarations, and **what those declarations rest on**. Axiom reports are parsed by `tools/axiom_gate.py`, which holds the allowlist and rejoins Lean's wrapped output.
 
-**483 of 765 tracked declarations in this repo have a kernel record** — 37 of them resting on no axiom at all, 446 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
+**486 of 768 tracked declarations in this repo have a kernel record** — 38 of them resting on no axiom at all, 448 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
 
 | file | decls | audited | `axiom` | rests on | status | report | dated |
 |---|---:|---:|---:|---|---|---|---|
@@ -28,6 +28,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Disaster/CatastropheF.lean` | 8 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-15/geometry__Orthogenesis__Disaster__CatastropheF.axioms.txt` | 2026-09-15 |
 | `Orthogenesis/Disaster/ChaosMu.lean` | 9 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-15/geometry__Orthogenesis__Disaster__ChaosMu.axioms.txt` | 2026-09-15 |
 | `Orthogenesis/Disaster/DisasterTheory.lean` | 18 | 16 | 0 | 1 axiom-free · 15 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-15/geometry__Orthogenesis__Disaster__DisasterTheory.axioms.txt` | 2026-09-15 |
+| `Orthogenesis/Epistemology/PythagoreanComma.lean` | 3 | 3 | 0 | 1 axiom-free · 2 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Epistemology__PythagoreanComma.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Figure8/A1Node.lean` | 27 | 27 | 0 | 27 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__A1Node.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Figure8/Analemma.lean` | 15 | 15 | 0 | 15 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__Analemma.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Figure8/BernoulliLemniscate.lean` | 20 | 19 | 0 | 19 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__BernoulliLemniscate.axioms.txt` | 2026-09-25 |
@@ -101,8 +102,8 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 
 | declarations | rests on |
 |---:|---|
-| 532 | `Classical.choice, Quot.sound, propext` |
-| 64 | `(none — axiom-free)` |
+| 534 | `Classical.choice, Quot.sound, propext` |
+| 65 | `(none — axiom-free)` |
 | 51 | `Quot.sound, propext` |
 | 41 | `propext` |
 | 12 | `Classical.choice, Quot.sound, propext, sorryAx` |
