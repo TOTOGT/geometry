@@ -39,3 +39,6 @@ import Orthogenesis.Conclusion.FixedPointConclusion
 import Orthogenesis.Annealing.AnnealingRevision
 import Orthogenesis.Verification.SorryFree
 import Orthogenesis.Epistemology.PythagoreanComma
+import Orthogenesis.Market.CircadianTrader
+import Orthogenesis.Matrix.CajueiroPrinciple
+import Orthogenesis.Taxonomy.GSeries
