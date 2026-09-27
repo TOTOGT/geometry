@@ -10159,3 +10159,13 @@ written.
 own `certify_rstar.py`/`certify_rstar_rigorous.py` already use for r\*, run against the exact
 right-hand side copied from `certify_rstar.py` (including its `exp(min(-z,200))` overflow
 clamp) — not a re-derivation of the ODE, a re-derivation of what r\* *is* within that ODE.
+
+## 2026-09-27 — Book XX finished: five chapters, five verify scripts, 0 FAIL
+
+Chapters 1–5 written, each after its script ran (R24). Findings a later session should not re-derive:
+- **Wald, Part V (pp. 63–65):** q(i) = q·δ(i)/γ(i) reproduces all four entries of his table (.61 .95 .85 .98); the p. 71 root is q = .850. The part with the most holes (fuselage, 78 of 202) is the second least vulnerable.
+- **Site survivorship:** 877 HTML paths ever added, 855 tracked, 66 added and gone (paths, not reasons).
+- **g6_equals_schumann:** chance of some g-value matching some mode's integer part under search alone = 0.309. Withdrawal had not reached `book5/chV-constants.html` or `book5/index.html`; both now carry `po-correction-ch20-02`, gated by ch02-verify.py [3].
+- **666-page limit:** 9 of 401 limits in [400,800] are g×repdigit or repdigit; the finding is that the limit was set, not measured. The word "resonant" in CLAUDE.md "Hardback constraint" is left for the author. `[OPEN]`
+- **Galton:** his own numbers close his balance equation (P = 1.706 vs printed 1.7) and yield the converse 0.341 ≈ 1/3.
+- **HURDAT2:** 1,752 of 1,988 reached TS/HU; 7.57/season 1851–1899 vs 11.86 1970–2019 (×1.57). Landfall-coded storms rose ×1.63, others ×1.52 — against the simple at-sea-undercount story (split not pre-registered). Verdict open until an observation-history source is held.

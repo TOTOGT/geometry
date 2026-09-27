@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Back Toward the Mean &middot; Book XX &mdash; Principia Orthogona</title>
+<meta name="description" content="Regression to the mean as a phenomenon before it is a model: Galton's 1886 law read from the paper, his converse recomputed from his own numbers, and the same effect with no cause at all.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.po-proved-block{max-width:820px;margin:2.5rem auto 1rem;padding:1.1rem 1.3rem;
+ border:1px solid rgba(122,148,113,.45);border-left:4px solid #7a9471;border-radius:0 6px 6px 0;
+ background:rgba(122,148,113,.07);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.75;}
+.po-proved-block .po-h{letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;color:#5f7a57;margin-bottom:.6rem;}
+.po-proved-block a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.po-proved-block .po-n{font-size:.68rem;opacity:.75;display:block;margin-top:.7rem;line-height:1.6;}
+</style>
+<!--po-subject--><meta name="po-subject" content="MATHEMATICS · APPLIED"><meta name="po-subject-2" content="HISTORY · SCIENCE"><!--/po-subject-->
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XX &middot; Ch 4</span>
+<span class="meta"><a href="ch03-what-to-expect.html">&larr; Ch 3</a> &middot; <a href="index.html">Book XX contents</a> &middot; <a href="ch05-the-storms-nobody-counted.html">Ch 5 &rarr;</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XX &middot; Reading Data &middot; Chapter 4 &middot; Regression &middot; 2026-09-27</div>
+<!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#16324f;background:#dfeaf4;border:1px solid #a8c2d8;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">MATHEMATICS · APPLIED</span><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4a2c14;background:#f3e7da;border:1px solid #d6b894;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">HISTORY · SCIENCE</span></div><!--/po-subject-->
+<h1>Back Toward <em>the Mean</em></h1>
+<div class="subtitle">Tall parents have children who are tall, but less tall. Galton found it in 1886 and first explained it as heredity. It turns out to need no cause at all, and that is why it fools people.</div>
+<div class="metagrid">
+<div><strong>Primary source</strong>Galton, &ldquo;Regression towards Mediocrity in Hereditary Stature&rdquo;, <em>J. Anthropological Institute</em> 15 (1886) 246&ndash;263</div>
+<div><strong>Model text</strong>Evans &amp; Rosenthal &sect;10.3, p. 538 &mdash; which never names the phenomenon</div>
+<div><strong>Every number</strong><span class="mono"><a href="ch04-verify.py">ch04-verify.py</a></span> &mdash; run first, 0 FAIL</div>
+</div>
+</div>
+<div class="wrap">
+
+<p class="lede">Pick anything extreme on one measurement and measure it again: on average it comes back less extreme. Nothing has to happen in between. Regression to the mean is a property of imperfect correlation, not a force, and most of the mistakes made with it come from treating the drift back as an effect.</p>
+
+<div class="eyebrow">&sect; 1</div>
+<h2>The law, in Galton's sentence</h2>
+<p>Francis Galton collected the heights of 928 adult children born to 205 pairs of parents (p.&nbsp;254). He averaged each pair into a &ldquo;mid-parent&rdquo;, scaling women's heights by 1.08 so that they could be averaged with men's. He then measured everyone as a deviation from the population's &ldquo;level of mediocrity&rdquo; of about 68&frac14; inches. On p.&nbsp;252 he states what he found in one sentence:</p>
+<div class="box thm"><span class="lab">Galton 1886, p. 252</span>
+&ldquo;the height-deviate of the offspring is, on the average, two-thirds of the height-deviate of its mid-parentage.&rdquo;</div>
+<p>Parents three inches above average have children, on average, two inches above. Parents three inches below have children two inches below. Both groups move toward the middle. Galton called it regression toward mediocrity, and the word <em>regression</em> has named the whole statistical method ever since. The textbook this volume reads, Evans and Rosenthal, uses the method in &sect;10.3 but never names the phenomenon. The script searches for four names for it and finds none. That is why this chapter is written from Galton.</p>
+
+<div class="eyebrow">&sect; 2</div>
+<h2>Why the population does not shrink</h2>
+<p>If every generation were pulled two-thirds of the way to the middle, heights would bunch together within a few generations. They do not, and Galton saw the objection. His answer (p.&nbsp;256) is a balance: children of similar mid-parents also scatter around their family's centre. The pull inward and the scatter outward cancel, and he writes the balance as an equation connecting three spreads. His own numbers satisfy it:</p>
+<div class="eq">v&sup2; p&sup2; + f&sup2; = P&sup2;&nbsp;&nbsp;&nbsp;&nbsp;(2/3)&sup2; &middot; 1.22&sup2; + 1.5&sup2; = 1.706&sup2;</div>
+<table>
+<tr><th>quantity</th><th>value</th><th>where Galton prints it</th></tr>
+<tr><td>regression, v</td><td class="n">2/3</td><td>p. 252</td></tr>
+<tr><td>spread of mid-parents, p</td><td class="n">1.22 in</td><td>p. 263</td></tr>
+<tr><td>spread within a family, f</td><td class="n">1.5 in</td><td>p. 252</td></tr>
+<tr><td>spread of the population, P &mdash; computed</td><td class="n"><strong>1.706 in</strong></td><td>p. 252 prints 1.7</td></tr>
+</table>
+<p>The four numbers agree <span class="tag t-data">COMPUTED</span>. Galton's image for it is mechanical: &ldquo;It acts like a spring against a weight&rdquo;. The distribution of heights holds steady because regression and scatter balance, and each is needed to explain the other.</p>
+
+<div class="eyebrow">&sect; 3</div>
+<h2>The converse is not the inverse</h2>
+<p>The next thing Galton says is the most often forgotten (p.&nbsp;253): &ldquo;The converse of this law is very far from being its numerical opposite.&rdquo; If children deviate two-thirds as much as their mid-parents, you might expect mid-parents to deviate three-halves as much as their children. They do not. Reading his table by columns instead of rows, the mid-parent of an exceptional person deviates only <em>one-third</em> as much as that person (p.&nbsp;254).</p>
+<p>Both directions regress, and the script derives Galton's one-third from the spreads above. The slope in the reverse direction is the forward slope scaled by the ratio of the two variances:</p>
+<div class="eq">(2/3) &middot; (1.22 / 1.706)&sup2; = 0.341 &asymp; 1/3</div>
+<p>His &ldquo;four and a half times smaller&rdquo; is <span class="mono">(3/2) / (1/3)</span>; with the measured spreads it comes out at 4.40 <span class="tag t-data">COMPUTED</span>. The practical reading is his own: &ldquo;an exceptional man is the somewhat exceptional son of rather mediocre parents&rdquo; far more often than the average son of exceptional ones. There are simply many more mediocre parents to be born to.</p>
+
+<div class="eyebrow">&sect; 4</div>
+<h2>The phenomenon with the heredity taken out</h2>
+<p>Galton explained regression by ancestry: the child inherits partly from a long line whose average is the average of the race. That explanation turned out to be unnecessary. The effect appears whenever two measurements share part of their variation and not all of it, whether or not one causes the other.</p>
+<p>The script builds the plainest possible case. It takes 100,000 things, each with a fixed true value, and measures each twice with independent noise as large as the true spread. It then selects the top 5% on the first measurement and looks at the same things on the second.</p>
+<table>
+<tr><th>group, chosen on measurement 1</th><th>mean on measurement 1</th><th>mean on measurement 2</th><th>ratio</th></tr>
+<tr><td>top 5%</td><td class="n">+2.91</td><td class="n">+1.44</td><td class="n">0.50</td></tr>
+<tr><td>bottom 5%</td><td class="n">&minus;2.93</td><td class="n">&minus;1.46</td><td class="n">0.50</td></tr>
+</table>
+<p>Nothing happened to any of them between the two measurements <span class="tag t-model">MODEL</span>. The top group &ldquo;declined&rdquo; by half and the bottom group &ldquo;improved&rdquo; by half, exactly the share of the first measurement that was noise. Put a treatment between the two measurements and give it to the bottom group, and it will appear to work. Give a warning to the top group and it will appear to work too. This is how regression becomes a finding: the drift back gets credited to whatever was done in between.</p>
+
+<div class="eyebrow">&sect; 5</div>
+<h2>Turned on this corpus</h2>
+<p>R19 in this repository's rules says that a number already in the ledger is settled, and that &ldquo;if it looks wrong, say which row and why, then re-run that one thing.&rdquo; That is the right economy, and this chapter adds one warning to it. A number is chosen for a re-run <em>because it looked extreme</em>, and a number chosen for being extreme will, on a noisy measurement, tend to come back less extreme. If the instrument has any noise in it &mdash; a sampled audit, a similarity score, a timing, an OCR count &mdash; the re-run will usually look like a correction, whether or not anything was wrong.</p>
+<p>The fix is Chapter 2's: decide the comparison before the re-run. Re-run a few ordinary rows alongside the one that looked wrong, and compare how far the suspicious row moved with how far the ordinary rows moved. <span class="tag t-open">OPEN</span> &mdash; no re-run in the ledger has been checked for this. Most of this corpus's instruments are deterministic scripts, where the second run equals the first and none of this applies. The warning is for the ones that are not.</p>
+
+<div class="eyebrow">&sect; 6</div>
+<h2>What to carry out of this chapter</h2>
+<ol>
+<li><strong>Selected on an extreme, expect a return.</strong> Anything chosen because it stood out will, on average, stand out less next time.</li>
+<li><strong>Regression is not a cause.</strong> It needs only a correlation below one. Galton's heredity story was more than the data required.</li>
+<li><strong>The reverse direction regresses too.</strong> Parents of the exceptional are nearer the middle than the exceptional are, and by a larger factor than a simple inversion would suggest.</li>
+<li><strong>Before crediting an intervention, ask what the untreated extremes did.</strong> Without that comparison, the drift back will look like the intervention working.</li>
+</ol>
+
+<h3>References</h3>
+<ol class="refs">
+<li>F. Galton, &ldquo;Regression towards Mediocrity in Hereditary Stature&rdquo;, <em>Journal of the Anthropological Institute of Great Britain and Ireland</em> 15 (1886), 246&ndash;263. Pages cited: 251 (mid-parents), 252 (the law; 1.5 and 1.7 in), 253&ndash;254 (the converse; 928 children, 205 mid-parents), 256 (the balance), 263 (1.22 in).</li>
+<li>M. J. Evans and J. S. Rosenthal, <em>Probability and Statistics: The Science of Uncertainty</em>, &sect;10.3 Quantitative Response and Predictors, p. 538.</li>
+<li>This corpus: <span class="mono">CLAUDE.md</span>, R19, &ldquo;Read the ledger first&rdquo;.</li>
+</ol>
+</div>
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XX &middot; Reading Data &middot; Chapter 4<br>
+Written 2026-09-27 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">Galton read from the 1886 paper; his figures recomputed; one simulation labelled as one. Every figure is printed by ch04-verify.py.</div>
+</div></footer>
+</body>
+</html>
