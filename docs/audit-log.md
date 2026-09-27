@@ -10265,3 +10265,4 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - Corrected figures: 98 names, **217** citations (not 242), top AutophagyDm3.lean at 15, and 60 names cited once.
   - The tool counts 109 distinct basenames among the 110 tracked files.
   - The page carries the correction box. The AXLE+GTCT figure of 49 predates the _to_delete fix.
+- AXLE+GTCT rerun after the _to_delete fix (Mac, 5a2e05a): still 49 names, 2 case-only, 6 upstream; **96** citations in all (was 104). ch04 updated.
