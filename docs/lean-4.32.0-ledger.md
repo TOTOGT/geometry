@@ -4,7 +4,7 @@ Produced by `tools/toolchain_ledger.py`. Toolchain pinned: `leanprover/lean4:v4.
 
 Nothing here is compiled by this tool. Each row reports whether a gate report already on disk names this file's declarations, and **what those declarations rest on**. Axiom reports are parsed by `tools/axiom_gate.py`, which holds the allowlist and rejoins Lean's wrapped output.
 
-**599 of 892 tracked declarations in this repo have a kernel record** — 43 of them resting on no axiom at all, 556 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
+**606 of 892 tracked declarations in this repo have a kernel record** — 43 of them resting on no axiom at all, 563 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
 
 | file | decls | audited | `axiom` | rests on | status | report | dated |
 |---|---:|---:|---:|---|---|---|---|
@@ -38,6 +38,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Figure8/GeronoLemniscate.lean` | 16 | 15 | 0 | 15 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__GeronoLemniscate.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Figure8/LunarAnalemma.lean` | 16 | 16 | 0 | 16 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__LunarAnalemma.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Hawking/HawkingConstants.lean` | 7 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-26/geometry__Orthogenesis__Hawking__HawkingConstants.axioms.txt` | 2026-09-26 |
+| `Orthogenesis/Hawking/TribonacciLog.lean` | 7 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-26/geometry__Orthogenesis__Hawking__TribonacciLog.axioms.txt` | 2026-09-26 |
 | `Orthogenesis/Immune/CommitmentThreshold.lean` | 7 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Immune__CommitmentThreshold.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Lyapunov/LyapunovHorizon.lean` | 4 | 4 | 0 | 4 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Lyapunov__LyapunovHorizon.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Market/CircadianTrader.lean` | 8 | 8 | 0 | 8 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Market__CircadianTrader.axioms.txt` | 2026-09-25 |
@@ -85,7 +86,6 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Geometry/HexForm.lean` | 5 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/HexGrid.lean` | 2 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/Main.lean` | 0 | 0 | 0 | — | declared, no gate | `—` | — |
-| `Orthogenesis/Hawking/TribonacciLog.lean` | 7 | 0 | 0 | — | declared, no gate | `—` | — |
 | `AMonster/GenerativeWeave.lean` | 20 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `AMonster/dm3_operators.lean` | 13 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `CollatzDescent.lean` | 15 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
@@ -119,7 +119,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 
 | declarations | rests on |
 |---:|---|
-| 638 | `Classical.choice, Quot.sound, propext` |
+| 645 | `Classical.choice, Quot.sound, propext` |
 | 70 | `(none — axiom-free)` |
 | 56 | `Quot.sound, propext` |
 | 42 | `propext` |
