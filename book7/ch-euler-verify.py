@@ -288,8 +288,12 @@ print("     design: blocks [10]-[11] land the actual mathematics in the two chap
 print("     that already hold the material it attaches to.")
 el_pat = dict(ROWS)['Euler-Lagrange']
 bp_pat = dict(ROWS)['Basel problem']
-check(chapters(el_pat) == ['book7/ch-kovalevskaya.html'],
-      'Euler-Lagrange now names exactly ch-kovalevskaya, and nowhere else',
+# vol2-nonarchimedean.html already names an "Euler-Lagrange system" for a contact
+# vector field -- a real, independent, pre-existing use this page did not create
+# and does not touch; ch-kovalevskaya is the one this work actually landed.
+check(chapters(el_pat) == sorted(['book7/ch-kovalevskaya.html', 'vol2-nonarchimedean.html']),
+      'Euler-Lagrange now named in exactly these two chapters -- kovalevskaya (new) '
+      'and vol2-nonarchimedean (pre-existing, untouched)',
       str(chapters(el_pat)))
 check(chapters(bp_pat) == ['book4/ch25-selection-principle.html'],
       'Basel problem now names exactly ch25-selection-principle, and nowhere else',
