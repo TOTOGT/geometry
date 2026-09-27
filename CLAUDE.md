@@ -49,7 +49,7 @@ above each of them.
 | R23 | **Evidence tags live in the master index.** A page's tags are a derived fact about that page, so by R8 they are generated, never hand-listed. `tools/build_indexes.py` reads them off every page and prints them on every row. | `## Evidence tags live in the master index` |
 | R24 | **The script runs before the sentence is written.** Not "is checkable" — was checked, first, and the finding is whatever the run says. Measure generously; fix the observable before running; run the control. | `## The script runs before` |
 | R25 | **Chapters cross-link, and the links are generated.** Every chapter carries an "Across the series" box: pages it names but does not link, pages that cite it, and three same-ground suggestions. `tools/crossref.py --write` writes it; `tools/subject_tags.py --write` writes the section tag. Never hand-edit either block. Set 2026-09-27 by Pablo. | `tools/crossref.py` |
-| R26 | **A reader can run it, and the page says how well it meets the bar.** Every chapter with code carries a one-click "Run it yourself" box (`tools/run_yourself.py --write`) and every chapter a Gold Standard Science stamp (`tools/gold_standard.py --write`): the nine tenets of EO 14303 §3(a), each scored from something observable, self-assessed, never a certification; (vii) peer review is never claimed. Run order: subject_tags → run_yourself → crossref → gold_standard. Set 2026-09-27 by Pablo. | `tools/gold_standard.py` |
+| R26 | **A reader can run it, and the page says how well it meets the bar.** Every chapter with code carries a one-click "Run it yourself" box (`tools/run_yourself.py --write`) and every chapter a Gold Standard Science stamp (`tools/gold_standard.py --write`): the nine tenets of EO 14303 §3(a), each scored from something observable, self-assessed, never a certification; (vii) peer review is never claimed. Run order: key_register → subject_tags → run_yourself → crossref → gold_standard. Set 2026-09-27 by Pablo. | `tools/gold_standard.py` |
 
 R4 is the one that proves the point. It was written on 2026-09-09, it is correct,
 and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
@@ -108,7 +108,7 @@ Lean on the Mac; the Cowork VM has no Lean and cannot unlink git locks — never
 - **Site-wide generated blocks (R25, R26):** section tags (subject_tags.py), cross-links
   (crossref.py), run-it-yourself downloads (run_yourself.py), Gold Standard Science
   self-assessment stamp against EO 14303 §3(a) (gold_standard.py — never a certification,
-  (vii) peer review never claimed). Run order: subject_tags → run_yourself → crossref → gold_standard.
+  (vii) peer review never claimed). Run order: key_register → subject_tags → run_yourself → crossref → gold_standard.
 
 ### Open — in priority order
 

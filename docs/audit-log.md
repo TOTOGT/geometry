@@ -10278,3 +10278,22 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 - GCM Appendix A ("Unified Lexicon") defines g, L, R, U, B and no C, K or F.
 - Holology: used on 20 pages, defined on 6, one sense; it fills the fourth cell of topos/holos × logy/graphy. Prior attestation is not checked (OPEN).
 - Proposal (not adopted): a generated key register, with one entry per letter giving head, key set and fillers.
+
+## 2026-09-27 — Key Register (tools/key_register.py)
+- New generator: book14/key-register.html and docs/key-register.tsv, built from the live pages. It applies Book XIV ch 3's chain rule and ch 4's key/filler reading to C, K, F, U.
+- **Heads:** C compression, K threshold, F fold, U unfolding.
+- **U = Union** comes out as a separate sense in the Omega key set; the test is that the page names both Genesis and Logos, which holds on 9 of the 10 pages.
+- **Fillers** are grouped by subject FIELD. Some are fragments where table cells run together, and the page says so.
+- The run order is now key_register → subject_tags → run_yourself → crossref → gold_standard (CLAUDE.md R26).
+- Built and tested in a clone of 07c785b while the device bridge was down.
+
+## 2026-09-27 — Key Register installed; Book XIV ch 5, The Machines That Read Us
+- tools/key_register.py was installed with apply_key_register.py (index row, ch4 link, subjects row, CLAUDE.md run order). The generator order is idempotent.
+- Sources now held:
+  - Jurafsky & Martin, SLP 3rd ed. draft of 19 Aug 2026 (647 pp; printed = PDF − 8) and the 2nd ed. (2007/2008)
+  - Chomsky 1957 (a scan with no text layer)
+  - Pullum 2011
+- ch5 maps lean_addresses, subject_tags, crossref and key_register onto J&M pp. 33, 92, 135 and 476. Every tool's recorded failure was a precision failure; recall has never been measured (WANTED: a gold set).
+- **Experiment:** predicting the subject FIELD from page text (472 pages, 12 fields, pinned at 07c785b, standard library only).
+  - Majority baseline 0.453; naive Bayes 0.663; tf-idf 1-NN 0.684; macro-F1 0.391.
+  - Purpose-defined fields (education, method, history, philosophy, apparatus) are barely recovered, which argues for keeping the tags editorial.

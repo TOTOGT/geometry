@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Machines That Read Us &middot; Book XIV &mdash; Principia Orthogona</title>
+<meta name="description" content="The corpus's four reading tools as textbook NLP (Jurafsky & Martin, 2026 draft), and a test: can a classifier file the pages? 0.68 against a 0.45 baseline, macro-F1 0.39.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.po-proved-block{max-width:820px;margin:2.5rem auto 1rem;padding:1.1rem 1.3rem;
+ border:1px solid rgba(122,148,113,.45);border-left:4px solid #7a9471;border-radius:0 6px 6px 0;
+ background:rgba(122,148,113,.07);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.75;}
+.po-proved-block .po-h{letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;color:#5f7a57;margin-bottom:.6rem;}
+.po-proved-block a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.po-proved-block .po-n{font-size:.68rem;opacity:.75;display:block;margin-top:.7rem;line-height:1.6;}
+</style>
+<!--po-subject--><meta name="po-subject" content="LINGUISTICS · COMPUTATIONAL"><meta name="po-subject-2" content="METHOD · SELF-AUDIT"><!--/po-subject-->
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XIV &middot; Ch 5</span>
+<span class="meta"><a href="ch04-translation-keys.html">&larr; Ch 4</a> &middot; <a href="index.html">Book XIV contents</a> &middot; <a href="ch07-maximum-meaning.html">Ch 7 &rarr;</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XIV &middot; Chapter 5 &middot; 2026-09-27 &middot; Computational linguistics</div>
+<!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4d1f47;background:#f3e0f0;border:1px solid #d4a6cc;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">LINGUISTICS · COMPUTATIONAL</span><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3a3a3a;background:#efece4;border:1px solid #c9c2ad;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">METHOD · SELF-AUDIT</span></div><!--/po-subject-->
+<h1>The Machines <em>That Read Us</em></h1>
+<div class="subtitle">Four tools, one textbook, and an experiment with the subject tags</div>
+<div class="metagrid"><div><strong>Warrant</strong>book14/ch05-verify.py, 0 FAIL</div><div><strong>Source</strong>Jurafsky &amp; Martin, SLP 3rd ed. draft, Aug 2026</div><div><strong>Corpus</strong>472 tagged pages at 07c785b</div></div>
+</div>
+<div class="wrap">
+
+<div class="lede">This corpus reads itself with four small programs. One finds file names, one files pages under sections, one links pages that share ground, and one collects the series' own keys. A standard textbook of language processing has a name for each of them, and a way to measure each. This chapter measures them the way the textbook would.</div>
+<div class="eyebrow">1 &middot; The four readers</div>
+<h2>Every tool here is a textbook technique</h2>
+<div class="tblwrap"><table><tr><th>tool</th><th>technique</th><th>where J&amp;M teach it</th><th>what it does here</th></tr><tr><td class="mono">tools/lean_addresses.py</td><td>regular expressions and tokenization</td><td>J&amp;M p.33</td><td>read CSS selectors as file names (nine false hits) and then its sibling tool's &ldquo;FILE.lean&rdquo; on 96 pages (<a href="../book19/ch04-addresses.html">XIX ch 4</a>)</td></tr><tr><td class="mono">tools/subject_tags.py</td><td>text categorization</td><td>J&amp;M p.92</td><td>labels are assigned by an editor, not learned; &sect;2 tests whether they could be</td></tr><tr><td class="mono">tools/crossref.py</td><td>tf-idf vectors and cosine similarity</td><td>J&amp;M p.135</td><td>&ldquo;same ground&rdquo; suggestions above a cosine floor of 0.15</td></tr><tr><td class="mono">tools/key_register.py</td><td>lexico-syntactic patterns (Hearst)</td><td>J&amp;M p.476</td><td>&ldquo;K: threshold&rdquo; is a pattern; a course legend matched it once in a sample of five (<a href="ch04-translation-keys.html">ch 4</a>)</td></tr></table></div>
+<p>Jurafsky and Martin: "All tokenization systems also depend on regular expressions as a processing step" (p.33). Text categorization is "the task of assigning a label or category to a text or document" (p.92). "The dot product acts as a similarity metric" (p.135). And "the earliest and still common algorithm for relation extraction is lexico-syntactic patterns" (p.476). <span class="tag t-data">CITED</span></p>
+<div class="box warn"><span class="lab">What the corpus's record shows</span>Every one of these tools first failed on <em>precision</em>: it reported things that were not there, such as CSS read as file names, a download box read as a citation, or a legend read as an operator. Each failure was found and fixed. <em>Recall</em>, the things a tool silently misses, was never measured, because measuring it needs a gold standard that nobody has built. <span class="tag t-data">COMPUTED</span></div>
+<div class="eyebrow">2 &middot; An experiment</div>
+<h2>Could a machine have filed the pages?</h2>
+<p>An editor gave every chapter a subject tag (MATHEMATICS &middot; PURE, BIOLOGY &middot; SYSTEMS&hellip;). The script asks whether the page text alone predicts the field. It takes 472 tagged pages in the 12 fields that have at least ten pages each, splits them ten ways, trains on nine parts and tests on the tenth. <span class="tag t-data">COMPUTED</span></p>
+<div class="tblwrap"><table><tr><th>reader</th><th>accuracy</th></tr>
+<tr><td>always answer &ldquo;mathematics&rdquo; (the majority baseline)</td><td class="n">0.453</td></tr>
+<tr><td>naive Bayes over word counts</td><td class="n">0.663</td></tr>
+<tr><td>tf-idf cosine, nearest neighbour (the method <span class="mono">crossref.py</span> uses)</td><td class="n">0.684</td></tr></table></div>
+<p>Both clearly beat the baseline, so the sections are partly written into the vocabulary. But J&amp;M warn about exactly this situation. A classifier that "stupidly classified every tweet" as the majority class scores 99.99% on a skewed set (p.113), which is why they report F1 per class. Per field, naive Bayes gives: <span class="tag t-data">CITED</span></p>
+<div class="tblwrap"><table><tr><th>field</th><th>pages</th><th>precision</th><th>recall</th><th>F1</th></tr><tr><td>mathematics</td><td class="n">214</td><td class="n">0.63</td><td class="n">0.93</td><td class="n">0.75</td></tr><tr><td>physics</td><td class="n">70</td><td class="n">0.63</td><td class="n">0.60</td><td class="n">0.61</td></tr><tr><td>biology</td><td class="n">44</td><td class="n">0.79</td><td class="n">0.61</td><td class="n">0.69</td></tr><tr><td>economics</td><td class="n">30</td><td class="n">0.76</td><td class="n">0.83</td><td class="n">0.79</td></tr><tr><td>education</td><td class="n">27</td><td class="n">0.80</td><td class="n">0.15</td><td class="n">0.25</td></tr><tr><td>series apparatus</td><td class="n">16</td><td class="n">1.00</td><td class="n">0.12</td><td class="n">0.22</td></tr><tr><td>earth</td><td class="n">15</td><td class="n">1.00</td><td class="n">0.60</td><td class="n">0.75</td></tr><tr><td>method</td><td class="n">12</td><td class="n">0.00</td><td class="n">0.00</td><td class="n">0.00</td></tr><tr><td>history</td><td class="n">12</td><td class="n">0.00</td><td class="n">0.00</td><td class="n">0.00</td></tr><tr><td>medicine</td><td class="n">11</td><td class="n">0.67</td><td class="n">0.18</td><td class="n">0.29</td></tr><tr><td>philosophy</td><td class="n">11</td><td class="n">0.00</td><td class="n">0.00</td><td class="n">0.00</td></tr><tr><td>chemistry</td><td class="n">10</td><td class="n">1.00</td><td class="n">0.20</td><td class="n">0.33</td></tr></table></div>
+<p>The macro-F1 is <b>0.391</b>. Mathematics has recall 0.93 and precision 0.63: the classifier files almost anything mathematical-looking under mathematics, and 28 physics pages go there. Education, series apparatus, method, history and philosophy are almost never recovered. <span class="tag t-data">COMPUTED</span></p>
+<div class="box thm"><span class="lab">What that says about the tags</span>The fields the machine cannot find are the ones defined by <em>purpose</em> rather than vocabulary. A teaching page about the Lorenz system uses the words of physics, and a method page uses the words of whatever it audits. So the magazine's sections carry information the text does not: they record why a page exists, not only what it is about. That is an argument for keeping the tags editorial, as R25 already does. <span class="tag t-model">MODEL</span></div>
+<div class="eyebrow">3 &middot; The patterns</div>
+<p>The key register (<a href="key-register.html">Key Register</a>) is a Hearst-style pattern reader: "K: threshold" plays the role of "NP such as NP" (p.476). In the by-eye sample of <a href="ch04-translation-keys.html">Chapter 4</a>, 19 of 20 hits were true glosses, so precision is high on a small sample. Recall is unknown, because glosses written as "K, the threshold," or in prose are not caught. <span class="tag t-open">OPEN</span></p>
+<div class="gap"><span class="lab">Not established</span>The tags are an editor's decisions, not facts about the pages, so "accuracy" here means agreement with those decisions. One deterministic ten-fold split was used, with no stemming and no stop list, so a better model would score higher. Recall for any of the four tools needs a hand-built gold set, which does not exist yet. <span class="tag t-open">WANTED</span></div>
+<p>See also <a href="ch03-how-many-senses.html">Chapter 3</a> (a sense test), <a href="ch07-maximum-meaning.html">Chapter 7</a> (a 1985 claim that AI was reinventing Sanskrit grammar) and <a href="../book19/ch04-addresses.html">Book XIX ch 4</a> (the address tool's own failures).</p>
+<ol class="refs"><li>D. Jurafsky &amp; J. H. Martin, <em>Speech and Language Processing</em>, 3rd ed. draft of 19 August 2026 (printed page = PDF &minus; 8). Held; hash in <span class="mono">docs/floor-texts.tsv</span>. The 2nd edition (2008 printing, marked 2007) is also held.</li></ol>
+
+</div>
+<!--po-gss--><aside class="po-gss" style="max-width:860px;margin:1.2rem auto 1rem;padding:.8rem 1.1rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(40,80,150,.85);border-radius:0 6px 6px 0;background:rgba(40,80,150,.05);font-family:ui-monospace,Menlo,monospace;font-size:.78rem;line-height:1.55"><details><summary style="cursor:pointer;letter-spacing:.08em"><b>Gold Standard Science &middot; 5 of 9 tenets shown</b> &middot; self-assessed against <a href="https://www.federalregister.gov/documents/2025/05/29/2025-09802/restoring-gold-standard-science" style="color:inherit">EO 14303 &sect;3(a)</a> &mdash; not a federal certification</summary><ul style="list-style:none;margin:.5rem 0 .3rem;padding:0"><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(i) reproducible <span style="opacity:.6">&mdash; a script or Lean file beside the page re-derives its numbers</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(ii) transparent <span style="opacity:.6">&mdash; code downloadable and sources named with addresses</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iii) error and uncertainty <span style="opacity:.6">&mdash; MODEL / OPEN tags or an [HONESTY] block</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(iv) collaborative, interdisciplinary <span style="opacity:.6">&mdash; no cross-volume links</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(v) skeptical <span style="opacity:.6">&mdash; states what it does not claim, or leaves items open</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(vi) falsifiable <span style="opacity:.6">&mdash; its script can print FAIL</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(vii) unbiased peer review <span style="opacity:.6">&mdash; not independently peer reviewed</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(viii) negative results <span style="opacity:.6">&mdash; no negative result reported on this page</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#9675;</span>(ix) conflicts of interest <span style="opacity:.6">&mdash; disclosed: author-published through G6 LLC, the author&#x27;s company</span></li></ul><div style="opacity:.75">Scored by <code>tools/gold_standard.py</code> from what is observable on this page and beside it. &#10003; shown &middot; &#10007; not shown &middot; &#9675; disclosure. No agency has reviewed this page.</div></details></aside><!--/po-gss-->
+<!--po-run--><aside class="po-run" style="max-width:860px;margin:1.6rem auto 1rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(80,140,110,.85);border-radius:0 6px 6px 0;background:rgba(80,140,110,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Run it yourself &middot; one-click download</div><ul style="margin:.4rem 0 .5rem 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book14/ch05-verify.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">ch05-verify.py</a> <span style="opacity:.6">&middot; Python 3 &middot; book14/ch05-verify.py</span></li><li style="margin:.2rem 0"><a href="../tools/crossref.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">crossref.py</a> <span style="opacity:.6">&middot; Python 3 &middot; tools/crossref.py</span></li><li style="margin:.2rem 0"><a href="../tools/key_register.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">key_register.py</a> <span style="opacity:.6">&middot; Python 3 &middot; tools/key_register.py</span></li><li style="margin:.2rem 0"><a href="../tools/lean_addresses.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">lean_addresses.py</a> <span style="opacity:.6">&middot; Python 3 &middot; tools/lean_addresses.py</span></li><li style="margin:.2rem 0"><a href="../tools/subject_tags.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">subject_tags.py</a> <span style="opacity:.6">&middot; Python 3 &middot; tools/subject_tags.py</span></li></ul><div style="font-size:.92em;opacity:.85"><b>Python</b>: <code>python3 FILE.py</code> &mdash; standard library only; pages that read a book also need <code>pdftotext</code> and the book in <code>~/Downloads</code>, and say SKIP rather than PASS without it.</div></aside><!--/po-run-->
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XIV &middot; Chapter 5<br>
+Written 2026-09-27 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">Numbers are printed by the script over a pinned commit, standard library only; quotations are checked by printed page.</div>
+</div></footer>
+</body>
+</html>
