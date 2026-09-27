@@ -48,10 +48,11 @@ check("Fig. 3.1 on p.34 names parser, macro expansion, elaborator, kernel",
       all(w in pages[34 + OFF - 1] for w in ("parser", "macro expansion", "elaborator", "kernel")))
 
 print("[2] the corpus by layer")
-files = [f for f in subprocess.run(["git", "--no-optional-locks", "-C", str(ROOT), "ls-files", "*.lean"],
-         capture_output=True, text=True).stdout.split() if ".lake" not in f]
+PIN = "e6c5e85"   # the census is of the corpus as this chapter was written (Book XIX ch2-4 commit)
+files = [f for f in subprocess.run(["git", "--no-optional-locks", "-C", str(ROOT), "ls-tree", "-r", "--name-only", PIN],
+         capture_output=True, text=True).stdout.split() if f.endswith(".lean") and ".lake" not in f]
 def code(f):
-    t = (ROOT / f).read_text(encoding="utf-8", errors="ignore")
+    t = subprocess.run(["git", "--no-optional-locks", "-C", str(ROOT), "show", f"{PIN}:{f}"], capture_output=True, text=True, errors="ignore").stdout
     t = re.sub(r"/-.*?-/", "", t, flags=re.S); return re.sub(r"--[^\n]*", "", t)
 src = {f: code(f) for f in files}
 pa = {f: len(re.findall(r"^#print axioms", t, re.M)) for f, t in src.items()}

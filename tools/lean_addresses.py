@@ -44,7 +44,7 @@ Exit 0 clean, 1 findings, 2 nothing checked.
 """
 import os, re, sys
 
-SKIP_DIRS = {'.lake', 'lake-packages', '.git', 'node_modules', '__pycache__'}
+SKIP_DIRS = {'.lake', 'lake-packages', '.git', 'node_modules', '__pycache__', '_to_delete'}  # _to_delete: retired, untracked, never published (2026-09-27)
 STYLE = re.compile(r'<(style|script)\b.*?</\1>', re.S | re.I)
 TAG = re.compile(r'<[^>]+>')
 # Generated boxes (R25/R26) are the tools' own output, not the page's claims.
@@ -97,7 +97,7 @@ def upstream_names(roots):
     out = {}
     for root in roots:
         root = os.path.abspath(os.path.expanduser(root))
-        for dp, dns, fns in os.walk(root):
+        for dp, dns, fns in os.walk(root, followlinks=True):   # .lake may be a symlink (book19/ch04-verify snapshots)
             if '.lake' not in dp and 'lake-packages' not in dp:
                 dns[:] = [d for d in dns
                           if d in ('.lake', 'lake-packages') or d not in SKIP_DIRS]

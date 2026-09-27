@@ -10257,3 +10257,11 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - All 5,040 orders of the rice sentence give the same 6 kāraka triples. This uses a toy ending-analyser for that one sentence only.
 - The compression/unfolding reading (C→U) is credited to Pablo Nogueira Grossi as MODEL. Briggs' zero/binary claims (p.39) are not checked.
 - floor_texts MIN_PAGES lowered from 12 to 8 because Briggs (8pp) had been hidden; the ledger grows from 133 to 163 rows.
+
+## 2026-09-27 — The first Mac run of the PDF-reading verify scripts
+- `pdftotext` (poppler) was missing on the Mac, so 17 verify scripts had only ever run in the VM. Homebrew and poppler are now installed; 15 of 16 passed at once.
+- **book19/ch02: FAIL "110 tracked .lean files" (now 111, after Book XIV's Polysemy.lean).** A live census drifts with every later book. ch02, ch03 and ch04 now read the corpus at commit e6c5e85 (git ls-tree / git show / git archive).
+- **ch04, pinned, exposed a second defect: lean_addresses scanned `_to_delete/`**, which is untracked and never published, and counted 25 citations from it. The tool now skips it (SKIP_DIRS). It also follows a symlinked .lake so that snapshots resolve Mathlib names.
+  - Corrected figures: 98 names, **217** citations (not 242), top AutophagyDm3.lean at 15, and 60 names cited once.
+  - The tool counts 109 distinct basenames among the 110 tracked files.
+  - The page carries the correction box. The AXLE+GTCT figure of 49 predates the _to_delete fix.

@@ -39,11 +39,12 @@ def census(text):
     return c
 
 print("[1] the census")
-files = [f for f in subprocess.run(["git", "--no-optional-locks", "-C", str(ROOT), "ls-files", "*.lean"],
-         capture_output=True, text=True).stdout.split() if ".lake" not in f]
+PIN = "e6c5e85"   # the census is of the corpus as this chapter was written (Book XIX ch2-4 commit)
+files = [f for f in subprocess.run(["git", "--no-optional-locks", "-C", str(ROOT), "ls-tree", "-r", "--name-only", PIN],
+         capture_output=True, text=True).stdout.split() if f.endswith(".lean") and ".lake" not in f]
 src = {}
 for f in files:
-    t = (ROOT / f).read_text(encoding="utf-8", errors="ignore")
+    t = subprocess.run(["git", "--no-optional-locks", "-C", str(ROOT), "show", f"{PIN}:{f}"], capture_output=True, text=True, errors="ignore").stdout
     t = re.sub(r"/-.*?-/", "", t, flags=re.S); t = re.sub(r"--[^\n]*", "", t)
     src[f] = t
 C = census("\n".join(src.values()))
