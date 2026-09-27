@@ -10202,3 +10202,5 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 ## 2026-09-27 — R26: run-it-yourself downloads and the Gold Standard Science stamp
 
 `tools/run_yourself.py`: one-click download box on 194 chapters that name a .py or .lean, with run instructions. `tools/gold_standard.py`: 483 chapters stamped against EO 14303 §3(a) (90 FR 22601); nine tenets scored from observable features, labelled self-assessment and "not a federal certification"; (vii) peer review marked not shown everywhere; (ix) a disclosure. Distribution of tenets shown: 0:13, 1:149, 2:80, 3:74, 4:45, 5:47, 6:56, 7:19 — the stamp is also the work list. New Lean: `book18/ChainRule.lean`, `book21/Conjugacy.lean` — written, **kernel audit pending** (pages say so).
+
+- 2026-09-27: `book18/ChainRule.lean` (6 decls) and `book21/Conjugacy.lean` (3 decls) kernel-checked by the author's run of leancheck.sh --audit: all on [propext, Classical.choice, Quot.sound]; `dual_pow` on propext alone. Reports in tools/verify-audit/2026-09-27/. Chapter pages switched from 'pending' to KERNEL-CHECKED with report links. Not yet in a lakefile target: a hand run proves the file on the day it is run.

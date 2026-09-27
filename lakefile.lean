@@ -160,3 +160,20 @@ lean_lib TurnaroundUniverse where
 lean_lib CatGT where
   srcDir := "catgt/lean"
   roots := #[`CatGT_Main]
+
+/-
+  book18/ChainRule.lean and book21/Conjugacy.lean, the Lean behind Book XVIII chs 2-4
+  and Book XXI ch 2. Hand-run by the author 2026-09-27 with tools/leancheck.sh --audit:
+  6 + 3 theorems, all on [propext, Classical.choice, Quot.sound] (dual_pow on propext
+  alone); reports in tools/verify-audit/2026-09-27/. Declared as targets the same day so
+  that a later regression fails the job. book21/Spiral.lean joins its chapter's target;
+  it was hand-run on 2026-09-19 and had no target either.
+-/
+@[default_target]
+lean_lib ChainRule where
+  srcDir := "book18"
+
+@[default_target]
+lean_lib Book21 where
+  srcDir := "book21"
+  roots := #[`Spiral, `Conjugacy]
