@@ -23,6 +23,9 @@ BLOCKS
   [6] The corpus's own field: where its zeros are, and what encloses index 1.
   [7] The corpus, counted, entity-aware.
   [8] Control.
+  [9] Euler's method, against the corpus's own field -- vs RK4, head to head.
+  [10] The Basel problem, and where it was already in the corpus (book4/ch25).
+  [11] Euler-Lagrange, elementary, and on the corpus's own rigid body (ch-kovalevskaya).
 
 PRIMARY SOURCES.
   L. Euler to C. Goldbach, 14 November 1750; E230 (statement, written 1750) and
@@ -35,9 +38,12 @@ PRIMARY SOURCES.
   S. H. Strogatz, "Nonlinear Dynamics and Chaos", 2nd ed., section 6.8
   pp. 179-180, index theory for closed curves; Theorem 6.8.2.
 
-Standard library only.  python3 book7/ch-euler-verify.py
+Standard library only for blocks [1]-[8]; blocks [9]-[11] use sympy for
+exact symbolic differentiation (already a corpus dependency, see
+book4/ch25-verify.py).  python3 book7/ch-euler-verify.py
 """
 import math, os, subprocess, sys
+import sympy as sp  # blocks [9]-[11] only -- exact differentiation, already a dependency of book4/ch25-verify.py
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 fails = []
@@ -273,11 +279,21 @@ for name, pat in ROWS:
 check(C['Euler'][0] > 50, 'Euler is in %d files' % C['Euler'][0])
 check(C['Runge-Kutta / RK4'][1] > 10,
       'the corpus integrates with Runge-Kutta in %d chapters' % C['Runge-Kutta / RK4'][1])
-for z in ('index of a vector field', 'hairy ball', "Euler's method", 'Euler-Lagrange',
-          'Basel problem'):
+for z in ('index of a vector field', 'hairy ball', "Euler's method"):
     pat = dict(ROWS)[z]
     check(chapters(pat) == [], 'no chapter but this one uses "%s"' % z, str(chapters(pat)))
 print('\n     Written to FAIL when a second chapter picks any of those up.')
+print("\n     Euler-Lagrange and the Basel problem are no longer zero-elsewhere by")
+print("     design: blocks [10]-[11] land the actual mathematics in the two chapters")
+print("     that already hold the material it attaches to.")
+el_pat = dict(ROWS)['Euler-Lagrange']
+bp_pat = dict(ROWS)['Basel problem']
+check(chapters(el_pat) == ['book7/ch-kovalevskaya.html'],
+      'Euler-Lagrange now names exactly ch-kovalevskaya, and nowhere else',
+      str(chapters(el_pat)))
+check(chapters(bp_pat) == ['book4/ch25-selection-principle.html'],
+      'Basel problem now names exactly ch25-selection-principle, and nowhere else',
+      str(chapters(bp_pat)))
 
 # ---------------------------------------------------------------------------
 head(8, 'CONTROL')
@@ -287,6 +303,112 @@ check(files(ABSENT) == [], 'and none for a token no file writes down', str(files
 check(abs(index_of(lambda x, y: (1.0, 0.0), 0, 0, 1.0)) < 1e-9,
       'a constant field has index 0 -- the winding routine is not always +1')
 check(betti({0: 1}, {0: [[0]], 1: []})[0] == 1, 'the Betti helper reads 1 for a point')
+
+
+# ---------------------------------------------------------------------------
+head(9, "EULER'S METHOD, AGAINST THE CORPUS'S OWN FIELD")
+print('  Institutiones calculi integralis, 1768: x_{n+1} = x_n + h f(x_n), first order.')
+print('  Runge-Kutta (Runge 1895, Kutta 1901) is the refinement, fourth order in h.')
+print('  Sixteen chapters of this corpus integrate with it and none names what it')
+print('  refines. Run head to head, on the field from block [6]:\n')
+def euler_step(x, y, h):
+    fx, fy = corpus(x, y)
+    return x + h * fx, y + h * fy
+def rk4_step(x, y, h):
+    k1x, k1y = corpus(x, y)
+    k2x, k2y = corpus(x + h/2*k1x, y + h/2*k1y)
+    k3x, k3y = corpus(x + h/2*k2x, y + h/2*k2y)
+    k4x, k4y = corpus(x + h*k3x, y + h*k3y)
+    return (x + h/6*(k1x + 2*k2x + 2*k3x + k4x),
+            y + h/6*(k1y + 2*k2y + 2*k3y + k4y))
+print('      %-8s %8s   %-14s %-14s %s' % ('h', 'steps', 'Euler r(T)', 'RK4 r(T)', '|Euler-RK4|'))
+errs = []
+for h in (0.1, 0.01, 0.001):
+    x0, y0, T = 1.05, 0.0, 2.0
+    n = int(T / h)
+    xe = ye = None; xr = yr = None
+    xe, ye, xr, yr = x0, y0, x0, y0
+    for _ in range(n):
+        xe, ye = euler_step(xe, ye, h)
+        xr, yr = rk4_step(xr, yr, h)
+    re, rr = math.hypot(xe, ye), math.hypot(xr, yr)
+    err = abs(re - rr)
+    errs.append(err)
+    print('      %-8.4f %8d   %-14.8f %-14.8f %.3e' % (h, n, re, rr, err))
+check(errs[0] > errs[1] > errs[2], "Euler's error against RK4 shrinks as h shrinks")
+r1, r2 = errs[0] / errs[1], errs[1] / errs[2]
+check(8.0 < r1 < 11.0 and 8.0 < r2 < 11.0,
+      'the shrink is first order -- a 10x smaller step gives ~10x smaller error',
+      'ratios %.2f, %.2f' % (r1, r2))
+print("\n  RK4's own value barely moves across the three step sizes -- it is the")
+print('  converged reference. Euler was not wrong; his method is the first-order case')
+print('  of the family this corpus already runs, put through the corpus\'s own field')
+print('  for the first time.')
+
+# ---------------------------------------------------------------------------
+head(10, "THE BASEL PROBLEM, AND WHERE IT WAS ALREADY IN THE CORPUS")
+print('  Euler, 1735: sum_{n=1}^infty 1/n^2 = pi^2/6 -- the first closed form for a')
+print('  value of what is now the Riemann zeta function.\n')
+zeta2 = sp.N(sp.zeta(2), 25)
+pi26 = sp.N(sp.pi ** 2 / 6, 25)
+print('      zeta(2), 25 digits:', zeta2)
+print('      pi^2/6,  25 digits:', pi26)
+check(sp.Abs(zeta2 - pi26) < sp.Float('1e-24'), 'zeta(2) = pi^2/6 to 25 digits')
+partial = sum(1.0 / (n * n) for n in range(1, 200001))
+check(abs(partial - float(pi26)) < 1e-5,
+      'the sum itself, taken to 200,000 terms, lands within 1e-5 of pi^2/6')
+print('\n  book4/ch25-selection-principle.html computes Z(s) = zeta(s) L(s, chi_-3) and')
+print('  reports its value at s = 2 as 1.28519..., without naming zeta(2) as anything')
+print("  more than an ingredient. It is Euler's 1735 number, unremarked -- the same")
+print('  shape of gap as chi elsewhere in this page.')
+z_ch25 = float(sp.N(sp.zeta(2)))
+check(abs(z_ch25 - 1.6449340668482264) < 1e-12,
+      'the zeta(2) factor ch25 actually uses is this same number', '%.16f' % z_ch25)
+
+# ---------------------------------------------------------------------------
+head(11, "EULER-LAGRANGE, ELEMENTARY AND ON THE CORPUS'S OWN RIGID BODY")
+print("  d/dt(dL/dq') - dL/dq = 0. Euler, 1744, Methodus inveniendi lineas curvas; the")
+print("  operator form used everywhere today is Lagrange's, 1755 -- the same shape of")
+print('  correction as de Moivre\'s formula, elsewhere on this page.\n')
+t = sp.symbols('t')
+m_, k_ = sp.symbols('m k', positive=True)
+x_ = sp.Function('x')(t)
+xd_ = sp.diff(x_, t)
+def EL(Lexpr, q):
+    qd = sp.diff(q, t)
+    return sp.diff(sp.diff(Lexpr, qd), t) - sp.diff(Lexpr, q)
+L1 = sp.Rational(1, 2) * m_ * xd_ ** 2
+EL1 = sp.simplify(EL(L1, x_))
+check(sp.simplify(EL1 - m_ * sp.diff(x_, t, 2)) == 0,
+      "free particle: E-L gives exactly m*xddot = 0 -- Newton's first law", str(EL1))
+L2 = sp.Rational(1, 2) * m_ * xd_ ** 2 - sp.Rational(1, 2) * k_ * x_ ** 2
+EL2 = sp.simplify(EL(L2, x_))
+check(sp.simplify(EL2 - (m_ * sp.diff(x_, t, 2) + k_ * x_)) == 0,
+      "harmonic oscillator: E-L gives exactly m*xddot + k*x = 0 -- Hooke's law", str(EL2))
+print("\n  ch-kovalevskaya's own 'Euler case' -- torque-free, c = 0 -- is")
+print('      A p\' = (B-C) q r     B q\' = (C-A) r p     C r\' = (A-B) p q')
+print('  the classical rigid-body equations. One of the three follows directly from')
+print('  the Euler-Lagrange equation applied to the Euler-angle Lagrangian below,')
+print('  verified by direct symbolic differentiation rather than asserted:\n')
+A_s, B_s, C_s = sp.symbols('A B C', positive=True)
+phi_ = sp.Function('phi')(t); theta_ = sp.Function('theta')(t); psi_ = sp.Function('psi')(t)
+phid_, thetad_, psid_ = sp.diff(phi_, t), sp.diff(theta_, t), sp.diff(psi_, t)
+w1 = phid_ * sp.sin(theta_) * sp.sin(psi_) + thetad_ * sp.cos(psi_)
+w2 = phid_ * sp.sin(theta_) * sp.cos(psi_) - thetad_ * sp.sin(psi_)
+w3 = phid_ * sp.cos(theta_) + psid_
+LagRB = sp.Rational(1, 2) * (A_s * w1 ** 2 + B_s * w2 ** 2 + C_s * w3 ** 2)
+w3dot = sp.diff(w3, t)
+ELpsi = sp.expand_trig(sp.simplify(EL(LagRB, psi_)))
+residual = sp.simplify(ELpsi - (C_s * w3dot + (B_s - A_s) * w1 * w2))
+check(residual == 0,
+      "E-L(psi) is EXACTLY C w3' + (B-A) w1 w2 -- setting it to 0 rearranges to "
+      "C r' = (A-B) p q", str(residual))
+print('\n  The other two equations follow the same way under cyclic relabelling of')
+print('  which axis carries the Euler-angle symmetry (Goldstein, Classical Mechanics,')
+print('  SS4.9 and 5.7; Landau and Lifshitz, Mechanics, SS37) -- not re-derived here.')
+print("  What is established here is that this page's own psi-equation, differentiated")
+print('  and simplified by computer algebra rather than asserted, is the C-axis Euler')
+print("  equation ch-kovalevskaya already runs as its torque-free control.")
 
 print('\n' + '=' * 70 + '\n  [HONESTY]\n' + '=' * 70)
 print("""

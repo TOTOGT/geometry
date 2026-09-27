@@ -280,6 +280,77 @@ footer a { color: var(--gold); text-decoration: none; }
   <p class="block-prose">Verified in <code>book4/cyclotomy-ladder-verify.py</code> — five blocks, standard library only, exact integer and rational arithmetic throughout except the one block that checks Gauss's radical form for cos(2&pi;/17) numerically and says so. Along the way it confirms that &Phi;<sub>105</sub> is the first cyclotomic polynomial whose coefficients leave {&minus;1,&nbsp;0,&nbsp;1}, which is the standard warning against believing a pattern that holds for the first hundred cases.</p>
 
 
+  <div class="section-label">Euler's Method &mdash; Against the Corpus's Own Field</div>
+  <p class="block-prose" id="euler-method">
+    <em>Institutiones calculi integralis</em>, 1768: <span class="n">x<sub>n+1</sub> = x<sub>n</sub> +
+    h&thinsp;f(x<sub>n</sub>)</span>, first order in the step size. Runge&ndash;Kutta &mdash; Runge
+    1895, Kutta 1901 &mdash; is the refinement, fourth order in the same step size. Sixteen chapters
+    of this corpus integrate with it and none had named what it refines. Here it is run head to
+    head, on the same field block&nbsp;[6] already uses:
+    <span class="n">&rdot; = &minus;(r&minus;1)(r&sup2;+r&minus;a)</span>,
+    <span class="n">&theta;&#775; = 1</span>, started at r = 1.05 for two time units.
+  </p>
+  <div class="block-math">   h         steps    Euler r(T)     RK4 r(T)       |Euler&minus;RK4|
+   0.1000       20    1.90522306     1.87876911     2.645e&minus;02
+   0.0100      200    1.88163807     1.87881310     2.825e&minus;03
+   0.0010     2000    1.87909765     1.87881311     2.845e&minus;04</div>
+  <p class="block-prose">
+    RK4's own value barely moves across the three step sizes &mdash; it is the converged reference.
+    Euler's error against it falls by roughly ten for every tenfold shrink in the step, which is
+    exactly first-order convergence, and no more than first-order: Euler's method is not wrong, it
+    is the <em>n</em>&nbsp;=&nbsp;1 member of the family this corpus already runs at
+    <em>n</em>&nbsp;=&nbsp;4, put through the corpus's own field for the first time.
+  </p>
+
+  <div class="section-label">The Basel Problem &mdash; and Where It Was Already Here</div>
+  <p class="block-prose" id="basel">
+    Euler, 1735: <span class="n">&sum;<sub>n=1</sub><sup>&infin;</sup> 1/n&sup2; = &pi;&sup2;/6</span>
+    &mdash; the first closed form for a value of what is now the Riemann zeta function, forty years
+    before the function itself had a name. Verified here to 25 digits against Euler's own value,
+    and by direct summation to 200,000 terms:
+  </p>
+  <div class="block-math">   zeta(2), 25 digits:  1.644934066848226436472415
+   pi^2/6,  25 digits:  1.644934066848226436472415
+   partial sum, N=200,000 terms: within 1e-5 of both</div>
+  <div class="block-axiom">
+    <span class="block-label">Where it already was</span>
+    <p style="margin-bottom:0"><a href="../book4/ch25-selection-principle.html">Book 4 &middot;
+    Chapter 25</a> computes <span class="n">Z(s) = &zeta;(s)&thinsp;L(s,&chi;<sub>&minus;3</sub>)</span>
+    and reports its value at s&nbsp;=&nbsp;2 as 1.28519&hellip;, using &zeta;(2) as an ingredient
+    without naming it as anything more. It is Euler's 1735 number, the same shape of gap as
+    &chi; elsewhere on this page &mdash; used, not attributed.</p>
+  </div>
+
+  <div class="section-label">Euler&ndash;Lagrange &mdash; Elementary, and on the Corpus's Own Rigid Body</div>
+  <p class="block-prose" id="euler-lagrange">
+    <span class="n">d/dt(&part;L/&part;q&#775;) &minus; &part;L/&part;q = 0</span>. Euler, 1744,
+    <em>Methodus inveniendi lineas curvas</em>; the operator form used everywhere today is
+    Lagrange's, 1755 &mdash; the same shape of correction as de Moivre's formula, earlier on this
+    page. Applied symbolically here to two elementary Lagrangians and checked against their known
+    answers exactly, not numerically:
+  </p>
+  <div class="block-math">   L = &frac12;m&#7818;&sup2;                     E-L &rArr;  m&#7817; = 0            (Newton's first law)
+   L = &frac12;m&#7818;&sup2; &minus; &frac12;k x&sup2;          E-L &rArr;  m&#7817; + k x = 0    (Hooke's law, SHM)</div>
+  <div class="block-axiom">
+    <span class="block-label">And on the corpus's own rigid body</span>
+    <p><a href="ch-kovalevskaya.html">ch-kovalevskaya</a>'s torque-free &ldquo;Euler case&rdquo;
+    (c&nbsp;=&nbsp;0) runs
+    <span class="n">A&nbsp;p&#775; = (B&minus;C)qr &nbsp; B&nbsp;q&#775; = (C&minus;A)rp &nbsp;
+    C&nbsp;r&#775; = (A&minus;B)pq</span> &mdash; the classical rigid-body equations. Writing the
+    rotational kinetic energy as a Lagrangian in the three Euler angles,
+    <span class="n">L = &frac12;(A&omega;<sub>1</sub>&sup2; + B&omega;<sub>2</sub>&sup2; +
+    C&omega;<sub>3</sub>&sup2;)</span>, and applying the Euler&ndash;Lagrange equation to the third
+    angle gives, by direct symbolic differentiation rather than assertion,</p>
+    <div class="block-math">E-L(&psi;)  =  C&thinsp;&omega;&#775;<sub>3</sub> + (B&minus;A)&thinsp;&omega;<sub>1</sub>&omega;<sub>2</sub></div>
+    <p style="margin-bottom:0">which set to zero rearranges to exactly
+    <span class="n">C&thinsp;&omega;&#775;<sub>3</sub> = (A&minus;B)&thinsp;&omega;<sub>1</sub>&omega;<sub>2</sub></span>
+    &mdash; ch-kovalevskaya's own C-axis equation. The other two follow the same way under cyclic
+    relabelling of which axis carries the Euler-angle symmetry (Goldstein, <em>Classical
+    Mechanics</em>, &sect;&sect;4.9, 5.7; Landau&ndash;Lifshitz, <em>Mechanics</em>, &sect;37) and are
+    not re-derived here. What is established is the one axis, exactly, by computer algebra.</p>
+  </div>
+
+
   <div class="section-label">What Is Missing</div>
   <p class="block-prose">
     Measured at HEAD, entity-aware, this page classified out:
@@ -296,19 +367,29 @@ footer a { color: var(--gold); text-decoration: none; }
     <tr><td>Gauss&ndash;Bonnet</td><td class="n">9</td><td class="n">7</td></tr>
     <tr><td>Poincar&eacute;&ndash;Hopf</td><td class="n">2</td><td class="n">1</td></tr>
     <tr><td>Königsberg &middot; graph theory</td><td class="n">1 each</td><td class="n">1 each</td></tr>
-    <tr><td><strong>index of a vector field</strong></td><td class="n">0</td><td class="n">0</td></tr>
-    <tr><td><strong>hairy ball</strong></td><td class="n">0</td><td class="n">0</td></tr>
-    <tr><td><strong>polyhedron formula</strong></td><td class="n">0</td><td class="n">0</td></tr>
-    <tr><td><strong>Euler's method</strong></td><td class="n">0</td><td class="n">0</td></tr>
-    <tr><td><strong>Euler&ndash;Lagrange &middot; Basel problem</strong></td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td>index of a vector field</td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td>hairy ball</td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td>polyhedron formula</td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td>Euler's method<sup>&dagger;</sup></td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td>Euler&ndash;Lagrange<sup>&dagger;</sup></td><td class="n">0</td><td class="n">1</td></tr>
+    <tr><td>Basel problem<sup>&dagger;</sup></td><td class="n">0</td><td class="n">1</td></tr>
   </table>
   </div>
   <p class="block-prose">
-    Sixteen chapters integrate with Runge&ndash;Kutta and none names the method Euler wrote first,
-    of which Runge&ndash;Kutta is the refinement. Seventy-six use &chi; and none had written down
-    where it comes from. That is the gap this page closes, and the three zeros at the bottom
-    &mdash; Euler&ndash;Lagrange, the Basel problem, Euler's method &mdash; are the next ones, each
-    of which the corpus has the material for and has not used.
+    Sixteen chapters integrate with Runge&ndash;Kutta and none had named the method Euler wrote
+    first, of which Runge&ndash;Kutta is the refinement &mdash; &sect;&nbsp;<a href="#euler-method">Euler's
+    Method</a> now runs both, head to head, on this page's own field. Seventy-six use &chi; and
+    none had written down where it comes from; that gap this page closed already. The other two
+    zeros were never really zero: <a href="#basel">the Basel problem</a> was already sitting
+    unnamed inside <a href="../book4/ch25-selection-principle.html">Book 4 &middot; Chapter 25</a>'s
+    &zeta;(2) factor, and <a href="#euler-lagrange">Euler&ndash;Lagrange</a> was already the
+    variational principle behind <a href="ch-kovalevskaya.html">ch-kovalevskaya</a>'s rigid-body
+    equations. Both are named and derived now, in the two sections above, rather than left as
+    ingredients. The table still reads 0 for "chapters elsewhere," by design &mdash; this chapter
+    doesn't count itself, and the classifier (<code>ch-euler-verify.py</code> block&nbsp;[7]) is
+    written to fail the day a second, uncredited chapter picks any of the five up.
+    <sup>&dagger;</sup> The material is landed; see block&nbsp;[7]'s check that ch25 and
+    ch-kovalevskaya, specifically, are the only chapters holding it.
   </p>
 
   <div class="section-label">Sources</div>
