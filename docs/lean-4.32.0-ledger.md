@@ -4,7 +4,7 @@ Produced by `tools/toolchain_ledger.py`. Toolchain pinned: `leanprover/lean4:v4.
 
 Nothing here is compiled by this tool. Each row reports whether a gate report already on disk names this file's declarations, and **what those declarations rest on**. Axiom reports are parsed by `tools/axiom_gate.py`, which holds the allowlist and rejoins Lean's wrapped output.
 
-**607 of 893 tracked declarations in this repo have a kernel record** — 43 of them resting on no axiom at all, 564 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
+**652 of 893 tracked declarations in this repo have a kernel record** — 53 of them resting on no axiom at all, 599 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
 
 | file | decls | audited | `axiom` | rests on | status | report | dated |
 |---|---:|---:|---:|---|---|---|---|
@@ -17,7 +17,10 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Allostatic/AllostaticLoad.lean` | 9 | 9 | 0 | 9 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Allostatic__AllostaticLoad.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Annealing/AnnealingRevision.lean` | 8 | 8 | 0 | 8 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Annealing__AnnealingRevision.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Architecture/AcousticLattice.lean` | 9 | 7 | 0 | 1 axiom-free · 6 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-14/geometry__Orthogenesis__Architecture__AcousticLattice.axioms.txt` | 2026-09-14 |
+| `Orthogenesis/Architecture/Coverage.lean` | 6 | 6 | 0 | 6 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__Orthogenesis__Architecture__Coverage.axioms.txt` | 2026-09-27 |
+| `Orthogenesis/Architecture/DM3Bridge.lean` | 14 | 14 | 0 | 6 axiom-free · 8 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__Orthogenesis__Architecture__DM3Bridge.axioms.txt` | 2026-09-27 |
 | `Orthogenesis/Architecture/G6Crystal.lean` | 33 | 14 | 0 | 3 axiom-free · 11 standard | kernel-audited | `geometry/tools/verify-dm3/axioms.txt` | 2026-08-26 |
+| `Orthogenesis/Architecture/NASAGaps.lean` | 12 | 12 | 0 | 3 axiom-free · 9 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__Orthogenesis__Architecture__NASAGaps.axioms.txt` | 2026-09-27 |
 | `Orthogenesis/Architecture/SeismicLattice.lean` | 17 | 15 | 0 | 1 axiom-free · 14 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-14/geometry__Orthogenesis__Architecture__SeismicLattice.axioms.txt` | 2026-09-14 |
 | `Orthogenesis/Architecture/ToyModel.lean` | 14 | 12 | 0 | 12 standard | kernel-audited | `geometry/tools/verify-dm3/axioms.txt` | 2026-08-26 |
 | `Orthogenesis/Axiomatic/AxiomaticTurn.lean` | 4 | 4 | 0 | 2 axiom-free · 2 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Axiomatic__AxiomaticTurn.axioms.txt` | 2026-09-25 |
@@ -37,6 +40,11 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Figure8/BernoulliLemniscate.lean` | 20 | 19 | 0 | 19 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__BernoulliLemniscate.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Figure8/GeronoLemniscate.lean` | 16 | 15 | 0 | 15 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__GeronoLemniscate.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Figure8/LunarAnalemma.lean` | 16 | 16 | 0 | 16 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__LunarAnalemma.axioms.txt` | 2026-09-25 |
+| `Orthogenesis/Geometry/Colony.lean` | 4 | 4 | 0 | 4 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__Orthogenesis__Geometry__Colony.axioms.txt` | 2026-09-27 |
+| `Orthogenesis/Geometry/GaussBonnet.lean` | 3 | 1 | 0 | 1 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__Orthogenesis__Geometry__GaussBonnet.axioms.txt` | 2026-09-27 |
+| `Orthogenesis/Geometry/Growth.lean` | 1 | 1 | 0 | 1 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__Orthogenesis__Geometry__Growth.axioms.txt` | 2026-09-27 |
+| `Orthogenesis/Geometry/HexForm.lean` | 5 | 5 | 0 | 5 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__Orthogenesis__Geometry__HexForm.axioms.txt` | 2026-09-27 |
+| `Orthogenesis/Geometry/HexGrid.lean` | 2 | 2 | 0 | 1 axiom-free · 1 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__Orthogenesis__Geometry__HexGrid.axioms.txt` | 2026-09-27 |
 | `Orthogenesis/Hawking/HawkingConstants.lean` | 7 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-26/geometry__Orthogenesis__Hawking__HawkingConstants.axioms.txt` | 2026-09-26 |
 | `Orthogenesis/Hawking/TribonacciLog.lean` | 7 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__Orthogenesis__Hawking__TribonacciLog.axioms.txt` | 2026-09-27 |
 | `Orthogenesis/Immune/CommitmentThreshold.lean` | 7 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Immune__CommitmentThreshold.axioms.txt` | 2026-09-25 |
@@ -76,15 +84,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `vol2-v5/deposit/VolumeTwo.lean` | 19 | 14 | 0 | 2 axiom-free · 12 standard | kernel-audited | `AXLE/tools/verify-vol2/axioms.txt` | 2026-09-24 |
 | `GateScreen.lean` | 5 | 0 | 0 | — | ambiguous name | `—` | — |
 | `Orthogenesis.lean` | 0 | 0 | 0 | — | declared, no gate | `—` | — |
-| `Orthogenesis/Architecture/Coverage.lean` | 6 | 0 | 0 | — | declared, no gate | `—` | — |
-| `Orthogenesis/Architecture/DM3Bridge.lean` | 14 | 0 | 0 | — | declared, no gate | `—` | — |
-| `Orthogenesis/Architecture/NASAGaps.lean` | 12 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/Cell.lean` | 0 | 0 | 0 | — | declared, no gate | `—` | — |
-| `Orthogenesis/Geometry/Colony.lean` | 4 | 0 | 0 | — | declared, no gate | `—` | — |
-| `Orthogenesis/Geometry/GaussBonnet.lean` | 3 | 0 | 0 | — | declared, no gate | `—` | — |
-| `Orthogenesis/Geometry/Growth.lean` | 1 | 0 | 0 | — | declared, no gate | `—` | — |
-| `Orthogenesis/Geometry/HexForm.lean` | 5 | 0 | 0 | — | declared, no gate | `—` | — |
-| `Orthogenesis/Geometry/HexGrid.lean` | 2 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/Main.lean` | 0 | 0 | 0 | — | declared, no gate | `—` | — |
 | `AMonster/GenerativeWeave.lean` | 20 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `AMonster/dm3_operators.lean` | 13 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
@@ -119,10 +119,10 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 
 | declarations | rests on |
 |---:|---|
-| 646 | `Classical.choice, Quot.sound, propext` |
-| 70 | `(none — axiom-free)` |
-| 56 | `Quot.sound, propext` |
-| 42 | `propext` |
+| 674 | `Classical.choice, Quot.sound, propext` |
+| 80 | `(none — axiom-free)` |
+| 60 | `Quot.sound, propext` |
+| 45 | `propext` |
 | 12 | `Classical.choice, Quot.sound, propext, sorryAx` |
 | 4 | `sorryAx` |
 
