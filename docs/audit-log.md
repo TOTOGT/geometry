@@ -10223,3 +10223,9 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 - Tool fix: lean_addresses.py now strips generated boxes (po-run/gss/related/subject). run_yourself's "lake env lean FILE.lean" had been read as 96 dangling citations. EXEMPT gains ch04's use/mention names.
 - R27 proposed (not adopted): name only resolving .lean files; the 98 are frozen as a baseline that may shrink but never grow. WANTED: rerun with --roots ~/Desktop/AXLE ~/Desktop/GTCT on the Mac.
 - 2026-09-27 (Mac, after e6c5e85): with --roots AXLE GTCT there are 49 dangling names (104 citations), 2 case-only and 6 upstream, across 212 files. About half of the 98 live in the sister repositories. The WANTED is closed on book19/ch04; ch04-verify [5] reruns it when the roots are present.
+
+## 2026-09-27 — Book XIV opened: The Language of Mathematics
+- New volume: mathematical and computational linguistics. Gathers WP-94, WP-61, WP-91, WP-116, Book XI, the Chomsky gallery page, VDJ recombination, Holology (VIII ch13) and Book XIX.
+- Lean stays in XIII, XVII and XIX. XIV links to them and does not repeat them; ch1 was retargeted from Lean's parser to the grammar of written notation.
+- Five chapters planned. Ch 1, 2 and 5 wait on sources (Chomsky 1956/57, Ganesalingam 2013, Jurafsky & Martin 3e). Ch 3 (lexicon) and ch 4 (holology as vocabulary) need only the corpus.
+- Vocabulary: LINGUISTICS · MATHEMATICAL and LINGUISTICS · COMPUTATIONAL. Series-hub card added; indexes rebuilt.
