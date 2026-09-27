@@ -172,19 +172,52 @@ else:
     check('prose poem' in flat, 'chapter names the subtitle that did the filing')
 
 # --------------------------------------------------------------------------
-# The bright wall (box added 2026-09-27). Inputs are standard values, NOT yet held:
-# T0 = 2.725 K today, 1 + z = 1090 at last scattering. Everything else is computed.
-print('\n[wall] the last-scattering surface, recomputed from two inputs')
-T0, stretch, WIEN = 2.725, 1090.0, 2.897771955e-3          # K, dimensionless, m K
-T_then = T0 * stretch
-check(2900 < T_then < 3050, 'T then = T0 (1+z) = %.0f K, "about 3,000 K"' % T_then)
-peak_then, peak_now = WIEN / T_then * 1e6, WIEN / T0 * 1e3
-check(0.9 < peak_then < 1.05, 'Wien peak then = %.3f um, "near 1 um, just past visible red"' % peak_then)
-check(1.0 < peak_now < 1.1, 'Wien peak now = %.3f mm, "near 1 mm"' % peak_now)
-check(abs((peak_now * 1e3) / peak_then - stretch) < 1e-6, 'every wavelength stretched by exactly 1+z = %.0f' % stretch)
+# The bright wall (box added 2026-09-27; sourced the same day). Every input is read
+# from Planck 2018 VI (arXiv:1807.06209), held in Downloads and in docs/floor-texts.tsv.
+print('\n[wall] the last-scattering surface, from Planck 2018 VI')
+import subprocess
+PL = None
+for d in ('~/mnt/Downloads', '~/Downloads'):
+    p = os.path.join(os.path.expanduser(d), 'Planck 2018 results. VI. Cosmological parameters.pdf')
+    if os.path.exists(p): PL = p
+if not PL:
+    print('    SKIP  Planck 2018 VI not on this machine')
+else:
+    T = subprocess.run(['pdftotext', '-layout', PL, '-'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True).stdout.split('\f')
+    fl = lambda s: re.sub(r'\s+', ' ', s)
+    p14, p15, p16 = fl(T[13]), fl(T[14]), fl(T[15])
+    check('We take T 0 = 2.7255K (Fixsen 2009)' in p14, 'p.14 fn 14: T0 = 2.7255 K')
+    check('13.787 ± 0.020' in p16, 'p.16 Table 2: age 13.787 +/- 0.020 Gyr')
+    check('1089.92 ± 0.25' in p16, 'p.16 Table 2: z* = 1089.92 +/- 0.25')
+    check('67.36 ± 0.54' in p15, 'p.15 Table 1: H0 = 67.36 +/- 0.54 km/s/Mpc')
+    check('0.1430 ± 0.0011' in p15, 'p.15 Table 1: Omega_m h^2 = 0.1430 +/- 0.0011')
+    T0, zs, H0, omh2 = 2.7255, 1089.92, 67.36, 0.1430
+    WIEN = 2.897771955e-3
+    T_then = T0 * (1 + zs)
+    check(2950 < T_then < 3000, 'T at last scattering = T0 (1+z*) = %.0f K, "about 3,000 K"' % T_then)
+    check(0.9 < WIEN / T_then * 1e6 < 1.05, 'Wien peak then = %.3f um, "near 1 um, just past visible red"' % (WIEN / T_then * 1e6))
+    check(1.0 < WIEN / T0 * 1e3 < 1.1, 'Wien peak now = %.3f mm, "near 1 mm"' % (WIEN / T0 * 1e3))
+    # time since the big bang at z*, and the age, from flat LCDM with these inputs
+    h = H0 / 100; om = omh2 / h**2
+    ogh2 = 2.469e-5 * (T0 / 2.7255)**4                 # photons, from T0
+    orad = ogh2 * (1 + 0.2271 * 3.046) / h**2          # + three neutrino species
+    ol = 1 - om - orad
+    Hs = H0 * 1e3 / 3.0856775814913673e22              # 1/s
+    Hz = lambda z: Hs * math.sqrt(om*(1+z)**3 + orad*(1+z)**4 + ol)
+    def age_at(z, n=200000):                            # t(z) = int_z^inf dz'/((1+z')H(z')), in ln(1+z)
+        lo, hi = math.log(1 + z), math.log(1 + 1e9)
+        s = 0.0; dx = (hi - lo) / n
+        for k in range(n):
+            x = lo + (k + 0.5) * dx; zz = math.exp(x) - 1
+            s += dx / Hz(zz)
+        return s / 3.15576e7                            # years
+    t_star, t0 = age_at(zs), age_at(0.0)
+    print('    computed: t(z*) = %.0f years; age today = %.3f Gyr' % (t_star, t0 / 1e9))
+    check(365000 < t_star < 375000, 't(z*) = %.0f yr, "~370,000 years" on the page' % t_star)
+    check(abs(t0 / 1e9 - 13.787) < 0.03, 'recomputed age %.3f Gyr agrees with Table 2\'s 13.787 to 0.03 Gyr' % (t0 / 1e9))
 if os.path.exists(CHAPTER):
     raw2 = open(CHAPTER, encoding='utf-8').read()
-    check('SOURCE WANTED: Planck 2018' in raw2, 'the box says its inputs are not yet held')
+    check('Planck 2018' in raw2 and 'SOURCE WANTED' not in raw2, 'the box cites Planck 2018 and no longer asks for it')
 
 # ==========================================================================
 print('\n' + '=' * 68)

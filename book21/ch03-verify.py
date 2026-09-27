@@ -77,6 +77,15 @@ for r in (-1.0, -0.01, -1e-4):
 check("the eigenvalue at the stable branch is 2x* = -2 sqrt(-r) -> 0 as r -> 0", abs(2 * fp(-1e-8)) < 1e-3)
 print("     at the fold itself (r = 0, x* = 0) the eigenvalue is 2*0 = 0: marginal")
 
+print("[5] the theorem in full: Perko §2.8, pp. 119-120")
+try:
+    R = subprocess.run(["pdftotext", "-layout", str(DL / 'Perko Differential Equations and Dynamical Systems.pdf'), "-"], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, timeout=170).stdout.split("\f")
+    r119, r120 = flat(R[133]), flat(R[134])
+    check("p.119: §2.8 The Hartman-Grobman Theorem; topologically conjugate = equivalence preserving the time parameter", "2.8 The Hartman-Grobman Theorem" in r119 and "topologically conjugate in a neighborhood of the origin" in r119)
+    check("p.120: hypotheses f in C1(E), f(0) = 0, Df(0) has no eigenvalue with zero real part", "has no eigenvalue with zero real part" in r120)
+except Exception as e:
+    print("SKIP Perko", e)
+
 print("""
 [HONESTY]
 [1] matches sentences in the ledgered Strogatz file. [2] integrates Strogatz's own

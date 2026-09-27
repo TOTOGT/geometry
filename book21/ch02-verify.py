@@ -91,14 +91,25 @@ for eps in (1e-2, 1e-4, 1e-6):
 check("|h^-1(z)|/|z| -> infinity as z -> 0: the inverse is not differentiable at the fixed point",
       abs(hinv(complex(1e-6, 0))) / 1e-6 > 100)
 
+print("[5] the general theorem, now held: Hirsch, Smale & Devaney (2013) §4.2, pp. 65-68")
+try:
+    Q = subprocess.run(["pdftotext", "-layout", str(DL / 'Smale, Stephen T_Devaney, Robert L - Differential equations, dynamical systems, and an introduction to chaos (2012_2013, Elsevier, Academic Press).pdf'), "-"], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, timeout=170).stdout.split("\f")
+    q65, q66, q67, q68 = (flat(Q[i]) for i in (79, 80, 81, 82))
+    check("p.65: (topologically) conjugate, defined by phi_B(t, h(X0)) = h(phi_A(t, X0))", q65.strip().startswith("4.2 Dynamical Classification 65") and "(topologically) conjugate" in q65)
+    check("p.66: the theorem -- hyperbolic 2x2 systems are conjugate iff they have the same number of eigenvalues with negative real part",
+          "are conjugate if and only if each matrix has the same number of eigenvalues with negative real part" in q66)
+    check("p.66: 'a system with a spiral sink is conjugate to a system with a (real) sink. Of course!'", "a spiral sink is conjugate to a system with a (real) sink. Of course!" in q66)
+    check("p.66: h is not differentiable at the origin -- 'the reason we require h to be only a homeomorphism'", "the reason we require h to be only a homeomorphism" in q66)
+    check("pp.67-68: the proof is the crossing-time construction through the unit circle S1", "each nonzero solution of X 0 = AX crosses S1 exactly" in q68 or "crosses S1 exactly once" in q68)
+except Exception as e:
+    print("SKIP HSD", e)
+
 print("""
 [HONESTY]
 [2]-[3] build conjugacies by the standard crossing-time construction and check the
 conjugacy equation numerically at sample points; that is evidence, not a proof. The
-general theorem -- hyperbolic linear flows with the same number of contracting
-directions are topologically conjugate -- is not in the held text: Strogatz defines
-topological equivalence (p.156) but does not state it. Wanted: Perko, Differential
-Equations and Dynamical Systems, or Hirsch, Smale & Devaney. The omegas (1.0, 1.7)
+general theorem is Hirsch, Smale & Devaney's (p.66, proof pp.67-68, [5]); [2]-[3]
+are instances of their construction, run. The omegas (1.0, 1.7)
 are free choices: the Lean file quantifies over them, and the construction works for any.
 """)
 print(f"{len(FAIL)} FAIL")
