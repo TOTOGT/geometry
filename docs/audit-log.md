@@ -10204,3 +10204,9 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 `tools/run_yourself.py`: one-click download box on 194 chapters that name a .py or .lean, with run instructions. `tools/gold_standard.py`: 483 chapters stamped against EO 14303 §3(a) (90 FR 22601); nine tenets scored from observable features, labelled self-assessment and "not a federal certification"; (vii) peer review marked not shown everywhere; (ix) a disclosure. Distribution of tenets shown: 0:13, 1:149, 2:80, 3:74, 4:45, 5:47, 6:56, 7:19 — the stamp is also the work list. New Lean: `book18/ChainRule.lean`, `book21/Conjugacy.lean` — written, **kernel audit pending** (pages say so).
 
 - 2026-09-27: `book18/ChainRule.lean` (6 decls) and `book21/Conjugacy.lean` (3 decls) kernel-checked by the author's run of leancheck.sh --audit: all on [propext, Classical.choice, Quot.sound]; `dual_pow` on propext alone. Reports in tools/verify-audit/2026-09-27/. Chapter pages switched from 'pending' to KERNEL-CHECKED with report links. Not yet in a lakefile target: a hand run proves the file on the day it is run.
+
+## 2026-09-27 — Book XI: chapters 2–3 written; Bundling.lean (import-free) awaiting audit
+
+- **ch 2 Bundling:** `unique_same_length` (any base, any length); brute force 9,083 numerals bases 2–12, 0 collisions. Cost b/ln b least at 3 (2.73), 10 at 4.34. Unit fractions 1/2..1/20 that end: base 10 → 7, 12 → 9, 60 → 13. WP-45's two numerical claims hold; its "minimal sufficient" title is recorded as not covering fifths.
+- **ch 3 Zero:** finding — zero is not needed for unambiguous numerals (`bijective_unique`; every n ≤ 100,000 has exactly one zero-free name) and causes ambiguity as a leading digit (`high_zero`); what it buys is that digits are remainders (`low_digit_is_remainder`).
+- **Wanted:** Ifrah, *The Universal History of Numbers*, or Menninger, *Number Words and Number Symbols* — both chapters decline all history of numeral systems until one is held. `[OPEN]`

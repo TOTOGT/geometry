@@ -177,3 +177,13 @@ lean_lib ChainRule where
 lean_lib Book21 where
   srcDir := "book21"
   roots := #[`Spiral, `Conjugacy]
+
+/-
+  book11/Numerals.lean (rung 11, hand-run 2026-09-19 under v4.32.0 and 4.33.0-rc1,
+  byte-identical reports) and book11/Bundling.lean (Book XI chs 2-3, written
+  2026-09-27). Both import nothing. Declared so a regression fails the job.
+-/
+@[default_target]
+lean_lib Book11 where
+  srcDir := "book11"
+  roots := #[`Numerals, `Bundling]
