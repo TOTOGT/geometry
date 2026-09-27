@@ -3062,3 +3062,31 @@ layer currently checks the other.
    model's blind spots miss; §9's own history shows the same model re-reading
    its own draft is not sufficient — the correction was drafted and then never
    committed, by the same authorship that wrote the claim.
+4. **Fix the Bessel-ratio-as-η claim in `ch-schumann-dual.html` and
+   `chF-catastrophe.html`.** Found the same session T8b landed (2026-09-26),
+   confirmed by a clean `lake build Orthogenesis.Resonance.TripleChamber` on
+   2026-09-27. `TripleChamber.lean`'s own OPEN section now states the bare
+   ratio `bessel_ratio = 7.016/3.832` is proved `< 1.83928`
+   (`bessel_ratio_below_tribonacci`, T8b), while `tribonacci_bracket` proves
+   `1.83928 < η` — so the ratio (1.830897…) and η (1.839287…) are distinct by
+   8.4e-3, "far outside either bracket," and the file says outright: "the
+   earlier reading of the ratio as η should be withdrawn wherever it appears."
+   Two pages still make that reading:
+   - `ch-schumann-dual.html` §7: "the ratio of consecutive Bessel zeros (1.831)
+     matches η to within 0.4%, and the dm³ K-deformation at κ = ε₀ shifts this
+     ratio to exactly η" — this is exactly the claim T8b refutes; needs pulling
+     or rewriting to cite T8b's actual gap. Leave §2 alone — its claim is a
+     *different* comparison (measured Schumann f₂/f₁ ≈ 1.827 vs η) that T8b does
+     not address either way; do not over-scope the fix onto it.
+   - `chF-catastrophe.html` "Proof 7": cites `bessel_ratio_in_tribonacci_interval`
+     (T8, the older loose bracket) and reads it as "confirming that the fold has
+     already been traversed" / "proving it was passed." Update the citation to
+     `bessel_ratio_below_tribonacci` (T8b) and soften the framing — T8b shows the
+     ratio sits measurably *below* η's bracket, not inside a shared one.
+   - `book6/index.html`'s Ch 24 blurb ("η ≈ f₂/f₁ Schumann ratio") repeats
+     `ch-schumann-dual.html`'s claim rather than originating it; update it to
+     match once that page is fixed.
+   Three other pages cite `TripleChamber.lean` for unrelated theorems
+   (`lam_triple`, `triple_chamber_strictAntiOn_nonneg`, `published_T1_is_false`)
+   in `book6/wp121-what-etf-connect-actually-couples.html` and
+   `chMu-lyapunov.html` — not violators, no action needed there.
