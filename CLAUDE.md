@@ -93,32 +93,55 @@ into prose. A result recorded only in narrative will be re-derived.
 
 ### State
 
-All pushed (02d002d). `lake build ChainRule Book21` green, 8659 jobs. The author runs git and
-Lean on the Mac; the Cowork VM has no Lean and cannot unlink git locks — never commit from it.
+Last push 2bbbdf2; this session's final commit adds the six missing folder indexes, the
+build_indexes FOLDER GUARD and this handoff. `lake build` is green on the Mac, including Book11,
+Book12 and Book14 (Polysemy.lean). The author runs git and Lean on the Mac. The Cowork VM has no
+Lean and cannot unlink git locks, so never commit from it. The Mac now has Homebrew and poppler
+(`pdftotext`), and all 17 PDF-reading verify scripts pass there.
 
-### Done this session (details in docs/audit-log.md, 2026-09-27 entries)
+### Done this session (details: docs/audit-log.md, 2026-09-27 entries)
 
-- **Books finished:** XX Reading Data (5/5), XVIII The Chain Rule (5/5, ch 5 = 3D calculus),
-  XXI Planar Linear Systems (3/3). Every chapter has a verify script, 0 FAIL.
-- **Findings worth keeping:** Book XVIII's planned thesis (only Leibniz composes) FAILED on
-  Newton's Ex. 5 — replaced by clock vs no clock = forward vs reverse mode. C₃∘K₃ = C₃ exactly;
-  the corpus's showcase non-commutation is invisible to the derivative (ChainRule.lean).
-  666 pp is the printer's limit, not a resonance. Poe's wall: t* = 371,000 yr (not 380k).
-- **New Lean, kernel-checked + build targets:** book18/ChainRule.lean, book21/Conjugacy.lean.
-- **Site-wide generated blocks (R25, R26):** section tags (subject_tags.py), cross-links
-  (crossref.py), run-it-yourself downloads (run_yourself.py), Gold Standard Science
-  self-assessment stamp against EO 14303 §3(a) (gold_standard.py — never a certification,
-  (vii) peer review never claimed). Run order: key_register → subject_tags → run_yourself → crossref → gold_standard.
+- **Books completed:** XI (3/3), XII (3/3), XVIII (5/5), XIX (4/4), XX (5/5), XXI (3/3).
+- **Book XIV — The Language of Mathematics** (new). Live: ch3 How Many Senses (the IJL
+  template; Polysemy.lean), ch4 Translation Keys (operator glosses, word-cluster figure,
+  holology), ch5 The Machines That Read Us (J&M 2026 draft; tag classifier 0.68 vs 0.45,
+  macro-F1 0.39), ch7 Maximum Meaning (Briggs 1985, NASA Ames), and the generated **Key
+  Register**.
+- **IJL manuscript v4** is in ~/Downloads/IJL v4.docx. References audited (Petersen & Potts
+  fixed three ways; Bond et al. has 4 authors). §5.4, §5.5 and §7.1 are new. Prediction (ii)
+  was withdrawn after it failed on 2 of 5 nouns in WordNet/SemCor.
+- **Tools:**
+  - key_register.py is new; run order: key_register → subject_tags → run_yourself → crossref → gold_standard.
+  - lean_addresses.py strips generated boxes, skips _to_delete/ and follows a symlinked .lake.
+  - floor_texts.py MIN_PAGES is 8.
+  - build_indexes.py covers books 11, 12, 14, 21, 28 and 29, and has a FOLDER GUARD.
+- **Pinning rule, learned the hard way:** a verify script that counts the corpus must read it
+  at a pinned commit (git show / ls-tree / archive). Live counts drift as later books add pages.
+  Book XIX ch2–4 and Book XIV ch4–5 are pinned.
+- **Corrections carried:** XIX ch4 now says 217 citations (not 242) and AXLE+GTCT has 49 names,
+  96 citations. The 110 in the Book XIX plan was the file count.
 
-### Open — in priority order
+### Open — the next session, in priority order
 
-1. The GSS stamp is the work list: 149 chapters show 1 tenet of 9, mostly no script behind them.
-2. Thin books still: XI, XII (ch 2–3 planned), XIX (ch 2–4), XXVIII (ch 2–3; F. Noether 1921 not held).
-3. The eight unfinished chapters in docs/unlisted.tsv (wp56/57, rh-paper, modular-π, wp125,
-   Polylaminin, chIV-15, ulam-dual) and the three book4 duplicates.
-4. tools/proved_labels.py times out (>180 s) in the VM; run it on the Mac.
-5. Handoff items carried from 2026-09-20: /3M/ "Helical Attractors" titles; io CI ContactMorphism;
-   DNLS successor; Fulk V / pedigree section for Book VII.
+1. **Book XIV ch1, The Grammar of Notation.** Held: Chomsky 1957 (a scan with no text
+   layer, so read pages as images or OCR them) and Pullum 2011 (text OK). Chomsky's hierarchy
+   applied to written notation (precedence, implicit multiplication, "sin x/2"). Script first.
+2. **Book XIV ch2** needs Ganesalingam, *The Language of Mathematics* (LNCS 7805, 2013), or his
+   2009 Cambridge thesis. NOT HELD — ask the author.
+3. **Book XIV ch6, a lexicon of the words that went wrong** (WP-94, WP-61). Needs only the corpus.
+4. **Key Register follow-ups:** the three U senses need an editorial decision (rename Union
+   under the Omega set? retire Unification/Universal?). A gold set for recall is WANTED (ch5).
+5. **IJL v4 before submission:** Atkins & Rundell (2008: 268) is quoted but not held. Decide
+   whether to mask self-citations for blind review.
+6. **Book XXVIII ch2–3** needs F. Noether 1921 and a K-theory text (Atiyah or Karoubi). NOT HELD.
+7. **The GSS work list:** 150 chapters show 1 tenet of 9, mostly with no script behind them.
+8. **R27, proposed and not adopted:** a page may name X.lean only if it resolves; freeze the 98
+   as a baseline that may only shrink. The author decides.
+9. **Carried:** the eight chapters in docs/unlisted.tsv; the three book4 duplicates;
+   tools/proved_labels.py (run it on the Mac, it times out in the VM); /3M/ "Helical Attractors"
+   titles; io CI ContactMorphism; DNLS successor; Fulk V / pedigree section for Book VII.
+10. **Sources still wanted:** Ifrah or Menninger (Book XI); Euler, *Institutiones calculi
+    differentialis* (XVIII ch4).
 
 ## The script runs before the sentence (R24, set 2026-09-20)
 

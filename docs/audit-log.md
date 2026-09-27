@@ -10297,3 +10297,7 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 - **Experiment:** predicting the subject FIELD from page text (472 pages, 12 fields, pinned at 07c785b, standard library only).
   - Majority baseline 0.453; naive Bayes 0.663; tf-idf 1-NN 0.684; macro-F1 0.391.
   - Purpose-defined fields (education, method, history, philosophy, apparatus) are barely recovered, which argues for keeping the tags editorial.
+
+## 2026-09-27 — Folder indexes for six books; handoff
+- **build_indexes.py had no FOLDERS entry for book11, 12, 14, 21, 28 or 29,** so those books had no folder index. This is the defect already recorded for book13, six times over. They are added, and a FOLDER GUARD now refuses to run while any bookNN/ folder is missing from the list. The result is 830 files and 27 index pages; index-book14 lists 6 pages.
+- CLAUDE.md HANDOFF was overwritten with the next session's TODOs.

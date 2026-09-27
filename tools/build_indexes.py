@@ -84,6 +84,11 @@ FOLDERS: list[tuple[str, str, str]] = [
     ("book7", "Book VII — The Scientists", "book7"),
     ("book8", "Book VIII — Cosmological / Quantum", "book8"),
     ("book10", "Book X — Trade, Power and the Continent", "book10"),
+    # book11, 12, 14, 21, 28 and 29 were indexed nowhere until 2026-09-27: the same defect
+    # recorded for book13 below, six times over. FOLDER GUARD further down now refuses to
+    # run while any bookNN/ directory is missing from this list.
+    ("book11", "Book XI — What a Numeral Names", "book11"),
+    ("book12", "Book XII — Counting, and the First Thing That Goes Wrong", "book12"),
     # book13 predates this list and was indexed nowhere until 2026-09-15: nine
     # chapters that existed at no address. Exactly the defect docs/audit-log.md
     # catalogues, occurring in the file that decides what has an address.
@@ -91,10 +96,14 @@ FOLDERS: list[tuple[str, str, str]] = [
     # -- nine chapters plus index.html plus ch-mathlib-verify.py. A directory
     # listing is not a chapter count. Corrected 2026-09-16.
     ("book13", "Book XIII — Category Theory", "book13"),
+    ("book14", "Book XIV — The Language of Mathematics", "book14"),
     ("book17", "Book XVII — The Machine Floor", "book17"),
     ("book18", "Book XVIII — The Chain Rule", "book18"),
     ("book19", "Book XIX — AXLE and the Manual", "book19"),
     ("book20", "Book XX — Reading Data", "book20"),
+    ("book21", "Book XXI — The Classification of Planar Linear Systems", "book21"),
+    ("book28", "Book XXVIII — Index Theory", "book28"),
+    ("book29", "Book XXIX — Open Threads", "book29"),
     ("omega", "Book IX \u2014 Omega Point", "omega"),
     ("HVEH", "HVEH", "HVEH"),
     ("AMonster", "A Monster's Law", "AMonster"),
@@ -112,6 +121,13 @@ if _cfg.exists():
     REPO    = _c.get("name", REPO)
     SKIP    = _c.get("skip", SKIP)
     FOLDERS = [tuple(x) for x in _c["folders"]] if "folders" in _c else FOLDERS
+
+# FOLDER GUARD (2026-09-27): a book directory absent from FOLDERS gets no index and its
+# chapters get no address. Refuse to run rather than write indexes that silently omit it.
+_missing = sorted(d.name for d in ROOT.glob("book[0-9]*") if d.is_dir()
+                  and d.name not in {slug for slug, _, _ in FOLDERS})
+if _missing:
+    raise SystemExit(f"build_indexes: book folders missing from FOLDERS: {_missing}")
 
 HREF = re.compile(r'href\s*=\s*["\']([^"\'#?]+)', re.I)
 JSREF = re.compile(r'["\']([A-Za-z0-9_\-./]+\.html)["\']')
