@@ -10248,3 +10248,12 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - the data link now points to book14/.
 - **Still WANTED before submission:** Atkins & Rundell 2008 p.268 (not held); decide whether to mask self-citations for blind review.
 - GCM Institutional Edition (2025) is noted as the source for Book XIV ch4, whose unified lexicon is Appendix A. Cross-link boxes (po-see-xiv) were added to book8 ch13, book6 wp61 and book11 index.
+
+## 2026-09-27 — Book XIV ch 7, Maximum Meaning (Briggs 1985)
+- Briggs, AI Magazine 6(1) 32–39, is now held (Downloads/466-Article Text-466-1-10-20080128.pdf). Ten quotations are checked by printed page (printed = PDF + 31).
+- The popular "NASA: best language for computers" claim appears nowhere in the eight pages; the page says so.
+- Computed:
+  - 3 Sanskrit words unfold to 38 in Nāgeśa's paraphrase.
+  - All 5,040 orders of the rice sentence give the same 6 kāraka triples. This uses a toy ending-analyser for that one sentence only.
+- The compression/unfolding reading (C→U) is credited to Pablo Nogueira Grossi as MODEL. Briggs' zero/binary claims (p.39) are not checked.
+- floor_texts MIN_PAGES lowered from 12 to 8 because Briggs (8pp) had been hidden; the ledger grows from 133 to 163 rows.
