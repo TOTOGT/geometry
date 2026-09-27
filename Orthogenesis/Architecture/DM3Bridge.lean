@@ -1,3 +1,7 @@
+-- GATE-DECLARE: sorries = none
+-- GATE-REASON: sorry-free. Its own "Toolchain" line below still read v4.14.0,
+-- stale since this repo's v4.32.0 pin -- corrected in this same edit. Never run
+-- through tools/leancheck.sh --audit by name until now.
 -- Orthogenesis/Architecture/DM3Bridge.lean
 -- Formal bridge between the dm³ generative contact mechanics framework
 -- and the Orthogenesis colony geometry.
@@ -11,7 +15,9 @@
 --   5. The six-fold symmetry of hexNeighbors realises the G6 Crystal's
 --      six-fold rotational structure.
 --
--- Toolchain: Lean 4 + Mathlib (v4.14.0, as G6Crystal.lean)
+-- Toolchain: Lean 4 + Mathlib v4.32.0 (the repository pin). This line read
+-- v4.14.0, same as G6Crystal.lean, until the gate round that added the header
+-- above -- stale since the repo moved to v4.32.0; corrected here, not just noted.
 -- Zenodo: 10.5281/zenodo.19162012  AXLE: github.com/TOTOGT/AXLE
 
 import Mathlib.Tactic

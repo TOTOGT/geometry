@@ -1,3 +1,6 @@
+-- GATE-DECLARE: sorries = none
+-- GATE-REASON: foundational to Orthogenesis.Geometry, same story as HexGrid.lean
+-- (see its header): always compiled, never separately audited until now.
 import Mathlib.Tactic
 
 namespace Orthogenesis

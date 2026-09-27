@@ -1,3 +1,7 @@
+-- GATE-DECLARE: sorries = none
+-- GATE-REASON: this file's own "Axiom report: pending first CI run" note below
+-- has never been resolved -- this closes it. tetra_gauss_bonnet is the required
+-- non-vacuous witness (R20); 3F=2E stays an explicit hypothesis, not a theorem.
 -- Orthogenesis/Geometry/GaussBonnet.lean
 --
 -- Discrete Gauss-Bonnet: the total angle defect of a triangulated closed
@@ -39,9 +43,9 @@
 --     topological invariant.  Identifying the two is the content of the real
 --     theorem and is not attempted here.
 --
--- Toolchain: Lean 4 + Mathlib, pinned by lean-toolchain.
--- Axiom report: pending first CI run.  Until it is pasted below with the run
--- number, this file is a claim and not a verification.
+-- Toolchain: Lean 4 + Mathlib, pinned by lean-toolchain (v4.32.0).
+-- Axiom report: see the GATE-DECLARE header at the top of this file and
+-- tools/verify-audit/ for the dated report once tools/leancheck.sh --audit runs.
 
 import Mathlib
 

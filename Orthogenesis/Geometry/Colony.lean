@@ -1,3 +1,8 @@
+-- GATE-DECLARE: sorries = none
+-- GATE-REASON: foundational to Orthogenesis.Geometry, same story as HexGrid.lean
+-- (see its header): always compiled, never separately audited until now. Its
+-- mem_expand/stage_bound/expand_mono/expandN_mono are load-bearing for
+-- Coverage.lean and NASAGaps.lean, gated in this same round.
 import Orthogenesis.Geometry.Cell
 import Mathlib.Data.Finset.Basic
 

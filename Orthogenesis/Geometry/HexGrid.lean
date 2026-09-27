@@ -1,3 +1,8 @@
+-- GATE-DECLARE: sorries = none
+-- GATE-REASON: foundational to Orthogenesis.Geometry, compiled as part of the
+-- Orthogenesis root since before this repo's per-file audit convention existed
+-- (lake build has always reached it); no tools/leancheck.sh --audit report was
+-- ever produced against it by name until now.
 import Mathlib.Tactic
 
 namespace Orthogenesis

@@ -1,3 +1,8 @@
+-- GATE-DECLARE: sorries = none
+-- GATE-REASON: every remaining gap theorem below is proved outright; the three
+-- gaps with no theorem (FN-P-101L, FN-P-402L, FN-M-302L) are open by omission,
+-- not by sorry -- see the REOPENED sections. Toolchain corrected to v4.32.0
+-- 2026-09-14; never run through tools/leancheck.sh --audit by name until now.
 -- Orthogenesis/Architecture/NASAGaps.lean
 -- Maps NASA Moon Base Phase 01 functional gap codes (FN-xxx-L) to
 -- Lean proof obligations. A sorry is an open gap. Closing a sorry

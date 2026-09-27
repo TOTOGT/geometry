@@ -1,3 +1,7 @@
+-- GATE-DECLARE: sorries = none
+-- GATE-REASON: rewritten sorry-free 2026-08-21 (see header below); imported into
+-- the Orthogenesis root since that rewrite, so lake build has always reached it,
+-- but no tools/leancheck.sh --audit report was ever produced against it by name.
 -- Orthogenesis/Architecture/Coverage.lean
 --   · coord_coverage      -- the ring walk at radius k visits exactly 6k coords (k >= 1)
 --   · no_coord_collision  -- Colony.expand preserves coordinate injectivity,
