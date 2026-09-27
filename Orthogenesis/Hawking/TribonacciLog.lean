@@ -41,17 +41,28 @@
   kernel shows what the result rests on. Same treatment as
   `epsilon0_eq_third_iff` in book2/lean/StabilityRadius.lean.
 
-  STATUS: NOT BUILT. No Lean toolchain on the desk that wrote it. The §1
-  `nlinarith` calls are the part most likely to need hint tuning; the numbers
-  they are asked to prove are correct.
+  STATUS: built clean 2026-09-26, 7/7 on the standard three axioms.
+
+  NAMESPACE: `Orthogenesis.Tribonacci`, not `...HawkingConstants`, although the
+  file was written for the Hawking chapter. η is a corpus-wide object, not a
+  Hawking one, and this is the only kernel-checked definition of it:
+    - `Orthogenesis/Resonance/TripleChamber.lean` T8 says in its own docstring
+      "nothing here defines η" while bracketing a ratio in (1.8, 1.9);
+    - `Orthogenesis/Disaster/DisasterTheory.lean` §4 points at AXLE's
+      TribonacciRatioConvergence.lean as "the nearest existing work";
+    - chEta-tribonacci.html, chGravity-scales.html, ch20-coherence-bridge.html,
+      chDis-disaster.html and chF-catastrophe.html all use the constant.
+  Those should cite `IsTribonacci` and `tribonacci_bracket` from here rather
+  than import something called "Hawking constants" to say what η is.
+  (`CrystallineReturn.tribonacci_row` is the integer n-bonacci SEQUENCE, a
+  different object; no conflict.)
 -/
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
--- §3 applies `tribonacci_factor`, which lives in HawkingConstants.lean.
--- If that file declares it outside `Orthogenesis.HawkingConstants`, either
--- drop the `namespace` line below or qualify the call in §3.
+-- §3 applies `tribonacci_factor`, which lives in HawkingConstants.lean under
+-- `Orthogenesis.HawkingConstants`; the call there is fully qualified.
 import Orthogenesis.Hawking.HawkingConstants
 
-namespace Orthogenesis.HawkingConstants
+namespace Orthogenesis.Tribonacci
 
 open Real
 
@@ -120,7 +131,8 @@ theorem tribonacci_factor_of_cubic {η : ℝ} (h : IsTribonacci η)
     (hlo : Real.exp 0.60937 < 1.83928)
     (hhi : (1.83929 : ℝ) < Real.exp 0.60939) :
     1.0969 < 1 + Real.log η / (2 * π) ∧ 1 + Real.log η / (2 * π) < 1.0971 :=
-  tribonacci_factor (Real.log η) (log_tribonacci_bounds h hlo hhi)
+  Orthogenesis.HawkingConstants.tribonacci_factor (Real.log η)
+    (log_tribonacci_bounds h hlo hhi)
 
 /-- The tribonacci constant exists and is unique above 1. Recorded so that
 `IsTribonacci` is not vacuous — a hypothesis nothing satisfies proves anything,
@@ -139,13 +151,13 @@ theorem isTribonacci_nonvacuous : ∃ η : ℝ, IsTribonacci η := by
   have hfx' : x ^ 3 - x ^ 2 - x - 1 = 0 := hfx
   linarith
 
-end Orthogenesis.HawkingConstants
+end Orthogenesis.Tribonacci
 
 /-! ## Axiom probe -/
-#print axioms Orthogenesis.HawkingConstants.tribonacci_gt
-#print axioms Orthogenesis.HawkingConstants.tribonacci_lt
-#print axioms Orthogenesis.HawkingConstants.tribonacci_bracket
-#print axioms Orthogenesis.HawkingConstants.tribonacci_pos
-#print axioms Orthogenesis.HawkingConstants.log_tribonacci_bounds
-#print axioms Orthogenesis.HawkingConstants.tribonacci_factor_of_cubic
-#print axioms Orthogenesis.HawkingConstants.isTribonacci_nonvacuous
+#print axioms Orthogenesis.Tribonacci.tribonacci_gt
+#print axioms Orthogenesis.Tribonacci.tribonacci_lt
+#print axioms Orthogenesis.Tribonacci.tribonacci_bracket
+#print axioms Orthogenesis.Tribonacci.tribonacci_pos
+#print axioms Orthogenesis.Tribonacci.log_tribonacci_bounds
+#print axioms Orthogenesis.Tribonacci.tribonacci_factor_of_cubic
+#print axioms Orthogenesis.Tribonacci.isTribonacci_nonvacuous
