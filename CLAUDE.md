@@ -89,84 +89,36 @@ Worked examples, all from 2026-09-17, all avoidable by one read:
 The corresponding duty: **a session that settles something writes it into the ledger**, not only
 into prose. A result recorded only in narrative will be re-derived.
 
-## HANDOFF — 2026-09-20 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
+## HANDOFF — 2026-09-27 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
 ### State
 
-Both repos pushed. R24 was set today — the script runs before the sentence —
-in `tools/CONVENTIONS.md` §6, in the rules table, and as the skill
-`claims-that-recompute` so it survives a session.
+All pushed (02d002d). `lake build ChainRule Book21` green, 8659 jobs. The author runs git and
+Lean on the Mac; the Cowork VM has no Lean and cannot unlink git locks — never commit from it.
 
-### Book VII gained a Writers wing thesis and three chapters
+### Done this session (details in docs/audit-log.md, 2026-09-27 entries)
 
-`ch-poe`, `ch-thoreau-surveyor`, `ch-freire`, each with a verify script.
-Ramos, dos Anjos, Levi, Poe and Thoreau each filed their most exact work in a
-container the reader was not expecting — `K∘F ≠ F∘K` at the scale of a
-discipline. Freire is the control. Computed, not asserted: Thoreau's rule
-holds on convex outlines only; dark-sky covering fraction 1.4e-14; the dollar
-ballot at 707 households to 1, majority cast by the top 5.3%.
-
-### CatGT V5 kernel-verified; the zeolite DNLS is open
-
-13 theorems on `[propext, Classical.choice, Quot.sound]`, Lean 4.33.0-rc1.
-The old `reeb_orbit_advances` proved a fact about a scalar potential, not
-about α_cat — R20 in the wild. The DNLS sign is corrected, and the two larger
-defects behind it are recorded: moments taken against an unnormalised density
-(2.06e-9 of the norm left), and a figure asserting "~2.1 Ų" that no run
-produces. Three breadth measures then split 1–2 on the direction, so it is
-reported open, with the successor's observable pre-registered in
-`io/zeolite_operator_order/DNLS_TWO_CHANNEL_DESIGN.md`.
-
-### gcm-framework — yesterday's callout, made
-
-"Introduced by Gibbs" was wrong and Etnyre, named in the same sentence, says
-so: Lie introduced contact structures, they reappeared in Gibbs. That clause
-was also the corpus's only occurrence of "Gibbs". The page now states the
-identification — α_cat is α_G = dU − T dS − Ω dJ at dS = 0 — checked on
-200,000 random tangent vectors, exact, and differing off the adiabat by
-exactly T dS. Legendrian submanifolds are adiabats; restoring T dS is open.
-
-### Unlisted pages are a backlog, not an exclusion list
-
-`docs/unlisted.tsv` + `tools/chapter_links.py`. **0 undeclared orphans, 8
-unfinished chapters waiting.** Four of the original thirteen needed reading,
-not writing: one redirect stub, three duplicates where the index links the
-ROOT copy and in one case the longer text is the unlinked one. Those three
-stay REPORTED — which copy is canonical is an editorial call.
-
-The count said 75 before the script followed one hop; `book4/index.html` is a
-cover pointing at `contents.html`, which lists 68 chapters. R15 committed by
-the instrument built to find missing links.
-
-### Vol IV IMPA preface: finished
-
-Not a draft — it was unlinked. Now linked, translatable (25 languages, source
-English, autoDisplay off), and carrying a script that checks its own
-load-bearing claim: the group-1 gaps equal the periods exactly, so "the table
-is a helix" is arithmetic, not analogy. Destination corrected to LAW3M,
-19–23 October 2026, Natal, UFRN.
+- **Books finished:** XX Reading Data (5/5), XVIII The Chain Rule (5/5, ch 5 = 3D calculus),
+  XXI Planar Linear Systems (3/3). Every chapter has a verify script, 0 FAIL.
+- **Findings worth keeping:** Book XVIII's planned thesis (only Leibniz composes) FAILED on
+  Newton's Ex. 5 — replaced by clock vs no clock = forward vs reverse mode. C₃∘K₃ = C₃ exactly;
+  the corpus's showcase non-commutation is invisible to the derivative (ChainRule.lean).
+  666 pp is the printer's limit, not a resonance. Poe's wall: t* = 371,000 yr (not 380k).
+- **New Lean, kernel-checked + build targets:** book18/ChainRule.lean, book21/Conjugacy.lean.
+- **Site-wide generated blocks (R25, R26):** section tags (subject_tags.py), cross-links
+  (crossref.py), run-it-yourself downloads (run_yourself.py), Gold Standard Science
+  self-assessment stamp against EO 14303 §3(a) (gold_standard.py — never a certification,
+  (vii) peer review never claimed). Run order: subject_tags → run_yourself → crossref → gold_standard.
 
 ### Open — in priority order
 
-1. Eight unfinished chapters in `docs/unlisted.tsv`. Read each before writing;
-   the last one turned out to be finished already.
-2. The three book4 duplicates — pick the canonical copy.
-3. `/3M/` and `/3M/law3m.html` still title themselves "Helical Attractors",
-   the wording this series retired on 2026-09-19. Either the rename
-   propagates to GTCT or the reason it does not apply gets written down.
-   Whether the Reeb objection even reaches LAW3M's equations is unchecked.
-4. io CI: ContactMorphism's first build, at the pinned v4.14.0.
-5. The DNLS successor model. Its own session.
-6. A Fulk V / pedigree-collapse section for Book VII, specced in conversation.
-
-### Five instruments mistook a mention for a claim today
-
-axiom_gate on a comment; chapter_links on one file; the R24 section landing
-inside the R20 row because it matched that row's citation of the heading;
-the correction-box scanner on gcm-framework reading a retraction as the claim
-it retracts; and the pale-box contrast fix, where matching one exact style
-string found 14 of 17. Always the same shape: match the shallowest thing that
-resembles the question.
+1. The GSS stamp is the work list: 149 chapters show 1 tenet of 9, mostly no script behind them.
+2. Thin books still: XI, XII (ch 2–3 planned), XIX (ch 2–4), XXVIII (ch 2–3; F. Noether 1921 not held).
+3. The eight unfinished chapters in docs/unlisted.tsv (wp56/57, rh-paper, modular-π, wp125,
+   Polylaminin, chIV-15, ulam-dual) and the three book4 duplicates.
+4. tools/proved_labels.py times out (>180 s) in the VM; run it on the Mac.
+5. Handoff items carried from 2026-09-20: /3M/ "Helical Attractors" titles; io CI ContactMorphism;
+   DNLS successor; Fulk V / pedigree section for Book VII.
 
 ## The script runs before the sentence (R24, set 2026-09-20)
 
