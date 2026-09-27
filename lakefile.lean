@@ -187,3 +187,12 @@ lean_lib Book21 where
 lean_lib Book11 where
   srcDir := "book11"
   roots := #[`Numerals, `Bundling]
+
+/-
+  book12/Counting.lean (rung 12, hand-run 2026-09-19) and book12/Carrying.lean
+  (Book XII chs 2-3, written 2026-09-27). Both import nothing.
+-/
+@[default_target]
+lean_lib Book12 where
+  srcDir := "book12"
+  roots := #[`Counting, `Carrying]

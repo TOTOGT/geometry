@@ -10210,3 +10210,8 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 - **ch 2 Bundling:** `unique_same_length` (any base, any length); brute force 9,083 numerals bases 2–12, 0 collisions. Cost b/ln b least at 3 (2.73), 10 at 4.34. Unit fractions 1/2..1/20 that end: base 10 → 7, 12 → 9, 60 → 13. WP-45's two numerical claims hold; its "minimal sufficient" title is recorded as not covering fifths.
 - **ch 3 Zero:** finding — zero is not needed for unambiguous numerals (`bijective_unique`; every n ≤ 100,000 has exactly one zero-free name) and causes ambiguity as a leading digit (`high_zero`); what it buys is that digits are remainders (`low_digit_is_remainder`).
 - **Wanted:** Ifrah, *The Universal History of Numbers*, or Menninger, *Number Words and Number Symbols* — both chapters decline all history of numeral systems until one is held. `[OPEN]`
+
+## 2026-09-27 — Book XII: chapters 2–3 written; Carrying.lean (import-free) awaiting audit
+
+- **ch 2 Carrying:** `addc_correct` (paper column addition names the true sum), `carry_small` (≤ 1 for two addends). Grid of 1.1M pairs: 0 errors, max carry 1. k addends: max carry ⌊(10k−1)/10⌋ — 11 addends can carry 10. 45/100 digit pairs carry.
+- **ch 3 Division:** `quot_rem_unique`, `remH_correct` (long division's running remainder, any divisor), `nines`. Finding for teachers: casting out nines caught 0 of 18,079 neighbouring swaps; the check by 11 caught all.
