@@ -10180,3 +10180,8 @@ Chapters 1–5 written, each after its script ran (R24). Findings a later sessio
 - **ch 3:** 40-line reverse-mode engine reproduces Deisenroth (5.110) to 12 places; forward/reverse operation ratio 4.6, 44.6, 444.6 at n = 10, 100, 1000; backprop through G₃ gives ∂/∂z = 0 exactly (C₃ overwrites z).
 - **ch 4:** Katz (Bradley & Sandifer 2007) p.224: Euler never stated the chain rule; d(pⁿ) = npⁿ⁻¹dp is it, unstated. dx² = 0 arithmetic = forward mode; checked numerically, no priority claimed.
 - **Wanted:** Leibniz *Nova Methodus* (1684); Newton *Method of Fluxions* (1736) — ch 1 blocked. Rumelhart, Hinton & Williams 1986; Euler *Institutiones calculi differentialis* (1755) — would replace second-hand citations. `[OPEN]`
+
+## 2026-09-27 — Book XVIII ch 1 written; the index thesis failed and was revised
+
+Sources arrived: Newton, *Method of Fluxions* (Colson 1736, sha256 86158ac3…), Dunham, *The Calculus Gallery* (d956b7c5…, with the 1684 Acta facsimile on p. 22), Rumelhart et al. 1986 (1f7b0339…), Stoudt's reprint scan of the Nova Methodus page (copy on this desk b4ed0136…; transfer re-encoded GIF87a→89a). Ledger re-run: 125 → 131 rows.
+**Finding:** the planned thesis "Leibniz's notation composes, Newton's does not" is false — Newton's Ex. 5 (§12, p. 24) composes by an auxiliary fluent and elimination; both give 42.865920 on (x²+1)³ at 1.2. Replacement, labelled MODEL: Newton's fluxions carry rates against one equable clock (forward mode, checked as (value, fluxion) arithmetic); Leibniz's "x and dx are treated in the same way as y and dy" names changes with no clock (what reverse mode needs). Book XVIII: 4 of 4 chapters written.
