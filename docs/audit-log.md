@@ -10266,3 +10266,15 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - The tool counts 109 distinct basenames among the 110 tracked files.
   - The page carries the correction box. The AXLE+GTCT figure of 49 predates the _to_delete fix.
 - AXLE+GTCT rerun after the _to_delete fix (Mac, 5a2e05a): still 49 names, 2 case-only, 6 upstream; **96** citations in all (was 104). ch04 updated.
+
+## 2026-09-27 — Book XIV ch 4, Translation Keys
+- Operator glosses across 822 published pages at f9e830e (Portuguese merged):
+  - C: compression 63, contact 17
+  - K: threshold 50, curvature 26, gate 12
+  - F: fold 86
+  - U: unfolding 68, union 10, universal 3, unification 3
+- Ch 3's chain test gives C, K and F one sense each and U three senses. U = Union is the Omega key set (G–L–R–U), a homonym.
+- Pablo's "translation keys" reading (MODEL) is supported for K: the gloss word is not domain-sorted (threshold appears on 9 pages each in math, physics and biology), while the filler is (5 instantiations are verified on their pages).
+- GCM Appendix A ("Unified Lexicon") defines g, L, R, U, B and no C, K or F.
+- Holology: used on 20 pages, defined on 6, one sense; it fills the fourth cell of topos/holos × logy/graphy. Prior attestation is not checked (OPEN).
+- Proposal (not adopted): a generated key register, with one entry per letter giving head, key set and fillers.
