@@ -47,11 +47,24 @@ import os, re, sys
 SKIP_DIRS = {'.lake', 'lake-packages', '.git', 'node_modules', '__pycache__'}
 STYLE = re.compile(r'<(style|script)\b.*?</\1>', re.S | re.I)
 TAG = re.compile(r'<[^>]+>')
+# Generated boxes (R25/R26) are the tools' own output, not the page's claims.
+# Without this strip, run_yourself's 'lake env lean FILE.lean' instruction
+# read as 96 dangling citations (Book XIX ch4, 2026-09-27).
+GENERATED = re.compile(r'<!--po-(run|gss|related|subject)-->.*?<!--/po-\1-->', re.S)
 NAME = re.compile(r'\b([A-Za-z][A-Za-z0-9_]*(?:[-_][A-Za-z0-9_]+)*\.lean)(?![-./\w])')
 
 # (page relpath, cited name) pairs that are deliberate illustrations, or a file
 # the page is instructing the READER to create rather than citing as evidence.
 EXEMPT = {
+    # Book XIX ch4 names these to count them (use/mention, as above).
+    ('book19/ch04-addresses.html', 'AutophagyDm3.lean'),
+    ('book19/ch04-addresses.html', 'Chain_updated.lean'),
+    ('book19/ch04-addresses.html', 'PrincipiaVol1.lean'),
+    ('book19/ch04-addresses.html', 'AutophagyDm3_v2.lean'),
+    ('book19/ch04-addresses.html', 'ZeoliteCommutation.lean'),
+    ('book19/ch04-addresses.html', 'FILE.lean'),
+    ('book19/ch04-addresses.html', 'X.lean'),
+    ('book19/ch04-addresses.html', 'main.lean'),
     ('docs/defect-ledger.html', 'XXXXXX.lean'),
     ('course-16weeks.html', 'claim.lean'),
     # named on the page precisely to report that they resolve nowhere.
@@ -112,7 +125,7 @@ def existing_names(roots):
 
 def prose(path):
     t = open(path, encoding='utf-8', errors='replace').read()
-    return TAG.sub(' ', STYLE.sub(' ', t))
+    return TAG.sub(' ', STYLE.sub(' ', GENERATED.sub(' ', t)))
 
 
 def scan(site, have, upstream=None):

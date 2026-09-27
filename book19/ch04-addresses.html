@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addresses &middot; Book XIX &mdash; Principia Orthogona</title>
+<meta name="description" content="Which .lean files the Principia Orthogona pages name that exist nowhere, and the smallest rule that stops it.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.po-proved-block{max-width:820px;margin:2.5rem auto 1rem;padding:1.1rem 1.3rem;
+ border:1px solid rgba(122,148,113,.45);border-left:4px solid #7a9471;border-radius:0 6px 6px 0;
+ background:rgba(122,148,113,.07);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.75;}
+.po-proved-block .po-h{letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;color:#5f7a57;margin-bottom:.6rem;}
+.po-proved-block a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.po-proved-block .po-n{font-size:.68rem;opacity:.75;display:block;margin-top:.7rem;line-height:1.6;}
+</style>
+<!--po-subject--><meta name="po-subject" content="MATHEMATICS · FORMAL VERIFICATION"><!--/po-subject-->
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XIX &middot; Ch 4</span>
+<span class="meta"><a href="ch03-elaborator-macro-kernel.html">&larr; Ch 3</a> &middot; <a href="index.html">Book XIX contents</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XIX &middot; Chapter 4 &middot; 2026-09-27 &middot; Provenance</div>
+<!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#16324f;background:#dfeaf4;border:1px solid #a8c2d8;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">MATHEMATICS · FORMAL VERIFICATION</span></div><!--/po-subject-->
+<h1><em>Addresses</em></h1>
+<div class="subtitle">98 file names that resolve nowhere, and one that was a tool reading a tool</div>
+<div class="metagrid"><div><strong>Warrant</strong>book19/ch04-verify.py, 0 FAIL</div><div><strong>Tool</strong>tools/lean_addresses.py</div><div><strong>Claim</strong>a count and a proposed rule</div></div>
+</div>
+<div class="wrap">
+
+<div class="lede">Before asking whether a proof is right, a reader can ask something cheaper: does the file the page names exist? Across this corpus, 98 file names do not resolve anywhere in the repository. This chapter was planned around a count of 110. That number turned out to be the count of files that do exist.</div>
+<div class="eyebrow">1 &middot; The check</div>
+<h2>98 names, 242 citations</h2>
+<p><span class="mono">tools/lean_addresses.py</span> reads 903 pages and matches every <span class="mono">X.lean</span> named in prose against the 110 tracked Lean files and Mathlib's 4,543. <span class="tag t-data">COMPUTED</span></p>
+<ul>
+<li><b>98</b> names resolve nowhere, cited <b>242</b> times;</li>
+<li><b>1</b> resolves only under another case: <span class="mono">main.lean</span> on the page, <span class="mono">Main.lean</span> on disk. It opens on a Mac and 404s on GitHub;</li>
+<li><b>12</b> are Mathlib files cited correctly, which are not the corpus's claims.</li>
+</ul>
+<div class="tblwrap"><table><tr><th>most-cited name that resolves nowhere</th><th>pages</th></tr><tr><td class="mono">AutophagyDm3.lean</td><td class="n">16</td></tr><tr><td class="mono">Chain_updated.lean</td><td class="n">15</td></tr><tr><td class="mono">PrincipiaVol1.lean</td><td class="n">13</td></tr><tr><td class="mono">AutophagyDm3_v2.lean</td><td class="n">11</td></tr><tr><td class="mono">ZeoliteCommutation.lean</td><td class="n">11</td></tr></table></div>
+<p>54 of the 98 appear on a single page. Four survive only in retired folders. <span class="mono">Chain_updated.lean</span> is named in this book's own <a href="ch01-what-the-kernel-certifies.html">Chapter 1</a> and index. <span class="tag t-data">COMPUTED</span></p>
+<div class="eyebrow">2 &middot; The artefact</div>
+<h2>A tool read another tool</h2>
+<p>The first run today reported 99 names and 385 citations. The top entry was <span class="mono">FILE.lean</span>, on 96 pages. No page claims that file. The phrase comes from the one-click download box that <span class="mono">tools/run_yourself.py</span> (R26) writes: "then <span class="mono">lake env lean FILE.lean</span>". The address checker read the box as prose. <span class="tag t-data">COMPUTED</span></p>
+<p>The fix is one line. <span class="mono">lean_addresses.py</span> now strips the generated blocks (<span class="mono">po-run, po-gss, po-related, po-subject</span>) before it scans, the same rule <span class="mono">run_yourself.py</span> already follows. This is the second time in a week that a generator's output leaked into another checker's input.</p>
+<div class="box warn"><span class="lab">The planned 110</span>
+The index said "110 .lean names cited across the corpus resolve nowhere". No run of that figure was recorded. The repository has exactly 110 tracked <span class="mono">.lean</span> files, and the tool's header line prints "110 corpus .lean files". The plan most likely took the wrong line. It is corrected here. <span class="tag t-data">COMPUTED</span></div>
+<div class="eyebrow">3 &middot; The smallest rule</div>
+<h2>Name only what resolves</h2>
+<p>The books written this session (XI, XII, XVIII, XX, XXI) cite <b>no</b> name that resolves nowhere. They were written after R26, whose download box links only to files that exist. If a page offers a download link, the address has to be real. <span class="tag t-data">COMPUTED</span></p>
+<div class="box thm"><span class="lab">Proposed rule (R27)</span>
+A new or edited page may name <span class="mono">X.lean</span> only if <span class="mono">lean_addresses.py</span> resolves it. The 98 existing names are frozen as a baseline, which may shrink but never grow. <span class="tag t-model">PROPOSAL</span></div>
+<div class="gap"><span class="lab">Wanted</span>This run used this repository alone. The tool also takes <span class="mono">--roots ~/Desktop/AXLE ~/Desktop/GTCT</span>, and some of the 98 may live there. <span class="tag t-open">WANTED</span> That run has to happen on the Mac. A name that resolves is still not a correct citation; <span class="mono">decl_resolve.py</span> is the rung above.</div>
+
+</div>
+<!--po-gss--><aside class="po-gss" style="max-width:860px;margin:1.2rem auto 1rem;padding:.8rem 1.1rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(40,80,150,.85);border-radius:0 6px 6px 0;background:rgba(40,80,150,.05);font-family:ui-monospace,Menlo,monospace;font-size:.78rem;line-height:1.55"><details><summary style="cursor:pointer;letter-spacing:.08em"><b>Gold Standard Science &middot; 4 of 9 tenets shown</b> &middot; self-assessed against <a href="https://www.federalregister.gov/documents/2025/05/29/2025-09802/restoring-gold-standard-science" style="color:inherit">EO 14303 &sect;3(a)</a> &mdash; not a federal certification</summary><ul style="list-style:none;margin:.5rem 0 .3rem;padding:0"><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(i) reproducible <span style="opacity:.6">&mdash; a script or Lean file beside the page re-derives its numbers</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(ii) transparent <span style="opacity:.6">&mdash; code or sourced references missing</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iii) error and uncertainty <span style="opacity:.6">&mdash; MODEL / OPEN tags or an [HONESTY] block</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(iv) collaborative, interdisciplinary <span style="opacity:.6">&mdash; no cross-volume links</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(v) skeptical <span style="opacity:.6">&mdash; states what it does not claim, or leaves items open</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(vi) falsifiable <span style="opacity:.6">&mdash; its script can print FAIL</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(vii) unbiased peer review <span style="opacity:.6">&mdash; not independently peer reviewed</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(viii) negative results <span style="opacity:.6">&mdash; no negative result reported on this page</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#9675;</span>(ix) conflicts of interest <span style="opacity:.6">&mdash; disclosed: author-published through G6 LLC, the author&#x27;s company</span></li></ul><div style="opacity:.75">Scored by <code>tools/gold_standard.py</code> from what is observable on this page and beside it. &#10003; shown &middot; &#10007; not shown &middot; &#9675; disclosure. No agency has reviewed this page.</div></details></aside><!--/po-gss-->
+<!--po-run--><aside class="po-run" style="max-width:860px;margin:1.6rem auto 1rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(80,140,110,.85);border-radius:0 6px 6px 0;background:rgba(80,140,110,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Run it yourself &middot; one-click download</div><ul style="margin:.4rem 0 .5rem 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book19/ch04-verify.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">ch04-verify.py</a> <span style="opacity:.6">&middot; Python 3 &middot; book19/ch04-verify.py</span></li><li style="margin:.2rem 0"><a href="../tools/lean_addresses.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">lean_addresses.py</a> <span style="opacity:.6">&middot; Python 3 &middot; tools/lean_addresses.py</span></li><li style="margin:.2rem 0"><a href="../tools/run_yourself.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">run_yourself.py</a> <span style="opacity:.6">&middot; Python 3 &middot; tools/run_yourself.py</span></li></ul><div style="font-size:.92em;opacity:.85"><b>Python</b>: <code>python3 FILE.py</code> &mdash; standard library only; pages that read a book also need <code>pdftotext</code> and the book in <code>~/Downloads</code>, and say SKIP rather than PASS without it.</div></aside><!--/po-run-->
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XIX &middot; Chapter 4<br>
+Written 2026-09-27 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">Every number on this page is printed by its verify script. Quotations are checked against the held PDF by page. No claim is made about Lean beyond what the cited source says.</div>
+</div></footer>
+</body>
+</html>

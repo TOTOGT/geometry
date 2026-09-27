@@ -10215,3 +10215,10 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 
 - **ch 2 Carrying:** `addc_correct` (paper column addition names the true sum), `carry_small` (≤ 1 for two addends). Grid of 1.1M pairs: 0 errors, max carry 1. k addends: max carry ⌊(10k−1)/10⌋ — 11 addends can carry 10. 45/100 digit pairs carry.
 - **ch 3 Division:** `quot_rem_unique`, `remH_correct` (long division's running remainder, any divisor), `nines`. Finding for teachers: casting out nines caught 0 of 18,079 neighbouring swaps; the check by 11 caught all.
+
+## 2026-09-27 — Book XIX chapters 2–4 (census, layers, addresses)
+- ch02 the tactic census against *Mathematics in Lean*: corpus 2,482 line-opening tactics and MIL 1,329; decision procedures 21.3% vs 7.4%. Verify: book19/ch02-verify.py, 0 FAIL.
+- ch03 Ullrich (2023): six quotations checked by printed page (printed = PDF − 12). Four corpus incidents sorted by layer (MODEL). Verify: book19/ch03-verify.py, 0 FAIL.
+- ch04 tools/lean_addresses.py: **98** dangling names, 242 citations. The index's "110" had no recorded run; 110 is the tracked-file count. Corrected on the index.
+- Tool fix: lean_addresses.py now strips generated boxes (po-run/gss/related/subject). run_yourself's "lake env lean FILE.lean" had been read as 96 dangling citations. EXEMPT gains ch04's use/mention names.
+- R27 proposed (not adopted): name only resolving .lean files; the 98 are frozen as a baseline that may shrink but never grow. WANTED: rerun with --roots ~/Desktop/AXLE ~/Desktop/GTCT on the Mac.
