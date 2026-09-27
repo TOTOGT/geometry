@@ -196,6 +196,11 @@ the theorems.
    `n` and converges to 2. `nbonacci_literals_increasing` compares five decimal
    approximations and says nothing about the roots. AXLE's
    `TribonacciRatioConvergence.lean` is the nearest existing work.
+   UPDATE 2026-09-26: for n = 3 the root is now pinned in-repo —
+   `Orthogenesis/Tribonacci` (Hawking/TribonacciLog.lean) defines
+   `IsTribonacci` by the cubic and proves 1.83928 < η < 1.83929, non-vacuously.
+   That is ONE n, not the cascade: monotonicity in n and the limit 2 are still
+   open, and this item stands for every n ≠ 3.
 4. **μ_max = −2 as a Lyapunov exponent.** `mu_max_negative` proves `-2 < 0`.
    The claim that −2 is the universal chaos-exit exponent for dm³ systems is
    analytic and is not in any kernel.

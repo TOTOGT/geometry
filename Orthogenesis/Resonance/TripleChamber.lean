@@ -93,9 +93,16 @@ theorem triple_perturbation_nonneg {k₁₂ k₂₃ A₁₂ A₂₃ : ℝ}
 
 /-! ## §2 Coupled-mode ordering -/
 
-/-- T3. Stronger aperture coupling lowers the global fundamental eigenvalue. -/
+/-- T3. Stronger aperture coupling lowers the global fundamental eigenvalue.
+
+    2026-09-26, from an unused-binder warning: `_hlam` is NOT used and cannot
+    be — subtracting a positive number lowers ANY real, so the result holds
+    with no assumption on lam₀ at all. It is kept as a named binder because it
+    records the intended physical setting (lam₀ an eigenvalue), not because the
+    proof needs it. What is proved is the arithmetic; that the arithmetic is
+    about an eigenvalue is the reader's assumption. -/
 theorem triple_coupled_eigenvalue_decreases {lam₀ κ A : ℝ}
-    (hlam : 0 < lam₀) (hκ : 0 < κ) (hA : 0 < A) : lam₀ - κ * A < lam₀ := by
+    (_hlam : 0 < lam₀) (hκ : 0 < κ) (hA : 0 < A) : lam₀ - κ * A < lam₀ := by
   linarith [mul_pos hκ hA]
 
 /-- T4. Restated on `κ ≥ 0`, the domain T1′ establishes. -/
@@ -127,8 +134,16 @@ theorem triple_mode_splitting_brackets {ω₀ κ δ : ℝ}
 
 /-! ## §4 Degeneracy limit -/
 
-/-- T6. At zero coupling the system collapses to the uncoupled mode. -/
-theorem triple_degenerate_at_zero_coupling {A γ : ℝ} (hA : 0 < A) (hγ : 0 < γ) :
+/-- T6. At zero coupling the system collapses to the uncoupled mode.
+
+    2026-09-26, from two unused-binder warnings: NEITHER `_hA` nor `_hγ` is
+    used. `simp [lam_triple]` closes this, so it is an identity holding for
+    every real A and γ — including zero and negative — and not a statement
+    about a physical regime. The binders are kept to record intended use. The
+    content is that `lam_triple _ _ 0` reduces to its first argument by
+    definition; the word "collapses" should not be read as a limit being
+    taken. -/
+theorem triple_degenerate_at_zero_coupling {A γ : ℝ} (_hA : 0 < A) (_hγ : 0 < γ) :
     lam_triple A γ 0 = A := by
   simp [lam_triple]
 
@@ -141,10 +156,29 @@ theorem bessel_ratio_def : bessel_ratio = 7.016 / 3.832 := rfl
 
 /-- T8. The ratio lies in `(1.8, 1.9)`, the interval containing the tribonacci
 constant η ≈ 1.8393. That the ratio lies in an interval containing η is not a
-statement that it equals η, and nothing here defines η. -/
+statement that it equals η, and nothing here defines η.
+
+    UPDATE 2026-09-26: η now HAS a kernel definition, in
+    `Orthogenesis/Tribonacci` (Orthogenesis/Hawking/TribonacciLog.lean):
+    `IsTribonacci η := 1 < η ∧ η^3 = η^2 + η + 1`, with
+    `tribonacci_bracket` giving 1.83928 < η < 1.83929 and
+    `isTribonacci_nonvacuous` showing the predicate is satisfied. The
+    non-identity caveat above is UNCHANGED and is the point of T8: this
+    theorem still says only that the ratio shares an interval with η. Anyone
+    wanting to test equality now has something to test against — and
+    1.83928 < η < 1.83929 against a ratio of 1.8309… settles it in the
+    negative, which is worth stating rather than leaving as an interval. -/
 theorem bessel_ratio_in_tribonacci_interval :
     (1.8 : ℝ) < bessel_ratio ∧ bessel_ratio < 1.9 := by
   constructor <;> norm_num [bessel_ratio]
+
+/-- T8b (2026-09-26). Sharper, now that η is defined: the ratio is BELOW the
+tribonacci bracket, so it is not η. `Orthogenesis.Tribonacci.tribonacci_bracket`
+gives 1.83928 < η, and 7.016/3.832 = 1.830897… < 1.83928. Stated as a bound so
+this file keeps no dependency on the Tribonacci file; the two combine at the
+point of use. This replaces an interval-sharing observation with a decision. -/
+theorem bessel_ratio_below_tribonacci : bessel_ratio < 1.83928 := by
+  norm_num [bessel_ratio]
 
 /-! ## §6 Canonical couplings -/
 
@@ -160,8 +194,14 @@ theorem canonical_coupling_ladder : κ₂₃ = κ₁₂ ^ 2 := by
    not in this file. chF-catastrophe.html §1 reads the definition as a result.
 2. **That the plasmapause is a Whitney A₁ fold.** Asserted in the header; no
    fold appears in any statement.
-3. **η and the Bessel ratio.** T8 places a decimal in an interval. Whether
-   `j'₀,₂ / j'₀,₁` is η, or near it for a reason, is untouched.
+3. **η and the Bessel ratio.** T8 places a decimal in an interval.
+   PARTLY SETTLED 2026-09-26: it is NOT η. T8b proves the ratio < 1.83928, and
+   `Orthogenesis.Tribonacci.tribonacci_bracket` proves 1.83928 < η, so the two
+   are distinct — 1.830897… against 1.839287…, a gap of 8.4e-3, far outside
+   either bracket. What remains untouched is the other half: whether the ratio
+   is NEAR η for a reason, or whether the resemblance is a coincidence of two
+   numbers near 1.83. Nothing here bears on that, and the earlier reading of
+   the ratio as η should be withdrawn wherever it appears.
 -/
 
 end dm3.TripleChamber
