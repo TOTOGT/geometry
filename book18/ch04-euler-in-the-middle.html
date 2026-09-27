@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Euler in the Middle &middot; Book XVIII &mdash; Principia Orthogona</title>
+<meta name="description" content="Euler never stated the chain rule; his notation applied it for him. His rule that higher differentials vanish, taken as an algebra with dx²=0, is the arithmetic of forward-mode automatic differentiation.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.po-proved-block{max-width:820px;margin:2.5rem auto 1rem;padding:1.1rem 1.3rem;
+ border:1px solid rgba(122,148,113,.45);border-left:4px solid #7a9471;border-radius:0 6px 6px 0;
+ background:rgba(122,148,113,.07);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.75;}
+.po-proved-block .po-h{letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;color:#5f7a57;margin-bottom:.6rem;}
+.po-proved-block a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.po-proved-block .po-n{font-size:.68rem;opacity:.75;display:block;margin-top:.7rem;line-height:1.6;}
+</style>
+<!--po-subject--><meta name="po-subject" content="HISTORY · MATHEMATICS"><meta name="po-subject-2" content="COMPUTING · THEORY"><!--/po-subject-->
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XVIII &middot; Ch 4</span>
+<span class="meta"><a href="ch03-mechanising-it.html">&larr; Ch 3</a> &middot; <a href="index.html">Book XVIII contents</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XVIII &middot; The Chain Rule &middot; Chapter 4 &middot; 2026-09-27</div>
+<!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4a2c14;background:#f3e7da;border:1px solid #d6b894;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">HISTORY · MATHEMATICS</span><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#123f5c;background:#dcedf7;border:1px solid #98c6e2;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">COMPUTING · THEORY</span></div><!--/po-subject-->
+<h1>Euler <em>in the Middle</em></h1>
+<div class="subtitle">What the eighteenth century did with the notation before anyone could run it. Euler never stated the chain rule, and one rule for his symbols made it unnecessary to.</div>
+<div class="metagrid"><div><strong>Held text</strong>Katz, &ldquo;Euler's Analysis Textbooks&rdquo;, in Bradley &amp; Sandifer (2007), pp. 213&ndash;233</div><div><strong>Wanted</strong>Euler, <em>Institutiones calculi differentialis</em> (1755)</div><div><strong>Every number</strong><span class="mono"><a href="ch04-verify.py">ch04-verify.py</a></span> &mdash; run first, 0 FAIL</div></div>
+</div>
+<div class="wrap">
+
+<p class="lede">Between Leibniz's notation (1684) and the first machine that could run it lies the eighteenth century, and in the middle of it is Euler. According to Victor Katz's reading of Euler's textbooks, Euler never stated the chain rule. He did not need to. His notation, and one rule for handling it, applied the chain rule for him whenever it came up. That rule turns out to be the arithmetic a forward-mode engine runs on.</p>
+
+<div class="eyebrow">&sect; 1</div>
+<h2>The textbooks that fixed the notation</h2>
+<p>Euler's three analysis textbooks are the <em>Introductio in analysin infinitorum</em> (1748), the <em>Institutiones calculi differentialis</em> (1755) and the <em>Institutiones calculi integralis</em> (1768&ndash;70). Katz calls them the first &ldquo;modern&rdquo; texts, readable today without translating fluxions into current terms, because &ldquo;Euler introduced much of our current notation for the calculus&rdquo; (p.&nbsp;213) <span class="tag t-data">CITED</span>. The <em>Differential Calculus</em> is also pure analysis, with no geometry, no physics and no diagrams. Katz's summary of Euler's view (p.&nbsp;231) is that one could understand everything needed &ldquo;by pure manipulation of symbols according to the rules that he and others developed.&rdquo;</p>
+<p>That sentence describes a program, a century and a half before anyone could run one. A calculus that is carried out entirely by rules applied to symbols is, in principle, mechanical.</p>
+
+<div class="eyebrow">&sect; 2</div>
+<h2>One rule: higher differentials vanish</h2>
+<p>Euler treated the calculus as &ldquo;nothing but a special case of the method of differences &hellip; wherein the differences are infinitely small&rdquo; (Katz p.&nbsp;224). To differentiate <span class="mono">y = x<sup>n</sup></span> he expands <span class="mono">(x + dx)<sup>n</sup></span> by the binomial theorem and subtracts <span class="mono">x<sup>n</sup></span>. He then declares that &ldquo;the second term and all succeeding terms vanish in the presence of the first term&rdquo;, which leaves <span class="mono">d(x<sup>n</sup>) = nx<sup>n&minus;1</sup>dx</span>. For logarithms he expands <span class="mono">ln(1 + dx/x)</span> and dispenses with the higher-order terms, which leaves <span class="mono">d(ln x) = dx/x</span> (p.&nbsp;225).</p>
+<p>Make that rule into arithmetic: numbers of the form <span class="mono">a + b&middot;dx</span>, multiplied as usual, except that <span class="mono">dx&middot;dx = 0</span>. In that arithmetic the script computes <span class="mono">(1.3 + dx)<sup>5</sup> = 1.3<sup>5</sup> + 14.2805&middot;dx</span>, and <span class="mono">14.2805 = 5 &times; 1.3<sup>4</sup></span> <span class="tag t-data">COMPUTED</span>. The derivative falls out of multiplication. Nothing was differentiated.</p>
+
+<div class="eyebrow">&sect; 3</div>
+<h2>The chain rule nobody stated</h2>
+<p>Katz is precise about what Euler did not do (p.&nbsp;224): &ldquo;Euler did not give an explicit statement of the modern chain rule, but did deal with special cases as the need arose. Thus if <span class="mono">p</span> is a function of <span class="mono">x</span> whose differential is <span class="mono">dp</span>, then <span class="mono">d(p<sup>n</sup>) = np<sup>n&minus;1</sup>dp</span>.&rdquo;</p>
+<p>That special case <em>is</em> the chain rule, and the notation delivers it without being asked. Writing <span class="mono">dp</span> where the power rule had <span class="mono">dx</span> is the whole step. In the <span class="mono">dx&sup2; = 0</span> arithmetic the step is not even a decision. Let <span class="mono">p = x&sup2; + 1</span>, computed on <span class="mono">x + dx</span>. It arrives already carrying <span class="mono">dp = 2x&middot;dx</span>, and raising it to the fifth power returns <span class="mono">5p<sup>4</sup>&middot;dp</span>, which at <span class="mono">x = 1.3</span> is 680.694862. A central difference agrees <span class="tag t-data">COMPUTED</span>. The inner derivative is carried along by the arithmetic; nobody multiplied it in.</p>
+<div class="box thm"><span class="lab">The connection, stated carefully</span>
+Arithmetic on <span class="mono">a + b&middot;dx</span> with <span class="mono">dx&sup2; = 0</span> is exactly what a forward-mode automatic-differentiation engine computes in. Chapter 3's forward pass used the same multiplication rule. Euler's &ldquo;higher terms vanish&rdquo;, taken as an algebra, is forward mode. This is a mathematical identity, checked numerically here. It is not a claim about how Euler thought, and no priority is claimed for anyone.</div>
+
+<div class="eyebrow">&sect; 4</div>
+<h2>What the century could not do</h2>
+<p>Euler's rule works because the higher terms really are negligible for the functions he used, not because they are zero. The eighteenth century had no account of why they could be dropped. Katz notes that the texts rest on &ldquo;infinitely large and infinitely small quantities&rdquo; and lack the modern theory of the real numbers (pp.&nbsp;231&ndash;232). That account came later, and Chapter 2's Loomis and Sternberg is where this volume holds it: the differential as a linear map, with the dropped terms controlled by the definition of differentiability. Euler had the algebra without the foundation. A machine needs only the algebra, which is why the algebra could be mechanised long before most users of it could state the theorem underneath.</p>
+<p>Laplace's advice survives in Katz's chapter (p.&nbsp;232): &ldquo;Read Euler; read Euler. He is the master of us all.&rdquo; Katz adds that it is hard to say who actually did. The <em>Differential Calculus</em> had a single eighteenth-century translation, into German in 1790.</p>
+
+<div class="eyebrow">&sect; 5</div>
+<h2>Where this leaves the volume</h2>
+<p>The lineage the volume index set out is now written at three of its four points. Chapter 2 is the rule as a theorem, Chapter 3 is the rule as a machine, and this chapter is the rule as an algebra that was already mechanical in form. Chapter 1, on why Leibniz's notation composes and Newton's does not, waits for Leibniz's 1684 paper and Newton's <em>Method of Fluxions</em> to be held. <span class="tag t-open">OPEN</span> Euler's own <em>Institutiones calculi differentialis</em> would also let this chapter quote Euler directly rather than through Katz. <span class="tag t-open">WANTED</span></p>
+
+<h3>References</h3>
+<ol class="refs">
+<li>V. J. Katz, &ldquo;Euler's Analysis Textbooks&rdquo;, in R. E. Bradley and C. E. Sandifer (eds.), <em>Leonhard Euler: Life, Work and Legacy</em> (Elsevier, 2007), pp. 213&ndash;233. Pages cited: 213, 224, 225, 231, 232.</li>
+<li>L. Euler, <em>Institutiones calculi differentialis</em> (1755) &mdash; quoted through Katz; <strong>not held</strong>.</li>
+<li>This volume: <a href="ch02-the-rule-itself.html">Chapter 2</a> (Loomis &amp; Sternberg's theorem), <a href="ch03-mechanising-it.html">Chapter 3</a> (forward and reverse mode).</li>
+</ol>
+
+</div>
+<!--po-related--><aside class="po-related" style="max-width:860px;margin:2.2rem auto 1.4rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(201,168,76,.8);border-radius:0 6px 6px 0;background:rgba(128,128,128,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Across the series</div><div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Named on this page</div><ul style="margin:0 0 0 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book7/ch-euler.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Book VII · Leonhard Euler</a> <span style="opacity:.6">(Leonhard Euler)</span></li><li style="margin:.2rem 0"><a href="../book7/ch-leibniz.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Book VII · Gottfried Wilhelm Leibniz</a> <span style="opacity:.6">(Gottfried Wilhelm Leibniz)</span></li></ul></aside><!--/po-related-->
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XVIII &middot; Chapter 4<br>
+Written 2026-09-27 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">Euler through Katz, a secondary source, and said so. Every figure is printed by ch04-verify.py.</div>
+</div></footer>
+</body>
+</html>

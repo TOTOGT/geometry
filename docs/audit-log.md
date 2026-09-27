@@ -10173,3 +10173,10 @@ Chapters 1–5 written, each after its script ran (R24). Findings a later sessio
 ## 2026-09-27 — cross-links across the series (R25)
 
 `tools/crossref.py` writes an "Across the series" box on 433 of 476 chapters (apparatus and redirects excluded): 171 named-here links (WP-numbers and 73 Scientist Gallery people named in prose but not linked), 1,014 cited-by back-edges, 687 same-ground suggestions (TF-IDF cosine ≥ 0.15, other books first). WP numbers shared by two files (WP-56 in book6 and book7) are skipped rather than guessed. Idempotent: a second run reports 0 stale.
+
+## 2026-09-27 — Book XVIII: chapters 2–4 written; chapter 1 blocked on sources
+
+- **ch 2:** Knill's cancellation proof divides by H, which is 0 at h = 1/(kπ) for g = x² sin(1/x); Loomis & Sternberg Thm 6.2 (p.143) never divides. On `AMonster/dm3_operators.lean`: dG₃ = dU₃·dF₃·dK₃·dC₃ at two states; **d(C₃∘K₃) = d(K₃∘C₃)** — the file's showcase non-commutation is a constant shift the derivative cannot see; C₃/U₃ is a pair whose Jacobians do not commute (gap 1.26 at (1,1,0)); F₃ has a corner at r = κ.
+- **ch 3:** 40-line reverse-mode engine reproduces Deisenroth (5.110) to 12 places; forward/reverse operation ratio 4.6, 44.6, 444.6 at n = 10, 100, 1000; backprop through G₃ gives ∂/∂z = 0 exactly (C₃ overwrites z).
+- **ch 4:** Katz (Bradley & Sandifer 2007) p.224: Euler never stated the chain rule; d(pⁿ) = npⁿ⁻¹dp is it, unstated. dx² = 0 arithmetic = forward mode; checked numerically, no priority claimed.
+- **Wanted:** Leibniz *Nova Methodus* (1684); Newton *Method of Fluxions* (1736) — ch 1 blocked. Rumelhart, Hinton & Williams 1986; Euler *Institutiones calculi differentialis* (1755) — would replace second-hand citations. `[OPEN]`

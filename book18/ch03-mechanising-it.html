@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mechanising It &middot; Book XVIII &mdash; Principia Orthogona</title>
+<meta name="description" content="Automatic differentiation as the chain rule run by a machine: a forty-line reverse-mode engine, forward versus reverse cost measured, and backpropagation through the corpus generator G3.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.po-proved-block{max-width:820px;margin:2.5rem auto 1rem;padding:1.1rem 1.3rem;
+ border:1px solid rgba(122,148,113,.45);border-left:4px solid #7a9471;border-radius:0 6px 6px 0;
+ background:rgba(122,148,113,.07);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.75;}
+.po-proved-block .po-h{letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;color:#5f7a57;margin-bottom:.6rem;}
+.po-proved-block a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.po-proved-block .po-n{font-size:.68rem;opacity:.75;display:block;margin-top:.7rem;line-height:1.6;}
+</style>
+<!--po-subject--><meta name="po-subject" content="COMPUTING · MACHINE LEARNING"><meta name="po-subject-2" content="MATHEMATICS · APPLIED"><!--/po-subject-->
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XVIII &middot; Ch 3</span>
+<span class="meta"><a href="ch02-the-rule-itself.html">&larr; Ch 2</a> &middot; <a href="index.html">Book XVIII contents</a> &middot; <a href="ch04-euler-in-the-middle.html">Ch 4 &rarr;</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XVIII &middot; The Chain Rule &middot; Chapter 3 &middot; 2026-09-27</div>
+<!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#123f5c;background:#dcedf7;border:1px solid #98c6e2;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">COMPUTING · MACHINE LEARNING</span><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#16324f;background:#dfeaf4;border:1px solid #a8c2d8;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">MATHEMATICS · APPLIED</span></div><!--/po-subject-->
+<h1>Mechanising <em>It</em></h1>
+<div class="subtitle">Forward and reverse mode, why reverse wins when one number depends on many, and what backpropagation actually is. A forty-line engine, run on the textbook and then on the corpus.</div>
+<div class="metagrid"><div><strong>Held text</strong>Deisenroth et al. &sect;5.6, pp. 159&ndash;164</div><div><strong>Wanted</strong>Rumelhart, Hinton &amp; Williams 1986, the founding paper</div><div><strong>Every number</strong><span class="mono"><a href="ch03-verify.py">ch03-verify.py</a></span> &mdash; run first, 0 FAIL</div></div>
+</div>
+<div class="wrap">
+
+<p class="lede">A notation that composes can be handed to a machine. Automatic differentiation is the chain rule carried out mechanically, one elementary step at a time, and reverse mode is that same process run from the output back to the inputs. When one number depends on many inputs, reverse mode is far cheaper, and that asymmetry is what backpropagation exploits. This chapter builds the engine, counts its cost, and runs it through the corpus's own generator.</p>
+
+<div class="eyebrow">&sect; 1</div>
+<h2>Not symbolic, not numerical</h2>
+<p>Deisenroth, Faisal and Ong start &sect;5.6 with a warning (p.&nbsp;159). Write out the derivative of</p>
+<div class="eq">f(x) = &radic;(x&sup2; + exp(x&sup2;)) + cos(x&sup2; + exp(x&sup2;))</div>
+<p>by hand, and the expression for <span class="mono">df/dx</span> is much longer than <span class="mono">f</span>. Implemented naively, it can cost far more than the function it differentiates. Automatic differentiation avoids that. It is neither symbolic algebra nor a finite difference: it evaluates the exact derivative, up to machine precision, by attaching the chain rule to each elementary operation (p.&nbsp;161). The authors credit backpropagation to Kelley (1960), Bryson (1961), Dreyfus (1962) and Rumelhart et al. (1986) <span class="tag t-data">CITED</span>. The last of these is not yet held on this desk.</p>
+<p>Their Example 5.14 breaks <span class="mono">f</span> into six intermediate variables &mdash; <span class="mono">a = x&sup2;</span>, <span class="mono">b = exp(a)</span>, <span class="mono">c = a + b</span>, <span class="mono">d = &radic;c</span>, <span class="mono">e = cos c</span>, <span class="mono">f = d + e</span> &mdash; and then walks back from <span class="mono">f</span>. Each step multiplies an incoming sensitivity by one local derivative and adds contributions where paths meet. That is the general rule (5.145), which the text names &ldquo;the backpropagation of the gradient through the computation graph&rdquo; (p.&nbsp;164). Their observation that makes the method worth having is on p.&nbsp;163: computed this way, the derivative is &ldquo;of similar complexity as the computation of the function itself.&rdquo;</p>
+
+<div class="eyebrow">&sect; 2</div>
+<h2>The engine, forty lines</h2>
+<p>The script for this chapter implements (5.143)&ndash;(5.145) directly. Each value records the values it came from and the local derivative along each edge, and a backward sweep in reverse topological order accumulates sensitivities. On Example 5.14 at <span class="mono">x = 0.5</span> it returns <span class="mono">&minus;1.3604310786</span>. That agrees with the book's closed form (5.110) to twelve decimal places and with a central difference to seven <span class="tag t-data">COMPUTED</span>. Nothing in the engine knows calculus beyond the derivatives of <span class="mono">+</span>, <span class="mono">&times;</span>, <span class="mono">exp</span>, <span class="mono">cos</span> and <span class="mono">&radic;</span>. The chain rule does the rest.</p>
+
+<div class="eyebrow">&sect; 3</div>
+<h2>Why backwards</h2>
+<p>There are two directions to run the chain. <em>Forward mode</em> carries a derivative alongside each value from the inputs out. It answers &ldquo;how does everything change if <em>this one input</em> moves?&rdquo;, so a full gradient over <span class="mono">n</span> inputs takes <span class="mono">n</span> passes. <em>Reverse mode</em> carries sensitivities from the output back. It answers &ldquo;how does <em>this one output</em> depend on everything?&rdquo;, so a full gradient takes one forward pass and one backward pass, whatever <span class="mono">n</span> is. The text states the consequence (p.&nbsp;162): where inputs vastly outnumber outputs, as with the millions of parameters and one loss of a neural network, reverse mode &ldquo;is computationally significantly cheaper than the forward mode.&rdquo;</p>
+<p>The script measures it on a function with one output and <span class="mono">n</span> inputs, counting graph operations in each mode:</p>
+<table>
+<tr><th>inputs n</th><th>forward mode</th><th>reverse mode</th><th>ratio</th></tr>
+<tr><td class="n">10</td><td class="n">380</td><td class="n">83</td><td class="n">4.6</td></tr>
+<tr><td class="n">100</td><td class="n">39,800</td><td class="n">893</td><td class="n">44.6</td></tr>
+<tr><td class="n">1,000</td><td class="n">3,998,000</td><td class="n">8,993</td><td class="n"><strong>444.6</strong></td></tr>
+</table>
+<p>Forward mode grows like <span class="mono">n&sup2;</span> here and reverse mode like <span class="mono">n</span>. Both give the same gradient to twelve places <span class="tag t-data">COMPUTED</span>. With one input and many outputs the comparison reverses, and the honest statement is about shape: run the chain from whichever end is narrow. <strong>Backpropagation is reverse-mode automatic differentiation applied to a scalar loss</strong>, and that is all it is. Its power comes from how cheap one backward pass is, not from anything special about neural networks.</p>
+
+<div class="eyebrow">&sect; 4</div>
+<h2>Backpropagation through the corpus's generator</h2>
+<p>Chapter 2 differentiated <span class="mono">G&#8323; = U&#8323; &#8728; F&#8323; &#8728; K&#8323; &#8728; C&#8323;</span> by multiplying Jacobians. The engine can do it without being told the Jacobians. Write the four operators as the Lean file defines them, run them on engine values, take the loss <span class="mono">|G&#8323;(s)|&sup2;</span>, and sweep back once:</p>
+<table>
+<tr><th>state s = (r, &theta;, z)</th><th>gradient by backprop</th><th>matches central differences</th></tr>
+<tr><td class="mono">(1, 1, 0)</td><td class="mono">(8.7358, 6.0, 0.0)</td><td>yes</td></tr>
+<tr><td class="mono">(2, 0.5, 0.3)</td><td class="mono">(11.2642, 25.0, 0.0)</td><td>yes</td></tr>
+</table>
+<p>The zero in the last place is a finding, not noise <span class="tag t-data">COMPUTED</span>. <span class="mono">C&#8323;</span> <em>overwrites</em> <span class="mono">z</span> with <span class="mono">r&sup2;&theta;</span>, so nothing downstream depends on the input <span class="mono">z</span>, and its gradient is exactly zero at every state. A gradient method run on the corpus's generator would never move <span class="mono">z</span>. This is the same fact as Chapter 2's: the constraint erases the coordinate that kinetics shifts, which is why the <span class="mono">C</span>&ndash;<span class="mono">K</span> non-commutation vanishes under differentiation.</p>
+<p>The second state lies above the fold, where <span class="mono">F&#8323;</span> reflects. The engine takes the branch the value selects and differentiates that branch. At <span class="mono">r = &kappa;</span> exactly there is no derivative to take, and the engine would silently pick one side. <span class="tag t-model">MODEL</span> &mdash; this is how every framework treats a corner, and it is why Chapter 2's warning about the fold matters in practice.</p>
+
+<div class="eyebrow">&sect; 5</div>
+<h2>What to carry out of this chapter</h2>
+<ol>
+<li><strong>Automatic differentiation is exact.</strong> It is the chain rule applied to each elementary step, not an approximation and not algebra.</li>
+<li><strong>Run the chain from the narrow end.</strong> With one output, go backwards: one sweep gives every partial derivative.</li>
+<li><strong>A zero gradient can be structural.</strong> If a map overwrites an input, no amount of training will move it. Read the definitions before reading the loss curve.</li>
+</ol>
+
+<h3>References</h3>
+<ol class="refs">
+<li>M. P. Deisenroth, A. A. Faisal, C. S. Ong, <em>Mathematics for Machine Learning</em> (Cambridge, 2020), &sect;5.6 Backpropagation and Automatic Differentiation, pp. 159&ndash;164: Example 5.14, (5.109)&ndash;(5.110), (5.143)&ndash;(5.145).</li>
+<li>D. E. Rumelhart, G. E. Hinton, R. J. Williams, &ldquo;Learning representations by back-propagating errors&rdquo;, <em>Nature</em> 323 (1986) 533&ndash;536 &mdash; cited through Deisenroth; <strong>not held</strong>. <span class="tag t-open">WANTED</span></li>
+<li>This corpus: <span class="mono">AMonster/dm3_operators.lean</span>; <a href="ch02-the-rule-itself.html">Chapter 2</a>.</li>
+</ol>
+
+</div>
+<!--po-related--><aside class="po-related" style="max-width:860px;margin:2.2rem auto 1.4rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(201,168,76,.8);border-radius:0 6px 6px 0;background:rgba(128,128,128,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Across the series</div><div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Same ground <span style="text-transform:none;letter-spacing:0">&middot; suggested by shared vocabulary</span></div><ul style="margin:0 0 0 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book17/ch01-the-names-it-already-has.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Book XVII · Ch 1 · The Names It Already Has</a></li></ul></aside><!--/po-related-->
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XVIII &middot; Chapter 3<br>
+Written 2026-09-27 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">The engine is the page's own and fits in its verify script. Every figure is printed by ch03-verify.py.</div>
+</div></footer>
+</body>
+</html>
