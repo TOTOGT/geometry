@@ -77,7 +77,8 @@ for f in pub:
 
 print("[4] case B: the hardback's 666-page limit")
 cm = (ROOT / "CLAUDE.md").read_text(encoding="utf-8")
-check("CLAUDE.md: 666 = 6 x 111, 'resonant with ... the 111 Hz sacred frequency'", "666 = 6 × 111, resonant" in cm)
+check("CLAUDE.md: 666 is the printer's limit for this edition", "printer's limit for this edition" in cm)
+check("CLAUDE.md keeps the retired 'resonant' gloss on record as history", "666 = 6 × 111,\nresonant" in cm or "666 = 6 × 111, resonant" in cm)
 rep = [int(str(d) * w) for w in (2, 3) for d in range(1, 10)]          # 11..99, 111..999
 gs = [2, 6, 33, 64]
 lo, hi = 400, 800
@@ -86,7 +87,7 @@ print(f"     page limits in [{lo},{hi}] writable as (g-value x repdigit) or a re
 print(f"     {readable}")
 print(f"     share of limits in that range: {len(readable)}/{hi-lo+1} = {len(readable)/(hi-lo+1):.3f}")
 check("666 is among them", 666 in readable)
-check("the limit is an input: it was set, not measured", "structural target" in cm)
+check("other editions can change it", "other editions" in cm)
 
 print("""
 [HONESTY]
@@ -97,7 +98,7 @@ physical value used is the one the page prints. The number k = 4 is read off the
 'fourth'; with more modes on offer the chance only rises. [4]'s families (the g-series,
 repdigits) are the ones the corpus itself invokes; a reader with other favourite
 numbers would find more. Neither case is judged true or false here: [2] shows the
-theorem checks 33 = 33, and [4] shows a limit that was chosen to be 666.
+theorem checks 33 = 33, and [4] shows a printer's limit that was later given a meaning.
 """)
 print(f"{len(FAIL)} FAIL")
 sys.exit(1 if FAIL else 0)

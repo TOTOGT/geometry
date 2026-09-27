@@ -1052,8 +1052,11 @@ invitation.
 ## Hardback constraint
 
 The **Complete Completeness hardback** (G5 print, ISBN 979-8-9954416-4-9) must stay
-at **666 pages maximum** when sent to print. This is a structural target, not a soft limit.
-666 = 6 × 111, resonant with the hexanacci/g6 threshold and the 111 Hz sacred frequency.
+at **666 pages maximum** when sent to print. This is the printer's limit for this edition
+(the most pages they will print for us), not a soft limit; other editions and other
+printers can change it. (Corrected 2026-09-27 by Pablo. This file used to add "666 = 6 × 111,
+resonant with the hexanacci/g6 threshold and the 111 Hz sacred frequency" — a meaning read
+into a number the printer supplied. Book XX ch 2, case B, examines that reading.)
 Any new content added to G5 must be measured against this constraint before inclusion.
 
 ## Site structure
