@@ -10222,3 +10222,4 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 - ch04 tools/lean_addresses.py: **98** dangling names, 242 citations. The index's "110" had no recorded run; 110 is the tracked-file count. Corrected on the index.
 - Tool fix: lean_addresses.py now strips generated boxes (po-run/gss/related/subject). run_yourself's "lake env lean FILE.lean" had been read as 96 dangling citations. EXEMPT gains ch04's use/mention names.
 - R27 proposed (not adopted): name only resolving .lean files; the 98 are frozen as a baseline that may shrink but never grow. WANTED: rerun with --roots ~/Desktop/AXLE ~/Desktop/GTCT on the Mac.
+- 2026-09-27 (Mac, after e6c5e85): with --roots AXLE GTCT there are 49 dangling names (104 citations), 2 case-only and 6 upstream, across 212 files. About half of the 98 live in the sister repositories. The WANTED is closed on book19/ch04; ch04-verify [5] reruns it when the roots are present.

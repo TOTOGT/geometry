@@ -67,10 +67,18 @@ files = [f for f in subprocess.run(["git", "--no-optional-locks", "-C", str(ROOT
 check("110 is the number of tracked .lean files", len(files) == 110, str(len(files)))
 check("and lean_addresses reports 110 corpus files scanned", "against 110 corpus .lean files" in out)
 
+print("[5] with the sister repositories")
+import os
+R = [os.path.expanduser(x) for x in ("~/Desktop/AXLE", "~/Desktop/GTCT")]
+if all(os.path.isdir(r) for r in R):
+    o2 = subprocess.run([sys.executable, str(ROOT / "tools/lean_addresses.py"), str(ROOT), "--roots", *R], capture_output=True, text=True).stdout
+    m = re.search(r"(\d+) names resolve nowhere", o2)
+    check("49 names resolve nowhere across all three roots", m and m.group(1) == "49", m and m.group(1))
+else:
+    print("     AXLE/GTCT not present here; the page's 49 is the Mac run of 2026-09-27 (e6c5e85)")
 print("[HONESTY]")
 print("  Run against this repository alone. The tool accepts --roots ~/Desktop/AXLE ~/Desktop/GTCT;")
-print("  those checkouts are on the Mac and were not mounted here, so some of the 98 may resolve")
-print("  there (WANTED: that run). A name that resolves is not thereby a correct citation;")
+print("  [5] reruns with them when present. A name that resolves is not thereby a correct citation;")
 print("  decl_resolve.py is the rung above. The index's '110 names' had no recorded run.")
 print(f"\n{len(FAIL)} FAIL" + (": " + ", ".join(FAIL) if FAIL else ""))
 sys.exit(1 if FAIL else 0)
