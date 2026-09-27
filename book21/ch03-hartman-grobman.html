@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hartman–Grobman &middot; Book XXI &mdash; Principia Orthogona</title>
+<meta name="description" content="What the linearisation is entitled to say about a nonlinear system: Strogatz's Example 6.3.2 integrated, the marginal case 30,000 times slower, and why the theorem is silent at the corpus's folds.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.po-proved-block{max-width:820px;margin:2.5rem auto 1rem;padding:1.1rem 1.3rem;
+ border:1px solid rgba(122,148,113,.45);border-left:4px solid #7a9471;border-radius:0 6px 6px 0;
+ background:rgba(122,148,113,.07);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.75;}
+.po-proved-block .po-h{letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;color:#5f7a57;margin-bottom:.6rem;}
+.po-proved-block a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.po-proved-block .po-n{font-size:.68rem;opacity:.75;display:block;margin-top:.7rem;line-height:1.6;}
+</style>
+<!--po-subject--><meta name="po-subject" content="MATHEMATICS · APPLIED"><meta name="po-subject-2" content="METHOD · SELF-AUDIT"><!--/po-subject-->
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XXI &middot; Ch 3</span>
+<span class="meta"><a href="ch02-topological-conjugacy.html">&larr; Ch 2</a> &middot; <a href="index.html">Book XXI contents</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XXI &middot; Planar Linear Systems &middot; Chapter 3 &middot; 2026-09-27</div>
+<!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#16324f;background:#dfeaf4;border:1px solid #a8c2d8;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">MATHEMATICS · APPLIED</span><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3a3a3a;background:#efece4;border:1px solid #c9c2ad;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">METHOD · SELF-AUDIT</span></div><!--/po-subject-->
+<h1>Hartman&ndash;<em>Grobman</em></h1>
+<div class="subtitle">What the linearisation is entitled to say about the nonlinear system, and where it goes silent. That place is exactly where this series makes its claims.</div>
+<div class="metagrid"><div><strong>Held text</strong>Strogatz (2018) &sect;6.3, pp. 154&ndash;156</div><div><strong>Corpus</strong><span class="mono">AMonster/dm3_operators.lean</span> &middot; <span class="mono">book21/Spiral.lean</span></div><div><strong>Every number</strong><span class="mono"><a href="ch03-verify.py">ch03-verify.py</a></span> &mdash; run first, 0 FAIL</div></div>
+</div>
+<div class="wrap">
+
+<p class="lede">Every model in this corpus is studied through its linearisation, the Jacobian at a fixed point. The Hartman&ndash;Grobman theorem says when that is legitimate: near a fixed point with no eigenvalue on the imaginary axis, the linear picture is the true picture up to bending. The fine print is where the corpus lives. The theorem is silent exactly at thresholds, folds and bifurcations, which are the points this series is about.</p>
+
+<div class="eyebrow">&sect; 1</div>
+<h2>The theorem, as held</h2>
+<p>Strogatz states it on p.&nbsp;156. A fixed point is <em>hyperbolic</em> if all eigenvalues of the linearisation have nonzero real part. The theorem says that &ldquo;the local phase portrait near a hyperbolic fixed point is &lsquo;topologically equivalent&rsquo; to the phase portrait of the linearization; in particular, the stability type of the fixed point is faithfully captured by the linearization&rdquo; <span class="tag t-data">CITED</span>. Chapter 2 showed how coarse topological equivalence is. So even at its strongest the theorem licenses a qualitative statement: sink, source or saddle. It does not license the rates.</p>
+<p>A page earlier (p.&nbsp;155) Strogatz sorts fixed points into <em>robust</em> cases (sources, sinks, saddles) and <em>marginal</em> cases: centers, and points where &ldquo;at least one eigenvalue is zero&rdquo;. Only the robust cases are covered. Centers, he writes, &ldquo;live on the razor's edge between stability and instability.&rdquo;</p>
+
+<div class="eyebrow">&sect; 2</div>
+<h2>When the linearisation lies</h2>
+<p>His Example 6.3.2 (p.&nbsp;154) is built to break it: <span class="mono">x&prime; = &minus;y + a x(x&sup2;+y&sup2;)</span>, <span class="mono">y&prime; = x + a y(x&sup2;+y&sup2;)</span>. The linear part is a pure rotation, so the linearisation predicts a center: closed orbits, <span class="mono">r</span> constant forever. In polar coordinates the system is <span class="mono">r&prime; = a r&sup3;</span>, <span class="mono">&theta;&prime; = 1</span>. For <span class="mono">a &lt; 0</span> it spirals in. The script integrates it with <span class="mono">a = &minus;1</span> from <span class="mono">r = 1</span>:</p>
+<table>
+<tr><th>time</th><th>r, integrated</th><th>r, closed form 1/&radic;(1+2t)</th><th>linearisation's r</th></tr>
+<tr><td class="n">10</td><td class="n">0.218218</td><td class="n">0.218218</td><td class="n">1</td></tr>
+<tr><td class="n">100</td><td class="n">0.070535</td><td class="n">0.070535</td><td class="n">1</td></tr>
+<tr><td class="n">1,000</td><td class="n">0.022355</td><td class="n">0.022355</td><td class="n">1</td></tr>
+</table>
+<p>The linearisation gets the kind of fixed point wrong <span class="tag t-data">COMPUTED</span>. And the true system spirals in the way Strogatz warns it will, &ldquo;extremely slow&rdquo;: algebraically, not exponentially.</p>
+
+<div class="eyebrow">&sect; 3</div>
+<h2>How much slower the marginal case is</h2>
+<p>Set Example 6.3.2 beside a hyperbolic sink with the corpus's own immune rate, <span class="mono">&mu; = &minus;0.44</span>:</p>
+<table>
+<tr><th></th><th>hyperbolic, &mu; = &minus;0.44</th><th>marginal, Example 6.3.2</th></tr>
+<tr><td>time to halve r</td><td class="n">1.58</td><td class="n">1.50</td></tr>
+<tr><td>time to reach r = 0.001</td><td class="n">15.7</td><td class="n"><strong>500,000</strong></td></tr>
+</table>
+<p>Early on they look alike. Halving takes about the same time, which is exactly how a marginal system passes for a robust one on a short record. Near the fixed point they part by a factor of over 30,000 <span class="tag t-data">COMPUTED</span>. A model fitted on the early data, reporting a decay rate, would be describing a rate that does not exist.</p>
+
+<div class="eyebrow">&sect; 4</div>
+<h2>Where the corpus stands: on the fold</h2>
+<p>This series is organised around thresholds: the fold, <span class="mono">&kappa;*</span>, the transition. At a fold, the textbook's saddle-node <span class="mono">x&prime; = r + x&sup2;</span>, the stable fixed point sits at <span class="mono">x* = &minus;&radic;(&minus;r)</span> with eigenvalue <span class="mono">2x*</span>. The script walks <span class="mono">r</span> toward zero: the eigenvalue goes &minus;2, &minus;0.2, &minus;0.02, and at the fold it is exactly zero <span class="tag t-data">COMPUTED</span>. That is Strogatz's second marginal case. Hartman&ndash;Grobman covers every point on the approach and says nothing at the point itself.</p>
+<p>The corpus's own fold operator, <span class="mono">F&#8323;</span> in <span class="mono">AMonster/dm3_operators.lean</span>, is worse placed still. As <a href="../book18/ch02-the-rule-itself.html">Book XVIII ch. 2</a> found, it is piecewise linear with a corner at <span class="mono">r = &kappa;</span>. It has no linearisation there at all, hyperbolic or not. <strong>The places where this series makes its claims are exactly the places where the standard licence for linear reasoning does not apply.</strong> That is not a reason to stop. It is a reason to use the tools built for those points &mdash; normal forms and bifurcation theory, Strogatz chapters 3 and 8 &mdash; rather than the Jacobian. <span class="tag t-open">OPEN</span> &mdash; the corpus's fold claims have not been re-derived with those tools.</p>
+
+<div class="eyebrow">&sect; 5</div>
+<h2>The volume, in three lines</h2>
+<ol>
+<li><strong>Ch 1:</strong> under linear changes of coordinates, the corpus's systems are provably different.</li>
+<li><strong>Ch 2:</strong> under continuous ones they are all the same, and so is every other sink.</li>
+<li><strong>Ch 3:</strong> the linear picture is trustworthy near a hyperbolic point and silent at the folds, which is where the corpus's claims are made.</li>
+</ol>
+
+<h3>References</h3>
+<ol class="refs">
+<li>S. H. Strogatz, <em>Nonlinear Dynamics and Chaos</em>, 2nd ed. (2018), &sect;6.3: Example 6.3.2, p. 154; robust and marginal cases, p. 155; Hartman&ndash;Grobman and structural stability, p. 156.</li>
+<li>This corpus: <span class="mono">AMonster/dm3_operators.lean</span> (F&#8323;); <a href="../book18/ch02-the-rule-itself.html">Book XVIII ch. 2</a>.</li>
+</ol>
+
+</div>
+<!--po-related--><aside class="po-related" style="max-width:860px;margin:2.2rem auto 1.4rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(201,168,76,.8);border-radius:0 6px 6px 0;background:rgba(128,128,128,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Across the series</div><div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Named on this page</div><ul style="margin:0 0 0 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book7/ch-strogatz.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Book VII · Steven Strogatz</a> <span style="opacity:.6">(Steven Strogatz)</span></li></ul><div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Same ground <span style="text-transform:none;letter-spacing:0">&middot; suggested by shared vocabulary</span></div><ul style="margin:0 0 0 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book21/ch01-what-the-same-system-means.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Book XXI · What “the Same System” Means</a></li></ul></aside><!--/po-related-->
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XXI &middot; Chapter 3<br>
+Written 2026-09-27 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">Strogatz's own example integrated and checked against his closed form. Every figure is printed by ch03-verify.py.</div>
+</div></footer>
+</body>
+</html>

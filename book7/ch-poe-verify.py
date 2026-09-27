@@ -171,6 +171,21 @@ else:
     check('harrison' in flat, 'chapter names Harrison')
     check('prose poem' in flat, 'chapter names the subtitle that did the filing')
 
+# --------------------------------------------------------------------------
+# The bright wall (box added 2026-09-27). Inputs are standard values, NOT yet held:
+# T0 = 2.725 K today, 1 + z = 1090 at last scattering. Everything else is computed.
+print('\n[wall] the last-scattering surface, recomputed from two inputs')
+T0, stretch, WIEN = 2.725, 1090.0, 2.897771955e-3          # K, dimensionless, m K
+T_then = T0 * stretch
+check(2900 < T_then < 3050, 'T then = T0 (1+z) = %.0f K, "about 3,000 K"' % T_then)
+peak_then, peak_now = WIEN / T_then * 1e6, WIEN / T0 * 1e3
+check(0.9 < peak_then < 1.05, 'Wien peak then = %.3f um, "near 1 um, just past visible red"' % peak_then)
+check(1.0 < peak_now < 1.1, 'Wien peak now = %.3f mm, "near 1 mm"' % peak_now)
+check(abs((peak_now * 1e3) / peak_then - stretch) < 1e-6, 'every wavelength stretched by exactly 1+z = %.0f' % stretch)
+if os.path.exists(CHAPTER):
+    raw2 = open(CHAPTER, encoding='utf-8').read()
+    check('SOURCE WANTED: Planck 2018' in raw2, 'the box says its inputs are not yet held')
+
 # ==========================================================================
 print('\n' + '=' * 68)
 if fails:
