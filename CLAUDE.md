@@ -16,7 +16,7 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 Seventeen standing rules were spread over 2 600 lines, interleaved with dated
 narrative and forty defect records. Nothing moved when this index was written on
-2026-09-13 — the rules are where they were. **There are twenty-four now**; R20
+2026-09-13 — the rules are where they were. **There are twenty-five now**; R20
 to R24 were set after that date and their sections are in this file too. What changed is that they can now be
 found without reading the file. Each line gives the rule and the heading to grep
 for. Six different sections are titled "What NOT to do"; they belong to the rule
@@ -48,6 +48,7 @@ above each of them.
 | R22 | **Green Lean comes home.** A `.lean` file that lives in another repo but is run against geometry moves INTO geometry once it compiles clean. Out-of-repo Lean is a claim nobody here can check. | `## Green Lean comes home` |
 | R23 | **Evidence tags live in the master index.** A page's tags are a derived fact about that page, so by R8 they are generated, never hand-listed. `tools/build_indexes.py` reads them off every page and prints them on every row. | `## Evidence tags live in the master index` |
 | R24 | **The script runs before the sentence is written.** Not "is checkable" — was checked, first, and the finding is whatever the run says. Measure generously; fix the observable before running; run the control. | `## The script runs before` |
+| R25 | **Chapters cross-link, and the links are generated.** Every chapter carries an "Across the series" box: pages it names but does not link, pages that cite it, and three same-ground suggestions. `tools/crossref.py --write` writes it; `tools/subject_tags.py --write` writes the section tag. Never hand-edit either block. Set 2026-09-27 by Pablo. | `tools/crossref.py` |
 
 R4 is the one that proves the point. It was written on 2026-09-09, it is correct,
 and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of

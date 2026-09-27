@@ -10169,3 +10169,7 @@ Chapters 1–5 written, each after its script ran (R24). Findings a later sessio
 - **666-page limit:** it is the printer's maximum for this edition (Pablo, 2026-09-27); other editions can change it. The "resonant with 111 Hz" gloss was a meaning read into a supplied number; CLAUDE.md now states the fact and keeps the gloss as history. 9 of 401 limits in [400,800] are g×repdigit or repdigit. Closed.
 - **Galton:** his own numbers close his balance equation (P = 1.706 vs printed 1.7) and yield the converse 0.341 ≈ 1/3.
 - **HURDAT2:** 1,752 of 1,988 reached TS/HU; 7.57/season 1851–1899 vs 11.86 1970–2019 (×1.57). Landfall-coded storms rose ×1.63, others ×1.52 — against the simple at-sea-undercount story (split not pre-registered). Verdict open until an observation-history source is held.
+
+## 2026-09-27 — cross-links across the series (R25)
+
+`tools/crossref.py` writes an "Across the series" box on 433 of 476 chapters (apparatus and redirects excluded): 171 named-here links (WP-numbers and 73 Scientist Gallery people named in prose but not linked), 1,014 cited-by back-edges, 687 same-ground suggestions (TF-IDF cosine ≥ 0.15, other books first). WP numbers shared by two files (WP-56 in book6 and book7) are skipped rather than guessed. Idempotent: a second run reports 0 stale.
