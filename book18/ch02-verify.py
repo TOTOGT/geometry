@@ -109,6 +109,11 @@ check("d(C3 o U3) != d(U3 o C3): this non-commutation the derivative does see", 
 lo = J3(Fo, (kap - 1e-3, 0, 0))[0][0]; hi = J3(Fo, (kap + 1e-3, 0, 0))[0][0]
 check("F3 has slope +1 below kappa and -1 above: not differentiable at r = kappa", abs(lo - 1) < 1e-6 and abs(hi + 1) < 1e-6, f"{lo:+.3f}, {hi:+.3f}")
 
+print("[5] book18/ChainRule.lean copies C3 and K3 without drift")
+cr = (ROOT / "book18/ChainRule.lean").read_text(encoding="utf-8")
+for line in ("| (r, θ, _) => (r, θ, r ^ 2 * θ)", "| (r, θ, z) => (r, θ, z + 1)"):
+    check(f"'{line.strip()}' appears in both files", line in src and line in cr)
+
 print("""
 [HONESTY]
 [1] finds sentences in text layers. [2]-[4] check the rule by central differences
