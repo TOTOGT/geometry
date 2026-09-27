@@ -1,3 +1,6 @@
+-- GATE-DECLARE: sorries = none
+-- GATE-REASON: added 2026-09-26 for the geometry pin (Lean v4.32.0, Mathlib v4.32.0).
+-- Two numeric exp facts are carried as NAMED HYPOTHESES, not axioms: see the header.
 /-
   TribonacciLog.lean
   Principia Orthogona · Orthogenesis · Hawking
@@ -64,7 +67,7 @@ def IsTribonacci (η : ℝ) : Prop := 1 < η ∧ η ^ 3 = η ^ 2 + η + 1
 theorem tribonacci_gt {η : ℝ} (h : IsTribonacci η) : 1.83928 < η := by
   obtain ⟨h1, hc⟩ := h
   by_contra hle
-  push_neg at hle
+  push Not at hle
   -- 1 < η ≤ 1.83928 and η³ = η² + η + 1 are inconsistent, because p is
   -- increasing on (1, ∞) and p 1.83928 < 0.
   nlinarith [hc, h1, hle, sq_nonneg (η - 1), sq_nonneg (η - 1.83928),
@@ -74,7 +77,7 @@ theorem tribonacci_gt {η : ℝ} (h : IsTribonacci η) : 1.83928 < η := by
 theorem tribonacci_lt {η : ℝ} (h : IsTribonacci η) : η < 1.83929 := by
   obtain ⟨h1, hc⟩ := h
   by_contra hge
-  push_neg at hge
+  push Not at hge
   nlinarith [hc, h1, hge, sq_nonneg (η - 1), sq_nonneg (η - 1.83929),
              mul_pos (show (0:ℝ) < η - 1 by linarith)
                      (show (0:ℝ) < 3 * η + 1 by linarith)]
@@ -137,3 +140,12 @@ theorem isTribonacci_nonvacuous : ∃ η : ℝ, IsTribonacci η := by
   linarith
 
 end Orthogenesis.HawkingConstants
+
+/-! ## Axiom probe -/
+#print axioms Orthogenesis.HawkingConstants.tribonacci_gt
+#print axioms Orthogenesis.HawkingConstants.tribonacci_lt
+#print axioms Orthogenesis.HawkingConstants.tribonacci_bracket
+#print axioms Orthogenesis.HawkingConstants.tribonacci_pos
+#print axioms Orthogenesis.HawkingConstants.log_tribonacci_bounds
+#print axioms Orthogenesis.HawkingConstants.tribonacci_factor_of_cubic
+#print axioms Orthogenesis.HawkingConstants.isTribonacci_nonvacuous
