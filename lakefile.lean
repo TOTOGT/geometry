@@ -196,3 +196,9 @@ lean_lib Book11 where
 lean_lib Book12 where
   srcDir := "book12"
   roots := #[`Counting, `Carrying]
+
+-- Book XIV: the IJL entry template's counting rules (import-free)
+@[default_target]
+lean_lib Book14 where
+  srcDir := "book14"
+  roots := #[`Polysemy]

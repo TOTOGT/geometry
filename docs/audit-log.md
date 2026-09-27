@@ -10229,3 +10229,22 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 - Lean stays in XIII, XVII and XIX. XIV links to them and does not repeat them; ch1 was retargeted from Lean's parser to the grammar of written notation.
 - Five chapters planned. Ch 1, 2 and 5 wait on sources (Chomsky 1956/57, Ganesalingam 2013, Jurafsky & Martin 3e). Ch 3 (lexicon) and ch 4 (holology as vocabulary) need only the corpus.
 - Vocabulary: LINGUISTICS · MATHEMATICAL and LINGUISTICS · COMPUTATIONAL. Series-hub card added; indexes rebuilt.
+
+## 2026-09-27 — IJL manuscript v4 and Book XIV ch 3 (How Many Senses a Word Has)
+- **The IJL reference audit, lost on 2026-09-1x, is now redone:**
+  - Petersen & Potts corrected: E. Petersen, Findings of EACL 2023, pp. 490–511. The unsupported "LLMs do not predict alternation blocking" claim is replaced by their §2 quote on verb + theme.
+  - Bond et al. 2024 has four authors, pp. 196–225.
+  - Boas et al. 2024 and 2025 verified.
+- **Lean, book14/Polysemy.lean** (import-free; kernel-checked in the cloud with v4.32.0; all within the three permitted axioms):
+  - Q3 (co-predication) needs transitivity; one non-transitive triple admits no sense division.
+  - The 2^k fold bound holds for binary folds only, and 'book' is a 3-branch fold.
+- **WordNet 3.0 / SemCor** (book14/ch03-verify.py):
+  - v3 prediction (ii), "head = most frequent", fails for book and chicken (holds for 3 of 5); withdrawn.
+  - charge: 15 senses, 7 attested; the most frequent is the attack sense.
+- **v4 written to Downloads/IJL v4.docx:**
+  - adds §5.4 (grinding/container), §5.5 (frequency check) and §7.1 (formal check);
+  - LDOCE sense counts removed (not held);
+  - the classroom anecdote is now a hypothesis;
+  - the data link now points to book14/.
+- **Still WANTED before submission:** Atkins & Rundell 2008 p.268 (not held); decide whether to mask self-citations for blind review.
+- GCM Institutional Edition (2025) is noted as the source for Book XIV ch4, whose unified lexicon is Appendix A. Cross-link boxes (po-see-xiv) were added to book8 ch13, book6 wp61 and book11 index.
