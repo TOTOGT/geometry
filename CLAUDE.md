@@ -2995,3 +2995,69 @@ A workflow with no receipt is not evidence that it ran. It is evidence that
 nothing here can tell whether it ran, which is exactly what a page saying
 machine-checked with no gate file is.
 
+## STATE — 2026-09-27
+
+**A prose chapter went stale against its own companion proof, and nothing said so.**
+`chW-wigner.html` (author-dated to March, committed to this repo 2026-06-15,
+touched only cosmetically since — contrast fixes 09-24, po-book tagging 09-26)
+still asserts passive coupling of the G6 Crystal to the Schumann n=4 resonance at
+33.516 Hz, cites Saturn's hexagon as an "empirical certificate," and treats the
+G⁶:33 conjecture (χ(H*(X⁶)) = 33) as established by that resonance match. Its own
+companion file, `Orthogenesis/Architecture/G6Crystal.lean` §4 and §9, withdrew
+every part of this on 2026-09-11 — sixteen days before this was noticed — on
+four independent grounds: comparing a dimensionless count (33) to a frequency in
+Hz is a units error, not weak evidence; 33.516 was entered as a literal and never
+derived; a 2% numerical proximity is not a dynamical coupling test; and the
+supporting theorem (`arnold_tongue_A4_coupling`) was `∀ δ, ‖δ‖ < c → True` —
+vacuously true for every input, asserting nothing. The withdrawal is explicit
+that the dm³ invariants (T*, μ_max, τ, ε₀) stay proved; only their attachment to
+a named physical resonance was pulled. Separately, GSeries.lean (this same week)
+already shows 33 generalizes to any threshold N in the one theorem that uses it —
+so the chapter's central claim was live and citable-sounding for over two weeks
+after the math it rests on was retracted, and no reader of the HTML page could
+have known.
+
+This was caught by a person asking "new chapter or old?" after a plain read-and-
+web-check, not by any automated pass. `G6Crystal.lean`'s own §9 records the same
+failure shape twice already inside one file — S1 above, and S2
+(`hexagrid_collapse_resistance_superior : True := trivial`, reported to NASA as
+deleted on 2026-08-21 while the theorem itself stayed in the tree, caught only
+when a vacuity scanner ran against it for the first time. A drafted correction
+that is never committed, or a Lean-side withdrawal that never propagates to the
+prose page citing it, are the same defect at two different layers, and neither
+layer currently checks the other.
+
+### TODO — for whichever session picks this up
+
+1. **Fix `chW-wigner.html`.** Pull the Schumann-coupling and Saturn-hexagon
+   framing (the "Why 33.516 Hz Is Special" section, the "empirical certificate"
+   language, the Collatz-fingerprint paragraph). Keep the proved hexagonal/dm³
+   geometry. Add a status line citing `G6Crystal.lean` §4 and §9 by name, the
+   way `ch-hawking.html` and `ch-euler.html` now cite their own theorem+line
+   rather than a whole file. Do not silently delete the retracted claims without
+   a note — a page that once claimed X and now says nothing is indistinguishable
+   from a page that was never wrong, and a future author or model will not know
+   to avoid making the same claim again.
+2. **Sweep for the same failure shape elsewhere.** Any HTML chapter with a
+   same-subject companion `.lean` file is a candidate: read the prose claim and
+   the current Lean docstring side by side, not the prose alone. Start with
+   files that, like `G6Crystal.lean`, carry their own "CORRECTION" or
+   "WITHDRAWN" header — a chapter citing one of those by an old claim rather
+   than the correction is the exact bug found today. `docs/lean-4.32.0-ledger.md`
+   and `git log --grep=WITHDRAWN --grep=CORRECTION -i` are the places to start
+   the list, not a fresh read of every chapter.
+3. **Do not trust a single pass, and do not trust a single model.** This page
+   was written on different machines and different models in March, before this
+   repo's gate discipline existed, and nothing since has re-verified it against
+   its own companion proof — the gate sweep that touched 39+ chapters the week
+   of 2026-09-25 added Lean files for chapters that had none; it did not check
+   chapters that already had one for drift. Going forward: a chapter is not
+   closed on one session's say-so, including this one's. A second session,
+   ideally on a different model, should re-derive or re-check the chapter's
+   central numeric claims against its cited sources and its own companion proof
+   before the chapter is treated as settled — the same way a mathematical proof
+   here is not trusted from `#print axioms` alone but from a second reader
+   checking the non-vacuity of what was declared. Multiple models catch what one
+   model's blind spots miss; §9's own history shows the same model re-reading
+   its own draft is not sufficient — the correction was drafted and then never
+   committed, by the same authorship that wrote the claim.
