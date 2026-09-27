@@ -54,3 +54,4 @@ import Orthogenesis.Polylaminin.PolylamininChecks
 import Orthogenesis.Collatz.CollatzChecks
 import Orthogenesis.Epilogue.EpilogueChecks
 import Orthogenesis.Overture.OvertureChecks
+import Orthogenesis.Hawking.HawkingConstants
