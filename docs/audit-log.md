@@ -10470,3 +10470,14 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 - **Not held:** an edition of the Alice books. Carroll is quoted through the letter.
 - **Tenniel engraving added to ch 3 §5:** the Queen of Hearts and Alice (1865, public domain), supplied by Pablo. Stored as book14/img/tenniel-queen-of-hearts.png and hash-checked.
 - **The AI-generated summary that came with the image is not used.** It gave Tenniel's illustration counts, the recalled first printing and the Nursery Alice, and no held source states any of them. This is the confabulation risk tools/terms.py was written for.
+- **Alice's Adventures in Wonderland is held:** Zelchenko's digital replica of the 1865 edition, Alice_in_Wonderland.pdf. ch3-verify.py [5] checks 10 quotations from ch. IX (pp. 142–146).
+  - **Puns:** for all 13 of the Mock Turtle's subjects, the nearest real subject by edit distance is the one punned on (13/13).
+  - **Lessons:** they lessen 10, 9, …, 1, which is 55 hours. Day 11 is 0 hours (the "holiday"). Day 12 would be −1, and there the Gryphon ends the subject.
+  - **Not held:** Through the Looking-Glass. The Humpty Dumpty lines are still quoted through the letter.
+- **Gardner, The Annotated Alice (Definitive Edition, Norton 2000) is held**, as annotated-alice.pdf (360 pp.).
+  - ch3-verify.py [6] checks the Looking-Glass ch. 6 text directly and two of Gardner's notes:
+    - note 11: Humpty Dumpty as nominalism; "enormous confusion" in logic and mathematics; Carroll's Symbolic Logic p. 165;
+    - note 19: the twelfth day introduces "mysterious negative numbers". This independently confirms the page's reading of the lessons.
+  - Small find: Schrieber's letter drops the comma in "Humpty Dumpty said, in rather a scornful tone".
+- **Also downloaded:** the Bodleian/Google scan of Alice's Adventures in Wonderland, illustrated by Tenniel (223 pp.). It has no text layer and is not used yet.
+- **The Queen Victoria anecdote** is not in Gardner. It stays "possibly apocryphal", as the letter says.

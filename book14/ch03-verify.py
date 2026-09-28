@@ -10,6 +10,10 @@ book14/ch03-verify.py -- every number on book14/ch03-how-many-senses.html and in
   [3] the Lean file: the two counting rules, and that the gate runs it
   [4] Humpty Dumpty and Alice, from L. Schrieber's letter (Notices AMS 71(6), 2024, p. 704): quotes; the
       Mock Turtle's four branches against the four operations by edit distance; WordNet senses of the letter's words
+  [5] Carroll himself: Alice's Adventures in Wonderland (Zelchenko's replica of the 1865 edition), ch. IX, pp. 142-146:
+      the Mock Turtle's thirteen school subjects against their real names; the lessons that lessen
+  [6] Gardner, The Annotated Alice (Definitive Edition, Norton 2000): Looking-Glass ch. 6 in Carroll's own
+      text; Gardner's note on Humpty Dumpty (nominalism) and on the twelfth day (negative numbers)
   [HONESTY]
 """
 import re, sys
@@ -110,12 +114,67 @@ img = ROOT / "book14/img/tenniel-queen-of-hearts.png"
 check("the Tenniel engraving shown on the page is the one supplied (sha256 a0832fb3e60fbf05...)",
       img.exists() and hashlib.sha256(img.read_bytes()).hexdigest().startswith("a0832fb3e60fbf05"))
 
+print("[5] Carroll: Alice's Adventures in Wonderland, ch. IX (replica of the 1865 edition, held)")
+AW = next((f for f in sorted(dl.iterdir()) if f.name.lower().startswith("alice_in_wonderland") and f.suffix == ".pdf"), None)
+check("Alice's Adventures in Wonderland is held", AW is not None, AW.name if AW else "")
+def aw(a, b): return subprocess.run(["pdftotext", "-f", str(a), "-l", str(b), str(AW), "-"], capture_output=True, text=True).stdout
+front, ch9 = aw(1, 3), aw(79, 81)
+check("it is Zelchenko's replica of the first edition: 'exact digital replica of Lewis Carroll’s first edition'",
+      sq("exact digital replica of Lewis Carroll’s first edition") in sq(front))
+for q in ["“Reeling and Writhing, of course, to begin with,” the Mock Turtle replied",
+          "the different branches of Arithmetic—Ambition, Distraction, Uglification, and Derision.",
+          "“Mystery, ancient and modern, with Seaography: then Drawling",
+          "he taught us Drawling, Stretching, and Fainting in Coils.",
+          "he taught Laughing and Grief, they used to say.",
+          "“Ten hours the first day,” said the Mock Turtle : “nine the next, and so on.”",
+          "“That ’s the reason they ’re called lessons,” the Gryphon remarked : “because they lessen from day to day.”",
+          "“Then the eleventh day must have been a holiday ?”",
+          "“And how did you manage on the twelfth ?” Alice went on eagerly.",
+          "“That ’s enough about lessons,” the Gryphon interrupted in a very decided tone"]:
+    check(f'Wonderland ch. IX: "{q[:60]}"', sq(q) in sq(ch9))
+PUN = ["reeling", "writhing", "ambition", "distraction", "uglification", "derision", "mystery",
+       "seaography", "drawling", "stretching", "fainting in coils", "laughing", "grief"]
+REAL = ["reading", "writing", "addition", "subtraction", "multiplication", "division", "history",
+        "geography", "drawing", "sketching", "painting in oils", "latin", "greek"]
+nearest = {p: min(REAL, key=lambda r: (lev(p, r), r)) for p in PUN}
+hits = sum(nearest[p] == r for p, r in zip(PUN, REAL))
+print("     nearest real subject by edit distance:", {p: nearest[p] for p in PUN})
+check(f"each of the 13 subjects is closest, by edit distance, to the real one it puns on: {hits}/13", hits == 13)
+hours = [10 - d for d in range(12)]
+check("lessons that lessen: 10, 9, ..., 1 hours is 55 hours; day 11 is 0 (the holiday); day 12 would be -1",
+      sum(hours[:10]) == 55 and hours[10] == 0 and hours[11] == -1)
+
+print("[6] Gardner, The Annotated Alice, the Definitive Edition (Norton, 2000)")
+GA = dl / "annotated-alice.pdf"
+check("The Annotated Alice is held", GA.exists())
+def ga(a, b=None): return subprocess.run(["pdftotext", "-f", str(a), "-l", str(b or a), str(GA), "-"], capture_output=True, text=True).stdout
+check("Definitive Edition, Norton, New York: 'Copyright© 2000, 1990, 1988, 1960 by Martin Gardner'",
+      sq("Copyright© 2000, 1990, 1988, 1960 by Martin Gardner") in sq(ga(1, 3)))
+g136 = ga(136)
+for q in ['"When I use a word," Humpty Dumpty said, in rather a scornful tone, "it means just what I choose it to mean—neither more nor less."',
+          '"The question is," said Alice, "whether you can make words mean so many different things."',
+          '"But \'glory\' doesn\'t mean \'a nice knock-down argument,\' " Alice objected.',
+          'particularly verbs: they\'re the proudest—adjectives you can do anything with, but not verbs']:
+    check(f'Looking-Glass ch. 6 (Gardner PDF p.136): "{q[:58]}"', sq(q) in sq(g136))
+g320 = ga(320)
+for q in ["Lewis Carroll was fully aware of the profundity in Humpty Dumpty's whimsical discourse on semantics",
+          "Humpty takes the point of view known in the Middle Ages as nominalism",
+          'Even in logic and mathematics, where terms are usually more precise than in other subject matters, enormous confusion often results from a failure to realize that words mean "neither more nor less" than what they are intended to mean',
+          "Carroll answers these questions at some length on page 165 of his Symbolic Logic",
+          "it is straight from the broad mouth of Humpty Dumpty"]:
+    check(f'Gardner, Looking-Glass ch. 6 note 11 (PDF p.320): "{q[:52]}"', sq(q) in sq(g320))
+g252 = ga(252)
+check('Gardner, Wonderland ch. IX note 19 (PDF p.252): "Alice\'s excellent question rightly puzzles the Gryphon because it introduces the possibility of mysterious negative numbers"',
+      sq("Alice's excellent question rightly puzzles the Gryphon because it introduces the possibility of mysterious negative numbers") in sq(g252))
+check('…"On the twelfth day and succeeding days did the pupils start teaching their teacher?"',
+      sq("On the twelfth day and succeeding days did the pupils start teaching their teacher?") in sq(g252))
+
 print("[HONESTY]")
 print("  SemCor is a sense-tagged part of the Brown Corpus (American prose, 1961); counts are small and dated. A count of 0 means")
 print("  unattested in SemCor, not absent from English. Which WordNet synset is the template's head")
 print("  is our judgement, stated per row. The co-predication table in Polysemy.lean is an input,")
-print("  not a corpus result. Lean checks the counting logic, not the linguistics. [4] quotes Carroll")
-print("  through Schrieber's letter, not from a held edition of the Alice books; the pairing of the")
+print("  not a corpus result. Lean checks the counting logic, not the linguistics. [4] quotes the letter; [5] and")
+print("  [6] check Carroll's own text (Wonderland replica; Looking-Glass in Gardner). The pairing of the")
 print("  Mock Turtle's branches with the operations is the reader's pun, measured, not stated in the letter.")
 print("  The Tenniel image came with an AI-generated summary (illustration counts, the recalled 1865")
 print("  printing, the 1890 Nursery Alice); none of that is used, because no held source states it.")
