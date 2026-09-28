@@ -85,10 +85,11 @@ MQ = [(1, "THE MAN WHO COUNTED A Collection of Mathematical Adventures MALBA TAH
       (4, "and one-ninth to Harim, the youngest"),
       (5, "18 + 12 + 4 = 34 camels"),
       (5, "The other rightly belongs to me for having resolved the complicated problem of the inheritance")]
+check("'Malba Tahan' is the only author the file names", sq("MALBA TAHAN") in sq(MW[0]) and not re.search(r"Julio|Júlio|Cesar|César", " ".join(MW)))
 for pg, q in MQ:
     check(f'Tahan PDF p.{pg}: "{q[:56]}"', sq(q) in sq(MW[pg - 1]))
 alltxt = " ".join(MW)
-check("the PDF (104 pages of text) has no front matter: no translator, publisher or author's real name",
+check("the hoax persists in the held copy: its only author is MALBA TAHAN, with no translator, publisher or real name (104 pages of text)",
       len([p for p in MW if p.strip()]) == 104 and not re.search(r"Mello|Souza|Sousa|Norton|translated by", alltxt, re.I))
 w = [Fr(1, 2), Fr(1, 3), Fr(1, 9)]
 check("the father's shares 1/2 + 1/3 + 1/9 add to 17/18, not 1", sum(w) == Fr(17, 18))
