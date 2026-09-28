@@ -3168,3 +3168,4 @@ layer currently checks the other.
   - TODO: find a held source on how Fritz and Emmy Noether were related.
 - 2026-09-28 (evening): Book XXVIII ch5 "The Space of Fredholm Operators" is live (Atiyah Appendix, Zois L3; FredholmSpace.lean). CI was green on 704b289. TODO ch6: Bott periodicity (Zois L4) or K-homology and the slant product.
 - 2026-09-28 (night): Book XXVIII ch6 "The Circle Comes Back" (Bott periodicity; CliffordSmall.lean) is live. Book28 = ShiftIndex, InfinityMinusInfinity, RiemannRoch, FredholmSpace, CliffordSmall (20 theorems). TODO ch7: K-theory of C*-algebras (Zois L5) or the index theorem statement (Blackadar 24.1.1).
+- 2026-09-28 (night): Book XXVIII ch7 "One Number, Two Ways" (Atiyah–Singer stated; CP^n test; IndexTwoWays.lean) live. Book28 = 6 files, 23 theorems. TODO ch8: K-theory of C*-algebras (Zois L5, Blackadar) or KK; Book XXXIII (noncommutative geometry) is the next volume. Do NOT run git on the repo from the session (stale locks).

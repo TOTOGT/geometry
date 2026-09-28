@@ -10731,3 +10731,15 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
   - Clifford centres, by exact sign arithmetic for n ≤ 16: period 2 over ℂ, period 4 for real Cl_{0,n} (R, C, R, R⊕R);
   - Dugger's f(n): f(n+8) = f(n) + 4.
 - **Not proved:** the periodicity theorems. The real period 8 beyond the centres is quoted.
+
+## 2026-09-28 — Book XXVIII ch 7, One Number, Two Ways (the Atiyah–Singer index theorem)
+- **Sources held:** Blackadar §24.1 (printed pp. 248–251), Theorem 24.1.1 and Examples 24.1.2, generalisations 24.1.3–24.1.6; Dugger §27 (Table 27.2, Prop. 27.4); Zois p. 56.
+- **book28/IndexTwoWays.lean** (3 theorems, all within the permitted three axioms; compiled and read for errors before the report): card_monomials, choose_zero_between, P1_count.
+- **Computed:**
+  - analytic side: χ(CPⁿ; O(k)) from Dugger's cohomology table, n = 1…8, k = −25…25;
+  - topological side: the Todd number, in exact fractions;
+  - the two agree in all 408 cases, and both equal (k+1)…(k+n)/n!;
+  - the Serre-duality shape holds;
+  - genus g, degree d: d − g + 1 for g = 0…6.
+- **Not proved:** the theorem itself. Atiyah–Singer's 1968 papers (cited by Blackadar) are not held.
+- **Housekeeping:** the earlier ch 6 commit hit two stale git locks (index.lock, HEAD.lock, objects/maintenance.lock), probably from git commands run against the repo from another process. I now run no git commands on the repo from the session side.
