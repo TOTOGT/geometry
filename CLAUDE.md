@@ -3080,3 +3080,4 @@ layer currently checks the other.
   - TODO: delete ~/Downloads/_po_ocr (scratch) and _to_delete/_to_delete_po_ocr.
   - TODO: save the Bellos Guardian 2014 article as a PDF so it can be held.
   - TODO: find a held source on how Fritz and Emmy Noether were related.
+- 2026-09-28 (evening): Book XXVIII ch5 "The Space of Fredholm Operators" is live (Atiyah Appendix, Zois L3; FredholmSpace.lean). CI was green on 704b289. TODO ch6: Bott periodicity (Zois L4) or K-homology and the slant product.

@@ -205,4 +205,4 @@ lean_lib Book14 where
 
 lean_lib Book28 where
   srcDir := "book28"
-  roots := #[`ShiftIndex, `InfinityMinusInfinity, `RiemannRoch]
+  roots := #[`ShiftIndex, `InfinityMinusInfinity, `RiemannRoch, `FredholmSpace]

@@ -10435,3 +10435,21 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - Series reading: the name as a translation key. Credited to Pablo.
 - **Housekeeping:** scratch OCR images were accidentally copied to ~/Downloads/_po_ocr. The copy inside the repo was moved into _to_delete/. The Downloads copy needs a manual delete.
 - **Also downloaded:** Algebra & Number Theory 12(8) (2018), 214 pp. Ledgered; not yet used.
+
+## 2026-09-28 — Book XXVIII ch 5, The Space of Fredholm Operators
+- **Sources held:** Atiyah, K-Theory (1967), Appendix, pp. 153–160 (a scan with an OCR text layer); Zois, Lecture 3, pp. 68–71.
+- **OCR:** on p. 154 the text layer reads ≤ as "<" and "dim" as "dirn". The script matches the damaged form and says so.
+- **book28/FredholmSpace.lean** (kernel-checked in the cloud, added to lean_lib Book28):
+  - rank_ker_comp_le: Atiyah's kernel inequality, for any linear maps, with cardinal rank and no finiteness assumed;
+  - every_integer_is_an_index: via the ch1 shifts.
+- **Computed:**
+  - T(t) = [[t,0,0],[0,1,0]]: the kernel and cokernel jump at t = 0, while the index and Atiyah's fixed-V construction both stay 1;
+  - both of Atiyah's inequalities and index additivity hold on 400 random rational matrix pairs;
+  - Whitehead path diag(U, U⁻¹) → I: |det| = 1 at 201 points for each of 20 random U.
+- **Mathlib at the pin:** no Fredholm operators, no contractibility of GL(H), no K-theory.
+- **Not held:** Jänich's 1964 dissertation.
+
+## 2026-09-28 — Book VII, Fritz Noether profile: sources
+- **Lede:** now cites the held 1921 paper (Math. Ann. 82, 42–63) and links to Book XXVIII ch 3 §4.
+- **Two biographical claims downgraded:** "operators with an index are still called Noetherian" and "He died in Soviet custody in 1941" have no held source. Pablo's ruling: they will never be verified here. The page now says the series does not make them, tagged NOT VERIFIED.
+- **Reference:** gives the page range and marks MacTutor as web, not held and not checked. Book XXVIII ch 3 links back to the profile.
