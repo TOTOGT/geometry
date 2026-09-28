@@ -10527,3 +10527,54 @@ re-audited here -- that means re-running `lake env lean` (a full Mathlib-backed 
 once per file, which is a job for the machine that already has the 5.9 GB Mathlib build, not
 this session. Anyone re-running `leancheck.sh --audit` on them going forward gets the correct
 count automatically; the historical entries above are the ones still worth a second look.
+
+# S2 (HEXGRID COLLAPSE RESISTANCE) PARTIALLY NARROWED, NOT CLOSED (2026-09-28)
+
+**Context.** A reader asked whether "The Application of Meshes in the Geometry of the
+Water Cube Project" (Zauk & Pires, *Educação Gráfica*, 28(3), 2024) — a paper on the
+Weaire-Phelan foam geometry behind Beijing's National Aquatics Center — bore on S2, the
+one obligation in `G6Crystal.lean`/`NASAGaps.lean` that was deleted as a vacuous
+`True := trivial` on 2026-08-21 and left as a bare literature citation: "hexagrid beats
+diagrid on progressive collapse (Mashhadiali 2013, 2014; Yildirim 2024)."
+
+**What the Water Cube paper actually offers.** It does not touch hexgrid-vs-diagrid at
+all — it is about a different geometry problem (Kelvin's 3D equal-volume space-filling
+problem) applied to a built structure. Its relevance is methodological: a real,
+seismically-rated space frame whose structural performance was established by converting
+a cellular/foam geometry into a mesh and running it through FEM optimization — the same
+category of move S2 needs (a real derivation or simulation) rather than a secondhand
+citation.
+
+**Checking the citation itself, since that is what S2 rests on.** WebSearch/WebFetch this
+session confirmed Mashhadiali's papers are real (Mashhadiali & Kheyroddin, *Structural
+Design of Tall and Special Buildings* 22(17), 1310–1329, 2013, proposing the hexagrid
+system; and Mashhadiali, DOI 10.1002/tal.1097, 2014, the progressive-collapse paper
+proper) but could not reach either one's full text (Wiley 403, ResearchGate 429,
+academia.edu robots-disallowed) to pull member/joint counts. **"Yildirim (2024)" could
+not be verified at all** — no matching 2024 hexgrid/diagrid/collapse paper turned up under
+repeated search; the only near match is Sıla Yıldırım's 2021 hexgrid performance-assessment
+work. This citation should be checked against its original source or corrected.
+
+A further, previously unrecorded complication: Lee & Kim, *Procedia Engineering* 171,
+1085–1091, 2017 — real, peer-reviewed — found hexagrid **less** efficient than diagrid on
+lateral resistance for the 60-story models they tested. Different metric from collapse
+robustness, so it does not contradict Mashhadiali, but "hexgrid beats diagrid" cited
+unqualified overstates the literature's agreement.
+
+**What was actually added.** `Orthogenesis/Architecture/Redundancy.lean` (new file):
+a static-indeterminacy (Maxwell redundancy) theorem, `more_bars_implies_more_redundancy`,
+proved for any two pin-jointed frame models sharing joint and reaction counts, given which
+one has more bars. This is real, non-vacuous, kernel-checkable content — and it is also
+explicitly *necessary, not sufficient*, for rigidity or collapse resistance (3D generic
+rigidity has no known combinatorial characterization, unlike Laman's theorem in 2D), and it
+takes no position on whether a real hexgrid or a real diagrid has more bars per joint at
+comparable scale, because that number was not obtained. `G6Crystal.lean`'s S2 comment and
+its HTML mirror in `book6/g6-crystal.html` were both updated with this same information, so
+the prose and the kernel do not come apart the way §2 of the NASA errata describes.
+
+**Left undone, on purpose.** Sourcing real hexgrid/diagrid bar and joint counts (an
+institutional-access or interlibrary request for Mashhadiali 2014's full text, not a web
+search) and instantiating `PinJointedFrameModel` for both would make
+`more_bars_implies_more_redundancy` a sourced, non-vacuous comparative result — still bounded
+by the necessary-not-sufficient caveat. Until then, S2 remains `∼` (partial): narrower than
+before, not closed.

@@ -465,4 +465,18 @@ theorem colony_depth2_coords :
 -- Yildirim (2024), cited as theirs. It was never a formal result of ours and
 -- there is no obligation here to discharge.
 
+-- UPDATE 2026-09-28. "Yildirim (2024)" above is UNVERIFIED: repeated search
+-- this session found no such 2024 paper (see Redundancy.lean header for what
+-- was checked). Mashhadiali's papers are confirmed real but their full text
+-- (with member/joint tables) was not reachable. A separate real paper, Lee &
+-- Kim (2017), found hexagrid LESS efficient than diagrid on lateral
+-- resistance specifically -- a different metric from collapse robustness,
+-- but reason enough not to cite "hexgrid beats diagrid" as if the literature
+-- agreed on all axes. None of this is a proof obligation for Lean, same as
+-- before. Orthogenesis/Architecture/Redundancy.lean now carries the one
+-- piece of S2 that IS provable: a general, hypothesis-gated static-
+-- indeterminacy (Maxwell redundancy) theorem. It is explicitly a necessary-
+-- not-sufficient narrowing, not a closure -- see that file's header before
+-- citing it as more than that.
+
 end Orthogenesis.G6Crystal
