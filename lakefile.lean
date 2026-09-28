@@ -206,3 +206,28 @@ lean_lib Book14 where
 lean_lib Book28 where
   srcDir := "book28"
   roots := #[`ShiftIndex, `InfinityMinusInfinity, `RiemannRoch, `FredholmSpace]
+
+/-
+  Vol2NonArchimedeanCollatz.lean is the Lean behind vol2-nonarchimedean.html
+  Section 5.1 / nacg.md Section 5.1 (the Non-Continuation Theorem). Written
+  2026-09-28, but the device bridge used that session could not run it: its
+  shell executes in a Linux VM, while this repository's own elan/lake/lean
+  are macOS ARM64 binaries -- a fundamental OS/architecture mismatch, not a
+  missing-mount issue, so tools/leancheck.sh --audit could not be reached
+  from there. Hand-run instead the same day in a separate, independent
+  Lean 4 + Mathlib v4.32.0 environment (mathlib4 rev
+  81a5d257c8e410db227a6665ed08f64fea08e997, matching this repo's pin) via
+  `lake env lean`: 0 errors, 2 theorems, both on [propext, Classical.choice,
+  Quot.sound] per `#print axioms`. Declaring the target here is what makes
+  a later regression fail the job.
+
+  SCOPE (see the file's own header for the full statement): this covers
+  only h ranging over ordinary polynomials Q_2[X], not the full Tate
+  algebra Q_2<X> the html/md page's stated theorem uses -- Strassmann's
+  theorem is not in Mathlib, so the general power-series case remains
+  unformalized. Re-running via tools/leancheck.sh --audit on this repo's
+  own toolchain, when reachable, is still worth doing for reproducibility,
+  but is not required to treat this result as proved.
+-/
+@[default_target]
+lean_lib Vol2NonArchimedeanCollatz

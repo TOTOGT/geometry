@@ -10625,3 +10625,51 @@ Vol2NonArchimedeanCollatz.lean`) against the v4.32.0 pin, fix whatever the two f
 fragile spots (`push_cast; ring` for `evenClass_infinite`'s membership proof; `norm_num` for
 the final numeric contradiction) need if anything, and only then add the `lean_lib` target
 and update the "not hand-run" language in all three places above.
+
+## VOL2NONARCHIMEDEANCOLLATZ.LEAN HAND-VERIFIED, NOW A LAKEFILE TARGET (2026-09-28)
+
+**What prompted this.** The previous entry above left `Vol2NonArchimedeanCollatz.lean`
+explicitly unverified: written the same day, but the device bridge that session used could
+not reach the Lean toolchain to check it. Asked this session to verify it. Confirmed the
+root cause is not a missing mount but a real incompatibility: `device_bash` executes inside
+a Linux VM on the user's machine, while the user's actual `elan`/`lake`/`lean` installation
+is macOS ARM64 binaries. No amount of PATH or folder-mounting fixes that; the device bridge
+can never run this repository's own toolchain as currently set up.
+
+**What was done instead.** Built an independent Lean 4 + Mathlib verification environment
+from scratch in a separate sandboxed Linux machine: installed `elan`, pinned
+`leanprover/lean4:v4.32.0` (read directly off mathlib4's own v4.32.0 tag to guarantee an
+exact match with this repo's pin), and ran `lake update` against mathlib4 rev
+`81a5d257c8e410db227a6665ed08f64fea08e997` with the prebuilt `.olean` cache (8639 files).
+Placed the file, unmodified except for one proof-script fix (below), and ran
+`lake env lean` against it directly.
+
+**Result.** Compiles with 0 errors. `#print axioms` on both declarations
+(`evenClass_infinite`, `no_polynomial_continuation`) reports only the three permitted axioms:
+`propext`, `Classical.choice`, `Quot.sound`. No `sorry`.
+
+**The one fix needed.** The `hf` step inside `no_polynomial_continuation`'s proof of
+`hAgree` left an unsolved goal `2⁻¹ * x = x * 2⁻¹` after `simp [hfA]` (a commutativity gap
+`simp`'s default lemma set didn't close on its own). Fixed by appending `; ring` to that
+line. This is exactly the class of fix the file's own header had flagged as the likely
+fragile spot, though it named a different line (the final numeric contradiction, which in
+fact closed on the first try with plain `norm_num`).
+
+**What this does and doesn't establish.** As the file's own header says throughout: this
+covers only the polynomial-restricted sub-case (`h ∈ Q_2[X]`), not the full Tate-algebra
+statement (`h ∈ Q_2⟨X⟩`) that needs Strassmann's theorem, which remains absent from Mathlib
+and unformalized here. That scope was not widened by this verification pass, only confirmed
+to compile as written.
+
+**What changed as a result.** `Vol2NonArchimedeanCollatz.lean`'s own header now records the
+hand-run and its result in place of the "not run through the toolchain" caveat. Declared a
+`lean_lib` target in `lakefile.lean` (comment there records the same run, per this
+repository's own convention that a hand run proves a file on the day it is run). Updated the
+three places that previously flagged it as unverified: `vol2-nonarchimedean.html`'s §5.1 prose,
+its Claims table, and its Verification row; `docs/claims.tsv` row `vol2-nonarchimedean#2`
+(status now `proved`, warrant `kernel (hand-run 2026-09-28, independent env)`). Re-running via
+this repository's own `tools/leancheck.sh --audit`, once the device bridge can actually reach
+the toolchain (or from a native macOS shell on the machine), is still worth doing for
+reproducibility on this repo's own pin -- it was not attempted here, since the bridge cannot
+run it and this file's fix was minimal enough not to need it -- but is not required to treat
+today's result as proved.

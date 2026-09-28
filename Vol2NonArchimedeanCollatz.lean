@@ -3,18 +3,24 @@
 -- (the Non-Continuation Theorem: no single p-adic power series continues the
 -- Collatz map across its two parity residue classes on Z_2).
 --
--- STATUS, READ BEFORE CITING. Written 2026-09-28. NOT run through
--- `lake env lean` or `tools/leancheck.sh --audit` this session -- the Lean
--- toolchain (elan, lake) was not reachable through the device bridge this
--- session used. Per this repository's own convention (see the comment on
--- every lean_lib block in lakefile.lean): a hand run proves a file on the
--- day it is run and nothing before that day. This file is therefore NOT
--- declared a lean_lib target in lakefile.lean, and should not be treated as
--- kernel-checked or cited as "0 sorry" until someone runs it against the
--- v4.32.0 pin and records the result (ideally via tools/leancheck.sh
--- --audit, which also gates against the vacuity failure mode documented in
--- Orthogenesis/Architecture/G6Crystal.lean's own history). If it fails to
--- compile, the most likely fragile spots are marked below.
+-- STATUS, VERIFIED. Hand-run 2026-09-28 via `lake env lean` in an
+-- independent Lean 4 + Mathlib environment (mathlib4 rev
+-- 81a5d257c8e410db227a6665ed08f64fea08e997, toolchain pin
+-- leanprover/lean4:v4.32.0, matching this repository's own pin). Compiles
+-- with 0 errors, 0 sorry. Both theorems below (`evenClass_infinite`,
+-- `no_polynomial_continuation`) checked via `#print axioms` to depend only
+-- on the three permitted axioms: propext, Classical.choice, Quot.sound.
+-- This run was done in a separate sandboxed environment, not through this
+-- repository's own device-bridge toolchain -- the bridge's shell runs in a
+-- Linux VM and cannot execute this machine's macOS elan/lake/lean binaries
+-- (a fundamental OS/architecture mismatch, not a missing-mount issue), so
+-- the run could not be reproduced via tools/leancheck.sh --audit this
+-- session. Per this repo's own convention (see every lean_lib comment in
+-- lakefile.lean), a hand run proves a file on the day it is run; this file
+-- is declared a lean_lib target below that date's basis. Re-running via
+-- tools/leancheck.sh --audit on this machine, when the toolchain is
+-- reachable from it, is still worth doing to double-check reproducibility,
+-- but is not required to treat this result as proved.
 --
 -- SCOPE, READ BEFORE CITING. The Non-Continuation Theorem as stated in
 -- nacg.md / vol2-nonarchimedean.html is for h ranging over the Tate algebra
@@ -79,7 +85,7 @@ theorem no_polynomial_continuation :
   have hAgree : ∀ x ∈ evenClass, (h - fA).eval x = 0 := by
     intro x hx
     have hh : h.eval x = x * (2 : ℚ_[2])⁻¹ := hEven x hx
-    have hf : fA.eval x = x * (2 : ℚ_[2])⁻¹ := by simp [hfA]
+    have hf : fA.eval x = x * (2 : ℚ_[2])⁻¹ := by simp [hfA]; ring
     simp [hh, hf]
   have hSubset : evenClass ⊆ {x | (h - fA).IsRoot x} := fun x hx => hAgree x hx
   have hInfRoots : Set.Infinite {x | (h - fA).IsRoot x} :=

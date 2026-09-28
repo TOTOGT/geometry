@@ -349,19 +349,21 @@ footer a { color: var(--gold); text-decoration: none; }
     forcing \(x/2=3x+1\), i.e. \(x=-2/5\), for every \(x\) in the infinite set
     \(1+2\mathbb{Z}_2\) &mdash; impossible for a nonzero affine equation.
     <br><br>
-    <strong>Lean, added 2026-09-28.</strong> A polynomial-restricted special case (\(h\)
-    ranging over \(\mathbb{Q}_2[X]\) rather than the full Tate algebra &mdash; every
-    polynomial is in the Tate algebra, so this is a genuine sub-case, not a different claim)
-    is formalized in <code>Vol2NonArchimedeanCollatz.lean</code>, using only that a nonzero
-    polynomial over a field has finitely many roots
+    <strong>Lean, added 2026-09-28, hand-run 2026-09-28.</strong> A polynomial-restricted
+    special case (\(h\) ranging over \(\mathbb{Q}_2[X]\) rather than the full Tate algebra
+    &mdash; every polynomial is in the Tate algebra, so this is a genuine sub-case, not a
+    different claim) is formalized in <code>Vol2NonArchimedeanCollatz.lean</code>, using only
+    that a nonzero polynomial over a field has finitely many roots
     (<code>Polynomial.eq_zero_of_infinite_isRoot</code>). It does <strong>not</strong> require
     Strassmann's theorem, which is not in Mathlib &mdash; checked against the pinned v4.32.0
     source, 2026-09-28: no match for "Strassmann", "TateAlgebra", or "NewtonPolygon" anywhere
-    in it &mdash; and is not formalized here or anywhere in this corpus. Written 2026-09-28;
-    <strong>not yet hand-run against the toolchain</strong> (the Lean toolchain was not
-    reachable this session) &mdash; see the file's own header before citing it as
-    kernel-checked, and do not add it to <code>lakefile.lean</code> as a target until someone
-    has.
+    in it &mdash; and is not formalized here or anywhere in this corpus. Hand-run 2026-09-28 in
+    an independent Lean 4 + Mathlib v4.32.0 environment via <code>lake env lean</code> (the
+    device bridge used that session could not reach this repository's own toolchain: its shell
+    is a Linux VM and cannot execute this machine's macOS elan/lake/lean binaries): 0 errors,
+    2 theorems, both on <code>[propext, Classical.choice, Quot.sound]</code> per
+    <code>#print axioms</code>. Now a <code>lean_lib</code> target in
+    <code>lakefile.lean</code>.
   </div>
   <p class="block-prose">
     This resolves option (i) below negatively and completely: the search for an actual p-adic
@@ -442,7 +444,7 @@ footer a { color: var(--gold); text-decoration: none; }
     <tr><td>Collatz obstruction identified as the same Smoothness Bridge gap (G1) as the real-contact case</td><td>[T] as an observation about the definitions; the underlying real-contact Gap&nbsp;G1 itself is a separate, prior claim of this series, not re-derived here</td></tr>
     <tr><td>Lemma: clopen gluing of two power series is never entire (&sect;5.1)</td><td>[T] &mdash; proved in full, via Strassmann's theorem (1928)</td></tr>
     <tr><td>Non-Continuation Theorem: no single \(h\in\mathbb{Q}_2\langle X\rangle\) continues Collatz across \(2\mathbb{Z}_2\) and \(1+2\mathbb{Z}_2\) (&sect;5.1)</td><td>[T] &mdash; proved in full; closes OP3</td></tr>
-    <tr><td>Polynomial-restricted case of the Non-Continuation Theorem, in Lean (<code>Vol2NonArchimedeanCollatz.lean</code>)</td><td>Written 2026-09-28, <strong>not hand-run against the toolchain this session</strong> &mdash; not a kernel-checked claim until someone runs it. Not a target in <code>lakefile.lean</code> until then, per this repository's own convention.</td></tr>
+    <tr><td>Polynomial-restricted case of the Non-Continuation Theorem, in Lean (<code>Vol2NonArchimedeanCollatz.lean</code>)</td><td>[T] &mdash; hand-run 2026-09-28 (independent Lean 4 + Mathlib v4.32.0 environment, <code>lake env lean</code>): 0 errors, 2 theorems, <code>[propext, Classical.choice, Quot.sound]</code>. Declared a <code>lean_lib</code> target in <code>lakefile.lean</code>.</td></tr>
     <tr><td>Groenewold&ndash;Van Hove theorem (&sect;6)</td><td>Cited, not this page's result &mdash; real, well-established (1946/1951), not independently re-derived here. See References [17]&ndash;[18].</td></tr>
     <tr><td>Crespo&ndash;Pelayo arXiv papers [2]&ndash;[6]: existence, titles, authors, subject matter</td><td>Verified this session against arXiv directly &mdash; all five titles and author lists confirmed to match; see verify.py &sect;3</td></tr>
     <tr><td>Content of Crespo&ndash;Pelayo's p-adic Moser lemma (arXiv:2508.15443) itself</td><td><strong>Not verified</strong> &mdash; arXiv's PDF returned no machine-readable text to this session; title/author/venue confirmed by independent web search only. This is exactly OP1, still open.</td></tr>
@@ -470,7 +472,7 @@ footer a { color: var(--gold); text-decoration: none; }
     <tr><td>[17]</td><td>L. van Hove. Sur certaines repr&eacute;sentations unitaires d'un groupe infini de transformations. Proc. Roy. Acad. Sci. Belgium 26 (1951), 1&ndash;102.</td></tr>
     <tr><td>[18]</td><td>M. J. Gotay, H. B. Grundling, G. M. Tuynman. Obstruction results in quantization theory. J. Nonlinear Sci. 6 (1996), 469&ndash;498 (the clean modern statement and full proof used for the &sect;6 sketch).</td></tr>
     <tr><td>Verification</td><td><code>vol2-nonarchimedean-verify.py</code> &mdash; standard library only (uses <code>fractions</code> for exact arithmetic). &sect;1 the wedge-power identity for \(n=1..4\); &sect;2 the Reeb-field equations on the standard model; &sect;3 the five external citations, checked against titles/authors confirmed on arXiv this session; &sect;4 the T/S/C tags and named gap are actually present in this page.</td></tr>
-    <tr><td>Verification, Lean</td><td><code>Vol2NonArchimedeanCollatz.lean</code> (repository root) &mdash; the polynomial-restricted Non-Continuation Theorem. Written 2026-09-28, not run through <code>lake env lean</code> or <code>tools/leancheck.sh --audit</code> this session; not declared a <code>lean_lib</code> target. See the file's own header for exactly what it does and does not cover before treating it as checked.</td></tr>
+    <tr><td>Verification, Lean</td><td><code>Vol2NonArchimedeanCollatz.lean</code> (repository root) &mdash; the polynomial-restricted Non-Continuation Theorem. Hand-run 2026-09-28 in an independent Lean 4 + Mathlib v4.32.0 environment via <code>lake env lean</code>: 0 errors, 2 theorems, both on <code>[propext, Classical.choice, Quot.sound]</code>. Declared a <code>lean_lib</code> target in <code>lakefile.lean</code>. Re-running via this repo's own <code>tools/leancheck.sh --audit</code> is still worth doing for reproducibility once the toolchain is reachable from the device bridge, but is not required to treat this as proved. See the file's own header for exactly what it does and does not cover (polynomial-restricted, not the full Tate algebra).</td></tr>
   </table>
 
 </div>
