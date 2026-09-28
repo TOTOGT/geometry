@@ -10327,3 +10327,9 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - New `docs/peer-review.tsv`: a page listed there with a published DOI earns (vii), and earns (ix) if the journal's COI statement reads "none". Submissions and preprints do not count.
 - **Fix (iv):** pages that already link other volumes in their own text got no generated box and scored "no cross-volume links". Direct links into another folder now count; 35 pages moved.
 - **Fix (viii):** the pattern now also accepts "withdraws the", "withdrew that/the/its/this", "refuted one/an/a/the/its/in" and "conjecture is refuted". A first, looser widening (bare "failed"/"refuted") matched Escher failing at school, a dam that failed, "Not refuted" and Thoreau withdrawing to Walden, so it was rejected. Pages gained: book14 ch3, book4 adelic-embedding, WP-107, WP-29, ch-feigin, ch-hardy, ch11-plasma, ch18-neural, wk06.
+
+## 2026-09-27 — Book XIV ch 6, Words That Went Wrong
+- **A lexicon of 9 entries** in ch3's template: sorry, degenerate, proved, exactly, there is no, 666, 110, proof, U. Each gives its source (WP-94, WP-61, CLAUDE.md rules, XIX ch4, XIV ch1/ch4) and a usage count across 831 pages at 7a471e3.
+- **"degenerate double root":** used on 0 pages. It is quoted only in WP-61 and in ch-huh, which reports it (use/mention, read). The WP-61 repair held.
+- **Proved/proved** 225/789 against kernel-checked 232, kernel-audited 33 and sorry-free 89. **"there is no"** 322 against "did not find" 4. These are work lists, not verdicts.
+- key_register MENTION now includes ch06 (it quotes U glosses as examples).
