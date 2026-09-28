@@ -205,7 +205,7 @@ lean_lib Book14 where
 
 lean_lib Book28 where
   srcDir := "book28"
-  roots := #[`ShiftIndex, `InfinityMinusInfinity, `RiemannRoch, `FredholmSpace]
+  roots := #[`ShiftIndex, `InfinityMinusInfinity, `RiemannRoch, `FredholmSpace, `CliffordSmall]
 
 /-
   Vol2NonArchimedeanCollatz.lean is the Lean behind vol2-nonarchimedean.html

@@ -10718,3 +10718,16 @@ rung — Hartman–Grobman is "the classification of planar linear systems"), bo
 (correctly match). Books XVIII and XIX exist and are complete but appear in neither ladder at
 all — not flagged as a collision since no rung claims their numbers, but worth someone eventually
 deciding whether they belong in `docs/floor-ladder.tsv` too.
+
+## 2026-09-28 — Book XXVIII ch 6, The Circle Comes Back (Bott periodicity)
+- **Sources held:** Zois Lecture 4 (pp. 72–75) and p. 8; Atiyah §2.2 and Thm 2.4.9 (OCR); Dugger §12 (p. 85) and 35.14 (p. 289).
+- **book28/CliffordSmall.lean** (5 theorems, all on the three permitted axioms): quaternion units i² = j² = −1 and ij = −ji; the quarter-turn J² = −1 with det J = 1.
+- **Lesson:** the first draft was missing `import Mathlib.Data.Real.Basic`. Lean printed "does not depend on any axioms" for theorems whose definitions had failed to elaborate, so an axiom report is not evidence that a file compiled. The page's curious-reader box says so.
+- **Computed:**
+  - clutching winding numbers for z^k (k = −3…3) and for 1/z;
+  - winding numbers add under products (25 pairs);
+  - a non-monomial symbol is homotopic to −z²/3 (min |f_s| = 0.264);
+  - Atiyah's rotation path has det 1 at 401 points;
+  - Clifford centres, by exact sign arithmetic for n ≤ 16: period 2 over ℂ, period 4 for real Cl_{0,n} (R, C, R, R⊕R);
+  - Dugger's f(n): f(n+8) = f(n) + 4.
+- **Not proved:** the periodicity theorems. The real period 8 beyond the centres is quoted.
