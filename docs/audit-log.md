@@ -10673,3 +10673,48 @@ the toolchain (or from a native macOS shell on the machine), is still worth doin
 reproducibility on this repo's own pin -- it was not attempted here, since the bridge cannot
 run it and this file's fix was minimal enough not to need it -- but is not required to treat
 today's result as proved.
+
+## WP-82's Part II table is stale, and two more rung/volume collisions found (2026-09-28)
+
+**What prompted this.** Asked to check whether parts of the series are missing from WP-82
+(`book6/wp82-the-missing-floor.html`). They are not missing so much as mislabeled: the page's
+own "Part II · Volumes XI–XVI" table still describes the state of affairs *before* the
+2026-09-19 rung/volume collision was settled, and the settlement (docs/audit-log.md,
+"two rung ladders, and they collide at 11 and 33") only touched `tools/floor_texts.py` and
+`.github/workflows/verify-proofs.yml`. WP-82 itself, the page a reader actually sees, was never
+updated to say the numbering it displays no longer holds.
+
+**What's stale in WP-82.** The Part II table says Volume XI is rung 28 (K-theory), Volume XII is
+rung 29 (operator algebras), Volume XIII is rung 30, XIV is rung 31 (derived algebraic geometry),
+XV is rung 32, XVI is rung 33 (noncommutative geometry). Since 2026-09-19 the rung number IS the
+volume number: rung 28 lives at Volume XXVIII (built, five chapters, `book28/`), rung 33 at
+Volume XXXIII (not written). The table's Volume XI–XVI placements for these rungs are dead
+pointers. Also stale: the correction note further up the same page about Volume XI's K₀ floor
+still cites `book6/lean/VolXI_K0_Floor.lean` — a real, working file whose *name* still says XI
+for content that is conceptually rung 28's, i.e. Volume XXVIII's, territory. The file was not
+renamed or moved when `ShiftIndex.lean` was; it wasn't mentioned in the 2026-09-19 fix at all.
+Added an OPEN note to WP-82 itself recording this, rather than silently fixing the table (the
+table's actual six-volume plan is the author's, not mine to rewrite).
+
+**Two new collisions, not the one from 2026-09-19.** Checked what `docs/floor-ladder.tsv` (the
+teaching-position ladder that forced the 2026-09-19 rename) actually reserves against what
+exists on disk today:
+
+| rung/vol | floor-ladder's plan | what's actually there |
+|---|---|---|
+| 14 | "The repairs: integers, then fractions" (`book14/Repairs.lean`, not written) | Book XIV, *The Language of Mathematics* — polysemy, translation keys, 9 chapters, complete |
+| 20 | "Polynomials and the circle" (`book20/Circle.lean`, not written) | Book XX — Wald's 1943 survivorship-bias memoranda, 5 chapters, complete |
+
+Neither collision was caught when its volume was opened, unlike rung 11/33, which was caught
+the same day and resolved by the author. `docs/floor-ladder.tsv` still lists both rows as
+"not written," which is false in the sense that matters — the volume number was written, just
+not with the planned content. Flagged both rows in `docs/floor-ladder.tsv`'s own status column
+(`COLLISION 2026-09-28: ...`) and added a matching OPEN paragraph to WP-82, following the exact
+precedent of the 2026-09-19 entry: recorded, not resolved, because resolving a numbering
+collision by guessing is what produced the first one. `[OPEN]`
+
+**Not touched:** book16 (genuinely not written, no collision), book21 (correctly matches its
+rung — Hartman–Grobman is "the classification of planar linear systems"), book28/book33
+(correctly match). Books XVIII and XIX exist and are complete but appear in neither ladder at
+all — not flagged as a collision since no rung claims their numbers, but worth someone eventually
+deciding whether they belong in `docs/floor-ladder.tsv` too.
