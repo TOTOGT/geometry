@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Non-Archimedean Contact Geometry &middot; Principia Orthogona &middot; Volume II</title>
-<meta name="description" content="A direct-transcription definition of p-adic contact manifolds and Reeb vector fields, a proposed p-adic contact Darboux theorem with one named unverified gap, and an honest account of why the Collatz map still does not fit this framework. First draft, tagged (T)/(S)/(C) throughout.">
+<meta name="description" content="A direct-transcription definition of p-adic contact manifolds and Reeb vector fields, a proposed p-adic contact Darboux theorem with one named unverified gap, and a proof (Strassmann's theorem) that the Collatz map admits no single p-adic power-series continuation. Closes with the Groenewold-Van Hove theorem, cited for comparison. Tagged (T)/(S)/(C) throughout; a partial Lean formalization is noted where it exists and flagged where it does not.">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
 <script>MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea']}};</script>
 <style>
@@ -99,8 +99,9 @@ footer a { color: var(--gold); text-decoration: none; }
   <h1>Non-Archimedean Contact Geometry</h1>
   <p class="hero-sub">A direct-transcription definition of p-adic contact manifolds and Reeb vector
     fields, a proposed p-adic contact Darboux theorem with one specific unverified gap named
-    in advance, and an honest account of why the Collatz map still does not fit &mdash; the
-    same obstruction as in the real-contact case, recurring unchanged.</p>
+    in advance, and a proof &mdash; not just an account &mdash; that the Collatz map admits no
+    single p-adic power-series continuation, via Strassmann's theorem. Closes with a second,
+    unrelated obstruction theorem (Groenewold&ndash;Van Hove) for comparison.</p>
   <div class="status-band">
     <strong>Status of this draft.</strong> This page proposes a definition, not a settled
     theory. Every claim below is tagged <strong>(T)</strong> proved in full here,
@@ -108,7 +109,10 @@ footer a { color: var(--gold); text-decoration: none; }
     conjectural &mdash; a proposed research direction, not a result. Section&nbsp;3's central
     theorem is <strong>(S)</strong>: it reduces to one named technical lemma from the existing
     p-adic symplectic literature that has not been checked line-by-line against the contact
-    case. Sections&nbsp;4 and 5 are <strong>(C)</strong> throughout.
+    case. Section&nbsp;4 is <strong>(C)</strong> throughout; Section&nbsp;5.1 (added
+    2026-09-28) proves the Non-Continuation Theorem in full <strong>(T)</strong>, closing
+    OP3. Section&nbsp;6 (added 2026-09-28) cites the Groenewold&ndash;Van Hove theorem for
+    comparison of genre &mdash; it is not this page's result and carries no (T)/(S)/(C) tag.
   </div>
 </div>
 
@@ -129,9 +133,12 @@ footer a { color: var(--gold); text-decoration: none; }
     form admits a symplectic basis, and the wedge-power combinatorics of a contact form &mdash;
     carry over unchanged. It defines p-adic contact manifolds and Reeb vector fields, verifies
     both on the standard model, states a p-adic contact Darboux theorem whose proof reduces to
-    one explicit gap, and closes by naming precisely why the Collatz map still resists this
+    one explicit gap, and closes by proving precisely why the Collatz map still resists this
     framework &mdash; the same Smoothness Bridge obstruction as in <a href="chH-collatz.html">the
-    real-contact Collatz chapter</a>, recurring unchanged when the ambient geometry changes.
+    real-contact Collatz chapter</a>, recurring unchanged when the ambient geometry changes, and
+    now settled by Strassmann's theorem rather than merely asserted (&sect;5.1). A closing section
+    cites, without claiming originality, a second and unrelated obstruction theorem
+    (Groenewold&ndash;Van Hove, classical/quantum mechanics) for comparison of genre.
   </p>
 
   <div class="section-label">Part I &middot; The Precise Gap in the Existing Literature</div>
@@ -296,24 +303,132 @@ footer a { color: var(--gold); text-decoration: none; }
     (oscillator, spin, Jaynes&ndash;Cummings) rather than arithmetic maps: those Hamiltonians are
     honest single power series, and Collatz is not.
   </p>
+  <h3>5.1 The obstruction is a proof, not an impression</h3>
   <p class="block-prose">
-    Two ways this could, in principle, be addressed, both left open: (i) find an actual p-adic
-    analytic function on \(\mathbb{Z}_2\) whose restriction to each parity coset recovers
-    Collatz's action there &mdash; an existence question, and a different, more demanding
-    requirement than the real-valued logarithmic near-conjugacy construction used elsewhere in
-    this series, which is analytic over \(\mathbb{R}\), not \(\mathbb{Q}_2\); or (ii) generalise
-    the Part&nbsp;II definition to an orbifold or groupoid built from finitely many p-adic
-    analytic charts glued along the residue-class boundaries, with its own non-degeneracy and
-    gluing conditions not developed here.
+    That \(T\) is "not analytic" on \(\mathbb{Z}_2\) is already asserted in the 3x+1
+    literature &mdash; Matthews and Watts (1984) and M&uuml;ller (1991), as reported in
+    Chamberland's 2003 survey, list the 2-adic extension of \(T\) as surjective, non-injective,
+    infinitely differentiable, measure-preserving and strongly mixing, but <em>not analytic</em>.
+    None of the copies of that claim checked for this page carry a proof reachable from here.
+    The following is short enough to include in full, and isolates exactly the fact
+    responsible: gluing two distinct entire functions along a nontrivial clopen partition of
+    \(\mathbb{Z}_p\) is never itself entire.
   </p>
+  <div class="block-theorem">
+    <span class="block-label">[T] &middot; proved here</span>
+    <strong>Lemma (clopen gluing is never entire, except trivially).</strong> Let \(p\) be
+    prime and let \(\mathbb{Z}_p = A \sqcup B\) be a partition into two nonempty, infinite
+    clopen residue classes (e.g. \(A=p\mathbb{Z}_p\), \(B\) its complement). Let \(f_A, f_B\)
+    be p-adic power series each convergent on all of \(\mathbb{Z}_p\) (elements of the Tate
+    algebra \(\mathbb{Q}_p\langle X\rangle\), coefficients tending to 0). If \(f_A \ne f_B\) as
+    power series, no single \(h \in \mathbb{Q}_p\langle X\rangle\) restricts to \(f_A\) on
+    \(A\) and to \(f_B\) on \(B\).
+    <br><br>
+    <em>Proof.</em> Suppose such \(h\) exists. Then \(h - f_A \in \mathbb{Q}_p\langle
+    X\rangle\) and vanishes on all of \(A\), which is infinite. By Strassmann's theorem
+    (1928) &mdash; a nonzero element of \(\mathbb{Q}_p\langle X\rangle\) has only finitely
+    many zeros in the closed unit disc, bounded by its Weierstrass degree &mdash; a power
+    series in \(\mathbb{Q}_p\langle X\rangle\) vanishing at infinitely many points of
+    \(\mathbb{Z}_p\) is identically zero. So \(h=f_A\) as power series, hence as functions on
+    all of \(\mathbb{Z}_p\), not just \(A\). The same argument on \(B\) gives \(h=f_B\)
+    everywhere. Then \(f_A = h = f_B\), contradicting \(f_A\ne f_B\). \(\blacksquare\)
+  </div>
+  <div class="block-theorem">
+    <span class="block-label">[T] &middot; proved here &middot; closes OP3</span>
+    <strong>Theorem (the Non-Continuation Theorem).</strong> There is no
+    \(h\in\mathbb{Q}_2\langle X\rangle\) with \(h(x)=x/2\) for every \(x\in 2\mathbb{Z}_2\) and
+    \(h(x)=3x+1\) for every \(x\in 1+2\mathbb{Z}_2\).
+    <br><br>
+    <em>Proof.</em> Apply the Lemma with \(p=2\), \(A=2\mathbb{Z}_2\), \(B=1+2\mathbb{Z}_2\),
+    \(f_A(x)=x/2\), \(f_B(x)=3x+1\) &mdash; both polynomials, hence trivially in
+    \(\mathbb{Q}_2\langle X\rangle\), and distinct (constant terms 0 and 1). \(\blacksquare\)
+    <br><br>
+    Equivalently, without the Lemma's generality: if \(h\) agreed with \(x/2\) on all of
+    \(2\mathbb{Z}_2\), Strassmann forces \(h\equiv x/2\) everywhere on \(\mathbb{Z}_2\), in
+    particular on \(1+2\mathbb{Z}_2\); but then \(h\) would also have to equal \(3x+1\) there,
+    forcing \(x/2=3x+1\), i.e. \(x=-2/5\), for every \(x\) in the infinite set
+    \(1+2\mathbb{Z}_2\) &mdash; impossible for a nonzero affine equation.
+    <br><br>
+    <strong>Lean, added 2026-09-28.</strong> A polynomial-restricted special case (\(h\)
+    ranging over \(\mathbb{Q}_2[X]\) rather than the full Tate algebra &mdash; every
+    polynomial is in the Tate algebra, so this is a genuine sub-case, not a different claim)
+    is formalized in <code>Vol2NonArchimedeanCollatz.lean</code>, using only that a nonzero
+    polynomial over a field has finitely many roots
+    (<code>Polynomial.eq_zero_of_infinite_isRoot</code>). It does <strong>not</strong> require
+    Strassmann's theorem, which is not in Mathlib &mdash; checked against the pinned v4.32.0
+    source, 2026-09-28: no match for "Strassmann", "TateAlgebra", or "NewtonPolygon" anywhere
+    in it &mdash; and is not formalized here or anywhere in this corpus. Written 2026-09-28;
+    <strong>not yet hand-run against the toolchain</strong> (the Lean toolchain was not
+    reachable this session) &mdash; see the file's own header before citing it as
+    kernel-checked, and do not add it to <code>lakefile.lean</code> as a target until someone
+    has.
+  </div>
+  <p class="block-prose">
+    This resolves option (i) below negatively and completely: the search for an actual p-adic
+    analytic continuation of Collatz was not merely unattempted, it is impossible, for the
+    reason Strassmann's theorem gives and no more exotic one. What survives is exactly what
+    Part&nbsp;II already requires only <em>locally</em>: \(T\) is analytic in a neighbourhood
+    of every point of \(\mathbb{Z}_2\) (each residue class is itself a clopen neighbourhood on
+    which \(T\) is a single polynomial), so \(T\) is locally p-adic analytic on all of
+    \(\mathbb{Z}_2\) without contradiction &mdash; the Lemma only forbids upgrading that to a
+    single global power series.
+  </p>
+
+  <p class="block-prose">
+    Two ways this obstruction could be addressed remain, one of them now closed: (i) find an
+    actual p-adic analytic function on \(\mathbb{Z}_2\) whose restriction to each parity coset
+    recovers Collatz's action there &mdash; <strong>closed by the Non-Continuation Theorem
+    above: impossible</strong>, and a different, more demanding requirement than the real-valued
+    logarithmic near-conjugacy construction used elsewhere in this series, which is analytic
+    over \(\mathbb{R}\), not \(\mathbb{Q}_2\), and does not bear on this question; or (ii)
+    generalise the Part&nbsp;II definition to an orbifold or groupoid built from finitely many
+    p-adic analytic charts glued along the residue-class boundaries, with its own
+    non-degeneracy and gluing conditions not developed here &mdash; this is now the only
+    remaining route.
+  </p>
+  <div class="section-label">Part VI &middot; A Second Obstruction, By Way of Comparison</div>
+  <h2>6. The Groenewold&ndash;Van Hove theorem (cited, not this page's result)</h2>
+  <p class="block-prose">
+    Section&nbsp;5 proves that no single p-adic power series continues the Collatz map across
+    the two parity residue classes of \(\mathbb{Z}_2\) &mdash; an obstruction to an
+    <em>exact global correspondence</em>, established by a zero-counting argument
+    (Strassmann). This section records a second, unrelated instance of the same <em>genre</em>
+    of result, from classical/quantum mechanics rather than p-adic dynamics: an exact,
+    structure-preserving correspondence a natural research programme wants, that a rigorous
+    argument shows cannot exist beyond a limited domain. Nothing here is original to this
+    page; it is included for the parallel, and because it is not otherwise cited anywhere in
+    this series.
+  </p>
+  <div class="block-theorem">
+    <span class="block-label">cited &middot; Groenewold 1946; van Hove 1951 &middot; not this page's result</span>
+    <strong>Theorem (Groenewold&ndash;Van Hove).</strong> No map \(Q\) from polynomial
+    functions on classical phase space (\(\mathbb{R}^{2n}\), coordinates \(q_i,p_i\)) to
+    self-adjoint operators can simultaneously satisfy linearity, \(Q(1)=I\), Dirac's
+    correspondence rule \([Q(f),Q(g)]=i\hbar\,Q(\{f,g\})\), and irreducibility on the canonical
+    pair, for the full polynomial algebra. Consistent quantization in this exact sense holds
+    only for polynomials of degree \(\le 2\); the obstruction already appears at degree 3
+    (e.g. quantizing \(q^2p^2\) via two different, classically-equal Poisson-bracket
+    decompositions gives operators differing at order \(\hbar^2\)).
+    <br><br>
+    <strong>What this does not show.</strong> The theorem obstructs an <em>exact</em>,
+    all-degree correspondence. It says nothing against the asymptotic one: Ehrenfest's
+    theorem, the WKB approximation, and decoherence all recover classical behaviour as
+    \(\hbar\to 0\), and Weyl quantization gives a correspondence accurate to \(O(\hbar^2)\)
+    &mdash; exactly the order at which the theorem's contradiction appears. Citing only the
+    exact-obstruction half, as if classical and quantum mechanics were simply unrelated
+    theories, overstates what is proved; citing only the asymptotic half ignores a genuine
+    theorem. Full statement, proof, and references (Groenewold 1946; van Hove 1951; Gotay,
+    Grundling &amp; Tuynman 1996) in References [17]&ndash;[18] below.
+  </div>
 
   <h2>Open problems</h2>
   <table class="cat">
     <tr><th>#</th><th>Problem</th></tr>
     <tr><td>OP1</td><td>Verify Step 2 of the Part III theorem against Crespo&ndash;Pelayo's actual p-adic Moser construction (arXiv:2508.15443); either complete the proof or identify precisely where the contact case diverges from the symplectic one.</td></tr>
     <tr><td>OP2</td><td>Construct a genuine p-adic dissipative contact-Hamiltonian toy model (Part IV) and check whether an analogue of this series' canonical invariants can be derived from first principles rather than chosen &mdash; directly addressing the free-parameter critique this series has raised against its own real-case constants.</td></tr>
-    <tr><td>OP3</td><td>Resolve, or prove unresolvable, the analyticity obstruction of Part V for the Collatz map specifically.</td></tr>
+    <tr><td>OP3</td><td><strong>Closed 2026-09-28</strong> by the Non-Continuation Theorem (&sect;5.1, via Strassmann's theorem): no single p-adic power series continues \(T\) across the parity cosets. What remains open is only route (ii) &mdash; generalise Part&nbsp;II to an orbifold or groupoid of p-adic analytic charts glued along the residue-class boundaries, and determine whether that structure can host a p-adic contact-Hamiltonian system in the sense of Part IV.</td></tr>
     <tr><td>OP4</td><td>Independent of Collatz: identify any existing arithmetic dynamical system already known to be p-adic analytic on all of \(\mathbb{Z}_p\), as a more tractable first test case than Collatz itself.</td></tr>
+    <tr><td>OP5</td><td>Independent of both Collatz and the rest of this page: &sect;6 states Groenewold&ndash;Van Hove for the finite-dimensional polynomial algebra on \(\mathbb{R}^{2n}\). Whether an analogous obstruction can be formulated and proved (not just expected by analogy) for a p-adic phase space is not addressed here &mdash; the operator-algebra machinery (self-adjointness, Hilbert space representations) it relies on does not transcribe to \(\mathbb{Q}_p\) by the direct-transcription method used in Parts&nbsp;II&ndash;III.</td></tr>
   </table>
 
   <h2>Claims and their status</h2>
@@ -325,6 +440,10 @@ footer a { color: var(--gold); text-decoration: none; }
     <tr><td>p-adic contact Darboux theorem</td><td>[S] &mdash; Step 1 proved here; Step 2 named as an open, unverified reduction to Crespo&ndash;Pelayo's Moser lemma</td></tr>
     <tr><td>Dissipative p-adic contact-Hamiltonian dynamics, \(|\lambda|_p&lt;1\) as the stability substitute</td><td>[C] &mdash; proposed question, no construction given</td></tr>
     <tr><td>Collatz obstruction identified as the same Smoothness Bridge gap (G1) as the real-contact case</td><td>[T] as an observation about the definitions; the underlying real-contact Gap&nbsp;G1 itself is a separate, prior claim of this series, not re-derived here</td></tr>
+    <tr><td>Lemma: clopen gluing of two power series is never entire (&sect;5.1)</td><td>[T] &mdash; proved in full, via Strassmann's theorem (1928)</td></tr>
+    <tr><td>Non-Continuation Theorem: no single \(h\in\mathbb{Q}_2\langle X\rangle\) continues Collatz across \(2\mathbb{Z}_2\) and \(1+2\mathbb{Z}_2\) (&sect;5.1)</td><td>[T] &mdash; proved in full; closes OP3</td></tr>
+    <tr><td>Polynomial-restricted case of the Non-Continuation Theorem, in Lean (<code>Vol2NonArchimedeanCollatz.lean</code>)</td><td>Written 2026-09-28, <strong>not hand-run against the toolchain this session</strong> &mdash; not a kernel-checked claim until someone runs it. Not a target in <code>lakefile.lean</code> until then, per this repository's own convention.</td></tr>
+    <tr><td>Groenewold&ndash;Van Hove theorem (&sect;6)</td><td>Cited, not this page's result &mdash; real, well-established (1946/1951), not independently re-derived here. See References [17]&ndash;[18].</td></tr>
     <tr><td>Crespo&ndash;Pelayo arXiv papers [2]&ndash;[6]: existence, titles, authors, subject matter</td><td>Verified this session against arXiv directly &mdash; all five titles and author lists confirmed to match; see verify.py &sect;3</td></tr>
     <tr><td>Content of Crespo&ndash;Pelayo's p-adic Moser lemma (arXiv:2508.15443) itself</td><td><strong>Not verified</strong> &mdash; arXiv's PDF returned no machine-readable text to this session; title/author/venue confirmed by independent web search only. This is exactly OP1, still open.</td></tr>
     <tr><td>Ref. [1] (Pelayo&ndash;Voevodsky&ndash;Warren, Q_p from homotopy type theory, cited as the origin of the p-adic integrable-systems program)</td><td>Secondhand &mdash; not read directly by this draft's author, cited via Crespo&ndash;Pelayo's own paper; this session independently confirmed Crespo&ndash;Pelayo's introduction states almost exactly this, crediting reference [29] of their Jaynes&ndash;Cummings paper</td></tr>
@@ -343,7 +462,15 @@ footer a { color: var(--gold); text-decoration: none; }
     <tr><td>[9]</td><td>J. H. Silverman. <em>The Arithmetic of Dynamical Systems.</em> Springer GTM 241, 2007.</td></tr>
     <tr><td>[10]</td><td>P. N. Grossi. <em>Generative Contact Mechanics: A Geometric Framework for Dissipative Systems with Structured Limit Cycles.</em> G6 LLC, 2026 (this series &mdash; <a href="gcm-framework.html">gcm-framework.html</a>, <a href="vol2-contact.html">Volume II</a>).</td></tr>
     <tr><td>[11]</td><td>P. N. Grossi. The Collatz map as a dm&sup3; corollary (working draft), G6 LLC, 2026 (this series &mdash; <a href="chH-collatz.html">chH-collatz.html</a>).</td></tr>
+    <tr><td>[12]</td><td>R. Strassmann. &Uuml;ber den Wertevorrat von Potenzreihen im Gebiet der p-adischen Zahlen. J. Reine Angew. Math. 159 (1928), 13&ndash;28 (finiteness of zeros of a convergent p-adic power series on the closed unit disc; used in the proof of the Non-Continuation Theorem, &sect;5.1).</td></tr>
+    <tr><td>[13]</td><td>K. R. Matthews, A. M. Watts. A generalization of Hasse's generalization of the Syracuse algorithm. Acta Arithmetica 43(2) (1984), 167&ndash;175.</td></tr>
+    <tr><td>[14]</td><td>H. M&uuml;ller. Das "3n+1" Problem. Mitteilungen der Mathematischen Gesellschaft Hamburg 12 (1991), 231&ndash;251.</td></tr>
+    <tr><td>[15]</td><td>M. Chamberland. An Update on the 3x+1 Problem. Butllet&iacute; de la Societat Catalana de Matem&agrave;tiques (2003) (survey; &sect;6.3 reports [13] and [14]'s conclusion that the 2-adic extension of \(T\) is not analytic, without a proof reachable from this page &mdash; &sect;5.1 supplies one, via [12]).</td></tr>
+    <tr><td>[16]</td><td>H. J. Groenewold. On the principles of elementary quantum mechanics. Physica 12 (1946), 405&ndash;460 (used in &sect;6).</td></tr>
+    <tr><td>[17]</td><td>L. van Hove. Sur certaines repr&eacute;sentations unitaires d'un groupe infini de transformations. Proc. Roy. Acad. Sci. Belgium 26 (1951), 1&ndash;102.</td></tr>
+    <tr><td>[18]</td><td>M. J. Gotay, H. B. Grundling, G. M. Tuynman. Obstruction results in quantization theory. J. Nonlinear Sci. 6 (1996), 469&ndash;498 (the clean modern statement and full proof used for the &sect;6 sketch).</td></tr>
     <tr><td>Verification</td><td><code>vol2-nonarchimedean-verify.py</code> &mdash; standard library only (uses <code>fractions</code> for exact arithmetic). &sect;1 the wedge-power identity for \(n=1..4\); &sect;2 the Reeb-field equations on the standard model; &sect;3 the five external citations, checked against titles/authors confirmed on arXiv this session; &sect;4 the T/S/C tags and named gap are actually present in this page.</td></tr>
+    <tr><td>Verification, Lean</td><td><code>Vol2NonArchimedeanCollatz.lean</code> (repository root) &mdash; the polynomial-restricted Non-Continuation Theorem. Written 2026-09-28, not run through <code>lake env lean</code> or <code>tools/leancheck.sh --audit</code> this session; not declared a <code>lean_lib</code> target. See the file's own header for exactly what it does and does not cover before treating it as checked.</td></tr>
   </table>
 
 </div>

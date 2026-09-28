@@ -10578,3 +10578,50 @@ search) and instantiating `PinJointedFrameModel` for both would make
 `more_bars_implies_more_redundancy` a sourced, non-vacuous comparative result — still bounded
 by the necessary-not-sufficient caveat. Until then, S2 remains `∼` (partial): narrower than
 before, not closed.
+
+# VOL2-NONARCHIMEDEAN.HTML SYNCED TO THE PROVEN NON-CONTINUATION THEOREM (2026-09-28)
+
+**Context.** A separate cloud-sandbox session had, over the course of investigating the
+p-adic Collatz continuation question, proved a real result -- the Non-Continuation Theorem
+(no single 2-adic power series continues the Collatz map across `2Z_2` and `1+2Z_2`, via
+Strassmann's theorem, 1928) -- and folded it into a working paper draft (`nacg.md`, kept
+outside this repository) along with a new comparison section on the Groenewold-Van Hove
+theorem (classical/quantum mechanics, cited not derived). Checking the published corpus
+chapter this draft corresponds to, `vol2-nonarchimedean.html`, found it stale: its own Open
+Problems table still listed OP3 -- "resolve, or prove unresolvable, the analyticity
+obstruction... for the Collatz map" -- as open, when the proof already existed in the
+unpublished draft. The corpus was telling readers a question was open that had been closed.
+
+**What was synced.** `vol2-nonarchimedean.html` gained a new §5.1 (the Lemma and the
+Non-Continuation Theorem, in full, matching `nacg.md`) and a new §6 (Groenewold-Van Hove,
+cited for comparison of genre, explicitly not claimed as this page's own result, with the
+same two-sided caveat used elsewhere in this corpus: the *exact* correspondence is obstructed,
+the *asymptotic* one is not). OP3 is marked closed; OP5 records the new, separate open
+question of whether an analogous obstruction exists for a p-adic phase space specifically
+(not addressed). The Claims and References tables were extended to match, following this
+page's own existing tier vocabulary rather than inventing a new one.
+
+**The Lean gap, and what was and wasn't done about it.** The page had no `.lean` file at all
+-- its "[T]" claims were checked only by `vol2-nonarchimedean-verify.py` (symbolic Python).
+`Vol2NonArchimedeanCollatz.lean` (new, repository root) formalizes a real but strictly weaker
+sub-case: the Non-Continuation Theorem restricted to `h` ranging over ordinary polynomials
+`Q_2[X]`, using only `Polynomial.eq_zero_of_infinite_isRoot` (a nonzero polynomial over a
+field has finitely many roots) -- elementary algebra, not Strassmann. The full theorem's
+proof needs Strassmann's theorem for the whole Tate algebra `Q_2<X>` (convergent power
+series); checked against the pinned v4.32.0 Mathlib source, 2026-09-28: no match anywhere for
+"Strassmann", "TateAlgebra", or "NewtonPolygon". That machinery does not exist in this
+repository's Mathlib pin and was not built from scratch here.
+
+**Unverified, on purpose, and said so everywhere it matters.** The Lean toolchain (`elan`,
+`lake`) was not reachable through the device bridge this session used, so
+`Vol2NonArchimedeanCollatz.lean` was **not** run through `lake env lean` or
+`tools/leancheck.sh --audit`. Per this repository's own established convention (see the
+comment on every `lean_lib` block in `lakefile.lean`: a hand run proves a file on the day it
+is run and nothing before it), the file is **not** declared a `lean_lib` target, and both the
+file's own header and every place it is cited (the HTML page, `docs/claims.tsv`) say plainly
+that it is unverified. Next step, for whoever has the actual toolchain: run
+`lake env lean Vol2NonArchimedeanCollatz.lean` (or `tools/leancheck.sh --audit
+Vol2NonArchimedeanCollatz.lean`) against the v4.32.0 pin, fix whatever the two flagged
+fragile spots (`push_cast; ring` for `evenClass_infinite`'s membership proof; `norm_num` for
+the final numeric contradiction) need if anything, and only then add the `lean_lib` target
+and update the "not hand-run" language in all three places above.
