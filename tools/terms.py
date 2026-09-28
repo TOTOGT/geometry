@@ -46,7 +46,37 @@ TAG = re.compile(r'<[^>]+>')
 REGISTRY = 'TERMS.md'
 
 
+# Evidence tags are not coined vocabulary. "Claim a classification (MODEL)" and
+# "Prior attestation is not checked (OPEN)" are a sentence followed by its tag,
+# which the expansion pattern cannot tell from "Expansion (ACRO)". Found 2026-09-28,
+# CI verify-proofs on f5784be.
+EVIDENCE_TAGS = {'MODEL', 'OPEN', 'CITED', 'WANTED', 'COMPUTED', 'STUB', 'ASSUME', 'DATA'}
+
+
+def tracked(root='.'):
+    """The files git tracks, or None outside a work tree. CI checks out exactly
+    these; a local run that also walks untracked scratch (a 'Claude outputs'
+    folder, say) reports vocabulary the repository does not contain."""
+    import subprocess
+    try:
+        out = subprocess.run(['git', '-C', root, 'ls-files', '-z'], capture_output=True, check=True).stdout
+    except Exception:
+        return None
+    return [f for f in out.decode('utf-8', 'replace').split('\0') if f]
+
+
 def files(root='.', include_registry=False):
+    tr = tracked(root)
+    if tr is not None:
+        for f in tr:
+            parts = f.split('/')
+            if any(d in SKIP for d in parts[:-1]):
+                continue
+            if parts[-1] == REGISTRY and not include_registry:
+                continue
+            if f.endswith(('.html', '.md')) and os.path.exists(os.path.join(root, f)):
+                yield os.path.join(root, f)
+        return
     for dp, dn, fn in os.walk(root):
         dn[:] = [d for d in dn if d not in SKIP]
         for f in fn:
@@ -103,6 +133,8 @@ def main():
     defs = collections.defaultdict(set)      # "Expansion (ACRO)" -> files
     for p in files():
         for m in EXPAND.finditer(text(p)):
+            if m.group(2) in EVIDENCE_TAGS:
+                continue
             defs['%s (%s)' % (m.group(1), m.group(2))].add(p.lstrip('./'))
 
     if '--check' not in sys.argv:

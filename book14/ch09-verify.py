@@ -72,8 +72,11 @@ ratio = R["this series"][1] / R["Mathematics in Lean"][1]
 check("past tense separates: this series uses about 21x the 'was/were' of Mathematics in Lean", 19 < ratio < 23, f"{ratio:.1f}x")
 mod = [v[2] for v in R.values()]
 check("modality does not separate: all four within 2,100-3,700 modals per million", min(mod) > 2100 and max(mod) < 3700, str(mod))
-check("frozen past-tense rates: series 2900, MIL 136, Avigad 1021, J&M 2073",
-      [R[k][1] for k in texts] == [2900, 136, 1021, 2073], str([R[k][1] for k in texts]))
+FROZEN = [2900, 136, 1021, 2073]      # first run, poppler 24 (Linux VM)
+got = [R[k][1] for k in texts]
+check("frozen past-tense rate of the series (git-pinned, so exact): 2900", got[0] == FROZEN[0], str(got[0]))
+check("frozen rates of the three PDFs within 0.5% (pdftotext versions differ: Homebrew poppler gives J&M 2069)",
+      all(abs(g - f) <= max(1, 0.005 * f) for g, f in zip(got[1:], FROZEN[1:])), str(got[1:]))
 
 print("[3] Leibniz, Nova Methodus (Acta Eruditorum 1684), page as printed in the Gerhardt edition")
 img = ROOT / "book14/img/nova-methodus-1684.png"
@@ -105,6 +108,7 @@ for t in ["nat_mul_comm", "matrix_mul_not_comm"]:
 check("no sorry", "sorry" not in re.sub(r"/-.*?-/|--[^\n]*", "", lean, flags=re.S))
 
 print("[HONESTY]")
+print("  Word counts of the three PDFs depend on the pdftotext version, so their rates are checked to 0.5%.")
 print("  Ganesalingam's book is not held; his claims are cited through Aberdein's review. The Leibniz text is")
 print("  a page image transcribed by eye; the edition's page number is not on the image. Past tense is")
 print("  counted as 'was/were' only, a crude proxy; the series' prose includes a gallery of historical")
