@@ -10453,3 +10453,18 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 - **Lede:** now cites the held 1921 paper (Math. Ann. 82, 42–63) and links to Book XXVIII ch 3 §4.
 - **Two biographical claims downgraded:** "operators with an index are still called Noetherian" and "He died in Soviet custody in 1941" have no held source. Pablo's ruling: they will never be verified here. The page now says the series does not make them, tagged NOT VERIFIED.
 - **Reference:** gives the page range and marks MacTutor as web, not held and not checked. Book XXVIII ch 3 links back to the profile.
+
+## 2026-09-28 — Cooke, The History of Mathematics (3rd ed., 2013): Fritz and Emmy Noether
+- **Source held:** Cooke_The History of Mathematics.pdf (643 pp.). p. 412 (PDF 440): Emmy was "the eldest child of the distinguished mathematician Max Noether", and "her brother Fritz (1884–1941), who was also a mathematician". Checked in book28/ch03-verify.py, which now has 78 checks.
+- **Pages updated:**
+  - Book XXVIII ch 3's "two Noethers" box now answers the question it had left WANTED.
+  - The Book VII profile gives the dates and the relationship.
+  - The manner of death stays unverified: Cooke gives only the year.
+
+## 2026-09-28 — Book XIV ch 3 §5, Humpty Dumpty's definition
+- **Source held:** Notices of the AMS 71(6), June/July 2024 (Downloads/202406FullIssue-LEtter To Editor.pdf). L. Schrieber's letter is on p. 704, doi:10.1090/noti2952. 12 quotations are checked.
+- **Computed:**
+  - WordNet noun senses: word 10, master 10, question 6, definition 2. R24: my prior guess of 7 for "master" was wrong.
+  - Mock Turtle pairing: the least total edit distance of the 24 pairings is the obvious one, 12 against 16 for the next.
+- **Series reading (MODEL):** Alice's question is polysemy; Humpty Dumpty's answer is stipulation, the move a mathematical definition makes. The section links to ch4 Translation Keys and the Key Register.
+- **Not held:** an edition of the Alice books. Carroll is quoted through the letter.

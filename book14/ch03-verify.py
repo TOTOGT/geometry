@@ -8,6 +8,8 @@ book14/ch03-verify.py -- every number on book14/ch03-how-many-senses.html and in
   [1] WordNet 3.0 noun senses and their SemCor tag counts for the nouns the manuscript analyses
   [2] prediction (ii) of v3 ("the head sense is the most frequent") against those counts
   [3] the Lean file: the two counting rules, and that the gate runs it
+  [4] Humpty Dumpty and Alice, from L. Schrieber's letter (Notices AMS 71(6), 2024, p. 704): quotes; the
+      Mock Turtle's four branches against the four operations by edit distance; WordNet senses of the letter's words
   [HONESTY]
 """
 import re, sys
@@ -65,10 +67,50 @@ for t in ["classes_force_transitive", "three_readings_no_division", "leaves_le_p
 check("no sorry in code", "sorry" not in re.sub(r"/-.*?-/|--[^\n]*", "", lean, flags=re.S))
 check("Book14 is a lean_lib", "lean_lib Book14" in (ROOT / "lakefile.lean").read_text())
 
+print("[4] Humpty Dumpty and Alice (Schrieber, Notices of the AMS 71(6), June/July 2024, p. 704)")
+import os, subprocess, itertools
+dl = next((Path(os.path.expanduser(c)) for c in ("~/mnt/Downloads", "~/Downloads") if Path(os.path.expanduser(c)).is_dir()), None)
+letter = next((f for f in sorted(dl.iterdir()) if f.name.lower().startswith("202406fullissue") and f.suffix == ".pdf"), None)
+check("the June/July 2024 Notices is held", letter is not None, letter.name if letter else "")
+L = subprocess.run(["pdftotext", "-f", "6", "-l", "6", str(letter), "-"], capture_output=True, text=True).stdout
+sq = lambda s: re.sub(r"\s+", "", s.replace("-\n", "")).lower()
+for q in ["LETTERS TO THE EDITOR",
+          "Charles Dodgson, who is hardly remembered as an Oxford mathematician",
+          "I once heard a story, possibly apocryphal, that Queen Victoria",
+          "we find this characterization of what a mathematical definition is",
+          "“When I use a word,” Humpty Dumpty said in rather a scornful tone, “it means just what I choose it to mean—neither more nor less.”",
+          "“The question is,” said Alice, “whether you can make words mean so many different things.”",
+          "“The question is,” said Humpty Dumpty, “which is to be master—that’s all.”",
+          "Who among us, trying to prove some theorem, has not experienced this exact phenomenon?",
+          "the different branches of Arithmetic—Ambition, Distraction, Uglification and Derision",
+          "Leonard Schrieber", "DOI: https://doi.org/10.1090/noti2952",
+          "704 NOTICES OF THE AMERICAN MATHEMATICAL SOCIETY VOLUME 71, NUMBER 6"]:
+    check(f'letter p.704: "{q[:62]}"', sq(q) in sq(L))
+def lev(a, b):
+    d = list(range(len(b) + 1))
+    for i, x in enumerate(a, 1):
+        p, d[0] = d[0], i
+        for j, y in enumerate(b, 1):
+            p, d[j] = d[j], min(d[j] + 1, d[j - 1] + 1, p + (x != y))
+    return d[-1]
+MT = ["ambition", "distraction", "uglification", "derision"]
+OPS = ["addition", "subtraction", "multiplication", "division"]
+costs = {perm: sum(lev(a, b) for a, b in zip(MT, perm)) for perm in itertools.permutations(OPS)}
+best = min(costs, key=costs.get)
+print("     edit distances:", {a: lev(a, b) for a, b in zip(MT, OPS)}, " total", costs[tuple(OPS)])
+check("of the 24 ways to pair the Mock Turtle's branches with the four operations, the one with the least total edit distance is Ambition-Addition, Distraction-Subtraction, Uglification-Multiplication, Derision-Division",
+      best == tuple(OPS) and sorted(costs.values())[0] < sorted(costs.values())[1], f"{costs[tuple(OPS)]} vs next {sorted(costs.values())[1]}")
+ws = {w: len(wn.synsets(w, pos=wn.NOUN)) for w in ("word", "question", "master", "definition")}
+print("     WordNet noun senses:", ws)
+check("WordNet noun senses: word 10, master 10, question 6, definition 2 (Alice's point, counted)",
+      ws == {"word": 10, "question": 6, "master": 10, "definition": 2}, str(ws))
+
 print("[HONESTY]")
 print("  SemCor is a sense-tagged part of the Brown Corpus (American prose, 1961); counts are small and dated. A count of 0 means")
 print("  unattested in SemCor, not absent from English. Which WordNet synset is the template's head")
 print("  is our judgement, stated per row. The co-predication table in Polysemy.lean is an input,")
-print("  not a corpus result. Lean checks the counting logic, not the linguistics.")
+print("  not a corpus result. Lean checks the counting logic, not the linguistics. [4] quotes Carroll")
+print("  through Schrieber's letter, not from a held edition of the Alice books; the pairing of the")
+print("  Mock Turtle's branches with the operations is the reader's pun, measured, not stated in the letter.")
 print(f"\n{len(FAIL)} FAIL" + (": " + ", ".join(FAIL) if FAIL else ""))
 sys.exit(1 if FAIL else 0)
