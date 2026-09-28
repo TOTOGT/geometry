@@ -69,6 +69,12 @@ E_ = " ".join(" ".join(pdfp(f)) for f in EMMY)
 check("the five 'Noether's theorem' texts held are Emmy Noether's 1918 theorem: '1918' throughout, 'Fritz' nowhere, 'Toeplitz' nowhere",
       E_.count("1918") >= 20 and "Fritz" not in E_ and "Toeplitz" not in E_, f"1918 x{E_.count('1918')}")
 
+CK = pdfp("Cooke_The History of Mathematics.pdf")
+check('Cooke, History of Mathematics (3rd ed. 2013), p. 412 (PDF 440): "her brother Fritz (1884–1941), who was also a mathematician"',
+      squash("her brother Fritz (1884–1941), who was also a mathematician") in squash(CK[439]) and CK[439].lstrip().startswith("412"))
+check('…and Emmy was "the eldest child of the distinguished mathematician Max Noether"',
+      squash("the eldest child of the distinguished mathematician Max Noether") in squash(CK[439]))
+
 print("[1c] F. Noether, Math. Ann. 82 (1921), pp. 42-63: the scan, by OCR")
 import shutil, tempfile, hashlib
 MA = dl() / "Titel- Mathematische Annalen Jahr- 1921.pdf"
