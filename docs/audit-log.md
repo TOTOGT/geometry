@@ -10381,3 +10381,25 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - was/were per million: MIL 136, Avigad 1,021, J&M 2,073, this series 2,900 (21x MIL).
   - Modals per million: 2,180–3,663 across all four.
   - Tense separates the texts; modality does not.
+
+## 2026-09-28 — Book XXVIII ch 2 and ch 3 (Zois, 18 Lectures on K-Theory)
+- **Source held:** Zois, *18 Lectures on K-Theory*, arXiv:1008.1346v1 (137 pp., Downloads). Part II Lectures 1–2 (pp. 56–67) are quoted; each quotation is checked by page.
+- **ShiftIndex.lean moved onto the repository pin.** It was written against v4.33.0-rc1 and did not build on v4.32.0, because one lemma is renamed between the two: `mapDomain_of_notMem_range` is `mapDomain_notin_range` on v4.32.0. It now uses the v4.32.0 name and builds in the new `lean_lib Book28`. Its 4 axiom reports are unchanged and clean.
+- **book28/InfinityMinusInfinity.lean** (7 theorems, all on the three permitted axioms, kernel-checked in the cloud) is built on Mathlib's `LinearMap.index` (O. Nash, 2026):
+  - `zois_theorem1` and `endo_index_zero` (finite-dimensional index; index 0 for endomorphisms);
+  - `shift_index_eq` and `bshift_index_eq` (ch 1's counts are Mathlib's index);
+  - `bshift_shift_index` and `shift_bshift_index` (indices add);
+  - `shift_bshift_ne_id` (index 0 does not imply invertible).
+- **ch 2, computed:**
+  - 127 matrices over ℚ, every shape and rank up to 6×6: ker − coker = n − m.
+  - N×N blocks of Sₖ have index 0; Sₖ itself has index −k.
+- **ch 3, computed:**
+  - winding numbers of 11 symbols, found two ways, which agree;
+  - rank of T_f T_g − T_fg is constant in N for 6 pairs (exact);
+  - Ind T_f = −wn(f) observed from 160×160 blocks for all 11 symbols. This is floating point and is an observation, not a proof.
+- **ch 3, Mathlib census at the pin:**
+  - has: `LinearMap.index`, `IsCompactOperator`, `circleIntegral`.
+  - lacks: Fredholm operators, winding number, Hardy space, Toeplitz operators, Calkin algebra.
+  - Banach.lean carries the comment "TODO: once mathlib has Fredholm operators".
+- **Retitled:** ch 2 was planned as "Why odd dimensions give index zero". No held source supports that claim, so the title was withdrawn. The "odd" that Zois supports is K⁻¹ (the odd K-cycle), and it now sits in ch 3 §5.
+- **Still wanted:** F. Noether 1921. Zois does not cite it, and the script checks that his notes never mention the name.

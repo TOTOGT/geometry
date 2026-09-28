@@ -202,3 +202,7 @@ lean_lib Book12 where
 lean_lib Book14 where
   srcDir := "book14"
   roots := #[`Polysemy, `Brackets, `Collective, `HardyWright, `TypesDecide]
+
+lean_lib Book28 where
+  srcDir := "book28"
+  roots := #[`ShiftIndex, `InfinityMinusInfinity, `RiemannRoch]

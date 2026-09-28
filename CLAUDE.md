@@ -3070,3 +3070,9 @@ layer currently checks the other.
    (`lam_triple`, `triple_chamber_strictAntiOn_nonneg`, `published_T1_is_false`)
    in `book6/wp121-what-etf-connect-actually-couples.html` and
    `chMu-lyapunov.html` — not violators, no action needed there.
+- 2026-09-28 (later): Book XXVIII ch2 "Infinity Minus Infinity" and ch3 "The Winding Number" are live. Source: Zois, 18 Lectures on K-Theory (arXiv:1008.1346).
+  - New Lean: book28/InfinityMinusInfinity.lean (7 theorems, on Mathlib's LinearMap.index).
+  - ShiftIndex.lean was ported to v4.32.0 and is now in lean_lib Book28.
+  - TODO: F. Noether 1921 (still wanted).
+  - TODO: a Book XXVIII ch4 on K⁻¹ and K-homology (Zois Lecture 3) or on Atkinson's theorem.
+  - TODO: the Fredholm, winding, Hardy and Toeplitz gaps in Mathlib (ch3 §6 lists them) are candidate contributions upstream.

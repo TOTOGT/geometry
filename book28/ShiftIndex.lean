@@ -48,7 +48,10 @@ on an infinite-dimensional space has an index, the index is not zero, and which
 side the inverse is on decides the sign. That is the part of the story that a
 reader can check with a basis and no limits.
 
-Toolchain: Lean 4.33.0-rc1. Mathlib: tag v4.33.0-rc1.
+Toolchain: Lean 4.32.0, Mathlib v4.32.0 (the repository pin). First written against
+v4.33.0-rc1; the one lemma renamed between the two (mapDomain_of_notMem_range, which is
+mapDomain_notin_range on v4.32.0) is used under its v4.32.0 name, so the file builds in
+lean_lib Book28 with everything else. See docs/audit-log.md, 2026-09-28.
 -/
 import Mathlib.LinearAlgebra.Finsupp.Defs
 import Mathlib.LinearAlgebra.Isomorphisms
@@ -107,7 +110,7 @@ theorem ker_trunc (k : ℕ) : ker (trunc F k) = range (shift F k) := by
   · rintro ⟨g, rfl⟩
     ext i
     simp only [comapDomain_apply, Finsupp.coe_zero, Pi.zero_apply, shift, lmapDomain_apply]
-    refine mapDomain_of_notMem_range _ _ ?_
+    refine mapDomain_notin_range _ _ ?_
     rintro ⟨m, hm⟩
     have hm' : m + k = (i : ℕ) := hm
     have hi : (i : ℕ) < k := i.isLt
@@ -160,7 +163,7 @@ theorem range_incl (k : ℕ) : range (incl F k) = ker (bshift F k) := by
   · rintro ⟨g, rfl⟩
     ext n
     simp only [comapDomain_apply, Finsupp.coe_zero, Pi.zero_apply]
-    refine mapDomain_of_notMem_range _ _ ?_
+    refine mapDomain_notin_range _ _ ?_
     rintro ⟨i, hi⟩
     have hi' : (i : ℕ) = n + k := hi
     have := i.isLt
