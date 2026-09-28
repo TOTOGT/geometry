@@ -44,6 +44,7 @@ QS = [(BL, "Blackadar", 15, "The first notions of K-theory were developed by Gro
       (RO, "Rosenberg", 3, "Jonathan Rosenberg"),
       (RO, "Rosenberg", 10, "which motivated Grothendieck’s first work on K-theory"),
       (RO, "Rosenberg", 10, "the Riemann-Roth theorem gives a formula for the difference of the dimensions of two vector spaces"),
+      (RO, "Rosenberg", 10, "Thus both involve a formal difference of two free modules"),
       (RO, "Rosenberg", 5, "K-theory in algebraic geometry is basic to Grothendieck’s approach to the Riemann-Roth problem"),
       (DU, "Dugger", 219, "Theorem 28.16 (Riemann-Roch). For any divisor D on a Riemann surface X"),
       (DU, "Dugger", 219, "The first equality, with 1 + deg(D) − g, is the classical statement"),

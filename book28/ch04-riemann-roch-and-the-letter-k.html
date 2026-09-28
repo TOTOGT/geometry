@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riemann-Roch and the Letter K &middot; Book XXVIII &mdash; Principia Orthogona</title>
+<meta name="description" content="Why K-theory exists: Grothendieck and the Riemann-Roch theorem, the even-dimensional index theorem. Computed on the sphere by Cech cochains and on curves of genus 0 to 4; the sphere case kernel-checked.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.po-proved-block{max-width:820px;margin:2.5rem auto 1rem;padding:1.1rem 1.3rem;
+ border:1px solid rgba(122,148,113,.45);border-left:4px solid #7a9471;border-radius:0 6px 6px 0;
+ background:rgba(122,148,113,.07);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.75;}
+.po-proved-block .po-h{letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;color:#5f7a57;margin-bottom:.6rem;}
+.po-proved-block a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.po-proved-block .po-n{font-size:.68rem;opacity:.75;display:block;margin-top:.7rem;line-height:1.6;}
+</style>
+<!--po-subject--><meta name="po-subject" content="MATHEMATICS · PURE"><meta name="po-subject-2" content="HISTORY · MATHEMATICS"><!--/po-subject-->
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XXVIII &middot; Ch 4</span>
+<span class="meta"><a href="ch03-the-winding-number.html">&larr; Ch 3</a> &middot; <a href="index.html">Book XXVIII contents</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XXVIII &middot; chapter 4 &middot; rung 28</div>
+<!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#16324f;background:#dfeaf4;border:1px solid #a8c2d8;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">MATHEMATICS · PURE</span><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4a2c14;background:#f3e7da;border:1px solid #d6b894;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">HISTORY · MATHEMATICS</span></div><!--/po-subject-->
+<h1>Riemann&ndash;Roch and the <em>Letter K</em></h1>
+<div class="subtitle">Grothendieck built K for Riemann&ndash;Roch, and Riemann&ndash;Roch is the even-dimensional index theorem</div>
+<div class="metagrid"><div><strong>Source</strong><a href="RiemannRoch.lean">RiemannRoch.lean</a> &middot; <a href="ch04-verify.py">ch04-verify.py</a></div><div><strong>Checked</strong>2 theorems, no sorryAx<br><a href="riemannroch.axioms.txt">axiom report</a></div><div><strong>Toolchain</strong>lean 4.32.0 &middot; Mathlib v4.32.0</div><div><strong>Texts</strong>Blackadar &middot; Rosenberg &middot; Dugger &middot; Atiyah</div></div>
+</div>
+<div class="wrap">
+
+<div class="lede">K-theory did not start in operator theory. Grothendieck started it for the Riemann&ndash;Roch theorem, and Riemann&ndash;Roch turned out to be an index theorem, the even-dimensional companion of the Toeplitz index in <a href="ch03-the-winding-number.html">Chapter 3</a>. This chapter follows that line from the sources, and computes the theorem on the sphere and on curves of genus 0 to 4.</div>
+<div class="eyebrow">1 &middot; Why the letter K</div>
+<h2>Grothendieck, Riemann and Roch</h2>
+<p>Blackadar opens his book with the history: &ldquo;The first notions of K-theory were developed by Grothendieck in his work on the Riemann&ndash;Roch theorem in algebraic geometry. K-theory as a part of algebraic topology was begun by Atiyah and Hirzebruch [1961].&rdquo; Rosenberg's <em>Algebraic K-Theory and Its Applications</em> (GTM 147) says that the Riemann&ndash;Roch theorem &ldquo;motivated Grothendieck&rsquo;s first work on K-theory&rdquo;, and describes what the theorem does: it &ldquo;gives a formula for the difference of the dimensions of two vector spaces&rdquo;. <a href="ch02-infinity-minus-infinity.html">Chapter 2</a> showed Zois' account that the letter K is Grothendieck's <em>Klasse</em>. <span class="tag t-data">CITED</span></p>
+<p>A difference of two dimensions is what this book calls an index. Grothendieck built K<sub>0</sub> to make such differences into elements of a group. Rosenberg: &ldquo;Thus both involve a formal difference of two free modules&rdquo;. <span class="tag t-data">CITED</span></p>
+<div class="box"><span class="lab">For the curious reader</span><p>In the held scan of Rosenberg the text layer never says &ldquo;Roch&rdquo;. The character recognition read it as &ldquo;Roth&rdquo; ten times, so a search for &ldquo;Riemann-Roch&rdquo; finds nothing and &ldquo;Riemann-Roth&rdquo; finds all ten. It is the Book XIV problem again (<a href="../book14/ch01-the-grammar-of-notation.html">Book XIV ch 1</a> reads a scan by OCR): a name is only as reliable as the text layer it passes through. <span class="tag t-data">COMPUTED</span></p></div>
+<div class="eyebrow">2 &middot; The even case</div>
+<h2>An index on a surface</h2>
+<p>Blackadar states the Atiyah&ndash;Singer index theorem, Ind<sub>a</sub>(D) = Ind<sub>t</sub>(D), and gives &ldquo;Two special cases&rdquo; that &ldquo;illustrate the typical content of the Index Theorem in the odd- and even-dimensional cases respectively&rdquo;. The odd case is the Toeplitz operator on the circle (Chapter 3). The even case is the &part;&#772; operator of a holomorphic line bundle L on a compact Riemann surface of genus g: &ldquo;The Index Theorem in this case gives the Riemann&ndash;Roch Theorem&rdquo;, Ind<sub>a</sub>(&part;&#772;) = d &minus; g + 1, &ldquo;where d is the degree of L&rdquo; (Ex. 24.1.2, p. 249). <span class="tag t-data">CITED</span></p>
+<p>Dugger gives the classical form (Theorem 28.16): for any divisor D on a Riemann surface X,</p>
+<div class="eq">&#8467;(D) &minus; &#8467;(K &minus; D) = 1 + deg(D) &minus; g</div>
+<p>He adds that &ldquo;The first equality, with 1 + deg(D) &minus; g, is the classical statement.&rdquo; The left side is a kernel dimension minus a cokernel dimension, so it is an index. <span class="tag t-data">CITED</span></p>
+<div class="eyebrow">3 &middot; On the sphere, by hand</div>
+<h2>Two charts, one map, an index of d + 1</h2>
+<p>Cover the Riemann sphere &#8450;P&sup1; by U&#8320; (z finite) and U&#8321; (z &ne; 0). A section of the line bundle O(d) is a power series in z on U&#8320; (monomials z&#7503;, k &ge; 0), a series in z&#8315;&sup1; times z&#7496; on U&#8321; (k &le; d), and anything on the overlap. Riemann&ndash;Roch becomes the index of one map, &delta;(f, g) = f &minus; g. Its kernel is the global sections h&#8304;, the monomials allowed on both charts. Its cokernel is h&sup1;, the monomials allowed on neither. Both source and target are infinite-dimensional, which is Chapter 2's &infin; &minus; &infin;, and the index is still a number. <span class="tag t-model">MODEL</span></p>
+<table><tr><th>d</th><th>h&#8304; = ker &delta;</th><th>h&sup1; = coker &delta;</th><th>index</th></tr><tr><td class="n">-4</td><td class="n">0</td><td class="n">3</td><td class="n">-3</td></tr><tr><td class="n">-3</td><td class="n">0</td><td class="n">2</td><td class="n">-2</td></tr><tr><td class="n">-2</td><td class="n">0</td><td class="n">1</td><td class="n">-1</td></tr><tr><td class="n">-1</td><td class="n">0</td><td class="n">0</td><td class="n">0</td></tr><tr><td class="n">0</td><td class="n">1</td><td class="n">0</td><td class="n">1</td></tr><tr><td class="n">1</td><td class="n">2</td><td class="n">0</td><td class="n">2</td></tr><tr><td class="n">2</td><td class="n">3</td><td class="n">0</td><td class="n">3</td></tr><tr><td class="n">3</td><td class="n">4</td><td class="n">0</td><td class="n">4</td></tr><tr><td class="n">4</td><td class="n">5</td><td class="n">0</td><td class="n">5</td></tr></table>
+<p>The script runs d = &minus;8 &hellip; 8 twice, once by counting monomials and once as an exact matrix on the window |k| &le; 12. The two runs agree, and the index is d + 1 = deg D &minus; g + 1 with g = 0 every time. h&sup1; vanishes exactly when d &ge; &minus;1. <span class="tag t-data">COMPUTED</span></p>
+<p>In Lean, <code>RiemannRoch.ell_P1</code> proves the kernel side: the polynomials of degree &le; d, which are the space L(d&middot;&infin;), have dimension d + 1. It uses Mathlib's <code>degreeLTEquiv</code>. <span class="tag t-data">KERNEL-CHECKED</span></p>
+<div class="eyebrow">4 &middot; Genus 0 to 4</div>
+<h2>Where the g in &ldquo;d &minus; g + 1&rdquo; comes from</h2>
+<p>On the curve y&sup2; = f(x), with f of degree 2g + 1, the functions whose only pole is at the point at infinity are spanned by x&#7491;y&#7495; (b = 0 or 1). x has a pole of order 2 and y one of order 2g + 1. Counting monomials with pole order &le; n gives &#8467;(n&middot;&infin;). <span class="tag t-model">MODEL</span></p>
+<p>For g = 0 to 4 and every n up to 30, the count equals n &minus; g + 1 as soon as n &ge; 2g &minus; 1, where &#8467;(K &minus; D) = 0 and Riemann&ndash;Roch predicts exactly that. Below that point the count falls short. The pole orders never reached are 1, 3, &hellip;, 2g &minus; 1, and there are exactly g of them. These are the Weierstrass gaps, and the genus is the number of missing pole orders. <span class="tag t-data">COMPUTED</span></p>
+<div class="eyebrow">5 &middot; What Lean has</div>
+<h2>No Riemann&ndash;Roch, no genus</h2>
+<p>The pinned Mathlib has no Riemann&ndash;Roch theorem and no genus of a curve; the script checks both. Riemann&ndash;Roch and Noether's Toeplitz theorem are the even and odd cases of the same theorem, and both are formalised here only at the algebraic level: the shift's index in Chapters 1&ndash;2, and the polynomial count on the sphere in this chapter. <span class="tag t-open">WANTED</span></p>
+<div class="eyebrow">Sources</div>
+<ol class="refs">
+<li>B. Blackadar, <em>K-Theory for Operator Algebras</em>, 2nd ed.: &sect;1 intro (PDF p. 15); Theorem 24.1.1 and Ex. 24.1.2 (p. 249). Held.</li>
+<li>J. Rosenberg, <em>Algebraic K-Theory and Its Applications</em>, GTM 147, Springer 1994: preface and &sect;1.1 (PDF pp. 5, 10). Held (scan; see the box in &sect;1).</li>
+<li>D. Dugger, <em>A Geometric Introduction to K-Theory</em>, &sect;28, Theorem 28.16 (PDF pp. 216&ndash;219). Held.</li>
+<li>M. F. Atiyah, <em>K-Theory</em>, notes by D. W. Anderson (Benjamin 1967), from lectures at Harvard in the fall of 1964. Held.</li>
+<li>Grothendieck's own Riemann&ndash;Roch (Borel&ndash;Serre 1958; SGA 6). <strong>Not held.</strong></li>
+</ol>
+</div>
+<!--po-gss--><aside class="po-gss" style="max-width:860px;margin:1.2rem auto 1rem;padding:.8rem 1.1rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(40,80,150,.85);border-radius:0 6px 6px 0;background:rgba(40,80,150,.05);font-family:ui-monospace,Menlo,monospace;font-size:.78rem;line-height:1.55"><details><summary style="cursor:pointer;letter-spacing:.08em"><b>Gold Standard Science &middot; 6 of 9 tenets shown</b> &middot; self-assessed against <a href="https://www.federalregister.gov/documents/2025/05/29/2025-09802/restoring-gold-standard-science" style="color:inherit">EO 14303 &sect;3(a)</a> &mdash; not a federal certification</summary><ul style="list-style:none;margin:.5rem 0 .3rem;padding:0"><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(i) reproducible <span style="opacity:.6">&mdash; a script or Lean file beside the page re-derives its numbers</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(ii) transparent <span style="opacity:.6">&mdash; code downloadable and sources named with addresses</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iii) error and uncertainty <span style="opacity:.6">&mdash; MODEL / OPEN tags or an [HONESTY] block</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iv) collaborative, interdisciplinary <span style="opacity:.6">&mdash; cross-linked to other volumes</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(v) skeptical <span style="opacity:.6">&mdash; states what it does not claim, or leaves items open</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(vi) falsifiable <span style="opacity:.6">&mdash; its script can print FAIL</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(vii) unbiased peer review <span style="opacity:.6">&mdash; not independently peer reviewed</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(viii) negative results <span style="opacity:.6">&mdash; no negative result reported on this page</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#9675;</span>(ix) conflicts of interest <span style="opacity:.6">&mdash; disclosed: author-published through G6 LLC, the author&#x27;s company</span></li></ul><div style="opacity:.75">Scored by <code>tools/gold_standard.py</code> from what is observable on this page and beside it. &#10003; shown &middot; &#10007; not shown &middot; &#9675; disclosure. No agency has reviewed this page.</div></details></aside><!--/po-gss-->
+<!--po-run--><aside class="po-run" style="max-width:860px;margin:1.6rem auto 1rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(80,140,110,.85);border-radius:0 6px 6px 0;background:rgba(80,140,110,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Run it yourself &middot; one-click download</div><ul style="margin:.4rem 0 .5rem 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book28/RiemannRoch.lean" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">RiemannRoch.lean</a> <span style="opacity:.6">&middot; Lean 4 &middot; book28/RiemannRoch.lean</span></li><li style="margin:.2rem 0"><a href="../book28/ch04-verify.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">ch04-verify.py</a> <span style="opacity:.6">&middot; Python 3 &middot; book28/ch04-verify.py</span></li></ul><div style="font-size:.92em;opacity:.85"><b>Python</b>: <code>python3 FILE.py</code> &mdash; standard library only; pages that read a book also need <code>pdftotext</code> and the book in <code>~/Downloads</code>, and say SKIP rather than PASS without it.<br><b>Lean</b>: clone <a href="https://github.com/TOTOGT/geometry" style="color:inherit">the repository</a>, run <code>lake exe cache get</code> once (Mathlib, pinned in <code>lakefile.lean</code>), then <code>lake env lean FILE.lean</code>. The <code>#print axioms</code> lines at the end should list only <code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>.</div></aside><!--/po-run-->
+<!--po-related--><aside class="po-related" style="max-width:860px;margin:2.2rem auto 1.4rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(201,168,76,.8);border-radius:0 6px 6px 0;background:rgba(128,128,128,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Across the series</div><div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Named on this page</div><ul style="margin:0 0 0 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book7/ch-atiyah.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Book VII · Atiyah — The Space Has No Room For It</a> <span style="opacity:.6">(Atiyah)</span></li><li style="margin:.2rem 0"><a href="../book7/ch-grothendieck.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Book VII · Alexander Grothendieck</a> <span style="opacity:.6">(Alexander Grothendieck)</span></li></ul><div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Same ground <span style="text-transform:none;letter-spacing:0">&middot; suggested by shared vocabulary</span></div><ul style="margin:0 0 0 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book7/ch-fritz-noether.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Book VII · Fritz Noether — The Operator, Written Down</a></li><li style="margin:.2rem 0"><a href="../book28/ch01-an-operator-with-a-one-sided-inverse.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Book XXVIII · An Operator With a One-Sided Inverse</a></li></ul></aside><!--/po-related-->
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XXVIII &middot; Chapter 4<br>
+Written 2026-09-27 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">Quotations checked against held texts; counts exact; the sphere case kernel-checked; Grothendieck 1957 not held.</div>
+</div></footer>
+</body>
+</html>

@@ -10403,3 +10403,22 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - Banach.lean carries the comment "TODO: once mathlib has Fredholm operators".
 - **Retitled:** ch 2 was planned as "Why odd dimensions give index zero". No held source supports that claim, so the title was withdrawn. The "odd" that Zois supports is K⁻¹ (the odd K-cycle), and it now sits in ch 3 §5.
 - **Still wanted:** F. Noether 1921. Zois does not cite it, and the script checks that his notes never mention the name.
+
+## 2026-09-28 — Book XXVIII ch 4, Riemann–Roch and the Letter K; ch 3 witnesses; new shelf
+- **New shelf (Downloads, ledgered via floor_texts):**
+  - operator K-theory: Blackadar (314 pp.), S. Richard (C*-algebras, 2020), Tomforde (slides);
+  - topological K-theory: Atiyah 1967 (Anderson notes), Atiyah "K-theory and Reality", Segal "Equivariant K-theory" (IHÉS 1968), Zakharevich 2024;
+  - algebraic K-theory and surveys: Rosenberg GTM 147, Dugger, Swan, Totaro, Déglise;
+  - unattributed: "Chapter 10 K-theory" (a draft) and "8. Basics of K-theory".
+  - Waldhausen, "Algebraic K-theory of topological spaces I", is a scan with no text layer and has not been OCR'd.
+- **ch 3:** two more witnesses to Ind T_f = −wn(f):
+  - Blackadar, Ex. 24.1.2(a), p. 249;
+  - the Chapter 10 draft, whose proof is marked "****Expand".
+  - Blackadar names the circle as the odd-dimensional case and Riemann–Roch as the even case. This corrects the withdrawn "odd dimensions give index zero".
+- **The five "Noether's theorem" downloads** (Ristić, McDonald 2026, Quigg, Leone, a biography) are about Emmy Noether's 1918 theorem, not F. Noether's 1921 index paper. None mentions Fritz. F. Noether 1921 is still WANTED.
+- **ch 4, new Lean:** book28/RiemannRoch.lean (finrank_degreeLT, ell_P1), kernel-checked in the cloud and added to lean_lib Book28.
+- **ch 4, computed:**
+  - on CP¹, the index of the Čech δ is d + 1 for d = −8…8, both by monomial count and by exact matrix;
+  - hyperelliptic curves of genus 0–4: ℓ(n∞) = n − g + 1 for n ≥ 2g − 1, with exactly g Weierstrass gaps.
+- **Mathlib has no Riemann–Roch and no genus.**
+- **Curiosity:** Rosenberg's scan OCRs "Roch" as "Roth" 10 times, and "Roch" 0 times.
