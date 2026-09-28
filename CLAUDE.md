@@ -123,9 +123,8 @@ Lean and cannot unlink git locks, so never commit from it. The Mac now has Homeb
 
 ### Open — the next session, in priority order
 
-1. **Book XIV ch1, The Grammar of Notation.** Held: Chomsky 1957 (a scan with no text
-   layer, so read pages as images or OCR them) and Pullum 2011 (text OK). Chomsky's hierarchy
-   applied to written notation (precedence, implicit multiplication, "sin x/2"). Script first.
+1. ~~Book XIV ch1~~ DONE 2026-09-27: Brackets.lean (SS fn 3 proved for brackets), 11,808 formulas nest ≤ 3.
+   On the Mac: `brew install tesseract` (ch01-verify OCRs the Chomsky scan) and `lake build Book14`.
 2. **Book XIV ch2** needs Ganesalingam, *The Language of Mathematics* (LNCS 7805, 2013), or his
    2009 Cambridge thesis. NOT HELD — ask the author.
 3. **Book XIV ch6, a lexicon of the words that went wrong** (WP-94, WP-61). Needs only the corpus.

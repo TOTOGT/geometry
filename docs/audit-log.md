@@ -10301,3 +10301,20 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 ## 2026-09-27 — Folder indexes for six books; handoff
 - **build_indexes.py had no FOLDERS entry for book11, 12, 14, 21, 28 or 29,** so those books had no folder index. This is the defect already recorded for book13, six times over. They are added, and a FOLDER GUARD now refuses to run while any bookNN/ folder is missing from the list. The result is 830 files and 27 index pages; index-book14 lists 6 pages.
 - CLAUDE.md HANDOFF was overwritten with the next session's TODOs.
+
+## 2026-09-27 — Book XIV ch 1, The Grammar of Notation
+- **Sources:**
+  - Chomsky, *Syntactic Structures*, 2nd ed. 2002 (a scan; OCR by tesseract; scan n = pp. 2n−18, 2n−17)
+  - Pullum 2011 (JoLLI 20:277–296)
+  - J&M 2026 draft, ch. 19
+- **Quoted:**
+  - SS p.13, a formalized mathematics is a language
+  - SS p.21, (9) and (10i) aⁿbⁿ, "We can easily show…" (no proof given)
+  - SS p.22 fn 3, the well-formed formulas of mathematics are not finite state "because of paired parentheses"
+  - SS p.23, "a rough indication"; §3.3, a bound gives finiteness
+  - Pullum, "SS contains no proof…"
+- **Lean, book14/Brackets.lean:** `no_finite_reader`, the pigeonhole proof that no finite reader accepts exactly (ⁿ)ⁿ. Kernel-checked in the cloud against Mathlib v4.32.0 cache; axioms [propext, Classical.choice, Quot.sound]. It is added to lean_lib Book14 (Mathlib import).
+- **Ambiguity** under a precedence-free grammar:
+  - 6÷2(1+2) gives {9, 1}; 1/2x, sin x/2, 2^3^2 and 8/4/2 each have 2 trees.
+  - 1+…+1 gives the Catalan numbers; 1+2*3-4/2 has 14 trees and 9 values.
+- **Corpus at eab9581:** 11,808 formulas; bracket depth 0: 8,824, 1: 2,822, 2: 157, 3: 5; the maximum is 3 (Enceladus). SS §3.3 observed: a 5-state reader suffices in practice.
