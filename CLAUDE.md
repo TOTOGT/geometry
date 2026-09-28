@@ -3076,3 +3076,7 @@ layer currently checks the other.
   - TODO: F. Noether 1921 (still wanted).
   - Book XXVIII ch4 "Riemann–Roch and the Letter K" is live (RiemannRoch.lean). TODO: ch5 on K⁻¹ and K-homology (Zois Lecture 3) or Atkinson; the 5 Noether downloads are Emmy 1918 (not the index).
   - TODO: the Fredholm, winding, Hardy and Toeplitz gaps in Mathlib (ch3 §6 lists them) are candidate contributions upstream.
+- 2026-09-28 (late): F. NOETHER 1921 IS HELD. It is Math. Ann. 82, pp. 42–63, a Göttingen scan read by OCR. Book XXVIII ch3 §4 quotes Satz II from the page image. Book XIV ch7 §5 adds Malba Tahan (the 35 camels; the name as a translation key, Pablo's reading).
+  - TODO: delete ~/Downloads/_po_ocr (scratch) and _to_delete/_to_delete_po_ocr.
+  - TODO: save the Bellos Guardian 2014 article as a PDF so it can be held.
+  - TODO: find a held source on how Fritz and Emmy Noether were related.

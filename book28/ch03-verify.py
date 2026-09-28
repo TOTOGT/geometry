@@ -47,7 +47,7 @@ QS = [(63, "Lecture 2 (Index of Toeplitz Operators, Winding Number and K-Homolog
       (67, "definition of K-cycle a la Connes in Noncommutative Geometry")]
 for pg, q in QS:
     check(f'Zois p.{pg}: "{q[:62]}"', squash(q) in squash(Z[pg - 1]))
-check("Zois cites no paper of F. Noether (the 1921 source is still not held)",
+check("Zois cites no paper of F. Noether (the 1921 source is read directly in [1c])",
       "noether" not in " ".join(Z).lower())
 
 print("[1b] two more witnesses, and the other Noether")
@@ -68,6 +68,38 @@ EMMY = ["Vladimir M. Ristić Noether's Theorem.pdf", "Noether’s Theorem Is Not
 E_ = " ".join(" ".join(pdfp(f)) for f in EMMY)
 check("the five 'Noether's theorem' texts held are Emmy Noether's 1918 theorem: '1918' throughout, 'Fritz' nowhere, 'Toeplitz' nowhere",
       E_.count("1918") >= 20 and "Fritz" not in E_ and "Toeplitz" not in E_, f"1918 x{E_.count('1918')}")
+
+print("[1c] F. Noether, Math. Ann. 82 (1921), pp. 42-63: the scan, by OCR")
+import shutil, tempfile, hashlib
+MA = dl() / "Titel- Mathematische Annalen Jahr- 1921.pdf"
+if not (shutil.which("tesseract") and shutil.which("pdftoppm")):
+    print("  needs tesseract and pdftoppm:  brew install tesseract poppler"); sys.exit(2)
+tmp = Path(tempfile.mkdtemp())
+def ocr(scan):                               # scan n holds printed page n - 6
+    subprocess.run(["pdftoppm", "-r", "200", "-gray", "-png", "-f", str(scan), "-l", str(scan), str(MA), str(tmp / f"s{scan}")], check=True)
+    return subprocess.run(["tesseract", str(next(tmp.glob(f"s{scan}*.png"))), "-"], capture_output=True, text=True).stdout
+S = {n: squash(ocr(n)) for n in (48, 49, 57, 58, 61)}
+check("the volume is Mathematische Annalen 82 (Göttingen digitisation PPN235181684_0082)",
+      "PPN235181684_0082" in subprocess.run(["pdftotext", "-l", "1", str(MA), "-"], capture_output=True, text=True).stdout)
+NQ = [(48, 42, "Fritz Noether in Karlsruhe"),
+      (48, 42, "Die folgende Mitteilung beschäftigt sich mit linearen Integral"),
+      (49, 43, "Anzahl der Reihen und der Kolonnen"),
+      (49, 43, "die Differenz eine bestimmte und explizit angebbare"),
+      (48, 42, "Theorie der Gezeiten"),
+      (48, 42, "Hydrodynamik schwach reibender"),
+      (57, 51, "Die Differenz der homogenen"),
+      (58, 52, "Index"),
+      (61, 55, "Die Differenz der homogenen"),
+      (61, 55, "Dabei ist n der Index"),
+      (61, 55, "Index die Hälfte einer ungeraden Zahl")]
+def ascii_(s): return s.replace("ä", "a").replace("ü", "u").replace("ö", "o")
+for scan, pg, q in NQ:
+    ok = squash(q) in S[scan] or ascii_(squash(q)) in ascii_(S[scan])
+    check(f'Noether p.{pg} (scan {scan}): "{q}"', ok)
+check("Satz I and Satz II are both on the OCR'd pages", "satzi." in S[57] and "satzii." in S[61])
+img = ROOT / "book28/img/noether-1921-satz-ii.png"
+check("book28/img/noether-1921-satz-ii.png is the crop of p. 55 shown on the page",
+      hashlib.sha256(img.read_bytes()).hexdigest().startswith("366db397cc22b653"))
 
 print("[2] winding numbers, two ways")
 def fromroots(rs, lo):                     # z^lo * prod (z - r)

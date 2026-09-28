@@ -10422,3 +10422,16 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - hyperelliptic curves of genus 0–4: ℓ(n∞) = n − g + 1 for n ≥ 2g − 1, with exactly g Weierstrass gaps.
 - **Mathlib has no Riemann–Roch and no genus.**
 - **Curiosity:** Rosenberg's scan OCRs "Roch" as "Roth" 10 times, and "Roch" 0 times.
+
+## 2026-09-28 — F. Noether 1921 held; Malba Tahan in Book XIV ch 7
+- **F. Noether's 1921 paper is now held.** Source: "Titel- Mathematische Annalen Jahr- 1921.pdf", the Göttingen digitisation PPN235181684_0082 of Math. Ann. 82, 332 pp., no text layer.
+  - The paper is on scans 48–69, which are printed pp. 42–63; printed page = scan − 6.
+  - book28/ch03-verify.py reads it by OCR: the byline "Fritz Noether in Karlsruhe", the tides and hydrodynamics motivation, the "Reihen und Kolonnen" analogy, Satz I and Satz II, "Dabei ist n der Index", and the half-integer index of §4.
+  - Satz II (r − r̄ = 2n, n = (1/2πi)∫ d log(a − ib)) is shown as a hash-checked crop, book28/img/noether-1921-satz-ii.png.
+  - Ch 3 gains §4, "Noether, 1921". ch3-verify.py now has 76 checks.
+- **Book XIV ch 7 §5, Malba Tahan:** the 35 camels.
+  - 1/2 + 1/3 + 1/9 = 17/18. The trick works exactly when N + 1 ≡ 0 (mod 18), leaving k = (N + 1)/18 camels.
+  - The held English PDF has no front matter. The hoax history is cited from Bellos (Guardian 2014), pasted in the session and not held.
+  - Series reading: the name as a translation key. Credited to Pablo.
+- **Housekeeping:** scratch OCR images were accidentally copied to ~/Downloads/_po_ocr. The copy inside the repo was moved into _to_delete/. The Downloads copy needs a manual delete.
+- **Also downloaded:** Algebra & Number Theory 12(8) (2018), 214 pp. Ledgered; not yet used.
