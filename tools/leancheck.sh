@@ -139,7 +139,20 @@ for f in "${FILES[@]}"; do
   [ -n "$probe_dir" ] && [ -d "$probe_dir" ] || {
     printf "        audit: probe could not be created -- not a result\n"
     fail=$((fail+1)); pass=$((pass-1)); continue; }
-  cp "$f" "$probe"
+  # Strip any #print axioms line already in the source before copying it into
+  # the probe. Some proof files keep a manual `#print axioms Foo.bar` at the
+  # end as the author's own sanity check (846 such lines across 83 files,
+  # found 2026-09-28). `cp`-ing those straight in and then appending a freshly
+  # generated `#print axioms` for the SAME declaration below prints every one
+  # of those theorems TWICE. axiom_gate.py's count check compares $tot against
+  # itself (both derived from this same report), so it can never catch the
+  # inflation -- it silently doubled book28/FredholmSpace.lean's reported
+  # count from 2 to 4 on 2026-09-28, and a spot-check of the existing ledger
+  # found the identical shape as far back as 2026-09-05 (e.g.
+  # PolarPolygonCommonRefinement.axioms.txt: 15 real theorems reported as 21,
+  # then as 30 on 2026-09-09). The probe built below is now the ONLY source of
+  # any #print axioms line the file it runs will see.
+  grep -v '^#print axioms' "$f" > "$probe"
   grep -oE '^(theorem|lemma)[[:space:]]+[^[:space:]:({\[]+' "$f" \
     | awk '{print $2}' \
     | while read -r d; do

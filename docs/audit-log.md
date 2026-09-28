@@ -10481,3 +10481,49 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - Small find: Schrieber's letter drops the comma in "Humpty Dumpty said, in rather a scornful tone".
 - **Also downloaded:** the Bodleian/Google scan of Alice's Adventures in Wonderland, illustrated by Tenniel (223 pp.). It has no text layer and is not used yet.
 - **The Queen Victoria anecdote** is not in Gardner. It stays "possibly apocryphal", as the letter says.
+
+# LEANCHECK.SH DOUBLE-COUNTED 83 FILES' OWN #print axioms (2026-09-28)
+
+**What tripped it.** `book28/FredholmSpace.lean` has exactly 2 theorems and, like a number
+of proof files in this corpus, ends with its own manual `#print axioms Foo.bar` lines --
+the author's habit of a quick sanity check while writing the proof. The 2026-09-28 audit
+report for it, `tools/verify-audit/2026-09-28/geometry__book28__FredholmSpace.axioms.txt`,
+listed **4** declarations: `rank_ker_comp_le` and `every_integer_is_an_index`, each twice.
+
+**Root cause.** `tools/leancheck.sh --audit` builds its probe by `cp`-ing the whole source
+file, then appending a freshly generated `#print axioms` line for every `theorem`/`lemma`
+it finds by grep. When the source already carries its own `#print axioms` line for that
+same declaration, the `cp` keeps it and the append duplicates it -- every such theorem is
+printed twice. `tools/axiom_gate.py`'s count check compares the report's own line count
+against itself (`tot` in the caller, `EXPECTED_COUNT` in the callee are the same number),
+so it cannot catch this: the gate passes, and the ledger silently records twice the real
+count.
+
+**Not a one-off.** `grep -rl '^#print axioms' --include='*.lean' .` (excluding `.lake`)
+finds **83 files** in this corpus with this habit, 846 such lines total. A spot-check of
+already-committed reports turns up the identical doubling symptom as far back as
+**2026-09-05**: `PolarPolygonCommonRefinement.axioms.txt` reported 21 theorems (15 real) on
+2026-09-05 and 30 (still 15 real) on 2026-09-09; `SpiralReturnObstruction`, `TripleAlphaDm3`,
+`SmokeBox`, `ChladniPolygon`, `CycleCoupling`, `NbonacciLadder`, `SaturnHexagon` and
+`PolarTriadClosure` all show the same shape on 2026-09-09. These historical reports are left
+as originally recorded -- the ledger is evidence of what a run said at the time, not a
+number to quietly correct after the fact -- but the counts in them for these files should be
+read as "real count times some duplication factor," not taken at face value, until
+individually re-audited.
+
+**Fix.** `tools/leancheck.sh`: the probe is now built with
+`grep -v '^#print axioms' "$f" > "$probe"` in place of `cp "$f" "$probe"`, so the probe's own
+appended `#print axioms` lines are the only ones it will ever contain. Verified two ways:
+(1) a standalone harness reproduced the exact old probe (4 lines, `rank_ker_comp_le` and
+`every_integer_is_an_index` each twice) and confirmed the new probe has exactly 2; (2) a
+control file with no inline `#print axioms` lines produces a byte-identical probe under both
+the old and new construction, so ordinary files are unaffected.
+
+**Corrected today's report.** `tools/verify-audit/2026-09-28/geometry__book28__FredholmSpace.axioms.txt`
+now lists the 2 real theorems once each, both depending only on the permitted three axioms.
+
+**Left undone, on purpose.** The other 82 files with inline `#print axioms` were not
+re-audited here -- that means re-running `lake env lean` (a full Mathlib-backed compile)
+once per file, which is a job for the machine that already has the 5.9 GB Mathlib build, not
+this session. Anyone re-running `leancheck.sh --audit` on them going forward gets the correct
+count automatically; the historical entries above are the ones still worth a second look.
