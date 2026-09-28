@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Types Decide &middot; Book XIV &mdash; Principia Orthogona</title>
+<meta name="description" content="One symbol, many meanings: Leibniz's 1684 notation, Ganesalingam's type-dependent syntax, I❤LA's juxtaposition, and a Lean proof that × commutes on numbers and not on matrices. Avigad's claim tested: this series uses the past tense 21x more than Mathematics in Lean.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.po-proved-block{max-width:820px;margin:2.5rem auto 1rem;padding:1.1rem 1.3rem;
+ border:1px solid rgba(122,148,113,.45);border-left:4px solid #7a9471;border-radius:0 6px 6px 0;
+ background:rgba(122,148,113,.07);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.75;}
+.po-proved-block .po-h{letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;color:#5f7a57;margin-bottom:.6rem;}
+.po-proved-block a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.po-proved-block .po-n{font-size:.68rem;opacity:.75;display:block;margin-top:.7rem;line-height:1.6;}
+</style>
+<!--po-subject--><meta name="po-subject" content="LINGUISTICS · MATHEMATICAL"><meta name="po-subject-2" content="HISTORY · MATHEMATICS"><!--/po-subject-->
+</head>
+<body>
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XIV &middot; Ch 9</span>
+<span class="meta"><a href="ch08-six-lines.html">&larr; Ch 8</a> &middot; <a href="index.html">Book XIV contents</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XIV &middot; Chapter 9 &middot; 2026-09-28 &middot; The design of mathematical language</div>
+<!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4d1f47;background:#f3e0f0;border:1px solid #d4a6cc;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">LINGUISTICS · MATHEMATICAL</span><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4a2c14;background:#f3e7da;border:1px solid #d6b894;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">HISTORY · MATHEMATICS</span></div><!--/po-subject-->
+<h1>What <em>Types Decide</em></h1>
+<div class="subtitle">From Leibniz&rsquo;s signs to a compiler&rsquo;s juxtaposition</div>
+<div class="metagrid"><div><strong>Warrant</strong>book14/ch09-verify.py, 0 FAIL &middot; book14/TypesDecide.lean, kernel-checked</div><div><strong>Sources</strong>Leibniz 1684 &middot; Avigad &middot; Aberdein/Ganesalingam &middot; Ganesalingam &amp; Gowers &middot; Macmillan &middot; I&#10084;LA &middot; Stathopoulos &amp; Teufel &middot; Matsuzaki et al.</div><div><strong>Corpus</strong>this series at 4b4b354</div></div>
+</div>
+<div class="wrap">
+
+<div class="lede">A symbol does not carry its meaning alone. The same &ldquo;&times;&rdquo; commutes on numbers and not on matrices; the same juxtaposition means a product of scalars, of a matrix and a vector, or of two matrices; the same sign in Leibniz's quotient rule flips according to whether a quantity grows or shrinks. What decides is the <em>type</em> of the thing the symbol is applied to. This chapter follows that idea from Leibniz in 1684 to a compiler in 2021, and tests a claim about the grammar of mathematics on this series.</div>
+<div class="eyebrow">1 &middot; Leibniz, 1684</div>
+<h2>A notation designed to be compressed</h2>
+<figure style="margin:1rem 0;border:1px solid var(--rule);background:#fff;padding:.5rem"><img src="img/nova-methodus-1684.png" alt="First page of Leibniz, Nova Methodus pro maximis et minimis, as printed in the collected edition, with the rules for da, d(ax), sums, products xv and quotients v/y" style="width:100%;height:auto"><figcaption class="mono" style="font-size:.62rem;color:var(--dim);padding:.3rem">Leibniz, <em>Nova Methodus pro maximis et minimis</em>, Acta Eruditorum Lipsiensium 1684, as reprinted in the collected mathematical writings. Page image held in the repository.</figcaption></figure>
+<p>On the first page of the calculus, Leibniz lists his rules: <em>da</em> = 0 for a constant, <em>d(ax)</em> = <em>a dx</em>, the differential of a sum is the sum of the differentials, and <em>Multiplicatio</em>: d(xv) = x dv + v dx. Then comes a sentence about notation itself: <em>&ldquo;In arbitrio enim est vel formulam, ut xv, vel compendio pro ea literam, ut y, adhibere&rdquo;</em>, &ldquo;for it is at our discretion to use either the formula, like xv, or, as an abbreviation for it, a letter, like y.&rdquo; A letter may stand for a whole formula. That is <a href="ch07-maximum-meaning.html">Chapter 7</a>'s compression, written into the rules of the calculus. <span class="tag t-data">CITED</span></p>
+<p>His quotient rule is printed as d(v/y) = (&plusmn;v dy &#8723; y dv)/yy. The script checks both readings against the derivative at nine points. With the lower signs, (y dv &minus; v dy)/yy, it is correct at every point. With the upper signs it gives exactly the negative. The next paragraph, <em>&ldquo;Quoad Signa&hellip;&rdquo;</em>, explains that the signs are settled by whether the quantities increase or decrease. The formula leaves a slot, and a fact about the quantities fills it. <span class="tag t-data">COMPUTED</span></p>
+<div class="eyebrow">2 &middot; The syntax is type-dependent</div>
+<h2>Ganesalingam, I&#10084;LA, and one symbol with two laws</h2>
+<p>Aberdein's review of Ganesalingam's <em>The Language of Mathematics</em> reports its central observation: &ldquo;Ganesalingam observes that the syntax of mathematics is type-dependent&rdquo;, so that whether an expression is even well formed can depend on what kind of object its letters denote. Ganesalingam also insists on &ldquo;full adaptivity&rdquo;: the mathematics must come from the text, not be built into the analyser. <span class="tag t-data">CITED</span></p>
+<p>I&#10084;LA, a language that compiles chalkboard linear algebra into code, applies the same idea. Its rule is that &ldquo;juxtaposition is multiplication&rdquo;, compiled &ldquo;depending on the types of the operands&rdquo;. The ambiguity in <a href="ch01-the-grammar-of-notation.html">Chapter 1</a>'s <em>6&divide;2(1+2)</em> comes from juxtaposition with no types attached. Stathopoulos and Teufel use &ldquo;a mathematical type&rdquo; as the key for searching research mathematics. <span class="tag t-data">CITED</span></p>
+<p><span class="mono">TypesDecide.lean</span> makes the point exact. On the natural numbers, <span class="mono">a * b = b * a</span> (<span class="mono">nat_mul_comm</span>). On 2&times;2 integer matrices the same symbol fails: with A = [[0,1],[0,0]] and B = [[0,0],[1,0]], AB &ne; BA (<span class="mono">matrix_mul_not_comm</span>). A reader who knows the symbol but not the type cannot know whether the law may be used. Lean's elaborator is the part that decides (<a href="../book19/ch03-elaborator-macro-kernel.html">Book XIX ch 3</a>). <span class="tag t-data">KERNEL-CHECKED</span></p>
+<div class="eyebrow">3 &middot; Too little and too much</div>
+<h2>Does this series write like mathematics?</h2>
+<p>Avigad (2021) says formal systems &ldquo;specify too little&rdquo; and &ldquo;too much&rdquo;. He also says of mathematical language: &ldquo;There are no subtle variations of tense, modality, or aspect, and the subject is generally devoid of subjunctives and counterfactuals.&rdquo; That is a claim that can be tested. <span class="tag t-data">CITED</span></p>
+<div class="tblwrap"><table><tr><th>text</th><th>words</th><th>was/were per million</th><th>modals per million</th></tr>
+<tr><td><em>Mathematics in Lean</em></td><td class="n">88,066</td><td class="n">136</td><td class="n">2,180</td></tr>
+<tr><td>Avigad 2021 (philosophy of mathematics)</td><td class="n">16,653</td><td class="n">1,021</td><td class="n">3,663</td></tr>
+<tr><td>Jurafsky &amp; Martin 2026 (a textbook of another field)</td><td class="n">302,974</td><td class="n">2,073</td><td class="n">2,872</td></tr>
+<tr><td>this series</td><td class="n">1,395,669</td><td class="n">2,900</td><td class="n">2,559</td></tr></table></div>
+<p>Modality does not separate the four: all fall between 2,100 and 3,700 modals per million. Tense does. <em>Mathematics in Lean</em> almost never uses the past tense (136 per million), just as Avigad predicts. This series uses it 21 times as often, more than a general textbook. <span class="tag t-data">COMPUTED</span></p>
+<div class="box thm"><span class="lab">What that says</span>Mathematics in the strict sense is timeless: it states what is true. This series mostly records what <em>happened</em>: a claim made and withdrawn, a scientist in the gallery, a figure corrected on the Mac. <a href="ch02-how-mathematical-prose-parses.html">Chapter 2</a> found the imperatives are in the Lean, and here the timeless statements are too. The prose is the history of doing mathematics, and the Lean is the mathematics. <span class="tag t-model">MODEL</span></div>
+<div class="eyebrow">4 &middot; Machines that write like people</div>
+<p>Macmillan's <em>On the Grammar of Proof</em> names the two virtues <a href="ch08-six-lines.html">Chapter 8</a> set side by side. <em>Syntactic completeness</em> is a proof that &ldquo;entirely encode[s] an argument's subtlest details&rdquo;, as the Lean does. <em>Semantic adequacy</em> is a proof that convinces a fluent mathematician, as Hardy and Wright's does. Ganesalingam and Gowers built a prover that &ldquo;presents the solutions in a form that is hard to distinguish from solutions that human mathematicians might write&rdquo;: completeness underneath, adequacy on the surface. Matsuzaki and colleagues tested a system on &ldquo;real university entrance exam problems&rdquo;, starting from the problem as a student reads it. <span class="tag t-data">CITED</span></p>
+<div class="gap"><span class="lab">Not established</span>Ganesalingam's book is still not held; his claims come through Aberdein's review. The Leibniz text was transcribed by eye from the page image, which does not show the edition's page number. Counting &ldquo;was/were&rdquo; is a crude measure of tense, and this series' gallery of historical chapters inflates it. None of the systems in &sect;4 was run here. <span class="tag t-open">OPEN</span></div>
+<ol class="refs">
+<li>G. W. Leibniz, &ldquo;Nova methodus pro maximis et minimis&hellip;&rdquo;, <em>Acta Eruditorum</em>, Leipzig, 1684; page image from the collected mathematical writings. Held.</li>
+<li>J. Avigad, &ldquo;The design of mathematical language&rdquo;, 29 Aug 2021.</li>
+<li>A. Aberdein, review of M. Ganesalingam, <em>The Language of Mathematics</em> (Springer, 2013), <em>Philosophia Mathematica</em> 25(1) (2017).</li>
+<li>M. Ganesalingam &amp; W. T. Gowers, &ldquo;A fully automatic problem solver with human-style output&rdquo;, arXiv:1309.4501, 2013.</li>
+<li>W. Macmillan, <em>On the Grammar of Proof</em>, MSc thesis, University of Gothenburg, 2021 (supervisor A. Ranta).</li>
+<li>Y. Li, S. Kamil, A. Jacobson &amp; Y. Gingold, &ldquo;I&#10084;LA: Compilable Markdown for Linear Algebra&rdquo;, <em>ACM Trans. Graph.</em> 40(6), Article 264, 2021.</li>
+<li>Y. A. Stathopoulos &amp; S. Teufel, &ldquo;Mathematical Information Retrieval based on Type Embeddings and Query Expansion&rdquo;, University of Cambridge.</li>
+<li>T. Matsuzaki, H. Iwane, H. Anai &amp; N. H. Arai, &ldquo;The Most Uncreative Examinee&rdquo;, AAAI-28, 2014.</li>
+</ol>
+
+</div>
+<!--po-gss--><aside class="po-gss" style="max-width:860px;margin:1.2rem auto 1rem;padding:.8rem 1.1rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(40,80,150,.85);border-radius:0 6px 6px 0;background:rgba(40,80,150,.05);font-family:ui-monospace,Menlo,monospace;font-size:.78rem;line-height:1.55"><details><summary style="cursor:pointer;letter-spacing:.08em"><b>Gold Standard Science &middot; 7 of 9 tenets shown</b> &middot; self-assessed against <a href="https://www.federalregister.gov/documents/2025/05/29/2025-09802/restoring-gold-standard-science" style="color:inherit">EO 14303 &sect;3(a)</a> &mdash; not a federal certification</summary><ul style="list-style:none;margin:.5rem 0 .3rem;padding:0"><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(i) reproducible <span style="opacity:.6">&mdash; a script or Lean file beside the page re-derives its numbers</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(ii) transparent <span style="opacity:.6">&mdash; code downloadable and sources named with addresses</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iii) error and uncertainty <span style="opacity:.6">&mdash; MODEL / OPEN tags or an [HONESTY] block</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iv) collaborative, interdisciplinary <span style="opacity:.6">&mdash; cross-linked to other volumes</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(v) skeptical <span style="opacity:.6">&mdash; states what it does not claim, or leaves items open</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(vi) falsifiable <span style="opacity:.6">&mdash; its script can print FAIL</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(vii) unbiased peer review <span style="opacity:.6">&mdash; not independently peer reviewed</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(viii) negative results <span style="opacity:.6">&mdash; reports a withdrawn or failed result</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#9675;</span>(ix) conflicts of interest <span style="opacity:.6">&mdash; disclosed: author-published through G6 LLC, the author&#x27;s company</span></li></ul><div style="opacity:.75">Scored by <code>tools/gold_standard.py</code> from what is observable on this page and beside it. &#10003; shown &middot; &#10007; not shown &middot; &#9675; disclosure. No agency has reviewed this page.</div></details></aside><!--/po-gss-->
+<!--po-run--><aside class="po-run" style="max-width:860px;margin:1.6rem auto 1rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(80,140,110,.85);border-radius:0 6px 6px 0;background:rgba(80,140,110,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Run it yourself &middot; one-click download</div><ul style="margin:.4rem 0 .5rem 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book14/TypesDecide.lean" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">TypesDecide.lean</a> <span style="opacity:.6">&middot; Lean 4 &middot; book14/TypesDecide.lean</span></li><li style="margin:.2rem 0"><a href="../book14/ch09-verify.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">ch09-verify.py</a> <span style="opacity:.6">&middot; Python 3 &middot; book14/ch09-verify.py</span></li></ul><div style="font-size:.92em;opacity:.85"><b>Python</b>: <code>python3 FILE.py</code> &mdash; standard library only; pages that read a book also need <code>pdftotext</code> and the book in <code>~/Downloads</code>, and say SKIP rather than PASS without it.<br><b>Lean</b>: clone <a href="https://github.com/TOTOGT/geometry" style="color:inherit">the repository</a>, run <code>lake exe cache get</code> once (Mathlib, pinned in <code>lakefile.lean</code>), then <code>lake env lean FILE.lean</code>. The <code>#print axioms</code> lines at the end should list only <code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>.</div></aside><!--/po-run-->
+<!--po-related--><aside class="po-related" style="max-width:860px;margin:2.2rem auto 1.4rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(201,168,76,.8);border-radius:0 6px 6px 0;background:rgba(128,128,128,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Across the series</div><div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Named on this page</div><ul style="margin:0 0 0 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book7/ch-leibniz.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Book VII · Gottfried Wilhelm Leibniz</a> <span style="opacity:.6">(Gottfried Wilhelm Leibniz)</span></li></ul><div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Same ground <span style="text-transform:none;letter-spacing:0">&middot; suggested by shared vocabulary</span></div><ul style="margin:0 0 0 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book18/ch01-a-ratio-not-a-rate.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Book XVIII · A Ratio, Not a Rate</a></li></ul></aside><!--/po-related-->
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XIV &middot; Chapter 9<br>
+Written 2026-09-27 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">Quotations checked against held texts; counts printed by the script; the Leibniz signs checked numerically; the Lean kernel-checked.</div>
+</div></footer>
+</body>
+</html>

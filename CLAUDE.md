@@ -121,6 +121,8 @@ Lean and cannot unlink git locks, so never commit from it. The Mac now has Homeb
 - **Corrections carried:** XIX ch4 now says 217 citations (not 242) and AXLE+GTCT has 49 names,
   96 citations. The 110 in the Book XIX plan was the file count.
 
+- **2026-09-28 addendum:** Book XIV is complete, with 9 chapters and the Key Register. ch2 draws on six papers (in lieu of Ganesalingam's book); ch8 Six Lines is HardyWright.lean; ch9 What Types Decide covers Leibniz 1684, Aberdein on Ganesalingam, I❤LA and TypesDecide.lean. Book14 = Polysemy, Brackets, Collective, HardyWright, TypesDecide. GSS: the peer-review ledger docs/peer-review.tsv; the ceiling is 7/9 without publication. The GSS work list goes to a dedicated session.
+
 ### Open — the next session, in priority order
 
 1. ~~Book XIV ch1~~ DONE 2026-09-27: Brackets.lean (SS fn 3 proved for brackets), 11,808 formulas nest ≤ 3.

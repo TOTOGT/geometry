@@ -10363,3 +10363,21 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - It uses 5 library facts plus nlinarith.
   - Kernel-checked in the cloud (Mathlib v4.32.0); added to lean_lib Book14.
 - **Not held:** Wiedijk 2006; Hardy & Wright (quoted via Kahle).
+
+## 2026-09-28 — Book XIV ch 9, What Types Decide
+- **Sources held:**
+  - Avigad 2021
+  - Aberdein's review of Ganesalingam, *Philosophia Mathematica* 25(1). The book itself is still not held.
+  - Ganesalingam & Gowers, arXiv:1309.4501
+  - Macmillan, Gothenburg MSc 2021
+  - I❤LA (ToG 2021)
+  - Stathopoulos & Teufel
+  - Matsuzaki et al., AAAI-28
+  - Leibniz, *Nova Methodus* (1684), page image (book14/img/nova-methodus-1684.png)
+- The "hipernombre_6_0.pdf" file is a link list with no author; it is not cited.
+- **Leibniz:** the printed d(v/y) = (±v dy ∓ y dv)/yy is correct with the lower signs at 9 test points and is the exact negative with the upper signs. The "Quoad Signa" paragraph settles the signs by whether the quantities increase or decrease.
+- **book14/TypesDecide.lean:** nat_mul_comm; matrix_mul_not_comm (A = [[0,1],[0,0]], B = [[0,0],[1,0]]). Kernel-checked in the cloud; added to lean_lib Book14.
+- **Avigad's claim** (no tense, no modality) tested:
+  - was/were per million: MIL 136, Avigad 1,021, J&M 2,073, this series 2,900 (21x MIL).
+  - Modals per million: 2,180–3,663 across all four.
+  - Tense separates the texts; modality does not.
