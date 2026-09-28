@@ -10318,3 +10318,12 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - 6÷2(1+2) gives {9, 1}; 1/2x, sin x/2, 2^3^2 and 8/4/2 each have 2 trees.
   - 1+…+1 gives the Catalan numbers; 1+2*3-4/2 has 14 trees and 9 values.
 - **Corpus at eab9581:** 11,808 formulas; bracket depth 0: 8,824, 1: 2,822, 2: 157, 3: 5; the maximum is 3 (Enceladus). SS §3.3 observed: a 5-state reader suffices in practice.
+
+## 2026-09-27 — Gold Standard stamp: what 9/9 would take, and two scoring fixes
+- **9/9 is not reachable by editing pages.**
+  - (vii) needs publication after independent peer review.
+  - (ix) cannot be claimed while G6 LLC publishes the books, so it stays a disclosure.
+  - The ceiling today is 7/9 plus the disclosure.
+  - New `docs/peer-review.tsv`: a page listed there with a published DOI earns (vii), and earns (ix) if the journal's COI statement reads "none". Submissions and preprints do not count.
+- **Fix (iv):** pages that already link other volumes in their own text got no generated box and scored "no cross-volume links". Direct links into another folder now count; 35 pages moved.
+- **Fix (viii):** the pattern now also accepts "withdraws the", "withdrew that/the/its/this", "refuted one/an/a/the/its/in" and "conjecture is refuted". A first, looser widening (bare "failed"/"refuted") matched Escher failing at school, a dam that failed, "Not refuted" and Thoreau withdrawing to Walden, so it was rejected. Pages gained: book14 ch3, book4 adelic-embedding, WP-107, WP-29, ch-feigin, ch-hardy, ch11-plasma, ch18-neural, wk06.

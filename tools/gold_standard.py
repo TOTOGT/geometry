@@ -27,7 +27,25 @@ ROOT = ST.ROOT
 BEGIN, END = '<!--po-gss-->', '<!--/po-gss-->'
 BLOCK = re.compile(re.escape(BEGIN) + r'.*?' + re.escape(END) + r'\n?', re.S)
 EO = 'https://www.federalregister.gov/documents/2025/05/29/2025-09802/restoring-gold-standard-science'
-NEG = re.compile(r'withdrawn|retract|thesis failed|null result|0 matches|zero intersections|does not survive|was false|is false', re.I)
+# 2026-09-27: widened only to phrasings that report a claim this corpus withdrew or refuted
+# ("v4 withdraws the prediction", "WP-24 refuted one of its own bridges", "the conjecture is
+# refuted"). A bare "failed" or "refuted" is NOT enough: it matched "Escher failed at school",
+# "the dam failed" and "Not refuted". Every page this changed is listed in docs/audit-log.md.
+NEG = re.compile(r'withdrawn|withdraws? the|withdrew (?:that|the|its|this)|retract|thesis failed|null result|0 matches|zero intersections|does not survive|was false|is false|\brefuted (?:one|an|a|the|its|in)\b|conjecture is refuted', re.I)
+
+# (vii) and (ix) are earned outside the books. docs/peer-review.tsv lists a page only once an
+# independent journal has PUBLISHED it: page<TAB>venue<TAB>DOI<TAB>COI statement as printed.
+# A submission, a preprint or an acceptance letter does not count.
+def peer_ledger():
+    path = os.path.join(ROOT, 'docs', 'peer-review.tsv')
+    out = {}
+    if os.path.exists(path):
+        for line in open(path, encoding='utf-8'):
+            f = line.rstrip('\n').split('\t')
+            if len(f) >= 4 and f[0] and not f[0].startswith('#') and f[2].startswith('10.'):
+                out[f[0]] = dict(venue=f[1], doi=f[2], coi=f[3])
+    return out
+PEER = peer_ledger()
 
 def score(rel, src):
     body = BLOCK.sub('', src)
@@ -35,6 +53,19 @@ def score(rel, src):
     scripts = [open(os.path.join(ROOT, f), encoding='utf-8', errors='replace').read() for f in files]
     code = '\n'.join(scripts)
     other_books = len(set(re.findall(r'Book (\w+) &middot;|Book (\w+) ·', body[body.find('<!--po-related-->'):] if '<!--po-related-->' in body else ''))) > 0
+    # 2026-09-27: a page that already links another volume in its own text gets no generated
+    # box (crossref only suggests pages not yet linked), and scored "no cross-volume links".
+    # Direct links into another top-level folder count too.
+    own = rel.split('/')[0] if '/' in rel else ''
+    prose = re.sub(r'<!--po-(run|gss|related|subject)-->.*?<!--/po-\1-->', '', body, flags=re.S)
+    prose = prose[prose.find('<div class="wrap">'):] if '<div class="wrap">' in prose else prose
+    for h in re.findall(r'href="([^"#]+\.html)', prose):
+        if h.startswith(('http', 'mailto')):
+            continue
+        tgt = os.path.normpath(os.path.join(os.path.dirname(rel), h)).split(os.sep)
+        if len(tgt) > 1 and tgt[0] not in ('..', own) or (own and len(tgt) == 1):
+            other_books = True
+            break
     refs = bool(re.search(r'References|Sources|<ol class="refs"|Primary source|Held text', body))
     t = [
       ('reproducible', bool(files), 'a script or Lean file beside the page re-derives its numbers' if files else 'no script or Lean file'),
@@ -43,9 +74,11 @@ def score(rel, src):
       ('collaborative, interdisciplinary', other_books, 'cross-linked to other volumes' if other_books else 'no cross-volume links'),
       ('skeptical', bool(re.search(r't-open|OPEN\]|not claim|will not claim|What (this|the) .{0,30}(not|does not)', body + code)), 'states what it does not claim, or leaves items open'),
       ('falsifiable', bool(re.search(r'\bFAIL\b', code)), 'its script can print FAIL' if re.search(r'\bFAIL\b', code) else 'no check that can fail'),
-      ('unbiased peer review', False, 'not independently peer reviewed'),
+      ('unbiased peer review', rel in PEER,
+       f"published after peer review: {PEER[rel]['venue']}, doi:{PEER[rel]['doi']}" if rel in PEER else 'not independently peer reviewed'),
       ('negative results', bool(NEG.search(body)), 'reports a withdrawn or failed result' if NEG.search(body) else 'no negative result reported on this page'),
-      ('conflicts of interest', None, 'disclosed: author-published through G6 LLC, the author\'s company'),
+      ('conflicts of interest', (True if rel in PEER and PEER[rel]['coi'].lower().startswith('none') else None),
+       f"journal statement: {PEER[rel]['coi']}" if rel in PEER else 'disclosed: author-published through G6 LLC, the author\'s company'),
     ]
     return t
 
