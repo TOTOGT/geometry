@@ -10338,7 +10338,7 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 - **Sources held:**
   - Tanswell & Inglis 2023 (Table 3)
   - Arambillete & de Groote, LENLS 21 (2025)
-  - Balkır, Oxford MSc 2014. The file is named `.oxford`, not `.pdf`, so floor_texts does not list it; rename it to list it.
+  - Balkır, Oxford MSc 2014. Renamed from `.oxford` to `.pdf` by Pablo on 2026-09-28; now listed in floor-texts.
   - Corneli et al., FARM'17
   - Orth 2013 (essay)
   - Fatima, FIRMA (preprint)
@@ -10355,3 +10355,11 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - Over senses (ch3's chain rule): only U is ambiguous, 0.742 bits. This is polysemy (K) against homonymy (U).
 - **FIRMA:** 0.304 overall. Its "6307.5%" implies a baseline of about 0.005. Flagged, not replicated.
 - **R24 in action:** my prior expectations ("Let" on top; U the most ambiguous) were both wrong, and the script's answers are the findings.
+
+## 2026-09-28 — Book XIV ch 8, Six Lines (Kahle; Hardy & Wright in Lean)
+- **Source held:** Kahle, "Towards the Structure of Mathematical Proof" (Downloads/paper-22.pdf). Its quotations of Hardy & Wright, Wiedijk ("We clearly are not yet there") and Scott ("What really is a proof?") are checked.
+- **book14/HardyWright.lean:** `no_coprime_solution`: a² = 2b² with (a, b) = 1 is impossible over ℕ. Each step is tagged HW(1..6) with the sentence it carries out.
+  - 7 lines and 52 tokens, against 49 words of Hardy & Wright.
+  - It uses 5 library facts plus nlinarith.
+  - Kernel-checked in the cloud (Mathlib v4.32.0); added to lean_lib Book14.
+- **Not held:** Wiedijk 2006; Hardy & Wright (quoted via Kahle).
