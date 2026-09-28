@@ -10468,3 +10468,5 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
   - Mock Turtle pairing: the least total edit distance of the 24 pairings is the obvious one, 12 against 16 for the next.
 - **Series reading (MODEL):** Alice's question is polysemy; Humpty Dumpty's answer is stipulation, the move a mathematical definition makes. The section links to ch4 Translation Keys and the Key Register.
 - **Not held:** an edition of the Alice books. Carroll is quoted through the letter.
+- **Tenniel engraving added to ch 3 §5:** the Queen of Hearts and Alice (1865, public domain), supplied by Pablo. Stored as book14/img/tenniel-queen-of-hearts.png and hash-checked.
+- **The AI-generated summary that came with the image is not used.** It gave Tenniel's illustration counts, the recalled first printing and the Nursery Alice, and no held source states any of them. This is the confabulation risk tools/terms.py was written for.

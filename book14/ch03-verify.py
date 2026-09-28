@@ -105,6 +105,11 @@ print("     WordNet noun senses:", ws)
 check("WordNet noun senses: word 10, master 10, question 6, definition 2 (Alice's point, counted)",
       ws == {"word": 10, "question": 6, "master": 10, "definition": 2}, str(ws))
 
+import hashlib
+img = ROOT / "book14/img/tenniel-queen-of-hearts.png"
+check("the Tenniel engraving shown on the page is the one supplied (sha256 a0832fb3e60fbf05...)",
+      img.exists() and hashlib.sha256(img.read_bytes()).hexdigest().startswith("a0832fb3e60fbf05"))
+
 print("[HONESTY]")
 print("  SemCor is a sense-tagged part of the Brown Corpus (American prose, 1961); counts are small and dated. A count of 0 means")
 print("  unattested in SemCor, not absent from English. Which WordNet synset is the template's head")
@@ -112,5 +117,7 @@ print("  is our judgement, stated per row. The co-predication table in Polysemy.
 print("  not a corpus result. Lean checks the counting logic, not the linguistics. [4] quotes Carroll")
 print("  through Schrieber's letter, not from a held edition of the Alice books; the pairing of the")
 print("  Mock Turtle's branches with the operations is the reader's pun, measured, not stated in the letter.")
+print("  The Tenniel image came with an AI-generated summary (illustration counts, the recalled 1865")
+print("  printing, the 1890 Nursery Alice); none of that is used, because no held source states it.")
 print(f"\n{len(FAIL)} FAIL" + (": " + ", ".join(FAIL) if FAIL else ""))
 sys.exit(1 if FAIL else 0)
