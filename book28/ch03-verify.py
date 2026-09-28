@@ -5,6 +5,8 @@
 book28/ch03-verify.py -- every number and quotation on book28/ch03-the-winding-number.html. Run first (R24).
     python3 book28/ch03-verify.py [--downloads DIR]
   [1] Zois, 18 Lectures on K-Theory (arXiv:1008.1346v1), Part II Lecture 2: the sentences quoted, by PDF page
+  [1b] two more witnesses to Ind T_f = -wn(f) (Blackadar; the unattributed Chapter 10 draft), and the other Noether
+  [1c] F. Noether, Math. Ann. 82 (1921), pp. 42-63: the scan, by OCR -- now held, see docs/audit-log.md 2026-09-28
   [2] winding numbers of eleven symbols, two ways: the argument around the circle, and roots inside the disc
   [3] Zois Prop. 1 on polynomial symbols: T_f T_g - T_fg has finite rank, the same at every truncation (exact)
   [4] Zois Thm. 1, Ind T_f = -wn(f), observed on the same eleven symbols from N x N sections (numerical)
@@ -199,10 +201,13 @@ check("the only 'Toeplitz' in Mathlib is the Hellinger–Toeplitz theorem (2 pla
       len(toe.splitlines()) == 2 and toe.count("Hellinger--Toeplitz") == 2)
 
 print("[HONESTY]")
-print("  Noether (1921) is not held; the theorem is quoted from Zois' notes of Roe's 1995 lectures,")
-print("  whose proof is a sketch (homotopy to zᵐ, then the shift). [2] and [4] are floating point:")
-print("  [4] reads the index off N x N sections (N = 160) by where the near-null singular vectors")
-print("  sit, which is an observation on eleven symbols, not a proof. [3] is exact. [5] is a text")
-print("  search at the pinned revision; 'lacks' means no declaration matched the pattern.")
+print("  Noether (1921) IS held (updated 2026-09-28): [1c] above quotes it directly, by OCR, from the")
+print("  Goettingen scan of Math. Ann. 82. Zois himself does not cite it -- his own theorem statement")
+print("  ([1]) is quoted from his notes of Roe's 1995 lectures, whose proof is a sketch (homotopy to")
+print("  z^m, then the shift), and that sketch is not verified against Noether's own 1921 argument.")
+print("  [2] and [4] are floating point: [4] reads the index off N x N sections (N = 160) by where the")
+print("  near-null singular vectors sit, which is an observation on eleven symbols, not a proof. [3]")
+print("  is exact. [5] is a text search at the pinned revision; 'lacks' means no declaration matched")
+print("  the pattern.")
 print(f"\n{len(FAIL)} FAIL" + (": " + ", ".join(FAIL) if FAIL else ""))
 sys.exit(1 if FAIL else 0)
