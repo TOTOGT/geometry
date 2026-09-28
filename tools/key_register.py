@@ -33,7 +33,7 @@ OUT_TSV = os.path.join(ROOT, 'docs', 'key-register.tsv')
 RETIRED = ('docs/ml-evidence/', '_archive/', '_to_delete/')
 # pages that QUOTE glosses as examples (use/mention): not counted as usage
 MENTION = {'book14/ch04-translation-keys.html', 'book14/key-register.html',
-           'book14/ch06-words-that-went-wrong.html'}
+           'book14/ch06-words-that-went-wrong.html', 'book14/ch02-how-mathematical-prose-parses.html'}
 SENSES = {
     'C': {'compression': ['compression', 'compress', 'compressão'], 'contact': ['contact']},
     'K': {'threshold': ['threshold', 'limiar'], 'curvature': ['curvature', 'curvatura'],

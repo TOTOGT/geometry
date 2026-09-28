@@ -201,4 +201,4 @@ lean_lib Book12 where
 @[default_target]
 lean_lib Book14 where
   srcDir := "book14"
-  roots := #[`Polysemy, `Brackets]
+  roots := #[`Polysemy, `Brackets, `Collective]

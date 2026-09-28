@@ -10333,3 +10333,25 @@ Ledger 131 → 134: Perko, Hirsch–Smale–Devaney (3rd ed.), Planck 2018 VI.
 - **"degenerate double root":** used on 0 pages. It is quoted only in WP-61 and in ch-huh, which reports it (use/mention, read). The WP-61 repair held.
 - **Proved/proved** 225/789 against kernel-checked 232, kernel-audited 33 and sorry-free 89. **"there is no"** 322 against "did not find" 4. These are work lists, not verdicts.
 - key_register MENTION now includes ch06 (it quotes U glosses as examples).
+
+## 2026-09-28 — Book XIV ch 2, How Mathematical Prose Parses (six papers in lieu of Ganesalingam)
+- **Sources held:**
+  - Tanswell & Inglis 2023 (Table 3)
+  - Arambillete & de Groote, LENLS 21 (2025)
+  - Balkır, Oxford MSc 2014. The file is named `.oxford`, not `.pdf`, so floor_texts does not list it; rename it to list it.
+  - Corneli et al., FARM'17
+  - Orth 2013 (essay)
+  - Fatima, FIRMA (preprint)
+- **Imperatives:** the thirteen Table 3 verbs occur 247 times per million words in this corpus (832 pages, 1,392,322 words, at 7a471e3), against 9,406 in arXiv proofs, about 38x fewer. The top verb is "Write" (course instructions), not "Let". The recipes are in the Lean (XIX ch2: 2,482 tactic lines).
+- **Collective.lean** (Mathlib; kernel-checked in the cloud):
+  - primes are pairwise coprime;
+  - {4} is vacuously pairwise coprime, although 4 is not prime;
+  - the collective reading is downward closed;
+  - orthogonality is not transitive on ℤ².
+  - Added to lean_lib Book14.
+- **'orthogonal' usage:** "are orthogonal" 11, "mutually orthogonal" 6, "pairwise orthogonal" 0, "orthogonal to" 9, "is orthogonal" 35.
+- **Entropy of the keys:**
+  - Over glosses: C 0.746, K 1.369, F 0, U 0.956 bits.
+  - Over senses (ch3's chain rule): only U is ambiguous, 0.742 bits. This is polysemy (K) against homonymy (U).
+- **FIRMA:** 0.304 overall. Its "6307.5%" implies a baseline of about 0.005. Flagged, not replicated.
+- **R24 in action:** my prior expectations ("Let" on top; U the most ambiguous) were both wrong, and the script's answers are the findings.

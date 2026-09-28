@@ -125,8 +125,7 @@ Lean and cannot unlink git locks, so never commit from it. The Mac now has Homeb
 
 1. ~~Book XIV ch1~~ DONE 2026-09-27: Brackets.lean (SS fn 3 proved for brackets), 11,808 formulas nest ≤ 3.
    On the Mac: `brew install tesseract` (ch01-verify OCRs the Chomsky scan) and `lake build Book14`.
-2. **Book XIV ch2** needs Ganesalingam, *The Language of Mathematics* (LNCS 7805, 2013), or his
-   2009 Cambridge thesis. NOT HELD — ask the author.
+2. ~~Book XIV ch2~~ DONE 2026-09-28 with six papers in lieu of Ganesalingam (still WANTED). Collective.lean added to Book14.
 3. ~~Book XIV ch6~~ DONE 2026-09-27: Words That Went Wrong (9 entries; "there is no" 322 vs "did not find" 4).
 4. **Key Register follow-ups:** the three U senses need an editorial decision (rename Union
    under the Omega set? retire Unification/Universal?). A gold set for recall is WANTED (ch5).
