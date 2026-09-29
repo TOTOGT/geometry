@@ -10848,3 +10848,10 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
 - **Connection made and left as a gap:** book7/ch-dyson.html's own text says nothing of Dyson spheres, the infrared search, civilizations, Kardashev or SETI, while PF p.187 credits Dyson with the search. Dyson chapter NOT edited.
 - **A check of mine broke and was fixed:** ch-kardashev-verify.py's "Dyson chapter says nothing" counted the generated cross-link box crossref.py had just added (it names ch-kardashev). The script now strips generated po-* boxes before counting; the claim is about the chapter's own text.
 - **Registered:** book7/index.html (2 cards, 2 gap rows), docs/subjects.tsv, stamps, run boxes; generated cross-link lines committed only where their diff names these chapters (ch-dyson, ch-tatiana, chH-collatz). Not committed, not mine: unrelated crossref changes to book4/ladder-polynomials, book6/ch-drifts-nutrition-fingerprint, book6/ch07-microtubule-fibonacci, chW-wigner (git cannot restore them here). tools/build_indexes.py not run.
+
+## 2026-09-29 - Kaku / Kikkawa / Kardashev revised on the papers supplied in Downloads
+- **Read:** Kardashev 1964 (OCR of a 5-page scan), Schwarz, Ooguri, Kubota workshop papers, the Appraisal paper (tertiary, not relied on), Sharma 2026 (preprint, unreviewed).
+- **Kardashev:** the earlier 'held: three descriptions, no paper' status is superseded. The paper's Type I is a technology level near 1963 (4e12 W), not the planet's sunlight; steps are 14 and 11 decades; the ladders in Kaku PW, Kaku PF and Sharma are each different from it. Dyson 1959 and Sagan remain WANTED.
+- **Kikkawa:** the 1984 duality credit and the 1969 paper are corroborated by three held papers; the 1974 string-field-theory claim is not (Kaku alone, WANTED). None of the cited papers is itself held.
+- **Still OPEN:** the 3 vs 5 vs 1 vertex count (R9, author's call); covariant level counts; Planck vs string length; Dyson chapter silent on Kardashev/Dyson sphere (gap, not edited).
+- **Registered:** four supplementary rows in docs/claims.tsv; the three chapter pages restamped; book7/index.html cards and gap rows updated. tools/build_indexes.py not run.

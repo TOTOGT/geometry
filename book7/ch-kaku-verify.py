@@ -283,6 +283,29 @@ else:
           'chGravity-scales.html, nano-scale text: "T-duality self-dual point at R = 1"')
 
 # ---------------------------------------------------------------------------
+head(7, 'THE PAPER THE LADDERS CLAIM TO DESCRIBE   (added after the author supplied it)')
+import tempfile, glob
+pp = find_pdf('The  Kardashev.pdf')
+PAPER = None
+if not pp:
+    print('    SKIP  The  Kardashev.pdf not found in ~/Downloads'); skips.append('paper')
+else:
+    try:
+        tmp = tempfile.mkdtemp()
+        subprocess.run(['pdftoppm', '-r', '250', '-png', pp, os.path.join(tmp, 'p')], check=True, capture_output=True)
+        PAPER = [squeeze(subprocess.run(['tesseract', png, '-'], capture_output=True, text=True, check=True).stdout) for png in sorted(glob.glob(os.path.join(tmp, 'p-*.png')))]
+    except Exception as e:
+        print('    SKIP  OCR unavailable (%s)' % e.__class__.__name__); skips.append('paper')
+if PAPER:
+    ok1 = squeeze('technological level close to the level presently attained on the earth') in ''.join(PAPER)
+    ok2 = squeeze('3200 years from now') in ''.join(PAPER) and squeeze('in 5800 years') in ''.join(PAPER)
+    check(ok1, 'Kardashev 1964: Type I is the technological level presently attained on the earth (not planetary sunlight)')
+    check(ok2, 'Kardashev 1964 prints 3200 and 5800 years at 1% growth')
+    d1 = 3200 * math.log(1.01) / math.log(10); d2 = 5800 * math.log(1.01) / math.log(10)
+    check(abs(d1 - 14) < 0.2 and abs(d2 - 25) < 0.2, 'those years are 14 and 25 decades above his Type I: his rungs are 4e12, 4e26, 4e37 W (steps 14 and 11), not 10^10 apart')
+    note('Full reading of the paper, Sharma 2026 and the four ladders: book7/ch-kardashev-verify.py')
+
+# ---------------------------------------------------------------------------
 print('\n' + '=' * 72)
 if skips: print('  SKIPPED (not passed, not failed): %s' % ', '.join(skips))
 if fails:
@@ -290,6 +313,7 @@ if fails:
     for f in fails: print('    - ' + f)
     sys.exit(1)
 print('  all run checks passed.')
-print('  Recorded as open, not checked: original 1974 and 1984 papers (WANTED); Kardashev 1964 and')
-print('  Sagan sources (WANTED); Planck vs string length in the R/1/R statement (OPEN); covariant')
-print('  level-truncation counts (OPEN); which gauge Kaku-Kikkawa used (WANTED).')
+print('  Recorded as open, not checked: the 1974 string-field-theory papers (WANTED); the 1984 duality paper and')
+print('  the 1969 Kikkawa-Sakita-Virasoro paper (cited by held papers, themselves not held); Sagan\'s grading (WANTED);')
+print('  Planck vs string length in the R/1/R statement (OPEN); covariant level-truncation counts (OPEN);')
+print('  which gauge Kaku-Kikkawa used (WANTED). Kardashev\'s 1964 paper IS held: see section 7 and ch-kardashev-verify.py.')

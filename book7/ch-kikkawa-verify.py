@@ -67,6 +67,57 @@ said('This duality was first found in 1984 by my old colleague Keiji Kikkawa and
 said('Kikkawa, Keiji, 190, 191, 209–10, 237', 'the index lists him on book pp.190, 191, 209-10, 237: the four passages, no others')
 
 # ---------------------------------------------------------------------------
+head('1b', 'INDEPENDENT SOURCES: THREE PAPERS PRESENTED AT THE WORKSHOP IN HIS HONOUR, AND ONE SECONDARY')
+def load(name, layout=True):
+    for d in ('~/Downloads', '~/mnt/Downloads'):
+        pp = os.path.join(os.path.expanduser(d), name)
+        if os.path.exists(pp):
+            try:
+                out = subprocess.run(['pdftotext'] + (['-layout'] if layout else []) + [pp, '-'], capture_output=True, text=True, check=True).stdout
+                return [squeeze(x) for x in out.split('\f')]
+            except Exception: return None
+    return None
+SRC = {
+ 'Schwarz': ('M Theory Extensions of T Duality.pdf', 'J. H. Schwarz, hep-th/9601077 (CALT-68-2034, Jan 1996)'),
+ 'Ooguri':  ('String Solitons and Singularities of K3 .pdf', 'H. Ooguri, LBL-38591 (Dec 1995)'),
+ 'Kubota':  ('THE RUBAKOV-CALLAN EFFECT AND BLACK HOLES 1.pdf', 'T. Kubota, hep-th/9603079 (OU-HET 241, Mar 1996)'),
+}
+SD = {}
+for k, (fn, label) in SRC.items():
+    SD[k] = load(fn)
+    if SD[k] is None: print('    SKIP  %s not found or unreadable' % fn); skips.append(k)
+    else: print('    held  %-8s %s' % (k, label))
+def sd(key, needle, msg):
+    if SD.get(key) is None: print('    SKIP  [%s] %s' % (key, msg)); return
+    n = squeeze(needle); pgs = [i + 1 for i, pg in enumerate(SD[key]) if n in pg]
+    check(bool(pgs), '[%s p.%s] %s' % (key, ','.join(map(str, pgs[:3])) or '-', msg))
+sd('Schwarz', 'in Honor of the 60th birthday of Keiji Kikkawa', 'presented at the workshop in honour of Kikkawa\'s 60th birthday')
+sd('Schwarz', 'Osaka, Japan December 1995', 'Osaka, December 1995')
+sd('Schwarz', 'Kikkawa and Yamasaki discovered the', 'Schwarz: Kikkawa and Yamasaki discovered "T duality"')
+sd('Schwarz', 'arising from compactification of closed string theories on a circle', 'T duality = closed strings compactified on a circle')
+sd('Schwarz', 'K. Kikkawa and M. Yamasaki, Phys. Lett. 149B (1984) 357', 'reference [3]: Kikkawa and Yamasaki, Phys. Lett. 149B (1984) 357')
+sd('Schwarz', 'type IIB superstring theory on a circle and type IIA superstring theory on a circle of reciprocal radius', 'the duality relates IIB on a circle to IIA on a circle of reciprocal radius')
+sd('Schwarz', 'K. Kikkawa, B. Sakita, and M.A. Virasoro, Phys. Rev. 184 (1969) 1701', 'reference [1]: Kikkawa, Sakita, Virasoro, Phys. Rev. 184 (1969) 1701')
+sd('Schwarz', 'as the tree approximation of a unitary quantum theory', 'that paper: dual-resonance n-point functions as the tree approximation of a unitary quantum theory')
+sd('Schwarz', 'K. Kikkawa and J.H. Schwarz, Phys. Rev. D1 (1970) 724', 'reference [2]: Kikkawa and Schwarz, Phys. Rev. D1 (1970) 724')
+sd('Schwarz', 'a study of the Regge asymptotic behavior of the KSV loop amplitudes', 'Schwarz and Kikkawa collaborated on the Regge asymptotic behaviour of the KSV loop amplitudes')
+sd('Schwarz', 'On several occasions Keiji Kikkawa has pioneered concepts', 'Schwarz: on several occasions Kikkawa pioneered concepts that led to advances in string theory')
+sd('Ooguri', 'K. Kikkawa and M. Yamasai, Phys. Lett. 149B (1984) 357', 'Ooguri cites the same paper (surname misspelt "Yamasai" in his list)')
+sd('Ooguri', 'in honor of the 60th birthday of Professor Keiji Kikkawa', 'presented at the same workshop')
+sd('Ooguri', 'Osaka, Japan, December 14-16, 1995', 'workshop dates: 14-16 December 1995')
+sd('Kubota', 'T. KUBOTA Department of Physics, Osaka University', 'Kubota writes from the Department of Physics, Osaka University')
+sd('Kubota', 'when I moved to Osaka University that I began to have the good fortune to work with Professor Keiji Kikkawa as one of his research associates', 'Kubota: research associate of Kikkawa at Osaka University from spring 1983')
+sd('Kubota', 'K. Kikkawa, T. Kubota and H.S. Song, Prog. Theor. Phys. 71 (1984) 1346', 'Kubota\'s reference [3]: Kikkawa, Kubota, Song, Prog. Theor. Phys. 71 (1984) 1346')
+# a fourth text repeats the credit, in a two-column layout the extractor interleaves; page-level check only, and it is NOT relied on
+AP = load('APPRAISAL OF CONCEPT AND BETTER UNDERSTANDING OF THEORY OF EVERYTHING OR GOD EQUATION AND CONSEQUENCE OF UNIVERSE.pdf', layout=False)
+if AP is None: print('    SKIP  the "Appraisal" paper not found'); skips.append('Appraisal')
+else:
+    a1, a2 = squeeze('K. Kikkawa and M.'), squeeze('Yamasaki of Osaka Univ. in 1984')
+    pgs = [i + 1 for i, pg in enumerate(AP) if a1 in pg and a2 in pg]
+    check(bool(pgs), '[Appraisal p.%s] a 2025 journal paper repeats "Kikkawa and Yamasaki of Osaka Univ. in 1984" (tertiary; not relied on)' % ','.join(map(str, pgs)))
+note('Schwarz, Ooguri and Kubota are independent of Kaku and of each other in what they cite; the papers they cite are NOT held.')
+
+# ---------------------------------------------------------------------------
 head(2, 'THE CORPUS ROW: HOW MANY STRING INTERACTIONS?   (R9: recorded, not resolved)')
 def strip(s):
     s = re.sub(r'data:[^"\')\s]+', '', s)
