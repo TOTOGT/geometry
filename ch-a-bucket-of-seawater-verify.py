@@ -44,7 +44,7 @@ def period(h):
         if np.abs(h[-1 - p] - h[-1]).max() < 1e-9: return p
     return None
 rows = {}
-for a in (0.0, 0.3, 0.45, 0.5, 0.6, 0.7, 0.9):
+for a in (0.0, 0.3, 0.41, 0.42, 0.45, 0.5, 0.6, 0.7, 0.9):
     ends = set(); pers = []
     for seed in range(40):
         h = run(8, a, 400, seed); ends.add(tuple(np.round(h[-1].ravel(), 4))); pers.append(period(h))
@@ -52,7 +52,9 @@ for a in (0.0, 0.3, 0.45, 0.5, 0.6, 0.7, 0.9):
     print(f"     alpha={a}: {len(ends)} distinct end states; periods {dict(rows[a][1])}")
 check("weak coupling (alpha = 0, 0.3): every one of 40 starts settles to a fixed state, and all 40 differ",
       all(rows[a][0] == 40 and rows[a][1] == Counter({1: 40}) for a in (0.0, 0.3)))
-check("alpha = 0.45: cycles appear (some runs of period 16)", rows[0.45][1].get(16, 0) > 0)
+check("alpha = 0.41: all 40 runs settle; alpha = 0.42: the first cycles (4 runs, period 24), 27 distinct end states",
+      rows[0.41][1] == Counter({1: 40}) and rows[0.42][1].get(24, 0) == 4 and rows[0.42][0] == 27)
+check("alpha = 0.45: cycles of period 16", rows[0.45][1].get(16, 0) > 0)
 check("alpha = 0.5: most runs cycle (period 16 or 24), fewer than half settle",
       rows[0.5][1].get(1, 0) < 20 and rows[0.5][1].get(16, 0) > 0)
 check("alpha >= 0.7: some runs neither settle nor repeat within 400 steps",
