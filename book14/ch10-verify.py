@@ -134,6 +134,6 @@ print("  I, C, M structure with F set aside) is a lead and is not proved here. T
 print("  ranges chosen. The Lean file proves the statements about the map; it does not prove the author's Theorems")
 print("  5.1-5.3 as printed (one of them is false, and the file proves that). It was compiled in the cloud against")
 print("  Lean 4.32.0 / Mathlib v4.32.0; run tools/leancheck.sh --audit book14/SwarmSimulatorV3.lean on the Mac to confirm.")
-print("  The V3 deposit that carries it (with the revised paper) is prepared under the reserved DOI 10.5281/zenodo.23027566 and is not yet on Zenodo. The Wolfram quotation is checked by eye.")
+print("  The V3 deposit that carries it (with the revised paper) was published as version 3.0, doi:10.5281/zenodo.23027566, on 29 September 2026. The Wolfram quotation is checked by eye.")
 print(f"\n{len(FAIL)} FAIL" + (": " + ", ".join(FAIL) if FAIL else ""))
 sys.exit(1 if FAIL else 0)

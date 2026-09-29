@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Zenodo description, Swarm Simulator V3</title>
+<style>body{font-family:Georgia,serif;max-width:46rem;margin:2rem auto;padding:0 1rem;line-height:1.55}code{font-family:Menlo,monospace;font-size:.92em}</style>
+</head>
+<body>
+<!-- HOW TO USE: open this file in a browser, select all (Cmd+A), copy (Cmd+C), and paste into the Zenodo description box.
+     Or, if the editor has a source/HTML button, paste everything between the START and END comments there. -->
+<!-- START -->
+<p><b>The Swarm Simulator: A Dynamical Systems Model of Collective Intelligence Using the TO/TOGT Operator Pipeline</b><br>
+<b>Version 3, September 2026 (corrections and formal checks)</b></p>
+
+<p>Pablo Nogueira Grossi, G6 LLC, Newark, NJ. ORCID: <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a><br>
+Versions: V1 <a href="https://doi.org/10.5281/zenodo.19208284">10.5281/zenodo.19208284</a>; V2 <a href="https://doi.org/10.5281/zenodo.20230613">10.5281/zenodo.20230613</a>; V3 (this deposit) 10.5281/zenodo.23027566.<br>
+Series root: <a href="https://doi.org/10.5281/zenodo.19117399">10.5281/zenodo.19117399</a>. Formal-verification hub: <a href="https://github.com/TOTOGT/AXLE">github.com/TOTOGT/AXLE</a>.</p>
+
+<h3>Abstract</h3>
+<p>The Swarm Simulator is a multi-agent dynamical system whose collective state X<sub>t</sub> = (I<sub>t</sub>, C<sub>t</sub>, M<sub>t</sub>, F<sub>t</sub>) has four quantities: shared-intent stability, coordination efficiency, type-propagation multiplier and diffusion factor. Four collective operators, motivated by the generative operator pipeline G = U&#8728;F&#8728;K&#8728;C of Topographical Orthogonal Generative Theory (TO/TOGT), govern its evolution. The agent-level pipeline is not formalised in this paper; the collective operators are taken as definitions.</p>
+
+<h3>Why version 3</h3>
+<p>Versions 1 and 2 stated a contraction theorem on R<sup>4</sup> and a multi-orbit claim of distinct fixed points, and version 1 said that no numerical or unverifiable claims were made. Checking version 2 against Lean 4.32.0 and Mathlib v4.32.0 showed that its Lean file did not compile, that several of its theorems did not concern the swarm map, that Theorem 5.1 as printed is false, and that the two clusters of its multi-orbit figure were not contractive. Version 3 replaces the paper, the Lean file, the simulator and the open-questions table. The V1 and V2 texts are superseded.</p>
+
+<h3>What version 3 proves</h3>
+<p>Lean 4.32.0, Mathlib v4.32.0, no <code>sorry</code>, axioms <code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code> only. Write a = f<sub>types</sub>&middot;f<sub>agents</sub>&middot;(1 &minus; &eta;), c = 1/(1 + D), m = (1 + &beta;&middot;reuse)&middot;avg_quality.</p>
+<ul>
+<li><b>No global contraction.</b> The map has no global Lipschitz constant, because C<sub>t+1</sub> = C<sub>t</sub>&middot;I<sub>t+1</sub>/(1 + D) multiplies two state variables (<code>no_global_lipschitz</code>).</li>
+<li><b>Contraction on a ball.</b> On &#8214;X&#8214; &le; R the Lipschitz constant is &lambda;(R) = max(a(1 + cR), m), which is below 1 for R &lt; (1 &minus; a)/(a&middot;c). For the default parameters the radius is about 3.51 (<code>step_lipschitz_ball</code>, <code>default_radius</code>).</li>
+<li><b>Decay.</b> &#8214;X<sub>t</sub>&#8214; &le; &rho;(R)<sup>t</sup>&#8214;X<sub>0</sub>&#8214; with &rho;(R) = max(a, a&middot;c&middot;R, m). The printed bound L<sup>t</sup>&#8214;X<sub>0</sub>&#8214; holds for &#8214;X<sub>0</sub>&#8214; &le; 1 and fails from (100, 10, 1) (<code>orbit_nrm_le</code>, <code>paper_bound</code>, <code>printed_bound_fails</code>).</li>
+<li><b>Fixed point.</b> The only fixed point of (I, C, M) in the ball is 0, and two clusters that satisfy the ball condition share it (<code>fixed_point_zero</code>, <code>two_clusters</code>).</li>
+<li><b>Diffusion.</b> F<sub>t</sub> = 1 + &alpha;t has no upper bound, so the four-coordinate system has no fixed point (<code>diffuse_unbounded</code>).</li>
+</ul>
+<p>Shared intent decays as I<sub>t</sub> = I<sub>0</sub>&middot;a<sup>t</sup>, the same law as a chain of steps that each hold with probability a.</p>
+
+<h3>What version 3 does not do</h3>
+<ul>
+<li>No empirical calibration: the default parameters are not fitted to data.</li>
+<li>The multi-orbit claim of distinct fixed points is refuted for this model. A model with a source term would be needed.</li>
+<li>The agent-level pipeline G = U&#8728;F&#8728;K&#8728;C is not formalised here.</li>
+</ul>
+
+<h3>Files</h3>
+<ul>
+<li><code>swarm_simulator_v3.pdf</code>, <code>swarm_simulator_v3.tex</code>: the revised paper, with <code>figures/</code></li>
+<li><code>SwarmSimulator.lean</code>: the Lean 4 proofs (build with <code>lake build SwarmSimulator</code>) and <code>swarmsimulator.axioms.txt</code>, the axiom report</li>
+<li><code>swarm_simulator.py</code>: simulator and figures; <code>python swarm_simulator.py --check</code> runs ten numerical checks of the statements proved in Lean</li>
+<li><code>OPEN_QUESTIONS_SwarmSimulator.md</code> and <code>CHANGES_SwarmSimulator_V3.md</code></li>
+</ul>
+
+<p>MSC codes: 37C25, 37D10, 47H10, 68T99. Keywords: swarm simulator, collective intelligence, TO/TOGT, contraction on a ball, fixed point, Lean 4.<br>
+License: CC BY-NC-ND 4.0 (paper), MIT (code). &copy; 2026 Pablo Nogueira Grossi, G6 LLC.</p>
+<!-- END -->
+</body>
+</html>
