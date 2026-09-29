@@ -56,3 +56,34 @@ prel = kr.text('prelude.html'); m = re.search(r'\(a\) The operators:.{0,330}', p
 print("prelude.html (Book 3) audit note:", m.group(0) if m else 'NOT FOUND')
 print("Book 3 'residue/hysteresis' reading of U:", [f for f in sorted(T) if re.search(r'\bU\s*(?:\(residue|—\s*when the driver is reversed)', T[f])])
 print("Book 3 'scale' reading of U:", [f for f in sorted(T) if re.search(r'\bU\s*(?:\(Scale\)|=\s*the scale-invariant|—\s*the recognition of the same structure)', T[f])])
+
+# ---- part 3 (2026-09-29): the founding papers. Vol I, Vol II, dm3 Operator = author's Downloads copies (matched to
+# Zenodo 19117400 by filename and byte size only); the GCM paper = its web edition gcm-framework.html (DOI ...20230610).
+import glob, hashlib, subprocess
+def pdf(pattern):
+    for d in (os.path.expanduser('~/Downloads'), os.path.expanduser('~/mnt/Downloads')):
+        for f in sorted(glob.glob(os.path.join(d, pattern))):
+            return ' '.join(subprocess.run(['pdftotext', f, '-'], capture_output=True, text=True).stdout.split()), hashlib.md5(open(f, 'rb').read()).hexdigest()
+    return None, None
+print("\n[part 3] founding papers (Zenodo v1 bundle 10.5281/zenodo.19117400; md5s as listed on zenodo.org/records/20230610, 2026-09-29)")
+for label, pat, md5, needles in [
+    ("Vol I", "Principia Orthogona Volume One-*Nogueira Grossi 2026*.pdf", "e7390cd722654fc680c8cba4f5462e7a",
+     ["Definition 3.4 (Unfolding Map). The unfolding operator U", "Gradient flow to Γsyn via U3",
+      "The full dm3 grammar g → L → R → U extends this sequence by adding multi-orbit coherence, resonance detection, and categorical unification"]),
+    ("Vol II", "Principia Orthogona Volume Two Grossi2026*.pdf", "53431c95f5dfe549ab07869276a929e1",
+     ["Gradient flow to Γ via U3", "Every operator (g-, L-, R-, U -, B-operators)"]),
+    ("dm3 Operator", "THE DM3 OPERATOR- EXPLICIT TOY MODEL*GLOBAL DYNAMICAL ANALYSIS*.pdf", "f0037d1068b11cc9f31b3d43c7b57eb4",
+     ["3.4.1. U1 : pushout. Unified state space", "3.4.2. U2 : translation", "3.4.3. U3 : synthesis", "τ12 = min(τ1 , τ2 )"]),
+    ("GCM paper", "GENERATIVE CONTACT MECHANICS-*STRUCTURED LIMIT CYCLES*.pdf", "bea3bf9092305c692cf0d3e9cdb0cbf3",
+     ["4.4. U -operators: unification", "Definition 4.27 (U1, U2, U3)", "U3 = exp(−∇dg(·, Γsyn)2)", "τ12 ≤ min(τi)"])]:
+    t, h = pdf(pat)
+    if t is None:
+        print(f"{label}: not in ~/Downloads: SKIP (Zenodo md5 {md5}). Read only in the Zenodo viewer on 2026-09-29, NOT script-verified.")
+        continue
+    print(f"{label}: md5 {'MATCHES Zenodo' if h == md5 else 'DIFFERS from Zenodo (' + h + ')'}")
+    for n in needles: print(f"   {'FOUND  ' if n in t else 'MISSING'} {n}")
+    if label == "Vol I": print("   'universal' as an operator name (U — Universal / U: universal):", bool(re.search(r'U\s*[—:-]\s*[Uu]niversal', t)))
+m = re.search(r'Theorem B · Unification and Noise Tolerance.{0,330}', gcm)
+print("GCM web edition Theorem B:", m.group(0)[:330] if m else 'NOT FOUND')
+print("GCM web edition Theorem D lists the algebra as:", (re.search(r'operator algebra \\\(\(([^)]*)\)', gcm) or [None, 'NOT FOUND'])[1] if False else re.search(r'dm³ operator algebra \\\(\(G, U, F, K, C\)\\\)', gcm) is not None)
+print("GCM web edition DOI on page:", sorted(set(re.findall(r'10\.5281/zenodo\.\d+', gcm)))[:6])
