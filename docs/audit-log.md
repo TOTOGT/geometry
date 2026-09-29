@@ -10855,3 +10855,8 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
 - **Kikkawa:** the 1984 duality credit and the 1969 paper are corroborated by three held papers; the 1974 string-field-theory claim is not (Kaku alone, WANTED). None of the cited papers is itself held.
 - **Still OPEN:** the 3 vs 5 vs 1 vertex count (R9, author's call); covariant level counts; Planck vs string length; Dyson chapter silent on Kardashev/Dyson sphere (gap, not edited).
 - **Registered:** four supplementary rows in docs/claims.tsv; the three chapter pages restamped; book7/index.html cards and gap rows updated. tools/build_indexes.py not run.
+
+## 2026-09-29 (later) - Dyson 1960 supplied; Sagan file supplied but partial
+- **Dyson:** the held page is dated 3 June 1960; Kardashev's reference says 1959. ch-kardashev now checks Dyson's shell (2x Earth's distance, 200 g/cm^2, 2-3 m, 200-300 K, ~10 um) and his growth argument (10^12 at 1%: computed 2,777 yr, his 'say 3000'). My full-output shell at 2 AU gives 278.3 K, peak 10.4 um: inside his range. The earlier 1 AU figure (394 K) is a different geometry. The 10^12 exponent was read from the page image.
+- **Sagan:** the file supplied is the 2000 Cambridge edition's front matter and chapter 1 only. The classification is chapter 34 (p.233) and 'Astroengineering' chapter 33 (p.229): still WANTED. The 10^16 W ladder's origin stays unchecked.
+- **Cache:** ch-kardashev-verify.py now caches the 1964 OCR under ~/.cache (keyed by md5), since a cold run exceeds the shell time limit here.

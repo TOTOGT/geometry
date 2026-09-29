@@ -49,11 +49,17 @@ else:
     print('    held  md5 %s  %s pages' % (hashlib.md5(open(p, 'rb').read()).hexdigest()[:8],
           re.search(r'Pages:\s+(\d+)', subprocess.run(['pdfinfo', p], capture_output=True, text=True).stdout).group(1)))
     try:
-        tmp = tempfile.mkdtemp()
-        subprocess.run(['pdftoppm', '-r', '250', '-png', p, os.path.join(tmp, 'p')], check=True, capture_output=True)
-        PAPER = []
-        for png in sorted(glob.glob(os.path.join(tmp, 'p-*.png'))):
-            PAPER.append(squeeze(subprocess.run(['tesseract', png, '-'], capture_output=True, text=True, check=True).stdout))
+        import json
+        cache = os.path.expanduser('~/.cache/po-verify-ocr-%s.json' % hashlib.md5(open(p, 'rb').read()).hexdigest()[:8])
+        if os.path.exists(cache):
+            PAPER = json.load(open(cache))      # OCR of this exact file, cached because it is slow
+        else:
+            tmp = tempfile.mkdtemp()
+            subprocess.run(['pdftoppm', '-r', '250', '-png', p, os.path.join(tmp, 'p')], check=True, capture_output=True)
+            PAPER = []
+            for png in sorted(glob.glob(os.path.join(tmp, 'p-*.png'))):
+                PAPER.append(squeeze(subprocess.run(['tesseract', png, '-'], capture_output=True, text=True, check=True).stdout))
+            os.makedirs(os.path.dirname(cache), exist_ok=True); json.dump(PAPER, open(cache, 'w'))
     except Exception as e:
         print('    SKIP  OCR unavailable (%s)' % e.__class__.__name__); skips.append('paper'); PAPER = None
 
@@ -181,10 +187,58 @@ if os.path.exists(pd):
 else:
     print('    SKIP  book7/ch-dyson.html not present'); skips.append('dyson')
 
+# ---------------------------------------------------------------------------
+head(6, 'DYSON, the paper the 1964 paper cites   (Science 131, 1667-1668; supplied by the author)')
+DY = None
+dp = find_pdf('dyson1960.pdf')
+if not dp:
+    print('    SKIP  dyson1960.pdf not found in ~/Downloads'); skips.append('dyson-paper')
+else:
+    print('    held  md5 %s' % hashlib.md5(open(dp, 'rb').read()).hexdigest()[:8])
+    try:
+        tmp6 = tempfile.mkdtemp()
+        subprocess.run(['pdftoppm', '-r', '200', '-f', '1', '-l', '1', '-png', dp, os.path.join(tmp6, 'd')], check=True, capture_output=True)
+        png = sorted(glob.glob(os.path.join(tmp6, 'd-*.png')))[0]
+        DY = squeeze(subprocess.run(['tesseract', png, '-'], capture_output=True, text=True, check=True).stdout)
+    except Exception as e:
+        print('    SKIP  OCR unavailable (%s)' % e.__class__.__name__); skips.append('dyson-paper'); DY = None
+def in_dyson(needle, msg):
+    if DY is None: print('    SKIP  %s' % msg); return
+    check(squeeze(needle) in DY, '[Dyson p.1667] %s' % msg)
+in_dyson('Search for Artificial Stellar Sources of Infrared Radiation', 'title')
+in_dyson('3 JUNE 1960', 'the page is dated 3 June 1960 (Kardashev\'s reference says 1959)')
+in_dyson('artificial biosphere which completely surrounds its parent', 'an intelligent species ends up in an artificial biosphere surrounding its star')
+in_dyson('revolving around the sun at twice the earth', 'a shell of Jupiter\'s mass revolving at twice the earth\'s distance')
+in_dyson('200 grams per square centimeter', 'mass 200 grams per square centimetre of surface')
+in_dyson('2 to 3 meters', 'thickness 2 to 3 metres')
+in_dyson('a surface temperature of 200', 'surface temperature 200 to 300 K (page image reads 200-300 degrees K; the text layer drops the degree sign)')
+in_dyson('around 10 microns wavelength', 'radiation in the far infrared, around 10 microns')
+in_dyson('8 to 12 microns', 'the atmosphere is transparent at 8 to 12 microns, so the search is feasible')
+in_dyson('say 3000 years if an average growth rate of 1 percent per year is maintained', 'the growth argument: say 3000 years at 1 percent per year')
+in_dyson('Princeton, New Jersey', 'Princeton, New Jersey')
+note('Read from the page image, not machine-read: the growth factor 10^12 (the OCR gives a stray mark for the exponent).')
+# arithmetic on the paper's own numbers (Dyson's figures, then CITED constants)
+yrs12 = 12 * math.log(10) / math.log(1.01)
+check(2700 < yrs12 < 2850, "10^12 at 1 percent a year takes %.0f years; Dyson rounds it to 'say 3000'" % yrs12)
+yrsK = 14 * math.log(10) / math.log(1.01)
+check(3200 < yrsK < 3300, "Kardashev's 10^14 at 1 percent takes %.0f years, his '3200': the same argument, one step longer" % yrsK)
+SUN_G, AU_CM = 2e30, 1.495978707e13   # Dyson's Jupiter mass (2e30 g); AU CITED
+sig = SUN_G / (4 * math.pi * (2 * AU_CM) ** 2)
+check(150 < sig < 250, 'Jupiter spread over a sphere at 2 AU: %.0f g/cm^2 (Dyson: "200")' % sig)
+check(1.5 < sig / 1.0 / 100 < 3.0, 'at density 1 g/cm^3 that is %.2f m thick (Dyson: 2 to 3 m depending on density)' % (sig / 100))
+L, sg, AU, b = 3.828e26, 5.670374419e-8, 1.495978707e11, 2.897771955e-3   # CITED, not held
+def shell_T(r_au): return (L / (4 * math.pi * (r_au * AU) ** 2) / sg) ** 0.25
+T1, T2 = shell_T(1), shell_T(2)
+check(392 < T1 < 396, 'full-output shell at 1 AU: %.1f K (the figure in section 4)' % T1)
+check(200 <= T2 <= 300, 'the same shell at Dyson\'s 2 AU: %.1f K, inside his 200-300 K' % T2, '%.1f' % T2)
+check(9.5 < b / T2 * 1e6 < 11.5, 'Wien peak at 2 AU: %.2f micrometres (Dyson: around 10)' % (b / T2 * 1e6))
+note('Sections 4 and 6 use the same CITED constants (sigma, L_sun, AU, Wien b); not held.')
+
 print('\n' + '=' * 72)
 if skips: print('  SKIPPED (not passed, not failed): %s' % ', '.join(skips))
 if fails:
     print('  %d FAIL:' % len(fails)); [print('    - ' + f) for f in fails]; sys.exit(1)
 print('  all run checks passed.')
-print('  Recorded as open, not checked: Dyson (1959) itself; Sagan\'s own grading and whether the 10^16 W ladder is his;')
-print('  what Dyson\'s infrared search did; the exponents in the paper are DERIVED, not machine-read (superscripts).')
+print('  Recorded as open, not checked: Sagan\'s own grading and whether the 10^16 W ladder is his (the Cosmic Connection')
+print('  file supplied holds only front matter and chapter 1; the classification is chapter 34, p.233 of the 2000 edition);')
+print('  what Dyson\'s infrared search did afterwards; the 1964 exponents are DERIVED, not machine-read (superscripts).')
