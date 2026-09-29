@@ -234,6 +234,19 @@ check(200 <= T2 <= 300, 'the same shell at Dyson\'s 2 AU: %.1f K, inside his 200
 check(9.5 < b / T2 * 1e6 < 11.5, 'Wien peak at 2 AU: %.2f micrometres (Dyson: around 10)' % (b / T2 * 1e6))
 note('Sections 4 and 6 use the same CITED constants (sigma, L_sun, AU, Wien b); not held.')
 
+# ---------------------------------------------------------------------------
+head(7, "SAGAN, as a fan wiki describes him   (TERTIARY: pasted by the author; not a primary source, not relied on)")
+note('Source: Kardashev Scale Wiki, "Carl Sagan" (fandom.com). It cites no page of Sagan. Only its ARITHMETIC is checked here.')
+K = lambda P: (math.log10(P) - 6) / 10
+check(abs(K(1e16) - 1) < 1e-12 and abs(K(1e26) - 2) < 1e-12 and abs(K(1e36) - 3) < 1e-12,
+      'K = (log10 P - 6)/10 sends 10^16, 10^26, 10^36 W to 1, 2, 3: the interpolation the wiki describes reproduces the Kaku PW ladder exactly')
+check(abs(K(1e13) - 0.7) < 1e-12, 'humanity at 10 TW (1e13 W) is K = 0.7, the 1973 value the wiki gives (Sharma: 0.73 at 2e13 W)')
+lett = lambda ch: 6 + (ord(ch) - ord('A'))      # A = 10^6 bits, one order of magnitude per letter
+check(lett('A') == 6 and lett('H') == 13 and lett('Z') == 31, 'information grades: A = 10^6, H = 10^13, Z = 10^31 bits, as the wiki says (0.7 H = 10^13 bits)')
+check(abs(K(4e12) - (math.log10(4e12) - 6) / 10) < 1e-12 and K(4e12) < 0.7, "Kardashev's own Type I (4e12 W) sits at K = %.2f on that index, below humanity's 1973 value" % K(4e12))
+note('What this does NOT establish: that the 10^16/10^26/10^36 anchors are Sagan\'s own words, or that they are "the values given" by Kardashev')
+note('(the 1964 paper gives 4e12/4e26/4e37 W, section 1). Both stay WANTED until Cosmic Connection ch.33-34 (pp.229-240, 2000 ed.) is held.')
+
 print('\n' + '=' * 72)
 if skips: print('  SKIPPED (not passed, not failed): %s' % ', '.join(skips))
 if fails:
