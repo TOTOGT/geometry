@@ -14,6 +14,10 @@ book14/ch03-verify.py -- every number on book14/ch03-how-many-senses.html and in
       the Mock Turtle's thirteen school subjects against their real names; the lessons that lessen
   [6] Gardner, The Annotated Alice (Definitive Edition, Norton 2000): Looking-Glass ch. 6 in Carroll's own
       text; Gardner's note on Humpty Dumpty (nominalism) and on the twelfth day (negative numbers)
+  [7] Copestake (AAAI Tech. Report SS-95-01, 1995), "Representing Lexical Polysemy": the constructional-polysemy /
+      sense-extension distinction and the "grinding" family behind the (grinding) label used in [2]; Skoufaki &
+      Petric (J. English for Academic Purposes 54, 2021, 101038): a related but different frequency-correlation
+      study on the Academic Vocabulary List, held in ~/Downloads
   [HONESTY]
 """
 import re, sys
@@ -169,6 +173,37 @@ check('Gardner, Wonderland ch. IX note 19 (PDF p.252): "Alice\'s excellent quest
 check('…"On the twelfth day and succeeding days did the pupils start teaching their teacher?"',
       sq("On the twelfth day and succeeding days did the pupils start teaching their teacher?") in sq(g252))
 
+print("[7] Copestake (1995) and Skoufaki & Petric (2021): the source of the (grinding) label in [2], and a related but different frequency study")
+COP = next((f for f in sorted(dl.iterdir()) if f.name.lower().startswith("copestake") and f.suffix == ".pdf"), None)
+check("Copestake (1995), 'Representing Lexical Polysemy', is held", COP is not None, COP.name if COP else "")
+def cop(a, b=None): return subprocess.run(["pdftotext", "-f", str(a), "-l", str(b or a), str(COP), "-"], capture_output=True, text=True).stdout
+c1, c2 = cop(1), cop(2)
+for q in ["AAAI Technical Report SS-95-01",
+          "Representing Lexical Polysemy",
+          "Ann Copestake",
+          "rabbit meaning the animal or its meat or fur, and violin meaning the instrument or the musician"]:
+    check(f'Copestake p.21: "{q[:58]}"', sq(q) in sq(c1))
+for q in ["Sandy likes to eat rabbit.", "animal -> meat (meat-grinding)",
+          "Sandy likes to wear rabbit.", "animal -> fur/skin (fur/skin grinding)",
+          "That stuff on the tarmac looks like rabbit.", "physical object -> substance (grinding)"]:
+    check(f'Copestake p.22, example (2): "{q[:58]}"', sq(q) in sq(c2))
+
+SP = next((f for f in sorted(dl.iterdir()) if f.name.lower().startswith("skoufaki") and f.suffix == ".pdf"), None)
+check("Skoufaki & Petric (2021) is held", SP is not None, SP.name if SP else "")
+def sp(a, b=None): return subprocess.run(["pdftotext", "-f", str(a), "-l", str(b or a), str(SP), "-"], capture_output=True, text=True).stdout
+sp_abs, sp_hi = sp(3), sp(2)
+check('Skoufaki & Petric abstract (p.3): "34.38% of the 2,673 AVL lemmas ... excluding homonyms, are polysemous"',
+      sq("34.38% of the 2,673 AVL lemmas included in both lexicographic resources, excluding homonyms, are polysemous") in sq(sp_abs))
+check('Skoufaki & Petric abstract (p.3): "Most (66.05%) come from the most frequent 1,000 AVL lemmas"',
+      sq("Most (66.05%) come from the most frequent 1,000 AVL lemmas") in sq(sp_abs))
+check('Skoufaki & Petric highlights (p.2): "919 (34.38%) of the 2,673 AVL lemmas shared ... are polysemous"',
+      sq("919 (34.38%) of the 2,673 AVL lemmas shared between the two lexicographic resources are polysemous") in sq(sp_hi))
+check('Skoufaki & Petric highlights (p.2): "607 (65.05%) of polysemous AVL lemmas are in the most frequent 1,000 AVL lemmas"',
+      sq("607 (65.05%) of polysemous AVL lemmas are in the most frequent 1,000 AVL lemmas") in sq(sp_hi))
+pct = round(607 / 919 * 100, 2)
+check("607/919 rounds to 66.05%, matching the Abstract's 'Most (66.05%)', not the Highlights' own '65.05%' -- their arithmetic, not ours",
+      pct == 66.05, f"{pct}%")
+
 print("[HONESTY]")
 print("  SemCor is a sense-tagged part of the Brown Corpus (American prose, 1961); counts are small and dated. A count of 0 means")
 print("  unattested in SemCor, not absent from English. Which WordNet synset is the template's head")
@@ -178,5 +213,13 @@ print("  [6] check Carroll's own text (Wonderland replica; Looking-Glass in Gard
 print("  Mock Turtle's branches with the operations is the reader's pun, measured, not stated in the letter.")
 print("  The Tenniel image came with an AI-generated summary (illustration counts, the recalled 1865")
 print("  printing, the 1890 Nursery Alice); none of that is used, because no held source states it.")
+print("  [7] tests two different things under one name. Copestake's \"grinding\" is the mechanism")
+print("  (constructional polysemy / sense extension) behind the animal/meat and container/contents families")
+print("  that make chicken and book fail prediction (ii) above -- it does not test frequency. Skoufaki & Petric")
+print("  test whether an AVL lemma's dictionary/WordNet sense count correlates with its corpus frequency, across")
+print("  2,673 lemmas -- not whether the head sense is the most frequent one for a given word, so it bears on but")
+print("  does not close the 'SemCor is small and dated' item below. Their own Highlights bullet (607, 65.05%) does")
+print("  not match their own Abstract (66.05%) or the arithmetic (607/919 = 66.05%); we report the Abstract's")
+print("  figure and flag the mismatch as theirs, uncorrected in their own document.")
 print(f"\n{len(FAIL)} FAIL" + (": " + ", ".join(FAIL) if FAIL else ""))
 sys.exit(1 if FAIL else 0)
