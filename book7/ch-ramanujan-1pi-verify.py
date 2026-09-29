@@ -93,6 +93,12 @@ final = approx
 check("the series converges to 1/pi to at least 90 digits",
       abs(final - target) < D(10) ** -90,
       "|S - 1/pi| < 1e-90 after 12 terms")
+check("13 terms give 104 correct digits (book4/ch-modular-equations-and-pi.html s.9 says 'checked to 104 digits')",
+      prev_digits >= 104, "measured: %d correct digits after n = 0..12" % prev_digits)
+_e = [abs(a - target) for _, a in ramanujan_terms(2)]
+check("first term 8 places, second 16, third 24 (same page, s.1)",
+      _e[0] < D(10) ** -8 and _e[1] < D(10) ** -16 and _e[2] < D(10) ** -24 and _e[0] > D(10) ** -9,
+      "errors %s, %s, %s" % (format(_e[0], ".2E"), format(_e[1], ".2E"), format(_e[2], ".2E")))
 check("every term after the first adds 8 digits",
       all(g == 8 for g in gains[:11]),
       "measured gains: %s" % ",".join(str(g) for g in gains[:6]))
@@ -127,7 +133,7 @@ def show(x, n=40):
     """Decimal -> string that keeps its exponent. str()[:46] silently ate 'E-10'
        in the first run of this script and made two correct numbers look wrong."""
     m, e = x.normalize().as_tuple()[1:] and (x, None), None
-    return ("%." + str(n) + "E") % x
+    return format(x, "." + str(n) + "E")   # NOT "%E" % x: that converts a Decimal to a float and prints noise past ~16 digits
 print("      from theta series : %s" % show(a58_theta))
 print("      closed form       : %s" % show(a58_closed))
 check("alpha_58 closed form agrees with the theta series",
@@ -167,13 +173,25 @@ check("g_58^12 = eps^6, from the transcendental side",
 check("eps^6 = 9801 + 1820 sqrt29",
       abs(eps ** 6 - (9801 + 1820 * sq(29))) < D(10) ** -50,
       show(9801 + 1820 * sq(29), 24))
+import os
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_true = format(eps ** 6, "f")[:16]                        # 19601.9999489847 -- a prefix of the exact value
+_miss = 19602 - eps ** 6
+check("displayed digits of g_58^12 on the four pages that print them equal the exact prefix",
+      all(_true in open(os.path.join(_ROOT, f), encoding="utf8").read()
+          and "19601.99999" not in open(os.path.join(_ROOT, f), encoding="utf8").read()
+          for f in ("book4/ch-modular-equations-and-pi.html", "book7/ch-ramanujan-1pi.html",
+                    "book7/ch-ramanujan.html", "book13/ch10-what-a-check-establishes.html")),
+      _true + "...   (a stray extra 9 stood here until 2026-09-29)")
+check("the miss from 19602 is 0.000051 = 51 parts in a million (page s.4, s.6)",
+      D("0.0000510") < _miss < D("0.0000511"), show(_miss, 6))
 print("""
       So g_58^12 is NOT an integer.  It is 9801 + 1820 sqrt29 -- and 9801 is
       sitting there exactly, as the rational part of the sixth power of the
       fundamental unit of Q(sqrt 29).
 
       An earlier run of this script asserted g_58^12 = 19602 and then 19601.
-      Both are wrong, and wrong in an instructive way: the value is 19601.99999,
+      Both are wrong, and wrong in an instructive way: the value is 19601.9999489847...,
       which is near BOTH and equal to NEITHER.  Asserting a near-integer as an
       integer is the failure this corpus keeps meeting.""")
 
@@ -296,7 +314,7 @@ gaps = [
   "the new Downloads sources have not been searched for it yet"),
  ("g_58^12 was asserted as an integer twice (19601, then 19602) before the "
   "exact form 9801 + 1820 sqrt29 was found",
-  "the quantity is 19601.99999: near two integers, equal to neither. Only "
+  "the quantity is 19601.9999489847...: near two integers, equal to neither. Only "
   "g^12 + g^-12 is exactly 19602, and only because Pell closes"),
  ("this script's first run returned k, not alpha = k^2, from the theta series",
   "caught because the closed form disagreed at the 5th digit, not because the "
