@@ -201,7 +201,7 @@ lean_lib Book12 where
 @[default_target]
 lean_lib Book14 where
   srcDir := "book14"
-  roots := #[`Polysemy, `Brackets, `Collective, `HardyWright, `TypesDecide]
+  roots := #[`Polysemy, `Brackets, `Collective, `HardyWright, `TypesDecide, `SwarmSimulatorV3]
 
 lean_lib Book28 where
   srcDir := "book28"
