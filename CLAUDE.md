@@ -77,8 +77,8 @@ The author kept having to re-explain the same terms, so they now live in `docs/d
 - Never fill an OPEN row. Write the question, the evidence, and leave it.
 - Add a line, never overwrite one without a dated note. A definition that changes gets a dated line saying what it replaced.
 - Current anchors: ε₀ = 1/3 is the coarse, literature-suggested Gronwall radius; r\* ≈ 0.77594058 (a radial position, displacement 1 − r\* ≈ 0.224) is the sharp inner-basin boundary (Book 4 chapter 10); canonical U is Unfolding.
-- Defined in the papers: τ = √(c/κ_noise) with LV ≤ −cV + κ_noise‖σ‖² (Vol II Thm 3.2; Vol I §2). Open detail: which Lyapunov function V is canonical (Vol I's c = 1, κ = 1/4 versus V = ρ² giving c = 4, κ = 1; both give τ = 2).
-- OPEN at creation: the winding-integral normalization, μ_max as a z → ∞ limit, the name for the dm³ class versus the concrete model, and the canonical V above.
+- Defined in the papers: τ = √(c/κ_noise) with LV ≤ −cV + κ_noise‖σ‖² (Vol II Thm 3.2; Vol I §2). V = ρ² is canonical (author, 2026-09-30; τ → τ/√λ under V → λV, so τ is a V-dependent bound). Vol I's (c, κ) = (1, 1/4) is stated without derivation and is not a rescaling of V; it stays unexplained, and no erratum is written until it is found.
+- OPEN at creation: μ_max as a z → ∞ limit, and the Vol I (c, κ) split. Winding integral W(Γ) = ∮_Γ λ is the raw integral, no 1/2π (old TeX `prop:winding`); the GCM page's "W ∈ ℤ" is unsupported. Naming: dm³ in prose, dm3 ASCII alias; defined once in the file. dm³ is decided: the contact 3-manifold carrying Γ, expressed across domains and scales, generalized to contact (2n+1)-manifolds in the GCM framework.
 - Lesson recorded here (R15 again): a term can be defined by a formula, not a sentence. Search for the symbol and its equation before writing "not defined".
 
 ## Git, on this machine (R4)
