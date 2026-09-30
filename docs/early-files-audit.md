@@ -15,3 +15,12 @@ R24: a script runs before any sentence is written. External facts were read from
 
 ## Not yet audited
 Theorem-by-theorem triage of the 78 theorem environments in master_book (which are proved, which asserted); the numerical claims in chapters 8-10 of Book 2; main-2.tex (largest, unpatched); the PDFs.
+
+## Theorem triage of master_book_FINAL_v2.tex (2026-09-30)
+Script: `engineering/master-book-theorem-triage.py`; per-statement table: `docs/master-book-theorem-triage.tsv`. The script classifies what is on the page, not whether an argument is correct.
+
+- 81 theorem-like statements (29 theorems, 42 propositions, 3 lemmas, 4 corollaries, 3 conjectures). By page features: 30 have no proof on the page, 7 have only a "Proof sketch", 10 have a one-line proof, 14 have a proof that defers to a citation or another result, 20 have a proof that looks complete (and is not yet checked). None was classed hand-waved by keyword.
+- **The five "Structural Theorems" (Existence and Well-Posedness, Local Determination, Non-Commutativity, Irreducibility, Finite Branching, lines 744-765) have no proof.** Only Finite Branching has a remark giving a two-line reason. These are the statements the operator chain C -> K -> F -> U rests on.
+- Theorems A-D are restated in three places (introduction of the Paper1 chapter, the Paper2 appendix and later parts), with the same label. Proofs named "Proof of Theorem~\ref{thm:A}" sit in the later parts, so the copy at line 1427 has none of its own; it is counted as unproved here even though a proof of the same statement exists elsewhere. Propositions used inside those proofs (for example prop:portrait) are also counted as having none.
+- Five statements are conjectures or corollaries about other claims with no proof (conj:global, conj:torus, conj:L1, cor:false); these are labelled as such in the book and are not findings.
+- Not checked: whether the 20 full-looking proofs are correct, and whether the 14 that defer point to a cited result that says what is claimed.
