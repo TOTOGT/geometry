@@ -109,6 +109,7 @@ have reported it. Now something does.
 - Permanent magnet generator (PMG)
 - Pittsburgh Sleep Quality Index (PSQI)
 - Poisson Conjecture (PC)
+- Population Employment Gap (PEG)
 - PRECISION OF THE ROOT LANGUAGE (LATE)
 - Prediction P1 (NGS)
 - Prediction P2 (NGS)
