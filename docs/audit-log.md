@@ -11021,3 +11021,8 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
 - **Status line:** Phillips checked against the primary; the other three CITED from King; their primary papers WANTED.
 - **Noted:** King lists Samuelson and Solow as 1961 while giving AER volume 50 (1960), and a title that differs from the one the author knows; the page keeps 1960. Phillips's paper thanks a Prof. E. H. Phelps Brown, a different person from Edmund Phelps.
 - `wp128-verify.py` all run checks pass; `tools/terms.py --check` OK.
+
+## 2026-09-30 (night, later) — WP-128: Granger and Jeon (2008) added as outside evidence
+- **Held:** Granger and Jeon, "The Evolution of the Phillips Curve: A Modern Time Series Viewpoint", preliminary version of 16 May 2008 (Downloads, 25 pp). Not a published version; cited as such.
+- **Read and used:** linear and time-varying-parameter models on four economies; unemployment usually helps forecast inflation, strength declining in recent periods; U.S. monthly, 1971-1989 and 1971-2007 the causal model is best, 1990-2007 a univariate model is slightly better. They recover Phillips's estimates b = 9.638, a = -0.9, c = -1.394, which independently match the curve now quoted on the page.
+- **Added to the page:** a short "Outside evidence" paragraph after "What it shows", worded as context (different method, preliminary), not as confirmation. `wp128-verify.py` passes; `tools/terms.py --check` OK.
