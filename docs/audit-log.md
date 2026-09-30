@@ -10906,3 +10906,10 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
 - **Re-derived, holds:** V(1) = -2, V''(1) = 6, V + 2 = (q-1)^2 (q+2), alpha^dalpha = -2 rho, Gronwall 1/3.
 - **Left OPEN:** "Whitney A1 fold" (non-degenerate critical point is A1, fold is A2); the Lean file is not in the repository and the receipt file is empty (WANTED); the beta table; clinical/regulatory facts cited not held, with two different dates in table and box; Book 3 vs book7 (R9).
 - **Status:** page stays `unfinished` in docs/unlisted.tsv; not linked.
+
+## 2026-09-29 - Dual Ulam Spiral Overlay (book7/ulam-dual.html) (author: "next")
+- **Read in full** (page text and its JavaScript); wrote book7/ulam-dual-verify.py (R24; BASELINE ef5e823; the page's spiral and sieve ported line for line).
+- **Corrected:** (1) at 0 degrees the coincidence set is every prime, not "dense along the main diagonals" (at 90/180/270 degrees: 359/292/359 of 1,252 on 101x101, about 154 if independent); (2) the slider has only multiples of 0.5 degrees, so "irrational angles" do not occur and exact cell coincidence happens only at -180, -90, 0, 90, 180; (3) Euler's n^2+n+41 is on the two main diagonals only in a spiral started at 41, not centre 1 (page's spiral: longest prime run on a diagonal from 41 is 3); primes are denser on the diagonals (25.1% v 12.0%); (4) r* = 0.776 is not a 7th-order Chebyshev node (2cos(3pi/7) = 0.445; nearest T7 node 0.7818).
+- **Confirmed:** the spiral fills each N x N grid once for all four sizes; n^2+n+41 is prime for n = 0..39.
+- **OPEN:** Whitney A1 caustic analogy and the lensing link (MODEL); the moire wording (not measured); sources (Ulam, Euler) not held. One cell (n = N^2) is not drawn: harmless for primes.
+- **Status:** page stays `unfinished` in docs/unlisted.tsv; not linked.
