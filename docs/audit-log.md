@@ -10942,3 +10942,9 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
 - **Changed:** heading now 172, with a dim line stating the split (155 in this folder, 17 sibling pages) and naming the script; the script checks that the heading equals the distinct pages listed, that every in-repository page exists, and that every unlisted book6 page is declared (R9). Run it after adding a paper.
 - **Regenerated:** tools/build_indexes.py (file index index-book6.html and the others it derives), and the four tools/*.py --write.
 - **Not decided here:** whether "Chapters & Papers" should count the 17 sibling pages and the three duplicate rows; 172 is the number of distinct pages the list links to. The author can narrow it (155 in this folder).
+
+## 2026-09-30 - docs/engineering-coverage-map.md (new): 17 engineering/science topics against the corpus, for DOE preparation (author's request)
+- **Counted (docs/engineering-coverage-verify.py, new):** strict textbook terms over 795 prose pages. Treated in the corpus: thermodynamics, electric fields, fluid dynamics (upper bound), one hydraulic build spec (HVEH Second River), crystal-lattice materials. Gaps (0-9 pages, incidental): statics, strength of materials, stress chain (0), circuits, soil mechanics, electronics, heat transfer, beltdraulic (0). Calculus is used as a tool on 4 pages, not taught.
+- **Not found:** any DOE-facing document; the term "beltdraulic" anywhere. Recorded OPEN (R9): the author defines beltdraulic and picks the DOE program.
+- **Hooks (D1 to D2)** in the map are proposals labelled CONJECTURE; standard ones (Gibbs contact form, Kirchhoff as d^2=0) are textbook.
+- **Not opened:** HVEH/ResilientNJ_HVEH_Grant_Narrative.pages.
