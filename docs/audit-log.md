@@ -10899,3 +10899,10 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
 - **Fixed (script-demonstrable):** Andromeda shift 4.29 days, not ~40,000 years (two walkers 8.6 days, not ~80,000 years); the two future cones first meet at d/2c = 1.27 Myr, not 2.537 Myr (that is when a flash crosses); permanent separation needs comoving d > 2 x event horizon, about 33 Gly (chi_eh 16.68 Gly, flat LCDM with H0 67.4 and Om 0.315, CITED), not 16 Gly. A verification note was added to the page.
 - **Left OPEN for the author:** the 4.5-6 Gyr merger time is outside the cited bracket 5.86 +- 0.72 Gyr; the regime (a)/(b) distinction does not hold as worded because a causal past is transitive (complete histories by ~2.6 Myr in a two-disc MODEL); Penrose 1960 as the origin of the Andromeda paradox unconfirmed; event horizon vs v > c; g96/r*/1e25 MODEL/CONJECTURE not run. Not held: van der Marel 2012, Davis & Lineweaver 2004, Sawala 2025.
 - **Status:** page stays `unfinished` in docs/unlisted.tsv and is not linked from book7/index.html.
+
+## 2026-09-29 - Polylaminin (book7/Polylaminin.html, Chapter B) (author: "next")
+- **Read in full;** no script existed. Wrote book7/polylaminin-verify.py (R24; BASELINE 7cb3891; sympy).
+- **Found and fixed:** the Figure B.1 caption said that at kappa = 100% the system has V'(q*) = 0 and V(q*) = -2; the figure code draws V = q^3 - 3q - 2.5 k q, whose minimum at k = 100% is q = 1.354 with V(1) = -4.5, and the tilt moves away from the fold (at k = -1.2). Caption corrected; the model question (what the tilt should be) is the author's.
+- **Re-derived, holds:** V(1) = -2, V''(1) = 6, V + 2 = (q-1)^2 (q+2), alpha^dalpha = -2 rho, Gronwall 1/3.
+- **Left OPEN:** "Whitney A1 fold" (non-degenerate critical point is A1, fold is A2); the Lean file is not in the repository and the receipt file is empty (WANTED); the beta table; clinical/regulatory facts cited not held, with two different dates in table and box; Book 3 vs book7 (R9).
+- **Status:** page stays `unfinished` in docs/unlisted.tsv; not linked.
