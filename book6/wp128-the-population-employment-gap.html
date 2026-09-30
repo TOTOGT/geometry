@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-128 &middot; The Population Employment Gap &middot; Principia Orthogona G6</title>
+<meta name="description" content="PEG = (population &minus; employment) / population, from two public FRED series: 40.91% in August 2026. It is not an unemployment rate: the unemployed are 6.2% of it. A reproducible companion to U-3 and U-6, and where it sits among the economics papers.">
+<style>
+:root {
+  --void:#04040a; --surface:#0c0d14; --card:#10111c;
+  --gold:#c9a84c; --teal:#0abab5; --green:#10b981;
+  --r-color:#6b9fd6; /* labour blue */
+  --text:#e8e4d8; --dim:#6b6757; --rule:rgba(201,168,76,0.14);
+  --op-c:#60a5fa; --op-k:#a78bfa; --op-f:#f472b6; --op-u:#34d399;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:Georgia,serif;background:var(--void);color:var(--text);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-logo{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;flex-wrap:wrap;}
+.nav-links a{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+
+.hero{padding:5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(107,159,214,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-eyebrow{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--r-color);border:1px solid currentColor;padding:.2rem .7rem;display:inline-block;margin-bottom:2rem;}
+.op-chain{font-family:'Courier New',monospace;font-size:.75rem;letter-spacing:.15em;margin-bottom:1.8rem;display:flex;justify-content:center;gap:.7rem;flex-wrap:wrap;}
+.op-dot{display:inline-block;padding:.2rem .7rem;border-radius:2px;border:1px solid currentColor;}
+.op-c{color:var(--op-c)!important;border-color:var(--op-c)!important;}
+.op-k{color:var(--op-k)!important;border-color:var(--op-k)!important;}
+.op-f{color:var(--op-f)!important;border-color:var(--op-f)!important;}
+.op-u{color:var(--op-u)!important;border-color:var(--op-u)!important;}
+.op-active{background:rgba(107,159,214,.12)!important;color:var(--r-color)!important;border-color:var(--r-color)!important;}
+.hero h1{font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;color:var(--gold);letter-spacing:.04em;margin:.8rem 0 .5rem;line-height:1.1;}
+.hero-sub{font-size:1rem;color:var(--dim);font-style:italic;max-width:620px;margin:0 auto 1.5rem;}
+.value{font-family:'Courier New',monospace;font-size:.8rem;letter-spacing:.12em;color:rgba(107,159,214,.6);margin-top:.8rem;}
+
+.page{max-width:800px;margin:0 auto;padding:4rem 2rem 6rem;}
+h2{font-size:1.15rem;font-weight:400;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin:3.5rem 0 1.2rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;}
+p{margin-bottom:1.1rem;}
+em{color:var(--gold);font-style:normal;}
+
+.proof-block{border-left:3px solid var(--r-color);padding:1.4rem 1.8rem;margin:1.8rem 0;background:rgba(107,159,214,.04);}
+.proof-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--r-color);display:block;margin-bottom:.5rem;}
+.proof-title{font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.7rem;}
+.math-block{font-family:'Courier New',monospace;font-size:.85rem;color:var(--teal);background:var(--surface);border:1px solid rgba(10,186,181,.15);padding:.9rem 1.3rem;margin:1rem 0;overflow-x:auto;white-space:pre;line-height:1.7;}
+.qed{display:block;text-align:right;color:var(--r-color);font-size:1.1rem;margin-top:.6rem;}
+.sorry-box{border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.05);padding:1rem 1.4rem;margin:1.5rem 0;border-radius:2px;}
+.sorry-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#ef4444;display:block;margin-bottom:.4rem;}
+.gold-rule{border:none;border-top:1px solid rgba(201,168,76,.25);margin:2.5rem 0;}
+
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem 0;border-top:1px solid rgba(107,159,214,.2);margin-top:3rem;}
+.chapter-nav a{color:var(--r-color);text-decoration:none;font-family:'Courier New',monospace;font-size:.78rem;letter-spacing:.08em;border:1px solid rgba(107,159,214,.25);padding:.5rem 1rem;border-radius:2px;transition:all .2s;}
+.chapter-nav a:hover{background:rgba(107,159,214,.08);}
+footer{text-align:center;padding:2rem;font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.08em;color:var(--dim);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+.tag{font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid currentColor;padding:.1rem .4rem;border-radius:2px;white-space:nowrap;}
+.t-data{color:var(--teal);}
+table.t{width:100%;border-collapse:collapse;margin:1.2rem 0 1.8rem;font-size:.9rem;}
+table.t th,table.t td{text-align:left;padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top;}
+table.t th{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:400;}
+table.t td.n{text-align:right;font-family:'Courier New',monospace;}
+table.t a{color:var(--gold);text-decoration:none;}
+</style>
+<!--po-subject--><meta name="po-subject" content="ECONOMICS · POLICY"><!--/po-subject-->
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">&#9884; Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="index.html">Book 6</a>
+    <a href="#what">What it is</a>
+    <a href="#now">Now</a>
+    <a href="#history">Since 1948</a>
+    <a href="#open">Open</a>
+    <a href="#papers">The economics papers</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">WP-128 &middot; 29 September 2026</div>
+  <!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#5a3a06;background:#f7ecd6;border:1px solid #e0c48a;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">ECONOMICS · POLICY</span></div><!--/po-subject-->
+<h1>The Population Employment Gap</h1>
+  <p class="hero-sub">One line of arithmetic on two public series, with a script that recomputes it. It is a gauge of how much of the working-age population is not employed for any reason, not a measure of joblessness.</p>
+  <div class="value">PEG 40.91% &middot; U-3 4.1% &middot; U-6 7.7% &middot; August 2026</div>
+</div>
+
+<div class="page">
+
+<h2 id="what">1 &middot; What it is, and what it is not</h2>
+
+<div class="proof-block">
+  <span class="proof-label">Definition</span>
+  <div class="math-block">PEG = (CNP16OV &minus; CE16OV) / CNP16OV &times; 100 = 100 &minus; EMRATIO</div>
+  <p>CNP16OV is the civilian noninstitutional population aged 16 and over; CE16OV is the employment level; EMRATIO is the employment&ndash;population ratio FRED already publishes. The script checks the identity on all 943 months since January 1948 (EMRATIO is published to one decimal, so the largest difference is 0.05).</p>
+</div>
+
+<p><strong>What PEG is not.</strong> It is not an unemployment rate and it is not a measure of discouragement or slack. Its population base includes retirees, full-time students and people unable to work. This page says so rather than leaving the reader to infer it, and the arithmetic below shows how little of the gap is unemployment.</p>
+
+<p><strong>What it is for.</strong> A public, reproducible, trackable measure, updated with each BLS Employment Situation report (typically the first Friday of the month) for as long as the two FRED series exist. It is a companion to U-3 and U-6, not a replacement for either and not a &ldquo;more honest&rdquo; version of them. If it is ever discontinued, a dated note will say so.</p>
+
+<h2 id="now">2 &middot; The number, August 2026</h2>
+
+<table class="t">
+<tr><th>Measure</th><th>Aug 2026</th><th>How it is built</th></tr>
+<tr><td>U-3</td><td class="n">4.1%</td><td>unemployed / labour force (FRED UNRATE; recomputed from UNEMPLOY and CLF16OV, same to 0.05)</td></tr>
+<tr><td>U-6</td><td class="n">7.7%</td><td>FRED U6RATE, as published</td></tr>
+<tr><td><strong>PEG</strong></td><td class="n"><strong>40.91%</strong></td><td>(275,415 &minus; 162,746) / 275,415, in thousands</td></tr>
+</table>
+
+<p>The gap is made of exactly two things, because employment equals the labour force minus the unemployed: <strong>38.36%</strong> of the population is outside the labour force, and <strong>2.55%</strong> is unemployed. The unemployed are 6.2% of the gap. &ldquo;Outside the labour force&rdquo; is not the same as &ldquo;by choice&rdquo;: it also holds people who want a job and are not counted. This page does not split that block by reason (section 5).</p>
+
+<h2 id="history">3 &middot; Since 1948</h2>
+
+<table class="t">
+<tr><th>Month</th><th>PEG</th><th>Outside labour force</th><th>Unemployed</th><th>U-3</th><th>U-6</th></tr>
+<tr><td>Jan 1948</td><td class="n">43.41%</td><td class="n">41.43%</td><td class="n">1.98%</td><td class="n">3.4%</td><td class="n">&mdash;</td></tr>
+<tr><td>Jan 1960</td><td class="n">43.95%</td><td class="n">40.85%</td><td class="n">3.10%</td><td class="n">5.2%</td><td class="n">&mdash;</td></tr>
+<tr><td>Jan 1970</td><td class="n">41.95%</td><td class="n">39.59%</td><td class="n">2.36%</td><td class="n">3.9%</td><td class="n">&mdash;</td></tr>
+<tr><td>Jan 1980</td><td class="n">40.03%</td><td class="n">36.02%</td><td class="n">4.01%</td><td class="n">6.3%</td><td class="n">&mdash;</td></tr>
+<tr><td>Jan 1990</td><td class="n">36.80%</td><td class="n">33.21%</td><td class="n">3.58%</td><td class="n">5.4%</td><td class="n">&mdash;</td></tr>
+<tr><td>Jan 2000</td><td class="n">35.41%</td><td class="n">32.71%</td><td class="n">2.70%</td><td class="n">4.0%</td><td class="n">7.0%</td></tr>
+<tr><td>Jan 2010</td><td class="n">41.55%</td><td class="n">35.19%</td><td class="n">6.35%</td><td class="n">9.8%</td><td class="n">16.6%</td></tr>
+<tr><td>Dec 2019</td><td class="n">38.95%</td><td class="n">36.70%</td><td class="n">2.25%</td><td class="n">3.6%</td><td class="n">6.8%</td></tr>
+<tr><td>Apr 2020</td><td class="n">48.75%</td><td class="n">39.87%</td><td class="n">8.88%</td><td class="n">14.8%</td><td class="n">22.9%</td></tr>
+<tr><td>Aug 2026</td><td class="n">40.91%</td><td class="n">38.36%</td><td class="n">2.55%</td><td class="n">4.1%</td><td class="n">7.7%</td></tr>
+</table>
+
+<p>Over Jan 1948 to Aug 2026 the gap has been as low as 35.26% (Apr 2000) and as high as 48.75% (Apr 2020). From January 2000 to August 2026 it rose by <strong>+5.50 points</strong>: +5.65 from people outside the labour force and -0.15 from the unemployed. So the long-run movement in PEG is almost entirely participation, and the year-to-year spikes (April 2020: 8.88% unemployed, against 2.25% in December 2019) are almost entirely unemployment. U-6 exists on FRED only from 1994.</p>
+
+<p>The 1948 and 1960 values are higher than today&rsquo;s. That is a fact about who was counted in the labour force, not a claim that the labour market was worse; this page does not decompose it (section 5).</p>
+
+<h2>4 &middot; Why not an alternate unemployment measure</h2>
+
+<p>The ShadowStats &ldquo;Alternate Unemployment Measure&rdquo; is built on what its author calls proprietary modelling of long-term discouraged workers: no published formula and no citable inputs, so a third party cannot check it. That fails the standard this project holds its pages to, that a number carries a script that produces it. PEG is deliberately a different kind of object: two public series, one subtraction.</p>
+
+<div class="sorry-box">
+  <span class="sorry-label">Stated, not confirmed here</span>
+  Status of ShadowStats, as the author states it: it stopped updating its public site in late 2023 and has been a subscriber-email service since, so it should be cited as <em>discontinued from public view, subscriber-only</em>, not as defunct. A search made while writing this page did not confirm the 2023 date. The last public figure the author recalls, about 23% (June 2016 vintage), has no held source. Both are <strong>WANTED</strong>.
+</div>
+
+<h2 id="open">5 &middot; What is open</h2>
+
+<p><strong>The split by reason.</strong> BLS publishes counts of people not in the labour force by reason (retired, in school, disabled, family care, want a job now). Splitting the 38.36% block that way would isolate the labour-market-relevant slice from the rest. Not run.</p>
+<p><strong>Foregone output.</strong> An Okun&rsquo;s-law conversion of that slice into dollars, using FRED actual and potential GDP. Not run, and not attempted before the split exists.</p>
+<p><strong>Whether PEG is the right proxy for anything.</strong> WP-32 uses unemployment as an urgency proxy in its section 5. Whether PEG, U-3 or U-6 is the better proxy there is untested.</p>
+
+<h2 id="papers">6 &middot; Where it sits among the economics papers</h2>
+
+<p>Every page tagged ECONOMICS in the corpus (37 of them, at the commit the script pins), with how many times its own text says &ldquo;unemployment&rdquo; and how many times it uses any employment word (U-3, U-6, employment, labour force, jobless, labour market, payroll, jobs). The counts are computed, not judged. 35 of the 37 never say &ldquo;unemployment&rdquo;; the two that do are WP-32, where it is the urgency proxy, and WP-64, once. A zero is not a defect: most of these papers are about other things. It does mean that PEG connects to the corpus by measurement and by WP-32, and this page does not claim more.</p>
+
+<table class="t">
+<tr><th>Paper</th><th>Subject</th><th>&ldquo;unemployment&rdquo;</th><th>employment words</th></tr>
+<tr><td><a href="wp32-forced-urgency-gap.html">The Forced Urgency Gap</a></td><td>ECONOMICS · MARKETS</td><td class="n">10</td><td class="n">18</td></tr>
+<tr><td><a href="wp64-the-recorder.html">WP64 · The Recorder</a></td><td>ECONOMICS · MARKETS / COMPUTING · MACHINE LEARNING</td><td class="n">1</td><td class="n">3</td></tr>
+<tr><td><a href="ch-bitter-cargo.html">Bitter Cargo · Bridge Chapter</a></td><td>MEDICINE · NUTRITION / ECONOMICS · DEVELOPMENT</td><td class="n">0</td><td class="n">3</td></tr>
+<tr><td><a href="wp99-paying-for-what-the-kernel-can-see.html">WP-99 · Paying for What the Kernel Can See</a></td><td>ECONOMICS · POLICY</td><td class="n">0</td><td class="n">3</td></tr>
+<tr><td><a href="wp117-forced-urgency-comes-to-the-county.html">WP-117 · Forced Urgency Comes to the County</a></td><td>ECONOMICS · POLICY</td><td class="n">0</td><td class="n">2</td></tr>
+<tr><td><a href="../book10/ch04-receiving-capacity-is-measured.html">Receiving Capacity Is Measured Every Year — Book X, Ch. 4</a></td><td>ECONOMICS · DEVELOPMENT</td><td class="n">0</td><td class="n">1</td></tr>
+<tr><td><a href="wp35-retiring-the-advisor.html">WP-35 · Retiring the Advisor</a></td><td>ECONOMICS · POLICY</td><td class="n">0</td><td class="n">1</td></tr>
+<tr><td><a href="wp38-positional-dominance.html">WP-38 · Positional Dominance under Non-Contestability</a></td><td>ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">1</td></tr>
+<tr><td><a href="wp98-a-measurement-science-without-a-unit.html">WP-98 · A Measurement Science Without a Unit</a></td><td>ECONOMICS · POLICY / COMPUTING · MACHINE LEARNING</td><td class="n">0</td><td class="n">1</td></tr>
+<tr><td><a href="../book10/ch01-the-encumbrance-ratio.html">The Encumbrance Ratio — Book X, Ch. 1</a></td><td>ECONOMICS · DEVELOPMENT</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../book10/ch03-the-numbers-in-dead-aid.html">The Numbers in Dead Aid — Book X, Ch. 3</a></td><td>ECONOMICS · DEVELOPMENT</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../book10/ch06-the-price-of-the-thing.html">Book X · Ch 6 · The Price of the Thing</a></td><td>ECONOMICS · DEVELOPMENT</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../book10/ch08-you-never-asked.html">Ch 8 — You Never Asked</a></td><td>ECONOMICS · DEVELOPMENT</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../book10/ch09-fifty-five-states-one-voice.html">Ch 9 — 55 States, One Voice</a></td><td>ECONOMICS · POLICY</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../book4/ch07.html">Chapter 7 — Map Newark: The Field and the Need</a></td><td>ECONOMICS · POLICY</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../book4/ch08.html">Chapter 8 — Harrison: The Ordering Law Under Pressure</a></td><td>ECONOMICS · POLICY</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../book4/ch09.html">Chapter 9 — Belleville: Verification and the Ladder&#x27;s End</a></td><td>ECONOMICS · POLICY</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp118-the-remedy-is-time.html">WP-118 · The Remedy Is Time, and It Cannot Be Installed</a></td><td>ECONOMICS · POLICY</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp121-what-etf-connect-actually-couples.html">WP-121 · What ETF Connect Actually Couples</a></td><td>ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp126-not-the-parameter.html">WP-126 · The Resources Are Not the Parameter</a></td><td>ECONOMICS · DEVELOPMENT</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp127-no-silk-road-for-biomass.html">WP-127 · There Is No Silk Road for Biomass</a></td><td>ECONOMICS · DEVELOPMENT / EARTH · CLIMATE</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp26-student-coin-compliance.html">So You Made a Coin in 20 Minutes</a></td><td>LAW · POLICY / ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp28-circadian-trader-audit.html">Auditing the Circadian Trader Claim</a></td><td>METHOD · SELF-AUDIT / ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp36-no-gauge-on-the-tank.html">WP-36 · No Gauge on the Tank</a></td><td>ECONOMICS · POLICY</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp56-algorithmic-urgency.html">Algorithmic Urgency — AI Credit and the Governance of an Inv</a></td><td>ECONOMICS · MARKETS / COMPUTING · MACHINE LEARNING</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp72-governance-as-treatment.html">WP72 · Governance as a Treatment · The Andes-Amazon Reversal</a></td><td>EARTH · CLIMATE / ECONOMICS · POLICY</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp75-paying-for-what-can-be-seen.html">WP75 · Paying for What Can Be Seen · Verifiable Restoration</a></td><td>ECONOMICS · POLICY / EARTH · CLIMATE</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp83-a-ponte-nova.html">WP-83 · A Ponte Nova</a></td><td>BUSINESS · VENTURE / ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="wp95-the-right-word-the-wrong-reader.html">WP-95 · The Right Word, the Wrong Reader</a></td><td>ECONOMICS · POLICY</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../book7/ch-cross-staff-and-ledger.html">The Cross-Staff and the Ledger · Bridge Chapter</a></td><td>HISTORY · SCIENCE / ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../book7/ch-freire.html">Paulo Freire — The Ballot the Reading Opens · Scientist Gall</a></td><td>EDUCATION / ECONOMICS · POLICY</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../book8/ch8-5-bitcoin.html">Bitcoin · Ch 8.5 · The Nakamoto Fold</a></td><td>ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../ch04-markets.html">Ch 4: Market Volatility Manifolds — The Mini-Beast</a></td><td>ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../ch13-market-metric.html">Market · The Manifold and Metric | Book 3: The Mini-Beast</a></td><td>ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../ch14-market-threshold.html">Market · Critical Volatility Threshold | Book 3: The Mini-Be</a></td><td>ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../ch15-market-transition.html">Market · The Generative Transition | Book 3: The Mini-Beast</a></td><td>ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><a href="../ch3c-econophysics.html">Chapter 3c · The Circadian Trader · Book 3: The Mini-Beast</a></td><td>ECONOMICS · MARKETS</td><td class="n">0</td><td class="n">0</td></tr>
+</table>
+
+<p style="color:var(--dim);font-size:.9rem;margin-top:2rem;">Producing script: <code>book6/wp128-verify.py</code> &mdash; recomputes every figure above from FRED (retrieved live; the August 2026 row is pinned, so a later revision makes the script fail loudly instead of this table going stale quietly), rebuilds the table in section 6 from <code>docs/subjects.tsv</code>, and checks that this page prints what it computes. <span class="tag t-data">CITED</span> FRED series CNP16OV, CE16OV, CLF16OV, UNEMPLOY, EMRATIO, UNRATE, U6RATE, <a href="https://fred.stlouisfed.org/">fred.stlouisfed.org</a>, not held. Nothing here is investment, legal or policy advice.</p>
+
+<div class="chapter-nav">
+  <a href="wp127-no-silk-road-for-biomass.html">&larr; WP-127</a>
+  <a href="index.html">Book 6 &middot; contents</a>
+</div>
+
+</div>
+
+<!--po-gss--><aside class="po-gss" style="max-width:860px;margin:1.2rem auto 1rem;padding:.8rem 1.1rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(40,80,150,.85);border-radius:0 6px 6px 0;background:rgba(40,80,150,.05);font-family:ui-monospace,Menlo,monospace;font-size:.78rem;line-height:1.55"><details><summary style="cursor:pointer;letter-spacing:.08em"><b>Gold Standard Science &middot; 4 of 9 tenets shown</b> &middot; self-assessed against <a href="https://www.federalregister.gov/documents/2025/05/29/2025-09802/restoring-gold-standard-science" style="color:inherit">EO 14303 &sect;3(a)</a> &mdash; not a federal certification</summary><ul style="list-style:none;margin:.5rem 0 .3rem;padding:0"><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(i) reproducible <span style="opacity:.6">&mdash; a script or Lean file beside the page re-derives its numbers</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(ii) transparent <span style="opacity:.6">&mdash; code or sourced references missing</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(iii) error and uncertainty <span style="opacity:.6">&mdash; MODEL / OPEN tags or an [HONESTY] block</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iv) collaborative, interdisciplinary <span style="opacity:.6">&mdash; cross-linked to other volumes</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(v) skeptical <span style="opacity:.6">&mdash; states what it does not claim, or leaves items open</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(vi) falsifiable <span style="opacity:.6">&mdash; its script can print FAIL</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(vii) unbiased peer review <span style="opacity:.6">&mdash; not independently peer reviewed</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(viii) negative results <span style="opacity:.6">&mdash; no negative result reported on this page</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#9675;</span>(ix) conflicts of interest <span style="opacity:.6">&mdash; disclosed: author-published through G6 LLC, the author&#x27;s company</span></li></ul><div style="opacity:.75">Scored by <code>tools/gold_standard.py</code> from what is observable on this page and beside it. &#10003; shown &middot; &#10007; not shown &middot; &#9675; disclosure. No agency has reviewed this page.</div></details></aside><!--/po-gss-->
+<!--po-run--><aside class="po-run" style="max-width:860px;margin:1.6rem auto 1rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(80,140,110,.85);border-radius:0 6px 6px 0;background:rgba(80,140,110,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Run it yourself &middot; one-click download</div><ul style="margin:.4rem 0 .5rem 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book6/wp128-verify.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">wp128-verify.py</a> <span style="opacity:.6">&middot; Python 3 &middot; book6/wp128-verify.py</span></li></ul><div style="font-size:.92em;opacity:.85"><b>Python</b>: <code>python3 FILE.py</code> &mdash; standard library only; pages that read a book also need <code>pdftotext</code> and the book in <code>~/Downloads</code>, and say SKIP rather than PASS without it.</div></aside><!--/po-run-->
+<footer>
+  Principia Orthogona &middot; Book 6 &middot; <a href="../index.html">index</a> &middot; G6 LLC
+</footer>
+
+</body>
+</html>
