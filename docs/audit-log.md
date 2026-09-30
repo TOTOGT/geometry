@@ -11033,3 +11033,6 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
 - **Consequence for WP-128:** its test is linear, unsplit and on a trailing-mean natural rate, so it cannot distinguish their hypothesis from a flat curve, and its 1985-2019 row straddles their 1995Q1 break. Recorded on the page as not run. Not run here either: WP-128's rule is that its specification was fixed before results were seen, and a new one would be a new test, the author's call.
 - **Not found:** a keyword search of their text for U-6, participation and employment-population turned up nothing, so this paper does not test a broad slack measure; PEG against the curve remains untested in the literature I hold.
 - Page edited (new paragraph "Nonlinearity and regimes", one sentence in section 6); `wp128-verify.py` passes; `tools/terms.py --check` OK.
+
+## 2026-09-30 WP-128: Gordon (1990) added
+Added a paragraph in book6/wp128 on supply-shock omission bias and moving natural rate (source: NBER 3393, held as scan, read by OCR); section-6 sentence notes no supply-shock control is run. Tagged CITED, nothing run. wp128-verify.py and terms.py --check pass. Wage-indexation overview and The Hill page not used: overview unsourced, The Hill returned 403.
