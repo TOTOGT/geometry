@@ -128,7 +128,7 @@ To make this a contact-geometric statement, we need a 1-form $\alpha$ such that:
 2. $\alpha \wedge d\alpha \neq 0$ everywhere (non-integrability).
 3. The *only* place where the contact distribution is compatible with hitting $U = V = 0$ is $\sigma = \tfrac{1}{2}$.
 
-Conditions (1)–(3) together would constitute a proof of RH within the contact-geometric framework. We can satisfy (1) and (2) explicitly; condition (3) is the open part.
+Conditions (1)–(3) together would constitute a proof of RH within the contact-geometric framework. We can satisfy (1) explicitly, and (2) wherever $\partial_t g\neq 0$ (it fails on the zero set of $\partial_t g$; see §4.8); condition (3) is the open part.
 
 ---
 
@@ -166,7 +166,7 @@ $$\partial_t g = \sum_{n=1}^{\infty} \frac{\Lambda(n)\log n}{n^\sigma}\cos(t\log
 
 $$\alpha_{\text{arith}} \wedge d\alpha_{\text{arith}} = -(\partial_t g)\,dV\wedge dt\wedge dU.$$
 
-*This is nonzero almost everywhere because the frequencies $\{\log p : p \text{ prime}\}$ are $\mathbb{Q}$-linearly independent, making $\partial_t g$ a quasi-periodic function that is dense and non-vanishing.*
+*This is nonzero almost everywhere because the frequencies $\{\log p : p \text{ prime}\}$ are $\mathbb{Q}$-linearly independent, making $\partial_t g$ a quasi-periodic function that is real-analytic in $t$ and not identically zero. It does change sign (for $\sigma=2$ it is positive at $t=0$ and has a zero near $t=0.83$), so the 3-form vanishes on the isolated $t$-values where $\partial_t g=0$; see §4.8.*
 
 **Proof sketch.** The independence of $\{\log p\}$ over $\mathbb{Q}$ follows from the uniqueness of prime factorization. Hence the quasi-periodic sum $\partial_t g$ is not identically zero on any open interval of $t$. $\square$
 
@@ -311,6 +311,14 @@ argument is transparent, natural, or reusable, and that judgment did not come fr
 Nothing in this paper is improved by the observation, but the standard it is written to is
 the same one, and it now has a public instance.
 
+### 4.8 Editor's verification note (2026-09-29)
+
+This note was added after version 3 by a script-backed check, [rh-paper-verify.py](rh-paper-verify.py) (mpmath at 40 digits, sympy). It does not change the version number, the reserved DOI or any claim in the status table of §4.6. What the script re-derived and found:
+
+- **Holds.** The numbers of §4.4 (at $\gamma_1$: $g=-10.076,\,-100.08,\ldots$, residue $-1$, $c\to0.4052744$); Corollary 4.5, $c(\tfrac12,t)=\vartheta'(t)$, to better than 30 digits; both reflection laws of §4.5 to about $10^{-40}$ at all 54 points of the stated grid; and the axiom report beside the page (17 declarations, no `sorryAx`, only `propext`, `Classical.choice`, `Quot.sound`).
+- **Corrected in this edition.** (a) "dense and non-vanishing" in Proposition 4.2: $\partial_t g$ changes sign, so $\alpha_{\text{arith}}\wedge d\alpha_{\text{arith}}$ vanishes on the isolated $t$-values where $\partial_t g=0$ (Step 1 and §3.2 (2) now say so). (b) The local factor $g_p$ of §5.2 exceeded the Euler-factor coefficient $-\zeta_p'/\zeta_p=\log p\,c/(1-c)$ by the constant $\log p$; the derivative in §5.3 is unchanged.
+- **Open, left for the author.** (1) The reformulation, "RH $\Leftrightarrow$ $\alpha_{\text{arith}}\wedge d\alpha_{\text{arith}}\neq0$ everywhere" (abstract, §3.2, Conjecture 6.1, Step 4), cannot hold as worded, because $\partial_t g$ has zeros at every $\sigma$ tested ($\sigma=2$: 25 sign changes for $t\in[0,60]$); a form of the condition that survives this is needed. (2) In §2 the forms have no $dt$ component: $d(dy+x\,dx)=0$, not $dx\wedge dy$, and $\alpha=dy-g(x,y)\,dx$ has $\alpha\wedge d\alpha=0$ for every $g$; also $\alpha(\dot\gamma)=g(1-f)$, which is zero only where $\dot x=1$. The §4 form is contact only because $g$ depends on $t$, so the "local, automatic" entry of Appendix B does not hold for a smooth $g(x,y)$. (3) "30 significant digits" (abstract, §4.5) and "30 digits at eight points ... maximum deviation $8.8\times10^{-16}$" (§4.6) disagree with each other, and the stated grid is six values of $\sigma$; the recomputation above supports the first. (4) The Lean source `ZetaReflection.lean` is not in the repository checkout, so the axiom report is a receipt for a file that could not be read. (5) The p-adic remarks in §5.2–5.3 ($e^{-it_p\log p}$ for $t_p\in\mathbb{Q}_p$; $g_p$ complex against $g_\infty$ real) are not checked. (6) The citations of §4.7 were not read; the Anthropic post and arXiv:2609.02882 exist, and arXiv listings dated after version 3 (2609.07918, 2609.24167, 2609.33043) suggest further movement in the analytic line.
+
 ---
 
 ## 5. Adelic Decomposition
@@ -329,7 +337,7 @@ This is the form of Section 4.
 
 **Non-Archimedean place $v = p$:** The local Euler factor contributes
 
-$$g_p(t_p) = \frac{\log p}{1 - p^{-\sigma}e^{-it_p\log p}},$$
+$$g_p(t_p) = \frac{\log p\;p^{-\sigma}e^{-it_p\log p}}{1 - p^{-\sigma}e^{-it_p\log p}},$$
 
 where $t_p \in \mathbb{Q}_p$ is the local idelic parameter. The local contact form is
 
@@ -422,7 +430,7 @@ Over a finite field $\mathbb{F}_q$, the analogue of $\zeta(s)$ is the **zeta fun
 
 For completeness, we state what a proof of RH within this framework would require:
 
-**Step 1** (done): Construct $\alpha_{\text{arith}}$ and verify $\alpha_{\text{arith}}\wedge d\alpha_{\text{arith}} \neq 0$ on the complement of the zeros (Section 4–5).
+**Step 1** (done): Construct $\alpha_{\text{arith}}$ and verify $\alpha_{\text{arith}}\wedge d\alpha_{\text{arith}} \neq 0$ off the zero set of $\partial_t g$ (Section 4–5; §4.8 records that this set is not empty).
 
 **Step 2** (done): Decompose into local forms $\alpha_v$ and verify the valuation lock at each $p$-adic place (Section 5.3).
 

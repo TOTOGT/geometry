@@ -10913,3 +10913,11 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
 - **Confirmed:** the spiral fills each N x N grid once for all four sizes; n^2+n+41 is prime for n = 0..39.
 - **OPEN:** Whitney A1 caustic analogy and the lensing link (MODEL); the moire wording (not measured); sources (Ulam, Euler) not held. One cell (n = N^2) is not drawn: harmless for primes.
 - **Status:** page stays `unfinished` in docs/unlisted.tsv; not linked.
+
+## 2026-09-29 - The Riemann Hypothesis as Non-Integrability (book4/rh-paper.html; source RH_arithmetic_contact_structure.md) (author: "next")
+- **Read in full;** wrote book4/rh-paper-verify.py (R24; BASELINE d1e8ad0; mpmath 40 digits, sympy). The page has no TODO markers (the docs/unlisted.tsv note was out of date).
+- **Holds:** the numbers at gamma_1 (g = -10.076 ... , residue -1, c -> 0.4052744); c(1/2,t) = theta'(t); both reflection laws to ~1e-40 at 54 points; the axiom report beside the page (17 declarations, no sorryAx, standard axioms only).
+- **Corrected (markdown and HTML):** Proposition 4.2 said d_t g is "dense and non-vanishing"; it changes sign (25 times for sigma = 2, t in [0,60]; first zero t = 0.83483), so alpha^dalpha vanishes on isolated t-values (also §3.2 (2) and Step 1); the local factor g_p was log p/(1-c), the Euler factor gives log p . c/(1-c). Added §4.8 (editor's verification note).
+- **OPEN, left to the author:** the reformulation "non-vanishing everywhere" cannot hold as worded; §2's forms have no dt (d(dy + x dx) = 0, alpha^dalpha = 0 for dy - g(x,y)dx; Appendix B row); "30 digits" against "8.8e-16 at eight points" (recomputation supports 30); the Lean source is not in this checkout; §4.7 citations not read (Anthropic post and arXiv:2609.02882 exist; later arXiv items unread); p-adic remarks unchecked.
+- **Builder drift (R9-style, recorded):** the committed HTML is not what tools/build_rh_paper.py produces from the same markdown (it loses bold and link markup). I did not overwrite the HTML with the builder's output; both files were patched by hand. The builder's claim that "the HTML cannot drift" is not true at this commit.
+- **Status:** page stays `unfinished`; not linked.
