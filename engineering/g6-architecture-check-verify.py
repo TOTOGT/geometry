@@ -82,14 +82,31 @@ for Pk in (5,10,20):
 check(abs(night-354.4)<0.1,'lunar night about 354 h')
 print('    the alternative is to work by day only and wait (half the duty), trading time for battery mass.')
 
-head(8,'radiation and the day-only option  (QUOTED: Chang\'e-4 lunar lander, sci.news summary of Zhang et al., Science Advances 2020)')
-lunar=1369.0; iss=731.0; iss_gcr=523.0
-print('    quoted: lunar surface average dose equivalent %.0f uSv/day (~60 uSv/h) ; ISS same period %.0f uSv/day, of which galactic cosmic rays %.0f'%(lunar,iss,iss_gcr))
-print('    per year: %.0f mSv (= %.2f Sv) ; ratio to the ISS total = %.2f ; quoted: GCR dose equivalent on the Moon about 2.6 x that inside the ISS'%(lunar*365/1e3,lunar*365/1e6,lunar/iss))
-check(abs(lunar*365/1e3-499.7)<0.5,'1,369 uSv/day is 500 mSv per year')
-print('    1369 / 523 = %.2f, which matches the quoted 2.6: the factor compares the lunar total with the ISS galactic-cosmic-ray dose'%(lunar/iss_gcr))
-check(abs(lunar/iss_gcr-2.6)<0.05,'1369/523 = 2.62 matches the quoted factor 2.6')
-print('    quoted: "on the ground well over 200 times lower" -> ground dose below %.1f uSv/day'%(lunar/200))
-print('    the source read gives ONE average and does not separate day from night. Galactic cosmic rays are continuous by origin; UV, the solar wind and solar particle events come from the Sun.')
-print('    So waiting through the night does not remove a dose that is measured as a day-and-night average; daytime adds UV (no ozone layer or atmosphere), heat (+121 C) and solar particle exposure.')
+head(8,'radiation: re-checked against the primary source (Zhang et al., Science Advances 6(39), 25 Sep 2020, DOI 10.1126/sciadv.aaz1334, text supplied by the author)')
+print('    QUOTED from the paper: total 13.2 +/- 1 uGy/h in Si; neutral 3.1 +/- 0.5; charged 10.2 +/- 1.1; conversion to water x 1.30; <Q> = 4.3 +/- 0.7;')
+print('    charged-particle (GCR) dose equivalent 57.1 +/- 10.6 uSv/h; "average dose equivalent of 1369 uSv/day"; ISS 731 uSv/day of which GCR 523; lander shielding ~1 g/cm2;')
+print('    EVA shielding 0.3 g/cm2 (suit fabric), 1 g/cm2 (pressurized rover); thermal/epithermal neutron flux rises up to ~150 g/cm2 of regolith (Apollo 17); data taken only while the lander was awake.')
+tot=13.2; neu=3.1; chg=10.2
+check(abs(neu+chg-tot)<0.15,'neutral + charged = %.1f + %.1f = %.1f vs total 13.2 uGy/h (rounding)'%(neu,chg,neu+chg))
+check(abs(100*neu/tot-23.5)<0.6,'neutral fraction %.1f%% (paper: 23 +/- 8%%)'%(100*neu/tot))
+water=chg*1.30; H=water*4.3
+print('    charged dose in water = %.2f uGy/h ; x <Q> 4.3 = %.1f uSv/h (paper 57.1) ; x 24 h = %.0f uSv/day (paper 1369)'%(water,H,H*24))
+check(abs(H-57.1)<0.5,'10.2 x 1.30 x 4.3 = %.1f uSv/h, matching 57.1'%H)
+check(abs(57.1*24-1369)<2,'57.1 uSv/h x 24 = %.0f, matching 1369 uSv/day'%(57.1*24))
+print('    => the 1,369 uSv/day is the CHARGED-particle (GCR) dose equivalent; the neutral (23% of the absorbed dose) is not converted to dose equivalent in the paper.')
+check(abs(1369/523-2.62)<0.01,'1369/523 = 2.62: the quoted factor 2.6 compares lunar GCR with ISS GCR')
+print('    per year: %.0f mSv of GCR dose equivalent (before neutrons and any solar particle event)'%(1369*365/1e3))
+print('    an 8 h EVA at 57.1 uSv/h = %.0f uSv (GCR only; the paper says its shielding, ~1 g/cm2, makes the values good estimates for EVA)'%(57.1*8))
+print('    day and night: the detector measured only when awake (3-12 Jan and 31 Jan-10 Feb 2019; the lander hibernated through the night and the lid was closed), so NIGHT WAS NOT MEASURED.')
+print('    The paper calls GCR exposure "chronic" and solar particle events "sporadic" (none seen in the period); it does not say night removes the dose, and it did not measure night.')
+print('    UV and the absence of an ozone layer are not in the paper.')
+rho=2000.0; thick=0.5
+ad=rho*thick/10.0  # kg/m2 -> g/cm2: 1 kg/m2 = 0.1 g/cm2
+print('    areal density of the illustrative hangar shell (section 2 of moonbase-hangar-verify.py): %.0f kg/m3 x %.1f m = %.0f kg/m2 = %.0f g/cm2'%(rho,thick,rho*thick,ad))
+check(abs(ad-100.0)<1e-9,'0.5 m of 2000 kg/m3 regolith is 100 g/cm2')
+for d_ in (1500.0,2000.0):
+    print('    150 g/cm2 of regolith at an assumed %.0f kg/m3 = %.2f m'%(d_,150*10/d_))
+print('    so a 0.5 m shell sits inside the regime where the paper says neutron flux from in-situ shielding increases (up to ~150 g/cm2); more charged-particle shielding comes with more neutrons.')
+print('    Science news (Mann, 25 Sep 2020, doi 10.1126/science.abe9386, text supplied by the author): authors calculate >= 50 cm of lunar soil suffices for a base; ~10 m of water for solar storms; ~30 min warning; ~200x Earth surface; up to 6 months within the NASA limit for a shielded base (Cucinotta, not an author).')
+check(abs(0.5*2000/10-100)<1e-9,'the illustrative 0.5 m shell equals the authors\' 50 cm minimum (100 g/cm2 at the assumed 2000 kg/m3); the paper text still warns neutron flux rises with regolith depth')
 print('\n'+('FAIL: %d'%len(fails) if fails else 'all checks passed')); sys.exit(1 if fails else 0)
