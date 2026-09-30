@@ -10948,3 +10948,8 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
 - **Not found:** any DOE-facing document; the term "beltdraulic" anywhere. Recorded OPEN (R9): the author defines beltdraulic and picks the DOE program.
 - **Hooks (D1 to D2)** in the map are proposals labelled CONJECTURE; standard ones (Gibbs contact form, Kirchhoff as d^2=0) are textbook.
 - **Not opened:** HVEH/ResilientNJ_HVEH_Grant_Narrative.pages.
+
+## 2026-09-30 - engineering-coverage-map re-ordered around the zeolite pore-selectivity grant (author: DOE has received his zeolite grant; the apprenticeship is not one he qualifies for)
+- **Author's statement recorded, not verified:** DOE apprenticeship (levels G-9 to G-5), self-taught so ineligible, grant on zeolite pore selectivity received. Program identity and rules unread.
+- **Counted:** the corpus has ch18, ch20, ch-catgt-zeolite on zeolites; "Langmuir", "Knudsen", "Fickian" 0 hits, "diffusivity" 2, "adsorption isotherm" 1. No adsorption, diffusion-in-confinement or pore-selectivity derivation exists.
+- **Changed:** map section 3 now ranks the 17 topics by what pore selectivity needs and lists three first scripts (kinetic diameter vs aperture from named literature values, Henry/Langmuir selectivity, Arrhenius/Fick/Thiele). Open: beltdraulic undefined, grant identity, proposal text absent.

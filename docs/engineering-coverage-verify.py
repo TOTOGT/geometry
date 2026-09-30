@@ -35,7 +35,7 @@ for t,p in T.items():
     c={f:n for f,n in c.items() if n}
     top=sorted(c.items(),key=lambda x:-x[1])[:3]
     print(f"| {t} | {len(c)} | {sum(c.values())} | "+"; ".join(f"{f} ({n})" for f,n in top)+" |")
-named=["book7/ch-clapeyron-gibbs.html","book8/ch10-thermodynamics.html","ch-energy-entropy.html","book7/ch-maxwell.html","book7/ch-faraday.html","book4/ch-faraday.html","book4/ch16-crystal-lattice.html","book4/ch17-magnetic-lattice.html","book4/ch18-seismic-lattice.html","book4/ch19-acoustic-lattice.html","book4/ch20-defect-lattice.html","HVEH/ch-build-2river.html","HVEH/case-belleville-second-river.html","HVEH/cfd/README.md","HVEH/rotor_geometry.py","book7/ch-feynman.html","book7/wp59-dark-matter-lensing.html","book6/ch-phase.html","book7/ch-strang.html"]
+named=["book7/ch-clapeyron-gibbs.html","book8/ch10-thermodynamics.html","ch-energy-entropy.html","book7/ch-maxwell.html","book7/ch-faraday.html","book4/ch-faraday.html","book4/ch16-crystal-lattice.html","book4/ch17-magnetic-lattice.html","book4/ch18-seismic-lattice.html","book4/ch19-acoustic-lattice.html","book4/ch20-defect-lattice.html","HVEH/ch-build-2river.html","HVEH/case-belleville-second-river.html","HVEH/cfd/README.md","HVEH/rotor_geometry.py","book7/ch-feynman.html","book7/wp59-dark-matter-lensing.html","book6/ch-phase.html","book7/ch-strang.html","ch18-zeolite-noncommutativity.html","ch20-saf-noncommutativity.html","ch-catgt-zeolite.html"]
 miss=[n for n in named if not os.path.exists(n)]
 print("\nnamed pages missing:",miss or "none")
 sys.exit(1 if miss else 0)
