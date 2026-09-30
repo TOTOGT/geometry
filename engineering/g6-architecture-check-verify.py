@@ -81,4 +81,15 @@ for Pk in (5,10,20):
     print('      P = %2d kW : %6.0f kWh -> %6.1f t of battery -> %5.0f-%5.0f t in Earth orbit'%(Pk,Ek,mb/1e3,mb/1e3*5.09,mb/1e3*6.66))
 check(abs(night-354.4)<0.1,'lunar night about 354 h')
 print('    the alternative is to work by day only and wait (half the duty), trading time for battery mass.')
+
+head(8,'radiation and the day-only option  (QUOTED: Chang\'e-4 lunar lander, sci.news summary of Zhang et al., Science Advances 2020)')
+lunar=1369.0; iss=731.0; iss_gcr=523.0
+print('    quoted: lunar surface average dose equivalent %.0f uSv/day (~60 uSv/h) ; ISS same period %.0f uSv/day, of which galactic cosmic rays %.0f'%(lunar,iss,iss_gcr))
+print('    per year: %.0f mSv (= %.2f Sv) ; ratio to the ISS total = %.2f ; quoted: GCR dose equivalent on the Moon about 2.6 x that inside the ISS'%(lunar*365/1e3,lunar*365/1e6,lunar/iss))
+check(abs(lunar*365/1e3-499.7)<0.5,'1,369 uSv/day is 500 mSv per year')
+print('    1369 / 523 = %.2f, which matches the quoted 2.6: the factor compares the lunar total with the ISS galactic-cosmic-ray dose'%(lunar/iss_gcr))
+check(abs(lunar/iss_gcr-2.6)<0.05,'1369/523 = 2.62 matches the quoted factor 2.6')
+print('    quoted: "on the ground well over 200 times lower" -> ground dose below %.1f uSv/day'%(lunar/200))
+print('    the source read gives ONE average and does not separate day from night. Galactic cosmic rays are continuous by origin; UV, the solar wind and solar particle events come from the Sun.')
+print('    So waiting through the night does not remove a dose that is measured as a day-and-night average; daytime adds UV (no ozone layer or atmosphere), heat (+121 C) and solar particle exposure.')
 print('\n'+('FAIL: %d'%len(fails) if fails else 'all checks passed')); sys.exit(1 if fails else 0)
