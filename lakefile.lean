@@ -49,10 +49,11 @@ lean_lib Orthogenesis
   promise. It is the cheapest of the five to close.
 -/
 @[default_target]
--- Book 3, "A Bucket of Seawater": what the fruit-fly toy model's pipeline does (C jumps, U fixes the norm, 4 fixed points at alpha = 0).
-lean_lib BioSwarmCheck
-
 lean_lib SaturnHexagon
+
+-- Book 3, "A Bucket of Seawater": what the fruit-fly toy model's pipeline does (C jumps, U fixes the norm, 4 fixed points at alpha = 0).
+@[default_target]
+lean_lib BioSwarmCheck
 
 /-
   book8/OrthogonalWitness.lean kernel-checked by hand on 2026-08-27 (all four
