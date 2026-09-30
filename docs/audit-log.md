@@ -11042,3 +11042,6 @@ Added a worked case to section 6. Inputs checked against primary pages: Steinhar
 
 ## 2026-09-30 WP-129 worked case retitled
 Retitled the worked case to the teacher who depends on SNAP, as the author meant (SNAP dependence is his point, not a sign-up task). Added the monthly figure, $2,500, and stated that eligibility against the New York limits is unchecked: the state agency page failed to load and third-party calculator sites were not used as sources.
+
+## 2026-09-30 WP-129 worked-case subtitle
+Added the author's subtitle to the worked case in section 6, marked as his position, with a note that other household income, savings and family help are not counted.
