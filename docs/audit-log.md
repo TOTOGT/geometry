@@ -11039,3 +11039,6 @@ Added a paragraph in book6/wp128 on supply-shock omission bias and moving natura
 
 ## 2026-09-30 WP-129 section 6: worked case (teacher residency, milk-hours)
 Added a worked case to section 6. Inputs checked against primary pages: Steinhardt Empire State grant ($30,000 stipend, two-year service), MIT Living Wage Calculator New York County 2026 ($38.21 and $60.92 per hour; $126,705), NYC minimum wage $17.00. Arithmetic recomputed. The $9 milk price is the author's observation, unsourced; the national figure is from a price aggregator, not BLS. One fetched page dated the $17.00 rate to 1 January 2027 while MIT lists it for 2026; the effective date is not settled here. wp129-verify.py and terms.py --check pass.
+
+## 2026-09-30 WP-129 worked case retitled
+Retitled the worked case to the teacher who depends on SNAP, as the author meant (SNAP dependence is his point, not a sign-up task). Added the monthly figure, $2,500, and stated that eligibility against the New York limits is unchecked: the state agency page failed to load and third-party calculator sites were not used as sources.
