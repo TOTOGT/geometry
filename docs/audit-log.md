@@ -11045,3 +11045,6 @@ Retitled the worked case to the teacher who depends on SNAP, as the author meant
 
 ## 2026-09-30 WP-129 worked-case subtitle
 Added the author's subtitle to the worked case in section 6, marked as his position, with a note that other household income, savings and family help are not counted.
+
+## 2026-09-30 WP-129 savings evidence
+Replaced the savings caveat in the worked case with Federal Reserve 2025 survey figures (63% cover a $400 expense, 55% hold a three-month fund, 21% and 39% in the two lowest income bands shown). The broad claim that most people have no savings is not what the survey shows overall; it holds in the lower income bands. Survey does not split by having children.
