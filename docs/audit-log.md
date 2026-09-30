@@ -10953,3 +10953,8 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
 - **Author's statement recorded, not verified:** DOE apprenticeship (levels G-9 to G-5), self-taught so ineligible, grant on zeolite pore selectivity received. Program identity and rules unread.
 - **Counted:** the corpus has ch18, ch20, ch-catgt-zeolite on zeolites; "Langmuir", "Knudsen", "Fickian" 0 hits, "diffusivity" 2, "adsorption isotherm" 1. No adsorption, diffusion-in-confinement or pore-selectivity derivation exists.
 - **Changed:** map section 3 now ranks the 17 topics by what pore selectivity needs and lists three first scripts (kinetic diameter vs aperture from named literature values, Henry/Langmuir selectivity, Arrhenius/Fick/Thiele). Open: beltdraulic undefined, grant identity, proposal text absent.
+
+## 2026-09-30 - Beltdraulic defined in the coverage map (author gave riserobotics.com/beltdraulic)
+- **Could not read:** the vendor page (WebFetch refused: robots.txt rate-limited); not worked around. Read instead: Machine Design 2026-02-10 (Grodzki, Turntide) and the BusinessWire 2022-12-22 patent release (US 11,255,416).
+- **Recomputed (docs/beltdraulic-check.py):** 1,400 psi = 9.65 MPa; 85% vs 21.1% efficiency implies 75.2% less energy, so "up to 90% less" needs a hydraulic comparator at or below 8.5%; block-and-tackle trades speed for force; "2-ton" unit unstated.
+- **Not established:** "proven faster, stronger, more accurate": no independent test cited in what was read. Status of the map row: defined, claims MODEL/vendor. R9 items unchanged.

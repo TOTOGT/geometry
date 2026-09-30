@@ -46,7 +46,7 @@ Status: WRITTEN = a page treats it; PARTIAL = related page, not the engineering 
 | Circuits | GAP | none | Kirchhoff laws as d^2 = 0 on a graph (standard cochain view) | Mesh analysis against nodal analysis |
 | Nature & property of materials | PARTIAL | book4/ch16-crystal-lattice.html to ch20-defect-lattice.html, book6/ch-phase.html | Lattice symmetry group to elastic tensor | Cubic elastic constants from symmetry |
 | Particle/aggregate to properties | PARTIAL | book6/wp92, wp93 | Packing and percolation thresholds | Site-percolation threshold by simulation |
-| Beltdraulic vs hydraulic | GAP | none (0 hits for "beltdraulic") | **Undefined in the repository.** The author must define it (see section 4) | none until defined |
+| Beltdraulic vs hydraulic | GAP | none (0 hits for "beltdraulic") | Defined in section 5 from public sources; hook not yet proposed | `docs/beltdraulic-check.py` (arithmetic only) |
 | Optics | PARTIAL | book4/ch19-acoustic-lattice.html, book7/wp59-dark-matter-lensing.html | Fermat as a variational principle; ray as a Legendrian curve | Snell from Fermat symbolic |
 | Heat transfer | PARTIAL | book6/ch-elliptic-poisson-foundations.html, book6/ch-wave-equation.html | Heat equation as a contraction semigroup | 1D conduction against Fourier series |
 | Soil mechanics | GAP | none | Effective stress and Mohr circle as a conic in the stress plane | Mohr-Coulomb failure envelope |
@@ -74,9 +74,25 @@ First scripts to write (R24, before prose), each re-derivable and each stating i
 
 ## 4. Open (R9, left to the author)
 
-- **Beltdraulic** is not in the repository. Please define it before I write about it.
+- **Beltdraulic:** defined in section 5 from public sources (author supplied the link). The vendor's own page could not be read (robots.txt refused the fetch, and I did not work around it). Claims of "proven" superiority are not established by what I could read.
 - **Which DOE program received the grant**, its identifier, and what the proposal already states (aims, guests, framework). The proposal text is not in the repository; sharing it lets the primer match it instead of guessing.
 - **Eligibility** for the apprenticeship: not assessed here; I have not read the program's requirements.
 - **HVEH power claim:** 10-20 kW per module is a MODEL figure on the page; the map does not endorse it. It is off the zeolite path.
 - **Hooks** in section 2 are proposals, not proved; the "standard" ones are textbook facts and can be cited, the rest are conjectures.
 - ResilientNJ_HVEH_Grant_Narrative.pages was not opened.
+
+## 5. Beltdraulic (added 2026-09-30, from the link the author gave)
+
+**What it is (per RISE Robotics and partners):** an electric, fluid-free linear actuator. Steel-wire-reinforced polyurethane flat belts run in a block-and-tackle arrangement, rolling contact rather than sliding; a high-torque electric motor drives it. Named as a "hydraulic-replacing" system. U.S. Patent 11,255,416 (press release 2022-12-22) covers a "high reduction belt-driven linear actuator"; the release quotes belt-pulley interface pressure above 1,400 psi. A Machine Design piece dated 2026-02-10 (Ryan Grodzki, Turntide Technologies, a partner) quotes more than 90% efficiency from the motor shaft and roughly 85% system efficiency, and cites Oak Ridge National Laboratory for mobile hydraulic systems averaging 21.1% efficiency.
+
+**What the sources establish:** the mechanism, the patent, and the quoted figures. **What they do not establish:** the operating conditions of the 90% and 85% figures are not stated, and no independent third-party test of the device is cited in what I read. "Faster, stronger and more accurate than hydraulics" is the vendor's framing; I found no measured comparison to check. The Beltdraulic page you linked was not readable by me.
+
+**What the arithmetic says (`docs/beltdraulic-check.py`, re-runnable):**
+- 1,400 psi is 9.65 MPa at the belt-pulley interface.
+- The two quoted efficiencies (85% against 21.1%) imply 75.2% less energy for the same work. "Up to 90% less" would need the hydraulic comparison system to be at or below 8.5% efficient, so the 90% figure is a best case, not a fleet average.
+- A block-and-tackle with N supporting strands multiplies force by N and divides speed by N, at fixed power. So "stronger" and "faster" cannot both come from the reduction; any advantage on both must come from efficiency, motor torque density, or the load and duty cycle, which the sources do not break out.
+- "2-ton cylinder" is 17.8 kN (short ton) or 19.6 kN (metric); the source does not say which.
+
+**Relevance to the zeolite grant:** none on the pore-selectivity path. It belongs to the actuation end of the engineering chapters (hydraulics against electromechanical drives), and to the HVEH chapters only if a mechanical drive is compared there.
+
+Sources: [Machine Design, 2026-02-10](https://www.machinedesign.com/markets/robotics/article/55356502/quick-seamless-integration-at-the-heart-of-novel-electric-belt-driven-hydraulic-replacing-system); [BusinessWire, 2022-12-22](https://www.businesswire.com/news/home/20221222005027/en/RISE™Robotics-Granted-US-Patent-for-Key-Technology---High-Reduction-Belt-Driven-Linear-Actuator).
