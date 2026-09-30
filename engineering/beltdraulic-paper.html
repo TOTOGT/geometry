@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beltdraulic · What the Published Efficiency Figures Imply</title>
+<meta name="description" content="Draft. An audit of the published Beltdraulic efficiency claims: what 85% against 22% implies (74-75% less energy, not 90%), when 90% holds, the force-speed law of a block and tackle, and a chain model. Every number recomputed by beltdraulic-paper-verify.py.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root{--void:#04040a;--surface:#0c0d16;--card:#10111c;--gold:#c9a84c;--teal:#0ABAB5;--red:#e05a3a;--purple:#c084fc;--green:#50c878;--text:#e8e4d8;--muted:#6b6757;--dim:#1e1e2a;--rule:rgba(201,168,76,0.14);--serif:'Noto Serif',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:17px;line-height:1.82;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.nav-series{font-family:var(--mono);font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1rem;}
+.nav-links a{font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.hero{padding:4.5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(192,132,252,.04) 0%,transparent 70%);pointer-events:none;}
+.wp-tag{font-family:var(--mono);font-size:.58rem;letter-spacing:.32em;text-transform:uppercase;color:var(--purple);border:1px solid rgba(192,132,252,.3);padding:.2rem .65rem;display:inline-block;margin-bottom:1.6rem;}
+.hero h1{font-size:clamp(1.5rem,3.2vw,2.4rem);font-weight:400;letter-spacing:.04em;color:var(--gold);margin-bottom:.5rem;line-height:1.25;}
+.hero-sub{font-size:.95rem;color:var(--muted);margin:.3rem auto 0;max-width:640px;font-style:italic;line-height:1.65;}
+.byline{margin-top:1.4rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;color:var(--muted);}
+.abstract{max-width:780px;margin:2.5rem auto 0;padding:1.4rem 1.8rem;background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--purple);}
+.abstract-label{font-family:var(--mono);font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--purple);margin-bottom:.7rem;display:block;}
+.abstract-body{font-size:.93rem;line-height:1.78;color:rgba(232,228,216,.85);}
+.page{max-width:820px;margin:0 auto;padding:3rem 2rem;}
+h2{font-size:1.02rem;font-weight:600;color:var(--gold);letter-spacing:.06em;margin:2.5rem 0 1rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule);}
+h2 .sec-n{font-family:var(--mono);font-size:.62rem;color:var(--purple);letter-spacing:.2em;margin-right:.6rem;}
+p.prose{margin-bottom:1.15rem;font-size:1rem;line-height:1.82;color:rgba(232,228,216,.87);}
+.defn{border-left:3px solid var(--gold);padding:.9rem 1.3rem;margin:1.4rem 0;background:rgba(201,168,76,.025);}
+.defn-lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem;display:block;}
+.thm{border-left:3px solid var(--teal);padding:.9rem 1.3rem;margin:1.4rem 0;background:rgba(10,186,181,.025);}
+.thm-lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:.45rem;display:block;}
+.orig{border-left:3px solid var(--purple);padding:.9rem 1.3rem;margin:1.4rem 0;background:rgba(192,132,252,.025);}
+.orig-lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);margin-bottom:.45rem;display:block;}
+.open{border-left:3px solid var(--red);padding:.9rem 1.3rem;margin:1.4rem 0;background:rgba(224,90,58,.025);}
+.open-lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem;display:block;}
+.block-body{font-size:.93rem;line-height:1.78;color:rgba(232,228,216,.85);}
+.math-block{font-family:var(--mono);font-size:.84rem;color:var(--gold);background:var(--surface);border:1px solid var(--dim);border-left:2px solid rgba(201,168,76,.3);padding:.75rem 1.2rem;margin:1.1rem 0;overflow-x:auto;line-height:1.9;}
+.timeline{display:flex;flex-direction:column;gap:2px;margin:1.4rem 0;}
+.tl-row{display:grid;grid-template-columns:180px 1fr;border:1px solid var(--rule);font-size:.86rem;}
+.tl-when{padding:.7rem 1rem;font-family:var(--mono);font-size:.65rem;color:var(--gold);background:var(--surface);border-right:1px solid var(--rule);display:flex;align-items:center;line-height:1.4;}
+.tl-what{padding:.7rem 1rem;line-height:1.6;color:rgba(232,228,216,.82);}
+.tl-row.highlight{background:rgba(192,132,252,.04);border-color:rgba(192,132,252,.25);}
+.tl-row.highlight .tl-when{color:var(--purple);}
+.pull{text-align:center;padding:2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:2.5rem 0;}
+.pull-text{font-size:1rem;font-style:italic;color:var(--text);max-width:620px;margin:0 auto;line-height:1.82;}
+.pull-sub{font-size:.86rem;color:var(--muted);max-width:620px;margin:.6rem auto 0;font-style:italic;}
+.gap-box{background:rgba(192,132,252,.03);border:1px solid rgba(192,132,252,.2);border-left:3px solid var(--purple);padding:1.2rem 1.5rem;margin:1.5rem 0;}
+.gap-lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--purple);margin-bottom:.7rem;display:block;}
+.refs{font-family:var(--mono);font-size:.7rem;line-height:1.9;color:var(--muted);margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--rule);}
+.refs a{color:var(--gold);text-decoration:none;}
+.chapter-nav{background:var(--surface);border-top:1px solid var(--rule);padding:.9rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
+.ch-nav-link{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.ch-nav-link:hover{color:var(--gold);}
+footer{text-align:center;padding:2rem;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--muted);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+<meta name="po-subject" content="ENGINEERING · ACTUATION">
+<style>table.t{width:100%;border-collapse:collapse;margin:1.2rem 0;font-family:var(--mono);font-size:.78rem}table.t th,table.t td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:right}table.t th:first-child,table.t td:first-child{text-align:left}table.t th{color:var(--gold);background:var(--surface);font-weight:400}.tblwrap{overflow-x:auto}.hi td{background:rgba(192,132,252,.06);color:var(--purple)}</style>
+</head>
+<body>
+
+<nav><a class="nav-series" href="../index.html">Principia Orthogona</a><div class="nav-links"><a href="../index.html">Home</a></div></nav>
+<header class="hero">
+<span class="wp-tag">Engineering · Draft · Unlisted</span>
+<h1>Beltdraulic: What the Published Efficiency Figures Imply</h1>
+<p class="hero-sub">An audit of the claims, a force–speed law that cannot be argued with, and a chain model for comparing actuators on equal terms.</p>
+<p class="byline">G6 LLC · 2026-09-30 · companion script: beltdraulic-paper-verify.py</p>
+<div class="abstract"><span class="abstract-label">Abstract</span><div class="abstract-body">
+RISE Robotics&#8217; Beltdraulic is an electric, fluid-free linear actuator that replaces a hydraulic cylinder with steel-reinforced polyurethane belts in a block-and-tackle. Its partners quote about 85% system efficiency; a national-laboratory study quotes an average of 22% for fluid power. We do not test the device. We compute what the two quoted numbers <em>imply</em>: 74&#8211;75% less energy for the same work, not 90%. The 90% figure of the patent release holds only against a hydraulic system at or below 8.5&#8211;9.0% efficiency, which is the very bottom of the range the same laboratory reports. We add the identity that a block and tackle multiplies force and divides speed at fixed power, so a claim of &#8220;stronger and faster&#8221; is a claim about efficiency and duty cycle, and we state what a matched test would have to hold constant.
+</div></div>
+</header>
+<main class="page">
+
+<h2><span class="sec-n">§1</span>The claim, and what was read</h2>
+<p class="prose">The mechanism, as its makers describe it: wire-reinforced belts arranged as a block and tackle, rolling contact instead of sliding, driven by a high-torque electric motor under torque control. The patent release (U.S. 11,255,416, 2022-12-22) covers a &#8220;high reduction belt-driven linear actuator&#8221; and quotes belt–pulley interface pressures above 1,400 psi, which is 9.65 MPa. A trade-press piece dated 2026-02-10 by a partner company quotes more than 90% efficiency from the motor shaft and roughly 85% system efficiency, and attributes to Oak Ridge National Laboratory a 21.1% average for mobile hydraulics.</p>
+<div class="open"><span class="open-lbl">What was and was not read</span><div class="block-body">The vendor&#8217;s own page could not be fetched (robots.txt refused the request; it was not worked around). The trade article and the patent release were read. The ORNL/NFPA material that could be read states an average of 22% across fluid power, with a range from under 9% to 60% depending on application, and no mobile-only figure. <strong>The 21.1% mobile figure is therefore carried as attributed and UNCONFIRMED.</strong> No independent third-party test of the device is cited in anything read. &#8220;Proven faster, stronger and more accurate than hydraulics&#8221; is the vendor&#8217;s framing here, not a measured result.</div></div>
+
+<h2><span class="sec-n">§2</span>What the two efficiencies imply</h2>
+<p class="prose">For the same useful work $W$, the energy drawn is $E=W/\eta$. The fraction saved by replacing a hydraulic system of efficiency $\eta_h$ with a belt system of efficiency $\eta_b$ is</p>
+<div class="math-block">$$s \;=\; 1-\frac{\eta_h}{\eta_b}, \qquad \eta_h \;=\; \eta_b\,(1-s).$$</div>
+<div class="tblwrap"><table class="t"><tr><th>hydraulic &#951;<sub>h</sub></th><th>&#951;<sub>b</sub> = 0.85</th><th>&#951;<sub>b</sub> = 0.90</th></tr>
+<tr><td>0.090 (bottom of ORNL range)</td><td>89.4%</td><td>90.0%</td></tr>
+<tr class="hi"><td>0.211 (as attributed, mobile)</td><td>75.2%</td><td>76.6%</td></tr>
+<tr class="hi"><td>0.220 (ORNL/NFPA average)</td><td>74.1%</td><td>75.6%</td></tr>
+<tr><td>0.300</td><td>64.7%</td><td>66.7%</td></tr>
+<tr><td>0.600 (top of ORNL range)</td><td>29.4%</td><td>33.3%</td></tr></table></div>
+<div class="thm"><span class="thm-lbl">Finding 1 · computed</span><div class="block-body">The vendor and laboratory averages, taken at face value, give <strong>75.2%</strong> less energy (against 21.1%) or <strong>74.1%</strong> (against 22%). The patent release&#8217;s &#8220;up to 90% less&#8221; requires the hydraulic comparator to sit at or below <strong>8.5%</strong> efficiency (belt at 85%) or <strong>9.0%</strong> (belt at 90%): the bottom edge of the range the same laboratory reports. Against the top of that range (60%) the saving is 29&#8211;33%. So &#8220;up to 90%&#8221; is a best case, and 74&#8211;75% is what the averages support. This is a statement about the claims, not about the device.</div></div>
+
+<div class="thm"><span class="thm-lbl">Finding 1b · computed</span><div class="block-body">A reported gain of &#8220;10&#215;&#8211;20&#215;&#8221; cannot be an energy-efficiency ratio against these averages: the ratio $\\eta_b/\\eta_h\\le 1/\\eta_h$ is 3.86 against 22%. Ten times needs a hydraulic comparator at or below 8.5% (belt at 85%), and twenty times needs one at or below 4.25%, below the whole reported range (under 9% to 60%). If a 10&#215;&#8211;20&#215; figure is published, it is about another quantity (force or power density, service life, maintenance interval, cost per unit work) and the quantity, the baseline and the test conditions must be named before it is cited. &#8220;Same basic deployment cost&#8221; is likewise a claim with no source read here.</div></div>
+
+<h2><span class="sec-n">§3</span>Stronger and faster: the identity behind both words</h2>
+<p class="prose">Let $N$ strands share the load and $T$ be the tension in each. Then the output force is $F=NT$ and the output speed is $v=v_{\text{belt}}/N$, so $F\cdot v = T\,v_{\text{belt}}=\eta P$ for every $N$. The reduction ratio moves a design along a curve of constant power; it cannot make it both stronger and faster.</p>
+<div class="thm"><span class="thm-lbl">Finding 2 · computed</span><div class="block-body">A belt actuator beats a hydraulic cylinder on <em>both</em> force and speed at the same load point only if $\eta_b P_b > \eta_h P_h$. At equal input power the ratio of output power is $\eta_b/\eta_h$: 3.86 against 22%, 1.42 against 60%. Any claim of &#8220;stronger and faster&#8221; therefore has to be read as a claim about efficiency, motor power, or duty cycle, and each must be reported separately.</div></div>
+
+<h2><span class="sec-n">§4</span>Why 85% against 22% is not yet a comparison</h2>
+<p class="prose">An average efficiency is energy-weighted, $\bar\eta=\sum E_{\text{out}}/\sum E_{\text{in}}$, over a duty cycle. A valve-throttled fixed-pressure hydraulic supply loses the difference between supply and load pressure as heat, so $\eta\approx\eta_{\text{peak}}\,p_{\text{load}}/p_{\text{supply}}$.</p>
+<div class="orig"><span class="orig-lbl">MODEL · mechanism only, assumed numbers</span><div class="block-body">With an assumed $\eta_{\text{peak}}=0.88$, a throttled system at a load-to-supply pressure ratio of 0.25 has $\eta=0.220$, exactly the reported average, at 0.50 it has 0.44, at 1.00 it has 0.88. The point is qualitative: a fleet average reflects part-load duty, while a torque-commanded electric drive does not throttle. An 85% figure quoted without duty cycle, and a 22% average taken over many machines, are <strong>not a matched test</strong>.</div></div>
+<p class="prose">Chain accounting shows what the 85% must contain. Total efficiency is the product of stage efficiencies. If the quoted 85% system figure includes motor and inverter at an <em>assumed</em> 93%, the belt and pulley stage is 91.4%. The assumed 93% is not from a source; the sources do not break the 85% into stages.</p>
+
+<h2><span class="sec-n">§5</span>What a matched test would hold constant</h2>
+<div class="defn"><span class="defn-lbl">Proposal (not a result)</span><div class="block-body">Same load profile and stroke, same input-energy measurement at the electrical or engine shaft, energy per unit useful work over a stated duty cycle including standby, the hydraulic comparator specified (pump type, load-sensing or not, accumulator or not), position accuracy measured as repeatability under load, and temperature at steady state. The result to report is energy per unit work with its duty cycle, not a single efficiency.</div></div>
+
+<h2><span class="sec-n">§6</span>Open</h2>
+<div class="open"><span class="open-lbl">Left to the author</span><div class="block-body">The ORNL mobile-hydraulics figure (21.1%) is not confirmed from primary text; the full ORNL/NFPA report should be read before it is cited. The 85% and 90% figures have no stated test conditions. The unit of the &#8220;2-ton&#8221; cylinder is not stated (17.79 kN short ton, 19.61 kN metric). Whether this paper belongs in the engineering chapters, beside the HVEH hydraulics, or in a grant appendix is undecided. No claim on this page has been added to a volume index.</div></div>
+
+<div class="refs">
+Sources read: <a href="https://www.machinedesign.com/markets/robotics/article/55356502/quick-seamless-integration-at-the-heart-of-novel-electric-belt-driven-hydraulic-replacing-system">Machine Design, 2026-02-10 (R. Grodzki, Turntide Technologies; a partner of the vendor)</a> &#183; <a href="https://www.businesswire.com/news/home/20221222005027/en/RISE™Robotics-Granted-US-Patent-for-Key-Technology---High-Reduction-Belt-Driven-Linear-Actuator">BusinessWire, 2022-12-22 (U.S. 11,255,416)</a> &#183; <a href="https://www.ornl.gov/publication/estimating-impact-energy-emissions-and-economics-us-fluid-power-industry-0">ORNL/NFPA, Estimating the Impact (Energy, Emissions and Economics) of the US Fluid Power Industry, Dec 2012</a> &#183; ORNL/NFPA 2010 study slides (L. Love), DOE Clean Cities. Not read: the vendor&#8217;s Beltdraulic page.
+</div>
+</main>
+<footer>Principia Orthogona · G6 LLC · draft, unlisted, not part of any volume</footer>
+</body></html>
