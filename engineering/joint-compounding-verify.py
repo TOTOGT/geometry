@@ -38,6 +38,29 @@ print('    for g=3: R>=10 at n=%d ; R>=20 at n=%d'%(
 lim=(sp.log(1+sp.Symbol('a'))/sp.log(1+sp.Symbol('a')/g))
 print('    asymptotically R ~ (1+alpha)^n / (1+alpha/g)^n = exp(n*[ln(1+alpha)-ln(1+alpha/g)]): exponential in DEPTH n')
 
+
+head(5,'lever arms: torque = sum of distal mass x distance; actuator mass m_k = beta x torque  [MODEL] -- is it factorial?')
+import math
+def lever(n,beta,payload=1.0):
+    m=[0.0]*(n+2)
+    for k in range(n,0,-1):
+        T=payload*(n-k+1)+sum(m[i]*(i-k) for i in range(k+1,n+1))
+        m[k]=beta*T
+    return m
+x=sp.Symbol('x',positive=True); b=sp.Symbol('beta',positive=True)
+sol=[sp.simplify(z) for z in sp.solve(sp.Eq((1-x)**2,b*x),x)]
+print('    growth per joint inward r = 1/x, with (1-x)^2 = beta x ; roots x =',sol)
+for beta in (0.02,0.05):
+    m=lever(160,beta)
+    xr=((2+beta)-math.sqrt(beta*beta+4*beta))/2
+    ratios=[m[k]/m[k+1] for k in (100,60,20)]
+    print('    beta=%.2f: numeric m_k/m_{k+1} = %s ; closed form 1/x = %.4f ; 1+sqrt(beta) = %.4f'%(beta,['%.4f'%r for r in ratios],1/xr,1+math.sqrt(beta)))
+    check(all(abs(r-1/xr)<1e-6 for r in ratios),'beta=%.2f: successive ratios are constant = 1/x (exponential, NOT factorial)'%beta)
+b1,b2=0.05,0.025
+r1=1/(((2+b1)-math.sqrt(b1*b1+4*b1))/2); r2=1/(((2+b2)-math.sqrt(b2*b2+4*b2))/2)
+print('    halving beta 0.05 -> 0.025 changes the per-joint growth %.4f -> %.4f; ratio %.4f per joint; over depth 100: %.0fx (asymptotic)'%(r1,r2,r1/r2,(r1/r2)**100))
+print('    a factorial would need successive ratios that themselves grow with depth; here they are constant, so growth is exponential with base ~ 1+sqrt(beta).')
+
 head(3,'what does NOT compound: energy and power add across parallel joints')
 print('    energy E_total = sum_j E_j: a per-joint efficiency gain g_e gives total gain g_e, not g_e^N, for N joints in parallel')
 Ej=[1.0]*300; Ej2=[1.0/1.5]*300
