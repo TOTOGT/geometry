@@ -52,4 +52,18 @@ for f in ['master_book_FINAL_v2.tex', 'completePrincipia.tex', 'book321.tex', 'd
     s = open(p, errors='ignore').read()
     print('    %-26s ' % f + ', '.join('%s x%d' % (k, len(re.findall(v, s))) for k, v in pats.items()))
 print('    repo: vol2-toymodel.html line 408 states the V3 density (variance sigma0^2/8); vol2-contact.html records the Hopf correction as "corrected in V4".')
+head(5, 'the V1 deposit itself (Zenodo 19117400, byte-identical local copy) shows where the -4 came from')
+import hashlib, subprocess, glob
+V1 = {'f0037d1068b11cc9f31b3d43c7b57eb4': 'THE DM3 OPERATOR- EXPLICIT TOY MODEL  AND GLOBAL DYNAMICAL ANALYSIS (1).pdf'}
+for md5, name in V1.items():
+    path = os.path.join(D, name)
+    if not os.path.exists(path): print('    (local V1 PDF not found; skipped)'); continue
+    ok = hashlib.md5(open(path, 'rb').read()).hexdigest() == md5
+    check(ok, 'local copy matches the md5 printed on the Zenodo record (%s)' % md5)
+    txt = subprocess.run(['pdftotext', path, '-'], capture_output=True, text=True).stdout
+    t1 = re.sub(r'\s+', ' ', txt)
+    check('V\u0307 \u2248 \u22124(r \u2212 1)2 = \u22124V' in t1 or 'c = 4' in t1, 'V1 Axiom 4: Vdot ~ -4(r-1)^2 = -4V, so c = 4 (that is the decay rate of V = (r-1)^2, twice the rate of r-1)')
+    check('F \u2248 \u22124(r \u2212 1)' in t1, 'V1 proof of the stationary density writes F ~ -4(r-1) (the V rate, not the drift rate 2)')
+    check('exp(\u22122(r \u2212 1)2' in t1, 'yet V1 states rho ~ exp(-2(r-1)^2/s0^2), which IS what drift -2(r-1) gives')
+print('    Reading: V1 had a slip in the proof line (-4 instead of -2) with the right final density; V3 changed the final density to match the slip.')
 print('\n' + ('FLAGS: %d' % len(fails) if fails else 'all checks passed'))
