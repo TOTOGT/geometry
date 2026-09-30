@@ -16,8 +16,8 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 Seventeen standing rules were spread over 2 600 lines, interleaved with dated
 narrative and forty defect records. Nothing moved when this index was written on
-2026-09-13 — the rules are where they were. **There are twenty-six now**; R20
-to R24 were set after that date and their sections are in this file too. What changed is that they can now be
+2026-09-13 — the rules are where they were. **There are twenty-eight now** (R27 is a proposal, not yet adopted); R20
+to R24 (and R25, R26, R28) were set after that date and their sections are in this file too. What changed is that they can now be
 found without reading the file. Each line gives the rule and the heading to grep
 for. Six different sections are titled "What NOT to do"; they belong to the rule
 above each of them.
@@ -50,6 +50,7 @@ above each of them.
 | R24 | **The script runs before the sentence is written.** Not "is checkable" — was checked, first, and the finding is whatever the run says. Measure generously; fix the observable before running; run the control. | `## The script runs before` |
 | R25 | **Chapters cross-link, and the links are generated.** Every chapter carries an "Across the series" box: pages it names but does not link, pages that cite it, and three same-ground suggestions. `tools/crossref.py --write` writes it; `tools/subject_tags.py --write` writes the section tag. Never hand-edit either block. Set 2026-09-27 by Pablo. | `tools/crossref.py` |
 | R26 | **A reader can run it, and the page says how well it meets the bar.** Every chapter with code carries a one-click "Run it yourself" box (`tools/run_yourself.py --write`) and every chapter a Gold Standard Science stamp (`tools/gold_standard.py --write`): the nine tenets of EO 14303 §3(a), each scored from something observable, self-assessed, never a certification; (vii) peer review is never claimed. Run order: key_register → subject_tags → run_yourself → crossref → gold_standard. Set 2026-09-27 by Pablo. | `tools/gold_standard.py` |
+| R28 | **Definitions live in one file.** `docs/definitions.md` holds the definitions the author has decided (e.g. ε₀ = 1/3 is the coarse Gronwall estimate; r\* ≈ 0.77594058 is the sharp inner-basin boundary, Book 4 ch10). Read it before asking the author to explain a term again. OPEN rows are his call; a session never fills them. | `## Definitions (R28)` |
 
 R4 is the one that proves the point. It was written on 2026-09-09, it is correct,
 and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
@@ -67,6 +68,18 @@ now actually present, and the handoff's flat "never commit from it" (see
 current HANDOFF block) is corrected by it: that line describes what happens
 if you take a stranded lock's own error message at face value, not a real
 limit of the bridge.
+
+## Definitions (R28, set 2026-09-30 by Pablo)
+
+The author kept having to re-explain the same terms, so they now live in `docs/definitions.md`, one table per topic, each row tagged DECIDED (he said so), VERIFIED (a script recomputed it) or OPEN (his call).
+
+- Read it first when a task touches a radius, threshold, exponent or operator symbol. Cite a DECIDED row; do not re-derive it (R19).
+- Never fill an OPEN row. Write the question, the evidence, and leave it.
+- Add a line, never overwrite one without a dated note. A definition that changes gets a dated line saying what it replaced.
+- Current anchors: ε₀ = 1/3 is the coarse, literature-suggested Gronwall radius; r\* ≈ 0.77594058 (a radial position, displacement 1 − r\* ≈ 0.224) is the sharp inner-basin boundary (Book 4 chapter 10); canonical U is Unfolding.
+- Defined in the papers: τ = √(c/κ_noise) with LV ≤ −cV + κ_noise‖σ‖² (Vol II Thm 3.2; Vol I §2). Open detail: which Lyapunov function V is canonical (Vol I's c = 1, κ = 1/4 versus V = ρ² giving c = 4, κ = 1; both give τ = 2).
+- OPEN at creation: the winding-integral normalization, μ_max as a z → ∞ limit, the name for the dm³ class versus the concrete model, and the canonical V above.
+- Lesson recorded here (R15 again): a term can be defined by a formula, not a sentence. Search for the symbol and its equation before writing "not defined".
 
 ## Git, on this machine (R4)
 
@@ -3170,4 +3183,4 @@ layer currently checks the other.
 - 2026-09-28 (night): Book XXVIII ch6 "The Circle Comes Back" (Bott periodicity; CliffordSmall.lean) is live. Book28 = ShiftIndex, InfinityMinusInfinity, RiemannRoch, FredholmSpace, CliffordSmall (20 theorems). TODO ch7: K-theory of C*-algebras (Zois L5) or the index theorem statement (Blackadar 24.1.1).
 - 2026-09-28 (night): Book XXVIII ch7 "One Number, Two Ways" (Atiyah–Singer stated; CP^n test; IndexTwoWays.lean) live. Book28 = 6 files, 23 theorems. TODO ch8: K-theory of C*-algebras (Zois L5, Blackadar) or KK; Book XXXIII (noncommutative geometry) is the next volume. Do NOT run git on the repo from the session (stale locks).
 - 2026-09-29: Book XIV ch10 "Where Counting Meets Chance" (series/parallel laws; Swarm Simulator; SwarmSimulatorV3.lean in lean_lib Book14) is live. Swarm Simulator V3 deposit is published (Zenodo v3.0, doi:10.5281/zenodo.23027566, 2026-09-29; files in papers/swarm-simulator-v3/); run `tools/leancheck.sh --audit book14/SwarmSimulatorV3.lean` on the Mac (it was compiled in the cloud only). TODO: examine the multi-orbit bioswarm paper (zip 20230617) the same way; the Swarm Simulator V3 paper is written (papers/swarm-simulator-v3/, reserved DOI 10.5281/zenodo.23027566) and is published. TODO ch11 idea: "Where a Theorem Holds" (the missing domain qualifier; Book XIV language theme). Do NOT run git on the repo from the session.
-- 2026-09-29: Book 3 "A Bucket of Seawater" (ch-a-bucket-of-seawater.html, verify script at root, BioSwarmCheck.lean as lean_lib BioSwarmCheck) is live: Racaniello opening, fruit-fly toy model run as written (multistable, cycles from alpha ~0.45), why the V2 contraction proof fails, going viral and the Trojan horse. index-book3.html is folder-based and does not list root Book 3 pages (known). BioSwarmCheck.lean audited on the Mac (17 decls OK). Fruit-fly paper V3 prepared in papers/multi-orbit-bioswarm/v3/ (needs a reserved DOI in place of DOIPLACEHOLDER, then Zenodo upload).
+- 2026-09-29: Book 3 "A Bucket of Seawater" (ch-a-bucket-of-seawater.html, verify script at root, BioSwarmCheck.lean as lean_lib BioSwarmCheck) is live: Racaniello opening, fruit-fly toy model run as written (multistable, cycles from alpha ~0.45), why the V2 contraction proof fails, going viral and the Trojan horse. index-book3.html is folder-based and does not list root Book 3 pages (known). BioSwarmCheck.lean audited on the Mac (17 decls OK). Fruit-fly paper V3 prepared in papers/multi-orbit-bioswarm/v3/ (reserved DOI 10.5281/zenodo.23029951; awaiting Zenodo upload).
