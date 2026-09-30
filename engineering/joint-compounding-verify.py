@@ -122,6 +122,26 @@ check(True,'ranking reported (see numbers); not asserted as a general law')
 print('    So "counting where joints can be improved" is a sensitivity ranking: dM/d(beta_k) at the robot\'s actual numbers. In the simple model it is flat;')
 print('    with lever arms it is not, and the ranking must be computed from the robot\'s own geometry, masses and torques.')
 
+
+head(8,'the limit n -> infinity: finite iff the per-joint fractions are summable  [MODEL]')
+print('    total mass M/P = prod_k (1+alpha_k) - 1 ; with equal alpha it diverges as n -> infinity (exponentially).')
+print('    The infinite product converges to a finite value iff sum_k alpha_k converges. Example: alpha_k = c/k^2 (fractions taper toward the tip):')
+print('        prod_{k>=1} (1 + c/k^2) = sinh(pi*sqrt(c)) / (pi*sqrt(c))')
+cc=sp.Symbol('c',positive=True)
+for c_ in (0.05,0.5,1.0):
+    N=200000
+    pr=1.0
+    for k in range(1,N+1): pr*=1+c_/(k*k)
+    cf=math.sinh(math.pi*math.sqrt(c_))/(math.pi*math.sqrt(c_))
+    check(abs(pr-cf)<1e-4,'c=%.2f: partial product to k=%d = %.6f ; sinh(pi sqrt c)/(pi sqrt c) = %.6f'%(c_,N,pr,cf))
+c_=0.5
+for g_ in (2,3):
+    P0=math.sinh(math.pi*math.sqrt(c_))/(math.pi*math.sqrt(c_))
+    P1=math.sinh(math.pi*math.sqrt(c_/g_))/(math.pi*math.sqrt(c_/g_))
+    print('    infinite chain, c=%.2f: total mass/payload = %.4f ; after dividing every fraction by g=%d: %.4f ; R = %.3f (finite)'%(c_,P0-1,g_,P1-1,(P0-1)/(P1-1)))
+print('    and R tends to g as c -> 0 (little compounding) and grows with c: the infinite chain has a finite, computable gain once its taper is known.')
+print('    the real limits are physical (material strength, joint size, control bandwidth), not infinity: the equal-fraction model is valid only while x = n*alpha stays in the range where those hold.')
+
 head(3,'what does NOT compound: energy and power add across parallel joints')
 print('    energy E_total = sum_j E_j: a per-joint efficiency gain g_e gives total gain g_e, not g_e^N, for N joints in parallel')
 Ej=[1.0]*300; Ej2=[1.0/1.5]*300
