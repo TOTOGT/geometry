@@ -11036,3 +11036,6 @@ deciding whether they belong in `docs/floor-ladder.tsv` too.
 
 ## 2026-09-30 WP-128: Gordon (1990) added
 Added a paragraph in book6/wp128 on supply-shock omission bias and moving natural rate (source: NBER 3393, held as scan, read by OCR); section-6 sentence notes no supply-shock control is run. Tagged CITED, nothing run. wp128-verify.py and terms.py --check pass. Wage-indexation overview and The Hill page not used: overview unsourced, The Hill returned 403.
+
+## 2026-09-30 WP-129 section 6: worked case (teacher residency, milk-hours)
+Added a worked case to section 6. Inputs checked against primary pages: Steinhardt Empire State grant ($30,000 stipend, two-year service), MIT Living Wage Calculator New York County 2026 ($38.21 and $60.92 per hour; $126,705), NYC minimum wage $17.00. Arithmetic recomputed. The $9 milk price is the author's observation, unsourced; the national figure is from a price aggregator, not BLS. One fetched page dated the $17.00 rate to 1 January 2027 while MIT lists it for 2026; the effective date is not settled here. wp129-verify.py and terms.py --check pass.
