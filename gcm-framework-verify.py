@@ -108,6 +108,21 @@ else:
     check('subtraction' in flat.lower(),
           'and the identification is stated as a subtraction -- what the framework leaves out')
 
+
+# ==========================================================================
+head(4, 'THE WINDING INTEGRAL (added 2026-09-30)')
+import math
+check(abs(2 * math.pi * 1.0 ** 2 - 2 * math.pi) < 1e-12 and abs(2 * math.pi * 1.5 ** 2 - 2 * math.pi) > 1.0,
+      'W = oint r^2 dtheta = 2*pi*r0^2: 2pi at r0 = 1 and not constant in r0, so it is not an integer invariant')
+if os.path.exists(PAGE):
+    raw4 = open(PAGE, encoding='utf-8').read()
+    body4 = re.sub(r'<div style="[^"]*background:#fdeaea[^"]*">.*?</div>', ' ', raw4, flags=re.S)
+    check('oint_\\Gamma \\lambda \\in \\mathbb{Z}' not in body4,
+          'the page no longer ASSERTS that the winding integral lies in Z')
+    check('used to say the winding integral lies in' in raw4,
+          'and the correction box still quotes the claim it retracts')
+    check('2\\pi' in body4, 'the page states the toy-model value 2*pi')
+
 # ==========================================================================
 print('\n' + '=' * 68)
 if fails:
