@@ -34,21 +34,28 @@ DOI = "10.5281/zenodo.22179684"
 
 
 def inline(t: str) -> str:
-    """Markdown inline -> HTML. Math between $ is left alone for MathJax."""
-    parts, out = re.split(r"(\$\$[^$]*\$\$|\$[^$\n]*\$|`[^`]*`)", t), []
-    for i, seg in enumerate(parts):
-        if i % 2:                                   # math or code, untouched
-            if seg.startswith("`"):
-                out.append(f"<code>{H.escape(seg[1:-1])}</code>")
-            else:
-                out.append(seg)
-            continue
-        seg = H.escape(seg)
-        seg = re.sub(r"\[([^\]]+)\]\((https?://[^)]+)\)", r'<a href="\2">\1</a>', seg)
-        seg = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", seg)
-        seg = re.sub(r"(?<!\*)\*([^*\n]+)\*(?!\*)", r"<em>\1</em>", seg)
-        out.append(seg)
-    return "".join(out)
+    """Markdown inline -> HTML. Math between $ and `code` are protected while bold,
+    italic and links are applied, so emphasis may span them (**no `sorryAx`**)."""
+    keep: list[str] = []
+
+    def stash(m: "re.Match[str]") -> str:
+        seg = m.group(0)
+        keep.append(f"<code>{H.escape(seg[1:-1])}</code>" if seg.startswith("`") else seg)
+        return f"\x00{len(keep) - 1}\x00"
+
+    t = re.sub(r"(\$\$[^$]*\$\$|\$[^$\n]*\$|`[^`]*`)", stash, t)
+    t = H.escape(t)
+
+    def img(m: "re.Match[str]") -> str:
+        src = m.group(2)
+        png = src[:-4] + ".png" if src.endswith(".pdf") and (OUT.parent / (src[:-4] + ".png")).exists() else src
+        return f'<img src="{png}" alt="figure" style="max-width:100%;display:block;margin:.6rem 0"><br>{m.group(1)}'
+
+    t = re.sub(r"!\[([^\]]*)\]\(([^)\s]+)\)(?:\{[^}]*\})?", img, t)
+    t = re.sub(r"\[([^\]]+)\]\(((?:https?://|\.{0,2}/)?[^)\s]+)\)", r'<a href="\2">\1</a>', t)
+    t = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", t)
+    t = re.sub(r"(?<!\*)\*([^*\n]+)\*(?!\*)", r"<em>\1</em>", t)
+    return re.sub(r"\x00(\d+)\x00", lambda m: keep[int(m.group(1))], t)
 
 
 def render(md: str) -> tuple[str, list[tuple[int, str, str]]]:

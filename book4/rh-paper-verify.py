@@ -172,12 +172,12 @@ if cur is not None:
         if msg is None: check(needle not in cur, 'the sentence "... that is dense and non-vanishing" is gone'); continue
         check(needle in cur, 'corrected: ' + msg)
 
-try: htm = sq(open(os.path.join(ROOT, 'book4/rh-paper.html'), encoding='utf-8').read())
+try: htm = sq(open(os.path.join(ROOT, 'book4/rh-paper.html'), encoding='utf-8').read().replace('&#x27;', "'"))
 except OSError: htm = None
 if htm is not None:
     for needle, msg in (('real-analyticin$t$andnotidenticallyzero', 'HTML: Prop 4.2 corrected'),
                         ('\\frac{\\logp\\;p^{-\\sigma}e^{-it_p\\logp}}{1-p^{-\\sigma}e^{-it_p\\logp}}', 'HTML: g_p corrected'),
-                        ('id="s4-8"', 'HTML: section 4.8 present')):
+                        ('4.8Editor', 'HTML: section 4.8 present')):
         check(needle in htm, msg)
     check('thatisdenseandnon-vanishing' not in htm, 'HTML: the "dense and non-vanishing" sentence is gone')
 
