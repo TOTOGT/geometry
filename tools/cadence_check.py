@@ -104,7 +104,9 @@ def main():
                     help="also exit 1 when a workflow has never left a receipt")
     a = ap.parse_args()
 
-    now = datetime.datetime.utcnow()
+    # Naive UTC, to stay comparable with the naive timestamps parsed from receipts.
+    # datetime.utcnow() is deprecated; timezone.utc works on every supported Python (datetime.UTC needs 3.11).
+    now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
     rec, rows, overdue, unproven = receipts(), [], 0, 0
     for fn, name, crons in workflows():
         period = min(p for p in (cron_period_days(c) for c in crons) if p) if crons else None
