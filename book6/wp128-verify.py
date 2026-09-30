@@ -8,7 +8,8 @@
   [4] the corpus: every page tagged ECONOMICS in docs/subjects.tsv at a pinned commit, and how
       many times each says unemployment / employment / labour-force words. The page's
       cross-reference table is checked against this count.
-  [5] the page prints what this script computes
+  [5] the Phillips-curve test, one fixed specification (added at the author's request), and the corpus's silence on it
+  [6] the page prints what this script computes
 
 Prints SKIP, never PASS, when FRED, the pinned commit or the page is missing.
 `--emit FILE` writes the computed numbers and table rows as JSON (used to build the page).
@@ -108,7 +109,7 @@ else:
             t = git('show', '%s:%s' % (BASELINE, f[0]))
             if t.returncode != 0: continue
             txt = strip(t.stdout)
-            ECON.append(dict(path=f[0], subj=' / '.join(x for x in (f[1], f[2]) if x), title=re.sub(r'\s+', ' ', f[3]).strip(), un=len(UN.findall(txt)), emp=len(EMP.findall(txt))))
+            ECON.append(dict(path=f[0], subj=' / '.join(x for x in (f[1], f[2]) if x), title=re.sub(r'\s+', ' ', f[3]).strip(), un=len(UN.findall(txt)), emp=len(EMP.findall(txt)), inf=len(re.findall(r'inflation', txt, re.I))))
     ECON.sort(key=lambda e: (-e['un'], -e['emp'], e['path']))
     print('    %d pages tagged ECONOMICS at %s' % (len(ECON), BASELINE))
     for e in ECON: print('      %-58s unemployment x%-3d  employment-words x%-3d' % (e['path'], e['un'], e['emp']))
@@ -121,7 +122,67 @@ else:
     print('      %d of %d never say "unemployment"' % (len(zero), len(ECON)))
     OUT['econ'] = ECON
 
-head(5, 'THE PAGE PRINTS WHAT THIS SCRIPT COMPUTES')
+INF = re.compile(r'inflation', re.I)
+for e in ECON: pass
+head(5, 'THE PHILLIPS CURVE   (one specification, chosen before its results were seen; FRED CPILFESL core CPI)')
+import statistics as st, math
+def cpi():
+    return fred('CPILFESL')
+PH = None
+if S:
+    try:
+        C = cpi()
+        ds = sorted(set(C) & set(S['UNRATE']) & set(common))
+        pegd = {d: (S['CNP16OV'][d] - S['CE16OV'][d]) / S['CNP16OV'][d] * 100 for d in common}
+        infl = {ds[i]: (C[ds[i]] / C[ds[i - 12]] - 1) * 100 for i in range(12, len(ds))}
+        rows = []
+        for i, d in enumerate(ds):
+            if i < 120 or i + 12 >= len(ds) or d not in infl or ds[i + 12] not in infl: continue
+            tu = st.mean(S['UNRATE'][ds[j]] for j in range(i - 120, i)); tp = st.mean(pegd[ds[j]] for j in range(i - 120, i))
+            u6 = S['U6RATE']; dsu = [x for x in ds if x in u6]
+            if d in u6 and dsu.index(d) >= 120:
+                k = dsu.index(d); u6dev = u6[d] - st.mean(u6[dsu[j]] for j in range(k - 120, k))
+            else: u6dev = None
+            rows.append((d, infl[ds[i + 12]] - infl[d], S['UNRATE'][d] - tu, pegd[d] - tp, u6dev))
+        def corr(a, b):
+            ma, mb = st.mean(a), st.mean(b); return sum((x - ma) * (y - mb) for x, y in zip(a, b)) / math.sqrt(sum((x - ma) ** 2 for x in a) * sum((y - mb) ** 2 for y in b))
+        def slope(x, y):
+            mx, my = st.mean(x), st.mean(y); return sum((a - mx) * (c - my) for a, c in zip(x, y)) / sum((a - mx) ** 2 for a in x)
+        PH = {}
+        print('      y = change in 12-month core-CPI inflation over the NEXT 12 months (points); x = the measure minus its own trailing 10-year mean')
+        for lab, lo, hi in (('all', '0', '9'), ('pre-2020', '0', '2020-01'), ('1985-2019', '1985', '2020-01'), ('2020 on', '2020', '9'), ('2004-2019', '2004', '2020-01')):
+            R = [r for r in rows if lo <= r[0] < hi]
+            y = [r[1] for r in R]
+            PH[lab] = dict(n=len(R), first=R[0][0][:7], last=R[-1][0][:7], ru=round(corr([r[2] for r in R], y), 2), rp=round(corr([r[3] for r in R], y), 2),
+                           bu=round(slope([r[2] for r in R], y), 2), bp=round(slope([r[3] for r in R], y), 2))
+            R6 = [r for r in R if r[4] is not None]
+            PH[lab]['n6'] = len(R6)
+            PH[lab]['r6'] = round(corr([r[4] for r in R6], [r[1] for r in R6]), 2) if len(R6) > 30 else None
+            if len(R6) > 30:   # the same window for all three, so the comparison is like for like
+                y6 = [r[1] for r in R6]
+                PH[lab]['ru_c'] = round(corr([r[2] for r in R6], y6), 2); PH[lab]['rp_c'] = round(corr([r[3] for r in R6], y6), 2)
+            q = PH[lab]; print('      %-10s n=%3d %s..%s   U-3: r=%+.2f slope=%+.2f    PEG: r=%+.2f slope=%+.2f    U-6 (n=%d): %s' % (lab, q['n'], q['first'], q['last'], q['ru'], q['bu'], q['rp'], q['bp'], q['n6'], ('r=%+.2f; same rows: U-3 %+.2f, PEG %+.2f' % (q['r6'], q['ru_c'], q['rp_c'])) if q['r6'] is not None else 'n/a (needs 10 years of U-6 first: from 2004)'))
+        OUT['phillips'] = PH
+        check(PH['pre-2020']['ru'] < 0 and PH['pre-2020']['rp'] < 0, 'before 2020 both measures carry the expected (negative) sign against later inflation change')
+        check(abs(PH['pre-2020']['rp']) < abs(PH['pre-2020']['ru']), 'before 2020 PEG is the WEAKER predictor: |r| %.2f against U-3 %.2f' % (abs(PH['pre-2020']['rp']), abs(PH['pre-2020']['ru'])))
+        check(abs(PH['1985-2019']['ru']) < 0.1 and abs(PH['1985-2019']['rp']) < 0.1, 'from 1985 to 2019 neither measure has |r| of 0.1 or more: the relationship is flat in that window')
+        check(PH['2004-2019']['n6'] == PH['2004-2019']['n'] and PH['2020 on']['n6'] == PH['2020 on']['n'], 'U-6 (from 1994) reaches the test only from 2004, once ten years of it exist: every 2004-2019 and 2020-on row has all three measures')
+        check(PH['2020 on']['ru'] > 0 and PH['2020 on']['rp'] > 0, 'from 2020 on both signs FLIP to positive (inflation rose while slack shrank); PEG r=%+.2f, U-3 r=%+.2f' % (PH['2020 on']['rp'], PH['2020 on']['ru']))
+        note('One specification, chosen before its results were seen, no other tried: a trailing 10-year mean stands in for a natural rate. This is a descriptive check that PEG is not a')
+        note('better Phillips-curve proxy in THIS setup, not an estimate of the curve and not a claim about any other setup. A natural-rate version (CBO NROU) is not run: OPEN.')
+        note('This is the PRICE form (Samuelson-Solow 1960), on US core CPI; Phillips 1958 was wages, UK 1861-1957. A wage version (FRED average hourly earnings, 1964 on) is not run: OPEN.')
+    except Exception as e:
+        print('    SKIP  Phillips block (%s: %s)' % (e.__class__.__name__, e)); skips.append('phillips')
+r2 = git('grep', '-l', '-i', 'phillips curve', BASELINE, '--', '*.html')
+n_ph = len([x for x in r2.stdout.splitlines() if x.strip()]) if r2.returncode in (0, 1) else None
+if n_ph is None: print('    SKIP  git grep unavailable'); skips.append('phillips-grep')
+else:
+    check(n_ph == 0, 'no page of the corpus says "Phillips curve" at %s (%d files)' % (BASELINE, n_ph))
+    OUT['n_phillips_pages'] = n_ph
+n_inf = sum(1 for e in ECON if e.get('inf', 0) > 0) if ECON else None
+if n_inf is not None: print('      %d of %d ECONOMICS pages use the word "inflation"' % (n_inf, len(ECON))); OUT['n_inf'] = n_inf
+
+head(6, 'THE PAGE PRINTS WHAT THIS SCRIPT COMPUTES')
 def sq(s): return re.sub(r'\s+', '', html.unescape(re.sub(r'<[^>]+>', ' ', s)).lower())
 cur = None
 try: raw = open(os.path.join(ROOT, PAGE), encoding='utf-8').read(); cur = sq(raw)
@@ -131,6 +192,16 @@ if cur is not None and 'aug' in OUT:
     for needle, msg in (('%.2f%%' % a_['peg'], 'PEG for Aug 2026'), ('%.2f%%' % c_['olf'], 'outside the labour force'), ('%.2f%%' % c_['un'], 'unemployed'),
                         ('%.1f%%ofthegap' % c_['share'], 'the unemployed share of the gap'), ('%+.2f' % d_['dpeg'], 'change since Jan 2000'), ('wp128-verify.py', 'names its producing script')):
         check(needle.lower().replace(' ', '') in cur, 'page prints %s: %s' % (msg, needle))
+    ph = OUT.get('phillips')
+    if ph:
+        for lab in ('pre-2020', '1985-2019', '2020 on'):
+            q = ph[lab]
+            for needle, msg in (('r=%+.2f'.replace('=', '') % q['ru'], 'U-3 r'), ('%+.2f' % q['rp'], 'PEG r')):
+                pass
+        need = ['%+.2f' % ph['2004-2019']['r6'], '%+.2f' % ph['2020 on']['r6'], '%+.2f' % ph['pre-2020']['ru'], '%+.2f' % ph['pre-2020']['rp'], '%+.2f' % ph['2020 on']['ru'], '%+.2f' % ph['2020 on']['rp'], '%+.2f' % ph['1985-2019']['ru'], '%+.2f' % ph['1985-2019']['rp']]
+        check('economica' in cur and '1861' in cur and 'wageversionisnotrun' in cur, 'page says the test is the price form, not Phillips\'s wage relation (Economica 1958, UK 1861-1957), and that the wage version is not run')
+        check(all(n.replace('-', '\u2212') in cur or n in cur for n in need), 'page prints the six correlations: ' + ' '.join(need))
+    if 'n_inf' in OUT: check(('%d of the %d' % (OUT['n_inf'], len(OUT['econ']))).replace(' ', '') in cur, 'page prints how many economics pages use the word inflation (%d)' % OUT['n_inf'])
     miss = [e['path'] for e in OUT.get('econ', []) if os.path.basename(e['path']) not in raw]
     check(not miss, 'the page links every one of the %d ECONOMICS-tagged pages' % len(OUT.get('econ', [])), 'missing: ' + ', '.join(miss[:6]))
     bad = []
