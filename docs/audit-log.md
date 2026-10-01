@@ -11084,3 +11084,6 @@ Added tools/planned_books.py and a planned index page for each of book30, book31
 
 ## 2026-10-02 Chapter 0 first in every index; planned books on the series hub
 Changed tools/build_indexes.py so a book's Chapter 0 page sorts first in its own index and in the master index (previously it sorted by title, so it was first in only some books). Checked all ten books and the master index. Added four planned cards (books 30 to 33) to series-hub.html, hand-maintained, in the planned style already used for Book XX; each states only what the repository records. Regenerated indexes; the four planned pages no longer show as orphaned. series_rule_check and terms check pass.
+
+## 2026-10-02 Book 33: reachability in the coupled toy
+Added docs/book33-coupled-toy-reachability.py (passes) and a section in the Book 33 note. Result: the inner boundary reproduces 0.775941 at z0 = 0 and approaches 1 as z0 falls, so the basin of the cycle pinches to the cycle in the far past of z; on the cycle z increases at unit rate, so its lift is a helix and not a closed ring. This corrects my spoken picture from the radial toy, where the return map made the cycle a single fixed point. Values below z0 = -2.5 are at double-precision resolution. An earlier version of the script overflowed in the exponential at very negative z0; guarded and rerun.

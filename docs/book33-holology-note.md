@@ -44,6 +44,16 @@ On the radial toy (Volume I's drift in ρ = r − 1, return map of time 2π): an
 | Advaita | A truth-value gap: neither real nor unreal (from memory) | Omega's gloss ("distinctions are real; their being-one is also real") may describe a different school; no source held | Unchecked |
 | Both-and | Da Costa logic Cω, Baaz's Kripke semantics on the reachability order | docs/book33-baaz-semantics-test.py: implementation matches the paper's validities; on the radial toy the glut set is the neighbourhood minus Γ | Tested on the radial toy, sampled; fold case OPEN |
 
+## Reachability in the coupled toy (docs/book33-coupled-toy-reachability.py, passes; 2026-10-02)
+
+Toy of Book 4 chapter 10: r' = r(1 − r²) + 2(r − 1)e^(−z), z' = r² − 2(r − 1)²e^(−z). Orbits converge to Γ or escape to r → 0 (or blow up on the outer side); both outcome sets are forward invariant, so nothing in one reaches the other.
+
+- The inner boundary r\*(z0) reproduces the chapter's 0.775941 at z0 = 0 and rises toward 1 as z0 falls: 0.9749 at z0 = −1, 0.9981 at −1.5, 0.999985 at −2, and 1 to numerical resolution from −2.5 down.
+- For z0 ≤ −2 a start within 0.001 of Γ leaves it on both sides (inner side escapes toward r → 0, outer side blows up). Only r0 = 1 exactly stays. So the basin of Γ pinches to the cycle itself as z0 → −∞: in the far past of z the cycle repels, which matches the linearization −2 + 2e^(−z) being positive for z < 0.
+- On Γ, z' = 1: the lifted cycle never returns to an earlier z. It is a helix in (angle, z), not a closed ring. This corrects the radial-toy picture given in conversation, where the return map has Γ as a fixed point and its states collapse into one element; with z present they do not. The corpus already says "helical" (ch15 Theorem 15.1).
+- Reading, not result: the spine of the picture is Γ itself, from a repelling past (z → −∞) to an attracting future (z → +∞). Head and tail differ by an irreversible shift in z, so they never meet. The two escape bodies touch Γ at z → −∞.
+- Limits: fixed-step RK4, T = 40, escape declared at r < 0.02; values below z0 = −2.5 are at the limit of double precision; ε = 2 only.
+
 ## OPEN, author's call
 
 Whether holology is presented as a new logic, a plain-language name for known ones, or a slot that translates between fields. The test favors the last two.
