@@ -11072,3 +11072,6 @@ Added docs/book33-holology-note.md and docs/book33-holology-test.py. The script 
 
 ## 2026-10-01 Book 33 note: checked against the logic books and Connes-Marcolli in Downloads
 Searched the text of Connes and Marcolli: Tomita time evolution is covered (section 4.1, Theorem 4.206); quantum logic, orthomodular, projection lattice and topos do not occur, so that link is not supported by the held book. Read the abstracts and key definitions of the da Costa and Baskent papers; recorded that gluts come from the negation function and not from the topology, and that a reachability preorder gives the Alexandroff setting. Kaku, Kardashev, Dyson, Sagan and the K3 and T-duality papers were not read.
+
+## 2026-10-01 Book 33 note: vocabulary map
+Added a table mapping holology, wholeness, know yourself, non-duality, advaita and both-and to a candidate formal object, what would verify it, and its status. Only the holology row has a passing script; the Tomita row is supported by the held Connes and Marcolli text; the rest are definitions or unchecked.

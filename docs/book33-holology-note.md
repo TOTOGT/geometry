@@ -33,6 +33,17 @@ On the radial toy (Volume I's drift in ρ = r − 1, return map of time 2π): an
 - Da Costa and de Ronde, "The Paraconsistent Logic of Quantum Superpositions" (arXiv 1306.3121): argues for contradiction as part of the formal structure of superposition from the start; offered as a first step, not a closed scheme. Read the abstract and introduction only.
 - Not read: the Kaku books, the Kardashev papers, Dyson 1960, Sagan, the K3 and T-duality papers. Their bearing on a logic of wholes is not established here.
 
+## Vocabulary map: each word, its candidate mathematical form, what would test it
+
+| Word | Candidate formal object | What verifies it | Status |
+|---|---|---|---|
+| Holology | Closure operation on the lattice of parts that keeps finite intersections (nucleus); dynamics version: "eventually always" | docs/book33-holology-test.py: no tested operator is a nucleus; "eventually always" sends a neighbourhood of Γ to its basin on the radial toy | Tested on the toy only; fold case OPEN |
+| Wholeness | The gluing condition: local truths that agree on overlaps are true of the whole (sheaf condition) | Not tested; needs a chosen space of parts | Defined in plain words only |
+| Know yourself | A state that fixes its own dynamics: Tomita's modular time evolution of a state on an algebra | Connes and Marcolli, section 4.1, Theorem 4.206 (text searched) | Supported as a statement in the held book; link to dm³ OPEN |
+| Non-duality | Three readings: indistinguishable points, a statement and its negation both true, or an object equal to its own dual | Not tested; the third reading needs a chosen duality | Reading not chosen: author |
+| Advaita | A truth-value gap: neither real nor unreal (from memory) | Omega's gloss ("distinctions are real; their being-one is also real") may describe a different school; no source held | Unchecked |
+| Both-and | Da Costa logic Cω with a negation function; topological semantics on Alexandroff spaces | Başkent (hal-01094786) and Restall (1995) read; reachability ordering of the toy not built | Lead; direction conventions unchecked |
+
 ## OPEN, author's call
 
 Whether holology is presented as a new logic, a plain-language name for known ones, or a slot that translates between fields. The test favors the last two.
