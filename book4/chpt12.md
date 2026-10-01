@@ -149,8 +149,8 @@ Chapter 12's Theorem 12.2 says something structurally parallel: the critical lin
 | Unit circle $r = 1$ | Critical line $\sigma = \tfrac{1}{2}$ |
 | Invariant under rotation $\theta \mapsto \theta + c$ | Invariant under functional equation reflection $s \mapsto 1-s$ |
 | Attractor: $\mu \to -2$ | Candidate attractor: decay rate unknown |
-| Proved convergent (outer basin $r(0) > 1$) | Conjectured convergent (Riemann Hypothesis) |
-| Lean 4: verified outer basin theorem | Lean 4: AXLE Issue #43, sorry |
+| Numerically verified convergent (outer basin, $z(0)=0$, $1 < r(0) \le 6.8$; general case open) | Conjectured convergent (Riemann Hypothesis) |
+| Lean 4: Gronwall rate inequality proved; ODE convergence open (AXLE Issues #35, #36) | Lean 4: AXLE Issue #43, sorry |
 
 The parallel is structural. The proof of convergence for dm³ used the explicit Lyapunov function $V(r) = \tfrac{1}{2}(r-1)^2$. The proof for the arithmetic system would require an analogous global quantity — a "distance from the critical line" function that decreases along every zero-trajectory. This is exactly the positivity theorem that remains unproved.
 

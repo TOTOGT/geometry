@@ -11102,3 +11102,6 @@ Ten new issues filed by the author; numbers recorded in docs/axle-issue-map.md a
 
 ## 2026-10-01: #35-#44 confirmed against GitHub; #21 restored
 Read the live issue list. #35-#44 match the order recorded. #21 is a real closed issue (r* precision), so the METHODOLOGY citation removed earlier in the day was restored. Closed set: #1, #3, #4, #5, #6, #10, #21.
+
+## 2026-10-01: stale "proved" outer-basin wording
+book4/chpt12.md comparison table and the Lean block comment in book4/ch10.html now say what is proved: the Gronwall rate inequality, not ODE convergence for every r(0) > 1. Numerically verified range stated; general case points to AXLE #35 and #36.
