@@ -11051,3 +11051,6 @@ Replaced the savings caveat in the worked case with Federal Reserve 2025 survey 
 
 ## 2026-09-30 WP-129 milk benchmark
 Replaced the aggregator national milk figure with the BLS national gallon series as carried by FRED (APU0000709112, 4.229 dollars, August 2026). A pasted series identifier for New York metro milk (ending 709111) resolved on FRED to a half-gallon series for the Northeast census region, discontinued in 1997, not a metro gallon series; the area code in it is a region, not a metro. No metro gallon price found. Milk-minutes unchanged after rounding.
+
+## 2026-10-01 Chapter 0 linked from every book entry page
+Added tools/link_chapter_zero.py (idempotent, has a check mode) and a one-line link to Chapter 0 on the ten book entry pages. Book 4 and Omega entry pages are redirects, so the link went on their targets, contents.html and omega-point-index.html. Indexes regenerated with tools/build_indexes.py: all ten Chapter 0 pages now count as linked. The one orphan left on the Omega index is the redirect page omega/index.html, which predates this change. W in the integers (GCM Theorem A(ii)) was already corrected in 342df8d.
