@@ -11063,3 +11063,6 @@ Added to the tau row that a valid but non-sharp c reproduces Volume I's pair onl
 
 ## 2026-10-01 Definitions pointer on every chapter (generated, via crossref)
 The site has no single shared footer or nav, so the pointer went into the generated Across the series box (tools/crossref.py, R8): every chapter in a book that has a Chapter 0 now lists a Definitions link to it. Chapter 0 pages carry none. The first write also refreshed 25 boxes that were already stale. Checked by script: of 386 pages changed, none differ outside the generated box; the crossref check reports 0 stale. Pages with uncommitted edits from other sessions were left out of the commit.
+
+## 2026-10-01 Definitions pointer extended to root-level Book 3 chapters
+Book 3 (the Mini-Beast) lives at the repository root on main, so its 83 root chapters, which the tagging tool already assigns to Book 3, now point to book3/ch00-definitions.html through the generated Across the series box. One root page assigned to Book 7 got none. Checked by script: no page differs outside the generated box; the crossref check reports 0 stale. Two of the 83 pages, ch-a-bucket-of-seawater.html and ch-eta-dnls.html, carry uncommitted edits from other sessions, so they were rewritten in the working tree but left out of this commit.

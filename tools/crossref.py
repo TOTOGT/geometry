@@ -189,8 +189,14 @@ def box(rel, pages, entry):
     # Definitions line (2026-10-01, Pablo: definitions findable from anywhere): every chapter in a book that has a
     # Chapter 0 points to it. Chapter 0 itself is the target, so it carries no such line.
     d = os.path.dirname(rel)
-    has_def = bool(d) and os.path.basename(rel) != 'ch00-definitions.html' \
-        and os.path.exists(os.path.join(ROOT, d, 'ch00-definitions.html'))
+    # Book 3 (the Mini-Beast) lives at the repo root on main, so its root chapters point to book3/ch00 (Pablo, 2026-10-01).
+    if not d and str(pages[rel]['book']) == '3':
+        def_href = 'book3/ch00-definitions.html'
+    else:
+        def_href = 'ch00-definitions.html'
+    def_dir = d or ('book3' if def_href.startswith('book3/') else '')
+    has_def = bool(def_dir) and os.path.basename(rel) != 'ch00-definitions.html' \
+        and os.path.exists(os.path.join(ROOT, def_dir, 'ch00-definitions.html'))
     if not (n_list or c_list or s_list or has_def):
         return ''
     up = '../' if '/' in rel else ''
@@ -200,7 +206,7 @@ def box(rel, pages, entry):
     parts = []
     if has_def:
         parts.append('<div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Definitions</div><ul style="margin:0 0 0 1.1rem;padding:0">'
-                     '<li style="margin:.2rem 0"><a href="ch00-definitions.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Chapter 0 &middot; Definitions and notation for this book</a></li></ul>')
+                     '<li style="margin:.2rem 0"><a href="' + def_href + '" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Chapter 0 &middot; Definitions and notation for this book</a></li></ul>')
     if n_list:
         parts.append('<div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Named on this page</div><ul style="margin:0 0 0 1.1rem;padding:0">'
                      + ''.join(a(t, f' <span style="opacity:.6">({html.escape(w)})</span>') for t, w in n_list) + '</ul>')
