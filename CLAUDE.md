@@ -3184,3 +3184,12 @@ layer currently checks the other.
 - 2026-09-28 (night): Book XXVIII ch7 "One Number, Two Ways" (Atiyah–Singer stated; CP^n test; IndexTwoWays.lean) live. Book28 = 6 files, 23 theorems. TODO ch8: K-theory of C*-algebras (Zois L5, Blackadar) or KK; Book XXXIII (noncommutative geometry) is the next volume. Do NOT run git on the repo from the session (stale locks).
 - 2026-09-29: Book XIV ch10 "Where Counting Meets Chance" (series/parallel laws; Swarm Simulator; SwarmSimulatorV3.lean in lean_lib Book14) is live. Swarm Simulator V3 deposit is published (Zenodo v3.0, doi:10.5281/zenodo.23027566, 2026-09-29; files in papers/swarm-simulator-v3/); run `tools/leancheck.sh --audit book14/SwarmSimulatorV3.lean` on the Mac (it was compiled in the cloud only). TODO: examine the multi-orbit bioswarm paper (zip 20230617) the same way; the Swarm Simulator V3 paper is written (papers/swarm-simulator-v3/, reserved DOI 10.5281/zenodo.23027566) and is published. TODO ch11 idea: "Where a Theorem Holds" (the missing domain qualifier; Book XIV language theme). Do NOT run git on the repo from the session.
 - 2026-09-29: Book 3 "A Bucket of Seawater" (ch-a-bucket-of-seawater.html, verify script at root, BioSwarmCheck.lean as lean_lib BioSwarmCheck) is live: Racaniello opening, fruit-fly toy model run as written (multistable, cycles from alpha ~0.45), why the V2 contraction proof fails, going viral and the Trojan horse. index-book3.html is folder-based and does not list root Book 3 pages (known). BioSwarmCheck.lean audited on the Mac (17 decls OK). Fruit-fly paper V3 prepared in papers/multi-orbit-bioswarm/v3/ (reserved DOI 10.5281/zenodo.23029951; awaiting Zenodo upload).
+
+## Repo location (added 2026-10-01)
+
+The working repo is `~/Desktop/geometry`. **Always.** A stale second clone exists at
+`~/geometry` (HEAD f4e6214, July-era `G6Crystal.lean`); it is dead and must not be
+written to. A Cowork session on 2026-10-01 had `~/geometry` as its connected folder,
+audited the July `G6Crystal.lean`, and reported as new three findings the live file had
+already fixed on 2026-09-11. If a session's connected folder is not
+`/Users/pablogrossi/Desktop/geometry`, stop and say so before doing any work.
