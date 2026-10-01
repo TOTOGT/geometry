@@ -1,15 +1,16 @@
-# Lean v4.32.0 ledger — geometry, measured 2026-09-27
+# Lean v4.32.0 ledger — geometry, measured 2026-10-01
 
 Produced by `tools/toolchain_ledger.py`. Toolchain pinned: `leanprover/lean4:v4.32.0`.
 
 Nothing here is compiled by this tool. Each row reports whether a gate report already on disk names this file's declarations, and **what those declarations rest on**. Axiom reports are parsed by `tools/axiom_gate.py`, which holds the allowlist and rejoins Lean's wrapped output.
 
-**652 of 893 tracked declarations in this repo have a kernel record** — 53 of them resting on no axiom at all, 599 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
+**766 of 1041 tracked declarations in this repo have a kernel record** — 65 of them resting on no axiom at all, 701 within the permitted three (`propext`, `Classical.choice`, `Quot.sound`), 3 outside them. 0 explicit `axiom` declarations in this repo — an axiom is not a proof.
 
 | file | decls | audited | `axiom` | rests on | status | report | dated |
 |---|---:|---:|---:|---|---|---|---|
 | `Orthogenesis/Architecture/MagneticLattice.lean` | 20 | 17 | 0 | 3 axiom-free · 14 standard · **1 untrusted** | UNTRUSTED AXIOM | `geometry/tools/verify-audit/2026-09-09/MagneticLattice.axioms.txt` | 2026-09-09 |
 | `docs/ml-evidence/deposits-moved-to-GTCT-2026-08-30/rh-arithmetic-contact-v1/ZetaReflection.lean` | 4 | 2 | 0 | 1 axiom-free · 1 standard · **2 untrusted** | UNTRUSTED AXIOM | `geometry/tools/verify-audit/2026-09-09/ZetaReflection.axioms.txt` | 2026-09-09 |
+| `BioSwarmCheck.lean` | 17 | 17 | 0 | 17 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-28/geometry__BioSwarmCheck.axioms.txt` | 2026-09-28 |
 | `CardiacHopfReduction.lean` | 5 | 5 | 0 | 5 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-12/geometry__CardiacHopfReduction.axioms.txt` | 2026-09-12 |
 | `ChladniPolygon.lean` | 4 | 4 | 0 | 4 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-09/ChladniPolygon.axioms.txt` | 2026-09-10 |
 | `CycleCoupling.lean` | 4 | 4 | 0 | 1 axiom-free · 3 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-09/CycleCoupling.axioms.txt` | 2026-09-10 |
@@ -35,6 +36,7 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `Orthogenesis/Entropy/EntropyChecks.lean` | 5 | 5 | 0 | 5 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-26/geometry__Orthogenesis__Entropy__EntropyChecks.axioms.txt` | 2026-09-26 |
 | `Orthogenesis/Epilogue/EpilogueChecks.lean` | 5 | 5 | 0 | 5 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-26/geometry__Orthogenesis__Epilogue__EpilogueChecks.axioms.txt` | 2026-09-26 |
 | `Orthogenesis/Epistemology/PythagoreanComma.lean` | 3 | 3 | 0 | 1 axiom-free · 2 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Epistemology__PythagoreanComma.axioms.txt` | 2026-09-25 |
+| `Orthogenesis/Eta/EtaChecks.lean` | 18 | 18 | 0 | 2 axiom-free · 16 standard | kernel-audited | `geometry/tools/verify-audit/2026-10-01/geometry__Orthogenesis__Eta__EtaChecks.axioms.txt` | 2026-10-01 |
 | `Orthogenesis/Figure8/A1Node.lean` | 27 | 27 | 0 | 27 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__A1Node.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Figure8/Analemma.lean` | 15 | 15 | 0 | 15 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__Analemma.axioms.txt` | 2026-09-25 |
 | `Orthogenesis/Figure8/BernoulliLemniscate.lean` | 20 | 19 | 0 | 19 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-25/geometry__Orthogenesis__Figure8__BernoulliLemniscate.axioms.txt` | 2026-09-25 |
@@ -77,30 +79,51 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 | `SmokeBox.lean` | 5 | 4 | 0 | 4 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-09/SmokeBox.axioms.txt` | 2026-09-10 |
 | `SpiralReturnObstruction.lean` | 5 | 5 | 0 | 1 axiom-free · 4 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-09/SpiralReturnObstruction.axioms.txt` | 2026-09-09 |
 | `TripleAlphaDm3.lean` | 6 | 6 | 0 | 1 axiom-free · 5 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-09/TripleAlphaDm3.axioms.txt` | 2026-09-09 |
+| `book11/Bundling.lean` | 8 | 8 | 0 | 1 axiom-free · 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__book11__Bundling.axioms.txt` | 2026-09-27 |
+| `book11/Numerals.lean` | 9 | 9 | 0 | 4 axiom-free · 5 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__book11__Numerals.axioms.txt` | 2026-09-27 |
+| `book12/Carrying.lean` | 9 | 9 | 0 | 1 axiom-free · 8 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__book12__Carrying.axioms.txt` | 2026-09-27 |
+| `book14/Brackets.lean` | 2 | 2 | 0 | 2 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__book14__Brackets.axioms.txt` | 2026-09-27 |
+| `book14/Collective.lean` | 4 | 4 | 0 | 2 axiom-free · 2 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__book14__Collective.axioms.txt` | 2026-09-27 |
+| `book14/HardyWright.lean` | 1 | 1 | 0 | 1 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__book14__HardyWright.axioms.txt` | 2026-09-27 |
+| `book14/Polysemy.lean` | 6 | 6 | 0 | 1 axiom-free · 5 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__book14__Polysemy.axioms.txt` | 2026-09-27 |
+| `book14/TypesDecide.lean` | 2 | 2 | 0 | 1 axiom-free · 1 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-28/geometry__book14__TypesDecide.axioms.txt` | 2026-09-28 |
+| `book18/ChainRule.lean` | 6 | 6 | 0 | 6 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__book18__ChainRule.axioms.txt` | 2026-09-27 |
+| `book21/Conjugacy.lean` | 3 | 3 | 0 | 3 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__book21__Conjugacy.axioms.txt` | 2026-09-27 |
+| `book21/Spiral.lean` | 10 | 10 | 0 | 10 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-27/geometry__book21__Spiral.axioms.txt` | 2026-09-27 |
+| `book28/CliffordSmall.lean` | 5 | 5 | 0 | 5 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-28/geometry__book28__CliffordSmall.axioms.txt` | 2026-09-28 |
+| `book28/FredholmSpace.lean` | 2 | 2 | 0 | 2 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-28/geometry__book28__FredholmSpace.axioms.txt` | 2026-09-28 |
+| `book28/IndexTwoWays.lean` | 3 | 3 | 0 | 3 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-28/geometry__book28__IndexTwoWays.axioms.txt` | 2026-09-28 |
+| `book28/InfinityMinusInfinity.lean` | 7 | 7 | 0 | 7 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-28/  OK      47s  InfinityMinusInfinity.lean
+geometry__book28__InfinityMinusInfinity  OK      47s  InfinityMinusInfinity.lean.axioms.txt` | 2026-09-28 |
+| `book28/RiemannRoch.lean` | 2 | 2 | 0 | 2 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-28/geometry__book28__RiemannRoch.axioms.txt` | 2026-09-28 |
 | `book6/MayaCalendar.lean` | 10 | 10 | 0 | 8 axiom-free · 2 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-13/geometry__book6__MayaCalendar.axioms.txt` | 2026-09-13 |
 | `book8/OrthogonalWitness.lean` | 4 | 4 | 0 | 4 standard | kernel-audited | `geometry/tools/verify-book8/axioms.txt` | 2026-08-27 |
 | `book8/TurnaroundUniverse.lean` | 6 | 6 | 0 | 6 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-13/geometry__TurnaroundUniverse.axioms.txt` | 2026-09-13 |
 | `catgt/lean/CatGT_Main.lean` | 23 | 9 | 0 | 9 standard | kernel-audited | `geometry/tools/verify-audit/2026-09-09/CatGT_Main.axioms.txt` | 2026-09-09 |
 | `vol2-v5/deposit/VolumeTwo.lean` | 19 | 14 | 0 | 2 axiom-free · 12 standard | kernel-audited | `AXLE/tools/verify-vol2/axioms.txt` | 2026-09-24 |
 | `GateScreen.lean` | 5 | 0 | 0 | — | ambiguous name | `—` | — |
+| `book14/SwarmSimulatorV3.lean` | 14 | 0 | 0 | — | ambiguous name | `—` | — |
+| `papers/multi-orbit-bioswarm/MultiOrbitBioSwarm_v2.lean` | 16 | 0 | 0 | — | ambiguous name | `—` | — |
+| `papers/swarm-simulator-v3/SwarmSimulator.lean` | 14 | 0 | 0 | — | ambiguous name | `—` | — |
 | `Orthogenesis.lean` | 0 | 0 | 0 | — | declared, no gate | `—` | — |
+| `Orthogenesis/Architecture/Redundancy.lean` | 1 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/Cell.lean` | 0 | 0 | 0 | — | declared, no gate | `—` | — |
 | `Orthogenesis/Geometry/Main.lean` | 0 | 0 | 0 | — | declared, no gate | `—` | — |
+| `Vol2NonArchimedeanCollatz.lean` | 2 | 0 | 0 | — | declared, no gate | `—` | — |
 | `AMonster/GenerativeWeave.lean` | 20 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `AMonster/dm3_operators.lean` | 13 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
+| `ClosurePointsCheck.lean` | 6 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `CollatzDescent.lean` | 15 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `DomainCheck.lean` | 5 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `FoldCentralCharge.lean` | 10 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `LadderBound.lean` | 6 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `NASAGaps.lean` | 0 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `ToeplitzIndex.lean` | 7 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
-| `book11/Numerals.lean` | 9 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `book12/Counting.lean` | 11 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `book17/Book17Ch02.lean` | 3 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `book17/Book17Core.lean` | 12 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `book17/Book17Mathlib.lean` | 9 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `book2/lean/StabilityRadius.lean` | 15 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
-| `book21/Spiral.lean` | 10 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `book28/ShiftIndex.lean` | 16 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `book6/lean/VolXI_K0_Floor.lean` | 1 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
 | `book6/lean/VolXI_attempt.lean` | 2 | 0 | 0 | — | OUTSIDE EVERY TARGET | `—` | — |
@@ -119,14 +142,23 @@ Nothing here is compiled by this tool. Each row reports whether a gate report al
 
 | declarations | rests on |
 |---:|---|
-| 674 | `Classical.choice, Quot.sound, propext` |
-| 80 | `(none — axiom-free)` |
-| 60 | `Quot.sound, propext` |
-| 45 | `propext` |
+| 771 | `Classical.choice, Quot.sound, propext` |
+| 92 | `(none — axiom-free)` |
+| 68 | `Quot.sound, propext` |
+| 55 | `propext` |
 | 12 | `Classical.choice, Quot.sound, propext, sorryAx` |
 | 4 | `sorryAx` |
 
 An axiom-free proof is the strongest result `#print axioms` can report, and a checker that counts only the `depends on axioms:` form cannot see it (WP-73 §6). Both forms are counted here.
+
+## Report lines that did not parse
+
+A line announcing axioms in a shape the gate cannot read is a finding, never a silent skip.
+
+- `geometry/tools/verify-audit/2026-09-28/  OK      47s  InfinityMinusInfinity.lean
+geometry__book28__InfinityMinusInfinity  OK      47s  InfinityMinusInfinity.lean.axioms.txt` — `'InfinityMinusInfinity.shift_bshift_ne_id' depends on axioms: [propext, Classical.choice, Quot.sound] OK      47s  InfinityMinusInfinity.lean`
+- `geometry/tools/verify-audit/2026-09-28/  OK      47s  InfinityMinusInfinity.lean
+geometry__book28__InfinityMinusInfinity  OK      47s  InfinityMinusInfinity.lean.axioms.txt` — `'InfinityMinusInfinity.shift_bshift_ne_id' depends on axioms: [propext, Classical.choice, Quot.sound] OK      47s  InfinityMinusInfinity.lean`
 
 `OUTSIDE EVERY TARGET` is the row to act on first: `lake build` never touches that file, so it can stop compiling and nothing will say so. `UNTRUSTED AXIOM` outranks it — a declaration resting on `sorryAx`, `Lean.ofReduceBool` or a `native_decide` axiom is disclosed, not audited.
 
