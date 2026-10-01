@@ -101,12 +101,15 @@ Re-cited without a new number: independence of {log p} now cites #34; Global Pos
 
 All 30 issues, checked live 2026-10-01: 23 open (#12-#15, #26-#44), 7 closed (#1, #3, #4, #5, #6, #10, #21). Every other number from #1 to #25 (#2, #7-#9, #11, #16-#20, #22-#25) is a pull request or discussion, not an issue.
 
-## Still open (author decisions, not changed)
+## Resolved 2026-10-01, second pass
 
-* Basin asymmetry / `inner_basin_is_asymmetric` / `thm_gronwall_asymmetry`, cited as #13 on about 10 pages: re-cite to #32 (O7) or file separately.
-* `book8/ch2-event-horizon.html`: set to #14 on 2026-09-15 as a Gronwall bound, yet its text calls #14 `inner_basin_escape` (now #37).
-* `P_ON (correctOrder drv) > 0`, "discretisation bound", cited as #14 in ch09.
-* #6 shown OPEN on pages, closed on GitHub.
-* `docs/claims.tsv` and generated indexes still carry old numbers until regenerated.
+* Basin asymmetry (`inner_basin_is_asymmetric`, `thm_gronwall_asymmetry`, r* certificate), formerly cited as #13 on ten pages, now cites **#32** (O7). Chosen because #32's title names the asymmetric inner boundary against the symmetric Gronwall bound. Reversible if you would rather file it separately. #13 stays on the Mather and Poincare-Bendixson citations (poa_research, GameTheory, book7 Polylaminin).
+* `book8/ch2-event-horizon.html`: the `inner_basin_escape` citations now cite **#37**. One sentence ("the bound never closed in Lean") still cites #14.
+* `P_ON (correctOrder drv) > 0`, "discretisation bound": number removed; drafted as round 3 in `docs/axle-issues-to-file-3.html` (file it, or close as a duplicate of #14 if T1 covers it).
+* "Proved" outer-basin wording in `book4/chpt12.md` and the Lean comment in `book4/ch10.html` corrected.
+
+## Still open
+
+* Issue #6 is shown OPEN on GameTheory pages (`MahloClosure.lean`, `g6_unconditional_closure`), but closed on GitHub. Whether that sorry is the closed issue's theorem needs the Lean file.
+* `docs/claims.tsv` is a scraped table; regenerating it today would churn about 11,000 lines for reasons unrelated to citations, so it was not regenerated.
 * GitHub housekeeping: close or relabel #15; retitle #12 and #34.
-* `book4/chpt12.md` line 152 and `book4/ch10.html` line 560 still say "proved" for the outer basin, which the 2026-10-01 correction restricted.

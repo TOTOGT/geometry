@@ -11105,3 +11105,6 @@ Read the live issue list. #35-#44 match the order recorded. #21 is a real closed
 
 ## 2026-10-01: stale "proved" outer-basin wording
 book4/chpt12.md comparison table and the Lean block comment in book4/ch10.html now say what is proved: the Gronwall rate inequality, not ODE convergence for every r(0) > 1. Numerically verified range stated; general case points to AXLE #35 and #36.
+
+## 2026-10-01: AXLE citations, second pass
+Basin-asymmetry citations moved from #13 to #32; Book 8 ch2 inner_basin_escape citations to #37; ch9 discretisation-bound sorry lost its number and is drafted as round 3 (docs/axle-issues-to-file-3.html). #6 mismatch and claims.tsv regeneration left, reasons in docs/axle-issue-map.md.
