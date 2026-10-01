@@ -1,8 +1,8 @@
 # AXLE issues: reconciliation of corpus citations (2026-10-01)
 
-Basis: `docs/axle-issue-map.md` (GitHub `TOTOGT/AXLE`, checked 2026-09-15). Nothing here was
-re-checked against GitHub today: the fetch was blocked, so anything filed after 2026-09-15
-(numbers above #34, or #21-#25) is unverified. GitHub numbers issues and pull requests in one
+Basis: `docs/axle-issue-map.md` (GitHub `TOTOGT/AXLE`, checked 2026-09-15). On 2026-10-01 you pasted the live open list: 13 open (#12, #13, #14, #15, #26-#34), 7 closed.
+Nothing open sits above #34 and nothing open sits at #21-#25. The 7 closed issues were not listed, so
+which numbers they hold (beyond #6) is unverified. GitHub numbers issues and pull requests in one
 sequence, so a PR number can never become an issue.
 
 ## 1. What GitHub says each number is
@@ -16,7 +16,7 @@ sequence, so a PR number can never become an issue.
 | 15 | issue | unrelated pasted trading page | open |
 | 16 | discussion | bot scans buys, sells | open |
 | 17-20 | pull requests | screenshots, README, G6 chapters, crop circles | closed/merged |
-| 21-25 | unchecked | not in the map | ? |
+| 21-25 | not open issues | pull requests or closed items; not in the map | ? |
 | 26-34 | issues | filed 2026-09-15 (regeneration invariant, Floquet, IPR, fold spectral measure, LCH, kernel dimension, O7 asymmetric inner boundary, Global Positivity statement, non-integrability) | open |
 
 ## 2. Where the live corpus still disagrees (found 2026-10-01)
@@ -41,17 +41,17 @@ The 2026-09-15 passes fixed the pages they listed. These were not on that list.
 | #18 (book4 ch11, chpt11, chpt14) | `g_arith` / vonMangoldt | PR | new issue 8 |
 | #19 (book4 ch11, chpt11, RH audit) | independence of {log p}, now elementary | PR; filed as #34 under the title "Baker" | retitle #34, re-cite |
 | #20 (chpt12, chpt14, claims.tsv 3318, MahloClosure block) | three meanings: digamma critical line, Global Positivity, "closes" in the Mahlo block | PR | new issue 9; re-cite Global Positivity to #33 |
-| #21 (chpt13, chpt14 and METHODOLOGY) | p-adic coefficient, and also `certify_rstar_rigorous.py` | unchecked | new issue 10 after checking #21 |
-| #22 (chpt13, chpt14) | Global Positivity = RH itself | unchecked; #33 states it | re-cite to #33 |
+| #21 (chpt13, chpt14 and METHODOLOGY) | p-adic coefficient, and also `certify_rstar_rigorous.py` | not an open issue | new issue 10 |
+| #22 (chpt13, chpt14) | Global Positivity = RH itself | not an open issue; #33 states it | re-cite to #33 |
 | #6 (GameTheory MahloClosure, ContactHomology) | "last sorry in the Collatz bridge", shown OPEN | #6 is closed on GitHub | state mismatch: page or issue wrong |
 
 ## 3. Actions only you can take on GitHub
 
-Close or relabel #15 (unrelated page). Retitle #12 to match what the defect ledger says. Retitle #34 (the chapter now says the independence is elementary, not Baker). Check #21-#25 and anything above #34.
+Close or relabel #15 (unrelated page). Retitle #12 to match what the defect ledger says. Retitle #34 (the chapter now says the independence is elementary, not Baker). Optionally look at the closed list to see which numbers the 7 closed issues hold.
 
 ## 4. New issues to file
 
-Ten, with prefilled titles and bodies: open `docs/axle-issues-to-file-2.html` and click each link, then Submit. Record each number in `docs/axle-issue-map.md` and write it back to its pages. Per the map's own rule, pages cite a number only after it exists.
+Ten, with prefilled titles and bodies: open `docs/axle-issues-to-file-2.html` and click each link, then Submit. Nothing above needs checking first: none of the ten is already open. Record each number in `docs/axle-issue-map.md` and write it back to its pages. Per the map's own rule, pages cite a number only after it exists.
 
 ## 5. Side effect on today's Book 4 correction
 
