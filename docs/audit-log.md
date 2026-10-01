@@ -11060,3 +11060,6 @@ Read Volume I v7 text (pdftotext). Findings: (1) Volume I defines the curvature 
 
 ## 2026-10-01 tau: loose-c reading recorded as a hypothesis
 Added to the tau row that a valid but non-sharp c reproduces Volume I's pair only for a Lyapunov function Volume I does not name; the text gives no reason for c = 1. Recomputed the four cases by script. Not closed.
+
+## 2026-10-01 Definitions pointer on every chapter (generated, via crossref)
+The site has no single shared footer or nav, so the pointer went into the generated Across the series box (tools/crossref.py, R8): every chapter in a book that has a Chapter 0 now lists a Definitions link to it. Chapter 0 pages carry none. The first write also refreshed 25 boxes that were already stale. Checked by script: of 386 pages changed, none differ outside the generated box; the crossref check reports 0 stale. Pages with uncommitted edits from other sessions were left out of the commit.

@@ -186,13 +186,21 @@ def label(pages, t):
 
 def box(rel, pages, entry):
     n_list, c_list, s_list = entry
-    if not (n_list or c_list or s_list):
+    # Definitions line (2026-10-01, Pablo: definitions findable from anywhere): every chapter in a book that has a
+    # Chapter 0 points to it. Chapter 0 itself is the target, so it carries no such line.
+    d = os.path.dirname(rel)
+    has_def = bool(d) and os.path.basename(rel) != 'ch00-definitions.html' \
+        and os.path.exists(os.path.join(ROOT, d, 'ch00-definitions.html'))
+    if not (n_list or c_list or s_list or has_def):
         return ''
     up = '../' if '/' in rel else ''
     def a(t, extra=''):
         return (f'<li style="margin:.2rem 0"><a href="{up}{t}" style="color:inherit;text-decoration:underline;text-underline-offset:2px">'
                 f'{html.escape(label(pages, t))}</a>{extra}</li>')
     parts = []
+    if has_def:
+        parts.append('<div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Definitions</div><ul style="margin:0 0 0 1.1rem;padding:0">'
+                     '<li style="margin:.2rem 0"><a href="ch00-definitions.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Chapter 0 &middot; Definitions and notation for this book</a></li></ul>')
     if n_list:
         parts.append('<div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Named on this page</div><ul style="margin:0 0 0 1.1rem;padding:0">'
                      + ''.join(a(t, f' <span style="opacity:.6">({html.escape(w)})</span>') for t, w in n_list) + '</ul>')
