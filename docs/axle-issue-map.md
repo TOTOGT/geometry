@@ -124,3 +124,20 @@ All 30 issues, checked live 2026-10-01: 23 open (#12-#15, #26-#44), 7 closed (#1
 * #12: "O1: separation_theorem — restate with the Tr(M⁶) hypothesis (deposited form is false; not an eigenvalue-API gap)". Basis: `docs/defect-ledger.html`, 24 Aug.
 * #34: "Linear independence of {log p} over ℚ and non-integrability of α_arith (elementary, by unique factorisation; not Baker)". Basis: `book4/ch11.html`.
 * #15: unrelated page; close as not planned if you agree.
+
+## Filed 2026-10-01: round 3, #45-#48 (confirmed live)
+
+| # | obligation | written onto |
+|---|---|---|
+| 45 | `P_ON (correctOrder drv) > 0`, discretisation bound | book4/ch09, HVEH/ch09 |
+| 46 | `closurePoints_stationary` stated with a false hypothesis (`lean/Main.lean`, `AXLE_v8_1.lean`); fixed and compiled | no page cites it yet |
+| 47 | Regularity-free `closurePoints_stationary` is false when cof α = ω | GameTheory_Full_Pack |
+| 48 | `g6_unconditional_closure`: ∃ m ≤ 33, crystal saturated and eigenmode locked | GameTheory_Full_Pack, ch-ocio |
+
+#6 stays closed: it holds for cof α > ω (`PrincipiaVol1`, #46's fix).
+
+### "Issue 6" is three different things in the corpus (found while writing #47 and #48 back)
+
+1. Cardinal regularity in `MahloClosure.lean` / `closurePoints_stationary`: now #6 (closed), #46, #47; and `g6_unconditional_closure`: #48. Pages updated: GameTheory_Full_Pack, ch-ocio (code comments and the two sorry labels).
+2. The G⁶ conjecture χ(H*(X⁶)) = 33 for all n, labelled "Issue 6" on about twenty pages: book5 (chV-g6, chV-sorrys, chV-axle, index), book6 (chVI-conjecture, g6-crystal, chVI-planetary, index, wp29), book1/vol2-dashboard, vol2-contact, book7/ch-huh, ch-d2-academic, ch24, chH-collatz, spectral-radius-v2, trilogy-sale, g6-opus-map. GameTheory maps the χ = 33 separation theorem to #12; chVI-conjecture records it "REFUTED for closed orientable manifolds 2026-08-21". Which issue carries it (#12, restated?) is an author decision; not changed.
+3. Smoothness regularity (α is C∞ and α∧dα ≠ 0) in `AMonster/monsterlaw.html` ("prove the hyper-Mahlo fixed-point result without the regularity hypothesis"), echoed in `ch-ocio.html` (Axiom 9, topic chip) and `ch3c-econophysics.html`. Different from sense 1: the cofinality counterexample does not touch it, and no issue carries it. Not changed.

@@ -11117,3 +11117,6 @@ PrincipiaVol1 (V7, cof > omega) is the true regular-case proof; lean/Main.lean a
 
 ## 2026-10-01: closurePoints_stationary compiled
 Set up Lean 4.32.0 with Mathlib v4.32.0 (same pin as geometry) in the cloud workspace. ClosurePointsCheck.lean (geometry root) proves: the card-uncountable hypothesis in lean/Main.lean and the card.ord = alpha hypothesis in AXLE_v8_1.lean are each insufficient; the regularity-free goal of #6 is false; the theorem holds for aleph0 < cof. Standard axioms only. AXLE_v8_1.lean working copy patched (closurePoints_stationary_regular now proved; GATE-DECLARE updated; 5 sorries remain); change not committed in the AXLE repo. lean/Main.lean left as is (does not build).
+
+## 2026-10-01: round-3 numbers #45-#48 written back
+#45 on the ch9 sorry; #47 and #48 on GameTheory_Full_Pack and the ch-ocio code comments. monsterlaw and the ch-ocio Axiom 9 text left as "Issue 6": their "regularity" is C∞ smoothness, not cofinality. "Issue 6" found to carry three meanings (details in docs/axle-issue-map.md).
