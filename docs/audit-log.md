@@ -11108,3 +11108,6 @@ book4/chpt12.md comparison table and the Lean block comment in book4/ch10.html n
 
 ## 2026-10-01: AXLE citations, second pass
 Basin-asymmetry citations moved from #13 to #32; Book 8 ch2 inner_basin_escape citations to #37; ch9 discretisation-bound sorry lost its number and is drafted as round 3 (docs/axle-issues-to-file-3.html). #6 mismatch and claims.tsv regeneration left, reasons in docs/axle-issue-map.md.
+
+## 2026-10-01: Issue #6 traced to its Lean
+#6 closed by a1f11b9 with the regular-cardinal case only; pages calling "Issue 6" open describe the regularity-free case, and g6_unconditional_closure is a separate finite statement. Two issues drafted in docs/axle-issues-to-file-3.html; pages not changed until numbers exist. AXLE_v8_1.lean and #6's closing comment disagree about closurePoints_stationary_regular.

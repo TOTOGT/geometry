@@ -110,6 +110,12 @@ All 30 issues, checked live 2026-10-01: 23 open (#12-#15, #26-#44), 7 closed (#1
 
 ## Still open
 
-* Issue #6 is shown OPEN on GameTheory pages (`MahloClosure.lean`, `g6_unconditional_closure`), but closed on GitHub. Whether that sorry is the closed issue's theorem needs the Lean file.
+* Issue #6, checked 2026-10-01 against the issue and the Lean. GitHub closed it by commit a1f11b9 (2026-03-22, `lean/Main.lean`) with the statement proved for regular uncountable cardinals only; the title's goal (all limit ordinals) was not proved. About fifteen pages (GameTheory_Full_Pack, ch-ocio, AMonster/monsterlaw, vol2-dashboard, chV-axle) still call "Issue 6" open for exactly that goal, so the pages are right about the maths and wrong about the number. Separately, `TOGT.g6_unconditional_closure` (finite 33-step crystal saturation, `AXLE_v8_1.lean` line 154) is a different statement that the pages label "Issue 6". Both obligations are drafted in `docs/axle-issues-to-file-3.html`; once filed, the pages get the new numbers. `AXLE_v8_1.lean` also still shows `closurePoints_stationary_regular` with a sorry although #6's comment says it is proved: the two files disagree.
 * `docs/claims.tsv` is a scraped table; regenerating it today would churn about 11,000 lines for reasons unrelated to citations, so it was not regenerated.
 * GitHub housekeeping: close or relabel #15; retitle #12 and #34.
+
+## GitHub titles (owner edit; the browser session offered no Edit option)
+
+* #12: "O1: separation_theorem — restate with the Tr(M⁶) hypothesis (deposited form is false; not an eigenvalue-API gap)". Basis: `docs/defect-ledger.html`, 24 Aug.
+* #34: "Linear independence of {log p} over ℚ and non-integrability of α_arith (elementary, by unique factorisation; not Baker)". Basis: `book4/ch11.html`.
+* #15: unrelated page; close as not planned if you agree.
