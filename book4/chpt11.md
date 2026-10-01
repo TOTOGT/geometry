@@ -732,7 +732,7 @@ noncomputable def g_arith (σ t : ℝ) : ℝ :=
   -- -Im(-ζ'/ζ(σ + it)) via meromorphic continuation
   -- For σ > 1: equals the Dirichlet series ∑ Λ(n)/n^σ · sin(t·log n)
   -- Inside the strip: defined by analytic continuation
-  sorry -- AXLE Issue #18: connect to Mathlib's vonMangoldt
+  sorry -- AXLE Issue #42: connect to Mathlib's vonMangoldt
 
 -- The arithmetic contact 1-form (formal declaration)
 -- α_arith = dV - g_arith dU  on R³_{(U,V,t)}
@@ -743,10 +743,10 @@ noncomputable def g_arith (σ t : ℝ) : ℝ :=
 theorem arith_contact_nonintegrable (σ : ℝ) (hσ : 1 < σ) :
     ∀ t : ℝ, ∃ ε > 0, ∀ t' ∈ Set.Ioo (t - ε) (t + ε),
     (∑ n : ℕ, vonMangoldt n / (n : ℝ)^σ * Real.log n * Real.cos (t' * Real.log n)) ≠ 0 := by
-  sorry -- AXLE Issue #19: linear independence of {log p} over ℚ
+  sorry -- AXLE Issue #34: linear independence of {log p} over ℚ
 
 end AXLE.Arithmetic
-The sorry at Issue #19 is the Lean formalization of Proposition 11.1. It is closeable using Mathlib's Baker–Wüstholz transcendence machinery (linear forms in logarithms), but requires 50–100 lines of non-trivial analytic number theory. It is the honest price of the construction.
+The sorry at Issue #34 is the Lean formalization of Proposition 11.1. It is closeable using Mathlib's Baker–Wüstholz transcendence machinery (linear forms in logarithms), but requires 50–100 lines of non-trivial analytic number theory. It is the honest price of the construction.
 
 §11.10 · What Chapter 11 Establishes
 The Honest Inventory
@@ -778,7 +778,7 @@ Still open (explicitly labelled):
 
 Why the contact planes' non-integrability forces zeroes to σ=12\sigma = \tfrac{1}{2}
 σ=21​ — this is the Global Positivity Theorem and is the content of Ch14.
-The Lean formalization of Proposition 11.1 (AXLE Issue #19).
+The Lean formalization of Proposition 11.1 (AXLE Issue #34).
 
 The chapter has made one full move of the dimension ladder: from the abstract claim "all zeros lie on a line" to a concrete geometric object — the arithmetic contact form — whose non-integrability encodes that claim's structure. The claim has been given a shape. The proof of the claim is the subject of what follows.
 

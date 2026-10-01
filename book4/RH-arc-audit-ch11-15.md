@@ -41,11 +41,11 @@ Knock-on edits if you adopt Repair A:
 3. Ch 12/13/14 references to "α = dV − g dU" → "α = c dU − g dV"; ch13's decomposition becomes
    the pair (c_p, g_p) per prime — additivity still exact since −ζ′/ζ = Σ_p (local factors).
 4. Ch 11 Lean stub: `g_arith` comment "Im(−ζ′/ζ)" — note Im(−ζ′/ζ) = **−g** with your g
-   (sign), and add `c_arith`. AXLE Issue #18 should build the pair.
+   (sign), and add `c_arith`. AXLE Issue #42 should build the pair.
 
 ## ■ M2. "Provable from Baker's theorem" — wrong tool, и the right tool is elementary
 
-**Where:** Ch 11 Proposition 11.1 + Lean Issue #19 ("Baker–Wüstholz, ~80 lines").
+**Where:** Ch 11 Proposition 11.1 + Lean Issue #34 ("Baker–Wüstholz, ~80 lines").
 
 ℚ-linear independence of {log p} is **unique factorization** (if Σ aᵢ log pᵢ = 0 with aᵢ ∈ ℚ,
 clear denominators and exponentiate — contradiction). Baker's theorem is about *quantitative
@@ -54,7 +54,7 @@ changes of the (absolutely convergent, σ>1) almost-periodic sum follows from Kr
 equidistribution + Bohr almost-periodicity.
 
 Fix: cite "unique factorization + Kronecker–Weyl" instead of Baker(-Wüstholz). Good news for
-AXLE Issue #19: it drops from transcendence machinery to an elementary argument.
+AXLE Issue #34: it drops from transcendence machinery to an elementary argument.
 
 ## ▲ M3. Sign of g vs. −ζ′/ζ
 

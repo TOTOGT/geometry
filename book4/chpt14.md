@@ -170,14 +170,14 @@ Across Ch11–14, the Higher Dimensions Arc applied to the Riemann Hypothesis ha
 
 ```lean
 -- AXLE: Honest sorry count for the RH arc
--- Issue #18: g_arith definition (connects to Mathlib VonMangoldt)
--- Issue #19: Non-integrability (Baker's theorem in Lean)
--- Issue #20: Critical line = contact symmetry locus (digamma)
--- Issue #21: Local p-adic coefficient definition
--- Issue #22: Global Positivity Theorem — THIS IS RH ITSELF
+-- Issue #42: g_arith definition (connects to Mathlib VonMangoldt)
+-- Issue #34: Non-integrability (Baker's theorem in Lean)
+-- Issue #43: Critical line = contact symmetry locus (digamma)
+-- Issue #44: Local p-adic coefficient definition
+-- Issue #33: Global Positivity Theorem — THIS IS RH ITSELF
 
--- Issues #18–#21: Closeable with existing Mathlib (~200 lines total)
--- Issue #22: Open. Not closeable without proving RH.
+-- Issues #42–#44: Closeable with existing Mathlib (~200 lines total)
+-- Issue #33: Open. Not closeable without proving RH.
 -- This is the correct status. There is no sorry-free path to RH
 -- that does not pass through the same mathematical wall.
 ```

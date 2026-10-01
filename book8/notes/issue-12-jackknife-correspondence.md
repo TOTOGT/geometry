@@ -1,4 +1,4 @@
-# AXLE Issue #12 — Proposed closure of `jackknife_correspondence`
+# AXLE Issue #38 — Proposed closure of `jackknife_correspondence`
 
 **Status:** Working note. Captured the night of June 25/26, 2026.
 **Companion to:** `issue-13-null-causality.md`, `lorentzian-contact-survey.md`.
@@ -6,7 +6,7 @@
 
 ---
 
-## What Issue #12 is
+## What Issue #38 is
 
 The open obligation is the construction of a contact diffeomorphism
 $$
@@ -131,10 +131,10 @@ on three coordinates.
    the target. The function $\varphi_{c}(r_{\mathrm{tt}})$ should be defined
    from the trailer mechanism and verified to equal $r_{*}$ on the fold locus.
 
-## Relation to Issue #13
+## Relation to Issue #37
 
-Issue #13 (inner_basin_escape, see `issue-13-null-causality.md`) is the
-*dynamical* obstruction at the fold locus. Issue #12 (this note) is the
+Issue #37 (inner_basin_escape, see `issue-13-null-causality.md`) is the
+*dynamical* obstruction at the fold locus. Issue #38 (this note) is the
 *geometric* construction of the diffeomorphism at the fold locus. The two
 together describe the fold completely:
 - #12 says: the fold is the locus where the contact diffeomorphism degenerates
@@ -146,7 +146,7 @@ Both closures are payoffs of the Phase 1 Lorentzian-contact program in
 
 ## Recommendation
 
-Add this note to AXLE OPEN_QUESTIONS.md alongside the Issue #13 path.
+Add this note to AXLE OPEN_QUESTIONS.md alongside the Issue #37 path.
 Write the math note formally (LaTeX, ~3 pages) before attempting the Lean
 proof. As with #13, the math note is the deliverable; the Lean proof is
 downstream of it.

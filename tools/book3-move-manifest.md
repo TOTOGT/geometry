@@ -152,7 +152,7 @@ Legend: **D** = in chapters-diagram · **J** = in journey · **G** = matched the
 | `series-layer-map.html` | D | 0 | Series Layer Map · Principia Orthogona · G6 LLC |
 | `sessao1-geometria-contato.html` | D | 0 | Sessão S1 · Geometria de Contato & o Sistema dm³ · Mini-Curso Vol. IV |
 | `sessao2-teorema-bacia.html` | D | 0 | Sessão S2 · Teorema 2.1 & a Bacia Assimétrica · Mini-Curso Vol. IV |
-| `sessao3-esqueleto-lean.html` | D | 0 | Sessão S3 · Esqueleto Lean 4 & AXLE Issue #12 · Mini-Curso Vol. IV |
+| `sessao3-esqueleto-lean.html` | D | 0 | Sessão S3 · Esqueleto Lean 4 & AXLE Issue #35 · Mini-Curso Vol. IV |
 | `session1-contact-geometry.html` | D | 0 | Redirecting... |
 | `session2-theorem-basin.html` | D | 0 | Redirecting... |
 | `session3-lean-skeleton.html` | D | 0 | Redirecting... |

@@ -11096,3 +11096,6 @@ Theorem box, definition, proof sketch and two figure captions in book4/ch10.html
 
 ## 2026-10-01: AXLE issue citations reconciled against the 2026-09-15 map
 New docs/axle-reconciliation.md lists every live citation of #6 and #12-#22 that still disagrees with GitHub (about 25 pages cite #12 for kappa_lipschitz, which has no issue). tools/axle_reconcile.py generates docs/axle-issues-to-file-2.html and .md: ten prefilled new-issue links. No pages changed and nothing filed; the live GitHub check was blocked, so #21-#25 and numbers above #34 are unverified.
+
+## 2026-10-01: AXLE issues #35-#44 written back
+Ten new issues filed by the author; numbers recorded in docs/axle-issue-map.md and written into about 30 pages (kappa_lipschitz, outer-basin domain, inner_basin_escape, jackknife, minnorm, ch9 sorries, RH-arc obligations). #19 cites #34, #22 cites #33, Mather/PB cites #13, Gronwall cites #14. Author-decision items listed in the map. docs/ml-evidence and _archive untouched.

@@ -1,6 +1,6 @@
 # Rigorous certification of r* — methodology and benchmarks
 
-Companion to `certify_rstar_rigorous.py`. Closes AXLE Issue #21.
+Companion to `certify_rstar_rigorous.py`. Closes no AXLE issue.
 
 ## The question
 

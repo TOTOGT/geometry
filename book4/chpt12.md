@@ -150,7 +150,7 @@ Chapter 12's Theorem 12.2 says something structurally parallel: the critical lin
 | Invariant under rotation $\theta \mapsto \theta + c$ | Invariant under functional equation reflection $s \mapsto 1-s$ |
 | Attractor: $\mu \to -2$ | Candidate attractor: decay rate unknown |
 | Proved convergent (outer basin $r(0) > 1$) | Conjectured convergent (Riemann Hypothesis) |
-| Lean 4: verified outer basin theorem | Lean 4: AXLE Issue #20, sorry |
+| Lean 4: verified outer basin theorem | Lean 4: AXLE Issue #43, sorry |
 
 The parallel is structural. The proof of convergence for dm³ used the explicit Lyapunov function $V(r) = \tfrac{1}{2}(r-1)^2$. The proof for the arithmetic system would require an analogous global quantity — a "distance from the critical line" function that decreases along every zero-trajectory. This is exactly the positivity theorem that remains unproved.
 
@@ -191,12 +191,12 @@ def xi_reflection : ℝ × ℝ × ℝ → ℝ × ℝ × ℝ :=
 --   (b) Verification that Im(χ'/χ(1/2+it)) = 0 for all t
 --   (c) Verification that Im(χ'/χ(σ+it)) ≠ 0 for σ ≠ 1/2 and generic t
 -- All three are within Lean + Mathlib but require ~100 lines of
--- special function analysis. Marked sorry pending Issue #20.
+-- special function analysis. Marked sorry pending Issue #43.
 
 theorem critical_line_is_contact_symmetry_locus 
     (σ : ℝ) (hσ : 0 < σ ∧ σ < 1) :
     (∀ t : ℝ, Im_chi_correction σ t = 0) ↔ σ = 1/2 := by
-  sorry -- AXLE Issue #20: digamma cancellation on critical line
+  sorry -- AXLE Issue #43: digamma cancellation on critical line
 
 end AXLE.Arithmetic
 ```

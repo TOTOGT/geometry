@@ -37,7 +37,7 @@ Propagate everywhere; the new chapters already use 0.77594058. Fix:
 ## What the new chapters deliberately do
 - El Ojo framed as a **conjecture** (consistent-with, awaiting field measurement), not a claimed result — keeps the conjectural→proven honesty.
 - Seven proofs introduced once in Ch 6½, then referenced by number in 7–9 (no duplication).
-- Lean obligations in Ch 9 shown as honest `sorry` placeholders (AXLE Issues #14–#16), matching ch10's convention.
+- Lean obligations in Ch 9 shown as honest `sorry` placeholders (AXLE Issues #14, #40 and #41), matching ch10's convention.
 - Ladder explicitly capped at 6D with Vol V handoff (Ch 9 §7).
 - Site data taken verbatim from `hveh_site_map_tricounty.html` (Newark 14, Belleville 8, Harrison 3 = 25).
 

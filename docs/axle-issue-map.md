@@ -77,3 +77,34 @@ Every "not yet filed" wording in the corpus has been replaced with its number.
 A number in this corpus is a citation. Before writing one, check it here or at
 the source. Numbers are not reassigned by renumbering the corpus: if an
 obligation has no issue, state the obligation and leave the number out.
+
+## Filed 2026-10-01: ten more, #35-#44
+
+Opened from `docs/axle-issues-to-file-2.html`. Live open list checked the same day: 13 open before these (#12-#15, #26-#34).
+Numbers taken from the order of creation (the author's report: first is #35, last is #44); confirm against GitHub.
+
+| # | obligation | cited in |
+|---|---|---|
+| 35 | `kappa_lipschitz`: Lipschitz bound on the dm3 coupling term | book4 ch10, chE-gtct-alt, ch-eta-dnls, dm3-lab-index, Book 3 sessions 2-3, livro3-brasil |
+| 36 | Outer basin: convergence domain (z(0) hypothesis) | book4 ch10, ch09; HVEH ch09 |
+| 37 | `inner_basin_escape`, null-causality route | book8 index, ch5, notes |
+| 38 | `jackknife_correspondence` | book8 ch3, notes |
+| 39 | `Matrix.minnorm` missing from Mathlib | book4 chIV-orthogonality |
+| 40 | `P_ON (wrongOrder drv) = 0` | book4 ch09; HVEH ch09 |
+| 41 | No homotopy between gamma_K and gamma_F | book4 ch09; HVEH ch09 |
+| 42 | `g_arith`: connect to Mathlib vonMangoldt | book4 ch11, chpt11, chpt14 |
+| 43 | Digamma cancellation, critical line | book4 chpt12, chpt14 |
+| 44 | p-adic local coefficient definition | book4 chpt13, chpt14 |
+
+Re-cited without a new number: independence of {log p} now cites #34; Global Positivity cites #33; Gronwall cites #14; Mather and Poincare-Bendixson cite #13 (poa_research, GameTheory).
+`book4/METHODOLOGY.md` no longer cites #21 (it was a different obligation).
+
+## Still open (author decisions, not changed)
+
+* Basin asymmetry / `inner_basin_is_asymmetric` / `thm_gronwall_asymmetry`, cited as #13 on about 10 pages: re-cite to #32 (O7) or file separately.
+* `book8/ch2-event-horizon.html`: set to #14 on 2026-09-15 as a Gronwall bound, yet its text calls #14 `inner_basin_escape` (now #37).
+* `P_ON (correctOrder drv) > 0`, "discretisation bound", cited as #14 in ch09.
+* #6 shown OPEN on pages, closed on GitHub.
+* `docs/claims.tsv` and generated indexes still carry old numbers until regenerated.
+* GitHub housekeeping: close or relabel #15; retitle #12 and #34.
+* `book4/chpt12.md` line 152 and `book4/ch10.html` line 560 still say "proved" for the outer basin, which the 2026-10-01 correction restricted.

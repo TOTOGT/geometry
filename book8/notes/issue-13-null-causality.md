@@ -1,4 +1,4 @@
-# AXLE Issue #13 — Proposed closure via null causality at the Whitney fold
+# AXLE Issue #37 — Proposed closure via null causality at the Whitney fold
 
 **Status:** Working note. Captured the night of June 25/26, 2026.
 **Companion to:** `lorentzian-contact-survey.md`, `dm3-on-horizons-questions.md`.
@@ -21,7 +21,7 @@ it being a root of the linear function $r-1$.
 This falls through to Lemma 2 ($d\tau$ does not blow up at $r_*$, so $S$ is
 not shown null this way), Lemma 3 (vacuous once Lemma 2 fails), and the
 "Theorem (inner_basin_escape, restated)" below — none of it goes through.
-**AXLE Issue #13 (`inner_basin_escape`) is still open.** It was never
+**AXLE Issue #37 (`inner_basin_escape`) is still open.** It was never
 attempted in Lean (see "What still needs to be checked" #2 below, which
 correctly flagged that Lemma 2 needed an explicit one-line check and
 correctly notes that check was never done — doing it is what surfaced this).
@@ -43,7 +43,7 @@ entries.
 theorem inner_basin_escape (r₀ : ℝ) (hr : r₀ < r_star) :
   ¬ ∃ μ < 0, ∀ t > 0,
   |r t - 1| ≤ |r₀ - 1| * Real.exp (μ * t) := by
-  sorry  -- AXLE Issue #13
+  sorry  -- AXLE Issue #37
 ```
 
 The current attempt at this proof tries to bound the radial flow by a Gronwall
@@ -93,7 +93,7 @@ No timelike curve in $(M, g_{\mathrm{Lyap}})$ crosses $S$.
 *Proof.* Standard. Any classical text on Lorentzian causal structure; see e.g.\
 O'Neill, *Semi-Riemannian Geometry*, §14.1, or Hawking–Ellis Prop.\ 6.4.6. □
 
-## The closure of Issue #13
+## The closure of Issue #37
 
 **Theorem (inner_basin_escape, restated).**
 For $r_0 < r_*$, there is no exponentially decaying trajectory connecting
@@ -139,7 +139,7 @@ That would be a self-contained ~80-line addition to `Chain_updated.lean`.
 This closure is the first concrete instance of the Beig–Chruściel program
 being applied to the dm³ framework. The survey (`lorentzian-contact-survey.md`,
 §3) flagged the Whitney $A_1$ fold as the natural locus for promoting
-dm³ to a Lorentzian-contact setting. Issue #13's closure is the first
+dm³ to a Lorentzian-contact setting. Issue #37's closure is the first
 deliverable of that promotion — it doesn't require the full Lorentzian contact
 structure, just the null-hypersurface character of the fold, which is the
 weakest piece of the promotion.
@@ -165,7 +165,7 @@ in standard Lorentzian geometry.
 ## Recommendation
 
 Add this note to the AXLE OPEN_QUESTIONS.md as the proposed closure path
-for Issue #13. Write the math note formally (LaTeX, ~3 pages) before
+for Issue #37. Write the math note formally (LaTeX, ~3 pages) before
 attempting the Lean proof. The Lean proof follows the math note.
 
 This is the closure path. The closure itself is downstream work, not

@@ -31,7 +31,7 @@ A third formation, appearing in the days following the 2026 June solstice, that 
 
 - **Positive close:** a third formation appears in the window 2026-06-25 to ~2026-07-05, matches (1) or (2), and one of the geometric ratios in (3) hits to sub-percent precision. The spacetime-coordinate reading then becomes a real empirical pattern, and the n-bonacci-ladder-in-spacetime claim is publishable.
 
-- **Negative close:** the window closes (call it end of July 2026) without a third formation meeting any of the three criteria. The spacetime-coordinate reading (2/3 timing, κ* distance) falls back to coincidence — two data points wasn't a pattern. The two prior geometric hits (Wiltshire r* at 0.20%, Switzerland κ* at 0.04%) remain on their own merit as empirical witnesses for AXLE Issue #12 (`jackknife_correspondence`), independently of the spacetime claim.
+- **Negative close:** the window closes (call it end of July 2026) without a third formation meeting any of the three criteria. The spacetime-coordinate reading (2/3 timing, κ* distance) falls back to coincidence — two data points wasn't a pattern. The two prior geometric hits (Wiltshire r* at 0.20%, Switzerland κ* at 0.04%) remain on their own merit as empirical witnesses for AXLE Issue #38 (`jackknife_correspondence`), independently of the spacetime claim.
 
 ## What this does not commit the framework to
 
@@ -40,7 +40,7 @@ This watch does not commit the framework to anything about the origin or mechani
 ## Anchor points
 
 - Prior formations and accuracy assessment: see TOTOGT/3M, the LAW3M poster anatomy.
-- AXLE Issue #12 closure path: `book8/notes/issue-12-jackknife-correspondence.md`
+- AXLE Issue #38 closure path: `book8/notes/issue-12-jackknife-correspondence.md`
 - LAW3M sits at the order-4 (Δ, Tetranacci) rung of the n-bonacci ladder, with $\varepsilon = \tau = 2$.
 - The dm³ certified constants set is $\{T^{*} = 2\pi,\;\varepsilon_0 = 1/3,\;\eta \approx 1.839,\;\mu_{\max} = -2,\;\kappa^* = \sqrt{7/9} \approx 0.882,\;\tau = 2\}$.
 

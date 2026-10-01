@@ -218,7 +218,7 @@ namespace AXLE.Arithmetic.Adelic
 noncomputable def g_p (p : ℕ) (hp : Nat.Prime p) (σ t_p : ℝ) : ℝ :=
   -- log p / (1 - p^{-σ} · p^{-it_p})
   -- Defined only for p^{-σ} < 1, i.e., σ > 0
-  sorry -- AXLE Issue #21: p-adic local coefficient
+  sorry -- AXLE Issue #44: p-adic local coefficient
 
 -- The local non-integrability coefficient
 noncomputable def dg_p (p : ℕ) (hp : Nat.Prime p) (σ t_p : ℝ) : ℂ :=
@@ -240,12 +240,12 @@ lemma dg_p_norm_correct (p : ℕ) (hp : Nat.Prime p) (σ t_p : ℝ)
 axiom adelic_contact_form_nondegenerate : 
     -- ∀ (s : AdelicPoint) in the admissible domain,
     -- alpha_arith ∧ d(alpha_arith) ≠ 0
-    True -- AXLE Issue #22: requires Global Positivity (Ch14)
+    True -- AXLE Issue #33: requires Global Positivity (Ch14)
 
 end AXLE.Arithmetic.Adelic
 ```
 
-The axiom at Issue #22 is precisely the statement that Ch14 will address — and honestly label as open.
+The axiom at Issue #33 is precisely the statement that Ch14 will address — and honestly label as open.
 
 ---
 
