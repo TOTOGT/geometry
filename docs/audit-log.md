@@ -11075,3 +11075,6 @@ Searched the text of Connes and Marcolli: Tomita time evolution is covered (sect
 
 ## 2026-10-01 Book 33 note: vocabulary map
 Added a table mapping holology, wholeness, know yourself, non-duality, advaita and both-and to a candidate formal object, what would verify it, and its status. Only the holology row has a passing script; the Tomita row is supported by the held Connes and Marcolli text; the rest are definitions or unchecked.
+
+## 2026-10-01 Book 33: Baaz semantics implemented and applied to the radial toy
+Added docs/book33-baaz-semantics-test.py. Part 1 checks the implementation against the paper (axioms 1 to 10, modus ponens, and the three non-validities) on 1500 random finite models: passes. Part 2 builds the reachability order of the radial toy from sampled orbits with the negation-assignment function empty: the statement-and-negation set for an invariant neighbourhood is exactly the states inside it that have an earlier state outside it, and the orbit that is the limit cycle is the only one free of them. Corrected the note: gluts also come from the order itself, not only from the assignment function. Sampled, radial toy only; the fold case is not tested. A first run of part 2 failed because the script chose its limit-cycle states by distance instead of by orbit; fixed and rerun.
