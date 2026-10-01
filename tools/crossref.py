@@ -190,11 +190,14 @@ def box(rel, pages, entry):
     # Chapter 0 points to it. Chapter 0 itself is the target, so it carries no such line.
     d = os.path.dirname(rel)
     # Book 3 (the Mini-Beast) lives at the repo root on main, so its root chapters point to book3/ch00 (Pablo, 2026-10-01).
-    if not d and str(pages[rel]['book']) == '3':
-        def_href = 'book3/ch00-definitions.html'
+    # Any other root page tagged <meta name="po-book"> points to its own book's Chapter 0 when that exists
+    # (ch-tatiana.html is tagged book7 and sits at the root; found 2026-10-01).
+    rb = str(pages[rel]['book'])
+    if not d and os.path.exists(os.path.join(ROOT, 'book' + rb, 'ch00-definitions.html')):
+        def_href = 'book' + rb + '/ch00-definitions.html'
     else:
         def_href = 'ch00-definitions.html'
-    def_dir = d or ('book3' if def_href.startswith('book3/') else '')
+    def_dir = d or ('book' + rb if def_href.startswith('book') else '')
     has_def = bool(def_dir) and os.path.basename(rel) != 'ch00-definitions.html' \
         and os.path.exists(os.path.join(ROOT, def_dir, 'ch00-definitions.html'))
     if not (n_list or c_list or s_list or has_def):

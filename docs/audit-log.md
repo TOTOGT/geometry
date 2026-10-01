@@ -11120,3 +11120,6 @@ Set up Lean 4.32.0 with Mathlib v4.32.0 (same pin as geometry) in the cloud work
 
 ## 2026-10-01: round-3 numbers #45-#48 written back
 #45 on the ch9 sorry; #47 and #48 on GameTheory_Full_Pack and the ch-ocio code comments. monsterlaw and the ch-ocio Axiom 9 text left as "Issue 6": their "regularity" is C∞ smoothness, not cofinality. "Issue 6" found to carry three meanings (details in docs/axle-issue-map.md).
+
+## 2026-10-01: Definitions line reaches every tagged root page
+tools/crossref.py now points a root page tagged <meta name="po-book" content="bookN"> at bookN/ch00-definitions.html when that exists (before, only Book 3). ch-tatiana.html (tagged Book 7) gained the line; the ten Chapter 0 pages and ch7-topological-orthogenesis.html had stale generated boxes and were regenerated. Check reports 0 stale. Only the generated box changed in each file.
