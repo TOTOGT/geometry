@@ -508,7 +508,7 @@ def main() -> None:
 
     # ---- per-folder indexes -------------------------------------------------
     for slug, name, _ in FOLDERS:
-        members = sorted(groups[slug], key=lambda r: titles[r].lower())
+        members = sorted(groups[slug], key=lambda r: (0 if r.endswith('/ch00-definitions.html') else 1, titles[r].lower()))  # Chapter 0 first (Pablo, 2026-10-01)
         n_orph = sum(1 for m in members if counts[m] == 0)
         rows = "\n".join(row_html(m, titles[m], counts[m], mark=marks[m])
                          for m in members)
@@ -533,7 +533,7 @@ def main() -> None:
 
     blocks = []
     for slug, name, _ in FOLDERS:
-        members = sorted(groups[slug], key=lambda r: titles[r].lower())
+        members = sorted(groups[slug], key=lambda r: (0 if r.endswith('/ch00-definitions.html') else 1, titles[r].lower()))  # Chapter 0 first (Pablo, 2026-10-01)
         if not members:
             continue
         rows = "\n".join(row_html(m, titles[m], counts[m], mark=marks[m])

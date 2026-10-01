@@ -11081,3 +11081,6 @@ Added docs/book33-baaz-semantics-test.py. Part 1 checks the implementation again
 
 ## 2026-10-01 Planned pages for books 30 to 33
 Added tools/planned_books.py and a planned index page for each of book30, book31, book32 and book33, so each has an index. Each page states only what the repository records: rung 30 is Volume XIII in book13; nothing recorded for 31; rung 32 is named as Motivic and Langlands in one Book VII sentence; rung 33 is noncommutative geometry with its Lean file not written, plus links to the Book 33 planning files in docs. Titles, scopes and chapters are left to the author. Numbering follows the floor-ladder path convention for rungs 28 and 33 (folder bookN); rung 30 is Volume XIII, so book30 may be redundant with book13, which is the author's call.
+
+## 2026-10-02 Chapter 0 first in every index; planned books on the series hub
+Changed tools/build_indexes.py so a book's Chapter 0 page sorts first in its own index and in the master index (previously it sorted by title, so it was first in only some books). Checked all ten books and the master index. Added four planned cards (books 30 to 33) to series-hub.html, hand-maintained, in the planned style already used for Book XX; each states only what the repository records. Regenerated indexes; the four planned pages no longer show as orphaned. series_rule_check and terms check pass.
