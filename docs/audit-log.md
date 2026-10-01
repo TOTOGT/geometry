@@ -11111,3 +11111,6 @@ Basin-asymmetry citations moved from #13 to #32; Book 8 ch2 inner_basin_escape c
 
 ## 2026-10-01: Issue #6 traced to its Lean
 #6 closed by a1f11b9 with the regular-cardinal case only; pages calling "Issue 6" open describe the regularity-free case, and g6_unconditional_closure is a separate finite statement. Two issues drafted in docs/axle-issues-to-file-3.html; pages not changed until numbers exist. AXLE_v8_1.lean and #6's closing comment disagree about closurePoints_stationary_regular.
+
+## 2026-10-01: closurePoints_stationary reconciled across four Lean files
+PrincipiaVol1 (V7, cof > omega) is the true regular-case proof; lean/Main.lean and AXLE_v8_1.lean state it with hypotheses that are false by hand-checked counterexamples; the regularity-free goal of #6 is false for cof = omega. Round-3 drafts rewritten (four issues). No AXLE Lean files edited: no Lean toolchain here to check a fix.
