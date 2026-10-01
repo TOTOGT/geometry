@@ -16,7 +16,8 @@ sequence, so a PR number can never become an issue.
 | 15 | issue | unrelated pasted trading page | open |
 | 16 | discussion | bot scans buys, sells | open |
 | 17-20 | pull requests | screenshots, README, G6 chapters, crop circles | closed/merged |
-| 21-25 | not open issues | pull requests or closed items; not in the map | ? |
+| 21 | issue | r* at arbitrary Lean 4 precision | closed |
+| 22-25 | not issues | pull requests or discussions | - |
 | 26-34 | issues | filed 2026-09-15 (regeneration invariant, Floquet, IPR, fold spectral measure, LCH, kernel dimension, O7 asymmetric inner boundary, Global Positivity statement, non-integrability) | open |
 
 ## 2. Where the live corpus still disagrees (found 2026-10-01)

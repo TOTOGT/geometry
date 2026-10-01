@@ -11099,3 +11099,6 @@ New docs/axle-reconciliation.md lists every live citation of #6 and #12-#22 that
 
 ## 2026-10-01: AXLE issues #35-#44 written back
 Ten new issues filed by the author; numbers recorded in docs/axle-issue-map.md and written into about 30 pages (kappa_lipschitz, outer-basin domain, inner_basin_escape, jackknife, minnorm, ch9 sorries, RH-arc obligations). #19 cites #34, #22 cites #33, Mather/PB cites #13, Gronwall cites #14. Author-decision items listed in the map. docs/ml-evidence and _archive untouched.
+
+## 2026-10-01: #35-#44 confirmed against GitHub; #21 restored
+Read the live issue list. #35-#44 match the order recorded. #21 is a real closed issue (r* precision), so the METHODOLOGY citation removed earlier in the day was restored. Closed set: #1, #3, #4, #5, #6, #10, #21.

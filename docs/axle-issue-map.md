@@ -81,7 +81,7 @@ obligation has no issue, state the obligation and leave the number out.
 ## Filed 2026-10-01: ten more, #35-#44
 
 Opened from `docs/axle-issues-to-file-2.html`. Live open list checked the same day: 13 open before these (#12-#15, #26-#34).
-Numbers taken from the order of creation (the author's report: first is #35, last is #44); confirm against GitHub.
+Confirmed against the live GitHub list in the author's browser on 2026-10-01: titles of #35-#44 match this table, in this order.
 
 | # | obligation | cited in |
 |---|---|---|
@@ -97,7 +97,9 @@ Numbers taken from the order of creation (the author's report: first is #35, las
 | 44 | p-adic local coefficient definition | book4 chpt13, chpt14 |
 
 Re-cited without a new number: independence of {log p} now cites #34; Global Positivity cites #33; Gronwall cites #14; Mather and Poincare-Bendixson cite #13 (poa_research, GameTheory).
-`book4/METHODOLOGY.md` no longer cites #21 (it was a different obligation).
+#21 is a real, closed issue ("r* ≈ 0.77594 at arbitrary Lean 4 precision"), so `book4/METHODOLOGY.md` keeps citing it. The p-adic coefficient obligation that `chpt13.md` and `chpt14.md` had cited as #21 is now #44.
+
+All 30 issues, checked live 2026-10-01: 23 open (#12-#15, #26-#44), 7 closed (#1, #3, #4, #5, #6, #10, #21). Every other number from #1 to #25 (#2, #7-#9, #11, #16-#20, #22-#25) is a pull request or discussion, not an issue.
 
 ## Still open (author decisions, not changed)
 

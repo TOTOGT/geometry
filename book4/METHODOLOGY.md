@@ -1,6 +1,6 @@
 # Rigorous certification of r* — methodology and benchmarks
 
-Companion to `certify_rstar_rigorous.py`. Closes no AXLE issue.
+Companion to `certify_rstar_rigorous.py`. Closes AXLE Issue #21 (r* at arbitrary Lean 4 precision; closed on GitHub).
 
 ## The question
 
