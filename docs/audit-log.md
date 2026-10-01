@@ -11093,3 +11093,6 @@ While reading El Ojo (Book 4 chapter 6 and a half), tested the chapter 10 outer-
 
 ## 2026-10-01: Book 4 ch10 outer-basin statement restricted
 Theorem box, definition, proof sketch and two figure captions in book4/ch10.html now state the verified range (z(0)=0, 1<r(0)<=6.8) and carry a dated correction note; the same sentence and the HONEST STATUS box in book4/ch06b.html and HVEH/ch06b.html were changed to match. General statement marked open (AXLE Issue #12). Evidence: book4/ch10-outer-basin-check.py (passes). docs/ml-evidence copy left as superseded.
+
+## 2026-10-01: AXLE issue citations reconciled against the 2026-09-15 map
+New docs/axle-reconciliation.md lists every live citation of #6 and #12-#22 that still disagrees with GitHub (about 25 pages cite #12 for kappa_lipschitz, which has no issue). tools/axle_reconcile.py generates docs/axle-issues-to-file-2.html and .md: ten prefilled new-issue links. No pages changed and nothing filed; the live GitHub check was blocked, so #21-#25 and numbers above #34 are unverified.
