@@ -56,3 +56,4 @@ import Orthogenesis.Epilogue.EpilogueChecks
 import Orthogenesis.Overture.OvertureChecks
 import Orthogenesis.Hawking.HawkingConstants
 import Orthogenesis.Hawking.TribonacciLog
+import Orthogenesis.Eta.EtaChecks
