@@ -11114,3 +11114,6 @@ Basin-asymmetry citations moved from #13 to #32; Book 8 ch2 inner_basin_escape c
 
 ## 2026-10-01: closurePoints_stationary reconciled across four Lean files
 PrincipiaVol1 (V7, cof > omega) is the true regular-case proof; lean/Main.lean and AXLE_v8_1.lean state it with hypotheses that are false by hand-checked counterexamples; the regularity-free goal of #6 is false for cof = omega. Round-3 drafts rewritten (four issues). No AXLE Lean files edited: no Lean toolchain here to check a fix.
+
+## 2026-10-01: closurePoints_stationary compiled
+Set up Lean 4.32.0 with Mathlib v4.32.0 (same pin as geometry) in the cloud workspace. ClosurePointsCheck.lean (geometry root) proves: the card-uncountable hypothesis in lean/Main.lean and the card.ord = alpha hypothesis in AXLE_v8_1.lean are each insufficient; the regularity-free goal of #6 is false; the theorem holds for aleph0 < cof. Standard axioms only. AXLE_v8_1.lean working copy patched (closurePoints_stationary_regular now proved; GATE-DECLARE updated; 5 sorries remain); change not committed in the AXLE repo. lean/Main.lean left as is (does not build).
