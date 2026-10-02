@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Provers · Book 7: Scientist Gallery · Principia Orthogona</title>
+<meta name="description" content="Laurent Lafforgue, Ng&ocirc; B&#7843;o Ch&acirc;u, and Gaitsgory and Raskin: three proofs on the Langlands program, what each closed, and the one object their machinery shares that you can compute by hand &mdash; Kloosterman sums, checked exhaustively against Deligne's bound."/>
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none;
+             transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+      border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .04em; line-height: 1.15;
+         margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 640px; margin: 0 auto 1.5rem; }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .08em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem;
+   border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+em { font-style: italic; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-math { background: rgba(17, 17, 24, 0.9); border: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; font-family: 'Courier New', monospace;
+            line-height: 1.7; overflow-x: auto; font-size: .9rem; white-space: pre; }
+.block-axiom { background: rgba(201, 168, 76, 0.08); border-left: 3px solid var(--gold);
+             padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-theorem { background: rgba(74, 158, 255, 0.08); border-left: 3px solid var(--op-c);
+               padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry { background: rgba(255, 159, 64, 0.08); border-left: 3px solid var(--amber);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry strong { color: var(--amber); }
+table.cat { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .88rem; }
+table.cat th { text-align:left; font-family:'Courier New',monospace; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+table.cat td { padding: .55rem .6rem; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+table.cat td:first-child { color: var(--gold); font-weight: 600; white-space: nowrap; }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .9rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .8rem; }
+.pull-wrap { background: rgba(201, 168, 76, 0.08); border-left: 4px solid var(--gold);
+           padding: 2rem; margin: 3rem 0; border-radius: 2px; font-style: italic;
+           line-height: 1.85; }
+.pull-cite { font-size: .85rem; color: var(--dim); display: block; margin-top: 1rem; font-style: normal; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none;
+          transition: color .2s; }
+.ch-nav a:hover { color: var(--gold); }
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+<body>
+<div class="page">
+
+<div class="ch-nav">
+  <div class="nav-links">
+    <a href="index.html">&#9884; Scientist Gallery</a> &middot;
+    <a href="ch-langlands.html">Langlands</a> &middot;
+<a href="ch-drinfeld-beilinson.html">Drinfeld &amp; Beilinson</a> &middot;
+<a href="ch-weil.html">Andr&eacute; Weil</a> &middot;
+    <a href="ch-grothendieck.html">Grothendieck</a> &middot;
+    <a href="ch-feigin.html">Feigin</a> &middot;
+    <a href="../book6/wp130-rung-thirtytwo.html">WP-130</a>
+  </div>
+</div>
+
+<div class="hero">
+<div class="hero-eyebrow">G7 &middot; The Scientist Gallery &middot; Attribution Series</div>
+<div class="po-subject"><span class="po-subject-tag">MATHEMATICS &middot; PURE</span></div>
+<h1>The Provers</h1>
+<p class="hero-sub">Three results closed three different gaps in the Langlands program, in
+2002, 2010 and 2024. They share a method more than a subject, and the method runs through
+the geometry the <a href="ch-drinfeld-beilinson.html">last chapter</a> began to describe.</p>
+<p class="meta">Laurent Lafforgue &middot; Fields Medal 2002 &middot; Ng&ocirc; B&#7843;o Ch&acirc;u
+&middot; Fields Medal 2010 &middot; Dennis Gaitsgory and Sam Raskin, with seven coauthors &middot; 2024</p>
+</div>
+
+<div class="section-label">Part I &middot; Three gaps</div>
+<h2>What each of them closed</h2>
+
+<p><strong>Laurent Lafforgue, 2002.</strong> Drinfeld had proved the function-field
+correspondence for GL(2). Lafforgue proved it for GL(<em>n</em>), every <em>n</em>, by
+extending Drinfeld's shtukas to higher rank and carrying their cohomology through a
+construction that took several years and several hundred pages. The work earned the 2002
+Fields Medal. It is the GL(<em>n</em>) function-field case and nothing wider; the
+extension to arbitrary reductive groups is a later result of Vincent Lafforgue.</p>
+
+<p><strong>Ng&ocirc; B&#7843;o Ch&acirc;u, 2008&ndash;2010.</strong> The trace formula is the
+tool that compares automorphic data across groups, and in comparing a group with its
+endoscopic groups it needs an identity between orbital integrals, the
+<em>fundamental lemma</em>, formulated by Langlands and Shelstad. Waldspurger reduced the
+group statement to a Lie-algebra one. Ng&ocirc; proved the Lie-algebra statement, over
+function fields, by a method nobody had expected to apply: the geometry of the Hitchin
+fibration, and a support theorem for the sheaves on it. The Fields Medal followed in 2010.
+Orbital integrals became point counts on a moduli space, and point counts are what
+Weil's Rosetta-stone column on function fields was made for.</p>
+
+<p><strong>Gaitsgory and Raskin, 2024.</strong> The geometric correspondence of the
+<a href="ch-drinfeld-beilinson.html">previous chapter</a>, in the form Arinkin and Gaitsgory
+repaired in 2012. Nine authors, five papers, between 800 and 1,000 pages depending on whose
+count you take. See <a href="ch-langlands.html">Langlands</a> for the account; this chapter
+does not re-tell it.</p>
+
+<div class="block-axiom">
+<p>What the three share is not a theorem. It is a habit: replace the number-theoretic
+object by a point count on a moduli space over a finite field, and let Frobenius and purity
+do the work. That is why the same four words &mdash; shtuka, Hitchin, Frobenius,
+weight &mdash; recur in all three, and why Weil and Grothendieck have chapters in this
+gallery before any of these three did.</p>
+</div>
+
+<div class="section-label">Part II &middot; The part you can check</div>
+<h2>One object their machinery shares</h2>
+
+<p>None of these proofs can be reproduced on a page. What can be reproduced is the smallest
+object they all feed on: a rank-2 local system whose Frobenius traces have a size someone has
+proved. The <em>Kloosterman sum</em></p>
+
+<pre class="block-body">Kl(a; p)  =  sum over x in F_p^*  of  exp( 2 pi i ( x + a/x ) / p )</pre>
+
+<p>is the trace of Frobenius on the rank-2 Kloosterman sheaf on the multiplicative group, a
+construction of Deligne and Katz. Deligne's theorem, the second form of the Weil
+conjectures, gives |Kl| &le; 2&radic;<em>p</em>: the same square-root size as the
+Ramanujan&ndash;Petersson bound that the function-field correspondence also delivers. The
+claim here is narrow. Deligne proved this bound; Lafforgue did not. What
+<code>ch-the-provers-verify.py</code> shows is that the size of the thing the three proofs
+are about is exactly what the weights say it is.</p>
+
+<p>The script checks, exhaustively over every <em>a</em> and every prime from 3 to 127:</p>
+
+<pre class="block-body">Kl is real, and |Kl| <= 2 sqrt(p) for every a            (largest ratio seen: 1.9738)
+sum over a of Kl^2  =  p^2 - p - 1                        (exact, all 30 primes)
+mean of (Kl/sqrt p)^4  ->  2   as p grows                 (p=31: 1.963   p=127: 1.992)</pre>
+
+<p>The fourth moment 2 is the SU(2) value that Sato&ndash;Tate-type equidistribution of
+Kloosterman angles predicts (Katz); the numbers approach it, which is an observation about
+127 primes and not a proof of anything. A fourth block confirms the dimension count behind
+Ng&ocirc;'s geometry: the Hitchin base for SL<sub>2</sub> on a genus-<em>g</em> curve is
+H<sup>0</sup>(<em>K</em><sup>2</sup>), of dimension 3<em>g</em>&minus;3 by Riemann&ndash;Roch,
+so the Hitchin space has dimension 6<em>g</em>&minus;6, twice that of
+Bun<sub>SL<sub>2</sub></sub>.</p>
+
+<p>Three controls run through the same code and must fail. The first is that a bound of
+&radic;<em>p</em> is violated, so the 2&radic;<em>p</em> bound is not loose by accident. The
+second is that <em>p</em>&sup2;&minus;<em>p</em> does not match the second moment. The third
+is a trap that the script caught in its own author: the sum with <em>x</em> + <em>ax</em>
+in place of <em>x</em> + <em>a</em>/<em>x</em> has the <em>same</em> second moment
+<em>p</em>&sup2;&minus;<em>p</em>&minus;1 as the true Kloosterman sum, so a moment identity
+alone cannot tell them apart. The bound can: the wrong sum reaches <em>p</em>&minus;1 at
+<em>a</em> = &minus;1.</p>
+
+<div class="block-sorry">
+<p><strong>What this does not show.</strong> It does not touch shtukas, the fundamental
+lemma, the Hitchin support theorem, or the 2024 proof. Kloosterman sums are a neighbour of
+those results, not an instance of them, and the Hitchin dimension count is a bookkeeping
+identity, not a step in Ng&ocirc;'s argument. The chapter says what the provers proved; the
+script checks one object that shares their vocabulary.</p>
+</div>
+
+<div class="section-label">Part III &middot; What this corpus does not have</div>
+<h2>Rung thirty-two, third occupant</h2>
+
+<p><a href="../book6/wp130-rung-thirtytwo.html">WP-130</a> counted <em>Lafforgue</em> and
+<em>Raskin</em> at zero in the corpus's mathematics. They now have names here. The
+corpus still builds nothing under any of the three proofs, and a gallery attributes rather
+than occupies. With <a href="ch-langlands.html">Langlands</a> and
+<a href="ch-drinfeld-beilinson.html">Drinfeld &amp; Beilinson</a> the slate has the
+programme, the geometry and the provers; one chapter remains, on Edward Frenkel, whose
+route runs through <a href="ch-feigin.html">Feigin</a> and is the only one of the four the
+corpus already half-stands on.</p>
+
+<div class="section-label">Sources</div>
+<div class="block-body">
+<p>Quanta Magazine, 19 July 2024 (the 2024 team, five papers, the 800+ page figure); Wikipedia,
+<em>Geometric Langlands correspondence</em> (1,000+). &middot; Lafforgue, <em>Chtoucas de
+Drinfeld et correspondance de Langlands</em>, Inventiones Mathematicae 2002. &middot; Ng&ocirc;,
+<em>Le lemme fondamental pour les alg&egrave;bres de Lie</em>, Publications IH&Eacute;S 2010.
+&middot; V. Lafforgue, <em>Chtoucas pour les groupes r&eacute;ductifs et
+param&eacute;trisation de Langlands globale</em>, J. Amer. Math. Soc. 2018. &middot; Deligne,
+<em>La conjecture de Weil II</em>; Katz, <em>Gauss Sums, Kloosterman Sums, and
+Monodromy Groups</em>. &middot; Checks: <code>book7/ch-the-provers-verify.py</code>.</p>
+<p>This chapter makes no claim about any of the three provers' present circumstances.</p>
+</div>
+
+</div>
+</body>
+</html>

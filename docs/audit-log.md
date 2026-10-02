@@ -11173,3 +11173,14 @@ WP-130 measured rung 32 and named a four-chapter slate. This is the first: `book
 **Source status.** Wolf Prize 2018 (Beilinson and Drinfeld) confirmed by search result (AMS Notices); Drinfeld's Fields Medal 1990 and the other dates are from the author's/my knowledge and were not re-fetched this session. The page does not say whether the Beilinson–Drinfeld Hecke-eigensheaf paper was ever journal-published, because that was not verified. The statement that opers are what Feigin–Frenkel find at the critical level is standard mathematics but is not stated in ch-feigin.html, which carries only z(ĝ) ≅ W(ᴸg); a cross-sentence there is a possible follow-up.
 
 **Own slip, caught before commit.** First draft said "nineteen field sizes"; the list has 18. Fixed.
+
+## 2026-10-02: ch-the-provers — third chapter on rung 32's floor
+`book7/ch-the-provers.html`: L. Lafforgue (GL(n), Fields 2002), Ngô (fundamental lemma, Fields 2010), Gaitsgory–Raskin et al. (2024), one page, attribution only.
+
+**What `ch-the-provers-verify.py` checks**, standard library, exhaustive, 5 blocks, all pass: Kloosterman sums Kl(a;p) for every a and all 30 primes 3..127 are real with |Kl| ≤ 2√p (largest ratio 1.9738); Σ_a Kl² = p²−p−1 exact; fourth moment of Kl/√p → 2 (1.963 at p=31, 1.992 at p=127; stated as an observation); Hitchin base for SL₂ is 3g−3, total 6g−6 = 2 dim Bun, g = 2..12.
+
+**The page says the check is a neighbour, not an instance.** Deligne, not any of the three provers, proved the Kloosterman bound; shtukas, the fundamental lemma, the support theorem and the 2024 proof are not touched. The Hitchin count is bookkeeping.
+
+**A control that could not fail, caught on first run.** The planned control "the sum with x+a·x instead of x+a/x fails the second-moment identity" FAILED to fail: that sum is Σ_x ψ(x(1+a)), equal to p−1 at a=−1 and −1 otherwise, so its second moment is also p²−p−1. Replaced with the bound, which it breaks (p−1 > 2√p); the coincidence is recorded in the script and the page. Third instance of the "check that cannot go red" shape this week (wp130 block 3, EightChecks one-sided invariant).
+
+**Source status.** Titles and venues of Lafforgue 2002, Ngô 2010, V. Lafforgue 2018, Deligne Weil II and Katz are from knowledge and not re-fetched this session; the Fields years and the 2024 team come from earlier-session sources (Quanta). Waldspurger's reduction and Langlands–Shelstad's formulation of the fundamental lemma are stated from knowledge. Check before citing outside the page.
