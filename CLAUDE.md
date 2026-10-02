@@ -16,8 +16,8 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 Seventeen standing rules were spread over 2 600 lines, interleaved with dated
 narrative and forty defect records. Nothing moved when this index was written on
-2026-09-13 — the rules are where they were. **There are twenty-eight now** (R27 is a proposal, not yet adopted); R20
-to R24 (and R25, R26, R28) were set after that date and their sections are in this file too. What changed is that they can now be
+2026-09-13 — the rules are where they were. **There are thirty now** (R27 is a proposal, not yet adopted); R20
+to R24 (and R25, R26, R28, R29, R30) were set after that date and their sections are in this file too. What changed is that they can now be
 found without reading the file. Each line gives the rule and the heading to grep
 for. Six different sections are titled "What NOT to do"; they belong to the rule
 above each of them.
@@ -51,6 +51,8 @@ above each of them.
 | R25 | **Chapters cross-link, and the links are generated.** Every chapter carries an "Across the series" box: pages it names but does not link, pages that cite it, and three same-ground suggestions. `tools/crossref.py --write` writes it; `tools/subject_tags.py --write` writes the section tag. Never hand-edit either block. Set 2026-09-27 by Pablo. | `tools/crossref.py` |
 | R26 | **A reader can run it, and the page says how well it meets the bar.** Every chapter with code carries a one-click "Run it yourself" box (`tools/run_yourself.py --write`) and every chapter a Gold Standard Science stamp (`tools/gold_standard.py --write`): the nine tenets of EO 14303 §3(a), each scored from something observable, self-assessed, never a certification; (vii) peer review is never claimed. Run order: key_register → subject_tags → run_yourself → crossref → gold_standard. Set 2026-09-27 by Pablo. | `tools/gold_standard.py` |
 | R28 | **Definitions live in one file.** `docs/definitions.md` holds the definitions the author has decided (e.g. ε₀ = 1/3 is the coarse Gronwall estimate; r\* ≈ 0.77594058 is the sharp inner-basin boundary, Book 4 ch10). Read it before asking the author to explain a term again. OPEN rows are his call; a session never fills them. | `## Definitions (R28)` |
+| R29 | **Every page gets the three-point audit, by hand, one page at a time.** (1) vacuous Lean theorems and checks that cannot fail, (2) inverted physics, (3) citations that do not say what they are cited for. No bulk scan, no fan-out. A confirmed problem is fixed in place with a dated correction box and a log entry. Set 2026-10-02 by Pablo; page 1 of about 850 is done. | `## The three-point page audit` |
+| R30 | **An empirical row is pre-registered before any data is read, and its test is shown able to detect the effect before it can count against it.** The pre-registration is committed first and never edited; a change is a new dated file. Set 2026-10-02. | `## Empirical rows are pre-registered` |
 
 R4 is the one that proves the point. It was written on 2026-09-09, it is correct,
 and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
@@ -80,6 +82,29 @@ The author kept having to re-explain the same terms, so they now live in `docs/d
 - Defined in the papers: τ = √(c/κ_noise) with LV ≤ −cV + κ_noise‖σ‖² (Vol II Thm 3.2; Vol I §2). V = ρ² is canonical (author, 2026-09-30; τ → τ/√λ under V → λV, so τ is a V-dependent bound). Vol I's (c, κ) = (1, 1/4) is stated without derivation and is not a rescaling of V; it stays unexplained, and no erratum is written until it is found.
 - OPEN at creation: μ_max as a z → ∞ limit, and the Vol I (c, κ) split. Winding integral W(Γ) = ∮_Γ λ is the raw integral, no 1/2π (old TeX `prop:winding`); the GCM page's "W ∈ ℤ" is unsupported. Naming: dm³ in prose, dm3 ASCII alias; defined once in the file. dm³ is decided: the contact 3-manifold carrying Γ, expressed across domains and scales, generalized to contact (2n+1)-manifolds in the GCM framework.
 - Lesson recorded here (R15 again): a term can be defined by a formula, not a sentence. Search for the symbol and its equation before writing "not defined".
+
+## The three-point page audit (R29, set 2026-10-02 by Pablo)
+
+The author wants the opus audited **one HTML page at a time, by hand, taking his time** — about 850 pages, published books first, Book 3 in roster order. He rejected a one-sitting scan and a fan-out of agents ("not to be done like this"). Page 1 (`ch-term-set-to-zero`) is done; `ch05-contact-normal-form` is next, then the rest of Book 3.
+
+Every page gets the same three checks, numbered 1-2-3 in the log:
+
+1. **Vacuous Lean theorems, and checks that cannot fail.** Read what each theorem or script check says, not what its name promises. Instruments: `tools/conclusion_scan.lean` (authoritative, needs the file to elaborate) and `tools/textual_conclusion_scan.py` (reaches every file, finds candidates only; names the shapes it misses). The same defect lives in Python: `book4/gibbs-check.py` check 1 compared an expression with an identical copy of itself. A check is not accepted until a control has been shown to fail (a wrong dictionary, a flipped sign, a null world). If a control passes, the check was vacuous; say so in the log.
+2. **Inverted physics.** Derive it independently. Direction and scaling claims (which way, what exponent, what the sign is) are the usual casualties. Where a statement is too strong, find the counterexample and put it in the checker in exact arithmetic (the T1 = 300 K, T2 = 400 K case in `gibbs-check.py`). Label a counterexample as a counterexample, not as a test of a model.
+3. **Citations that do not say what is claimed.** The author wants claims verified against sources, not parked as "unchecked". Source in hand (PDF in `~/Downloads`, read with `pdftotext`): check the claim against it, and the verify script prints SKIP, never PASS, when the PDF is missing. Source not in hand: write UNCHECKED in the log and ask the author for the PDF. Never mark a citation verified from memory. Internal cross-references (a page quoting another page) are citations: open the target and read the section.
+
+**Fix policy.** Fix in place on the page, add a dated correction box at the top of the page (and on any other page where the wording originated), and write the log entry in `docs/audit-log.md` with the finding, the derivation and what was changed. Then run `git grep` for the old wording and fix or flag every other page that repeats it; a downstream page that is only flagged still gets its own audit in turn. Check div balance and tag nesting on every edited page, and run `python3 tools/terms.py --check` before committing: a multi-word phrase followed straight away by a parenthesised capital acronym is read as a coined term and fails CI (found 2026-10-02 in `ch-quantum-oracles`). Ship a script beside the page when the page reports a count or a derived number (R12).
+
+**Queue and tally.** Pages audited: 1 of ~850 (2026-10-02). Flagged for their own audit, not yet read: `book4/ch28-what-the-flow-pays.html` (its "stops paying" claim rests on the §21.8 statement corrected on 2026-10-02).
+
+## Empirical rows are pre-registered (R30, set 2026-10-02)
+
+A row in the g-series translation table (C/K/F/U across fields) moves up from *analogy* to *model* to *established* only on that field's data or a derivation. The Coherence Bridge carries the fold's normal form and exponents, not constants or mechanism, and nobody yet knows how close the toy model is to the empirical systems. So:
+
+- Write `docs/prereg-<row>.md` **before downloading or plotting any data**: the data source, every analysis choice, the rival models, the outcome rule. Commit it. Never edit it; a change is `prereg-<row>-2.md`, dated, saying what changed and why.
+- Build the checker and run it on **synthetic worlds first**: a world with the effect built in, a no-effect control, a control for each named rival, and a null world with realistic noise. Report its **power**. If power is low, a failure on real data is uninformative and **must not demote the row**; fix that in a new pre-registration before the real run.
+- Bitcoin (`docs/prereg-bitcoin.md`, `docs/bitcoin-fold-check.py`): the synthetic self-test found power of about 0.1 to 0.3 for the primary test, so it cannot yet falsify the fold. The data source line is still blank. No market data has been touched.
+- Candidate rows: buckling and shallow lakes and gene switches (literature-backed), markets (Zeeman 1974, model), Enceladus plumes (analogy).
 
 ## Git, on this machine (R4)
 
@@ -184,64 +209,29 @@ Worked examples, all from 2026-09-17, all avoidable by one read:
 The corresponding duty: **a session that settles something writes it into the ledger**, not only
 into prose. A result recorded only in narrative will be re-derived.
 
-## HANDOFF — 2026-09-27 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
+## HANDOFF — 2026-10-02 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
 ### State
 
-Last push 2bbbdf2; this session's final commit adds the six missing folder indexes, the
-build_indexes FOLDER GUARD and this handoff. `lake build` is green on the Mac, including Book11,
-Book12 and Book14 (Polysemy.lean). The author runs Lean on the Mac -- the Cowork VM genuinely
-cannot reach it (a Linux VM cannot run this machine's macOS elan/lake/lean binaries; not a config
-issue). **Corrected 2026-09-28: git is different from Lean here.** The line that used to stand
-here said the Cowork VM "cannot unlink git locks, so never commit from it" -- true about unlink,
-false about the conclusion. It can commit; see *Git, on this machine* (R4) for the `mv`-not-`rm`
-recipe and why the stranded-lock incidents this line was drawn from looked like a hard block but
-were not one. Push still needs the desk (no credentials on the bridge). The Mac now has Homebrew
-and poppler (`pdftotext`), and all 17 PDF-reading verify scripts pass there.
+Last push a0a126e (audit page 1). Branch main is level with origin. The working repo is `~/Desktop/geometry`; `~/geometry` is a dead clone (see *Repo location* at the end of this file). Lean runs on the Mac, not in the Cowork VM (the Linux VM cannot run macOS elan/lake/lean). Git: a stranded lock on the Mac terminal can simply be deleted (`find .git -name '*.lock' -delete`, only when no git process runs); through the bridge `rm` is blocked, use `mv` (R4). Commit messages carry no trailers (R5). Push is done by the author from the Mac.
 
-### Done this session (details: docs/audit-log.md, 2026-09-27 entries)
+**Uncommitted, wanted in the repo (delivered, not yet committed):** `quantum-maths/` (index, qm1 to qm5 pages and verify scripts), `Orthogenesis/Quantum/QubitAlgebra.lean` (never compiled; NOT in `Orthogenesis.lean`), `book7/ch-quantum-oracles.html` and `-verify.py` (blocks 14c and 14d, Grover and Bernstein-Vazirani sourcing), `book7/ch-frenkel.html` and `-verify.py`, `book7/ch-feigin.html` (cross-link). The QM log entry for these is in `docs/audit-log.md` (2026-10-02). Do not add the unrelated parallel-session files: AMonster/monsterlaw.html, book14/key-register.html, ch-a-bucket-of-seawater.html, ch3c-econophysics.html, docs/floor-texts.tsv, docs/key-register.tsv, the BioSwarm V3 files, scan.json.
 
-- **Books completed:** XI (3/3), XII (3/3), XVIII (5/5), XIX (4/4), XX (5/5), XXI (3/3).
-- **Book XIV — The Language of Mathematics** (new). Live: ch3 How Many Senses (the IJL
-  template; Polysemy.lean), ch4 Translation Keys (operator glosses, word-cluster figure,
-  holology), ch5 The Machines That Read Us (J&M 2026 draft; tag classifier 0.68 vs 0.45,
-  macro-F1 0.39), ch7 Maximum Meaning (Briggs 1985, NASA Ames), and the generated **Key
-  Register**.
-- **IJL manuscript v4** is in ~/Downloads/IJL v4.docx. References audited (Petersen & Potts
-  fixed three ways; Bond et al. has 4 authors). §5.4, §5.5 and §7.1 are new. Prediction (ii)
-  was withdrawn after it failed on 2 of 5 nouns in WordNet/SemCor.
-- **Tools:**
-  - key_register.py is new; run order: key_register → subject_tags → run_yourself → crossref → gold_standard.
-  - lean_addresses.py strips generated boxes, skips _to_delete/ and follows a symlinked .lake.
-  - floor_texts.py MIN_PAGES is 8.
-  - build_indexes.py covers books 11, 12, 14, 21, 28 and 29, and has a FOLDER GUARD.
-- **Pinning rule, learned the hard way:** a verify script that counts the corpus must read it
-  at a pinned commit (git show / ls-tree / archive). Live counts drift as later books add pages.
-  Book XIX ch2–4 and Book XIV ch4–5 are pinned.
-- **Corrections carried:** XIX ch4 now says 217 citations (not 242) and AXLE+GTCT has 49 names,
-  96 citations. The 110 in the Book XIX plan was the file count.
+### Done this session (details: docs/audit-log.md, 2026-10-02 entries)
 
-- **2026-09-28 addendum:** Book XIV is complete, with 9 chapters and the Key Register. ch2 draws on six papers (in lieu of Ganesalingam's book); ch8 Six Lines is HardyWright.lean; ch9 What Types Decide covers Leibniz 1684, Aberdein on Ganesalingam, I❤LA and TypesDecide.lean. Book14 = Polysemy, Brackets, Collective, HardyWright, TypesDecide. GSS: the peer-review ledger docs/peer-review.tsv; the ceiling is 7/9 without publication. The GSS work list goes to a dedicated session.
+- Langlands slate finished (ch-drinfeld-beilinson, ch-the-provers, ch-frenkel); `ch-quantum-oracles` and the five quantum-maths chapters written and sourced against N&C, Shor, Kitaev, CEMM, Grover, BV, Cirel'son 1980, CHSH 1969, Wehner, Nayak et al.; QM2 extended with the CHSH game and Cirel'son's Theorem 1 and sum-of-squares identity.
+- Bitcoin fold row pre-registered (R30) and its checker validated on synthetic worlds; power is low.
+- Page 1 of the three-point audit (R29): `ch-term-set-to-zero` and ch21 §21.8 corrected; `gibbs-check.py` rewritten; `ch-term-set-to-zero-census.py` added; one sentence in ch28 corrected.
 
 ### Open — the next session, in priority order
 
-1. ~~Book XIV ch1~~ DONE 2026-09-27: Brackets.lean (SS fn 3 proved for brackets), 11,808 formulas nest ≤ 3.
-   On the Mac: `brew install tesseract` (ch01-verify OCRs the Chomsky scan) and `lake build Book14`.
-2. ~~Book XIV ch2~~ DONE 2026-09-28 with six papers in lieu of Ganesalingam (still WANTED). Collective.lean added to Book14.
-3. ~~Book XIV ch6~~ DONE 2026-09-27: Words That Went Wrong (9 entries; "there is no" 322 vs "did not find" 4).
-4. **Key Register follow-ups:** the three U senses need an editorial decision (rename Union
-   under the Omega set? retire Unification/Universal?). A gold set for recall is WANTED (ch5).
-5. **IJL v4 before submission:** Atkins & Rundell (2008: 268) is quoted but not held. Decide
-   whether to mask self-citations for blind review.
-6. **Book XXVIII ch2–3** needs F. Noether 1921 and a K-theory text (Atiyah or Karoubi). NOT HELD.
-7. **The GSS work list:** 150 chapters show 1 tenet of 9, mostly with no script behind them.
-8. **R27, proposed and not adopted:** a page may name X.lean only if it resolves; freeze the 98
-   as a baseline that may only shrink. The author decides.
-9. **Carried:** the eight chapters in docs/unlisted.tsv; the three book4 duplicates;
-   tools/proved_labels.py (run it on the Mac, it times out in the VM); /3M/ "Helical Attractors"
-   titles; io CI ContactMorphism; DNLS successor; Fulk V / pedigree section for Book VII.
-10. **Sources still wanted:** Ifrah or Menninger (Book XI); Euler, *Institutiones calculi
-    differentialis* (XVIII ch4).
+1. **Commit the quantum set** (list above), then `lake build Orthogenesis.Quantum.QubitAlgebra` on the Mac; add the import to `Orthogenesis.lean` only after it builds clean, in the same commit as the file's fix if one is needed. Read each theorem for what it says before trusting it.
+2. **R29, next pages:** `ch05-contact-normal-form` (carries the same α), then Book 3 roster order; `book4/ch28-what-the-flow-pays.html` on its own turn.
+3. **Sources wanted, to turn UNCHECKED into checked:** Arnold (1990), *Contact geometry: the geometrical method of Gibbs's thermodynamics* (Proc. Gibbs Symposium, AMS), for the remark credited to him in ch21 §21.8; Popescu and Rohrlich (1994) for QM2; Freedman, Larsen and Wang (2002) for QM5; Barandes, Hasan and Kagan (PRA 114, 022208) as a PDF (QM2 currently relies on pasted text). Put them in `~/Downloads`.
+4. **Bitcoin row decision (the author's):** (a) add the rule that a failure counts only if measured power is at least 0.6; (b) revise the pipeline in `prereg-bitcoin-2.md` (more events, non-overlapping windows, shorter detrend) tested on synthetic worlds only. Name the data source in the pre-registration before any real run. K and U need a driver series and are untested.
+5. **Translation table:** the proposed "Why it recurs" paragraph on g-series.html, `FoldScaling.lean`, and the operator column, each with R30 status per row. Borrowed definitions from the quantum chapters (order of an iterate, rotation number and continued fractions, Perron-Frobenius growth rate, generated-semigroup closure, spectral projector for C, retraction for U, commutator, K* as the boundary of a feasible set; Cirel'son's Gram-matrix form for a bipartite translation table) are proposals, not results, each labelled "shared functional form, not shared invariant".
+6. **Carried from earlier sessions:** the 56-file retrofit with inline correction markers (question to the author unanswered); `G6Crystal.lean` section 3 false docstring; propagation check of `book5/chV-g6.html`, `book6/chVI-wigner.html`, `book6/g6-crystal.html`; ch8 section titles; duplicate chapter sets and the three book4 duplicates; `build_indexes.py` `po-book`; held AXLE items; DOI-lag tooling; the eight chapters in `docs/unlisted.tsv`; `tools/proved_labels.py` (run on the Mac); /3M/ "Helical Attractors" titles; io CI ContactMorphism; DNLS successor; Fulk V / pedigree section for Book VII.
+7. **Key Register and IJL (carried):** the three U senses need an editorial decision; a gold set for recall (Book XIV ch5); IJL v4 needs Atkins and Rundell (2008: 268) held and a decision on masking self-citations; R27 (a page may name X.lean only if it resolves) is proposed, not adopted; the GSS work list (150 chapters show 1 tenet of 9, mostly with no script behind them). Sources still wanted: Ifrah or Menninger (Book XI); Euler, *Institutiones calculi differentialis* (XVIII ch4); Ganesalingam (Book XIV ch2).
 
 ## The script runs before the sentence (R24, set 2026-09-20)
 
