@@ -19,9 +19,13 @@ WHAT IT CHECKS.
   [1] The §1 pattern table reproduces at 6b7918b, the commit the paper names.
   [2] The §2 composition table reproduces: every file behind the 9, and its
       kind. This is the block that fails if the finding stops being true.
-  [3] The zero rows. These are the rows the proposed gallery slate is meant to
-      falsify, so they are the rows most likely to move. A zero that is never
-      asserted is a zero nobody notices changing.
+  [3] The zero rows, twice: pinned at 6b7918b for reproducibility, and read
+      again at HEAD, live. The first draft of this file asserted them only at
+      the commit and said in the same breath that writing the slate would turn
+      them red. It would not have -- a value pinned to a historical commit
+      never moves, so that green would have meant nothing, which is the exact
+      defect WP-82 recorded in a vacuity scan whose anchor could never match.
+      The HEAD reading is the one that moves.
   [4] The two control rows, in opposite directions: k-theory 8 -> 25 and
       w-algebra 0 -> 7. WP-82 named rung 28 as the missing floor and chose the
       W-algebra route as rung 32's reachable bridge; both were built. If these
@@ -121,14 +125,29 @@ check(g == ['docs/part-ii-source-wants.md'],
       'the one gaitsgory mention is a wants-list', 'got %s' % g)
 
 # ---------------------------------------------------------------- [3]
-head(3, 'The zero rows -- what the proposed slate is meant to falsify')
-for pat in ('drinfeld', 'beilinson', 'harish-chandra', 'lafforgue',
-            'raskin', 'fundamental lemma'):
+head(3, 'The zero rows -- pinned at the commit, and read live at HEAD')
+ZEROS = ('drinfeld', 'beilinson', 'harish-chandra', 'lafforgue',
+         'raskin', 'fundamental lemma')
+print('  at %s (reproducibility -- these must not move):' % COMMIT)
+for pat in ZEROS:
     got = n(pat)
-    check(got == 0, '%-20s absent from the corpus' % pat, 'now %d' % got)
-print('\n    These are assertions that something is MISSING. When the slate is')
-print('    written they will go red, and that is the point: this block is how')
-print('    the corpus notices the gap closing.')
+    check(got == 0, '%-20s was 0 at the commit' % pat, 'now reads %d' % got)
+print('\n  at HEAD (live -- this is the one that moves):')
+closed = []
+for pat in ZEROS:
+    got = n(pat, 'HEAD')
+    if got == 0:
+        print('    OPEN  %-20s still absent' % pat)
+    else:
+        closed.append((pat, got))
+        print('    BUILT %-20s now in %d file(s)' % (pat, got))
+if closed:
+    print('\n    %d of %d closed since %s. When all six are built, retire this'
+          % (len(closed), len(ZEROS), COMMIT))
+    print('    block and re-measure: the paper it checks will be describing a')
+    print('    corpus that no longer exists.')
+else:
+    print('\n    None closed yet. This block is how the corpus notices when they are.')
 
 # ---------------------------------------------------------------- [4]
 head(4, 'Controls -- the two rungs WP-82 named, both since built')
