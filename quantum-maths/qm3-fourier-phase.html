@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QM3 &middot; The Fourier transform and phase estimation</title>
+<meta name="description" content="The QFT built as a matrix and as a circuit and compared, phase estimation simulated against its closed form, the 4/pi^2 bound derived, and continued fractions recovering rational phases."/>
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none;
+             transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+      border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .04em; line-height: 1.15;
+         margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 640px; margin: 0 auto 1.5rem; }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .08em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem;
+   border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+em { font-style: italic; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-math { background: rgba(17, 17, 24, 0.9); border: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; font-family: 'Courier New', monospace;
+            line-height: 1.7; overflow-x: auto; font-size: .9rem; white-space: pre; }
+.block-axiom { background: rgba(201, 168, 76, 0.08); border-left: 3px solid var(--gold);
+             padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-theorem { background: rgba(74, 158, 255, 0.08); border-left: 3px solid var(--op-c);
+               padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry { background: rgba(255, 159, 64, 0.08); border-left: 3px solid var(--amber);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry strong { color: var(--amber); }
+table.cat { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .88rem; }
+table.cat th { text-align:left; font-family:'Courier New',monospace; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+table.cat td { padding: .55rem .6rem; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+table.cat td:first-child { color: var(--gold); font-weight: 600; white-space: nowrap; }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .9rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .8rem; }
+.pull-wrap { background: rgba(201, 168, 76, 0.08); border-left: 4px solid var(--gold);
+           padding: 2rem; margin: 3rem 0; border-radius: 2px; font-style: italic;
+           line-height: 1.85; }
+.pull-cite { font-size: .85rem; color: var(--dim); display: block; margin-top: 1rem; font-style: normal; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none;
+          transition: color .2s; }
+.ch-nav a:hover { color: var(--gold); }
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+<body>
+<div class="page">
+
+<div class="ch-nav">
+  <div class="nav-links">
+    <a href="index.html">&#9884; Quantum maths</a> &middot;
+    <a href="qm1-states-gates.html">QM1</a> &middot;
+    <a href="qm2-measurement-chsh.html">QM2</a> &middot;
+    <strong>QM3</strong> &middot;
+    <a href="qm4-order-finding.html">QM4</a> &middot;
+    <a href="qm5-anyons.html">QM5</a> &middot;
+    <a href="../book7/ch-quantum-oracles.html">Four Quantum Oracles</a>
+  </div>
+</div>
+
+<div class="hero">
+<div class="hero-eyebrow">Quantum maths &middot; QM3</div>
+<div class="po-subject"><span class="po-subject-tag">MATHEMATICS &middot; QUANTUM COMPUTING</span></div>
+<h1>The Fourier transform and phase estimation</h1>
+<p class="hero-sub">One transform behind Deutsch&ndash;Jozsa, phase estimation and Shor. Built two ways and compared.</p>
+<p class="meta">Nielsen &amp; Chuang, chapter 5; Kitaev, 1995</p>
+</div>
+<div class="section-label">Part I &middot; The transform</div>
+<h2>The quantum Fourier transform is a matrix, and a circuit</h2>
+
+
+<p>On <em>N</em> = 2<sup><em>n</em></sup> basis states the QFT sends |<em>j</em>&#9002; to
+<em>N</em><sup>&minus;1/2</sup> &Sigma;<sub><em>k</em></sub> e<sup>2&pi;i<em>jk</em>/<em>N</em></sup>|<em>k</em>&#9002;. Its matrix
+F<sub><em>jk</em></sub> = e<sup>2&pi;i<em>jk</em>/<em>N</em></sup>/&radic;<em>N</em> is unitary because the columns are orthonormal:
+&Sigma;<sub><em>j</em></sub> e<sup>2&pi;i<em>j</em>(<em>k</em>&minus;<em>k&prime;</em>)/<em>N</em></sup> = <em>N</em> if <em>k</em> = <em>k&prime;</em> and 0 otherwise (a geometric
+series of roots of unity). The circuit that implements it uses <em>n</em>(<em>n</em>+1)/2 gates plus swaps: for each qubit a Hadamard
+followed by controlled phase rotations of angle 2&pi;/2<sup><em>m</em></sup> from each later qubit, and a final bit reversal. The product
+formula behind it is |<em>j</em>&#9002; &rarr; &otimes;<sub><em>l</em></sub> (|0&#9002; + e<sup>2&pi;i<em>j</em>/2<sup><em>l</em></sup></sup>|1&#9002;)/&radic;2.</p>
+<p>Two structural facts. Over the group <strong>Z</strong><sub>2</sub><sup><em>n</em></sup> the same construction is the <em>n</em>-fold Hadamard,
+the transform inside the <a href="../book7/ch-quantum-oracles.html">Deutsch&ndash;Jozsa and Bernstein&ndash;Vazirani circuits</a>. And F
+diagonalises the cyclic shift S|<em>k</em>&#9002; = |<em>k</em>+1&#9002;: F<sup>&dagger;</sup>SF = diag(&omega;<sup><em>k</em></sup>) with &omega; = e<sup>&plusmn;2&pi;i/<em>N</em></sup>,
+which is the whole reason the transform detects periods.</p>
+
+<div class="section-label">Part II &middot; Phase estimation</div>
+<h2>Reading an eigenvalue off the Fourier transform</h2>
+
+
+<p>Let U|<em>u</em>&#9002; = e<sup>2&pi;i&phi;</sup>|<em>u</em>&#9002;. Controlled-U<sup>2<sup><em>k</em></sup></sup> applied to a uniform superposition of control
+qubits leaves the register in <em>T</em><sup>&minus;1/2</sup> &Sigma;<sub><em>k</em></sub> e<sup>2&pi;i<em>k</em>&phi;</sup>|<em>k</em>&#9002; (<em>T</em> = 2<sup><em>t</em></sup>), by phase
+kickback, and the inverse QFT turns that into a peak at &phi;<em>T</em>. If &phi; = <em>m</em>/<em>T</em> exactly, the output is |<em>m</em>&#9002; with probability 1.
+In general, with &delta; = &phi; &minus; <em>m</em>/<em>T</em>, summing the geometric series gives</p>
+<pre class="block-body">P(m)  =  sin^2(pi T d) / ( T^2 sin^2(pi d) )</pre>
+<p><strong>The 4/&pi;&sup2; bound.</strong> For the nearest estimate |&delta;| &le; 1/(2<em>T</em>). Using sin <em>x</em> &ge; 2<em>x</em>/&pi; on [0, &pi;/2] gives
+sin(&pi;<em>T</em>&delta;) &ge; 2<em>T</em>|&delta;|, and sin(&pi;&delta;) &le; &pi;|&delta;|, so
+<em>P</em> &ge; (2<em>T</em>&delta;)&sup2;/(<em>T</em>&sup2;&pi;&sup2;&delta;&sup2;) = 4/&pi;&sup2; &asymp; 0.405 for the best <em>t</em>-bit estimate. Nielsen and Chuang give the
+stronger form: with <em>t</em> = <em>n</em> + &lceil;log(2 + 1/(2&epsilon;))&rceil; qubits, <em>n</em> bits of &phi; are returned with probability
+at least 1 &minus; &epsilon;.</p>
+<p><strong>From estimate to fraction.</strong> If &phi; = <em>s</em>/<em>r</em> and |<em>s</em>/<em>r</em> &minus; &phi;&prime;| &le; 1/(2<em>r</em>&sup2;), then
+<em>s</em>/<em>r</em> is a convergent of the continued fraction of &phi;&prime; (Nielsen &amp; Chuang, Theorem 5.1), so a <em>t</em>-bit estimate with
+2<sup>&minus;<em>t</em></sup> &le; 1/(2<em>r</em>&sup2;) recovers the exact rational. Kitaev's 1995 paper measures an eigenvalue exactly this way: refine to
+precision 2<sup>&minus;2<em>n</em>&minus;1</sup>, then take continued fractions.</p>
+
+<div class="section-label">Part III &middot; The part you can check</div>
+<h2>Built two ways and compared</h2>
+
+
+<pre class="block-body">F^dagger F = I, N = 2..64                                   worst 6.7e-15
+circuit (H + controlled phases + bit reversal) = matrix,
+  every basis state, n = 1..7                               worst 1.2e-14
+inverse circuit undoes it on a random 5-qubit state
+H^(x)n = Z_2^n character table / sqrt(2^n), n = 1..6
+F^dagger S F = diag(roots of unity), N = 4, 8, 16, 32        worst 8.3e-15
+phase estimation, phi = m/2^t: |m> with probability 1, t = 2..7, every m
+simulated distribution vs sin^2(pi T d)/(T^2 sin^2(pi d)),
+  40 random (t, phi)                                         worst 5.2e-15
+nearest t-bit estimate: P >= 4/pi^2 = 0.4053;               minimum seen 0.4262
+continued fractions recover every reduced p/q, q <= 40, from its t-bit
+  estimate with t = 2 ceil(log2 q) + 1</pre>
+<p>Controls: dropping the bit reversal breaks circuit = matrix; using F in place of F<sup>&dagger;</sup> returns |&minus;3 mod 16&#9002; = |13&#9002; instead of |3&#9002;,
+reading the phase backwards (the first draft of this control claimed it returned &ldquo;not |3&#9002;&rdquo; with a bound that was itself wrong:
+it returns a different state with probability 1); a non-dyadic phase never gives a single outcome with probability 1.</p>
+<div class="block-sorry"><p><strong>What this does not show.</strong> It simulates the circuit on a classical machine at up to 7 qubits, so it verifies the algebra, not a
+scaling claim about hardware. Approximate QFT, gate counts for controlled-U<sup>2<sup>k</sup></sup>, and the cost of preparing the eigenstate
+are not treated.</p></div>
+<p>Run it: <code>python3 quantum-maths/qm3-verify.py</code> (standard library only; the sourcing block says SKIP, never PASS, if the source PDF is not in <code>~/Downloads</code>).</p>
+
+<div class="section-label">Sources</div>
+<h2></h2>
+
+<div class="block-body"><p>Nielsen &amp; Chuang, 10th Anniversary Edition, chapter 5 (the quantum Fourier transform, &sect;5.2 phase estimation, Theorem 5.1 on continued fractions).
+&middot; Kitaev, <em>Quantum measurements and the Abelian stabilizer problem</em>, arXiv quant-ph/9511026, Theorem 1 (exact eigenvalue measurement with
+continued fractions at precision 2<sup>&minus;2<em>n</em>&minus;1</sup>). &middot; Checks: <code>quantum-maths/qm3-verify.py</code>.</p></div>
+
+
+</div>
+</body>
+</html>

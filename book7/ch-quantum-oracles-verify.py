@@ -283,6 +283,64 @@ else:
         check(needle in txt, 'N&C records: ' + label)
     check('required three function evaluations' not in txt, 'control: a phrase N&C does not contain is not found')
 
+head('14b', 'the sourcing, against Cleve-Ekert-Macchiavello-Mosca (arXiv quant-ph/9708016) in ~/Downloads')
+_C = 'Quantum Algorithms Revisited.pdf'
+CBOOK = next((q for q in (os.path.expanduser('~/Downloads/' + _C), os.path.expanduser('~/mnt/Downloads/' + _C)) if os.path.exists(q)), None)
+ctxt = None
+if CBOOK:
+    try:
+        o = subprocess.run(['pdftotext', '-layout', CBOOK, '-'], capture_output=True, text=True, timeout=120)
+        if o.returncode == 0 and o.stdout:
+            ctxt = re.sub(r'\s+', ' ', o.stdout.replace('\ufb01', 'fi').replace('\ufb02', 'fl').replace('\u2019', "'"))
+    except Exception:
+        ctxt = None
+if ctxt is None:
+    print('    SKIP  Cleve et al. is not available; none of the sourcing below is checked')
+else:
+    for label, needle in [
+        ('one network for Deutsch-Jozsa and Bernstein-Vazirani', 'Deutsch-Jozsa\'s and Bernstein-Vazirani\'s algorithms'),
+        ('improvement on Deutsch-Jozsa original (two evaluations)', 'slight improvement of Deutsch and Jozsa'),
+        ('BV original also used two evaluations', 'two f -controlled-NOT operations instead of one'),
+        ('BV problem: f(x) = a.x xor b, classical needs n queries', 'requires at least n f -controlled-NOT operations'),
+        ('classical DJ worst case 2^(n-1)+1', 'evaluations of f before determining the answer with certainty'),
+        ('BV 1993 at the 25th STOC', 'Proc. 25th Annual ACM Symposium on the Theory of Com'),
+        ('Grover 1996 at the 28th STOC', 'Grover, L. 1996, Proc. 28 Annual ACM Symposium on the Theory of Computing'),
+        ('Deutsch 1985 volume', 'Deutsch, D. 1985, Proc. R. Soc. London A 400, 97'),
+        ('Deutsch-Jozsa 1992 volume', 'Deutsch, D. & Jozsa, R. 1992, Proc. R. Soc. London A 439, 553'),
+    ]:
+        check(needle in ctxt, 'Cleve et al. record: ' + label)
+
+def _pdf_text(names):
+    path = next((q for n in names for q in (os.path.expanduser('~/Downloads/' + n), os.path.expanduser('~/mnt/Downloads/' + n)) if os.path.exists(q)), None)
+    if not path:
+        return None
+    try:
+        o = subprocess.run(['pdftotext', '-layout', path, '-'], capture_output=True, text=True, timeout=120)
+        if o.returncode == 0 and o.stdout:
+            return re.sub(r'\s+', ' ', o.stdout.replace('\ufb01', 'fi').replace('\ufb02', 'fl').replace('\u2019', "'"))
+    except Exception:
+        pass
+    return None
+
+head('14c', "the sourcing, against Grover's paper (STOC 1996) in ~/Downloads")
+gtxt = _pdf_text(['A fast quantum mechanical algorithm for database search.pdf', 'A_fast_quantum_mechanical_algorithm_for_database_search.pdf'])
+if gtxt is None:
+    print("    SKIP  Grover's paper is not available; none of the sourcing below is checked")
+else:
+    for label, needle in [('affiliation', 'AT&T Bell Labs'), ('venue', "STOC'96"), ('place', 'Philadelphia PA'),
+                          ('optimality remark', 'within a constant factor of the fastest possible')]:
+        check(needle in gtxt, "Grover's paper records: " + label)
+
+head('14d', 'the sourcing, against Bernstein-Vazirani (preliminary version) in ~/Downloads')
+btxt = _pdf_text(['Quantum Complexity Theory.pdf', 'Quantum_Complexity_Theory.pdf'])
+if btxt is None:
+    print('    SKIP  Bernstein-Vazirani is not available; none of the sourcing below is checked')
+else:
+    for label, needle in [('oracle separation from EQP', 'There exists an oracle relative to which the class EQP is not contained'),
+                          ('Fourier sampling', 'Fourier sampling prob'),
+                          ('classical recursive cost', 'the straightforward recursive solution on a PTM will require time')]:
+        check(needle in btxt, 'Bernstein-Vazirani records: ' + label)
+
 print()
 if FAIL:
     print('FAILED: %d check(s)' % len(FAIL)); sys.exit(1)

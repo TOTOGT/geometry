@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QM5 &middot; Braiding: Fibonacci and Ising</title>
+<meta name="description" content="Fibonacci anyons built from F and R and the braid relation checked; the Ising braid group shown finite (24 elements, Clifford) and the Fibonacci one shown not to close; a sign typo in the source found by the braid relation."/>
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none;
+             transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+      border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .04em; line-height: 1.15;
+         margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 640px; margin: 0 auto 1.5rem; }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .08em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem;
+   border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+em { font-style: italic; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-math { background: rgba(17, 17, 24, 0.9); border: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; font-family: 'Courier New', monospace;
+            line-height: 1.7; overflow-x: auto; font-size: .9rem; white-space: pre; }
+.block-axiom { background: rgba(201, 168, 76, 0.08); border-left: 3px solid var(--gold);
+             padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-theorem { background: rgba(74, 158, 255, 0.08); border-left: 3px solid var(--op-c);
+               padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry { background: rgba(255, 159, 64, 0.08); border-left: 3px solid var(--amber);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry strong { color: var(--amber); }
+table.cat { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .88rem; }
+table.cat th { text-align:left; font-family:'Courier New',monospace; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+table.cat td { padding: .55rem .6rem; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+table.cat td:first-child { color: var(--gold); font-weight: 600; white-space: nowrap; }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .9rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .8rem; }
+.pull-wrap { background: rgba(201, 168, 76, 0.08); border-left: 4px solid var(--gold);
+           padding: 2rem; margin: 3rem 0; border-radius: 2px; font-style: italic;
+           line-height: 1.85; }
+.pull-cite { font-size: .85rem; color: var(--dim); display: block; margin-top: 1rem; font-style: normal; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none;
+          transition: color .2s; }
+.ch-nav a:hover { color: var(--gold); }
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+<body>
+<div class="page">
+
+<div class="ch-nav">
+  <div class="nav-links">
+    <a href="index.html">&#9884; Quantum maths</a> &middot;
+    <a href="qm1-states-gates.html">QM1</a> &middot;
+    <a href="qm2-measurement-chsh.html">QM2</a> &middot;
+    <a href="qm3-fourier-phase.html">QM3</a> &middot;
+    <a href="qm4-order-finding.html">QM4</a> &middot;
+    <strong>QM5</strong> &middot;
+    <a href="../book7/ch-quantum-oracles.html">Four Quantum Oracles</a>
+  </div>
+</div>
+
+<div class="hero">
+<div class="hero-eyebrow">Quantum maths &middot; QM5</div>
+<div class="po-subject"><span class="po-subject-tag">MATHEMATICS &middot; QUANTUM COMPUTING</span></div>
+<h1>Braiding: Fibonacci and Ising</h1>
+<p class="hero-sub">Why the corpus's register says braiding is universal for Fibonacci anyons and not for Ising ones, and the part of that a script can reach.</p>
+<p class="meta">Nayak et al. 2008; Freedman&ndash;Larsen&ndash;Wang 2002 (cited, not reproduced)</p>
+</div>
+<div class="section-label">Part I &middot; The model</div>
+<h2>Fibonacci anyons: one fusion rule</h2>
+
+
+<p>The Fibonacci (&ldquo;golden&rdquo;) theory has two particle types, 1 and &tau;, and one nontrivial rule: &tau; &times; &tau; = 1 + &tau;. Fusing <em>n</em> &tau;'s,
+the number of fusion paths ending in total charge 1 is Fib(<em>n</em>&minus;1), and in &tau; is Fib(<em>n</em>); so the Hilbert space of <em>n</em> anyons with trivial total charge has dimension Fib(<em>n</em>&minus;1),
+growing like &phi;<sup><em>n</em></sup>, and the quantum dimension of &tau; is the golden ratio &phi; = (1 + &radic;5)/2, which satisfies &phi;&sup2; = &phi; + 1.</p>
+<p>Changing the order of fusion is the basis change F = [[1/&phi;, 1/&radic;&phi;], [1/&radic;&phi;, &minus;1/&phi;]], unitary with F&sup2; = I (its rows are unit vectors because 1/&phi;&sup2; + 1/&phi; = 1).
+Exchanging two anyons is R = diag(e<sup>&minus;4&pi;i/5</sup>, e<sup>3&pi;i/5</sup>) in the basis where the pair fuses to 1 or &tau;. Then &sigma;<sub>1</sub> = R and &sigma;<sub>2</sub> = FRF
+are the braid generators on the two-dimensional space of four anyons, and the consistency condition that makes braiding well defined, the hexagon equation, appears here as the
+braid relation &sigma;<sub>1</sub>&sigma;<sub>2</sub>&sigma;<sub>1</sub> = &sigma;<sub>2</sub>&sigma;<sub>1</sub>&sigma;<sub>2</sub>.</p>
+
+<div class="section-label">Part II &middot; Universality</div>
+<h2>The distinction the register makes, checked</h2>
+
+
+<p>The corpus's claims register says braiding is universal for topological quantum computation only <em>model by model</em>: Fibonacci yes (Freedman, Larsen, Wang), Ising no &mdash; Clifford
+gates only, needing a supplementary non-topological gate. This chapter checks the part of that which a script can reach. A set of gates is universal only if the group it generates is dense
+in SU(2) (mod phase); a <em>finite</em> group is the opposite extreme.</p>
+<p><strong>Ising.</strong> For four &sigma; anyons with total charge 1, &sigma;<sub>1</sub> = diag(e<sup>&minus;i&pi;/8</sup>, e<sup>3i&pi;/8</sup>) and &sigma;<sub>2</sub> = H&sigma;<sub>1</sub>H (Hadamard-conjugated).
+They satisfy the braid relation, and the group they generate, modulo overall phase, closes at exactly 24 elements: the one-qubit Clifford group. A finite group is not dense, so braiding alone cannot be universal.</p>
+<p><strong>Fibonacci.</strong> The group generated by &sigma;<sub>1</sub>, &sigma;<sub>2</sub> above does <em>not</em> close: breadth-first search layers hold 5, 17, 42, 90, 184, 360, 690, 1314, 2488, 4698, 8862,
+16704, 31468 &hellip; distinct elements (mod phase), and the search passes 20,000 without stopping. That is evidence for density and no more; density is the theorem of Freedman, Larsen and Wang, which the script does not
+reproduce.</p>
+
+<div class="section-label">Part III &middot; The part you can check</div>
+<h2>What passed, and a typo in the source</h2>
+
+
+<pre class="block-body">paths of n tau's: to charge 1 is Fib(n-1), to tau is Fib(n), n = 1..24;   Fib(n+1)/Fib(n) -> 1.618033988750
+F unitary, F^2 = I, rows unit; R unitary
+sigma_1 sigma_2 sigma_1 = sigma_2 sigma_1 sigma_2          gap 1.6e-16 (Fibonacci);  Ising: same relation
+Ising closure mod phase: 24 elements, closes.    Fibonacci closure mod phase: > 20,000, does not close.
+controls: sigma_2 = R F R breaks the braid relation; a wrong R phase breaks it;
+          with e^{-i pi/7} in place of e^{-i pi/8} the Ising-style closure is NOT finite</pre>
+<p><strong>A sign typo in the review, found by the braid relation.</strong> In Nayak et al., equation (133) and the three-anyon matrix give the &tau;-channel braiding phase as &minus;e<sup>&minus;2&pi;i/5</sup>
+(= e<sup>3&pi;i/5</sup>, the value used here), but the sentence right after (133) reads R<sup>&tau;</sup><sub>&tau;&tau;</sub> = &minus;e<sup>+2&pi;i/5</sup>; the PDF's own text layer shows the missing minus in that sentence. The braid relation settles
+it: with the review's F and R<sup>1</sup><sub>&tau;&tau;</sub> = e<sup>&minus;4&pi;i/5</sup>, the value &minus;e<sup>&minus;2&pi;i/5</sup> satisfies &sigma;<sub>1</sub>&sigma;<sub>2</sub>&sigma;<sub>1</sub> = &sigma;<sub>2</sub>&sigma;<sub>1</sub>&sigma;<sub>2</sub> to 10<sup>&minus;16</sup>,
+and &minus;e<sup>+2&pi;i/5</sup> misses by 0.326.</p>
+<div class="block-sorry"><p><strong>What this does not show.</strong> It does not prove density (Freedman&ndash;Larsen&ndash;Wang), does not check the pentagon equation, and does not touch any physical realisation: whether any
+material hosts these anyons, or whether Google's 2023 superconducting realisation, which used projective Ising anyons, computes anything the Ising analysis here does not already cover. The Ising R-values quoted
+(e<sup>&minus;i&pi;/8</sup>, e<sup>3i&pi;/8</sup>) are those in Nayak et al.; the F-matrix used for Ising (Hadamard) is standard but is not among the values the checker confirms in the review's text.</p></div>
+<p>Run it: <code>python3 quantum-maths/qm5-verify.py</code> (standard library only; the sourcing block says SKIP, never PASS, if the source PDF is not in <code>~/Downloads</code>).</p>
+
+<div class="section-label">Sources</div>
+<h2></h2>
+
+<div class="block-body"><p>Nayak, Simon, Stern, Freedman &amp; Das Sarma, <em>Non-Abelian anyons and topological quantum computation</em>, arXiv:0707.1889v2 [cond-mat.str-el], 28 March 2008: the
+Fibonacci fusion rule, Fib(<em>n</em>&minus;1) dimension, the R-matrix of Eqs. (132)&ndash;(133), universality of the Fibonacci model, and the statement that Ising needs non-topological operations are all confirmed in the
+PDF by the checker's last block. &middot; Freedman, Larsen &amp; Wang, 2002, <em>A modular functor which is universal for quantum computation</em> (the review's reference 2002a), for density: cited through the review's reference list, not read. &middot; The register row this chapter bears on:
+<a href="../research-status.html">research-status.html</a>, &ldquo;Braiding is universal for topological quantum computation&rdquo;. &middot; Checks: <code>quantum-maths/qm5-verify.py</code>.</p></div>
+
+
+</div>
+</body>
+</html>

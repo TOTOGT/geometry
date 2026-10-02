@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QM2 &middot; Measurement and CHSH</title>
+<meta name="description" content="The Born rule, collapse, uncertainty, the Schmidt decomposition, and CHSH: the local bound 2 by exhaustion, the quantum value 2 sqrt 2 from explicit matrices, and Tsirelson's bound from an operator identity."/>
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none;
+             transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+      border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .04em; line-height: 1.15;
+         margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 640px; margin: 0 auto 1.5rem; }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .08em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem;
+   border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+em { font-style: italic; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-math { background: rgba(17, 17, 24, 0.9); border: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; font-family: 'Courier New', monospace;
+            line-height: 1.7; overflow-x: auto; font-size: .9rem; white-space: pre; }
+.block-axiom { background: rgba(201, 168, 76, 0.08); border-left: 3px solid var(--gold);
+             padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-theorem { background: rgba(74, 158, 255, 0.08); border-left: 3px solid var(--op-c);
+               padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry { background: rgba(255, 159, 64, 0.08); border-left: 3px solid var(--amber);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry strong { color: var(--amber); }
+table.cat { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .88rem; }
+table.cat th { text-align:left; font-family:'Courier New',monospace; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+table.cat td { padding: .55rem .6rem; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+table.cat td:first-child { color: var(--gold); font-weight: 600; white-space: nowrap; }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .9rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .8rem; }
+.pull-wrap { background: rgba(201, 168, 76, 0.08); border-left: 4px solid var(--gold);
+           padding: 2rem; margin: 3rem 0; border-radius: 2px; font-style: italic;
+           line-height: 1.85; }
+.pull-cite { font-size: .85rem; color: var(--dim); display: block; margin-top: 1rem; font-style: normal; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none;
+          transition: color .2s; }
+.ch-nav a:hover { color: var(--gold); }
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+<body>
+<div class="page">
+
+<div class="ch-nav">
+  <div class="nav-links">
+    <a href="index.html">&#9884; Quantum maths</a> &middot;
+    <a href="qm1-states-gates.html">QM1</a> &middot;
+    <strong>QM2</strong> &middot;
+    <a href="qm3-fourier-phase.html">QM3</a> &middot;
+    <a href="qm4-order-finding.html">QM4</a> &middot;
+    <a href="qm5-anyons.html">QM5</a> &middot;
+    <a href="../book7/ch-quantum-oracles.html">Four Quantum Oracles</a>
+  </div>
+</div>
+
+<div class="hero">
+<div class="hero-eyebrow">Quantum maths &middot; QM2</div>
+<div class="po-subject"><span class="po-subject-tag">MATHEMATICS &middot; QUANTUM COMPUTING</span></div>
+<h1>Measurement and CHSH</h1>
+<p class="hero-sub">Why quantum correlations reach 2&radic;2 and no further, from an operator identity rather than a grid.</p>
+<p class="meta">Nielsen &amp; Chuang, chapter 2 and Problem 2.3</p>
+</div>
+<div class="section-label">Part I &middot; Measurement</div>
+<h2>The Born rule, and what a second measurement does</h2>
+
+
+<p>Measuring in an orthonormal basis {|e<sub><em>k</em></sub>&#9002;} gives outcome <em>k</em> with probability
+|&#9001;e<sub><em>k</em></sub>|&psi;&#9002;|&sup2;. These sum to 1 because the basis is complete. The state afterwards is the normalised
+projection P<sub><em>k</em></sub>|&psi;&#9002;/&#8214;P<sub><em>k</em></sub>|&psi;&#9002;&#8214;, so measuring again returns the
+same outcome with probability 1. For an observable A with A&sup2; = I (an &plusmn;1 observable such as a Pauli) the
+expectation is &#9001;&psi;|A|&psi;&#9002; and the variance is 1 &minus; &#9001;A&#9002;&sup2;.</p>
+<p><strong>Uncertainty (Robertson).</strong> For any two observables, Var(A) Var(B) &ge; |&#9001;[A,B]&#9002;|&sup2;/4. With A = Z, B = X
+the commutator is [Z,X] = 2iY, so Var(Z) Var(X) &ge; &#9001;Y&#9002;&sup2;: Z and X cannot both be sharp.</p>
+
+<div class="section-label">Part II &middot; Entanglement</div>
+<h2>Schmidt decomposition and the singlet</h2>
+
+
+<p>Every two-qubit state has a Schmidt form &radic;&lambda;<sub>1</sub>|a<sub>1</sub>&#9002;|b<sub>1</sub>&#9002; +
+&radic;&lambda;<sub>2</sub>|a<sub>2</sub>&#9002;|b<sub>2</sub>&#9002;, where &lambda;<sub>1,2</sub> are the eigenvalues of M M<sup>&dagger;</sup>
+for the 2&times;2 coefficient matrix M. The entanglement entropy is &minus;&Sigma; &lambda;<sub><em>i</em></sub> log<sub>2</sub> &lambda;<sub><em>i</em></sub>:
+zero for a product state and exactly one bit for the singlet (|01&#9002; &minus; |10&#9002;)/&radic;2, whose &lambda;<sub>1</sub> = &lambda;<sub>2</sub> = 1/2.</p>
+
+<div class="section-label">Part III &middot; Bell and CHSH</div>
+<h2>Two parties, four settings, and a number that separates theories</h2>
+
+
+<p>Alice measures &plusmn;1 observables A<sub>0</sub> or A<sub>1</sub>, Bob B<sub>0</sub> or B<sub>1</sub>. Define
+S = &#9001;A<sub>0</sub>B<sub>0</sub>&#9002; + &#9001;A<sub>0</sub>B<sub>1</sub>&#9002; + &#9001;A<sub>1</sub>B<sub>0</sub>&#9002; &minus; &#9001;A<sub>1</sub>B<sub>1</sub>&#9002;.
+<strong>Local models.</strong> If the outcomes are fixed in advance, each of A<sub>0</sub>, A<sub>1</sub>, B<sub>0</sub>, B<sub>1</sub> is &plusmn;1 and
+S = A<sub>0</sub>(B<sub>0</sub> + B<sub>1</sub>) + A<sub>1</sub>(B<sub>0</sub> &minus; B<sub>1</sub>); one of the brackets is 0 and the other &plusmn;2, so |S| &le; 2, and every mixture of
+such assignments obeys it too.</p>
+<p><strong>Quantum.</strong> On the singlet, for observables cos<em>a</em> Z + sin<em>a</em> X and cos<em>b</em> Z + sin<em>b</em> X the
+correlator is &minus;cos(<em>a</em> &minus; <em>b</em>). At <em>a</em><sub>0</sub> = 0, <em>a</em><sub>1</sub> = &pi;/2, <em>b</em><sub>0</sub> = &pi;/4,
+<em>b</em><sub>1</sub> = &minus;&pi;/4 this gives |S| = 2&radic;2 &asymp; 2.828.</p>
+<p><strong>Tsirelson's bound, algebraically.</strong> For any A<sub>0</sub>, A<sub>1</sub>, B<sub>0</sub>, B<sub>1</sub> with squares equal to I, let
+S = A<sub>0</sub>&otimes;(B<sub>0</sub> + B<sub>1</sub>) + A<sub>1</sub>&otimes;(B<sub>0</sub> &minus; B<sub>1</sub>). Expanding S&sup2; and using the squares,
+the cross terms collect into a commutator:</p>
+<pre class="block-body">S^2  =  4 I  -  [A0, A1] (x) [B0, B1]</pre>
+<p>Each commutator has norm at most 2, so &#8214;S&#8214;&sup2; &le; 4 + 4 = 8 and &#8214;S&#8214; &le; 2&radic;2. The identity needs only
+A&sup2; = B&sup2; = I, not Hermiticity, a point the checker's control found out the hard way (see below).</p>
+
+<p><strong>The same number as a game.</strong> A referee sends bits <em>x</em>, <em>y</em> to Alice and Bob, who may not communicate; they answer
+<em>a</em>, <em>b</em> and win when <em>a</em> &oplus; <em>b</em> = <em>x</em>&middot;<em>y</em>. A win at <em>xy</em> = 0 means equal answers and at
+<em>xy</em> = 1 different answers, so the win probability is 1/2 + <em>S</em>/8. Consider the family of no-signalling boxes with uniform marginals and
+P(win) = (1+&epsilon;)/2: every correlator is &epsilon;(&minus;1)<sup><em>xy</em></sup> and <em>S</em> = 4&epsilon;. Deterministic local strategies
+win at most 3/4 (8 of the 16 reach it), and mixing those 8 gives exactly the &epsilon; = 1/2 box, so &epsilon; &gt; 1/2 is outside every local model.
+The singlet at the settings above, with Bob's observables negated to match the &minus;cos convention, gives P(win) = cos<sup>2</sup>(&pi;/8) &asymp; 0.854, that is
+&epsilon; = 1/&radic;2. The Popescu&ndash;Rohrlich box, &epsilon; = 1, wins always and has <em>S</em> = 4, so no-signalling alone does not give Tsirelson's bound.
+Barandes, Hasan and Kagan (Phys. Rev. A 114, 022208, 2026) re-derive 2&radic;2 in their stochastic&ndash;quantum framework, where causal locality forces the
+unitary to factorise as <em>U</em><sub>A</sub>&otimes;<em>U</em><sub>B</sub>; the bound then follows from the same operator inequality used above. That framework is
+an interpretation, not consensus, and my reading of their paper is from the text supplied, not machine-checked.</p>
+
+<div class="section-label">Part IV &middot; The part you can check</div>
+<h2>Computed from matrices, not from the formula</h2>
+
+
+<pre class="block-body">Born rule: probabilities sum to 1 (worst 1.1e-15); repeat measurement -> same outcome (6.7e-16)
+Robertson: Var(Z)Var(X) >= |&lt;[Z,X]>|^2/4 on 500 random states, minimum slack +9.8e-07
+Schmidt: singlet entropy exactly 1 bit; product state 0
+Correlator -cos(a-b) vs explicit kron(A(a),B(b)) on the singlet: 25 x 25 grid, worst 4.4e-16
+CHSH local:   all 16 deterministic assignments: max |S| = 2
+CHSH quantum: |S| = 2.828427124746190 = 2 sqrt 2;  16^4 angle choices: max 2.828427124746
+Tsirelson identity S^2 = 4I - [A0,A1](x)[B0,B1]: 60 random observable quadruples, worst 6.2e-15
+spectral norm of S over those: max 2.818011 &lt;= 2 sqrt 2
+Game: box family eps in [0,1] is no-signalling; win = (1+eps)/2, S = 4 eps (101 values, worst 4.4e-16)
+Local: 16 deterministic strategies, best win 3/4 (8 reach it); uniform mixture of those 8 = the eps = 1/2 box exactly
+Quantum: singlet box wins cos^2(pi/8) = 0.8535533906 = (1+1/sqrt 2)/2; PR box (eps = 1) wins 1, S = 4</pre>
+<p>One game check was vacuous on first writing: my no-signalling test compared Alice's marginal across <em>her own</em> input, which may vary, and passed
+only because every marginal in the family is uniform. A box where Alice's answer equals Bob's input exposed it (the test scored 0.00 on a box that signals); it now compares across the <em>other</em>
+party's input and scores 1.00 there. A second control confirms the sign convention: with Bob's observables un-negated the singlet wins only 0.146.</p>
+<p>Controls, each must fail and does: &minus;cos(2(<em>a</em>&minus;<em>b</em>)) in place of &minus;cos(<em>a</em>&minus;<em>b</em>) against the explicit
+singlet; a product state on the same grid stays at max |S| = 1.755, inside the local bound; and a non-involutory A<sub>0</sub> breaks the
+identity. The checker's first control for that last point used the matrix [[1,1],[0,&minus;1]], which is non-Hermitian but
+<em>does</em> square to I, so the identity held and the control did not fail. It was replaced with [[1,1],[0,1]], whose
+square is not I.</p>
+<div class="block-sorry"><p><strong>What this does not show.</strong> The 16<sup>4</sup> grid is evidence for Tsirelson's bound; the algebraic argument is the proof,
+and the script checks that identity on random samples, not symbolically. It does not address loopholes in real Bell tests,
+or Bell nonlocality beyond CHSH.</p></div>
+<p>Run it: <code>python3 quantum-maths/qm2-verify.py</code> (standard library only; the sourcing block says SKIP, never PASS, if the source PDF is not in <code>~/Downloads</code>).</p>
+
+<div class="section-label">Sources</div>
+<h2></h2>
+
+<div class="block-body"><p>Nielsen &amp; Chuang, 10th Anniversary Edition: Problem 2.3 states Tsirelson's inequality and the identity
+(Q&otimes;S + R&otimes;S + R&otimes;T &minus; Q&otimes;T)&sup2; = 4I + [Q,R]&otimes;[S,T], which is this page's S&sup2; = 4I &minus; [A<sub>0</sub>,A<sub>1</sub>]&otimes;[B<sub>0</sub>,B<sub>1</sub>] after
+relabelling (R&rarr;A<sub>0</sub>, Q&rarr;A<sub>1</sub>, S&rarr;B<sub>0</sub>, T&rarr;B<sub>1</sub>); they credit the inequality to Tsirelson (1980). Also: Clauser, Horne, Shimony and Holt, Phys. Rev. Lett. 23, 880 (13 October 1969), title and date confirmed in the PDF; B. S. Cirel'son, Quantum generalizations of Bell's inequality, Lett. Math. Phys. 4, 93&ndash;100 (1980), title page viewed (the scan has no text layer, so not text-searched); Popescu and Rohrlich, Found. Phys. 24, 379 (1994), from my knowledge, not checked against a source; Wehner, arXiv quant-ph/0510076, abstract confirmed in the PDF; Barandes, Hasan and Kagan (2026) from the text you pasted. The Bell inequality and
+Schmidt decomposition are treated in chapter 2. &middot; Checks: <code>quantum-maths/qm2-verify.py</code>.</p></div>
+
+
+</div>
+</body>
+</html>

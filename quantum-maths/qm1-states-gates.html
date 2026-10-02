@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QM1 &middot; States, gates, tensor products</title>
+<meta name="description" content="Qubits as unit vectors, gates as unitaries, the Pauli algebra, tensor products and entanglement, and the inner-product proof of no-cloning, each checked numerically."/>
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none;
+             transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+      border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .04em; line-height: 1.15;
+         margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 640px; margin: 0 auto 1.5rem; }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .08em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem;
+   border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+em { font-style: italic; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-math { background: rgba(17, 17, 24, 0.9); border: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; font-family: 'Courier New', monospace;
+            line-height: 1.7; overflow-x: auto; font-size: .9rem; white-space: pre; }
+.block-axiom { background: rgba(201, 168, 76, 0.08); border-left: 3px solid var(--gold);
+             padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-theorem { background: rgba(74, 158, 255, 0.08); border-left: 3px solid var(--op-c);
+               padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry { background: rgba(255, 159, 64, 0.08); border-left: 3px solid var(--amber);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry strong { color: var(--amber); }
+table.cat { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .88rem; }
+table.cat th { text-align:left; font-family:'Courier New',monospace; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+table.cat td { padding: .55rem .6rem; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+table.cat td:first-child { color: var(--gold); font-weight: 600; white-space: nowrap; }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .9rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .8rem; }
+.pull-wrap { background: rgba(201, 168, 76, 0.08); border-left: 4px solid var(--gold);
+           padding: 2rem; margin: 3rem 0; border-radius: 2px; font-style: italic;
+           line-height: 1.85; }
+.pull-cite { font-size: .85rem; color: var(--dim); display: block; margin-top: 1rem; font-style: normal; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none;
+          transition: color .2s; }
+.ch-nav a:hover { color: var(--gold); }
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+<body>
+<div class="page">
+
+<div class="ch-nav">
+  <div class="nav-links">
+    <a href="index.html">&#9884; Quantum maths</a> &middot;
+    <strong>QM1</strong> &middot;
+    <a href="qm2-measurement-chsh.html">QM2</a> &middot;
+    <a href="qm3-fourier-phase.html">QM3</a> &middot;
+    <a href="qm4-order-finding.html">QM4</a> &middot;
+    <a href="qm5-anyons.html">QM5</a> &middot;
+    <a href="../book7/ch-quantum-oracles.html">Four Quantum Oracles</a>
+  </div>
+</div>
+
+<div class="hero">
+<div class="hero-eyebrow">Quantum maths &middot; QM1</div>
+<div class="po-subject"><span class="po-subject-tag">MATHEMATICS &middot; QUANTUM COMPUTING</span></div>
+<h1>States, gates, tensor products</h1>
+<p class="hero-sub">From a unit vector in C&sup2; to the inner-product argument that stops a quantum state from being copied. Every identity is derived by hand and then checked.</p>
+<p class="meta">Standard material, checked rather than quoted: Nielsen &amp; Chuang, chapters 1&ndash;2</p>
+</div>
+<div class="section-label">Part I &middot; State space</div>
+<h2>A qubit is a unit vector, up to phase</h2>
+
+
+<p>A qubit is a unit vector |&psi;&#9002; = &alpha;|0&#9002; + &beta;|1&#9002; in <strong>C</strong>&sup2;, with
+|&alpha;|&sup2; + |&beta;|&sup2; = 1, and two vectors that differ by an overall phase e<sup>i&gamma;</sup> are the same
+state. Fixing the phase so that &alpha; is real and non-negative leaves two real numbers:</p>
+<pre class="block-body">|psi> = cos(theta/2)|0> + e^{i phi} sin(theta/2)|1>,     0 &lt;= theta &lt;= pi,  0 &lt;= phi &lt; 2 pi</pre>
+<p>The density matrix &rho; = |&psi;&#9002;&#9001;&psi;| then equals (I + <strong>r</strong>&middot;<strong>&sigma;</strong>)/2 with
+<strong>r</strong> = (sin&theta; cos&phi;, sin&theta; sin&phi;, cos&theta;), a point on the unit sphere: the Bloch sphere.
+Antipodal points are orthogonal states.</p>
+
+<div class="section-label">Part II &middot; Gates</div>
+<h2>Unitary, and why</h2>
+
+
+<p>A gate is a linear map that sends unit vectors to unit vectors. If &#9001;U&psi;|U&psi;&#9002; = &#9001;&psi;|&psi;&#9002; for
+every &psi;, then by polarisation U preserves every inner product, which is U<sup>&dagger;</sup>U = I. So gates are
+unitary, and the single-qubit ones act on the Bloch sphere as rotations. The Pauli matrices and their algebra:</p>
+<pre class="block-body">X^2 = Y^2 = Z^2 = I          XY = iZ,  YZ = iX,  ZX = iY          XZ = -ZX
+H = (X + Z)/sqrt 2    =>    HXH = Z,  HZH = X,  HYH = -Y
+S = diag(1, i),  T = diag(1, e^{i pi/4}),   T^2 = S,  S^2 = Z</pre>
+<p><strong>Derivation of HXH = Z.</strong> HXH = &frac12;(X + Z)X(X + Z) = &frac12;(1 + ZX)(X + Z) =
+&frac12;(X + Z + ZXX + ZXZ). Since XX = I and ZXZ = &minus;X (X and Z anticommute), this is &frac12;(X + Z + Z &minus; X) = Z.</p>
+<p><strong>Rotations.</strong> For a unit vector <strong>n</strong>, (<strong>n</strong>&middot;<strong>&sigma;</strong>)&sup2; = I
+(expand the square; the cross terms cancel by anticommutation). So in the power series for
+exp(&minus;i&theta; <strong>n</strong>&middot;<strong>&sigma;</strong>/2) the even powers give cos(&theta;/2)I and the odd powers
+give &minus;i sin(&theta;/2) <strong>n</strong>&middot;<strong>&sigma;</strong>, the closed form
+R<sub><strong>n</strong></sub>(&theta;) = cos(&theta;/2) I &minus; i sin(&theta;/2) <strong>n</strong>&middot;<strong>&sigma;</strong>.
+Acting on the Bloch vector it rotates by &theta; about <strong>n</strong>.</p>
+
+<div class="section-label">Part III &middot; Tensor products</div>
+<h2>Two qubits, and what a product state is</h2>
+
+
+<p>Two qubits live in <strong>C</strong>&sup2; &otimes; <strong>C</strong>&sup2; = <strong>C</strong><sup>4</sup>, with basis
+|00&#9002;, |01&#9002;, |10&#9002;, |11&#9002;; <em>n</em> qubits live in dimension 2<sup><em>n</em></sup>. A general state
+is a|00&#9002; + b|01&#9002; + c|10&#9002; + d|11&#9002;. It is a <em>product</em> state (&alpha;|0&#9002; + &beta;|1&#9002;) &otimes;
+(&gamma;|0&#9002; + &delta;|1&#9002;) exactly when its coefficient matrix has rank one, i.e. when
+<strong>ad &minus; bc = 0</strong>: for a product, a = &alpha;&gamma;, b = &alpha;&delta;, c = &beta;&gamma;, d = &beta;&delta;, so
+ad = bc; conversely if ad = bc the rows are proportional and the state factors. The quantity 2|ad &minus; bc| is the
+<em>concurrence</em>. The Bell state (|00&#9002; + |11&#9002;)/&radic;2 has ad &minus; bc = 1/2: not a product, and no
+choice of single-qubit states can reproduce it.</p>
+
+<div class="section-label">Part IV &middot; No-cloning</div>
+<h2>There is no unitary that copies an unknown state</h2>
+
+
+<p>Suppose a unitary U satisfies U(|&psi;&#9002; &otimes; |0&#9002;) = |&psi;&#9002; &otimes; |&psi;&#9002; for two states &phi;, &psi;.
+Take the inner product of the two equations. The left side gives
+&#9001;&phi;|&psi;&#9002;&#9001;0|0&#9002; = &#9001;&phi;|&psi;&#9002;, since U preserves inner products; the right side gives
+&#9001;&phi;|&psi;&#9002;&sup2;. So c = c&sup2; for c = &#9001;&phi;|&psi;&#9002;, and over the complex numbers c(c &minus; 1) = 0
+forces c = 0 or c = 1: a single machine can copy only states that are orthogonal or identical. CNOT copies |0&#9002;
+and |1&#9002;, and applied to |+&#9002;|0&#9002; produces a Bell state, whose overlap with |+&#9002;|+&#9002; is 1/2.</p>
+
+<div class="section-label">Part V &middot; The part you can check</div>
+<h2>Every identity above, numerically</h2>
+
+
+<p><code>qm1-verify.py</code> checks, to 10<sup>&minus;12</sup>: unitarity of X, Y, Z, H, S, T and CNOT and of 200 random
+rotations; every Pauli relation above, HXH = Z included; the series of exp(&minus;i&theta; <strong>n</strong>&middot;<strong>&sigma;</strong>/2)
+against the closed form on 200 random axes and angles; &rho; = (I + <strong>r</strong>&middot;<strong>&sigma;</strong>)/2 with
+|<strong>r</strong>| = 1 and the rotation R<sub>z</sub> acting as a rotation on 200 random states; ad &minus; bc = 0
+on 200 random product states and concurrence 1 on all four Bell states; and CNOT's fidelity with |+&#9002;|+&#9002;
+is exactly 0.5. Controls: a non-unitary matrix changes the norm; the wrong-sign Bloch rotation does not match; ad &minus; bc is
+nonzero on a Bell state; the CNOT cloner fails on a superposition.</p>
+<p>A Lean file, <code>Orthogenesis/Quantum/QubitAlgebra.lean</code>, states the Pauli algebra, the conjugation
+(X + Z)X(X + Z) = 2Z, and the abstract no-cloning argument (a linear isometry with a tensor-product pairing).
+<strong>It has not been compiled</strong>: no Lean toolchain was available when it was written, and it is not yet imported
+from <code>Orthogenesis.lean</code>. The file's header says what each theorem does and does not say.</p>
+<div class="block-sorry"><p><strong>What this does not show.</strong> Gates are checked on a handful of explicit matrices and
+random samples, not proved for all states; the Lean file is the place a proof will be, once it builds. Universality
+of a gate set, the Solovay&ndash;Kitaev theorem and error correction are not treated.</p></div>
+<p>Run it: <code>python3 quantum-maths/qm1-verify.py</code> (standard library only; the sourcing block says SKIP, never PASS, if the source PDF is not in <code>~/Downloads</code>).</p>
+
+<div class="section-label">Sources</div>
+<h2></h2>
+
+<div class="block-body"><p>Nielsen &amp; Chuang, <em>Quantum Computation and Quantum Information</em>, 10th Anniversary Edition,
+Cambridge University Press, 2010, chapters 1&ndash;2 (the Pauli matrices, the Bloch sphere, the no-cloning theorem, the
+Schmidt decomposition); the page's derivations are the author's, checked numerically, and the book is cited for the
+standard statements. &middot; Checks: <code>quantum-maths/qm1-verify.py</code>.</p></div>
+
+
+</div>
+</body>
+</html>

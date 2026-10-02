@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantum maths &middot; the mathematics behind the algorithms</title>
+<meta name="description" content="Five chapters on the mathematics of quantum computing, each derived by hand, each with a checker that can fail: qubits and gates, measurement and CHSH, the Fourier transform, Shor's arithmetic, and anyon braiding."/>
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none;
+             transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+      border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .04em; line-height: 1.15;
+         margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 640px; margin: 0 auto 1.5rem; }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .08em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem;
+   border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+em { font-style: italic; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-math { background: rgba(17, 17, 24, 0.9); border: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; font-family: 'Courier New', monospace;
+            line-height: 1.7; overflow-x: auto; font-size: .9rem; white-space: pre; }
+.block-axiom { background: rgba(201, 168, 76, 0.08); border-left: 3px solid var(--gold);
+             padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-theorem { background: rgba(74, 158, 255, 0.08); border-left: 3px solid var(--op-c);
+               padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry { background: rgba(255, 159, 64, 0.08); border-left: 3px solid var(--amber);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry strong { color: var(--amber); }
+table.cat { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .88rem; }
+table.cat th { text-align:left; font-family:'Courier New',monospace; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+table.cat td { padding: .55rem .6rem; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+table.cat td:first-child { color: var(--gold); font-weight: 600; white-space: nowrap; }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .9rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .8rem; }
+.pull-wrap { background: rgba(201, 168, 76, 0.08); border-left: 4px solid var(--gold);
+           padding: 2rem; margin: 3rem 0; border-radius: 2px; font-style: italic;
+           line-height: 1.85; }
+.pull-cite { font-size: .85rem; color: var(--dim); display: block; margin-top: 1rem; font-style: normal; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none;
+          transition: color .2s; }
+.ch-nav a:hover { color: var(--gold); }
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+<body>
+<div class="page">
+
+<div class="ch-nav">
+  <div class="nav-links">
+    <strong>&#9884; Quantum maths</strong> &middot;
+    <a href="qm1-states-gates.html">QM1</a> &middot;
+    <a href="qm2-measurement-chsh.html">QM2</a> &middot;
+    <a href="qm3-fourier-phase.html">QM3</a> &middot;
+    <a href="qm4-order-finding.html">QM4</a> &middot;
+    <a href="qm5-anyons.html">QM5</a> &middot;
+    <a href="../book7/ch-quantum-oracles.html">Four Quantum Oracles</a>
+  </div>
+</div>
+
+<div class="hero">
+<div class="hero-eyebrow">Quantum maths &middot; Index</div>
+<div class="po-subject"><span class="po-subject-tag">MATHEMATICS &middot; QUANTUM COMPUTING</span></div>
+<h1>Quantum maths</h1>
+<p class="hero-sub">The mathematics under <a href="../book7/ch-quantum-oracles.html">Four Quantum Oracles</a>: five chapters, each derived by hand and checked by a script with controls that must fail.</p>
+<p class="meta">Sources: Nielsen &amp; Chuang (10th Anniversary Edition), Shor, Cleve&ndash;Ekert&ndash;Macchiavello&ndash;Mosca, Kitaev, Nayak et al.</p>
+</div>
+<div class="section-label">Chapters</div>
+<table class="cat"><tr><th>Chapter</th><th>What it derives and checks</th></tr><tr><td><a href="qm1-states-gates.html">QM1 &middot; States, gates, tensor products</a></td><td>Unit vectors, unitary gates, the Pauli algebra, entanglement, no-cloning</td></tr><tr><td><a href="qm2-measurement-chsh.html">QM2 &middot; Measurement and CHSH</a></td><td>Born rule, Schmidt decomposition, CHSH reaching 2&radic;2 and no further</td></tr><tr><td><a href="qm3-fourier-phase.html">QM3 &middot; Fourier transform and phase estimation</a></td><td>The QFT as matrix and circuit; phase estimation; continued fractions</td></tr><tr><td><a href="qm4-order-finding.html">QM4 &middot; Order finding and Shor</a></td><td>The reduction, the exact distribution, Shor's bounds, the lemma checked to 400</td></tr><tr><td><a href="qm5-anyons.html">QM5 &middot; Braiding: Fibonacci and Ising</a></td><td>Braid relation, finite Ising closure, non-closing Fibonacci, a typo in the source</td></tr></table>
+<p>Every chapter has a <code>qmN-verify.py</code> beside it, standard library only; where the chapter leans on a source PDF the script extracts it from <code>~/Downloads</code> and prints SKIP, never PASS, if it is not there.
+The Lean file <code>Orthogenesis/Quantum/QubitAlgebra.lean</code> states the Pauli algebra, a Clifford conjugation and the abstract no-cloning argument; it has <strong>not been compiled</strong> and is not yet imported from <code>Orthogenesis.lean</code>.</p>
+<div class="block-sorry"><p><strong>Scope.</strong> This is the mathematics, checked at toy sizes on a classical machine. It makes no claim about quantum hardware, error correction at scale, or any application; and it does not treat Shor's discrete-logarithm algorithm, Grover's proof of optimality, the Solovay&ndash;Kitaev theorem, or the stabiliser formalism.</p></div>
+
+</div>
+</body>
+</html>
