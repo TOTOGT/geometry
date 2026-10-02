@@ -45,6 +45,14 @@ the marked amplitudes (the oracle), then reflect every amplitude about the mean
   [13] Controls: a function that breaks the promise gives a probability
        strictly between 0 and 1; dropping the final Hadamards destroys it.
 
+  [14] The sourcing, against the book in ~/Downloads (SKIP if the book or
+       pdftotext is absent — never PASS without it): Nielsen & Chuang say the
+       original Deutsch algorithm was probabilistic, that Deutsch-Jozsa's
+       deterministic version used two evaluations, that the improved version
+       is Cleve-Ekert-Macchiavello-Mosca's, and that the bibliography records
+       the citations the page gives. The one-query circuit simulated in
+       [10]-[11] is the IMPROVED form, not the 1992 paper's.
+
 What it does not show: the lower bound. That no quantum algorithm can do
 better than order sqrt(N) queries is a theorem (Bennett-Bernstein-Brassard-
 Vazirani 1997; exact constant by Zalka 1999). It is cited, not checked.
@@ -240,6 +248,40 @@ check(0.01 < pr[0] < 0.99, 'a function outside the promise: P(0..0) = %.4f, stri
 N4 = 4; amp = [1 / math.sqrt(N4)] * N4
 amp = [a * (-1) ** (1 if x in (0, 1) else 0) for x, a in enumerate(amp)]   # balanced, no final Hadamards
 check(abs(amp[0] ** 2 - 1) > 0.01 and abs(amp[0] ** 2) > 0.01, 'without the final Hadamards a balanced function does not read out as 0')
+
+head(14, 'the sourcing, against Nielsen & Chuang in ~/Downloads')
+import os, re, subprocess, tempfile
+_NAME = 'quantum-computation-and-quantum-information-nielsen-chuang.pdf'
+BOOK = next((q for q in (os.path.expanduser('~/Downloads/' + _NAME),
+                         os.path.expanduser('~/mnt/Downloads/' + _NAME)) if os.path.exists(q)), None)
+txt = None
+if BOOK:
+    try:
+        out = subprocess.run(['pdftotext', '-layout', BOOK, '-'], capture_output=True, text=True, timeout=120)
+        if out.returncode == 0 and out.stdout:
+            txt = re.sub(r'\s+', ' ', out.stdout.replace('\ufb01', 'fi').replace('\ufb02', 'fl').replace('\u2019', "'"))
+    except Exception:
+        txt = None
+if txt is None:
+    print('    SKIP  the book or pdftotext is not available; none of the sourcing below is checked')
+else:
+    claims = [
+        ('original Deutsch algorithm only worked probabilistically', 'original algorithm of Deutsch only worked probabilistically'),
+        ('DJ deterministic but two evaluations', 'required two function evaluations'),
+        ('CEMM improved version', 'Cleve, Ekert, Macchiavello, and Mosca'),
+        ('Deutsch 1985 title', 'Church-Turing Principle'),
+        ('Deutsch-Jozsa 1992 volume', '439:553'),
+        ('BBBV97 pages', '26(5):1510'),
+        ('BV97 pages', '26(5):1411'),
+        ('Zalka 1999', '60(4):2746'),
+        ('Zalka: asymptotically exactly optimal', 'asymptotically, exactly optimal'),
+        ('BBBV: Grover best possible oracle-based search', 'best possible oracle-based search algorithm was proved by Bennett, Bernstein'),
+        ('CEMM title and pages', '454(1969):339'),
+        ('problem of little practical interest', 'of little practical interest'),
+    ]
+    for label, needle in claims:
+        check(needle in txt, 'N&C records: ' + label)
+    check('required three function evaluations' not in txt, 'control: a phrase N&C does not contain is not found')
 
 print()
 if FAIL:
