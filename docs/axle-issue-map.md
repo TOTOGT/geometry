@@ -104,7 +104,7 @@ All 30 issues, checked live 2026-10-01: 23 open (#12-#15, #26-#44), 7 closed (#1
 ## Resolved 2026-10-01, second pass
 
 * Basin asymmetry (`inner_basin_is_asymmetric`, `thm_gronwall_asymmetry`, r* certificate), formerly cited as #13 on ten pages, now cites **#32** (O7). Chosen because #32's title names the asymmetric inner boundary against the symmetric Gronwall bound. Reversible if you would rather file it separately. #13 stays on the Mather and Poincare-Bendixson citations (poa_research, GameTheory, book7 Polylaminin).
-* `book8/ch2-event-horizon.html`: the `inner_basin_escape` citations now cite **#37**. One sentence ("the bound never closed in Lean") still cites #14.
+* `book8/ch2-event-horizon.html`: the `inner_basin_escape` citations now cite **#37**. The last sentence ("the bound never closed in Lean") now cites #32 as well (2026-10-02): it is about the inner-basin Gronwall bound, which is the asymmetry obligation, not T1 (#14, Gronwall integration).
 * `P_ON (correctOrder drv) > 0`, "discretisation bound": number removed; drafted as round 3 in `docs/axle-issues-to-file-3.html` (file it, or close as a duplicate of #14 if T1 covers it).
 * "Proved" outer-basin wording in `book4/chpt12.md` and the Lean comment in `book4/ch10.html` corrected.
 

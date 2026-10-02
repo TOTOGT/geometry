@@ -11271,3 +11271,6 @@ Author approved the fixes ("this is precisely what I need fixed, go ahead"). Eac
 - Check: div balance and tag nesting unchanged in the two main pages; gibbs-check.py and the census script run clean.
 
 **2026-10-02 (CLAUDE.md update):** added R29 (three-point page audit) and R30 (pre-registered empirical rows), overwrote the HANDOFF block, and recorded the open list. `tools/terms.py --check` caught a source note in `ch-quantum-oracles.html` that put a parenthesised acronym right after a multi-word phrase, which it read as an undeclared term; rephrased before commit, guard now reports 157 declared terms, all present.
+
+## 2026-10-02: book8 ch2 last #14 citation
+"The bound never closed in Lean (AXLE Issue #14)" in book8/ch2-event-horizon.html now cites #32. The sentence is about the inner-basin Gronwall bound (asymmetric inner boundary against the symmetric bound), the same obligation as inner_basin_is_asymmetric; #14 is T1 Gronwall integration. Reversible: swap back if you read the sentence as T1.
