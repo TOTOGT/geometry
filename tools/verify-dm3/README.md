@@ -51,7 +51,15 @@ cannot survive a change underneath it.
 
 ## What is NOT checked, on purpose
 
-G6Crystal.lean's three open obligations — S1 Arnold tongue, S2 hexgrid collapse
-superiority, S3 `coord_coverage` — are not named in the probe. Naming them would
-fail the job for being honest. The gate exists to punish quiet admission, not
-disclosure.
+G6Crystal.lean's three once-disclosed obligations — S1 Arnold tongue, S2 hexgrid
+collapse superiority, S3 `coord_coverage` — are not named in the probe. Naming
+them would fail the job for being honest. The gate exists to punish quiet
+admission, not disclosure.
+
+Updated 2026-10-01: none of the three is a `sorry`, and the paragraph above
+overstated what the file was admitting. S1 and S2 concluded `True` (S1 as
+`∀ δ, ‖δ‖ < c → True`) and were deleted on 2026-09-11 along with §4, whose
+Schumann claim was their basis; S3 was proved. That is the sharper lesson for
+this gate: a sorry-counting probe reports clean on a vacuous theorem, so the
+thing it cannot see is not quiet admission but a statement that admits nothing
+because it says nothing.
