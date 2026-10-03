@@ -116,6 +116,7 @@ else:
         ('the chapter says its Lean file is not held', 'file not held here'),
     ]:
         check(needle in t, 'Polylaminin page: ' + label)
+    check('update, 2026-10-03' in t and 'spinal cord , 4 august 2026' in t.replace('spinal cord,', 'spinal cord ,'), 'Polylaminin page: carries the dated update that the pilot was published in Spinal Cord on 4 August 2026')
     check('peng' not in re.findall(r'[a-z]+', t), 'the Polylaminin page does not itself mention PENG (so this chapter adds the link, not the page)')
     check('polylaminin' in t, 'control: the same search finds the word Polylaminin on that page')
 
