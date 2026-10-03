@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimal transport and Monge-Ampère · Book 7: Scientist Gallery · Principia Orthogona</title>
+<meta name="description" content="Optimal transport with quadratic cost, its duality and its Monge-Ampere equation, stated from Caffarelli's review and checked on finite examples: cyclical monotonicity, strong duality, Gaussians, a linear cost and a target with a gap. Examples, not theorems."/>
+<style>
+:root {
+  --void: #04040a; --surface: #0c0d14; --card: #0f1019;
+  --gold: #c9a84c; --teal: #0abab5; --amber: #f59e0b;
+  --text: #e8e4d8; --dim: #6b6757; --rule: rgba(201,168,76,0.14);
+  --navy: #1a2744; --cream: #faf7f0;
+  --op-c: #60a5fa; --op-k: #a78bfa; --op-f: #f472b6; --op-u: #34d399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Georgia, serif; background: var(--void); color: var(--text);
+     font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+nav { position: sticky; top: 0; z-index: 200; background: rgba(4,4,10,0.96);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.nav-logo { font-family: 'Courier New', monospace; font-size: .65rem;
+          letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+          text-decoration: none; }
+.nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.nav-links a { font-family: 'Courier New', monospace; font-size: .62rem;
+             letter-spacing: .1em; color: var(--dim); text-decoration: none;
+             transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.hero { padding: 5rem 2rem 3rem; text-align: center; position: relative;
+      border-bottom: 1px solid var(--rule); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,168,76,.06) 0%, transparent 70%);
+  pointer-events: none; }
+.hero-eyebrow { font-family: 'Courier New', monospace; font-size: .65rem;
+              letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+              border: 1px solid currentColor; padding: .2rem .7rem;
+              display: inline-block; margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400;
+         color: var(--gold); letter-spacing: .04em; line-height: 1.15;
+         margin-bottom: .8rem; }
+.hero-sub { font-size: 1.05rem; color: var(--dim); font-style: italic;
+          max-width: 640px; margin: 0 auto 1.5rem; }
+.page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+.section-label { font-family: 'Courier New', monospace; font-size: .6rem;
+                letter-spacing: .35em; text-transform: uppercase; color: var(--teal);
+                margin: 4rem 0 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; font-weight: 400; color: var(--gold); letter-spacing: .08em;
+   margin: 3rem 0 1.2rem; padding-bottom: .5rem;
+   border-bottom: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin: 2rem 0 .8rem; }
+p { margin-bottom: 1.2rem; }
+strong { color: var(--gold); font-weight: 600; }
+em { font-style: italic; }
+.block-prose { margin-bottom: 1.4rem; line-height: 1.8; }
+.block-math { background: rgba(17, 17, 24, 0.9); border: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; font-family: 'Courier New', monospace;
+            line-height: 1.7; overflow-x: auto; font-size: .9rem; white-space: pre; }
+.block-axiom { background: rgba(201, 168, 76, 0.08); border-left: 3px solid var(--gold);
+             padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-label { font-family: 'Courier New', monospace; font-size: .6rem;
+            letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.8rem; display: block; }
+.block-theorem { background: rgba(74, 158, 255, 0.08); border-left: 3px solid var(--op-c);
+               padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry { background: rgba(255, 159, 64, 0.08); border-left: 3px solid var(--amber);
+            padding: 1.5rem; margin: 2rem 0; border-radius: 2px; }
+.block-sorry strong { color: var(--amber); }
+table.cat { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .88rem; }
+table.cat th { text-align:left; font-family:'Courier New',monospace; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+table.cat td { padding: .55rem .6rem; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+table.cat td:first-child { color: var(--gold); font-weight: 600; white-space: nowrap; }
+table.refs { width:100%; border-collapse:collapse; margin: 1.5rem 0; font-size: .9rem; }
+table.refs td { padding: .5rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.refs td:first-child { color: var(--dim); white-space: nowrap; font-family: 'Courier New', monospace; font-size: .8rem; }
+.pull-wrap { background: rgba(201, 168, 76, 0.08); border-left: 4px solid var(--gold);
+           padding: 2rem; margin: 3rem 0; border-radius: 2px; font-style: italic;
+           line-height: 1.85; }
+.pull-cite { font-size: .85rem; color: var(--dim); display: block; margin-top: 1rem; font-style: normal; }
+code { font-family: 'Courier New', monospace; background: rgba(0,0,0,0.4);
+     padding: 0.2em 0.4em; border-radius: 2px; color: var(--op-c); }
+footer { text-align: center; padding: 2rem; font-family: 'Courier New', monospace;
+       font-size: .58rem; letter-spacing: .08em; color: var(--dim);
+       border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+.ch-nav { max-width: 780px; margin: 3rem auto 0; padding: 2rem;
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        border-top: 1px solid rgba(201, 168, 76, 0.1); }
+.ch-nav a { font-size: .9rem; color: var(--dim); text-decoration: none;
+          transition: color .2s; }
+.ch-nav a:hover { color: var(--gold); }
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+<body>
+<div class="page">
+
+<div class="ch-nav">
+  <div class="nav-links">
+    <a href="index.html">&#9884; Scientist Gallery</a> &middot;
+    <a href="ch-caffarelli.html">Caffarelli</a> &middot;
+    <a href="ch-mirzakhani.html">Mirzakhani</a> &middot;
+    <a href="ch-huh.html">Huh</a>
+  </div>
+</div>
+
+<div class="hero">
+<div class="hero-eyebrow">G7 &middot; The Scientist Gallery &middot; Maths chapter</div>
+<div class="po-subject"><span class="po-subject-tag">MATHEMATICS &middot; ANALYSIS</span></div>
+<h1>Optimal transport and the Monge&ndash;Amp&egrave;re equation</h1>
+<p class="hero-sub">Move one pile of earth onto another at least cost. With the right cost the best plan is the
+gradient of a convex function, and that function solves a nonlinear second-order equation.
+This chapter states the pieces and checks the ones that can be checked on a finite example.</p>
+<p class="meta">Companion to <a href="ch-caffarelli.html">ch-caffarelli</a> &middot; read from Caffarelli's
+elementary review (Lecture Notes in Mathematics 1813) &middot; every claim below is either an example
+that was computed or is labelled as stated, not shown</p>
+</div>
+
+<div class="section-label">Part I &middot; The problem</div>
+<h2>Two piles, a cost, a plan</h2>
+
+<p>Take two distributions of mass, <em>f</em> on a region <em>X</em> and <em>g</em> on <em>Y</em>,
+with equal totals, and a cost <em>c</em>(<em>x</em>, <em>y</em>) of moving a unit from
+<em>x</em> to <em>y</em>. Monge's original problem asks for a <em>map</em> <em>T</em> from <em>X</em>
+to <em>Y</em> that carries <em>f</em> onto <em>g</em> and minimises the total cost
+&int; <em>c</em>(<em>x</em>, <em>T</em>(<em>x</em>)) <em>f</em>(<em>x</em>) d<em>x</em>. Kantorovich's
+relaxation lets mass at one point split among several; a <em>plan</em> is then a joint
+distribution with the right two marginals. The review frames the plan version through a shipping
+company that must move goods from warehouses to shops.</p>
+
+<p>On a finite example the plan is a matching, and the whole subject can be run by brute force.
+That is what the checker does: six integer points in the plane, all 720 matchings, quadratic cost.</p>
+
+<div class="section-label">Part II &middot; Quadratic cost</div>
+<h2>The best plan is the gradient of a convex function</h2>
+
+<p>With cost |<em>x</em> &minus; <em>y</em>|&sup2;, optimal plans have a property called
+<em>cyclical monotonicity</em>: no rearrangement of the targets among any cycle of the sources
+lowers the cost. A theorem the review credits to Rockafellar says such a set is contained in
+the graph of the subdifferential of a convex function. So the optimal map is
+<em>T</em> = &nabla;&phi; with &phi; convex (Brenier's theorem, under conditions the review states
+and this page does not reprove).</p>
+
+<p><strong>Checked:</strong> for the seeded six-point instance the brute-force optimal plan
+maximises &Sigma; &lang;<em>y<sub>i</sub></em>, <em>x<sub>i</sub></em>&rang; over every rearrangement
+of its own targets &mdash; cyclical monotonicity, tested on 720 permutations &mdash; and the
+worst plan does <em>not</em> have the property. In one dimension the optimal matching is the
+sorted one, which held on 40 random six-point sets; the order-reversing matching cost
+more (20 against 0 on the example printed).</p>
+
+<div class="section-label">Part III &middot; Duality</div>
+<h2>The shipper's problem and the c-transform</h2>
+
+<p>The dual problem prices the move: find functions <em>u</em>(<em>x</em>) and <em>v</em>(<em>y</em>)
+with <em>u</em>(<em>x</em>) + <em>v</em>(<em>y</em>) &le; <em>c</em>(<em>x</em>, <em>y</em>), maximising
+&Sigma; <em>u</em> + &Sigma; <em>v</em>. Any admissible pair gives a lower bound on every plan's
+cost. Given <em>u</em>, the best <em>v</em> is the <em>c</em>-transform
+<em>v</em>*(<em>y</em>) = min<sub><em>x</em></sub> [<em>c</em>(<em>x</em>, <em>y</em>) &minus; <em>u</em>(<em>x</em>)],
+and for the quadratic cost this is, up to rearrangement of terms, a Legendre transform.</p>
+
+<p><strong>Checked:</strong> the Hungarian algorithm's potentials on the same instance are
+admissible, tight on the matched pairs, and sum to 1303, which is the brute-force minimum, so strong
+duality holds there with nothing to spare. Raising one potential by 1 breaks admissibility.
+Applying the <em>c</em>-transform to an admissible pair gave an admissible pair that is nowhere
+smaller; with max in place of min the result was not admissible.</p>
+
+<div class="section-label">Part IV &middot; The equation</div>
+<h2>Why it is Monge&ndash;Amp&egrave;re</h2>
+
+<p>If <em>T</em> = &nabla;&phi; carries <em>f</em> onto <em>g</em>, conservation of mass says
+<em>g</em>(&nabla;&phi;(<em>x</em>)) det <em>D</em>&sup2;&phi;(<em>x</em>) = <em>f</em>(<em>x</em>).
+That is a Monge&ndash;Amp&egrave;re equation, with the convexity of &phi; as the condition that
+selects the right solution. Where &phi; is not smooth the equation has to be read in a weak sense;
+the review uses the Alexandrov sense and a maximal-monotone one. How regular &phi; is, and under what
+conditions on <em>f</em>, <em>g</em> and the shapes of <em>X</em> and <em>Y</em>, is where Caffarelli's
+regularity theory enters. This page does not state those theorems and does not test them.</p>
+
+<p><strong>Checked, with Gaussians:</strong> in one dimension the affine map between two Gaussians
+satisfies the equation to 8&times;10<sup>&minus;17</sup> at 81 points. In the plane, with covariances
+<em>S</em><sub>1</sub> and <em>S</em><sub>2</sub>, the map <em>T x</em> = <em>A x</em> with
+<em>A</em> = <em>S</em><sub>1</sub><sup>&minus;1/2</sup>(<em>S</em><sub>1</sub><sup>1/2</sup>
+<em>S</em><sub>2</sub> <em>S</em><sub>1</sub><sup>1/2</sup>)<sup>1/2</sup>
+<em>S</em><sub>1</sub><sup>&minus;1/2</sup> satisfies it to 4&times;10<sup>&minus;17</sup> on 169
+points, and <em>A</em> is symmetric positive definite, so <em>T</em> is the gradient of the convex
+function <em>x</em>&middot;<em>A x</em>/2. The control is a different map, <em>S</em><sub>2</sub><sup>1/2</sup> <em>Q</em>
+<em>S</em><sub>1</sub><sup>&minus;1/2</sup> with <em>Q</em> a rotation: it pushes the density forward
+just as well (error 2&times;10<sup>&minus;17</sup>) but is not symmetric, so it is not the gradient of
+any convex function. That is the point of the control: pushing the mass forward is not what makes a
+map optimal; being a convex gradient is.</p>
+
+<div class="section-label">Part V &middot; Two places it behaves differently</div>
+<h2>Linear cost, and a target with a gap</h2>
+
+<p><strong>Cost |x &minus; y|.</strong> Move [&minus;2, &minus;1] onto [1, 2]. Every matching
+pays the same, because every unit crosses the whole gap; on the checker's
+grids all 200 random matchings cost exactly 27, whereas the quadratic cost separates them and the
+sorted matching is the cheapest. Optimal maps for the linear cost are therefore not unique, which
+is one reason the quadratic case is the clean one.</p>
+
+<p><strong>A target with a gap.</strong> Send [&minus;1, 1], density 1, onto [&minus;2, &minus;1]
+&cup; [1, 2], density 1, by <em>T</em>(<em>x</em>) = <em>x</em> + sign(<em>x</em>). It is monotone, and its
+Jacobian is 1 away from 0, so the equation holds there. The potential
+&phi;(<em>x</em>) = |<em>x</em>| + <em>x</em>&sup2;/2 has second difference 1 away from 0 and about
+1 + 2/<em>h</em> at 0 &mdash; the second derivative carries a point mass of weight 2 there. So with
+a non-convex target the potential is not smooth, and the equation holds in the Alexandrov sense
+rather than classically. The control (the value at 0 is not the almost-everywhere value 1) fails
+as it should.</p>
+
+<div class="block-sorry"><span class="block-label">What this does not show</span>
+<p>Examples, not theorems. Nothing here proves that optimal plans exist, are unique, are maps, or
+are regular, and nothing tests Caffarelli's regularity theory itself; that needs the review's
+hypotheses and an analysis a finite grid does not carry. The Gaussian and one-dimensional examples
+are the cases where a closed form exists. Where this page says &ldquo;Brenier&rdquo; or
+&ldquo;Alexandrov&rdquo;, it follows the review's statement of those results.</p>
+<p>One structural remark, labelled as such. The <em>c</em>-transform has the same functional form as
+a Legendre transform, and Legendre transforms turn up elsewhere in the corpus. That is a shared
+functional form, not a shared invariant: nothing here connects the transport problem to any other
+chapter's quantity.</p></div>
+
+<div class="section-label">Sources</div>
+<div class="block-body">
+<p>L. A. Caffarelli, <em>The Monge&ndash;Amp&egrave;re Equation and Optimal Transportation, an
+elementary review</em> (Lecture Notes in Mathematics 1813; read in full, supplied as a PDF). That
+review credits the convex-potential theorem to Rockafellar, spelling it &ldquo;Rockafeller&rdquo;,
+and treats the linear-cost and non-convex-target examples. &middot; Checks:
+<code>book7/ch-optimal-transport-verify.py</code>, standard library only, seeded.</p>
+</div>
+
+</div>
+<footer>
+  &#9884; Principia Orthogona &middot; Book 7 &middot; The Scientist Gallery &middot;
+  <a href="index.html">the gallery</a> &middot;
+  <a href="../living-book.html">the living book</a><br>
+  &copy; 2026 Pablo Nogueira Grossi &middot; G6 LLC &middot; Newark, NJ &middot; g6llc@proton.me
+</footer>
+
+</body>
+</html>
