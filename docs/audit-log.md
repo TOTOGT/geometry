@@ -11313,3 +11313,14 @@ Author approved the fixes ("this is precisely what I need fixed, go ahead"). Eac
 - The user's own child and building matters are not in the page (checked by the verify script).
 - book6/wp132-verify.py recomputes every figure from the sourced inputs and checks EN/PT parity, 10 references, status table and link sets, with five controls that must fail (share changed, link dropped, status deleted, family name inserted, multiple changed). It does not check what the sources say beyond what I read in them this session.
 - Not done: native review of the Portuguese; Bitter Cargo cross-link.
+
+
+## 2026-10-03: WP-133 (The Grandchildren of Others: what unpriced extraction costs)
+- New page book6/wp133-the-grandchildren-of-others.html (EN/PT), row added to book6/index.html after WP-132. Sequel in form to WP-131/132; the page says the relation is of form, not proof.
+- The user's claim was split into E1 (costs not in price or debt), E2 (large), E3 (fall on later generations), E4 (fall on others). Sources support E1 and E2 only under the IMF's definition; E3 and E4 are marked as the author's reading, with the discounting mechanism shown but no incidence data.
+- Figures read this session: IMF page (2024: 7.43T total, 0.73T explicit, 6.7T implicit, 6.4% and 5.8% of world output; shares 39/32/16/4); EPA 2023 report key figures (120/190/340 per ton at 2.5/2.0/1.5%, 2020 dollars, global damages); EO 14154 sec. 6 (IWG disbanded, A-4 of 2003); Harvard EELP tracker (first-term domestic-only, 3% and 7%; "slated for rollback" Jan 2026); UN DESA SEEA-EA page (no date on page; none stated on the WP); Nature retraction summary.
+- Not read: the IMF working paper (403), the full EPA report, current agency SC-GHG guidance, OECD/IEA at source (dispute reported only by one secondary article, Terra Daily, 12 Sep 2026, labelled secondary), the UN standard itself.
+- Excluded on purpose: the Kotz, Levermann and Wenz 19% income-loss / 38T-a-year estimate (Nature, retracted 3 Dec 2025). Listed in the status table as retracted, not used.
+- Own arithmetic, labelled as such: weights on 1 USD of damage 50 years out (37.2c at 2%, 22.8c at 3%, 3.4c at 7%; about 11x between 2% and 7%); one year of implicit subsidy as 17.2% of the US debt stock (a world flow against one country's stock, labelled a scale not a comparison).
+- book6/wp133-verify.py recomputes the figures and checks EN/PT parity, 9 references, status table and link sets, with six controls that must fail (weight altered, link dropped, retraction label removed, IMF total altered, personal name inserted, unsourced UN year inserted).
+- Not done: native review of the Portuguese; Bitter Cargo cross-link; any claim about the size of the true environmental cost (deliberately not made).
