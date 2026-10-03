@@ -11274,3 +11274,10 @@ Author approved the fixes ("this is precisely what I need fixed, go ahead"). Eac
 
 ## 2026-10-02: book8 ch2 last #14 citation
 "The bound never closed in Lean (AXLE Issue #14)" in book8/ch2-event-horizon.html now cites #32. The sentence is about the inner-basin Gronwall bound (asymmetric inner boundary against the symmetric bound), the same obligation as inner_basin_is_asymmetric; #14 is T1 Gronwall integration. Reversible: swap back if you read the sentence as T1.
+
+## 2026-10-03 — QM5: Freedman–Larsen–Wang read (arXiv quant-ph/0001108v2)
+- Read: Theorem 4.1 (the closure of the image of the Jones representation of B6 at q = e^{2πi/5} in U(5)×U(8) contains SU(5)×SU(8)), Theorems 2.1–2.3 (braid approximation of two-qubit gates; BQP simulation). The words Fibonacci and Ising occur nowhere in the paper.
+- Consequence: QM5 had said "density is the theorem of Freedman, Larsen and Wang" for the 2-dimensional Fibonacci group tested in the script. The theorem is about a different object (the 5- and 8-dimensional sectors at the fifth root of unity). The identification with the Fibonacci model is standard but is not in this paper and is not checked on the page. QM5's text and sources paragraph now say so.
+- qm5-verify.py block 8 added (7 record checks, 2 absence checks, 1 control that the absence search can fail: the Nayak review contains both words). An earlier substring test failed on "arising"; fixed with word boundaries. Run: all checks passed.
+- Then fixed (same day): the claims-register row in research-status.html (with a dated correction note) and the sentence in ch7-topological-orthogenesis.html, and the register quotation in QM5. All three now attribute the Fibonacci universality statement to Nayak et al. and the density theorem to Freedman–Larsen–Wang for the Jones representation at the fifth root of unity. Not independently re-run: no script covers those two pages.
+- The PDF is the arXiv version; the journal version (2002) has not been seen.

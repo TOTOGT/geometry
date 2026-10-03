@@ -29,6 +29,10 @@ by breadth-first closure, modulo overall phase.
       closure exceeds the limit).
   [7] Sourcing against Nayak-Simon-Stern-Freedman-Das Sarma (arXiv:0707.1889)
       in ~/Downloads (SKIP if absent).
+  [8] Sourcing against Freedman-Larsen-Wang (arXiv quant-ph/0001108v2) in
+      ~/Downloads (SKIP if absent): the density theorem is about the Jones
+      representation of B6 at q = e^{2 pi i/5}, and the words Fibonacci and Ising
+      do not occur in that paper (control: both occur in the Nayak review).
 
     python3 quantum-maths/qm5-verify.py
 """
@@ -161,6 +165,41 @@ else:
     gap_eqn = dist(mm(mm(Reqn, Reqn2), Reqn), mm(mm(Reqn2, Reqn), Reqn2))
     check(gap_eqn < 1e-11 and gap_alt > 0.1,
           'braid relation accepts Eq. (133), R_tau = -e^(-2 pi i/5) = e^(3 pi i/5) (gap %.1e), and REJECTS the review\'s prose line -e^(+2 pi i/5) (gap %.3f): the prose line has a sign typo' % (gap_eqn, gap_alt))
+
+head(8, 'the sourcing, against Freedman-Larsen-Wang (arXiv quant-ph/0001108v2) in ~/Downloads')
+def _pdf_norm(prefix):
+    if not _D: return None
+    for fn in os.listdir(_D):
+        if fn.lower().startswith(prefix):
+            try:
+                o = subprocess.run(['pdftotext', '-layout', os.path.join(_D, fn), '-'], capture_output=True, text=True, timeout=180)
+                if o.returncode == 0 and o.stdout:
+                    return re.sub(r'\s+', ' ', o.stdout.replace('\ufb01', 'fi').replace('\ufb02', 'fl'))
+            except Exception:
+                return None
+    return None
+flw = _pdf_norm('a modular functor which is universal')
+if flw is None:
+    print('    SKIP  the Freedman-Larsen-Wang PDF (or pdftotext) is not available; none of the sourcing below is checked')
+else:
+    for label, needle in [
+        ('arXiv identifier quant-ph/0001108', 'quant-ph/0001108'),
+        ('Theorem 4.1 is stated', 'Theorem 4.1. Let'),
+        ('closure of the image contains SU(5) x SU(8)', 'contains SU(5) × SU(8)'),
+        ('the representation is at the 5-th root of unity', '5-th root of unity'),
+        ('the model is Chern-Simons at the fifth root of unity', 'fifth root of unity'),
+        ('Theorem 2.1 (braid approximation of two-qubit gates)', 'Theorem 2.1.'),
+        ('BQP simulation (Theorem 2.3)', 'BQP'),
+    ]:
+        check(needle in flw, 'Freedman-Larsen-Wang record: ' + label)
+    low = flw.lower()
+    check(not re.search(r'\bfibonacci\b', low), 'the word Fibonacci does not occur in the Freedman-Larsen-Wang paper')
+    check(not re.search(r'\bising\b', low), 'the word Ising does not occur in the Freedman-Larsen-Wang paper')
+    if txt is None:
+        print('    SKIP  control for the two absence checks (the Nayak review is not available): they could not be shown able to fail')
+    else:
+        tl = txt.lower()
+        check(bool(re.search(r'\bfibonacci\b', tl)) and bool(re.search(r'\bising\b', tl)), 'control: the same search finds Fibonacci and Ising in the Nayak review, so the absence checks can fail')
 
 print()
 if FAIL:
