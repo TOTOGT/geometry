@@ -62,6 +62,7 @@ have reported it. Now something does.
 - Formal proofs (AXLE)
 - Formal Verification in Lean 4 (AXLE)
 - Franco Rossi (MIT)
+- Frequency doubling (KDP)
 - Freya BLEKMAN (DESY)
 - Functional segments (IGH)
 - Galilean Contact Transformations (GTCT)
