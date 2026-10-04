@@ -5,6 +5,9 @@ import re, sys, os
 here = os.path.dirname(os.path.abspath(__file__))
 path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(here, 'wp132-born-appraised-the-debt-share-of-a-newborn.html')
 html = open(path, encoding='utf8').read()
+import re as _re_gen
+# R25/R26: the generated blocks (subject tag, Across the series, GSS stamp) carry their own links and are not part of the page's argument
+html = _re_gen.sub(r'<!--po-([a-z]+)-->.*?<!--/po-\1-->', '', html, flags=_re_gen.S)
 fails = []
 def check(name, ok):
     print(('PASS ' if ok else 'FAIL ') + name)
