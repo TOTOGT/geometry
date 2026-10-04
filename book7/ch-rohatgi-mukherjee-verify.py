@@ -113,8 +113,13 @@ for n in ['2 august 1924', '31 december 2009', 'photochemistry of anthracene der
     check(n in ptxt or n in html.unescape(page).lower(), 'page contains: %s' % n)
 check('villani' not in ptxt and 'caffarelli' not in ptxt, 'control: the page names neither Villani nor Caffarelli')
 check('1991' not in re.sub(r'one search summary gave 1991[^.]*\.', '', ptxt), 'the 1991 medal year appears only where the page refutes it')
-cites = sorted(set(int(x) for x in re.findall(r'p\.(\d{3})', page)))
-check(cites and min(cites) >= 113 and max(cites) <= 128, 'every cited page is inside the memoir (111-128): %s' % cites)
+partV = re.search(r'<div class="section-label">Part V.*?(?=<div class="block-sorry">)', page, flags=re.S)
+memoir_part = page.replace(partV.group(0), '') if partV else page
+cites = sorted(set(int(x) for x in re.findall(r'p\.(\d{3})', memoir_part)))
+check(cites and min(cites) >= 113 and max(cites) <= 128, 'every cited page outside Part V is inside the memoir (111-128): %s' % cites)
+check(bool(partV) and 'p.322' in partV.group(0) and 'Chapter 11' in partV.group(0) and 'photochem-index.html' in partV.group(0), 'Part V names the textbook page (p.322, Chapter 11) and links the photochemistry branch')
+check(os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'photochem-index.html')), 'the branch index it links to exists')
+check(not (partV and re.search(r'memoir', partV.group(0)) and 'p.322' in memoir_part), 'control: the textbook page number does not leak into the memoir citations')
 check(not any(c < 113 for c in cites), 'control: nothing cited from the cover or photograph pages')
 
 # ---------------------------------------------------------------- [3]
@@ -205,5 +210,6 @@ print('[HONESTY] It does not establish that the memoir is right: it is one colle
 print('[HONESTY] Two facts were read from page images, not text, because the text layer garbles them: the thesis title (p.114) and the medal year 1990 (p.114).')
 print('[HONESTY] Block [4] is our own physics for three quantities the memoir names. It does not reproduce her methods, numbers or conclusions; the thesis was not read.')
 print('[HONESTY] The Bowen paper and the encyclopaedia entry were not read in full (access error and summary only).')
+print('[HONESTY] Part V cites the textbook (Fundamentals of Photochemistry, Chapter 11 from p.322, case history of anthracene and carbon tetrachloride). That was read on the chapter\'s opening page of the supplied scan only; this script cannot check it because the textbook is not in the repository.')
 print('\n' + ('ALL CHECKS PASS' if not FAIL else '%d FAILED' % FAIL))
 sys.exit(1 if FAIL else 0)
