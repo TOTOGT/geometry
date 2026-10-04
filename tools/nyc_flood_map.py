@@ -103,6 +103,33 @@ PLACES = [  # typed from memory, +/- ~100 m; NOT geocoded. Used for orientation,
   ("Coney Island", -73.9707, 40.5755),
 ]
 
+# Axis corridors (a rotated strip around a hand-chosen axis; endpoints typed from memory, NOT surveyed).
+# "Land" = cells above today's MHHW. These are rough landform masks, not boundaries of any official area.
+LANDFORMS = [
+  ("Rockaway peninsula", "Pen&iacute;nsula de Rockaway", (-73.925, 40.557), (-73.765, 40.597), 500),
+  ("Coney Island", "Coney Island", (-74.010, 40.5755), (-73.962, 40.5745), 350),
+]
+LF_KEYS = ["sandy_2012", "2050_central", "2050_high", "2150_central", "2150_high"]
+
+def corridor_mask(a, b, half_m):
+    lons = LON0 + (np.arange(W) + 0.5) * PX; lats = LAT1 - (np.arange(H) + 0.5) * PX
+    LO, LA = np.meshgrid(lons, lats)
+    a = np.array(a); b = np.array(b); d = b - a; c = np.cos(np.radians(40.58))
+    P = np.stack([(LO - a[0]) * c, (LA - a[1])], -1); D = np.array([d[0] * c, d[1]])
+    t = np.clip((P @ D) / (D @ D), 0, 1)
+    dist = np.hypot(*(P - t[..., None] * D).transpose(2, 0, 1)) * 111000.0
+    return dist < half_m
+
+def landform_stats(dem, floods, lv):
+    out = []
+    for name, _pt, a, b, half in LANDFORMS:
+        land = corridor_mask(a, b, half) & (dem > lv["today"])
+        q = np.nanpercentile(dem[land], [50, 90, 100])
+        out.append({"name": name, "axis": [list(a), list(b)], "half_width_m": half, "land_km2": round(cell_area_km2(land), 2),
+                    "median_m": round(float(q[0]), 1), "p90_m": round(float(q[1]), 1), "max_m": round(float(q[2]), 1),
+                    "dry_pct": {k: int(round(100.0 * (land & ~floods[k]).sum() / land.sum())) for k in LF_KEYS}})
+    return out
+
 def load_mosaic(dem_dir):
     import tifffile
     M = np.full((H, W), np.nan, np.float32)
@@ -172,6 +199,7 @@ def compute(dem):
             row["below_" + k] = bool(dem[i, j] <= lv[k])
         places.append(row)
     res["places"] = places
+    res["landforms"] = landform_stats(dem, floods, lv)
     return res, floods
 
 # ---------------------------------------------------------------- picture assets
@@ -273,6 +301,21 @@ def write_block(chapter, name, content):
 FT = 3.28084
 def ft(m): return "%.1f" % (m * FT)
 
+def landforms_html(res):
+    cols = [("sandy_2012", "Sandy 2012", "Sandy 2012"), ("2050_central", "2050 central", "2050 central"), ("2050_high", "2050 high-end", "2050 alto"),
+            ("2150_central", "2150 central", "2150 central"), ("2150_high", "2150 high-end", "2150 alto")]
+    o = ['<table class="dtab" id="tab-landforms"><thead><tr><th><span data-l="en">Landform (axis corridor)</span><span data-l="pt">Forma de terra (corredor)</span></th>'
+         '<th><span data-l="en">Land above today&#8217;s high tide (km&sup2;)</span><span data-l="pt">Terra acima da mar&eacute; alta de hoje (km&sup2;)</span></th>'
+         '<th><span data-l="en">Ground: median / 90th pct / max (m)</span><span data-l="pt">Terreno: mediana / percentil 90 / m&aacute;x (m)</span></th>' +
+         "".join('<th><span data-l="en">Still dry, %s</span><span data-l="pt">Ainda seco, %s</span></th>' % (e, p) for _, e, p in cols) + '</tr></thead><tbody>']
+    pt = {n: p for n, p, *_ in LANDFORMS}
+    for lf in res["landforms"]:
+        o.append('<tr><td><span data-l="en">%s</span><span data-l="pt">%s</span></td><td>%.1f</td><td>%.1f / %.1f / %.1f</td>%s</tr>' % (
+            lf["name"], pt[lf["name"]], lf["land_km2"], lf["median_m"], lf["p90_m"], lf["max_m"],
+            "".join("<td>%d%%</td>" % lf["dry_pct"][k] for k, _, _ in cols)))
+    o.append('</tbody></table>')
+    return "\n".join(o)
+
 LEVEL_ROWS = [  # key, EN label, PT label, rise-table (year) or None
   ("today", "Today: mean higher high water", "Hoje: preamar média mais alta", None),
   ("sandy_2012", "Sandy, 30 Oct 2012: recorded peak at The Battery", "Sandy, 30 out 2012: pico registrado em The Battery", None),
@@ -346,7 +389,8 @@ def main():
         print("asset sizes (chars):", sz, {y: sum(len(l["png"]) + len(l["path"]) for l in L) for y, L in assets["years"].items()})
         if a.write:
             write_block(a.chapter, "flood-data", "<script>window.FLOOD=" + json.dumps(assets, separators=(",", ":")) + ";</script>")
-            write_block(a.chapter, "flood-numbers", numbers_html(res)); print("wrote blocks into", a.chapter)
+            write_block(a.chapter, "flood-numbers", numbers_html(res))
+            write_block(a.chapter, "flood-landforms", landforms_html(res)); print("wrote blocks into", a.chapter)
         if a.preview:
             from PIL import Image
             def dec(u): return Image.open(io.BytesIO(base64.b64decode(u.split(",", 1)[1])))

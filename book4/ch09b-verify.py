@@ -100,6 +100,22 @@ check("numbers block present", bool(B))
 check("numbers block equals tool output from results.json", B is not None and B.group(1) == T.numbers_html(RES))
 expect_fail("a tampered numbers block is detected", lambda: B is not None and B.group(1).replace("3.434", "3.443") == T.numbers_html(RES))
 
+print("\n[3b] Rockaway and Coney Island (axis corridors)")
+LFR = {l["name"]: l for l in RES["landforms"]}
+rk, cn = LFR["Rockaway peninsula"], LFR["Coney Island"]
+check("prose: median ground 2.2 m (Rockaway) and 1.9 m (Coney Island) equal results.json", rk["median_m"] == 2.2 and cn["median_m"] == 1.9)
+check("prose: still dry at Sandy 2012: 3% and 3%", rk["dry_pct"]["sandy_2012"] == 3 and cn["dry_pct"]["sandy_2012"] == 3)
+check("prose: still dry at 2150 central: 6% and 9%", rk["dry_pct"]["2150_central"] == 6 and cn["dry_pct"]["2150_central"] == 9)
+check("prose: still dry at 2150 high-end: 1% and 0%", rk["dry_pct"]["2150_high"] == 1 and cn["dry_pct"]["2150_high"] == 0)
+for r in ("median ground height of 2.2 m", "Coney Island&#8217;s 1.9 m", "$52.6 billion", "begin in 2030", "13 feet", "about 4.0 m", "0.9 to 3.7 m"):
+    check("English text contains %r" % r, r in html)
+check("13 feet is about 4.0 m (13 x 0.3048 = %.3f)" % (13 * 0.3048), round(13 * 0.3048, 1) == 4.0)
+check("13 ft (3.96 m) lies above 2150 central (2.995) and below 2150 high-end (4.395)", lv["2150_central"] < 13 * 0.3048 < lv["2150_high"])
+check("landforms block equals tool output", re.search(r"<!-- BEGIN flood-landforms[^>]*-->\n(.*?)\n<!-- END flood-landforms -->", html, re.S).group(1) == T.landforms_html(RES))
+check("corridor masks nest: a narrower corridor holds fewer cells than a wider one",
+      T.corridor_mask(*T.LANDFORMS[1][2:4], 350).sum() < T.corridor_mask(*T.LANDFORMS[1][2:4], 600).sum())
+expect_fail("a wrong Rockaway median (2.9) is not what results.json says", lambda: rk["median_m"] == 2.9)
+
 print("\n[4] the embedded map data")
 D = re.search(r"<!-- BEGIN flood-data[^>]*-->\n<script>window\.FLOOD=(.*?);</script>\n<!-- END flood-data -->", html, re.S)
 check("map data block present", bool(D))
@@ -158,6 +174,7 @@ print("\n[HONESTY] what this establishes, and what it does not")
 print("  - Established: the printed levels follow from the source numbers; the bathtub code does what the hand-worked grid says;")
 print("    the page text and tables equal the tool's output; the map data in the page equals the tool's masks' levels.")
 print("  - Not established: that the real water will follow the bathtub (surge, drains, defences, subsidence not modelled);")
+print("    the Rockaway and Coney Island corridor masks (hand-defined, ends typed from memory) and the ENR and USACE facts (summarising fetch; status after 2024 not checked);")
 print("    NAVD88 as the DEM's vertical datum (cited, not read from the files); the Datums JSON as read (values typed from the pasted JSON);")
 print("    place coordinates (typed from memory, about 100 m); the Sandy check is plausibility only (no official layer read);")
 print("    the Portuguese has not had native review.")
