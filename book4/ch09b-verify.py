@@ -116,6 +116,30 @@ check("corridor masks nest: a narrower corridor holds fewer cells than a wider o
       T.corridor_mask(*T.LANDFORMS[1][2:4], 350).sum() < T.corridor_mask(*T.LANDFORMS[1][2:4], 600).sum())
 expect_fail("a wrong Rockaway median (2.9) is not what results.json says", lambda: rk["median_m"] == 2.9)
 
+print("\n[3c] siting note and the 25 candidate coordinates")
+import importlib.util
+_sp = importlib.util.spec_from_file_location("ch09b_sites", os.path.join(HERE, "ch09b-sites.py")); S = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(S)
+SR = json.load(open(os.path.join(HERE, "ch09b-sites.results.json")))
+check("25 sites parsed from ch07.html and in results", SR["n"] == 25 == len(SR["sites"]) == len(S.load_sites()))
+check("sites block equals generator output", re.search(r"<!-- BEGIN flood-sites[^>]*-->\n(.*?)\n<!-- END flood-sites -->", html, re.S).group(1) == S.sites_html(SR))
+check("none of the 25 on open water at today's high tide (prose says so)", SR["on_water_today"] == 0 and "none of the 25 sits on open water" in html)
+above20 = [x for x in SR["sites"] if x["elev_m"] > 20]
+check("six sites read above 20 m, max 44.8 m (prose)", len(above20) == 6 and max(x["elev_m"] for x in above20) == 44.83 and "six read above 20 m" in html and "44.8 m" in html)
+cnt = SR["sites_at_flooded_cell"]
+check("counts nest or stay level as the lines rise (central<=high, tide<=storm)", all(cnt[a] <= cnt[b] for a, b in
+      [("2050_central", "2050_high"), ("2150_central", "2150_high"), ("2050_central", "2050_storm_central"), ("2150_central", "2150_storm_central"), ("2150_storm_central", "2150_storm_high")]))
+P = {q["name"]: q for q in RES["places"]}
+def fl(n, k): return P[n]["flooded_" + k]
+check("prose: Newark Penn dry on every line", not any(v for k, v in P["Newark Penn Station"].items() if k.startswith("flooded_")))
+check("prose: Hoboken under Sandy, all storm lines and 2150 high-end, not 2150 central",
+      all(fl("Hoboken (terminal)", k) for k in ("sandy_2012", "2050_storm_central", "2050_storm_high", "2150_storm_central", "2150_storm_high", "2150_high")) and not fl("Hoboken (terminal)", "2150_central") and P["Hoboken (terminal)"]["elev_m"] == 3.07)
+check("prose: Newark airport and LaGuardia under Sandy and both 2150 lines",
+      all(fl(n, k) for n in ("Newark Liberty airport", "LaGuardia airport") for k in ("sandy_2012", "2150_central", "2150_high")))
+check("prose: JFK under Sandy and 2150 high-end, not 2150 central", fl("JFK airport", "sandy_2012") and fl("JFK airport", "2150_high") and not fl("JFK airport", "2150_central"))
+check("prose: ground heights 2.7 / 2.2 / 3.2 / 3.1 / 8.2 m", [round(P[n]["elev_m"], 1) for n in ("Newark Liberty airport", "LaGuardia airport", "JFK airport", "Hoboken (terminal)", "Newark Penn Station")] == [2.7, 2.2, 3.2, 3.1, 8.2])
+check("siting note makes no recommendation and says the mobile-unit idea is untested", "makes no recommendation" in html and "None of that has been tested here" in html)
+expect_fail("a wrong count (7 sites flooded at 2150 central) is not what results say", lambda: cnt["2150_central"] == 7)
+
 print("\n[4] the embedded map data")
 D = re.search(r"<!-- BEGIN flood-data[^>]*-->\n<script>window\.FLOOD=(.*?);</script>\n<!-- END flood-data -->", html, re.S)
 check("map data block present", bool(D))
@@ -177,6 +201,8 @@ print("  - Not established: that the real water will follow the bathtub (surge, 
 print("    the Rockaway and Coney Island corridor masks (hand-defined, ends typed from memory) and the ENR and USACE facts (summarising fetch; status after 2024 not checked);")
 print("    NAVD88 as the DEM's vertical datum (cited, not read from the files); the Datums JSON as read (values typed from the pasted JSON);")
 print("    place coordinates (typed from memory, about 100 m); the Sandy check is plausibility only (no official layer read);")
+print("    the 25 candidate coordinates (taken from Chapter 7 as written; they look schematic, not placed on the channels);")
+print("    that a mobile unit could be deployed or would perform (an idea, untested);")
 print("    the Portuguese has not had native review.")
 print("\nran: %d checks, %d controls; optional sections run: %s" % (RAN["checks"], RAN["controls"], RAN["optional"] or "none"))
 if RAN["checks"] == 0 or RAN["controls"] == 0:
