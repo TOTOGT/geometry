@@ -43,3 +43,13 @@ AXLE checkout, no errors; v4.32.0 `lake build CatGT` completed (8656 jobs). The 
 derivative proofs carry `-- COMPAT` lines: `h1.cosh`/`h1.sinh` and `congr_deriv` replace
 `.comp`/`convert` because v4.32 returns Pi-form functions from `HasDerivAt.inv/div/mul`.
 Copies byte-identical. CI gate (verify-proofs.yml) now expects 23.
+
+Update (2026-10-06): §4d (5 theorems: `radius_le_criticalRadiusNorm_of_sq_le`,
+`withinTubeNorm_antitone`, `sechProfile_deriv_deriv`, `sech_width_fixed_amplitude_of_stationary`,
+`criticalRadius_is_sech_width_at_sqrt2`; fixed-norm tube and stationary-sech width) added; 28
+theorems. Runs: v4.14.0 via the AXLE checkout (`lake env lean`), no errors; v4.32.0 `lake build
+CatGT` completed (8656 jobs); 28/28 `#print axioms` on [propext, Classical.choice, Quot.sound] on
+both. New warnings: unused `hJ` (line 523) and an unreachable `ring` after `field_simp <;>`
+(line 532; also 534 on v4.32). No `-- COMPAT` lines needed. Copies byte-identical. CI gate
+(verify-proofs.yml, probe_catgt.lean) now expects 28. The V6 deposit (10.5281/zenodo.22929142)
+is the 23-theorem file; §4d is post-V6.

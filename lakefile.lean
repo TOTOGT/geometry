@@ -158,7 +158,8 @@ lean_lib TurnaroundUniverse where
   all on [propext, Classical.choice, Quot.sound]. Declaring the target is what makes a later
   regression fail the job instead of passing unnoticed. `lake build CatGT` was run by the
   author on 2026-09-20 (8656 jobs, completed; 13/13 axiom lines on the permitted three; 5
-  unused-binder warnings). The 13 theorems are gated in CI by tools/verify-catgt/probe_catgt.lean.
+  unused-binder warnings). Now 28 theorems (2026-10-06), all gated in CI by
+  tools/verify-catgt/probe_catgt.lean.
 -/
 @[default_target]
 lean_lib CatGT where
