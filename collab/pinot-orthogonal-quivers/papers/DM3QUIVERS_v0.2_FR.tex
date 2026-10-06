@@ -1,0 +1,244 @@
+% !TEX program = xelatex
+% Version française. Références au format des Publications mathématiques de l'IHÉS (clés alphabétiques).
+\documentclass[11pt]{article}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{fontspec}
+\setmainfont{DejaVu Serif}[Scale=0.9]
+\usepackage{polyglossia}
+\setmainlanguage{french}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array,enumitem}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\usepackage{attachfile2}
+
+\newtheorem{theorem}{Théorème}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemme}
+\newtheorem{corollary}[theorem]{Corollaire}
+\theoremstyle{definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{question}{Question}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remarque}
+\renewcommand{\proofname}{Démonstration}
+
+\newcommand{\tagP}{\textsf{\small[démontré ici]}}
+\newcommand{\tagC}{\textsf{\small[cité]}}
+\newcommand{\tagN}{\textsf{\small[vérifié numériquement]}}
+\newcommand{\tagK}{\textsf{\small[arithmétique vérifiée par le noyau Lean]}}
+\newcommand{\tagO}{\textsf{\small\textcolor{red!70!black}{[ouvert]}}}
+
+\newcommand{\C}{\mathbb{C}}\newcommand{\R}{\mathbb{R}}\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\M}{\mathfrak{M}}\newcommand{\Rep}{\mathrm{Rep}}\newcommand{\SRep}{\mathrm{SRep}}
+\newcommand{\BD}{\mathrm{BD}}
+\newcommand{\bundleurl}{https://totogt.github.io/geometry/collab/pinot-orthogonal-quivers/}
+
+\title{Variétés de carquois orthogonaux affines en $\delta$ et $2\delta$,\\ et leurs entrelacs de contact}
+\author{Pablo Nogueira Grossi\\[2pt]
+{\small G6 LLC (d/b/a PrincipiaOrthogona), Newark, NJ, États-Unis \quad \texttt{g6llc@proton.me}\quad ORCID 0009-0000-6496-2186}}
+\date{Version 0.2 --- 5 octobre 2026 --- préparée pour l'évaluation de V.~Pinot}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Pinot a récemment calculé les variétés de carquois $\M_\delta$ et $\M_{2\delta}$ des carquois orthogonaux dont le graphe sous-jacent est un diagramme de Dynkin affine, et identifié parmi elles des singularités kleiniennes de surface \cite{Pin26}. Nous faisons trois observations et une construction. (i) En n'utilisant que l'immersion fermée de Li \cite[prop.~9.2.1]{Li19}, dès que $\M_\delta$ est une surface, l'involution agit trivialement et $\M_\delta$ est la surface kleinienne classique du diagramme affine sous-jacent. (ii) Par conséquent, les deux lignes $\widetilde D$ du théorème~1.2 de \cite{Pin26} sont de type $D_{2n-2}$ et $D_{2n-1}$, et non $D_{n+1}$ ; pour $(\widetilde D_{2n-1},a)$, la relation de définition est $z^2=z(-x)^{n-1}-xy^2$. Nous confirmons ces deux énoncés par un calcul numérique indépendant de l'anneau des invariants. (iii) Dans chaque ligne en $2\delta$, le groupe $\Gamma$ contient le groupe classique du graphe sous-jacent avec indice $2$ (ou $1$) ; nous conjecturons que les surfaces en $2\delta$ sont des quotients de la surface classique par une involution, et démontrons l'énoncé correspondant pour les anneaux de coordonnées. Enfin, chaque surface est un cône dont l'entrelacs est une variété de contact de dimension $3$, $S^3/\Gamma$ ; nous montrons que l'espace des représentations symétriques est quaternionique, de sorte que l'entrelacs est le quotient $3$-sasakien (de Kempf--Ness) de la sphère unité, et nous dressons la table des fibrations de Seifert du flot de Reeb (de Hopf).
+\end{abstract}
+
+\begin{center}\fbox{\parbox{0.93\textwidth}{\small
+\textbf{Mode de lecture.} Chaque énoncé porte une étiquette : \tagP, \tagC, \tagN{} (un script du dossier ; indice, non démonstration), \tagK{} (Lean~4, arithmétique seulement) ou \tagO. \textbf{Dossier de vérification} (Python et Lean, avec un README) : \textattachfile[color=0 0 0.6]{DM3QUIVERS-verification-bundle.zip}{\textcolor{blue!50!black}{\underline{cliquer ici pour ouvrir le zip joint}}} (joint à ce PDF), ou à télécharger sur \url{\bundleurl}. Ce texte a été préparé avec l'aide de Claude (Anthropic) ; l'auteur en assume la responsabilité, et il n'a pas encore été vérifié par V.~Pinot.}}\end{center}
+
+\section{Introduction}
+
+Les variétés de carquois de Nakajima de type Dynkin affine redonnent les espaces ALE de Kronheimer et les singularités kleiniennes $\C^2/\Gamma$ \cite{Kro89,Nak94} ; les étiquettes ADE remontent à la classification par Gabriel des carquois de type fini \cite{Gab72}. Pinot étudie les quotients analogues pour les \emph{carquois orthogonaux} \cite{Pin26} : des carquois $Q$ munis d'une involution contravariante $\tau$ et d'un signe $s$, dont les représentations symétriques $\SRep(\overline Q,\mathrm d)$ portent une action de $G^b_{\mathrm d}=\prod O(\mathrm d_i)\times\prod GL(\mathrm d_j)$, et
+\[\M_{\mathrm d}=\mu^{-1}(0)/\!/G^b_{\mathrm d}.\]
+Son théorème~1.2 donne $\M_\delta$ et $\M_{2\delta}$ pour dix familles infinies. Cette note relit ce tableau sous deux angles : la comparaison avec la variété de carquois classique du même graphe (\S\S3--4), et la géométrie de contact de l'entrelacs de chaque surface (\S5).
+
+\paragraph{Résultats.}
+\begin{itemize}[leftmargin=*]
+\item \textbf{Théorème A} (\S3). Si $\M_\delta$ est une surface, alors $\M_\delta\cong\M_\delta^{\rm cl}$, la surface kleinienne classique du graphe affine sous-jacent, et l'involution y agit trivialement. Énoncé conditionnel à la seule applicabilité de l'immersion fermée de Li au cadre non encadré de Pinot.
+\item \textbf{Corollaire B} (\S3). Les lignes $\widetilde D$ sont de type $D_{2n-2}$ et $D_{2n-1}$. L'équation de $(\widetilde D_{2n-2},v)$ dans \cite{Pin26} est correcte ; la relation de $(\widetilde D_{2n-1},a)$ est $z^2=z(-x)^{n-1}-xy^2$. Confirmé numériquement pour $n=3,4,5$ par le calcul direct de l'anneau des invariants.
+\item \textbf{Conjecture C} (\S4). Chaque surface en $2\delta$ est $\M^{\rm cl}_\delta/\iota$ pour une involution $\iota$ ; de façon équivalente, $\Gamma_{2\delta}\supset\Gamma_{\rm cl}$ avec indice $\le2$, et l'entrelacs classique est un revêtement double de l'entrelacs en $2\delta$. L'énoncé au niveau des anneaux est démontré.
+\item \textbf{Théorème D} (\S5). $\SRep(\overline Q,\mathrm d)$ est un sous-espace quaternionique ; l'entrelacs est le quotient de Kempf--Ness / $3$-sasakien de la sphère unité ; le flot de Reeb est le flot de Hopf, avec les données de Seifert du tableau~\ref{tab:seifert}.
+\end{itemize}
+
+\section{Cadre}\label{sec:setup}
+Nous suivons les notations de \cite{Pin26}, avec l'espace signé standard ($J_i=\mathrm{id}$ dans des bases convenables), de sorte que l'involution sur les représentations est $\sigma(v)_a=s(a)\,v_{\tau a}^{T}$ et $\SRep=\Rep^\sigma$ \cite[déf.~2.3 et 2.5]{Pin26}. L'application moment est la restriction de l'application moment du carquois, avec $\mu(\SRep)\subset\mathfrak g^b$ \cite[cor.~2.13]{Pin26}. L'anneau des invariants est engendré par des traces de cycles \cite[th.~3.9]{Pin26}, \cite{LP90}. L'homothétie $t\cdot v$ donne à $\operatorname{tr}(\Lambda^kC)$ le poids $k\,\ell(C)$, de sorte que chaque $\M_{\mathrm d}$ est un cône \cite[\S3.5.1]{Pin26}.
+
+\paragraph{Le morphisme de comparaison.} Soit $\M^{\rm cl}_{\mathrm d}=\mu^{-1}(0)/\!/G_{\mathrm d}$ la variété de carquois classique du même carquois. Par la propriété universelle des quotients catégoriques, il existe un morphisme $\iota:\M_{\mathrm d}\to(\M^{\rm cl}_{\mathrm d})^{[\sigma]}$. La remarque~2.15 de \cite{Pin26} affirme que c'est un isomorphisme, en citant \cite{Li19,Nak25}. Les sources donnent moins. Li démontre que $\iota$ est une \emph{immersion fermée} pour un graphe arbitraire \cite[prop.~9.2.1]{Li19}, qualifie l'isomorphisme de conjectural, et le démontre en type $A_n$ à signes alternés \cite[prop.~9.2.2]{Li19}. Nakajima ne traite que les $\sigma$-variétés de carquois lisses, à $\zeta$ générique \cite{Nak25}. Li travaille avec des variétés encadrées $(v,w)$ et des formes prescrites ; nous \emph{supposons} dans tout le texte que sa proposition~9.2.1 s'applique au cadre non encadré et signé de Pinot (question~\ref{q:li}). Nous n'utilisons que l'immersion fermée.
+
+\section{Les surfaces en $\delta$}\label{sec:delta}
+
+\begin{theorem}\label{thm:A}
+Supposons que l'immersion fermée de Li $\iota:\M_\delta\hookrightarrow\M^{\rm cl}_\delta$ vaille dans le cadre de Pinot, $\delta$ étant la racine imaginaire minimale du graphe affine sous-jacent. Si $\M_\delta$ est une surface réduite et irréductible (comme dans toutes les lignes non triviales de \cite[th.~1.2]{Pin26}), alors $\iota$ est un isomorphisme et $[\sigma]$ agit trivialement sur $\M^{\rm cl}_\delta$. En particulier $\M_\delta\cong\C^2/\Gamma$, où $\Gamma$ est le groupe de McKay du graphe affine sous-jacent.
+\end{theorem}
+\begin{proof}
+$\M^{\rm cl}_\delta\cong\C^2/\Gamma$ est une surface irréductible \cite{Kro89,Nak94}. Une immersion fermée d'une surface réduite et irréductible dans une surface irréductible est surjective, donc un isomorphisme sur celle-ci. Comme son image est contenue dans le lieu fixe de $[\sigma]$, ce lieu fixe est la surface entière. \tagP{} (sous l'hypothèse).
+\end{proof}
+
+\begin{corollary}\label{cor:B}
+Les lignes non triviales en $\delta$ sont de type $A_{2n-2}$ pour $\widetilde A_{2n-2}$, $A_{2n-1}$ pour $\widetilde A_{2n-1}$, $D_{2n-2}$ pour $(\widetilde D_{2n-2},v)$ et $D_{2n-1}$ pour $(\widetilde D_{2n-1},a)$. Les deux dernières remplacent l'étiquette $D_{n+1}$ imprimée dans \cite[th.~1.2]{Pin26} ; elles ne coïncident avec elle que pour $n=3$ dans le premier cas, et jamais dans le second.
+\end{corollary}
+
+Le corollaire~\ref{cor:B} dépend de l'hypothèse du théorème~\ref{thm:A}. Les deux résultats suivants le vérifient de façon indépendante.
+
+\begin{proposition}[monômes pondérés]\label{prop:enum}
+Dans les lignes $\widetilde D$, posons $x=\det C_3$, $y=\operatorname{tr}(C_1C_2)$, $z=\operatorname{tr}(C_1C_2C_3)$, avec $L=2n-5$ pour $(\widetilde D_{2n-2},v)$ et $L=2n-4$ pour $(\widetilde D_{2n-1},a)$ \cite[p.~18]{Pin26}. Leurs poids sont $(4,2L+2,2L+4)$, et une relation homogène avec $z^2$ est de degré $4L+8$. Les seuls monômes de ce degré sont :
+\begin{itemize}[leftmargin=*]
+\item $(\widetilde D_{2n-2},v)$, $n\ge4$ : $z^2,\ xy^2,\ x^{n-1}y,\ x^{2n-3}$. La relation $z^2+\beta xy^2+\alpha x^{n-1}y+\gamma x^{2n-3}$ est de type $D_{2n-2}$ si et seulement si $\beta\ne0$ et $\gamma\neq\alpha^2/4\beta$. Pour $n=3$, les poids sont $(4,4,6)$, donc $y^3$ est aussi de degré $12$ : la relation est $z^2+c(x,y)$ avec $c$ une cubique binaire, de type $D_4$ si et seulement si $c$ a trois facteurs linéaires distincts.
+\item $(\widetilde D_{2n-1},a)$ : $z^2,\ x^{n-1}z,\ xy^2,\ x^{2n-2}$. La relation $z^2+\alpha x^{n-1}z+\beta xy^2+\gamma x^{2n-2}$ est de type $D_{2n-1}$ si et seulement si $\beta\ne0$ et $\gamma\ne\alpha^2/4$. Le terme $x^{n-1}y$ imprimé dans \cite[lemme~3.27]{Pin26} est de degré $4L+6$ et ne peut pas apparaître.
+\end{itemize}
+\end{proposition}
+\begin{proof}
+On résout $4a+(2L+2)b+(2L+4)c=4L+8$ en entiers positifs ou nuls, puis on complète le carré : en $y$ pour la première ligne, en $z$ pour la seconde. On obtient la forme normale $z^2+xy^2+c\,x^{m-1}$ de $D_m$ avec $m=2n-2$, resp.\ $m=2n-1$, et $c\neq0$ exactement sous les conditions indiquées. De façon équivalente, par la formule de Milnor--Orlik $\mu=\prod(d/w_i-1)=L+3$ \cite{MO70}. \tagP{} \tagK
+\end{proof}
+
+\begin{proposition}[calcul direct]\label{prop:numeric}
+Pour $n=3,4,5$, nous avons tiré $80$ points aléatoires de $\mu^{-1}(0)\cap\SRep(\overline Q,\delta)$ par la méthode de Gauss--Newton et déterminé toutes les relations linéaires entre les monômes de poids $\le 4L+8$ en $x,y,z$. Dans chaque cas il y a exactement une relation (valeur singulière relative $\le2\cdot10^{-8}$, contre $\ge0{,}1$ pour la suivante), à coefficients entiers :
+\[
+(\widetilde D_{2n-2},v)\ :\ z^2=-y(-x)^{n-1}-xy^2,\qquad (\widetilde D_{2n-1},a)\ :\ z^2=z(-x)^{n-1}-xy^2 .
+\]
+La première est l'équation de \cite[lemme~3.28]{Pin26}. La seconde est celle de \cite[lemme~3.27]{Pin26} où $y$ est remplacé par $z$ dans le premier terme : l'étape $\operatorname{tr}(C_1C_2^2C_3^3)=\operatorname{tr}(C_1C_2C_3)(-\det C_3)^{n-1}$ semble avoir été écrite avec $\operatorname{tr}(C_1C_2)$. Dans les deux lignes, les conditions de non-dégénérescence de la proposition~\ref{prop:enum} sont satisfaites ($\beta=1$, discriminant $-1/4$ ; pour $n=3$ dans la première ligne, la cubique est $xy(x+y)$, à trois facteurs distincts). Pour le signe $-1$ dans $(\widetilde D_{2n-1},a)$, tous les invariants s'annulent, en accord avec \cite{Pin26}. \tagN
+\end{proposition}
+
+\begin{table}[h]\centering\small
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+carquois & signe & d & équation & type & $\Gamma$ & $|\Gamma|$\\\midrule
+$(\widetilde A_{2n-2},v\text{-}a)$ & $+1$ & $\delta$ & $xy=z^{2n-1}$ & $A_{2n-2}$ & $\Z_{2n-1}$ & $2n-1$\\
+ & $-1$ & $2\delta$ & $xy=z^{4n-2}$ & $A_{4n-3}$ & $\Z_{4n-2}$ & $4n-2$\\
+$(\widetilde A_{2n-1},a\text{-}a)$ & $(+,+)$ & $\delta$ & $xy=z^{2n}$ & $A_{2n-1}$ & $\Z_{2n}$ & $2n$\\
+ & $(+,-)$ & $2\delta$ & $xy=z^{4n}$ & $A_{4n-1}$ & $\Z_{4n}$ & $4n$\\
+ & $(-,-)$ & $2\delta$ & $xy=z^{2n}$ & $A_{2n-1}$ & $\Z_{2n}$ & $2n$\\
+$(\widetilde A_{2n-1},v\text{-}v)$ & & $\delta$ & $xy=z^{2n}$ & $A_{2n-1}$ & $\Z_{2n}$ & $2n$\\
+$(\widetilde A_{2n-1},c)$ & & $2\delta$ & $x^{n+1}-y^2x-z^2=0$ & $D_{n+2}$ & $\BD_{4n}$ & $4n$\\
+$(\widetilde D_{2n-2},v)$ & & $\delta$ & $z^2=-y(-x)^{n-1}-xy^2$ & $\mathbf{D_{2n-2}}$ & $\BD_{8(n-2)}$ & $8n-16$\\
+$(\widetilde D_{2n-1},a)$ & $+1$ & $\delta$ & $\mathbf{z^2=z(-x)^{n-1}-xy^2}$ & $\mathbf{D_{2n-1}}$ & $\BD_{4(2n-3)}$ & $8n-12$\\\bottomrule
+\end{tabular}
+\caption{Les lignes non triviales de \cite[th.~1.2]{Pin26}, corrections en gras. $\BD_{4k}$ est le groupe diédral binaire d'ordre $4k$ (pour $n=1$ dans la ligne $(\widetilde A_{2n-1},c)$, $D_3=A_3$). Les autres lignes sont des points réduits.}\label{tab:main}
+\end{table}
+
+\section{Les surfaces en $2\delta$}\label{sec:2delta}
+En $2\delta$, la variété classique est de dimension $4$ et les surfaces orthogonales sont nouvelles. Comparons chaque $\Gamma_{2\delta}$ au groupe classique $\Gamma_{\rm cl}$ du même graphe :
+\begin{center}\small
+\begin{tabular}{@{}llll@{}}\toprule
+ligne en $2\delta$ & $\Gamma_{2\delta}$ & $\Gamma_{\rm cl}$ & indice\\\midrule
+$(\widetilde A_{2n-2},v\text{-}a)$, $-1$ & $\Z_{4n-2}$ & $\Z_{2n-1}$ & 2\\
+$(\widetilde A_{2n-1},a\text{-}a)$, $(+,-)$ & $\Z_{4n}$ & $\Z_{2n}$ & 2\\
+$(\widetilde A_{2n-1},c)$ & $\BD_{4n}$ & $\Z_{2n}$ & 2\\
+$(\widetilde A_{2n-1},a\text{-}a)$, $(-,-)$ & $\Z_{2n}$ & $\Z_{2n}$ & 1\\\bottomrule
+\end{tabular}
+\end{center}
+Les deux sur-groupes d'indice $2$ de $\Z_{2n}$ dans $SU(2)$ qui interviennent ici, $\Z_{4n}$ et $\BD_{4n}$, apparaissent tous deux.
+
+\begin{conjecture}\label{conj:C}
+Chaque surface en $2\delta$ est isomorphe à $\M^{\rm cl}_\delta/\iota$ pour une involution $\iota$ de la surface classique, triviale exactement dans la ligne $(-,-)$.
+\end{conjecture}
+
+\begin{proposition}\label{prop:rings}
+Écrivons $\C^2/\Z_m=\{XY=Z^m\}$ avec $X=u^m$, $Y=v^m$, $Z=uv$.
+\begin{enumerate}[label=(\alph*)]
+\item Le générateur de $\Z_{2m}\supset\Z_m$ induit $\iota_1:(X,Y,Z)\mapsto(-X,-Y,Z)$. Ses invariants $X^2,Y^2,Z$ vérifient $X^2Y^2=Z^{2m}$, la surface $A_{2m-1}$.
+\item Pour $m=2n$, $j\in\BD_{4n}$ induit $\iota_2:(X,Y,Z)\mapsto(Y,X,-Z)$. Ses invariants $s=X+Y$, $w=Z^2$, $t=Z(X-Y)$ vérifient $t^2=ws^2-4w^{n+1}$, la surface $D_{n+2}$.
+\end{enumerate}
+Avec $m=2n-1$, resp.\ $m=2n$, on retrouve exactement les trois lignes d'indice $2$ ci-dessus.
+\end{proposition}
+\begin{proof}
+Substitution directe ; les anneaux d'invariants sont les invariants classiques de Klein de $\Z_{2m}$ et de $\BD_{4n}$. \tagP{} \tagN{} (symbolique, $m\le11$).
+\end{proof}
+
+Les générateurs de Pinot eux-mêmes s'accordent avec ce tableau. Dans la ligne $(+,-)$, les coordonnées en $2\delta$ sont $\det C_1,\det C_2$ et $\operatorname{tr}C_3$, alors que les coordonnées classiques en $\delta$ sont $\operatorname{tr}C_1,\operatorname{tr}C_2,\operatorname{tr}C_3$. Les poids des deux premières doublent, exactement comme $X\mapsto X^2$, $Y\mapsto Y^2$ dans~(a). Il reste à construire $\iota$ à partir des données du carquois. \tagO
+
+\section{Les entrelacs de contact}\label{sec:links}
+
+\subsection{Cônes et poids}
+\begin{lemma}\label{lem:weights}
+Dans chaque ligne du tableau~\ref{tab:main}, les poids (longueurs de chemins) des trois générateurs de Pinot sont égaux aux degrés des invariants de Klein correspondants dans $\C[u,v]^\Gamma$ : $(m,m,2)$ pour $\Z_m$ et $(4,2k,2k+2)$ pour $\BD_{4k}$. On peut donc choisir l'identification $\M_{\mathrm d}\cong\C^2/\Gamma$ graduée, et le cercle unité du $\C^*$ des homothéties agit sur $\C^2/\Gamma$ par les scalaires.
+\end{lemma}
+\begin{proof}
+En $\delta$ pour $\widetilde A_{m-1}$ : $\operatorname{tr}C_1,\operatorname{tr}C_2$ sont de poids $m$ et $\operatorname{tr}C_3$ de poids $2$. En $2\delta$, les déterminants doublent la longueur des cycles : $(4n-2,4n-2,2)$ et $(4n,4n,2)$. Dans la ligne $(\widetilde A_{2n-1},c)$ les poids sont $(4,2n,2n+2)$, et dans les lignes $\widetilde D$ ce sont $(4,2L+2,2L+4)$ avec $k=L+1$. Les changements de variables vers les formes normales utilisés plus haut préservent la graduation. \tagP
+\end{proof}
+
+L'entrelacs $L_Q=(\M_{\mathrm d}\setminus0)/\R_{>0}\cong S^3/\Gamma$ porte sa structure de contact canonique : les tangences complexes, unique à contactomorphisme près \cite{CNPP06}. C'est le quotient de la structure standard de $S^3$, puisque $\Gamma\subset SU(2)$ ; elle est universellement tendue et remplissable au sens de Milnor. \tagC
+
+\subsection{Une structure réelle}
+Une forme de contact réelle requiert une forme symplectique exacte réelle. La forme $\omega$ et l'application $\mu$ de Pinot sont holomorphes ; nous utilisons donc la structure hyperkählérienne plate de $T^*\Rep(Q,\mathrm d)$ : $I=i$ et $J(x,y)=(-y^\dagger,x^\dagger)$, flèche par flèche.
+
+\begin{lemma}\label{lem:quat}
+Dans l'espace signé standard, $\sigma\circ J=J\circ\sigma$ et $\sigma$ est unitaire. Par conséquent $\SRep(\overline Q,\mathrm d)$ est un sous-espace quaternionique. Le groupe compact $K^b=G^b\cap\prod U(\mathrm d_i)=\prod O(\mathrm d_i,\R)\times\prod U(\mathrm d_j)$ préserve $I,J,K$, et les deux applications moment envoient $\SRep$ dans $\mathfrak k^b$.
+\end{lemma}
+\begin{proof}
+$\sigma(Jv)_a=s(a)(-v_{(\tau a)^*}^\dagger)^T=-s(a)\overline{v_{(\tau a)^*}}=J(\sigma v)_a$, et de même pour $a^*$, en utilisant $s(a^*)=s(a)$ et $\tau(a^*)=\tau(a)^*$. L'involution $\sigma$ permute les coefficients des matrices, au signe et à la transposition près ; elle préserve donc la norme hermitienne. Pour $\mu_\C$, la dernière assertion est \cite[prop.~2.11]{Pin26} ; pour $\mu_\R$, le même calcul s'applique. \tagP{} \tagN
+\end{proof}
+
+\begin{theorem}\label{thm:D}
+Il existe un homéomorphisme $\C^*$-équivariant $\bigl(\mu_\R^{-1}(0)\cap\mu_\C^{-1}(0)\cap\SRep\bigr)/K^b\cong\M_{\mathrm d}$. En intersectant avec la sphère unité on obtient
+\[L_Q\cong\bigl(\mu_\R^{-1}(0)\cap\mu_\C^{-1}(0)\cap S(\SRep)\bigr)/K^b,\]
+le quotient $3$-sasakien de la sphère unité de l'espace quaternionique $\SRep$ \cite{BGM94,BG99}. La structure lisse de $L_Q$ provient du lemme~\ref{lem:weights}. La réduction n'est pas nécessairement localement libre sur l'ensemble des zéros.
+\end{theorem}
+\begin{proof}
+$\mu_\C^{-1}(0)\cap\SRep$ est une sous-variété fermée et $G^b$-stable d'une représentation unitaire de $G^b=(K^b)_\C$. Le théorème de Kempf--Ness \cite{KN79} identifie son quotient catégorique au $K^b$-quotient du lieu des zéros de l'application moment de $K^b$, qui est $\mu_\R$ par le lemme~\ref{lem:quat}. Les deux membres sont des cônes, donc l'identification se restreint aux entrelacs. \tagP{} (standard)
+\end{proof}
+
+\subsection{Flot de Reeb}
+D'après le lemme~\ref{lem:weights}, le flot de Reeb de la forme de contact induite par la métrique plate est le flot de Hopf $x\mapsto e^{i\theta}x$ sur $S^3/\Gamma$.
+
+\begin{proposition}\label{prop:seifert}
+Le flot de Hopf sur $S^3/\Gamma$ est une fibration de Seifert, avec les données suivantes. L'orbite générique est de période $2\pi$ si $-1\notin\Gamma$, et $\pi$ sinon. La fibre exceptionnelle au-dessus d'un point conique d'ordre $a$ est de période (générique)$/a$.
+\end{proposition}
+
+\begin{table}[h]\centering\small
+\begin{tabular}{@{}lllll@{}}\toprule
+type & $\Gamma$ & $L_Q$ & orbifold de base & période générique\\\midrule
+$A_{m-1}$, $m$ impair & $\Z_m$ & $L(m,m-1)$ & $S^2(m,m)$ & $2\pi$\\
+$A_{m-1}$, $m$ pair & $\Z_m$ & $L(m,m-1)$ & $S^2(m/2,m/2)$ & $\pi$\\
+$D_{k+2}$ & $\BD_{4k}$ & variété prismatique & $S^2(2,2,k)$ & $\pi$\\\bottomrule
+\end{tabular}
+\caption{Données de Seifert du flot de Reeb : orbifold de base et multiplicités. Les invariants de Seifert $\beta_i$ et le nombre d'Euler ne sont pas calculés ici.}\label{tab:seifert}
+\end{table}
+\begin{proof}
+Le stabilisateur de $x$ est $\{\theta : e^{i\theta}x\in\Gamma x\}$. Pour $x$ générique, seuls les scalaires $\pm1\in\Gamma$ contribuent. La base est $\C P^1/\bar\Gamma$, avec $\bar\Gamma\subset SO(3)$ cyclique d'ordre $m$ ou $m/2$, ou diédral d'ordre $2k$. Ses points coniques sont les points de $\C P^1$ de stabilisateur non trivial dans $\bar\Gamma$. L'identité $\chi^{\rm orb}=2/|\bar\Gamma|$ contrôle les données. \tagP{} \tagN{} \tagK
+\end{proof}
+
+Sous la conjecture~\ref{conj:C}, $S^3/\Gamma_{\rm cl}\to S^3/\Gamma_{2\delta}$ est un revêtement double de variétés de contact qui commute aux flots de Reeb : l'entrelacs en $2\delta$ est un $\Z_2$-quotient de l'entrelacs classique.
+
+\subsection{Remplissages}
+La résolution minimale classique de $\C^2/\Gamma$ (le quotient de Kronheimer à $\zeta\ne0$) est un remplissage symplectique fort (kählérien) de $L_Q$. Elle n'est pas de Stein, puisqu'elle contient les $(-2)$-courbes exceptionnelles. Pour les singularités ADE, elle est difféomorphe à la fibre de Milnor \cite{Bri71}, qui est un remplissage de Stein. Pour les espaces lenticulaires munis de cette structure de contact, tous les remplissages sont classifiés par Lisca \cite{Lis08}. La question de savoir si le quotient orthogonal de Pinot à $\zeta\ne0$ fournit une résolution reste ouverte : seuls les facteurs $GL$ de $G^b$ admettent des caractères, et l'involution envoie $\zeta$ sur $-\zeta$ avant une correction de Weyl \cite{Nak25}. \tagC{} \tagO
+
+\section{Questions à V.~Pinot}
+\begin{question} Confirmez-vous les étiquettes $D_{2n-2}$, $D_{2n-1}$ et la relation $z^2=z(-x)^{n-1}-xy^2$ du corollaire~\ref{cor:B} et de la proposition~\ref{prop:numeric} ?\end{question}
+\begin{question}\label{q:li} La proposition~9.2.1 de Li s'applique-t-elle à votre cadre non encadré et signé (par exemple avec $w=0$, ou avec un sommet d'encadrement auxiliaire) ? Le théorème~\ref{thm:A} n'utilise que cette immersion fermée.\end{question}
+\begin{question} Disposez-vous d'une référence pour l'isomorphisme de la remarque~2.15 en $\zeta=0$ au-delà du type $A_n$ à signes alternés ?\end{question}
+\begin{question} Les surfaces en $2\delta$ sont-elles des quotients de la surface classique par une involution (conjecture~\ref{conj:C}) ? Existe-t-il un candidat naturel pour $\iota$ en termes du carquois ?\end{question}
+\begin{question} Comptez-vous traiter le cas de votre remarque~1.3, $(\widetilde D_{2n-1},a)$ de signe $-1$ en $2\delta$ ? Sous la conjecture~\ref{conj:C}, on attendrait un sur-groupe de $\BD_{4(2n-3)}$ d'indice au plus~$2$.\end{question}
+
+\appendix
+\section{Dossier de vérification}
+\textattachfile[color=0 0 0.6]{DM3QUIVERS-verification-bundle.zip}{\textcolor{blue!50!black}{\underline{Zip joint}}} ; également sur \url{\bundleurl}. Python~3 avec \texttt{numpy}, \texttt{scipy}, \texttt{sympy} ; Lean~4 de base (sans Mathlib).
+\begin{itemize}[leftmargin=*]
+\item \texttt{verify\_Dtilde\_relation\_numeric.py} : proposition~\ref{prop:numeric} ; la sortie enregistrée est incluse.
+\item \texttt{verify\_ade\_types.py} : nombres de Milnor des polynômes des lignes $\widetilde D$ ; défaut d'homogénéité de la relation imprimée.
+\item \texttt{verify\_2delta\_index2.py} : proposition~\ref{prop:rings}.
+\item \texttt{verify\_quaternionic\_SRep.py} : lemme~\ref{lem:quat}.
+\item \texttt{verify\_seifert.py} : tableau~\ref{tab:seifert} et ordres des groupes.
+\item \texttt{DM3Quivers\_Check.lean} : degrés des poids, identité du numérateur de Milnor--Orlik $(d-w_x)(d-w_y)(d-w_z)=(L+3)w_xw_yw_z$, ordres des groupes et identités orbifoldes. Il ne vérifie ni la remarque~2.15 ni aucun énoncé géométrique.
+\end{itemize}
+
+\begin{thebibliography}{BGM94}
+\bibitem[BG99]{BG99} C.~P.~Boyer, K.~Galicki, \emph{3-Sasakian manifolds}, dans \emph{Surveys in Differential Geometry}, vol.~VI, International Press, Boston, 1999 ; arXiv:hep-th/9810250.
+\bibitem[BGM94]{BGM94} C.~P.~Boyer, K.~Galicki, B.~M.~Mann, The geometry and topology of 3-Sasakian manifolds, \emph{J. Reine Angew. Math.}, \textbf{455} (1994), 183--220.
+\bibitem[Bri71]{Bri71} E.~Brieskorn, Singular elements of semi-simple algebraic groups, dans \emph{Actes du Congrès international des mathématiciens} (Nice, 1970), t.~2, Gauthier-Villars, Paris, 1971, 279--284.
+\bibitem[CNPP06]{CNPP06} C.~Caubel, A.~Némethi, P.~Popescu-Pampu, Milnor open books and Milnor fillable contact 3-manifolds, \emph{Topology}, \textbf{45} (2006), 673--689.
+\bibitem[Gab72]{Gab72} P.~Gabriel, Unzerlegbare Darstellungen I, \emph{Manuscripta Math.}, \textbf{6} (1972), 71--103.
+\bibitem[KN79]{KN79} G.~Kempf, L.~Ness, The length of vectors in representation spaces, dans \emph{Algebraic Geometry} (Copenhague, 1978), Lecture Notes in Math., vol.~732, Springer, Berlin, 1979, 233--243.
+\bibitem[Kro89]{Kro89} P.~B.~Kronheimer, The construction of ALE spaces as hyper-Kähler quotients, \emph{J. Differ. Geom.}, \textbf{29} (1989), 665--683.
+\bibitem[Li19]{Li19} Y.~Li, Quiver varieties and symmetric pairs, \emph{Represent. Theory}, \textbf{23} (2019), 1--56.
+\bibitem[Lis08]{Lis08} P.~Lisca, On symplectic fillings of lens spaces, \emph{Trans. Am. Math. Soc.}, \textbf{360} (2008), 765--799.
+\bibitem[LP90]{LP90} L.~Le Bruyn, C.~Procesi, Semisimple representations of quivers, \emph{Trans. Am. Math. Soc.}, \textbf{317} (1990), 585--598.
+\bibitem[MO70]{MO70} J.~Milnor, P.~Orlik, Isolated singularities defined by weighted homogeneous polynomials, \emph{Topology}, \textbf{9} (1970), 385--393.
+\bibitem[Nak94]{Nak94} H.~Nakajima, Instantons on ALE spaces, quiver varieties, and Kac--Moody algebras, \emph{Duke Math. J.}, \textbf{76} (1994), 365--416.
+\bibitem[Nak25]{Nak25} H.~Nakajima, Instantons on ALE spaces for classical groups, involutions on quiver varieties, and quantum symmetric pairs, prépublication arXiv:2510.13007, 2025.
+\bibitem[Pin26]{Pin26} V.~Pinot, Quiver varieties for affine orthogonal quivers, prépublication arXiv:2609.39434, 2026.
+\end{thebibliography}
+\end{document}

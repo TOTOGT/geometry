@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orthogonal Quiver Links</title>
+<meta name="description" content="Affine orthogonal quiver varieties at δ and 2δ and their contact links: a working note on V. Pinot's arXiv:2609.39434, in English, Portuguese and French, with downloadable verification scripts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* A preprint landing page: one reading column; downloads first, then results, the corrected table, questions, and how to check it. */
+:root{
+  --paper:#fbfbf7; --ink:#1c2330; --muted:#5a6272; --rule:#dcdfe3; --panel:#f1f2ee;
+  --accent:#0e6b70; --accent-ink:#ffffff; --mark:#f3e7c4; --open:#9a3b1e;
+  --display:"Newsreader", "Iowan Old Style", Georgia, serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#13171e; --ink:#e5e8ec; --muted:#a2a9b4; --rule:#2c333d; --panel:#1b2029;
+  --accent:#5cc3c6; --accent-ink:#0b1216; --mark:#3a3420; --open:#e08a6b; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --paper:#13171e; --ink:#e5e8ec; --muted:#a2a9b4; --rule:#2c333d; --panel:#1b2029;
+  --accent:#5cc3c6; --accent-ink:#0b1216; --mark:#3a3420; --open:#e08a6b; color-scheme:dark }
+html{background:var(--paper)}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;margin:0}
+a{color:var(--accent)}
+.wrap{max-width:46rem;margin:0 auto;padding-inline:20px;padding-block:24px 64px;display:grid;gap:40px}
+header{display:grid;gap:14px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:14px}
+.crumbs{color:var(--muted)}
+.langs{display:flex;gap:6px;flex-wrap:wrap}
+.langs button{font:600 13px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;padding:8px 12px;border:1px solid var(--rule);background:transparent;color:var(--muted);border-radius:999px;cursor:pointer}
+.langs button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.langs button:focus-visible,.btn:focus-visible,.copy:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow{font:600 12px/1.3 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,5vw,40px);line-height:1.12;margin:0;text-wrap:balance}
+.byline{color:var(--muted);font-size:15px;margin:0}
+.byline b{color:var(--ink);font-weight:600}
+h2{font-family:var(--display);font-weight:600;font-size:24px;margin:0;text-wrap:balance}
+p{margin:0}
+.lede{font-family:var(--display);font-size:19px;line-height:1.5}
+section{display:grid;gap:14px}
+.dl{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:18px;display:grid;gap:14px}
+.dl-row{display:flex;flex-wrap:wrap;gap:10px}
+.btn{font:600 15px/1 var(--body);padding:12px 16px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);display:inline-flex;gap:8px;align-items:center;text-decoration:none}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn small{font-weight:400;opacity:.85}
+.note{font-size:14px;color:var(--muted)}
+.res{display:grid;grid-template-columns:3.2rem 1fr;gap:12px;align-items:start;padding-block:12px;border-top:1px solid var(--rule)}
+.res .k{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.res h3{font:600 17px/1.35 var(--body);margin:0 0 4px}
+.status{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:8px;font-size:13px;color:var(--muted)}
+.tag{display:inline-block;font:600 11px/1 var(--body);letter-spacing:.08em;padding:5px 8px;border-radius:999px;border:1px solid var(--accent);color:var(--accent)}
+.tag.o{border-color:var(--open);color:var(--open)}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums;min-width:36rem}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--rule);white-space:nowrap}
+th{font:600 12px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--panel)}
+tr:last-child td{border-bottom:0}
+tr.fix td{background:var(--mark)}
+td .was{color:var(--muted);text-decoration:line-through;margin-left:6px;font-size:13px}
+ol.q{margin:0;padding-left:1.3em;display:grid;gap:8px}
+ul.files{margin:0;padding-left:1.1em;display:grid;gap:4px;font-size:15px}
+ul.files code{font:13.5px var(--mono)}
+.cmds{display:grid;gap:8px}
+.cmd{display:flex;gap:8px;align-items:stretch;min-width:0}
+.cmd code{flex:1;min-width:0;overflow-x:auto;font:13.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;white-space:pre;color:var(--ink)}
+.copy{font:600 13px/1 var(--body);padding:0 12px;border-radius:8px;border:1px solid var(--rule);background:transparent;color:var(--muted);cursor:pointer}
+footer{font-size:14px;color:var(--muted);border-top:1px solid var(--rule);padding-top:16px;display:grid;gap:6px}
+@media (max-width:520px){ .res{grid-template-columns:2.4rem 1fr} body{font-size:16px} }
+@media (prefers-reduced-motion:no-preference){ .btn,.langs button{transition:background .15s,color .15s} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="top">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/geometry/">Principia Orthogona</a> · <a href="../index.html" data-i="collabs">Collaborations</a></nav>
+      <nav class="langs" aria-label="Language">
+        <button type="button" id="b-en" data-lang="en" aria-pressed="true">English</button>
+        <button type="button" id="b-pt" data-lang="pt" aria-pressed="false">Português</button>
+        <button type="button" id="b-fr" data-lang="fr" aria-pressed="false">Français</button>
+      </nav>
+    </div>
+    <div class="eyebrow" data-i="eyebrow">Version 0.2 · 5 October 2026 · for evaluation by V. Pinot</div>
+    <h1 data-i="title">Affine orthogonal quiver varieties at δ and 2δ, and their contact links</h1>
+    <p class="byline"><b>Pablo Nogueira Grossi</b> · G6 LLC (PrincipiaOrthogona), Newark NJ · ORCID 0009-0000-6496-2186 · <span data-i="on">on</span> V. Pinot, <i>Quiver varieties for affine orthogonal quivers</i>, <a href="https://arxiv.org/abs/2609.39434">arXiv:2609.39434</a></p>
+  </header>
+
+  <section class="dl" aria-labelledby="dl-h">
+    <h2 id="dl-h" data-i="dlh">Download</h2>
+    <div class="dl-row">
+      <a class="btn primary" id="dl-main" href="papers/DM3QUIVERS_v0.2_EN.pdf" download><span data-i="paper">Paper (PDF, English)</span></a>
+      <a class="btn" href="DM3QUIVERS-verification-bundle.zip" download><span data-i="zip">Verification scripts</span> <small>.zip · Python + Lean</small></a>
+    </div>
+    <div class="dl-row">
+      <a class="btn" href="papers/DM3QUIVERS_v0.2_EN.pdf" download>PDF · English</a>
+      <a class="btn" href="papers/DM3QUIVERS_v0.2_PT.pdf" download>PDF · Português (ABNT)</a>
+      <a class="btn" href="papers/DM3QUIVERS_v0.2_FR.pdf" download>PDF · Français</a>
+    </div>
+    <p class="note" data-i="dlnote">The zip is also attached inside each PDF (paperclip icon in Acrobat or Preview). LaTeX sources and every script are listed below.</p>
+  </section>
+
+  <section aria-labelledby="sum-h">
+    <h2 id="sum-h" data-i="sumh">What the note shows</h2>
+    <p class="lede" data-i="lede">Pinot's Theorem 1.2 lists the surfaces 𝔐<sub>δ</sub> and 𝔐<sub>2δ</sub> for ten families of affine orthogonal quivers. This note compares each surface with the classical quiver variety of the same graph, and lifts each one to its link, a contact 3-manifold S³/Γ.</p>
+    <div>
+      <div class="res"><div class="k">A</div><div><h3 data-i="ah">At δ the involution acts trivially</h3><p data-i="ap">Whenever 𝔐<sub>δ</sub> is a surface, it equals the classical Kleinian surface of the underlying affine graph. The proof uses only Li's closed immersion (Prop. 9.2.1), not the isomorphism stated in Pinot's Remark 2.15.</p><div class="status"><span class="tag">PROVED</span><span data-i="ac">assuming Li's result applies to the unframed case</span></div></div></div>
+      <div class="res"><div class="k">B</div><div><h3 data-i="bh">The two D̃ rows are D₂ₙ₋₂ and D₂ₙ₋₁</h3><p data-i="bp">Not D<sub>n+1</sub>. For (D̃₂ₙ₋₁, a) the relation is z² = z(−x)ⁿ⁻¹ − xy²: the printed version has y in place of z in the first term. A direct numerical computation of the invariant ring confirms both rows for n = 3, 4, 5.</p><div class="status"><span class="tag">PROVED</span><span class="tag">COMPUTED</span><span data-i="bc">numerical for n = 3, 4, 5</span></div></div></div>
+      <div class="res"><div class="k">C</div><div><h3 data-i="ch">At 2δ the groups double</h3><p data-i="cp">In three rows Γ<sub>2δ</sub> contains the classical group with index 2 (ℤ₄ₙ₋₂ ⊃ ℤ₂ₙ₋₁, ℤ₄ₙ ⊃ ℤ₂ₙ, BD₄ₙ ⊃ ℤ₂ₙ), and in the fourth they are equal. Conjecture: each 2δ surface is the classical surface divided by an involution.</p><div class="status"><span class="tag o">CONJECTURE</span><span data-i="cc">the statement for coordinate rings is proved</span></div></div></div>
+      <div class="res"><div class="k">D</div><div><h3 data-i="dh">The contact links</h3><p data-i="dp">The symmetric representation space is quaternionic, so the link is the Kempf–Ness / 3-Sasakian quotient of its unit sphere. Pinot's weights match the Klein invariants, so the Reeb flow is the Hopf flow: lens spaces over S²(m,m) and prism manifolds over S²(2,2,k).</p><div class="status"><span class="tag">PROVED</span><span class="tag">CITED</span><span data-i="dc">standard results, checked by script</span></div></div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-h">
+    <h2 id="tab-h" data-i="tabh">Pinot's table, with the corrections</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th data-i="t1">Quiver</th><th data-i="t2">Sign</th><th>d</th><th data-i="t3">Equation</th><th data-i="t4">Type</th><th>Γ</th></tr></thead>
+        <tbody>
+          <tr><td>(Ã₂ₙ₋₂, v-a)</td><td>+1</td><td>δ</td><td>xy = z²ⁿ⁻¹</td><td>A₂ₙ₋₂</td><td>ℤ₂ₙ₋₁</td></tr>
+          <tr><td>(Ã₂ₙ₋₂, v-a)</td><td>−1</td><td>2δ</td><td>xy = z⁴ⁿ⁻²</td><td>A₄ₙ₋₃</td><td>ℤ₄ₙ₋₂</td></tr>
+          <tr><td>(Ã₂ₙ₋₁, a-a)</td><td>(+,+)</td><td>δ</td><td>xy = z²ⁿ</td><td>A₂ₙ₋₁</td><td>ℤ₂ₙ</td></tr>
+          <tr><td>(Ã₂ₙ₋₁, a-a)</td><td>(+,−)</td><td>2δ</td><td>xy = z⁴ⁿ</td><td>A₄ₙ₋₁</td><td>ℤ₄ₙ</td></tr>
+          <tr><td>(Ã₂ₙ₋₁, a-a)</td><td>(−,−)</td><td>2δ</td><td>xy = z²ⁿ</td><td>A₂ₙ₋₁</td><td>ℤ₂ₙ</td></tr>
+          <tr><td>(Ã₂ₙ₋₁, v-v)</td><td></td><td>δ</td><td>xy = z²ⁿ</td><td>A₂ₙ₋₁</td><td>ℤ₂ₙ</td></tr>
+          <tr><td>(Ã₂ₙ₋₁, c)</td><td></td><td>2δ</td><td>xⁿ⁺¹ − y²x − z² = 0</td><td>D<sub>n+2</sub></td><td>BD₄ₙ</td></tr>
+          <tr class="fix"><td>(D̃₂ₙ₋₂, v)</td><td></td><td>δ</td><td>z² = −y(−x)ⁿ⁻¹ − xy²</td><td><b>D₂ₙ₋₂</b><span class="was">D<sub>n+1</sub></span></td><td>BD<sub>8(n−2)</sub></td></tr>
+          <tr class="fix"><td>(D̃₂ₙ₋₁, a)</td><td>+1</td><td>δ</td><td><b>z² = z(−x)ⁿ⁻¹ − xy²</b></td><td><b>D₂ₙ₋₁</b><span class="was">D<sub>n+1</sub></span></td><td>BD<sub>4(2n−3)</sub></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" data-i="tabnote">Highlighted rows are corrected; the struck-through label is the one printed in arXiv:2609.39434. All other rows are reduced points.</p>
+  </section>
+
+  <section aria-labelledby="q-h">
+    <h2 id="q-h" data-i="qh">Questions for V. Pinot</h2>
+    <ol class="q">
+      <li data-i="q1">Do you confirm the labels D₂ₙ₋₂, D₂ₙ₋₁ and the relation z² = z(−x)ⁿ⁻¹ − xy²?</li>
+      <li data-i="q2">Does Li's Proposition 9.2.1 apply to your unframed signed setting, for instance with w = 0 or an auxiliary framing vertex?</li>
+      <li data-i="q3">Is there a source for the isomorphism of Remark 2.15 at ζ = 0 beyond type Aₙ with alternating signs?</li>
+      <li data-i="q4">Are the 2δ surfaces quotients of the classical surface by an involution, and is there a natural candidate for it in terms of the quiver?</li>
+      <li data-i="q5">Do you plan to treat the case of your Remark 1.3, (D̃₂ₙ₋₁, a) with sign −1 at 2δ?</li>
+    </ol>
+    <span class="tag o">OPEN</span>
+  </section>
+
+  <section aria-labelledby="run-h">
+    <h2 id="run-h" data-i="runh">Run it yourself</h2>
+    <p data-i="runp">Python 3 with numpy, scipy and sympy, and Lean 4 core (no Mathlib). The page's own check is index-verify.py: it runs in seconds and reads the saved output of the ten-minute numerical computation; add --full to recompute it.</p>
+    <div class="cmds">
+      <div class="cmd"><code id="c1">python3 index-verify.py</code><button type="button" class="copy" data-copy="c1">Copy</button></div>
+      <div class="cmd"><code id="c2">python3 -m pip install numpy scipy sympy</code><button type="button" class="copy" data-copy="c2">Copy</button></div>
+      <div class="cmd"><code id="c3">python3 index-verify.py --full</code><button type="button" class="copy" data-copy="c3">Copy</button></div>
+      <div class="cmd"><code id="c4">lean scripts/DM3Quivers_Check.lean</code><button type="button" class="copy" data-copy="c4">Copy</button></div>
+    </div>
+    <ul class="files">
+      <li><a href="index-verify.py" download><code>index-verify.py</code></a> — <span data-i="f0">the page's check: every claim above, numbered blocks, PASS/FAIL</span></li>
+      <li><a href="scripts/verify_Dtilde_relation_numeric.py" download><code>scripts/verify_Dtilde_relation_numeric.py</code></a> · <a href="scripts/verify_Dtilde_relation_numeric.out" download><code>.out</code></a> — <span data-i="f1">the invariant ring computed from random points of μ⁻¹(0)</span></li>
+      <li><a href="scripts/verify_ade_types.py" download><code>scripts/verify_ade_types.py</code></a> — <span data-i="f2">Milnor numbers of the D̃-row polynomials</span></li>
+      <li><a href="scripts/verify_2delta_index2.py" download><code>scripts/verify_2delta_index2.py</code></a> — <span data-i="f3">the 2δ ring identities</span></li>
+      <li><a href="scripts/verify_quaternionic_SRep.py" download><code>scripts/verify_quaternionic_SRep.py</code></a> — <span data-i="f4">σ commutes with the quaternionic structure</span></li>
+      <li><a href="scripts/verify_seifert.py" download><code>scripts/verify_seifert.py</code></a> — <span data-i="f5">Seifert data and group orders</span></li>
+      <li><a href="scripts/DM3Quivers_Check.lean" download><code>scripts/DM3Quivers_Check.lean</code></a> — <span data-i="f6">Lean 4 kernel check of the arithmetic only</span></li>
+      <li><a href="papers/DM3QUIVERS_v0.2_EN.tex" download><code>EN.tex</code></a> · <a href="papers/DM3QUIVERS_v0.2_PT.tex" download><code>PT.tex</code></a> · <a href="papers/DM3QUIVERS_v0.2_FR.tex" download><code>FR.tex</code></a> — <span data-i="f7">LaTeX sources (XeLaTeX)</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p data-i="foot1">Every statement in the PDF carries a tag: proved, cited, numerically checked, kernel-checked arithmetic, or open. Numerical results are evidence, not proofs. Not peer reviewed.</p>
+    <p data-i="foot2">Prepared with the assistance of Claude (Anthropic). The author takes responsibility for the text. Victor Pinot has agreed to read it; his evaluation has not arrived yet.</p>
+    <p data-i="foot3">Text CC BY-NC-ND 4.0, code MIT (see LICENSE-CONTENT and LICENSE in the repository). Contact: g6llc@proton.me</p>
+  </footer>
+</div>
+
+<script>
+const T = {
+ pt:{collabs:"Colaborações", eyebrow:"Versão 0.2 · 5 de outubro de 2026 · para avaliação de V. Pinot",
+  title:"Variedades de quivers ortogonais afins em δ e 2δ e seus links de contato", on:"sobre",
+  dlh:"Baixar", paper:"Artigo (PDF, português)", zip:"Scripts de verificação",
+  dlnote:"O zip também está anexado dentro de cada PDF (ícone de clipe no Acrobat ou no Preview). As fontes LaTeX e todos os scripts estão listados abaixo.",
+  sumh:"O que a nota mostra",
+  lede:"O Teorema 1.2 de Pinot lista as superfícies 𝔐<sub>δ</sub> e 𝔐<sub>2δ</sub> para dez famílias de quivers ortogonais afins. Esta nota compara cada superfície com a variedade de quiver clássica do mesmo grafo e eleva cada uma ao seu link, uma 3-variedade de contato S³/Γ.",
+  ah:"Em δ a involução age trivialmente", ap:"Sempre que 𝔐<sub>δ</sub> é uma superfície, ela é igual à superfície kleiniana clássica do grafo afim subjacente. A demonstração usa apenas a imersão fechada de Li (Prop. 9.2.1), e não o isomorfismo afirmado na Observação 2.15 de Pinot.", ac:"supondo que o resultado de Li se aplica ao caso não enquadrado",
+  bh:"As duas linhas D̃ são D₂ₙ₋₂ e D₂ₙ₋₁", bp:"E não D<sub>n+1</sub>. Para (D̃₂ₙ₋₁, a) a relação é z² = z(−x)ⁿ⁻¹ − xy²: a versão impressa tem y no lugar de z no primeiro termo. Um cálculo numérico direto do anel de invariantes confirma as duas linhas para n = 3, 4, 5.", bc:"numérico para n = 3, 4, 5",
+  ch:"Em 2δ os grupos dobram", cp:"Em três linhas Γ<sub>2δ</sub> contém o grupo clássico com índice 2 (ℤ₄ₙ₋₂ ⊃ ℤ₂ₙ₋₁, ℤ₄ₙ ⊃ ℤ₂ₙ, BD₄ₙ ⊃ ℤ₂ₙ), e na quarta os dois coincidem. Conjectura: cada superfície em 2δ é a superfície clássica dividida por uma involução.", cc:"o enunciado para os anéis de coordenadas está demonstrado",
+  dh:"Os links de contato", dp:"O espaço das representações simétricas é quaterniônico, de modo que o link é o quociente de Kempf–Ness / 3-sasakiano da sua esfera unitária. Os pesos de Pinot coincidem com os invariantes de Klein, logo o fluxo de Reeb é o fluxo de Hopf: espaços lenticulares sobre S²(m,m) e variedades prismáticas sobre S²(2,2,k).", dc:"resultados padrão, verificados por script",
+  tabh:"A tabela de Pinot, com as correções", t1:"Quiver", t2:"Sinal", t3:"Equação", t4:"Tipo",
+  tabnote:"As linhas destacadas foram corrigidas; o rótulo riscado é o impresso em arXiv:2609.39434. As demais linhas são pontos reduzidos.",
+  qh:"Questões para V. Pinot",
+  q1:"Confirma os rótulos D₂ₙ₋₂, D₂ₙ₋₁ e a relação z² = z(−x)ⁿ⁻¹ − xy²?",
+  q2:"A Proposição 9.2.1 de Li se aplica ao seu contexto não enquadrado e sinalizado, por exemplo com w = 0 ou com um vértice de enquadramento auxiliar?",
+  q3:"Há uma fonte para o isomorfismo da Observação 2.15 em ζ = 0 além do tipo Aₙ com sinais alternados?",
+  q4:"As superfícies em 2δ são quocientes da superfície clássica por uma involução, e há um candidato natural para ela em termos do quiver?",
+  q5:"Pretende tratar o caso da sua Observação 1.3, (D̃₂ₙ₋₁, a) com sinal −1 em 2δ?",
+  runh:"Rode você mesmo", runp:"Python 3 com numpy, scipy e sympy, e Lean 4 básico (sem Mathlib). A verificação da própria página é index-verify.py: roda em segundos e lê a saída gravada do cálculo numérico de dez minutos; acrescente --full para recalculá-lo.",
+  f0:"a verificação da página: cada afirmação acima, em blocos numerados, PASS/FAIL", f1:"o anel de invariantes calculado a partir de pontos aleatórios de μ⁻¹(0)", f2:"números de Milnor dos polinômios das linhas D̃", f3:"as identidades de anéis em 2δ", f4:"σ comuta com a estrutura quaterniônica", f5:"dados de Seifert e ordens dos grupos", f6:"verificação no núcleo do Lean 4, apenas da aritmética", f7:"fontes LaTeX (XeLaTeX)",
+  foot1:"Cada enunciado do PDF traz uma etiqueta: demonstrado, citado, verificado numericamente, aritmética verificada no núcleo do Lean, ou em aberto. Resultados numéricos são evidência, não demonstração. Sem revisão por pares.",
+  foot2:"Preparado com o auxílio do Claude (Anthropic). O autor assume a responsabilidade pelo texto. Victor Pinot aceitou lê-lo; a sua avaliação ainda não chegou.",
+  foot3:"Texto CC BY-NC-ND 4.0, código MIT (ver LICENSE-CONTENT e LICENSE no repositório). Contato: g6llc@proton.me",
+  pdf:"papers/DM3QUIVERS_v0.2_PT.pdf", copy:"Copiar", copied:"Copiado"},
+ fr:{collabs:"Collaborations", eyebrow:"Version 0.2 · 5 octobre 2026 · pour évaluation par V. Pinot",
+  title:"Variétés de carquois orthogonaux affines en δ et 2δ, et leurs entrelacs de contact", on:"sur",
+  dlh:"Télécharger", paper:"Article (PDF, français)", zip:"Scripts de vérification",
+  dlnote:"Le zip est aussi joint à chaque PDF (icône trombone dans Acrobat ou Aperçu). Les sources LaTeX et tous les scripts sont listés plus bas.",
+  sumh:"Ce que montre la note",
+  lede:"Le théorème 1.2 de Pinot donne les surfaces 𝔐<sub>δ</sub> et 𝔐<sub>2δ</sub> pour dix familles de carquois orthogonaux affines. Cette note compare chaque surface à la variété de carquois classique du même graphe, et relève chacune en son entrelacs, une variété de contact S³/Γ de dimension 3.",
+  ah:"En δ l'involution agit trivialement", ap:"Dès que 𝔐<sub>δ</sub> est une surface, elle est égale à la surface kleinienne classique du graphe affine sous-jacent. La démonstration n'utilise que l'immersion fermée de Li (prop. 9.2.1), et non l'isomorphisme énoncé dans la remarque 2.15 de Pinot.", ac:"si le résultat de Li s'applique au cas non encadré",
+  bh:"Les deux lignes D̃ sont D₂ₙ₋₂ et D₂ₙ₋₁", bp:"Et non D<sub>n+1</sub>. Pour (D̃₂ₙ₋₁, a), la relation est z² = z(−x)ⁿ⁻¹ − xy² : la version imprimée porte y au lieu de z dans le premier terme. Un calcul numérique direct de l'anneau des invariants confirme les deux lignes pour n = 3, 4, 5.", bc:"numérique pour n = 3, 4, 5",
+  ch:"En 2δ les groupes doublent", cp:"Dans trois lignes, Γ<sub>2δ</sub> contient le groupe classique avec indice 2 (ℤ₄ₙ₋₂ ⊃ ℤ₂ₙ₋₁, ℤ₄ₙ ⊃ ℤ₂ₙ, BD₄ₙ ⊃ ℤ₂ₙ), et dans la quatrième ils coïncident. Conjecture : chaque surface en 2δ est le quotient de la surface classique par une involution.", cc:"l'énoncé pour les anneaux de coordonnées est démontré",
+  dh:"Les entrelacs de contact", dp:"L'espace des représentations symétriques est quaternionique, donc l'entrelacs est le quotient de Kempf–Ness / 3-sasakien de sa sphère unité. Les poids de Pinot coïncident avec les invariants de Klein, donc le flot de Reeb est le flot de Hopf : espaces lenticulaires au-dessus de S²(m,m) et variétés prismatiques au-dessus de S²(2,2,k).", dc:"résultats standard, vérifiés par script",
+  tabh:"Le tableau de Pinot, corrigé", t1:"Carquois", t2:"Signe", t3:"Équation", t4:"Type",
+  tabnote:"Les lignes surlignées sont corrigées ; l'étiquette barrée est celle imprimée dans arXiv:2609.39434. Les autres lignes sont des points réduits.",
+  qh:"Questions à V. Pinot",
+  q1:"Confirmez-vous les étiquettes D₂ₙ₋₂, D₂ₙ₋₁ et la relation z² = z(−x)ⁿ⁻¹ − xy² ?",
+  q2:"La proposition 9.2.1 de Li s'applique-t-elle à votre cadre non encadré et signé, par exemple avec w = 0 ou un sommet d'encadrement auxiliaire ?",
+  q3:"Disposez-vous d'une référence pour l'isomorphisme de la remarque 2.15 en ζ = 0 au-delà du type Aₙ à signes alternés ?",
+  q4:"Les surfaces en 2δ sont-elles des quotients de la surface classique par une involution, et en existe-t-il un candidat naturel en termes du carquois ?",
+  q5:"Comptez-vous traiter le cas de votre remarque 1.3, (D̃₂ₙ₋₁, a) de signe −1 en 2δ ?",
+  runh:"Exécutez-le vous-même", runp:"Python 3 avec numpy, scipy et sympy, et Lean 4 de base (sans Mathlib). La vérification propre à la page est index-verify.py : elle tourne en quelques secondes et lit la sortie enregistrée du calcul numérique de dix minutes ; ajoutez --full pour le refaire.",
+  f0:"la vérification de la page : chaque énoncé ci-dessus, blocs numérotés, PASS/FAIL", f1:"l'anneau des invariants calculé à partir de points aléatoires de μ⁻¹(0)", f2:"nombres de Milnor des polynômes des lignes D̃", f3:"les identités d'anneaux en 2δ", f4:"σ commute avec la structure quaternionique", f5:"données de Seifert et ordres des groupes", f6:"vérification par le noyau Lean 4, de l'arithmétique seulement", f7:"sources LaTeX (XeLaTeX)",
+  foot1:"Chaque énoncé du PDF porte une étiquette : démontré, cité, vérifié numériquement, arithmétique vérifiée par le noyau Lean, ou ouvert. Les résultats numériques sont des indices, non des démonstrations. Non relu par des pairs.",
+  foot2:"Préparé avec l'aide de Claude (Anthropic). L'auteur assume la responsabilité du texte. Victor Pinot a accepté de le lire ; son évaluation n'est pas encore arrivée.",
+  foot3:"Texte CC BY-NC-ND 4.0, code MIT (voir LICENSE-CONTENT et LICENSE dans le dépôt). Contact : g6llc@proton.me",
+  pdf:"papers/DM3QUIVERS_v0.2_FR.pdf", copy:"Copier", copied:"Copié"}
+};
+const EN = {}; document.querySelectorAll("[data-i]").forEach(el => { EN[el.dataset.i] = el.innerHTML; });
+Object.assign(EN, {pdf:"papers/DM3QUIVERS_v0.2_EN.pdf", copy:"Copy", copied:"Copied"});
+T.en = EN;
+let lang = "en";
+function setLang(l){
+  if(!T[l]) l = "en"; lang = l;
+  const d = T[l];
+  document.documentElement.lang = l;
+  document.querySelectorAll("[data-i]").forEach(el => { const k = el.dataset.i; if(d[k] != null) el.innerHTML = d[k]; });
+  document.getElementById("dl-main").setAttribute("href", d.pdf);
+  document.querySelectorAll(".copy").forEach(b => b.textContent = d.copy);
+  document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
+  try { localStorage.setItem("oql-lang", l); } catch(e) {}
+}
+document.querySelectorAll(".langs button").forEach(b => b.addEventListener("click", () => { setLang(b.dataset.lang); history.replaceState(null, "", "#" + b.dataset.lang); }));
+let start = (location.hash || "").replace("#", "");
+if(!T[start]){ try { start = localStorage.getItem("oql-lang") || "en"; } catch(e) { start = "en"; } }
+setLang(start);
+document.querySelectorAll(".copy").forEach(b => b.addEventListener("click", async () => {
+  const code = document.getElementById(b.dataset.copy);
+  try { await navigator.clipboard.writeText(code.textContent); b.textContent = T[lang].copied; setTimeout(() => b.textContent = T[lang].copy, 1500); }
+  catch(e) { const sel = window.getSelection(); const rg = document.createRange(); rg.selectNodeContents(code); sel.removeAllRanges(); sel.addRange(rg); }
+}));
+</script>
+</body>
+</html>
