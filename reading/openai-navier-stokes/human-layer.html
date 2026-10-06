@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why the Blowup Works</title>
+<meta name="description" content="The explanatory layer OpenAI's Navier–Stokes blowup preprint leaves out: why each choice is made, worked toy models of each mechanism, a dependency map, where the new idea lives, and questions the paper does not answer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Second layer of the reading companion: questions a reader asks, each answered with a reason and, where it helps, a toy model checked by script. */
+:root{
+  --paper:#fbfbf7; --ink:#1c2330; --muted:#5a6272; --rule:#dcdfe3; --panel:#f1f2ee;
+  --accent:#0e6b70; --grow:#c0502a; --shrink:#0090a0; --open:#9a3b1e;
+  --display:"Newsreader", "Iowan Old Style", Georgia, serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#13171e; --ink:#e5e8ec; --muted:#a2a9b4; --rule:#2c333d; --panel:#1b2029;
+  --accent:#5cc3c6; --grow:#cf6440; --shrink:#169aa3; --open:#e08a6b; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --paper:#13171e; --ink:#e5e8ec; --muted:#a2a9b4; --rule:#2c333d; --panel:#1b2029;
+  --accent:#5cc3c6; --grow:#cf6440; --shrink:#169aa3; --open:#e08a6b; color-scheme:dark }
+html{background:var(--paper)}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;margin:0}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:46rem;margin:0 auto;padding-inline:20px;padding-block:24px 72px;display:grid;gap:44px}
+.crumbs{font-size:14px;color:var(--muted)}
+header{display:grid;gap:12px}
+.eyebrow{font:600 12px/1.3 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,5.2vw,44px);line-height:1.1;margin:0;text-wrap:balance}
+.byline{color:var(--muted);font-size:15px;margin:0}
+h2{font-family:var(--display);font-weight:600;font-size:25px;line-height:1.2;margin:0;text-wrap:balance}
+h3{font:600 17px/1.35 var(--body);margin:0}
+p{margin:0}
+section{display:grid;gap:14px}
+.wrap > *, section > *{min-width:0}
+.lede{font-family:var(--display);font-size:20px;line-height:1.5}
+.q{font-family:var(--display);font-style:italic;font-size:21px;line-height:1.35;color:var(--accent)}
+.note{border-left:3px solid var(--rule);padding-left:14px;color:var(--muted);font-size:15px}
+.tag{display:inline-block;font:600 11px/1 var(--body);letter-spacing:.08em;padding:5px 8px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);vertical-align:2px}
+.tag.o{border-color:var(--open);color:var(--open)}
+.fig{border:1px solid var(--rule);border-radius:10px;padding:14px;background:var(--panel);overflow-x:auto;position:relative}
+.fig svg{display:block;width:100%;height:auto}
+#kplot{min-width:520px}
+figcaption{font-size:14px;color:var(--muted)}
+figure{margin:0;display:grid;gap:8px}
+.ctrl{display:grid;grid-template-columns:auto 1fr auto;gap:8px 12px;align-items:center;font-size:15px}
+.ctrl input{accent-color:var(--accent)}
+.ctrl output{font:600 14px var(--mono);font-variant-numeric:tabular-nums;min-width:6ch;text-align:right}
+.readout{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--paper);font-size:13px;padding:6px 8px;border-radius:6px;white-space:nowrap;transform:translate(-50%,-130%)}
+ul.tree,ul.tree ul{list-style:none;margin:0;padding-left:1.2em;border-left:1px solid var(--rule)}
+ul.tree{padding-left:0;border-left:0}
+ul.tree li{padding:3px 0 3px 10px;position:relative}
+ul.tree ul li::before{content:"";position:absolute;left:-1.2em;top:15px;width:1em;border-top:1px solid var(--rule)}
+ul.tree b{font-weight:600}
+ul.tree span{color:var(--muted);font-size:15px}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:36rem}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 12px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--panel)}
+tr:last-child td{border-bottom:0}
+ol.story{margin:0;padding-left:1.4em;display:grid;gap:10px}
+ol.story li::marker{font-family:var(--display);color:var(--accent);font-weight:600}
+ul.plain{margin:0;padding-left:1.1em;display:grid;gap:8px}
+.btn{font:600 15px/1 var(--body);padding:11px 14px;border-radius:8px;border:1px solid var(--accent);color:var(--accent);background:transparent;text-decoration:none;display:inline-flex}
+.cmd code{display:block;overflow-x:auto;font:13.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;white-space:pre}
+footer{font-size:14px;color:var(--muted);border-top:1px solid var(--rule);padding-top:16px;display:grid;gap:6px}
+@media (max-width:620px){ body{font-size:16px} .ctrl{grid-template-columns:auto 1fr auto} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/geometry/">Principia Orthogona</a> · <a href="../index.html">Reading companions</a> · <a href="index.html">Reading the Navier–Stokes blowup</a></nav>
+
+  <header>
+    <div class="eyebrow">Reading companion, second layer · 6 October 2026</div>
+    <h1>Why the blowup works</h1>
+    <p class="byline">On OpenAI, <i>Finite time blowup for Navier–Stokes</i> (preprint, 8 September 2026). Prepared by Pablo Nogueira Grossi with the assistance of Claude (Anthropic).</p>
+  </header>
+
+  <section>
+    <p class="lede">A mathematician at Oxford read the preprint and said it was not written for humans. That is a fair description. Its Section 2 tells the physical story and Section 3 lists the steps, but the layers a human author would normally supply are thin. Why this ansatz and not another? What does each mechanism look like in the simplest possible case? Which steps carry the new idea and which are bookkeeping? How do its many results depend on one another? This page supplies those layers, as questions a reader would ask.</p>
+    <p class="note">The toy models below are classical and are not the paper's construction; each is checked by the script at the end. Where we reconstruct a reason the paper does not state, we say so.</p>
+  </section>
+
+  <section aria-labelledby="q1">
+    <h2 id="q1">1. Why should anything blow up at all?</h2>
+    <p class="q">Viscosity smooths. How can a viscous flow reach infinite speed?</p>
+    <p>Viscosity wins over a length ℓ in time ℓ²/ν. Run that backwards: a structure that shrinks like ℓ ∼ √(ν(1−t)) shrinks exactly as fast as diffusion can follow. Speeds of order ℓ/τ ∼ τ<sup>−1/2</sup> are then "critical": the Reynolds number ℓ·speed/ν stays of order one, and viscosity keeps up. To beat viscosity, something has to move faster than that.</p>
+    <p>The paper's core does exactly that, but only in one direction. Its radial inflow stays at the critical scale, so viscosity and inflow remain in balance and the profile stays smooth and self-similar. Its swirl, the speed around the axis, runs faster by a factor τ<sup>−h</sup>, which is the swirl Reynolds number Re<sub>θ</sub> → ∞. The fluid makes more and more turns per diffusion time. Rotation is the part viscosity cannot keep up with, and rotation is what carries the blowup. <span class="tag">COMPUTED</span></p>
+    <p class="q">And why does the energy stay bounded?</p>
+    <p>Because the fast region is tiny. Its volume shrinks like τ<sup>3/2−h</sup> while the squared speed grows like τ<sup>−1−2h</sup>, so the energy in the core goes to zero, like τ<sup>1/2−3h</sup>. Infinite speed in a vanishing volume costs almost nothing.</p>
+  </section>
+
+  <section aria-labelledby="q2">
+    <h2 id="q2">2. Why a slender vortex, and why the small h?</h2>
+    <p>A core that shrank equally in all directions would leave no small parameter to expand in. Making the height shrink more slowly than the radius (τ<sup>1/2−h</sup> against τ<sup>1/2</sup>) does three things at once. The column gets slender, ℓ<sub>r</sub>/ℓ<sub>z</sub> ∼ τ<sup>h</sup>. Diffusion along the axis becomes weaker than diffusion across it, by a factor τ<sup>2h</sup>. And that factor, written q<sup>2h</sup>, becomes the expansion parameter: Section 5 corrects the profile order by order in powers of q<sup>2h</sup>. The paper says this in one line (§3.1); it is the reason h exists.</p>
+    <p>Why h &lt; 1/100 rather than, say, 1/10? The energy argument only needs h &lt; 1/6. We did not find where the paper explains the smaller bound; we read it as a technical margin used in the estimates, not as something essential. <span class="tag o">OPEN</span></p>
+    <p class="q">Why the deliberate up–down asymmetry?</p>
+    <p>The pulses need shear to grow. With exact mirror symmetry about the mid-plane, the axial flow would vanish there and so would the rotational amplification, leaving a dead layer. Tilting the axial profile slightly upward separates the layer where one mechanism is weak from the layer where the other is weak, so some amplification is always present (§2.1).</p>
+  </section>
+
+  <section aria-labelledby="q3">
+    <h2 id="q3">3. How can a wave push the mean flow?</h2>
+    <p>A wave w = a cos(k·x), with its velocity a perpendicular to k so that it is divergence-free, averages to zero. But the force it exerts on the mean flow comes from the product w ⊗ w, and that does not average to zero:</p>
+    <p style="text-align:center;font-family:var(--display);font-size:20px">⟨w ⊗ w⟩ = ½ a aᵀ.</p>
+    <p>This averaged product is the wave's momentum flux, the Reynolds stress of turbulence theory. Its divergence acts on the mean flow exactly like a force. That is the whole trick of the paper: the background vortex needs a force it cannot supply, so the paper places waves where that force is needed and lets their momentum flux supply it. "The fluid's own motion supplies the missing momentum transport" (§2.2). <span class="tag">COMPUTED</span></p>
+    <p class="note">Oscillations that realise a prescribed stress are also the engine of convex integration (De Lellis–Székelyhidi, Buckmaster–Vicol). The difference here is that the paper's waves are not imposed at every instant: each is seeded by an exponentially small push and then grows on its own, by drawing energy from the shear.</p>
+  </section>
+
+  <section aria-labelledby="q4">
+    <h2 id="q4">4. Why two wave families, and what is the cone?</h2>
+    <p>The force needed in the annulus has two components: azimuthal momentum and axial momentum, both transported radially. A single wave family carries flux in one fixed direction v₁, set by its orientation; turning up its amplitude only moves along that ray, and the amplitude enters squared, so it can never point backwards. Two families with directions v₁ and v₂ can reach any target T = c₁v₁ + c₂v₂ with c₁, c₂ ≥ 0: exactly the cone between them, and nothing outside it.</p>
+    <figure>
+      <div class="fig">
+        <svg viewBox="0 0 520 250" role="img" aria-labelledby="ct">
+          <title id="ct">Two flux directions span a cone; a target inside needs two positive weights, a target outside would need a negative one</title>
+          <g font-family="Source Sans 3, system-ui, sans-serif" font-size="13">
+            <path d="M80 210 L 460 115 L 205 25 Z" fill="var(--shrink)" fill-opacity="0.14"/>
+            <line x1="80" y1="210" x2="460" y2="115" stroke="var(--shrink)" stroke-width="2"/>
+            <line x1="80" y1="210" x2="205" y2="25" stroke="var(--shrink)" stroke-width="2"/>
+            <text x="468" y="119" fill="var(--ink)">v₁</text>
+            <text x="190" y="20" fill="var(--ink)">v₂</text>
+            <circle cx="300" cy="110" r="6" fill="var(--accent)" stroke="var(--panel)" stroke-width="2"/>
+            <text x="312" y="106" fill="var(--ink)">T inside: c₁, c₂ &gt; 0</text>
+            <circle cx="400" cy="215" r="6" fill="var(--grow)" stroke="var(--panel)" stroke-width="2"/>
+            <text x="300" y="240" fill="var(--ink)">T outside: one weight &lt; 0 (impossible)</text>
+            <circle cx="80" cy="210" r="3" fill="var(--muted)"/><text x="62" y="228" fill="var(--muted)">0</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>Illustrative directions, not the paper's. In the paper, v₁ and v₂ depend on the local background and on the chosen wave orientations.</figcaption>
+    </figure>
+    <p>So the background must be built so that its required stress lies inside the cone everywhere in the annulus. That is the "admissible stress cone" condition (Lemma 4.5). It does not hold by luck. Appendix C forces it by adding a small radial ripple to the profile, with phase N log X, which changes the shear by an order-one amount while changing everything else by only O(1/N). This is one of the genuinely delicate steps.</p>
+  </section>
+
+  <section aria-labelledby="q5">
+    <h2 id="q5">5. Why do the pulses grow, and why do they stop?</h2>
+    <p>The simplest exact example is Kelvin's shearing wave (1887). On a plane shear flow u = (Sy, 0), a single Fourier mode of vorticity is carried by the shear: its wavevector tilts, k<sub>y</sub>(t) = k<sub>y0</sub> − S k<sub>x</sub> t, and viscosity damps it by exp(−ν∫|k|²). Remarkably, this is an exact solution of the full Navier–Stokes equations, nonlinear term included, because a single plane wave does not advect itself. Its energy is proportional to (amplitude)²/|k|²:</p>
+    <ul class="plain">
+      <li>while the shear turns the wave toward k<sub>x</sub>, |k| shrinks and the energy grows (this is the Orr mechanism);</li>
+      <li>once it has turned past, |k| grows, the wavelength shortens, and viscosity takes over.</li>
+    </ul>
+    <figure>
+      <div class="fig" id="kwrap">
+        <svg id="kplot" viewBox="0 0 640 300" role="img" aria-label="Energy of Kelvin's shearing wave over time"></svg>
+        <div class="tip" id="ktip" hidden></div>
+      </div>
+      <div class="ctrl">
+        <label for="ky0">initial tilt k<sub>y0</sub>/k<sub>x</sub></label><input type="range" id="ky0" min="1" max="12" step="0.5" value="8"><output id="ky0v" for="ky0">8.0</output>
+        <label for="nu">viscosity ν</label><input type="range" id="nu" min="0" max="0.01" step="0.0005" value="0.002"><output id="nuv" for="nu">0.0020</output>
+      </div>
+      <p class="readout" id="kread"></p>
+      <figcaption>Energy relative to its starting value; S = k<sub>x</sub> = 1. At the default settings the energy grows about thirty-fold, peaks when the wave is aligned with k<sub>x</sub> (t ≈ 8), then decays. Hover the curve for values.</figcaption>
+    </figure>
+    <p>The paper's pulses do the same thing, with two differences. Their background is a rotating, axially sheared vortex, and part of the growth is centrifugal: a parcel moving outward with extra swirl keeps accelerating outward if the angular velocity falls off fast enough with radius, a version of Rayleigh's criterion (the paper cites the centrifugal-instability criteria of Leibovich–Stewartson and Billant–Gallaire). And the paper chooses each pulse's initial wavelength so that growth wins first and viscosity wins later, exactly as in the toy, so each pulse is a finite burst whose tails are exponentially small (Lemma 7.4; Figure 3(b)). <span class="tag">CITED</span></p>
+  </section>
+
+  <section aria-labelledby="q6">
+    <h2 id="q6">6. Then why is the paper 166 pages long?</h2>
+    <p>Because the leading-order cancellation is only the start. Every wave that cancels one error creates others: interactions between waves, corrections from the cutoffs, terms from the varying amplitude, the effect of the waves on the pressure. The force has to be smooth to <em>every</em> order, so every one of these must be pushed down as well, with control of every derivative, uniformly. The paper does this with a fixed cycle of four corrections that improves the decay of the remainder by a fixed step each time (σ<sub>j+1</sub> = σ<sub>j</sub> + 1/10), then sums infinitely many cycles with shrinking cutoffs. Most of the length is this bookkeeping.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Where</th><th>What kind of step</th><th>In our reading</th></tr></thead>
+        <tbody>
+          <tr><td>§2, §3.3, Prop. 7.5</td><td>The idea</td><td>Shear-amplified pulses whose averaged flux supplies the missing force on a collapsing vortex. The paper names this as its new ingredient (§1.1).</td></tr>
+          <tr><td>§2.1, §3.1, Thm 4.6</td><td>Design choices</td><td>Slender core with small h; deliberate asymmetry; the heat exterior that needs no force and allows cutting off.</td></tr>
+          <tr><td>Lemma 4.5, App. C</td><td>Delicate analysis</td><td>Making the required stress lie inside the cone everywhere.</td></tr>
+          <tr><td>§5, §9</td><td>Delicate analysis</td><td>Corrections to every order with derivative losses that do not grow with the stage.</td></tr>
+          <tr><td>Lemmas 10.2, 10.3</td><td>Delicate analysis</td><td>Showing every derivative of the force has a limit at t = 1, so it extends smoothly.</td></tr>
+          <tr><td>§6, §8, symbol table</td><td>Bookkeeping</td><td>Dyadic charts, the auxiliary torus that keeps pulses apart, coefficient classes, moment equations.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">The classification in the right-hand column is our judgment as readers, not the authors'.</p>
+  </section>
+
+  <section aria-labelledby="q7">
+    <h2 id="q7">7. How do the results depend on each other?</h2>
+    <p>The paper's Figures 5 and 6 are a flow chart; here is the same information as a tree, read from the top down. Each line names a result in the paper. <span class="tag">CITED</span></p>
+    <ul class="tree">
+      <li><b>Theorem 1.1</b> <span>blowup on ℝ³; Corollary 10.6 on the torus</span>
+        <ul>
+          <li><b>Lemma 10.5</b> <span>a smooth bounded-energy solution with the same force must equal ours before t = 1</span></li>
+          <li><b>Lemma 10.4</b> <span>energy and dissipation stay bounded</span></li>
+          <li><b>Lemmas 10.2, 10.3</b> <span>the force extends smoothly through t = 1</span></li>
+          <li><b>Proposition 10.1</b> <span>cut off in space and time</span>
+            <ul>
+              <li><b>Theorem 3.1</b> <span>the local flow: smooth, divergence-free, flat residual, swirl ∼ τ<sup>−1/2−h</sup></span>
+                <ul>
+                  <li><b>Proposition 9.9</b> <span>sum the corrections; the residual is flat</span>
+                    <ul>
+                      <li><b>Proposition 9.6</b> <span>one correction cycle improves the decay by 1/10</span>
+                        <ul>
+                          <li><b>Proposition 9.5</b> <span>background plus pulses is a valid starting point</span>
+                            <ul>
+                              <li><b>Proposition 7.5</b> <span>positive weights reproduce the stress</span> · <b>Lemma 7.7</b> <span>divergence-free pulses</span> · <b>Lemma 7.4</b> <span>each pulse grows, then decays</span></li>
+                              <li><b>Proposition 5.5</b> <span>background to every order: annular stress plus a flat remainder</span>
+                                <ul>
+                                  <li><b>Theorem 4.6</b> <span>the leading profile</span>
+                                    <ul>
+                                      <li><b>Proposition A.4</b> <span>heat exterior and moment matching (Appendix A)</span></li>
+                                      <li><b>Proposition B.2</b> <span>analytic profiles near the axis (Appendix B)</span></li>
+                                      <li><b>Lemma 4.5</b>, <b>Proposition C.3</b> <span>the stress cone holds (Appendix C)</span></li>
+                                    </ul></li>
+                                </ul></li>
+                            </ul></li>
+                        </ul></li>
+                    </ul></li>
+                </ul></li>
+            </ul></li>
+        </ul></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="q8">
+    <h2 id="q8">8. How might one have found this?</h2>
+    <p class="note">This is our reconstruction of a plausible path, written to make the logic memorable. It is not the authors' account, and we do not know how the construction was actually found.</p>
+    <ol class="story">
+      <li>With a force allowed, the question becomes: find a blowing-up flow whose leftover force stays smooth.</li>
+      <li>Try a vortex that spins up as it shrinks, since rotation is what can outrun viscosity. Make it slender so there is a small parameter.</li>
+      <li>Compute the leftover. Inside the core it can be made zero, and outside, with a heat-equation swirl, also zero. It survives only in the joining annulus, and there it has the form of a stress divergence.</li>
+      <li>A stress divergence is what waves supply. Ask which waves the background shear will amplify for free.</li>
+      <li>Squares are positive, so a single family cannot hit a two-component target; use two, and shape the background so the target lies in their cone.</li>
+      <li>Accept that every fix makes new, smaller errors, and design a correction cycle that provably shrinks them, forever.</li>
+      <li>Cut off, call the leftover the force, and check it is smooth at the end.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="q9">
+    <h2 id="q9">9. Questions the paper does not answer</h2>
+    <p>These are the questions a human referee or seminar audience would likely ask. We could not answer them from the text. <span class="tag o">OPEN</span></p>
+    <ul class="plain">
+      <li>Which choices are forced and which are convenient? Would a symmetric core, a different h, or a single wave family fail, and where exactly?</li>
+      <li>How large is the force? The theorem gives a smooth compactly supported f, but no size. Can it be made small in some norm, and does it have to act at all scales?</li>
+      <li>What is the obstruction to removing the force? The pulses are seeded by exponentially small pushes and the remaining force is flat at the singular point, but it is not zero. Is there a reason to expect, or not to expect, an unforced version?</li>
+      <li>Is the blowup stable? Does a small change in the force or the data still blow up, or is this flow isolated?</li>
+      <li>What exactly did the Lean formalization check, and against which statement?</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="run-h">
+    <h2 id="run-h">Run it yourself</h2>
+    <p>The script checks every toy on this page: the wave flux, the cone, that Kelvin's wave is an exact Navier–Stokes solution (symbolically, nonlinear term included), its growth and decay at the default settings, the speed comparison, and, with the PDF, that every result named in the dependency tree exists in the paper.</p>
+    <div><a class="btn" href="human-layer-verify.py" download>Download human-layer-verify.py</a></div>
+    <div class="cmd"><code>python3 human-layer-verify.py --pdf navier-stokes.pdf</code></div>
+  </section>
+
+  <footer>
+    <p>Prepared with the assistance of Claude (Anthropic); the author takes responsibility for the text. Not affiliated with OpenAI, the Clay Institute or any party to the priority dispute.</p>
+    <p>Text CC BY-NC-ND 4.0, code MIT. Pablo Nogueira Grossi · G6 LLC (PrincipiaOrthogona), Newark NJ · ORCID 0009-0000-6496-2186 · g6llc@proton.me</p>
+  </footer>
+</div>
+<script>
+(function(){
+  const svg = document.getElementById("kplot"), tip = document.getElementById("ktip");
+  const W=640, H=300, L=56, R=620, T=20, B=250, tmax=20;
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (n, a, t) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (t != null) e.textContent = t; return e; };
+  function energy(t, ky0, nu){ const ky = ky0 - t; const I = t + ky0*ky0*t - ky0*t*t + t*t*t/3; return Math.exp(-2*nu*I) / (1 + ky*ky); }
+  function draw(){
+    const ky0 = parseFloat(document.getElementById("ky0").value), nu = parseFloat(document.getElementById("nu").value);
+    document.getElementById("ky0v").textContent = ky0.toFixed(1); document.getElementById("nuv").textContent = nu.toFixed(4);
+    const E0 = energy(0, ky0, nu), pts = [];
+    let peak = 0, tpeak = 0;
+    for (let i = 0; i <= 400; i++) { const t = i * tmax / 400, e = energy(t, ky0, nu) / E0; pts.push([t, e]); if (e > peak) { peak = e; tpeak = t; } }
+    const ymax = Math.max(2, Math.ceil(peak / 10) * 10 || 2);
+    const X = t => L + t / tmax * (R - L), Y = e => B - e / ymax * (B - T);
+    svg.textContent = "";
+    const g = el("g", {"font-family":"Source Sans 3, system-ui, sans-serif", "font-size":"12"}); svg.appendChild(g);
+    for (let k = 0; k <= 4; k++) { const v = ymax * k / 4, y = Y(v);
+      g.appendChild(el("line", {x1:L, x2:R, y1:y, y2:y, stroke:"var(--rule)"}));
+      g.appendChild(el("text", {x:L-8, y:y+4, "text-anchor":"end", fill:"var(--muted)", "font-variant-numeric":"tabular-nums"}, (Math.round(v*10)/10) + "×")); }
+    for (let t = 0; t <= tmax; t += 5) g.appendChild(el("text", {x:X(t), y:B+18, "text-anchor":"middle", fill:"var(--muted)"}, t));
+    g.appendChild(el("text", {x:(L+R)/2, y:B+38, "text-anchor":"middle", fill:"var(--muted)"}, "time (in units of 1/S)"));
+    g.appendChild(el("line", {x1:X(ky0), x2:X(ky0), y1:T, y2:B, stroke:"var(--muted)", "stroke-dasharray":"3 4"}));
+    g.appendChild(el("text", {x:X(ky0)+6, y:T+12, fill:"var(--muted)"}, "aligned with kₓ"));
+    g.appendChild(el("line", {x1:L, x2:R, y1:Y(1), y2:Y(1), stroke:"var(--muted)", "stroke-width":1}));
+    g.appendChild(el("polyline", {points: pts.map(p => X(p[0]).toFixed(1)+","+Y(p[1]).toFixed(1)).join(" "), fill:"none", stroke:"var(--accent)", "stroke-width":2, "stroke-linejoin":"round"}));
+    const dot = el("circle", {r:5, fill:"var(--accent)", stroke:"var(--panel)", "stroke-width":2, visibility:"hidden"}); g.appendChild(dot);
+    const cross = el("line", {y1:T, y2:B, stroke:"var(--muted)", visibility:"hidden"}); g.appendChild(cross);
+    const hit = el("rect", {x:L, y:T, width:R-L, height:B-T, fill:"transparent"}); g.appendChild(hit);
+    hit.addEventListener("mousemove", ev => {
+      const box = svg.getBoundingClientRect(), wrap = svg.parentNode.getBoundingClientRect();
+      const sx = (ev.clientX - box.left) / box.width * W, t = Math.min(tmax, Math.max(0, (sx - L) / (R - L) * tmax));
+      const e = energy(t, ky0, nu) / E0, px = X(t), py = Y(e);
+      dot.setAttribute("cx", px); dot.setAttribute("cy", py); dot.setAttribute("visibility", "visible");
+      cross.setAttribute("x1", px); cross.setAttribute("x2", px); cross.setAttribute("visibility", "visible");
+      tip.hidden = false; tip.textContent = "t = " + t.toFixed(2) + ", energy = " + e.toFixed(2) + "×";
+      tip.style.left = (box.left - wrap.left + px / W * box.width) + "px"; tip.style.top = (box.top - wrap.top + py / H * box.height) + "px";
+    });
+    hit.addEventListener("mouseleave", () => { tip.hidden = true; dot.setAttribute("visibility", "hidden"); cross.setAttribute("visibility", "hidden"); });
+    const end = pts[pts.length-1][1];
+    document.getElementById("kread").textContent = "Peak gain " + peak.toFixed(1) + "× at t = " + tpeak.toFixed(2) + "; energy at t = 20 is " + end.toFixed(2) + "× the start" + (end < 1 ? ", so the burst has decayed." : ", still above the start at this viscosity.");
+  }
+  ["ky0","nu"].forEach(id => document.getElementById(id).addEventListener("input", draw));
+  draw();
+})();
+</script>
+</body>
+</html>
