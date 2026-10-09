@@ -7,3 +7,4 @@ import Orthogenesis.Architecture.MagneticLattice
 import Orthogenesis.Architecture.SeismicLattice
 import Orthogenesis.Architecture.AcousticLattice
 import Orthogenesis.Architecture.DM3Bridge
+import Orthogenesis.Architecture.WignerChecks
