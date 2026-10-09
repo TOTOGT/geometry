@@ -788,7 +788,8 @@ Ten draft chapters in `book5/` (chV-kaluza … chV-ledger), English only, about 
 - [ ] Original Einstein–Bergmann 1938 paper is paywalled (JSTOR); not read. [ ] Read van Dongen and Overduin–Wesson beyond the sections cited.
 - [ ] Open the 37-dimension paper's published version; confirm "37", journal, year. New Scientist page was blocked.
 - [x] Klein 0.8e-30 cm is the loop length (radius 83 L_P in Gaussian formula); Ravndal's 23 L_P differs by exactly sqrt(4π) (charge normalisation). Still: read Klein's 1926 paper to confirm his normalisation.
-- [x] Book 4 Theorem T1 marked in place (hypotheses = conclusion; ch06, chIV-recursion, hub, chTau-tartaruga). Still unmarked: book4/chIV-recursion.html, chIV-recursion-fixed.html. Find the real Lean file (AXLE / GTCT repos). Still unaudited: ch06 "16 invariants" count, sixth-slot identity.
+- [x] Book 4 Theorem T1 marked in place (hypotheses = conclusion; ch06, chIV-recursion, hub, chTau-tartaruga). All T1 pages now marked (2026-10-09); real file = Desktop/AXLE/AXLE_v6.lean (gtct_t1 := h_dissipative; vacuous, file says so). Still unaudited: ch06 "16 invariants" count, sixth-slot identity.
 - [x] Portuguese edition drafted (`book5/chV-*-pt.html`, machine-assisted, NOT reviewed by a native speaker). Generator sources: `tools/book5_arc/` (build.py, chapters.py, patches.py, pt_*.py; `_dup_to_delete/` is an accidental copy, safe to delete). [ ] native review.
 - [ ] Decide whether the arc belongs in Book 5 (Banach/Lean volume) or Book 4.
 - [ ] Optional: Lean check of the F∧F computation.
+- [ ] **Audit Book 5 "0 sorry / 9 sorrys closed" claims** (book5/index.html, chV-sorrys.html, chV-seed.html) against Desktop/AXLE/AXLE_v6.lean and its FINAL STATUS v6.2 (which results are real vs vacuous). Found 2026-10-09, not yet checked page by page.
