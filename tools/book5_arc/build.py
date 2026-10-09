@@ -2,10 +2,12 @@ import re,html
 exec(open('chapters.py',encoding='utf-8').read())
 exec(open('patches.py',encoding='utf-8').read())
 apply_en(CH)
+apply_en2(CH)
 PT={}
 for _f in ['pt_a','pt_b','pt_c']:
     _ns={}; exec(open(_f+'.py',encoding='utf-8').read(),_ns); PT.update([v for k,v in _ns.items() if k.startswith('PT_')][0])
 apply_pt(PT)
+apply_pt2(PT)
 D='/'.join([__import__('os').path.expanduser('~'),'mnt','geometry','book5'])
 CSS="""
 :root{--void:#04040a;--surface:#0c0d16;--card:#10111c;--gold:#c9a84c;--teal:#0ABAB5;--red:#e05a3a;--text:#e8e4d8;--muted:#8a8674;--dim:#2a2920;--rule:rgba(201,168,76,0.18);--serif:'Noto Serif',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace;}
