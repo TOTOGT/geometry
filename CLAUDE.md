@@ -784,10 +784,11 @@ for a worked example of a corrected document.
 ## To-do: Book 5 dimensions arc (added 2026-10-09)
 
 Ten draft chapters in `book5/` (chV-kaluza … chV-ledger), English only, about 5,500 words. Status in `book5/chV-ledger.html`.
-- [ ] Literature check: has `η∧(dη)² = κ² dy∧F∧F` (KK circle bundle contact iff F∧F ≠ 0) been stated before? Not checked.
+- [x] Literature check (2026-10-09, delegated, abstracts/excerpts only): contact condition is standard Boothby–Wang (Hamilton arXiv:1001.1953; Ding–Geiges 1107.4948); Goto 2310.17925 ties F∧F≠0 to contact for Maxwell fields. KK/E·B phrasing not found stated. Still to do: Boyer–Galicki *Sasakian Geometry*, Geiges textbook, Lerman.
 - [ ] Read the original Einstein–Bergmann 1938 paper; read van Dongen and Overduin–Wesson beyond the sections cited.
 - [ ] Open the 37-dimension paper's published version; confirm "37", journal, year. New Scientist page was blocked.
 - [ ] Reconcile Klein's 0.8e-30 cm with Ravndal's ~23 Planck lengths (conventions).
 - [ ] Book 4 ch06: Galilean prototype corrected in place; Theorem T1, the "16 invariants" count, and sixth-slot identity still unaudited.
-- [ ] Portuguese edition; decide whether the arc belongs in Book 5 (Banach/Lean volume) or Book 4.
+- [x] Portuguese edition drafted (`book5/chV-*-pt.html`, machine-assisted, NOT reviewed by a native speaker). Generator sources: `tools/book5_arc/` (build.py, chapters.py, patches.py, pt_*.py; `_dup_to_delete/` is an accidental copy, safe to delete). [ ] native review.
+- [ ] Decide whether the arc belongs in Book 5 (Banach/Lean volume) or Book 4.
 - [ ] Optional: Lean check of the F∧F computation.
