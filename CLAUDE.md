@@ -792,4 +792,4 @@ Ten draft chapters in `book5/` (chV-kaluza … chV-ledger), English only, about 
 - [x] Portuguese edition drafted (`book5/chV-*-pt.html`, machine-assisted, NOT reviewed by a native speaker). Generator sources: `tools/book5_arc/` (build.py, chapters.py, patches.py, pt_*.py; `_dup_to_delete/` is an accidental copy, safe to delete). [ ] native review.
 - [ ] Decide whether the arc belongs in Book 5 (Banach/Lean volume) or Book 4.
 - [ ] Optional: Lean check of the F∧F computation.
-- [ ] **Audit Book 5 "0 sorry / 9 sorrys closed" claims** (book5/index.html, chV-sorrys.html, chV-seed.html) against Desktop/AXLE/AXLE_v6.lean and its FINAL STATUS v6.2 (which results are real vs vacuous). Found 2026-10-09, not yet checked page by page.
+- [x] Book 5 "0 sorry / 9 closed" corrected in place 2026-10-09 (7 of 9 vacuous per AXLE_v6.lean v6.2 FINAL STATUS). [ ] Still: read chV-seed, chV-axle, chV-g6, chV-saturn-smoke, Student Edition for the same claims; find `banach_fixed_point`; check '1,080 theorems'; rebuild AXLE_v6.lean with a real Lean toolchain.
