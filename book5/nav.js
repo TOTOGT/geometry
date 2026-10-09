@@ -120,6 +120,7 @@ const CHAPTERS = [
   { href:"chV-saturn-smoke.html", label:"Saturn·Smoke" },
   { href:"chV-seed.html",      label:"The Seed" },
   { href:"chV-erdos-machine.html", label:"Erdős" },
+  { href:"chV-ladder.html", label:"Ladder" },
   { href:"chV-kaluza.html", label:"Kaluza" },
   { href:"chV-klein.html", label:"Klein" },
   { href:"chV-einstein-bergmann.html", label:"Einstein" },
