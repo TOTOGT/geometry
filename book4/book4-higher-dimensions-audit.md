@@ -122,3 +122,4 @@ Five different templates are currently live in one arc:
 - chV-seed: "SEED PROVED" / G(𝒮)=𝒮 is conceptual, not Lean-checked; x*, G undefined as objects. Correction box added.
 - chV-saturn-smoke: finite models, page states limits; not edited. GTCT_V_Student_Edition: no sorry claims found in sampled lines (keyword scan only, not read in full).
 - Still unfound: `banach_fixed_point`, the "1,080 theorems" count. Nothing rebuilt: no Lean toolchain on this computer.
+- GTCT_V_Student_Edition (read via keyword extraction of full text): Lean blocks are uncompiled skeletons; Banach contraction of G and chart-independence of κ unproved in Lean. Correction box added 2026-10-08.
