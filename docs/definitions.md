@@ -38,3 +38,12 @@ Known wording errors to fix when the text is next edited: Vol I "ε₀ = 1/3 lie
 
 ## Terms used but not defined (candidates)
 "reduced system", "contact class of α", "multi-scale coherence" (GCM page); "Coherence Bridge" (Vol I figure). Define or remove.
+
+## Moon Base location (added 2026-10-13)
+
+| Item | Statement | Status | Notes |
+|---|---|---|---|
+| Base region | The lunar South Pole. | VERIFIED against the source, not an author decision | NextSTEP-3 Appendix B, Directed-Topic Call 2 (Surface Mating Systems), NASA JSC, 2 Oct 2026, section 1.0; read in full 2026-10-13 (4 pages). The call also puts surface mating systems in Phase 3 of the build-up and a ground demonstration by 30 Sep 2027. |
+| Specific site | Not named in the call. | OPEN | Illumination, temperature and terrain shielding all depend on the site; do not fill this row. |
+| Lunar night length | About 354 h is the generic length of the lunar night. | OPEN at the pole | Lit ridges and permanently shadowed craters differ; the TDM brief and RFI use 354 h without a site. |
+| Surface radiation | Chang'e-4 LND, far side, one site: 1,369 uSv/day charged-particle GCR dose equivalent, measured only while the lander was awake. | VERIFIED (docs/audit-log.md 2026-09-30, primary sources) | Not a yearly figure and not a South Pole figure. A terrain model reports up to 50% lower intense-storm proton dose low in a small south-pole crater (Eos report of a conference result; protons only; not read in the original). |
