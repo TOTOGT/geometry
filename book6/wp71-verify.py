@@ -63,7 +63,7 @@ else:
     check(flat.count('Bone Standards and Recommendations: OCHMO by 2028')==2,'Bone deliverable printed twice (characterisation and countermeasure columns)')
     check(flat.count('Days post-landing prior to initial EVA')==2 and 'prior to initial EVA: OCHMO by 2027' in flat and 'prior to initial EVA: OCHMO by 2033' in flat,'"Days post-landing" appears twice, OCHMO 2027 and 2033')
     check(re.search(r'effects of radiation dose and dose-.{0,200}rate on cancer',flat) is not None,'Cancer-104 wording (wrapped across a column break in the PDF)')
-    print('    NOT FOUND in the PDF (page claims them; source must be named): "2.5 hours" of ISS exercise, "45 days" recovery, deliverable counts per plan not recounted here')
+    print('    READ 2026-10-15 (not in the RAP PDF): NASA Astronaut Exercise page says crew average two hours of exercise per day; OCHMO-TB-031 gives 30 min aerobic + 30-60 min resistive, VO2peak baseline ~30 days after return, 45-day reconditioning program. Page text now matches these; the earlier 2.5 h and 45-day-baseline wording was unsupported. Deliverable counts per plan not recounted here')
 
 head(7,'the one Lean name on the page: `discriminant`, linked to book21/Spiral.lean:75')
 sp=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','book21','Spiral.lean')
