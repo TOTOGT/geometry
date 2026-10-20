@@ -187,11 +187,13 @@ over primes is: <span class="tag t-proved">proved — classical (Euler product)<
 
 <div class="box warn">
   <span class="lab">Critical status point</span>
-  Non-integrability α_arith ∧ dα_arith ≠ 0 being equivalent to RH is the central claim of
-  Book 4 Ch 14. It is stated precisely there and identified as the Global Positivity Theorem.
-  It is <strong>not proved</strong>. The contact-geometric reformulation is in the same
-  neighborhood as Connes–Consani — a reformulation, not a proof.
-  <span class="tag t-conj">conjecture</span>
+  <em>Corrected 2026-10-19.</em> Earlier wording called the equivalence of non-integrability
+  α_arith ∧ dα_arith ≠ 0 with RH the central claim of Ch 14. As worded that equivalence is
+  <strong>false</strong>: α_arith ∧ dα_arith vanishes for σ &gt; 1, where ζ has no zeros,
+  whatever the truth of RH (<a href="rh-paper.html#s20b">RH paper §4.9</a>). Ch 14&rsquo;s Global
+  Positivity condition is a separate, open <strong>conjecture</strong>, not proved equivalent to RH.
+  The contact-geometric language is in the same neighborhood as Connes–Consani, as an analogy.
+  <span class="tag t-caution">caution</span>
 </div>
 
 <div class="eyebrow">§2 &middot; The Conjecture</div>
@@ -231,8 +233,10 @@ over primes is: <span class="tag t-proved">proved — classical (Euler product)<
   <p><strong>(iii) Zeros correspondence:</strong> Under φ, the stable fixed points of
   G = U∘F∘K∘C correspond to the non-trivial zeros of ζ(s) on the critical line σ = ½.</p>
   <p style="margin-top:.8rem"><strong>Consequence:</strong> If (i)–(iii) hold, then
-  non-integrability of α_arith — equivalent to RH in the Book 4 framework — follows from
-  the verified non-integrability of α_cat on X_cat.</p>
+  non-integrability of α_arith follows from the verified non-integrability of α_cat on X_cat.
+  <em>(Corrected 2026-10-19: this line said that non-integrability is &ldquo;equivalent to RH in the
+  Book 4 framework&rdquo;. That equivalence is withdrawn, so the Consequence no longer bears on RH;
+  see §8.)</em></p>
   <p style="margin-top:.6rem;font-size:.88rem;color:var(--dim)">
     This conjecture is falsifiable. If no contact embedding exists (Obligation 1 fails),
     or if the embedding does not preserve the contact condition (Obligation 2 fails),
@@ -480,6 +484,76 @@ the remaining obligations.</p>
   CatGT — <a href="https://totogt.github.io/io">totogt.github.io/io</a><br>
   Contact: g6llc@proton.me · ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a>
 </div>
+
+<div class="eyebrow">§8 &middot; Editor&rsquo;s verification note (2026-10-19)</div>
+<h2>What a first check found</h2>
+
+<p>This note was added after the chapter by a script-backed check,
+<a href="book4-ch-adelic-embedding-verify.py"><span class="mono">book4-ch-adelic-embedding-verify.py</span></a>
+(mpmath at 20 digits, NumPy). It changes no statement above; it records what the
+cheapest obligation returned when it was run. Refutation is a result (§6, item 5).</p>
+
+<div class="box warn">
+  <span class="lab">Obligation 2 fails as worded <span class="tag t-caution">caution</span></span>
+  <p>The formal statement φ*(g(σ,t)) = r² requires g ≥ 0, because r is real.
+  It is not. Sampling g(σ,t) = −Im(ζ′/ζ(σ+it)) for t ∈ [0.1, 60] in steps of 0.05:</p>
+  <table>
+    <thead><tr><th>σ</th><th>samples with g &lt; 0</th><th>range of g</th></tr></thead>
+    <tbody>
+      <tr><td>½</td><td>568 / 1199</td><td>−194.6 to +337.9</td></tr>
+      <tr><td>0.7</td><td>577 / 1199</td><td>−2.85 to +2.71</td></tr>
+      <tr><td>2</td><td>605 / 1199</td><td>−0.40 to +0.30</td></tr>
+    </tbody>
+  </table>
+  <p>On the critical line this is forced, not numerical: there g = Z′/Z for Hardy&rsquo;s
+  Z-function, which runs from +∞ to −∞ between consecutive zeros. No real r(σ) satisfies the
+  equation on roughly half of every gap. Obligation 2 needs a new formulation (for example a
+  signed coefficient, or matching |g| on a different coordinate), not more compute.</p>
+</div>
+
+<div class="box warn">
+  <span class="lab">Obligation 3: &ldquo;the commutator is a scalar&rdquo; cannot hold for matrices <span class="tag t-caution">caution</span></span>
+  <p>For finite square matrices, tr[A,B] = 0. So [A,B] = c·I forces c = 0; on a 3-site ring,
+  [coupling, onsite] = −6·I would need trace −18. The −6 in
+  <span class="mono">ZeoliteCommutation.lean</span> must therefore be one entry of the
+  commutator, or the commutator applied to a particular state. The obligation should be restated
+  against the exact Lean statement before any transport to L²(C_K) is attempted.</p>
+  <p>The target side has the same obstruction. Translations T_a and multiplications M_f by bounded
+  f are bounded operators, and by the Wintner–Wielandt theorem no two bounded operators have a
+  commutator equal to a nonzero multiple of the identity. A well-posed version would match a
+  specified expectation value, ⟨v,[A,B]v⟩ = −6, which is a weaker and different statement.
+  The finite part (the exact −6 and tr[A,B] = 0) is ready for Lean; the transport is specialist work.</p>
+</div>
+
+<div class="box warn">
+  <span class="lab">Obligation 1 and §4: the p-adic coordinates of φ are constant <span class="tag t-caution">caution</span></span>
+  <p>A continuous map from a connected space such as ℝ³ into a totally disconnected space such as
+  ℚ_p is constant. So for any continuous φ into A = ℝ × ∏′ℚ_p, every p-adic coordinate is
+  constant: option (b) of Obligation 1 reduces to option (a), and only the archimedean factor carries
+  information. Over a function field there is no archimedean place, so a real, smooth X_cat can only
+  map into the function-field adèles as a constant. The proof of concept of §4 therefore cannot be
+  stated with the real X_cat: X_cat,𝔽_q must first be defined as an algebraic contact structure over
+  𝔽_q (for instance the 1-form dz − x dy on 𝔸³, which is contact in every characteristic).
+  The topological lemma is a short Lean exercise; defining &ldquo;contact embedding into an adelic
+  object&rdquo; is specialist work, and Weil&rsquo;s RH for curves is not yet in Mathlib.</p>
+</div>
+
+<div class="box warn">
+  <span class="lab">The Consequence line: equivalence withdrawn <span class="tag t-caution">caution</span></span>
+  <p>The equivalence &ldquo;non-integrability of α_arith ⇔ RH&rdquo; used by the Consequence is
+  withdrawn in this edition: for σ &gt; 1, ∂ₜg is a mean-zero almost-periodic function and changes
+  sign, so α_arith ∧ dα_arith vanishes where ζ has no zeros. Criteria that survive are known ones on
+  ξ: Laguerre-type inequalities on σ = ½, and Lagarias&rsquo;s Re(ξ′/ξ) &gt; 0 for Re s &gt; ½.
+  Full argument and numbers: <a href="rh-paper.html#s20b">RH paper §4.9</a>.</p>
+</div>
+
+<p><strong>Sign convention.</strong> §1 of this chapter defines g = −Im(ζ′/ζ); the RH paper (§4.1)
+defines g = −Im(−ζ′/ζ), the opposite sign. Neither conclusion above depends on the sign: g takes
+both signs either way, and sign changes of ∂ₜg are the same.</p>
+
+<p><strong>What remains open.</strong> The function-field proof of concept is still the right first
+test once X_cat,𝔽_q is defined algebraically. Whether Obligations 2 and 3 can be restated so that the
+checks above no longer fail is open. <span class="tag t-open">open</span></p>
 
 <div class="eyebrow">References</div>
 <h2>Sources</h2>
