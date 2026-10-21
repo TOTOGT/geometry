@@ -134,6 +134,7 @@
         <button class="btn" data-engine="en" data-voice="triad">D · F♯ · A</button>
         <button class="btn" data-engine="en" data-voice="binaural">Binaural 7 Hz</button>
         <button class="btn" data-engine="en" data-voice="drum">Atabaque</button>
+        <button class="btn" data-engine="en" data-voice="clap">Clapping</button>
       </div>
 
       <div class="sliderRow">
@@ -165,8 +166,7 @@
         <span>Drum</span><span>atabaque cycle · 12 steps  (T* = 2π)</span>
       </div>
       <p class="legend">
-        Listen on headphones for the binaural effect. The plate figure is rendered
-        directly from the live audio spectrum — what you see <em>is</em> what you hear.
+        Listen on headphones for the binaural effect. The plate shows idealized square-plate Chladni modes, each weighted by the live spectrum near its frequency. It is a model figure, not a measured plate.
       </p>
     </div>
 
@@ -198,6 +198,7 @@
         <button class="btn" data-engine="br" data-voice="triad">Ré · Fá♯ · Lá</button>
         <button class="btn" data-engine="br" data-voice="binaural">Binaural 7 Hz</button>
         <button class="btn" data-engine="br" data-voice="drum">Atabaque</button>
+        <button class="btn" data-engine="br" data-voice="clap">Palmas</button>
       </div>
 
       <div class="sliderRow">
@@ -229,8 +230,7 @@
         <span>Atabaque</span><span>ciclo de 12 passos  (T* = 2π)</span>
       </div>
       <p class="legend">
-        Use fone para sentir o binaural. A figura na placa vem do espectro sonoro
-        ao vivo — o que você vê <em>é</em> o que você escuta.
+        Use fone para sentir o binaural. A placa mostra modos de Chladni idealizados de uma placa quadrada, cada um ponderado pelo espectro ao vivo perto da sua frequência. É uma figura de modelo, não uma placa medida.
       </p>
     </div>
 
@@ -268,7 +268,7 @@ function makeEngine(id, cymCanvasId, diagCanvasId, palette){
   const E = {
     id, palette,
     ctx:null, master:null, analyser:null,
-    voices:{bass:null, triad:null, binaural:null, drum:null},
+    voices:{bass:null, triad:null, binaural:null, drum:null, clap:null},
     params:{arame:0.8, caxixi:0.35, binDelta:7, bpm:104},
     cym: document.getElementById(cymCanvasId),
     diag: document.getElementById(diagCanvasId),
@@ -286,7 +286,7 @@ function ensureAudio(E){
   E.master = E.ctx.createGain();
   E.master.gain.value = 0.7;
   E.analyser = E.ctx.createAnalyser();
-  E.analyser.fftSize = 2048;
+  E.analyser.fftSize = 8192;   // 5.9 Hz bins at 48 kHz, so neighbouring plate modes (14.7 Hz apart at the bottom) separate
   E.master.connect(E.analyser);
   E.analyser.connect(E.ctx.destination);
 }
@@ -349,58 +349,73 @@ function startBinaural(E){
   };
 }
 
-/* Atabaque / African drum cycle — 12 steps, accent pattern.
-   Uses short noise bursts filtered to low/mid bands. */
-function startDrum(E){
-  stopVoice(E,'drum');
-  const c=E.ctx;
-  const pattern=[1,0,0.3,0,0.6,0,1,0,0.3,0.5,0.6,0]; // 12 steps
-  let step=0;
-  const schedule=()=>{
-    if(!E.voices.drum) return;
-    const v = pattern[step%12];
-    if(v>0) drumHit(E, v);
-    step++;
-  };
+/* Atabaque + palmas (clapping) — one shared 12-step sequencer so the voices stay locked.
+   Atabaque: pitched membrane hits (open bass stroke, tone, slap) from the original accent pattern.
+   Palmas: three short band-passed noise bursts per clap. The clap pattern is a simple one chosen
+   here; it is not a transcription of any traditional toque. */
+const ATAB=[1,0,0.3,0,0.6,0,1,0,0.3,0.5,0.6,0];
+const CLAP=[0,0,1,0,0,0.7,0,0,1,0,0.7,0];
+function seqEnsure(E){
+  if(E.seqTimer) return;
+  E.step=0;
   const tick=()=>{
-    schedule();
-    const bpm=E.params.bpm;
-    const interval = 60000/(bpm*2); // 2 hits per beat = 12 steps/bar of 6/4 feel
-    E.drumTimer = setTimeout(tick, interval);
+    const s=E.step%12;
+    if(E.voices.drum && ATAB[s]>0) atabaqueHit(E, ATAB[s]);
+    if(E.voices.clap && CLAP[s]>0) clapHit(E, CLAP[s]);
+    E.step++;
+    if(!E.voices.drum && !E.voices.clap){ E.seqTimer=null; return; }
+    E.seqTimer=setTimeout(tick, 60000/(E.params.bpm*2)); // 2 steps per beat
   };
-  E.voices.drum = {stop:()=>{clearTimeout(E.drumTimer); E.drumTimer=null;}};
   tick();
 }
-function drumHit(E, amp){
+function startDrum(E){ stopVoice(E,'drum'); E.voices.drum={stop:()=>{}}; seqEnsure(E); }
+function startClap(E){ stopVoice(E,'clap'); E.voices.clap={stop:()=>{}}; seqEnsure(E); }
+function noiseBuf(c, secs, pw){
+  const n=Math.floor(c.sampleRate*secs), b=c.createBuffer(1,n,c.sampleRate), d=b.getChannelData(0);
+  for(let i=0;i<n;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/n,pw);
+  return b;
+}
+function atabaqueHit(E, amp){
   const c=E.ctx, now=c.currentTime;
-  // low body
-  const bufLen = c.sampleRate*0.25;
-  const noise = c.createBuffer(1, bufLen, c.sampleRate);
-  const d = noise.getChannelData(0);
-  for(let i=0;i<bufLen;i++) d[i]= (Math.random()*2-1)*Math.pow(1-i/bufLen,2.2);
-  const src=c.createBufferSource(); src.buffer=noise;
-  const bp=c.createBiquadFilter(); bp.type='lowpass'; bp.frequency.value= 110 + amp*140;
-  const g=c.createGain(); g.gain.value=0.0;
-  src.connect(bp).connect(g).connect(E.master);
-  g.gain.setValueAtTime(0.0001, now);
-  g.gain.exponentialRampToValueAtTime(0.6*amp, now+0.01);
-  g.gain.exponentialRampToValueAtTime(0.0001, now+0.35);
-  src.start(now); src.stop(now+0.4);
-
-  // caxixi shaker layer
+  let f0,f1,dec,tone,slap;
+  if(amp>=0.9){ f0=95; f1=62; dec=0.42; tone=0.55; slap=0.12; }       // open bass stroke
+  else if(amp>=0.5){ f0=170; f1=118; dec=0.24; tone=0.38; slap=0.10; } // tone
+  else { f0=240; f1=190; dec=0.12; tone=0.12; slap=0.30; }             // slap
+  // membrane: sine with a fast pitch drop
+  const o=c.createOscillator(); o.type='sine';
+  o.frequency.setValueAtTime(f0, now);
+  o.frequency.exponentialRampToValueAtTime(f1, now+0.06);
+  const g=c.createGain(); g.gain.setValueAtTime(0.0001, now);
+  g.gain.exponentialRampToValueAtTime(tone, now+0.006);
+  g.gain.exponentialRampToValueAtTime(0.0001, now+dec);
+  o.connect(g).connect(E.master); o.start(now); o.stop(now+dec+0.05);
+  // skin attack: short band-passed noise
+  const s=c.createBufferSource(); s.buffer=noiseBuf(c,0.05,2);
+  const bp=c.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value= amp<0.5?1800:900; bp.Q.value=0.9;
+  const g2=c.createGain(); g2.gain.value=slap;
+  s.connect(bp).connect(g2).connect(E.master); s.start(now); s.stop(now+0.06);
+  // caxixi shaker layer (unchanged behaviour)
   const cx=E.params.caxixi;
   if(cx>0.02){
-    const b2=c.createBuffer(1, c.sampleRate*0.12, c.sampleRate);
-    const d2=b2.getChannelData(0);
-    for(let i=0;i<d2.length;i++) d2[i]=(Math.random()*2-1)*Math.pow(1-i/d2.length,1.5);
-    const s2=c.createBufferSource(); s2.buffer=b2;
+    const s2=c.createBufferSource(); s2.buffer=noiseBuf(c,0.12,1.5);
     const hp=c.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=3800;
-    const g2=c.createGain(); g2.gain.value=0.0001;
-    s2.connect(hp).connect(g2).connect(E.master);
-    g2.gain.exponentialRampToValueAtTime(0.25*cx*amp, now+0.005);
-    g2.gain.exponentialRampToValueAtTime(0.0001, now+0.12);
+    const g3=c.createGain(); g3.gain.value=0.0001;
+    s2.connect(hp).connect(g3).connect(E.master);
+    g3.gain.exponentialRampToValueAtTime(0.25*cx*amp, now+0.005);
+    g3.gain.exponentialRampToValueAtTime(0.0001, now+0.12);
     s2.start(now); s2.stop(now+0.15);
   }
+}
+function clapHit(E, amp){
+  const c=E.ctx, now=c.currentTime;
+  [0,0.009,0.019].forEach((dt,i)=>{
+    const s=c.createBufferSource(); s.buffer=noiseBuf(c,0.07,3);
+    const bp=c.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1500+i*250; bp.Q.value=1.1;
+    const g=c.createGain(); g.gain.setValueAtTime(0.0001, now+dt);
+    g.gain.exponentialRampToValueAtTime(0.5*amp*(i===2?1:0.7), now+dt+0.003);
+    g.gain.exponentialRampToValueAtTime(0.0001, now+dt+0.06);
+    s.connect(bp).connect(g).connect(E.master); s.start(now+dt); s.stop(now+dt+0.08);
+  });
 }
 
 function stopVoice(E, name){
@@ -411,93 +426,82 @@ function stopAll(E){
   E.running=false;
 }
 
-/* ---------- cymatics render ---------- */
+/* ---------- cymatics render ----------
+   Idealized Chladni figure for a square plate with free edges:
+     phi_mn(x,y) = cos(n*pi*x)cos(m*pi*y) - cos(m*pi*x)cos(n*pi*y),  x,y in [0,1], m<n
+   Sand collects where phi ~ 0 (nodal lines). Mode frequencies are taken as f = F0*(m^2+n^2),
+   with F0 chosen so (1,2) falls at D2 = 73.42 Hz. This is an idealization: a real plate's
+   mode frequencies depend on its material and thickness, and the formula above is the standard
+   textbook approximation, not a measurement. Each mode's weight is the live spectrum level
+   near its frequency, so the pattern follows what is playing. */
+const CHL_F0 = 73.42/5;            // (1,2): m^2+n^2 = 5
+const CHL_G  = 140;                // grid resolution of the pattern
+const CHL_MODES = (()=>{
+  const out=[];
+  for(let n=1;n<=8;n++) for(let m=0;m<n;m++){ if(m===n) continue; out.push({m,n,f:CHL_F0*(m*m+n*n)}); }
+  return out;
+})();
+const CHL_COS = (()=>{ // cos(k*pi*i/G) for k=0..8
+  const t=[]; for(let k=0;k<=8;k++){ const r=new Float32Array(CHL_G); for(let i=0;i<CHL_G;i++) r[i]=Math.cos(k*Math.PI*(i+0.5)/CHL_G); t.push(r);} return t;
+})();
+function hexToRgb(h){ h=h.replace('#',''); return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; }
 function drawCym(E){
-  const cvs=E.cym;
-  const dpr=window.devicePixelRatio||1;
+  const cvs=E.cym, dpr=window.devicePixelRatio||1;
   const W=cvs.clientWidth, H=cvs.clientHeight;
-  if(cvs.width!==W*dpr){cvs.width=W*dpr;cvs.height=H*dpr;}
+  if(cvs.width!==Math.round(W*dpr)){cvs.width=Math.round(W*dpr);cvs.height=Math.round(H*dpr);}
   const g=cvs.getContext('2d');
   g.setTransform(dpr,0,0,dpr,0,0);
-  g.fillStyle='rgba(0,0,0,0.22)';
-  g.fillRect(0,0,W,H);
+  g.fillStyle='#050808'; g.fillRect(0,0,W,H);
+  const side=Math.min(W,H)*0.92, ox=(W-side)/2, oy=(H-side)/2;
 
-  // sample audio spectrum (if running)
-  let spectrum=null;
-  if(E.analyser){
+  // weights from the live spectrum
+  if(!E.cw) E.cw=new Float32Array(CHL_MODES.length);
+  let top=-1, topW=0, sum=0;
+  if(E.analyser && E.ctx && Object.values(E.voices).some(Boolean)){
     const buf=new Uint8Array(E.analyser.frequencyBinCount);
     E.analyser.getByteFrequencyData(buf);
-    spectrum=buf;
-  }
-
-  const cx=W/2, cy=H/2;
-  const N = 240;
-  E.t += 0.012;
-
-  // derive a handful of "modes" from spectrum bins
-  const modes=[];
-  if(spectrum){
-    const bands=[3,6,9,13,18,26,36]; // pick bins
-    bands.forEach((b,i)=>{
-      modes.push({
-        k: 2+i,                        // angular number
-        amp: (spectrum[b]||0)/255,
-        phase: E.t*(0.5+i*0.15)
-      });
+    const binHz=E.ctx.sampleRate/E.analyser.fftSize;
+    CHL_MODES.forEach((md,i)=>{
+      const b=Math.round(md.f/binHz); let e=0;
+      for(let k=b-1;k<=b+1;k++) if(buf[k]>e) e=buf[k];
+      const w=Math.pow(e/255,4);
+      E.cw[i]=0.8*E.cw[i]+0.2*w;
     });
   } else {
-    for(let i=0;i<6;i++) modes.push({k:2+i, amp:0.15, phase:E.t*(0.3+i*0.1)});
+    for(let i=0;i<E.cw.length;i++) E.cw[i]*=0.9;
   }
+  E.cw.forEach((w,i)=>{ sum+=w; if(w>topW){topW=w; top=i;} });
 
-  // Chladni-like figure: superposition of radial/angular modes
-  const rMax = Math.min(W,H)*0.46;
-  g.lineWidth=1;
-  const [c1,c2,c3] = E.palette;
-  for(let i=0;i<N;i++){
-    const a = i/N * Math.PI*2;
-    let r=0;
-    modes.forEach(m=>{
-      r += m.amp * Math.cos(m.k*a + m.phase) * (1 - m.k*0.04);
-    });
-    const rr = rMax*(0.55 + 0.45*(0.5+0.5*Math.sin(E.t+ a*2)) + r*0.35);
-    const x = cx + Math.cos(a)*rr;
-    const y = cy + Math.sin(a)*rr;
-    if(i===0) g.beginPath(),g.moveTo(x,y);
-    else g.lineTo(x,y);
-  }
-  g.closePath();
-  const grd = g.createRadialGradient(cx,cy,10,cx,cy,rMax);
-  grd.addColorStop(0, c1+"cc");
-  grd.addColorStop(0.6, c2+"66");
-  grd.addColorStop(1, c3+"00");
-  g.fillStyle=grd;
-  g.fill();
-  g.strokeStyle=c1+"aa";
-  g.stroke();
-
-  // inner rings from raw spectrum
-  if(spectrum){
-    for(let ring=0;ring<4;ring++){
-      g.beginPath();
-      const rr0 = rMax*(0.15 + ring*0.09);
-      const idx0 = 4+ring*6;
-      for(let i=0;i<180;i++){
-        const a=i/180*Math.PI*2;
-        const bin=(spectrum[(idx0 + (i%24))] || 0)/255;
-        const r=rr0 + bin*18;
-        const x=cx+Math.cos(a)*r, y=cy+Math.sin(a)*r;
-        if(i===0) g.moveTo(x,y); else g.lineTo(x,y);
-      }
-      g.closePath();
-      g.strokeStyle = [c1,c2,c3,c2][ring]+"77";
-      g.stroke();
+  const [r,gc,b]=hexToRgb(E.palette[0]);
+  if(sum>0.02){
+    const G=CHL_G;
+    if(!E.cimg){ E.cbuf=document.createElement('canvas'); E.cbuf.width=G; E.cbuf.height=G; E.cimg=E.cbuf.getContext('2d').createImageData(G,G); }
+    const px=E.cimg.data;
+    const act=[]; E.cw.forEach((w,i)=>{ if(w>0.01*sum) act.push(i); });
+    if(!E.cpsi) E.cpsi=new Float32Array(G*G);
+    let mx=1e-6;
+    for(let j=0;j<G;j++) for(let i=0;i<G;i++){
+      let psi=0;
+      for(const k of act){ const md=CHL_MODES[k];
+        psi += E.cw[k]*(CHL_COS[md.n][i]*CHL_COS[md.m][j]-CHL_COS[md.m][i]*CHL_COS[md.n][j]); }
+      E.cpsi[j*G+i]=psi; if(Math.abs(psi)>mx) mx=Math.abs(psi);
     }
+    const sig=0.07*mx;                            // line width relative to the strongest antinode
+    for(let q=0;q<G*G;q++){
+      const v=E.cpsi[q]/sig, s=Math.exp(-v*v);    // sand density: high near nodal lines
+      const o=q*4;
+      px[o]=r; px[o+1]=gc; px[o+2]=b; px[o+3]=Math.round(255*s);
+    }
+    E.cbuf.getContext('2d').putImageData(E.cimg,0,0);
+    g.imageSmoothingEnabled=true;
+    g.drawImage(E.cbuf,ox,oy,side,side);
   }
-
-  // center dot — the emergent fixed point x*
-  g.fillStyle = c1;
-  g.beginPath(); g.arc(cx,cy, 4,0,Math.PI*2); g.fill();
-
+  g.strokeStyle=E.palette[0]+'88'; g.lineWidth=1.5; g.strokeRect(ox,oy,side,side);
+  g.font='11px monospace'; g.fillStyle=E.palette[1]+'cc';
+  const label = top>=0 && sum>0.02
+    ? `idealized mode (${CHL_MODES[top].m},${CHL_MODES[top].n}) ≈ ${CHL_MODES[top].f.toFixed(0)} Hz`
+    : 'plate at rest — press Start';
+  g.fillText(label, ox+8, oy+side-8);
   requestAnimationFrame(()=>drawCym(E));
 }
 
@@ -606,7 +610,7 @@ function bind(E, prefix){
       const voice  = btn.dataset.voice;
       if(action==='start'){
         // turn on a default mix
-        startBass(E); startTriad(E); startBinaural(E); startDrum(E);
+        startBass(E); startTriad(E); startBinaural(E); startDrum(E); startClap(E);
         E.running=true;
         setActiveAll(E.id, true);
       } else if(action==='stop'){
@@ -621,6 +625,7 @@ function bind(E, prefix){
           if(voice==='triad') startTriad(E);
           if(voice==='binaural') startBinaural(E);
           if(voice==='drum') startDrum(E);
+          if(voice==='clap') startClap(E);
           btn.classList.add('active');
         }
       }
