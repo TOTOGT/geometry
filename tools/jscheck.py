@@ -43,10 +43,24 @@ USAGE
     python3 tools/jscheck.py              # whole repo from the repo root
     python3 tools/jscheck.py book4        # one subtree
 Exit 0 if every block parses, 1 if any fails, 2 if node is not installed.
+
+Nothing in this repo is deleted, so nothing curated is skipped: `_to_delete/`
+is checked like any other directory. Only .git, node_modules, .lake and build
+are passed over, and those hold no page anyone is served.
 """
 import io, os, re, subprocess, sys
 
-SKIP_DIRS = {".git", "node_modules", "_to_delete", ".lake", "build"}
+# Only version-control, dependency and build-output directories are skipped.
+# The `_to_delete/` trees are NOT skipped, and the name is a misnomer worth
+# knowing about: nothing in this repo is deleted. Superseded files are kept and
+# curated, carrying a correction notice (the 2026-07-29 decision on
+# ALGEBRAIC_PROOFS_ALL_7_THEOREMS.md: "do NOT delete. The file stays"), and the
+# retained copies are evidence -- a record of what a page claimed before it was
+# corrected, which is what makes the corrections measurable and is used as ML
+# evidence alongside docs/ml-evidence/. Four such trees exist (., book4, book6,
+# book17) holding 32 inline scripts between them. A superseded page that will
+# not parse is a damaged exhibit, so it is checked like any other.
+SKIP_DIRS = {".git", "node_modules", ".lake", "build"}
 SCRIPT_RE = re.compile(r'<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>', re.S)
 
 
