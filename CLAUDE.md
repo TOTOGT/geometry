@@ -17,8 +17,8 @@ style guide, licensing, what agents must NOT do). This file adds geometry-specif
 
 Seventeen standing rules were spread over 2 600 lines, interleaved with dated
 narrative and forty defect records. Nothing moved when this index was written on
-2026-09-13 — the rules are where they were. **There are thirty now** (R27 is a proposal, not yet adopted); R20
-to R24 (and R25, R26, R28, R29, R30) were set after that date and their sections are in this file too. What changed is that they can now be
+2026-09-13 — the rules are where they were. **There are thirty-one now** (R27 is a proposal, not yet adopted); R20
+to R24 (and R25, R26, R28, R29, R30, R31) were set after that date and their sections are in this file too. What changed is that they can now be
 found without reading the file. Each line gives the rule and the heading to grep
 for. Six different sections are titled "What NOT to do"; they belong to the rule
 above each of them.
@@ -54,6 +54,7 @@ above each of them.
 | R28 | **Definitions live in one file.** `docs/definitions.md` holds the definitions the author has decided (e.g. ε₀ = 1/3 is the coarse Gronwall estimate; r\* ≈ 0.77594058 is the sharp inner-basin boundary, Book 4 ch10). Read it before asking the author to explain a term again. OPEN rows are his call; a session never fills them. | `## Definitions (R28)` |
 | R29 | **Every page gets the three-point audit, by hand, one page at a time.** (1) vacuous Lean theorems and checks that cannot fail, (2) inverted physics, (3) citations that do not say what they are cited for. No bulk scan, no fan-out. A confirmed problem is fixed in place with a dated correction box and a log entry. Set 2026-10-02 by Pablo; page 1 of about 850 is done. | `## The three-point page audit` |
 | R30 | **An empirical row is pre-registered before any data is read, and its test is shown able to detect the effect before it can count against it.** The pre-registration is committed first and never edited; a change is a new dated file. Set 2026-10-02. | `## Empirical rows are pre-registered` |
+| R31 | **One clone: `~/Desktop/geometry`.** Check `pwd` before reading any repo file. A second clone drifts, and its drift reads as findings — it has cost three sessions (2026-10-01, 2026-10-13, 2026-10-22), the last reporting 1,024 "unpushed" commits that were all on `origin/main`. Set 2026-10-22. | `## Repo location` |
 
 R4 is the one that proves the point. It was written on 2026-09-09, it is correct,
 and it sat at line 184 under a heading dated 2026-09-05, below 183 lines of
