@@ -217,14 +217,32 @@ All rights in this repository, in the Principia Orthogona series and in the depo
 made from it are his and G6 LLC's.
 
 The work is produced with AI assistance, and that assistance confers no authorship.
-More than one Claude session contributes (Opus 5, Opus 5.5, Sonnet 5, Sonnet 5.5 to
-date), and other large language models are used alongside them; the Claude account
-running these sessions is sluhcdf@gmail.com.
+Many sessions contribute, across several Claude models and across other vendors' models.
+The Claude account running the Claude sessions is sluhcdf@gmail.com.
+
+**Do not treat this repository's own trailers as a census of what was used.** Over 1,529
+commits they name four models — Sonnet 5.5 (99), Opus 5 (77), Opus 5.5 (8), Sonnet 5 (7) —
+and that list is incomplete by construction. Fable was used in this corpus (access granted,
+withdrawn, and granted again) and carries no trailer anywhere. Other vendors' models
+contributed too, a GPT-5.6 "Luna" session among them, and none of them was ever in a
+position to write a trailer. A model's absence from the history says nothing about whether
+it was used; it says only that whoever committed that day did or did not type a line.
 
 So: **no `Co-Authored-By:`, no `Claude-Session:`, no "Generated with" line** — not in a
 commit message, not in a page footer, not in a deposit. Where a change has to be
 traceable to a particular session, name the model inside that session's bullet in the
-HANDOFF block below, the way the dated entries there already do. Nothing else.
+HANDOFF block below, the way the dated entries there already do.
+
+A **session link** may be recorded there too, and only there — but know what it is worth.
+The 186 `Claude-Session:` trailers in this history resolve to **12 distinct ids**, and the
+id is not a conversation. Four of the twelve span more than one model; three span weeks;
+`session_01X4Y4bcnFKrMb5Xw8PJTokR` was used by Sonnet 5 on 2026-09-30 and by Opus 5 on
+2026-10-21, and appears in history under two different capitalisations. It identifies a
+persistent workspace, not the conversation that produced a change, so it cannot answer
+"which session did this". **The dated handoff bullet and the `docs/audit-log.md` entry are
+the real pointers**; a link beside them is a convenience, not provenance. In a commit
+message it is worse than useless: published to GitHub forever, resolving for nobody but
+the account that ran it, and ambiguous even for them.
 
 ## HANDOFF — 2026-10-02 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
@@ -241,7 +259,7 @@ Last push a0a126e (audit page 1). Branch main is level with origin. The working 
 - Page 1 of the three-point audit (R29): `ch-term-set-to-zero` and ch21 §21.8 corrected; `gibbs-check.py` rewritten; `ch-term-set-to-zero-census.py` added; one sentence in ch28 corrected.
 - 2026-10-13 (Claude Sonnet 5.5): the Moon Base B9 claim is withdrawn in `book4/gomc-opus.html` and `ch-catgt-zeolite.html` (it cited a Corollary 6 that does not exist; the extrudate result was Corollary 2, cut in V5). `engineering/moonbase-tiling-verify.py` added (R24, ALL PASS; its first patch check failed on a normalisation bug in the check itself, kept in the header). Log: `docs/audit-log.md`, 2026-10-13. Not run: `tools/terms.py --check`, a render. Commits carry no trailers (R5).
 
-- 2026-10-22 (Claude Opus 5): `book4/chIV-field.html` rendered with an empty body on the live site. Cause was not content — the chapter text is injected from a JS array into `#contentA`, and a string literal spanning six lines threw `SyntaxError` at parse time, so the whole inline script including the renderer never ran. Every file-level check passes on a page in that state (byte count, balanced divs, `git diff origin/main`, HTTP 200), which is why it looked intact. Four more files carried the same class of defect: `Book1.html` (15 multi-line `text:"…"` literals, one per language array), `template-ebook-multilingual.html` (unescaped inner quotes), `Enceladus.html` and `Enceladus-zenodo.html` (CSS inside `<script>`). Also hardened 11 weak MathJax guards — `window.MathJax` is the config object and is truthy before the async CDN library arrives, so `if(window.MathJax)` alone throws mid-render. **New check, cheap, belongs in the sweep:** extract every inline `<script>` and run `node --check` on it; repo is at 663 scripts, 0 failing. Also ported the five unpublished correction boxes and six generators out of the dead `~/geometry` clone (see *Repo location*), and wrote the `## Attribution` section R5 has pointed at since 2026-09-13 without it existing.
+- 2026-10-22 (Claude Opus 5): `book4/chIV-field.html` rendered with an empty body on the live site. Cause was not content — the chapter text is injected from a JS array into `#contentA`, and a string literal spanning six lines threw `SyntaxError` at parse time, so the whole inline script including the renderer never ran. Every file-level check passes on a page in that state (byte count, balanced divs, `git diff origin/main`, HTTP 200), which is why it looked intact. Four more files carried the same class of defect: `Book1.html` (15 multi-line `text:"…"` literals, one per language array), `template-ebook-multilingual.html` (unescaped inner quotes), `Enceladus.html` and `Enceladus-zenodo.html` (CSS inside `<script>`). Also hardened 11 weak MathJax guards — `window.MathJax` is the config object and is truthy before the async CDN library arrives, so `if(window.MathJax)` alone throws mid-render. **New check, cheap, belongs in the sweep:** extract every inline `<script>` and run `node --check` on it; repo is at 663 scripts, 0 failing. Also ported the five unpublished correction boxes and six generators out of the dead `~/geometry` clone (see *Repo location*), and wrote the `## Attribution` section R5 has pointed at since 2026-09-13 without it existing. Session: <https://claude.ai/code/session_01X4Y4bcnFKrMb5Xw8PJTokR>.
 
 ### Open — the next session, in priority order
 
