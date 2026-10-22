@@ -35,6 +35,18 @@ FIGURES = [
  ("ACCA", "5%", "residential / small / mid / rural"), ("ACCA", "9%", "commercial / marketing >=12%"), ("ACCA", "8%", "large firms"),
  ("ACCA", "12%", "marketing threshold"), ("ACCA", "27%", "extended labor warranty margin"), ("ACCA", "19%", "adjust pricing by season"),
  ("ACCA", "January 28, 2026", "article posted"), ("ACCA", "Farmington Consulting Group", "ran the survey"),
+ ("SEC", "21,747", "Carrier 2025 net sales, $ millions (8-K ex. 99, Feb 5, 2026)"),
+ ("SEC", "22,486", "Carrier 2024 net sales"),
+ ("SEC", "21,321.9", "Trane Technologies 2025 net revenues (8-K ex. 99.1, Jan 29, 2026)"),
+ ("SEC", "19,838.2", "Trane 2024 net revenues"),
+ ("SEC", "16,986.4", "EMCOR 2025 revenues (8-K ex. 99.1, Feb 26, 2026)"),
+ ("SEC", "14,566.1", "EMCOR 2024 revenues"),
+ ("SEC", "7,050.5", "EMCOR US mechanical construction and facilities services 2025"),
+ ("SEC", "16.6%", "EMCOR increase as stated in the release"),
+ ("SEC", "9,101.6", "Comfort Systems USA 2025 revenue (8-K ex. 99.1, Feb 19, 2026)"),
+ ("SEC", "7,027.5", "Comfort Systems USA 2024 revenue"),
+ ("SEC", "11.94 billion", "Comfort Systems USA backlog at Dec 31, 2025"),
+ ("SEC", "20.4 billion", "figure in the supplied summary for Carrier, shown as not matching the filing"),
 ]
 def figures_missing(t):
     p = plain(t)
@@ -68,6 +80,12 @@ def cases_ok(out):
           and close(A.get("churn"), 0.08) and close(A.get("attach"), 0.15)
           and close(A.get("monthlyContribution"), 10) and A.get("floorAgreements") == 3000)
     return ok and all(v is None for v in B.values()) and C.get("burdenPerHour") is None and close(C.get("revPerTruckDay"), 1500)
+def comfort_change_ok(t):
+    # 9,101.641 / 7,027.476 - 1 = 29.5%: the page's own arithmetic, checked here
+    return "29.5%" in plain(t) and abs((9101.641 / 7027.476 - 1) * 100 - 29.5) < 0.05
+def players_ok(t):
+    q = plain(t)
+    return all(w in q for w in ["Who the players are", "not all of it is HVAC", "fiscal year", "Daikin", "Gree", "private-equity"]) and comfort_change_ok(t) and "expects the industry to consolidate" in q and "an expectation, not a finding" in q
 def labels_ok(t):
     q = plain(t)
     return all(w in q for w in ["Work sample", "no company data", "invented", "not independently checked", "definitions", "Stakeholders VR"])
@@ -86,6 +104,8 @@ print("[2] the metrics, run")
 out = run_cases(t)
 if out == "NONODE": print("CANNOT RUN: node is not installed."); sys.exit(2)
 check("metrics() matches the hand-derived cases A, B, C", cases_ok(out), "" if cases_ok(out) else str(out)[:300])
+print("[2b] players section")
+check("players section: not all HVAC, fiscal year stated, Daikin/Gree/PE named as left out, Comfort change recomputed", players_ok(t))
 print("[3] labels")
 check("labels present (work sample, no company data, invented example, not independently checked, definitions, link to first piece)", labels_ok(t))
 print("[4] privacy")
@@ -97,6 +117,7 @@ check("control: cash floor using the wrong divisor is caught", not cases_ok(run_
 check("control: churn inverted is caught", not cases_ok(run_cases(t.replace("div(v.lost, v.start)", "div(v.start, v.lost)"))))
 check("control: material variance sign flipped is caught", not cases_ok(run_cases(t.replace("-(v.amat - v.qmat)", "(v.amat - v.qmat)"))))
 check("control: an injected fetch( is caught", not privacy_ok(t.replace("// glue", "fetch('/x'); // glue")))
+check("control: players caveat removed is caught", not players_ok(t.replace("not all of it is HVAC", "")))
 check("control: label removed is caught", not labels_ok(t.replace("no company data", "")))
 print("[HONESTY] This checks that the page carries the recorded figures, that its arithmetic is right on three hand-derived cases, and that it sends and stores nothing.")
 print("  It does not check the BLS or ACCA figures against the sources (read through a fetch tool's summary), the framework, or that any real HVAC firm looks like the example.")
