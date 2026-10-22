@@ -4,8 +4,9 @@
 you are about to touch the file it covers. Dated narrative for closed defects
 and audits lives in `docs/audit-log.md`, not here.
 
-This file primes Claude for the `~/geometry` working repo, which is the live HTML site
-for the Principia Orthogona series at totogt.github.io/geometry.
+This file primes Claude for the working repo **`~/Desktop/geometry`**, which is the live HTML
+site for the Principia Orthogona series at totogt.github.io/geometry. `~/geometry` is a dead
+clone and is not it — see *Repo location* at the end of this file, and check `pwd` first.
 
 Read `~/Desktop/dnls/CLAUDE.md` for the canonical house rules (filesystem map, repo table,
 style guide, licensing, what agents must NOT do). This file adds geometry-specific notes.
@@ -209,6 +210,22 @@ Worked examples, all from 2026-09-17, all avoidable by one read:
 The corresponding duty: **a session that settles something writes it into the ledger**, not only
 into prose. A result recorded only in narrative will be re-derived.
 
+## Attribution (R5)
+
+**Author and rights holder: Pablo Nogueira Grossi, G6 LLC (Newark, NJ) — g6llc@proton.me.**
+All rights in this repository, in the Principia Orthogona series and in the deposits
+made from it are his and G6 LLC's.
+
+The work is produced with AI assistance, and that assistance confers no authorship.
+More than one Claude session contributes (Opus 5, Opus 5.5, Sonnet 5, Sonnet 5.5 to
+date), and other large language models are used alongside them; the Claude account
+running these sessions is sluhcdf@gmail.com.
+
+So: **no `Co-Authored-By:`, no `Claude-Session:`, no "Generated with" line** — not in a
+commit message, not in a page footer, not in a deposit. Where a change has to be
+traceable to a particular session, name the model inside that session's bullet in the
+HANDOFF block below, the way the dated entries there already do. Nothing else.
+
 ## HANDOFF — 2026-10-02 (ONE block. OVERWRITE it; do not append, and do not open a second one above it. Dated narrative goes to `docs/audit-log.md`.)
 
 ### State
@@ -223,6 +240,8 @@ Last push a0a126e (audit page 1). Branch main is level with origin. The working 
 - Bitcoin fold row pre-registered (R30) and its checker validated on synthetic worlds; power is low.
 - Page 1 of the three-point audit (R29): `ch-term-set-to-zero` and ch21 §21.8 corrected; `gibbs-check.py` rewritten; `ch-term-set-to-zero-census.py` added; one sentence in ch28 corrected.
 - 2026-10-13 (Claude Sonnet 5.5): the Moon Base B9 claim is withdrawn in `book4/gomc-opus.html` and `ch-catgt-zeolite.html` (it cited a Corollary 6 that does not exist; the extrudate result was Corollary 2, cut in V5). `engineering/moonbase-tiling-verify.py` added (R24, ALL PASS; its first patch check failed on a normalisation bug in the check itself, kept in the header). Log: `docs/audit-log.md`, 2026-10-13. Not run: `tools/terms.py --check`, a render. Commits carry no trailers (R5).
+
+- 2026-10-22 (Claude Opus 5): `book4/chIV-field.html` rendered with an empty body on the live site. Cause was not content — the chapter text is injected from a JS array into `#contentA`, and a string literal spanning six lines threw `SyntaxError` at parse time, so the whole inline script including the renderer never ran. Every file-level check passes on a page in that state (byte count, balanced divs, `git diff origin/main`, HTTP 200), which is why it looked intact. Four more files carried the same class of defect: `Book1.html` (15 multi-line `text:"…"` literals, one per language array), `template-ebook-multilingual.html` (unescaped inner quotes), `Enceladus.html` and `Enceladus-zenodo.html` (CSS inside `<script>`). Also hardened 11 weak MathJax guards — `window.MathJax` is the config object and is truthy before the async CDN library arrives, so `if(window.MathJax)` alone throws mid-render. **New check, cheap, belongs in the sweep:** extract every inline `<script>` and run `node --check` on it; repo is at 663 scripts, 0 failing. Also ported the five unpublished correction boxes and six generators out of the dead `~/geometry` clone (see *Repo location*), and wrote the `## Attribution` section R5 has pointed at since 2026-09-13 without it existing.
 
 ### Open — the next session, in priority order
 
@@ -3185,5 +3204,16 @@ written to. A Cowork session on 2026-10-01 had `~/geometry` as its connected fol
 audited the July `G6Crystal.lean`, and reported as new three findings the live file had
 already fixed on 2026-09-11. If a session's connected folder is not
 `/Users/pablogrossi/Desktop/geometry`, stop and say so before doing any work.
+
+**Ported out and closed, 2026-10-22 (Claude Opus 5):** the dead clone was 13 commits ahead
+and 1,033 behind. Twelve of the thirteen were absent from `origin/main` by patch-id, and most
+of their content had reached the site by other routes — but five correction boxes and the six
+`tools/book5_arc/` generators had not, and were ported onto the current files (never by
+cherry-pick: that clone's `book4/hub.html` would have restored the withdrawn 1,080-theorem
+figure and the "exact mathematical identities" claim). **Still open:** `book4/ch05.html` and
+`book4/chTau-tartaruga.html` carry the same Theorem T1 claim and have no box — the 9 October
+commit message said "all five Book 4 pages" and covered three; and `book4/hub.html` still
+shows `spiral_return_exists (T1) · ✓ proved` in its table, directly under the box saying the
+theorem assumes its conclusion.
 
 **Corrected 2026-10-13:** a Cowork session read `~/geometry` (the dead clone: 11 commits ahead, 1,015 behind) at the start of its Moon Base audit, repeating the 2026-10-01 failure above, and reported a stale local state as if it were the site's. It caught this only by cloning origin/main fresh. Check `pwd` against this section before reading any repo file.
