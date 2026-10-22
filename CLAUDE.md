@@ -259,7 +259,7 @@ Last push a0a126e (audit page 1). Branch main is level with origin. The working 
 - Page 1 of the three-point audit (R29): `ch-term-set-to-zero` and ch21 §21.8 corrected; `gibbs-check.py` rewritten; `ch-term-set-to-zero-census.py` added; one sentence in ch28 corrected.
 - 2026-10-13 (Claude Sonnet 5.5): the Moon Base B9 claim is withdrawn in `book4/gomc-opus.html` and `ch-catgt-zeolite.html` (it cited a Corollary 6 that does not exist; the extrudate result was Corollary 2, cut in V5). `engineering/moonbase-tiling-verify.py` added (R24, ALL PASS; its first patch check failed on a normalisation bug in the check itself, kept in the header). Log: `docs/audit-log.md`, 2026-10-13. Not run: `tools/terms.py --check`, a render. Commits carry no trailers (R5).
 
-- 2026-10-22 (Claude Opus 5): `book4/chIV-field.html` rendered with an empty body on the live site. Cause was not content — the chapter text is injected from a JS array into `#contentA`, and a string literal spanning six lines threw `SyntaxError` at parse time, so the whole inline script including the renderer never ran. Every file-level check passes on a page in that state (byte count, balanced divs, `git diff origin/main`, HTTP 200), which is why it looked intact. Four more files carried the same class of defect: `Book1.html` (15 multi-line `text:"…"` literals, one per language array), `template-ebook-multilingual.html` (unescaped inner quotes), `Enceladus.html` and `Enceladus-zenodo.html` (CSS inside `<script>`). Also hardened 11 weak MathJax guards — `window.MathJax` is the config object and is truthy before the async CDN library arrives, so `if(window.MathJax)` alone throws mid-render. **New check, cheap, belongs in the sweep:** extract every inline `<script>` and run `node --check` on it; repo is at 663 scripts, 0 failing. Also ported the five unpublished correction boxes and six generators out of the dead `~/geometry` clone (see *Repo location*), and wrote the `## Attribution` section R5 has pointed at since 2026-09-13 without it existing. Session: <https://claude.ai/code/session_01X4Y4bcnFKrMb5Xw8PJTokR>.
+- 2026-10-22 (Claude Opus 5): `book4/chIV-field.html` rendered with an empty body on the live site. Cause was not content — the chapter text is injected from a JS array into `#contentA`, and a string literal spanning six lines threw `SyntaxError` at parse time, so the whole inline script including the renderer never ran. Every file-level check passes on a page in that state (byte count, balanced divs, `git diff origin/main`, HTTP 200), which is why it looked intact. Four more files carried the same class of defect: `Book1.html` (15 multi-line `text:"…"` literals, one per language array), `template-ebook-multilingual.html` (unescaped inner quotes), `Enceladus.html` and `Enceladus-zenodo.html` (CSS inside `<script>`). Also hardened 11 weak MathJax guards — `window.MathJax` is the config object and is truthy before the async CDN library arrives, so `if(window.MathJax)` alone throws mid-render. **New check, cheap, belongs in the sweep:** extract every inline `<script>` and run `node --check` on it; repo is at 663 scripts, 0 failing. Also ported the five unpublished correction boxes and six generators out of the dead `~/geometry` clone (see *Repo location*), and wrote the `## Attribution` section R5 has pointed at since 2026-09-13 without it existing.
 
 ### Open — the next session, in priority order
 
@@ -3228,9 +3228,11 @@ and 1,033 behind. Twelve of the thirteen were absent from `origin/main` by patch
 of their content had reached the site by other routes — but five correction boxes and the six
 `tools/book5_arc/` generators had not, and were ported onto the current files (never by
 cherry-pick: that clone's `book4/hub.html` would have restored the withdrawn 1,080-theorem
-figure and the "exact mathematical identities" claim). **Still open:** `book4/ch05.html` and
-`book4/chTau-tartaruga.html` carry the same Theorem T1 claim and have no box — the 9 October
-commit message said "all five Book 4 pages" and covered three; and `book4/hub.html` still
+figure and the "exact mathematical identities" claim). The 9 October commit message said "all
+five Book 4 pages" and covered three; `book4/chTau-tartaruga.html` was the fourth and got its
+box 2026-10-22. `book4/ch05.html` is named in the to-do list but does not mention T1 at all —
+measured, zero occurrences — so there is no fifth page and nothing to correct there. **Still
+open:** `book4/hub.html` still
 shows `spiral_return_exists (T1) · ✓ proved` in its table, directly under the box saying the
 theorem assumes its conclusion.
 
