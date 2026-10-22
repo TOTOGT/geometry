@@ -28,7 +28,8 @@ def plain(t):
 FORBIDDEN = ["fetch(", "XMLHttpRequest", "sendBeacon", "localStorage", "sessionStorage", "indexedDB", "document.cookie", "WebSocket", "<form", "action="]
 SECS = ["S1", "S2", "S3", "S4"]
 LABELS = ["not a test", "no table values", "permission to name her is pending", "not peer-reviewed", "not read in full", "has not reviewed or endorsed the mathematics"]
-NAMES = ["sousa", "zilacleide", "zila", "uerj", "catalysis today"]
+NAMES = ["zilacleide", "zila ", "uerj"]
+CITES = ["Sousa et al.", "Catalysis Today", "234, 2014", "10.5281/zenodo.22929142", "totogt.github.io/io"]
 PRIVATE = ["73.70", "81.44", "86.22", "88.89", "26.36", "28.65", "15.71", "18.01", "17.25", "27.43", "98.22", "98.01"]
 BANNED = ["ernst", "secaucus", "baruch", "rutgers", "jpmorgan", "banco do brasil", "tishman", "speyer"]
 def secs_ok(t): return re.findall(r'<div class="sec" data-n="([^"]+)">', t) == SECS
@@ -37,6 +38,7 @@ def labels_ok(t):
 def clean_ok(t):
     return not any(b in t.lower() for b in BANNED) and not any(v in t for v in PRIVATE) and not any(f in t for f in FORBIDDEN)
 def unnamed_ok(t): return not any(n in t.lower() for n in NAMES)
+def cites_ok(t): return all(c in t for c in CITES) and "her co-authors" not in t
 def points_ok(t): return re.findall(r'<li data-d="(D[1-7])">', t) == ["D%d" % i for i in range(1, 8)]
 def links_ok(t):
     return 'href="ch05-proposal-with-a-test-that-can-fail.html"' in t and (HERE / "ch05-proposal-with-a-test-that-can-fail.html").exists()
@@ -49,6 +51,7 @@ def main():
     check("all required labels present", labels_ok(t))
     check("no table values, employer names, network/storage/form", clean_ok(t))
     check("collaborator, institution and paper are NOT named (permission pending)", unnamed_ok(t))
+    check("the 2014 paper and the V6 preprint are cited; the collaborator is not tied to the paper", cites_ok(t))
     check("review points D1..D7 present in order", points_ok(t))
     check("link to ch05 present and the file exists", links_ok(t))
     ctl = []
@@ -59,6 +62,8 @@ def main():
     control("label removed", re.sub("(?i)not a test", "zzz", t), labels_ok)
     control("table value pasted in", t + " 81.44 ", clean_ok)
     control("her name pasted in", t + " Zilacleide Sousa ", unnamed_ok)
+    control("V6 DOI removed", t.replace("22929142", "00000000"), cites_ok)
+    control("collaborator tied to paper", t + " her co-authors ", cites_ok)
     control("review point removed", t.replace('data-d="D4"', 'data-d="X"'), points_ok)
     control("ch05 link broken", t.replace("ch05-proposal", "ch99-proposal"), links_ok)
     print("[HONESTY] Checks structure, labels and exclusions. It does not show the collaborator agreed to any of this, that the transcriptions are right, or that the law holds or fails.")
