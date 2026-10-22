@@ -1,6 +1,6 @@
 -- GATE-DECLARE: sorries = none
 -- GATE-REASON: new file 2026-10-22 for the geometry pin (Lean v4.32.0, Mathlib).
--- UNTESTED until the author runs `lake env lean NbonacciLimit.lean` on it. Written without a compiler.
+-- COMPILED by the author 2026-10-22 (Lean v4.32.0, Mathlib), including `exists_seq_tendsto_two`: no errors, no sorry, two `push_neg` deprecation warnings (lines 62, 83); axioms for all seven #print lines: propext, Classical.choice, Quot.sound.
 /-
 # NbonacciLimit.lean
 
@@ -167,6 +167,23 @@ theorem tendsto_two (η : ℕ → ℝ) (h : ∀ k, 2 ≤ k → 1 < η k ∧ IsNb
   have h2 := h0.add_const 2
   simpa using h2
 
+/-- Non-vacuity: the hypothesis of `tendsto_two` is satisfiable. There is a sequence that, for every `k ≥ 2`, picks a root
+of the k-th characteristic equation greater than 1 (by `root_exists`), and that sequence tends to 2. -/
+theorem exists_seq_tendsto_two :
+    ∃ η : ℕ → ℝ, (∀ k, 2 ≤ k → 1 < η k ∧ IsNbonacciRoot k (η k)) ∧ Filter.Tendsto η Filter.atTop (nhds 2) := by
+  have key : ∀ k : ℕ, ∃ x : ℝ, 2 ≤ k → (3 / 2 < x ∧ x < 2 ∧ IsNbonacciRoot k x) := by
+    intro k
+    by_cases hk : 2 ≤ k
+    · obtain ⟨x, hx⟩ := root_exists k hk
+      exact ⟨x, fun _ => hx⟩
+    · exact ⟨0, fun h => absurd h hk⟩
+  choose η hη using key
+  have h : ∀ k, 2 ≤ k → 1 < η k ∧ IsNbonacciRoot k (η k) := by
+    intro k hk
+    obtain ⟨h1, _, h3⟩ := hη k hk
+    exact ⟨by linarith, h3⟩
+  exact ⟨η, h, tendsto_two η h⟩
+
 end NbonacciLimit
 
 #print axioms NbonacciLimit.root_eq
@@ -175,3 +192,4 @@ end NbonacciLimit
 #print axioms NbonacciLimit.gap_le
 #print axioms NbonacciLimit.root_exists
 #print axioms NbonacciLimit.tendsto_two
+#print axioms NbonacciLimit.exists_seq_tendsto_two
