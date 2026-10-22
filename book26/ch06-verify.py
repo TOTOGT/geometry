@@ -27,7 +27,7 @@ def plain(t):
     return re.sub(r"\s+", " ", t)
 FORBIDDEN = ["fetch(", "XMLHttpRequest", "sendBeacon", "localStorage", "sessionStorage", "indexedDB", "document.cookie", "WebSocket", "<form", "action="]
 SECS = ["S1", "S2", "S3", "S4"]
-LABELS = ["not a test", "no table values", "permission to name her is pending", "not peer-reviewed", "not read in full", "has not reviewed or endorsed the mathematics"]
+LABELS = ["not a test", "no table values", "permission to identify her is pending", "not peer-reviewed", "not read in full", "has not reviewed or endorsed the mathematics"]
 NAMES = ["zilacleide", "zila ", "uerj"]
 CITES = ["Sousa et al.", "Catalysis Today", "234, 2014", "10.5281/zenodo.22929142", "totogt.github.io/io"]
 PRIVATE = ["73.70", "81.44", "86.22", "88.89", "26.36", "28.65", "15.71", "18.01", "17.25", "27.43", "98.22", "98.01"]
@@ -50,7 +50,7 @@ def main():
     check("sections S1..S4 in order", secs_ok(t))
     check("all required labels present", labels_ok(t))
     check("no table values, employer names, network/storage/form", clean_ok(t))
-    check("collaborator, institution and paper are NOT named (permission pending)", unnamed_ok(t))
+    check("collaborator and institution are NOT named (permission pending); the paper is cited as literature", unnamed_ok(t))
     check("the 2014 paper and the V6 preprint are cited; the collaborator is not tied to the paper", cites_ok(t))
     check("review points D1..D7 present in order", points_ok(t))
     check("link to ch05 present and the file exists", links_ok(t))
