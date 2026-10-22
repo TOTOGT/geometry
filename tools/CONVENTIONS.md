@@ -236,3 +236,11 @@ is not the desk is the failure mode; if you must, write the offset.
 
 This is WP-73's rule at one turn smaller. A claim names its arguments, and a
 date is one of them.
+
+## 7. A withdrawal is closed by the sweep, not by intent
+
+**Rule.** A withdrawn claim may be marked CLOSED only when `python3 tools/staleness_sweep.py --json`, run on the branch that will be pushed, shows no row for that entry's `id` with `acknowledged_in_file` false, and the closing note records the commit hash that made it so. The check is per entry, not the script's exit code, because the exit code is 1 whenever any entry has an unacknowledged hit. A claim is added to `tools/withdrawn_claims.json` in the same commit that withdraws it.
+
+**Incident.** Book 17 ch01 §4(i) was marked CLOSED on 2026-09-19 for the phrase "exact mathematical identities". On 2026-10-21 the phrase, or its singular form, was still asserted unhedged in `book4/hub.html`, `minibeast-pilot.html`, `vol2-dashboard.html`, `ch00-introduction.html`, `ch02-biological.html`, `ch06-pedagogy.html`, `journey.html` and `book4/chIV-preface-impa.html`; no commit on any branch removed it from the first three. The status had been written from intent, and nothing re-checked the files. The list `tools/withdrawn_claims.json` held one entry, so the sweep could not have caught it.
+
+**What this does not settle.** The sweep treats a file as acknowledged if the words withdrawn, retracted, corrected, superseded or deprecated appear anywhere in it, so a page can pass while still asserting the claim, and it reads only files tracked on the current branch. A person reads each listed file before the note says CLOSED. Keywords are stems ("exact mathematical identit") so the singular and plural both match.
