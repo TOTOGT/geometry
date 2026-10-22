@@ -5,7 +5,7 @@
 book22/ch04-verify.py -- book22/ch04-placement.html: a satire sketch plus a placement form. Run first (R24).
     python3 book22/ch04-verify.py
 Needs python3 and node. Checks STRUCTURE, the labels, the placement rule (by running it), and that nothing is sent or stored.
-  [1] six sketch beats S1..S6, each with English and Portuguese text
+  [1] seven sketch beats S1..S7, each with English and Portuguese text
   [2] the fiction label, and the Doctor's name, are present
   [3] the form exists (name, learned, accent, staff, button, result area) and the page script defines place()
   [4] place() is RUN in node against recorded cases (the rule is the one in Chapter 1: no place named -> Thursday Alaska;
@@ -22,7 +22,7 @@ def check(label, ok, detail=""):
     print(("PASS " if ok else "FAIL ") + label + (f"  -- {detail}" if detail else ""))
     if not ok: FAIL.append(label)
 def plain(t): return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", t))
-BEATS = ["S1", "S2", "S3", "S4", "S5", "S6"]
+BEATS = ["S1", "S2", "S3", "S4", "S5", "S6", "S7"]
 FORBIDDEN = ["fetch(", "XMLHttpRequest", "sendBeacon", "localStorage", "sessionStorage", "indexedDB", "document.cookie", "WebSocket", "<form", "action="]
 
 def beats_ok(text):
@@ -33,6 +33,10 @@ def beats_ok(text):
         pt = re.search(r'<div lang="pt">(.*?)</div>', body, re.S)
         got[m.group(1)] = bool(en and plain(en.group(1)).strip()) and bool(pt and plain(pt.group(1)).strip())
     return list(got) == BEATS and all(got.values())
+def uniform_ok(text):
+    m = re.search(r'<div class="sec" data-n="S6">(.*?)<div lang="pt">', text, re.S)
+    q = plain(m.group(1)) if m else ""
+    return all(w in q for w in ["combat boots", "tuxedo", "tweed", "uniform", "no accent"])
 def label_ok(text):
     p = plain(text)
     return "Fiction." in p and "invented" in p and "Fairweather" in p
@@ -85,7 +89,10 @@ if not path.exists():
     print("\nFAILED: " + ", ".join(FAIL)); sys.exit(1)
 t = path.read_text(encoding="utf-8")
 print("[1] sketch beats")
-check("six beats S1..S6 each have EN and PT text", beats_ok(t))
+check("seven beats S1..S7 each have EN and PT text", beats_ok(t))
+print("[1b] the dress-code beat")
+check("S6 has the punk's boots, the tuxedo, the tweed, the word uniform and the Doctor's 'no accent'", uniform_ok(t))
+check("control: beat without the tuxedo is caught", not uniform_ok(t.replace("tuxedo", "suit")))
 print("[2] labels")
 check("fiction label present, names the Doctor, says the people are invented", label_ok(t))
 print("[3] the form")
@@ -98,7 +105,7 @@ check("place() returns the recorded placements (7 cases)", rule_ok(out), "" if r
 print("[5] privacy")
 check("no network, storage or form action; page says nothing typed leaves it", privacy_ok(t))
 print("[6] controls")
-check("control: no beats -> caught", not beats_ok(t.replace('data-n="S3"', 'data-n="S3x"')))
+check("control: renamed beat -> caught", not beats_ok(t.replace('data-n="S3"', 'data-n="S3x"')))
 check("control: staff exemption removed -> caught",
       not rule_ok(run_cases(t.replace("if (staff)", "if (false)"))), "")
 check("control: Julia sent to Tuesday -> caught",

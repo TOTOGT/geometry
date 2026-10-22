@@ -8,7 +8,7 @@ Standard library only. The figures below were copied by hand on 2026-10-22 from 
 for each source URL. A fetch tool summarizes the page; it is not a reading of the page image or the PDF.
 So this script proves the PAGE matches those recorded figures, not that the figures match the sources.
   [1] each recorded figure appears on the page
-  [2] each finding F1..F7 has English and Portuguese text
+  [2] each finding F1..F8 has English and Portuguese text
   [3] the status box (fetched, not independently read) is present
   [4] a changed figure and a removed finding are both caught (control)
   [HONESTY] what this does not establish
@@ -48,8 +48,21 @@ FIGURES = [
  ("F7", "74.44%", "Wikipedia, Ulcinj, Albanian mother tongue, municipality"),
  ("F7", "Ulqini", "Wiktionary, Ulqin, definite form"),
  ("F7", "Gheg", "Wikipedia, Albanians in Montenegro"),
+ ("F8", "14183", "govinfo, DCPD-202500187, Executive Order 14183"),
+ ("F8", "January 27, 2025", "govinfo, DCPD-202500187, date signed"),
+ ("F8", "4(a)(1)", "govinfo, EO 14183 Sec. 4(a)(1), pronouns"),
+ ("F8", "4(c)", "govinfo, EO 14183 Sec. 4(c), facilities"),
+ ("F8", "extraordinary operational necessity", "govinfo, EO 14183 Sec. 4(c)"),
+ ("F8", "June 1, 2026", "FindLaw and Military Times, D.C. Circuit in Talbott"),
+ ("F8", "2 to 1", "Gender Justice League tracker, Sept 2026"),
+ ("F8", "June 30, 2026", "Gender Justice League tracker, class certification"),
+ ("F8", "4,240", "Military Times citing AP; tracker"),
+ ("F8", "August 28, 2026", "Gender Justice League tracker, DOJ request to the Supreme Court"),
+ ("F8", "October 20, 2025", "Gender Justice League tracker, Shilling argued"),
+ ("F8", "November 3, 2026", "Gender Justice League tracker, Shilling trial"),
+ ("F8", "May 2025", "Gender Justice League tracker, Supreme Court stay in Shilling"),
 ]
-FINDINGS = ["F1", "F2", "F3", "F4", "F5", "F6", "F7"]
+FINDINGS = ["F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8"]
 
 def missing(text):
     p = plain(text)
@@ -72,9 +85,16 @@ print("[1] figures on the page")
 miss = missing(t) if t else [f for f, _, _ in FIGURES]
 check(f"all {len(FIGURES)} recorded figures are on the page", not miss, ", ".join(miss))
 print("[2] findings")
-check("F1..F7 each have English and Portuguese text", bool(t) and findings_ok(t))
+check("F1..F8 each have English and Portuguese text", bool(t) and findings_ok(t))
 print("[3] status box")
 check("page says the figures were fetched, not independently read", "not independently read" in plain(t))
+print("[3b] F8 labels")
+def f8_labels(text):
+    q = plain(text)
+    return ("Not verified" in q and "could not be fetched" in q and "published by a plaintiff" in q
+            and "after the September 2026 tracker were not searched" in q and "the author" in q)
+check("F8 says what was not verified, who published the tracker, and what was not searched", bool(t) and f8_labels(t))
+check("control: the 'not verified' label removed is caught", bool(t) and not f8_labels(t.replace("Not verified", "")))
 print("[4] controls")
 check("control: a changed figure (9.65 -> 9.56) is caught", bool(t) and bool(missing(t.replace("9.65", "9.56"))))
 d = re.sub(r'<div class="sec" data-n="F4">', '<div class="sec" data-n="F4x">', t, count=1) if t else ""
