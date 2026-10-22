@@ -97,11 +97,16 @@ FOLDERS: list[tuple[str, str, str]] = [
     # listing is not a chapter count. Corrected 2026-09-16.
     ("book13", "Book XIII — Category Theory", "book13"),
     ("book14", "Book XIV — The Language of Mathematics", "book14"),
+    # book15 and book26 were absent from this list when the FOLDER GUARD stopped the build on 2026-10-22; titles taken from each book's index.html.
+    ("book15", "Book XV — The Mathematics of Travel and Trade", "book15"),
     ("book17", "Book XVII — The Machine Floor", "book17"),
     ("book18", "Book XVIII — The Chain Rule", "book18"),
     ("book19", "Book XIX — AXLE and the Manual", "book19"),
     ("book20", "Book XX — Reading Data", "book20"),
     ("book21", "Book XXI — The Classification of Planar Linear Systems", "book21"),
+    ("book22", "Book XXII — Language Arts and Added Languages", "book22"),
+    ("book23", "Book XXIII — 22 Days", "book23"),
+    ("book26", "Book XXVI — The 2026 Applications", "book26"),
     ("book28", "Book XXVIII — Index Theory", "book28"),
     ("book29", "Book XXIX — Open Threads", "book29"),
     ("book30", "Book XXX — Planned", "book30"),

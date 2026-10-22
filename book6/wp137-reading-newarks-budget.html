@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP137 &middot; Reading Newark's Budget &middot; One-Time Money in a $900 Million General Budget</title>
+<meta name="description" content="A reading of the City of Newark, NJ 2025 and 2026 Municipal User Friendly Budgets: which columns foot, which do not, how much of the general budget the city itself flags as non-recurring, and what replacing it from the levy would cost per average home. Arithmetic checked by script; not an audit.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],tags:'ams'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+:root{
+  --void:    #04040a;
+  --surface: #0c0d16;
+  --card:    #10111c;
+  --gold:    #c9a84c;
+  --teal:    #0ABAB5;
+  --red:     #e05a3a;
+  --purple:  #c084fc;
+  --green:   #50c878;
+  --amber:   #f59e0b;
+  --deep:    #5b4fcf;   /* deep quantum violet */
+  --text:    #e8e4d8;
+  --muted:   #6b6757;
+  --dim:     #2a2920;
+  --rule:    rgba(201,168,76,0.18);
+  --serif:   'Noto Serif', Georgia, serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-series{font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;}
+.nav-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-links a.here{color:var(--purple);}
+
+.hero{padding:5rem 2rem 4rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(91,79,207,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--deep);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:2rem;opacity:.9;}
+.hero h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:400;letter-spacing:.04em;color:var(--gold);margin-bottom:.4rem;line-height:1.25;}
+.hero-sub{font-size:1rem;color:rgba(232,228,216,.7);max-width:680px;margin:.6rem auto 0;font-style:italic;line-height:1.7;}
+.hero-eq{margin-top:2rem;font-family:var(--mono);font-size:.85rem;letter-spacing:.08em;color:rgba(201,168,76,.4);line-height:2;}
+.hero-wp{margin-top:.8rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+
+.page{max-width:900px;margin:0 auto;padding:4rem 2rem;}
+
+h2{font-size:1.25rem;font-weight:400;color:var(--gold);letter-spacing:.04em;margin:3.5rem 0 1.2rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;letter-spacing:.02em;}
+p{margin-bottom:1.2rem;}
+p:last-child{margin-bottom:0;}
+a{color:var(--teal);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* Theorem blocks */
+.block-verified{border-left:3px solid var(--teal);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(10,186,181,.03);}
+.block-model{border-left:3px solid var(--gold);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(201,168,76,.025);}
+.block-open{border-left:3px solid var(--amber);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(245,158,11,.025);}
+.block-proof{border-left:3px solid var(--purple);padding:1.1rem 1.5rem;margin:1.5rem 0;background:rgba(192,132,252,.025);}
+.block-defn{border-left:3px solid var(--deep);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(91,79,207,.03);}
+.block-lens{border-left:3px solid var(--muted);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(107,103,87,.03);}
+.block-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:.6rem;display:block;}
+.block-verified .block-label{color:var(--teal);}
+.block-model   .block-label{color:var(--gold);}
+.block-open    .block-label{color:var(--amber);}
+.block-proof   .block-label{color:var(--purple);}
+.block-defn    .block-label{color:var(--deep);}
+.block-lens    .block-label{color:var(--muted);}
+.block-body{font-size:.95rem;line-height:1.82;color:var(--text);}
+.qed{text-align:right;font-family:var(--mono);font-size:.85rem;color:var(--purple);margin-top:.6rem;}
+
+.block-math{font-family:var(--mono);font-size:.9rem;color:var(--gold);background:var(--surface);border:1px solid var(--dim);padding:1rem 1.4rem;margin:1.2rem 0;overflow-x:auto;line-height:2;}
+
+.op-chain{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:1rem 0;}
+.op{font-family:var(--mono);font-size:.78rem;padding:.2rem .55rem;border-radius:2px;}
+.op-c{background:rgba(10,186,181,.12);color:#0ABAB5;border:1px solid rgba(10,186,181,.3);}
+.op-k{background:rgba(224,90,58,.12);color:#e05a3a;border:1px solid rgba(224,90,58,.3);}
+.op-f{background:rgba(192,132,252,.12);color:#c084fc;border:1px solid rgba(192,132,252,.3);}
+.op-u{background:rgba(80,200,120,.12);color:#50c878;border:1px solid rgba(80,200,120,.3);}
+.op-arr{color:var(--muted);}
+
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0;}
+@media(max-width:700px){.compare-grid{grid-template-columns:1fr;}}
+.cg-card{background:var(--card);border:1px solid var(--rule);padding:1.4rem;border-radius:2px;}
+.cg-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;display:block;}
+.cg-body{font-size:.88rem;line-height:1.75;color:rgba(232,228,216,.8);}
+.cg-card.purple-accent{border-color:rgba(192,132,252,.25);}
+.cg-card.purple-accent .cg-title{color:var(--purple);}
+.cg-card.deep-accent{border-color:rgba(91,79,207,.25);}
+.cg-card.deep-accent .cg-title{color:rgba(91,79,207,.9);}
+
+.step-list{list-style:none;counter-reset:step-counter;margin:1rem 0;}
+.step-list li{counter-increment:step-counter;padding:.5rem 0 .5rem 2.2rem;position:relative;border-bottom:1px solid var(--dim);font-size:.94rem;line-height:1.75;}
+.step-list li:last-child{border-bottom:none;}
+.step-list li::before{content:counter(step-counter)".";position:absolute;left:0;font-family:var(--mono);font-size:.75rem;color:var(--purple);font-weight:700;top:.55rem;}
+
+.pull{text-align:center;padding:2.5rem 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:3rem 0;}
+.pull-text{font-size:1.15rem;font-style:italic;color:var(--gold);max-width:660px;margin:0 auto;line-height:1.75;}
+.pull-attr{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.8rem;}
+
+.infinity-tower{background:var(--surface);border:1px solid var(--rule);padding:2rem;margin:2rem 0;text-align:center;}
+.it-row{font-family:var(--mono);font-size:.85rem;color:rgba(232,228,216,.7);line-height:2.2;}
+.it-row .highlight{color:var(--gold);}
+.it-row .dim{color:var(--muted);}
+.it-arrow{color:var(--muted);font-size:1.1rem;display:block;}
+
+.po-ring-strip{display:flex;justify-content:center;align-items:center;gap:0;border-top:1px solid var(--rule);padding:0;font-family:var(--mono);font-size:.58rem;flex-wrap:wrap;}
+.po-ring-strip a{display:inline-block;padding:.65rem 1.1rem;color:var(--muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;border-right:1px solid var(--rule);transition:color .2s,background .2s;}
+.po-ring-strip a:last-child{border-right:none;}
+.po-ring-strip a:hover{color:var(--gold);background:rgba(201,168,76,.04);}
+.po-ring-strip a.here{color:var(--purple);}
+
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid var(--rule);}
+footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);line-height:2;}
+
+  /* --- provenance footer (added 2026-08-12) --- */
+  footer .prov{max-width:760px;margin:1.5rem auto 0;padding-top:1.1rem;
+    border-top:1px solid currentColor;display:flex;gap:34px;flex-wrap:wrap;
+    text-align:left;font-size:.72rem;line-height:1.7;opacity:.9}
+  footer .prov>div{flex:1 1 300px}
+  footer .prov a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+  footer .prov .disc{opacity:.85}
+</style>
+<!--po-subject--><meta name="po-subject" content="ECONOMICS · POLICY"><!--/po-subject-->
+</head>
+<body>
+<style>
+.wp137 table{border-collapse:collapse;width:100%;margin:1rem 0 1.6rem;font-size:.86rem;}
+.wp137 th,.wp137 td{border:1px solid var(--rule);padding:.45rem .6rem;text-align:left;vertical-align:top;}
+.wp137 th{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;}
+.wp137 .tblwrap{overflow-x:auto;}
+.wp137 .tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;}
+</style>
+<nav class="wpchain" style="font:600 10.5px/1.7 ui-sans-serif,system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;letter-spacing:.09em;text-transform:uppercase;display:flex;flex-wrap:wrap;gap:.35rem 1.5rem;justify-content:space-between;align-items:baseline;padding:.75rem 1.4rem;border-bottom:1px solid currentColor;opacity:.7">
+  <a href="wp136-living-in-a-moon-habitat.html" style="color:inherit;text-decoration:none;border-bottom:1px dotted currentColor;padding-bottom:1px;white-space:nowrap">&larr; WP-136 &middot; Living in a Moon Habitat</a>
+  <span style="opacity:.85"><a href="index.html" style="color:inherit;text-decoration:none;border-bottom:1px dotted currentColor;padding-bottom:1px;white-space:nowrap">Vol VI &middot; Roots</a> &middot; <a href="../index.html" style="color:inherit;text-decoration:none;border-bottom:1px dotted currentColor;padding-bottom:1px;white-space:nowrap">&#9884; Principia Orthogona</a> &middot; <span>Written 2026-10-21</span></span>
+  <a href="index.html" style="color:inherit;text-decoration:none;border-bottom:1px dotted currentColor;padding-bottom:1px;white-space:nowrap">Vol VI index &rarr;</a>
+</nav>
+
+<nav>
+  <a class="nav-series" href="../book4/living-book.html">Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="wp136-living-in-a-moon-habitat.html">WP136</a>
+    <a href="wp137-reading-newarks-budget.html" class="here">WP137</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Working Paper 137 &middot; Municipal Finance &middot; Newark, New Jersey</div>
+  <!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#5a3a06;background:#f7ecd6;border:1px solid #e0c48a;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">ECONOMICS · POLICY</span></div><!--/po-subject-->
+<h1>Reading Newark's Budget</h1>
+  <p class="hero-sub">One-time money in a $900 million general budget. A close reading of the City of Newark's 2025 and 2026 State-form budgets: which columns foot, which do not, how much of the general budget the city itself flags as non-recurring, and what it would cost an average home to replace it. Arithmetic, not an audit.</p>
+  <div class="hero-wp">Principia Orthogona &middot; Book VI &middot; WP137 &middot; 2026</div>
+</section>
+
+<main class="page wp137">
+
+<p><strong>Status.</strong> Independent working paper, not peer-reviewed, and not an audit, a rating or a finding that Newark is in fiscal stress. Every figure comes from the text of two State of New Jersey Municipal User Friendly Budget PDFs (named in Sources), copied by hand into <code>wp137-verify.py</code>, which was run before these sentences were written. An earlier read of the same PDFs through a text-summary tool scrambled several lines; nothing here relies on that read. What is computed is labelled <em>computed</em>; what the sheets print and this page cannot explain is labelled <em>unexplained</em>.</p>
+
+<h2>&sect;1 &middot; What the form is</h2>
+<p>New Jersey municipalities file a standard workbook, the Municipal User Friendly Budget (UFB), with the Division of Local Government Services. It is the city's own summary of its budget: revenue and appropriations by fund, the tax levy and rate, personnel, debt, and a list of revenues "that may not be available in subsequent years". Newark's 2026 file does not say whether it is the introduced or the adopted budget. The 2025 file is named <em>INTRODUCED BUDGET</em>, so its figures may differ from what the city finally adopted; the 2026 file's prior-year columns are the better guide to 2025 outcomes where the two disagree.</p>
+<p>The form does <strong>not</strong> contain the one number a runway estimate needs: year-end fund balance. That sits in the audit; &sect;5 uses the 2021 audit and the 2023 budget's surplus sheet, the only ones provided, and nothing later.</p>
+
+<h2>&sect;2 &middot; The scale</h2>
+<div class="tblwrap"><table>
+<tr><th>Item (2026 file)</th><th>Figure</th><th>Status</th></tr>
+<tr><td>General-budget revenue (UFB-2 column; also UFB-1 appropriations before RUT + RUT)</td><td>$900,500,264.94</td><td class="tag">printed; foots</td></tr>
+<tr><td>Total taxable (assessed) valuation, 1 Oct 2025</td><td>$12,785,121,100</td><td class="tag">printed</td></tr>
+<tr><td>Equalized valuation, taxable properties</td><td>$26,763,912,706.72</td><td class="tag">printed</td></tr>
+<tr><td>Assessed / equalized</td><td>47.77%</td><td class="tag">computed; matches the printed average ratio</td></tr>
+<tr><td>Average residential assessment</td><td>$191,563</td><td class="tag">printed</td></tr>
+</table></div>
+<p>"Valuation" has two meanings here. The tax rate is applied to the $12.8 billion assessed base. The equalized figure, $26.8 billion, is the market-based estimate; Newark assesses at about 47.77% of it.</p>
+
+<h2>&sect;3 &middot; What foots and what does not</h2>
+<div class="tblwrap"><table>
+<tr><th>Test</th><th>Result</th><th>Status</th></tr>
+<tr><td>2026 general-budget revenue lines sum to the printed column</td><td>$900,500,264.94, yes</td><td class="tag">computed</td></tr>
+<tr><td>2026 general-budget appropriation lines sum to the printed column</td><td>$908,391,132.98, yes</td><td class="tag">computed</td></tr>
+<tr><td>2026 appropriation column versus revenue column (a balanced budget has none)</td><td>appropriations exceed revenue by $7,890,868.04</td><td class="tag">unexplained</td></tr>
+<tr><td>2025 (introduced) appropriation column versus revenue column</td><td>appropriations are $56,392,140.77 below revenue; UFB-1 does balance</td><td class="tag">unexplained</td></tr>
+<tr><td>2025 (introduced) reserve for uncollected taxes</td><td>$23,344,000 in UFB-1, $24,850,000 in UFB-3; the 2026 file gives $23,344,000 as the prior-year value</td><td class="tag">two figures in one file</td></tr>
+<tr><td>Printed all-funds totals, 2026</td><td>revenue is $42,746,765.00 below appropriations</td><td class="tag">unexplained</td></tr>
+<tr><td>Printed all-funds totals, 2025 introduced</td><td>revenue is $24,480,000.00 below appropriations</td><td class="tag">unexplained</td></tr>
+<tr><td>2026 levy / valuation</td><td>2.154 per $100, against a printed rate of 2.016</td><td class="tag">unexplained</td></tr>
+<tr><td>2026 municipal-purposes change: levy, valuation, rate</td><td>levy -2.89% (printed), valuation +0.12%, so the sheet's own figures imply about -3.0%; the printed rate change is -9.12%</td><td class="tag">unexplained</td></tr>
+<tr><td>Average residential payment, 191,563 &times; 2.016 / 100</td><td>$3,861.91 (printed $3,861.53)</td><td class="tag">follows the printed rate, not the levy</td></tr>
+</table></div>
+<p>These are differences between numbers the city printed on one form. They may be form mechanics: offsetting columns, the basis on which the rate was struck, or a version mismatch. This paper does not know which, and does not allege anything. They are the lines to check against the adopted budget and the audit before relying on either number.</p>
+
+<h2>&sect;4 &middot; The surplus draw falls</h2>
+<div class="tblwrap"><table>
+<tr><th>Budget year</th><th>Surplus appropriated</th><th>Share of general-budget revenue</th></tr>
+<tr><td>2024 (prior-year column of the 2025 file)</td><td>$43,000,000.00</td><td>not computed (no matching total)</td></tr>
+<tr><td>2025 (introduced; the 2026 file's prior column agrees)</td><td>$23,850,000.00</td><td>2.458%</td></tr>
+<tr><td>2026</td><td>$4,106,000.00</td><td>0.456%</td></tr>
+</table></div>
+<p>The 2026 draw is 17.2% of the 2025 draw, a fall of 82.78% as the sheet prints it. A smaller draw means less reliance on reserves this year. It does not say reserves are healthy or depleted; &sect;5 reads the balances that are available.</p>
+
+<h2>&sect;5 &middot; The balance behind the draw</h2>
+<p>The form has no year-end balance, but two other documents in the same folder do: the City's <em>2021 Report on Examination of Accounts</em> (Samuel Klein and Company, a scanned PDF read by OCR) and the 2023 adopted budget, whose "Condition of Surplus" sheet gives the available balance each year. No audit after 2021 was provided. What they show:</p>
+<div class="tblwrap"><table>
+<tr><th>Item</th><th>Amount</th><th>Source</th><th>Status</th></tr>
+<tr><td>Current-fund balance, 31 Dec 2020</td><td>$37,296,982.41</td><td>2021 audit, Sheet 2</td><td class="tag">read</td></tr>
+<tr><td>Surplus used in the 2021 budget</td><td>$11,700,000.00</td><td>2021 audit</td><td class="tag">read</td></tr>
+<tr><td>Excess in operations, 2021</td><td>$27,791,935.91</td><td>2021 audit</td><td class="tag">read</td></tr>
+<tr><td>Current-fund balance, 31 Dec 2021</td><td>$53,388,918.32</td><td>2021 audit</td><td class="tag">computed: 37,296,982.41 &minus; 11,700,000.00 + 27,791,935.91</td></tr>
+<tr><td>Same balance as printed in the 2023 budget sheet</td><td>$53,375,084.83</td><td>2023 adopted budget</td><td class="tag">differs by $13,833.49; unexplained</td></tr>
+<tr><td>Available surplus, 31 Dec 2022</td><td>$77,859,942.23</td><td>2023 adopted budget</td><td class="tag">read</td></tr>
+<tr><td>Surplus anticipated, 2022 and 2021 (second source)</td><td>$25,000,000.00; $11,700,000.00</td><td>2022 adopted legal-line budget, Sheet 11 (scan)</td><td class="tag">read from the page image; agrees with the 2023 sheet and the 2021 audit. Cash realized in 2021: $11,700,000.00. The 2022 draw is 3.062% of that budget's $816,392,337.95 total anticipated general revenues (computed)</td></tr>
+<tr><td>Used: 2022 budget; 2023 budget</td><td>$25,000,000.00; $60,000,000.00</td><td>2023 adopted budget</td><td class="tag">read</td></tr>
+<tr><td>Remaining after the 2023 use</td><td>$17,859,942.23</td><td>2023 adopted budget</td><td class="tag">computed; matches the sheet</td></tr>
+<tr><td>Implied addition to the balance during 2022</td><td>$49,484,857.40</td><td>from the rows above</td><td class="tag">computed</td></tr>
+</table></div>
+<p>The balance is refilled each year: about $27.8 million of operating excess in 2021 (audited) and an implied $49.5 million added in 2022. That changes how the &sect;4 draws should be read: a draw is spending from a balance the previous year's results had restocked. Going further is inference, not reading, because no balance sheet after 2022 was provided. The draws are $25.0M (2022), $60.0M (2023), $43.0M (2024, read from the 2025 file's prior-year column; the 2024 budget itself was not read), $23.85M (2025) and $4.106M (2026): $155,956,000 over 2022 to 2026. Against the $53,375,084.83 available at the end of 2021, at least <strong>$102,580,915.17</strong> had to be added to the balance during 2022 to 2025 for those draws to be fundable, if each was paid from the balance. To fund the 2024 draw alone, at least $25,140,057.77 had to be added during 2023. These are lower bounds from the printed draws, not estimates of what was added.</p>
+<p>The 2026 introduced legal-line budget also has an appendix with a 31 December 2025 balance sheet; the scan's figures were not legible by OCR, so no end-2025 balance is read here.</p>
+
+<p>Context from an earlier audit, which is a different kind of audit and not a balance review. The State Comptroller's December 2013 report on Newark's payroll, timekeeping and operating practices (covering January 2010 to September 2013, a performance audit under the Comptroller's own statute) states in its background section that Newark "historically has been a financially distressed city." It also records special State aid of $32 million in 2011 and $10 million in 2012 (the City had asked for $24 million), none in 2013, and a Memorandum of Understanding with the Department of Community Affairs that put a Fiscal Monitor over hiring and budget practices. This paper quotes that history; it does not extend it to 2026, and nothing in the 2025 and 2026 files read here says whether a monitor or special aid is in place today.</p>
+
+<h2>&sect;6 &middot; What the city flags as non-recurring</h2>
+<p>Sheet UFB-4 lists revenues the city marks as one-time ("Revenue may not be available in subsequent years", the form's standard comment). The two lists:</p>
+<div class="tblwrap"><table>
+<tr><th>2026</th><th>Amount</th><th>2025 (introduced)</th><th>Amount</th></tr>
+<tr><td>Surplus</td><td>$4,106,000</td><td>Surplus</td><td>$23,850,000</td></tr>
+<tr><td>Sale of Municipal Assets, Groups A, B, C and unlabelled</td><td>$81,373,378</td><td>Transitional Aid Loan</td><td>$30,000,000</td></tr>
+<tr><td>Community Economic Development Trust Fund</td><td>$3,463,045</td><td>Cancellation of Appropriation Reserves</td><td>$9,980,450</td></tr>
+<tr><td>Cancellation of improvement authorizations, outstanding checks, trusts</td><td>$6,414,375</td><td>Newark Housing Authority Demolition</td><td>$4,000,000</td></tr>
+<tr><td>Hess Trust Fund</td><td>$100,000</td><td>Hess Trust Fund; CEDTF; cancellation of commitments</td><td>$9,482,314</td></tr>
+<tr><td>Water and Sewer utility fund balances</td><td>$17,000,000</td><td>Water and Sewer utility fund balances</td><td>$32,800,000</td></tr>
+<tr><td><strong>List total</strong></td><td><strong>$112,456,798.43</strong></td><td><strong>List total</strong></td><td><strong>$110,112,764.26</strong></td></tr>
+<tr><td>Without the utility-fund balances</td><td>$95,456,798.43</td><td>Without the utility-fund balances</td><td>$77,312,764.26</td></tr>
+<tr><td>Share of general-budget revenue</td><td>10.60%</td><td>Share of general-budget revenue</td><td>7.97%</td></tr>
+</table></div>
+<p>Computed: the flagged share rose from 7.97% to 10.60% although the surplus line fell by 82.78%. The four asset-sale lines are 85.25% of the 2026 flagged general-side total. So "less surplus" and "less one-time money" are different statements in these two files. Two cautions. The flags are the city's tick-boxes; this paper has not mapped them to revenue lines on UFB-2. And the 2025 $30,000,000 Transitional Aid Loan is absent from the 2026 list; the form does not say why, and this page does not guess.</p>
+
+<h2>&sect;7 &middot; What replacing it from the levy would cost</h2>
+<p>This is arithmetic at constant valuation, not a forecast. The city could cut spending, sell assets again, or get state aid; the table prices one option so the scale is visible. Each $1,000,000 of levy, grossed up by the 96.24% collection rate the sheet uses for the reserve, costs the average residential assessment of $191,563 <strong>$15.57</strong> a year (computed).</p>
+<div class="tblwrap"><table>
+<tr><th>Share of the $95.46M flagged general-side items replaced by levy</th><th>Added levy</th><th>As a share of the 2026 municipal-purposes levy</th><th>Per average home, per year</th></tr>
+<tr><td>25%</td><td>$24.80M</td><td>9.00%</td><td>$372</td></tr>
+<tr><td>50%</td><td>$49.59M</td><td>18.01%</td><td>$743</td></tr>
+<tr><td>75%</td><td>$74.39M</td><td>27.01%</td><td>$1,115</td></tr>
+<tr><td>100%</td><td>$99.19M</td><td>36.02%</td><td>$1,486</td></tr>
+</table></div>
+<p>For scale, the printed 2026 average municipal-purposes payment is $3,861.53, so full replacement would add about 38% on top of it (computed from the figures above).</p>
+
+<h2>&sect;8 &middot; A toy simulation, and what it is for</h2>
+<p>Treat each of the ten flagged general-side lines as repeating independently with probability <em>p</em>, and price whatever does not repeat from the levy. With a fixed seed and 20,000 draws, at <em>p</em> = 0.25, 0.50, 0.75 the mean added cost per average home is about $1,112, $742 and $371, with 5th-to-95th percentile ranges of $561 to $1,486, $138 to $1,340 and $0 to $925. The mean was already given by the arithmetic in &sect;7; the simulation adds only a spread, and the spread is mostly the question of whether the four asset sales happen. The value of <em>p</em> is an assumption, not data, and the model contains nothing about Newark beyond ten printed lines. It is included to show the method, not to predict anything.</p>
+
+<h2>&sect;9 &middot; Debt arithmetic</h2>
+<p>The debt sheet foots. Gross debt $759,701,874.59 less deductions $500,565,790.65 is net debt $259,136,083.94, which is 0.96% of the three-year average valuation of $26,999,413,197.67. Gross debt per head is $2,438.47 on the 2020 census population of 311,549. Current-year debt service is $43,995,319 principal plus $18,666,700 interest, $62,662,019, which is 5.65% of the $1,108,746,903.34 all-funds budget (all computed). The ratings printed on the sheet are Baa1 (year of last rating 2024) and AA- (year of last rating 2017); the sheet's layout puts them under Moody's and Standard &amp; Poor's respectively.</p>
+
+<h2>&sect;10 &middot; What would test it</h2>
+<p>First, the adopted 2026 budget and the 2025 adopted budget, to see which of the &sect;3 differences survive. Second, the audits for 2022 to 2025, so the surplus draw can be set against balances that are read, not implied. Third, a mapping from each UFB-4 line to its revenue line on UFB-2, so the flagged share is a share of identified lines. Fourth, other New Jersey cities' forms, so Newark's 10.60% has a comparison. This paper uses no state stress score and no peer group; none was used here.</p>
+
+<h2>&sect;11 &middot; What each statement is</h2>
+<div class="tblwrap"><table>
+<tr><th>Statement</th><th>Status</th></tr>
+<tr><td>Printed figures in &sect;&sect;2, 4, 6, 9, and the balances in &sect;5</td><td class="tag">read from the PDF text; copied into the script</td></tr>
+<tr><td>Column sums, shares, ratios, per-home costs</td><td class="tag">computed</td></tr>
+<tr><td>The differences in &sect;3</td><td class="tag">reported; cause unexplained</td></tr>
+<tr><td>Which flagged items are one-time</td><td class="tag">the city's own flags</td></tr>
+<tr><td>The simulation's probabilities</td><td class="tag">assumption</td></tr>
+<tr><td>&sect;12: the Authority&rsquo;s status, lease, bonds, covenants</td><td class="tag">read from the page images of the Authority&rsquo;s 2023 audit; sums recomputed</td></tr>
+<tr><td>Any statement about fiscal health, reserves or risk of Newark</td><td class="tag">not made</td></tr>
+</table></div>
+
+<h2>&sect;12 &middot; One public body in between: the Parking Authority</h2>
+<p>The 2019 lease-back reported by the press (a $27 million, 30-year lease of space the city had sold for $1 in 2017) raises a structural question: why would a city route a transaction through an authority? This section reads what the Authority&rsquo;s own audit says, and stops where the documents stop. It does not read the Authority&rsquo;s finances into the city&rsquo;s numbers, and it does not say why the city chose this structure; no document read here states a reason.</p>
+<p>Source: <em>Parking Authority of the City of Newark, financial statements for the years ended 31 December 2023 and 2022</em>, with the Authority&rsquo;s Resolution No. 09-2025-30 adopting it (Withum Smith &amp; Brown; a 54-page scan, OCR for search, each figure below read from the page image). The Authority&rsquo;s website lists audits for 2010 to 2023 and adopted budgets for 2012 to 2025; the 2022 and 2021 audit and the 2025 adopted budget were also OCR&rsquo;d, and nothing from them is used in the table.</p>
+<div class="tblwrap"><table>
+<tr><th>Item</th><th>What the audit says</th><th>Status</th></tr>
+<tr><td>What the Authority is</td><td>Created by a city ordinance adopted 3 August 1955 and amended 4 April 1956; &ldquo;a public body corporate and politic of the State of New Jersey and an agency of the City of Newark&rdquo;; five members appointed by the Mayor with the advice and consent of the Council; no stockholders</td><td class="tag">read (Note 1)</td></tr>
+<tr><td>Relation to the city&rsquo;s books</td><td>&ldquo;The Authority is a component unit of the City of Newark&rdquo; and issues separate financial statements</td><td class="tag">read (Note 2)</td></tr>
+<tr><td>The city as tenant</td><td>The Authority leases office space to the city under a non-cancelable operating lease expiring May 2051; monthly payments range from $60,405 to $93,710; no renewal option</td><td class="tag">read (Note 7)</td></tr>
+<tr><td>Series 2018 bonds</td><td>$37,386,500 Parking Revenue Bonds issued 21 December 2018 to finance the Green Street Mixed-Use Parking Facility; the bond agreement was amended five times between 2020 and 2022</td><td class="tag">read (Note 8)</td></tr>
+<tr><td>Series 2023 bonds</td><td>$12,425,000 Lease Revenue Bonds issued 10 August 2023, &ldquo;secured by its lease with the City of Newark&rdquo;; maturing 1 February 2051; 5.00% to 5.50%; scheduled interest $13,016,065, total debt service $25,441,065 from 2024</td><td class="tag">read; sums recomputed in the script</td></tr>
+<tr><td>Restructuring</td><td>The 2023 issue restructured Series 2018 debt, defeasing $11.687 million of principal, with approximately $20 million of interest savings over the life of the bonds (the audit&rsquo;s estimate)</td><td class="tag">read; the estimate is the Authority&rsquo;s</td></tr>
+<tr><td>Covenants</td><td>Not in compliance with covenants (including an EBITDA ratio and furnishing audited statements within 150 days of year-end) at 31 December 2022 and 2023; a waiver was received for each year</td><td class="tag">read (Note 8)</td></tr>
+<tr><td>Net deficit</td><td>$2,775,073 at 31 December 2023</td><td class="tag">read (statement of net deficit)</td></tr>
+<tr><td>Audit opinion</td><td>Unmodified (&ldquo;present fairly, in all material respects&rdquo;). The going-concern language in the report is the standard description of management&rsquo;s and the auditor&rsquo;s responsibilities, not a finding</td><td class="tag">read</td></tr>
+</table></div>
+<p>What follows is reading, not a finding. The Authority is a public body the city created, and the city appoints its board. Its 2023 bonds are secured by the city&rsquo;s rent. So the debt is the Authority&rsquo;s, and the city&rsquo;s payment toward it appears in the city&rsquo;s budget as rent. Whether the city also guaranteed any Authority bonds, which would change how the debt counts under New Jersey law, is not stated in the audit and is not known here. The Parking Authority Law says authority bonds are generally not debts of the municipality unless the municipality guarantees them by ordinance. The 2017 sale ordinance (file 17-1221, adopted 12 July 2017) was read only as a council record page, without its text, so the sale price is still the press&rsquo;s figure.</p>
+<p>Two cautions. The Authority&rsquo;s board approved this audit in 2025 and its subsequent-events note runs through 23 July 2025, about nineteen months after year-end; the audit itself says the 150-day covenant was missed. And the Authority&rsquo;s income statement shows a &ldquo;City of Newark lease&rdquo; revenue line of $479,061 for 2023, which this paper has not reconciled to the monthly rent in Note 7. Neither point is read as a conclusion about the city.</p>
+
+<h2>Sources</h2>
+<p>
+<a href="https://www.newarknj.gov/DocumentCenter/View/3079/2026-User-Friendly-Budget-PDF" target="_blank" rel="noopener">City of Newark, 2026 Municipal User Friendly Budget (PDF, saved as "2026 UFB Budget - Newark.pdf")</a> &middot;
+<a href="https://www.newarknj.gov/DocumentCenter/View/2724/2025-User-Friendly-Budget-PDF" target="_blank" rel="noopener">City of Newark, 2025 Municipal User Friendly Budget (PDF; the file read is named "2025_UFB_Template_FINAL - INTRODUCED BUDGET.pdf")</a>
+</p>
+<p>Also read, from the same folder: the City of Newark <em>2021 Report on Examination of Accounts</em> (Samuel Klein and Company; two scanned PDFs, OCR) and <em>0714 Certified Adopted Budget 2023</em> (PDF text), plus the <em>2026 City of Newark Introduced Legal Line Budget with RUT</em> (scan; only fragments legible by OCR). Not yet read: the 2021 to 2023 introduced and adopted budgets beyond the 2023 surplus sheet, the abatement reports, and the 2024 long-term-tax-exemption (LTCR) report.</p>
+<p>For &sect;12: <a href="https://newarkparkingauthority.org/financials/" target="_blank" rel="noopener">Newark Parking Authority, Financials page</a> (audits and budgets); the Authority&rsquo;s 2023 audit and Resolution 09-2025-30 (saved as &ldquo;2025-12-30_2023-auditresolutions-1.pdf&rdquo; and &ldquo;-2.pdf&rdquo;); <a href="https://www.nj.gov/dca/dlgs/programs/au_docs/Statutes/Parking%20Authority%20Law%20(as%20of%205-7-2026).PDF" target="_blank" rel="noopener">Parking Authority Law, N.J.S.A. 40:11A (NJ DCA, as of 5-7-2026)</a>; City of Newark Municipal Council file 17-1221 (record page only).</p>
+<p>The two downloaded files were read with <code>pdftotext -layout</code> on 2026-10-21. Companion script: <code>book6/wp137-verify.py</code>.</p>
+
+</main>
+
+<footer>
+  <div style="margin-bottom:.7rem"><a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" aria-label="G6 LLC — grossi-ops"><img src="g6-mark.svg" alt="G6 LLC" width="40" height="46" style="height:44px;width:auto;vertical-align:middle;display:inline-block;border:0"></a></div>
+  <p>Principia Orthogona · Book VI · Working Paper 137</p>
+  <p>Reading Newark's Budget &middot; One-Time Money in a $900 Million General Budget &middot; 2026</p>
+  <p>Series: <a href="https://zenodo.org/communities/principia-orthogona" target="_blank">zenodo.org/communities/principia-orthogona</a></p>
+
+  <span style="display:block;margin-top:.5rem">&copy; 2026 Pablo Nogueira Grossi / <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> &middot; Newark, New Jersey &middot; CC BY-NC-ND 4.0</span>
+
+  <div class="prov">
+    <div>
+      <strong>WP137</strong><br>
+      Principia Orthogona &middot; Vol VI &middot; Roots<br>
+      G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; 2026<br>
+      ORCID <a href="https://orcid.org/0009-0000-6496-2186" target="_blank" rel="noopener">0009-0000-6496-2186</a>
+      &middot; <a href="mailto:g6llc@proton.me">g6llc@proton.me</a><br>
+      Series <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" rel="noopener">Principia Orthogona</a>
+      &middot; <a href="https://github.com/TOTOGT/geometry" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="disc">
+      <strong>Notice</strong><br>
+      Independent working paper; not peer-reviewed. Vol VI has no ISBN allocation and no volume-level deposit; series citations should point at the Principia Orthogona community rather than any single DOI.<br>
+      CC BY-NC-ND 4.0 &middot; &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
