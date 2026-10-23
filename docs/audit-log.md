@@ -11578,3 +11578,94 @@ Book 8, keyword pass plus reading the hits:
 - `book8/ch13-holology.html`: ER=EPR is explicitly "an analogy and not an instance" and "a rhyme is not evidence". Fine as written.
 GTCT/GOMC naming appears throughout Books 5 and 8 as the series' own framework label; the cut applied to the CATGT paper, so I did not touch it.
 Not committed or pushed.
+
+### 2026-10-22 (US Eastern): Claim audit — remaining 19 books (1, 4, 5, 6, 7, 10–15, 17–22, 26, 28)
+
+Full keyword sweep for: "not an analogy" / "exact mathematical identit*" / "is an identity" / "Coherence Bridge" / "GTCT" / "GOMC" / "machine-checked" / "kernel-checked" / "proves that" / "isomorphic" / "universal" / "shared invariant". Each hit was read in its surrounding paragraph. This was a keyword pass, not a sentence-by-sentence read of every page.
+
+#### A — Pages still carrying uncorrected Coherence Bridge "exact mathematical identities" language
+
+These pages use the pre-correction wording that was supposed to have been fixed in the Sept 2026 audit. The similarity test (`coherence_similarity.py`) found 0/55 pairs similar; the claim that domains are related by "exact mathematical identity" was withdrawn. These pages still say it:
+
+1. **`book4/hub.html` line 754**: "Coherence Bridge Theorem (5.4) — proved in Lean 4. ... These are not analogies. Where the morphisms fᵢⱼ are exhibited they are exact mathematical identities; where they are not, the systems share a functional form." This is the source file that `coherence_similarity.py` parses from — the very page the test was built to audit. Also lines 579 ("16+ domains ... related by explicit contact morphisms"), 596 ("The Coherence Bridge with parameters ... formally verified across all confirmed domains"), 825 ("The braid was always there"). The entire §V section and surrounding claims need the same correction that the other eleven pages got.
+
+2. **`book4/chE-gtct-alt.html` line 251**: "This is not an analogy: it is the same 12-fold structure appearing in the circadian clock (12 hours), the chromatic scale (12 semitones), and the 12-month year — all are instances of the same contact normal form." No derivation backs the 12-fold normal form claim for circadian or calendar systems.
+
+3. **`book4/chIV-preface-impa.html` line 645**: "This is not analogy. Where the contact morphisms are exhibited it is exact mathematical identity across scales; where they are not, the scales share a functional form." Same uncorrected Bridge language.
+
+4. **`book4/gomc-opus.html`**: Lines 294, 388, 503, 507, 577, 595, 605, 612, 648, 651, 687, 693, 879, 943, 1072, 1080, 1087, 1089, 1096. This page is the full GOMC Opus / Coherence Bridge hub. It claims 18 domains in the Bridge, "formally verified across all confirmed domains", with an interactive spoke diagram. This is the most concentrated source of the withdrawn claims; the page also contains the plasma companion and DustyPlasma.lean claims. The entire page predates the V5 pivot and was not updated.
+
+5. **`book4/ch11-catgt.html`**: Lines 375, 594, 597, 600, 1006. §6 is titled "Coherence Bridge: Seven Domains" with an interactive spoke diagram. This is the CATGT paper page itself — the paper that was pivoted to V5 and whose Coherence Bridge was cut. The page still shows the pre-pivot version with the Bridge intact.
+
+6. **`book4/chTau-tartaruga.html` lines 444–445**: "Coherence Bridge Theorem 5.4. The turtle shell joins the Coherence Bridge table."
+
+7. **`book7/Polylaminin.html` lines 289–293**: §4 titled "The coherence bridge" — "The Coherence Bridge maps biological systems to the dm³ scalar invariants." Still using Bridge framing for SCI and polylaminin.
+
+**Decision needed (author):** All seven pages carry language that was withdrawn in the Sept 2026 audit but never corrected on these specific files. The Sept audit found 11 files and 13 occurrences; it appears that the correction was applied to some but these were missed. The `hub.html` page being uncorrected is particularly notable because it is the source file that the similarity test reads from.
+
+#### B — Strong unhedged claims (not Coherence Bridge, but needing review)
+
+8. **`book7/ch-escher.html` line 332**: "Escher's drawing was not an analogy to the holographic principle; it was an instance of it." Unhedged identity claim. The paragraph maps the Print Gallery's conformal structure to the AdS/CFT boundary-to-bulk dictionary. No derivation or morphism is exhibited; the mapping is described qualitatively. Should be hedged or should state explicitly that the mapping is structural resemblance, not a proved isomorphism.
+
+9. **`book7/ch-chomsky.html` line 95**: "This is not analogy. In the machine-checked half of this series, a theorem is a term..." This sentence conflates the general truth that Lean theorems are terms (Curry-Howard) with the claim that the specific dm³ framework's claims are therefore not analogies. The Curry-Howard point is true; it does not establish that every domain mapping in the series is an identity. Needs narrowing to say what specific theorems are meant.
+
+10. **`book7/ch-feynman.html` lines 615, 617, 668**: "The answer is not an analogy" (615); "The answer is an identity, not a fit" (617); "α(X) ≤ 0 is an identity" (668). Lines 617 and 668 are about a specific algebraic computation (evaluating α on the dm³ vector field gives a specific expression, which is ≤ 0). This is a genuine mathematical identity — an algebraic calculation on one system — not a cross-domain claim. **No action needed** on 617 and 668. Line 615 says the path-integral connection "is not an analogy, and it is narrower than one might hope — which is what makes it checkable." This is self-hedged by the sentence itself. **No action needed.**
+
+11. **`book6/ch02-e8-root-system.html`**: Claims dm³ operators generate Lie algebra isomorphic to e₈. Its own status says "The Lie-algebra isomorphism is open." Self-hedged by the status. **No action needed** unless the body text states the isomorphism as proved.
+
+12. **`book7/ch-nachbin.html` line 659**: "construction, not an analogy." In context this is about the Nachbin space construction applied to the framework. Likely refers to a specific mathematical construction. **Needs reading** to confirm scope.
+
+13. **`book4/ch-euclidean-algorithm.html` line 139**: "This is not an analogy." In context: a continued fraction expansion of a specific number. This is about arithmetic — a genuine mathematical identity. **No action needed.**
+
+14. **`book4/ch22-gauss-map.html` line 444**: "the fold is not an analogy imported from catastrophe theory. It is what..." Claims the fold in dm³ is a genuine fold in the sense of catastrophe theory. This is a mathematical claim about the structure of the model, not a cross-domain Bridge claim. **Needs the mathematical content checked** — is there a calculation showing the dm³ fold satisfies the Whitney fold conditions? If so, fine; if not, the claim is unhedged.
+
+15. **`book4/ladder-polynomials.html` line 472**: "the exact identity 2 − rₙ = rₙ⁻ⁿ". This is a genuine algebraic identity (proved in NbonacciLimit.lean). **No action needed.**
+
+16. **`book1/vol1-mathematics.html` line 524**: "The central mathematical claim is that this operator sequence is not an analogy: it is a precise structure admitting constructive definitions..." This is about the operator chain C, K, F, U itself — whether it is a well-defined mathematical object. This is the Volume I mathematical framework's central thesis. It is not a Bridge claim. **No action needed** — it is the kind of claim the whole project either establishes or doesn't, and the ch00-definitions status tables track which pieces are defined and which are open.
+
+#### C — Pages already properly hedged (no action needed)
+
+- **`book5/chV-hopf.html`**: "Analogy and shared form, not a claimed shared invariant"
+- **`book5/chV-37.html`**: "That sentence is analogy, labelled as such"
+- **`book5/chV-saturn-smoke.html`**: "What this chapter genuinely establishes is more modest and harder"
+- **`book7/ch-optimal-transport.html` line 213**: "Examples, not theorems. Nothing here proves..."
+- **`book17/ch01-the-names-it-already-has.html`**: Properly corrected ("One row is an identity, and it has a test"). Documents the Sept audit and the similarity test results.
+- **`book21/index.html` and ch02**: Exists specifically to address the identity claim audit. Properly framed.
+- **`book6/wp80-the-theorem-and-the-reader.html`**: Documents the "compiles ≠ proves" failure (`reeb_orbit_is_integral` statement is `1 = 1`). This is the audit itself, not a claim.
+- **`book6/wp134-the-growth-imperative-tested.html`**: "That is an identity, not a finding about firms" — uses "identity" in the mathematical sense (shares sum to one). Fine.
+- **`book6/wp112-the-ends-not-the-middle.html`**: "there is an identity" — algebraic identity of an integral. Fine.
+- **`book6/wp120-how-many-closed-orbits.html`**: "checks this is an identity" — algebraic factoring check. Fine.
+- **`book6/wp69-the-fold-is-a-coordinate.html`**: "an exact identity, a gauge theorem, a moduli count" — about a specific formal result. Fine.
+- **`book7/ch-beltrami.html`**: "is not an analogy for curvature, it is the integral being evaluated" — about a dome's geometry. Specific physical/mathematical point. Fine.
+- **`book7/ch-1103-and-26390.html`**: "It is an identity in rational arithmetic, not a numerical coincidence" — about a specific algebraic expansion involving Ramanujan's formula. Genuine arithmetic identity. Fine.
+
+#### D — GTCT / GOMC naming
+
+GTCT appears extensively in Book 5 (legitimate: it's the book's existing title) and in Book 4's hub/gomc-opus/ch11 pages (part of the pre-pivot material flagged in §A above). GOMC appears in Book 5's ch00.html SVG header and in Book 4's gomc-opus.html. Per the V5 pivot decision, GTCT is retained only as Book 5's existing title, and GOMC branding was cut. The Book 4 pages flagged above carry both issues (Bridge + GOMC); the Book 5 GTCT usage is the legitimate exception.
+
+GOMC in `book5/ch00.html` SVG: this is inside a visual element (the book's header image/logo). Author's call whether to update the SVG or leave it as a historical label.
+
+#### E — Verification status claims not individually reviewed
+
+~1200 hits across all books for "conjecture" / "sorry" / "unproved" / "open". These are self-labeling — pages saying their own claims are conjectural or open. Not individually reviewed in this pass. The ch00-definitions.html files (generated from docs/definitions.md) carry comprehensive status tables per book that track these systematically; a spot check on Books 1, 4, 7, and 17 found the status tables consistent with what the individual pages say.
+
+#### Summary: priority corrections
+
+**Must fix (uncorrected Bridge language, withdrawn Sept 2026):**
+1. `book4/hub.html` §V and surroundings
+2. `book4/chE-gtct-alt.html` line 251
+3. `book4/chIV-preface-impa.html` line 645
+4. `book4/gomc-opus.html` (entire page; heaviest concentration)
+5. `book4/ch11-catgt.html` §6 (the CATGT paper's own page)
+6. `book4/chTau-tartaruga.html` Bridge row
+7. `book7/Polylaminin.html` §4
+
+**Should review (strong unhedged claims, not Bridge):**
+8. `book7/ch-escher.html` line 332 (Escher = instance of holographic principle)
+9. `book7/ch-chomsky.html` line 95 (Curry-Howard conflation)
+10. `book7/ch-nachbin.html` line 659 (scope unclear without full read)
+11. `book4/ch22-gauss-map.html` line 444 (fold = catastrophe fold — needs math check)
+
+**No action needed:** items 10, 12–16 in §B, everything in §C, Book 5 GTCT usage (legitimate), Book 6 working papers (all use "identity" in the algebraic sense).
+
+Not edited. Not committed or pushed.
