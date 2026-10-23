@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="po-book" content="book3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter γ · Photonic Crystals and the Graphene Lattice · Principia Orthogona Book III</title>
+<meta name="description" content="Light can be trapped. Sajeev John's photonic band gap materials, graphene's Dirac cone, and the Floquet–Bloch theorem that governs both — and the dm³ transverse spectrum. Chapter γ of The Mini-Beast. G6 LLC 2026.">
+<meta name="author" content="Pablo Nogueira Grossi — G6 LLC">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --void:    #04040a;
+  --surface: #0c0d16;
+  --card:    #10111c;
+  --gold:    #c9a84c;
+  --teal:    #0ABAB5;
+  --red:     #e05a3a;
+  --purple:  #c084fc;
+  --green:   #50c878;
+  --blue:    #5b8def;
+  --text:    #e8e4d8;
+  --muted:   #6b6757;
+  --dim:     #2a2920;
+  --rule:    rgba(201,168,76,0.18);
+  --serif:   'Noto Serif', Georgia, serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--serif);
+  background: var(--void);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(4,4,10,0.96); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+  padding: .6rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .6rem;
+}
+.nav-series { font-family: var(--mono); font-size: .6rem; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); text-decoration: none; }
+.nav-links  { display: flex; gap: 1.2rem; }
+.nav-links a { font-family: var(--mono); font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+.nav-links a:hover { color: var(--gold); }
+.nav-links a.accent { color: var(--teal); }
+
+/* ── HERO ── */
+.hero {
+  padding: 5rem 2rem 4rem; text-align: center;
+  border-bottom: 1px solid var(--rule); position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 35%, rgba(91,141,239,.07) 0%, transparent 65%),
+              radial-gradient(ellipse 40% 50% at 70% 70%, rgba(201,168,76,.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-tag {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .32em; text-transform: uppercase;
+  color: var(--teal); border: 1px solid currentColor; padding: .2rem .65rem;
+  display: inline-block; margin-bottom: 2rem; position: relative;
+}
+.hero h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 400; letter-spacing: .04em; color: var(--gold); margin-bottom: .6rem; line-height: 1.2; position: relative; }
+.hero-en { font-size: .95rem; color: rgba(232,228,216,.75); max-width: 640px; margin: .6rem auto 0; line-height: 1.75; position: relative; }
+.hero-eq { margin-top: 1.8rem; font-family: var(--mono); font-size: .9rem; letter-spacing: .12em; color: rgba(201,168,76,.45); position: relative; }
+.hero-source { margin-top: 1.2rem; font-family: var(--mono); font-size: .58rem; letter-spacing: .08em; color: var(--muted); position: relative; }
+
+/* ── OP BANNER ── */
+.op-banner { background: var(--gold); color: var(--void); text-align: center; padding: .7rem 2rem; font-family: var(--mono); font-size: .9rem; letter-spacing: .2em; }
+
+/* ── PAGE ── */
+.page { max-width: 900px; margin: 0 auto; padding: 3.5rem 2rem; }
+
+/* ── CHAPTER HEADER ── */
+.chapter-header { text-align: center; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--rule); }
+.ch-num { font-family: var(--mono); font-size: .62rem; letter-spacing: .3em; color: var(--gold); text-transform: uppercase; display: block; margin-bottom: .6rem; }
+.chapter-header h2 { font-size: 1.4rem; font-weight: 400; color: var(--text); letter-spacing: .04em; }
+.chapter-header .ch-sub { font-style: italic; color: var(--muted); margin-top: .4rem; font-size: .92rem; }
+
+/* ── BLOCKS ── */
+.block-prose { font-size: 1rem; line-height: 1.82; margin-bottom: 1.4rem; }
+.block-theorem { border-left: 2px solid var(--teal); padding: 1rem 1.4rem; margin: 1.5rem 0; background: rgba(10,186,181,.025); }
+.block-axiom   { border-left: 2px solid var(--gold); padding: 1rem 1.4rem; margin: 1.5rem 0; background: rgba(201,168,76,.025); }
+.block-note    { border-left: 2px solid var(--blue); padding: 1rem 1.4rem; margin: 1.5rem 0; background: rgba(91,141,239,.03); }
+.block-sorry   { border-left: 2px solid var(--red); padding: 1rem 1.4rem; margin: 1.5rem 0; background: rgba(224,90,58,.03); }
+.block-label { font-family: var(--mono); font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; margin-bottom: .5rem; display: block; }
+.block-theorem .block-label { color: var(--teal); }
+.block-axiom   .block-label { color: var(--gold); }
+.block-note    .block-label { color: var(--blue); }
+.block-sorry   .block-label { color: var(--red); }
+.block-body { font-size: .95rem; line-height: 1.78; color: var(--text); }
+
+/* Vocab cards */
+.vocab-grid { display: grid; gap: 1.2rem; margin: 1.5rem 0; }
+.vcard { background: var(--surface); border: 1px solid var(--dim); border-left: 3px solid var(--gold); padding: 1.1rem 1.4rem; }
+.vterm { font-size: 1.05rem; color: var(--gold); font-weight: 600; }
+.vpos { font-family: var(--mono); font-size: .68rem; color: var(--muted); font-style: italic; margin-left: .5rem; letter-spacing: .05em; }
+.vdef { font-size: .93rem; color: var(--text); margin: .4rem 0 .6rem; line-height: 1.7; }
+.vex { font-size: .9rem; color: rgba(232,228,216,.6); font-style: italic; border-left: 2px solid var(--dim); padding-left: .8rem; }
+.vex cite { display: block; font-family: var(--mono); font-style: normal; font-size: .62rem; color: var(--muted); margin-top: .3rem; letter-spacing: .05em; }
+
+/* Distinguish box */
+.distinguish-box { background: var(--card); color: var(--text); padding: 1.4rem 1.6rem; margin: 1.8rem 0; border: 1px solid var(--dim); border-left: 3px solid var(--teal); }
+.distinguish-box h3 { color: var(--teal); font-family: var(--mono); font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; margin-bottom: .8rem; }
+.distinguish-box .dterm { color: var(--gold); font-weight: 600; }
+.distinguish-box p { color: rgba(232,228,216,.8); font-size: .9rem; margin-bottom: .7rem; line-height: 1.7; }
+
+/* Reading box */
+.reading-box { background: var(--surface); border: 1px solid var(--dim); padding: 1.6rem 1.8rem; margin: 1.8rem 0; }
+.reading-box h3 { color: var(--gold); font-size: 1.05rem; margin-bottom: .8rem; }
+.reading-box .source { font-family: var(--mono); font-size: .62rem; color: var(--muted); letter-spacing: .04em; margin-bottom: 1rem; display: block; }
+.reading-box blockquote { border-left: 3px solid var(--gold); padding: .8rem 1.2rem; margin: 1rem 0; background: rgba(201,168,76,.03); font-size: .95rem; line-height: 1.7; color: rgba(232,228,216,.85); font-style: italic; }
+
+/* Bridge box */
+.bridge-box { background: var(--card); padding: 1.6rem 1.8rem; margin: 2rem 0; border: 1px solid var(--dim); border-left: 3px solid var(--teal); }
+.bridge-box h3 { color: var(--teal); font-family: var(--mono); font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; margin-bottom: .8rem; }
+.bridge-box p { color: rgba(232,228,216,.8); font-size: .93rem; margin-bottom: .7rem; line-height: 1.7; }
+.bridge-box code { background: rgba(255,255,255,0.06); padding: 0.1rem 0.35rem; font-size: .88em; color: var(--gold); font-family: var(--mono); }
+
+/* Exercise box */
+.exercise-box { background: var(--surface); border: 1px solid var(--dim); border-top: 2px solid var(--gold); padding: 1.4rem 1.6rem; margin: 1.8rem 0; }
+.exercise-box h3 { color: var(--gold); font-size: 1rem; font-family: var(--mono); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .8rem; }
+.exercise-box ol { padding-left: 1.4rem; }
+.exercise-box li { margin-bottom: .8rem; font-size: .93rem; line-height: 1.7; }
+
+/* Section divider */
+.section-label-strip {
+  background: var(--surface); padding: 1.5rem 2rem; text-align: center;
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+}
+.section-label-strip .sl { font-family: var(--mono); font-size: .62rem; letter-spacing: .28em; text-transform: uppercase; color: var(--teal); display: block; margin-bottom: .3rem; }
+.section-label-strip .st { font-size: 1.1rem; color: var(--gold); font-weight: 400; }
+
+/* Operator chain inline */
+.op-chain { display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; margin: 1rem 0; justify-content: center; }
+.op { font-family: var(--mono); font-size: .78rem; padding: .2rem .55rem; border-radius: 2px; }
+.op-c { background: rgba(10,186,181,.12); color: #0ABAB5; border: 1px solid rgba(10,186,181,.3); }
+.op-k { background: rgba(224,90,58,.12);  color: #e05a3a; border: 1px solid rgba(224,90,58,.3); }
+.op-f { background: rgba(80,200,120,.12); color: #50c878; border: 1px solid rgba(80,200,120,.3); }
+.op-u { background: rgba(192,132,252,.12);color: #c084fc; border: 1px solid rgba(192,132,252,.3); }
+.op-arr { color: var(--muted); font-size: .8rem; }
+
+/* CEFR tag */
+.cefr-tag { display: inline-block; font-family: var(--mono); font-size: .62rem; letter-spacing: .15em; text-transform: uppercase; padding: .2rem .6rem; border-radius: 2px; margin-bottom: .8rem; }
+.cefr-b1 { background: rgba(91,141,239,.12); color: var(--blue); border: 1px solid rgba(91,141,239,.3); }
+.cefr-c1 { background: rgba(10,186,181,.12); color: var(--teal); border: 1px solid rgba(10,186,181,.3); }
+.cefr-d1 { background: rgba(201,168,76,.12); color: var(--gold); border: 1px solid rgba(201,168,76,.3); }
+
+/* Chapter nav */
+.chapter-nav { background: var(--surface); border-top: 1px solid var(--rule); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.ch-nav-link { font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+.ch-nav-link:hover { color: var(--gold); }
+.ch-nav-current { font-family: var(--mono); font-size: .6rem; color: var(--dim); letter-spacing: .1em; }
+
+/* Footer */
+footer { text-align: center; padding: 2.5rem 2rem; font-family: var(--mono); font-size: .58rem; letter-spacing: .1em; color: var(--muted); border-top: 1px solid var(--rule); }
+footer a { color: var(--gold); text-decoration: none; }
+
+@media (max-width: 640px) {
+  .hero { padding: 3rem 1.2rem 2.5rem; }
+  .page { padding: 2rem 1.2rem; }
+  nav { padding: .5rem 1rem; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="book3/index.html" class="nav-series">Principia Orthogona &middot; Book III &middot; The Mini-Beast</a>
+  <div class="nav-links">
+    <a href="chW-wigner.html">&larr; Ch W</a>
+    <a href="living-book.html">Living Book</a>
+    <a href="series-hub.html" class="accent">Series &nearr;</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-tag">Chapter &gamma; &middot; Living Addition</span>
+  <h1>Photonic Crystals &amp; the Graphene Lattice</h1>
+  <p class="hero-en">Light can be trapped. Sajeev John proved it in 1984 &mdash; and built the materials to do it. Forty years later, graphene brings tuneability. This chapter reads the language of both crystals.</p>
+  <div class="op-chain">
+    <span class="op op-c">C</span><span class="op-arr">&rarr;</span>
+    <span class="op op-k">K</span><span class="op-arr">&rarr;</span>
+    <span class="op op-f">F</span><span class="op-arr">&rarr;</span>
+    <span class="op op-u">U</span>
+  </div>
+  <div class="hero-eq">Floquet&ndash;Bloch &middot; Band Gap &middot; Dirac Cone &middot; Self-Trapping</div>
+  <div class="hero-source">Source: Rahul Kalvapalle, &ldquo;The future is bright,&rdquo; University of Toronto News, 22 Oct 2026</div>
+</div>
+
+<!-- OP BANNER -->
+<div class="op-banner">C &rarr; K &rarr; F &rarr; U &nbsp;&nbsp;&nbsp; PERIODICITY &nbsp;&rarr;&nbsp; INTERFERENCE &nbsp;&rarr;&nbsp; SELECTION &nbsp;&rarr;&nbsp; GAP</div>
+
+<!-- ═══════════ SECTION 1 ═══════════ -->
+<div class="section-label-strip">
+  <span class="sl">Section 1</span>
+  <span class="st">General Vocabulary</span>
+</div>
+
+<div class="page">
+<span class="cefr-tag cefr-b1">A2 &ndash; B1</span>
+
+<p class="block-prose">Words a general reader meets in the source article. Not specialist, but a researcher presenting in English needs them precise and fluent.</p>
+
+<div class="vocab-grid">
+
+<div class="vcard">
+  <span class="vterm">audacious</span><span class="vpos">adj.</span>
+  <p class="vdef">Showing a willingness to take bold risks; unusually daring.</p>
+  <p class="vex">&ldquo;As a young PhD student at Harvard, Sajeev John published an <em>audacious</em> paper.&rdquo;<cite>Kalvapalle 2026</cite></p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">pique</span><span class="vpos">v.</span>
+  <p class="vdef">To stimulate (interest or curiosity). &ldquo;Piqued by.&rdquo; Do not confuse with <em>peak</em> (summit) or <em>peek</em> (glance).</p>
+  <p class="vex">&ldquo;Anderson&rsquo;s interest was apparently <em>piqued</em> by John&rsquo;s argument.&rdquo;<cite>Kalvapalle 2026</cite></p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">seminal</span><span class="vpos">adj.</span>
+  <p class="vdef">Strongly influencing later developments; foundational. A <em>seminal paper</em> is one that opens a field.</p>
+  <p class="vex">&ldquo;John published a second <em>seminal</em> paper confirming his idea of light localization.&rdquo;<cite>Kalvapalle 2026</cite></p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">usher in</span><span class="vpos">phrasal v.</span>
+  <p class="vdef">To cause or mark the start of something new. Formal register, common in science journalism.</p>
+  <p class="vex">&ldquo;Photonic crystals are <em>ushering in</em> a new era for harnessing the power of light.&rdquo;<cite>Kalvapalle 2026</cite></p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">swath</span><span class="vpos">n.</span>
+  <p class="vdef">A broad strip or area. &ldquo;A wide swath of fields&rdquo; = many different domains. Also <em>swathe</em> in British English.</p>
+  <p class="vex">&ldquo;Their potential is rapidly being realized across a wide <em>swath</em> of fields.&rdquo;<cite>Kalvapalle 2026</cite></p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">precursor</span><span class="vpos">n.</span>
+  <p class="vdef">A thing that comes before another of the same kind; a forerunner. In chemistry: a compound that participates in a reaction to produce another compound.</p>
+  <p class="vex">&ldquo;A silicon wafer &hellip; a <em>precursor</em> to creating photonic crystal solar cells.&rdquo;<cite>Kalvapalle 2026</cite></p>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════ SECTION 2 ═══════════ -->
+<div class="section-label-strip">
+  <span class="sl">Section 2</span>
+  <span class="st">Technical Vocabulary: Crystals and Waves</span>
+</div>
+
+<div class="page">
+<span class="cefr-tag cefr-c1">B2 &ndash; C1</span>
+
+<div class="vocab-grid">
+
+<div class="vcard">
+  <span class="vterm">photonic crystal</span><span class="vpos">n.</span>
+  <p class="vdef">A structure with a periodic arrangement of dielectric material whose repetition length is comparable to the wavelength of light, creating interference effects that control which wavelengths can propagate.</p>
+  <p class="vex">&ldquo;Structures that can confine and manipulate light at a microscopic scale.&rdquo;<cite>Kalvapalle 2026</cite></p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">photonic band gap</span><span class="vpos">n.</span>
+  <p class="vdef">A range of light wavelengths (or equivalently, frequencies) forbidden from propagating through a photonic crystal. The optical analogue of an electronic band gap in a semiconductor.</p>
+  <p class="vex">&ldquo;A range of light wavelengths that are prevented from passing through and even existing in a material.&rdquo;<cite>Kalvapalle 2026</cite></p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">graphene</span><span class="vpos">n.</span>
+  <p class="vdef">A single layer of carbon atoms in a hexagonal (honeycomb) lattice. Isolated in 2004 by Andre Geim and Konstantin Novoselov (Nobel Prize in Physics, 2010). Its band structure has no gap at the Dirac points, but graphene combined with photonic crystals creates tuneable optical devices.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">Anderson localization</span><span class="vpos">n.</span>
+  <p class="vdef">The absence of wave diffusion in a disordered medium. Philip W. Anderson showed in 1958 that electron waves in a sufficiently disordered solid are confined rather than conducting. John&rsquo;s 1984 paper asked whether the same could happen to photons.</p>
+  <p class="vex">&ldquo;A phenomenon in which electron waves existing in solids with an irregular internal structure are prevented from conducting current.&rdquo;<cite>Kalvapalle 2026</cite></p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">dielectric</span><span class="vpos">adj. / n.</span>
+  <p class="vdef">A material that is an electrical insulator but can sustain an internal electric field. In photonic crystals, alternating regions of high and low dielectric constant create the periodic index contrast that produces the band gap.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">lattice</span><span class="vpos">n.</span>
+  <p class="vdef">A regular, repeating arrangement of points in space. Photonic crystals: typically three-dimensional with sub-micrometre periodicity. Graphene: two-dimensional with a carbon&ndash;carbon spacing of about 1.42&thinsp;&Aring;.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">band structure</span><span class="vpos">n.</span>
+  <p class="vdef">The relationship between a wave&rsquo;s energy (or frequency) and its momentum (or wavevector) inside a periodic material. A &ldquo;gap&rdquo; in the band structure means certain energies have no allowed states.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">Dirac point</span><span class="vpos">n.</span>
+  <p class="vdef">In graphene&rsquo;s band structure, the point where the conduction and valence bands meet in a cone-shaped crossing. Electrons near a Dirac point behave as if they have zero effective mass.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">interference</span><span class="vpos">n.</span>
+  <p class="vdef">The combination of two or more waves producing a new wave pattern. <em>Constructive</em> adds crests; <em>destructive</em> cancels a crest with a trough. The photonic band gap is a consequence of systematic destructive interference.</p>
+  <p class="vex">&ldquo;When a crest and a trough meet, they cancel each other out.&rdquo;<cite>Kalvapalle 2026, quoting John</cite></p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">defect</span><span class="vpos">n.</span>
+  <p class="vdef">In a crystal, a deliberate or accidental break in the periodic pattern. In photonic crystals, designed defects create channels where light <em>can</em> propagate &mdash; the basis of photonic waveguides.</p>
+  <p class="vex">&ldquo;By introducing deliberate defects, researchers can create singular pathways that channel chosen light in desired circuit paths.&rdquo;<cite>Kalvapalle 2026</cite></p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">self-assembly</span><span class="vpos">n.</span>
+  <p class="vdef">A process in which pre-existing components form an organized structure without external direction. John&rsquo;s group at U&nbsp;of&nbsp;T achieved self-assembling silicon photonic crystals (c.&thinsp;2000) with a band gap near 1.5&thinsp;&mu;m &mdash; the wavelength of optical communications.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">hollow-core fibre</span><span class="vpos">n.</span>
+  <p class="vdef">An optical fibre that guides light through an air or gas core using photonic band gap effects instead of total internal reflection. Permits higher intensities and wider wavelength range. First life-saving medical use: 2004, Boston, tracheal tumour surgery.</p>
+</div>
+
+</div>
+
+<div class="distinguish-box">
+  <h3>Distinguish: crystal &middot; lattice &middot; structure</h3>
+  <p><span class="dterm">Crystal</span> &mdash; a solid whose atoms or constituent units are arranged in a highly ordered, repeating pattern. Graphene is a 2D crystal; a photonic crystal is a 3D (or 2D) engineered periodic structure, not necessarily atomic in scale.</p>
+  <p><span class="dterm">Lattice</span> &mdash; the abstract mathematical pattern of points that describes the periodicity. The lattice is the geometry; the crystal is the physical object sitting on it.</p>
+  <p><span class="dterm">Structure</span> &mdash; the most general term. &ldquo;Band structure&rdquo; is the energy-vs.-momentum map, not a physical shape.</p>
+</div>
+
+</div>
+
+<!-- ═══════════ SECTION 3 ═══════════ -->
+<div class="section-label-strip">
+  <span class="sl">Section 3</span>
+  <span class="st">Research Register</span>
+</div>
+
+<div class="page">
+<span class="cefr-tag cefr-d1">C1 &ndash; D1</span>
+
+<p class="block-prose">Terms from research papers and grant proposals. A presenter using these must define them for a mixed audience.</p>
+
+<div class="vocab-grid">
+
+<div class="vcard">
+  <span class="vterm">photonic band gap material</span><span class="vpos">n.</span>
+  <p class="vdef">The material class whose defining property is a photonic band gap. Named jointly by Sajeev John and Eli Yablonovitch, who published independently in <em>Physical Review Letters</em> weeks apart (1987) and agreed on the name over lunch at the Institute for Advanced Study.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">Floquet&ndash;Bloch theorem</span><span class="vpos">n.</span>
+  <p class="vdef">The foundational result for waves in periodic media: solutions of a wave equation with periodic coefficients can be written as a plane wave multiplied by a periodic function. Band structure is a consequence. The same theorem, under the name Floquet theory, governs the transverse exponent &mu;<sub>max</sub> in this series&rsquo; Vol&nbsp;II and the dm&sup3; framework.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">DNA aptamer</span><span class="vpos">n.</span>
+  <p class="vdef">A short, single-stranded DNA molecule folded into a specific 3D shape that binds to a target protein with high selectivity. Used as synthetic molecular receptors in John&rsquo;s lab-in-a-photonic-crystal diagnostic chips.</p>
+  <p class="vex">&ldquo;Various DNA aptamers that bind telltale proteins &hellip; an instant spectral fingerprint of the disease.&rdquo;<cite>Kalvapalle 2026</cite></p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">spectral fingerprint</span><span class="vpos">n.</span>
+  <p class="vdef">A pattern of absorption, emission, or transmission intensities across wavelengths that uniquely identifies a substance. In John&rsquo;s biosensor, disease changes which frequencies pass through the crystal, producing a fingerprint.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">Brillouin zone</span><span class="vpos">n.</span>
+  <p class="vdef">The fundamental domain in reciprocal (momentum) space for a periodic lattice. Band structure is defined over this zone. In graphene&rsquo;s hexagonal lattice, the corners of the Brillouin zone are the Dirac points.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">tuneable</span><span class="vpos">adj.</span>
+  <p class="vdef">Capable of being adjusted. A graphene layer added to a photonic crystal is tuneable because applying a voltage shifts graphene&rsquo;s Fermi level and changes its optical response, modifying the crystal&rsquo;s effective band gap without altering the geometry.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">plasmon</span><span class="vpos">n.</span>
+  <p class="vdef">A collective oscillation of electrons at a material&rsquo;s surface, coupled to an electromagnetic wave. Graphene supports surface plasmons at terahertz and mid-infrared frequencies; these interact with a photonic crystal&rsquo;s band gap to produce hybrid polariton modes.</p>
+</div>
+
+<div class="vcard">
+  <span class="vterm">Fermi level</span><span class="vpos">n.</span>
+  <p class="vdef">The energy level at which the probability of finding an electron is exactly 50%. In graphene, the Fermi level can be shifted by an external electric field (gate voltage) &mdash; which is why graphene is useful as a tuneable element inside photonic structures.</p>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════ SECTION 4 ═══════════ -->
+<div class="section-label-strip">
+  <span class="sl">Section 4</span>
+  <span class="st">Reading: &ldquo;The Future Is Bright&rdquo;</span>
+</div>
+
+<div class="page">
+<span class="cefr-tag cefr-c1">B2 &ndash; C1</span>
+
+<div class="reading-box">
+<h3>Source Text</h3>
+<span class="source">Rahul Kalvapalle, &ldquo;The future is bright: Meet the physicist who discovered how to trap light,&rdquo; University of Toronto News, 22 October 2026.</span>
+
+<p class="block-prose">The article traces four decades of Sajeev John&rsquo;s work: a single-author PhD paper at Harvard (1984) proposing that light could be trapped in disordered media; the invention of photonic band gap materials at Princeton (1987); self-assembling photonic crystals at the University of Toronto (c.&thinsp;2000); and current applications in medicine (hollow-core fibre surgery, 2004; lab-in-a-chip biosensors), solar energy (ultra-thin silicon cells, 50&times; thinner), and optical computing (microchips with circuits of light).</p>
+
+<blockquote>&ldquo;I didn&rsquo;t start out with any plan to invent materials to microscopically control light on a chip. I was simply doing innocent, curiosity-driven physics.&rdquo;</blockquote>
+
+<p class="block-prose">The article is structured as a profile: personal narrative first, technical content embedded in the story, applications at the end. Notice how the journalist moves from a human moment (&ldquo;I thought, &lsquo;OK, he&rsquo;s sharpening his knives here&rsquo;&rdquo;) to the physics (&ldquo;crests and troughs&rdquo;) without losing the reader. That transition is the craft a researcher presenting to a general audience should study.</p>
+</div>
+
+<div class="exercise-box">
+<h3>Comprehension &amp; Discussion</h3>
+<ol>
+  <li>John&rsquo;s 1984 paper was about trapping light in <em>disordered</em> media. His 1987 paper was about trapping light in <em>ordered</em> (periodic) structures. In your own words, explain why both approaches produce confinement but through different mechanisms.</li>
+  <li>The article says photonic crystal solar cells can be &ldquo;a factor of 50 thinner&rdquo; yet absorb sunlight &ldquo;more efficiently.&rdquo; What property of photonic crystals makes this possible? Use the term <em>band gap</em> in your answer.</li>
+  <li>Graphene has no band gap at its Dirac points. Researchers open a gap by placing graphene on hexagonal boron nitride, which breaks the sublattice symmetry. Compare this to how John introduces a defect in a photonic crystal to create a channel for light. What is analogous? What is not?</li>
+  <li>Anderson localization traps waves by <em>disorder</em>. Photonic band gaps trap waves by <em>order</em>. John started with the first and moved to the second. Write a two-sentence paragraph a B1-level reader could follow, explaining why order is easier to engineer than disorder.</li>
+  <li><strong>Presentation exercise.</strong> Three minutes. One application of photonic crystals (medical diagnostics, solar cells, or optical computing). Mixed audience of engineers and business students. Write your opening sentence.</li>
+</ol>
+</div>
+</div>
+
+<!-- ═══════════ SECTION 5 ═══════════ -->
+<div class="section-label-strip">
+  <span class="sl">Section 5</span>
+  <span class="st">Bridge to the Series</span>
+</div>
+
+<div class="page">
+<span class="cefr-tag cefr-d1">D1</span>
+
+<div class="bridge-box">
+<h3>Connection to the dm&sup3; Framework</h3>
+
+<p>A photonic band gap is a <em>forbidden zone</em> in frequency space, enforced by the geometry of the lattice. The dm&sup3; framework&rsquo;s operator chain <code>G = U ∘ F ∘ K ∘ C</code> acts on a different kind of periodic structure &mdash; a contact manifold with a limit cycle &mdash; but the mechanism rhymes: periodicity creates interference, interference creates selection, and selection is what we mean by a &ldquo;gap&rdquo; or a &ldquo;trap.&rdquo;</p>
+
+<p>The Floquet&ndash;Bloch theorem governs both. In photonic crystals it gives the band structure; in the dm&sup3; toy model it gives the transverse exponents (&mu;<sub>max</sub>, Ch&nbsp;0 of this book). The mathematics is the same theorem applied to different wave equations on different periodic domains.</p>
+
+<p>Graphene&rsquo;s Dirac cone &mdash; where the gap closes to a point &mdash; is the analogue of a critical parameter value in the dm&sup3; system where the limit cycle loses hyperbolicity. Neither is a failure; both are phase transitions, and both are where the interesting physics lives.</p>
+</div>
+
+<div class="block-sorry">
+<span class="block-label">What the series does not claim</span>
+<div class="block-body">Shared functional form (Floquet&ndash;Bloch) is not a shared invariant. Photonic band gaps and the dm&sup3; transverse spectrum are governed by the same class of theorem for the same reason &mdash; periodicity &mdash; and that is all. The Coherence Bridge notes this as a dimensional-analysis coincidence, not an identity. &radic;(J/&lambda;) is the generic crossover scale for any coupling-vs.-localization competition; it does not require shared geometry.</div>
+</div>
+
+<div class="distinguish-box">
+  <h3>Two kinds of &ldquo;crystal&rdquo;</h3>
+  <p><span class="dterm">Photonic crystal</span> &mdash; an engineered periodic dielectric structure with sub-micrometre features, designed to create a photonic band gap. Periodicity is in the material&rsquo;s refractive index.</p>
+  <p><span class="dterm">Graphene crystal</span> &mdash; a two-dimensional atomic crystal of carbon. Periodicity is in the positions of atoms. Its &ldquo;band structure&rdquo; refers to electrons, not photons, though graphene can be <em>used inside</em> a photonic crystal to tune its optical response.</p>
+  <p>When a presenter says &ldquo;crystal,&rdquo; the audience needs to know which one. The word carries different physics depending on whether the periodic thing is atoms or engineered dielectric regions, and whether the waves are electrons or photons.</p>
+</div>
+
+</div>
+
+<!-- ═══════════ IMAGE SIDEBAR ═══════════ -->
+<div class="page">
+<div class="block-theorem" style="border-left-color: var(--teal);">
+<span class="block-label" style="color: var(--teal);">The hexagons are real</span>
+<div class="block-body">
+<p style="margin-bottom:.8rem;">In 2009, researchers at IBM Z&uuml;rich used a non-contact atomic force microscope (nc-AFM) to image a single pentacene molecule &mdash; five fused carbon hexagons. For the first time, the textbook drawing matched a photograph. Individual atoms, the bonds between them, and the empty spaces inside the rings were all resolved. The honeycomb lattice that graphene extends to two infinite dimensions was visible in a single molecule.</p>
+<p style="margin-bottom:.8rem;">The image above was shared by <strong>@scitechgirl</strong>, sourced from the <strong>National Institute of Standards and Technology</strong> (NIST), <em>Atomic-scale imaging and measurement research</em>.</p>
+<p style="font-family:var(--mono);font-size:.82rem;color:var(--muted);">ESL note &middot; &ldquo;Imaging&rdquo; here means <em>producing a picture of something too small to see.</em> An AFM does not use light. It drags a needle one atom wide across the surface and measures the force. The hexagons in the image are force maps, not photographs &mdash; but the atoms are exactly where chemistry said they would be.</p>
+</div>
+</div>
+</div>
+
+<!-- ═══════════ SECTION 6 ═══════════ -->
+<div class="section-label-strip">
+  <span class="sl">Section 6</span>
+  <span class="st">Where They Meet: Graphene Photonic Crystals</span>
+</div>
+
+<div class="page">
+<span class="cefr-tag cefr-c1">C1</span>
+
+<p class="block-prose">The two crystal types converge in active research. Graphene-integrated photonic crystals combine John&rsquo;s band-gap engineering with graphene&rsquo;s electrical tuneability.</p>
+
+<div class="block-theorem">
+<span class="block-label">The open question</span>
+<div class="block-body">Can a photonic band gap be made <em>switchable</em> &mdash; present at one gate voltage, absent at another &mdash; using graphene as the active element? If yes, the result is a light transistor: a device that lets light through or blocks it, controlled by an electrical signal, at room temperature, with no moving parts.</div>
+</div>
+
+<div class="vocab-grid">
+
+<div class="vcard">
+  <span class="vterm">graphene photonic crystal</span><span class="vpos">n.</span>
+  <p class="vdef">A photonic crystal in which one or more graphene layers are incorporated into the periodic dielectric stack. Applying a gate voltage shifts graphene&rsquo;s Fermi level, changing its optical conductivity and the effective refractive index of the stack. The band gap becomes voltage-tuneable without altering the physical geometry.</p>
+</div>
+
+</div>
+
+<div class="block-axiom">
+<span class="block-label">Analogy to CatGT (Theorem 1)</span>
+<div class="block-body">In the CATGT self-trapping selectivity principle, a reaction pathway&rsquo;s spatial extent is bounded by a self-trapping radius r*(λ) = a&radic;(J/λ). In a photonic crystal, the band gap width is controlled by the dielectric contrast &mdash; the ratio of high to low refractive index. Both are <em>selectivity from confinement</em>: the parameter that determines what gets through is a ratio of coupling to localization. The Floquet&ndash;Bloch theorem is the shared mathematical ancestor.</div>
+</div>
+
+</div>
+
+<!-- CHAPTER NAV -->
+<div class="chapter-nav">
+  <a href="chW-wigner.html" class="ch-nav-link">&larr; Ch W &middot; Wigner Crystal</a>
+  <span class="ch-nav-current">Chapter &gamma; &middot; Photonic Crystals</span>
+  <a href="book3/index.html" class="ch-nav-link">Book III Hub &rarr;</a>
+</div>
+
+<!--po-gss--><aside class="po-gss" style="max-width:860px;margin:1.2rem auto 1rem;padding:.8rem 1.1rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(40,80,150,.85);border-radius:0 6px 6px 0;background:rgba(40,80,150,.05);font-family:ui-monospace,Menlo,monospace;font-size:.78rem;line-height:1.55"><details><summary style="cursor:pointer;letter-spacing:.08em"><b>Gold Standard Science &middot; 3 of 9 tenets shown</b> &middot; self-assessed against <a href="https://www.federalregister.gov/documents/2025/05/29/2025-09802/restoring-gold-standard-science" style="color:inherit">EO 14303 &sect;3(a)</a> &mdash; not a federal certification</summary><ul style="list-style:none;margin:.5rem 0 .3rem;padding:0"><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(i) reproducible <span style="opacity:.6">&mdash; vocabulary sourced from a cited, publicly available article</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(ii) transparent <span style="opacity:.6">&mdash; source text cited with author, title, date</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(iii) error and uncertainty <span style="opacity:.6">&mdash; no quantitative claims to bound</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iv) collaborative, interdisciplinary <span style="opacity:.6">&mdash; cross-linked to series framework and other volumes</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(v) skeptical <span style="opacity:.6">&mdash; states what the series does not claim</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(vi) falsifiable <span style="opacity:.6">&mdash; vocabulary chapter, no testable prediction</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(vii) unbiased peer review <span style="opacity:.6">&mdash; not independently peer reviewed</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(viii) negative results <span style="opacity:.6">&mdash; no negative result reported on this page</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#9675;</span>(ix) conflicts of interest <span style="opacity:.6">&mdash; disclosed: author-published through G6 LLC, the author&#x27;s company</span></li></ul><div style="opacity:.75">Scored by what is observable on this page. &#10003; shown &middot; &#10007; not shown &middot; &#9675; disclosure. No agency has reviewed this page.</div></details></aside><!--/po-gss-->
+
+<footer>
+  Principia Orthogona &middot; Book III &middot; The Mini-Beast &middot;
+  &copy; 2026 Pablo Nogueira Grossi &middot; G6 LLC &middot;
+  ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a> &middot;
+  <a href="https://zenodo.org/communities/principia-orthogona">Zenodo</a>
+</footer>
+
+</body>
+</html>
