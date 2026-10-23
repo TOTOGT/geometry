@@ -11669,3 +11669,23 @@ GOMC in `book5/ch00.html` SVG: this is inside a visual element (the book's heade
 **No action needed:** items 10, 12–16 in §B, everything in §C, Book 5 GTCT usage (legitimate), Book 6 working papers (all use "identity" in the algebraic sense).
 
 Not edited. Not committed or pushed.
+
+
+# NEGATIVE CONTROL: THE APRIL 2026 STRONG-INTERACTION PAPER, READ CLAIM BY CLAIM (2026-10-23)
+
+**What was added.** `ch-negative-control-strong-interactions.html` (root, no book assigned yet, so it has no inbound link and the index lists it as orphaned), `ch-negative-control-strong-interactions-verify.py` (R24) and `NuclearControl.lean` (R22: it was run against geometry's toolchain, so it lives here). Source paper: `TOTOGT/AXLE`, `AnuclearPhysics/NuclearPhysicsB_latex.pdf` (md5 7961116c2967103990c5a4fac3fc5f45). Its Lean companion is outside this repo (`grossi-ops/cajueiro/lean/NuclearPhysicsB/`, pinned Mathlib v4.14.0) and was not run.
+
+**Kernel runs (author's, Lean/Mathlib v4.32.0, `tools/leancheck.sh --audit`).**
+- `Orthogenesis/Eta/EtaChecks.lean` OK, 294 s, 18 declarations, standard axioms only (2026-10-22 report, identical to 2026-10-01).
+- `NuclearControl.lean` OK, 320 s, 7 declarations, no `sorryAx`, no axiom outside propext, Classical.choice, Quot.sound. Report: `tools/verify-audit/2026-10-23/Downloads__NuclearControl.axioms.txt` (the audited file was run from `~/Downloads`; the copy in this repo is byte-identical, md5 d27c3d760b674a12a8737a9251c1aa6e).
+- Two earlier runs the same day failed (13 errors). The second one checked a stale 168-line copy that did not contain the fixes; the file that passed is the 178-line one.
+
+**What the three Lean statements say (read per R20).** `stable_branch_vacuous`: for any map, `n = 0` satisfies the shape of the companion's `UnfoldOp.stable_branch`, so it carries no content. `stability_at_threshold_false`: the companion's `stability_at_threshold` (every G-orbit reaches a fixed point within 33 generations; `sorry` there) is false as stated, by an explicit model on N (C = K = U = id, F swapping 0 and 1 and sending 2 to 0; orbit of 2 is 2, 0, 1, 0, 1, ...). `trib_inv_sum`: eta^-1 + eta^-2 + eta^-3 = 1, the identity only; no measure is formalized.
+
+**What this does not establish.** The definitions are restated from the companion, with one change (`attribute [instance] GenerativeManifold.metric`, because the verbatim structure does not elaborate under v4.32.0). The result is about the restated statement, not the companion's files. It does not show the paper's physics is wrong or the framework false; seven of ten claims are flagged as assumed, mis-named, undefined or untested, three hold (Tribonacci arithmetic, contracting weights, Figure 1's ring scale).
+
+**Verify script.** All blocks pass against the PDF. Fixed on the way: (a) the Figure 1 ring check found 0 rings under this machine's poppler 22.02 because it writes stroke colour as `style="stroke:rgb(..)"` and the check matched only `stroke="rgb(..)"`; both forms now match; (b) the ratio check passed on an empty list (could not fail); it now requires four ratios.
+
+**Findings about the paper (details in the chapter).** The paper calls 1.8392867552 "the plastic number"; the plastic number is the real root of x^3 = x + 1 (about 1.3247), and this one is the tribonacci constant. Because eta^-1 + eta^-2 + eta^-3 = 1, the natural self-similar measure is Lebesgue measure on [0,1] (dimension 1, not fractal).
+
+**Repo checks.** `tools/terms.py --check` fails (vocabulary baseline does not match TERMS.md) and `tools/duplicates.py` reports 10 undeclared duplicate groups; neither list names a file added here, and both were failing before this change. `tools/build_indexes.py` was run and regenerated 37 index files (link counts, plus the new row). `key_register`, `subject_tags`, `run_yourself`, `crossref` and `gold_standard` were run read-only; they report stale pages across the repo, so no `--write` was done, to keep this commit to its own files. Not done: R30 pre-registration for W.1, F.1, Phi.1; a human read of the 13 scanner-flagged companion theorems; the Book III or other hub link for the chapter.
