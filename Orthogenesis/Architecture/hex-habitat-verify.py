@@ -21,6 +21,10 @@ MOX  = "https://www.nasa.gov/missions/mars-2020-perseverance/perseverance-rover/
 ZOPH = "https://www.dezeen.com/2018/07/27/nasa-announces-winners-3d-habitat-centennial-challenge-competition-printed-habitat-mars/amp/"  # Dezeen, 27 Jul 2018 (secondary); replaced mymodernmet URL that returned 404
 IAC19 = "https://ntrs.nasa.gov/api/citations/20190032473/downloads/20190032473.pdf"
 ZIMG = "https://www.nasa.gov/wp-content/uploads/2019/04/p3l4_zopherus_4.png"
+WW = "https://www.nasa.gov/offices/oct/early_stage_innovation/niac/2012_phase_I_fellows_flynn.html"
+WHEELER = "https://simoc.space/wp-content/uploads/2018/09/Plants-for-Human-Life-Support-WHEELER-2010.pdf"
+UPI84 = "https://www.upi.com/Archives/1984/04/09/Honeybees-buzzing-and-building-honeycomb-in-space/2395450334800/"
+SI_BEE = "https://airandspace.si.edu/collection-objects/bee-enclosure-module-sts-41-c/nasm_A19880031000"
 BVAD = "https://ntrs.nasa.gov/citations/20210024855"
 
 # id, claim as used, source, key string expected on the page, status
@@ -52,6 +56,10 @@ ROWS = [
  ("MOX-RATE", "Up to 12 grams per hour",                           MOX,  "12 grams of oxygen an hour", "confirmed"),
  ("MOX-PUR",  "98% purity or better",                              MOX,  "98%",           "confirmed"),
  ("MOX-FINAL","Final run Aug. 7; article dated Sept. 6, 2023 (year of run inferred from article date)", MOX, "Aug. 7", "confirmed"),
+ ("WW-SHIELD","Water Walls (Flynn, NIAC 2012 Phase I): life-support cells double as radiation shielding", WW, "radiation", "confirmed"),
+ ("CROPS",    "NASA CELSS shared candidates include sweet potato (Wheeler 2010; PDF, string check may fail)", WHEELER, "sweetpotato", "confirmed"),
+ ("BEE-N",    "About 3,300 honeybees on STS-41C, 1984, student experiment", SI_BEE, "3300", "confirmed"),
+ ("BEE-COMB", "Astronauts reported the bees built honeycomb (contemporaneous news)", UPI84, "honeycomb", "secondary"),
  ("O2-NEED",  "Crew oxygen need per person per day (BVAD Table 3-27)", BVAD, None,        "unconfirmed"),
 ]
 

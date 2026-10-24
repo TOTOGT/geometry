@@ -11701,3 +11701,5 @@ Not edited. Not committed or pushed.
 **Cut claims.** The 2026-10-13 Mars items (114 GPa, Theorem 5 / 20,000 years, 33.516 Hz, six-cycle, CHAPEA) do not appear; the verify script scans the page for them.
 
 **Repo checks.** `tools/build_indexes.py` re-run (page listed under Orthogenesis, orphaned: no inbound link yet). `tools/terms.py --check` still fails on the pre-existing baseline mismatch; none of its lines names this page. No book assigned. Open: a hub or book link for the page; prior-art search for stacking on legs; BVAD oxygen figure.
+
+**2026-10-23, later (same page).** Added the "Batata-doce in the walls" garden-ring section (design choice; shielding benefit labelled not yet calculated; NASA Water Walls cited as prior art) and a note on the 1984 STS-41C honeybee experiment (Smithsonian for the bee count; UPI 9 Apr 1984 for the astronauts' report of comb, secondary). Four verify rows added. Inline scripts parse.
