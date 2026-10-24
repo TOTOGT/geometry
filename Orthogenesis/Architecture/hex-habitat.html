@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hex Habitat Mars</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;700&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: full-bleed image hero, then one 1080px column of sections; the hex planner is the single interactive moment. Dark-first (Martian dusk). */
+:root{
+  --bg:#14161b; --surface:#1d2027; --line:#2f333d; --fg:#ece6dc; --muted:#a39d93;
+  --dust:#e0874a; --dust-soft:#3a2a20; --sky:#8fb3c9; --leaf:#7fbf7a;
+  --display:"Saira Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#f3efe9; --surface:#fbf8f4; --line:#ddd4c8; --fg:#24201c; --muted:#6b635a;
+  --dust:#b4531c; --dust-soft:#f1dccb; --sky:#3f6f8c; --leaf:#3d7d3a; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#f3efe9; --surface:#fbf8f4; --line:#ddd4c8; --fg:#24201c; --muted:#6b635a;
+  --dust:#b4531c; --dust-soft:#f1dccb; --sky:#3f6f8c; --leaf:#3d7d3a; color-scheme:light}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.05;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,4vw,40px);letter-spacing:.01em}
+h3{font-size:22px}
+p{margin:0;max-width:65ch}
+a{color:var(--dust)}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dust)}
+.mono{font-family:var(--mono)}
+/* hero */
+.hero{position:relative;overflow:hidden;background:#1a120d}
+.hero img{display:block;width:100%;max-height:72vh;object-fit:cover;object-position:center 40%}
+.hero .cap{position:absolute;inset:auto 0 0 0;padding-block:72px 28px;background:linear-gradient(transparent,rgba(12,9,7,.88))}
+.hero h1{color:#f6efe4;font-size:clamp(44px,8vw,96px);letter-spacing:-.005em}
+.hero .sub{color:#e9dccb;font-size:clamp(16px,2vw,19px);margin-top:12px}
+.hero .eyebrow{color:#f0a06a;margin-bottom:14px}
+.draft{display:inline-block;margin-top:16px;font:500 12px/1 var(--mono);color:#1b130d;background:#f0a06a;padding:6px 10px;border-radius:3px}
+section{padding-block:64px;border-bottom:1px solid var(--line)}
+section .head{display:grid;gap:12px;margin-bottom:32px}
+/* constraints */
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.spec{background:var(--surface);padding:20px;display:grid;gap:6px;align-content:start}
+.spec .v{font:500 30px/1.1 var(--display);color:var(--fg);font-variant-numeric:tabular-nums}
+.spec .v small{font:400 14px var(--mono);color:var(--muted)}
+.spec .k{font:500 11px/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dust)}
+.spec p{font-size:14px;color:var(--muted)}
+.src{margin-top:14px;font-size:13px;color:var(--muted)}
+/* principles */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px}
+.col{display:grid;gap:10px;align-content:start}
+.col svg{width:56px;height:56px}
+.col p{color:var(--muted)}
+/* planner */
+.planner{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:32px;align-items:start}
+@media (max-width:760px){.planner{grid-template-columns:1fr}}
+.board{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px;overflow-x:auto}
+.board svg{display:block;width:100%;height:auto;min-width:300px}
+.cell{cursor:pointer;transition:fill .15s}
+.cell.off{fill:transparent;stroke:var(--line);stroke-dasharray:3 4}
+.cell.off:hover{fill:var(--dust-soft)}
+.cell.on{fill:var(--dust);stroke:var(--bg);stroke-width:2}
+.cell.on.ext{fill:var(--dust)}
+.cell:focus-visible{outline:none;stroke:var(--sky);stroke-width:3}
+.readout{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+.readout div{background:var(--surface);padding:14px 16px;display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.readout span{font-size:14px;color:var(--muted)}
+.readout b{font:500 22px var(--display);font-variant-numeric:tabular-nums}
+.ctrl{display:grid;gap:14px}
+.ctrl label{font-size:14px;color:var(--muted);display:grid;gap:6px}
+.ctrl input[type=range]{width:100%;accent-color:var(--dust)}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+button{font:500 14px var(--body);color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:4px;padding:8px 14px;cursor:pointer}
+button:hover{border-color:var(--dust)}
+button:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+.note{font-size:13px;color:var(--muted)}
+/* phases */
+.phases{display:grid;gap:0;counter-reset:p}
+.phase{display:grid;grid-template-columns:120px minmax(0,1fr);gap:24px;padding-block:20px;border-top:1px solid var(--line)}
+.phase:last-child{border-bottom:1px solid var(--line)}
+.phase .n{font:500 13px var(--mono);color:var(--dust);letter-spacing:.08em;text-transform:uppercase}
+.phase p{color:var(--muted);margin-top:6px}
+@media (max-width:560px){.phase{grid-template-columns:1fr;gap:6px}}
+.open{background:var(--dust-soft);border-left:3px solid var(--dust);padding:20px 24px;display:grid;gap:10px}
+.open ul{margin:0;padding-left:20px;display:grid;gap:6px}
+footer{padding-block:40px;color:var(--muted);font-size:14px;display:grid;gap:6px}
+.caju{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:32px;align-items:start}
+@media (max-width:760px){.caju{grid-template-columns:1fr}}
+.caju .board svg{min-width:280px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);padding:8px 4px 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.vs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px 32px;margin-top:40px}
+.vs .br-item h3{font-size:20px}
+/* brazilian take */
+.br-fig{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px;overflow-x:auto;margin-bottom:32px}
+.br-fig svg{display:block;width:100%;height:auto;min-width:520px}
+.br-fig figcaption{font-size:13px;color:var(--muted);padding:8px 4px 2px}
+.br-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px 32px}
+.br-item{display:grid;gap:6px;align-content:start}
+.br-item .pt{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}
+.br-item p{color:var(--muted)}
+.names{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.names span{font:500 20px var(--display);border:1px solid var(--line);border-radius:4px;padding:4px 12px}
+.names small{font:400 13px var(--body);color:var(--muted);margin-left:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<header class="hero">
+  <img src="hex-habitat-cover.jpg" alt="Stacked hexagonal habitat modules raised on legs above a red Martian plain, with two crew members on a deck and a rover parked below">
+  <div class="cap"><div class="wrap">
+    <div class="eyebrow">G6 LLC · Newark, New Jersey</div>
+    <h1>Hex Habitat</h1>
+    <p class="sub">A Mars settlement built from hexagonal modules that lock together like a honeycomb, stack upward, and stand on legs above the dust.</p>
+    <span class="draft">Working draft · concept stage</span>
+  </div></div>
+</header>
+
+<main>
+<section><div class="wrap">
+  <div class="head">
+    <div class="eyebrow">The site</div>
+    <h2>What Mars asks of a building</h2>
+    <p>Every choice in the habitat answers one of these numbers.</p>
+  </div>
+  <div class="specs">
+    <div class="spec"><div class="k">Gravity</div><div class="v">0.38 <small>× Earth</small></div><p>3.73 m/s². Everything weighs 38% of its Earth weight, which eases the dead load on a stacked cluster.</p></div>
+    <div class="spec"><div class="k">Air pressure</div><div class="v">6.36 <small>mbar</small></div><p>About 0.6% of Earth's sea-level pressure. Each module is a pressure vessel first and a room second, so its walls are pushed outward from inside.</p></div>
+    <div class="spec"><div class="k">Temperature</div><div class="v">−89 to −31 <small>°C</small></div><p>Daily swing measured at the Viking 1 lander site.</p></div>
+    <div class="spec"><div class="k">Atmosphere</div><div class="v">95.1% <small>CO₂</small></div><p>Plus 2.59% nitrogen and 1.94% argon. A feedstock for oxygen and fuel, not something to breathe.</p></div>
+    <div class="spec"><div class="k">Solar day</div><div class="v">24.66 <small>hours</small></div><p>Close to Earth's, so crew schedules can follow a familiar rhythm.</p></div>
+    <div class="spec"><div class="k">Distance to Earth</div><div class="v">54.6–401.4 <small>million km</small></div><p>Distance makes resupply slow, so the habitat should be repairable on site.</p></div>
+  </div>
+  <p class="src">Figures: NASA Goddard, <a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html" target="_blank" rel="noopener">Mars Fact Sheet</a> (NSSDC).</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head">
+    <div class="eyebrow">The idea</div>
+    <h2>Why hexagons</h2>
+  </div>
+  <div class="cols">
+    <div class="col">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><g fill="none" stroke="var(--dust)" stroke-width="2"><path d="M18 6l10 6v12l-10 6-10-6V12z"/><path d="M38 6l10 6v12l-10 6-10-6V12z"/><path d="M28 24l10 6v12l-10 6-10-6V30z"/></g></svg>
+      <h3>Shared walls</h3>
+      <p>Hexagons tile a plane with no gaps. Every wall two modules share is a wall that never faces the outside, so the cluster needs less shell and loses less heat as it grows.</p>
+    </div>
+    <div class="col">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><g fill="none" stroke="var(--dust)" stroke-width="2"><path d="M28 4l12 7v14l-12 7-12-7V11z"/><path d="M28 26l12 7v14l-12 7-12-7V33z"/></g></svg>
+      <h3>Stacking</h3>
+      <p>Modules sit on top of one another two or three levels high. In 0.38 g, ladders and stairs are easy, and a tall cluster keeps the footprint and site preparation small.</p>
+    </div>
+    <div class="col">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><g fill="none" stroke="var(--dust)" stroke-width="2"><path d="M14 8h28l8 12H6z"/><path d="M12 20l-4 30M44 20l4 30M28 20v30"/><path d="M2 50h52"/></g></svg>
+      <h3>Raised on legs</h3>
+      <p>Legs lift the habitat clear of the surface and leave room for rovers below. Whether printed legs can carry every load is an open question.</p>
+    </div>
+    <div class="col">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><g fill="none" stroke="var(--dust)" stroke-width="2"><path d="M28 6l18 10v24L28 50 10 40V16z"/><path d="M19 22h18v12H19z"/></g></svg>
+      <h3>One part, many uses</h3>
+      <p>The same hexagonal shell becomes sleeping quarters, a lab, a greenhouse or an airlock. One production line, one set of spare parts, one repair manual.</p>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head">
+    <div class="eyebrow">Decided · Mars materials</div>
+    <h2>Built from Mars</h2>
+    <p>The habitat is built and supplied from Mars itself. Shells come from regolith, the loose rock and dust that covers the surface, and breathing oxygen comes from the carbon dioxide air. Earth sends only the machines and the parts Mars cannot make.</p>
+    <p>The buildings are 3D printed. The plan is for robotic printers to lay down regolith wall by wall, with lasers or other heat sources fusing the grains, before any crew arrive. These are design choices. No habitat has been printed on Mars yet, by anyone.</p>
+  </div>
+  <div class="cols">
+    <div class="col"><h3>What ships from Earth</h3><p>3D printers and sintering lasers, construction robots, airtight inner liners, windows, hatches, life support and power. Small, dense cargo that fits a launch fairing.</p></div>
+    <div class="col"><h3>What Mars provides</h3><p>Thick hexagonal walls, floors and the legs that lift each cluster. Heavy material that would be expensive to launch is already on the ground. An airtight liner inside carries the pressure, because printed regolith is expected to be weak in tension.</p></div>
+    <div class="col"><h3>Air from the atmosphere</h3><p>The plan is to split crew oxygen out of the 95% carbon dioxide atmosphere on site. This has been demonstrated only at small scale. A crew-sized system has not been built.</p></div>
+    <div class="col"><h3>Why it suits the hexagon</h3><p>A repeated six-sided cell gives the printer one wall shape to print again and again. Regolith walls also put mass between the crew and space radiation. How thick they must be is still open.</p></div>
+  </div>
+  <p class="src">Precedent, on Earth: NASA's 3D-Printed Habitat Challenge (2015–2019) had teams build one-third-scale structures from recyclables and materials that could be found on deep-space destinations, then tested them for material mix, leakage, durability and strength. AI SpaceFactory of New York won the $500,000 first prize in May 2019. This shows subscale printing on Earth, not a printed habitat working on Mars. <a href="https://www.nasa.gov/news-release/teams-3d-print-planetary-habitats-awarded-700k-in-nasa-challenge/" target="_blank" rel="noopener">NASA release</a>.</p>
+  <p class="src">Precedent, on Mars: MOXIE, on NASA's Perseverance rover, made 122 grams of oxygen from Mars' carbon dioxide over 16 runs, reaching 12 grams per hour at 98% purity or better. NASA reported its final run in September 2023. MOXIE was a technology demonstration, far below what a crew would need. <a href="https://www.nasa.gov/missions/mars-2020-perseverance/perseverance-rover/nasas-oxygen-generating-experiment-moxie-completes-mars-mission/" target="_blank" rel="noopener">NASA release</a>.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="open" style="margin-bottom:0">
+    <div class="eyebrow">Prior work</div>
+    <p>Hexagonal Mars habitats printed from local material are not a new idea. Team Zopherus placed first in the 2018 virtual modeling stage of NASA's Challenge, with a design that secondary reporting describes as modular and hexagonal, built from materials found on Mars. What this concept adds, stacking on legs, still needs a prior-art search before anyone calls it new. <a href="https://www.nasa.gov/centers-and-facilities/marshall/top-five-teams-win-a-share-of-100000-in-virtual-modeling-stage-of-nasas-3d-printed-habitat-competition/" target="_blank" rel="noopener">NASA results, July 2018</a>.</p>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head">
+    <div class="eyebrow">Try it</div>
+    <h2>Cluster planner</h2>
+    <p>Tap cells to add or remove modules. The readout shows how much floor you gain and how many walls end up shared.</p>
+  </div>
+  <div class="planner">
+    <div class="board"><svg id="grid" viewBox="0 0 420 420" role="group" aria-label="Hexagonal module grid"></svg></div>
+    <div class="ctrl">
+      <div class="readout">
+        <div><span>Modules per level</span><b id="o-n">0</b></div>
+        <div><span>Floor area, all levels</span><b id="o-area">0</b></div>
+        <div><span>Outside walls per level</span><b id="o-ext">0</b></div>
+        <div><span>Shared walls per level</span><b id="o-shared">0</b></div>
+        <div><span>Outer wall area saved vs. separate modules</span><b id="o-save">0%</b></div>
+      </div>
+      <label for="side">Module side length: <span class="mono" id="side-v">4.0 m</span>
+        <input id="side" type="range" min="2" max="6" step="0.5" value="4"></label>
+      <label for="levels">Levels stacked: <span class="mono" id="lev-v">2</span>
+        <input id="levels" type="range" min="1" max="4" step="1" value="2"></label>
+      <div class="btns">
+        <button type="button" id="b-flower">7-module flower</button>
+        <button type="button" id="b-line">Straight row</button>
+        <button type="button" id="b-clear">Clear</button>
+      </div>
+      <p class="note">Hexagon floor area = 2.598 × side². Outside wall area assumes 3 m per level. Example layout, not a final plan.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="brasil"><div class="wrap">
+  <div class="head">
+    <div class="eyebrow">Design direction · not an engineering claim</div>
+    <h2>A Brazilian take</h2>
+    <p>Brazil already has an architecture for most of what the habitat needs: buildings raised off the ground, screen walls that filter sun, porches where daily life happens, and a tradition of building together. This section borrows that language. It changes how the habitat looks and is lived in. It does not change the engineering above.</p>
+  </div>
+  <figure class="br-fig">
+    <svg id="br-svg" viewBox="0 0 760 430" role="img" aria-label="Elevation sketch: a honeycomb of hexagonal modules on pilotis, with a free span underneath, porches at the sides, a garden cell in the middle and screen-patterned outer shells"></svg>
+    <figcaption>Elevation sketch, not to scale. Screen pattern is on the outer skin only; the airtight liner inside each cell is unbroken.</figcaption>
+  </figure>
+  <div class="br-grid">
+    <div class="br-item"><div class="pt">Pilotis · vão livre</div><h3>The legs become a public floor</h3><p>Brazilian modernism made raised buildings normal, from the Ministry of Education building in Rio to Lina Bo Bardi's MASP in São Paulo, which leaves a plaza under the museum. Here the space under the cluster is the free span where the crew meets, repairs equipment and parks the rovers.</p></div>
+    <div class="br-item"><div class="pt">Palafita</div><h3>The stilt house as ancestor</h3><p>The Amazon's stilt houses lift homes above shifting ground and floodwater. A habitat on legs above drifting dust follows the same instinct.</p></div>
+    <div class="br-item"><div class="pt">Cobogó</div><h3>Screen walls on the outer skin</h3><p>The perforated block from Recife lets light and air through while cutting sun. Printed into the outer regolith skin, a cobogó pattern gives texture and shade on decks. It cannot cut through a pressurized wall, and perforated shells already appear in the Zopherus design, so this is a look, not a new idea.</p></div>
+    <div class="br-item"><div class="pt">Curvas</div><h3>Niemeyer's curves on a hexagonal grid</h3><p>The hexagon stays, because it does the geometric work. Corners soften, stair ramps curve, and the skyline of the cluster rises and falls instead of stepping.</p></div>
+    <div class="br-item"><div class="pt">Varanda · quintal</div><h3>A porch for every module, a yard in the middle</h3><p>Each module faces out onto a sheltered porch. The shared central cell is the backyard, with a greenhouse where the mango tree would be.</p></div>
+    <div class="br-item"><div class="pt">Jardim</div><h3>Gardens laid out like landscape</h3><p>Greenhouse cells are food production first, planned with the curving beds Roberto Burle Marx used in his gardens and promenades, instead of rows of racks.</p></div>
+    <div class="br-item"><div class="pt">Mutirão</div><h3>Built together</h3><p>A mutirão is a collective work party where neighbors build a house together. On Mars the printers raise the shells and the crew finishes the interiors together, cell by cell.</p></div>
+    <div class="br-item"><div class="pt">Nome</div><h3>Names to choose from</h3><div class="names"><span>Colmeia<small>beehive</small></span><span>Favo<small>honeycomb cell</small></span><span>Oca<small>Indigenous communal house</small></span></div></div>
+  </div>
+</div></section>
+
+<section id="cajueiro"><div class="wrap">
+  <div class="head">
+    <div class="eyebrow">Growth pattern · design direction</div>
+    <h2>Grows like a cajueiro</h2>
+    <p>The hive grows by one rule, applied again and again. A cluster sends out walkways, and at the end of each walkway a new cluster sets down its own legs. Then the new cluster does the same. The model is the Cajueiro de Pirangi, the giant cashew tree near Natal, whose branches grow sideways, reach the ground and take root, so one tree spreads like a small forest.</p>
+  </div>
+  <div class="caju">
+    <div class="board">
+      <svg id="caju-svg" viewBox="0 0 400 400" role="img" aria-label="Plan view of the habitat grown by a branching rule"></svg>
+      <div class="legend"><span><i style="background:var(--leaf)"></i>First cluster</span><span><i style="background:var(--dust)"></i>Modules</span><span><i style="background:var(--dust-soft);outline:1px solid var(--dust)"></i>Covered walkway</span><span><i style="background:var(--fg);border-radius:50%"></i>Cluster on its own legs</span></div>
+    </div>
+    <div class="ctrl">
+      <label for="gen">Generations of growth: <span class="mono" id="gen-v">2</span>
+        <input id="gen" type="range" min="0" max="4" step="1" value="2"></label>
+      <div class="readout">
+        <div><span>Modules</span><b id="c-mod">0</b></div>
+        <div><span>Clusters, each on its own legs</span><b id="c-clu">0</b></div>
+        <div><span>Walkway cells</span><b id="c-walk">0</b></div>
+        <div><span>Farthest module from the first, in cells walked</span><b id="c-far">0</b></div>
+      </div>
+      <p class="note">Rule: each new cluster sends two walkways, turned 60° left and right of the one it came from. Branches stop where they would run into existing cells. A layout sketch, not a structural design.</p>
+    </div>
+  </div>
+  <div class="vs">
+    <div class="br-item"><div class="pt">Why cajueiro, not araucária</div><h3>Every branch puts its feet down</h3><p>The araucária, the Paraná pine, is the other famous Brazilian branching tree, but its branches are long arms held out from a trunk. Built in printed regolith, arms like that would be cantilevers with tension along their tops, which the material is expected to handle poorly. The cajueiro sets its branches down and roots again, so each cluster stands on its own legs and walkways only span short gaps.</p></div>
+    <div class="br-item"><div class="pt">Growth by campaigns</div><h3>Each generation is one building season</h3><p>The printers finish one generation of clusters before starting the next. The settlement is usable at every stage, and it can stop growing at any generation without being left half built.</p></div>
+    <div class="br-item"><div class="pt">Open trade-off</div><h3>A tree has only one path</h3><p>In a pure branching pattern there is one route between any two clusters, so a damaged walkway cuts off everything beyond it. Real cajueiro branches cross and touch. The habitat would need cross-links between neighboring branches, which breaks the pure tree but adds escape routes.</p></div>
+  </div>
+  <p class="src">About the tree: Brazilian press reports put the Cajueiro de Pirangi in Pirangi do Norte, Parnamirim, Rio Grande do Norte, covering more than 8,500 m², and attribute its spread to a genetic trait that sends branches sideways to the ground, where they root. <a href="https://www.nsctotal.com.br/?p=7429350" target="_blank" rel="noopener">NSC Total, 20 Feb 2025</a> (news report; the genetic explanation is not sourced there).</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head">
+    <div class="eyebrow">Proposed sequence</div>
+    <h2>How it grows</h2>
+    <p>A draft order of build-out. None of these steps has been tested.</p>
+  </div>
+  <div class="phases">
+    <div class="phase"><div class="n">Phase 1</div><div><h3>Seed cluster</h3><p>Printers land ahead of the crew and print one airlock module and a core ring on legs from local regolith. Liners go in and the cluster is pressurized before anyone arrives.</p></div></div>
+    <div class="phase"><div class="n">Phase 2</div><div><h3>Second level</h3><p>Lab and sleeping modules stacked on the core, with outside decks and stairs down to the rover bay.</p></div></div>
+    <div class="phase"><div class="n">Phase 3</div><div><h3>Neighbor clusters</h3><p>Additional honeycombs nearby, linked by covered walkways, so a failure in one cluster does not have to shut down the others.</p></div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="open">
+    <div class="eyebrow">Open questions</div>
+    <h3>Decisions still to make</h3>
+    <ul>
+            <li>Wall thickness needed on the upper levels for radiation shielding.</li>
+      <li>Which fusing method suits the regolith at the chosen site (laser, microwave or binder), and how airtight liners seal against printed walls.</li>
+      <li>Whether the legs can be printed too, since printed regolith is expected to be weak in tension, as concrete is.</li>
+      <li>Crew size and mission length the first cluster is sized for.</li>
+      <li>Water source: where the nearest subsurface ice is, and how it is mined.</li>
+    </ul>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div>Hex Habitat · G6 LLC · Newark, New Jersey · 2026</div>
+  <div>Illustration from the cover of <em>Applications of Generative Orthogonal Matrix Compression Science</em>, Principia Orthogona series, by Pablo Nogueira Grossi.</div>
+</div></footer>
+
+<script>
+(function(){
+  const svg=document.getElementById('grid'), NS='http://www.w3.org/2000/svg';
+  const R=3, size=34, cx=210, cy=210;
+  const cells=new Map(); // key "q,r" -> element
+  let on=new Set();
+  const key=(q,r)=>q+','+r;
+  const dirs=[[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+  for(let q=-R;q<=R;q++)for(let r=Math.max(-R,-q-R);r<=Math.min(R,-q+R);r++){
+    const x=cx+size*1.5*q, y=cy+size*Math.sqrt(3)*(r+q/2);
+    let pts=[];for(let i=0;i<6;i++){const a=Math.PI/3*i;pts.push((x+(size-2)*Math.cos(a)).toFixed(1)+','+(y+(size-2)*Math.sin(a)).toFixed(1));}
+    const p=document.createElementNS(NS,'polygon');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('class','cell off');
+    p.setAttribute('tabindex','0');p.setAttribute('role','button');
+    const k=key(q,r);p.dataset.k=k;
+    p.addEventListener('click',()=>toggle(k));
+    p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(k);}});
+    svg.appendChild(p);cells.set(k,p);
+  }
+  function toggle(k){on.has(k)?on.delete(k):on.add(k);render();}
+  function setLayout(list){on=new Set(list);render();}
+  const fmt=n=>n.toLocaleString(undefined,{maximumFractionDigits:0});
+  function render(){
+    cells.forEach((el,k)=>{const a=on.has(k);el.setAttribute('class','cell '+(a?'on':'off'));el.setAttribute('aria-pressed',a);
+      el.setAttribute('aria-label',(a?'Module ':'Empty site ')+k);});
+    const s=+document.getElementById('side').value, L=+document.getElementById('levels').value;
+    document.getElementById('side-v').textContent=s.toFixed(1)+' m';
+    document.getElementById('lev-v').textContent=L;
+    const n=on.size;let pairs=0;
+    on.forEach(k=>{const[q,r]=k.split(',').map(Number);dirs.forEach(([dq,dr])=>{if(on.has(key(q+dq,r+dr)))pairs++;});});
+    pairs/=2;
+    const ext=6*n-2*pairs, area=2.598*s*s*n*L;
+    document.getElementById('o-n').textContent=n;
+    document.getElementById('o-area').textContent=fmt(area)+' m²';
+    document.getElementById('o-ext').textContent=ext+' ('+fmt(ext*s*3*L)+' m²)';
+    document.getElementById('o-shared').textContent=pairs;
+    document.getElementById('o-save').textContent=n?Math.round(100*(1-ext/(6*n)))+'%':'0%';
+  }
+  document.getElementById('side').addEventListener('input',render);
+  document.getElementById('levels').addEventListener('input',render);
+  const flower=['0,0'].concat(dirs.map(([q,r])=>key(q,r)));
+  document.getElementById('b-flower').onclick=()=>setLayout(flower);
+  document.getElementById('b-line').onclick=()=>setLayout(['-3,0','-2,0','-1,0','0,0','1,0','2,0','3,0']);
+  document.getElementById('b-clear').onclick=()=>setLayout([]);
+  setLayout(flower);
+})();
+</script>
+<script>
+(function(){
+  const svg=document.getElementById('br-svg'); if(!svg) return;
+  const NS='http://www.w3.org/2000/svg';
+  const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;};
+  const defs=el('defs',{});
+  const pat=el('pattern',{id:'cobogo',width:14,height:14,patternUnits:'userSpaceOnUse'},defs);
+  el('rect',{width:14,height:14,fill:'var(--dust)'},pat);
+  el('path',{d:'M7 2 L12 7 L7 12 L2 7Z',fill:'var(--bg)',opacity:.55},pat);
+  const r=44, w=Math.sqrt(3)*r, ground=392, base=300; // base = centre y of bottom row
+  const hex=(cx,cy)=>{let p=[];for(let i=0;i<6;i++){const a=Math.PI/180*(60*i-90);p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1));}return p.join(' ');};
+  const cx0=380;
+  const rows=[[-1.5,-0.5,0.5,1.5],[-1,0,1],[-0.5,0.5]];
+  // ground and free span
+  el('line',{x1:20,y1:ground,x2:740,y2:ground,stroke:'var(--muted)','stroke-width':1.5});
+  el('rect',{x:cx0-2*w,y:base+r,width:4*w,height:ground-base-r,fill:'var(--dust-soft)',opacity:.6});
+  // pilotis
+  [-1.5,-0.5,0.5,1.5].forEach(k=>{const x=cx0+k*w;el('path',{d:`M${x-5} ${base+r} L${x-9} ${ground} L${x+9} ${ground} L${x+5} ${base+r}Z`,fill:'var(--muted)'});});
+  // rover
+  el('rect',{x:cx0+18,y:ground-22,width:46,height:16,rx:4,fill:'var(--sky)'});
+  [cx0+28,cx0+54].forEach(x=>el('circle',{cx:x,cy:ground-5,r:5,fill:'var(--fg)'}));
+  // curved ramp
+  el('path',{d:`M${cx0-2*w-110} ${ground} C ${cx0-2*w-60} ${ground-4}, ${cx0-2*w-30} ${base+r+30}, ${cx0-2*w+6} ${base+r-2}`,fill:'none',stroke:'var(--fg)','stroke-width':3,'stroke-linecap':'round'});
+  // cells
+  rows.forEach((row,ri)=>row.forEach(k=>{
+    const cx=cx0+k*w, cy=base-ri*1.5*r;
+    const outer=(ri===0&&Math.abs(k)===1.5)||(ri===1&&Math.abs(k)===1)||ri===2;
+    const garden=(ri===1&&k===0);
+    el('polygon',{points:hex(cx,cy),fill:garden?'var(--surface)':(outer?'url(#cobogo)':'var(--dust)'),stroke:'var(--bg)','stroke-width':3,'stroke-linejoin':'round'});
+    if(garden){
+      el('polygon',{points:hex(cx,cy),fill:'none',stroke:'var(--leaf)','stroke-width':2});
+      el('path',{d:`M${cx-26} ${cy+16} Q ${cx-10} ${cy-4} ${cx} ${cy+16} Q ${cx+12} ${cy-10} ${cx+26} ${cy+16}`,fill:'none',stroke:'var(--leaf)','stroke-width':3,'stroke-linecap':'round'});
+      el('path',{d:`M${cx} ${cy+16} L${cx} ${cy-14} M${cx} ${cy-4} Q ${cx-12} ${cy-14} ${cx-16} ${cy-24} M${cx} ${cy-8} Q ${cx+12} ${cy-18} ${cx+14} ${cy-28}`,fill:'none',stroke:'var(--leaf)','stroke-width':2.5,'stroke-linecap':'round'});
+    } else if(!outer){
+      el('rect',{x:cx-14,y:cy-12,width:28,height:22,rx:9,fill:'var(--bg)',opacity:.75});
+    }
+  }));
+  // varandas on row 1
+  [-1,1].forEach(s=>{const x=cx0+s*(1.5*w), y=base-1.5*r+r/2-8;
+    const x2=x+s*58;
+    el('line',{x1:x,y1:y,x2:x2,y2:y,stroke:'var(--fg)','stroke-width':3});
+    for(let i=1;i<=4;i++){const xi=x+s*i*13;el('line',{x1:xi,y1:y,x2:xi,y2:y-14,stroke:'var(--fg)','stroke-width':1.2});}
+    el('line',{x1:x,y1:y-14,x2:x2,y2:y-14,stroke:'var(--fg)','stroke-width':1.2});
+  });
+  // labels
+  const lab=(x,y,t,sub,anchor)=>{const g=el('text',{x,y,'text-anchor':anchor||'start',fill:'var(--fg)','font-family':'IBM Plex Mono, monospace','font-size':12});g.textContent=t;
+    if(sub){const s2=el('text',{x,y:y+15,'text-anchor':anchor||'start',fill:'var(--muted)','font-family':'Public Sans, system-ui, sans-serif','font-size':12});s2.textContent=sub;}};
+  const lead=(x1,y1,x2,y2)=>el('line',{x1,y1,x2,y2,stroke:'var(--muted)','stroke-width':1,'stroke-dasharray':'3 3'});
+  lab(cx0,ground+28,'VÃO LIVRE','free span on pilotis','middle');
+  lead(cx0+w*0.5,base-1.5*r-6,cx0+w*0.5+150,72); lab(cx0+w*0.5+156,64,'QUINTAL','garden cell at the centre');
+  lead(cx0-w*0.5,base-3*r-10,cx0-w*0.5-120,40); lab(cx0-w*0.5-126,32,'COBOGÓ','screen pattern, outer skin','end');
+  lead(cx0+1.5*w+50,base-1.5*r+r/2-14,cx0+1.5*w+90,base-1.5*r-50); lab(cx0+1.5*w+64,base-1.5*r-70,'VARANDA','porch');
+  lead(cx0-2*w-70,ground-14,cx0-2*w-110,ground-60); lab(cx0-2*w-110,ground-84,'RAMPA','curved ramp','middle');
+})();
+</script>
+<script>
+(function(){
+  const svg=document.getElementById('caju-svg'); if(!svg) return;
+  const NS='http://www.w3.org/2000/svg', size=10;
+  const D=[[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+  const K=(q,r)=>q+','+r;
+  function grow(G){
+    const cells=new Map(), clusters=[];
+    const free=(q,r)=>!cells.has(K(q,r));
+    function flower(q,r,first){
+      clusters.push([q,r]);
+      cells.set(K(q,r),first?'first':'mod');
+      D.forEach(([dq,dr])=>{if(free(q+dq,r+dr))cells.set(K(q+dq,r+dr),'mod');});
+    }
+    function fits(q,r){ if(!free(q,r))return false; let n=0; D.forEach(([dq,dr])=>{if(!free(q+dq,r+dr))n++;}); return n===0; }
+    flower(0,0,true);
+    let tips=[{q:0,r:0,dirs:[0,2,4]}];
+    for(let g=0;g<G;g++){
+      const next=[];
+      tips.forEach(t=>t.dirs.forEach(d=>{
+        const [dq,dr]=D[d];
+        const cq=t.q+dq*6, cr=t.r+dr*6;
+        let ok=fits(cq,cr);
+        for(let k=2;k<=4&&ok;k++){ if(!free(t.q+dq*k,t.r+dr*k)) ok=false; }
+        if(!ok) return;
+        for(let k=2;k<=4;k++) cells.set(K(t.q+dq*k,t.r+dr*k),'walk');
+        flower(cq,cr,false);
+        next.push({q:cq,r:cr,dirs:[(d+1)%6,(d+5)%6]});
+      }));
+      tips=next;
+    }
+    return {cells,clusters};
+  }
+  function far(cells){
+    const seen=new Map([[K(0,0),0]]), Q=[[0,0]]; let m=0;
+    while(Q.length){const [q,r]=Q.shift(), dist=seen.get(K(q,r));
+      if(cells.get(K(q,r))!=='walk') m=Math.max(m,dist);
+      D.forEach(([dq,dr])=>{const k=K(q+dq,r+dr); if(cells.has(k)&&!seen.has(k)){seen.set(k,dist+1);Q.push([q+dq,r+dr]);}});}
+    return m;
+  }
+  function draw(){
+    const G=+document.getElementById('gen').value;
+    document.getElementById('gen-v').textContent=G;
+    const {cells,clusters}=grow(G);
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    const pos=(q,r)=>[size*1.5*q, size*Math.sqrt(3)*(r+q/2)];
+    let minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
+    cells.forEach((v,k)=>{const [q,r]=k.split(',').map(Number);const [x,y]=pos(q,r);minx=Math.min(minx,x);maxx=Math.max(maxx,x);miny=Math.min(miny,y);maxy=Math.max(maxy,y);});
+    const pad=size*2.5, span=Math.max(maxx-minx,maxy-miny)+2*pad;
+    const cx=(minx+maxx)/2, cy=(miny+maxy)/2;
+    svg.setAttribute('viewBox',`${(cx-span/2).toFixed(1)} ${(cy-span/2).toFixed(1)} ${span.toFixed(1)} ${span.toFixed(1)}`);
+    cells.forEach((v,k)=>{
+      const [q,r]=k.split(',').map(Number), [x,y]=pos(q,r);
+      let p=[];for(let i=0;i<6;i++){const a=Math.PI/3*i;p.push((x+(size-0.8)*Math.cos(a)).toFixed(2)+','+(y+(size-0.8)*Math.sin(a)).toFixed(2));}
+      const e=document.createElementNS(NS,'polygon');
+      e.setAttribute('points',p.join(' '));
+      e.setAttribute('fill',v==='first'?'var(--leaf)':v==='walk'?'var(--dust-soft)':'var(--dust)');
+      e.setAttribute('stroke',v==='walk'?'var(--dust)':'var(--bg)');
+      e.setAttribute('stroke-width',v==='walk'?0.8:1);
+      svg.appendChild(e);
+    });
+    clusters.forEach(([q,r])=>{const [x,y]=pos(q,r);const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',size*0.28);c.setAttribute('fill','var(--fg)');svg.appendChild(c);});
+    let mod=0,walk=0; cells.forEach(v=>{v==='walk'?walk++:mod++;});
+    document.getElementById('c-mod').textContent=mod;
+    document.getElementById('c-clu').textContent=clusters.length;
+    document.getElementById('c-walk').textContent=walk;
+    document.getElementById('c-far').textContent=far(cells);
+  }
+  document.getElementById('gen').addEventListener('input',draw);
+  draw();
+})();
+</script>
+
+</body>
+</html>
