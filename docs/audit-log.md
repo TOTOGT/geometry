@@ -11478,3 +11478,12 @@ Most pages in books 10–15, 17–22, 26, 28 use appropriate hedging ("conjectur
 ### Category D — GTCT/GOMC naming
 
 Book 5 retains "GTCT" in its title — this is the book's legitimate name, not reintroduced framing. Other GOMC references are in the gomc-opus.html page (now corrected with top-level box).
+
+## chE-gtct.html (Book 3, Extended Chapter E) - read and corrected, 2026-10-24
+
+Read in full; reconciled against Book 4 Ch 5 and Ch 10 and the GTCT repo's dm3CriticalityPrinciple_extended.lean.
+Companion: `chE-audit-verify.py` (math A1-A6 plus page regression guards B, stdlib only, exits 0) and `ChEAudit.lean` (UNTESTED, no local toolchain).
+
+What changed on the page (kept, relabelled, not deleted): Theorem 5 is now Conjecture 5 with an audit note (as printed, (i) and (iii) contradict Theorem 3; Book 4 Ch 10 gives one transverse eigenvalue -2 = -tau plus a neutral along-orbit direction, outer basin only); Lean block no longer headed "Closed/Lean-verified" (hand-proved, not kernel-checked here); Axiom 6, Axiom 8, the twelve-fold section, Theorem 1, Time III and IV, and the tau-Omega gap are labelled as proposals/interpretations; two graphs added (n-bonacci roots toward 2; contraction vs boost vs eigenvalue 2); hero count and the sorry/axiom counts attributed to the files they describe (extended file: 9 sorry lines; AXLE registry: 0).
+
+Open: nBonacciRingSize is an axiom whose docstring says "7th term of the rank-n recurrence", but 13 (n=3) and 56 (n=4) are not both 7th terms under any convention tried and a 7th term stops changing for large n, so strict monotonicity cannot hold; critDim_monotone and no_return_to_critical are valid but conditional. Needs the Navratil definition. Whitney labels A1-A3 follow the map-germ convention (same as Book 4 Ch 10); an earlier draft of this audit called them off by one and was wrong. Duplicates of this chapter (book4/chE-gtct.html, book4/chE-gtct-alt.html, ch-e-gtct.html) were not touched. `tools/terms.py --check` fails on HEAD with or without these edits (other files).
