@@ -11855,3 +11855,10 @@ Pre-registered in `docs/prereg-rh-criteria.md` (committed before any run); one c
 - T2: 138 sign changes of Hardy Z on (0,300], step 0.02, equal to N(300)=138 from mpmath nzeros; control (a zero pair replaced by a complex pair) drops the count by exactly 2. Numerical, not interval-certified.
 - T3: min Re(ξ'/ξ) on the grid = 0.00203 > 0 (σ=0.5005, edge of window); control with the first zero moved to Re s=0.52 goes negative at the zero. The margin tends to 0 as σ→1/2 by symmetry, so the test cannot see a zero closer to the line than the grid spacing (0.0005 in σ).
 - None of these is a proof or a test of the contact condition (already refuted as an equivalence, RH paper §4.9).
+
+## 2026-10-25 — Headroom of the Cobeli–Zaharescu bound toward 11/12 (editor asked "can we get the .0277")
+Pre-registered in `docs/prereg-rh-proportion-headroom.md`; script `docs/rh-proportion-headroom.py`; output `docs/rh-proportion-headroom-run-2026-10-25.txt`. Source: arXiv:2610.23467v1 read in full from Downloads.
+- Reproduced (6.2): 0.888931 from α=209/5000, d=57/2000, C=1.3313394 (paper: ≈0.88893). With α=0,d=0,C=C_MT the same formula gives 0.88762, Lamzouri's constant (1.3), a second consistency check. Reconstructed f*, K* from (5.1): ∫f*=1, min f*=0.7925 (>0.79), K*(1/2)=0.67587, C(f*)=1.3313394 (trapezoid; my first C used rectangle weights and gave 1.3322 — my error, fixed, not the paper's).
+- What 11/12 would take inside the same formula: α≈0.130 at the paper's C and d (3.1× the paper's 0.0418), or α≈0.094 at C=C_MT, d=0 (2.3×).
+- Heuristic ceiling for better local analysis with the same f* (remainder replaced by the lower convex envelope of the lattice energy ρ·e(1/ρ); proxy, lattice patches, not a proof): 0.8906 (0.8919 with C=C_MT). Even a remainder 4× larger gives 0.9047. None reaches 0.91667.
+- Reading: sharper local inequalities with this test function are worth about +0.002; 11/12 needs a different input (a stronger inequality than the trace/Bessel step, a jointly optimised test function, or pair correlation beyond support 1). Nothing was proved. The test function was not re-optimised.
