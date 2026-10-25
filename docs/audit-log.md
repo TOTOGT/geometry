@@ -11508,3 +11508,8 @@ Findings (page edited to say so):
 - Duplicates: `chT-tubulin.html`, `ch-t-tubulin.html`, `ch-t-tubulina.html` were byte-identical (md5 5351b2a2...); only chT-tubulin.html was edited, so the other two now differ. `ch-t-tubulina.html` is English content under a Portuguese filename. Decision on merge/sync is the author's.
 
 Schlegel 1894 (second-hand): an AI-generated summary supplied by the author gives the title as "Series de Lamb superieures", El Progreso Matematico, Ano 4, pp. 171-174. Not verified: the cited page (spirasolaris.ca) redirect-loops from here, a search found nothing, and Kessler-Schiff give pp. 173-174. "Lamb" may be a garble of "Lame" (a guess, not checked). The chE Sources entry stays as cited by Kessler-Schiff.
+
+### Schlegel 1894 and history credits, 2026-10-25 (follow-up)
+
+Source supplied by the author (open in the built-in browser): Archibald's Note V in Hambidge, Dynamic Symmetry (Yale UP, 1920) as reproduced on spirasolaris.ca. It prints "V. Schlegel, 'Series de Lamb superieurs,' El progreso matematico, 1894, ano 4, pp. 171-174" (probably "Lame"; a guess), records "Lame series" and "Braun/Schimper-Braun series" as older names for the Fibonacci series, and cites Schlegel, "Verallgemeinerung eines geometrischen Paradoxons", Z. Math. Phys. 24 (1879) 123-128. Page range conflicts with Kessler-Schiff (173-174); both shown on chE-gtct.html. The Schlegel paper itself still not located.
+Credit lines added: chEta-tribonacci.html (history note before section 1 body), ch7-crystalline.html section 7.3 (parenthetical), chE-gtct.html Sources (Schlegel entry corrected; Archibald added). ch7-crystalline-verify.py still ALL PASS. Priority statements follow the papers as read and are unchecked against originals.
