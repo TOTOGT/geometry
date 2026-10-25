@@ -117,7 +117,8 @@ check("no convention tried gives 13 at n=3 AND 56 at n=4 as the 7th term", not h
 print("    READ  56 is the 8th term of 1,1,2,4,8,15,29,56 and 13 the 6th/7th of tribonacci, so the two")
 print("          axioms use different indices. Lean theorems critDim_monotone / no_return_to_critical")
 print("          are valid but conditional on axioms the docstring definition does not satisfy.")
-print("          Not ruled out: another convention. Needs the Navratil definition.")
+print("          Not ruled out: another convention. Needs the original definition (the GTCT docstring")
+print("          credits Navratil; the author says the definition predates that document, source not yet located).")
 
 print("[A6] Book 4 Ch 10 numbers, recomputed from the ODE (eps = 2)")
 E = 2.0
