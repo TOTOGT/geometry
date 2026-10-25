@@ -87,8 +87,8 @@ footer{text-align:center;padding:2.6rem 2rem;color:var(--text-dim);font-size:.82
   <p class="lede">
     The cardiac pacemaker — the sinoatrial (SA) node — is one of the cleanest biological realizations of a dm³ system.
     The limit cycle is the <em>sinus rhythm</em>; the contact variable $z$ is <em>autonomic balance</em> (the
-    sympathovagal ratio); and the embodiment threshold $\tau = 2$ is the heart-rate-variability ratio at which
-    decompensation becomes likely.
+    sympathovagal ratio); and the embodiment threshold $\tau = 2$ is <em>proposed</em> as the heart-rate-variability ratio at which
+    decompensation becomes likely (no cohort data here, and no definition of the ratio is fixed in this chapter).
   </p>
 
   <h2>The SA node as an operator chain</h2>
@@ -107,14 +107,13 @@ footer{text-align:center;padding:2.6rem 2rem;color:var(--text-dim);font-size:.82
   <p>The chapter carries the same invariant triple $(T^\ast,\ \mu_{\max},\ \tau)$ that every other Book 3 system does, in the cardiac medium:</p>
   <table>
     <tr><th>Quantity</th><th>Value</th><th>Meaning</th></tr>
-    <tr><td>$\mu_{\max}$</td><td>&approx; &minus;0.29</td><td>Leading Lyapunov / stability margin of the sinus limit cycle</td></tr>
+    <tr><td>$\mu_{\max}$</td><td>&approx; &minus;0.29</td><td>Stated stability margin of the sinus limit cycle (unsourced; no data or fit here). In the reduced model below the radial exponent at the cycle is $-2\mu_H$ for Hopf parameter $\mu_H$ (to leading order in $\mu_H/\lambda$), so $-0.29$ would mean $\mu_H\approx0.145$ &mdash; a consequence of the model, not a measurement</td></tr>
     <tr><td>$\omega$</td><td>&approx; 1.0 Hz</td><td>Pacemaker frequency (≈ 60 bpm resting)</td></tr>
     <tr><td>$\tau$</td><td>2</td><td>Embodiment / decompensation threshold — the shared invariant across all seven Book 3 systems</td></tr>
   </table>
   <p>
     The recurrence of $\tau = 2$ &mdash; the same value found in tubulin, neural, immune and the other instantiations
-    &mdash; is the point: it is <em>not</em> a free parameter fitted per system, but a common threshold the framework
-    predicts each medium should exhibit.
+    &mdash; is the point of the framework: a common threshold rather than a per-system fit. In this chapter it is an assigned value, not measured or derived, and the same number appearing in several chapters is a shared functional form, not evidence of a shared invariant.
   </p>
 
   <h2>Falsifiable Prediction 3</h2>
@@ -166,6 +165,10 @@ footer{text-align:center;padding:2.6rem 2rem;color:var(--text-dim);font-size:.82
     The rigor is not decoration — the slaved mode is precisely what saturates and stabilizes the healthy rhythm.
   </p>
   <div class="callout">
+    <span class="lab">Exact check (added in audit)</span>
+    For the full three-variable field the cycle can be found with no center-manifold approximation: setting $\dot r=0$ gives $u=\mu$, and $\dot u=0$ then gives $r^2=\lambda\mu$ <em>exactly</em>. Linearising in $(r,u)$ at that point gives $s^2+\lambda s+2\lambda\mu=0$, so the radial exponents are $s=\tfrac12\big(-\lambda\pm\sqrt{\lambda^2-8\lambda\mu}\big)$. For small $\mu/\lambda$ the slow one is $\approx-2\mu$ (the value the Lean file proves for the <em>reduced</em> 1-D field), but it is not exactly $-2\mu$ for the full field, and for $\mu>\lambda/8$ the pair is complex. Likewise $u=(x^2+y^2)/\lambda$ is the leading-order slaved value as $\mu\to0$. Checked symbolically in <code>ch6b-audit-verify.py</code>.
+  </div>
+  <div class="callout">
     <span class="lab">What this settles</span>
     <p>The single-mode picture is now the leading-order reduction <em>on</em> the center manifold, not an assumption.
     For the SA node specifically, decompensation ($\tau = 2$) becomes a statement about the sign of the first Lyapunov
@@ -176,10 +179,10 @@ footer{text-align:center;padding:2.6rem 2rem;color:var(--text-dim);font-size:.82
   <p>Following the same axiom/sorry ledger convention as the rest of the series, here is the honest accounting for this chapter:</p>
   <table class="status-table">
     <tr><th>Statement</th><th>Status</th><th>Notes</th></tr>
-    <tr><td>One-mode limit-cycle model of the SA node</td><td>derived</td><td>Formal reduction of the operator chain to a single oscillatory mode; sinus rhythm as the attractor $\Gamma$</td></tr>
-    <tr><td>$\tau = 2$ as the HRV decompensation threshold</td><td>proposed</td><td>Consistent with the shared $\tau=2$ invariant across Book 3; motivated, not clinically validated here</td></tr>
-    <tr><td>Rigorous center-manifold reduction</td><td>derived</td><td>Center-manifold theorem applied to the dm³ Hopf oscillator; the stable mode is slaved as $u=(x^2+y^2)/\lambda$ and the reduced normal form $\dot r=\mu r-r^3/\lambda$ follows (verified symbolically). Coefficient signs for the explicit SA-node field remain to be read off its Jacobian</td></tr>
-    <tr><td>Lean / AXLE formalization</td><td>audited</td><td>Algebraic core in <a href="CardiacHopfReduction.lean">CardiacHopfReduction.lean</a> — reduced radial identity, limit-cycle amplitude $r^2=L\mu$, supercritical sign, one-mode contrast. Kernel-checked 2026-09-12 under the v4.32.0 pin — four declarations, all on [propext, Classical.choice, Quot.sound], report in tools/verify-audit/2026-09-12/. Center-manifold existence invoked, not formalized</td></tr>
+    <tr><td>One-mode limit-cycle model of the SA node</td><td>assumed (model)</td><td>The operator chain is <em>posited</em> to reduce to a single oscillatory mode with sinus rhythm as the attractor $\Gamma$; nothing derives this from SA-node physiology (ion-channel kinetics) here</td></tr>
+    <tr><td>$\tau = 2$ as the HRV decompensation threshold</td><td>proposed</td><td>Same value assigned in other Book 3 chapters (shared form, not a shared invariant); motivated, not clinically validated here; $\sigma$ and the ratio $\sigma/\tau$ are not defined from data</td></tr>
+    <tr><td>Rigorous center-manifold reduction</td><td>derived for the toy field only</td><td>Center-manifold theorem applied to the stated three-variable field (not to an SA-node model); the stable mode is slaved as $u=(x^2+y^2)/\lambda$ and the reduced normal form $\dot r=\mu r-r^3/\lambda$ follows (verified symbolically). Coefficient signs for the explicit SA-node field remain to be read off its Jacobian</td></tr>
+    <tr><td>Lean / AXLE formalization</td><td>audited</td><td>Algebraic core in <a href="CardiacHopfReduction.lean">CardiacHopfReduction.lean</a> — reduced radial identity, limit-cycle amplitude $r^2=L\mu$, one-mode contrast, and <code>radial_deriv_at_cycle</code> (derivative of the reduced radial field at the cycle is $-2\mu$). <code>supercritical</code> is only $-1/L&lt;0$ and mentions no vector field (its own docstring says so); the substantive statement is <code>radial_deriv_at_cycle</code>. Kernel-checked 2026-09-12 under the v4.32.0 pin — five declarations, all on [propext, Classical.choice, Quot.sound], report in tools/verify-audit/2026-09-12/. Center-manifold existence invoked, not formalized</td></tr>
     <tr><td>Clinical validation of Prediction 3</td><td>not done</td><td>Requires a prospective HRV cohort; the $\sigma/\tau>1$ criterion is falsifiable but untested in this chapter</td></tr>
   </table>
 

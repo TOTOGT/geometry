@@ -2,13 +2,17 @@
   Cardiac Hopf — center-manifold reduction of the SA-node dm³ oscillator, in Lean 4
   Principia Orthogona · Book 3 · ch6b-cardiac · Pablo Nogueira Grossi · G6 LLC · Newark NJ · 2026
 
-  STATUS: The algebraic core below — the reduced radial dynamics on the center
-          manifold, the limit-cycle amplitude, the supercritical (first Lyapunov)
-          sign, and the contrast with the bare one-mode ansatz — is written to be
-          sound but has NOT yet been run through the kernel (compilation deferred
-          until a Mathlib build is available). The *existence* of the center
-          manifold is the standard center-manifold theorem; it is invoked, not
-          formalized here. Do not cite as machine-checked until `lake build` passes.
+  STATUS: kernel-checked 2026-09-12 (v4.32.0 pin); the five declarations below report
+          [propext, Classical.choice, Quot.sound] in
+          tools/verify-audit/2026-09-12/geometry__CardiacHopfReduction.axioms.txt.
+          (An earlier version of this header said "not yet run"; that was stale.
+          Comment-only edit 2026-10-25, no change to any declaration; not re-run since.)
+          The *existence* of the center manifold is the standard center-manifold
+          theorem; it is invoked, not formalized here. `supercritical` is only
+          -(1/L) < 0 and says nothing about a vector field; `radial_deriv_at_cycle`
+          is the substantive statement, and it is about the reduced 1-D field: for the
+          full (r,u) field the radial exponents solve s^2 + L s + 2 L mu = 0
+          (see ch6b-cardiac.html, "Exact check").
 
   Model (μ, ω the Hopf data; L = λ > 0 the stable-mode decay rate — λ is Lean's
   lambda, so it is written L here):
