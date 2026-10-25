@@ -11703,3 +11703,107 @@ Not edited. Not committed or pushed.
 **Repo checks.** `tools/build_indexes.py` re-run (page listed under Orthogenesis, orphaned: no inbound link yet). `tools/terms.py --check` still fails on the pre-existing baseline mismatch; none of its lines names this page. No book assigned. Open: a hub or book link for the page; prior-art search for stacking on legs; BVAD oxygen figure.
 
 **2026-10-23, later (same page).** Added the "Batata-doce in the walls" garden-ring section (design choice; shielding benefit labelled not yet calculated; NASA Water Walls cited as prior art) and a note on the 1984 STS-41C honeybee experiment (Smithsonian for the bee count; UPI 9 Apr 1984 for the astronauts' report of comb, secondary). Four verify rows added. Inline scripts parse.
+
+### 2026-10-21: TO hub (book4/hub.html), claims relabelled and the coupling term corrected
+Prompted by a read of grossi-ops.github.io/TO against the repo copy `book4/hub.html`. Four edits, text only, no Lean touched, no page script re-run on the hub text:
+- **Figure 1 caption (anyons).** Was: braid non-commutativity "is the geometric origin of the GTCT operator non-commutativity. This is not a modelling choice. It is the topology." Now: an analogy, not a derivation, with no derivation on the page. Reason: nothing on the page derives K∘F ≠ F∘K from σ₁σ₂ ≠ σ₂σ₁, and WP54 Theorem 1 (book6/wp54-quantum-weave.html, read at its opening only) shows a topological gate commutes with a topology-preserving fold, so the analogy can hold only if F is not topology-preserving.
+- **Coupling term.** The printed dm³ equations (line 576) and the λ(z) line (line 663) had e⁻ʳ; both now have e⁻ᶻ, which is what this log and `tools/to_hub_verify.py` already settle (run today, all blocks hold: with e⁻ᶻ the page's own λ(z) and μ_max = −2 are exact; with e⁻ʳ neither is). μ_max = −2 is now stated as the z → ∞ limit, matching the open row in this log.
+- **Coherence Bridge header.** "These are not analogies. They are exact mathematical identities." replaced by a sentence that ties "identity" to rows marked proved and calls argued or building rows a shared functional form, not a shared invariant. The table rows themselves are unchanged.
+- **Already on the page and left as is:** the 2026-10-09 correction that `gtct_t1` in `AXLE_v6.lean` takes its conclusion as the hypothesis `h_dissipative`.
+Not changed, and still saying the older things: the phrase "exact mathematical identities" also appears in `ch20-coherence-bridge.html`, `minibeast-pilot.html`, `vol2-dashboard.html` and `book17/ch01-the-names-it-already-has.html`; `hub.html` at the repo root and any translated copies of the edited sentences were not checked; the live site shows the old text until this is committed and pushed (not done); the hub's sentence that Theorem 5.4 "proves that 16+ domains ... are objects in the same category dm³" was not re-examined.
+
+### 2026-10-21: "exact mathematical identities" in two more pages, and a status that did not hold
+Same relabelling as the hub entry above, text only, in `minibeast-pilot.html` ("They are not analogies. They are exact mathematical identities." → identity where a morphism is exhibited, otherwise a shared functional form, not a shared invariant) and `vol2-dashboard.html` (same sentence, same change).
+- **Left alone on purpose:** `ch20-coherence-bridge.html` already carries the hedge ("if the morphisms are exhibited"); `book17/ch01-the-names-it-already-has.html` quotes the phrase to record the correction; `vol2-v5/deposit/dashboard.html` is inside a deposit folder and still has the old sentence, so changing it would put it out of step with the deposited record. Decide separately whether the deposit gets a new version.
+- **Status check:** Book 17 ch01 §4(i) is marked CLOSED 2026-09-19 for correcting pages that carry the phrase unhedged. A grep today found it unhedged in `book4/hub.html`, `minibeast-pilot.html` and `vol2-dashboard.html`, so that item was not true of the files as they stood on 2026-10-21. Cause not investigated (an edit lost, a page rebuilt from an older source, or the first pass missing these). Book 17 ch01 itself was not edited here and still says CLOSED.
+- **Not re-examined:** the neighbouring claims in both pages that the systems are "related by explicit contact morphisms"; the two pages that Book 17 names but that were not in today's grep (`ch-e-gtct.html`, `ch24-seed-sentences.html`); any translated copies.
+Not committed or pushed.
+
+### 2026-10-21: staleness sweep now tracks "exact mathematical identities"
+Added entry `bridge-exact-identities-2026-10-21` to `tools/withdrawn_claims.json` (source `book4/hub.html`, keyword "exact mathematical identities"), so `tools/staleness_sweep.py` lists every tracked page that still carries the phrase. Reason: the 2026-09-19 correction (Book 17 ch01 §4(i), marked CLOSED) is not in git history for `book4/hub.html`, `minibeast-pilot.html` or `vol2-dashboard.html`, and nothing re-checked the files afterward.
+Limits of the check, from the script's own design: it only reads tracked files; a hit counts as "acknowledged" if the same file contains the word withdrawn, retracted, corrected, superseded or deprecated anywhere, so a page can pass while still asserting the claim; and pages that quote the phrase to explain the history (this log, Book 17 ch01, Ch 20) are listed too. It narrows the corpus to a short list for a person to read. It does not prove a page is clean. Not committed or pushed.
+
+### 2026-10-21: five more pages relabelled, sweep keyword widened, closing rule written
+The first sweep entry matched only the plural "exact mathematical identities" and listed one file. The keyword is now the stem "exact mathematical identit"; with it the sweep found five pages asserting the claim unhedged (`ch00-introduction.html`, `ch02-biological.html`, `ch06-pedagogy.html`, `journey.html`, `minibeast-pilot.html`) plus `book4/chIV-preface-impa.html`, which the sweep cannot see on `main` because it is untracked there.
+Edits, text only: each "This is not analogy. It is exact mathematical identity." became "Where a contact morphism between two systems is exhibited, the relation is an identity; where none is, the systems share a functional form, not a shared invariant." (or the same sentence for domains). `ch02-biological.html` hero line now reads "One shared functional form." `journey.html`'s topic title no longer quotes the phrase. `minibeast-pilot.html`'s chapter-5 heading is now "Identity Where a Morphism Is Exhibited". `ch00-introduction.html`'s discussion prompt now says an earlier version of the introduction made the claim, and that it has since been corrected.
+Sweep after the edits: the `bridge-exact-identities-2026-10-21` entry lists three files, all acknowledging (`ch00-introduction`, `ch20-coherence-bridge`, `ch24-seed-sentences`), none stale. The sweep still exits 1, because the Schumann entry has 26 unacknowledged hits in this clone; I did not look at them (the keyword "schumann" may match legitimate uses).
+Not changed: the neighbouring claims "not analogies ... different orbits of the same dm³ system" in `ch06-pedagogy.html` and `minibeast-pilot.html`, `ch-e-gtct.html` / `chE-gtct.html`'s "mathematically identical up to ...", `vol2-v5/deposit/dashboard.html` (deposit), `_archive/`, `book21` and `book17` (history pages that quote it). The first-line backup of every file edited today is in Downloads/geometry-backup-2026-10-21.
+New rule: `tools/CONVENTIONS.md` §7, a withdrawal is CLOSED only when the sweep shows no stale row for its id, with the commit hash that made it so.
+Repository state, from read-only commands: remote default branch is `main` at ded204ca, which this clone does not have; local `main` is fd5675ae; the remote has no `book15-push`. Not committed or pushed.
+
+## 2026-10-22 — Remaining-books claim audit (19 books)
+
+Scope: Books 1, 4, 5, 6, 7, 10–15, 17–22, 26, 28. Checked for: uncorrected Coherence Bridge "exact identity" language, verification status claims that don't match reality, references to cut material, hedging adequacy.
+
+### Category A — Uncorrected Bridge language (correction boxes added)
+
+1. **book4/chE-gtct-alt.html** (line 249): "This is not an analogy: it is the same 12-fold structure appearing in the circadian clock..." → correction box added noting 12-fold coincidence is a shared number, not a shared contact normal form; no contact morphism exhibited.
+
+2. **book4/ch11-catgt.html** (line 557): §6 "Coherence Bridge: Seven Domains" — entire section is pre-V5 → correction box added after heading noting Bridge withdrawn, 0/55 similarity test, √(J/λ) is generic crossover scale.
+
+3. **book4/chTau-tartaruga.html** (line 231): Turtle shell Bridge row tagged CONJECTURE/BRIDGE → inline italic correction note added: Bridge withdrawn, 0/55, functional form only.
+
+4. **book7/Polylaminin.html** (line 272): §4 "The coherence bridge" describes Bridge mapping for SCI → correction box added noting rows share functional form (damped oscillator near limit cycle), not proved identities.
+
+5. **book4/gomc-opus.html** (18+ Bridge references throughout): Full GOMC Opus / Coherence Bridge hub page, pre-V5 → prominent correction box added after abstract, applying to entire page. Notes Bridge withdrawn, 0/55, identity rule, and that "derived"/"proved" status means within-domain derivation, not cross-domain contact morphism.
+
+Already corrected (Sept 2026 audit): book4/hub.html, book4/chIV-preface-impa.html.
+
+### Category B — Should review (author decisions needed)
+
+- book7/ch-escher.html line 332: "Escher = instance of holographic principle" — strong claim, needs author review
+- book7/ch-chomsky.html line 95: Curry-Howard conflation — needs author review  
+- book7/ch-nachbin.html line 659: scope of claim unclear
+- book4/ch22-gauss-map.html line 444: fold = catastrophe fold — needs math check
+
+### Category C — Already properly hedged
+
+Most pages in books 10–15, 17–22, 26, 28 use appropriate hedging ("conjecture," "open problem," "functional form"). The majority of ~1200 conjecture/sorry hits across the corpus are legitimate uses of the word in context.
+
+### Category D — GTCT/GOMC naming
+
+Book 5 retains "GTCT" in its title — this is the book's legitimate name, not reintroduced framing. Other GOMC references are in the gomc-opus.html page (now corrected with top-level box).
+
+## chE-gtct.html (Book 3, Extended Chapter E) - read and corrected, 2026-10-24
+
+Read in full; reconciled against Book 4 Ch 5 and Ch 10 and the GTCT repo's dm3CriticalityPrinciple_extended.lean.
+Companion: `chE-audit-verify.py` (math A1-A6 plus page regression guards B, stdlib only, exits 0) and `ChEAudit.lean` (UNTESTED, no local toolchain).
+
+What changed on the page (kept, relabelled, not deleted): Theorem 5 is now Conjecture 5 with an audit note (as printed, (i) and (iii) contradict Theorem 3; Book 4 Ch 10 gives one transverse eigenvalue -2 = -tau plus a neutral along-orbit direction, outer basin only); Lean block no longer headed "Closed/Lean-verified" (hand-proved, not kernel-checked here); Axiom 6, Axiom 8, the twelve-fold section, Theorem 1, Time III and IV, and the tau-Omega gap are labelled as proposals/interpretations; two graphs added (n-bonacci roots toward 2; contraction vs boost vs eigenvalue 2); hero count and the sorry/axiom counts attributed to the files they describe (extended file: 9 sorry lines; AXLE registry: 0).
+
+Open: nBonacciRingSize is an axiom whose docstring says "7th term of the rank-n recurrence", but 13 (n=3) and 56 (n=4) are not both 7th terms under any convention tried and a 7th term stops changing for large n, so strict monotonicity cannot hold; critDim_monotone and no_return_to_critical are valid but conditional. Needs the original definition: the GTCT docstring credits Navratil, but the author states the definition predates that document (2000s, other author, source not yet located), so the attribution in dm3CriticalityPrinciple_extended.lean should be corrected once the source is found. Whitney labels A1-A3 follow the map-germ convention (same as Book 4 Ch 10); an earlier draft of this audit called them off by one and was wrong. Duplicates of this chapter (book4/chE-gtct.html, book4/chE-gtct-alt.html, ch-e-gtct.html) were not touched. `tools/terms.py --check` fails on HEAD with or without these edits (other files).
+
+### chE-gtct.html follow-up, 2026-10-25: credits, k-bonacci sources, ring-size candidate
+
+Credits added on the page: tribonacci sequence credited to Agronomof (Mathesis 1914); sources block with Feinberg 1963 (name), Miles 1960 (k-generalized), Bicknell-Hoggatt 1973 (early "k-bonacci"), Dunkel 1925 (partial sums), Parks-Wills 2022 (combinatorial proof, arXiv:2208.01224, read in full for this audit), Tuenter 2023 (history; read from abstract and notes only). Priority statements follow those papers and are not checked against the originals. Also noted in Parks-Wills references: Lee-Lee-Kim-Shin 2001 and Kessler-Schiff 2004 (Fibonacci Quarterly) on k-generalized Fibonacci numbers, possible 2000s sources the author may have meant; not read.
+
+Math: with Parks-Wills Cor. 3.2, the term at index 2k-1 of the rank-k sequence has closed form 2^(k-3)(2^(k+1)-k) for k >= 3 (13 at k=3, 56 at k=4), strictly increasing. HYPOTHESIS for the ring size only: gives 3 at k=2, contradicting "Dcrit(2)=26". chE-audit-verify.py A5b checks Cor. 3.2 (k<=8, n<=30) and the closed form (k<=40). ChEKbonacci.lean (UNTESTED, Mathlib) states the finite facts and a general strict-monotonicity proof of the closed form; ChEAudit.lean unchanged. No Lean toolchain reachable from the cloud (elan toolchain download blocked) or the device.
+
+## chT-tubulin.html (Book 3, Chapter T, "Tubulin as Computronium") - read and relabelled, 2026-10-25
+
+First of the biology chapters (others queued: chA-autophagy, ch6b-cardiac, ch02-biological, ch19-enzyme-noncommutativity). Read in full. Companion: `chT-audit-verify.py` (arithmetic plus page regression guards, stdlib only, exits 0). Relabelled, not deleted.
+
+Findings (page edited to say so):
+- Table T.2 values (mu_max 3.42 /nm, kappa* 2.81 /nm, omega 0.077 /s, beta 0.382) were presented as "computed", "over-determined", "not a fit, a prediction". No computation is shown. The stated derivation of mu_max (12 deg over ~8 nm heterodimer) gives ~0.026 /nm; the tabulated curvatures imply radii of curvature of 0.29 and 0.36 nm; the microtubule wall (r = 12.5 nm) is 0.08 /nm. Heterodimer repeat and 3-start pitch are standard figures from memory, not checked against the cited cryo-EM papers.
+- beta = 0.382 is phi^-2, not phi^-1 (0.618) as the page said.
+- P1 (seam offset 0.92 nm) = 12 nm / 13: appears to be standard lattice geometry, so not a prediction made in advance. P2 mixes curvature with GTP-cap thickness; the Gardner 2011 / Duellberg 2016 "knee" claims were not checked. P3 (exactly 15 architectures) is a count of listed structures, not a derived bound.
+- Lean sketch (T.7) is not a verified mechanisation: `AXLE/Tubulin/ContactNormalForm.lean` was not found in the local AXLE; the only tubulin file there (`CatGT/tubulinselectArchitecture.lean`, 117 lines) is a scoring-function sketch with no theorem and an elided `{ ... }`. With constant beta and mu the form dz - beta dtheta + mu drho is closed, so alpha ^ d alpha = 0: not a contact form. Mathlib imports/claims (ContactStructure, Poincare-Bendixson "fully discharged") unverified (Mathlib not searchable here).
+- Theorem T.1 relabelled Proposition T.1 (unproved). Unsourced: yeast/human tubulin "interchangeable"; Ulam 1964 attribution not checked; "500 million years" softened to "over 500 million years" (eukaryotic tubulin is much older; needs a source).
+- Sales section: "seven million dollars ... working drafts on all seven" corrected (six Clay problems at US$1 million each; Collatz has none; chapters explore, none is a proof).
+- Duplicates: `chT-tubulin.html`, `ch-t-tubulin.html`, `ch-t-tubulina.html` were byte-identical (md5 5351b2a2...); only chT-tubulin.html was edited, so the other two now differ. `ch-t-tubulina.html` is English content under a Portuguese filename. Decision on merge/sync is the author's.
+
+Schlegel 1894 (second-hand): an AI-generated summary supplied by the author gives the title as "Series de Lamb superieures", El Progreso Matematico, Ano 4, pp. 171-174. Not verified: the cited page (spirasolaris.ca) redirect-loops from here, a search found nothing, and Kessler-Schiff give pp. 173-174. "Lamb" may be a garble of "Lame" (a guess, not checked). The chE Sources entry stays as cited by Kessler-Schiff.
+
+### Schlegel 1894 and history credits, 2026-10-25 (follow-up)
+
+Source supplied by the author (open in the built-in browser): Archibald's Note V in Hambidge, Dynamic Symmetry (Yale UP, 1920) as reproduced on spirasolaris.ca. It prints "V. Schlegel, 'Series de Lamb superieurs,' El progreso matematico, 1894, ano 4, pp. 171-174" (probably "Lame"; a guess), records "Lame series" and "Braun/Schimper-Braun series" as older names for the Fibonacci series, and cites Schlegel, "Verallgemeinerung eines geometrischen Paradoxons", Z. Math. Phys. 24 (1879) 123-128. Page range conflicts with Kessler-Schiff (173-174); both shown on chE-gtct.html. The Schlegel paper itself still not located.
+Credit lines added: chEta-tribonacci.html (history note before section 1 body), ch7-crystalline.html section 7.3 (parenthetical), chE-gtct.html Sources (Schlegel entry corrected; Archibald added). ch7-crystalline-verify.py still ALL PASS. Priority statements follow the papers as read and are unchecked against originals.
+
+### chA-autophagy, 2026-10-25 (built on the upstream rebuild, not replacing it)
+
+The geometry clone still held the pre-2026-08-28 page (nine non-existent Lean names). Took the upstream-rebuilt page from the current GitHub clone as the base, then kept its content and relabelled the remaining unsupported lines as proposals, each with what would build it: "This chapter proves it" -> "sets out that reading"; mu = -2 attractor -> proposed reading, fit the mTOR/AMPK ODE to time-courses; Legendrian membrane -> conjecture (no alpha_cell defined); mu = -2 as Lyapunov exponent / ageing as drift -> hypothesis with a test; T* = 2pi/omega0 -> analogy; "41 ATG genes" -> "more than 40"; "every ageing model tested" -> yeast, worms, flies, mice; caloric restriction "among the most". Biology history left as is. AutophagyDm3_v2.lean (24 theorems, 0 sorry per its own header) not re-run: UNTESTED here. Script: chA-audit-verify.py.
+
+
+### Merge of the two Book 3 lines, 2026-10-25
+
+The geometry working folder had diverged from GitHub main on 2026-08-13 (24 local commits vs 1,071 upstream). Merged with upstream as the base. Rule used: where both lines edited the same passage and upstream's wording was the later, more careful one (Book 5 sorry recount, ch05 prolonged-point-group correction, Wigner chapter round, ch06-pedagogy "conjectured / shared functional form"), upstream kept; r* = 0.77594058 kept (the 0.77594059 in the older copy of chGravity-scales is a rounding slip; the value is 0.7759405755...). Where only the local line had the work (chE reconciliation with Book 4 and Conjecture 5, chT-tubulin relabel, chA relabel, credits in chEta/ch7, ChEAudit.lean, ChEKbonacci.lean, three verify scripts), kept. book5 nav/index: union of entries. Root chIV-recursion.html stays deleted (upstream dedupe). Generated index pages (index-*, master-index) taken from upstream and need regenerating. All Lean files here remain UNTESTED by the author's kernel.

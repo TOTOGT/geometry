@@ -121,6 +121,16 @@ const CHAPTERS = [
   { href:"chV-seed.html",      label:"The Seed" },
   { href:"chV-erdos-machine.html", label:"Erdős" },
   { href:"chV-cosmic-law.html", label:"Cosmic Law" },
+  { href:"chV-kaluza.html", label:"Kaluza" },
+  { href:"chV-klein.html", label:"Klein" },
+  { href:"chV-reduction.html", label:"Reduction" },
+  { href:"chV-einstein-bergmann.html", label:"Einstein" },
+  { href:"chV-hopf.html", label:"Hopf" },
+  { href:"chV-eleven.html", label:"Eleven" },
+  { href:"chV-37.html", label:"37" },
+  { href:"chV-contact-kk.html", label:"Contact" },
+  { href:"chV-ladder.html", label:"Ladder" },
+  { href:"chV-ledger.html", label:"Ledger" },
   { href:"GTCT_V_Student_Edition.html", label:"Student Ed." },
 ];
 
