@@ -11868,3 +11868,6 @@ CLAUDE.md cadence: each changed chapter carries a "Book 3 v2 (web, dated …)" b
 
 ## 2026-10-25 — Cajueiro Workshops linked from Book 3
 `ch01-cajueiro.html` (The Cajueiro Principle) and the Cajueiro section of `vol3-minibeast.html` had no link to the workshop page `https://grossi-ops.github.io/cajueiro/`. Added a short note to both; ch01-cajueiro also gains the Book 3 v2 box. The book gives no dates, venue or sponsor status, because the workshop page's own statements disagree with the author's: it says the Uceda School venue is confirmed and NYFA fiscal sponsorship is "pending", while the author reports the series is NYFA-sponsored and starting next week, and (earlier) that Uceda closed in June 2026. The page needs correcting by the author before the book can state any of those.
+
+### Correction to the entry above (2026-10-25, same day)
+The Cajueiro Workshops link went first into `ch01-cajueiro.html`, which is Week 1 of a different course (English for Researchers, C1→D2). The author named `ch1.html` (Book 3 Chapter 1, Week 1–2, CEFR A2, "The Cajueiro Principle") as the real Chapter 1 / Week 1 of the workshops, and the workshop page already links to it. Reverted `ch01-cajueiro.html` to its prior text; put the note and the v2-box line in `ch1.html` (which already linked the walk page); the Book 3 volume page now says Chapter 1 is Week 1.
