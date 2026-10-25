@@ -187,6 +187,7 @@ guard("Time III/IV: spiral and irreversibility claims scoped", ["You cannot undo
 guard("axiom 9 sorry count attributed to the extended file", ["AXLE v6.1 carries 9 named sorrys"], ["dm3CriticalityPrinciple_extended.lean, GTCT repo) carries 9 named sorrys"])
 guard("ring-size definition flagged", [], ["definition behind these axioms needs to be pinned down"])
 guard("credit and sources block present (Agronomof 1914, Miles 1960, Dunkel 1925, Parks-Wills, Tuenter)", [], ["Agronomof (1914)", "Miles Jr.", "Dunkel", "Parks and D. C. Wills", "Tuenter"])
+guard("Schlegel (1894) and Ferguson (1966) listed as second-hand citations", [], ["Schlegel", "cited by Kessler–Schiff", "Ferguson", "as cited by Kessler–Schiff"])
 guard("ring-size candidate stated as hypothesis only", [], ["It is a hypothesis only: it gives 3, not 13, at k = 2"])
 print("    NOTE  Whitney labels (fold A1, cusp A2, swallowtail A3) follow the map-germ convention;")
 print("          Book 4 Ch 10 uses the same (r* is the 'Whitney A1 fold'). An earlier draft of this")
