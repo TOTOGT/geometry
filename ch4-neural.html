@@ -481,7 +481,7 @@
 
 <p>Close your eyes. You are thinking about nothing in particular. Somewhere in your visual cortex, 10 billion synapses are firing. In your hippocampus, theta waves at 6 Hz are sweeping through CA1. In your prefrontal cortex, a slower rhythm is organizing what will count as a thought and what will be discarded.</p>
 
-<p>None of this is conscious. And yet, the moment you decide to read the next sentence, something changes. A 40 Hz gamma oscillation couples to the theta wave in your hippocampus. Spatially distant populations — visual cortex, Broca's area, prefrontal cortex — suddenly fire in phase. The binding problem, which neuroscientists argued about for 30 years, solves itself in 25 milliseconds. You read a sentence.</p>
+<p>None of this is conscious. And yet, the moment you decide to read the next sentence, something changes. A 40 Hz gamma oscillation couples to the theta wave in your hippocampus. Spatially distant populations — visual cortex, Broca's area, prefrontal cortex — suddenly become phase-locked (coherent; not necessarily in phase, see the Lean status note). On this model's reading, the binding problem, which neuroscientists have argued about for decades, is settled within one 25 ms gamma cycle; that is the model's proposal, not an established result. You read a sentence.</p>
 
 <p>That synchronization event is <span class="op-tag op-k">K</span>. It is the threshold — the moment when compression becomes structure, when isolated firing becomes coherent information. The operator K does not create the oscillation. It selects which oscillations are permitted to bind.</p>
 
@@ -496,7 +496,7 @@
 dz/dt = (λ + iω)z − |z|²z
 <br><br>
 λ &lt; λ*  →  damped: oscillation decays (C alone)
-λ = λ*  →  bifurcation: K fires, limit cycle born
+λ = λ* (= 0)  →  bifurcation: K fires; no cycle yet, a cycle of radius √λ grows from zero just past λ*
 λ &gt; λ*  →  sustained: stable gamma oscillation (F begins)
 </div>
 
@@ -506,7 +506,7 @@ dz/dt = (λ + iω)z − |z|²z
 
 <p>In the hippocampus, memory encoding uses a two-frequency architecture. The theta wave (6 Hz) sets the temporal frame — one theta cycle is roughly one working memory slot. Inside each theta cycle, 4–7 gamma bursts appear, each carrying a different item. The gamma is nested inside the theta like pages inside a chapter.</p>
 
-<p>This nesting is not accidental. Theta provides the K threshold that gates which gamma bursts are permitted to carry information to long-term storage. A gamma burst that occurs at the wrong phase of theta — when K is not open — does not consolidate. It is compressed away. Only gamma that fires at the theta peak crosses the K threshold into the fold (F), into memory.</p>
+<p>This nesting is not accidental. Theta provides the K threshold that gates which gamma bursts are permitted to carry information to long-term storage. A gamma burst that occurs at the wrong phase of theta — when K is not open — does not consolidate. It is compressed away. On one proposed picture, only gamma that fires at the theta peak crosses the K threshold into the fold (F), into memory.</p>
 
 <p>Sleep-dependent consolidation, which you learned about in Chapter 3, is the downstream consequence: the language you studied at 10pm is not stored if your theta-gamma coupling during slow-wave sleep is disrupted.</p>
 
@@ -514,12 +514,12 @@ dz/dt = (λ + iω)z − |z|²z
 
 <p>Francis Crick and Christof Koch proposed in 1990 that 40 Hz gamma oscillations solve the binding problem: the question of how the brain unifies the red of an apple, the round of its shape, and the word "apple" into one percept. Their proposal was K before the language existed. They were describing a threshold frequency at which spatially distributed representations became coherent enough to act as one object in cognition.</p>
 
-<p>Subsequent work complicated the picture — gamma alone does not solve binding, and the threshold varies by task and region. But the core operator was correct: there is a frequency threshold K* at which integration becomes possible. Below K*, you have compression. Above K*, you have thought.</p>
+<p>Subsequent work complicated the picture — gamma alone does not solve binding, and the threshold varies by task and region. But the core operator was correct: there is a threshold K* at which integration becomes possible. In Proposition 4.1 below K* is a threshold on <em>coherence</em> C, not on frequency; the 40 Hz is an input to the model (the Hopf phase turns at ω for every λ), not something the bifurcation selects. Below K*, you have compression. Above K*, you have thought (a proposed reading).</p>
 
 <div class="theorem-box">
-  <div class="theorem-label">Theorem 4.1 — The Neural Synchrony Threshold</div>
+  <div class="theorem-label">Proposition 4.1 (conjectural) — The Neural Synchrony Threshold</div>
   <div class="theorem-body">Let P₁, P₂ be two neural populations with firing rates r₁(t), r₂(t). Define their coherence C(P₁,P₂) = |⟨e^{i(φ₁−φ₂)}⟩|. Then information transfer between populations is bounded by C(P₁,P₂). There exists a critical coherence K* such that for C &lt; K*, information transfer is below the resolution threshold of downstream populations (effective compression only). For C ≥ K*, the fold operator F becomes accessible: the populations can act as a unified information source.</div>
-  <div class="theorem-proof"><strong>Proof sketch:</strong> Phase coherence bounds mutual information between populations via the data processing inequality. At C = K* the Shannon capacity of the inter-population channel crosses the minimum necessary for stable attractor formation in the downstream network. This is the K threshold. □</div>
+  <div class="theorem-proof"><strong>Proof sketch (does not establish the bound; see the Lean status note, item 3):</strong> Phase coherence bounds mutual information between populations via the data processing inequality. At C = K* the Shannon capacity of the inter-population channel crosses the minimum necessary for stable attractor formation in the downstream network. This is the K threshold. □</div>
 </div>
 <div class="lean-status" style="margin:1rem 0;padding:.8rem 1rem;border-left:3px solid #6a8f5a;background:rgba(106,143,90,.12);font-size:.93em;line-height:1.65;color:inherit"><strong>Lean status (Book 3 v2, 2026-09-25) — the Hopf equation and the coherence C, checked.</strong> <a href="https://github.com/TOTOGT/geometry/blob/main/Orthogenesis/Neural/NeuralOscillations.lean" style="color:inherit;text-decoration:underline">NeuralOscillations.lean</a> (12 theorems, kernel-checked, no sorry). <em>Confirmed:</em> for dz/dt = (λ + iω)z − |z|²z, Re(z̄ ż) = λ|z|² − |z|⁴, so the amplitude obeys ṙ = λr − r³; for λ ≤ 0 every oscillation decays, and for λ &gt; 0 the circle r = √λ is a cycle that attracts from inside and outside. <em>To restate:</em> (1) The critical value is λ* = 0, and at λ* itself there is no cycle of positive radius — the cycle appears just past λ*, with amplitude √λ growing from zero. (2) The phase turns at θ̇ = ω for every λ: the bifurcation does not select a frequency, so the 40 Hz of the binding threshold is an input to this model, not an output of it. (3) The coherence C = |⟨e<sup>i(φ₁−φ₂)</sup>⟩| of Theorem 4.1 lies in [0, 1] and equals 1 for any constant phase difference — populations locked exactly out of phase (δ = π) are fully coherent — so C measures phase-locking, not firing in phase; two samples at differences 0 and π give C = 0. The information bound in Theorem 4.1 is not formalised: the data-processing inequality alone does not give a bound in terms of C. The arithmetic in the text checks: 40 Hz for 45 minutes is 108,000 cycles, and one 40 Hz cycle is 25 ms.</div>
 
@@ -534,7 +534,7 @@ dz/dt = (λ + iω)z − |z|²z
 
 <div class="falsify-box">
   <div class="falsify-label">Falsifiability Condition</div>
-  <p>If a patient with complete disruption of gamma oscillations (e.g., through targeted optogenetic silencing of parvalbumin interneurons) retains the ability to bind spatially distributed representations into coherent percepts — without any compensatory mechanism — then Theorem 4.1 is false and K is not the binding operator in neural tissue.</p>
+  <p>If a patient with complete disruption of gamma oscillations (e.g., through targeted optogenetic silencing of parvalbumin interneurons) retains the ability to bind spatially distributed representations into coherent percepts — without any compensatory mechanism — then Proposition 4.1 is false and K is not the binding operator in neural tissue.</p>
   <p style="margin-top:0.8rem;font-size:0.88rem;color:var(--text-dim)">Current evidence: parvalbumin interneuron ablation in mice disrupts object recognition and working memory capacity, consistent with K as the binding threshold. The model survives, but is not proven.</p>
 </div>
 
