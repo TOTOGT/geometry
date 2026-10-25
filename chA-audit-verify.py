@@ -23,4 +23,9 @@ for g in ['This chapter sets out that reading','more than 40 ATG genes','propose
     ck('C present: '+g,g in txt)
 for g in ['This chapter proves it','now 41 ATG','In every ageing model tested','is the most reproducible','autophagy_fold_fires']:
     ck('C absent: '+g,g not in txt)
+# D: what-holds block regression + numbers it quotes
+for g in ['What holds, and what it does not establish','Taking V literally gives −3, not −2','The exponent is not derived from V','removed</em>, not proved']:
+    ck('D present: '+g, g in txt or g in t)
+ck('D -V\'\'(1)/2 = -3 for V=q^3-3q', -(6*1)/2==-3)
+ck('D 2/(2*(1+1)) = 1/2 (docstring bound 1)', abs(2/(2*(1+1))-1/2)<1e-12)
 sys.exit(1 if bad else 0)
