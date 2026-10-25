@@ -120,6 +120,29 @@ print("          are valid but conditional on axioms the docstring definition do
 print("          Not ruled out: another convention. Needs the original definition (the GTCT docstring")
 print("          credits Navratil; the author says the definition predates that document, source not yet located).")
 
+print("[A5b] Candidate ring size N(k) = f^(k)_(2k-1), Parks-Wills convention (f_0 = 1, f_n = 0 for n < 0)")
+from math import comb
+def fpw(k, N):
+    a = [1]
+    for n in range(1, N+1): a.append(sum(a[n-i] for i in range(1, k+1) if n-i >= 0))
+    return a
+def cor32(k, n):   # Parks-Wills Corollary 3.2, exact rational arithmetic
+    from fractions import Fraction as Fr
+    t = Fr(0)
+    for j in range(0, n//(k+1)+1):
+        d = 1 if (n == 0 and j == 0) else 0
+        num, den = (n-j*k)+j+(1 if n == 0 else 0), 2*(n-j*k)+(1 if n == 0 else 0)
+        t += (-1)**j * Fr(num, den) * comb(n-j*k, j) * Fr(2)**(n-j*(k+1))
+    return t
+check("Corollary 3.2 reproduces the recurrence for k=1..8, n=0..30",
+      all(cor32(k, n) == fpw(k, 30)[n] for k in range(1, 9) for n in range(0, 31)))
+Nk = {k: fpw(k, 2*k)[2*k-1] for k in range(2, 41)}
+check("N(3) = 13 and N(4) = 56", Nk[3] == 13 and Nk[4] == 56)
+check("closed form N(k) = 2^(k-3) (2^(k+1) - k) for k = 3..40", all(Nk[k] == 2**(k-3)*(2**(k+1)-k) for k in range(3, 41)))
+check("N strictly increasing for k = 2..40, so critDim(k) -> infinity", all(Nk[k] < Nk[k+1] for k in range(2, 40)))
+check("N(2) = 3, NOT 13: the docstring's 'Dcrit(2) = 26 (accidental)' would not hold", Nk[2] == 3)
+print("    READ  HYPOTHESIS ONLY. Two data points fit by an index rule; the original definition is still unsourced.")
+
 print("[A6] Book 4 Ch 10 numbers, recomputed from the ODE (eps = 2)")
 E = 2.0
 def jac(r, z):
@@ -163,6 +186,8 @@ guard("Theorem 1 labelled a proposal", ["by mathematical necessity", "They are d
 guard("Time III/IV: spiral and irreversibility claims scoped", ["You cannot undo G because G is a contraction", "generating logarithmic spirals"], ["has an inverse", "a picture, not a derived Reeb flow"])
 guard("axiom 9 sorry count attributed to the extended file", ["AXLE v6.1 carries 9 named sorrys"], ["dm3CriticalityPrinciple_extended.lean, GTCT repo) carries 9 named sorrys"])
 guard("ring-size definition flagged", [], ["definition behind these axioms needs to be pinned down"])
+guard("credit and sources block present (Agronomof 1914, Miles 1960, Dunkel 1925, Parks-Wills, Tuenter)", [], ["Agronomof (1914)", "Miles Jr.", "Dunkel", "Parks and D. C. Wills", "Tuenter"])
+guard("ring-size candidate stated as hypothesis only", [], ["It is a hypothesis only: it gives 3, not 13, at k = 2"])
 print("    NOTE  Whitney labels (fold A1, cusp A2, swallowtail A3) follow the map-germ convention;")
 print("          Book 4 Ch 10 uses the same (r* is the 'Whitney A1 fold'). An earlier draft of this")
 print("          audit called them off by one under Arnold's Lagrangian convention; retracted.")
