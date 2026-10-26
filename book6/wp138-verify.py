@@ -53,7 +53,7 @@ low=re.sub(r'<[^>]+>',' ',html).lower()
 for lab in ['concept, not a nomination','memo was not read','schematic, not a map','not peer-reviewed','assumes about 1.3 million','not checked']:
     check(lab in low,'label present: '+lab)
 check(not re.search(r'>\s*90\s*%\s*crew dose|lonsdaleite',low),'cut lunar claims (>90% crew dose, lonsdaleite) not reintroduced')
-check('wp136-living-in-a-moon-habitat.html' in html,'links to WP136')
+check('wp136-living-in-a-moon-habitat.html' in html and 'Orthogenesis/Architecture/hex-habitat.html' in html and (Path(__file__).resolve().parent.parent/'Orthogenesis/Architecture/hex-habitat.html').exists(),'links to WP136 and to Hex Habitat Mars (file exists)')
 check(not any(b in html for b in ('fetch(','localStorage','XMLHttpRequest')),'no network or storage calls')
 print('\n[HONESTY] Arithmetic and labels only. It does not show where the base would go, that any county has capacity, or that the competition would accept this.')
 print('\nALL PASS' if not fails else '\nFAILED: %d'%len(fails)); sys.exit(1 if fails else 0)
