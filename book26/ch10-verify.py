@@ -50,7 +50,7 @@ SECS = ["mission", "economic", "criminal", "democracy", "environmental", "archit
 FIGS = ["$662,500", "$20,000", "42.6% vs 76.7%", "$132,000 vs $0", "40 : 1", "59% vs 13-16%", "80,000+", "350,000+",
         "18 + DC", "60+", "$6.1 million", "90%", "$640,000", "2 July 2026", "13 May 2026", "20 megawatts", "7 July 2026", "27 August 2026", "S-731/A-796", "S3379", "November 2025"]
 # Claims that failed checking and were removed or corrected; none may reappear.
-BANNED = ["Use Newark as the proof case", "compliance indicators in consent-decree", "Academic Coordinator", "150 Years is Enough", "Fund for New Jersey", "Feb 2026", "a boys' facility",
+BANNED = ["Use Newark as the proof case", "compliance indicators in consent-decree", "Academic Coordinator, 2022", "Since 2021 I have run adult language schools", "150 Years is Enough", "Fund for New Jersey", "Feb 2026", "a boys' facility",
           "Vote 16 expansion", "June 2026 I was"]
 URLS = ["nj.gov/governor/news/2026/20260702a", "nj.gov/governor/news/2026/20260527a", "ncsl.org/elections-and-campaigns/voter-registration-deadlines",
         "sentencingproject.org/fact-sheet/black-disparities", "data.census.gov/table/ACSDT1Y2024.B25003B", "njisj.org/economic-justice/", "njisj.org/criminal-justice/", "njisj.org/democracy-justice",
@@ -103,7 +103,7 @@ def main():
     control("wealth figure altered",  t.replace("$662,500", "$622,500"), figs_ok)
     control("homeownership figure altered", t.replace("42.6% vs 76.7%", "38.4% vs 75.9%"), figs_ok)
     control("40 to 1 altered",        t.replace("40 : 1", "24 : 1", 1), figs_ok)
-    control("false title returns",    t.replace("Coordinator at Uceda until it closed", "Academic Coordinator at Uceda until it closed", 1), banned_ok)
+    control("false career line returns", t.replace("From 2021 to 2023 I was School Director", "Since 2021 I have run adult language schools. From 2021 to 2023 I was School Director", 1), banned_ok)
     control("source link dropped",    t.replace("newjerseymonitor.com/2026/05/27/", "example.invalid/", 1), urls_ok)
     control("updates section emptied", t.replace("Not yet checked, and likely to have moved", "Notes"), upd_ok)
     control("stale Newark framing returns", t.replace("Use Newark as the test of whether reform outlasts oversight.", "Use Newark as the proof case."), banned_ok)
