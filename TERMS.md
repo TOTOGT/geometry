@@ -105,6 +105,7 @@ have reported it. Now something does.
 - Municipal User Friendly Budget (UFB)
 - Natural killer (NK)
 - Network game (MPE)
+- New Jersey State Police (SORA)
 - Nonsense-mediated decay (NMD)
 - Nucleic Acid Compiler (NAC)
 - Operator-order switch in MCM-22 (DRIFTS)
