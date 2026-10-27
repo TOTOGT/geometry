@@ -106,7 +106,7 @@ FOLDERS: list[tuple[str, str, str]] = [
     ("book21", "Book XXI — The Classification of Planar Linear Systems", "book21"),
     ("book22", "Book XXII — Language Arts and Added Languages", "book22"),
     ("book23", "Book XXIII — 22 Days", "book23"),
-    ("book26", "Book XXVI — The 2026 Applications", "book26"),
+    ("book26", "Book XXVI — 2026", "book26"),
     ("book28", "Book XXVIII — Index Theory", "book28"),
     ("book29", "Book XXIX — Open Threads", "book29"),
     ("book30", "Book XXX — Planned", "book30"),
