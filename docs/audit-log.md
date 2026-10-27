@@ -12071,3 +12071,40 @@ Checklist now nine done (C1–C4, C8, C9, C12, C13, C14) and five open (C5, C6, 
 updated to fourteen with `ch08-verify.py`'s check and control. ch08-verify: 18 checks, 7 controls.
 Not run: `tools/terms.py --check`, a render, any push. Still unresolved: GitHub Pages is not deploying,
 so none of ch07–ch09 is visible on the site.
+
+## 2026-10-26 — book26 ch08: C15, one constant with four multipliers; C11 narrowed, not closed
+
+`book26/nielsen-sector-coefficients.py` added (6 checks, 2 controls). Branch B of C14's fork hardens.
+
+**Established.** ζ(3) appears across the sectors with a different prefactor each time, and two of them
+claim the same mechanism:
+
+| sector | where | n² coefficient | stated origin |
+|---|---|---|---|
+| lepton | Thm 51, eq. (88) | **−ζ(3)** = −1.20206 | "Casimir determinant suppression" |
+| quark | Thm 55, eq. (121) | **+ζ(3)/12** = +0.100171 | "lens-space zeta evaluation on S⁵" |
+| boson | Thm 53, eq. (96) | **+√3·α/(2π)** = +0.002012, written ζ_B | "spectral determinant corrections" |
+| lepton torsion | | σ₃ = ζ(3)/(4π²) = 0.0304485 | |
+| quark torsion | | σ₅ = ζ(3)/(16π²) = 0.0076121 | stated as σ₃/4 — verified |
+
+So one constant carries multipliers 1, 1/12, 1/(4π²) and 1/(16π²). The lepton and quark n² coefficients
+cite **the same mechanism** — a lens-space zeta determinant — yet differ by exactly 12 **and in sign**
+(leptons suppressed, quarks enhanced). The only case computable from first principles is S³, done
+exactly in C13, and it gives neither: the lepton value is 4π² = 39.478 times it, the quark value 3.29
+times it. The boson coefficient is not a zeta value at all and is numerically inert —
+exp(ζ_B n²) = 1.018 at n = 3 — while being written with a symbol that reads like one.
+
+**Also established.** The preprint displays its lepton table **anchored**: §8.15.4, p. 122, prints the
+electron deviation as "0.00% (anchor)", μ at +0.002%, τ at 0.0002%, while the paper's own script prints
+a uniform +0.22–0.24% offset on all three (C12). The abstract's "within PDG uncertainties" rests on the
+anchored presentation.
+
+**Not established.** That ζ(3)/12 is wrong for S⁵ — the S⁵ lens-space determinant was not computed,
+only the S³ one. What is established is that two sectors cite one mechanism, take values a factor of 12
+and a sign apart, and that the checkable case matches neither.
+
+**C11 stays open.** It asks for the quark and boson masses, couplings and anomalous moments tabulated
+from the paper's own script as C12 did for the leptons. This session answered a different question — which
+coefficients the sectors use — so it is recorded as C15 and C11 is unchanged. Checklist now ten done
+(C1–C4, C8, C9, C12–C15) and five open (C5, C6, C7, C10, C11); label updated to fifteen with its check
+and control. ch08-verify: 19 checks, 7 controls. Not run: `tools/terms.py --check`, a render, any push.
