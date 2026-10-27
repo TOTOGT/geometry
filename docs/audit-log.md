@@ -12037,3 +12037,37 @@ Checklist now eight done (C1–C4, C8, C9, C12, C13) and five open (C5, C6, C7, 
 from twelve to thirteen with `ch08-verify.py`'s check and control. ch08-verify: 17 checks, 7 controls.
 Not run: `tools/terms.py --check`, a render, any push. **Still unresolved and not from this work:**
 GitHub Pages is not deploying — ch07, ch08 and ch09 are all on origin/main and all 404 live.
+
+## 2026-10-26 — book26 ch08: C14, the fork. The coefficient that fits the data is the one the derivation does not give
+
+`book26/nielsen-exponent-fork.py` added (6 checks, 2 controls). C12 established that the preprint's own
+appendix script reproduces its lepton table with exp(−ζ(3)n²); C13 established that the lens-space
+determinant gives ζ(3)/(4π²). Substituting the second for the first, every other ingredient held fixed
+(Λ, a, β, α, trefoil factor, PDG references):
+
+| | paper, exp(−ζ(3)n²) | corrected, exp(−ζ(3)/(4π²)n²) |
+|---|---|---|
+| m_e | 0.512185 MeV (+0.232%) | 1.65291 MeV (**+223%**) |
+| m_μ | 105.906 MeV (+0.235%) | 11487.2 MeV (**+1.08×10⁴%**) |
+| m_τ | 1780.99 MeV (+0.229%) | 6.76×10⁷ MeV (**+3.81×10⁶%**) |
+
+**The escape route is closed by the paper's own argument.** The failure is in the ratios: μ/e comes out
+6949.7 against the observed 206.77 (×33.6), τ/μ 5886.5 against 16.82 (×350). p. 12 argues v is a mere
+unit conversion because "changing v multiplies every mass by the same constant" and "leaves invariant
+every mass ratio" — which is true, and therefore the single empirical input cannot repair a ratio
+failure. Λ_shell cancels in both ratios.
+
+**So exactly one of these holds, and both contradict "zero dimensionless free parameters."** (A) The
+Sector Determinant Lemma is right and the mass formula is wrong by factors of 34 and 350 in the ratios.
+(B) The mass formula is right and the exponent ζ(3) is not the lens-space determinant coefficient — its
+stated derivation does not support it, and the value that reproduces the data to 0.002% in ratio is
+precisely the one the derivation does not give.
+
+**Not established.** Which branch holds; whether the lemma was ever intended to apply to this formula;
+whether a and φₙ are right — both are still undefined in the text. This changes one coefficient and
+holds everything else fixed; it is not a claim that the rest of the formula is sound.
+
+Checklist now nine done (C1–C4, C8, C9, C12, C13, C14) and five open (C5, C6, C7, C10, C11); label
+updated to fourteen with `ch08-verify.py`'s check and control. ch08-verify: 18 checks, 7 controls.
+Not run: `tools/terms.py --check`, a render, any push. Still unresolved: GitHub Pages is not deploying,
+so none of ch07–ch09 is visible on the site.
