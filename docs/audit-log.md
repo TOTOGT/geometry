@@ -11880,3 +11880,25 @@ Left alone: archived Journal issues (No. 2–4 say workshops "planned October 20
 
 ## 2026-10-26 — Chapter 6 corrected, WP138 (Maxley) and book26 chapter 7 added
 `book26/ch06`: the R range is about 1.4 to about 13 across definitions, not 1.4 to 4; the page now says no pass or fail is called, that the materials differ in acid properties, and that the collaborator asked to split the experimental and mathematical papers (56ac12ce, 426622bc). `book6/wp138-the-hive-on-earth.html` and `wp138-verify.py` added (five commits, last 7ca72b9c): corrected a mis-attribution (WP136 is a lunar human-factors page; the hive design is Hex Habitat Mars). `book26/ch07-two-postings-one-employer.html` and `ch07-verify.py` added (b7af2f73): two recruiting-coordinator postings compared, no employer named, same-role match labelled an inference. Zila paper review: v3 set A R ranges used a 5.1 A lower bound while the text said 5.3 to 5.6 A; an unreproducible "ethene share" row; v4 fixes both. Not run: `tools/terms.py --check`, a render, any push.
+
+## 2026-10-26 — book26 chapter 9 added (NJ private career school status)
+
+`book26/ch09-a-licence-before-a-student.html` and `ch09-verify.py` added. Source: one written reply
+from the Training Evaluation Unit (COEI/ORI, NJ Department of Labor and Workforce Development),
+received 2026-10-26. **Established:** what the page records is what that message says — the statutory
+test at N.J.S.A. 34:15C-10.1 is four-part and conjunctive; the three exclusions include instruction
+that is avocational, cultural or recreational; the initial application carries a $1,150 non-refundable
+fee and a $20,000 tuition performance bond payable to the Commissioner, with liability insurance,
+proof of authority to do business in NJ and a school catalog, at N.J.A.C. 12:41-2.2 from page 7; the
+ETPL application is contained in the PCS application and there is no second form or fee.
+**Not established:** whether G6 LLC is or is not a private career school — no determination was
+requested and none was issued, and the message says in terms that it cannot tell from what it was
+sent; whether the figures are current beyond that message (quoted as received, not checked against
+the codes); the training site's weekly traffic (recorded as the agency's claim, unverified); the list
+of agencies whose existing licence permits the free ETPL-only route, which did not come through in
+the message. Not legal advice. No application filed; no instruction is being sold.
+`ch09-verify.py`: 6 checks, 7 controls, all controls rejected. **The first version of the
+"disclaimer dropped" control was itself vacuous** — the page writes `not</b> legal advice`, so a
+replace of "not legal advice" matched nothing and the control passed without damaging anything.
+R24 caught it, not a reader; the control now damages both spellings. `tools/jscheck.py book26`:
+3 inline scripts, 0 failing. Not run: `tools/terms.py --check`, a render, any push.
