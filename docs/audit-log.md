@@ -12177,3 +12177,45 @@ kernel 2 was intended to carry the bundle step — only that as written it canno
 Checklist now twelve done (C1–C4, C8–C15) and three open: C5 (the six algebra statements), C6
 (hypothesis audit of ~99), C7 (read the full 247 pages). None of the three can change the C13/C14/C15/C11
 conclusion. ch08-verify: 21 checks, 7 controls. Not run: `tools/terms.py --check`, a render, any push.
+
+## 2026-10-26 — book26 ch08: C5 closed. Two of the six algebra statements are correct, three carry defects
+
+`book26/nielsen-algebra-six.py` added (11 checks, 2 controls). The census tiers exactly six statements
+as "2 algebra". Read against the source:
+
+| statement | verdict |
+|---|---|
+| Cor 1, p. 16 — Bianchi is geometric | **correct**; d_∇Ω = dΩ + [ω,Ω] cancels term by term, cubics included |
+| Prop 2, p. 50 — field lines are copies of the group | **correct**, standard |
+| Cor 14, p. 97 — shell content forced by Hodge duality | **not an algebra claim**; a structural assignment, carried to C6 |
+| Cor 2, p. 21 — SM cross-sector curvatures vanish | conclusion holds, **premise false** |
+| Lem 4, p. 101 — tangential dominance | **(iii) does not follow from (ii)** |
+| Cor 19, p. 154 — angular momentum quantization | **integer orbital only** |
+
+**Cor 2.** It reads "the Standard Model group SU(3)×SU(2)×U(1), *a genuine direct product*", while the
+paper's own abstract gives the group as [SU(3)×SU(2)×U(1)]/ℤ₆, which is not a direct product. The
+conclusion survives — curvature decomposition needs only the Lie algebra, which the discrete quotient
+leaves alone — but the statement is false of the group the paper says it concerns.
+
+**Lem 4.** (ii) bounds ‖v⊥‖²/‖v⊤‖² by 2(n−2)/3; (iii) asserts ‖v⊥‖ < ‖v⊤‖ on *all physical shells*. The
+shells are S³, S⁵, S⁷, S⁹ (p. 97), so n runs to 5 and the bound reads 0, 2/3, **4/3 and 2**. On S⁷ and S⁹
+it permits a ratio above 1, so (iii) is not implied there. (iii) may still be true; the proof offered
+does not reach it.
+
+**Cor 19 and Definition 13.** w ranges over π₁(S¹) ≅ ℤ, so L_z = ℏw admits no half-integer. The corollary
+is correct about *orbital* angular momentum and cannot supply spin-½, which every fermion in the theory
+needs. The definition immediately following derives ℏ = ℓ_P²c³/G and says ℏ "is not an independent input"
+because c and G are derived — but that formula is the definition ℓ_P := √(ℏG/c³) rearranged, and no value
+for the fiber cross-section is computed from the geometry anywhere; it is identified with ℓ_P by
+definition. **ℏ is obtained from ℏ.** Table 16 lists ℏ under Predictions (C8).
+
+**Not established.** That (iii) is false on S⁷ or S⁹, or that Cor 2's conclusion fails.
+
+Also fixed: `ch08-verify.py`'s control "an open item marked done in the markup only" pointed at C5 and
+went **vacuous** the moment C5 closed — the replace matched nothing and the control passed without
+damaging anything. Repointed at C6, with a note to repoint again rather than delete if C6 closes. That
+is the second vacuous control caught in this chapter by R24, and the third this session.
+
+Checklist now thirteen done (C1–C5, C8–C15) and two open: C6 (hypothesis audit of ~99 statements) and
+C7 (read the full 247 pages). ch08-verify: 22 checks, 7 controls. Not run: `tools/terms.py --check`,
+a render, any push.
