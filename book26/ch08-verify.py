@@ -16,6 +16,41 @@ AUDIT = sorted((ROOT / "tools" / "verify-audit").glob("*/geometry__book26__Niels
 AUDIT2 = sorted((ROOT / "tools" / "verify-audit").glob("*/geometry__book26__NielsenAbstractArithmetic.axioms.txt"))
 AUDIT3 = sorted((ROOT / "tools" / "verify-audit").glob("*/geometry__book26__NielsenLeptonDeviation.axioms.txt"))
 CENSUS = HERE / "nielsen-census.tsv"
+
+# --- the source paper -------------------------------------------------------
+# CLAUDE.md: source in hand -> check the claim against it; source not in hand ->
+# the script prints SKIP, never PASS, and the log says UNCHECKED. The paper is not
+# in the repo (third-party, 9.4 MB); it is read from ~/Downloads where the author
+# keeps sources. Identified by content and pinned by digest, not by filename --
+# the file arrived named with a UUID and a rename must not silently change what
+# was audited.
+import hashlib, os, shutil, subprocess
+PAPER_MD5 = "b7ae1a50d535d15027cdd5336d5e7f22"   # 247 pp, 9,389,556 bytes, 2026-08-14
+PAPER_MARKS = ("Nielsen", "complex Hopf fibration")
+def find_paper():
+    """Return (path, md5) of the preprint, or (None, reason)."""
+    d = Path(os.environ.get("NIELSEN_PDF_DIR", Path.home() / "Downloads"))
+    if not d.is_dir(): return None, "no source directory"
+    if not shutil.which("pdftotext"): return None, "pdftotext not installed"
+    for f in sorted(d.glob("*.pdf")):
+        try:
+            if f.stat().st_size < 1_000_000: continue
+            head = subprocess.run(["pdftotext", "-f", "1", "-l", "1", str(f), "-"],
+                                  capture_output=True, text=True, timeout=60).stdout
+        except Exception:
+            continue
+        if all(m in head for m in PAPER_MARKS):
+            return f, hashlib.md5(f.read_bytes()).hexdigest()
+    return None, "preprint not found in " + str(d)
+
+# Strings this chapter attributes to the paper. If the page says the abstract
+# claims the masses are within PDG uncertainties, the abstract must say so.
+PAPER_CLAIMS = ["within PDG", "sin2 \u03b8W = 3/(4\u03c0) = 0.23873",
+                "246 220 MeV", "mW = 80.3695 GeV", "mZ = 91.1878 GeV", "mH = 125.225 GeV"]
+def paper_page1(path):
+    return subprocess.run(["pdftotext", "-f", "1", "-l", "1", str(path), "-"],
+                          capture_output=True, text=True, timeout=60).stdout
+
 FAIL = []
 def check(label, ok, detail=""):
     print(("PASS " if ok else "FAIL ") + label + (f"  -- {detail}" if detail else ""))
@@ -97,6 +132,21 @@ def main():
     check("third audit report (lepton deviation) exists: 3 theorem lines, permitted axioms", audit3_ok())
     check("the page no longer says the lepton Lean file is unrun", "and not yet run" not in plain(t))
     check("census has 140 rows", census_ok())
+
+    # Source check. SKIP, never PASS, when the paper is not in hand.
+    paper, info = find_paper()
+    if paper is None:
+        print("SKIP source paper: " + info + "  -- claims about the preprint are UNCHECKED here")
+    else:
+        same = (info == PAPER_MD5)
+        check("source paper found and is the audited copy", same,
+              paper.name if same else "digest %s != audited %s" % (info[:12], PAPER_MD5[:12]))
+        if same:
+            pg1 = paper_page1(paper)
+            missing = [c for c in PAPER_CLAIMS if c not in pg1]
+            check("the abstract says what this chapter says it says", not missing,
+                  "missing: " + "; ".join(missing) if missing else "")
+
     ctl = []
     def control(name, damaged, fn):
         ok = fn(damaged); print(("PASS " if not ok else "FAIL ") + "control rejected: " + name)

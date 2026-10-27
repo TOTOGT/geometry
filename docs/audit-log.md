@@ -11902,3 +11902,34 @@ the message. Not legal advice. No application filed; no instruction is being sol
 replace of "not legal advice" matched nothing and the control passed without damaging anything.
 R24 caught it, not a reader; the control now damages both spellings. `tools/jscheck.py book26`:
 3 inline scripts, 0 failing. Not run: `tools/terms.py --check`, a render, any push.
+
+## 2026-10-26 — book26 chapter 8 wired to its source; lepton Lean run recorded
+
+`book26/ch08-a-preprint-against-a-kernel.html` had four commits and **no entry here**, which is the
+defect the ledger exists to prevent. Recorded now.
+
+**Established.** `NielsenLeptonDeviation.lean` was run on the Mac 2026-10-26 (363 s, 3 declarations,
+axioms within the permitted set, no `sorryAx`; report
+`tools/verify-audit/2026-10-26/geometry__book26__NielsenLeptonDeviation.axioms.txt`, committed
+6a39390b). The page had said it was "written and not yet run"; it now records the run **and** that
+per R20 a clean axiom report is not a reading of the statement — three named declarations elaborate,
+which is not the same as their saying the deviations exceed the quoted uncertainties.
+The source preprint is in hand: `~/Downloads/303EA34A-D120-11F1-8256-DEFD2578C994.pdf`, 247 pp,
+9,389,556 bytes, md5 `b7ae1a50d535d15027cdd5336d5e7f22`, dated 2026-08-14. `ch08-verify.py` now
+locates it **by content and pins it by digest, not by filename** (it arrived named with a UUID; a
+rename must not silently change what was audited), and checks that the abstract makes the claims
+this chapter attributes to it: "within PDG", sin²θW = 3/(4π) = 0.23873, v = 246 220 MeV,
+mW = 80.3695, mZ = 91.1878, mH = 125.225 GeV. All six present. With no source directory the script
+prints **SKIP, never PASS**, and these claims are UNCHECKED on that machine.
+
+**Not established.** That the paper's figures are right, that the Lean statements say what their
+names say, or that the audit reports were produced from the `.lean` files now on disk. The standing
+contradiction is unresolved and is the chapter's substance: the abstract claims all charged lepton
+and quark masses fall within PDG uncertainties, while C12 tabulates the three charged-lepton masses
+as a uniform 0.23% high — >10⁶, 10⁵ and 40 standard deviations for electron, muon and tau. A uniform
+offset across all three is the signature of one wrong conversion constant, not three wrong
+predictions; that reading is a hand observation and is untested.
+
+`ch08-verify.py`: 14 checks, 7 controls, all controls rejected. A control confirming the source check
+can fail (a fabricated mH value) was run and did fail; the control file was moved out of the repo
+with `mv`, not `rm` (R4). Not run: `tools/terms.py --check`, a render, any push.
