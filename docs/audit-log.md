@@ -12146,3 +12146,34 @@ Also fixed: `plain()` in `ch07-verify.py` and `ch08-verify.py` now decodes `&pri
 Checklist now eleven done (C1–C4, C8, C9, C11–C15) and four open (C5, C6, C7, C10); label updated to
 four with its check and control. ch08-verify: 20 checks, 7 controls. Not run: `tools/terms.py --check`,
 a render, any push.
+
+## 2026-10-26 — book26 ch08: C10 closed. Kernel 2's hypothesis is unsatisfiable, not merely unproved
+
+`book26/nielsen-kernel2-gap.py` added (8 checks, 2 controls). Section 3 read kernel 2 as not proving
+"no product splitting of the bundle" and marked that a hand derivation. **The reading holds, and the gap
+is three gaps, the middle one unclosable.**
+
+**(1) The Lean never touches a space.** Kernel 2 is `MiniRing` over an arbitrary type. Its section of
+`NielsenKernels.lean` contains no topology, connectedness, continuity or manifold, and the
+no-zero-divisor condition `nzd` enters as a hypothesis of `domain_idempotents_trivial` and is
+instantiated nowhere in the file.
+
+**(2) The hypothesis is unsatisfiable for the ring that matters.** The correct bridge is idempotents ↔
+clopen sets: X is connected *iff* C(X) has only the idempotents 0 and 1. The Lean assumes instead that
+the ring has no zero divisors — strictly stronger, and false for C(X) on every connected space larger
+than a point. Two bump functions with disjoint supports multiply to zero and neither is zero; the script
+exhibits such a pair on ℝ, f·g = 0 at all 20,001 sample points with max|f| = max|g| = 0.368. So `nzd` is
+not an unproved hypothesis in the intended application — it is an unsatisfiable one, and no additional
+lemma can discharge it.
+
+**(3) The conclusion is about the wrong product.** `prodRing` multiplies componentwise, and a ring direct
+product corresponds to a *disjoint union* of spaces, C(X ⊔ Y) ≅ C(X)×C(Y). A *Cartesian* product gives a
+tensor product by Künneth. "No product splitting of the bundle" is a claim about ×; kernel 2 is a claim
+about ⊔.
+
+**Not established.** That the preprint's physical claim is false, that no bundle argument exists, or that
+kernel 2 was intended to carry the bundle step — only that as written it cannot reach it.
+
+Checklist now twelve done (C1–C4, C8–C15) and three open: C5 (the six algebra statements), C6
+(hypothesis audit of ~99), C7 (read the full 247 pages). None of the three can change the C13/C14/C15/C11
+conclusion. ch08-verify: 21 checks, 7 controls. Not run: `tools/terms.py --check`, a render, any push.
