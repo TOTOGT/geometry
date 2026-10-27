@@ -3,8 +3,10 @@ NielsenKernels.lean -- transcription of Appendix B ("TUFT_Forcing_Core.lean") of
 preprint, with unicode repaired (the PDF text had lost the symbols  exists / and / neq / equiv),
 plus a short section of `example`s showing what each kernel does and does not say.
 
-STATUS: UNTESTED. Not compiled by the person who transcribed it (no Lean toolchain in that
-workspace). Run:   tools/leancheck.sh --audit book26/NielsenKernels.lean
+STATUS: compiled on the author's Mac 2026-10-26 (Lean v4.32.0, Mathlib build in geometry);
+`leancheck.sh --audit`: 7 theorems, all within the permitted three axioms; report in
+tools/verify-audit/2026-10-26/. The K3b and K4b examples compiled; the K1b example was removed
+afterwards (it was vacuous) and the file has not been re-run since that removal. Run:   tools/leancheck.sh --audit book26/NielsenKernels.lean
 Report errors verbatim; fix against the compiler, not by guessing.
 The paper states it compiled with Lean 4.32.2 and reports axioms: none (kernels 1,3,4),
 [propext] (kernel 2), [propext, Quot.sound] (kernel 5).
@@ -183,9 +185,7 @@ example (C : HoCat) (F : BundleFunctor C) {B B' : C.Obj}
 example (C : HoCat) (F : BundleFunctor C) {B : C.Obj} (h : Classifies C F B)
     {X : C.Obj} (b : F.Bun X) : F.pull (h.classify b) h.E = b := h.pull_classify b
 
--- K1b: the setup has no U(1), no charge lattice, no holonomy of a connection: Phase and
--- Charge are arbitrary types. Take Phase := Unit: no charge is ever inadmissible, so the
--- theorem's hypothesis cannot be met there. It is a contrapositive, true of any setup.
-example : ∀ (S : HolonomySetup), S.Phase = Unit → True := fun _ _ => trivial
+-- K1: no example is given. The setup has no U(1), no charge lattice and no connection: Charge,
+-- Phase and Loop are arbitrary types, so the theorem is a contrapositive true of any such setup.
 
 end TUFT
