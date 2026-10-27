@@ -14,6 +14,7 @@ ROOT = HERE.parent
 PAGE = HERE / "ch08-a-preprint-against-a-kernel.html"
 AUDIT = sorted((ROOT / "tools" / "verify-audit").glob("*/geometry__book26__NielsenKernels.axioms.txt"))
 AUDIT2 = sorted((ROOT / "tools" / "verify-audit").glob("*/geometry__book26__NielsenAbstractArithmetic.axioms.txt"))
+AUDIT3 = sorted((ROOT / "tools" / "verify-audit").glob("*/geometry__book26__NielsenLeptonDeviation.axioms.txt"))
 CENSUS = HERE / "nielsen-census.tsv"
 FAIL = []
 def check(label, ok, detail=""):
@@ -64,6 +65,19 @@ def audit2_ok():
         m = re.search(r"depends on axioms: \[(.*)\]", l)
         if not m or not {x.strip() for x in m.group(1).split(",")} <= allowed: return False
     return True
+def audit3_ok():
+    # NielsenLeptonDeviation.lean, run 2026-10-26 (363 s). Three declarations.
+    # R20: a clean axiom report is not a reading of the statement. This checks the
+    # receipt's shape, not that the theorems say what their names say.
+    if not AUDIT3: return False
+    lines = [l for l in AUDIT3[-1].read_text().splitlines() if l.strip()]
+    allowed = {"propext", "Quot.sound", "Classical.choice"}
+    if len(lines) != 3: return False
+    for l in lines:
+        if "does not depend on any axioms" in l: continue
+        m = re.search(r"depends on axioms: \[(.*)\]", l)
+        if not m or not {x.strip() for x in m.group(1).split(",")} <= allowed: return False
+    return True
 def census_ok():
     if not CENSUS.exists(): return False
     return len(CENSUS.read_text(encoding="utf-8").splitlines()) - 1 == 140
@@ -80,6 +94,8 @@ def main():
     check("the table script behind C12 exists", (HERE / "nielsen-lepton-table.py").exists())
     check("audit report exists: 7 theorem lines, axioms within the permitted set", audit_ok())
     check("second audit report (abstract arithmetic) exists: 6 theorem lines, permitted axioms", audit2_ok())
+    check("third audit report (lepton deviation) exists: 3 theorem lines, permitted axioms", audit3_ok())
+    check("the page no longer says the lepton Lean file is unrun", "and not yet run" not in plain(t))
     check("census has 140 rows", census_ok())
     ctl = []
     def control(name, damaged, fn):
