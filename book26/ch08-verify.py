@@ -3,7 +3,7 @@
 # Copyright (c) 2026 Pablo Nogueira Grossi / G6 LLC
 """
 book26/ch08-verify.py -- book26/ch08-a-preprint-against-a-kernel.html.
-  [1] sections S1..S5   [2] labels   [3] the checklist: ten items, C1..C3 checked, C4..C10 open, in the page's own markup
+  [1] sections S1..S5   [2] labels   [3] the checklist: eleven items, C1..C4 checked, C5..C11 open, in the page's own markup
   [4] the evidence behind each checked box exists: audit report with 7 theorem lines and only permitted axioms; census with 140 rows
   [5] no employer or personal names beyond the cited title; controls    [HONESTY] what this does not establish
 """
@@ -13,6 +13,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 PAGE = HERE / "ch08-a-preprint-against-a-kernel.html"
 AUDIT = sorted((ROOT / "tools" / "verify-audit").glob("*/geometry__book26__NielsenKernels.axioms.txt"))
+AUDIT2 = sorted((ROOT / "tools" / "verify-audit").glob("*/geometry__book26__NielsenAbstractArithmetic.axioms.txt"))
 CENSUS = HERE / "nielsen-census.tsv"
 FAIL = []
 def check(label, ok, detail=""):
@@ -28,8 +29,8 @@ SECS = ["S1", "S2", "S3", "S4", "S5"]
 LABELS = ["most of the checklist below is open", "a hand derivation", "this is an estimate", "not a verdict", "not established here", "keyword matching"]
 BANNED = ["citadel", "north bridge", "uerj", "zilacleide"]
 FORBIDDEN = ["fetch(", "XMLHttpRequest", "localStorage", "<form", "action=", "<script"]
-IDS = ["C%d" % i for i in range(1, 11)]
-DONE = {"C1", "C2", "C3"}
+IDS = ["C%d" % i for i in range(1, 12)]
+DONE = {"C1", "C2", "C3", "C4"}
 def secs_ok(t): return re.findall(r'<div class="sec" data-n="([^"]+)">', t) == SECS
 def labels_ok(t):
     p = plain(t).lower(); return all(l in p for l in LABELS)
@@ -52,6 +53,16 @@ def audit_ok():
         m = re.search(r"depends on axioms: \[(.*)\]", l)
         if not m or not {x.strip() for x in m.group(1).split(",")} <= allowed: return False
     return True
+def audit2_ok():
+    if not AUDIT2: return False
+    lines = [l for l in AUDIT2[-1].read_text().splitlines() if l.strip()]
+    allowed = {"propext", "Quot.sound", "Classical.choice"}
+    if len(lines) != 6: return False
+    for l in lines:
+        if "does not depend on any axioms" in l: continue
+        m = re.search(r"depends on axioms: \[(.*)\]", l)
+        if not m or not {x.strip() for x in m.group(1).split(",")} <= allowed: return False
+    return True
 def census_ok():
     if not CENSUS.exists(): return False
     return len(CENSUS.read_text(encoding="utf-8").splitlines()) - 1 == 140
@@ -63,8 +74,9 @@ def main():
     check("sections S1..S5 in order", secs_ok(t))
     check("required labels present", labels_ok(t))
     check("no private names, scripts, forms or network", names_ok(t))
-    check("checklist: C1..C10, C1-C3 checked, C4-C10 open, markup agrees with status", checklist_ok(t))
+    check("checklist: C1..C11, C1-C4 checked, C5-C11 open, markup agrees with status", checklist_ok(t))
     check("audit report exists: 7 theorem lines, axioms within the permitted set", audit_ok())
+    check("second audit report (abstract arithmetic) exists: 6 theorem lines, permitted axioms", audit2_ok())
     check("census has 140 rows", census_ok())
     ctl = []
     def control(name, damaged, fn):
@@ -72,7 +84,7 @@ def main():
         if ok: ctl.append(name)
     control("section removed", t.replace('data-n="S3"', 'data-n="X"'), secs_ok)
     control("label removed", t.replace("Most of the checklist below is open", "All done"), labels_ok)
-    control("an open item marked done in the markup only", t.replace('data-c="C4" data-s="open"', 'data-c="C4" data-s="open"').replace('<input type="checkbox" disabled aria-label="C4">', '<input type="checkbox" disabled checked aria-label="C4">'), checklist_ok)
+    control("an open item marked done in the markup only", t.replace('<input type="checkbox" disabled aria-label="C5">', '<input type="checkbox" disabled checked aria-label="C5">'), checklist_ok)
     control("a checked item whose status is open", t.replace('data-c="C1" data-s="done"', 'data-c="C1" data-s="open"'), checklist_ok)
     control("an item removed", t.replace('data-c="C9"', 'data-c="X9"'), checklist_ok)
     control("private name pasted in", t + " UERJ ", names_ok)
