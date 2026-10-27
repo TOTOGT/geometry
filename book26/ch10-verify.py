@@ -10,8 +10,12 @@ book26/ch10-verify.py -- book26/ch10-four-pillars-one-mission.html: a vision for
 
 Where each figure was read (2026-10-27, by fetching the page; this script does not fetch):
   $662,500 / $20,000 / 38.4% vs 75.9% / $132,000 vs $0 ..... njisj.org/economic-justice
-  29 : 1 (shown as 29 beside 1, no ratio printed) .......... njisj.org/criminal-justice
-  59% vs 15% / 22 states / New Jersey not one ............... njisj.org/democracy-justice
+  40.2 : 1 (241 and 6 per 100,000, 2023) ................... Sentencing Project fact sheet (federal juvenile census)
+  29 : 1 (institute page; superseded in the panel) ......... njisj.org/criminal-justice
+  59% (institute) vs 12.9% / 15.8% ......................... njisj.org/democracy-justice; nj.gov Labor RP-30; Census QuickFacts
+  18 states + DC, NJ 21 days before ......................... NCSL; (institute says 22: not resolved)
+  Voter Empowerment Act A-1715/S-282, 2 July 2026 .......... nj.gov/governor/news/2026/20260702a
+  Data center plan, four parts, 27 May 2026 ................ nj.gov/governor/news/2026/20260527a
   2 July 2026, tenth state, first after Louisiana v Callais . njisj.org press release of 2 July 2026
   $640,000 gap, 'less than $20,000' ......................... njisj.org press release of 3 April 2025
   60+ groups, 13 May 2026, 20 MW; four-part plan ............ New Jersey Monitor; PYMNTS (secondary)
@@ -40,12 +44,13 @@ def plain(t):
     return re.sub(r"\s+", " ", t)
 
 SECS = ["mission", "economic", "criminal", "democracy", "environmental", "architecture", "checked"]
-FIGS = ["$662,500", "$20,000", "38.4% vs 75.9%", "$132,000 vs $0", "29 : 1", "59% vs 15%", "80,000+", "350,000+",
-        "22", "60+", "$6.1 million", "90%", "$640,000", "2 July 2026", "13 May 2026", "20 megawatts"]
+FIGS = ["$662,500", "$20,000", "38.4% vs 75.9%", "$132,000 vs $0", "40 : 1", "59% vs 13-16%", "80,000+", "350,000+",
+        "18 + DC", "60+", "$6.1 million", "90%", "$640,000", "2 July 2026", "13 May 2026", "20 megawatts"]
 # Claims that failed checking and were removed or corrected; none may reappear.
-BANNED = ["Academic Coordinator", "150 Years is Enough", "Fund for New Jersey", "Feb 2026", "a boys' facility",
+BANNED = ["every six months", "Academic Coordinator", "150 Years is Enough", "Fund for New Jersey", "Feb 2026", "a boys' facility",
           "Vote 16 expansion", "June 2026 I was"]
-URLS = ["njisj.org/economic-justice/", "njisj.org/criminal-justice/", "njisj.org/democracy-justice",
+URLS = ["nj.gov/governor/news/2026/20260702a", "nj.gov/governor/news/2026/20260527a", "ncsl.org/elections-and-campaigns/voter-registration-deadlines",
+        "sentencingproject.org/fact-sheet/black-disparities", "njisj.org/economic-justice/", "njisj.org/criminal-justice/", "njisj.org/democracy-justice",
         "newjerseymonitor.com/2026/05/27/", "pymnts.com/cpi-posts/coalition-of-60-groups"]
 FORBIDDEN = ["fetch(", "XMLHttpRequest", "localStorage", "sessionStorage", "<form", "action=", "<script"]
 
@@ -79,8 +84,8 @@ def main():
         if ok: ctl.append(name)
     control("a section removed",      t.replace('<section id="democracy">', '<section>'), secs_ok)
     control("old book title returns", t.replace("Book XXVI &middot; 2026", "Book XXVI &middot; The 2026 Applications", 1), label_ok)
-    control("wealth figure altered",  t.replace("$662,500", "$622,500", 1), figs_ok)
-    control("29 to 1 altered",        t.replace("29 : 1", "24 : 1", 1), figs_ok)
+    control("wealth figure altered",  t.replace("$662,500", "$622,500"), figs_ok)
+    control("40 to 1 altered",        t.replace("40 : 1", "24 : 1", 1), figs_ok)
     control("false title returns",    t.replace("Coordinator at Uceda until it closed", "Academic Coordinator at Uceda until it closed", 1), banned_ok)
     control("source link dropped",    t.replace("newjerseymonitor.com/2026/05/27/", "example.invalid/", 1), urls_ok)
     control("checked box removed",    t.replace("What was checked, and what was not", "Notes"), exc_ok)
