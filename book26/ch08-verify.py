@@ -3,7 +3,7 @@
 # Copyright (c) 2026 Pablo Nogueira Grossi / G6 LLC
 """
 book26/ch08-verify.py -- book26/ch08-a-preprint-against-a-kernel.html.
-  [1] sections S1..S6   [2] labels   [3] the checklist: eleven items, C1..C4 checked, C5..C11 open, in the page's own markup
+  [1] sections S1..S6   [2] labels   [3] the checklist: twelve items, C1..C4 and C12 checked, the rest open, in the page's own markup
   [4] the evidence behind each checked box exists: audit report with 7 theorem lines and only permitted axioms; census with 140 rows
   [5] no employer or personal names beyond the cited title; controls    [HONESTY] what this does not establish
 """
@@ -29,8 +29,8 @@ SECS = ["S1", "S2", "S3", "S4", "S5", "S6"]
 LABELS = ["most of the checklist below is open", "a hand derivation", "this is an estimate", "not a verdict", "not established here", "keyword matching"]
 BANNED = ["citadel", "north bridge", "uerj", "zilacleide"]
 FORBIDDEN = ["fetch(", "XMLHttpRequest", "localStorage", "<form", "action=", "<script"]
-IDS = ["C%d" % i for i in range(1, 12)]
-DONE = {"C1", "C2", "C3", "C4"}
+IDS = ["C%d" % i for i in range(1, 13)]
+DONE = {"C1", "C2", "C3", "C4", "C12"}
 def method_ok(t): return re.findall(r'<li data-m="(M\d)">', t) == ["M%d" % i for i in range(1, 7)]
 def secs_ok(t): return re.findall(r'<div class="sec" data-n="([^"]+)">', t) == SECS
 def labels_ok(t):
@@ -76,7 +76,8 @@ def main():
     check("required labels present", labels_ok(t))
     check("method points M1..M6 present in order", method_ok(t))
     check("no private names, scripts, forms or network", names_ok(t))
-    check("checklist: C1..C11, C1-C4 checked, C5-C11 open, markup agrees with status", checklist_ok(t))
+    check("checklist: C1..C12, C1-C4 and C12 checked, the rest open, markup agrees with status", checklist_ok(t))
+    check("the table script behind C12 exists", (HERE / "nielsen-lepton-table.py").exists())
     check("audit report exists: 7 theorem lines, axioms within the permitted set", audit_ok())
     check("second audit report (abstract arithmetic) exists: 6 theorem lines, permitted axioms", audit2_ok())
     check("census has 140 rows", census_ok())
