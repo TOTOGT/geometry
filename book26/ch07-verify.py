@@ -17,7 +17,7 @@ def check(label, ok, detail=""):
 def plain(t):
     t = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", t, flags=re.S)
     t = re.sub(r"<[^>]+>", " ", t)
-    for a, b in (("&rsquo;", "'"), ("&ldquo;", '"'), ("&rdquo;", '"'), ("&amp;", "&"), ("&mdash;", "-"), ("&ndash;", "-"), ("&middot;", ".")):
+    for a, b in (("&rsquo;", "'"), ("&ldquo;", '"'), ("&rdquo;", '"'), ("&amp;", "&"), ("&mdash;", "-"), ("&ndash;", "-"), ("&middot;", "."), ("&nbsp;", " "), ("&thinsp;", " "), ("&hbar;", "h")):
         t = t.replace(a, b)
     return re.sub(r"\s+", " ", t)
 SECS = ["S1", "S2", "S3", "S4"]

@@ -11964,3 +11964,76 @@ estimated; the page label "Most of the checklist below is open" was true at five
 "Half", with `ch08-verify.py`'s label check and its control updated to match. `ch08-verify.py`:
 15 checks, 7 controls. An earlier note in this session called this item C5; it is C9 — C5 is the
 algebra statements and remains open. Not run: `tools/terms.py --check`, a render, any push.
+
+## 2026-10-26 — book26 ch08: C8 closed, the paper gives three accounts of its own inputs
+
+Checked against the source with `book26/ch08-inputs-verify.py` (8 checks, 3 controls,
+SKIP-never-PASS without the paper, pinned by digest).
+
+**Established.** C8's suspicion holds and the contradiction is internal to the paper.
+p. 12, under "Proof of zero dimensionless free parameters": *"The only dimensionful input is the
+electroweak VEV, v = 246 220 MeV (Axiom 1)"*, and the paper *"contains no fitting routine, no
+optimization loop, and no adjustable coefficient"*. p. 216, Table 16 — whose stated purpose is to
+*"distinguish what TUFT assumes from what it predicts"* — lists under **Predictions**: *"SM gauge
+group + GR; c, ℏ, e, α, G, v"*, while its **Inputs** row holds only topological normalisations. The
+same v is Axiom 1 on one page and an output on another. On that same page the reproducibility note
+sets masses by m_j = (ℏ/c)(λ_j/r_eff) *"with v/R fixed once across sectors"* — fixing a ratio once so
+that sectors agree is a calibration, and the formula consumes ℏ and c, which the table above it calls
+predictions. A third labelling sits on p. 11, where v is "Input (v)" and α = 1/137.036, G, c and e
+are all "Derived". Three accounts, not in agreement.
+
+**Not established.** That v cannot be derived, that the theory is wrong, or that Theorem 68 (G) and
+Theorem 66 (α) fail — neither theorem was read. **What would settle C8:** one table stating, for each
+of c, ℏ, e, α, G and v, whether it is assumed or computed, and if computed, from what.
+
+Checklist now seven done (C1–C4, C8, C9, C12) and five open (C5, C6, C7, C10, C11), counted. The page
+label moved from "Half of the checklist below is open" to "Five of the twelve checklist items below
+are open", with `ch08-verify.py`'s label check and its control updated in the same edit (16 checks,
+7 controls). Also fixed in passing: `plain()` in `ch07-verify.py` and `ch08-verify.py` did not decode
+`&nbsp;`, `&thinsp;` or `&hbar;`, so a check for text containing them could never match — it failed
+first on the new C8 check rather than passing silently, but the same blind spot was already present
+in ch07. Not run: `tools/terms.py --check`, a render, any push.
+
+## 2026-10-26 — book26 ch08: C13, the lens-space determinant. The Gaussian exponent is off by 4π²
+
+`book26/nielsen-lens-determinant.py` added (6 checks, runs in ~20 s with mpmath; SKIPs if mpmath is
+absent). **Established.** The preprint's Sector Determinant Lemma asserts ln det′ Bₙ = L(n) − ζ(3)n²
++ O(1) and uses exp(−ζ(3)n²) in the mass formula. The coefficient is **ζ(3)/(4π²) = 0.030448, not
+bare ζ(3) = 1.202** — smaller by 4π² = 39.478 in the exponent. Method: ⋆d on coexact 1-forms of the
+unit S³ has eigenvalues ±N (N ≥ 2) in reps (N/2,(N−2)/2) and its swap; the ℤₙ is the Hopf U(1) in
+SU(2)_L, so the invariant sector keeps 2m_L ≡ 0 (mod n), the multiplicity is quasi-polynomial of
+period 2n, and the spectral zeta is a finite sum of Hurwitz zetas — exact, no cutoff.
+
+Three validations, because a fit that lands on the number you were looking for is weak evidence.
+(i) n = 1 reproduces the closed form ζ(3)/(2π²) − ln 2π = −1.776980152292558942 to 31 digits, and
+that is *where the 4π² comes from*: ζ_R′(−2) = −ζ(3)/(4π²) exactly, and the n² term inherits it.
+(ii) The quasi-polynomial multiplicities match a direct SU(2) weight enumeration for n ∈ {1,2,3,5,7,8},
+N < 200, zero mismatches. (iii) The coefficient converges rather than being fitted to a target:
+6×10⁻⁷ at n = 8–64, 1.8×10⁻⁷ at 16–64, 5×10⁻⁸ at 32–64, and a local three-point solve with the target
+absent from the basis gives −0.030448471 at n = 48.
+
+**Consequence.** The Gaussian factor in m₂/m₁ is 0.913, not 0.027. The term is inert and cannot
+generate the lepton hierarchy. **Two further defects in the lemma as stated:** "+ O(1)" is too strong
+— there is a growing ln n term, fitted at ≈ 4/3 — and **Cheeger–Müller cannot confirm the coefficient**,
+since torsion is an alternating combination of determinants across form degrees in which a
+metric-dependent n² term cancels.
+
+**Not established.** That the asymptotic follows from the preprint's cited route through
+Nash–O'Connor (abstract read, body not); the ln n coefficient analytically; the non-trivial χₙ
+sectors; sensitivity to radius or zeta normalisation.
+
+**Provenance.** The lens-space line of attack and the first numerical result came from another
+session's draft, which arrived as a complete replacement chapter. That draft was **not** used as the
+page: it audited the **April 2026 v1 from preprints.org** rather than the August 2026 version in hand
+and digest-pinned (b7ae1a50…), stated "nothing here has yet been formalized in Lean" when three files
+were kernel-audited on 2026-10-26, and replaced sections S1–S6 and the C1–C12 checklist with a
+different structure that `ch08-verify.py`, `ch08-sin2w-verify.py` and `ch08-inputs-verify.py` all key
+off — dropping it in would have discarded the census, the Lean receipts and the C4/C8/C9/C12 findings.
+Its mathematics was re-derived here independently before being written in: the n = 1 closed form, the
+ζ_R′(−2) identity, the multiplicity enumeration and the convergence test are this session's own
+computation, and the ln det′ table agrees with the draft's to all printed digits.
+
+Checklist now eight done (C1–C4, C8, C9, C12, C13) and five open (C5, C6, C7, C10, C11); label updated
+from twelve to thirteen with `ch08-verify.py`'s check and control. ch08-verify: 17 checks, 7 controls.
+Not run: `tools/terms.py --check`, a render, any push. **Still unresolved and not from this work:**
+GitHub Pages is not deploying — ch07, ch08 and ch09 are all on origin/main and all 404 live.
