@@ -58,15 +58,15 @@ def check(label, ok, detail=""):
 def plain(t):
     t = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", t, flags=re.S)
     t = re.sub(r"<[^>]+>", " ", t)
-    for a, b in (("&rsquo;", "'"), ("&ldquo;", '"'), ("&rdquo;", '"'), ("&amp;", "&"), ("&mdash;", "-"), ("&ndash;", "-"), ("&middot;", "."), ("&nbsp;", " "), ("&thinsp;", " "), ("&hbar;", "h")):
+    for a, b in (("&rsquo;", "'"), ("&ldquo;", '"'), ("&rdquo;", '"'), ("&amp;", "&"), ("&mdash;", "-"), ("&ndash;", "-"), ("&middot;", "."), ("&nbsp;", " "), ("&thinsp;", " "), ("&hbar;", "h"), ("&prime;", "'"), ("&radic;", "sqrt"), ("&minus;", "-")):
         t = t.replace(a, b)
     return re.sub(r"\s+", " ", t)
 SECS = ["S1", "S2", "S3", "S4", "S5", "S6"]
-LABELS = ["five of the fifteen checklist items below are open", "a hand derivation", "this is an estimate", "not a verdict", "not established here", "keyword matching"]
+LABELS = ["four of the fifteen checklist items below are open", "a hand derivation", "this is an estimate", "not a verdict", "not established here", "keyword matching"]
 BANNED = ["citadel", "north bridge", "uerj", "zilacleide"]
 FORBIDDEN = ["fetch(", "XMLHttpRequest", "localStorage", "<form", "action=", "<script"]
 IDS = ["C%d" % i for i in range(1, 16)]
-DONE = {"C1", "C2", "C3", "C4", "C8", "C9", "C12", "C13", "C14", "C15"}
+DONE = {"C1", "C2", "C3", "C4", "C8", "C9", "C12", "C13", "C11", "C14", "C15"}
 def method_ok(t): return re.findall(r'<li data-m="(M\d)">', t) == ["M%d" % i for i in range(1, 7)]
 def secs_ok(t): return re.findall(r'<div class="sec" data-n="([^"]+)">', t) == SECS
 def labels_ok(t):
@@ -125,12 +125,14 @@ def main():
     check("required labels present", labels_ok(t))
     check("method points M1..M6 present in order", method_ok(t))
     check("no private names, scripts, forms or network", names_ok(t))
-    check("checklist: C1..C15, ten done (C1-C4, C8, C9, C12-C15), five open, markup agrees with status", checklist_ok(t))
+    check("checklist: C1..C15, eleven done (C1-C4, C8, C9, C11-C15), four open, markup agrees with status", checklist_ok(t))
     check("the table script behind C12 exists", (HERE / "nielsen-lepton-table.py").exists())
     check("audit report exists: 7 theorem lines, axioms within the permitted set", audit_ok())
     check("second audit report (abstract arithmetic) exists: 6 theorem lines, permitted axioms", audit2_ok())
     check("third audit report (lepton deviation) exists: 3 theorem lines, permitted axioms", audit3_ok())
     check("the page no longer says the lepton Lean file is unrun", "and not yet run" not in plain(t))
+    check("C11 names the lambda_T expressions and the appendix contradiction",
+          all(x in plain(t) for x in ("2/(3", "sign flip", "zeta'(-2) = -z3/(4*pi**2)")))
     check("C15 names the four multipliers and the anchor",
           all(x in plain(t) for x in ("1/12", "0.002012", "0.00% (anchor)")))
     check("C14 names the ratio factors and the p.12 argument",
@@ -161,7 +163,7 @@ def main():
         ok = fn(damaged); print(("PASS " if not ok else "FAIL ") + "control rejected: " + name)
         if ok: ctl.append(name)
     control("section removed", t.replace('data-n="S3"', 'data-n="X"'), secs_ok)
-    control("label removed", t.replace("Five of the fifteen checklist items below are open", "All done"), labels_ok)
+    control("label removed", t.replace("Four of the fifteen checklist items below are open", "All done"), labels_ok)
     control("an open item marked done in the markup only", t.replace('<input type="checkbox" disabled aria-label="C5">', '<input type="checkbox" disabled checked aria-label="C5">'), checklist_ok)
     control("a checked item whose status is open", t.replace('data-c="C1" data-s="done"', 'data-c="C1" data-s="open"'), checklist_ok)
     control("an item removed", t.replace('data-c="C9"', 'data-c="X9"'), checklist_ok)

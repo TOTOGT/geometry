@@ -12108,3 +12108,41 @@ from the paper's own script as C12 did for the leptons. This session answered a 
 coefficients the sectors use — so it is recorded as C15 and C11 is unchanged. Checklist now ten done
 (C1–C4, C8, C9, C12–C15) and five open (C5, C6, C7, C10, C11); label updated to fifteen with its check
 and control. ch08-verify: 19 checks, 7 controls. Not run: `tools/terms.py --check`, a render, any push.
+
+## 2026-10-26 — book26 ch08: C11 closed. The uniform offset is lepton-only, and the appendix settles C14's fork
+
+`book26/nielsen-quark-boson-table.py` added (7 checks, 2 controls). Formulas transcribed verbatim from
+the preprint's own Appendix A script, SECTION 3 (eq. 97) and SECTION 4 (eq. 122), with that script's own
+PDG dictionary. The transcription reproduces the printed Λ₅ = 6.09144×10⁻², a₅ = 3.564112 and the whole
+p. 131 quark table (u = 2.160005 MeV).
+
+**Answer to the question C11 was asked:** no, the other sectors do not show the leptons' uniform +0.23%.
+W −0.0026%, Z −0.0032%, H +0.017%; u +0.0003%, d −0.125%, s +0.177%, c +0.214%, b −0.186%, t +0.061% —
+mixed signs, every pull under 1.5σ.
+
+**That is not a point in the paper's favour, for two reasons.** (i) The uncertainties are not comparable:
+the up quark is known to ±3.2%, the electron to ±3×10⁻⁸%. A 0.2% quark deviation is 0.06σ; the same
+relative deviation on the electron was over 10⁶σ. "Within experimental error" is eight orders of
+magnitude weaker a claim in the quark sector. (ii) There is no uniform offset because there is no uniform
+formula. The quark exponent carries **three separate expressions for λ_T**, one per generation —
+2/(3√3), 2/π + ζ(3)/(24π), 2/π − ζ(3)/(24π), **with a sign flip between n = 2 and n = 3** — plus three
+torsion values τ(Kₙ) = (1, 4, 3) and a 2/3 prefactor applied to the first generation alone. Six quark
+masses rest on that many per-generation choices. The boson sector likewise uses three distinct T_B
+expressions, an r_f = r + ζ_B shift, and a Λ_B the paper's own script comments as a "post-absorption
+value".
+
+**And the appendix settles C14's fork from the inside.** SECTION 1 of that same verification script checks
+the identity `zeta'(-2) = -z3/(4*pi**2)` — exactly the constant C13 computed independently — and SECTION 2,
+one section later, writes the lepton exponent as `-z3*n**2` with the comment "Casimir det, from
+Nash-O'Connor lens space". **The correct coefficient is verified in the paper's own verification script
+and then not used.** That is branch B of C14, in the author's own file.
+
+**Not established.** That the quark or boson numbers are wrong — they agree within the quoted errors.
+The couplings and the anomalous moments are not tabulated here; C11 as written also named them, and that
+part is carried forward rather than claimed.
+
+Also fixed: `plain()` in `ch07-verify.py` and `ch08-verify.py` now decodes `&prime;`, `&radic;` and
+`&minus;`, the same blind spot found earlier with `&nbsp;` — a check containing them could not match.
+Checklist now eleven done (C1–C4, C8, C9, C11–C15) and four open (C5, C6, C7, C10); label updated to
+four with its check and control. ch08-verify: 20 checks, 7 controls. Not run: `tools/terms.py --check`,
+a render, any push.
