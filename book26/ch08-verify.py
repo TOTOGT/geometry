@@ -3,7 +3,7 @@
 # Copyright (c) 2026 Pablo Nogueira Grossi / G6 LLC
 """
 book26/ch08-verify.py -- book26/ch08-a-preprint-against-a-kernel.html.
-  [1] sections S1..S6   [2] labels   [3] the checklist: twelve items, C1..C4 and C12 checked, the rest open, in the page's own markup
+  [1] sections S1..S6   [2] labels   [3] the checklist: twelve items, six done (C1-C4, C9, C12) and six open, in the page's own markup
   [4] the evidence behind each checked box exists: audit report with 7 theorem lines and only permitted axioms; census with 140 rows
   [5] no employer or personal names beyond the cited title; controls    [HONESTY] what this does not establish
 """
@@ -62,11 +62,11 @@ def plain(t):
         t = t.replace(a, b)
     return re.sub(r"\s+", " ", t)
 SECS = ["S1", "S2", "S3", "S4", "S5", "S6"]
-LABELS = ["most of the checklist below is open", "a hand derivation", "this is an estimate", "not a verdict", "not established here", "keyword matching"]
+LABELS = ["half of the checklist below is open", "a hand derivation", "this is an estimate", "not a verdict", "not established here", "keyword matching"]
 BANNED = ["citadel", "north bridge", "uerj", "zilacleide"]
 FORBIDDEN = ["fetch(", "XMLHttpRequest", "localStorage", "<form", "action=", "<script"]
 IDS = ["C%d" % i for i in range(1, 13)]
-DONE = {"C1", "C2", "C3", "C4", "C12"}
+DONE = {"C1", "C2", "C3", "C4", "C9", "C12"}
 def method_ok(t): return re.findall(r'<li data-m="(M\d)">', t) == ["M%d" % i for i in range(1, 7)]
 def secs_ok(t): return re.findall(r'<div class="sec" data-n="([^"]+)">', t) == SECS
 def labels_ok(t):
@@ -125,12 +125,14 @@ def main():
     check("required labels present", labels_ok(t))
     check("method points M1..M6 present in order", method_ok(t))
     check("no private names, scripts, forms or network", names_ok(t))
-    check("checklist: C1..C12, C1-C4 and C12 checked, the rest open, markup agrees with status", checklist_ok(t))
+    check("checklist: C1..C12, six done (C1-C4, C9, C12), six open, markup agrees with status", checklist_ok(t))
     check("the table script behind C12 exists", (HERE / "nielsen-lepton-table.py").exists())
     check("audit report exists: 7 theorem lines, axioms within the permitted set", audit_ok())
     check("second audit report (abstract arithmetic) exists: 6 theorem lines, permitted axioms", audit2_ok())
     check("third audit report (lepton deviation) exists: 3 theorem lines, permitted axioms", audit3_ok())
     check("the page no longer says the lepton Lean file is unrun", "and not yet run" not in plain(t))
+    check("C9 names both derived values and the gap",
+          all(x in plain(t) for x in ("0.238732", "0.223200", "6.96%", "97")))
     check("census has 140 rows", census_ok())
 
     # Source check. SKIP, never PASS, when the paper is not in hand.
@@ -152,7 +154,7 @@ def main():
         ok = fn(damaged); print(("PASS " if not ok else "FAIL ") + "control rejected: " + name)
         if ok: ctl.append(name)
     control("section removed", t.replace('data-n="S3"', 'data-n="X"'), secs_ok)
-    control("label removed", t.replace("Most of the checklist below is open", "All done"), labels_ok)
+    control("label removed", t.replace("Half of the checklist below is open", "All done"), labels_ok)
     control("an open item marked done in the markup only", t.replace('<input type="checkbox" disabled aria-label="C5">', '<input type="checkbox" disabled checked aria-label="C5">'), checklist_ok)
     control("a checked item whose status is open", t.replace('data-c="C1" data-s="done"', 'data-c="C1" data-s="open"'), checklist_ok)
     control("an item removed", t.replace('data-c="C9"', 'data-c="X9"'), checklist_ok)

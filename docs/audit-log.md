@@ -11933,3 +11933,34 @@ predictions; that reading is a hand observation and is untested.
 `ch08-verify.py`: 14 checks, 7 controls, all controls rejected. A control confirming the source check
 can fail (a fabricated mH value) was run and did fail; the control file was moved out of the repo
 with `mv`, not `rm` (R4). Not run: `tools/terms.py --check`, a render, any push.
+
+## 2026-10-26 — book26 ch08: C9 closed, sin²θ_W = 3/(4π) is fitted
+
+Checked against the source preprint (p. 123, eq. 100), with `book26/ch08-sin2w-verify.py`
+(6 checks, 4 controls, SKIP-never-PASS without the source, paper pinned by digest).
+
+**Established, three internal points.** (1) The scheme question C9 asked is answered: the 0.4σ is
+against the PDG Thomson-limit value 0.23867 ± 0.00016 — recomputed 0.39σ. Against MS-bar at M_Z,
+0.23122 ± 0.00006, the same number is 125σ, which the paper absorbs into Δ_spec ≈ −0.0075, a
+quantity it says the PDG value "implies" — back-solved from the discrepancy, not computed from the
+shell spectrum. The same mechanism absorbs 5.0% in g and 3.0% in g′. (2) The derivation contradicts
+its own definition: the paper writes sin²θ_W = g′²/(g²+g′²) with g′ the hypercharge coupling, then
+puts dim SU(2) = 3 on top as the weight "carried by the SU(2) sector" — by its own formula that is
+cos²θ_W. A generator count over a Gauss–Bonnet integral ∫K dA = 4π is not a ratio of gauge weights;
+done as the prose describes, the degree-of-freedom ratio is 1/4 or 3/4. (3) The same page derives
+the symbol a second time from the paper's own Table 6 masses: 1 − m_W²/m_Z² = 0.223200, reproduced
+exactly, matching the PDG on-shell value to 10⁻⁵. Two derived values of one quantity, **6.96% apart,
+97σ in the uncertainty used to claim 0.4σ**, each compared to whichever scheme value it lands on.
+
+**Not established.** That 3/(4π) is wrong physics, that the Standard Model value is right, or that no
+derivation of this ratio could exist. The finding is internal consistency only. **Not reproduced:**
+eq. (101) prints g ≈ 0.6205; 4π√(α/3) with α = 1/137.036 gives 0.6198. Their α comes from Theorem 66,
+unread, so this may be internal rather than an error. **What would settle C9:** a Δ_spec computed from
+the Hopf-shell spectrum without reference to the measured number, and a statement of which scheme
+eq. (100) predicts. Neither is in the paper.
+
+Checklist now six done (C1–C4, C9, C12) and six open (C5, C6, C7, C8, C10, C11), counted not
+estimated; the page label "Most of the checklist below is open" was true at five done and is now
+"Half", with `ch08-verify.py`'s label check and its control updated to match. `ch08-verify.py`:
+15 checks, 7 controls. An earlier note in this session called this item C5; it is C9 — C5 is the
+algebra statements and remains open. Not run: `tools/terms.py --check`, a render, any push.
