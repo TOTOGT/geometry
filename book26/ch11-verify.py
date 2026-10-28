@@ -251,9 +251,10 @@ def main():
     print("[5] figures quoted in prose"); p = plain(t)
     for k, v in prose_expected().items(): check(f"prose: {k}", v in p, v[:90])
     check("stat panels equal computed values", stats_ok(t), f"{len(stats_expected())} figures")
-    c10 = (HERE / "ch10-four-pillars-one-mission.html"); fact = "securities finance at JPMorgan Chase (2005 to 2008)"
-    if c10.exists(): check("author aside: the JPMorgan Chase dates match chapter 10 word for word", fact in plain(c10.read_text(encoding="utf-8")) and fact in plain(t))
-    else: skip("author aside against chapter 10", "ch10 not beside the page")
+    # author's own stated dates (no document; recorded 2026-10-28): Chase 2005 to 2008, securities finance from November 2006, Banco do Brasil NY RM until 2014
+    p_ = plain(t)
+    check("author aside states the author's recorded dates", all(k in p_ for k in ("at JPMorgan Chase from 2005 to 2008", "in securities finance from November 2006", "Relationship Manager until 2014")))
+    check("author aside does not repeat the imprecise 'securities finance at JPMorgan Chase (2005 to 2008)'", "securities finance at JPMorgan Chase (2005 to 2008)" not in p_)
     print("[6] comparative claims"); [check(k, ok) for k, ok in claims().items()]
     print("UNCHECKED  posting figures in S1 ($179,150-$229,150; 27 Oct and 1 Dec 2026; more than $22 and $9 billion): the posting is not held here")
     print("[7] SOURCE")
