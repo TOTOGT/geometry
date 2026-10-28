@@ -46,7 +46,8 @@ BS = {"Bonds": 18476899, "Common stocks": 1827205, "Cash, cash equivalents and s
       "Total cash and invested assets": 21025079}                       # balance sheet p. 4
 ON_LOAN, COLLATERAL = 238377, 250359                                   # p. 25
 REALIZED_BONDS = -85325                                                # p. 26, net realized gains (losses) and impairments
-CITED = {"bond table": 24, "maturity table": 24, "securities lending": 25, "balance sheet": 4, "realized": 26}
+RESERVE_DISCOUNT = 5                                                   # p. 9, percent, mandated by the Workers' Compensation Law
+CITED = {"bond table": 24, "maturity table": 24, "securities lending": 25, "balance sheet": 4, "realized": 26, "reserve discount": 9}
 
 def m(x): return f"{x/1000:,.1f}"
 def sgn(x): return ("-" if x < 0 else "") + f"{abs(x)/1000:,.1f}"
@@ -91,6 +92,7 @@ def prose_expected():
         "long end $1.03 billion": f"${long_gap/1e6:.2f} billion below cost",
         "long end 69 percent": f"{long_gap/gap*100:.0f} percent of the whole gap",
         "realized $85.3 million": f"${-REALIZED_BONDS/1e3:.1f} million of net realized losses",
+        "reserves discounted at 5 percent": f"{RESERVE_DISCOUNT} percent at which state law makes the Fund discount its claim reserves",
     }
 def prose_ok(t):
     p = plain(t); return all(v in p for v in prose_expected().values())
@@ -145,6 +147,8 @@ def source_checks(pages, ips, boc):
     res["p. 4 balance sheet"] = (row(p4, "Bonds-at NAIC carrying value")[:1] == [BS["Bonds"]] and row(p4, "Common stocks")[:1] == [BS["Common stocks"]]
                                  and row(p4, "Cash, cash equivalents and short-term investments")[:1] == [BS["Cash, cash equivalents and short-term investments"]]
                                  and row(p4, "Total cash and invested assets")[:1] == [BS["Total cash and invested assets"]])
+    p9 = re.sub(r"\s+", " ", wcf_page(pages, CITED["reserve discount"]))
+    res["p. 9 reserves discounted at 5% by law"] = f"discounts all loss and loss adjustment expense reserves at {RESERVE_DISCOUNT}%" in p9
     w = re.sub(r"\s+", " ", ips)
     for s in ["As amended by the Board of Commissioners on November 18, 2020", "Investment Grade Fixed 78% 85% 100% NYSIF Custom Benchmark",
               "High Yield 0% 4% 7%", "Public Equities 0% 5% 8%", "Alternatives 0% 4% 7%", "Cash 0% 2% 3% ICE BofAML 3-month T-Bill",
