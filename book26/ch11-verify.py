@@ -122,7 +122,7 @@ def prose_expected():
       "corp pct": f"corporate bonds {pb('Corporate bonds'):.1f} percent", "abs pct": f"asset-backed securities {pb('Asset-backed securities'):.1f} percent",
       "long end": f"${lg/1e6:.2f} billion below book, {lg/gap*100:.0f} percent of the whole gap",
       "5-10 above book": f"${mid/1e3:.1f} million above book",
-      "stock gains": f"six of the seven years, ${sum(REAL_STOCKS)/1e6:.2f} billion in all",
+      "stock gains": f"six of the seven years and a net ${sum(REAL_STOCKS)/1e6:.2f} billion over the seven",
       "DFS realized": f"${DFS_1014_REALIZED/1e9:.2f} billion over 2010 to 2014 and ${DFS_1519_REALIZED/1e6:,.0f} million over 2015 to 2019",
       "stock share range": f"between {min(share):.1f} and {max(share):.1f} percent of cash and invested assets",
       "bond gains 2019-21": f"net gains of ${up/1e3:,.1f} million over 2019 to 2021", "bond losses 2022-25": f"net losses of ${-dn/1e3:,.1f} million over 2022 to 2025",
