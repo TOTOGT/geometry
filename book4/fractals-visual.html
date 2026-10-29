@@ -51,11 +51,11 @@ input[type=range]{width:100%;accent-color:#d9b76a;margin-top:.3rem}
   <div class="cv"><canvas id="c"></canvas><div class="hint">colour = position along the curve (cosmetic) · white dots = vertices the curve visits twice (45° tent only)</div></div>
   <div class="panel">
     <div><label>curve</label><div class="seg" id="kind">
-      <button data-k="tent" class="on">Tent</button><button data-k="koch">Koch</button><button data-k="mink">Minkowski</button></div></div>
+      <button data-k="tent" class="on">Tent</button><button data-k="koch">Koch</button><button data-k="mink">Minkowski</button><button data-k="sier">Sierpinski</button></div></div>
     <div><label>level <b id="lvL">4</b><input id="lvl" type="range" min="0" max="8" value="4"></label></div>
     <div id="thWrap"><label>tent angle <b id="thL">45</b> degrees<input id="th" type="range" min="1" max="59" value="45"></label></div>
     <div class="row"><input type="checkbox" id="dots" checked style="accent-color:#d9b76a"><label for="dots" style="margin:0">mark double-visited vertices</label></div>
-    <div class="seg"><button class="btn" id="trace">Trace it</button><button class="btn" id="reset">Reset view</button></div>
+    <div class="seg"><button class="btn" id="trace">Trace it</button><button class="btn" id="reset">Reset view</button><button class="btn" id="touch">Zoom to a touch</button></div>
     <div class="read" id="read"></div>
   </div>
 </div></div>
@@ -63,6 +63,7 @@ input[type=range]{width:100%;accent-color:#d9b76a;margin-top:.3rem}
 <div class="note">
   <p>What is drawn here is the polygon at the chosen level, not the limit curve. Every figure in the panel is computed live from the generator in <code>fractals.html</code> §2, except the similarity dimension, which is the formula log N / log(1/r).</p>
   <p>The tent at 45° has similarity dimension exactly 4/3. At other angles the readout is the same formula, which is an upper bound once pieces overlap, and I have not determined where that begins. The double-visited-vertex count is a different measurement from the touching-pair counts in the chapter text (it misses places where one piece's end meets the middle of another), so the two numbers should not be compared. Exact arithmetic, <code>fractals-verify.py</code> and <code>fractals-touch-count.py</code>, is the source for anything stated in the text.</p>
+  <p>Exact checks at rational angles (<code>fractals-angle-scan.py</code>) found proper self-crossings in every tested tent angle except 45°, at a level that grows as the angle shrinks. I do not know whether crossings of the curve invalidate the dimension formula, so the readout at other angles stays labelled as the formula only.</p>
   <p>Not proved: that the 45° limit satisfies the open-set condition, and so that 4/3 is its true (Hausdorff) dimension. The picture suggests contacts stay bounded; it does not show it.</p>
 </div>
 
@@ -79,7 +80,17 @@ input[type=range]{width:100%;accent-color:#d9b76a;margin-top:.3rem}
     return [[0,0],[.25,t/4],[.5,t/2],[.75,t/4],[1,0]];
   }
   function maxLevel(m){var n=0,c=1;while(c*m<=MAXSEG&&n<8){c*=m;n++;}return n;}
+  function buildSier(){
+    var lv=Math.min(S.level,8),T=new Float64Array([0,0,1,0,.5,Math.sqrt(3)/2]);
+    for(var l=0;l<lv;l++){var n=T.length/6,U=new Float64Array(n*18);
+      for(var i=0;i<n;i++){var ax=T[6*i],ay=T[6*i+1],bx=T[6*i+2],by=T[6*i+3],cx=T[6*i+4],cy=T[6*i+5];
+        var abx=(ax+bx)/2,aby=(ay+by)/2,acx=(ax+cx)/2,acy=(ay+cy)/2,bcx=(bx+cx)/2,bcy=(by+cy)/2;
+        U.set([ax,ay,abx,aby,acx,acy, abx,aby,bx,by,bcx,bcy, acx,acy,bcx,bcy,cx,cy],18*i);}
+      T=U;}
+    S.tri=T;S.lv=lv;S.ml=8;S.m=3;S.xs=new Float64Array([0,1,.5]);S.ys=new Float64Array([0,0,Math.sqrt(3)/2]);S.dbl=[];S.dblg=[];
+  }
   function build(){
+    if(S.kind==='sier'){buildSier();return;}
     var g=gen(),m=g.length-1;
     var ml=maxLevel(m),lv=Math.min(S.level,ml);
     var xs=new Float64Array([0,1]),ys=new Float64Array([0,0]);
@@ -94,11 +105,11 @@ input[type=range]{width:100%;accent-color:#d9b76a;margin-top:.3rem}
     }
     S.xs=xs;S.ys=ys;S.lv=lv;S.ml=ml;S.m=m;
     // double-visited vertices (exact only at 45 deg tent)
-    S.dbl=[];
+    S.dbl=[];S.dblg=[];
     if(S.kind==='tent'&&S.th===45&&lv<=7){
       var map=new Map();
       for(var i=0;i<xs.length;i++){var key=xs[i]+','+ys[i];var a=map.get(key);if(a===undefined)map.set(key,[i]);else a.push(i);}
-      map.forEach(function(a){if(a.length>1)S.dbl.push(a[0]);});
+      map.forEach(function(a){if(a.length>1){S.dbl.push(a[0]);S.dblg.push(a);}});
     }
   }
   function fitView(){
@@ -113,6 +124,12 @@ input[type=range]{width:100%;accent-color:#d9b76a;margin-top:.3rem}
   function draw(){
     var W=cv.width,H=cv.height,v=S.view;
     ctx.globalCompositeOperation='source-over';ctx.fillStyle='#04060a';ctx.fillRect(0,0,W,H);
+    if(S.kind==='sier'){
+      var T=S.tri,nt=T.length/6,e2=Math.max(1,Math.floor(nt*S.limit));
+      ctx.globalCompositeOperation='source-over';
+      for(var i=0;i<e2;i++){ctx.fillStyle='hsl('+((205+300*i/nt)%360)+',72%,58%)';ctx.beginPath();
+        ctx.moveTo(v.ox+v.s*T[6*i],v.oy-v.s*T[6*i+1]);ctx.lineTo(v.ox+v.s*T[6*i+2],v.oy-v.s*T[6*i+3]);ctx.lineTo(v.ox+v.s*T[6*i+4],v.oy-v.s*T[6*i+5]);ctx.closePath();ctx.fill();}
+      readout();return;}
     var n=S.xs.length-1,end=Math.max(1,Math.floor(n*S.limit)),batch=Math.max(1,Math.floor(n/300));
     ctx.globalCompositeOperation='lighter';ctx.lineJoin='round';ctx.lineCap='round';
     var lw=Math.max(.7,2.4-S.lv*.28)*dpr;
@@ -133,10 +150,14 @@ input[type=range]{width:100%;accent-color:#d9b76a;margin-top:.3rem}
       var r=Math.max(1.1,2.4-S.lv*.25)*dpr;
       for(var q=0;q<S.dbl.length;q++){var k=S.dbl[q];ctx.beginPath();ctx.arc(v.ox+v.s*S.xs[k],v.oy-v.s*S.ys[k],r,0,6.2832);ctx.fill();}
     }
+    if(S.focus){ctx.globalCompositeOperation='source-over';ctx.strokeStyle='#d9b76a';ctx.lineWidth=1.5*dpr;ctx.beginPath();ctx.arc(v.ox+v.s*S.focus.x,v.oy-v.s*S.focus.y,16*dpr,0,6.2832);ctx.stroke();}
     readout();
   }
   function readout(){
     var d,form;
+    if(S.kind==='sier'){var nt=S.tri.length/6;
+      document.getElementById('read').innerHTML='level <b>'+S.lv+'</b><br>triangles <b>'+nt.toLocaleString()+'</b><br>area left <b>'+Math.pow(.75,S.lv).toFixed(4)+'</b> of the original, (3/4)^n<br>N=3, 1/r=2<br>similarity dim <b>'+(Math.log(3)/Math.log(2)).toFixed(4)+'</b><br><span style="color:#6b738a">the limit has zero area; dimension is log 3 / log 2</span>';
+      document.getElementById('lvL').textContent=S.level;return;}
     if(S.kind==='koch'){d=Math.log(4)/Math.log(3);form='N=4, 1/r=3';}
     else if(S.kind==='mink'){d=Math.log(8)/Math.log(4);form='N=8, 1/r=4';}
     else{var c=4*Math.cos(S.th*Math.PI/180);d=Math.log(4)/Math.log(c);form='N=4, 1/r='+c.toFixed(4);}
@@ -151,11 +172,30 @@ input[type=range]{width:100%;accent-color:#d9b76a;margin-top:.3rem}
   function rebuild(fit){build();if(fit||!S.view)fitView();draw();}
   kindBtns.forEach(function(b){b.addEventListener('click',function(){
     kindBtns.forEach(function(x){x.classList.remove('on')});b.classList.add('on');S.kind=b.dataset.k;
-    document.getElementById('thWrap').style.display=S.kind==='tent'?'':'none';S.limit=1;rebuild(true);});});
+    document.getElementById('thWrap').style.display=S.kind==='tent'?'':'none';S.limit=1;S.focus=null;rebuild(true);});});
   document.getElementById('lvl').addEventListener('input',function(e){S.level=+e.target.value;S.limit=1;rebuild(false);});
   document.getElementById('th').addEventListener('input',function(e){S.th=+e.target.value;document.getElementById('thL').textContent=S.th;S.limit=1;rebuild(true);});
   document.getElementById('dots').addEventListener('change',function(e){S.dots=e.target.checked;draw();});
-  document.getElementById('reset').addEventListener('click',function(){S.limit=1;fitView();draw();});
+  document.getElementById('reset').addEventListener('click',function(){S.limit=1;S.focus=null;fitView();draw();});
+  document.getElementById('touch').addEventListener('click',function(){
+    S.kind='tent';S.th=45;document.getElementById('th').value=45;document.getElementById('thL').textContent=45;
+    document.getElementById('thWrap').style.display='';
+    kindBtns.forEach(function(x){x.classList.toggle('on',x.dataset.k==='tent')});
+    S.level=Math.max(S.level,6);if(S.level>7)S.level=7;document.getElementById('lvl').value=S.level;S.limit=1;rebuild(true);
+    if(!S.dbl.length)return;
+    var good=[];
+    S.dblg.forEach(function(a){var dirs={};a.forEach(function(i){[i-1,i+1].forEach(function(j){if(j<0||j>=S.xs.length)return;
+      var dx=S.xs[j]-S.xs[i],dy=S.ys[j]-S.ys[i],L=Math.hypot(dx,dy);dirs[Math.round(dx/L*1e4)+','+Math.round(dy/L*1e4)]=1;});});
+      if(Object.keys(dirs).length>=3)good.push(a[0]);});
+    var pool=good.length?good:S.dbl;
+    var k=pool[Math.floor(pool.length*0.37)],x=S.xs[k],y=S.ys[k];S.focus={x:x,y:y};
+    var Ls=Math.pow(2,-1.5*S.lv),W=cv.width,H=cv.height,s1=Math.min(W,H)/(10*Ls),v0={s:S.view.s,ox:S.view.ox,oy:S.view.oy},t0=performance.now();
+    var tx=W/2-s1*x,ty=H/2+s1*y;
+    (function step(now){var p=Math.min(1,(now-t0)/1400),e=p*p*(3-2*p);
+      var lerp=Math.exp(Math.log(v0.s)*(1-e)+Math.log(s1)*e);
+      S.view.s=lerp;S.view.ox=W/2-lerp*x*1+((v0.ox+v0.s*x-W/2)*(1-e));S.view.oy=H/2+lerp*y+((v0.oy-v0.s*y-H/2)*(1-e));
+      draw();if(p<1)requestAnimationFrame(step);})(t0);
+  });
   var raf=null;
   document.getElementById('trace').addEventListener('click',function(){
     cancelAnimationFrame(raf);var t0=performance.now(),dur=5500;
