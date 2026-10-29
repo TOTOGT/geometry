@@ -90,7 +90,9 @@ theorem allUnit_refineList : ∀ (l : List V), AllUnit l → AllUnit (refineList
       exact allUnit_append _ _ (allUnit_refine2 h.1) (allUnit_refineList l h.2)
 
 theorem allUnit_steps : ∀ m : Nat, AllUnit (steps m)
-  | 0 => by simp only [steps, AllUnit, UnitStep]; exact ⟨Or.inl ⟨rfl, rfl⟩, trivial⟩
+  | 0 => by
+      show UnitStep (1, 0) ∧ AllUnit []
+      exact ⟨Or.inl ⟨rfl, rfl⟩, trivial⟩
   | m + 1 => by
       simp only [steps]
       exact allUnit_refineList _ (allUnit_steps m)
