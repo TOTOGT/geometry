@@ -54,6 +54,40 @@ def boxslope(p, eps_list, per=6):
     s = np.polyfit(np.log(1 / np.array(eps_list)), np.log(N), 1)[0]
     return N, s
 
+from fractions import Fraction as F
+EX_GEN=[(F(0),F(0)),(F(1,4),F(1,4)),(F(1,2),F(1,2)),(F(3,4),F(1,4)),(F(1),F(0))]
+def ex_refine(p):
+    out=[]
+    for (ax,ay),(bx,by) in zip(p[:-1],p[1:]):
+        dx,dy=bx-ax,by-ay
+        for gx,gy in EX_GEN[:-1]:
+            out.append((ax+gx*dx-gy*dy, ay+gx*dy+gy*dx))
+    out.append(p[-1]); return out
+def ex_build(n):
+    p=[(F(0),F(0)),(F(1),F(0))]
+    for _ in range(n): p=ex_refine(p)
+    return p
+def orient(u,v,w): return (v[0]-u[0])*(w[1]-u[1])-(v[1]-u[1])*(w[0]-u[0])
+def onseg(u,v,w): return min(u[0],v[0])<=w[0]<=max(u[0],v[0]) and min(u[1],v[1])<=w[1]<=max(u[1],v[1])
+def ex_analyze(p):
+    n=len(p)-1; proper=0; touch=0; ex=[]
+    for i in range(n):
+        a,b=p[i],p[i+1]
+        for j in range(i+2,n):
+            c,d=p[j],p[j+1]
+            o1,o2,o3,o4=orient(a,b,c),orient(a,b,d),orient(c,d,a),orient(c,d,b)
+            if o1*o2<0 and o3*o4<0: proper+=1
+            else:
+                t=False
+                if o1==0 and onseg(a,b,c): t=True
+                if o2==0 and onseg(a,b,d): t=True
+                if o3==0 and onseg(c,d,a): t=True
+                if o4==0 and onseg(c,d,b): t=True
+                if t:
+                    touch+=1
+                    if len(ex)<3: ex.append((i,j))
+    return proper,touch,ex
+
 r = 2 ** -1.5; N = 4
 print("1. similarity dimension")
 print("   piece lengths of generator:", np.round(seglens(TENT), 6), " 2^-1.5 =", round(r, 6))
@@ -65,6 +99,10 @@ for n in range(0, 7):
 print("3. proper self-crossings (finite check)")
 for n in range(1, 6):
     print(f"   level {n}: {crossings(build(TENT, n))}")
+print("3b. EXACT rational arithmetic at 45 deg (floating-point crossing tests are fragile when pieces touch)")
+for n in range(1,6):
+    pr,tc,_=ex_analyze(ex_build(n))
+    print(f"   level {n}: proper crossings {pr}, touching non-adjacent pairs {tc}")
 print("4. box counting (noisy; compare to calibration)")
 pk = build(KOCH, 7)
 Nk, sk = boxslope(pk, [3.0**-k for k in range(2, 6)])

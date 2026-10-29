@@ -151,7 +151,7 @@ footer a:hover{color:#c8a96e;}
 <div class="eq">N r = 4 · 2^(−3/2) = 2^(1/2) = √2<br>
 d = log N / log(1/r) = (2 log 2)/((3/2) log 2) = 4/3<br>
 <span class="cm">length at level n:  L_n = (√2)^n  →  ∞   (a rectifiable limit would have finite length)</span></div>
-<p>Two caveats the formula does not remove. First, similarity dimension equals the true (Hausdorff) dimension only when the pieces overlap little (an open-set condition); I have <em>not</em> proved that condition for this curve, only checked it numerically to level 5 (§5). Second, I looked only at the 45° member. In a family with apex angle θ the ratio is r = 1/(4 cos θ) and the similarity dimension is log 4 / log(4 cos θ); other angles give other dimensions, but beyond a certain angle the pieces overlap and the formula is only an upper bound. 45° is the special case where the answer is exactly 4/3.</p>
+<p>Two caveats the formula does not remove. First, similarity dimension equals the true (Hausdorff) dimension only when the pieces overlap little (an open-set condition); I have <em>not</em> proved that condition for this curve, only checked it numerically to level 5 (§5). Second, I looked only at the 45° member. In a family with apex angle θ the ratio is r = 1/(4 cos θ) and the similarity dimension is log 4 / log(4 cos θ); other angles give other dimensions, but the formula is only an upper bound once pieces overlap, and I have not determined where that begins (my floating-point scan of other angles was unreliable, see §5). 45° is the case where the answer is exactly 4/3 and the exact check above was run.</p>
 
 <div class="sec-num">§4 · See it</div>
 <h2 class="sec">Levels 0 to 5</h2>
@@ -168,9 +168,10 @@ d = log N / log(1/r) = (2 log 2)/((3/2) log 2) = 4/3<br>
 <p>I ran <code>fractals-verify.py</code> on the repository machine. It builds the levels with exact complex-number similarities and reports the following.</p>
 <div class="eq">generator pieces: all 0.353553 = 2^-1.5     d = log4/log(1/r) = 1.3333333…<br>
 level length, measured vs √2^n:  n=0..6 agree to 6 decimals (1, 1.414214, 2, 2.828427, 4, 5.656854, 8)<br>
-proper self-crossings, levels 1–5:   0, 0, 0, 0, 0<br>
+proper self-crossings, levels 1–5 (exact rational arithmetic):   0, 0, 0, 0, 0<br>
+touching non-adjacent pairs, levels 1–5:   0, 0, 12, 70, 316<br>
 <span class="cm">box-count slope, Koch (true 1.2619): 1.318   tent (true 1.3333): 1.260</span></div>
-<p>So the algebra and the length are exact, and no pieces cross <em>through level 5</em>. That is a finite check, not a proof that the limit curve is simple or that the open-set condition holds. The box-count slopes are off by about 0.06 in opposite directions for the two curves, so box counting at these scales cannot distinguish 1.26 from 1.33. I report it as a sanity check on the code, and I do not offer it as a measurement of the limit. The verifier is untested by anyone but me until you run it yourself: <code>python3 fractals-verify.py</code>.</p>
+<p>So the algebra and the length are exact, and no pieces properly cross <em>through level 5</em>. But the exact check also shows the curve <em>touches itself</em> from level 3 on (12, 70, 316 touching pairs at levels 3, 4, 5), so the limit is not a simple arc. Touching is compatible with the open-set condition, which only forbids substantial overlap, but I have not proved it; this is a finite check, not a proof. I caught this because a floating-point version of the same test gave nonzero crossing counts at level 5: the touch points are exactly where rounding error flips the answer, so floating-point crossing counts are unreliable for this curve and should not be quoted. The box-count slopes are off by about 0.06 in opposite directions for the two curves, so box counting at these scales cannot distinguish 1.26 from 1.33. I report it as a sanity check on the code, and I do not offer it as a measurement of the limit. The verifier is untested by anyone but me until you run it yourself: <code>python3 fractals-verify.py</code>.</p>
 
 <div class="sec-num">§6 · Where this meets Book 4</div>
 <h2 class="sec">The formula in Theorem 3.4</h2>
