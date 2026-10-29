@@ -5,8 +5,8 @@ Mathlib-free: core Lean 4 only, so it can be checked with
     lean book4/FractalGridLemma.lean
 and cannot drift with a Mathlib bump.
 
-STATUS: WRITTEN WITHOUT A LOCAL LEAN TOOLCHAIN. UNTESTED until you run it.
-Errors should be fixed against what the compiler actually says.
+STATUS: compiled by the author on Lean v4.32.0 with no errors and no sorry (2026-10-29).
+`#print axioms` on even_level_no_crossing: propext, Classical.choice, Quot.sound.
 
 ## What this file claims (and what it does not)
 
