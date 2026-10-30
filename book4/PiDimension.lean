@@ -3,11 +3,9 @@ import Mathlib
 /-!
 # PiDimension — the algebra behind book4/pi.html (Chapter 3½)
 
-STATUS: first compile (author, 2026-10-30): `moran` and `ratio_lt_half` clean (axioms propext,
-Classical.choice, Quot.sound); `box_count` failed at a `rw` (rpow_natCast did not match the
-literal exponent 3) and so `box_count` and `box_count_pi` depended on sorryAx. That step was
-then rewritten; it has NOT been recompiled. Until a fully clean run is recorded here, treat
-box_count and box_count_pi as unchecked.
+STATUS: compiled by the author on Lean v4.32.0 with Mathlib, no errors and no sorry (2026-10-30).
+`#print axioms` on moran, ratio_lt_half, box_count and box_count_pi: propext, Classical.choice,
+Quot.sound. (An earlier run failed in `box_count` at a `rw`; that step was rewritten.)
 
 Transcendence of π plays no role. The construction only uses that π is a real number with
 3 < π < 4 (Mathlib: `Real.pi_gt_three`, and an upper bound), so s = π − 3 lies in (0, 1).
