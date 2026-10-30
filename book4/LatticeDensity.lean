@@ -31,7 +31,7 @@ lemma floor_two_le (x : ℝ) (hx : 2 ≤ x) :
   have h2 : x < (⌊x⌋₊ : ℝ) + 1 := Nat.lt_floor_add_one x
   exact ⟨by linarith, h1⟩
 
-theorem lattice_error (d : ℝ) (hd : 0 < d) (hd4 : d ≤ 4) (m : ℕ) (hm : 2 ≤ m)
+theorem lattice_error (d : ℝ) (_hd : 0 < d) (hd4 : d ≤ 4) (m : ℕ) (hm : 2 ≤ m)
     (hx : 2 ≤ (m : ℝ) ^ d) :
     1 ≤ ⌊(m : ℝ) ^ d⌋₊ ∧ ⌊(m : ℝ) ^ d⌋₊ ≤ m ^ 4 ∧
     0 ≤ d - Real.log (⌊(m : ℝ) ^ d⌋₊) / Real.log m ∧
@@ -49,7 +49,10 @@ theorem lattice_error (d : ℝ) (hd : 0 < d) (hd4 : d ≤ 4) (m : ℕ) (hm : 2 �
       Real.rpow_le_rpow_of_exponent_le hm1.le hd4
     have h5 : (m : ℝ) ^ (4 : ℝ) = (m : ℝ) ^ (4 : ℕ) := by
       exact_mod_cast Real.rpow_natCast (m : ℝ) 4
-    have : (⌊x⌋₊ : ℝ) ≤ (m : ℝ) ^ (4 : ℕ) := by linarith
+    have : (⌊x⌋₊ : ℝ) ≤ (m : ℝ) ^ (4 : ℕ) :=
+      calc (⌊x⌋₊ : ℝ) ≤ x := hhi
+        _ ≤ (m : ℝ) ^ (4 : ℝ) := h4
+        _ = (m : ℝ) ^ (4 : ℕ) := h5
     exact_mod_cast this
   · have hlx : Real.log x = d * Real.log m := by
       rw [hxdef, Real.log_rpow hmpos]
@@ -79,7 +82,7 @@ theorem lattice_dense (d ε : ℝ) (hd : 0 < d) (hd4 : d ≤ 4) (hε : 0 < ε) :
   set m : ℕ := ⌈Real.exp t⌉₊ with hmdef
   have hmge : Real.exp t ≤ (m : ℝ) := Nat.le_ceil _
   have hm2 : 2 ≤ m := by
-    have : (1 : ℝ) < Real.exp t := Real.one_lt_exp.mpr htpos
+    have : (1 : ℝ) < Real.exp t := by rw [← Real.exp_zero]; exact Real.exp_lt_exp.mpr htpos
     have h2 : (1 : ℝ) < (m : ℝ) := lt_of_lt_of_le this hmge
     have : 1 < m := by exact_mod_cast h2
     omega
