@@ -100,12 +100,33 @@ dimension of C x R^3 = 3.141592653590   container R^4 needs dim &lt;= 4: True</p
 <p>The constructions in Chapter 1½ cut a unit square into a grid and keep N of m² cells, so their dimension is log N / log m with whole numbers N and m. In the unit 4-cube the same recipe allows any N up to m⁴. That gives dimensions that are logarithms of whole numbers, and it can get as close to π as you like: the verifier found m = 37 with N = 84,460 pieces giving 3.141593, an error of about 4 × 10<sup>−8</sup>.</p>
 <p>It does not give π exactly. Hitting it would need m<sup>π</sup> to be a whole number, and this check does not settle whether that can happen. The construction above sidesteps the question by using a ratio that is not a reciprocal of a whole number (1/r = 133.67…), which a lattice cannot do. The honest statement is: the lattice route approximates π, and the non-lattice ratio realises it exactly.</p>
 
-<h2>4 · What this is, and is not</h2>
+<h2>4 · Can m<sup>π</sup> be a whole number?</h2>
+<p>The lattice route would hit π exactly only if m<sup>π</sup> = N for whole numbers m and N. As far as the author knows this is an open question; even "is 2<sup>π</sup> rational?" is listed as unknown. Below is every route considered, with what it actually gives.</p>
+<div class="tbl"><table>
+<tr><th>Route</th><th>What it gives</th><th>Status</th></tr>
+<tr><td class="n">1 · Certified bracketing</td><td>m<sup>π</sup> lies strictly between two consecutive integers for every m from 2 to 1,000,000 (999,999 values, none undecided). By hand: 8 &lt; 2<sup>π</sup> = 8.82497… &lt; 9 and 31 &lt; 3<sup>π</sup> = 31.54428… &lt; 32.</td><td>Proved for those m, by interval arithmetic (<code>pi-integer-power.py</code>). Nothing beyond the limit.</td></tr>
+<tr><td class="n">2 · Six exponentials theorem</td><td>For any three distinct primes, at least one of p<sup>π</sup> is transcendental, hence not a whole number. So at most two primes p can have p<sup>π</sup> algebraic. (Take x<sub>i</sub> = ln p<sub>i</sub> and y = (1, π).) The four exponentials conjecture would sharpen this to at most one prime.</td><td>Quoted theorem (Lang and Ramachandra); the consequence is one step. Speaks about primes, not directly about composite m.</td></tr>
+<tr><td class="n">3 · Gelfond–Schneider, Baker</td><td>Nothing. They need an algebraic exponent, or algebraic coefficients in a linear form of logarithms, and π is neither.</td><td>Does not apply.</td></tr>
+<tr><td class="n">4 · Schanuel's conjecture</td><td>Would, as far as the author knows, settle whether m<sup>π</sup> is algebraic.</td><td>Conditional on an unproved conjecture; the implication is not derived here.</td></tr>
+<tr><td class="n">5 · Heuristic</td><td>Fractional parts of m<sup>π</sup> behave like random numbers, so an exact whole-number hit has probability zero. The nearest approach for m up to 10<sup>6</sup> is 2.9 × 10<sup>−7</sup> (at m = 973,492), about what a random sample of that size would give.</td><td>Evidence only, not proof.</td></tr>
+</table></div>
+<p>Each route stalls at a known place. Route 1 is finite and cannot reach every m. Route 2 constrains primes and leaves up to two of them open, and a composite m<sup>π</sup> is a product of prime powers of π that could in principle be algebraic even if none of the factors is. Routes 3 and 4 need either a hypothesis that fails or a conjecture. The five nearest misses found by route 1:</p>
+<div class="tbl"><table>
+<tr><th>m</th><th>distance to nearest whole number</th></tr>
+<tr><td class="n">973,492</td><td>2.858 × 10<sup>−7</sup></td></tr>
+<tr><td class="n">751,568</td><td>5.523 × 10<sup>−7</sup></td></tr>
+<tr><td class="n">433,759</td><td>1.089 × 10<sup>−6</sup></td></tr>
+<tr><td class="n">941,693</td><td>2.817 × 10<sup>−6</sup></td></tr>
+<tr><td class="n">473,615</td><td>3.626 × 10<sup>−6</sup></td></tr>
+</table></div>
+<p>The certificate rests on the interval arithmetic of the library used (outward-rounded enclosures of π and of m<sup>π</sup> at 80 digits); it is as reliable as that library. None of this affects the dimension-π set of §2, which never needs m<sup>π</sup> to be a whole number.</p>
+
+<h2>5 · What this is, and is not</h2>
 <ul class="l">
   <li><b>This is a construction, not a natural object.</b> A Cantor dust times a solid is a clean way to realise a dimension. It says nothing about whether any physical or dynamical set has dimension near π.</li>
   <li><b>Where natural 3–4 dimensional sets might appear.</b> As far as I know, a chaotic flow in four variables can have a Kaplan–Yorke dimension between 3 and 4, as the three-variable flows of Chapter 2½ have values between 2 and 3. None is computed in this chapter, so it makes no claim about any 4D system.</li>
   <li><b>π is not special.</b> The same recipe gives e, 3.2 or 3.9. A dimension equal to π would need its own reason to matter, and none is given here.</li>
-  <li><b>Not formalised in Lean.</b> The box-count identity is two lines of algebra, but nothing here has been checked by a proof assistant.</li>
+  <li><b>Not machine-checked yet.</b> The box-count identity is two lines of algebra. A Lean file for it (<code>PiDimension.lean</code>) exists but has not yet been compiled, so nothing in this chapter has been checked by a proof assistant.</li>
   <li><b>Not a link to the series' other constants.</b> The π here is just a target value for the dimension. The chapter does not claim any connection to the π that appears elsewhere in the dm³ chapters.</li>
 </ul>
 
