@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 3½ — Pi: a Set of Dimension 3.14159… · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090f;--panel:#0d111b;--ink:#e8ebf2;--dim:#7d869c;--rule:#1c2233;--gold:#d9b76a;--teal:#58c7d1;--red:#e0735a;--serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.62}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.7rem 1.25rem;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 1.25rem}
+header{padding:2.2rem 0 1rem}
+.kick{font-family:var(--mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:500;font-size:clamp(1.9rem,4.6vw,3.2rem);line-height:1.1;margin:.5rem 0 .7rem}h1 em{color:var(--gold)}
+.lede{max-width:46rem;color:#b9c0d1;font-style:italic}
+h2{font-weight:500;font-size:1.5rem;margin:2.4rem 0 .6rem;border-bottom:1px solid var(--rule);padding-bottom:.3rem}
+p{margin-bottom:.85rem;max-width:52rem}
+code{font-family:var(--mono);font-size:.82em;color:var(--teal)}
+.grid{display:grid;grid-template-columns:1fr 310px;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:1rem}
+.cv{background:#04060a;min-width:0;position:relative}
+canvas{display:block;width:100%;height:min(66vh,560px);touch-action:none;cursor:grab}
+.panel{background:var(--panel);padding:1.1rem;display:flex;flex-direction:column;gap:.85rem;min-width:0}
+.seg{display:flex;gap:.3rem;flex-wrap:wrap}
+.seg button,.btn{font-family:var(--mono);font-size:.58rem;letter-spacing:.05em;text-transform:uppercase;padding:.38rem .55rem;background:transparent;border:1px solid var(--rule);color:var(--dim);cursor:pointer}
+.seg button.on,.seg button:hover,.btn:hover{border-color:var(--teal);color:var(--teal)}
+label.l{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-bottom:.3rem}
+.eq{font-family:var(--mono);font-size:.64rem;line-height:1.7;color:#c9d1e3;white-space:pre-wrap;word-break:break-word}
+.read{border-top:1px solid var(--rule);padding-top:.7rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:var(--dim)}
+.read b{color:var(--gold);font-weight:500}
+.badge{display:inline-block;font-family:var(--mono);font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;padding:.15rem .45rem;border:1px solid;border-radius:2px}
+.b-ch{color:#7bd88f;border-color:#2f6b3d}.b-no{color:var(--red);border-color:#6b3326}.b-co{color:var(--gold);border-color:#6b5a2b}
+.tbl{overflow-x:auto;margin:1rem 0}
+table{border-collapse:collapse;font-family:var(--mono);font-size:.68rem;min-width:100%}
+th,td{padding:.4rem .7rem;text-align:left;border-bottom:1px solid var(--rule);white-space:nowrap}
+th{color:var(--dim);font-weight:400;text-transform:uppercase;letter-spacing:.05em;font-size:.58rem}
+td.n{color:var(--ink)}
+.note{border-left:3px solid var(--gold);background:var(--panel);padding:.9rem 1.1rem;margin:1.2rem 0;max-width:52rem}
+.note p{margin:0}
+ul.l{margin:0 0 1rem 1.2rem;max-width:52rem}ul.l li{margin-bottom:.5rem}
+.navrow{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.6rem 0 3rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em}
+@media(max-width:860px){.grid{grid-template-columns:1fr}canvas{height:52vh}}
+
+.cv2{background:#04060a;border:1px solid var(--rule);margin-top:1rem}
+.ctl{display:flex;gap:1.2rem;flex-wrap:wrap;align-items:center;padding:.8rem 1rem;background:var(--panel);border:1px solid var(--rule);border-bottom:0;margin-top:1rem;font-family:var(--mono);font-size:.62rem;color:var(--dim)}
+.ctl input[type=range]{width:min(320px,70vw);accent-color:var(--teal)}
+.ctl b{color:var(--gold);font-weight:500}
+pre.out{font-family:var(--mono);font-size:.62rem;line-height:1.6;color:#c9d1e3;background:#04060a;border:1px solid var(--rule);padding:.9rem 1rem;overflow-x:auto;margin:1rem 0;max-width:100%}
+th{text-transform:none!important}
+.math{font-family:var(--mono);font-size:.78em;color:#c9d1e3}
+</style></head>
+<body>
+<div class="top"><span><a href="contents.html">Book 4 contents</a> · <a href="../index-book4.html">file index</a> · <a href="../master-index.html">master index</a></span><span><a href="ch03.html">← Ch 3</a> · <a href="ch04.html">Ch 4 →</a></span></div>
+<div class="wrap">
+<header>
+  <div class="kick">Principia Orthogona · Book 4 · Chapter 3½ · Between the third and fourth dimension</div>
+  <h1>π: <em>a set whose dimension is 3.14159…</em></h1>
+  <p class="lede">Chapters 1½ and 2½ met sets between one and two dimensions and between two and three. This one asks the question from the other end: can a dimension be a number like π, and what has to be true of the space around it? The answer is yes for a set and no for a vector space, and the construction fits on one line.</p>
+</header>
+
+<h2>1 · Two meanings of "dimension"</h2>
+<p>A vector space has a whole-number dimension: the number of independent directions. A <em>set</em> has other dimensions that measure how it fills space, and those take any real value from 0 up to the dimension of the space it sits in. The similarity dimension of Chapter 1½, log N / log(1/r), is one of them; the tent curve came out at exactly 4/3.</p>
+<p>That upper limit is the whole constraint. A set with dimension 3.14159… is bigger than anything that fits in ordinary three-dimensional space, so it needs at least four dimensions around it. Four is enough, because 3.14159… is less than 4. Chapter 4, the hypercube, is exactly the four-dimensional container this set lives in.</p>
+
+<h2>2 · The construction, by hand</h2>
+<p>Let s = π − 3 = 0.14159…, and let C be the Cantor set made of two pieces, each a copy of the whole scaled by r, one at each end of [0, 1]. Choose r so the similarity equation holds:</p>
+<div class="note"><p><code>2 · r<sup>s</sup> = 1</code>, so <code>r = 2<sup>−1/s</sup> = 0.0074812…</code> (that is 1/r = 133.67…)</p></div>
+<p>Since r is less than 1/2 the two pieces do not touch, so the set is a genuine Cantor dust, and its dimension is log 2 / log(1/r) = s. The step from the similarity equation to the Hausdorff dimension is a standard theorem about self-similar sets with non-overlapping pieces (the open set condition). I am quoting it, not re-deriving it.</p>
+<p>Now take C × [0, 1]³, a Cantor dust times a solid cube, which sits in R⁴. The box-counting argument is elementary and worth seeing, because the number π − 3 does all the work. The level-k picture of C has 2<sup>k</sup> intervals of length r<sup>k</sup>. Cover C × [0,1]³ by cubes of side ε = r<sup>k</sup>: each interval needs one cube across, and the cube [0,1]³ needs (1/ε)³ of them, so the count is</p>
+<div class="note"><p><code>N(ε) = 2<sup>k</sup> · (r<sup>−k</sup>)³ = (r<sup>−k</sup>)<sup>s</sup> · (r<sup>−k</sup>)³ = ε<sup>−(3+s)</sup> = ε<sup>−π</sup></code></p></div>
+<p>using 2 = r<sup>−s</sup>. So at the scales ε = r<sup>k</sup> the box count grows exactly like ε<sup>−π</sup>. That gives the box-counting dimension at those scales. That the Hausdorff dimension equals it is the standard product theorem for Hausdorff dimension (the product of a set with R³, where both Hausdorff and box dimension of the cube are 3, adds the dimensions). That is quoted from the standard texts on fractal geometry, and I have not re-read the exact statement in this session.</p>
+
+<h2>The plate: C at every scale</h2>
+<p>A Cantor dust with r this small is almost invisible, so the plate shows what self-similarity says in pictures: each row is the left stripe of the row above, magnified by 1/r. Every row looks the same. Drag the slider to choose the target dimension; r changes and the stripes get wider as the dimension approaches 4. The stripes are drawn full height because they stand for slabs C × R³ seen edge-on in one direction.</p>
+<div class="ctl"><label>target dimension d = <b id="dval">3.14159</b></label><input type="range" id="dsl" min="3.02" max="3.98" step="0.00001" value="3.14159265"><button class="btn" id="dpi">Set d = π</button><span id="dread"></span></div>
+<div class="cv2"><canvas id="c2" style="height:320px;width:100%"></canvas></div>
+
+<h2>What was computed</h2>
+<p><code>pi-verify.py</code> does arithmetic and counts. It does not prove the dimension theorems. Its output for the π case:</p>
+<pre class="out">s = pi-3 = 0.1415926536
+r = 2^(-1/s) = 0.0074812066   (1/r = 133.6683)
+log2/log(1/r) = 0.141592653590   (s = 0.141592653590)
+Moran sum 2*r^s = 1.000000000000
+pieces disjoint (r &lt; 1/2): True
+dimension of C x R^3 = 3.141592653590   container R^4 needs dim &lt;= 4: True</pre>
+<div class="tbl"><table>
+<tr><th>target d</th><th>s = d − 3</th><th>r = 2<sup>−1/s</sup></th><th>pieces disjoint</th></tr>
+<tr><td class="n">3.1</td><td>0.1</td><td>0.000976563</td><td>yes</td></tr>
+<tr><td class="n">3.25</td><td>0.25</td><td>0.0625</td><td>yes</td></tr>
+<tr><td class="n">3.5</td><td>0.5</td><td>0.25</td><td>yes</td></tr>
+<tr><td class="n">π</td><td>0.14159</td><td>0.00748121</td><td>yes</td></tr>
+<tr><td class="n">3.9</td><td>0.9</td><td>0.462937</td><td>yes</td></tr>
+</table></div>
+<p>At the level-aligned scales ε = r<sup>k</sup> the exact count log N / log(1/ε) equals s at every level checked (1 to 6). Between those scales the count wobbles, which is what a very sparse set does: at ε = 10<sup>−1</sup> … 10<sup>−10</sup> the estimate ranges from 0.30 down to 0.162, and a straight regression over those decades gave 0.158 against the true 0.142. That is the expected behaviour of box counting on a gappy set over a finite range, and it is the reason to prefer the exact level count to a fitted slope.</p>
+
+<h2>3 · The lattice trap</h2>
+<p>The constructions in Chapter 1½ cut a unit square into a grid and keep N of m² cells, so their dimension is log N / log m with whole numbers N and m. In the unit 4-cube the same recipe allows any N up to m⁴. That gives dimensions that are logarithms of whole numbers, and it can get as close to π as you like: the verifier found m = 37 with N = 84,460 pieces giving 3.141593, an error of about 4 × 10<sup>−8</sup>.</p>
+<p>It does not give π exactly. Hitting it would need m<sup>π</sup> to be a whole number, and this check does not settle whether that can happen. The construction above sidesteps the question by using a ratio that is not a reciprocal of a whole number (1/r = 133.67…), which a lattice cannot do. The honest statement is: the lattice route approximates π, and the non-lattice ratio realises it exactly.</p>
+
+<h2>4 · What this is, and is not</h2>
+<ul class="l">
+  <li><b>This is a construction, not a natural object.</b> A Cantor dust times a solid is a clean way to realise a dimension. It says nothing about whether any physical or dynamical set has dimension near π.</li>
+  <li><b>Where natural 3–4 dimensional sets might appear.</b> As far as I know, a chaotic flow in four variables can have a Kaplan–Yorke dimension between 3 and 4, as the three-variable flows of Chapter 2½ have values between 2 and 3. I computed none here, so this chapter makes no claim about any 4D system.</li>
+  <li><b>π is not special.</b> The same recipe gives e, 3.2 or 3.9. A dimension equal to π would need its own reason to matter, and none is given here.</li>
+  <li><b>Not formalised in Lean.</b> The box-count identity is two lines of algebra, but nothing here has been checked by a proof assistant.</li>
+  <li><b>Not a link to the series' other constants.</b> The π here is just a target value for the dimension. The chapter does not claim any connection to the π that appears elsewhere in the dm³ chapters.</li>
+</ul>
+
+<h2>Exercises</h2>
+<ul class="l">
+  <li>Build a dimension-3.5 set: show r = 1/4 works for the two-piece Cantor set, and check that 2 · (1/4)<sup>1/2</sup> = 1.</li>
+  <li>Why can no set of dimension 3.14 sit in R³? Say it using the container rule.</li>
+  <li>Replace two pieces by three. For d = π, find r from 3 · r<sup>s</sup> = 1 and check the pieces are disjoint (you need r &lt; 1/3).</li>
+  <li>Find r for d = e. Is it larger or smaller than for π, and why?</li>
+</ul>
+
+<div class="navrow"><a href="ch03.html">← Ch 3 · The Contact 3-Manifold</a><a href="contents.html">Contents</a><a href="../index-book4.html">File index</a><a href="../master-index.html">Master index</a><a href="ch04.html">Ch 4 →</a></div>
+</div>
+
+<script>
+(function(){
+var cv=document.getElementById('c2'),ctx=cv.getContext('2d');
+var sl=document.getElementById('dsl'),dv=document.getElementById('dval'),rd=document.getElementById('dread');
+function draw(){
+  var d=parseFloat(sl.value),s=d-3,r=Math.pow(2,-1/s);
+  dv.textContent=d.toFixed(5);
+  rd.textContent='s='+s.toFixed(5)+'  r='+r.toPrecision(5)+'  1/r='+(1/r).toFixed(2)+'  2·r^s='+(2*Math.pow(r,s)).toFixed(6);
+  var dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;
+  cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.fillStyle='#04060a';ctx.fillRect(0,0,W,H);
+  var pad=24,L=W-2*pad,rowH=58,gap=34,y0=24;
+  var gold='#d9b76a',teal='#58c7d1',dim='#7d869c';
+  ctx.font='11px "JetBrains Mono",monospace';
+  var labels=['window [0, 1]','left stripe [0, r], magnified 1/r','left stripe [0, r²], magnified 1/r²'];
+  for(var k=0;k<3;k++){
+    var y=y0+k*(rowH+gap);
+    ctx.strokeStyle='#1c2233';ctx.strokeRect(pad+.5,y+.5,L,rowH);
+    var w=Math.max(r*L,1.5);
+    ctx.fillStyle=teal;ctx.fillRect(pad,y,w,rowH);ctx.fillRect(pad+L-w,y,w,rowH);
+    ctx.fillStyle=dim;ctx.fillText(labels[k],pad,y-6);
+    if(k<2){
+      ctx.strokeStyle=gold;ctx.globalAlpha=.5;ctx.beginPath();
+      ctx.moveTo(pad,y+rowH);ctx.lineTo(pad,y+rowH+gap);
+      ctx.moveTo(pad+w,y+rowH);ctx.lineTo(pad+L,y+rowH+gap);
+      ctx.stroke();ctx.globalAlpha=1;
+    }
+  }
+}
+sl.addEventListener('input',draw);
+document.getElementById('dpi').addEventListener('click',function(){sl.value=Math.PI;draw();});
+window.addEventListener('resize',draw);draw();
+})();
+</script>
+</body>
+</html>
