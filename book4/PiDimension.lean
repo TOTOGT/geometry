@@ -3,9 +3,11 @@ import Mathlib
 /-!
 # PiDimension — the algebra behind book4/pi.html (Chapter 3½)
 
-STATUS: NOT YET COMPILED. Written by hand against Mathlib names recalled from memory; the
-author runs it and errors are fixed against what the compiler says. Until a clean run is
-recorded here, treat nothing below as checked.
+STATUS: first compile (author, 2026-10-30): `moran` and `ratio_lt_half` clean (axioms propext,
+Classical.choice, Quot.sound); `box_count` failed at a `rw` (rpow_natCast did not match the
+literal exponent 3) and so `box_count` and `box_count_pi` depended on sorryAx. That step was
+then rewritten; it has NOT been recompiled. Until a fully clean run is recorded here, treat
+box_count and box_count_pi as unchecked.
 
 Transcendence of π plays no role. The construction only uses that π is a real number with
 3 < π < 4 (Mathlib: `Real.pi_gt_three`, and an upper bound), so s = π − 3 lies in (0, 1).
@@ -76,7 +78,9 @@ theorem box_count (s : ℝ) (hs : 0 < s) (k : ℕ) :
     (2 : ℝ) ^ k * (((ratio s) ^ k)⁻¹) ^ (3 : ℕ)
       = (((ratio s) ^ k)⁻¹) ^ ((3 : ℝ) + s) := by
   have hpos : 0 < ((ratio s) ^ k)⁻¹ := inv_pos.mpr (pow_pos (ratio_pos s) k)
-  rw [Real.rpow_add hpos, Real.rpow_natCast, two_pow_eq s hs k]
+  have h3 : (((ratio s) ^ k)⁻¹) ^ (3 : ℝ) = (((ratio s) ^ k)⁻¹) ^ (3 : ℕ) := by
+    exact_mod_cast Real.rpow_natCast (((ratio s) ^ k)⁻¹) 3
+  rw [Real.rpow_add hpos, h3, two_pow_eq s hs k]
   ring
 
 /-- The same with 3 + s = π, for s = π − 3. -/
