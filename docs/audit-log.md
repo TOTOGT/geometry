@@ -12278,3 +12278,10 @@ Sources were read through a summarising web-fetch tool (finra.org PDFs under rob
 - Verified by script (controls included): 722-3=719, 719-300=419, 300/719=41.7%, 372/4000, 6-13 Oct = 7 days, 10,000x88 = 880,000 agent-hours. Reported-figure consistency only. The script declines to form a ratio between agent-hours and ChatGPT Pro thinking hours (not comparable units).
 - Not checked: correctness of any of the 372 results; faithfulness of any formalization; the Navier-Stokes mismatch preprint; the exact-overlaps and Polyakov claims.
 - Generated blocks (Across the series, Gold Standard, Run-it-yourself) not yet written.
+
+## 2026-10-30 (Claude Sonnet 5.5) — Book 8: Dueling Proofs (new)
+- `book8/ch-dueling-proofs.html` and `-verify.py`. Sole source: Scientific American, 27 Oct 2026 (Howlett and Hall), text supplied by the user. No paper, repository or lab page opened. Chapter carries a disclosure that it was drafted with Claude (Anthropic), a party to the ETH story.
+- Verified by script (controls included): date arithmetic; 7-1 = 6 open Millennium problems (the article says five: recorded as a question, not decided); c^n with c<2 stays exponential (log2(T)/n constant) while 2^sqrt(n) does not. Kakeya-is-about-dimension and ETH-needs-2^o(n) are standard background in prose, labelled as such; the script computes only the ETH rate contrast.
+- Not checked: any of the three results; Anthropic's and OpenAI's own statements; the AGMAI statement; the other SciAm articles linked from the page.
+- `ch-claims-awaiting-verification.html` gained a "Later releases" pointer to this chapter.
+- Generated blocks (Across the series, Gold Standard, Run-it-yourself) not yet written.

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dueling Proofs · Book 8 · Principia Orthogona</title>
+<meta name="description" content="Book 8 — Scientific American, 27 Oct 2026, on three results OpenAI released on 26 Oct (Kakeya, Yang-Mills existence, the Exponential Time Hypothesis) and Anthropic's competing ETH claim: what is claimed, what is public, what it would mean.">
+<script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --void:    #03030a;
+  --card:    #0c0c16;
+  --card2:   #111122;
+  --gold:    #c9a84c;
+  --gold2:   #e8d49a;
+  --text:    #e8e4d8;
+  --dim:     #6b6757;
+  --dim2:    #9a9485;
+  --rule:    rgba(201,168,76,0.10);
+  --rule2:   rgba(201,168,76,0.22);
+  --monster: #c0392b;
+  --monster2:#ff6b35;
+  --parch:   rgba(243,223,160,0.82);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:Georgia,'Times New Roman',serif;background:var(--void);color:var(--text);font-size:18px;line-height:1.95;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(3,3,10,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);padding:.55rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.nav-logo{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;}
+.nav-links a{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--dim);text-decoration:none;}
+.nav-links a:hover{color:var(--gold);}
+.opening{min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 2rem 5rem;text-align:center;position:relative;}
+.opening-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 80% at 50% 40%,rgba(192,57,43,.12) 0%,transparent 65%);}
+.ch-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--dim2);margin-bottom:2rem;position:relative;}
+.monster-glyph{font-size:clamp(6rem,16vw,12rem);line-height:1;color:transparent;background:linear-gradient(135deg,var(--monster) 0%,var(--monster2) 45%,var(--gold) 100%);-webkit-background-clip:text;background-clip:text;margin-bottom:1.5rem;position:relative;}
+.ch-title{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:300;color:var(--text);line-height:1.15;margin-bottom:1.2rem;position:relative;max-width:720px;}
+.ch-title em{font-style:italic;color:var(--gold);}
+.ch-rule{width:40px;height:1px;background:var(--rule2);margin:1.8rem auto;}
+.ch-epigraph{font-size:.97rem;font-style:italic;color:var(--dim2);max-width:540px;margin:0 auto;line-height:1.8;position:relative;}
+.ch-epigraph cite{display:block;margin-top:.6rem;font-style:normal;font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--dim);}
+.order-card{display:inline-block;background:var(--card);border:1px solid rgba(192,57,43,.3);padding:1.2rem 2rem;margin:2.5rem auto;font-family:'Courier New',monospace;font-size:.7rem;letter-spacing:.04em;color:var(--monster2);line-height:1.9;text-align:left;}
+.body{max-width:680px;margin:0 auto;padding:4rem 2rem 2rem;}
+p{margin-bottom:1.4rem;}
+h2{font-size:1.25rem;font-weight:600;color:var(--gold);margin:3rem 0 1rem;letter-spacing:.03em;}
+h3{font-size:1.05rem;font-weight:600;color:var(--gold2);margin:2rem 0 .8rem;}
+.section-break{width:100%;text-align:center;margin:3.5rem 0;font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.35em;color:var(--dim);}
+.pull-quote{border-left:1px solid var(--rule2);padding:1.2rem 1.8rem;margin:2.5rem 0;font-style:italic;font-size:1.05rem;color:var(--parch);line-height:1.85;}
+.pull-quote cite{display:block;margin-top:.7rem;font-style:normal;font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--dim);}
+.fact-box{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--monster);padding:1.5rem 1.8rem;margin:2.5rem 0;}
+.fact-box .label{font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--monster2);margin-bottom:.7rem;}
+table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.88rem;}
+th{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--rule2);padding:.5rem .8rem;text-align:left;}
+td{padding:.5rem .8rem;border-bottom:1px solid var(--rule);color:var(--dim2);}
+td:first-child{color:var(--text);}
+.footer-nav{max-width:680px;margin:5rem auto 3rem;padding:2rem;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.08em;}
+.footer-nav a{color:var(--dim);text-decoration:none;}
+.footer-nav a:hover{color:var(--gold);}
+.license{text-align:center;padding:2rem;font-family:'Courier New',monospace;font-size:.55rem;letter-spacing:.1em;color:var(--dim);}
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;font-size:.95em;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+  footer.prov-foot{margin-top:3rem;padding:2rem 1.5rem;border-top:1px solid currentColor;
+    font-size:.72rem;line-height:1.8;opacity:.85;text-align:center;}
+  footer.prov-foot a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+<!--po-subject--><meta name="po-subject" content="MATHEMATICS · FORMAL VERIFICATION"><!--/po-subject-->
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">G8 · The Monster</a>
+  <div class="nav-links">
+    <a href="index.html">Index</a>
+    <a href="../vol1-mathematics.html">Vol I</a>
+    <a href="../chapters-diagram.html">All Chapters</a>
+  </div>
+</nav>
+
+<div class="opening">
+  <div class="opening-bg"></div>
+  <div class="ch-label">Book 8 · Verification · Open Ledger II</div>
+  <div class="monster-glyph">𝕄</div>
+  <!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#16324f;background:#dfeaf4;border:1px solid #a8c2d8;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">MATHEMATICS · FORMAL VERIFICATION</span></div><!--/po-subject-->
+<h1 class="ch-title">Dueling <em>Proofs</em></h1>
+  <div class="ch-rule"></div>
+  <p class="ch-epigraph">Three results announced on 26 October 2026, one of them claimed twice, as reported by Scientific American.</p>
+</div>
+
+<div class="body">
+
+<p>On 26 October 2026, according to Scientific American's report of 27 October (Joseph Howlett and Peter Hall, marked there as a breaking story to be updated), OpenAI announced three large results: the Kakeya conjecture in every dimension, the existence half of the Yang&ndash;Mills problem, and a refutation of the Exponential Time Hypothesis (ETH). Within hours, Anthropic posted its own result disproving ETH. This chapter is the second ledger in this book's record of AI-lab mathematics claims; the first is "Claims Awaiting Verification". Its only source is the article text, supplied by the project's owner. No paper, repository or lab announcement was opened.</p>
+
+<div class="fact-box">
+  <div class="label">Disclosure</div>
+  <p>This chapter was drafted with Claude, a model made by Anthropic. Anthropic is one of the parties in the ETH story below. The claims are recorded as reported, the verifier checks arithmetic only, and the chapter takes no side between the labs.</p>
+</div>
+
+<div class="fact-box">
+  <div class="label">The ledger, as of the article's date (27 Oct 2026)</div>
+  <table>
+    <tr><th>Result</th><th>Claimant</th><th>State</th></tr>
+    <tr><td>Kakeya conjecture, all dimensions (four dimensions were claimed in an earlier release)</td><td>OpenAI, internal model</td><td>Claimed. The article does not say whether a paper is public.</td></tr>
+    <tr><td>Yang&ndash;Mills, existence half only</td><td>OpenAI, internal model</td><td>Claimed. The paper has not been made public. The advisory group has called for its release.</td></tr>
+    <tr><td>Yang&ndash;Mills, mass gap half</td><td>&mdash;</td><td>Not claimed. Remains open on the article's account.</td></tr>
+    <tr><td>ETH refuted</td><td>OpenAI; then Anthropic, independently and within hours</td><td>Claimed twice. OpenAI has asked Impagliazzo, Paturi and Williams to investigate and will sponsor a conference. No result reported yet.</td></tr>
+    <tr><td>Model, prompts, compute time, chain-of-thought</td><td>OpenAI</td><td>Not public, per the article.</td></tr>
+  </table>
+</div>
+
+<h2>Kakeya</h2>
+
+<p>The article describes the conjecture in terms of volume: a needle turned to point in every direction, sweeping out as little space as possible. That is a popular simplification. In its standard form the Kakeya conjecture concerns <em>dimension</em>: a set in $\mathbb{R}^n$ containing a unit line segment in every direction should have Hausdorff and Minkowski dimension $n$. Volume is the wrong measure because sets of that kind with zero volume exist, as Besicovitch showed in the plane. The article's account of progress is that Hong Wang and Joshua Zahl proved the three-dimensional case last year, that Wang received a Fields Medal this summer, and that OpenAI's earlier release covered four dimensions. If the new claim holds, it settles a central problem in harmonic analysis. Whether it holds is the open question; the article reports no vetting.</p>
+
+<h2>Yang&ndash;Mills: existence, not the prize</h2>
+
+<p>The Clay Mathematics Institute's problem asks for two things, existence of a quantum Yang&ndash;Mills theory and a mass gap, and the article says OpenAI claims only the first. So even if the claim is right, the million-dollar problem as Clay states it would still be open. The path was sketched by Tadeusz Balaban in the late 1980s in long, dense papers that, according to Roland Bauerschmidt as quoted, he essentially completed but that nobody can now confidently certify. Ethan Sussman and Anthropic's Levent Alp&ouml;ge had a public repository using language models to fill in the steps and believed they were close; the article says OpenAI's claim, with no public proof, appears to have beaten them to it. That is a priority dispute, and the priority claim carries no proof until the paper is released.</p>
+
+<h2>ETH: what refuting it requires</h2>
+
+<p>ETH says the 3-SAT problem needs time $2^{\delta n}$ for some fixed $\delta &gt; 0$ as the number of variables $n$ grows. The article says OpenAI's algorithm is "just a tiny bit faster than exponential time". That phrase cannot be read literally. An algorithm running in $c^n$ for some $1 &lt; c &lt; 2$ is already faster than brute force, such algorithms are known, and they do not refute ETH, because $c^n$ is still exponential. Refuting ETH needs a running time of $2^{o(n)}$: for every $\delta &gt; 0$ eventually below $2^{\delta n}$. The verifier script shows the difference numerically, with $\log_2(T)/n$ constant for $c^n$ and tending to zero for $2^{\sqrt{n}}$. What the labs actually proved is not in the source, and the right reading is in the papers.</p>
+
+<p>The article also says the result would not by itself resolve P versus NP, since ETH is a stronger assumption than $\mathrm{P}\neq\mathrm{NP}$ and refuting it does not show $\mathrm{P}=\mathrm{NP}$. Two groups claiming the same refutation independently is, if both are right, a form of corroboration. If one of them is wrong, it is a warning. The article reports neither.</p>
+
+<h2>Procedure, not just proofs</h2>
+
+<p>The article spends as much space on process as on mathematics. The advisory group on mathematics and AI that OpenAI itself convened (AGMAI) issued a statement the day before the release about how experts should shepherd results into public view. The article says OpenAI's handling of two of the three results violated that statement, and that the model, prompts, compute time and reasoning traces are all withheld. The first ledger records the same tension from Science's reporting. A result that outside readers cannot reproduce on the same tool is something they can check only by reading, and reading is slow when the papers are enormous and the authors are not human.</p>
+
+<h2>Two things in the article that do not add up on their face</h2>
+
+<p>First, the "Millennium" count. The article says Yang&ndash;Mills is one of seven problems set by Clay and one of five that remain open. Seven minus the one resolved problem (the Poincar&eacute; conjecture) is six. Five would imply that a second has been counted as resolved, perhaps the Navier&ndash;Stokes claim from September that this book has treated as disputed. The article does not say. The verifier prints the arithmetic and does not decide it.</p>
+
+<p>Second, "just a few weeks after" the earlier release is 20 days from 6 to 26 October. That one is fine.</p>
+
+<h2>What this chapter does not know</h2>
+
+<p>It does not know whether any of the three results is correct or what any of them says in detail. It does not know the state of OpenAI's, Anthropic's or the advisory group's own statements. It has not opened the other Scientific American pieces linked from the article, including one titled "The inside story behind OpenAI's million-dollar math proof". It has not read Balaban's papers, the Sussman&ndash;Alp&ouml;ge repository, or any proof.</p>
+
+<div class="section-break">· · ·</div>
+
+<div class="pull-quote">
+  Two labs announcing the same refutation within hours is news. It is not yet mathematics.
+</div>
+
+<h2>Update rule</h2>
+
+<p>When a row changes state, change the row and its date and cite the new source. Do not add a source that was not opened.</p>
+
+<h2>Source</h2>
+
+<p>Joseph Howlett and Peter Hall, "Dueling proofs from OpenAI and Anthropic astound scientists", Scientific American, 27 October 2026 (text supplied by the project's owner; not retrieved by this book).</p>
+
+</div>
+
+<div class="footer-nav">
+  <a href="ch-claims-awaiting-verification.html">← Claims Awaiting Verification</a>
+  <span style="color:var(--dim)">Dueling Proofs</span>
+  <a href="ch-do-not-trust-verify.html">Do Not Trust, Verify →</a>
+</div>
+
+<div class="license">
+  CC BY-NC-ND 4.0 · G6 LLC · Pablo Nogueira Grossi · g6llc@proton.me · ORCID 0009-0000-6496-2186 · 2026
+</div>
+
+<footer class="prov-foot">
+  <strong>Dueling Proofs</strong><br>
+  Principia Orthogona &middot; Vol VIII &middot; G8 &mdash; The Monster<br>
+  G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; 2026 &middot; ORCID <a href="https://orcid.org/0009-0000-6496-2186" target="_blank" rel="noopener">0009-0000-6496-2186</a><br>
+  Series <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" rel="noopener">Principia Orthogona community</a> &middot; <a href="https://github.com/TOTOGT/geometry">GitHub</a><br>
+  &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC &middot; Licence CC BY-NC-ND 4.0
+</footer>
+</body>
+</html>
