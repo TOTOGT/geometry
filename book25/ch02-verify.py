@@ -22,6 +22,7 @@ check('Sanskrit table has rows 1..10 with 5 cells each',[r[0] for r in skrows]==
 check('Panini facts sourced (3,983 sutras, eight chapters, dating uncertain)','3,983' in sk and 'eight chapters' in sk and 'uncertain' in sk)
 check('Sanskrit numerals marked to confirm','to confirm with a Sanskrit speaker' in sk)
 check('UN box sourced and scoped (A/RES/71/178, 2022-2032, Plan not opened)','A/RES/71/178' in t and '2022&ndash;2032' in t and 'Global Action Plan document itself was not opened' in t)
+check('Brazil proposal sourced, not claimed as adopted','Carta de Bel' in t and 'nothing saying the government has adopted' in t)
 check('unchecked Tibetan sentence is marked, not invented','for a Tibetan speaker to write' in t)
 check('to-confirm box present','To confirm' in t)
 check('Portuguese blocks present','lang="pt"' in t)
