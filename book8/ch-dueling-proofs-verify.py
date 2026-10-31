@@ -60,6 +60,12 @@ check("c^n with c<2: log2(T)/n is constant (still exponential)", max(r_c)-min(r_
 check("c^n is faster than 2^n for every n (c<2)", all(math.log2(c) < 1 for _ in ns))
 check("2^sqrt(n): log2(T)/n decreases toward 0", all(r_sub[i] > r_sub[i+1] for i in range(len(r_sub)-1)) and r_sub[-1] < 0.002)
 control("c^n must NOT tend to 0 (if it did, c^n would refute ETH)", r_c[-1] < 0.002)
+base3 = 2 - 2/(3+1)                       # Dantsin et al. 2002, deterministic, k = 3 (cited in the Anthropic preprint)
+check("Dantsin et al. (2-2/(k+1))^n at k=3 is 1.5^n", abs(base3-1.5) < 1e-12)
+check("1.5 < 2 yet log2(1.5^n)/n = %.4f > 0: faster than 2^n, still exponential" % math.log2(base3), 0 < math.log2(base3) < 1)
+control("that bound must not equal 2^o(n): its rate does not tend to 0", math.log2(base3) < 1e-6)
+print("  [NOTE ] the OpenAI preprint is cited with date 26 Oct 2026 and a path naming a folder dated 25 Oct;")
+print("          recorded, not explained.")
 
 print()
 if FAIL: print("FAILED:", FAIL); raise SystemExit(1)
