@@ -27,6 +27,10 @@ check('Amondawa box sourced, with the narrower claim and the unchecked Hopi/Pira
 check('Oral-traditions box: consent stated, practice marked as author proposal','Oral traditions' in t and 'speakers decide' in t and 'not drawn from a guideline' in t)
 check('Reflection questions present in both languages','Before you go on' in t and 'Antes de seguir' in t and 'whom will you help' in t)
 check('Hosts-and-guests box sourced, author observation labelled','Hosts and Guests' in t and 'which is not drawn from those sources' in t and 'it does not address language' in t)
+l5=t.split('Lesson 5.')[1].split('What the UN is doing')[0]
+r5=re.findall(r'<tr><td>(hot \(temperature\)|hot \(spicy\)|cold)</td>(.*?)</tr>',l5,re.S)
+check('Lesson 5 has 3 rows of 6 cells, Tibetan/Dzongkha/Tupi-Guarani blank',len(r5)==3 and all(len(re.findall(r'<td','<td>'+x[1]))==6 and x[1].count('find out')==3 for x in r5))
+check('Lesson 5 labels the American-culture point as observation, and words as to confirm','author&rsquo;s observation, not a finding' in l5 and 'no source was read' in l5)
 check('unchecked Tibetan sentence is marked, not invented','for a Tibetan speaker to write' in t)
 check('to-confirm box present','To confirm' in t)
 check('Portuguese blocks present','lang="pt"' in t)
