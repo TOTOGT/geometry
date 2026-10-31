@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1 · Vectors, Span, Independence · Book XXIV · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090f;--panel:#0d111b;--ink:#e8ebf2;--dim:#7d869c;--rule:#1c2233;--gold:#d9b76a;--teal:#58c7d1;--serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.65}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.7rem 1.25rem;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;color:var(--dim)}
+header,.wrap{max-width:900px;margin:0 auto;padding-inline:1.25rem}
+header{padding-top:2.4rem;padding-bottom:1rem}
+.kick{font-family:var(--mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:500;font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.1;margin:.5rem 0 .8rem}h1 em{color:var(--gold)}
+.lede{color:#b9c0d1;font-style:italic;max-width:42rem}
+h2{font-weight:500;font-size:1.35rem;margin:2.2rem 0 .7rem;padding-bottom:.3rem;border-bottom:1px solid var(--rule)}
+p{margin-bottom:.9rem}
+.mono,code{font-family:var(--mono);font-size:.82em;color:var(--teal)}
+.eq{font-family:var(--mono);font-size:.88rem;background:var(--panel);border-left:2px solid var(--gold);padding:.7rem 1rem;margin:1rem 0;overflow-x:auto;white-space:pre}
+.box{border:1px solid var(--rule);background:var(--panel);padding:1rem 1.2rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}
+.box.warn{border-color:#5a4720}
+ol.ex{padding-left:1.4rem}ol.ex li{margin-bottom:.6rem}
+.stage{max-width:1100px;margin:1.4rem auto 0;padding:0 1.25rem}
+.grid{display:grid;grid-template-columns:1fr 270px;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.cv{background:#04060a;position:relative;min-width:0}
+canvas{display:block;width:100%;height:min(60vh,500px);touch-action:none;cursor:grab}
+.hint{position:absolute;left:.7rem;bottom:.5rem;font-family:var(--mono);font-size:.56rem;color:#47506a;letter-spacing:.05em}
+.panel{background:var(--panel);padding:1.1rem;display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.btn{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem .6rem;background:transparent;border:1px solid var(--rule);color:var(--dim);cursor:pointer}
+.btn:hover{border-color:var(--teal);color:var(--teal)}
+.row{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.read{border-top:1px solid var(--rule);padding-top:.8rem;font-family:var(--mono);font-size:.64rem;line-height:1.9;color:var(--dim)}
+.read b{color:var(--gold);font-weight:500}
+footer{max-width:900px;margin:3rem auto 0;padding:1.2rem 1.25rem 3rem;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.9}
+@media(max-width:820px){.grid{grid-template-columns:1fr}canvas{height:50vh}}
+</style>
+</head>
+<body>
+<div class="top"><span><a href="index.html">Book XXIV contents</a> &middot; <a href="../master-index.html">master index</a></span><span>Chapter 1 &middot; <a href="../book21/ch01-what-the-same-system-means.html">Book XXI Ch 1 &rarr;</a></span></div>
+<header>
+  <div class="kick">Principia Orthogona &middot; Book XXIV &middot; Linear Algebra &middot; Chapter 1</div>
+  <h1>Vectors, <em>span</em>, independence</h1>
+  <p class="lede">Two arrows in the plane either point along one line or they don&rsquo;t. Everything in this book is a way of making that precise and then asking what survives when the plane is replaced by something larger.</p>
+</header>
+
+<div class="stage"><div class="grid">
+  <div class="cv"><canvas id="c"></canvas><div class="hint">drag the three dots &middot; teal = v1 &middot; gold = v2 &middot; white = w</div></div>
+  <div class="panel">
+    <div class="row"><input type="checkbox" id="snap" checked style="accent-color:#d9b76a"><label for="snap" style="margin:0">snap to half-units</label></div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap"><button class="btn" id="dep">Make v2 dependent</button><button class="btn" id="reset">Reset</button></div>
+    <div class="read" id="read"></div>
+  </div>
+</div></div>
+
+<div class="wrap">
+<h2>1 &middot; The two definitions</h2>
+<p>Over a field F (for now: the real numbers), the vectors v<sub>1</sub>, &hellip;, v<sub>k</sub> are <em>linearly independent</em> when the only way to write the zero vector as c<sub>1</sub>v<sub>1</sub> + &hellip; + c<sub>k</sub>v<sub>k</sub> is with every c<sub>i</sub> = 0. Their <em>span</em> is the set of all such combinations. Independence says the list has no redundancy, and span says how much room the list reaches.</p>
+<p>In the plane, take v<sub>1</sub> = (a, c) and v<sub>2</sub> = (b, d) as the columns of a matrix. The plate above draws them, shades the parallelogram they span, and reads off the determinant.</p>
+
+<h2>2 &middot; The plane criterion</h2>
+<div class="box"><span class="lab">Statement</span>Two vectors v<sub>1</sub> = (a, c) and v<sub>2</sub> = (b, d) in the plane are independent exactly when <span class="mono">ad &minus; bc &ne; 0</span>.</div>
+<p><strong>If the determinant is not zero.</strong> Suppose c<sub>1</sub>v<sub>1</sub> + c<sub>2</sub>v<sub>2</sub> = 0, that is, c<sub>1</sub>a + c<sub>2</sub>b = 0 and c<sub>1</sub>c + c<sub>2</sub>d = 0. Multiply the first by d and the second by b and subtract: c<sub>1</sub>(ad &minus; bc) = 0. Multiply the second by a and the first by c and subtract: c<sub>2</sub>(ad &minus; bc) = 0. With ad &minus; bc &ne; 0 both c<sub>i</sub> are zero.</p>
+<p><strong>If the determinant is zero.</strong> Then (c<sub>1</sub>, c<sub>2</sub>) = (d, &minus;c) gives a combination equal to zero in both components, as does (b, &minus;a). If c and d are not both zero the first is nonzero; otherwise, if a and b are not both zero, the second is; and if all four entries are zero, (1, 0) works. In every case there is a nonzero combination that vanishes, so the pair is dependent. &square;</p>
+
+<h2>3 &middot; Coordinates</h2>
+<p>When the determinant D = ad &minus; bc is not zero, every w = (w<sub>1</sub>, w<sub>2</sub>) in the plane is a combination of v<sub>1</sub> and v<sub>2</sub> in exactly one way:</p>
+<div class="eq">c1 = (w1&middot;d &minus; b&middot;w2) / D
+c2 = (a&middot;w2 &minus; c&middot;w1) / D</div>
+<p>The plate computes these for the white dot. They are the <em>coordinates</em> of w in the basis (v<sub>1</sub>, v<sub>2</sub>). Move v<sub>1</sub> and v<sub>2</sub> and w stays put while its coordinates change: the vector is one thing, and its coordinates are a description of it relative to a choice of basis. That distinction is the one Book XXI needs when it asks which descriptions of a system are descriptions of the same system.</p>
+<div class="box warn"><span class="lab">What this chapter does not claim</span>The link to Book XXI is a pointer, not an identity: a change of basis is the operation under which &ldquo;the same system&rdquo; must be judged there. It does not say anything about the systems in that volume beyond that.</div>
+
+<h2>4 &middot; Exercises</h2>
+<ol class="ex">
+<li>Show that if v<sub>1</sub> = 0, the pair is dependent whatever v<sub>2</sub> is.</li>
+<li>Find the coordinates of (3, 1) in the basis (1, 1), (1, &minus;1) by the formulas, then check by recombining.</li>
+<li>Three vectors in the plane are always dependent. Using the plate as a guide, give an argument that does not use any dimension count.</li>
+<li>The trace a + d is not the independence criterion. Find a pair with a + d = 0 that is independent and a pair with a + d &ne; 0 that is dependent.</li>
+<li>Describe the span of a dependent pair that is not both zero.</li>
+</ol>
+</div>
+
+<footer>
+<strong style="color:var(--gold)">Status.</strong> Mathematics in &sect;2&ndash;3 checked in exact arithmetic by <a class="mono" href="ch01-verify.py">ch01-verify.py</a> (finite grid, with failing controls); the proof is the argument in &sect;2. The plate is not covered by that script. Chapter text, plate and exercises are original to this book. Scope reference for the volume: Golan, <em>The Linear Algebra a Beginning Graduate Student Ought to Know</em>, 2nd ed., Springer 2007 &mdash; contents list and preface only have been read.
+</footer>
+
+<script>
+(function(){
+  var cv=document.getElementById('c'),ctx=cv.getContext('2d'),rd=document.getElementById('read');
+  var START={v1:[2,1],v2:[-1,2],w:[3,3]};
+  var P={v1:START.v1.slice(),v2:START.v2.slice(),w:START.w.slice()},drag=null,W=0,H=0,R=5;
+  function sc(){return Math.min(W,H)/(2*R)}
+  function toS(p){return[W/2+p[0]*sc(),H/2-p[1]*sc()]}
+  function toM(x,y){return[(x-W/2)/sc(),(H/2-y)/sc()]}
+  function size(){var r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;cv.width=Math.max(1,r.width*d);cv.height=Math.max(1,r.height*d);W=r.width;H=r.height;ctx.setTransform(d,0,0,d,0,0);draw()}
+  function f(x){return(Math.round(x*100)/100).toString()}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='#121828';ctx.lineWidth=1;
+    for(var i=-R;i<=R;i++){var a=toS([i,-R]),b=toS([i,R]),c=toS([-R,i]),d=toS([R,i]);
+      ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.moveTo(c[0],c[1]);ctx.lineTo(d[0],d[1]);ctx.stroke()}
+    var o=toS([0,0]);
+    ctx.strokeStyle='#2a3350';ctx.beginPath();ctx.moveTo(0,o[1]);ctx.lineTo(W,o[1]);ctx.moveTo(o[0],0);ctx.lineTo(o[0],H);ctx.stroke();
+    var a=P.v1[0],c=P.v1[1],b=P.v2[0],d=P.v2[1],D=a*d-b*c,dep=Math.abs(D)<1e-9;
+    var s1=toS(P.v1),s2=toS(P.v2),s12=toS([a+b,c+d]);
+    if(!dep){ctx.fillStyle='rgba(88,199,209,0.10)';ctx.beginPath();ctx.moveTo(o[0],o[1]);ctx.lineTo(s1[0],s1[1]);ctx.lineTo(s12[0],s12[1]);ctx.lineTo(s2[0],s2[1]);ctx.closePath();ctx.fill();
+      ctx.strokeStyle='rgba(217,183,106,0.35)';ctx.stroke()}
+    else{var dir=(a||c)?[a,c]:[b,d];if(dir[0]||dir[1]){var n=Math.hypot(dir[0],dir[1]),u=[dir[0]/n*20,dir[1]/n*20],p=toS(u),q=toS([-u[0],-u[1]]);
+      ctx.strokeStyle='rgba(217,183,106,0.7)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);ctx.stroke();ctx.lineWidth=1}}
+    function arrow(p,col){var s=toS(p);ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(o[0],o[1]);ctx.lineTo(s[0],s[1]);ctx.stroke();ctx.lineWidth=1;ctx.beginPath();ctx.arc(s[0],s[1],8,0,6.2832);ctx.fill()}
+    arrow(P.v1,'#58c7d1');arrow(P.v2,'#d9b76a');
+    var w=toS(P.w);ctx.fillStyle='#e8ebf2';ctx.beginPath();ctx.arc(w[0],w[1],7,0,6.2832);ctx.fill();
+    var h='v1 = ('+f(a)+', '+f(c)+')<br>v2 = ('+f(b)+', '+f(d)+')<br>det = <b>'+f(D)+'</b><br>';
+    if(dep){h+='<b>dependent</b>: span is a line or a point<br>';
+      var dr=(a||c)?[a,c]:[b,d];
+      if(dr[0]||dr[1]){var onl=Math.abs(P.w[0]*dr[1]-P.w[1]*dr[0])<1e-9;h+='w '+(onl?'<b>is</b>':'is <b>not</b>')+' on that line'}
+      else{h+='span is just 0'}}
+    else{var c1=(P.w[0]*d-b*P.w[1])/D,c2=(a*P.w[1]-c*P.w[0])/D;
+      h+='<b>independent</b>: span is the plane<br>w = ('+f(P.w[0])+', '+f(P.w[1])+')<br>coordinates: c1 = <b>'+f(c1)+'</b>, c2 = <b>'+f(c2)+'</b><br>check: '+f(c1*a+c2*b)+', '+f(c1*c+c2*d)}
+    rd.innerHTML=h}
+  function pos(e){var r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]}
+  cv.addEventListener('pointerdown',function(e){var q=pos(e),best=null,bd=22;
+    ['v1','v2','w'].forEach(function(k){var s=toS(P[k]),dd=Math.hypot(s[0]-q[0],s[1]-q[1]);if(dd<bd){bd=dd;best=k}});
+    drag=best;if(drag)cv.setPointerCapture(e.pointerId)});
+  cv.addEventListener('pointermove',function(e){if(!drag)return;var q=pos(e),m=toM(q[0],q[1]);
+    m[0]=Math.max(-R,Math.min(R,m[0]));m[1]=Math.max(-R,Math.min(R,m[1]));
+    if(document.getElementById('snap').checked){m[0]=Math.round(m[0]*2)/2;m[1]=Math.round(m[1]*2)/2}
+    P[drag]=m;draw()});
+  cv.addEventListener('pointerup',function(){drag=null});
+  document.getElementById('dep').onclick=function(){P.v2=[P.v1[0]*1.5,P.v1[1]*1.5];draw()};
+  document.getElementById('reset').onclick=function(){P={v1:START.v1.slice(),v2:START.v2.slice(),w:START.w.slice()};draw()};
+  window.addEventListener('resize',size);size();
+})();
+</script>
+</body>
+</html>
