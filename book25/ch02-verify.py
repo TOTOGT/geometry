@@ -26,6 +26,7 @@ check('Brazil proposal sourced, not claimed as adopted','Carta de Bel' in t and 
 check('Amondawa box sourced, with the narrower claim and the unchecked Hopi/Pirahã flagged','Amondawa' in t and 'not what the authors say' in t and 'I have not checked them here' in t and 'full paper was not read' in t)
 check('Oral-traditions box: consent stated, practice marked as author proposal','Oral traditions' in t and 'speakers decide' in t and 'not drawn from a guideline' in t)
 check('Reflection questions present in both languages','Before you go on' in t and 'Antes de seguir' in t and 'whom will you help' in t)
+check('Hosts-and-guests box sourced, author observation labelled','Hosts and Guests' in t and 'which is not drawn from those sources' in t and 'it does not address language' in t)
 check('unchecked Tibetan sentence is marked, not invented','for a Tibetan speaker to write' in t)
 check('to-confirm box present','To confirm' in t)
 check('Portuguese blocks present','lang="pt"' in t)
