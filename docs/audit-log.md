@@ -12272,3 +12272,9 @@ Sources were read through a summarising web-fetch tool (finra.org PDFs under rob
 - Verified by script (with failing controls): Monster order factorization, 196883 = 47·59·71, 196884 = 196883+1, 1+1+16 = 18 families, date arithmetic (2–25 Oct inclusive = 24 days), 722−3 = 719, 300/719, rates. These check Monster arithmetic and the self-consistency of reported figures only; no Lean was run.
 - NOT checked: that the Lean proof exists, builds, or is free of sorry/extra axioms (repository not opened: fetch blocked); the 34 deviations; the Unbalanced Group Theorem counterexamples; the hexagonmath.org paper. Axiom's proof-map page says 100 milestones in its summary and 108 in the Milestones header; recorded, not resolved.
 - Generated blocks (Across the series, Gold Standard, Run-it-yourself) not yet written for this chapter.
+
+## 2026-10-30 (Claude Sonnet 5.5) — Book 8: Claims Awaiting Verification (new)
+- `book8/ch-claims-awaiting-verification.html` and `-verify.py`. Sole source: Science, 13 Oct 2026 (Howarth), text supplied by the user after the site refused our fetch. OpenAI's own page not retrieved; no paper read; the related Science Riemann-hypothesis article not opened; secondary outlets from search results not opened and not relied on.
+- Verified by script (controls included): 722-3=719, 719-300=419, 300/719=41.7%, 372/4000, 6-13 Oct = 7 days, 10,000x88 = 880,000 agent-hours. Reported-figure consistency only. The script declines to form a ratio between agent-hours and ChatGPT Pro thinking hours (not comparable units).
+- Not checked: correctness of any of the 372 results; faithfulness of any formalization; the Navier-Stokes mismatch preprint; the exact-overlaps and Polyakov claims.
+- Generated blocks (Across the series, Gold Standard, Run-it-yourself) not yet written.
