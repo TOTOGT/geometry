@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter Lp &middot; Rudolf Lipschitz &middot; The Condition That Makes Iteration Converge &middot; Principia Orthogona G7</title>
+<meta name="description" content="Rudolf Lipschitz (1832-1903) and the condition that bears his name: a bound on how fast a function can stretch. Built from one chapter of numerical-analysis notes: the definition, the contraction mapping theorem on an interval, and a worked example whose table this page reproduces and checks.">
+<script>MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --void:#04040a; --surface:#0c0d14; --card:#10111c;
+  --gold:#c9a84c; --teal:#0abab5; --green:#10b981;
+  --h-color:#5b9fc7; /* rope blue: the colour of a knot diagram on a dark page */
+  --text:#e8e4d8; --dim:#6b6757; --rule:rgba(201,168,76,0.14);
+  --op-c:#60a5fa; --op-k:#a78bfa; --op-f:#f472b6; --op-u:#34d399;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:Georgia,serif;background:var(--void);color:var(--text);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-logo{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;flex-wrap:wrap;}
+.nav-links a{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.hero{padding:5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(91,159,199,.10) 0%,transparent 70%);pointer-events:none;}
+.hero-eyebrow{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--h-color);border:1px solid currentColor;padding:.2rem .7rem;display:inline-block;margin-bottom:2rem;}
+.hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:400;color:var(--gold);letter-spacing:.04em;margin:.8rem 0 .5rem;line-height:1.1;}
+.hero-sub{font-size:1rem;color:var(--dim);font-style:italic;max-width:660px;margin:0 auto 1.5rem;}
+.value{font-family:'Courier New',monospace;font-size:.8rem;letter-spacing:.12em;color:rgba(91,159,199,.75);margin-top:.8rem;}
+.page{max-width:800px;margin:0 auto;padding:4rem 2rem 6rem;}
+h2{font-size:1.15rem;font-weight:400;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin:3.5rem 0 1.2rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;}
+p{margin-bottom:1.1rem;}
+em{color:var(--gold);font-style:normal;}
+code{font-family:'Courier New',monospace;font-size:.85em;color:var(--teal);}
+a.ref{color:var(--h-color);text-decoration:none;border-bottom:1px dotted rgba(91,159,199,.5);}
+a.ref:hover{color:var(--text);}
+.proof-block{border-left:3px solid var(--h-color);padding:1.4rem 1.8rem;margin:1.8rem 0;background:rgba(91,159,199,.05);}
+.proof-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--h-color);display:block;margin-bottom:.5rem;}
+.proof-title{font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.7rem;}
+.math-block{font-family:'Courier New',monospace;font-size:.85rem;color:var(--teal);background:var(--surface);border:1px solid rgba(10,186,181,.15);padding:.9rem 1.3rem;margin:1rem 0;overflow-x:auto;white-space:pre;line-height:1.7;}
+.sorry-box{border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.05);padding:1rem 1.4rem;margin:1.5rem 0;border-radius:2px;}
+.sorry-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#ef4444;display:block;margin-bottom:.4rem;}
+.ask{border:1px solid rgba(201,168,76,.28);background:rgba(201,168,76,.04);padding:1.1rem 1.5rem;margin:1.4rem 0;border-radius:2px;}
+.ask-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.45rem;}
+.gold-rule{border:none;border-top:1px solid rgba(201,168,76,.25);margin:2.5rem 0;}
+table{width:100%;border-collapse:collapse;margin:1.4rem 0;font-size:.9rem;}
+th,td{text-align:left;padding:.6rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top;}
+th{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--h-color);}
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:2rem 0;border-top:1px solid rgba(91,159,199,.2);margin-top:3rem;}
+.chapter-nav a{color:var(--h-color);text-decoration:none;font-family:'Courier New',monospace;font-size:.78rem;letter-spacing:.08em;border:1px solid rgba(91,159,199,.25);padding:.5rem 1rem;border-radius:2px;transition:all .2s;}
+.chapter-nav a:hover{background:rgba(91,159,199,.1);}
+footer{text-align:center;padding:2rem;font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.08em;color:var(--dim);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+</style>
+<!--po-subject--><meta name="po-subject" content="MATHEMATICS · PURE"><meta name="po-subject-2" content="PROFILE"><!--/po-subject-->
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">&#9884; Principia Orthogona &middot; Vol VII</a>
+  <div class="nav-links">
+    <a href="index.html">Scientist Gallery</a>
+    <a href="ch-lipshitz.html">Robert Lipshitz (no c)</a>
+    <a href="ch-huh.html">June Huh</a>
+    <a href="../book6/index.html">Vol VI</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Capítulo Lp &middot; Vol VII &middot; Scientist Gallery</div>
+  <!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#16324f;background:#dfeaf4;border:1px solid #a8c2d8;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">MATHEMATICS · PURE</span><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3a3a3a;background:#ffffff;border:1px solid #b5b5b5;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">PROFILE</span></div><!--/po-subject-->
+<h1>Rudolf Lipschitz</h1>
+  <p class="hero-sub">
+    His name is on a single inequality that says how fast a function may stretch. Put a ceiling below 1 on
+    that rate and iteration is forced to settle on one answer. This page builds that from a chapter of
+    numerical-analysis notes and checks the notes&#8217; worked example.
+  </p>
+  <div class="value">14 May 1832, K&ouml;nigsberg &ndash; 7 October 1903, Bonn &middot; sourced from one footnote</div>
+</div>
+
+<div class="page">
+
+<div class="sorry-box">
+  <span class="sorry-label">How this chapter is sourced</span>
+  One document: Chapter 1, <em>Solution of equations by iteration</em>, a PDF of course notes filed under the name
+  &lsquo;suli&rsquo; on the NYU MATH-UA 252 (spring 2022) course page. It is the only source for what is said below, about the
+  man and the mathematics alike. The PDF does not print its book title or authors in the text I extracted, so I do
+  not give them. This is <em>not</em> Robert Lipshitz (no <em>c</em>), the knot theorist of
+  <a class="ref" href="ch-lipshitz.html">the previous chapters</a>; the two names look alike and nothing here connects them.
+</div>
+
+<h2>1 &middot; The man, as far as the source says</h2>
+
+<p>
+  The notes give him a footnote: Rudolf Otto Sigismund Lipschitz, born 14 May 1832 in K&ouml;nigsberg, Prussia (now
+  Kaliningrad, Russia), died 7 October 1903 in Bonn. It says he made important contributions to number theory,
+  the theory of Bessel functions and Fourier series, ordinary and partial differential equations, and analytical
+  mechanics and potential theory. That is everything this chapter will say about his life. A chapter with more sources would say more.
+</p>
+
+<h2>2 &middot; The condition</h2>
+
+<div class="proof-block">
+  <span class="proof-label">Definition (source, Def 1.2 and Remark 1.2)</span>
+  <div class="proof-title">Lipschitz condition, and contraction</div>
+  <p style="margin-bottom:.6rem">
+    A function $g$ on an interval $[a,b]$ satisfies a <em>Lipschitz condition</em> with constant $L > 0$ if
+  </p>
+  <div class="math-block">|g(x) - g(y)|  &lt;=  L &middot; |x - y|     for all x, y in [a, b]</div>
+  <p style="margin-bottom:0">
+    When $0 < L < 1$ the function is a <em>contraction</em>: the distance between two images is at most $L$
+    times the distance between the points, so every pair of points is pulled closer together.
+  </p>
+</div>
+
+<h2>3 &middot; Why a ceiling below 1 forces one answer</h2>
+
+<div class="proof-block">
+  <span class="proof-label">Theorem (source, Thm 1.3)</span>
+  <div class="proof-title">Contraction mapping theorem on an interval</div>
+  <p style="margin-bottom:.6rem">
+    Let $g$ be continuous on $[a,b]$ with $g(x) \in [a,b]$ for all $x$, and a contraction there. Then $g$ has a
+    unique fixed point $\xi$ in $[a,b]$, and for every start $x_0 \in [a,b]$ the iteration $x_{k+1} = g(x_k)$
+    converges to $\xi$.
+  </p>
+  <p style="margin-bottom:.6rem">
+    <em>Uniqueness.</em> If $\xi$ and $\eta$ were both fixed, then $|\xi - \eta| = |g(\xi) - g(\eta)| \le L|\xi - \eta|$, so
+    $(1-L)|\xi - \eta| \le 0$; since $1 - L > 0$, $\eta = \xi$.
+  </p>
+  <p style="margin-bottom:0">
+    <em>Convergence.</em> $|x_k - \xi| = |g(x_{k-1}) - g(\xi)| \le L|x_{k-1} - \xi|$, and by induction
+    $|x_k - \xi| \le L^k |x_0 - \xi|$, which tends to 0 because $L < 1$.
+  </p>
+</div>
+
+<p>
+  The source gets <em>existence</em> of a fixed point on the interval from Brouwer&#8217;s fixed point theorem (its
+  Theorem 1.2). The uniqueness and the rate need only the Lipschitz condition. The source does not say who first
+  proved the theorem, and this chapter does not either.
+</p>
+
+<h2>4 &middot; The worked example, checked</h2>
+
+<p>
+  The source solves $e^x - 2x - 1 = 0$ on $[1,2]$ by iterating $g(x) = \ln(2x+1)$. It checks the hypotheses by hand:
+  $g(1) = 1.0986\ldots$ and $g(2) = 1.6094\ldots$ lie in $[1,2]$; $g'(x) = 2/(2x+1)$ is decreasing, since
+  $g'' = -4/(2x+1)^2 < 0$, so on $[1,2]$ it ranges over $[2/5, 2/3]$. By the mean value theorem
+  $|g(x) - g(y)| \le \tfrac23 |x - y|$, so $L = 2/3$ and the iteration converges from any start in $[1,2]$.
+  Starting from $x_0 = 1$ the source prints these iterates:
+</p>
+
+<table><tr><th>k</th><th>x<sub>k</sub></th><th>k</th><th>x<sub>k</sub></th></tr>
+<tr><td>0</td><td>1.000000</td><td>6</td><td>1.245952</td></tr>
+<tr><td>1</td><td>1.098612</td><td>7</td><td>1.250447</td></tr>
+<tr><td>2</td><td>1.162283</td><td>8</td><td>1.253018</td></tr>
+<tr><td>3</td><td>1.201339</td><td>9</td><td>1.254486</td></tr>
+<tr><td>4</td><td>1.224563</td><td>10</td><td>1.255323</td></tr>
+<tr><td>5</td><td>1.238121</td><td>11</td><td>1.255800</td></tr>
+</table>
+
+<p>
+  <code>ch-rudolf-lipschitz-verify.py</code> reproduces all twelve to the six printed decimals, using 60-digit
+  arithmetic, and checks the slope range exactly. It solves for $\xi$ to 50 digits, getting $\xi = 1.256431208626\ldots$,
+  and confirms the error bound $|x_k - \xi| \le (2/3)^k |x_0 - \xi|$ for $k = 0, \ldots, 40$. It also notes that
+  the observed ratio of successive errors is about $0.569$, which equals $g'(\xi)$: the bound $2/3$ is safe but the
+  iteration is faster than the bound says.
+</p>
+
+<div class="ask">
+  <span class="ask-label">The controls</span>
+  A bound that holds for the right $L$ proves nothing unless it can fail. Two controls: the same inequality with
+  $L = 0.3$ fails, and a corrupted table entry is detected. Two more show the hypotheses matter: $g(x) = x$ on
+  $[1,2]$ has ratio exactly 1 and every point is fixed, so $L = 1$ gives no uniqueness; and $\sqrt{x}$ on $[0,1]$
+  has difference quotients at 0 that grow without bound ($3.16$ at $h = 10^{-1}$ to $316228$ at $h = 10^{-11}$),
+  so it satisfies no Lipschitz condition there.
+</div>
+
+<h2>5 &middot; What the condition does not need</h2>
+
+<p>
+  The source points out that a Lipschitz function need not be differentiable. $g(x) = |x|$ satisfies the
+  condition with $L = 1$ on any closed interval and has slope $-1$ on one side of 0 and $+1$ on the other; the
+  verifier prints exactly those two difference quotients. It adds, in a footnote, that a function satisfying the
+  Lipschitz condition on an interval is differentiable except possibly on a set of Lebesgue measure zero, and
+  names this Rademacher&#8217;s theorem. I did not check that statement.
+</p>
+
+<h2>6 &middot; Beside the Lean file</h2>
+
+<p>
+  The series has a Lean file, <code>book5/ExistenceBanach.lean</code>, that proves an existence-and-uniqueness
+  statement by exactly this route: the map is shown to be a contraction with constant $r < 1$, and Mathlib&#8217;s
+  <code>ContractingWith</code> and <code>LipschitzWith</code> supply the unique fixed point and the convergence of
+  the iterates. It works in a complete metric space instead of an interval, where completeness takes the place of
+  Brouwer&#8217;s theorem for existence; that generalisation is standard and is not in the source above. That file
+  has <em>not been compiled by anyone yet</em>. Nothing on this page is evidence that it compiles. The existing page
+  <a class="ref" href="../book5/chV-banach.html">Book 5, Chapter V</a> is a neighbour; I have not re-read it for this chapter.
+</p>
+
+<div class="ask">
+  <span class="ask-label">Exercises</span>
+  1. For $g(x) = \cos x$ on $[0,1]$, show $g$ maps $[0,1]$ into itself and find an $L < 1$.
+  &nbsp; 2. Why does the proof of uniqueness fail at $L = 1$? Which of the verifier&#8217;s controls shows it?
+  &nbsp; 3. For $g(x) = \ln(2x+1)$ the error ratio was $0.569$ against the bound $0.667$. Which point of $[1,2]$ makes
+  $g'$ largest, and which makes the ratio exactly $g'(\xi)$?
+</div>
+
+<div class="chapter-nav">
+  <a href="ch-lipshitz.html">&larr; Robert Lipshitz (no c)</a>
+  <a href="index.html">Scientist Gallery</a>
+  <a href="ch-huh.html">June Huh &rarr;</a>
+</div>
+
+</div>
+
+<footer>
+  <strong style="color:var(--gold)">Chapter Lp &middot; Rudolf Lipschitz &middot; The Condition That Makes Iteration Converge</strong><br>
+  Principia Orthogona &middot; Vol VII &middot; The Scientist Gallery &middot; 2026<br>
+  &copy; 2026 Pablo Nogueira Grossi &middot; G6 LLC &middot; Newark, New Jersey, USA<br>
+  ORCID 0009-0000-6496-2186 &middot;
+  <a href="mailto:g6llc@proton.me">g6llc@proton.me</a><br>
+  <a href="https://zenodo.org/communities/principia-orthogona">Zenodo Community</a> &middot;
+  <a href="index.html">All Scientists</a><br>
+  Licence CC BY-NC-ND 4.0 &middot; Independent chapter; not peer-reviewed.<br>
+  This chapter rests on a single source and makes no claim on the history of the theorem. Verifier: <code>ch-rudolf-lipschitz-verify.py</code> &mdash; untested outside the author&#8217;s machine until you run it.
+</footer>
+
+</body>
+</html>

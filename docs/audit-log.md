@@ -12261,3 +12261,8 @@ Sources were read through a summarising web-fetch tool (finra.org PDFs under rob
 - `book7/ch-lipshitz.html` and `ch-lipshitz-verify.py`: person chapter sourced from the paper only, no biography. The verifier failed twice on first run (page lacked "40 pages" and "six concordance"); the page was fixed, not the check.
 - Observation: Table 2's caption says 13 invariants; the header lists 14 (sQ, sF2, tau, psi1o, phio1-5, phie1, psi1e, phiHF1-3). Reported, not corrected.
 - Not run: crossref.py, gold_standard.py, run_yourself.py (corpus-wide, 130 and 70 pages stale before this change). subject_tags.py --write stamped only these two pages. Card added to book7/index.html; two rows added to docs/subjects.tsv.
+
+## 2026-10-30 (Claude Sonnet 5.5) — Book 7: Rudolf Lipschitz chapter (new)
+- `book7/ch-rudolf-lipschitz.html` and `-verify.py`: built from one source, Chapter 1 "Solution of equations by iteration" (course-notes PDF, NYU MATH-UA 252 spring 2022 page; title and authors of the parent book not printed in the extracted text, so not given). Life: only the source's footnote (dates, places, fields). Verifier: Table 1.1 reproduced to 6 decimals, slope range [2/5, 2/3] exact, error bound (1.6) for k = 0..40 against xi to 50 digits, |x| one-sided slopes; four controls (wrong L, corrupted table, g(x)=x at L=1, sqrt(x) has no Lipschitz constant). A first draft of the L=1 control compared a value with itself and a stray unused line remained; both fixed before the run that counts.
+- Not checked: Rademacher's theorem (the source's footnote), the history of the contraction theorem (the source says nothing; neither does the page).
+- `ch-lipshitz.html` (Robert) gained one sentence distinguishing the two names; re-stamped with subject_tags.py.
