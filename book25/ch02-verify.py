@@ -24,6 +24,7 @@ check('Sanskrit numerals marked to confirm','to confirm with a Sanskrit speaker'
 check('UN box sourced and scoped (A/RES/71/178, 2022-2032, Plan not opened)','A/RES/71/178' in t and '2022&ndash;2032' in t and 'Global Action Plan document itself was not opened' in t)
 check('Brazil proposal sourced, not claimed as adopted','Carta de Bel' in t and 'nothing saying the government has adopted' in t)
 check('Amondawa box sourced, with the narrower claim and the unchecked Hopi/Pirahã flagged','Amondawa' in t and 'not what the authors say' in t and 'I have not checked them here' in t and 'full paper was not read' in t)
+check('Oral-traditions box: consent stated, practice marked as author proposal','Oral traditions' in t and 'speakers decide' in t and 'not drawn from a guideline' in t)
 check('unchecked Tibetan sentence is marked, not invented','for a Tibetan speaker to write' in t)
 check('to-confirm box present','To confirm' in t)
 check('Portuguese blocks present','lang="pt"' in t)
