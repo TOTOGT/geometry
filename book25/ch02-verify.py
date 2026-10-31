@@ -16,6 +16,11 @@ check('every row has 6 language cells',all(len(re.findall(r'<td',c))==6 for c in
 check('Nepali and Tibetan cells carry lang tags and romanization',all('lang="ne"' in c and 'lang="bo"' in c and c.count('class="rom"')==2+('lang="yrl"' in c) for c in cells))
 check('Dzongkha cells are blank prompts, not filled in',all(re.search(r'<td lang="dz"><span class="blank">find out',c) for c in cells))
 check('Tupi-Guarani: only sourced iepé and mukui filled, rest blank prompts',[c.count('find out') for c in cells]==[1,1]+[2]*8 and 'iep' in cells[0] and 'mukui' in cells[1] and sum('lang="yrl"' in c for c in cells)==2)
+sk=t.split('Lesson 4.')[1].split('What comes next')[0]
+skrows=re.findall(r'<tr><td>(\d+)</td>(.*?)</tr>',sk,re.S)
+check('Sanskrit table has rows 1..10 with 5 cells each',[r[0] for r in skrows]==[str(i) for i in range(1,11)] and all(len(re.findall(r'<td',"<td>"+r[1]))==5 for r in skrows))
+check('Panini facts sourced (3,983 sutras, eight chapters, dating uncertain)','3,983' in sk and 'eight chapters' in sk and 'uncertain' in sk)
+check('Sanskrit numerals marked to confirm','to confirm with a Sanskrit speaker' in sk)
 check('unchecked Tibetan sentence is marked, not invented','for a Tibetan speaker to write' in t)
 check('to-confirm box present','To confirm' in t)
 check('Portuguese blocks present','lang="pt"' in t)
