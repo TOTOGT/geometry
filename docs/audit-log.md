@@ -12285,3 +12285,4 @@ Sources were read through a summarising web-fetch tool (finra.org PDFs under rob
 - Not checked: any of the three results; Anthropic's and OpenAI's own statements; the AGMAI statement; the other SciAm articles linked from the page.
 - `ch-claims-awaiting-verification.html` gained a "Later releases" pointer to this chapter.
 - Generated blocks (Across the series, Gold Standard, Run-it-yourself) not yet written.
+- Update (same day): opened Anthropic ETH preprint hexagon:2610.00577v1 via page-to-text summary (not raw). Reports: deterministic 2^{o(n)} 3-SAT algorithm, also #3-SAT; Anthropic as author; core algorithm found 16 Oct; posted 27 Oct; cites an OpenAI preprint of 26 Oct (ref 68); says "formalized in Lean 4" but scope/link not on page; labelled primarily AI-generated and unreviewed. Chapter edited accordingly; verifier gained two date checks. Lean file, OpenAI preprint, and the 92 references' relevance not examined.

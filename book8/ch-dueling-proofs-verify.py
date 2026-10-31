@@ -34,6 +34,11 @@ check("article dated 27 Oct says 'yesterday': the drop is 26 Oct", (art-dt.timed
 check("6 Oct release to 26 Oct drop = 20 days ('a few weeks')", (drop-first).days == 20)
 control("20 days is not 20 weeks", (drop-first).days == 140)
 
+found, anth, oai = dt.date(2026,10,16), dt.date(2026,10,27), dt.date(2026,10,26)
+check("Anthropic preprint (27 Oct) is one day after the OpenAI preprint it cites (26 Oct)", (anth-oai).days == 1)
+control("same-day posting would contradict 'one day after'", (anth-oai).days == 0)
+check("core algorithm reportedly found 16 Oct, 11 days before posting", (anth-found).days == 11)
+
 print("\nB. Millennium Prize Problems as printed")
 SET, SOLVED_KNOWN = 7, 1
 print("  [NOTE ] article: 'one of seven set by Clay in 2000' and 'five ... remain open'.")
