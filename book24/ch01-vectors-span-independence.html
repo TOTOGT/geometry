@@ -24,6 +24,15 @@ p{margin-bottom:.9rem}
 .box{border:1px solid var(--rule);background:var(--panel);padding:1rem 1.2rem;margin:1.3rem 0}
 .box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}
 .box.warn{border-color:#5a4720}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;background:rgba(7,9,15,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);padding:.55rem 0;margin:1.6rem 0 .4rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.bar button{font:inherit;letter-spacing:inherit;text-transform:inherit;background:transparent;border:1px solid var(--rule);color:var(--dim);padding:.35rem .55rem;cursor:pointer}
+.bar button[aria-pressed="true"]{color:var(--c);border-color:var(--c)}
+.bar button.q{--c:var(--ink)}
+.layer{border-left:2px solid var(--c);padding:.1rem 0 .1rem 1rem;margin:.7rem 0 1rem;--c:var(--teal)}
+.layer>.tag{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--c);margin-bottom:.25rem}
+.layer[data-l="statement"]{--c:var(--gold)}.layer[data-l="proof"]{--c:#9aa3ba}.layer[data-l="remarks"]{--c:#b497d9}
+.bar [data-l="intuition"]{--c:var(--teal)}.bar [data-l="statement"]{--c:var(--gold)}.bar [data-l="proof"]{--c:#9aa3ba}.bar [data-l="remarks"]{--c:#b497d9}
+body.off-intuition .layer[data-l="intuition"],body.off-statement .layer[data-l="statement"],body.off-proof .layer[data-l="proof"],body.off-remarks .layer[data-l="remarks"]{display:none}
 ol.ex{padding-left:1.4rem}ol.ex li{margin-bottom:.6rem}
 .stage{max-width:1100px;margin:1.4rem auto 0;padding:0 1.25rem}
 .grid{display:grid;grid-template-columns:1fr 270px;gap:1px;background:var(--rule);border:1px solid var(--rule)}
@@ -58,34 +67,57 @@ footer{max-width:900px;margin:3rem auto 0;padding:1.2rem 1.25rem 3rem;border-top
 </div></div>
 
 <div class="wrap">
-<h2>1 &middot; The two definitions</h2>
-<p>Over a field F (for now: the real numbers), the vectors v<sub>1</sub>, &hellip;, v<sub>k</sub> are <em>linearly independent</em> when the only way to write the zero vector as c<sub>1</sub>v<sub>1</sub> + &hellip; + c<sub>k</sub>v<sub>k</sub> is with every c<sub>i</sub> = 0. Their <em>span</em> is the set of all such combinations. Independence says the list has no redundancy, and span says how much room the list reaches.</p>
-<p>In the plane, take v<sub>1</sub> = (a, c) and v<sub>2</sub> = (b, d) as the columns of a matrix. The plate above draws them, shades the parallelogram they span, and reads off the determinant.</p>
+<div class="bar" id="bar" aria-label="Layers of the text"><span>layers</span>
+<button type="button" data-l="intuition" aria-pressed="true">Intuition</button>
+<button type="button" data-l="statement" aria-pressed="true">Statement</button>
+<button type="button" data-l="proof" aria-pressed="true">Proof</button>
+<button type="button" data-l="remarks" aria-pressed="true">Remarks</button>
+<button type="button" class="q" id="only">Intuition only</button><button type="button" class="q" id="all">All</button></div>
 
-<h2>2 &middot; The plane criterion</h2>
-<div class="box"><span class="lab">Statement</span>Two vectors v<sub>1</sub> = (a, c) and v<sub>2</sub> = (b, d) in the plane are independent exactly when <span class="mono">ad &minus; bc &ne; 0</span>.</div>
+<h2>1 &middot; Redundancy and reach</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>A list of arrows is redundant when one of them can be built from the others by stretching and adding. A list has reach in proportion to what it can build. The two ideas pull against each other: add an arrow that can already be built and the reach stays the same; add one that cannot and the reach grows.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<p>Over a field F (for now, the real numbers), vectors v<sub>1</sub>, &hellip;, v<sub>k</sub> are <em>linearly independent</em> when the only way to write the zero vector as c<sub>1</sub>v<sub>1</sub> + &hellip; + c<sub>k</sub>v<sub>k</sub> is with every c<sub>i</sub> = 0. Their <em>span</em> is the set of all such combinations.</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>The definition is about zero, not about building one vector from the others, and the two are equivalent once you divide by a nonzero coefficient. Dividing needs a field, which is why Chapter 2 spends time on what a field is.</p></div>
+
+<h2>2 &middot; Two arrows in the plane</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>Drag the teal and gold dots above. When the two arrows point along one line, the parallelogram they span is flat and the shading disappears. Away from that, the parallelogram has area, and any point of the plane can be reached. The determinant on the panel measures that area, with a sign.</p></div>
+<div class="layer" data-l="statement" ><span class="tag">Statement</span>
+<div class="box"><span class="lab">Proposition 1</span>Two vectors v<sub>1</sub> = (a, c) and v<sub>2</sub> = (b, d) in the plane are independent exactly when <span class="mono">ad &minus; bc &ne; 0</span>.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
 <p><strong>If the determinant is not zero.</strong> Suppose c<sub>1</sub>v<sub>1</sub> + c<sub>2</sub>v<sub>2</sub> = 0, that is, c<sub>1</sub>a + c<sub>2</sub>b = 0 and c<sub>1</sub>c + c<sub>2</sub>d = 0. Multiply the first by d and the second by b and subtract: c<sub>1</sub>(ad &minus; bc) = 0. Multiply the second by a and the first by c and subtract: c<sub>2</sub>(ad &minus; bc) = 0. With ad &minus; bc &ne; 0 both c<sub>i</sub> are zero.</p>
-<p><strong>If the determinant is zero.</strong> Then (c<sub>1</sub>, c<sub>2</sub>) = (d, &minus;c) gives a combination equal to zero in both components, as does (b, &minus;a). If c and d are not both zero the first is nonzero; otherwise, if a and b are not both zero, the second is; and if all four entries are zero, (1, 0) works. In every case there is a nonzero combination that vanishes, so the pair is dependent. &square;</p>
+<p><strong>If the determinant is zero.</strong> Then (c<sub>1</sub>, c<sub>2</sub>) = (d, &minus;c) gives a combination equal to zero in both components, and so does (b, &minus;a). If c and d are not both zero the first is nonzero; otherwise, if a and b are not both zero, the second is; and if all four entries are zero, (1, 0) works. In every case a nonzero combination vanishes, so the pair is dependent. &square;</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>The plate shows the determinant as signed area, but nothing in this chapter proves that; the proof above uses only the two component equations. The trace a + d is not the criterion (Exercise 4). The determinant is defined for larger matrices in Chapter 5, where this proposition will reappear as a special case.</p></div>
 
 <h2>3 &middot; Coordinates</h2>
-<p>When the determinant D = ad &minus; bc is not zero, every w = (w<sub>1</sub>, w<sub>2</sub>) in the plane is a combination of v<sub>1</sub> and v<sub>2</sub> in exactly one way:</p>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>If v<sub>1</sub> and v<sub>2</sub> are independent, they work like a pair of directions for walking. To reach w, walk some distance c<sub>1</sub> along v<sub>1</sub>, then c<sub>2</sub> along v<sub>2</sub>. Move the arrows and the white dot stays put, but the walking instructions change. The point is one thing; its coordinates are how it is described relative to a choice of directions.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Proposition 2</span>Let D = ad &minus; bc &ne; 0. Every w = (w<sub>1</sub>, w<sub>2</sub>) is c<sub>1</sub>v<sub>1</sub> + c<sub>2</sub>v<sub>2</sub> for exactly one pair (c<sub>1</sub>, c<sub>2</sub>), namely
 <div class="eq">c1 = (w1&middot;d &minus; b&middot;w2) / D
-c2 = (a&middot;w2 &minus; c&middot;w1) / D</div>
-<p>The plate computes these for the white dot. They are the <em>coordinates</em> of w in the basis (v<sub>1</sub>, v<sub>2</sub>). Move v<sub>1</sub> and v<sub>2</sub> and w stays put while its coordinates change: the vector is one thing, and its coordinates are a description of it relative to a choice of basis. That distinction is the one Book XXI needs when it asks which descriptions of a system are descriptions of the same system.</p>
-<div class="box warn"><span class="lab">What this chapter does not claim</span>The link to Book XXI is a pointer, not an identity: a change of basis is the operation under which &ldquo;the same system&rdquo; must be judged there. It does not say anything about the systems in that volume beyond that.</div>
+c2 = (a&middot;w2 &minus; c&middot;w1) / D</div></div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p><em>Existence.</em> Substitute. The first component of c<sub>1</sub>v<sub>1</sub> + c<sub>2</sub>v<sub>2</sub> is c<sub>1</sub>a + c<sub>2</sub>b = [(w<sub>1</sub>d &minus; bw<sub>2</sub>)a + (aw<sub>2</sub> &minus; cw<sub>1</sub>)b]/D = w<sub>1</sub>(ad &minus; bc)/D = w<sub>1</sub>. The second is c<sub>1</sub>c + c<sub>2</sub>d = [(w<sub>1</sub>d &minus; bw<sub>2</sub>)c + (aw<sub>2</sub> &minus; cw<sub>1</sub>)d]/D = w<sub>2</sub>(ad &minus; bc)/D = w<sub>2</sub>.</p>
+<p><em>Uniqueness.</em> If two pairs both work, their difference is a combination of v<sub>1</sub> and v<sub>2</sub> equal to zero. By Proposition 1 (D &ne; 0) the difference is (0, 0). &square;</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>The readout &ldquo;check&rdquo; on the plate recombines the coordinates and should return w. The link to Book XXI is a pointer, not an identity: a change of basis is the operation under which &ldquo;the same system&rdquo; must be judged there, and this chapter says nothing more about those systems.</p></div>
 
 <h2>4 &middot; Exercises</h2>
 <ol class="ex">
 <li>Show that if v<sub>1</sub> = 0, the pair is dependent whatever v<sub>2</sub> is.</li>
 <li>Find the coordinates of (3, 1) in the basis (1, 1), (1, &minus;1) by the formulas, then check by recombining.</li>
-<li>Three vectors in the plane are always dependent. Using the plate as a guide, give an argument that does not use any dimension count.</li>
-<li>The trace a + d is not the independence criterion. Find a pair with a + d = 0 that is independent and a pair with a + d &ne; 0 that is dependent.</li>
+<li>Three vectors in the plane are always dependent. Give an argument that does not use any dimension count.</li>
+<li>Find a pair with a + d = 0 that is independent and a pair with a + d &ne; 0 that is dependent.</li>
 <li>Describe the span of a dependent pair that is not both zero.</li>
 </ol>
 </div>
 
 <footer>
-<strong style="color:var(--gold)">Status.</strong> Mathematics in &sect;2&ndash;3 checked in exact arithmetic by <a class="mono" href="ch01-verify.py">ch01-verify.py</a> (finite grid, with failing controls); the proof is the argument in &sect;2. The plate is not covered by that script. Chapter text, plate and exercises are original to this book. Scope reference for the volume: Golan, <em>The Linear Algebra a Beginning Graduate Student Ought to Know</em>, 2nd ed., Springer 2007 &mdash; contents list and preface only have been read.
+<strong style="color:var(--gold)">Status.</strong> Mathematics in &sect;2&ndash;3 checked in exact arithmetic by <a class="mono" href="ch01-verify.py">ch01-verify.py</a> (finite grid, with failing controls); the proof is the argument in &sect;2. The plate is not covered by that script. The text is written in four layers (intuition, statement, proof, remarks), switchable at the top. Chapter text, plate and exercises are original to this book. Scope reference for the volume: Golan, <em>The Linear Algebra a Beginning Graduate Student Ought to Know</em>, 2nd ed., Springer 2007 &mdash; contents list and preface only have been read.
 </footer>
 
 <script>
@@ -135,6 +167,11 @@ c2 = (a&middot;w2 &minus; c&middot;w1) / D</div>
   document.getElementById('reset').onclick=function(){P={v1:START.v1.slice(),v2:START.v2.slice(),w:START.w.slice()};draw()};
   window.addEventListener('resize',size);size();
 })();
+  (function(){var body=document.body,bar=document.getElementById('bar');
+    function set(l,on){body.classList.toggle('off-'+l,!on);var b=bar.querySelector('button[data-l="'+l+'"]');if(b)b.setAttribute('aria-pressed',on?'true':'false')}
+    bar.querySelectorAll('button[data-l]').forEach(function(b){b.onclick=function(){set(b.dataset.l,b.getAttribute('aria-pressed')!=='true')}});
+    document.getElementById('only').onclick=function(){['intuition','statement','proof','remarks'].forEach(function(l){set(l,l==='intuition')})};
+    document.getElementById('all').onclick=function(){['intuition','statement','proof','remarks'].forEach(function(l){set(l,true)})};})();
 </script>
 </body>
 </html>
