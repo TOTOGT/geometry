@@ -2,7 +2,7 @@
 """Checks Chapter 2: offline-safe, counting table complete, unchecked cells marked, links resolve."""
 import re, os, sys
 d=os.path.dirname(os.path.abspath(__file__))
-t=open(os.path.join(d,'ch02-four-languages.html'),encoding='utf-8').read()
+t=open(os.path.join(d,'ch02-five-languages.html'),encoding='utf-8').read()
 ok=True
 def check(n,c):
     global ok
@@ -12,14 +12,15 @@ tbl=t.split('Lesson 1.')[1].split('Lesson 2.')[0]
 rows=re.findall(r'<tr><td>(\d+)\. ',tbl)
 check('counting table has rows 1..10',rows==[str(i) for i in range(1,11)])
 cells=re.findall(r'<tr><td>\d+\. .*?</tr>',tbl)
-check('every row has 4 language cells',all(len(re.findall(r'<td',c))==4 for c in cells))
+check('every row has 5 language cells',all(len(re.findall(r'<td',c))==5 for c in cells))
 check('Nepali and Tibetan cells carry lang tags and romanization',all('lang="ne"' in c and 'lang="bo"' in c and c.count('class="rom"')==2 for c in cells))
+check('Dzongkha cells are blank prompts, not filled in',all(c.count('find out')==1 and 'lang="dz"' in c for c in cells))
 check('unchecked Tibetan sentence is marked, not invented','for a Tibetan speaker to write' in t)
 check('to-confirm box present','To confirm' in t)
 check('Portuguese blocks present','lang="pt"' in t)
 for h in re.findall(r'href="([^"#]+)"',t):
     if not h.startswith('http'): check('link '+h,os.path.exists(os.path.join(d,h)))
 # controls: a table row missing a language cell, or an outside <link>, must be caught
-check('control: short row caught',len(re.findall(r'<td','<tr><td>1. one</td><td>um</td></tr>'))!=4)
+check('control: short row caught',len(re.findall(r'<td','<tr><td>1. one</td><td>um</td></tr>'))!=5)
 check('control: outside link caught',bool(re.search(r'<link\b','<link href=x>')))
 sys.exit(0 if ok else 1)
