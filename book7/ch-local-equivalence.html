@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter Le &middot; Local Equivalence &middot; What a Knot&#8217;s Complex Remembers &middot; Principia Orthogona G7</title>
+<meta name="description" content="A reading of Lipshitz, On Khovanov local equivalence groups (arXiv 2610.37595): the definitions, one complete 2-torsion example worked by hand, the census table behind the six new concordance homomorphisms, and what this page re-checked and what it did not.">
+<script>MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --void:#04040a; --surface:#0c0d14; --card:#10111c;
+  --gold:#c9a84c; --teal:#0abab5; --green:#10b981;
+  --h-color:#5b9fc7; /* rope blue: the colour of a knot diagram on a dark page */
+  --text:#e8e4d8; --dim:#6b6757; --rule:rgba(201,168,76,0.14);
+  --op-c:#60a5fa; --op-k:#a78bfa; --op-f:#f472b6; --op-u:#34d399;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:Georgia,serif;background:var(--void);color:var(--text);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-logo{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;flex-wrap:wrap;}
+.nav-links a{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.hero{padding:5rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(91,159,199,.10) 0%,transparent 70%);pointer-events:none;}
+.hero-eyebrow{font-family:'Courier New',monospace;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--h-color);border:1px solid currentColor;padding:.2rem .7rem;display:inline-block;margin-bottom:2rem;}
+.hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:400;color:var(--gold);letter-spacing:.04em;margin:.8rem 0 .5rem;line-height:1.1;}
+.hero-sub{font-size:1rem;color:var(--dim);font-style:italic;max-width:660px;margin:0 auto 1.5rem;}
+.value{font-family:'Courier New',monospace;font-size:.8rem;letter-spacing:.12em;color:rgba(91,159,199,.75);margin-top:.8rem;}
+.page{max-width:800px;margin:0 auto;padding:4rem 2rem 6rem;}
+h2{font-size:1.15rem;font-weight:400;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin:3.5rem 0 1.2rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;}
+p{margin-bottom:1.1rem;}
+em{color:var(--gold);font-style:normal;}
+code{font-family:'Courier New',monospace;font-size:.85em;color:var(--teal);}
+a.ref{color:var(--h-color);text-decoration:none;border-bottom:1px dotted rgba(91,159,199,.5);}
+a.ref:hover{color:var(--text);}
+.proof-block{border-left:3px solid var(--h-color);padding:1.4rem 1.8rem;margin:1.8rem 0;background:rgba(91,159,199,.05);}
+.proof-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--h-color);display:block;margin-bottom:.5rem;}
+.proof-title{font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.7rem;}
+.math-block{font-family:'Courier New',monospace;font-size:.85rem;color:var(--teal);background:var(--surface);border:1px solid rgba(10,186,181,.15);padding:.9rem 1.3rem;margin:1rem 0;overflow-x:auto;white-space:pre;line-height:1.7;}
+.sorry-box{border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.05);padding:1rem 1.4rem;margin:1.5rem 0;border-radius:2px;}
+.sorry-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#ef4444;display:block;margin-bottom:.4rem;}
+.ask{border:1px solid rgba(201,168,76,.28);background:rgba(201,168,76,.04);padding:1.1rem 1.5rem;margin:1.4rem 0;border-radius:2px;}
+.ask-label{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.45rem;}
+.gold-rule{border:none;border-top:1px solid rgba(201,168,76,.25);margin:2.5rem 0;}
+table{width:100%;border-collapse:collapse;margin:1.4rem 0;font-size:.9rem;}
+th,td{text-align:left;padding:.6rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top;}
+th{font-family:'Courier New',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--h-color);}
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:2rem 0;border-top:1px solid rgba(91,159,199,.2);margin-top:3rem;}
+.chapter-nav a{color:var(--h-color);text-decoration:none;font-family:'Courier New',monospace;font-size:.78rem;letter-spacing:.08em;border:1px solid rgba(91,159,199,.25);padding:.5rem 1rem;border-radius:2px;transition:all .2s;}
+.chapter-nav a:hover{background:rgba(91,159,199,.1);}
+footer{text-align:center;padding:2rem;font-family:'Courier New',monospace;font-size:.58rem;letter-spacing:.08em;color:var(--dim);border-top:1px solid var(--rule);}
+footer a{color:var(--gold);text-decoration:none;}
+</style>
+<!--po-subject--><meta name="po-subject" content="MATHEMATICS · PURE"><!--/po-subject-->
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">&#9884; Principia Orthogona &middot; Vol VII</a>
+  <div class="nav-links">
+    <a href="index.html">Scientist Gallery</a>
+    <a href="ch-lipshitz.html">Robert Lipshitz</a>
+    <a href="ch-huh.html">June Huh</a>
+    <a href="../book6/index.html">Vol VI</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Capítulo Le &middot; Vol VII &middot; Scientist Gallery</div>
+  <!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#16324f;background:#dfeaf4;border:1px solid #a8c2d8;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">MATHEMATICS · PURE</span></div><!--/po-subject-->
+<h1>Local Equivalence</h1>
+  <p class="hero-sub">
+    Take the Khovanov complex of a knot and forget everything that does not survive a certain
+    kind of map. What is left is a group, and in October 2026 the paper found torsion in it, and
+    integer-valued invariants that the $s$-invariants cannot see. This page reads that paper, works one example
+    to the end, and says which parts were checked here and which were not.
+  </p>
+  <div class="value">Source: R. Lipshitz &middot; arXiv:2610.37595v1 [math.GT] &middot; 27 Oct 2026 &middot; 40 pages</div>
+</div>
+
+<div class="page">
+
+<div class="sorry-box">
+  <span class="sorry-label">Read this first &middot; status</span>
+  I read the abstract, the introduction, Section 2.1 and 2.2, Section 3, the questions of Section 4
+  and the methodology section of the paper. I did <em>not</em> read the proofs of Section 2.3 and
+  2.4, which carry the main theorem about the $\mathbb{Z}^\infty$ summand. Everything below about
+  those results is the paper&#8217;s statement of them, not a check of them. What <em>was</em> checked
+  is listed in &sect;5, by a script that sits beside this page.
+</div>
+
+<h2>1 &middot; The question</h2>
+
+<p>
+  A knot is <em>slice</em> if it bounds a smooth disc in the four-ball, and two knots are
+  <em>concordant</em> if they differ by a slice knot. Concordance classes form an abelian group, and
+  obstructing sliceness is one of the headline uses of Khovanov homology: Rasmussen&#8217;s $s$-invariant,
+  built from it, gave another proof of the Milnor conjecture. Since then many more concordance invariants have
+  been built from Khovanov homology and its relatives.
+</p>
+
+<p>
+  The paper studies two <em>local equivalence groups</em> built from the Khovanov complex, one by
+  Lewark and one by Dunfield, Schütz and Lipshitz. A group like this is a deliberately coarse
+  summary: it throws away everything about the complex except what survives maps of one specific kind.
+  Rasmussen&#8217;s $s$ over any field is a function on these groups. The question the paper answers is how much
+  more structure the groups have than the $s$-invariants see.
+</p>
+
+<h2>2 &middot; The definitions</h2>
+
+<p>
+  Let $\mathbb{Z}[h]$ be polynomials in one variable $h$ of grading $-2$. A <em>knot-like complex</em>
+  over a graded $\mathbb{Z}[h]$-algebra $R$ is a finitely generated cochain complex of free graded
+  $R$-modules which, after inverting $h$, is chain homotopy equivalent to $h^{-1}R$ sitting in
+  homological degree 0. The reduced Bar-Natan complex of a knot is one.
+</p>
+
+<div class="proof-block">
+  <span class="proof-label">Definition (paper, Defs 2.1&ndash;2.2)</span>
+  <div class="proof-title">Local maps, and the group $G(R)$</div>
+  <p style="margin-bottom:.6rem">
+    A chain map $\beta: D \to D'$ is <em>local</em> if $h^{-1}\beta$ is a chain homotopy equivalence.
+    Write $D \le D'$ if a local map exists; $D$ and $D'$ are <em>locally equivalent</em> if both
+    $D \le D'$ and $D' \le D$. The local equivalence classes under tensor product form an abelian
+    group $G(R)$, with the dual complex as the inverse. The default is $G = G(\mathbb{Z}[h])$.
+  </p>
+  <p style="margin-bottom:0">
+    The knot-to-complex assignment is a homomorphism from the smooth concordance group to $G$, so
+    anything one learns about $G$ is a statement about what a concordance invariant of this type
+    could possibly be.
+  </p>
+</div>
+
+<p>
+  A second group, $\widetilde{C}_{LEO}$, keeps three pieces of data at once: a complex $C$ over
+  $\mathbb{Z}$ (the odd Khovanov complex), a knot-like complex $D$ over $\mathbb{Z}[h]$ (the
+  Bar-Natan complex), and an identification of their reductions. $G$ is a direct summand of it.
+</p>
+
+<h2>3 &middot; One complex, done by hand</h2>
+
+<p>
+  The paper&#8217;s first result is that $G$ has torsion, and the first torsion element is a five-generator
+  complex $D_{2,1,1}$ over $\mathbb{Z}[h]$ (the author of the paper reports that Claude called it a
+  <em>bowtie</em> complex). Its generators and gradings, written (homological, quantum), are:
+</p>
+
+<table>
+  <tr><th>generator</th><th>$x$</th><th>$y_+$</th><th>$y_0$</th><th>$y_-$</th><th>$z$</th></tr>
+  <tr><td>bigrading</td><td>(&minus;1, &minus;2)</td><td>(0, 2)</td><td>(0, 0)</td><td>(0, &minus;2)</td><td>(1, 2)</td></tr>
+</table>
+
+<div class="math-block">d(x)  = 4h&middot;y0 + h^2&middot;y+ + 8&middot;y-
+d(y0) = -4h&middot;z
+d(y+) = 8&middot;z
+d(y-) = h^2&middot;z
+d(z)  = 0</div>
+
+<p>
+  Two checks you can do on paper. First, $d^2 = 0$: $d^2(x) = 4h(-4hz) + h^2(8z) + 8(h^2 z) =
+  (-16 + 8 + 8)h^2 z = 0$, and $d^2$ vanishes on the other generators because each has at most one
+  step to $z$. Second, $d$ preserves quantum grading when $h$ is counted as degree $-2$: $d(x)$ has
+  terms of grading $-2$ in every slot.
+</p>
+
+<div class="proof-block">
+  <span class="proof-label">Lemma 2.8 (paper) &middot; re-derived here</span>
+  <div class="proof-title">$D_{2,1,1}$ is a nontrivial element of order 2 in $G(\mathbb{Z}[h])$</div>
+  <p style="margin-bottom:.6rem">
+    <em>Knot-like.</em> Invert $h$. The pair $y_-, z$ cancels through $d(y_-) = h^2 z$, and the pair
+    $x, y_+$ cancels through the coefficient $h^2$ in $d(x)$. What remains is $\mathbb{Z}[h,h^{-1}]\langle y_0\rangle$.
+  </p>
+  <p style="margin-bottom:.6rem">
+    <em>Nontrivial.</em> The paper uses $s_c(D) = \max\{j : \exists$ a cycle in bidegree $(0,j)$
+    that generates $H(h^{-1}D)\}$, a local-equivalence invariant, and the fact that $D$ is trivial exactly when
+    $s_c(D) = s_c(D^*) = 0$. In bidegree $(0,0)$ the cycles are the multiples $k(hy_+ + 2y_0)$, which
+    represent $2k$ times a generator, never a generator. So $s_c(D_{2,1,1}) \ne 0$; in fact it is $-2$,
+    witnessed by the cycle $hy_0 + 4y_-$.
+  </p>
+  <p style="margin-bottom:0">
+    <em>Order 2.</em> Swapping $x \leftrightarrow z$, $y_+ \leftrightarrow y_-$, $y_0 \mapsto -y_0$
+    identifies $D_{2,1,1}$ with its dual. The dual is the inverse in $G$, so $D_{2,1,1} = -D_{2,1,1}$.
+  </p>
+</div>
+
+<p>
+  The paper then generalises to a three-parameter family $D_{p,m,n}$ for a prime $p$ and positive
+  integers $m,n$, with $2p^m h^n$ and $2p^{2m}$ in place of $4h$ and $8$. Its Theorem 1.1 says that for
+  each prime $p$ these generate a copy of $(\mathbb{Z}/2)^\infty$ in $G$, independent for different primes.
+  The proof the paper gives for the independence over one prime is an invariant that measures the
+  largest power of $p$ dividing the ideal of values of homology classes; I did not re-derive it.
+</p>
+
+<h2>4 &middot; What the paper claims</h2>
+
+<table>
+  <tr><th style="width:18%">Result</th><th>Statement, as the paper gives it</th><th style="width:22%">Status here</th></tr>
+  <tr><td>Thm 1.1</td><td>$G$ has 2-torsion: for each prime $p$ a $(\mathbb{Z}/2)^\infty$ subgroup, independent across primes.</td><td>Example $D_{2,1,1}$ re-derived. General case not re-derived.</td></tr>
+  <tr><td>Thm 1.2</td><td>A $(\mathbb{Z}/2)^\infty$ subgroup of the kernel of $\widetilde{C}_{LEO} \to G$.</td><td>Not read.</td></tr>
+  <tr><td>Thm 1.3</td><td>For each prime $p$, $G$ has a $\mathbb{Z}^\infty$ direct summand in the kernel of all $s$-invariants.</td><td>Not read. The proof imitates Dai&ndash;Hom&ndash;Stoffregen&ndash;Truong over $\mathbb{Z}_p[h]/(ph)$.</td></tr>
+  <tr><td>Thm 1.4 / Cor 3.1</td><td>At least six concordance homomorphisms to $\mathbb{Z}$, independent of the $s$-invariants, $\tau$, and the DHST homomorphisms.</td><td>Corollary 3.1 checked on the paper&#8217;s own table, &sect;5.</td></tr>
+</table>
+
+<h2>5 &middot; The census, and what the script checked</h2>
+
+<p>
+  The proof of Corollary 3.1 in the paper is one sentence: view Table 2 as a matrix and row-reduce it.
+  Table 2 gives fourteen invariants on eleven knots (its caption says thirteen; the header lists fourteen).
+  The rows below are copied from the paper&#8217;s table by a script from the extracted text.
+</p>
+
+<div style="overflow-x:auto"><table style="font-family:'Courier New',monospace;font-size:.78rem"><tr><th>Knot</th><th>s<sub>Q</sub></th><th>s<sub>F2</sub></th><th>&tau;</th><th>&psi;<sub>1</sub><sup>o</sup></th><th>&phi;<sub>1</sub><sup>o</sup></th><th>&phi;<sub>2</sub><sup>o</sup></th><th>&phi;<sub>3</sub><sup>o</sup></th><th>&phi;<sub>4</sub><sup>o</sup></th><th>&phi;<sub>5</sub><sup>o</sup></th><th>&phi;<sub>1</sub><sup>e</sup></th><th>&psi;<sub>1</sub><sup>e</sup></th><th>&phi;<sub>1</sub><sup>HF</sup></th><th>&phi;<sub>2</sub><sup>HF</sup></th><th>&phi;<sub>3</sub><sup>HF</sup></th></tr>
+<tr><td>31</td><td>2</td><td>2</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>819</td><td>6</td><td>6</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+<tr><td>942</td><td>0</td><td>0</td><td>0</td><td>-1</td><td>-1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>12n200</td><td>-2</td><td>-2</td><td>-1</td><td>3</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>-1</td><td>0</td><td>0</td></tr>
+<tr><td>12n475</td><td>0</td><td>0</td><td>0</td><td>-1</td><td>0</td><td>0</td><td>-1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>13n309</td><td>0</td><td>0</td><td>0</td><td>-1</td><td>0</td><td>-1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>13n4587</td><td>10</td><td>10</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>2</td><td>0</td><td>1</td></tr>
+<tr><td>14n19265</td><td>0</td><td>-2</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>-1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>14n26039</td><td>0</td><td>0</td><td>-1</td><td>1</td><td>0</td><td>-1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>-1</td><td>0</td><td>0</td></tr>
+<tr><td>15n5319</td><td>-2</td><td>-2</td><td>-1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>-1</td><td>0</td><td>0</td></tr>
+<tr><td>16n956730</td><td>-2</td><td>-2</td><td>-1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>-1</td><td>0</td><td>0</td></tr>
+</table></div>
+
+<p>
+  <code>ch-local-equivalence-verify.py</code> turns the sentence into numbers. Over $\mathbb{Q}$ the full
+  $11 \times 14$ matrix has rank 11, the eight columns other than the six new invariants
+  ($\psi_1^o,\ \phi_1^o,\dots,\phi_5^o$) have rank 5, so the six add 6 independent directions on these
+  eleven knots. Since a linear relation among the invariants on all knots would hold on these eleven, that
+  certifies the six are independent of each other and of the rest. Two controls were run first: zeroing the
+  $\phi_5^o$ column drops the gain to 5, and replacing it by a copy of $\tau$ also drops it to 5, so the test
+  can fail. The script also confirms the three relations the paper states for its census: $\tau =
+  \phi_1^{HF} + 2\phi_2^{HF} + 3\phi_3^{HF}$, $s_{F_2} - s_Q = 2\psi_1^e$, and $\phi_1^e = -\psi_1^e$.
+</p>
+
+<div class="sorry-box">
+  <span class="sorry-label">What this certificate is worth</span>
+  The rank argument is only as good as the table. The paper says that Claude wrote the code that computed the
+  standard complexes and ran all the computations, and that its author did not examine the code
+  directly. The paper also says that the Dai&ndash;Hom&ndash;Stoffregen&ndash;Truong homomorphisms beyond the third vanish on these knots, and that the $s$-invariants over odd primes equal $s_Q$ in this range; the table prints none of those columns, so the claim of independence from <em>all</em> of them rests on that statement and the script cannot check it. The numbers could be wrong in an entry. The rank result says they are
+  consistent, not that they are the true values for those knots; the independence is a conclusion
+  about this table, which the author does not claim to have recomputed independently of the program.
+</div>
+
+<p>
+  The same script checks the algebra of &sect;3: $d^2 = 0$ and bidegree homogeneity for 64 choices of
+  $(p, m, n)$, with a control that a perturbed differential fails; that $h^{-1}D_{2,1,1}$ has rational
+  homology of rank one in degree 0; $s_c(D_{2,1,1}) = -2$ with the witness a cycle; and self-duality. It also
+  checks that each row of the paper&#8217;s Table 3 sums to its printed total, and prints the column sums,
+  which are the numbers of knots of each crossing class that table implies: 249, 185, 888, 5110, 27436,
+  168030 and 1008906. The script has no knot census to compare them against.
+</p>
+
+<h2>6 &middot; Where the paper stops</h2>
+
+<p>
+  The paper ends with six questions, which I give in my words. Does any knot realise one of the
+  2-torsion complexes? Can one write explicit homomorphisms from $G$ onto $(\mathbb{Z}/2)^\infty$? Is there
+  torsion of order other than 2? Do the groups have infinitely divisible elements? What is the structure of
+  $G(\mathbb{Z}_p[h]/(ph))$, and is it $\mathbb{Z}^\infty$ with an explicit basis? And is every local
+  equivalence class realised by a knot? The author says the last needs significant new ideas.
+</p>
+
+<p>
+  A computational remark from the same paper bears on the first question: for every amphicheiral knot up to
+  16 crossings, and about 40,000 random strongly negatively amphicheiral knots with 19 to 26 crossings, the
+  invariant $s_c$ vanished, so none of the 2-torsion complexes of &sect;3 turned up in that sample.
+</p>
+
+<h2>7 &middot; What this page does not claim</h2>
+
+<p>
+  It makes no claim that local equivalence groups connect to anything else in this series. The paper is about
+  knots and chain complexes; nothing in it is about the operators C, K, F, U or the contact-geometry chapters, and
+  a shared word such as &ldquo;complex&rdquo; or &ldquo;group&rdquo; is not a shared mechanism. It repeats the
+  author&#8217;s statement that the knot concordance results are his own and the AI-assisted research his
+  report; the human side of that is the next chapter.
+</p>
+
+<div class="ask">
+  <span class="ask-label">Exercises</span>
+  1. Verify $d^2 = 0$ for the general $D_{p,m,n}$: show that the three terms of $d^2(x)$ contribute
+  $-4p^{2m}$, $+2p^{2m}$ and $+2p^{2m}$ times $h^{2n}z$. &nbsp;
+  2. Find all cycles of bidegree $(0,-2)$ in $D_{2,1,1}$ and check that $hy_0 + 4y_-$ is one of them. &nbsp;
+  3. Why can the six new homomorphisms not all be detected by checking fewer than six knots?
+</div>
+
+<div class="chapter-nav">
+  <a href="ch-lipshitz.html">&larr; The author of this paper</a>
+  <a href="index.html">Scientist Gallery</a>
+  <a href="ch-huh.html">June Huh &rarr;</a>
+</div>
+
+</div>
+
+<footer>
+  <strong style="color:var(--gold)">Chapter Le &middot; Local Equivalence &middot; What a Knot&#8217;s Complex Remembers</strong><br>
+  Principia Orthogona &middot; Vol VII &middot; The Scientist Gallery &middot; 2026<br>
+  &copy; 2026 Pablo Nogueira Grossi &middot; G6 LLC &middot; Newark, New Jersey, USA<br>
+  ORCID 0009-0000-6496-2186 &middot;
+  <a href="mailto:g6llc@proton.me">g6llc@proton.me</a><br>
+  <a href="https://zenodo.org/communities/principia-orthogona">Zenodo Community</a> &middot;
+  <a href="index.html">All Scientists</a><br>
+  Licence CC BY-NC-ND 4.0 &middot; Independent chapter; not peer-reviewed.<br>
+  This chapter discusses the published work of a living mathematician. It makes no claim on his results, asserts no collaboration, and attributes no view to him. Verifier: <code>ch-local-equivalence-verify.py</code> &mdash; untested outside the author&#8217;s machine until you run it.
+</footer>
+
+</body>
+</html>
