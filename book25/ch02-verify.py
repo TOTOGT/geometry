@@ -36,6 +36,7 @@ check('Write-in-your-language box: voluntary list, no-contact policy sourced, no
 check('Empty-seat paragraph: author principle, sourced protections, decision left to them','A seat held empty' in t and 'Uma cadeira vazia' in t and '2022 Supreme Court' in t and 'theirs to say' in t)
 check('History box: not a free choice, origins, episodes, counts differ by counter, sources read','not a free choice' in t and 'Matis' in t and '196 groups' in t and '124 by this count' in t and 'was not opened' in t)
 check('no text claims isolation was simply chosen','have chosen not to be in contact' not in t and 'isolation they have chosen' not in t and 'escolheram' not in t)
+check('Crossing paragraph: sourced, help described as thin, unsupported claims flagged','Crossing into Brazil' in t and 'about 35' in t and 'help is thin' in t and 'nothing on diamonds' in t and 'armed-forces' in t)
 check('unchecked Tibetan sentence is marked, not invented','for a Tibetan speaker to write' in t)
 check('to-confirm box present','To confirm' in t)
 check('Portuguese blocks present','lang="pt"' in t)
