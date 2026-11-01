@@ -41,7 +41,7 @@ l6=t.split('Lesson 6.')[1].split('What the UN is doing')[0]
 r6=re.findall(r'<tr><td>([^<]+)</td><td lang="pt">([^<]+)</td>(.*?)</tr>',l6,re.S)
 check('Lesson 6 has 9 phrase rows, 6 cells each, 4 blank columns',len(r6)==9 and all(len(re.findall(r'<td','<td>'+x[0]+'</td><td>'+x[1]+'</td>'+x[2]))==6 and x[2].count('find out')==4 for x in r6))
 check('Lesson 6 says phrases unverified, numbers unverified, scene invented, notes primary-care scope','no native review' in l6 and 'did not verify the emergency numbers' in l6 and 'covers primary care only' in l6 and 'invented example' in l6)
-check('Teofilo Otoni example: date, bill, pending signature, not verified as signed','Te&oacute;filo Otoni' in t and 'PL 123/2025' in t and 'awaited the mayor' in t and 'I have not checked whether it was signed' in t)
+check('Teofilo Otoni example: bill, signing reported but number/date unconfirmed, voting project flagged unverified','Te&oacute;filo Otoni' in t and 'PL 123/2025' in t and 'awaited the mayor' in t and 'I could not confirm the number or the date' in t and 'reported, not verified' in t)
 check('unchecked Tibetan sentence is marked, not invented','for a Tibetan speaker to write' in t)
 check('to-confirm box present','To confirm' in t)
 check('Portuguese blocks present','lang="pt"' in t)
