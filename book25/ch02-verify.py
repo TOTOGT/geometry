@@ -32,6 +32,7 @@ r5=re.findall(r'<tr><td>(hot \(temperature\)|hot \(spicy\)|cold)</td>(.*?)</tr>'
 check('Lesson 5 has 3 rows of 6 cells, Tibetan/Dzongkha/Tupi-Guarani blank',len(r5)==3 and all(len(re.findall(r'<td','<td>'+x[1]))==6 and x[1].count('find out')==3 for x in r5))
 check('Lesson 5 labels the American-culture point as observation, and words as to confirm','author&rsquo;s observation, not a finding' in l5 and 'no source was read' in l5)
 check('Translate box: file naming, translations folder, pull request, disclosure of machine use and speaker review, no guessed cells','ch02-bo.html' in t and 'translations' in t and 'pull request' in t and 'machine translation tool' in t and 'speaker of the language has checked' in t and 'blank is better than a wrong one' in t)
+check('Write-in-your-language box: voluntary list, no-contact policy sourced, no seeking out','Write in your language' in t and 'only for people who choose' in t and 'does not try to find them' in t and '115 isolated peoples' in t and 'has confirmed 29' in t and 'leave them alone' in t)
 check('unchecked Tibetan sentence is marked, not invented','for a Tibetan speaker to write' in t)
 check('to-confirm box present','To confirm' in t)
 check('Portuguese blocks present','lang="pt"' in t)
