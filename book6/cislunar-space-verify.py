@@ -76,6 +76,16 @@ for nm,v in (('L1',(L1+mu)*D/GEO),('L2',(L2+mu)*D/GEO),('L3',(-L3-mu)*D/GEO)):
 check(7<(L1+mu)*D/GEO<8 and 10<(L2+mu)*D/GEO<11,'L1 in (7,8) and L2 in (10,11) as read off the primer Figure 1')
 check('%.1f'%((L2-L1)*D/GEO) in txt,'L1-to-L2 span %.1f GEO shown'%((L2-L1)*D/GEO))
 
+head(4.6,'Figures 2 and 3 (redrawn)')
+hills=D*(mu/3)**(1/3)/GEO
+check('%.2f'%hills in txt and 3.3>hills*2,'Hill radius %.2f GEO shown, and the by-eye Moon zone (3.3) is more than twice it'%hills)
+for lab in ('Reading the primer&rsquo;s Figure 2','Reading the primer&rsquo;s Figure 3','by eye','Top view, z toward you'):
+    check(lab in html,'present: '+lab)
+x4,y4=.5*(D/GEO),(D/GEO)*math.sqrt(3)/2
+check(abs(math.hypot(x4,y4)-D/GEO)<1e-9,'L4 is at the Moon distance %.2f GEO from Earth (all three zones: outside the 5.7 Earth-Moon circle, inside 13.8)'%(D/GEO))
+check(5.7<D/GEO<13.8 and 5.7<(-L3-mu)*D/GEO<13.8,'L3, L4, L5 lie between the Earth-Moon and outer circles (by-eye radii 5.7, 13.8)')
+check(abs(((L1+mu)-1)*D/GEO)<3.3 and abs(((L2+mu)-1)*D/GEO)<3.3,'L1 and L2 within 3.3 GEO of the Moon (inside the by-eye Moon zone)')
+
 head(5,'Runge-Kutta conserves the Jacobi constant (the page applet uses the same equations)')
 def acc(s):
     x,y,u,v=s; r1=math.hypot(x+mu,y); r2=math.hypot(x-1+mu,y)
