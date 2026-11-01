@@ -37,6 +37,10 @@ check('Empty-seat paragraph: author principle, sourced protections, decision lef
 check('History box: not a free choice, origins, episodes, counts differ by counter, sources read','not a free choice' in t and 'Matis' in t and '196 groups' in t and '124 by this count' in t and 'was not opened' in t)
 check('no text claims isolation was simply chosen','have chosen not to be in contact' not in t and 'isolation they have chosen' not in t and 'escolheram' not in t)
 check('Crossing paragraph: sourced, help described as thin, unsupported claims flagged','Crossing into Brazil' in t and 'about 35' in t and 'help is thin' in t and 'nothing on diamonds' in t and 'armed-forces' in t)
+l6=t.split('Lesson 6.')[1].split('What the UN is doing')[0]
+r6=re.findall(r'<tr><td>([^<]+)</td><td lang="pt">([^<]+)</td>(.*?)</tr>',l6,re.S)
+check('Lesson 6 has 9 phrase rows, 6 cells each, 4 blank columns',len(r6)==9 and all(len(re.findall(r'<td','<td>'+x[0]+'</td><td>'+x[1]+'</td>'+x[2]))==6 and x[2].count('find out')==4 for x in r6))
+check('Lesson 6 says phrases unverified, numbers unverified, scene invented, notes primary-care scope','no native review' in l6 and 'did not verify the emergency numbers' in l6 and 'covers primary care only' in l6 and 'invented example' in l6)
 check('unchecked Tibetan sentence is marked, not invented','for a Tibetan speaker to write' in t)
 check('to-confirm box present','To confirm' in t)
 check('Portuguese blocks present','lang="pt"' in t)
