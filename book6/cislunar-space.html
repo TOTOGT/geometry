@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cislunar Space · The Geometry, Physics and Arithmetic</title>
+<meta name="description" content="A chapter on cislunar space: the three-body model and its assumptions, the geometry of the Lagrange points, the Jacobi constant, periods, and the arithmetic of seeing and reaching objects at lunar distance. Checked against the AFRL primer of 2021; every number is labeled as computed, quoted or assumed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:    #04040a;
+  --surface: #0c0d16;
+  --card:    #10111c;
+  --gold:    #c9a84c;
+  --teal:    #0ABAB5;
+  --red:     #e05a3a;
+  --purple:  #c084fc;
+  --green:   #50c878;
+  --amber:   #f59e0b;
+  --deep:    #5b4fcf;   /* deep quantum violet */
+  --text:    #e8e4d8;
+  --muted:   #6b6757;
+  --dim:     #2a2920;
+  --rule:    rgba(201,168,76,0.18);
+  --serif:   'Noto Serif', Georgia, serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-series{font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;}
+.nav-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-links a.here{color:var(--purple);}
+
+.hero{padding:5rem 2rem 4rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(91,79,207,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--deep);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:2rem;opacity:.9;}
+.hero h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:400;letter-spacing:.04em;color:var(--gold);margin-bottom:.4rem;line-height:1.25;}
+.hero-sub{font-size:1rem;color:rgba(232,228,216,.7);max-width:680px;margin:.6rem auto 0;font-style:italic;line-height:1.7;}
+.hero-eq{margin-top:2rem;font-family:var(--mono);font-size:.85rem;letter-spacing:.08em;color:rgba(201,168,76,.4);line-height:2;}
+.hero-wp{margin-top:.8rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+
+.page{max-width:900px;margin:0 auto;padding:4rem 2rem;}
+
+h2{font-size:1.25rem;font-weight:400;color:var(--gold);letter-spacing:.04em;margin:3.5rem 0 1.2rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;letter-spacing:.02em;}
+p{margin-bottom:1.2rem;}
+p:last-child{margin-bottom:0;}
+a{color:var(--teal);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* Theorem blocks */
+.block-verified{border-left:3px solid var(--teal);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(10,186,181,.03);}
+.block-model{border-left:3px solid var(--gold);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(201,168,76,.025);}
+.block-open{border-left:3px solid var(--amber);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(245,158,11,.025);}
+.block-proof{border-left:3px solid var(--purple);padding:1.1rem 1.5rem;margin:1.5rem 0;background:rgba(192,132,252,.025);}
+.block-defn{border-left:3px solid var(--deep);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(91,79,207,.03);}
+.block-lens{border-left:3px solid var(--muted);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(107,103,87,.03);}
+.block-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:.6rem;display:block;}
+.block-verified .block-label{color:var(--teal);}
+.block-model   .block-label{color:var(--gold);}
+.block-open    .block-label{color:var(--amber);}
+.block-proof   .block-label{color:var(--purple);}
+.block-defn    .block-label{color:var(--deep);}
+.block-lens    .block-label{color:var(--muted);}
+.block-body{font-size:.95rem;line-height:1.82;color:var(--text);}
+.qed{text-align:right;font-family:var(--mono);font-size:.85rem;color:var(--purple);margin-top:.6rem;}
+
+.block-math{font-family:var(--mono);font-size:.9rem;color:var(--gold);background:var(--surface);border:1px solid var(--dim);padding:1rem 1.4rem;margin:1.2rem 0;overflow-x:auto;line-height:2;}
+
+.op-chain{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:1rem 0;}
+.op{font-family:var(--mono);font-size:.78rem;padding:.2rem .55rem;border-radius:2px;}
+.op-c{background:rgba(10,186,181,.12);color:#0ABAB5;border:1px solid rgba(10,186,181,.3);}
+.op-k{background:rgba(224,90,58,.12);color:#e05a3a;border:1px solid rgba(224,90,58,.3);}
+.op-f{background:rgba(192,132,252,.12);color:#c084fc;border:1px solid rgba(192,132,252,.3);}
+.op-u{background:rgba(80,200,120,.12);color:#50c878;border:1px solid rgba(80,200,120,.3);}
+.op-arr{color:var(--muted);}
+
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0;}
+@media(max-width:700px){.compare-grid{grid-template-columns:1fr;}}
+.cg-card{background:var(--card);border:1px solid var(--rule);padding:1.4rem;border-radius:2px;}
+.cg-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;display:block;}
+.cg-body{font-size:.88rem;line-height:1.75;color:rgba(232,228,216,.8);}
+.cg-card.purple-accent{border-color:rgba(192,132,252,.25);}
+.cg-card.purple-accent .cg-title{color:var(--purple);}
+.cg-card.deep-accent{border-color:rgba(91,79,207,.25);}
+.cg-card.deep-accent .cg-title{color:rgba(91,79,207,.9);}
+
+.step-list{list-style:none;counter-reset:step-counter;margin:1rem 0;}
+.step-list li{counter-increment:step-counter;padding:.5rem 0 .5rem 2.2rem;position:relative;border-bottom:1px solid var(--dim);font-size:.94rem;line-height:1.75;}
+.step-list li:last-child{border-bottom:none;}
+.step-list li::before{content:counter(step-counter)".";position:absolute;left:0;font-family:var(--mono);font-size:.75rem;color:var(--purple);font-weight:700;top:.55rem;}
+
+.pull{text-align:center;padding:2.5rem 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:3rem 0;}
+.pull-text{font-size:1.15rem;font-style:italic;color:var(--gold);max-width:660px;margin:0 auto;line-height:1.75;}
+.pull-attr{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.8rem;}
+
+.infinity-tower{background:var(--surface);border:1px solid var(--rule);padding:2rem;margin:2rem 0;text-align:center;}
+.it-row{font-family:var(--mono);font-size:.85rem;color:rgba(232,228,216,.7);line-height:2.2;}
+.it-row .highlight{color:var(--gold);}
+.it-row .dim{color:var(--muted);}
+.it-arrow{color:var(--muted);font-size:1.1rem;display:block;}
+
+.po-ring-strip{display:flex;justify-content:center;align-items:center;gap:0;border-top:1px solid var(--rule);padding:0;font-family:var(--mono);font-size:.58rem;flex-wrap:wrap;}
+.po-ring-strip a{display:inline-block;padding:.65rem 1.1rem;color:var(--muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;border-right:1px solid var(--rule);transition:color .2s,background .2s;}
+.po-ring-strip a:last-child{border-right:none;}
+.po-ring-strip a:hover{color:var(--gold);background:rgba(201,168,76,.04);}
+.po-ring-strip a.here{color:var(--purple);}
+
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid var(--rule);}
+footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);line-height:2;}
+
+  /* --- provenance footer (added 2026-08-12) --- */
+  footer .prov{max-width:760px;margin:1.5rem auto 0;padding-top:1.1rem;
+    border-top:1px solid currentColor;display:flex;gap:34px;flex-wrap:wrap;
+    text-align:left;font-size:.72rem;line-height:1.7;opacity:.9}
+  footer .prov>div{flex:1 1 300px}
+  footer .prov a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+  footer .prov .disc{opacity:.85}
+</style>
+<meta name="po-subject" content="ENGINEERING">
+</head>
+<body>
+<style>
+.cs table{border-collapse:collapse;width:100%;margin:1rem 0 1.6rem;font-size:.86rem;}
+.cs th,.cs td{border:1px solid var(--rule);padding:.45rem .6rem;text-align:left;vertical-align:top;}
+.cs th{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;}
+.cs .tblwrap{overflow-x:auto;}
+.cs .tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;}
+.cs svg{width:100%;height:auto;max-width:860px;display:block;margin:1.2rem auto;background:var(--surface);border:1px solid var(--rule);}
+.cs svg text{font-family:var(--mono);}
+.cs .sim label{font-family:var(--mono);font-size:.7rem;display:block;margin:.5rem 0;}
+.cs .sim input[type=range]{width:100%;}
+.cs .sim output{color:var(--gold);}
+.cs code{font-family:var(--mono);font-size:.85em;color:var(--gold);}
+</style>
+<nav>
+  <a class="nav-series" href="../index.html">Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="wp71-lunar-survivability.html">WP71 Lunar survivability</a>
+    <a href="wp136-living-in-a-moon-habitat.html">WP136 Moon habitat</a>
+    <a href="../Orthogenesis/Architecture/hex-habitat.html">Hex Habitat Mars</a>
+    <a class="here" href="cislunar-space.html">Cislunar space</a>
+  </div>
+</nav>
+<header class="hero">
+  <span class="hero-tag">Chapter &middot; mathematics and physics</span>
+  <h1>Cislunar Space</h1>
+  <p class="hero-sub">The model, the assumptions, the geometry and the arithmetic of the region between Earth and the Moon, built around a public Air Force Research Laboratory primer. A teaching chapter, not an operations document.</p>
+  <p class="hero-wp">Drafted 2026-11-01 &middot; not peer-reviewed</p>
+</header>
+<main class="page cs">
+
+<div class="block-open"><span class="block-label">What this is, and what it is not</span><div class="block-body">
+The primer is &ldquo;A Primer on Cislunar Space&rdquo; by Holzinger, Chow and Garretson (AFRL, 3 May 2021, approved for public release). I read the PDF from the author&rsquo;s Downloads folder and checked its key figures against the full text. This chapter rebuilds the geometry and the arithmetic behind those figures by hand and script. It does not give radiation doses (the primer does not either, and earlier lunar dose claims on this site were cut), does not design a mission, and does not say anything about where any agency will fly. Constants not in the primer (the Moon&ndash;Earth mass ratio, the sidereal month, the year, the speed of light, Earth&rsquo;s gravitational parameter) are standard values written from memory and are labeled so.
+</div></div>
+
+<h2>&sect;1 &middot; Scale</h2>
+<p>The primer measures distance in geosynchronous radii: 1 GEO = 42,164 km from Earth&rsquo;s centre. The mean Earth&ndash;Moon distance is 384,402 km, which is 9.12 GEO (the primer says 9.12). Light covers that in 1.282 s. A volume that reaches out to 12 GEO holds 12<sup>3</sup> = 1,728 times the volume inside 1 GEO, because the volume of a sphere grows as the cube of its radius; the primer states that figure. It also says some transfers go beyond 1.5 million km, which is 35.6 GEO; the primer rounds that to 35.</p>
+
+<h2>&sect;2 &middot; Two clocks: sidereal and synodic</h2>
+<p>The Moon circles Earth once in 27.32 days against the stars (sidereal). Earth goes round the Sun once in 365.256 days. The Moon&ndash;Sun angle repeats on the synodic month, found from the difference of the two angular rates:</p>
+<div class="block-math">1 / T<sub>syn</sub> = 1 / T<sub>sid</sub> &minus; 1 / T<sub>yr</sub> &nbsp;&rArr;&nbsp; T<sub>syn</sub> = 29.53 days</div>
+<p>That agrees with the primer&rsquo;s 29.5 days. It matters because lighting on an orbit that repeats once per synodic month can be arranged to repeat too, which is why the primer singles out 1:1 synodic-resonant orbits for sensing. Earth turns 15.04&deg; per hour; the Moon moves 13.18&deg; per day. A ground station therefore cannot follow a cislunar object continuously: it hands the object off from site to site, which is the primer&rsquo;s point about asynchronous tracking.</p>
+
+<h2>&sect;3 &middot; The model and its assumptions</h2>
+<p>The standard model for motion near the Earth&ndash;Moon system is the circular restricted three-body problem (CR3BP). It is a model, so each assumption is listed.</p>
+<ol class="step-list">
+<li>Earth and Moon are point masses on circular orbits about their common centre (the real Moon&rsquo;s orbit has an eccentricity near 0.055; <span class="tag">from memory</span>).</li>
+<li>The spacecraft has negligible mass and does not disturb them.</li>
+<li>Only gravity acts. No Sun, no solar radiation pressure, no thrust, no non-spherical Moon. The primer says all of these matter, and that lunar gravity is highly uneven.</li>
+<li>Units: distance in Earth&ndash;Moon separations, time so that the rotation rate is 1 (one unit = 4.3484 days), and total mass 1. With the mass ratio Moon/Earth = 1/81.3006 (from memory), &mu; = m<sub>Moon</sub> / (m<sub>Earth</sub> + m<sub>Moon</sub>) = 0.0121506.</li>
+<li>The frame rotates with the Moon. Earth sits at x = &minus;&mu;, the Moon at x = 1 &minus; &mu;.</li>
+</ol>
+<div class="block-math">&Omega;(x,y) = (x&sup2; + y&sup2;)/2 + (1&minus;&mu;)/r<sub>1</sub> + &mu;/r<sub>2</sub> + &mu;(1&minus;&mu;)/2<br>x&#776; &minus; 2y&#775; = &part;&Omega;/&part;x, &nbsp; y&#776; + 2x&#775; = &part;&Omega;/&part;y</div>
+<p>Here r<sub>1</sub> and r<sub>2</sub> are the distances to Earth and Moon. The constant term &mu;(1&minus;&mu;)/2 only fixes the zero of the Jacobi constant used below; with it, the constant at L4 and L5 equals exactly 3.</p>
+
+<h2>&sect;4 &middot; The geometry of the five equilibrium points</h2>
+<p>An equilibrium is a point where a spacecraft at rest in the rotating frame stays at rest, so the gradient of &Omega; is zero. On the axis, y = 0, that is the single equation</p>
+<div class="block-math">x &minus; (1&minus;&mu;)(x+&mu;)/|x+&mu;|&sup3; &minus; &mu;(x&minus;1+&mu;)/|x&minus;1+&mu;|&sup3; = 0</div>
+<p>It has three real roots, one between the bodies and one beyond each. I solved it by bisection. The two off-axis points need no numerics: setting r<sub>1</sub> = r<sub>2</sub> = 1 satisfies both components, so L4 and L5 sit at the apexes of equilateral triangles built on the Earth&ndash;Moon line. That is a geometric fact, and the dotted triangles in the figure show it.</p>
+<svg viewBox="0 0 760 600" role="img" aria-label="Earth-Moon rotating frame with the five Lagrange points, drawn to scale; bodies enlarged"><circle cx="296.6" cy="300.0" r="280.0" fill="none" stroke="#6b6757" stroke-dasharray="4 4"/><polygon points="296.6,300.0 576.6,300.0 436.6,57.5" fill="none" stroke="#5b4fcf" stroke-dasharray="2 3"/><polygon points="296.6,300.0 576.6,300.0 436.6,542.5" fill="none" stroke="#5b4fcf" stroke-dasharray="2 3"/><circle cx="296.6" cy="300.0" r="9" fill="#0ABAB5"/><text x="278.6" y="326.0" fill="#e8e4d8" font-size="13">Earth</text><circle cx="576.6" cy="300.0" r="5" fill="#c9a84c"/><text x="562.6" y="322.0" fill="#e8e4d8" font-size="13">Moon</text><circle cx="534.3" cy="300.0" r="4" fill="#e05a3a"/><text x="525.3" y="288.0" fill="#c084fc" font-size="13">L1</text><circle cx="623.6" cy="300.0" r="4" fill="#e05a3a"/><text x="614.6" y="288.0" fill="#c084fc" font-size="13">L2</text><circle cx="18.6" cy="300.0" r="4" fill="#e05a3a"/><text x="9.6" y="288.0" fill="#c084fc" font-size="13">L3</text><circle cx="436.6" cy="57.5" r="4" fill="#e05a3a"/><text x="427.6" y="45.5" fill="#c084fc" font-size="13">L4</text><circle cx="436.6" cy="542.5" r="4" fill="#e05a3a"/><text x="427.6" y="562.5" fill="#c084fc" font-size="13">L5</text><text x="20" y="582" fill="#6b6757" font-size="12">Distances to scale (1 unit = 384,402 km); Earth and Moon discs enlarged. Rotating frame. The L4 and L5 triangles have all sides equal to 1.</text></svg>
+<div class="tblwrap"><table>
+<tr><th>Point</th><th>x (units)</th><th>Where</th><th>Status</th></tr>
+<tr><td>L1</td><td>0.8369</td><td>58,019 km from the Moon, toward Earth</td><td class="tag">computed</td></tr>
+<tr><td>L2</td><td>1.1557</td><td>64,515 km beyond the Moon</td><td class="tag">computed</td></tr>
+<tr><td>L3</td><td>-1.0051</td><td>381,677 km from Earth, opposite the Moon</td><td class="tag">computed</td></tr>
+<tr><td>L4, L5</td><td>0.4879, &plusmn;0.8660</td><td>60&deg; ahead of and behind the Moon on its orbit</td><td class="tag">computed (exact geometry)</td></tr>
+</table></div>
+<p>Stability is a separate question. Linearizing near L4 and L5, motion is bounded only if &mu; &lt; (1 &minus; &radic;(23/27))/2 = 0.0385 (Routh&rsquo;s condition, a standard result from memory). For Earth&ndash;Moon, &mu; = 0.0121506 passes by a wide margin, which is why the primer calls L4 and L5 the only regions where objects stay a long time. L1, L2 and L3 are always unstable: a small error grows exponentially. This is linear theory in the idealised model. The primer notes that solar radiation pressure disturbs dust clouds near L4 and L5, so the real picture is messier.</p>
+
+<h2>&sect;5 &middot; The Jacobi constant and the gates at L1 and L2</h2>
+<p>In the CR3BP one quantity is conserved along every path: <code>C = 2&Omega;(x,y) &minus; (x&#775;&sup2; + y&#775;&sup2;)</code>. Since speed squared cannot be negative, a path with constant C can only visit places where 2&Omega; &ge; C. The curve 2&Omega; = C is a zero-velocity curve. Its shape depends on C, and the critical values are those at the equilibrium points:</p>
+<div class="tblwrap"><table>
+<tr><th>Point</th><th>C (this convention)</th><th>Meaning</th><th>Status</th></tr>
+<tr><td>L1</td><td>3.200</td><td>for C below this, the region around Earth connects to the region around the Moon through a neck at L1</td><td class="tag">computed</td></tr>
+<tr><td>L2</td><td>3.184</td><td>below this, the neck at L2 opens to the outside</td><td class="tag">computed</td></tr>
+<tr><td>L3</td><td>3.024</td><td>below this, the far side opens too</td><td class="tag">computed</td></tr>
+<tr><td>L4, L5</td><td>3.000</td><td>the minimum of 2&Omega; is here; below 3 nothing is forbidden</td><td class="tag">computed</td></tr>
+</table></div>
+<p>So &ldquo;low-energy&rdquo; routes in the primer&rsquo;s sense are those where C sits just under C(L1) or C(L2): the gates are barely open, and a spacecraft needs very little extra energy to pass. The L1 and L2 points lie close to the edge of the Moon&rsquo;s zone of dominance. A rough size for that zone is the Hill radius, a(&mu;/3)<sup>1/3</sup> = 61,274 km for a = 384,402 km. The match with L1 and L2 (58,019 and 64,515 km) is approximate, not exact.</p>
+<svg viewBox="0 0 760 220" role="img" aria-label="Zoom on the Moon: L1, L2 and the Hill radius, drawn to scale"><line x1="20" y1="110" x2="740" y2="110" stroke="#2a2920"/><circle cx="366" cy="110" r="294.1" fill="none" stroke="#c9a84c" stroke-dasharray="5 4"/><circle cx="366" cy="110" r="8.3" fill="#c9a84c"/><text x="352" y="138" fill="#e8e4d8" font-size="13">Moon</text><circle cx="87.5" cy="110" r="4" fill="#e05a3a"/><text x="79.5" y="96" fill="#c084fc" font-size="13">L1</text><circle cx="675.7" cy="110" r="4" fill="#e05a3a"/><text x="667.7" y="96" fill="#c084fc" font-size="13">L2</text><text x="20" y="206" fill="#6b6757" font-size="12">Zoom on the Moon: 4.8 px per 1,000 km, Earth to the left. Dashed circle: Hill radius 61,274 km.</text></svg>
+
+<h2>&sect;6 &middot; Periods near L1 and L2, and a check against the primer</h2>
+<p>Expanding the equations to first order about L1 or L2 gives, for in-plane motion, one real pair of exponents (the instability) and one imaginary pair (oscillation). With c = &mu;/r<sub>2</sub>&sup3; + (1&minus;&mu;)/r<sub>1</sub>&sup3; evaluated at the point, the oscillation frequency solves &omega;&#8308; &minus; (2&minus;c)&omega;&sup2; + (1 + c &minus; 2c&sup2;) = 0 and the growth rate &lambda; solves &lambda;&sup2; = [(c&minus;2) + &radic;(9c&sup2;&minus;8c)]/2. Converted to days:</p>
+<div class="tblwrap"><table>
+<tr><th>Point</th><th>Small-orbit period</th><th>Error grows by e in</th><th>Primer, larger orbits</th></tr>
+<tr><td>L1 Lyapunov</td><td>11.7 days</td><td>1.5 days</td><td>12.2 days (quoted, checked)</td></tr>
+<tr><td>L2 Lyapunov</td><td>14.7 days</td><td>2.0 days</td><td>14.5 days (quoted, checked)</td></tr>
+</table></div>
+<p>The two columns are not meant to be equal. Orbits of larger amplitude have longer periods than the linear estimate, and the primer&rsquo;s numbers come from one example transfer, so what the comparison shows is only that the linear model puts the periods at the right scale (about two weeks) and in the right order (L2 longer than L1). The primer&rsquo;s example transfer from the 12.2-day L1 orbit to the 14.5-day L2 orbit takes 20.35 days; I did not recompute it. The growth times say why station-keeping is needed: a small error grows by a factor of e in about 1.5 to 2.0 days, so in linear theory an uncorrected error is multiplied by about 2937192 in 30 days (<code>e<sup>30/2.0</sup></code>, using the slower L2 rate). The linear estimate stops being valid long before that, but it makes the point: the error does not stay small. <span class="tag">computed, linear theory</span></p>
+
+<div class="block-defn sim"><span class="block-label">Try it: a path near L1 or L2</span><div class="block-body">
+<p>The page integrates the model above with a fourth-order Runge&ndash;Kutta step and plots the path in the rotating frame. It starts at rest a small distance from the chosen point. Because the point is unstable the path leaves; the Jacobi constant shown should stay near its starting value, which is a check on the integrator, not on reality.</p>
+<label>Point <select id="pt"><option value="L1">L1</option><option value="L2">L2</option></select></label>
+<label>Offset from the point (km) <output id="offo">100</output><input id="off" type="range" min="10" max="2000" value="100"></label>
+<label>Duration (days) <output id="duro">60</output><input id="dur" type="range" min="5" max="120" value="60"></label>
+<svg id="simsvg" viewBox="0 0 760 300" role="img" aria-label="Simulated path near a collinear Lagrange point"></svg>
+<p id="simout" class="tag"></p>
+<p>Not real: no Sun, no thrust, no lunar gravity field, circular lunar orbit. Treat it as a picture of the model.</p>
+</div></div>
+
+<h2>&sect;7 &middot; Seeing across the distance</h2>
+<p>The primer says objects at lunar distance are fainter and that active sensing needs prohibitive power. Both statements follow from inverse-square laws. Take an object of the same size and reflectivity, seen at the same lighting phase. Reflected sunlight reaching an observer falls as 1/R&sup2;, so moving from GEO to lunar distance (a factor of 9.12 in range from Earth&rsquo;s centre) dims the object by (9.12)&sup2; = 83, which is 4.8 astronomical magnitudes. For a radar or laser that must send light out and catch the echo, the received power falls as 1/R&#8308;: (9.12)&#8308; = 6,908 times weaker. The model ignores atmosphere, target shape, phase angle, antenna gain and sensor noise, and measures range from Earth&rsquo;s centre where a real station is a few thousand kilometres away. It shows the scaling, not a detection limit.</p>
+
+<h2>&sect;8 &middot; Reaching and keeping an object there</h2>
+<p>A rough cost of reaching lunar distance uses the two-body &ldquo;vis-viva&rdquo; energy equation. From a 300 km circular parking orbit (radius 6,678.137 km, with &mu;<sub>Earth</sub> = 398,600.4418 km&sup3;/s&sup2;) to an ellipse whose far point is at lunar distance, the burn is 3.11 km/s and the coast takes 4.98 days. This ignores the Moon&rsquo;s gravity, the orbital plane, finite burn time and the capture burn, so it is an order-of-magnitude figure (<span class="tag">computed, two-body</span>). The primer says direct transfers take several days, which is consistent.</p>
+<p>The primer says maintenance maneuvers are often in the mm/s range. A velocity error of 1 mm/s drifts an object 86.4 m in a day and 2.6 km in 30 days if nothing corrects it (linear drift only; the instability in &sect;6 makes real growth faster). That is why telling a deliberate maneuver from a natural perturbation is hard: both are tiny against the distances involved.</p>
+
+<h2>&sect;9 &middot; What each statement is</h2>
+<div class="tblwrap"><table>
+<tr><th>Statement</th><th>Status</th></tr>
+<tr><td>Distances, GEO ratio, 1,728, 1.5 million km, 29.5 d, 12.2 / 14.5 / 20.35 d, mm/s, Gateway orbit</td><td class="tag">quoted from the AFRL primer; checked against the PDF</td></tr>
+<tr><td>Moon/Earth mass ratio, sidereal month, year, c, Earth GM, lunar eccentricity</td><td class="tag">standard values from memory; not read this session</td></tr>
+<tr><td>L1, L2, L3 positions; Jacobi values; Hill radius; periods and growth times; synodic month; scaling factors; TLI burn</td><td class="tag">computed here (script)</td></tr>
+<tr><td>L4 and L5 equilateral geometry</td><td class="tag">exact</td></tr>
+<tr><td>Routh limit</td><td class="tag">standard result, from memory; value computed</td></tr>
+<tr><td>Anything about radiation dose, shielding, habitats, power, or a particular mission</td><td class="tag">not established here</td></tr>
+</table></div>
+
+<h2>Sources</h2>
+<p>
+<a href="https://www.afrl.af.mil/Portals/90/Documents/RV/A%20Primer%20on%20Cislunar%20Space_Dist%20A_PA2021-1271.pdf?ver=vs6e0sE4PuJ51QC-15DEfg%3D%3D" target="_blank" rel="noopener">Holzinger, Chow, Garretson, A Primer on Cislunar Space, AFRL, 2021</a>.
+Companion script: <code>book6/cislunar-space-verify.py</code>. Related: <a href="wp71-lunar-survivability.html">WP71</a> &middot; <a href="wp136-living-in-a-moon-habitat.html">WP136</a> &middot; <a href="../Orthogenesis/Architecture/hex-habitat.html">Hex Habitat Mars</a>.</p>
+
+</main>
+<footer>
+  <p>Principia Orthogona &middot; Book VI &middot; Cislunar Space</p>
+  <p>Geometry &middot; Physics &middot; Assumptions &middot; 2026</p>
+  <span style="display:block;margin-top:.5rem">&copy; 2026 Pablo Nogueira Grossi / <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> &middot; Newark, New Jersey &middot; CC BY-NC-ND 4.0</span>
+  <div class="prov"><div class="disc"><strong>Notice</strong><br>Independent teaching chapter; not peer-reviewed. Not for navigation or operations.</div></div>
+</footer>
+<script>
+(function(){
+var mu=0.0121505844, D=384402, TU=4.3484;
+function om(x,y){var r1=Math.hypot(x+mu,y),r2=Math.hypot(x-1+mu,y);return .5*(x*x+y*y)+(1-mu)/r1+mu/r2+.5*mu*(1-mu);}
+function acc(s){var x=s[0],y=s[1],u=s[2],v=s[3];var r1=Math.hypot(x+mu,y),r2=Math.hypot(x-1+mu,y);
+ var ox=x-(1-mu)*(x+mu)/Math.pow(r1,3)-mu*(x-1+mu)/Math.pow(r2,3);
+ var oy=y-(1-mu)*y/Math.pow(r1,3)-mu*y/Math.pow(r2,3);
+ return [u,v,ox+2*v,oy-2*u];}
+function rk4(s,h){function ad(a,b,k){return a.map(function(q,i){return q+b[i]*k;});}
+ var k1=acc(s),k2=acc(ad(s,k1,h/2)),k3=acc(ad(s,k2,h/2)),k4=acc(ad(s,k3,h));
+ return s.map(function(q,i){return q+h/6*(k1[i]+2*k2[i]+2*k3[i]+k4[i]);});}
+var P={L1:0.8369151317,L2:1.1556821608};
+function run(){
+ var p=document.getElementById('pt').value,off=+document.getElementById('off').value,dur=+document.getElementById('dur').value;
+ document.getElementById('offo').textContent=off;document.getElementById('duro').textContent=dur;
+ var s=[P[p]+off/D,0,0,0],c0=2*om(s[0],s[1]),T=dur/TU,n=Math.max(200,Math.round(T/0.0004)),h=T/n,pts=[],mx=0;
+ for(var i=0;i<=n;i++){pts.push([s[0],s[1]]);s=rk4(s,h);}
+ var c1=2*om(s[0],s[1])-(s[2]*s[2]+s[3]*s[3]);c0=c0;
+ var minx=1e9,maxx=-1e9,miny=1e9,maxy=-1e9;
+ pts.forEach(function(q){minx=Math.min(minx,q[0],P[p]);maxx=Math.max(maxx,q[0],P[p]);miny=Math.min(miny,q[1]);maxy=Math.max(maxy,q[1]);});
+ var w=Math.max(maxx-minx,1e-6),ht=Math.max(maxy-miny,1e-6),sc=Math.min(680/w,260/ht);
+ var d='M'+pts.map(function(q){return (40+(q[0]-minx)*sc).toFixed(1)+','+(150-(q[1]-(miny+maxy)/2)*sc).toFixed(1);}).join(' L');
+ var px=40+(P[p]-minx)*sc;
+ document.getElementById('simsvg').innerHTML='<path d="'+d+'" fill="none" stroke="#0ABAB5"/><circle cx="'+px.toFixed(1)+'" cy="150" r="4" fill="#e05a3a"/><text x="'+(px+8).toFixed(1)+'" y="140" fill="#c084fc" font-size="13">'+p+'</text><text x="20" y="290" fill="#6b6757" font-size="12">Rotating frame, axes equally scaled; width '+(w*D).toFixed(0)+' km</text>';
+ var last=pts[pts.length-1];
+ document.getElementById('simout').textContent='Jacobi constant: start '+c0.toFixed(6)+', end '+c1.toFixed(6)+'; end distance from '+p+': '+(Math.hypot(last[0]-P[p],last[1])*D).toFixed(0)+' km';
+}
+['pt','off','dur'].forEach(function(id){document.getElementById(id).addEventListener('input',run);});
+run();
+})();
+</script>
+</body>
+</html>
