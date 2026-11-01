@@ -70,6 +70,12 @@ tt=math.pi*math.sqrt(((r0+D)/2)**3/GM)/86400
 print('    TLI %.3f km/s, coast %.3f d'%(vp-v0,tt)); check('%.2f'%(vp-v0) in txt and '%.2f'%tt in txt,'two-body burn and coast shown')
 check(abs(.001*86400-86.4)<1e-9 and '86.4' in txt and '2.6 km' in txt,'1 mm/s: 86.4 m/day, 2.6 km/30 d')
 
+head(4.5,'Figure 1 reading (distances from Earth centre in GEO radii)')
+for nm,v in (('L1',(L1+mu)*D/GEO),('L2',(L2+mu)*D/GEO),('L3',(-L3-mu)*D/GEO)):
+    print('    %s %.2f GEO'%(nm,v)); check('%.2f'%v in txt,'page shows %s %.2f GEO'%(nm,v))
+check(7<(L1+mu)*D/GEO<8 and 10<(L2+mu)*D/GEO<11,'L1 in (7,8) and L2 in (10,11) as read off the primer Figure 1')
+check('%.1f'%((L2-L1)*D/GEO) in txt,'L1-to-L2 span %.1f GEO shown'%((L2-L1)*D/GEO))
+
 head(5,'Runge-Kutta conserves the Jacobi constant (the page applet uses the same equations)')
 def acc(s):
     x,y,u,v=s; r1=math.hypot(x+mu,y); r2=math.hypot(x-1+mu,y)
