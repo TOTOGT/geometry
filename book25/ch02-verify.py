@@ -34,6 +34,8 @@ check('Lesson 5 labels the American-culture point as observation, and words as t
 check('Translate box: file naming, translations folder, pull request, disclosure of machine use and speaker review, no guessed cells','ch02-bo.html' in t and 'translations' in t and 'pull request' in t and 'machine translation tool' in t and 'speaker of the language has checked' in t and 'blank is better than a wrong one' in t)
 check('Write-in-your-language box: voluntary list, no-contact policy sourced, no seeking out','Write in your language' in t and 'only for people who choose' in t and 'does not try to find them' in t and '115 isolated peoples' in t and 'has confirmed 29' in t and 'leave them alone' in t)
 check('Empty-seat paragraph: author principle, sourced protections, decision left to them','A seat held empty' in t and 'Uma cadeira vazia' in t and '2022 Supreme Court' in t and 'theirs to say' in t)
+check('History box: not a free choice, origins, episodes, counts differ by counter, sources read','not a free choice' in t and 'Matis' in t and '196 groups' in t and '124 by this count' in t and 'was not opened' in t)
+check('no text claims isolation was simply chosen','have chosen not to be in contact' not in t and 'isolation they have chosen' not in t and 'escolheram' not in t)
 check('unchecked Tibetan sentence is marked, not invented','for a Tibetan speaker to write' in t)
 check('to-confirm box present','To confirm' in t)
 check('Portuguese blocks present','lang="pt"' in t)
