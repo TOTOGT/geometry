@@ -3,7 +3,8 @@ import Mathlib
 /-!
 # GCM V2, Part I: what the audit of the PDF actually established, stated in Lean
 
-STATUS: UNTESTED. Written 2026-11-02 with no local Lean toolchain; the author compiles it.
+STATUS: compiled by the author 2026-11-02 (Lean v4.32.0 + Mathlib): no errors; the only output was two linter
+warnings about an unused fallback tactic, which was then deleted (that deletion itself not re-run).
 Read each statement for what it says, not what its name promises:
 
 * `gronwall_equality_case` checks ONLY that the comparison function e^{-ct} m0 + (K/c)(1-e^{-ct})
@@ -24,9 +25,9 @@ theorem gronwall_equality_case (c K m0 t : ℝ) (hc : c ≠ 0) :
     have := ((hasDerivAt_id t).const_mul (-c)).exp
     simpa using this
   have h2 := (h1.mul_const m0).add ((h1.const_sub 1).const_mul (K / c))
-  convert h2 using 1
-  field_simp
-  ring
+  have hk : c * (K / c) = K := by field_simp
+  refine h2.congr_deriv ?_
+  linear_combination hk
 
 theorem winding_depends_on_primitive :
     ∃ f g : ℝ → ℝ, (∀ r, deriv f r = deriv g r) ∧ 2 * Real.pi * f 1 ≠ 2 * Real.pi * g 1 := by
