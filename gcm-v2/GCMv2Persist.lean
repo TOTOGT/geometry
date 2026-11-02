@@ -3,7 +3,7 @@ import Mathlib
 /-!
 # GCM V2, Theorem D″ (radial scalar case): persistence with an explicit radius
 
-STATUS: UNTESTED (written 2026-11-02, no local toolchain); the author compiles it.
+STATUS: compiled by the author 2026-11-02 (Lean v4.32.0 + Mathlib), no errors, no warnings (empty output).
 
 Read each statement for what it says, not what its name promises:
 
@@ -37,7 +37,9 @@ theorem persistence_1d_of_bounds (f F : ℝ → ℝ) (m ρ : ℝ) (hρ : 0 < ρ)
   have hg : Differentiable ℝ (fun x => f x + F x) := hdf.add hdF
   have hderiv : ∀ x ∈ Set.Icc (-ρ) ρ, deriv (fun x => f x + F x) x < 0 := by
     intro x hx
-    rw [deriv_add (hdf x) (hdF x)]
+    have hd : deriv (fun x => f x + F x) x = deriv f x + deriv F x :=
+      ((hdf x).hasDerivAt.add (hdF x).hasDerivAt).deriv
+    rw [hd]
     have h3 := hm x hx
     have h4 := (abs_lt.mp (hFd x hx)).2
     linarith
@@ -55,6 +57,6 @@ theorem persistence_1d_of_bounds (f F : ℝ → ℝ) (m ρ : ℝ) (hρ : 0 < ρ)
 theorem lyapunov_endpoint (f : ℝ → ℝ) (c ρ : ℝ) (hρ : 0 < ρ) (h : ρ * f ρ ≤ -(c / 2) * ρ ^ 2) :
     f ρ ≤ -(c / 2) * ρ := by
   by_contra hcon
-  push_neg at hcon
+  replace hcon := not_le.mp hcon
   have : ρ * (-(c / 2) * ρ) < ρ * f ρ := mul_lt_mul_of_pos_left hcon hρ
   nlinarith
