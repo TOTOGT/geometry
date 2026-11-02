@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book XVI &middot; LLMs Explained &mdash; Principia Orthogona</title>
+<meta name="description" content="How large language models work, built from the primary papers: tokens, embeddings, attention, the transformer, training and what is not understood. Every number printed by a script; every claim marked as computed, quoted or open."/>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.sim label{font-family:var(--mono);font-size:.72rem;display:block;margin:.6rem 0}
+.sim textarea{width:100%;font-family:var(--mono);font-size:.8rem;padding:.5rem;border:1px solid var(--rule);background:#fff;color:var(--ink)}
+.sim input[type=range]{width:100%}
+.sim pre{font-family:var(--mono);font-size:.78rem;background:#fff;border:1px solid var(--rule);padding:.7rem;overflow-x:auto;white-space:pre-wrap}
+.sim input[type=text]{font-family:var(--mono);padding:.3rem;border:1px solid var(--rule);background:#fff;color:var(--ink)}
+.tblwrap{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="topnav"><span class="crumbs"><a href="../index.html">Principia Orthogona</a> &middot; Book XVI</span><span class="meta"><a href="../book17/index.html">Book XVII</a> &middot; <a href="../book18/index.html">Book XVIII</a></span></div>
+<header class="wp-head"><div class="wp-kicker">Principia Orthogona &middot; Book XVI</div>
+<h1>LLMs Explained: <em>Tokens, Embeddings, Transformers</em> and More</h1>
+<p class="subtitle">What a large language model does with a sentence, from the text it reads to the number it predicts, taken from the original papers and checked by script.</p></header>
+<div class="wrap">
+<div class="lede">The series already holds the mathematics under this (Book XVII, the Machine Floor; Book XVIII, the chain rule that ends in backpropagation; Book XXIV, linear algebra). It did not hold the thing the mathematics is used for. This book fills that gap, one stage at a time, in the order a sentence travels.</div>
+<div class="box warn"><span class="lab">How claims are marked</span>Each statement is <span class="tag t-model">computed</span> (a script in this folder prints it), <span class="tag t-data">quoted</span> (taken from a named paper and section, not recomputed) or <span class="tag t-open">open</span> (not checked). Explanations are not written from memory alone: where I have not read a source, the page says so.</div>
+<h2>Contents</h2>
+<div class="tblwrap"><table>
+<tr><th>#</th><th>Chapter</th><th>Status</th><th>Main source</th></tr>
+<tr><td class="n">1</td><td><a href="ch01-tokens.html">Tokens: the unit a model actually reads</a></td><td>draft</td><td>Sennrich, Haddow, Birch 2015 (byte pair encoding)</td></tr>
+<tr><td class="n">2</td><td>Embeddings: words as points</td><td>planned</td><td>Mikolov et al. 2013</td></tr>
+<tr><td class="n">3</td><td>Attention: who looks at whom</td><td>planned</td><td>Vaswani et al. 2017, &sect;3.2</td></tr>
+<tr><td class="n">4</td><td>The transformer block</td><td>planned</td><td>Vaswani et al. 2017, &sect;3 and Table 1</td></tr>
+<tr><td class="n">5</td><td>Training: loss, gradients and scale</td><td>planned</td><td>Books XVII and XVIII; scaling-law papers (unread)</td></tr>
+<tr><td class="n">6</td><td>What is not understood</td><td>planned</td><td>to be chosen after the earlier chapters</td></tr>
+</table></div>
+<h2>What I have read, and what I have not</h2>
+<p>Read for this draft: the byte-pair-encoding paper (Sennrich et al., arXiv 1508.07909, &sect;3.2) and the formulas, hyperparameters, complexity table and results of the transformer paper (Vaswani et al., arXiv 1706.03762, version 7, &sect;&sect;3&ndash;6). Not read: the word-embedding paper beyond its abstract, any scaling-law or alignment paper, and the neural-network chapters of a current textbook. The Jurafsky&ndash;Martin text on the desk is the 2007 edition, which predates neural language models, so it cannot support chapters 2 to 6. Those chapters are marked planned, not drafted.</p>
+<h2>Where this connects</h2>
+<p><a href="../book17/index.html">Book XVII</a> (mathematics of machine learning) &middot; <a href="../book18/index.html">Book XVIII</a> (chain rule and backpropagation) &middot; <a href="../book24/index.html">Book XXIV</a> (linear algebra) &middot; <a href="../book14/index.html">Book XIV</a> (language of mathematics, parsing machines) &middot; <a href="../book25/index.html">Book XXV</a> (languages side by side, which will supply the multilingual tokenization test in chapter 1).</p>
+</div>
+<div class="wrap"><p class="mono" style="color:var(--dim)">&copy; 2026 Pablo Nogueira Grossi / G6 LLC &middot; Newark, New Jersey &middot; CC BY-NC-ND 4.0 &middot; Independent teaching text; not peer-reviewed.</p></div>
+</body>
+</html>

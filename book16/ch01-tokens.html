@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1 &middot; Tokens &mdash; LLMs Explained</title>
+<meta name="description" content="Tokens, the unit a language model reads: why not letters or words, how byte pair encoding builds a vocabulary by merging frequent pairs, a worked example computed by script, and a small trainer to try."/>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.sim label{font-family:var(--mono);font-size:.72rem;display:block;margin:.6rem 0}
+.sim textarea{width:100%;font-family:var(--mono);font-size:.8rem;padding:.5rem;border:1px solid var(--rule);background:#fff;color:var(--ink)}
+.sim input[type=range]{width:100%}
+.sim pre{font-family:var(--mono);font-size:.78rem;background:#fff;border:1px solid var(--rule);padding:.7rem;overflow-x:auto;white-space:pre-wrap}
+.sim input[type=text]{font-family:var(--mono);padding:.3rem;border:1px solid var(--rule);background:#fff;color:var(--ink)}
+.tblwrap{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="topnav"><span class="crumbs"><a href="../index.html">Principia Orthogona</a> &middot; <a href="index.html">Book XVI</a></span><span class="meta"><a href="index.html">Contents</a> &middot; Next: Embeddings (planned)</span></div>
+<header class="wp-head"><div class="wp-kicker">Book XVI &middot; Chapter 1</div>
+<h1>Tokens: <em>the unit a model actually reads</em></h1>
+<p class="subtitle">A model reads numbers. Tokenization is the decision about what each number stands for.</p></header>
+<div class="wrap">
+<div class="lede">Before anything else happens, text is cut into pieces and each piece is given a number from a fixed list. The list and the cutting rule are chosen first and then frozen. Everything the model later learns is learned about those pieces.</div>
+
+<h2>&sect;1 &middot; Three ways to cut</h2>
+<p>The simplest cut is one piece per character: the list is short (a few hundred symbols cover most scripts) but a sentence becomes a long sequence. The opposite cut is one piece per word: sequences are short, but the list must hold every word the model will ever meet, and any word it has not seen has no number. Subword tokenization sits between them: frequent words get a single number, rare words are spelled from smaller pieces, and nothing is ever unknown.</p>
+<p>Length matters because of the cost of attention, covered in chapter 4. The transformer paper&rsquo;s Table 1 gives the work of one self-attention layer as proportional to <span class="mono">n&sup2;&middot;d</span>, where <span class="mono">n</span> is the sequence length and <span class="mono">d</span> the width of the representation. <span class="tag t-data">quoted: Vaswani et al. 2017, &sect;4, Table 1</span> Halve the number of tokens and one layer does a quarter of that part of the work.</p>
+
+<h2>&sect;2 &middot; Byte pair encoding</h2>
+<p>The method the field adopted for this comes from Sennrich, Haddow and Birch (2015), who used it for machine translation. As they describe it (&sect;3.2), the procedure is:</p>
+<ol style="margin:0 0 1rem 1.4rem">
+<li>Write every word in the training text as its characters followed by an end-of-word mark (&lt;/w&gt; below; the paper uses a dot), and keep a count of how often each word occurs.</li>
+<li>Count how often each pair of neighbouring symbols occurs, weighted by word counts. Pairs never cross a word boundary.</li>
+<li>Replace every occurrence of the most frequent pair with one new symbol, and record the merge.</li>
+<li>Repeat. The size of the final list is the starting characters plus the number of merges, and the number of merges is the method&rsquo;s single setting.</li>
+<li>To tokenize new text, split each word into characters and apply the recorded merges in the order they were learned.</li>
+</ol>
+<p><span class="tag t-data">quoted: Sennrich et al. 2015, &sect;3.2</span> In the text I fetched I did not find a rule for breaking ties between equally frequent pairs (the fetch was a machine summary, not a page-by-page read); my script breaks them by taking the alphabetically smallest pair, so the merge order below depends on that rule.</p>
+
+<h2>&sect;3 &middot; A worked example, computed</h2>
+<p>The toy text is four words with counts: <span class="mono">low</span> &times; 5, <span class="mono">lower</span> &times; 2, <span class="mono">newest</span> &times; 6, <span class="mono">widest</span> &times; 3, the dictionary in the paper&rsquo;s own code listing. The text I fetched did not print the merges that listing would make, so I ran it. The starting list has 11 symbols (&lt;/w&gt;, d, e, i, l, n, o, r, s, t, w). After 10 merges it has 21.</p>
+<div class="tblwrap"><table>
+<tr><th>Step</th><th>Pair merged</th><th>New symbol</th><th>Count</th></tr>
+<tr><td class="n">1</td><td class="mono">e + s</td><td class="mono">es</td><td class="n">9</td></tr><tr><td class="n">2</td><td class="mono">es + t</td><td class="mono">est</td><td class="n">9</td></tr><tr><td class="n">3</td><td class="mono">est + &lt;/w&gt;</td><td class="mono">est&lt;/w&gt;</td><td class="n">9</td></tr><tr><td class="n">4</td><td class="mono">l + o</td><td class="mono">lo</td><td class="n">7</td></tr><tr><td class="n">5</td><td class="mono">lo + w</td><td class="mono">low</td><td class="n">7</td></tr><tr><td class="n">6</td><td class="mono">e + w</td><td class="mono">ew</td><td class="n">6</td></tr><tr><td class="n">7</td><td class="mono">ew + est&lt;/w&gt;</td><td class="mono">ewest&lt;/w&gt;</td><td class="n">6</td></tr><tr><td class="n">8</td><td class="mono">n + ewest&lt;/w&gt;</td><td class="mono">newest&lt;/w&gt;</td><td class="n">6</td></tr><tr><td class="n">9</td><td class="mono">low + &lt;/w&gt;</td><td class="mono">low&lt;/w&gt;</td><td class="n">5</td></tr><tr><td class="n">10</td><td class="mono">d + est&lt;/w&gt;</td><td class="mono">dest&lt;/w&gt;</td><td class="n">3</td></tr>
+</table></div>
+<p>The text holds 16 word occurrences. Before any merge they take 95 symbols; after ten merges they take 28, which is 3.39 times shorter. If that whole text were fed as one sequence, the <span class="mono">n&sup2;</span> term would fall by (95/28)&sup2; = 11.5 times. That last number is only an illustration on a four-word toy; a real corpus has a different ratio. <span class="tag t-model">computed: <span class="mono">ch01-verify.py</span></span></p>
+<p>Now the point of the method. Words the training text never contained still get tokenized, with no unknown symbol:</p>
+<div class="tblwrap"><table>
+<tr><th>Word</th><th>Pieces after 10 merges</th><th>Count</th></tr>
+<tr><td class="mono">low</td><td class="mono">low&lt;/w&gt;</td><td class="n">1</td></tr><tr><td class="mono">lower</td><td class="mono">low | e | r | &lt;/w&gt;</td><td class="n">4</td></tr><tr><td class="mono">newer</td><td class="mono">n | ew | e | r | &lt;/w&gt;</td><td class="n">5</td></tr><tr><td class="mono">lowest</td><td class="mono">low | est&lt;/w&gt;</td><td class="n">2</td></tr>
+</table></div>
+<p><span class="mono">lowest</span> and <span class="mono">newer</span> never appeared in the toy text. <span class="mono">lowest</span> comes out as the known piece <span class="mono">low</span> plus the known ending <span class="mono">est&lt;/w&gt;</span>, which is the open-vocabulary behaviour the paper is about.</p>
+
+<div class="box sim"><span class="lab">Try it: train your own</span>
+<label>Training text (words are counted)<textarea id="corp" rows="4">low low low low low lower lower newest newest newest newest newest newest widest widest widest</textarea></label>
+<label>Number of merges <output id="nmo">10</output><input id="nm" type="range" min="0" max="40" value="10"></label>
+<label>Word to tokenize <input id="tw" type="text" value="lowest"></label>
+<pre id="res"></pre>
+<p style="margin:0">Same rules as the script (ties go to the alphabetically smallest pair). A toy: real tokenizers work on bytes or characters of enormous texts and have extra rules this page does not cover.</p></div>
+
+<h2>&sect;4 &middot; What this chapter does not establish</h2>
+<p>Which tokenizer a particular model uses, how many tokens it has, and how its rules treat spaces, capital letters or numbers are facts about each model, not about the method, and I have not checked any. I also have not measured how the number of tokens for the same sentence differs between languages. That question matters for the languages of Book XXV (English, Portuguese, Nepali, Tibetan): a tokenizer trained mostly on one language may cut another into many more pieces, which would make it costlier to read and write. That is a hypothesis here, not a finding. The test is straightforward: take one sentence in each language, run it through a published tokenizer, and count. It needs a tokenizer I can run, so it is left open.</p>
+
+<h2>&sect;5 &middot; What each statement is</h2>
+<div class="tblwrap"><table>
+<tr><th>Statement</th><th>Status</th></tr>
+<tr><td>BPE procedure (steps 1 to 5); vocabulary = characters + merges; open-vocabulary motivation</td><td><span class="tag t-data">quoted: Sennrich et al. &sect;3.2</span></td></tr>
+<tr><td>Self-attention cost per layer proportional to n&sup2;&middot;d</td><td><span class="tag t-data">quoted: Vaswani et al. &sect;4, Table 1</span></td></tr>
+<tr><td>The ten merges, symbol counts, segmentations of unseen words, the 95-to-28 reduction</td><td><span class="tag t-model">computed</span> (tie rule mine)</td></tr>
+<tr><td>Squared-length factor on the toy text</td><td><span class="tag t-model">computed</span>; illustrative only</td></tr>
+<tr><td>Token counts differ by language for the same sentence</td><td><span class="tag t-open">open</span>: not measured</td></tr>
+<tr><td>Any claim about a specific model&rsquo;s tokenizer</td><td><span class="tag t-open">open</span>: not made here</td></tr>
+</table></div>
+
+<h2>Sources</h2>
+<p><a href="https://arxiv.org/abs/1508.07909" target="_blank" rel="noopener">Sennrich, Haddow, Birch, &ldquo;Neural Machine Translation of Rare Words with Subword Units&rdquo;, arXiv 1508.07909 (2015)</a> &middot; <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Vaswani et al., &ldquo;Attention Is All You Need&rdquo;, arXiv 1706.03762 (2017)</a>. Companion script: <code>book16/ch01-verify.py</code>.</p>
+</div><script>
+(function(){
+function pairs(v){var c={};Object.keys(v).forEach(function(w){var s=w.split(' ');for(var i=0;i<s.length-1;i++){var k=s[i]+'\u0001'+s[i+1];c[k]=(c[k]||0)+v[w];}});return c;}
+function merge(v,a,b){var o={};Object.keys(v).forEach(function(w){var s=w.split(' '),r=[],i=0;while(i<s.length){if(i<s.length-1&&s[i]===a&&s[i+1]===b){r.push(a+b);i+=2;}else{r.push(s[i]);i++;}}o[r.join(' ')]=v[w];});return o;}
+function train(v,n){var log=[];for(var t=0;t<n;t++){var c=pairs(v),best=null,bm=0;Object.keys(c).forEach(function(k){var m=c[k];if(m>bm||(m===bm&&k<best)){bm=m;best=k;}});if(best===null)break;var ab=best.split('\u0001');v=merge(v,ab[0],ab[1]);log.push([ab[0],ab[1],bm]);}return {v:v,log:log};}
+function enc(word,log){var s=word.split('').concat(['</w>']);log.forEach(function(m){var r=[],i=0;while(i<s.length){if(i<s.length-1&&s[i]===m[0]&&s[i+1]===m[1]){r.push(m[0]+m[1]);i+=2;}else{r.push(s[i]);i++;}}s=r;});return s;}
+function run(){
+ var txt=document.getElementById('corp').value.toLowerCase(),n=+document.getElementById('nm').value,test=document.getElementById('tw').value.toLowerCase().trim();
+ document.getElementById('nmo').textContent=n;
+ var cnt={};txt.split(/\s+/).filter(Boolean).forEach(function(w){cnt[w]=(cnt[w]||0)+1;});
+ var v={};Object.keys(cnt).forEach(function(w){v[w.split('').join(' ')+' </w>']=cnt[w];});
+ var tot0=0;Object.keys(v).forEach(function(w){tot0+=w.split(' ').length*v[w];});
+ var r=train(v,n),tot1=0;Object.keys(r.v).forEach(function(w){tot1+=w.split(' ').length*r.v[w];});
+ var out='merges:\n'+r.log.map(function(m,i){return (i+1)+'. '+m[0]+' + '+m[1]+'  (count '+m[2]+')';}).join('\n');
+ out+='\n\nsymbols over the whole text: '+tot0+' -> '+tot1;
+ if(test){out+='\n'+test+' -> '+enc(test,r.log).join(' | ');}
+ document.getElementById('res').textContent=out;
+}
+['corp','nm','tw'].forEach(function(i){document.getElementById(i).addEventListener('input',run);});run();
+})();
+</script>
+<div class="wrap"><p class="mono" style="color:var(--dim)">&copy; 2026 Pablo Nogueira Grossi / G6 LLC &middot; Newark, New Jersey &middot; CC BY-NC-ND 4.0 &middot; Independent teaching text; not peer-reviewed.</p></div>
+</body>
+</html>
