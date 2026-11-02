@@ -3,7 +3,8 @@ import Mathlib
 /-!
 # GCM V2, corrected toy model: what these three theorems say
 
-STATUS: UNTESTED (written 2026-11-02, no local toolchain); the author compiles it.
+STATUS: compiled by the author 2026-11-02 (Lean v4.32.0 + Mathlib): no errors; the only output was a linter
+warning about an unused fallback tactic, which was then deleted (that deletion itself not re-run).
 
 The model is  r' = (μ/2)(r - 1/r),  θ' = ω₀,  z' = μ z - ω₀  with  α = dz - (r²-1) dθ.
 Read each statement for what it says, not what its name promises:
@@ -35,9 +36,7 @@ theorem toy_z_solution (μ ω z0 t : ℝ) (hμ : μ ≠ 0) :
     simpa using this
   have hk : μ * (ω / μ) = ω := by field_simp
   refine h.congr_deriv ?_
-  first
-    | linear_combination (-1 : ℝ) * hk
-    | linear_combination hk
+  linear_combination (-1 : ℝ) * hk
 
 theorem toy_dtheta_coefficient (μ r : ℝ) (hr : r ≠ 0) :
     -2 * r * ((μ / 2) * (r - 1 / r)) = -μ * (r ^ 2 - 1) := by

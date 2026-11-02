@@ -122,7 +122,7 @@ $$\dot r=\tfrac{\mu}{2}\Big(r-\frac1r\Big),\qquad \dot\theta=\omega_0,\qquad \do
 3. The Floquet exponents of that cycle are $(\mu,\mu,0)$.
 4. The holonomy of $\lambda$ on $r=1$ is $0$; changing to $\lambda=r^2d\theta$ makes it $2\pi$ and, by Proposition 5.1(d), destroys the contact lift. The primitive is part of the model.
 
-Lean: `gcm-v2/GCMv2Toy.lean` states the two exact solutions and the $d\theta$-coefficient identity. It has **not** been compiled; its docstring says what each theorem does and does not say.
+Lean: `gcm-v2/GCMv2Toy.lean` states the two exact solutions and the $d\theta$-coefficient identity. It compiles (author's run, Lean v4.32.0 with Mathlib); its docstring says what each theorem does and does not say, and none of them is the Lie-derivative statement.
 
 # 7. Theorem D, restated
 
