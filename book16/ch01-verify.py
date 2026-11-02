@@ -93,10 +93,26 @@ global.document={getElementById:function(i){return el(i);}};
         check((tw+' -> '+' | '.join(s)) in out,'trainer segmentation of %s equals Python'%tw)
 else: print('    SKIP  node not available (no PASS without it)')
 
+head(3.5,'history layer: computed examples')
+import math
+def gage(s,pairs):
+    for a,b in pairs: s=s.replace(a,b)
+    return s
+s1=gage('ABABCABCD',[('AB','X')]); s2=gage(s1,[('XC','Y')])
+print('    ABABCABCD ->',s1,'->',s2); check((s1,s2)==('XXCXCD','XYYD'),"Gage's example: ABABCABCD -> XXCXCD -> XYYD")
+check('XXCXCD' in txt and 'XYYD' in txt and 'ABABCABCD' in txt,'page shows the example')
+check('%.2f'%math.log2(27)=='4.75' and '4.75' in txt,'log2(27) = 4.75 shown')
+check(abs(math.log2(26)-4.70)<0.005,'log2(26) = 4.70 (Shannon F0 about 4.7)')
+for lab in ('1844','1994','2015','2018','Morse','Vail','Shannon','Gage','Kudo','SentencePiece','not traced to Vail','I did not read those sources'):
+    check(lab in txt,'history present: '+lab)
+
 head(4,'labels, links, exclusions')
 for lab in ('Sennrich','Vaswani','Table 1','not measured','open','alphabetically smallest pair','never appeared in the toy text'):
     check(lab in txt,'present: '+lab)
-check(not re.search(r'(https?:)?//(?!arxiv\.org)[a-z0-9.-]+\.[a-z]{2,}',re.sub(r'<a [^>]*href="https://arxiv.org[^"]*"','',html).replace('http://www.w3.org','')) ,'no outside resources other than the two arXiv links')
+allowed=('https://arxiv.org/abs/1508.07909','https://arxiv.org/abs/1706.03762','https://arxiv.org/abs/1808.06226','https://jacobfilipp.com/DrDobbs/articles/CUJ/1994/9402/gage/gage.htm','https://sites.socsci.uci.edu/~rfutrell/teaching/itl-davis/readings/shannon1951prediction.pdf','https://historyofinformation.com/detail.php?id=471')
+ext=re.findall(r'(?:href|src)="(https?://[^"]+)"',html)
+check(all(u in allowed for u in ext) and len(ext)>=6,'only the six cited sources are linked outside (%d links)'%len(ext))
+check(not re.search(r'<link[^>]+href="http|<img[^>]+src="http|<script[^>]+src=',html),'no outside stylesheets, images or scripts')
 check(not any(b in html for b in ('fetch(','localStorage','XMLHttpRequest','<script src')),'no network or storage calls')
 for p in ('index.html','../index.html','../book17/index.html','../book18/index.html','../book24/index.html','../book14/index.html','../book25/index.html'):
     check((HERE/p).exists(),'link target exists: '+p)

@@ -77,6 +77,10 @@ footer .disc{max-width:520px;color:#6f6a5c}
 .sim pre{font-family:var(--mono);font-size:.78rem;background:#fff;border:1px solid var(--rule);padding:.7rem;overflow-x:auto;white-space:pre-wrap}
 .sim input[type=text]{font-family:var(--mono);padding:.3rem;border:1px solid var(--rule);background:#fff;color:var(--ink)}
 .tblwrap{overflow-x:auto}
+.hist td:nth-child(3){width:52%}
+.hist td:nth-child(2){width:14%}
+.hist td:nth-child(1){width:9%}
+.hist .tag{white-space:normal;display:inline-block;margin:.1rem .1rem .1rem 0}
 </style>
 </head>
 <body>
@@ -86,6 +90,18 @@ footer .disc{max-width:520px;color:#6f6a5c}
 <p class="subtitle">A model reads numbers. Tokenization is the decision about what each number stands for.</p></header>
 <div class="wrap">
 <div class="lede">Before anything else happens, text is cut into pieces and each piece is given a number from a fixed list. The list and the cutting rule are chosen first and then frozen. Everything the model later learns is learned about those pieces.</div>
+
+<h2>History &middot; five layers under one idea</h2>
+<p>The idea behind tokens is old: when you must turn text into something a machine can carry, give the common things short names. Seeing it as a stack of five layers, each built on the one below, makes the modern version easier to follow.</p>
+<div class="tblwrap"><table class="hist">
+<tr><th>Year</th><th>Who</th><th>What they did</th><th>Status</th></tr>
+<tr><td class="n">1844&ndash;45</td><td>Samuel Morse and Alfred Vail</td><td>The telegraph code that sent the first long-distance message (24 May 1844). Vail extended Morse&rsquo;s numeric code to letters, and, as the story is told, counted the type in a newspaper&rsquo;s type cases to see which letters are common, then gave those the shortest dot-dash sequences. The first token list, in effect: frequent means short.</td><td><span class="tag t-data">quoted: one history page; the type-case story not traced to Vail&rsquo;s own writing</span></td></tr>
+<tr><td class="n">1948&ndash;51</td><td>Claude Shannon</td><td>Showed that letters are far from equally predictable. With 27 symbols (26 letters and the space) a uniform guess costs log<sub>2</sub> 27 = 4.75 bits per letter; the more context you use, the lower the cost. He also had people guess the next letter of real text, and put the entropy of English at roughly one bit per letter once long-range patterns count, about 75 percent redundancy.</td><td><span class="tag t-data">quoted: Shannon 1951; the log is computed</span></td></tr>
+<tr><td class="n">1994</td><td>Philip Gage</td><td>Byte pair encoding, as a way to <em>compress files</em>: find the most common adjacent pair of bytes, replace it with an unused byte, repeat. His example turns ABABCABCD into XXCXCD and then XYYD. Nothing to do with language models yet.</td><td><span class="tag t-data">quoted: C Users Journal, Feb 1994</span> <span class="tag t-model">example computed</span></td></tr>
+<tr><td class="n">2015</td><td>Sennrich, Haddow, Birch</td><td>Noticed that the same procedure builds a vocabulary of word pieces for translation, so a model can handle words it has never seen. This is the method of &sect;2 below.</td><td><span class="tag t-data">quoted: arXiv 1508.07909</span></td></tr>
+<tr><td class="n">2018</td><td>Kudo and Richardson</td><td>SentencePiece: a tokenizer that trains from raw sentences, with no earlier step of splitting into words, and is meant to work for any language. Its abstract reports a test on English&ndash;Japanese translation; Japanese is written without spaces between words, which is why a no-word-splitting step helps (my gloss, not the paper&rsquo;s).</td><td><span class="tag t-data">quoted: abstract of arXiv 1808.06226</span></td></tr>
+</table></div>
+<p>Read upward, the layers are: <em>short names for common things</em> (Morse), <em>the reason that works</em> (Shannon), <em>an automatic way to find the common things</em> (Gage), <em>using it for language</em> (Sennrich), and <em>doing it without assuming words or any particular language</em> (Kudo and Richardson). Everything in &sect;&sect;1 to 3 is the third and fourth layers. What I have not covered: WordPiece and the unigram tokenizer, and how the byte-level variants used in some current models work. I did not read those sources, so they are not described here.</p>
 
 <h2>&sect;1 &middot; Three ways to cut</h2>
 <p>The simplest cut is one piece per character: the list is short (a few hundred symbols cover most scripts) but a sentence becomes a long sequence. The opposite cut is one piece per word: sequences are short, but the list must hold every word the model will ever meet, and any word it has not seen has no number. Subword tokenization sits between them: frequent words get a single number, rare words are spelled from smaller pieces, and nothing is ever unknown.</p>
@@ -138,7 +154,7 @@ footer .disc{max-width:520px;color:#6f6a5c}
 </table></div>
 
 <h2>Sources</h2>
-<p><a href="https://arxiv.org/abs/1508.07909" target="_blank" rel="noopener">Sennrich, Haddow, Birch, &ldquo;Neural Machine Translation of Rare Words with Subword Units&rdquo;, arXiv 1508.07909 (2015)</a> &middot; <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Vaswani et al., &ldquo;Attention Is All You Need&rdquo;, arXiv 1706.03762 (2017)</a>. Companion script: <code>book16/ch01-verify.py</code>.</p>
+<p><a href="https://arxiv.org/abs/1508.07909" target="_blank" rel="noopener">Sennrich, Haddow, Birch, &ldquo;Neural Machine Translation of Rare Words with Subword Units&rdquo;, arXiv 1508.07909 (2015)</a> &middot; <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Vaswani et al., &ldquo;Attention Is All You Need&rdquo;, arXiv 1706.03762 (2017)</a>. <a href="https://jacobfilipp.com/DrDobbs/articles/CUJ/1994/9402/gage/gage.htm" target="_blank" rel="noopener">Gage, &ldquo;A New Algorithm for Data Compression&rdquo;, C Users Journal, Feb 1994 (archive copy)</a> &middot; <a href="https://sites.socsci.uci.edu/~rfutrell/teaching/itl-davis/readings/shannon1951prediction.pdf" target="_blank" rel="noopener">Shannon, &ldquo;Prediction and Entropy of Printed English&rdquo;, 1951 (course copy)</a> &middot; <a href="https://arxiv.org/abs/1808.06226" target="_blank" rel="noopener">Kudo and Richardson, SentencePiece, arXiv 1808.06226 (2018)</a> &middot; <a href="https://historyofinformation.com/detail.php?id=471" target="_blank" rel="noopener">History of Information, entry on Morse code</a>. Companion script: <code>book16/ch01-verify.py</code>.</p>
 </div><script>
 (function(){
 function pairs(v){var c={};Object.keys(v).forEach(function(w){var s=w.split(' ');for(var i=0;i<s.length-1;i++){var k=s[i]+'\u0001'+s[i+1];c[k]=(c[k]||0)+v[w];}});return c;}
