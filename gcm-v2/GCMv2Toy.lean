@@ -3,8 +3,8 @@ import Mathlib
 /-!
 # GCM V2, corrected toy model: what these three theorems say
 
-STATUS: compiled by the author 2026-11-02 (Lean v4.32.0 + Mathlib): no errors; the only output was a linter
-warning about an unused fallback tactic, which was then deleted (that deletion itself not re-run).
+STATUS: compiled by the author 2026-11-02 (Lean v4.32.0 + Mathlib): no errors, no warnings (empty output),
+re-run after the unused fallback tactic was deleted.
 
 The model is  r' = (μ/2)(r - 1/r),  θ' = ω₀,  z' = μ z - ω₀  with  α = dz - (r²-1) dθ.
 Read each statement for what it says, not what its name promises:

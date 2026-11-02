@@ -16,13 +16,16 @@ h=re.sub(r'<title>.*?</title>','',h,flags=re.S)
 h=html.unescape(re.sub(r'<[^>]+>',' ',h))
 pdf=subprocess.run(['pdftotext','-layout',str(here/'out/gcm-v2.pdf'),'-'],capture_output=True,text=True).stdout
 for a,b in (('ﬁ','fi'),('ﬂ','fl'),('ﬀ','ff')): pdf=pdf.replace(a,b)
-pdf=re.sub(r'-\n\s*','',pdf)
 def words(t): return [w.lower() for w in re.findall(r"[A-Za-z]{4,}",t)]
-wh,wp=words(h),words(pdf)
-# math in the PDF extracts as words too (e.g. 'max', 'log'); drop tokens that occur only inside math in the source
+# vocabulary of prose words in the source (math removed), built first so line-end hyphens can be resolved
 src=(here/'src/gcm-v2.md').read_text()
 prose=re.sub(r'\$\$.*?\$\$','',src,flags=re.S); prose=re.sub(r'\$[^$\n]*\$','',prose)
 vocab=set(words(prose))
+def fix(mo):                                  # 'dissipa-\ntion' -> joined if the joined word is in the source prose, else 'Euler-\nLagrange' -> two words
+    a,b=mo.group(1),mo.group(2)
+    return a+b if (a+b).lower() in vocab else a+' '+b
+pdf=re.sub(r'([A-Za-z]+)-\n\s*([A-Za-z]+)',fix,pdf)
+wh,wp=words(h),words(pdf)
 wh=[w for w in wh if w in vocab]; wp=[w for w in wp if w in vocab]
 same=wh==wp
 print(("PASS " if same else "FAIL ")+f"prose words identical in HTML and PDF ({len(wh)} vs {len(wp)})")
