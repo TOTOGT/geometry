@@ -1,9 +1,9 @@
 /-
 Volume XVIII — chapter 7 (planned): sequences and series. Lean core.
 
-STATUS: compiled clean by the author (see series.axioms.txt). Originally written without a toolchain; that was
-written. Run it yourself:   lake env lean book18/Series.lean
-and read the actual output; fix against what the kernel says.
+STATUS: compiled clean by the author, no sorryAx (report: series.axioms.txt). It was first written
+without a toolchain and fixed against the real compiler output. To rerun:
+  lake env lean book18/Series.lean
 
 What it states, in the textbook's own epsilon-N form (not as a Mathlib `Tendsto`, so the
 statement can be read against the book):
