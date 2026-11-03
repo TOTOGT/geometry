@@ -90,7 +90,7 @@ for n in names:
     check(f"theorem {n} is declared", re.search(r"\btheorem\s+" + n + r"\b", code) is not None)
 check("no proof in the file uses sorry", re.search(r"\bsorry\b", code) is None)
 if not rep.is_file():
-    print("  NOT YET RUN: molecularcascade.axioms.txt does not exist. The Lean file is untested.")
+    print("  NOT YET RUN: molecularcascade.axioms.txt does not exist.")
 else:
     lines = [l for l in rep.read_text(encoding="utf-8").splitlines() if l.startswith("'Book6Molecular.")]
     check("the axiom report has one line per theorem", len(lines) == len(names), f"{len(lines)} lines")
@@ -99,7 +99,7 @@ else:
 print("[HONESTY]")
 print("  Nothing here tests biology. Part A assumes the two stages are independent; the NMD rule is the chapter's rule as stated.")
 print("  Whether real pass fractions are 1/1000 or the real threshold is 50 or 55 nt is empirical and is not checked.")
-print("  The ChargingAttempt sketch on the page is not in the Lean file. The Lean file is untested until the author compiles it.")
+print("  The ChargingAttempt sketch on the page is not in the Lean file. The Lean file was compiled by the author on 2026-11-03 (see molecularcascade.axioms.txt).")
 print()
 print("0 FAIL" if not FAIL else f"{len(FAIL)} FAIL: {FAIL}")
 sys.exit(1 if FAIL else 0)

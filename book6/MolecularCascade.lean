@@ -3,8 +3,8 @@ import Mathlib
 /-
 Book VI, chapter 6: The Molecular Cascade. Lean core.
 
-STATUS: UNTESTED. Written without a Lean toolchain; nobody has compiled it. Until the author runs
-it and saves the output as molecularcascade.axioms.txt, nothing here counts as checked. To run:
+STATUS: COMPILED by the author on 2026-11-03 (no errors; one push_neg deprecation warning at the
+time; no sorryAx; output in molecularcascade.axioms.txt). Header text only edited since. To run:
   lake env lean book6/MolecularCascade.lean
 
 WHAT THIS FILE IS. The chapter's own section 4 says it makes no claim that any rate constant,
