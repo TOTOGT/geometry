@@ -39,7 +39,7 @@ structure IsSub (K : Type*) {V : Type*} [Field K] [AddCommGroup V] [Module K V] 
   smul_mem : ∀ (k : K) {x : V}, x ∈ S → k • x ∈ S
 
 /-- Y + Z: all vectors y + z with y in Y, z in Z. -/
-def sumSet {V : Type*} [AddCommGroup V] (Y Z : Set V) : Set V :=
+abbrev sumSet {V : Type*} [AddCommGroup V] (Y Z : Set V) : Set V :=
   {x | ∃ y ∈ Y, ∃ z ∈ Z, y + z = x}
 
 /-- x is congruent to y modulo Y when x - y lies in Y. -/
@@ -100,7 +100,7 @@ theorem cong_refl {Y : Set V} (hY : IsSub K Y) (x : V) : Cong Y x x := by
 theorem cong_symm {Y : Set V} (hY : IsSub K Y) {x y : V} (h : Cong Y x y) : Cong Y y x := by
   unfold Cong at *
   have h1 := hY.smul_mem (-1 : K) h
-  rwa [neg_one_smul_eq_neg, neg_sub] at h1
+  rwa [neg_one_smul_eq_neg (K := K), neg_sub] at h1
 
 theorem cong_trans {Y : Set V} (hY : IsSub K Y) {x y z : V} (h1 : Cong Y x y) (h2 : Cong Y y z) :
     Cong Y x z := by
