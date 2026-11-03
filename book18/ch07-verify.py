@@ -108,11 +108,27 @@ else:
     check("p.92: Proposition 2.5.13, nonnegative terms <=> partial sums bounded above", "Proposition 2.5.13" in pg(92) and "bounded above" in pg(92))
     check("p.93: Proposition 2.5.16 (Comparison test)", "Proposition 2.5.16 (Comparison test)" in pg(93))
 
+print("[10] second held text: Thomson, Bruckner & Bruckner, Elementary Real Analysis, 2nd ed. 2008 (printed page = pdf page - 22)")
+tbb = None
+for c in ("~/Downloads", "~/mnt/Downloads", "."):
+    q = Path(os.path.expanduser(c)) / "TBB-AllChapters-Landscape.pdf"
+    if q.is_file(): tbb = q; break
+if tbb is None:
+    print("  SKIP: TBB-AllChapters-Landscape.pdf not found (no claim made)")
+else:
+    T = subprocess.run(["pdftotext", "-layout", "-f", "80", "-l", "170", str(tbb), "-"], capture_output=True, text=True, timeout=150).stdout.split("\f")
+    tp = lambda n: flat(T[n + 22 - 80])
+    check("p.68: Theorem 2.28 (Monotone Convergence Theorem)", "Theorem 2.28 (Monotone Convergence Theorem)" in tp(68))
+    check("p.124: Example 3.12, sum 1/(k(k+1)) telescopes to 1", "Example 3.12" in tp(124) and "k(k + 1)" in tp(124))
+    check("p.124: geometric series, |r| < 1 converges to 1/(1-r)", "Geometric Series" in tp(124) and "|r| < 1" in tp(124))
+    check("p.132: monotonic sequence converges iff bounded, applied to nonnegative series", "convergent if and only if it is bounded" in tp(132))
+    check("p.141: Direct Comparison Test I", "Direct Comparison Test I" in tp(141))
+
 print("[HONESTY]")
 print("  This script checks arithmetic and the text of two files. It does not run Lean; the axiom report is the author's run.")
 print("  geom_series_converges and bounded_monotone_converges are proved in Lean by Mathlib's own lemmas, not from scratch.")
 print("  [7] is an illustration; the Lean file does not prove that nonnegativity is necessary.")
-print("  Held text: Lebl, Basic Analysis I v6.3 (CC BY-NC-SA). [9] checks only that the four cited statements sit on the cited pages;")
+print("  Held texts: Lebl and Thomson-Bruckner-Bruckner (authors retain copyright; free pdf; nothing copied). Lebl, Basic Analysis I v6.3 (CC BY-NC-SA). [9] checks only that the four cited statements sit on the cited pages;")
 print("  it does not check that the chapter's wording matches Lebl line by line, and nothing is copied from him.")
 print()
 print("0 FAIL" if not FAIL else f"{len(FAIL)} FAIL: {FAIL}")
