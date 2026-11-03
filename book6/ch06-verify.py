@@ -72,12 +72,10 @@ txt = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", html)))
 check("page quotes 1/40,000 and the 50-55 nt rule", "1/40,000" in txt and "50–55" in txt)
 check("page quotes 1 to 3 per 10,000 and the window 1/2,400 to 1/40,000", "1 to 3 amino" in txt and "1/2,400" in txt)
 check("page says the correction does not reach 10^-8", "does not reach" in txt and "10⁻⁸" in txt)
-m = re.search(r"roughly an order of magnitude looser at the low end", txt)
-print("  FINDING (not a failure of this script): the page says the corrected range is '" +
-      (m.group(0) if m else "[sentence not found]") + "'.")
-print("  Arithmetic above: the low end moved from 10^-8 to 1/40000, a factor of 2500 (about 3.4 orders).")
-print("  What is about one order of magnitude is the improvement factor (10^4 before, 400..4000 now).")
-print("  The sentence is true for the improvement factor and not for the endpoint. [OPEN] wording.")
+check("the sentence 'roughly an order of magnitude looser at the low end' now appears only in the correction note",
+      txt.count("roughly an order of magnitude looser at the low end") == 1 and "[CORRECTED" in txt)
+check("section 3 now states the 2,500 factor and the 400 to 4,000 improvement factor", "2,500 times larger" in txt and "400 to 4,000" in txt)
+check("section 3 states the starting error as 1/10 to 1/100", "roughly 1/10 to 1/100" in txt)
 
 print("[6] the Lean file")
 src = (here / "MolecularCascade.lean").read_text(encoding="utf-8")
