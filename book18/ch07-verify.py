@@ -91,11 +91,29 @@ check("no theorem line shows sorryAx", all("sorryAx" not in l for l in lines))
 check("each theorem line lists only propext, Classical.choice, Quot.sound",
       all(l.split("depends on axioms:")[1].strip() == "[propext, Classical.choice, Quot.sound]" for l in lines))
 
+print("[9] the held text: Lebl, Basic Analysis I, v6.3 (printed page = pdf page)")
+import os, subprocess
+flat = lambda t: re.sub(r"\s+", " ", t)
+pdf = None
+for c in ("~/Downloads", "~/mnt/Downloads", "."):
+    q = Path(os.path.expanduser(c)) / "realanal.pdf"
+    if q.is_file(): pdf = q; break
+if pdf is None:
+    print("  SKIP: realanal.pdf not found (pass-through; no claim made)")
+else:
+    L = subprocess.run(["pdftotext", "-layout", str(pdf), "-"], capture_output=True, text=True, timeout=150).stdout.split("\f")
+    pg = lambda n: flat(L[n - 1])
+    check("p.55: Theorem 2.1.10 (Monotone convergence theorem)", "Theorem 2.1.10 (Monotone convergence theorem)" in pg(55))
+    check("p.88: Proposition 2.5.5, geometric series", "Proposition 2.5.5" in pg(88) and "geometric series" in pg(88))
+    check("p.92: Proposition 2.5.13, nonnegative terms <=> partial sums bounded above", "Proposition 2.5.13" in pg(92) and "bounded above" in pg(92))
+    check("p.93: Proposition 2.5.16 (Comparison test)", "Proposition 2.5.16 (Comparison test)" in pg(93))
+
 print("[HONESTY]")
 print("  This script checks arithmetic and the text of two files. It does not run Lean; the axiom report is the author's run.")
 print("  geom_series_converges and bounded_monotone_converges are proved in Lean by Mathlib's own lemmas, not from scratch.")
 print("  [7] is an illustration; the Lean file does not prove that nonnegativity is necessary.")
-print("  Held text: none. The chapter follows no page-addressed source yet.")
+print("  Held text: Lebl, Basic Analysis I v6.3 (CC BY-NC-SA). [9] checks only that the four cited statements sit on the cited pages;")
+print("  it does not check that the chapter's wording matches Lebl line by line, and nothing is copied from him.")
 print()
 print("0 FAIL" if not FAIL else f"{len(FAIL)} FAIL: {FAIL}")
 sys.exit(1 if FAIL else 0)
