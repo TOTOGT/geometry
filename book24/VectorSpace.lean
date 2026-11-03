@@ -66,15 +66,12 @@ theorem neg_one_smul_eq_neg (x : V) : (-1 : K) • x = -x := by
       _ = ((1 : K) + -1) • x := by rw [← add_smul]
       _ = (0 : K) • x := by simp
       _ = 0 := zero_smul_axioms x
-  first
-    | exact eq_neg_of_add_eq_zero_right h
-    | exact (neg_eq_of_add_eq_zero_right h).symm
-    | exact eq_neg_iff_add_eq_zero.mpr (by rw [add_comm]; exact h)
+  exact eq_neg_of_add_eq_zero_right h
 
 theorem inter_isSub {Y Z : Set V} (hY : IsSub K Y) (hZ : IsSub K Z) : IsSub K (Y ∩ Z) :=
   ⟨⟨hY.zero_mem, hZ.zero_mem⟩,
    fun hx hy => ⟨hY.add_mem hx.1 hy.1, hZ.add_mem hx.2 hy.2⟩,
-   fun k hx => ⟨hY.smul_mem k hx.1, hZ.smul_mem k hx.2⟩⟩
+   fun k {_} hx => ⟨hY.smul_mem k hx.1, hZ.smul_mem k hx.2⟩⟩
 
 theorem sum_isSub {Y Z : Set V} (hY : IsSub K Y) (hZ : IsSub K Z) : IsSub K (sumSet Y Z) := by
   refine ⟨⟨0, hY.zero_mem, 0, hZ.zero_mem, add_zero 0⟩, ?_, ?_⟩
