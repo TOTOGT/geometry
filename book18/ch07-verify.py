@@ -124,11 +124,25 @@ else:
     check("p.132: monotonic sequence converges iff bounded, applied to nonnegative series", "convergent if and only if it is bounded" in tp(132))
     check("p.141: Direct Comparison Test I", "Direct Comparison Test I" in tp(141))
 
+print("[11] third held text: Ross, Elementary Analysis, 2nd ed. 2013 (printed page = pdf page - 12)")
+ross = None
+for c in ("~/Downloads", "~/mnt/Downloads", "."):
+    q = Path(os.path.expanduser(c)) / "RCmplx01_Ross.pdf"
+    if q.is_file(): ross = q; break
+if ross is None:
+    print("  SKIP: RCmplx01_Ross.pdf not found (no claim made)")
+else:
+    R = subprocess.run(["pdftotext", "-layout", "-f", "60", "-l", "120", str(ross), "-"], capture_output=True, text=True, timeout=150).stdout.split("\f")
+    rp = lambda n: flat(R[n + 12 - 60])
+    check("p.57: 10.2 Theorem, all bounded monotone sequences converge", "10.2 Theorem" in rp(57) and "All bounded monotone sequences converge" in rp(57))
+    check("p.96: geometric series Example 1 and nonnegative terms give an increasing sequence of partial sums", "geometric series" in rp(96) and "increasing sequence" in rp(96))
+    check("p.98: 14.6 Comparison Test", "Comparison Test" in rp(98) and "14.6" in rp(98))
+
 print("[HONESTY]")
 print("  This script checks arithmetic and the text of two files. It does not run Lean; the axiom report is the author's run.")
 print("  geom_series_converges and bounded_monotone_converges are proved in Lean by Mathlib's own lemmas, not from scratch.")
 print("  [7] is an illustration; the Lean file does not prove that nonnegativity is necessary.")
-print("  Held texts: Lebl and Thomson-Bruckner-Bruckner (authors retain copyright; free pdf; nothing copied). Lebl, Basic Analysis I v6.3 (CC BY-NC-SA). [9] checks only that the four cited statements sit on the cited pages;")
+print("  Held texts: Lebl, Thomson-Bruckner-Bruckner and Ross (Springer-copyrighted; page references only, nothing copied). Lebl, Basic Analysis I v6.3 (CC BY-NC-SA). [9] checks only that the four cited statements sit on the cited pages;")
 print("  it does not check that the chapter's wording matches Lebl line by line, and nothing is copied from him.")
 print()
 print("0 FAIL" if not FAIL else f"{len(FAIL)} FAIL: {FAIL}")
