@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foundations of Analysis &middot; Book XVIII &mdash; Principia Orthogona</title>
+<meta name="description" content="Why the completeness of the real numbers is what lets a bounded monotone sequence converge, a continuous function cross a value, and a uniform limit stay continuous, with exact checks and controls where each fails.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.po-proved-block{max-width:820px;margin:2.5rem auto 1rem;padding:1.1rem 1.3rem;
+ border:1px solid rgba(122,148,113,.45);border-left:4px solid #7a9471;border-radius:0 6px 6px 0;
+ background:rgba(122,148,113,.07);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.75;}
+.po-proved-block .po-h{letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;color:#5f7a57;margin-bottom:.6rem;}
+.po-proved-block a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.po-proved-block .po-n{font-size:.68rem;opacity:.75;display:block;margin-top:.7rem;line-height:1.6;}
+</style>
+<!--po-subject--><meta name="po-subject" content="MATHEMATICS · ANALYSIS"><meta name="po-subject-2" content="PROOF · LEAN"><!--/po-subject-->
+</head>
+<body>
+
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XVIII &middot; Ch 9</span>
+<span class="meta"><a href="ch08-several-variables.html">&larr; Ch 8</a> &middot; <a href="index.html">Book XVIII contents</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XVIII &middot; The Chain Rule &middot; Chapter 9 &middot; 2026-11-04 &middot; in progress</div>
+<h1>Foundations of <em>Analysis</em></h1>
+<div class="subtitle">The earlier chapters kept saying a limit exists. This chapter asks what makes that allowed: the real numbers have no holes, and the rationals do. It checks that claim, three theorems that depend on it, and the difference between pointwise and uniform convergence, with a control wherever a hypothesis is removed.</div>
+<div class="metagrid"><div><strong>Held text</strong>Lebl, <em>Basic Analysis I</em> v6.3 (CC BY-NC-SA): Def 1.1.3 and Ex 1.1.4 p.24; Thm 2.3.8 p.78; Thm 3.3.2 p.130; Thm 3.3.8 p.133, Ex 3.3.9 p.134; Def 6.1.6 p.229, Ex 6.1.8 p.230; Thm 6.2.2 p.235</div>
+<div><strong>Claim type</strong>standard results, no new theorems; the numerical examples are single cases</div>
+<div><strong>Lean</strong><a href="Foundations.lean">Foundations.lean</a>: seven statements, <strong>not yet compiled</strong></div>
+<div><strong>Checks</strong><a href="ch09-verify.py">ch09-verify.py</a>: exact rational arithmetic</div></div>
+</div>
+<div class="wrap">
+<p class="lede">Every limit in the earlier chapters is a real number that was not on the list when the sequence began. A sequence of rationals can close in on a number that is not rational, so the claim that the limit exists has to come from somewhere. It comes from one property of the real numbers: a nonempty set with an upper bound has a <em>least</em> upper bound.</p>
+
+<div class="eyebrow">&sect; 1</div>
+<h2>The rationals have a hole</h2>
+<p>Take the rationals whose square is less than 2. Any rational <span class="mono">u &gt; 0</span> with <span class="mono">u<sup>2</sup> &gt; 2</span> is an upper bound for that set, and it is never the least one: the rational <span class="mono">u&prime; = (u<sup>2</sup> + 2)/(2u)</span> is smaller and still an upper bound, because <span class="mono">u&prime;<sup>2</sup> &minus; 2 = (u<sup>2</sup> &minus; 2)<sup>2</sup>/(4u<sup>2</sup>) &gt; 0</span> and <span class="mono">u &minus; u&prime; = (u<sup>2</sup> &minus; 2)/(2u) &gt; 0</span>. Starting at 3/2 this gives 3/2, 17/12, 577/408, each smaller than the last and each with square above 2; 17/12 squared is 289/144, which is 2 + 1/144. The same holds from below: for a rational <span class="mono">x &ge; 0</span> with <span class="mono">x<sup>2</sup> &lt; 2</span>, the rational <span class="mono">x&prime; = (2x + 2)/(x + 2)</span> is larger and still has square below 2, since <span class="mono">x&prime;<sup>2</sup> &minus; 2 = (2x<sup>2</sup> &minus; 4)/(x + 2)<sup>2</sup></span>. So the set has no least rational upper bound.</p>
+<p>The step that remains is that no rational has square 2: if <span class="mono">p<sup>2</sup> = 2q<sup>2</sup></span> with <span class="mono">p/q</span> in lowest terms, then <span class="mono">p</span> is even, say <span class="mono">p = 2r</span>, so <span class="mono">q<sup>2</sup> = 2r<sup>2</sup></span> and <span class="mono">q</span> is even too, against lowest terms. This is Lebl&rsquo;s Example 1.1.4 (p.24), where the property that fails is Definition 1.1.3, the least-upper-bound property. The script checks both update formulas on 1,187 fractions above &radic;2 and 673 below it (denominators up to 30, not reduced, so some values repeat), and finds no solution of <span class="mono">p<sup>2</sup> = 2q<sup>2</sup></span> with <span class="mono">q</span> up to 3,000. The finite checks test the formulas; the parity argument is what proves the claim. Lean: <span class="mono">newton_improves</span> and <span class="mono">control_no_rational_sqrt_two</span> are proved from field arithmetic and Mathlib&rsquo;s irrationality of &radic;2; <span class="mono">completeness</span> is Mathlib&rsquo;s <span class="mono">Real.exists_isLUB</span>. None of it has been compiled.</p>
+
+<div class="eyebrow">&sect; 2</div>
+<h2>What completeness gives: three theorems</h2>
+<p><strong>A bounded sequence has a convergent part (Bolzano&ndash;Weierstrass, Lebl Thm 2.3.8, p.78).</strong> The sequence <span class="mono">x<sub>n</sub> = (&minus;1)<sup>n</sup>(1 + 1/n)</span> is bounded by 2 and does not converge, but its even terms satisfy <span class="mono">x<sub>2k</sub> &minus; 1 = 1/(2k)</span> exactly, and its odd terms <span class="mono">x<sub>2k&minus;1</sub> + 1 = &minus;1/(2k&minus;1)</span> exactly, so one subsequence tends to 1 and the other to &minus;1. Control: <span class="mono">x<sub>n</sub> = n</span> is unbounded and has no convergent subsequence, since any strictly increasing choice of indices has <span class="mono">n<sub>k</sub> &ge; k</span>.</p>
+<p><strong>A continuous function crosses every value between two of its values (Bolzano&rsquo;s intermediate value theorem, Thm 3.3.8, p.133).</strong> Take <span class="mono">f(x) = x<sup>3</sup> &minus; x &minus; 1</span> on <span class="mono">[1, 2]</span>, where <span class="mono">f(1) = &minus;1</span> and <span class="mono">f(2) = 5</span>. Bisection (Example 3.3.9, p.134), in exact arithmetic, keeps <span class="mono">f(a) &lt; 0 &lt; f(b)</span> at each of 40 steps and traps a root in an interval of width exactly 2<sup>&minus;40</sup>, at about 1.3247179572. The only rational candidates for a root, &plusmn;1, are not roots, so the root the bisection finds is not a rational: the theorem is delivering a number that is not on the rational list. Two controls. Over the rationals, the same bisection for <span class="mono">x<sup>2</sup> &minus; 2</span> on <span class="mono">[0, 2]</span> never lands on a zero in 60 steps: the function changes sign, the interval shrinks to width 2<sup>&minus;59</sup>, and there is no rational to land on. And a step function that is &minus;1 below 1/2 and +1 from 1/2 changes sign on <span class="mono">[0, 1]</span> without ever being zero: continuity is a hypothesis.</p>
+<p><strong>A continuous function on a closed interval attains its maximum and minimum (Thm 3.3.2, p.130).</strong> For <span class="mono">x(1 &minus; x)</span> on <span class="mono">[0, 1]</span> the identity <span class="mono">1/4 &minus; x(1 &minus; x) = (x &minus; 1/2)<sup>2</sup></span> shows the maximum is 1/4, attained only at 1/2 (checked exactly on a grid of 201 points). Controls: <span class="mono">x</span> on the open interval <span class="mono">(0, 1)</span> has no maximum, because <span class="mono">(x + 1)/2</span> is larger; and <span class="mono">1/x</span> on <span class="mono">(0, 1]</span> is unbounded, with value <span class="mono">n</span> at <span class="mono">x = 1/n</span>. Closed and bounded matter.</p>
+<p>Lean: <span class="mono">bolzano_weierstrass</span>, <span class="mono">ivt</span> and <span class="mono">extreme_value</span> call Mathlib&rsquo;s own theorems (<span class="mono">tendsto_subseq_of_bounded</span>, <span class="mono">intermediate_value_Icc</span>, <span class="mono">IsCompact.exists_isMaxOn</span> and <span class="mono">exists_isMinOn</span>); once compiled they would check the statements, not Lebl&rsquo;s proofs.</p>
+
+<div class="eyebrow">&sect; 3</div>
+<h2>Pointwise is not uniform</h2>
+<p>A sequence of functions converges <em>pointwise</em> if it converges at each point separately, and <em>uniformly</em> if one index <span class="mono">N</span> works for every point at once (Definition 6.1.6, p.229). Take <span class="mono">f<sub>n</sub>(x) = x<sup>n</sup></span> on <span class="mono">[0, 1)</span>. At each point tried (1/2, 9/10, 99/100) the powers fall below 1/1000 eventually, so the pointwise limit is 0. But at <span class="mono">x<sub>n</sub> = 1 &minus; 1/(2n)</span> the value is at least 1/2 for every <span class="mono">n</span>, by Bernoulli&rsquo;s inequality <span class="mono">(1 &minus; t)<sup>n</sup> &ge; 1 &minus; nt</span>; the script checks it exactly for <span class="mono">n</span> up to 300. So for <span class="mono">&epsilon; = 1/2</span> no <span class="mono">N</span> works, and the convergence is not uniform (compare Lebl&rsquo;s Example 6.1.8, p.230, for <span class="mono">x<sup>2n</sup></span> on <span class="mono">[&minus;1, 1]</span>). Each <span class="mono">x<sup>n</sup></span> is continuous on <span class="mono">[0, 1]</span>, yet at <span class="mono">x = 1</span> every one equals 1 while the limit elsewhere is 0: the limit jumps, which Theorem 6.2.2 (p.235) forbids under uniform convergence.</p>
+<p>A uniform case: <span class="mono">f<sub>n</sub>(x) = x/(1 + nx<sup>2</sup>)</span>. Since <span class="mono">(1 + nx<sup>2</sup>)<sup>2</sup> &minus; 4nx<sup>2</sup> = (1 &minus; nx<sup>2</sup>)<sup>2</sup> &ge; 0</span>, we get <span class="mono">|f<sub>n</sub>(x)| &le; 1/(2&radic;n)</span> for every <span class="mono">x</span>, with equality at <span class="mono">x = 1/k</span> when <span class="mono">n = k<sup>2</sup></span>. So for <span class="mono">&epsilon; = 1/100</span>, any <span class="mono">N &gt; 2500</span> works for all <span class="mono">x</span> at once. Lean: <span class="mono">uniform_limit_continuous</span>, Mathlib&rsquo;s <span class="mono">TendstoUniformly.continuous</span>, uncompiled.</p>
+
+<div class="eyebrow">&sect; 4</div>
+<h2>Where the earlier chapters leaned on this</h2>
+<p>Chapter 7 uses the monotone convergence theorem (Lebl Thm 2.1.10, p.55): a bounded increasing sequence converges. The standard proof takes the supremum of the terms, and that supremum exists by completeness; in the rationals the sequence 1, 1.4, 1.41, 1.414, &hellip; of decimal truncations of &radic;2 is bounded and increasing and has no rational limit. That is the sense in which chapter 7&rsquo;s steps were allowed: they were taken in the real numbers. This chapter checks the property and its consequences on examples; it does not trace each earlier step back to it.</p>
+
+<div class="eyebrow">&sect; 5</div>
+<h2>What is not here</h2>
+<ul>
+<li>Metric spaces, open and closed sets, and compactness in general. The index row for this chapter mentioned them; they are the subject of Lebl&rsquo;s later chapters and are <strong>not</strong> covered here, and the extreme value theorem above is only the interval case.</li>
+<li>Exchanging a limit with an integral or a derivative (Lebl Thm 6.2.4, p.237, and Thm 6.2.10, p.239), Dini&rsquo;s theorem, and the Weierstrass M-test.</li>
+<li>Proofs of the three theorems in &sect; 2. The page gives the examples and the controls, and cites Lebl for the proofs.</li>
+<li>Compiled status. <span class="mono">Foundations.lean</span> has not been compiled. Five of its seven proofs are calls to Mathlib, so it checks that the textbook statements are true as formal sentences, not that any hand argument here is right. The two proofs that are not bare library calls are <span class="mono">newton_improves</span> and <span class="mono">control_no_rational_sqrt_two</span>, and they are the likeliest to need a fix after the first compile.</li>
+<li>Line-by-line agreement with Lebl. The statements are confirmed to sit on the cited pages (ch09-verify.py [8]); the chapter&rsquo;s own wording has not been compared with his proofs. <span class="mono">[OPEN]</span></li>
+</ul>
+</div>
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XVIII &middot; Chapter 9<br>
+Written 2026-11-04 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">Standard results; statements located in Lebl, Basic Analysis I (pp.24, 78, 130, 133, 134, 229, 230, 235), nothing copied. Every figure is printed by ch09-verify.py; the theorems are in Foundations.lean, which is untested.</div>
+</div></footer>
+</body>
+</html>
