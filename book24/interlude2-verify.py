@@ -257,6 +257,22 @@ else:
           f"{neg['tstar']:.4f}" in ftxt and f"{pos['maxdev']:.1e}" in ftxt and f"{neg['maxdev']:.1e}" in ftxt and "latest" in ftxt and "the collapse time the argument predicts" not in ftxt)
     check("page says the failed part of the run is not plotted and is not evidence of blow-up", "that part is not plotted" in ftxt and "it does not show it" in ftxt)
 
+
+print("[9] r_eye(3,l) section (formulas only; read from the typeset arXiv PDF pp. 4-5)")
+import math as _m2
+def _re(d, l): return (d + l) / (l + _m2.sqrt(d)) if l < d else 1 + (d - 1) / (1 + _m2.sqrt(l)) ** 2
+_pg = (Path(__file__).resolve().parent / "interlude2-frank-merle-blow-up.html").read_text(encoding="utf-8")
+_tx = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", _pg))
+check("branches agree at l = d and equal 3 - sqrt 3 for d = 3 (limits from both sides within 1e-9)", abs((3+3)/(3+_m2.sqrt(3)) - (1+2/(1+_m2.sqrt(3))**2)) < 1e-12 and abs(_re(3,3-1e-9)-(3-_m2.sqrt(3))) < 1e-8 and abs(_re(3,3+1e-9)-(3-_m2.sqrt(3))) < 1e-8)
+check("r_eye(3,l) is strictly decreasing on (0,12], above 1, and the review's r2,r3,r4 (1.0501, 1.1010, 1.1348) lie in (1, 3 - sqrt 3)",
+      all(_re(3,0.05*i) > _re(3,0.05*(i+1)) > 1 for i in range(1,239) if abs(0.05*i-3) > 0.06) and all(1 < v < 3-_m2.sqrt(3) for v in (1.0501,1.1010,1.1348)))
+check("e = (l(r-1)+r-2)/2 > 0 at r = r_eye(3,l) exactly when r_eye > (l+2)/(l+1); this holds at l = 3 and for every l > 3 sampled, and fails below l = sqrt 3 (so the bound is sqrt 3, not 3); gamma < (2+sqrt3)/sqrt3 is the same as l > sqrt 3",
+      abs((2+_m2.sqrt(3))/_m2.sqrt(3) - (1+2/_m2.sqrt(3))) < 1e-12 and abs(2/((2+_m2.sqrt(3))/_m2.sqrt(3)-1) - _m2.sqrt(3)) < 1e-12 and abs((2*_m2.sqrt(3)-3)/(2-_m2.sqrt(3)) - _m2.sqrt(3)) < 1e-12 and
+      all(_re(3,l) > (l+2)/(l+1) for l in [3]+[3+0.1*i for i in range(1,400)]) and _re(3,1.70) < (1.70+2)/(2.70) and _re(3,1.80) > (1.80+2)/2.80)
+check("page states the formula, the source arXiv:1912.11009, the typeset-page provenance, that r2-r4 are quoted not recomputed, and that Annals Part I was not read",
+      "arXiv:1912.11009" in _tx and "typeset pages 4 and 5" in _tx and "quoted from the review" in _tx and "not recomputed" in _tx and "Part I was not read" in _tx)
+check("page attributes l > 3 to lost radicals in a text extraction, not to a different version of the paper", "extraction loss, not a difference in the paper" in _tx and "versions of the paper differ" not in _tx)
+
 print()
 print("ALL PASS" if not FAIL else f"{len(FAIL)} FAILED: {FAIL}")
 sys.exit(1 if FAIL else 0)
