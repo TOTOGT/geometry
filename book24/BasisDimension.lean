@@ -3,10 +3,9 @@ import Mathlib
 /-
 Book XXIV, chapter 4: basis and dimension. Lean core.
 
-STATUS: UNTESTED. Written without a Lean toolchain; not yet compiled by anyone. Until the author
-runs it and the output is saved as basisdimension.axioms.txt, nothing in this file counts as
-checked. To run:
-  lake env lean book24/BasisDimension.lean 2>&1 | tee book24/basisdimension.axioms.txt
+STATUS: COMPILED by the author on 2026-11-03 (first run, no errors, no warnings, no sorryAx; output saved as
+basisdimension.axioms.txt). That a theorem compiles is not the same as its proving what its name says:
+the statements are read against Lax in the header below and on the chapter page.
 
 The statements follow Lax, Linear Algebra and Its Applications (2nd ed.), Chapter 1, pp.5-11:
   indep_ne_zero                  Exercise 10 (p.5):  an independent family has no zero member

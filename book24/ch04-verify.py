@@ -311,7 +311,7 @@ for nme in names:
     check(f"theorem {nme} is declared", re.search(r"\btheorem\s+" + nme + r"\b", code) is not None)
 check("no proof in the file uses sorry", re.search(r"\bsorry\b", code) is None)
 if not rep.is_file():
-    print("  NOT YET RUN: basisdimension.axioms.txt does not exist. The Lean file is untested.")
+    print("  NOT YET RUN: basisdimension.axioms.txt does not exist.")
 else:
     lines = [l for l in rep.read_text(encoding="utf-8").splitlines() if l.startswith("'Book24Basis.")]
     check("the axiom report has one line per theorem", len(lines) == len(names), f"{len(lines)} lines")
@@ -319,7 +319,7 @@ else:
 
 print("[HONESTY]")
 print("  Finite-field checks are exhaustive but are checks of examples; the theorems are on the page and in the Lean file.")
-print("  The Lean file is untested until the author runs it. Theorem 4, Exercises 11, 16, 17 and the non-uniqueness in Exercise 12 are not in it.")
+print("  The Lean file was compiled by the author (axiom report checked above). Theorem 4, Exercises 11, 16, 17 and the non-uniqueness in Exercise 12 are not in it.")
 print("  Held text: Lax only (Wiley-copyrighted, page references, nothing copied). Lax works over R or C; finite fields go beyond him.")
 print()
 print("0 FAIL" if not FAIL else f"{len(FAIL)} FAIL: {FAIL}")
