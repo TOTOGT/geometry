@@ -4,10 +4,11 @@ import Mathlib
 Book XXIV, Interlude 2: the algebra of the limiting blow-up speed r_eye (Merle, Raphael, Rodnianski, Szeftel,
 arXiv:1912.11009v2, eq. (1.4), (1.8), (1.16); read on the typeset pages 4 and 5).
 
-STATUS: UNTESTED. Written 2026-11-04 without running Lean. Nothing here is verified until
-`lake env lean book24/ReyeAlgebra.lean 2>&1 | tee book24/reye.axioms.txt` has been run and its real output read.
-Likeliest to need a fix: the `div_lt_div_iff` call (renamed in recent Mathlib), and the `positivity` steps that
-use a hypothesis `t - 1 ≠ 0`.
+STATUS: COMPILED 2026-11-04, THREE OF FOUR CLEAN. The first run accepted `branch_agree`, `branch_agree_d` and
+`plus_branch_positive` (axioms propext, Classical.choice, Quot.sound only) and failed on `threshold_three`: `div_lt_div_iff`
+is not a Mathlib name any more ("Unknown identifier"), so that theorem carries sorryAx. Its proof has been rewritten
+without any renamed lemma (the two fractions are cleared with `field_simp`, then linear arithmetic); the rewrite has NOT
+been compiled. Recompile with `lake env lean book24/ReyeAlgebra.lean 2>&1 | tee book24/reye.axioms.txt`.
 
 WHAT IT STATES (real-number algebra only):
   branch_agree / branch_agree_d   the two branches r_* and r_+ of r_eye are equal at l = d, for every d > 0
@@ -42,17 +43,29 @@ theorem threshold_three (l : ℝ) (hl : 0 < l) :
   have hs4 : Real.sqrt 3 < 2 := by nlinarith
   have hpos1 : 0 < 1 + l := by linarith
   have hpos2 : 0 < l + Real.sqrt 3 := by linarith
+  have hne1 : (1 + l) ≠ 0 := hpos1.ne'
+  have hne2 : (l + Real.sqrt 3) ≠ 0 := hpos2.ne'
+  have hx : (2 + l) / (1 + l) * (1 + l) = 2 + l := by field_simp
+  have hy : (3 + l) / (l + Real.sqrt 3) * (l + Real.sqrt 3) = 3 + l := by field_simp
+  generalize (2 + l) / (1 + l) = x at hx ⊢
+  generalize (3 + l) / (l + Real.sqrt 3) = y at hy ⊢
   have key : (3 + l) * (1 + l) - (2 + l) * (l + Real.sqrt 3)
       = (2 - Real.sqrt 3) * (l - Real.sqrt 3) := by
     linear_combination (-1 : ℝ) * hs2
-  rw [div_lt_div_iff hpos1 hpos2]
+  have hid : (y - x) * ((1 + l) * (l + Real.sqrt 3))
+      = (3 + l) * (1 + l) - (2 + l) * (l + Real.sqrt 3) := by
+    linear_combination (1 + l) * hy - (l + Real.sqrt 3) * hx
+  have hD : 0 < (1 + l) * (l + Real.sqrt 3) := mul_pos hpos1 hpos2
   constructor
   · intro h
+    have h1 : 0 < (y - x) * ((1 + l) * (l + Real.sqrt 3)) := mul_pos (sub_pos.2 h) hD
     by_contra hc
     push_neg at hc
     nlinarith [mul_nonneg (sub_nonneg.2 hs4.le) (sub_nonneg.2 hc)]
   · intro h
-    nlinarith [mul_pos (sub_pos.2 hs4) (sub_pos.2 h)]
+    by_contra hc
+    push_neg at hc
+    nlinarith [mul_nonneg (sub_nonneg.2 hc) hD.le, mul_pos (sub_pos.2 hs4) (sub_pos.2 h)]
 
 theorem plus_branch_positive (t : ℝ) (ht : 0 < t) (h1 : t ≠ 1) :
     (2 + t ^ 2) / (1 + t ^ 2) < 1 + 2 / (1 + t) ^ 2 := by

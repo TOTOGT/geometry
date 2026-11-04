@@ -273,13 +273,29 @@ check("page states the formula, the source arXiv:1912.11009, the typeset-page pr
       "arXiv:1912.11009" in _tx and "typeset pages 4 and 5" in _tx and "quoted from the review" in _tx and "not recomputed" in _tx and "Part I was not read" in _tx)
 check("page attributes l > 3 to lost radicals in a text extraction, not to a different version of the paper", "extraction loss, not a difference in the paper" in _tx and "versions of the paper differ" not in _tx)
 
-check("page says the r_eye derivation is floating point, does not resolve the l > d branch, and that ReyeAlgebra.lean is not compiled unless a report exists",
-      "reye-derive.py" in _tx and "nothing is claimed about that branch" in _tx and "does not prove that smooth self-similar profiles exist" in _tx
-      and (("has not been compiled" in _tx) == (not (lambda f: f.exists() and f.read_text(encoding="utf-8").strip() != "")(Path(__file__).resolve().parent / "reye.axioms.txt"))))
-
-check("page 5d links Witness.lean, states the agreement is not blind, and says the file is untested unless a report exists",
-      "Witness.lean" in _tx and "It is not blind" in _tx and "two routes meet, not that either is right about the fluid" in _tx
-      and (("The file is untested" in _tx) == (not (lambda f: f.exists() and f.read_text(encoding="utf-8").strip() != "")(Path(__file__).resolve().parent / "witness.axioms.txt"))))
+def _rep(nm):
+    f = Path(__file__).resolve().parent / nm
+    return f.read_text(encoding="utf-8") if f.exists() and f.read_text(encoding="utf-8").strip() else ""
+_rr, _wr = _rep("reye.axioms.txt"), _rep("witness.axioms.txt")
+check("page says the r_eye derivation is floating point and does not resolve the l > d branch",
+      "reye-derive.py" in _tx and "nothing is claimed about that branch" in _tx and "does not prove that smooth self-similar profiles exist" in _tx)
+if not _rr:
+    check("ReyeAlgebra.lean: no report, page says not compiled", "has not been compiled" in _tx)
+elif "sorryAx" in _rr or "error" in _rr.lower():
+    _bad = [l for l in _rr.splitlines() if "sorryAx" in l]
+    check("ReyeAlgebra.lean: report shows only threshold_three with sorryAx, and the page says three of four clean and the rewrite not recompiled",
+          len(_bad) == 1 and "threshold_three" in _bad[0] and "three of the four theorems are clean" in _tx and "not been recompiled" in _tx)
+else:
+    check("ReyeAlgebra.lean: clean report, page says so", "all four" in _tx and "three of the four" not in _tx)
+if not _wr:
+    check("Witness.lean: no report, page says untested", "The file is untested" in _tx)
+elif "sorryAx" in _wr or "error" in _wr.lower():
+    check("Witness.lean: report shows a problem; the page must not say clean", "compiled clean (all six" not in _tx)
+else:
+    check("Witness.lean: clean report with all six theorems, page says compiled clean and not untested",
+          all(("Book24Wi." + n) in _wr for n in ("agree_of_subsingleton","disagree_possible","witness_minimum","witness_minimum_card","majority_three","no_majority_two"))
+          and "The file compiled clean (all six" in _tx and "The file is untested" not in _tx)
+check("page 5d links Witness.lean and says the agreement is not blind", "Witness.lean" in _tx and "It is not blind" in _tx and "two routes meet, not that either is right about the fluid" in _tx)
 
 print()
 print("ALL PASS" if not FAIL else f"{len(FAIL)} FAILED: {FAIL}")

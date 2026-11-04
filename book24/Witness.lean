@@ -3,10 +3,10 @@ import Mathlib
 /-
 Book XXIV: "where two or three are gathered" as a minimum condition for there to be a witness.
 
-STATUS: UNTESTED. Written 2026-11-04 without a Lean toolchain (none could be installed in the session). Nothing here is
-verified until `lake env lean book24/Witness.lean 2>&1 | tee book24/witness.axioms.txt` has been run and its real output
-read. Likeliest to need a fix: the `decide` calls (size of the search, and the Decidable instance for `Agree`), the name
-`not_nontrivial_iff_subsingleton`, and `Fintype.one_lt_card_iff_nontrivial`.
+STATUS: COMPILED 2026-11-04, ALL SIX CLEAN. The report witness.axioms.txt lists agree_of_subsingleton (no axioms),
+and disagree_possible, witness_minimum, witness_minimum_card, majority_three and no_majority_two with axioms
+[propext, Classical.choice, Quot.sound] only; no errors, no sorryAx. Compiling says the statements are true as formal
+sentences; whether they say what their names promise is a reading, and the paragraphs below say what they do not say.
 
 THE MODEL, AND WHY IT IS NOT CIRCULAR. The words of the sources are not formalised and cannot be: Deuteronomy 19:15
 ("one witness shall not rise up ... at the mouth of two witnesses, or at the mouth of three witnesses, shall the matter be
