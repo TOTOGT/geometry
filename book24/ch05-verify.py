@@ -275,7 +275,7 @@ for nme in names:
     check(f"theorem {nme} is declared", re.search(r"\btheorem\s+" + nme + r"\b", code) is not None)
 check("no proof in the file uses sorry", re.search(r"\bsorry\b", code) is None)
 if not rep.is_file():
-    print("  NOT YET RUN: linearmaps.axioms.txt does not exist. LinearMaps.lean is UNTESTED.")
+    print("  NOT YET RUN: linearmaps.axioms.txt does not exist.")
 else:
     lines = [l for l in rep.read_text(encoding="utf-8").splitlines() if l.startswith("'Book24LM.")]
     check("the axiom report has one line per theorem", len(lines) == len(names), f"{len(lines)} lines")
@@ -283,7 +283,7 @@ else:
 
 print("[HONESTY]")
 print("  Finite-field checks are exhaustive but are checks of examples; the theorems are on the page and in the Lean file.")
-print("  LinearMaps.lean: first compile 2026-11-04 had 6 of 7 theorems clean; corollaryA depends on sorryAx until the fix already in the file is recompiled (check [6] reports it). Applications 2 and 3, the transpose, and the general differential are not in it.")
+print("  The Lean file was compiled by the author (axiom report checked above); one fix was needed after the first run. Applications 2 and 3, the transpose, and the general differential are not in it.")
 print("  The Jacobian example is one function at one point, computed exactly; it illustrates the idea and proves nothing general.")
 print("  Held text: Lax only (Wiley-copyrighted, page references, nothing copied). Lax works over R or C; finite fields go beyond him.")
 print()

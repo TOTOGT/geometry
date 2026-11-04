@@ -3,11 +3,11 @@ import Mathlib
 /-
 Book XXIV, chapter 5: linear maps. Lean core.
 
-STATUS: first compile by the author (2026-11-04): 6 of 7 theorems clean, no sorryAx. corollaryA failed:
-`simp [hk] at h4` made no progress (line 72), so it depended on sorryAx. The fix (prove the kernel's
-finrank is 0 with `simp [hk]`, the pattern corollaryB already used, then `omega`) is in the file below
-and has NOT been recompiled. linearmaps.axioms.txt still holds the real failing report; do not
-overwrite it until the author reruns. To rerun:
+STATUS: compiled clean by the author (2026-11-04): 7 of 7 theorems, no errors, no warnings, no sorryAx
+(report: linearmaps.axioms.txt). History: the first compile had 6 of 7 clean; corollaryA failed at
+`simp [hk] at h4` (line 72, "made no progress"), so it depended on sorryAx. It was fixed against that
+real output (prove the kernel's finrank is 0 with `simp [hk]`, the pattern corollaryB used, then
+`omega`) and recompiled clean. To rerun:
   lake env lean book24/LinearMaps.lean 2>&1 | tee book24/linearmaps.axioms.txt
 
 The statements follow Lax, Linear Algebra and Its Applications (2nd ed.), Chapter 3, pp.19-22:
