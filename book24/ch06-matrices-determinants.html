@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 6 · Matrices, systems and determinants · Book XXIV · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090f;--panel:#0d111b;--ink:#e8ebf2;--dim:#7d869c;--rule:#1c2233;--gold:#d9b76a;--teal:#58c7d1;--serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.65}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.7rem 1.25rem;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;color:var(--dim)}
+header,.wrap{max-width:900px;margin:0 auto;padding-inline:1.25rem}
+header{padding-top:2.4rem;padding-bottom:1rem}
+.kick{font-family:var(--mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:500;font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.1;margin:.5rem 0 .8rem}h1 em{color:var(--gold)}
+.lede{color:#b9c0d1;font-style:italic;max-width:42rem}
+h2{font-weight:500;font-size:1.35rem;margin:2.2rem 0 .7rem;padding-bottom:.3rem;border-bottom:1px solid var(--rule)}
+p{margin-bottom:.9rem}
+.mono,code{font-family:var(--mono);font-size:.82em;color:var(--teal)}
+.eq{font-family:var(--mono);font-size:.88rem;background:var(--panel);border-left:2px solid var(--gold);padding:.7rem 1rem;margin:1rem 0;overflow-x:auto;white-space:pre}
+.box{border:1px solid var(--rule);background:var(--panel);padding:1rem 1.2rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}
+.box.warn{border-color:#5a4720}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;background:rgba(7,9,15,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);padding:.55rem 0;margin:1.6rem 0 .4rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.bar button{font:inherit;letter-spacing:inherit;text-transform:inherit;background:transparent;border:1px solid var(--rule);color:var(--dim);padding:.35rem .55rem;cursor:pointer}
+.bar button[aria-pressed="true"]{color:var(--c);border-color:var(--c)}
+.bar button.q{--c:var(--ink)}
+.layer{border-left:2px solid var(--c);padding:.1rem 0 .1rem 1rem;margin:.7rem 0 1rem;--c:var(--teal)}
+.layer>.tag{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--c);margin-bottom:.25rem}
+.layer[data-l="statement"]{--c:var(--gold)}.layer[data-l="proof"]{--c:#9aa3ba}.layer[data-l="remarks"]{--c:#b497d9}
+.bar [data-l="intuition"]{--c:var(--teal)}.bar [data-l="statement"]{--c:var(--gold)}.bar [data-l="proof"]{--c:#9aa3ba}.bar [data-l="remarks"]{--c:#b497d9}
+body.off-intuition .layer[data-l="intuition"],body.off-statement .layer[data-l="statement"],body.off-proof .layer[data-l="proof"],body.off-remarks .layer[data-l="remarks"]{display:none}
+ol.ex{padding-left:1.4rem}ol.ex li{margin-bottom:.6rem}
+.stage{max-width:1100px;margin:1.4rem auto 0;padding:0 1.25rem}
+.grid{display:grid;grid-template-columns:1fr 270px;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.cv{background:#04060a;position:relative;min-width:0}
+canvas{display:block;width:100%;height:min(60vh,500px);touch-action:none;cursor:grab}
+.hint{position:absolute;left:.7rem;bottom:.5rem;font-family:var(--mono);font-size:.56rem;color:#47506a;letter-spacing:.05em}
+.panel{background:var(--panel);padding:1.1rem;display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.btn{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem .6rem;background:transparent;border:1px solid var(--rule);color:var(--dim);cursor:pointer}
+.btn.on,.btn:hover{border-color:var(--teal);color:var(--teal)}
+.row{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.read{border-top:1px solid var(--rule);padding-top:.8rem;font-family:var(--mono);font-size:.64rem;line-height:1.9;color:var(--dim)}
+.read b{color:var(--gold);font-weight:500}
+footer{max-width:900px;margin:3rem auto 0;padding:1.2rem 1.25rem 3rem;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.9}
+@media(max-width:820px){.grid{grid-template-columns:1fr}canvas{height:50vh}}
+.nav{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;max-width:900px;margin:2.2rem auto 0;padding:1rem 1.25rem 0;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.75rem}
+.metagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.4rem 0;font-size:.8rem;line-height:1.5}.metagrid>div{background:var(--panel);padding:.7rem .9rem;min-width:0}.metagrid strong{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.25rem}select{font-family:var(--mono);font-size:.7rem;background:var(--bg);color:var(--ink);border:1px solid var(--rule);padding:.2rem .3rem}
+[hidden]{display:none!important}
+#vecs{display:flex;flex-direction:column;gap:.5rem}
+</style>
+</head>
+<body>
+<div class="top"><span><a href="index.html">Book XXIV contents</a> &middot; <a href="ch05-linear-maps.html">&larr; Chapter 5</a> &middot; <a href="../master-index.html">master index</a></span><span>Chapter 6 &middot; <a href="../book21/index.html">Book XXI &rarr;</a></span></div>
+<header>
+  <div class="kick">Principia Orthogona &middot; Book XXIV &middot; Linear and nonlinear &middot; Chapter 6</div>
+  <h1>Matrices, systems and <em>determinants</em></h1>
+  <p class="lede">A matrix is a linear map written down in a basis; multiplying matrices is composing maps. Elimination turns a system of equations into one you can read off. The determinant is the one number that says whether the map can be undone, and it multiplies when maps are composed.</p>
+</header>
+
+<div class="stage"><p class="mono" style="margin:0 0 .5rem;line-height:1.7"><strong style="color:var(--gold)">The object.</strong> A 2&times;2 matrix A over F<sub>p</sub>. Choose its four entries and read off its determinant ad &minus; bc, its rank, whether it has an inverse, and what happens to the determinant when A is multiplied by itself. The button counts all p<sup>4</sup> matrices and compares those with det &ne; 0 to the formula (p&sup2; &minus; 1)(p&sup2; &minus; p).</p>
+<div class="grid" style="grid-template-columns:1fr"><div class="panel">
+    <div class="row"><label for="pp">p</label><select id="pp"><option>2</option><option selected>3</option><option>5</option></select></div>
+    <div class="row"><span>a</span><select id="ma"></select><span>b</span><select id="mb"></select></div>
+    <div class="row"><span>c</span><select id="mc"></select><span>d</span><select id="md"></select></div>
+    <button class="btn on" id="count" type="button">Count invertible matrices</button>
+    <div class="read" id="read"></div>
+</div></div></div>
+
+<div class="wrap">
+<div class="metagrid"><div><strong>Held text</strong>Lax, <em>Linear Algebra and Its Applications</em> 2nd ed., Chapter 4: matrices pp.32&ndash;38, the product rule p.35, Gaussian elimination pp.39&ndash;43; Chapter 5: determinant pp.44&ndash;51, Theorem 2 p.49, Corollary 3 p.51, Cramer&rsquo;s rule and Theorem 7 pp.53&ndash;54, trace and Theorems 8 and 9 pp.55&ndash;56 (scan; page checks in the script)</div><div><strong>Claim type</strong>standard mathematics, no new results; the worked system is one example, not a theorem</div><div><strong>Lean</strong><a href="MatricesDet.lean">MatricesDet.lean</a>: nine statements, <strong>not yet compiled</strong></div><div><strong>Checks</strong><a href="ch06-verify.py">ch06-verify.py</a>: exhaustive finite-field tests, exact elimination, Cramer&rsquo;s rule</div></div>
+
+<div class="bar" id="bar" aria-label="Layers of the text"><span>layers</span>
+<button type="button" data-l="intuition" aria-pressed="true">Intuition</button>
+<button type="button" data-l="statement" aria-pressed="true">Statement</button>
+<button type="button" data-l="proof" aria-pressed="true">Proof</button>
+<button type="button" data-l="remarks" aria-pressed="true">Remarks</button>
+<button type="button" class="q" id="only">Intuition only</button><button type="button" class="q" id="all">All</button></div>
+
+<h2>1 &middot; A matrix is a linear map in a basis</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>To know a linear map on F<sup>n</sup> you only need to know what it does to the n unit vectors: everything else is a combination of those, and the map respects combinations. List the m coordinates of each image as a column and you have a table of numbers with n columns and m rows. Doing one map and then another is then a fixed recipe on the two tables, the product, and nothing more.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Correspondence (Lax, Chapter 4, pp.32&ndash;34)</span>Linear maps T: K<sup>n</sup> &rarr; K<sup>m</sup> correspond one to one with m&times;n matrices (t<sub>ij</sub>): T is given by (Tx)<sub>i</sub> = &Sigma;<sub>j</sub> t<sub>ij</sub> x<sub>j</sub>, and column j of the matrix is Te<sub>j</sub>.</div>
+<div class="box"><span class="lab">Rule of matrix multiplication (Lax p.35)</span>If T is m&times;n and S is l&times;m, the composed map ST has the l&times;n matrix with entries (ST)<sub>ik</sub> = &Sigma;<sub>j</sub> s<sub>ij</sub> t<sub>jk</sub>. Equivalently, (AB)v = A(Bv) for every vector v.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p>Let A be the matrix of T (columns Te<sub>j</sub>) and x = &Sigma;<sub>j</sub> x<sub>j</sub>e<sub>j</sub>. By linearity Tx = &Sigma;<sub>j</sub> x<sub>j</sub>Te<sub>j</sub>, whose ith coordinate is &Sigma;<sub>j</sub> t<sub>ij</sub>x<sub>j</sub>. Conversely that formula defines a linear map with columns Te<sub>j</sub>. For the product: the kth column of ST is S(Te<sub>k</sub>) = S(&Sigma;<sub>j</sub> t<sub>jk</sub>e<sub>j</sub>) = &Sigma;<sub>j</sub> t<sub>jk</sub> Se<sub>j</sub>, whose ith coordinate is &Sigma;<sub>j</sub> s<sub>ij</sub>t<sub>jk</sub>. &square;</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lax pp.32&ndash;35. Lean: <span class="mono">product_is_composition</span>, proved by Mathlib&rsquo;s <span class="mono">Matrix.mulVec_mulVec</span>; it checks the statement, not this proof, and the file has not been compiled yet. The script checks (AB)v = A(Bv) for every pair of 2&times;2 matrices over F<sub>2</sub> (256 pairs), over F<sub>3</sub> (6,561 pairs) and every pair of 3&times;3 matrices over F<sub>2</sub> (262,144 pairs), each on every vector. Control: over F<sub>3</sub>, with A = [[1,1],[0,1]] and B = [[1,0],[1,1]], AB = [[2,1],[1,1]] and BA = [[1,1],[1,2]]; matrix multiplication is not commutative, which is why the order in the rule matters.</p></div>
+
+<h2>2 &middot; Elimination, and what rank is</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>To solve a system, you add multiples of one equation to another until each unknown can be read off, swapping equations when a leading coefficient is zero. None of these moves changes the set of solutions, because each can be undone. What is left is a staircase, and the number of steps is the rank.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Gaussian elimination (Lax pp.39&ndash;43)</span>The three row operations (swap two equations, multiply one by a nonzero scalar, add a multiple of one to another) do not change the solution set of Ax = b. By these operations any matrix reaches echelon form; the number of pivots is the rank of A.</div>
+<div class="box"><span class="lab">Row rank = column rank (Lax, Chapter 3, Theorem 6, p.27, and his remark on p.28)</span>dim R<sub>T</sub> = dim R<sub>T&prime;</sub> for a linear map T and its transpose T&prime;; Lax notes (p.28) that this is the abstract form of the equality of row rank and column rank. In matrix terms: the dimension of the span of the rows equals the dimension of the span of the columns, so A and its transpose have the same rank.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Worked example</span>
+<p>Solve Ax = b with A = [[0,2,1],[1,1,1],[2,1,3]] and b = (4, 6, 11). The first pivot is zero, so swap rows 1 and 2: rows (1,1,1 | 6), (0,2,1 | 4), (2,1,3 | 11). Subtract 2&times;row 1 from row 3: (0,&minus;1,1 | &minus;1). Halve row 2: (0,1,&frac12; | 2). Add row 2 to row 3: (0,0,3/2 | 1). Back-substitute: x<sub>3</sub> = 2/3, x<sub>2</sub> = 2 &minus; (&frac12;)(2/3) = 5/3, x<sub>1</sub> = 6 &minus; 5/3 &minus; 2/3 = 11/3. Check in the original equations: 0 + 10/3 + 2/3 = 4, 11/3 + 5/3 + 2/3 = 6, 22/3 + 5/3 + 6/3 = 11. For the right-hand side (5, 6, 13) the same steps give x = (7/3, 4/3, 7/3).</p>
+<p>A singular case: [[1,2],[2,4]] has rank 1 (the second row is twice the first). The system with right-hand side (1, 2) is consistent and has a whole line of solutions; with (1, 3) the second equation contradicts the first and there is none. The proof that row rank equals column rank is Lax&rsquo;s (Theorem 6, p.27); the script checks it, below, on every matrix of the stated sizes.</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lean: <span class="mono">rank_transpose_eq</span>, Mathlib&rsquo;s <span class="mono">Matrix.rank_transpose</span>. The file does not state elimination itself. The script solves the worked system in exact rational arithmetic (x = (11/3, 5/3, 2/3), one row swap) and by substitution, and checks row rank = column rank, together with |range| = p<sup>rank</sup>, for every 2&times;3 and 3&times;2 matrix over F<sub>2</sub> and F<sub>3</sub> and every 3&times;3 matrix over F<sub>2</sub> (64 + 64 + 729 + 729 + 512 matrices). This is the link to chapter 5: the range of a matrix has p<sup>rank</sup> elements.</p></div>
+
+<h2>3 &middot; The determinant</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>Over the reals the determinant of an n&times;n matrix is the factor by which the map scales volume, with a sign for whether it flips orientation. Two things follow at once: composing two maps multiplies the factors, and a map that squashes volume to zero cannot be undone. Over a finite field there is no volume, but the algebra survives: a formula for det that is linear in each column, changes sign when two columns are swapped, and is 1 on the identity.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Definition (the Leibniz formula)</span>det A = &Sigma;<sub>&pi;</sub> sign(&pi;) a<sub>1&pi;(1)</sub> a<sub>2&pi;(2)</sub> &hellip; a<sub>n&pi;(n)</sub>, summed over all n! permutations &pi;. Properties (Lax pp.44&ndash;48): it is linear in each column, changes sign when two columns are swapped, and det I = 1.</div>
+<div class="box"><span class="lab">Theorem 2 (Lax p.49)</span>For all n&times;n matrices A and B, det(BA) = det A &middot; det B.</div>
+<div class="box"><span class="lab">Corollary 3 and its converse (Lax p.51; over a field)</span>A is invertible if and only if det A &ne; 0.</div>
+<div class="box"><span class="lab">Count (not in Lax)</span>The number of invertible n&times;n matrices over F<sub>p</sub> is (p<sup>n</sup> &minus; 1)(p<sup>n</sup> &minus; p) &hellip; (p<sup>n</sup> &minus; p<sup>n&minus;1</sup>): 6 for n = 2, p = 2; 48 for n = 2, p = 3; 168 for n = 3, p = 2; 11,232 for n = 3, p = 3.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p><strong>Theorem 2, in the 2&times;2 case, by expansion.</strong> Let A = [[a,b],[c,d]] and B = [[e,f],[g,h]]. Then BA = [[ea + fc, eb + fd],[ga + hc, gb + hd]], and (ea + fc)(gb + hd) &minus; (eb + fd)(ga + hc) = eahd + fcgb &minus; ebhc &minus; fdga (the terms eagb and ebga, and fchd and fdhc, cancel in pairs) = (ad &minus; bc)(eh &minus; fg). In general both sides, as functions of the columns of A, are linear in each column, change sign when two columns are swapped, and agree (to det B) at A = I; such a function is unique up to its value at I, which is Lax&rsquo;s argument on p.49.</p>
+<p><strong>Corollary 3.</strong> If AB = I then det A det B = det I = 1, so det A &ne; 0. Conversely, if det A &ne; 0 then A(adj A) = (det A)I (Section 4), so A has the inverse (det A)<sup>&minus;1</sup> adj A. &square;</p>
+<p><strong>The count.</strong> A matrix is invertible exactly when its columns form a basis, and the columns can be chosen one at a time: the first is any nonzero vector (p<sup>n</sup> &minus; 1 choices), the second any vector outside the line of the first (p<sup>n</sup> &minus; p), the third outside the plane of the first two (p<sup>n</sup> &minus; p<sup>2</sup>), and so on.</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lax pp.44&ndash;51. Lean: <span class="mono">det_product</span>, <span class="mono">invertible_iff_det_ne_zero</span> (Mathlib&rsquo;s <span class="mono">Matrix.det_mul</span> and <span class="mono">Matrix.isUnit_iff_isUnit_det</span>), not yet compiled. The script checks the Leibniz formula against cofactor expansion on 200 random integer 4&times;4 matrices (fixed seed); det(BA) = det A det B for every pair of 2&times;2 matrices over F<sub>2</sub> (256 pairs), F<sub>3</sub> (6,561), F<sub>5</sub> (390,625) and every pair of 3&times;3 over F<sub>2</sub> (262,144); that a matrix has an inverse, found by search, exactly when det &ne; 0 (2&times;2 over F<sub>2</sub> and F<sub>3</sub>, 3&times;3 over F<sub>2</sub>); the four counts above; and that swapping the rows of [[1,2],[3,4]] changes det from &minus;2 to 2. <strong>Controls:</strong> det(I + I) = 4 but det I + det I = 2, so the determinant is not additive; and 3&times;3 over F<sub>3</sub> has 11,232 matrices with det &ne; 0, not 3<sup>9</sup>/2.</p></div>
+
+<h2>4 &middot; Cramer&rsquo;s rule and the inverse by cofactors</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>The determinant also gives a closed formula for the solution of a square system. It is a good way to see how the answer depends on the data, and a poor way to compute one: the Leibniz formula has n! terms, and elimination does the same job in far fewer steps.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Cramer&rsquo;s rule and Theorem 7 (Lax pp.53&ndash;54)</span>If det A &ne; 0, the solution of Ax = b has x<sub>k</sub> = det A<sub>k</sub> / det A, where A<sub>k</sub> is A with column k replaced by b. The inverse is A<sup>&minus;1</sup> = adj(A) / det A, where adj(A)<sub>ij</sub> = (&minus;1)<sup>i+j</sup> times the determinant of A with row j and column i removed.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Worked example</span>
+<p>For the matrix of Section 2, det A = &minus;3 and adj(A) = [[2,&minus;5,1],[&minus;1,&minus;2,1],[&minus;1,4,&minus;2]]; multiplying out, A adj(A) = &minus;3I. For b = (4, 6, 11), replacing columns of A by b in turn and dividing by &minus;3 gives x = (11/3, 5/3, 2/3), the same answer elimination gave. The proof of the rule is Lax&rsquo;s (p.54): expanding det A<sub>k</sub> along column k and using that a determinant with two equal columns is zero.</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lean: <span class="mono">cramer_solves</span> states A(cramer A b) = (det A)&middot;b, from Mathlib&rsquo;s <span class="mono">Matrix.mulVec_cramer</span>; it does not need det A &ne; 0, and it is uncompiled. The script checks the example in exact arithmetic: Cramer&rsquo;s quotients equal the elimination solution, A adj(A) = det A &middot; I with the adjugate above, and A<sup>&minus;1</sup>b = x. <strong>Control:</strong> [[1,2],[2,4]] has determinant 0, so the rule has nothing to divide by.</p></div>
+
+<h2>5 &middot; Trace, and what similar matrices share</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>Changing the basis changes the matrix of a map to P A P<sup>&minus;1</sup>. Quantities that mean something about the map itself, not the basis, must survive that change. The determinant does, by Theorem 2. The sum of the diagonal entries does too, because it does not care about the order of a product.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Theorems 8 and 9 (Lax pp.55&ndash;56)</span>tr A = &Sigma; a<sub>ii</sub> is linear, and tr(AB) = tr(BA). Similar matrices, A and P A P<sup>&minus;1</sup> with P invertible, have the same determinant and the same trace.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p>tr(AB) = &Sigma;<sub>i</sub> &Sigma;<sub>k</sub> a<sub>ik</sub>b<sub>ki</sub>, and swapping the names of the summation indices gives &Sigma;<sub>k</sub> &Sigma;<sub>i</sub> b<sub>ki</sub>a<sub>ik</sub> = tr(BA). Then tr(P A P<sup>&minus;1</sup>) = tr(A P<sup>&minus;1</sup>P) = tr A, and det(P A P<sup>&minus;1</sup>) = det P det A det P<sup>&minus;1</sup> = det A, because det P det P<sup>&minus;1</sup> = det I = 1. &square;</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lean: <span class="mono">trace_comm</span> (<span class="mono">Matrix.trace_mul_comm</span>) and <span class="mono">similar_det</span> (<span class="mono">Matrix.det_conj</span>), uncompiled. The script checks tr(AB) = tr(BA) for all 262,144 pairs of 3&times;3 matrices over F<sub>2</sub>, and, over F<sub>3</sub>, that P A P<sup>&minus;1</sup> has the same determinant and trace as A for all 48 invertible P and all 81 matrices A (3,888 cases). <strong>Controls:</strong> tr(AB) is not tr A &middot; tr B (for A = B = I: 2 against 4); and the converse of Theorem 9 is false: over F<sub>3</sub>, I and [[1,1],[0,1]] have the same determinant and trace, but every conjugate of I is I itself, so the two are not similar.</p></div>
+
+<h2>6 &middot; Which fields</h2>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lax works over the reals or complex numbers, and his motivation for the determinant is volume. The algebra in Sections 1 to 5 uses only that the entries lie in a field (the Leibniz formula, Theorem 2 and the trace results hold over any commutative ring; the equivalence in Corollary 3 needs a field; over a general commutative ring the condition is that det A is a unit). The finite-field checks therefore say something about those statements and nothing about the volume interpretation, which needs the reals.</p></div>
+
+<h2>7 &middot; Exercises</h2>
+<ol class="ex">
+<li>Multiply the matrices of Section 1, [[1,1],[0,1]] and [[1,0],[1,1]], in both orders over the integers, and find a pair of 2&times;2 matrices that does commute and is not diagonal.</li>
+<li>Solve the system of Section 2 with right-hand side (1, 0, 0) by elimination, then by Cramer&rsquo;s rule, then by multiplying by the adjugate divided by &minus;3. The three answers must agree; the third column of A<sup>&minus;1</sup> comes out as the solution for (0, 0, 1).</li>
+<li>Over F<sub>2</sub>, list the six invertible 2&times;2 matrices and verify that their determinants are all 1. Why must the determinant of an invertible matrix over F<sub>2</sub> be 1?</li>
+<li>Show that a 2&times;2 matrix over F<sub>p</sub> is invertible exactly when its columns are linearly independent (neither is zero and neither is a multiple of the other), and count them: (p&sup2; &minus; 1)(p&sup2; &minus; p). Compare with the plate for p = 5 (480).</li>
+<li>Prove det(P A P<sup>&minus;1</sup>) = det A in one line from Theorem 2.</li>
+<li>Find two 2&times;2 matrices over the rationals with the same determinant and trace that are not similar, other than the pair in Section 5.</li>
+<li>Rank&ndash;nullity (chapter 5) says dim N + dim R = n. For the singular matrix [[1,2],[2,4]], find N and R and check it.</li>
+<li>Compute the determinant of a 3&times;3 matrix by the Leibniz formula (six terms) and by elimination, and count the multiplications each takes.</li>
+</ol>
+</div>
+
+<div class="nav"><a href="ch05-linear-maps.html">&larr; Chapter 5</a><a href="index.html">&uarr; Contents</a><span class="mono" style="color:var(--dim)">Chapter 7 planned</span></div>
+<footer>
+<strong style="color:var(--gold)">Status.</strong> Sections 1 to 5 state and prove, or reference to Lax, the standard results on matrices, elimination, the determinant, Cramer&rsquo;s rule, trace and similarity; the 2&times;2 case of Theorem 2 is expanded here, and the worked system is one example. Checked by <a class="mono" href="ch06-verify.py">ch06-verify.py</a> (exhaustive over every matrix or pair in the stated finite-field families, exact rational arithmetic for the worked system and Cramer&rsquo;s rule, page references into Lax). <a class="mono" href="MatricesDet.lean">MatricesDet.lean</a> states nine results (seven theorems and two controls) and <strong>has not been compiled</strong>: it was written without a Lean toolchain, and its lemma names are from memory. Most of its proofs are calls to Mathlib, so once it compiles it checks that Lax&rsquo;s statements are true, not that the proofs on this page are right. Held text: Lax only; a scan, so its page checks match short phrases. Nothing is copied from Lax. Standard results, no new claims.
+</footer>
+
+<script>
+(function(){
+  var body=document.body,bar=document.getElementById('bar');
+  function set(l,on){body.classList.toggle('off-'+l,!on);var b=bar.querySelector('button[data-l="'+l+'"]');if(b)b.setAttribute('aria-pressed',on?'true':'false')}
+  bar.querySelectorAll('button[data-l]').forEach(function(b){b.onclick=function(){set(b.dataset.l,b.getAttribute('aria-pressed')!=='true')}});
+  document.getElementById('only').onclick=function(){['intuition','statement','proof','remarks'].forEach(function(l){set(l,l==='intuition')})};
+  document.getElementById('all').onclick=function(){['intuition','statement','proof','remarks'].forEach(function(l){set(l,true)})};
+
+  var rd=document.getElementById('read'),sp=document.getElementById('pp');
+  var ids=['ma','mb','mc','md'],sel=ids.map(function(i){return document.getElementById(i)});
+  var p=3,M=[1,1,0,1],note='';
+  function md(x){return ((x%p)+p)%p}
+  function det(A){return md(A[0]*A[3]-A[1]*A[2])}
+  function inv(x){for(var y=1;y<p;y++)if(md(x*y)===1)return y;return 0}
+  function rank(A){if(A.every(function(v){return v===0}))return 0;return det(A)!==0?2:1}
+  function sq(A){return [md(A[0]*A[0]+A[1]*A[2]),md(A[0]*A[1]+A[1]*A[3]),md(A[2]*A[0]+A[3]*A[2]),md(A[2]*A[1]+A[3]*A[3])]}
+  function fill(){
+    sel.forEach(function(s,i){
+      s.innerHTML='';
+      for(var v=0;v<p;v++){var o=document.createElement('option');o.textContent=v;s.appendChild(o)}
+      M[i]=Math.min(M[i],p-1);s.selectedIndex=M[i];
+      s.onchange=function(){M[i]=+s.value;note='';show()};
+    });
+  }
+  function show(){
+    var d=det(M),r=rank(M),S=sq(M),h='';
+    h+='A = [['+M[0]+','+M[1]+'],['+M[2]+','+M[3]+']] over F<sub>'+p+'</sub><br>';
+    h+='det A = ad &minus; bc = <b>'+d+'</b> &middot; rank = <b>'+r+'</b> &middot; '+(d!==0?'<b>invertible</b>':'<b>not invertible</b>')+'<br>';
+    if(d!==0){var di=inv(d);h+='inverse = [['+md(M[3]*di)+','+md(-M[1]*di)+'],['+md(-M[2]*di)+','+md(M[0]*di)+']]<br>'}
+    h+='A&sup2; = [['+S[0]+','+S[1]+'],['+S[2]+','+S[3]+']], det A&sup2; = <b>'+det(S)+'</b> = (det A)&sup2; = <b>'+md(d*d)+'</b><br>';
+    rd.innerHTML=h+note;
+  }
+  sp.onchange=function(){p=+sp.value;note='';fill();show()};
+  document.getElementById('count').onclick=function(){
+    var n=0,a,b,c,d;
+    for(a=0;a<p;a++)for(b=0;b<p;b++)for(c=0;c<p;c++)for(d=0;d<p;d++)if(md(a*d-b*c)!==0)n++;
+    note='<br>counted '+n+' of '+Math.pow(p,4)+' matrices with det &ne; 0; formula (p&sup2;&minus;1)(p&sup2;&minus;p) = <b>'+((p*p-1)*(p*p-p))+'</b>';
+    show();
+  };
+  fill();show();
+})();
+</script>
+</body>
+</html>
