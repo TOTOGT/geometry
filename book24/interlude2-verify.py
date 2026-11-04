@@ -286,7 +286,7 @@ elif "sorryAx" in _rr or "error" in _rr.lower():
     check("ReyeAlgebra.lean: report shows only threshold_three with sorryAx, and the page says three of four clean and the rewrite not recompiled",
           len(_bad) == 1 and "threshold_three" in _bad[0] and "three of the four theorems are clean" in _tx and "not been recompiled" in _tx)
 else:
-    check("ReyeAlgebra.lean: clean report, page says so", "all four" in _tx and "three of the four" not in _tx)
+    check("ReyeAlgebra.lean: clean report with all four theorems, page says all four clean", all(("Book24Re." + n) in _rr for n in ("branch_agree","branch_agree_d","threshold_three","plus_branch_positive")) and "all four theorems are clean" in _tx and "three of the four" not in _tx)
 if not _wr:
     check("Witness.lean: no report, page says untested", "The file is untested" in _tx)
 elif "sorryAx" in _wr or "error" in _wr.lower():

@@ -4,11 +4,11 @@ import Mathlib
 Book XXIV, Interlude 2: the algebra of the limiting blow-up speed r_eye (Merle, Raphael, Rodnianski, Szeftel,
 arXiv:1912.11009v2, eq. (1.4), (1.8), (1.16); read on the typeset pages 4 and 5).
 
-STATUS: COMPILED 2026-11-04, THREE OF FOUR CLEAN. The first run accepted `branch_agree`, `branch_agree_d` and
-`plus_branch_positive` (axioms propext, Classical.choice, Quot.sound only) and failed on `threshold_three`: `div_lt_div_iff`
-is not a Mathlib name any more ("Unknown identifier"), so that theorem carries sorryAx. Its proof has been rewritten
-without any renamed lemma (the two fractions are cleared with `field_simp`, then linear arithmetic); the rewrite has NOT
-been compiled. Recompile with `lake env lean book24/ReyeAlgebra.lean 2>&1 | tee book24/reye.axioms.txt`.
+STATUS: COMPILED 2026-11-04, ALL FOUR CLEAN. The report reye.axioms.txt lists all four theorems with axioms
+[propext, Classical.choice, Quot.sound] only and no sorryAx. History: the first run failed on `threshold_three`
+because `div_lt_div_iff` is no longer a Mathlib name; the rewrite (fractions cleared with `field_simp`, then linear
+arithmetic) compiled. The report also holds two deprecation warnings for `push_neg` (newer Mathlib prefers `push Not`);
+they are not errors.
 
 WHAT IT STATES (real-number algebra only):
   branch_agree / branch_agree_d   the two branches r_* and r_+ of r_eye are equal at l = d, for every d > 0
