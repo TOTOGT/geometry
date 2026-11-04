@@ -273,6 +273,14 @@ check("page states the formula, the source arXiv:1912.11009, the typeset-page pr
       "arXiv:1912.11009" in _tx and "typeset pages 4 and 5" in _tx and "quoted from the review" in _tx and "not recomputed" in _tx and "Part I was not read" in _tx)
 check("page attributes l > 3 to lost radicals in a text extraction, not to a different version of the paper", "extraction loss, not a difference in the paper" in _tx and "versions of the paper differ" not in _tx)
 
+check("page says the r_eye derivation is floating point, does not resolve the l > d branch, and that ReyeAlgebra.lean is not compiled unless a report exists",
+      "reye-derive.py" in _tx and "nothing is claimed about that branch" in _tx and "does not prove that smooth self-similar profiles exist" in _tx
+      and (("has not been compiled" in _tx) == (not (lambda f: f.exists() and f.read_text(encoding="utf-8").strip() != "")(Path(__file__).resolve().parent / "reye.axioms.txt"))))
+
+check("page 5d links Witness.lean, states the agreement is not blind, and says the file is untested unless a report exists",
+      "Witness.lean" in _tx and "It is not blind" in _tx and "two routes meet, not that either is right about the fluid" in _tx
+      and (("The file is untested" in _tx) == (not (lambda f: f.exists() and f.read_text(encoding="utf-8").strip() != "")(Path(__file__).resolve().parent / "witness.axioms.txt"))))
+
 print()
 print("ALL PASS" if not FAIL else f"{len(FAIL)} FAILED: {FAIL}")
 sys.exit(1 if FAIL else 0)

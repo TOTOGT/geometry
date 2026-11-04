@@ -3,14 +3,13 @@ import Mathlib
 /-
 Book XXIV, chapter 9: the numerical side (norms, singular values, conditioning). Lean core.
 
-STATUS: COMPILED 2026-11-04, NINE OF TEN CLEAN. The first run (output in numerical.axioms.txt) accepted the first nine
-theorems with axioms [propext, Classical.choice, Quot.sound] only, and failed on `control_hilbert3_inverse`: the `simp`
-step left `![9, -36, 30] 2` and the `vecCons ... 2` terms unevaluated, so nine goals stayed open and the theorem
-carries sorryAx. The proof of that one theorem has since been replaced (a `first` over `Matrix.mul_fin_three` and a
-`simp` with `Matrix.vecHead`/`Matrix.vecTail`); the replacement has NOT been compiled. Two lint warnings in the first run
-say the fallback alternatives in `opNorm_comp_le` and `gram_same_nonzero_spectrum` never ran: the first alternative
-worked in both, so the fallbacks are harmless and can be dropped. Recompile with
-`lake env lean book24/Numerical.lean 2>&1 | tee book24/numerical.axioms.txt` and read the real output.
+STATUS: COMPILED 2026-11-04, TEN OF TEN CLEAN. The report numerical.axioms.txt lists all ten theorems with axioms
+[propext, Classical.choice, Quot.sound] only and no sorryAx. History: the first run accepted nine and failed on
+`control_hilbert3_inverse` (the `simp` step left `![9, -36, 30] 2` unevaluated); a first replacement left
+`!![1, 0, 0; 0, 1, 0; 0, 0, 1] = 1` open and `first` kept that branch; the second replacement (rewrite with
+`Matrix.mul_fin_three` and `Matrix.one_fin_three`, `done`-guarded alternatives) closed it. The report also holds lint
+warnings: the fallback alternatives in `opNorm_comp_le`, `gram_same_nonzero_spectrum` and the control never ran, so
+they are harmless and can be dropped.
 
 The statements follow Lax, Linear Algebra and Its Applications (2nd ed.), Chapters 7, 10 and 17 (scan page = printed + 17):
   opNorm_le                    p.90   |Az| <= |A| |z|                                    Theorem 13 (33)
@@ -105,7 +104,8 @@ theorem control_hilbert3_inverse :
     (!![(9 : ℚ), -36, 30; -36, 192, -180; 30, -180, 180]) *
       (!![(1 : ℚ), 1 / 2, 1 / 3; 1 / 2, 1 / 3, 1 / 4; 1 / 3, 1 / 4, 1 / 5]) = 1 := by
   first
-  | (rw [Matrix.mul_fin_three]; norm_num [Matrix.one_fin_three])
+  | (rw [Matrix.mul_fin_three, Matrix.one_fin_three]; norm_num; done)
+  | (rw [Matrix.mul_fin_three]; norm_num; exact Matrix.one_fin_three.symm)
   | (ext i j
      fin_cases i <;> fin_cases j <;>
        simp [Matrix.mul_apply, Fin.sum_univ_three, Matrix.vecHead, Matrix.vecTail] <;> norm_num)
