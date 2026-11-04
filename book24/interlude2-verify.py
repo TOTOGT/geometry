@@ -236,6 +236,27 @@ if txt:
     check("page says the Lean file does not formalise the equation (virial identity and GN enter as hypotheses)", "hypotheses" in txt and "not formalised" in txt)
     check("page makes no claim about the cause of the Titan failure and gives no design guidance", "no claim about its cause" in txt and "guidance for building or diving" in txt)
 
+print("[8] the two figures (floating-point numerics; read from interlude2-figs.json, recompute with interlude2-figs.py)")
+import json, math as _m
+jf = Path(__file__).resolve().parent / "interlude2-figs.json"
+if not jf.exists():
+    print("  NOTE: no interlude2-figs.json; the figures have not been computed")
+else:
+    d = json.loads(jf.read_text(encoding="utf-8")); pos, neg, lat = d["pos"], d["neg"], d["lattice"]
+    check("figure 1, E > 0: computed y matches y(0) + 8 E t^2 (relative gap < 1e-5) and E is conserved (< 1e-8)", pos["maxrel"] < 1e-5 and pos["Edrift"] < 1e-8, f"gap {pos['maxrel']:.1e}, drift {pos['Edrift']:.1e}")
+    check("figure 1, E < 0: same on 0 <= t <= 0.3 t* (gap < 1e-8, E drift < 1e-6), and the peak only grows modestly (< 5)", neg["maxrel"] < 1e-8 and neg["Edrift"] < 1e-6 and neg["peak"] < 5, f"gap {neg['maxrel']:.1e}, drift {neg['Edrift']:.1e}, peak {neg['peak']:.2f}")
+    check("figure 1: both runs satisfy kmax^2 dt < pi (split-step stability) and E < 0 gives a finite zero t* = sqrt(y0/(-8E))",
+          pos["stab"] < _m.pi and neg["stab"] < _m.pi and neg["E"] < 0 and abs(neg["tstar"] - _m.sqrt(neg["y0"] / (-8 * neg["E"]))) < 1e-9 and abs(neg["T"] - 0.3 * neg["tstar"]) < 1e-3 * neg["tstar"])
+    check("figure 2: mass drift < 1e-6, fractions in [0, 1], small at Lambda = 0.5 (< 0.05), large at Lambda = 12 (> 0.9), and increasing from Lambda = 3.5 on",
+          lat["mass_drift_final"] < 1e-6 and all(0 <= f <= 1 for f in lat["fraction"]) and lat["fraction"][0] < 0.05 and lat["fraction"][-1] > 0.9
+          and all(lat["fraction"][i] <= lat["fraction"][i + 1] for i in range(lat["Lambda"].index(3.5), len(lat["fraction"]) - 1)))
+    ftxt = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", page_html)) if "page_html" in globals() else None
+    if ftxt is None:
+        ftxt = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", (Path(__file__).resolve().parent / "interlude2-frank-merle-blow-up.html").read_text(encoding="utf-8")))
+    check("page prints the stored figure numbers (t* and the gaps) and calls t* the latest possible time, not the collapse time",
+          f"{neg['tstar']:.4f}" in ftxt and f"{pos['maxdev']:.1e}" in ftxt and f"{neg['maxdev']:.1e}" in ftxt and "latest" in ftxt and "the collapse time the argument predicts" not in ftxt)
+    check("page says the failed part of the run is not plotted and is not evidence of blow-up", "that part is not plotted" in ftxt and "it does not show it" in ftxt)
+
 print()
 print("ALL PASS" if not FAIL else f"{len(FAIL)} FAILED: {FAIL}")
 sys.exit(1 if FAIL else 0)

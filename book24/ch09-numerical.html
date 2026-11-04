@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 9 · Norms, singular values and conditioning · Book XXIV · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090f;--panel:#0d111b;--ink:#e8ebf2;--dim:#7d869c;--rule:#1c2233;--gold:#d9b76a;--teal:#58c7d1;--serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.65}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.7rem 1.25rem;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;color:var(--dim)}
+header,.wrap{max-width:900px;margin:0 auto;padding-inline:1.25rem}
+header{padding-top:2.4rem;padding-bottom:1rem}
+.kick{font-family:var(--mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:500;font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.1;margin:.5rem 0 .8rem}h1 em{color:var(--gold)}
+.lede{color:#b9c0d1;font-style:italic;max-width:42rem}
+h2{font-weight:500;font-size:1.35rem;margin:2.2rem 0 .7rem;padding-bottom:.3rem;border-bottom:1px solid var(--rule)}
+p{margin-bottom:.9rem}
+.mono,code{font-family:var(--mono);font-size:.82em;color:var(--teal)}
+.eq{font-family:var(--mono);font-size:.88rem;background:var(--panel);border-left:2px solid var(--gold);padding:.7rem 1rem;margin:1rem 0;overflow-x:auto;white-space:pre}
+.box{border:1px solid var(--rule);background:var(--panel);padding:1rem 1.2rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}
+.box.warn{border-color:#5a4720}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;background:rgba(7,9,15,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);padding:.55rem 0;margin:1.6rem 0 .4rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.bar button{font:inherit;letter-spacing:inherit;text-transform:inherit;background:transparent;border:1px solid var(--rule);color:var(--dim);padding:.35rem .55rem;cursor:pointer}
+.bar button[aria-pressed="true"]{color:var(--c);border-color:var(--c)}
+.bar button.q{--c:var(--ink)}
+.layer{border-left:2px solid var(--c);padding:.1rem 0 .1rem 1rem;margin:.7rem 0 1rem;--c:var(--teal)}
+.layer>.tag{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--c);margin-bottom:.25rem}
+.layer[data-l="statement"]{--c:var(--gold)}.layer[data-l="proof"]{--c:#9aa3ba}.layer[data-l="remarks"]{--c:#b497d9}
+.bar [data-l="intuition"]{--c:var(--teal)}.bar [data-l="statement"]{--c:var(--gold)}.bar [data-l="proof"]{--c:#9aa3ba}.bar [data-l="remarks"]{--c:#b497d9}
+body.off-intuition .layer[data-l="intuition"],body.off-statement .layer[data-l="statement"],body.off-proof .layer[data-l="proof"],body.off-remarks .layer[data-l="remarks"]{display:none}
+ol.ex{padding-left:1.4rem}ol.ex li{margin-bottom:.6rem}
+.stage{max-width:1100px;margin:1.4rem auto 0;padding:0 1.25rem}
+.grid{display:grid;grid-template-columns:1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.panel{background:var(--panel);padding:1.1rem;display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.btn{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem .6rem;background:transparent;border:1px solid var(--rule);color:var(--dim);cursor:pointer}
+.btn.on,.btn:hover{border-color:var(--teal);color:var(--teal)}
+.row{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.read{border-top:1px solid var(--rule);padding-top:.8rem;font-family:var(--mono);font-size:.64rem;line-height:1.9;color:var(--dim);overflow-wrap:anywhere}
+.read b{color:var(--gold);font-weight:500}
+footer{max-width:900px;margin:3rem auto 0;padding:1.2rem 1.25rem 3rem;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.9}
+.nav{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;max-width:900px;margin:2.2rem auto 0;padding:1rem 1.25rem 0;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.75rem}
+.metagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.4rem 0;font-size:.8rem;line-height:1.5}.metagrid>div{background:var(--panel);padding:.7rem .9rem;min-width:0}.metagrid strong{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.25rem}select{font-family:var(--mono);font-size:.7rem;background:var(--bg);color:var(--ink);border:1px solid var(--rule);padding:.2rem .3rem}
+.mono{overflow-wrap:anywhere}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="top"><span><a href="index.html">Book XXIV contents</a> &middot; <a href="ch08-inner-products.html">&larr; Chapter 8</a> &middot; <a href="../master-index.html">master index</a></span><span>Chapter 9 &middot; <a href="../book21/index.html">Book XXI &rarr;</a></span></div>
+<header>
+  <div class="kick">Principia Orthogona &middot; Book XXIV &middot; Linear and nonlinear &middot; Chapter 9</div>
+  <h1>Norms, singular values and <em>conditioning</em></h1>
+  <p class="lede">A matrix turns the unit circle into an ellipse. The longest axis of that ellipse is the size of the matrix, the shortest is the size of its inverse, and their ratio, the condition number, says how much a small error in the data of a linear system can be magnified in its answer. This chapter proves that, and shows that it is why solving least squares through the normal equations loses digits.</p>
+</header>
+
+<div class="stage"><p class="mono" style="margin:0 0 .5rem;line-height:1.7"><strong style="color:var(--gold)">The object.</strong> A real 2&times;2 matrix A = [[a,b],[c,d]]. Choose a, b, c, d and read off F (the sum of the squares of the entries), the determinant D, the two singular values, and the condition number K. The button counts the 2401 matrices with entries &minus;3..3.</p>
+<div class="grid"><div class="panel">
+    <div class="row"><span>a</span><select id="ma"></select><span>b</span><select id="mb"></select><span>c</span><select id="mc"></select><span>d</span><select id="md"></select></div>
+    <button class="btn on" id="count" type="button">Count the 2401 matrices with entries &minus;3..3</button>
+    <div class="read" id="read"></div>
+</div></div></div>
+
+<div class="wrap">
+<div class="metagrid"><div><strong>Held text</strong>Lax, <em>Linear Algebra and Its Applications</em> 2nd ed.: Chapter 7, the norm of a map and Theorems 13 to 15 (pp.89&ndash;91); Chapter 8, Theorem 13, the norm is the square root of the largest eigenvalue of A*A (p.119); Chapter 10, Theorem 22 (polar decomposition), the singular value decomposition and Exercises 13 and 14 (pp.169&ndash;171); Chapter 17, sensitivity and the condition number (pp.247&ndash;248) (scan; page checks in the script)</div><div><strong>Claim type</strong>standard mathematics, no new results; the pseudoinverse (section 4) and the Hilbert matrix (section 5) are not in the held text, and say so where they appear</div><div><strong>Lean</strong><a href="Numerical.lean">Numerical.lean</a>: ten statements, <strong>not yet compiled</strong></div><div><strong>Checks</strong><a href="ch09-verify.py">ch09-verify.py</a>: exact arithmetic, exhaustive finite families, a few steps in 60-digit decimal, page references</div></div>
+
+<div class="bar" id="bar" aria-label="Layers of the text"><span>layers</span>
+<button type="button" data-l="intuition" aria-pressed="true">Intuition</button>
+<button type="button" data-l="statement" aria-pressed="true">Statement</button>
+<button type="button" data-l="proof" aria-pressed="true">Proof</button>
+<button type="button" data-l="remarks" aria-pressed="true">Remarks</button>
+<button type="button" class="q" id="only">Intuition only</button><button type="button" class="q" id="all">All</button></div>
+
+<h2>1 &middot; The size of a map</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>Feed every unit vector to A. The outputs trace an ellipse (a line segment if A is singular). The longest output is the size of A, written |A|: the most that A can stretch anything. It is the right yardstick for a map because it bounds every single output: no vector is stretched by more than |A|.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Definition and Theorems 13 and 14 (Lax pp.89&ndash;91)</span>|A| = max |Ax| over unit vectors x. Then |Az| &le; |A||z| for every z; |A + B| &le; |A| + |B|; |CA| &le; |C||A|; and |A<sup>T</sup>| = |A|.</div>
+<div class="box"><span class="lab">Theorem 15 (Lax p.91)</span>If A is invertible and |A &minus; B| &lt; 1/|A<sup>-1</sup>|, then B is invertible.</div>
+<div class="box"><span class="lab">The norm in terms of eigenvalues (Lax p.119, Chapter 8, Theorem 13)</span>|A| is the square root of the largest eigenvalue of A<sup>T</sup>A. For a 2&times;2 matrix, with F the sum of the squares of its entries and D its determinant, |A|&sup2; = (F + &radic;(F&sup2; &minus; 4D&sup2;))/2.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p><strong>The inequality.</strong> For z = 0 it is trivial. Otherwise z = |z|u with u a unit vector, so |Az| = |z||Au| &le; |z||A|. <strong>Products.</strong> |CAx| &le; |C||Ax| &le; |C||A||x|; take the maximum over unit x. <strong>Transpose.</strong> (Ax, v) = (x, A<sup>T</sup>v), and |A| is the maximum of (Ax, v) over unit x and v (Lax p.90, from Theorem 2 of Chapter 7); the right-hand side gives |A<sup>T</sup>| in the same way.</p>
+<p><strong>Theorem 15.</strong> Put C = A &minus; B, so B = A &minus; C = A(I &minus; A<sup>-1</sup>C), and |A<sup>-1</sup>C| &le; |A<sup>-1</sup>||C| &lt; 1. If Bx = 0 then x = A<sup>-1</sup>Cx, so |x| &le; |A<sup>-1</sup>C||x|, which forces x = 0. So B has no kernel, and a square matrix with no kernel is invertible. The argument is Lax&rsquo;s.</p>
+<p><strong>The eigenvalue formula.</strong> |Ax|&sup2; = (A<sup>T</sup>Ax, x). By the spectral theorem of Chapter 8, A<sup>T</sup>A is symmetric, so this is at most &lambda;|x|&sup2;, where &lambda; is its largest eigenvalue, with equality at a corresponding eigenvector. For 2&times;2, A<sup>T</sup>A has trace F and determinant det(A<sup>T</sup>)det(A) = D&sup2;, so &lambda; is the larger root of t&sup2; &minus; Ft + D&sup2;.</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lean: <span class="mono">opNorm_le</span> and <span class="mono">opNorm_comp_le</span> are Mathlib&rsquo;s operator-norm lemmas, stated for real normed spaces; uncompiled, and the second lemma name is among the likeliest to need a fix. The eigenvalue formula, Theorem 15 and |A<sup>T</sup>| = |A| are not stated in Lean. The script checks, exactly: for all 625 integer 2&times;2 matrices with entries &minus;2..2 and 80 integer vectors (50,000 cases), |Ax|&sup2; &le; &lambda;|x|&sup2;, comparing without square roots; where &lambda; is an integer (273 matrices) it is attained at an eigenvector of A<sup>T</sup>A; A A<sup>T</sup> and A<sup>T</sup>A have the same F and the same D&sup2;. It also checks, with the 1-norm (the largest column sum, a different norm, for which the product rule still holds because the proof used nothing special about the Euclidean one), |CA| &le; |C||A| for all 390,625 pairs, and Theorem 15 in 40,176 cases. The bound in Theorem 15 cannot be improved: A = I and B = I &minus; E<sub>11</sub> has |A &minus; B| = 1 = 1/|A<sup>-1</sup>| and B is singular; the script finds 568 such equality cases among its inputs.</p></div>
+
+<h2>2 &middot; Polar decomposition and singular values</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>A real number is a sign times a size. A matrix is a stretch times a turn: first rotate or reflect (an orthogonal map U, which preserves lengths), then stretch along perpendicular axes (a symmetric map R with non-negative eigenvalues). Choosing the axes, once in the input space and once in the output space, makes A diagonal: A = W D V, with W and V orthogonal and D diagonal. The diagonal entries of D are the singular values, the semi-axes of the ellipse of section 1.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Theorem 22, polar decomposition (Lax p.169)</span>Every square matrix A factors as A = RU with R non-negative symmetric and U orthogonal (unitary in the complex case). If A is invertible, R is positive.</div>
+<div class="box"><span class="lab">Singular value decomposition (Lax p.170)</span>A = WDV with W and V orthogonal and D diagonal with non-negative entries. The diagonal entries of D, the singular values of A, are the non-negative square roots of the eigenvalues of AA<sup>T</sup>.</div>
+<div class="box"><span class="lab">Exercises 13 and 14 (Lax pp.170&ndash;171)</span>For a square matrix A, AA<sup>T</sup> and A<sup>T</sup>A have the same eigenvalues with the same multiplicities (Exercise 13, p.170). For a matrix A from one Euclidean space to another they have the same non-zero eigenvalues with the same multiplicities (Exercise 14, p.171).</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p><strong>Polar decomposition, A invertible (real case).</strong> (AA<sup>T</sup>x, x) = |A<sup>T</sup>x|&sup2; &gt; 0 for x &ne; 0, so AA<sup>T</sup> is a positive symmetric matrix and has a unique positive square root R, R&sup2; = AA<sup>T</sup> (Lax cites his Theorem 1 for this on p.169). Put U = R<sup>-1</sup>A. Then UU<sup>T</sup> = R<sup>-1</sup>AA<sup>T</sup>R<sup>-1</sup> = R<sup>-1</sup>R&sup2;R<sup>-1</sup> = I, so U is orthogonal, and A = RU. For singular A Lax builds the isometry on the range of R and extends it (p.170); that argument is not reproduced here.</p>
+<p><strong>Singular values.</strong> By the spectral theorem R = WDW<sup>T</sup> with W orthogonal and D diagonal. Then A = WDW<sup>T</sup>U = WDV with V = W<sup>T</sup>U orthogonal. The eigenvalues of R&sup2; = AA<sup>T</sup> are the squares of the entries of D.</p>
+<p><strong>Exercise 14.</strong> If A<sup>T</sup>Ax = &lambda;x with &lambda; &ne; 0, then Ax &ne; 0 (else A<sup>T</sup>Ax = 0) and AA<sup>T</sup>(Ax) = &lambda;Ax. So A carries the &lambda;-eigenspace of A<sup>T</sup>A injectively into that of AA<sup>T</sup>; by the same argument A<sup>T</sup> carries it back, so the two eigenspaces have equal dimension.</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lean: <span class="mono">gram_det</span> states det(A<sup>T</sup>A) = det(A)&sup2;, the product of the squared singular values. <span class="mono">gram_same_nonzero_spectrum</span> states t<sup>m</sup>&middot;charpoly(A<sup>T</sup>A) = t<sup>n</sup>&middot;charpoly(AA<sup>T</sup>) for any real m&times;n matrix, from Mathlib&rsquo;s lemma for products in both orders: it says the two have the same non-zero roots with multiplicity; uncompiled, and the exact form of that lemma is the likeliest thing in the file to need a fix. The existence of the decomposition is not stated in Lean. The script builds A = W D V<sup>T</sup> from the rotations with cosine and sine 3/5 and 4/5, 5/13 and 12/13, 8/17 and 15/17, 7/25 and 24/25 (and the identity), and D = diag(s<sub>1</sub>, s<sub>2</sub>) with 0 &le; s<sub>2</sub> &le; s<sub>1</sub> &le; 5, so every entry is a fraction. For all 525 matrices it checks exactly A<sup>T</sup>A V = V D&sup2;, AA<sup>T</sup> W = W D&sup2;, A = RU with R = W D W<sup>T</sup> symmetric and U = W V<sup>T</sup> orthogonal. That checks the theorem on a family where it can be written in fractions; it is not a proof. Exercise 14 is checked on all 729 3&times;2 matrices with entries &minus;1, 0, 1: the characteristic polynomial of AA<sup>T</sup> is t times that of A<sup>T</sup>A. And det(A<sup>T</sup>A) = det(A)&sup2; on all 625 integer 2&times;2 matrices.</p></div>
+
+<h2>3 &middot; The condition number and sensitivity</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>Solve Ax = b where b carries a small error. If A squeezes the circle into a thin ellipse, then an error in b along the short axis comes from a large change in x, because A made that direction small. The worst case is a solution x that A stretches the most, together with an error in b along the direction A stretches the least. The magnification is then the longest axis divided by the shortest: K = |A||A<sup>-1</sup>|. It is at least 1, and equal to 1 only for a map that treats all directions alike.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Sensitivity and the condition number (Lax pp.247&ndash;248, formulas (4) and (5))</span>Let A be invertible, Ax = b and A(x + &delta;x) = b + &delta;b. Then (|&delta;x|/|x|) &le; K(A)(|&delta;b|/|b|), where K(A) = |A||A<sup>-1</sup>|, and the bound is attained for some x and &delta;b.</div>
+<div class="box"><span class="lab">Properties</span>(i) K(A) &ge; 1 (Lax Exercise 1, p.248). (ii) K(A) &ge; &beta;/&alpha;, where &beta; and &alpha; are the largest and smallest absolute values of the eigenvalues of A (Lax (6), (6)&prime; and (7)). (iii) For the Euclidean norm, K(A) = &sigma;<sub>max</sub>/&sigma;<sub>min</sub>. (iv) For 2&times;2: K + 1/K = F/|D|. Since F &minus; 2D = (a &minus; d)&sup2; + (b + c)&sup2; and F + 2D = (a + d)&sup2; + (b &minus; c)&sup2;, K = 1 exactly when A is a non-zero multiple of a rotation or a reflection. (v) K(A<sup>T</sup>A) = K(A)&sup2;.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p><strong>Sensitivity.</strong> Subtracting the two equations gives A&delta;x = &delta;b, so &delta;x = A<sup>-1</sup>&delta;b and |&delta;x| &le; |A<sup>-1</sup>||&delta;b|. Also |b| = |Ax| &le; |A||x|. Multiply: |&delta;x||b| &le; |A||A<sup>-1</sup>||&delta;b||x|, which is the claim with the denominators cleared. <strong>Attained:</strong> take x with |Ax| = |A||x| and &delta;b with |A<sup>-1</sup>&delta;b| = |A<sup>-1</sup>||&delta;b|; both inequalities become equalities.</p>
+<p><strong>(i)</strong> I = AA<sup>-1</sup> and |I| = 1, so 1 &le; |A||A<sup>-1</sup>|. <strong>(ii)</strong> If Ax = &mu;x then |&mu;||x| = |Ax| &le; |A||x|, so every eigenvalue has |&mu;| &le; |A|; in particular &beta; &le; |A|. The eigenvalues of A<sup>-1</sup> are the 1/&mu;, so the same argument gives 1/&alpha; &le; |A<sup>-1</sup>|. Multiply. <strong>(iii)</strong> From A = WDV, A<sup>-1</sup> = V<sup>T</sup>D<sup>-1</sup>W<sup>T</sup> has singular values 1/&sigma;<sub>i</sub>, so |A| = &sigma;<sub>max</sub> and |A<sup>-1</sup>| = 1/&sigma;<sub>min</sub>.</p>
+<p><strong>(iv)</strong> Write &lambda;<sub>1</sub> &ge; &lambda;<sub>2</sub> for the eigenvalues of A<sup>T</sup>A, so &lambda;<sub>1</sub> + &lambda;<sub>2</sub> = F and &lambda;<sub>1</sub>&lambda;<sub>2</sub> = D&sup2;, and K&sup2; = &lambda;<sub>1</sub>/&lambda;<sub>2</sub>. Then (K + 1/K)&sup2; = K&sup2; + 2 + K<sup>-2</sup> = (&lambda;<sub>1</sub> + &lambda;<sub>2</sub>)&sup2;/(&lambda;<sub>1</sub>&lambda;<sub>2</sub>) = F&sup2;/D&sup2;. Since K + 1/K &ge; 2 with equality only at K = 1, K = 1 exactly when F = 2|D|, and by the two sum-of-squares identities that happens exactly when (a &minus; d)&sup2; + (b + c)&sup2; = 0 (so D &gt; 0) or (a + d)&sup2; + (b &minus; c)&sup2; = 0 (so D &lt; 0), with A not zero. <strong>(v)</strong> A<sup>T</sup>A = V<sup>T</sup>D&sup2;V has singular values &sigma;<sub>i</sub>&sup2;, so its ratio is (&sigma;<sub>max</sub>/&sigma;<sub>min</sub>)&sup2;.</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lean: <span class="mono">condition_ge_one</span> states 1 &le; |A||B| whenever B is a left inverse of A (B&middot;A = id) on a non-trivial real normed space. <span class="mono">sensitivity</span> states |&delta;x||Ax| &le; (|A||B|)(|A&delta;x||x|) with b = Ax and &delta;b = A&delta;x, so it carries no division and holds when x or b is zero. <span class="mono">frobenius_det_bounds</span> states the two sum-of-squares identities and 2|D| &le; F. <span class="mono">trace_sq_gram</span> states trace((A<sup>T</sup>A)&sup2;) = F&sup2; &minus; 2D&sup2; written out in the four entries, which is what turns (iv) into (v) for 2&times;2. All uncompiled. The script: K from the definition |A||A<sup>-1</sup>| equals &sigma;<sub>max</sub>/&sigma;<sub>min</sub> for all 2112 invertible integer matrices with entries &minus;3..3 (2401 matrices in all: 289 singular and 2112 invertible), in 60-digit decimal because it needs square roots; K + 1/K = F/|D| for all of them; K &ge; 1 for all, and 96 have K = 1 exactly where the integer test says; trace((A<sup>T</sup>A)&sup2;) = F&sup2; &minus; 2D&sup2; exactly and K(A<sup>T</sup>A) = K(A)&sup2;; (ii) is checked exactly with the 1-norm on all 2112. Sensitivity is checked exactly (1-norm, cross-multiplied) on 285,696 cases, and the bound is attained for A = diag(1, 1/m), x = e<sub>1</sub>, &delta;b along e<sub>2</sub>, with ratio exactly m = K, for m = 1 to 20. One caution from Lax p.248: the bound is a worst case. With k-digit arithmetic the relative error in x can be as large as 10<sup>-k</sup>K(A); it is often smaller.</p></div>
+
+<h2>4 &middot; The pseudoinverse, and why not the normal equations</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>A tall matrix has no inverse, but it has a best substitute: the map that sends b to the least-squares answer of Chapter 8. That map is the pseudoinverse A<sup>+</sup>. In the singular value decomposition it is easy to write: undo each stretch that is not zero, and leave the zero directions alone. The classical way to compute the answer, solving A<sup>T</sup>Ac = A<sup>T</sup>b, squares every singular value, and so squares the condition number: half the digits are gone before the arithmetic starts.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Standard facts, not in the held text beyond Lax p.86</span>If A has independent columns, A<sup>+</sup> = (A<sup>T</sup>A)<sup>-1</sup>A<sup>T</sup>, and A<sup>+</sup>A = I. In general A<sup>+</sup> satisfies the four Penrose conditions AA<sup>+</sup>A = A, A<sup>+</sup>AA<sup>+</sup> = A<sup>+</sup>, and AA<sup>+</sup> and A<sup>+</sup>A symmetric. If A = WDV (W, V orthogonal, D diagonal), A<sup>+</sup> = V<sup>T</sup>D<sup>+</sup>W<sup>T</sup>, where D<sup>+</sup> inverts the non-zero diagonal entries. For rank one, A = uv<sup>T</sup>: A<sup>+</sup> = vu<sup>T</sup>/(|u|&sup2;|v|&sup2;). The least-squares answer is c = A<sup>+</sup>b, and the normal equations have condition number K(A<sup>T</sup>A) = K(A)&sup2;.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p><strong>Independent columns.</strong> A<sup>T</sup>A is invertible (Chapter 8), so (A<sup>T</sup>A)<sup>-1</sup>A<sup>T</sup>A = I. Then AA<sup>+</sup> = A(A<sup>T</sup>A)<sup>-1</sup>A<sup>T</sup> is the orthogonal projection onto the range of A (Chapter 8, section 3): it is symmetric and fixes every vector of the range, so AA<sup>+</sup>A = A. Since A<sup>+</sup>A = I, which is symmetric, A<sup>+</sup>AA<sup>+</sup> = A<sup>+</sup>. <strong>Rank one.</strong> AA<sup>+</sup>A = uv<sup>T</sup>vu<sup>T</sup>uv<sup>T</sup>/(|u|&sup2;|v|&sup2;) = u(v<sup>T</sup>v)(u<sup>T</sup>u)v<sup>T</sup>/(|u|&sup2;|v|&sup2;) = uv<sup>T</sup>. <strong>Condition.</strong> Section 3 (v): the singular values of A<sup>T</sup>A are the squares of those of A. The SVD formula for A<sup>+</sup> is stated here as the standard one; its proof is not given on this page.</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lean: <span class="mono">left_inverse_normal</span> states that (A<sup>T</sup>A)<sup>-1</sup>A<sup>T</sup> is a left inverse of A when det(A<sup>T</sup>A) is a unit; uncompiled. The Penrose conditions and the SVD formula are not stated in Lean. The script checks, exactly: the four Penrose conditions for 200 random integer rank-one 3&times;2 matrices with the rank-one formula; for 200 random integer 4&times;2 matrices of full column rank, that (A<sup>T</sup>A)<sup>-1</sup>A<sup>T</sup> is a left inverse and satisfies all four conditions; and, on the 525 matrices A = W D V<sup>T</sup> of section 2 (including the singular and zero ones), that V D<sup>+</sup> W<sup>T</sup> satisfies all four. The chapter 8 four-point fit gives A<sup>+</sup>b = (9/10, 9/10), the fitted line y = 0.9 + 0.9t. For that matrix A<sup>T</sup>A = [[4,6],[6,14]] has F = 284 and D = 20, so K(A<sup>T</sup>A) = 14.13 and K(A) = 3.76: here the squaring costs about one digit, which is harmless. It costs half of all digits when K(A) is large.</p></div>
+
+<h2>5 &middot; A real example: the Hilbert matrix</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>The Hilbert matrix H<sub>n</sub> has entries 1/(i + j &minus; 1), the integrals of x<sup>i+j-2</sup> over [0, 1]. It looks harmless and has an inverse made of whole numbers, but its columns are nearly parallel, so its ellipse is almost flat and its condition number grows very fast.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Computed values (not in the held text)</span>H<sub>3</sub> = [[1,1/2,1/3],[1/2,1/3,1/4],[1/3,1/4,1/5]] has inverse [[9,-36,30],[-36,192,-180],[30,-180,180]]. With the 1-norm (largest column sum), |H<sub>3</sub>| = 11/6 and |H<sub>3</sub><sup>-1</sup>| = 408, so &kappa;<sub>1</sub>(H<sub>3</sub>) = 748. For n = 1 to 5 the 1-norm condition numbers are 1, 27, 748, 28375, 943656, and H<sub>n</sub><sup>-1</sup> has integer entries for every n up to 8.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p>By direct computation in exact fractions: H<sub>3</sub>H<sub>3</sub><sup>-1</sup> = I, the column sums of H<sub>3</sub><sup>-1</sup> in absolute value are 75, 408 and 390, and those of H<sub>3</sub> are 11/6, 13/12 and 47/60; 11/6 &times; 408 = 748. Nothing deeper is claimed; the growth for general n is observed here, not proved.</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lean: <span class="mono">control_hilbert3_inverse</span> states that the integer matrix above times H<sub>3</sub> is the identity over the rationals; a direct computation, uncompiled. The script verifies all of the above exactly for n = 1 to 8. It also solves H<sub>n</sub>x = H<sub>n</sub>(1, &hellip;, 1) in ordinary floating point (numpy, double precision, not exact) for n = 3, 5, 8, where the 2-norm condition numbers are about 5&times;10<sup>2</sup>, 5&times;10<sup>5</sup> and 1.5&times;10<sup>10</sup>. The relative errors of the computed solution are of order 10<sup>-14</sup>, 10<sup>-12</sup> and 10<sup>-7</sup>, and the script asserts only that each is below 2.3 &times; 10<sup>-15</sup> times K, a stand-in for Lax&rsquo;s 10<sup>-k</sup>K with double precision (about 16 digits) and a margin of 10. These floating-point digits depend on the machine and the library, so they are illustrations, not part of the results.</p></div>
+
+<h2>6 &middot; What is not here</h2>
+<p>The conditioning of the eigenvalue problem (it differs from that of Ax = b and is worse for non-normal matrices), floating-point error models and the stability of Gaussian elimination, iterative methods and their rates (Lax Chapter 17, from p.248 on), the QR algorithm (Chapter 18), the best low-rank approximation of a matrix by truncating its singular values, and complex matrices beyond what is stated. Lean states none of the decompositions, only the identities and inequalities listed in the remarks above.</p>
+
+<h2>7 &middot; Exercises</h2>
+<ol class="ex">
+<li>Show K(A) &ge; 1 from |I| = 1 (Lax Exercise 1). Then show K(cA) = K(A) for every non-zero number c.</li>
+<li>For A = [[1,1],[0,1]], compute F and D, then use K + 1/K = F/|D| to show K = (3 + &radic;5)/2 = 2.618&hellip;. Check the singular values are &phi; and 1/&phi; with &phi; the golden ratio.</li>
+<li>For A = diag(1, &epsilon;), find K, and find x and &delta;b for which the sensitivity bound is an equality.</li>
+<li>Compute the singular values of A = [[3,0],[4,5]] from AA<sup>T</sup> (here F = 50 and D = 15), and K(A). Find R and U in A = RU.</li>
+<li>Use Exercise 14 to show that the non-zero singular values of A and of A<sup>T</sup> agree, and give a 3&times;2 example where one of A<sup>T</sup>A, AA<sup>T</sup> has the eigenvalue 0 and the other does not.</li>
+<li>Verify H<sub>3</sub>H<sub>3</sub><sup>-1</sup> = I with the matrix of section 5, and compute &kappa;<sub>1</sub>(H<sub>3</sub>) = 748 yourself.</li>
+<li>For the four-point fit of Chapter 8, solve the least-squares problem in exact fractions through A<sup>T</sup>Ac = A<sup>T</sup>b, then explain why the same computation in 3-digit arithmetic would lose accuracy faster than one that works with A directly when K(A) is large.</li>
+</ol>
+</div>
+
+<div class="nav"><a href="ch08-inner-products.html">&larr; Chapter 8</a><a href="index.html">&uarr; Contents</a><span class="mono" style="color:var(--dim)">Chapter 10 planned</span></div>
+<footer>
+<strong style="color:var(--gold)">Status.</strong> Sections 1 to 5 state, and prove or reference to Lax, the standard results on the norm of a map, the polar and singular value decompositions, the condition number and sensitivity of a linear system, and the pseudoinverse; section 5 is a worked example. Checked by <a class="mono" href="ch09-verify.py">ch09-verify.py</a> (exact arithmetic, exhaustive over the stated integer families, a few steps in 60-digit decimal, page references into Lax). <a class="mono" href="Numerical.lean">Numerical.lean</a> states ten results and <strong>has not been compiled</strong>: it was written without a Lean toolchain, and its Mathlib lemma names are from memory. Most of its proofs are calls to Mathlib or short algebra, so once it compiles it checks that these statements are true, not that the proofs on this page are right. The singular value decomposition itself is not stated in Lean. Held text: Lax only; a scan, so its page checks match short phrases. Nothing is copied from Lax. The pseudoinverse and the Hilbert matrix are standard but are not in the held text. Standard results, no new claims.
+</footer>
+
+<script>
+(function(){
+  var body=document.body,bar=document.getElementById('bar');
+  function set(l,on){body.classList.toggle('off-'+l,!on);var b=bar.querySelector('button[data-l="'+l+'"]');if(b)b.setAttribute('aria-pressed',on?'true':'false')}
+  bar.querySelectorAll('button[data-l]').forEach(function(b){b.onclick=function(){set(b.dataset.l,b.getAttribute('aria-pressed')!=='true')}});
+  document.getElementById('only').onclick=function(){['intuition','statement','proof','remarks'].forEach(function(l){set(l,l==='intuition')})};
+  document.getElementById('all').onclick=function(){['intuition','statement','proof','remarks'].forEach(function(l){set(l,true)})};
+
+  var rd=document.getElementById('read');
+  var ids=['ma','mb','mc','md'],sel=ids.map(function(i){return document.getElementById(i)});
+  var M=[1,1,0,1],note='';
+  function f(x){return String(Math.round(x*1000)/1000)}
+  function fill(){
+    sel.forEach(function(s,i){
+      for(var v=-5;v<=5;v++){var o=document.createElement('option');o.value=v;o.textContent=v;s.appendChild(o)}
+      s.value=M[i];
+      s.onchange=function(){M[i]=+s.value;note='';show()};
+    });
+  }
+  function isK1(a,b,c,d){return ((a-d)*(a-d)+(b+c)*(b+c)===0)||((a+d)*(a+d)+(b-c)*(b-c)===0)}
+  function show(){
+    var a=M[0],b=M[1],c=M[2],d=M[3],F=a*a+b*b+c*c+d*d,D=a*d-b*c,h='';
+    h+='A = [['+a+','+b+'],['+c+','+d+']] &middot; F = <b>'+F+'</b> &middot; det D = <b>'+D+'</b><br>';
+    var disc=F*F-4*D*D;
+    var s1=Math.sqrt((F+Math.sqrt(disc))/2),s2=Math.sqrt(Math.max(0,(F-Math.sqrt(disc))/2));
+    if(F===0){h+='A is the zero matrix: both singular values are 0.<br>'}
+    else if(D===0){
+      h+='singular values <b>'+f(s1)+'</b> and <b>0</b>: A is singular, the ellipse is a segment, and K is infinite (A has no inverse).<br>';
+    } else {
+      var K=s1/s2;
+      h+='singular values <b>'+f(s1)+'</b> and <b>'+f(s2)+'</b> (product '+f(s1*s2)+' = |D|, sum of squares '+f(s1*s1+s2*s2)+' = F)<br>';
+      h+='condition number K = <b>'+f(K)+'</b> &middot; K + 1/K = '+f(K+1/K)+' = F/|D| = '+f(F/Math.abs(D))+'<br>';
+      h+='normal equations: K(A<sup>T</sup>A) = K&sup2; = <b>'+f(K*K)+'</b><br>';
+      h+=isK1(a,b,c,d)?'K = 1 exactly: A is a multiple of a rotation or a reflection.':'K &gt; 1: A is not a multiple of a rotation or reflection (F &gt; 2|D|).';
+    }
+    rd.innerHTML=h+note;
+  }
+  document.getElementById('count').onclick=function(){
+    var tot=0,sg=0,k1=0,a,b,c,d;
+    for(a=-3;a<=3;a++)for(b=-3;b<=3;b++)for(c=-3;c<=3;c++)for(d=-3;d<=3;d++){
+      tot++;
+      if(a*d-b*c===0)sg++;else if(isK1(a,b,c,d))k1++;
+    }
+    note='<br>counted '+tot+' matrices: <b>'+sg+'</b> singular, <b>'+(tot-sg)+'</b> invertible, and <b>'+k1+'</b> have K = 1 (multiples of rotations and reflections)';
+    show();
+  };
+  fill();show();
+})();
+</script>
+</body>
+</html>
