@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Several Variables &middot; Book XVIII &mdash; Principia Orthogona</title>
+<meta name="description" content="Partial derivatives, the differential, the gradient, symmetry of mixed partials and the area scaling of a linear map, with a control showing the symmetry theorem needs its hypothesis.">
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.po-proved-block{max-width:820px;margin:2.5rem auto 1rem;padding:1.1rem 1.3rem;
+ border:1px solid rgba(122,148,113,.45);border-left:4px solid #7a9471;border-radius:0 6px 6px 0;
+ background:rgba(122,148,113,.07);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.75;}
+.po-proved-block .po-h{letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;color:#5f7a57;margin-bottom:.6rem;}
+.po-proved-block a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.po-proved-block .po-n{font-size:.68rem;opacity:.75;display:block;margin-top:.7rem;line-height:1.6;}
+</style>
+<!--po-subject--><meta name="po-subject" content="MATHEMATICS · ANALYSIS"><meta name="po-subject-2" content="PROOF · LEAN"><!--/po-subject-->
+</head>
+<body>
+
+<div class="topnav">
+<span class="crumbs"><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XVIII &middot; Ch 8</span>
+<span class="meta"><a href="ch07-sequences-and-series.html">&larr; Ch 7</a> &middot; <a href="index.html">Book XVIII contents</a></span>
+</div>
+<div class="wp-head">
+<div class="wp-kicker">Book XVIII &middot; The Chain Rule &middot; Chapter 8 &middot; 2026-11-04 &middot; in progress</div>
+<h1>Several <em>Variables</em></h1>
+<div class="subtitle">A function of two variables has a derivative in every direction, and the differential packs them all into one linear map. This chapter checks that statement, what it says about the gradient, when the order of two partial derivatives does not matter, and how a linear map changes area.</div>
+<div class="metagrid"><div><strong>Held text</strong>Loomis and Sternberg, <em>Advanced Calculus</em> rev. ed. (1990): &sect; 6 The differential p.140; Thm 7.1 p.147; Thm 9.2 p.157; Thm 16.3 p.187; Thm 8.1 p.335; &sect; 12 Successive integration p.346 (scan with a text layer, printed page = pdf page &minus; 12)</div><div><strong>Claim type</strong>standard mathematics, no new results</div><div><strong>Lean</strong><a href="SeveralVariables.lean">SeveralVariables.lean</a><br>12 theorems, <span class="mono">[OPEN]</span> untested: no compile report exists yet</div><div><strong>Every number</strong><a href="ch08-verify.py">ch08-verify.py</a> &mdash; run first, 0 FAIL</div></div>
+</div>
+<div class="wrap">
+
+<p class="lede">The derivative of a function of one variable is a number. For a function of two variables it cannot be: moving east and moving north give different rates, and so does every direction in between. The honest definition is a linear map, the differential, that approximates the change in the function, and everything else in this chapter is read off it.</p>
+
+<div class="eyebrow">&sect; 1</div>
+<h2>Partial derivatives, and the differential as a linear approximation</h2>
+<p>Take <span class="mono">f(x, y) = x<sup>2</sup>y + y<sup>3</sup></span>. Freeze <span class="mono">y</span> and vary <span class="mono">x</span>: the quotient <span class="mono">(f(x+h, y) &minus; f(x, y))/h</span> is exactly <span class="mono">2xy + yh</span>, so the partial derivative in <span class="mono">x</span> is <span class="mono">2xy</span>. Freeze <span class="mono">x</span> and vary <span class="mono">y</span>: the quotient is <span class="mono">x<sup>2</sup> + 3y<sup>2</sup> + 3yk + k<sup>2</sup></span>, so the partial in <span class="mono">y</span> is <span class="mono">x<sup>2</sup> + 3y<sup>2</sup></span>. The script prints both identities in exact fractions at five points.</p>
+<p>The partials say how <span class="mono">f</span> changes along two axes. The differential says more: there is one linear map <span class="mono">L(h, k) = f<sub>x</sub> h + f<sub>y</sub> k</span> so that <span class="mono">f(x+h, y+k) &minus; f(x, y) &minus; L(h, k)</span> is small compared with the size of <span class="mono">(h, k)</span>. For this <span class="mono">f</span> the remainder is exactly <span class="mono">y h<sup>2</sup> + 2x hk + h<sup>2</sup>k + 3y k<sup>2</sup> + k<sup>3</sup></span>, and for <span class="mono">|h|, |k| &le; 1</span> it is at most <span class="mono">(4|y| + 2|x| + 2)(|h| + |k|)<sup>2</sup></span>. Since <span class="mono">(|h|+|k|)<sup>2</sup>/(|h|+|k|) = |h|+|k|</span> goes to 0, the remainder is smaller than the step by as much as you like. The script checks the formula and the bound on 300 random steps at each of five points.</p>
+<p>In Loomis and Sternberg this is the definition of the differential (&sect; 6, p.140), and Theorem 9.2 (p.157) says that for a map on <span class="mono">&Ropf;<sup>n</sup></span> the partial derivatives are the skeleton of the differential: the value of the differential on a vector <span class="mono">(y<sub>1</sub>, &hellip;, y<sub>n</sub>)</span> is <span class="mono">&Sigma; y<sub>j</sub> &part;F/&part;x<sub>j</sub></span>. In Lean the plane case is <span class="mono">differential_is_partials_combination</span>, and <span class="mono">partial_x_eq_differential</span> says the partial in <span class="mono">x</span> is the differential applied to <span class="mono">(1, 0)</span>. The two worked derivatives above are <span class="mono">partial_x_example</span> and <span class="mono">partial_y_example</span>.</p>
+
+<div class="eyebrow">&sect; 2</div>
+<h2>Directional derivatives and the gradient</h2>
+<p>Move from <span class="mono">(x, y)</span> in direction <span class="mono">(a, b)</span>: the quotient <span class="mono">(f(x+ta, y+tb) &minus; f(x, y))/t</span> tends to <span class="mono">a f<sub>x</sub> + b f<sub>y</sub></span>. For our <span class="mono">f</span> the gap between the two is exactly <span class="mono">t(y a<sup>2</sup> + 2x ab + 3y b<sup>2</sup>) + t<sup>2</sup>(a<sup>2</sup>b + b<sup>3</sup>)</span>, which the script checks for fifteen point-and-direction pairs. This is Theorem 7.1 (p.147): when the differential exists, the directional derivative is the differential applied to the direction. In Lean it is <span class="mono">directional_derivative_eq_differential</span>, stated for any normed space, not only the plane, and proved from Mathlib's chain rule.</p>
+<p>Now ask which direction makes <span class="mono">f</span> grow fastest. Write the gradient as <span class="mono">(a, b) = (f<sub>x</sub>, f<sub>y</sub>)</span> and the direction as a unit vector <span class="mono">(u, v)</span>. The rate is <span class="mono">a u + b v</span>, and <span class="mono">(au + bv)<sup>2</sup> + (av &minus; bu)<sup>2</sup> = (a<sup>2</sup> + b<sup>2</sup>)(u<sup>2</sup> + v<sup>2</sup>) = a<sup>2</sup> + b<sup>2</sup></span>. So <span class="mono">a u + b v &le; &radic;(a<sup>2</sup> + b<sup>2</sup>)</span>, with equality exactly when <span class="mono">(u, v)</span> points along <span class="mono">(a, b)</span>. At <span class="mono">(1, 2)</span> the gradient is <span class="mono">(4, 13)</span>, so the steepest rate is <span class="mono">&radic;185</span>. The script checks that <span class="mono">(4u+13v)<sup>2</sup> &le; 185</span> for several thousand rational unit vectors and that some come within <span class="mono">10<sup>&minus;4</sup></span> of it. The two Lean statements are <span class="mono">directional_derivative_le_gradient_norm</span> and <span class="mono">directional_derivative_attains</span>. This is a consequence of Theorem 9.2 and the Schwarz inequality, not a theorem the book states in this form.</p>
+
+<div class="eyebrow">&sect; 3</div>
+<h2>When the order of two partial derivatives does not matter</h2>
+<p>Differentiate <span class="mono">f</span> in <span class="mono">x</span> and then in <span class="mono">y</span>, or the other way round. For nice functions you get the same thing: <span class="mono">&part;<sup>2</sup>f/&part;y&part;x = &part;<sup>2</sup>f/&part;x&part;y</span>. Loomis and Sternberg state it as Theorem 16.3 (p.187): the second differential is a symmetric function of its two arguments, and Theorem 16.2 says it exists when all second partials exist and are continuous. In Lean this is <span class="mono">second_differential_symmetric</span>, for any twice continuously differentiable function on a normed space, proved by Mathlib's own symmetry theorem.</p>
+<p>The hypothesis is not decoration. Let <span class="mono">f(x, y) = xy(x<sup>2</sup> &minus; y<sup>2</sup>)/(x<sup>2</sup> + y<sup>2</sup>)</span> and <span class="mono">f(0, 0) = 0</span>. Along the column <span class="mono">x = 0</span>, <span class="mono">f<sub>x</sub>(0, y) = &minus;y</span>, because <span class="mono">(f(h, y) &minus; f(0, y))/h = y(h<sup>2</sup> &minus; y<sup>2</sup>)/(h<sup>2</sup> + y<sup>2</sup>)</span>, which is within <span class="mono">2h<sup>2</sup>/|y|</span> of <span class="mono">&minus;y</span>. Along the row <span class="mono">y = 0</span>, <span class="mono">f<sub>y</sub>(x, 0) = x</span>. So the mixed partial at the origin is <span class="mono">&minus;1</span> one way and <span class="mono">+1</span> the other. The script shows the mixed quotient <span class="mono">f(h, k)/(hk) = (h<sup>2</sup> &minus; k<sup>2</sup>)/(h<sup>2</sup> + k<sup>2</sup>)</span> exactly, then gives values within <span class="mono">10<sup>&minus;6</sup></span> of <span class="mono">&minus;1</span> and of <span class="mono">+1</span> depending on which step is taken to 0 first. The Lean file proves this as <span class="mono">cf_dx</span>, <span class="mono">cf_dy</span> and <span class="mono">mixed_partials_differ</span>. Here the second partials exist at the origin but are not continuous there, so the theorem does not apply, and it correctly gives no answer.</p>
+
+<div class="eyebrow">&sect; 4</div>
+<h2>Integrating in two variables, one variable at a time</h2>
+<p>To integrate <span class="mono">f(x, y)</span> over a rectangle, integrate in <span class="mono">x</span> with <span class="mono">y</span> held fixed, then integrate the result in <span class="mono">y</span>. For a polynomial on <span class="mono">[0, 2] &times; [1, 3]</span> the script does this in both orders with exact antiderivatives and gets the same fraction. It also shows the midpoint sum on an <span class="mono">n &times; n</span> grid approaching that value, with the error falling by about a factor of 4 each time <span class="mono">n</span> doubles (<span class="mono">n = 5, 10, 20, 40</span>). Loomis and Sternberg treat this in &sect; 12 (p.346): a contented function is contented relative to a splitting <span class="mono">&Ropf;<sup>n</sup> = &Ropf;<sup>k</sup> &times; &Ropf;<sup>l</sup></span> when the inner integrals exist and the result is again integrable, and then the integral is the iterated one. <strong>This is not in the Lean file.</strong> The page shows exact examples only, and that is not a proof of the theorem.</p>
+
+<div class="eyebrow">&sect; 5</div>
+<h2>A linear map multiplies area by its determinant</h2>
+<p>Apply the matrix with rows <span class="mono">(A, B)</span> and <span class="mono">(C, D)</span> to a rectangle. The image is a parallelogram, and its area is <span class="mono">|AD &minus; BC|</span> times the rectangle&rsquo;s. The script computes the area of the image of a <span class="mono">3 &times; 2</span> rectangle by the shoelace formula for every integer matrix with entries from <span class="mono">&minus;3</span> to <span class="mono">3</span> (2401 of them, including the singular ones) and finds <span class="mono">6|AD &minus; BC|</span> each time. In Loomis and Sternberg this is Theorem 8.1 (p.335): the content of <span class="mono">L(A)</span> is <span class="mono">|det L|</span> times the content of <span class="mono">A</span>, for every contented set. In Lean it is <span class="mono">area_scales_by_det</span>, a direct call to Mathlib&rsquo;s Haar-measure scaling lemma on the plane, so it covers every measurable set and not only rectangles.</p>
+
+<div class="eyebrow">&sect; 6</div>
+<h2>What is not here</h2>
+<ul>
+<li>Fubini&rsquo;s theorem and the change of variables formula as theorems. &sect; 4 above is exact examples, and &sect; 5 covers only the linear case. The nonlinear change of variables (LS &sect; 11, p.342), where the factor is the determinant of the Jacobian, is not stated.</li>
+<li>The implicit function theorem, the mean value theorem, and the criterion that continuous partials imply differentiability (LS Theorem 9.3).</li>
+<li>Line integrals, surface integrals and Stokes&rsquo; theorem. The index row for this chapter mentioned them; they are the subject of LS Chapter 11 and are <strong>not</strong> covered here.</li>
+<li>Compiled status. <span class="mono">SeveralVariables.lean</span> has not been compiled. Several proofs call Mathlib directly, so it checks that the textbook statements are true as formal sentences, not that the hand arguments above are right. The one computation proved by hand in the file is the control in &sect; 3. <span class="mono">[OPEN]</span></li>
+<li>Line-by-line agreement with Loomis and Sternberg. The statements are confirmed to sit on the cited pages (ch08-verify.py [9]); the chapter&rsquo;s own wording has not been compared with their proofs. <span class="mono">[OPEN]</span></li>
+</ul>
+<p>The next chapter, <a href="index.html">Foundations of Analysis</a>, is where the completeness steps used here and in chapter 7 are examined.</p>
+
+</div>
+<footer><div class="fwrap">
+<div><a href="../index.html">&#9884; PRINCIPIA ORTHOGONA</a> &middot; Book XVIII &middot; Chapter 8<br>
+Written 2026-11-04 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0<br>
+ORCID <a href="https://orcid.org/0009-0000-6496-2186">0009-0000-6496-2186</a></div>
+<div class="disc">Standard results; statements located in Loomis and Sternberg, Advanced Calculus (pp.140, 147, 157, 187, 335, 346), nothing copied. Every figure is printed by ch08-verify.py; the theorems are in SeveralVariables.lean, which is untested.</div>
+</div></footer>
+</body>
+</html>
