@@ -110,6 +110,64 @@ t = Fraction(1, 3)
 check("u1 (u0 = 1/2) and u2 (u0 = 1/4) both solve u' = u^2, but (u1 + u2)' = u1^2 + u2^2 differs from (u1 + u2)^2 by 2 u1 u2 > 0 at t = 1/3",
       du2(Fraction(1, 2), t) + du2(Fraction(1, 4), t) != (u1(t) + uB(t)) ** 2 and (u1(t) + uB(t)) ** 2 - (u1(t) ** 2 + uB(t) ** 2) == 2 * u1(t) * uB(t))
 
+print("[5b] focusing against dispersion: the virial identity y'' = 16 E (floating-point numerics; not a proof)")
+try:
+    import numpy as np
+except Exception as ex:
+    np = None; print(f"  SKIP: numpy not available ({ex}); no claim made")
+if np is not None:
+    L_, M_ = 60.0, 4096; xs = (np.arange(M_) - M_ // 2) * (L_ / M_); dxs = L_ / M_; ks = 2 * np.pi * np.fft.fftfreq(M_, d=dxs)
+    def lin(v, dt): return np.fft.ifft(np.exp(-1j * ks ** 2 * dt / 2) * np.fft.fft(v))
+    def stp(v, dt):
+        v = lin(v, dt); v = v * np.exp(1j * np.abs(v) ** 4 * dt); return lin(v, dt)
+    def En(v):
+        vx = np.fft.ifft(1j * ks * np.fft.fft(v)); return 0.5 * np.sum(abs(vx) ** 2) * dxs - np.sum(abs(v) ** 6) * dxs / 6
+    def yy(v): return np.sum(xs ** 2 * abs(v) ** 2) * dxs
+    MQ = np.sqrt(3) * np.pi / 2
+    for A in (0.5, 1.5, 2.5):
+        u0 = A * np.exp(-xs ** 2 / 2) * np.exp(0.7j * xs); h = 2e-3; n = 20; up = u0.copy(); um = u0.copy()
+        for _ in range(n): up = stp(up, h / n); um = stp(um, -h / n)
+        ypp = (yy(up) - 2 * yy(u0) + yy(um)) / h ** 2; e = En(u0)
+        check(f"A = {A}: finite-difference y'' = {ypp:+.4f} agrees with 16E = {16 * e:+.4f} to 4 significant digits", abs(ypp - 16 * e) <= 1e-4 * max(1.0, abs(16 * e)))
+        vx = np.fft.ifft(1j * ks * np.fft.fft(u0)); K = np.sum(abs(vx) ** 2) * dxs; Mm = np.sum(abs(u0) ** 2) * dxs
+        check(f"A = {A}: E >= (1/2)(1 - (M/M_Q)^2) int|u_x|^2 (illustration of the sharp inequality, not a proof)", e >= 0.5 * (1 - (Mm / MQ) ** 2) * K - 1e-9)
+    Q = 3 ** 0.25 / np.sqrt(np.cosh(2 * xs)); Qxx = np.real(np.fft.ifft(-(ks ** 2) * np.fft.fft(Q)))
+    check("Q = 3^(1/4) sech(2x)^(1/2) solves Q'' - Q + Q^5 = 0 (residual below 1e-8 on the grid)", np.max(abs(Qxx - Q + Q ** 5)) < 1e-8)
+    check("mass of Q is sqrt(3) pi / 2 = 2.7207 (to 8 digits) and E(Q) = 0", abs(np.sum(Q ** 2) * dxs - MQ) < 1e-8 and abs(En(Q.astype(complex))) < 1e-9)
+# exact part: the parabola
+y0, y1, E_ = Fraction(1), Fraction(0), Fraction(-1, 8)
+check("exact: y(t) = y0 + y1 t + 8 E t^2 with y0 = 1, y1 = 0, E = -1/8 is 1 - t^2: second derivative -2 = 16 E, and it vanishes at t = 1",
+      16 * E_ == -2 and (y0 + y1 * 1 + 8 * E_ * 1) == 0)
+if np is not None:
+    ok = True
+    for lam in (0.5, 2.0, 3.0):
+        g = np.exp(-xs ** 2 / 2); gl = lam ** 0.5 * np.exp(-(lam * xs) ** 2 / 2)
+        ok &= abs(np.sum(gl ** 2) * dxs - np.sum(g ** 2) * dxs) < 1e-9
+        ok &= abs(np.sum(gl ** 6) * dxs - lam ** 2 * np.sum(g ** 6) * dxs) < 1e-9
+        glx = np.real(np.fft.ifft(1j * ks * np.fft.fft(gl))); gx = np.real(np.fft.ifft(1j * ks * np.fft.fft(g)))
+        ok &= abs(np.sum(glx ** 2) * dxs - lam ** 2 * np.sum(gx ** 2) * dxs) < 1e-8
+    check("dilation u_lam = lam^(1/2) u(lam x), Gaussian, lam = 0.5, 2, 3: mass fixed, int|u_x|^2 and int|u|^6 both scale like lam^2 (the critical scaling)", bool(ok))
+
+print("[5c] the pressure hull: wall stress and the buckling threshold")
+check("exact: wall stress p R / (2 t) with R = 1, t = 1/10, p = 50e6 is 250e6 (force balance p pi R^2 = sigma 2 pi R t, pi cancels)",
+      Fraction(50 * 10 ** 6) * 1 / (2 * Fraction(1, 10)) == 250 * 10 ** 6)
+check("exact: exercise numbers R = 2, t = 1/20, p = 20e6 give wall stress 400e6",
+      Fraction(20 * 10 ** 6) * 2 / (2 * Fraction(1, 20)) == 400 * 10 ** 6)
+import math
+okm = True
+for (E_, nu_, t_, R_) in ((200e9, 0.30, 0.05, 1.0), (70e9, 0.33, 0.02, 0.5), (1.0, 0.25, 0.01, 1.0)):
+    D_ = E_ * t_ ** 3 / (12 * (1 - nu_ ** 2)); k4 = E_ * t_ / (D_ * R_ ** 2)
+    f_ = lambda k: D_ * k ** 2 / t_ + E_ / (R_ ** 2 * k ** 2)
+    kstar = k4 ** 0.25
+    best = min(f_(kstar * 10 ** (e / 200)) for e in range(-200, 201))
+    pred = 2 * math.sqrt(D_ * E_ / t_) / R_
+    target = E_ * t_ / (R_ * math.sqrt(3 * (1 - nu_ ** 2)))
+    okm &= abs(f_(kstar) - pred) < 1e-9 * pred and best >= pred * (1 - 1e-12) and abs(pred - target) < 1e-9 * target
+check("numerical (floating point): min over k of D k^2/t + E/(R^2 k^2) is 2 sqrt(DE/t)/R at k^4 = E t/(D R^2) (scan over three decades), and equals E t / (R sqrt(3(1 - nu^2))), for three parameter sets", okm)
+check("1/sqrt(3 (1 - 0.3^2)) = 0.6052 to four digits (the page's 0.605 E t/R)", abs(1 / math.sqrt(3 * (1 - 0.09)) - 0.6052) < 5e-5)
+pc = lambda t_: 2 * t_ * (1.0 * t_ / (1.0 * math.sqrt(3 * (1 - 0.09)))) / 1.0
+check("buckling pressure p_cr = 2 t sigma_cr / R with sigma_cr proportional to t is proportional to t^2: doubling t multiplies it by 4", abs(pc(0.1) / pc(0.05) - 4) < 1e-12)
+
 print("[5] the facts table and the page")
 # (fact as the page must state it, source URL the page must cite).  Read 2026-11-04.
 FACTS = [
@@ -152,7 +210,31 @@ if txt:
     check("no claim that the Millennium Prize problem was solved; the page says the fluid results concern compressible equations", "millennium" in low and "does not" in low and "compressible" in low)
     check("no 'hidden order' / 'chaos' language from the unverified summary", "hidden order" not in low and "hidden, recurring" not in low)
     check("no claim that the toy equation is Merle's equation or that it proves anything about his results", "toy" in low and "not merle" in low)
-    check("the page says it has no Lean file", "no lean" in low)
+
+print("[7] the Lean file")
+src = (HERE / "Interlude2.lean").read_text(encoding="utf-8")
+rep_f = HERE / "interlude2.axioms.txt"
+code = re.sub(r"/-.*?-/", "", src, flags=re.S)
+names = ["toy_quadratic_deriv", "toy_quadratic_profile", "toy_quadratic_unbounded", "fold_tan_deriv",
+         "virial_first_derivative", "virial_second_derivative", "virial_collapse", "glassey_step", "virial_terms",
+         "energy_scales_critical", "energy_lower_bound", "no_negative_energy_below_threshold",
+         "negative_energy_forces_mass", "sphere_force_balance", "wrinkle_stress_lower_bound",
+         "wrinkle_stress_attained", "zoelly_algebra", "zoelly_pressure"]
+for nm in names:
+    check(f"theorem {nm} is stated", re.search(r"theorem\s+" + nm + r"\b", code) is not None)
+check("no sorry or admit in the Lean code", not re.search(r"\b(sorry|admit)\b", code))
+has_rep = rep_f.exists() and rep_f.read_text(encoding="utf-8").strip() != ""
+if has_rep:
+    r = rep_f.read_text(encoding="utf-8")
+    check("axiom report: all eighteen theorems appear", all(("Book24Il2." + nm) in r for nm in names))
+    check("axiom report: no sorryAx and no error", "sorryAx" not in r and "error" not in r.lower())
+else:
+    print("  NOTE: no interlude2.axioms.txt yet; the Lean file has NOT been compiled (run the command in its header).")
+if txt:
+    check("page links Interlude2.lean and says it states eighteen results", "Interlude2.lean" in txt and "eighteen" in txt)
+    check("page says the Lean file is not compiled unless a report exists", ("not yet compiled" in txt) == (not has_rep))
+    check("page says the Lean file does not formalise the equation (virial identity and GN enter as hypotheses)", "hypotheses" in txt and "not formalised" in txt)
+    check("page makes no claim about the cause of the Titan failure and gives no design guidance", "no claim about its cause" in txt and "guidance for building or diving" in txt)
 
 print()
 print("ALL PASS" if not FAIL else f"{len(FAIL)} FAILED: {FAIL}")
