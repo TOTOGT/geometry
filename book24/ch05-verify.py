@@ -283,7 +283,7 @@ else:
 
 print("[HONESTY]")
 print("  Finite-field checks are exhaustive but are checks of examples; the theorems are on the page and in the Lean file.")
-print("  LinearMaps.lean has NOT been compiled by anyone unless the axiom report above exists. Applications 2 and 3, the transpose, and the general differential are not in it.")
+print("  LinearMaps.lean: first compile 2026-11-04 had 6 of 7 theorems clean; corollaryA depends on sorryAx until the fix already in the file is recompiled (check [6] reports it). Applications 2 and 3, the transpose, and the general differential are not in it.")
 print("  The Jacobian example is one function at one point, computed exactly; it illustrates the idea and proves nothing general.")
 print("  Held text: Lax only (Wiley-copyrighted, page references, nothing copied). Lax works over R or C; finite fields go beyond him.")
 print()

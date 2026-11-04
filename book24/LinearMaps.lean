@@ -3,8 +3,11 @@ import Mathlib
 /-
 Book XXIV, chapter 5: linear maps. Lean core.
 
-STATUS: UNTESTED. Written without a Lean toolchain; not compiled by anyone. Until the author runs it
-and saves the output as linearmaps.axioms.txt, nothing in this file counts as checked. To run:
+STATUS: first compile by the author (2026-11-04): 6 of 7 theorems clean, no sorryAx. corollaryA failed:
+`simp [hk] at h4` made no progress (line 72), so it depended on sorryAx. The fix (prove the kernel's
+finrank is 0 with `simp [hk]`, the pattern corollaryB already used, then `omega`) is in the file below
+and has NOT been recompiled. linearmaps.axioms.txt still holds the real failing report; do not
+overwrite it until the author reruns. To rerun:
   lake env lean book24/LinearMaps.lean 2>&1 | tee book24/linearmaps.axioms.txt
 
 The statements follow Lax, Linear Algebra and Its Applications (2nd ed.), Chapter 3, pp.19-22:
@@ -69,7 +72,8 @@ theorem corollaryA [FiniteDimensional K V] [FiniteDimensional K W] (T : V →ₗ
   have h4 : 0 < Module.finrank K (LinearMap.ker T) := by omega
   have h5 : LinearMap.ker T ≠ ⊥ := by
     intro hk
-    simp [hk] at h4
+    have h6 : Module.finrank K (LinearMap.ker T) = 0 := by simp [hk]
+    omega
   obtain ⟨x, hx, hx0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot h5
   exact ⟨x, hx0, hx⟩
 
