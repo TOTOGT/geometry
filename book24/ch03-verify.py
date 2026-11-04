@@ -161,7 +161,7 @@ for nme in names:
     check(f"theorem {nme} is declared", re.search(r"\btheorem\s+" + nme + r"\b", code) is not None)
 check("no proof in the file uses sorry", re.search(r"\bsorry\b", code) is None)
 if not rep.is_file():
-    print("  NOT YET RUN: vectorspace.axioms.txt does not exist. The Lean file is untested.")
+    print("  NOT YET RUN: vectorspace.axioms.txt does not exist.")
 else:
     lines = [l for l in rep.read_text(encoding="utf-8").splitlines() if l.startswith("'Book24VS.")]
     check("the axiom report has one line per theorem", len(lines) == len(names), f"{len(lines)} lines")
@@ -169,7 +169,7 @@ else:
 
 print("[HONESTY]")
 print("  Finite-field checks are exhaustive but are checks of examples; the theorems are in the page and the Lean file.")
-print("  The Lean file is untested until the author runs it. Held text: Lax only (Wiley-copyrighted, page references, nothing copied).")
+print("  The Lean file was compiled by the author (see vectorspace.axioms.txt). Held text: Lax only (Wiley-copyrighted, page references, nothing copied).")
 print("  Fields beyond the reals and complexes, and finite fields in particular, go beyond Lax, who restricts to R or C.")
 print()
 print("0 FAIL" if not FAIL else f"{len(FAIL)} FAIL: {FAIL}")

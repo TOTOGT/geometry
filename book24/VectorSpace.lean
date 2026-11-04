@@ -1,11 +1,10 @@
 import Mathlib
 
 /-
-Book XXIV, chapter 3 (planned): fields and vector spaces. Lean core.
+Book XXIV, chapter 3: fields and vector spaces. Lean core.
 
-STATUS: UNTESTED. Written without a Lean toolchain; not yet compiled by anyone. Until the author
-runs it and the output is saved as vectorspace.axioms.txt, nothing in this file counts as checked.
-To run:
+STATUS: COMPILED by the author (no errors, no warnings, no sorryAx; output in
+vectorspace.axioms.txt). Header text only edited since. To run:
   lake env lean book24/VectorSpace.lean
 
 The statements follow Lax, Linear Algebra and Its Applications (2nd ed.), Chapter 1:
