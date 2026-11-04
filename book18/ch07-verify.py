@@ -138,10 +138,75 @@ else:
     check("p.96: geometric series Example 1 and nonnegative terms give an increasing sequence of partial sums", "geometric series" in rp(96) and "increasing sequence" in rp(96))
     check("p.98: 14.6 Comparison Test", "Comparison Test" in rp(98) and "14.6" in rp(98))
 
+
+print("[12] second Lean file: Series2.lean (ratio test, alternating series test, Abel's lemma)")
+src2f = Path(__file__).resolve().parent / "Series2.lean"
+src2 = src2f.read_text(encoding="utf-8")
+code2 = re.sub(r"/-.*?-/", "", src2, flags=re.S)
+code2 = re.sub(r"--[^\n]*", "", code2)
+names2 = ["dominated_by_geometric", "terms_tend_to_zero", "ratio_test_converges", "ratio_test_diverges",
+          "alternating_series_test", "control_alternating_needs_limit_zero", "power_series_abel",
+          "exp_series_converges_of_ne_zero"]
+for n in names2:
+    check(f"theorem {n} is declared", re.search(r"\btheorem\s+" + n + r"\b", code2) is not None)
+check("no proof in Series2.lean uses sorry", re.search(r"\bsorry\b", code2) is None)
+rep2 = Path(__file__).resolve().parent / "series2.axioms.txt"
+if not rep2.is_file():
+    print("  NOT YET RUN: series2.axioms.txt does not exist. Series2.lean is untested.")
+else:
+    l2 = [l for l in rep2.read_text(encoding="utf-8").splitlines() if l.startswith("'Book18Series2.")]
+    check("the Series2 axiom report has one line per theorem", len(l2) == len(names2), f"{len(l2)} lines")
+    check("no Series2 theorem line shows sorryAx", all("sorryAx" not in l for l in l2))
+
+print("[13] illustrations for the new tests (exact; NOT proofs, not in the Lean file)")
+# ratio -> 1 is inconclusive: harmonic diverges, 1/(n+1)^2 converges, both have ratio -> 1
+rat_h = [F(1, n + 2) / F(1, n + 1) for n in range(2000)]      # a_n = 1/(n+1)
+rat_s = [F(1, (n + 2) ** 2) / F(1, (n + 1) ** 2) for n in range(2000)]  # a_n = 1/(n+1)^2
+check("harmonic ratios (n+1)/(n+2) are below 1 and exceed 0.999 by n = 1999", rat_h[-1] > F(999, 1000) and rat_h[-1] < 1)
+check("1/(n+1)^2 ratios are below 1 and exceed 0.998 by n = 1999", rat_s[-1] > F(998, 1000) and rat_s[-1] < 1)
+H = lambda m: sum((F(1, i) for i in range(1, m + 1)), F(0))
+check("harmonic H(2^k) >= 1 + k/2 for k = 0..14 (it diverges although the ratio tends to 1)",
+      all(H(2 ** k) >= 1 + F(k, 2) for k in range(15)))
+check("1/(n+1)^2 partial sums stay below 2 (it converges although the ratio tends to 1)",
+      sum((F(1, (n + 1) ** 2) for n in range(5000)), F(0)) < 2)
+# ratio test with a_n = x^n/n!: ratio |x|/(n+1) falls below r = (L+1)/2 = 1/2 for n >= 2|x| - 1
+for x in (F(2), F(5), F(-7, 2)):
+    ok = all(abs(x) / (n + 1) < F(1, 2) for n in range(int(2 * abs(x)) + 1, int(2 * abs(x)) + 60))
+    check(f"x = {x}: the ratio |x|/(n+1) is below 1/2 from n = {int(2 * abs(x)) + 1} on", ok)
+# n! |x|^n: ratio (n+1)|x| exceeds 1 for large n, so the terms do not tend to 0
+check("n!*(3/2)^n: ratio (n+1)*3/2 > 1 from n = 0, terms increase", all(F(3, 2) * (n + 1) > 1 for n in range(0, 50)))
+# alternating series: b_n = 1/(n+1): even partial sums decrease, odd increase, and they bracket the limit
+def alt(n): return sum((F((-1) ** i, i + 1) for i in range(n)), F(0))
+check("alternating harmonic: the even partial sums s(2k) increase and the odd ones s(2k+1) decrease for k = 1..200",
+      all(alt(2 * k + 2) > alt(2 * k) and alt(2 * k + 3) < alt(2 * k + 1) for k in range(1, 200)))
+check("alternating harmonic: s(2k+1) > s(2k) and the gap is exactly b(2k) = 1/(2k+1)",
+      all(alt(2 * k + 1) - alt(2 * k) == F(1, 2 * k + 1) for k in range(1, 100)))
+check("control: b = 1 gives partial sums 0,1,0,1,... (no limit)", [alt_c for alt_c in [sum((F((-1) ** i) for i in range(n)), F(0)) for n in range(8)]] == [0, 1, 0, 1, 0, 1, 0, 1])
+# Abel's lemma: a_n = 1, x0 = 1 (bounded by M = 1), |x| = 9/10: terms |x|^n <= M * r^n with r = 9/10
+check("Abel: a_n = 1, x0 = 1, M = 1, x = 9/10: |a_n x^n| <= M r^n with r = max(|x/x0|, 1/2) = 9/10",
+      all(abs(F(9, 10) ** n) <= F(9, 10) ** n for n in range(60)))
+
+print("[14] the held texts, second pass: ratio test, alternating series test")
+if pdf is not None:
+    check("Lebl p.96: Proposition 2.5.19 (Ratio test), with a convergence case and a divergence case", "Proposition 2.5.19 (Ratio test)" in pg(96) and "converges absolutely" in pg(96) and "diverges" in pg(96))
+    check("Lebl p.97: Example 2.5.20, a series settled by the ratio test", "Example 2.5.20" in pg(97) and "ratio test" in pg(97))
+    check("Lebl p.101: Proposition 2.6.2 (Alternating series)", "Proposition 2.6.2 (Alternating series)" in pg(101))
+if tbb is not None:
+    T2 = subprocess.run(["pdftotext", "-layout", "-f", "165", "-l", "190", str(tbb), "-"], capture_output=True, text=True, timeout=150).stdout.split("\f")
+    tp2 = lambda n: flat(T2[n + 22 - 165])
+    check("TBB p.147: 3.28 (Ratio Test), limit < 1", "3.28 (Ratio Test)" in tp2(147))
+    check("TBB p.148: ratio limit L > 1 gives divergence", "If L > 1" in tp2(148) and "divergent" in tp2(148))
+    check("TBB p.162: 3.6.12 Alternating Series Test", "Alternating Series Test" in tp2(162))
+if ross is not None:
+    check("Ross p.99: 14.8 Ratio Test, (i) converges absolutely, (ii) diverges", "14.8 Ratio" in rp(99) and "converges absolutely" in rp(99) and "diverges if lim inf" in rp(99))
+    check("Ross p.108: 15.3 Alternating Series Theorem", "15.3 Alternating Series Theorem" in rp(108))
+print("  Abel's lemma (bounded at x0 => converges for |x| < |x0|): no matching statement located in the held texts; NOT page-checked.")
+
 print("[HONESTY]")
 print("  This script checks arithmetic and the text of two files. It does not run Lean; the axiom report is the author's run.")
 print("  geom_series_converges and bounded_monotone_converges are proved in Lean by Mathlib's own lemmas, not from scratch.")
 print("  [7] is an illustration; the Lean file does not prove that nonnegativity is necessary.")
+print("  Series2.lean is untested until the author compiles it; [13] are exact illustrations, not proofs. Root test, radius of convergence and Taylor are not covered.")
 print("  Held texts: Lebl, Thomson-Bruckner-Bruckner and Ross (Springer-copyrighted; page references only, nothing copied). Lebl, Basic Analysis I v6.3 (CC BY-NC-SA). [9] checks only that the four cited statements sit on the cited pages;")
 print("  it does not check that the chapter's wording matches Lebl line by line, and nothing is copied from him.")
 print()
