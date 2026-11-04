@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 5 · Linear maps · Book XXIV · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090f;--panel:#0d111b;--ink:#e8ebf2;--dim:#7d869c;--rule:#1c2233;--gold:#d9b76a;--teal:#58c7d1;--serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.65}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.7rem 1.25rem;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;color:var(--dim)}
+header,.wrap{max-width:900px;margin:0 auto;padding-inline:1.25rem}
+header{padding-top:2.4rem;padding-bottom:1rem}
+.kick{font-family:var(--mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:500;font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.1;margin:.5rem 0 .8rem}h1 em{color:var(--gold)}
+.lede{color:#b9c0d1;font-style:italic;max-width:42rem}
+h2{font-weight:500;font-size:1.35rem;margin:2.2rem 0 .7rem;padding-bottom:.3rem;border-bottom:1px solid var(--rule)}
+p{margin-bottom:.9rem}
+.mono,code{font-family:var(--mono);font-size:.82em;color:var(--teal)}
+.eq{font-family:var(--mono);font-size:.88rem;background:var(--panel);border-left:2px solid var(--gold);padding:.7rem 1rem;margin:1rem 0;overflow-x:auto;white-space:pre}
+.box{border:1px solid var(--rule);background:var(--panel);padding:1rem 1.2rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}
+.box.warn{border-color:#5a4720}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;background:rgba(7,9,15,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);padding:.55rem 0;margin:1.6rem 0 .4rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.bar button{font:inherit;letter-spacing:inherit;text-transform:inherit;background:transparent;border:1px solid var(--rule);color:var(--dim);padding:.35rem .55rem;cursor:pointer}
+.bar button[aria-pressed="true"]{color:var(--c);border-color:var(--c)}
+.bar button.q{--c:var(--ink)}
+.layer{border-left:2px solid var(--c);padding:.1rem 0 .1rem 1rem;margin:.7rem 0 1rem;--c:var(--teal)}
+.layer>.tag{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--c);margin-bottom:.25rem}
+.layer[data-l="statement"]{--c:var(--gold)}.layer[data-l="proof"]{--c:#9aa3ba}.layer[data-l="remarks"]{--c:#b497d9}
+.bar [data-l="intuition"]{--c:var(--teal)}.bar [data-l="statement"]{--c:var(--gold)}.bar [data-l="proof"]{--c:#9aa3ba}.bar [data-l="remarks"]{--c:#b497d9}
+body.off-intuition .layer[data-l="intuition"],body.off-statement .layer[data-l="statement"],body.off-proof .layer[data-l="proof"],body.off-remarks .layer[data-l="remarks"]{display:none}
+ol.ex{padding-left:1.4rem}ol.ex li{margin-bottom:.6rem}
+.stage{max-width:1100px;margin:1.4rem auto 0;padding:0 1.25rem}
+.grid{display:grid;grid-template-columns:1fr 270px;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.cv{background:#04060a;position:relative;min-width:0}
+canvas{display:block;width:100%;height:min(60vh,500px);touch-action:none;cursor:grab}
+.hint{position:absolute;left:.7rem;bottom:.5rem;font-family:var(--mono);font-size:.56rem;color:#47506a;letter-spacing:.05em}
+.panel{background:var(--panel);padding:1.1rem;display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.btn{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem .6rem;background:transparent;border:1px solid var(--rule);color:var(--dim);cursor:pointer}
+.btn.on,.btn:hover{border-color:var(--teal);color:var(--teal)}
+.row{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.read{border-top:1px solid var(--rule);padding-top:.8rem;font-family:var(--mono);font-size:.64rem;line-height:1.9;color:var(--dim)}
+.read b{color:var(--gold);font-weight:500}
+footer{max-width:900px;margin:3rem auto 0;padding:1.2rem 1.25rem 3rem;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.9}
+@media(max-width:820px){.grid{grid-template-columns:1fr}canvas{height:50vh}}
+.nav{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;max-width:900px;margin:2.2rem auto 0;padding:1rem 1.25rem 0;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.75rem}
+.metagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.4rem 0;font-size:.8rem;line-height:1.5}.metagrid>div{background:var(--panel);padding:.7rem .9rem;min-width:0}.metagrid strong{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.25rem}select{font-family:var(--mono);font-size:.7rem;background:var(--bg);color:var(--ink);border:1px solid var(--rule);padding:.2rem .3rem}
+[hidden]{display:none!important}
+#vecs{display:flex;flex-direction:column;gap:.5rem}
+</style>
+</head>
+<body>
+<div class="top"><span><a href="index.html">Book XXIV contents</a> &middot; <a href="ch04-basis-dimension.html">&larr; Chapter 4</a> &middot; <a href="../master-index.html">master index</a></span><span>Chapter 5 &middot; <a href="../book21/index.html">Book XXI &rarr;</a></span></div>
+<header>
+  <div class="kick">Principia Orthogona &middot; Book XXIV &middot; Linear and nonlinear &middot; Chapter 5</div>
+  <h1>Linear <em>maps</em></h1>
+  <p class="lede">A matrix is one way to write a linear map; the map is the thing. Every linear map splits its domain into the part it kills and the part it keeps, and the two sizes add up to the size of the domain. That one count answers when a system of equations can be solved, and why a polynomial can be pinned down by its values.</p>
+</header>
+
+<div class="stage"><p class="mono" style="margin:0 0 .5rem;line-height:1.7"><strong style="color:var(--gold)">The object.</strong> A linear map T of the plane F<sub>p</sub>&sup2; to itself, T(x, y) = (ax + by, cx + dy). Choose the four entries. Every point of the left grid is coloured by where T sends it; the gold points are sent to 0 (the kernel); the right grid lights up the points T reaches. The equal-coloured sets on the left are the fibres, and each has exactly as many points as the kernel. The button counts every one of the p&#8308; maps by rank.</p>
+<div class="grid"><div class="cv"><canvas id="c"></canvas><div class="hint">left: domain, coloured by image &middot; gold = kernel &middot; right: target, lit = in the range</div></div>
+  <div class="panel">
+    <div class="row"><label for="pp">p</label><select id="pp"><option>2</option><option selected>3</option><option>5</option></select></div>
+    <div class="row"><span>a</span><select id="ma"></select><span>b</span><select id="mb"></select></div>
+    <div class="row"><span>c</span><select id="mc"></select><span>d</span><select id="md"></select></div>
+    <button class="btn on" id="count" type="button">Count maps by rank</button>
+    <div class="read" id="read"></div>
+  </div></div></div>
+
+<div class="wrap">
+<div class="metagrid"><div><strong>Held text</strong>Lax, <em>Linear Algebra and Its Applications</em> 2nd ed., Chapter 3: definition and Theorem 1 p.20; Theorem 2 p.20, its proof and Corollaries A and B p.21; Corollaries A&prime; and B&prime; and Application 1 p.22 (scan; page checks in the script)</div><div><strong>Claim type</strong>standard mathematics, no new results; the Jacobian example (&sect;5) is a single worked case, not a theorem</div><div><strong>Lean</strong><a href="LinearMaps.lean">LinearMaps.lean</a><br><strong>UNTESTED</strong>: written without a toolchain; nobody has compiled it. <span class="mono">[OPEN]</span></div><div><strong>Every number</strong><a href="ch05-verify.py">ch05-verify.py</a> &mdash; run first, 0 FAIL</div></div>
+
+<div class="bar" id="bar" aria-label="Layers of the text"><span>layers</span>
+<button type="button" data-l="intuition" aria-pressed="true">Intuition</button>
+<button type="button" data-l="statement" aria-pressed="true">Statement</button>
+<button type="button" data-l="proof" aria-pressed="true">Proof</button>
+<button type="button" data-l="remarks" aria-pressed="true">Remarks</button>
+<button type="button" class="q" id="only">Intuition only</button><button type="button" class="q" id="all">All</button></div>
+
+<h2>1 &middot; Linear maps, and the two subspaces they carry</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>A linear map respects the two operations of a vector space: adding first and then mapping is the same as mapping first and then adding, and likewise for scaling. That is all it takes for two subsets to appear automatically: the vectors the map sends to 0, which is where it loses information, and the vectors it actually reaches. Both are subspaces.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Definition</span>X and U are linear spaces over the same field K. A map T: X &rarr; U is <em>linear</em> if T(x + y) = Tx + Ty for all x, y in X (additive) and T(kx) = kTx for all x in X, k in K (homogeneous). X is the <em>domain space</em> and U the <em>target space</em>.</div>
+<div class="box"><span class="lab">Theorem 1 (Lax, with Exercise 1)</span>(a) The image of a subspace of X under T is a subspace of U. (b) The inverse image of a subspace of U, that is, the set of all vectors of X that T sends into it, is a subspace of X.</div>
+<div class="box"><span class="lab">Definitions</span>The <em>range</em> R<sub>T</sub> is the image of X under T; by (a) it is a subspace of U. The <em>nullspace</em> (kernel) N<sub>T</sub> is the set of x with Tx = 0; by (b) it is a subspace of X.</div>
+<div class="box"><span class="lab">Fact used below (not numbered in Lax)</span>T0 = 0. And T is one-to-one if and only if N<sub>T</sub> = {0}.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p>T0 = 0: T0 = T(0 + 0) = T0 + T0, and subtracting T0 from both sides gives T0 = 0.</p>
+<p>(a) Let S be a subspace of X. Then 0 = T0 is in T(S). If Tx and Ty are in T(S), with x, y in S, then Tx + Ty = T(x + y) and x + y is in S, so the sum is in T(S). If Tx is in T(S) and k is a scalar, kTx = T(kx) with kx in S. (b) Let S&prime; be a subspace of U and S the set of x with Tx in S&prime;. T0 = 0 is in S&prime;, so 0 is in S. If Tx and Ty are in S&prime;, then T(x + y) = Tx + Ty is in S&prime;, so x + y is in S; and T(kx) = kTx is in S&prime;, so kx is in S.</p>
+<p>One-to-one: if T is one-to-one and Tx = 0 = T0 then x = 0. Conversely if N<sub>T</sub> = {0} and Tx = Ty, then T(x &minus; y) = Tx &minus; Ty = 0, so x &minus; y = 0. &square;</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lax p.20 (Theorem 1 is left to the reader there as Exercise 1; the proof above is mine). Lean: <span class="mono">theorem1a</span> and <span class="mono">theorem1b</span>. <strong>What the Lean proof is.</strong> Each states that a subspace exists whose underlying set is the image, respectively the inverse image, and is proved by Mathlib&rsquo;s own constructions <span class="mono">Submodule.map</span> and <span class="mono">Submodule.comap</span>, whose underlying sets are those by definition. So it records that the sentence is true over any field; it does not re-do the three checks above. The fact T0 = 0 and the one-to-one criterion are not stated separately in Lean. <span class="mono">[OPEN]</span> not compiled.</p>
+<p>The script checks Theorem 1 on every linear map between the F<sub>p</sub>-spaces (p, n, m) = (2,1,1), (2,2,2), (3,2,2), (2,3,2), (2,2,3), (2,3,3), (3,2,3), (3,3,2): all 2 + 16 + 81 + 64 + 64 + 512 + 729 + 729 matrices, each tested on every subspace of the domain and of the target.</p></div>
+
+<h2>2 &middot; Rank and nullity</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>T cannot tell apart two vectors that differ by something in the kernel. So the vectors that land on one target point are exactly one coset of the kernel, and every reached point has such a coset above it, all the same size. The domain is therefore the kernel&rsquo;s dimension plus the number of independent directions that survive, which is the dimension of the range. Move the entries in the plate: whenever the gold set grows, the lit set on the right shrinks by the same number of dimensions.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Theorem 2 (rank&ndash;nullity)</span>Let T: X &rarr; U be a linear map, X finite dimensional. Then dim N<sub>T</sub> + dim R<sub>T</sub> = dim X.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p>If x<sub>1</sub> and x<sub>2</sub> are equivalent modulo N<sub>T</sub>, then x<sub>1</sub> &minus; x<sub>2</sub> is in N<sub>T</sub>, so Tx<sub>1</sub> = Tx<sub>2</sub>. So T is well defined on the quotient space X/N<sub>T</sub>: set T&#771;{x} = Tx. It is linear (the operations on classes are done through representatives). It is onto R<sub>T</sub> by the definition of the range. It is one-to-one: if T&#771;{x} = 0 then Tx = 0, so x is in N<sub>T</sub> and {x} = {0}. So X/N<sub>T</sub> and R<sub>T</sub> are isomorphic and have the same dimension. By Theorem 6 of Chapter 4, dim X/N<sub>T</sub> = dim X &minus; dim N<sub>T</sub>. Combine. &square;</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lax pp.20&ndash;21, his proof. Lean: <span class="mono">theorem2</span>. <strong>What the Lean proof is.</strong> It is Mathlib&rsquo;s rank&ndash;nullity theorem (<span class="mono">LinearMap.finrank_range_add_finrank_ker</span>) with the two terms put in Lax&rsquo;s order by <span class="mono">omega</span>. It is not the quotient-space argument above, which is not formalized here; it checks that the statement is true over any field. <span class="mono">[OPEN]</span> not compiled.</p>
+<p>The script checks, on every one of the maps listed in &sect;1 and on all 19,683 maps of F<sub>3</sub>&sup3; to itself: |N<sub>T</sub>|&middot;|R<sub>T</sub>| = p<sup>n</sup>. On every map of the eight smaller families it also checks the proof&rsquo;s steps: each fibre is exactly a coset x + N<sub>T</sub>, and the number of cosets equals |R<sub>T</sub>|. As a by-product, and beyond Lax, it checks that the number of linear maps F<sub>p</sub><sup>n</sup> &rarr; F<sub>p</sub><sup>m</sup> of rank r is the product over i &lt; r of (p<sup>n</sup> &minus; p<sup>i</sup>)(p<sup>m</sup> &minus; p<sup>i</sup>)/(p<sup>r</sup> &minus; p<sup>i</sup>) in every case listed: for the plane it gives 1, 9 and 6 maps of rank 0, 1 and 2 over F<sub>2</sub> (total 16), and 1, 32 and 48 over F<sub>3</sub> (total 81). I have verified that formula by counting, not proved it here.</p></div>
+
+<h2>3 &middot; Corollaries: when the kernel must be nonzero, and when the map must be onto</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>If the target is smaller than the domain, T cannot be one-to-one: there is not enough room on the other side, so something nonzero is lost. If the target and domain have the same dimension and nothing nonzero is lost, then nothing is missed either, and T reaches every vector. In terms of equations: more unknowns than equations always leaves a nonzero solution of the homogeneous system, and a square system whose homogeneous version has only the zero solution can be solved for any right-hand side, in exactly one way.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Corollary A</span>If dim U &lt; dim X then Tx = 0 for some x &ne; 0.</div>
+<div class="box"><span class="lab">Corollary B</span>If dim U = dim X and the only vector with Tx = 0 is x = 0, then R<sub>T</sub> = U.</div>
+<div class="box"><span class="lab">Corollary A&prime;</span>X = K<sup>n</sup>, U = K<sup>m</sup>, m &lt; n. The system &sum;<sub>j</sub> t<sub>ij</sub>x<sub>j</sub> = 0 (i = 1, &hellip;, m) has a solution with some x<sub>j</sub> &ne; 0.</div>
+<div class="box"><span class="lab">Corollary B&prime;</span>X = U = K<sup>n</sup>. If &sum;<sub>j</sub> t<sub>ij</sub>x<sub>j</sub> = 0 (i = 1, &hellip;, n) has only the trivial solution, then &sum;<sub>j</sub> t<sub>ij</sub>x<sub>j</sub> = u<sub>i</sub> has a solution for all u<sub>1</sub>, &hellip;, u<sub>n</sub>, and the solution is unique.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p>A. dim R<sub>T</sub> &le; dim U &lt; dim X, because R<sub>T</sub> is a subspace of U. By Theorem 2, dim N<sub>T</sub> = dim X &minus; dim R<sub>T</sub> &gt; 0, so N<sub>T</sub> contains a vector other than 0.</p>
+<p>B. N<sub>T</sub> = {0}, so dim N<sub>T</sub> = 0. By Theorem 2 and dim U = dim X, dim R<sub>T</sub> = dim X = dim U. By Corollary 6&prime; of Chapter 4, a subspace of the same dimension as the whole space is the whole space; so R<sub>T</sub> = U.</p>
+<p>A&prime; and B&prime; are A and B for the map u<sub>i</sub> = &sum;<sub>j</sub> t<sub>ij</sub>x<sub>j</sub>. The uniqueness in B&prime;: if x and x&prime; both solve the system, T(x &minus; x&prime;) = 0, so x = x&prime; by the one-to-one criterion of &sect;1. &square;</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lax p.21&ndash;22. Lean: <span class="mono">corollaryA</span>, <span class="mono">corollaryB</span>, derived from <span class="mono">theorem2</span> as above (B uses Mathlib&rsquo;s <span class="mono">Submodule.eq_top_of_finrank_eq</span> for Corollary 6&prime;). The concrete versions A&prime; and B&prime; are not stated in Lean separately. <span class="mono">[OPEN]</span> not compiled.</p>
+<p><strong>Each hypothesis is doing work, and the controls show it.</strong> Over any field, (x, y) &rarr; (x, 0) has equal dimensions but a nonzero kernel and misses most of the plane: Corollary B needs &ldquo;only x = 0 goes to 0&rdquo;. It is <span class="mono">control_corollaryB_needs_trivial_kernel</span> in the Lean file (over the rationals) and is checked over F<sub>2</sub>, F<sub>3</sub> and F<sub>5</sub> in the script. (x, y) &rarr; (x, y, 0) from F<sub>3</sub>&sup2; to F<sub>3</sub>&sup3; has a trivial kernel and is not onto: Corollary B needs dim U = dim X. The identity of the plane has m = n and a trivial kernel: Corollary A needs the strict inequality m &lt; n.</p>
+<p>The script checks Corollary A on every map F<sub>p</sub><sup>n</sup> &rarr; F<sub>p</sub><sup>m</sup> with m &lt; n in the list; Corollary B on every square map, including that each target vector has exactly one preimage and that every map with a nonzero kernel is not onto; and that the number of square maps with trivial kernel is (p<sup>n</sup> &minus; 1)(p<sup>n</sup> &minus; p) &hellip; (p<sup>n</sup> &minus; p<sup>n&minus;1</sup>), the same count as ordered bases in Chapter 4: 6, 48, 168 and 11,232.</p></div>
+
+<h2>4 &middot; Application: a polynomial is determined by its values</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>Two points fix a line; three points fix a parabola. In general n distinct points fix a polynomial of degree below n, and any values at those points are possible. The map that records the values has a domain and target of dimension n, so Corollary B turns the easy half, that a nonzero polynomial cannot vanish at all n points, into the hard half, that every list of values is hit.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Application 1 (Lax p.22, there over the complex numbers)</span>Let X be the polynomials p(s) of degree less than n, U = K<sup>n</sup>, and s<sub>1</sub>, &hellip;, s<sub>n</sub> distinct elements of K. Define Tp = (p(s<sub>1</sub>), &hellip;, p(s<sub>n</sub>)). Then T is onto: the values of p at s<sub>1</sub>, &hellip;, s<sub>n</sub> can be prescribed arbitrarily. (By the one-to-one criterion, the polynomial is also unique.)</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p>dim X = n (the monomials 1, s, &hellip;, s<sup>n&minus;1</sup> are a basis) and dim U = n. N<sub>T</sub> is trivial: Tp = 0 means p vanishes at n distinct points, and a nonzero polynomial of degree less than n has fewer than n zeros. (Standard: if p(s<sub>1</sub>) = 0 then p = (s &minus; s<sub>1</sub>)q with deg q &lt; deg p; at each further zero s<sub>i</sub> distinct from s<sub>1</sub>, q(s<sub>i</sub>) = 0 because the field has no zero divisors; after n zeros p would be divisible by a polynomial of degree n, forcing p = 0.) By Corollary B, R<sub>T</sub> = U. &square;</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lean: <span class="mono">interpolation</span>, over an arbitrary field K, with s injective and conclusion &ldquo;degree p &lt; n and p(s<sub>i</sub>) = u<sub>i</sub> for all i&rdquo;. <strong>What the Lean proof is.</strong> It follows Lax&rsquo;s structure: the evaluation map on the polynomials of degree below n (Mathlib&rsquo;s <span class="mono">degreeLT</span>), proved one-to-one with Mathlib&rsquo;s bound on the number of zeros, then onto by Mathlib&rsquo;s &ldquo;one-to-one implies onto for equal finite dimensions&rdquo;, which is Corollary B&rsquo;s content. It is the most name-fragile theorem in the file (several <span class="mono">Polynomial</span> lemma names are flagged in the header as likely to need fixing against the real compiler). <span class="mono">[OPEN]</span> not compiled.</p>
+<p>The script checks: over F<sub>3</sub> (n &le; 3), F<sub>5</sub> (n &le; 5) and F<sub>7</sub> (n &le; 3), for every ordered list of n distinct points (15, 325 and 259 lists), that the p<sup>n</sup> polynomials take p<sup>n</sup> different value lists, which is exactly onto. And it breaks each hypothesis: a repeated point (0, 0, 1) over F<sub>5</sub> misses 100 of the 125 value lists, because x(x &minus; 1) vanishes at all three; degree below 4 with three distinct points always has a nonzero kernel; and x<sup>5</sup> &minus; x vanishes at all five points of F<sub>5</sub> though it is not zero, so &ldquo;less than n&rdquo; cannot be relaxed to &ldquo;at most n&rdquo;. Over the rationals it solves one case exactly: nodes 0, 1, 2, 5 and values 3, &minus;1, 4, 1 give the polynomial 3 &minus; (109/10)s + (81/10)s&sup2; &minus; (6/5)s&sup3;, evaluated back at the nodes with exact fractions.</p>
+<p><strong>Not done here.</strong> Lax&rsquo;s Application 2 (averages over disjoint intervals, which needs the fact that a function with average zero changes sign) and Application 3 (the lattice equations for Laplace&rsquo;s equation, which needs the maximum principle) are on pp.22&ndash;23; I did not work through them and the Lean file does not contain them.</p></div>
+
+<h2>5 &middot; The Jacobian: the linear map that best fits a nonlinear one</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>Near a point, a smooth nonlinear map looks like a linear one: the Jacobian matrix of its partial derivatives. Everything in &sect;&sect;1&ndash;3 then applies to that linear map, and the kernel is the place to look. A direction in the kernel is one where the linear model says nothing moves, to first order. What the map actually does in that direction is a second-order effect, and the linear model cannot see it. This is the question Interlude 1 asked, when to linearize, in its smallest form.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box warn"><span class="lab">Not in Lax; one worked example</span>F(x, y) = (x&sup2; + y, xy) at the point a = (1, 2). Its Jacobian is J = [[2x, 1], [y, x]] = [[2, 1], [2, 1]] there. (i) Exactly, F(a + h) &minus; F(a) &minus; Jh = (h<sub>1</sub>&sup2;, h<sub>1</sub>h<sub>2</sub>). (ii) J has rank 1 and nullity 1, and its kernel is spanned by (1, &minus;2). (iii) Along h = t(1, &minus;2), F(a + h) &minus; F(a) = (t&sup2;, &minus;2t&sup2;). (iv) No other linear map fits as well: for A &ne; J the remainder F(a + h) &minus; F(a) &minus; Ah is of the size of |h| along some direction, while for J it is at most of size |h|&sup2;.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p>(i) F(a + h) = ((1 + h<sub>1</sub>)&sup2; + 2 + h<sub>2</sub>, (1 + h<sub>1</sub>)(2 + h<sub>2</sub>)) = (3 + 2h<sub>1</sub> + h<sub>1</sub>&sup2; + h<sub>2</sub>, 2 + 2h<sub>1</sub> + h<sub>2</sub> + h<sub>1</sub>h<sub>2</sub>), F(a) = (3, 2), and Jh = (2h<sub>1</sub> + h<sub>2</sub>, 2h<sub>1</sub> + h<sub>2</sub>). Subtract. (ii) Both rows of J are (2, 1), so the range of J is the line spanned by (1, 1) and has dimension 1, and by Theorem 2 the kernel has dimension 2 &minus; 1 = 1. J(1, &minus;2) = (2 &minus; 2, 2 &minus; 2) = 0. (iii) From (i) with h = (t, &minus;2t): Jh = 0, so F(a + h) &minus; F(a) = (t&sup2;, &minus;2t&sup2;). The range of J is the line through (1, 1), and (1, &minus;2) is not along it: the motion in the kernel direction leaves the linear model&rsquo;s line, at order t&sup2;. (iv) For a linear A, write A = J + E with E &ne; 0. The remainder at h = tu is t(J &minus; A)u + t&sup2;(u<sub>1</sub>&sup2;, u<sub>1</sub>u<sub>2</sub>) = &minus;tEu + t&sup2;(u<sub>1</sub>&sup2;, u<sub>1</sub>u<sub>2</sub>). Choose u with Eu &ne; 0. Dividing by |tu| leaves &minus;Eu/|u| plus a term of size at most t|u|, which does not tend to 0 as t &rarr; 0. For A = J, only the second term is left, of size at most t|u|. &square;</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>This is one function at one point, computed exactly. It illustrates the idea and proves nothing general; there is no Lean for it in this chapter. The general statement (differentiable means there is a linear map with a remainder smaller than |h|; the directional derivative is that map applied to the direction; the gradient direction maximizes it) is Book XVIII chapter 8, <a href="../book18/ch08-several-variables.html">Several variables</a>, from Loomis&ndash;Sternberg Chapter 3, with its own Lean file (also not yet compiled when this page was written). I used the sup norm for the remainder estimates; any norm on the plane gives the same conclusion.</p>
+<p>The script checks (i) on 841 rational h, (ii)&ndash;(iii) at several t including negative and fractional ones, and (iv) for all 80 nonzero integer E with entries in {&minus;1, 0, 1} in five directions at t = 1/1000 and 1/1,000,000, in exact arithmetic. That the point (1, 2) has singular Jacobian is a feature of the example I chose, not a property of F: det J = 2x&sup2; &minus; y vanishes along the whole parabola y = 2x&sup2;.</p></div>
+
+<h2>6 &middot; Which fields</h2>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>Lax works over the reals or complex numbers, and Application 1 over the complex numbers. Sections 1&ndash;4 use only that K is a field: the plate, the script and the Lean file are over F<sub>p</sub>, over any field K, and over the rationals in the control. The step that needs the field axioms is the one that bounds the zeros of a polynomial (no zero divisors); over F<sub>p</sub> it also explains why n distinct points exist only for n &le; p. Section 5 is different: the Jacobian needs limits, so it lives over the reals (or complex numbers), and the finite-field checks say nothing about it.</p></div>
+
+<h2>7 &middot; Exercises</h2>
+<ol class="ex">
+<li>(Lax Exercise 1.) Prove Theorem 1 without looking at the proof above. Then prove that the range of T is spanned by the images of any spanning list of X.</li>
+<li>Over F<sub>3</sub>, T(x, y) = (x + y, 2x + 2y), the plate&rsquo;s opening state. Find N<sub>T</sub> and R<sub>T</sub>, check Theorem 2, and list the three fibres. Which is the kernel?</li>
+<li>Count the linear maps F<sub>2</sub>&sup2; &rarr; F<sub>2</sub>&sup2; of rank 0, 1 and 2, by hand. Check against 1, 9, 6.</li>
+<li>Give a linear map R&sup3; &rarr; R&sup2; and exhibit the nonzero vector Corollary A promises. Then write the same fact as a homogeneous system with two equations and three unknowns.</li>
+<li>Show that the polynomial of degree below 2 through (0, 3) and (1, &minus;1) over the rationals is 3 &minus; 4s, and verify it by the method of &sect;4: write down T and check that its nullspace is zero.</li>
+<li>Over F<sub>5</sub>, why does Application 1 make no sense for n = 6? What does Corollary A say about degree below 6 with all five points of F<sub>5</sub>?</li>
+<li>For the example of &sect;5, find the points where det J &ne; 0 and say what Corollary B gives for the linear model there.</li>
+<li>If T: X &rarr; U is linear and one-to-one, and x<sub>1</sub>, &hellip;, x<sub>j</sub> are linearly independent in X, show that Tx<sub>1</sub>, &hellip;, Tx<sub>j</sub> are linearly independent in U. Does it hold if T is not one-to-one?</li>
+</ol>
+</div>
+
+<div class="nav"><a href="ch04-basis-dimension.html">&larr; Chapter 4</a><a href="index.html">&uarr; Contents</a><span class="mono" style="color:var(--dim)">Chapter 6 planned</span></div>
+<footer>
+<strong style="color:var(--gold)">Status.</strong> Theorems 1 and 2, Corollaries A and B and Application 1 proved in the text (Lax leaves Theorem 1 as his Exercise 1; the proof here is mine). Checked by <a class="mono" href="ch05-verify.py">ch05-verify.py</a> (exhaustive over every linear map in the stated families of finite-field spaces, with the page references into Lax, and an exact worked example for &sect;5). <a class="mono" href="LinearMaps.lean">LinearMaps.lean</a> states the same results (without Corollaries A&prime; and B&prime;, Applications 2 and 3, the Jacobian, the transpose and similarity) and is <strong>UNTESTED</strong>: written without a Lean toolchain and not compiled by anyone. Most of its proofs are calls to Mathlib, so once it compiles it will check that Lax&rsquo;s statements are true over any field, not that these proofs are right. Held text: Lax only; a scan, so its page checks match short phrases. Nothing is copied from Lax. Standard results, no new claims.
+</footer>
+
+<script>
+(function(){
+  var body=document.body,bar=document.getElementById('bar');
+  function set(l,on){body.classList.toggle('off-'+l,!on);var b=bar.querySelector('button[data-l="'+l+'"]');if(b)b.setAttribute('aria-pressed',on?'true':'false')}
+  bar.querySelectorAll('button[data-l]').forEach(function(b){b.onclick=function(){set(b.dataset.l,b.getAttribute('aria-pressed')!=='true')}});
+  document.getElementById('only').onclick=function(){['intuition','statement','proof','remarks'].forEach(function(l){set(l,l==='intuition')})};
+  document.getElementById('all').onclick=function(){['intuition','statement','proof','remarks'].forEach(function(l){set(l,true)})};
+
+  var cv=document.getElementById('c'),ctx=cv.getContext('2d'),rd=document.getElementById('read');
+  var sp=document.getElementById('pp'),ids=['ma','mb','mc','md'],sel=ids.map(function(i){return document.getElementById(i)});
+  var p=3,M=[1,1,2,2],note='';
+  function md(x){return ((x%p)+p)%p}
+  function T(x,y,A){A=A||M;return [md(A[0]*x+A[1]*y),md(A[2]*x+A[3]*y)]}
+  function rankOf(A){var s={};for(var x=0;x<p;x++)for(var y=0;y<p;y++){var t=T(x,y,A);s[t[0]+','+t[1]]=1}var n=Object.keys(s).length,r=0,q=1;while(q<n){q*=p;r++}return r}
+  function fillSelects(){
+    sel.forEach(function(s,i){
+      s.innerHTML='';
+      for(var v=0;v<p;v++){var o=document.createElement('option');o.textContent=v;s.appendChild(o)}
+      M[i]=Math.min(M[i],p-1);s.selectedIndex=M[i];
+      s.onchange=function(){M[i]=+s.value;note='';draw()};
+    });
+  }
+  function draw(){
+    var w=cv.clientWidth,h=cv.clientHeight,dpr=window.devicePixelRatio||1;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.fillStyle='#04060a';ctx.fillRect(0,0,w,h);
+    var imgs={},list=[],x,y,t,key;
+    for(x=0;x<p;x++)for(y=0;y<p;y++){t=T(x,y);key=t[0]+','+t[1];if(!(key in imgs)){imgs[key]=list.length;list.push(key)}}
+    var nonzero=list.filter(function(k){return k!=='0,0'}),hue={};
+    nonzero.forEach(function(k,i){hue[k]=Math.round(20+i*(300/Math.max(nonzero.length,1)))});
+    function col(k){return k==='0,0'?'hsl(42,58%,58%)':'hsl('+hue[k]+',46%,40%)'}
+    var m=24,gap=44,half=(w-gap-2*m)/2,cell=Math.min(half/p,(h-2*m-14)/p),gw=cell*p;
+    var ox1=m+(half-gw)/2,ox2=m+half+gap+(half-gw)/2,oy=m+14+((h-2*m-14)-gw)/2;
+    ctx.fillStyle='#7d869c';ctx.font='10px JetBrains Mono, monospace';ctx.textAlign='left';ctx.textBaseline='alphabetic';
+    ctx.fillText('X = F'+p+'^2',ox1,oy-6);ctx.fillText('U = F'+p+'^2',ox2,oy-6);
+    ctx.fillStyle='#47506a';ctx.textAlign='center';ctx.fillText('T',m+half+gap/2,oy+gw/2);
+    for(x=0;x<p;x++)for(y=0;y<p;y++){
+      var px=ox1+x*cell,py=oy+(p-1-y)*cell;t=T(x,y);key=t[0]+','+t[1];
+      ctx.fillStyle=col(key);ctx.fillRect(px+2,py+2,cell-4,cell-4);
+      if(cell>26){ctx.fillStyle='#04060a';ctx.font='11px JetBrains Mono, monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(x+','+y,px+cell/2,py+cell/2)}
+      var qx=ox2+x*cell,qy=oy+(p-1-y)*cell,k2=x+','+y,inR=(k2 in imgs);
+      ctx.fillStyle=inR?col(k2):'#10151f';ctx.fillRect(qx+2,qy+2,cell-4,cell-4);
+      if(cell>26){ctx.fillStyle=inR?'#04060a':'#47506a';ctx.font='11px JetBrains Mono, monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(x+','+y,qx+cell/2,qy+cell/2)}
+    }
+    var ker=0;for(x=0;x<p;x++)for(y=0;y<p;y++){t=T(x,y);if(t[0]===0&&t[1]===0)ker++}
+    var nR=list.length,rk=0,q=1;while(q<nR){q*=p;rk++}
+    var nl=0;q=1;while(q<ker){q*=p;nl++}
+    rd.innerHTML='<b>p</b> = '+p+' &middot; T(x,y) = ('+M[0]+'x+'+M[1]+'y, '+M[2]+'x+'+M[3]+'y)<br><b>kernel</b>: '+ker+' points &middot; nullity '+nl+'<br><b>range</b>: '+nR+' points &middot; rank '+rk+'<br><b>nullity + rank</b> = '+(nl+rk)+' = dim X = 2<br><b>each fibre</b> has '+ker+' points ('+nR+' fibres, '+nR+'&times;'+ker+' = '+(nR*ker)+' = p&sup2;)<br><b>one-to-one</b>: '+(ker===1?'yes':'no')+' &middot; <b>onto</b>: '+(nR===p*p?'yes':'no')+(note?'<br>'+note:'');
+  }
+  function count(){
+    var tally=[0,0,0],a,b,c,d;
+    for(a=0;a<p;a++)for(b=0;b<p;b++)for(c=0;c<p;c++)for(d=0;d<p;d++)tally[rankOf([a,b,c,d])]++;
+    var r2=(p*p-1)*(p*p-p),r1=(p*p-1)*(p*p-1)/(p-1),ok=(tally[0]===1&&tally[1]===r1&&tally[2]===r2);
+    note='<b>all '+Math.pow(p,4)+' maps</b>: rank 0: '+tally[0]+', rank 1: '+tally[1]+', rank 2: '+tally[2]+'<br>formula: 1, '+r1+', '+r2+(ok?' (equal)':' (NOT equal)');
+    draw();
+  }
+  sp.onchange=function(){p=+sp.value;M=[1,1,2,2];note='';fillSelects();draw()};
+  document.getElementById('count').onclick=count;
+  fillSelects();window.addEventListener('resize',draw);draw();
+})();
+</script>
+</body>
+</html>
