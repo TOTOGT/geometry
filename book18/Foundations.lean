@@ -82,7 +82,7 @@ theorem ivt (f : ℝ → ℝ) {a b y : ℝ} (hab : a ≤ b) (hf : ContinuousOn f
 
 theorem uniform_limit_continuous (F : ℕ → ℝ → ℝ) (f : ℝ → ℝ) (hF : ∀ n, Continuous (F n))
     (hu : TendstoUniformly F f Filter.atTop) : Continuous f :=
-  hu.continuous (Filter.Eventually.of_forall hF)
+  hu.continuous (Filter.Eventually.of_forall hF).frequently
 
 end Book18F
 
