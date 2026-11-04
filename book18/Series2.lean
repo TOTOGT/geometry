@@ -3,8 +3,10 @@ import Mathlib
 /-
 Volume XVIII — chapter 7, second Lean file: the ratio test, the alternating series test, Abel's lemma.
 
-STATUS: UNTESTED. Written without a Lean toolchain; not compiled by anyone. Until the author runs it
-and saves the output as series2.axioms.txt, nothing in this file counts as checked. To run:
+STATUS: FIRST RUN DONE, NOT YET CLEAN. The author compiled it once (2026-11-04): 7 of 8 theorems compiled with only the
+standard axioms; exp_series_converges_of_ne_zero failed at one `field_simp` step (an abs of a product was left
+unsplit, error at the old line 204), so its axiom line shows sorryAx. That step was then rewritten (abs_of_nonneg,
+then field_simp <;> ring) and has NOT been recompiled; until it is, treat the file as not clean. To rerun:
   lake env lean book18/Series2.lean 2>&1 | tee book18/series2.axioms.txt
 
 Series.lean is compiled and is not touched. This file is standalone: it re-declares ConvergesTo and
@@ -208,7 +210,10 @@ theorem exp_series_converges_of_ne_zero (x : ℝ) (hx : x ≠ 0) :
     have hn1 : ((n : ℝ) + 1) ≠ 0 := by positivity
     rw [abs_div, abs_div, abs_pow, abs_pow, Nat.factorial_succ]
     simp only [Nat.cast_mul, Nat.cast_add, Nat.cast_one, Nat.abs_cast]
-    field_simp
+    have h1 : |((n : ℝ) + 1) * (n.factorial : ℝ)| = ((n : ℝ) + 1) * (n.factorial : ℝ) :=
+      abs_of_nonneg (by positivity)
+    rw [h1]
+    field_simp <;> ring
   have hL : ConvergesTo (fun n : ℕ => |x ^ (n + 1) / ((n + 1).factorial : ℝ)| /
       |x ^ n / (n.factorial : ℝ)|) 0 :=
     (convergesTo_iff _ _).2 (hlim.congr (fun n => (hratio n).symm))

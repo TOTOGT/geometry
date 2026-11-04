@@ -152,11 +152,12 @@ for n in names2:
 check("no proof in Series2.lean uses sorry", re.search(r"\bsorry\b", code2) is None)
 rep2 = Path(__file__).resolve().parent / "series2.axioms.txt"
 if not rep2.is_file():
-    print("  NOT YET RUN: series2.axioms.txt does not exist. Series2.lean is untested.")
+    print("  NOT YET RUN: series2.axioms.txt does not exist.")
 else:
     l2 = [l for l in rep2.read_text(encoding="utf-8").splitlines() if l.startswith("'Book18Series2.")]
     check("the Series2 axiom report has one line per theorem", len(l2) == len(names2), f"{len(l2)} lines")
-    check("no Series2 theorem line shows sorryAx", all("sorryAx" not in l for l in l2))
+    check("no Series2 theorem line shows sorryAx", all("sorryAx" not in l for l in l2),
+          "; ".join(l.split("'")[1] for l in l2 if "sorryAx" in l) or "")
 
 print("[13] illustrations for the new tests (exact; NOT proofs, not in the Lean file)")
 # ratio -> 1 is inconclusive: harmonic diverges, 1/(n+1)^2 converges, both have ratio -> 1
@@ -206,7 +207,7 @@ print("[HONESTY]")
 print("  This script checks arithmetic and the text of two files. It does not run Lean; the axiom report is the author's run.")
 print("  geom_series_converges and bounded_monotone_converges are proved in Lean by Mathlib's own lemmas, not from scratch.")
 print("  [7] is an illustration; the Lean file does not prove that nonnegativity is necessary.")
-print("  Series2.lean is untested until the author compiles it; [13] are exact illustrations, not proofs. Root test, radius of convergence and Taylor are not covered.")
+print("  Series2.lean was compiled once by the author (7 of 8 theorems clean; the exponential-series theorem failed and was fixed in source, not recompiled), so the [12] check reports a FAIL until it is recompiled; [13] are exact illustrations, not proofs. Root test, radius of convergence and Taylor are not covered.")
 print("  Held texts: Lebl, Thomson-Bruckner-Bruckner and Ross (Springer-copyrighted; page references only, nothing copied). Lebl, Basic Analysis I v6.3 (CC BY-NC-SA). [9] checks only that the four cited statements sit on the cited pages;")
 print("  it does not check that the chapter's wording matches Lebl line by line, and nothing is copied from him.")
 print()
