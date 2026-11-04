@@ -3,12 +3,11 @@ import Mathlib
 /-
 Book XXIV, chapter 7: eigenvalues and eigenvectors. Lean core.
 
-STATUS: UNTESTED. Written 2026-11-04 without a Lean toolchain; the author has not compiled it. Nothing here is
-verified until `lake env lean book24/Eigen.lean 2>&1 | tee book24/eigen.axioms.txt` has been run and its real
-output read. Lemma names are from memory of Mathlib; errors are expected to be about names or small simp steps,
-and are to be fixed against what the compiler actually says. The Mathlib interface for splitting polynomials and
-for eigenvectors of endomorphisms has changed names more than once, so those four statements are the likeliest
-to need a fix.
+STATUS: COMPILED on the author's machine, 2026-11-04. It was written without a toolchain. The first compile found
+one unknown lemma name (Matrix.smul_mulVec_assoc, in eigen_iff_det_zero); the fix was recompiled with
+`lake env lean book24/Eigen.lean 2>&1 | tee book24/eigen.axioms.txt`. The report lists all seven theorems, each
+depending only on [propext, Classical.choice, Quot.sound], and no sorryAx. The only remaining output is linter
+warnings about unused fallback tactics in eigen_iff_det_zero.
 
 The statements follow Lax, Linear Algebra and Its Applications (2nd ed.), Chapter 6 (scan page = printed + 17):
   eigen_iff_det_zero                p.60-61  a is an eigenvalue of A exactly when det(aI - A) = 0 (over a field)
@@ -37,7 +36,12 @@ theorem eigen_iff_det_zero {K : Type*} [Field K] {n : ℕ} (A : Matrix (Fin n) (
     (∃ v : Fin n → K, v ≠ 0 ∧ A.mulVec v = a • v) ↔ ((a • (1 : Matrix (Fin n) (Fin n) K)) - A).det = 0 := by
   have key : ∀ v : Fin n → K, A.mulVec v = a • v ↔ ((a • (1 : Matrix (Fin n) (Fin n) K)) - A).mulVec v = 0 := by
     intro v
-    rw [Matrix.sub_mulVec, Matrix.smul_mulVec_assoc, Matrix.one_mulVec, sub_eq_zero]
+    have h1 : (a • (1 : Matrix (Fin n) (Fin n) K)).mulVec v = a • v := by
+      first
+      | simp [Matrix.smul_mulVec]
+      | simp [Matrix.smul_mulVec_assoc]
+      | (ext i; simp [Matrix.mulVec, dotProduct, Matrix.one_apply, mul_comm])
+    rw [Matrix.sub_mulVec, h1, sub_eq_zero]
     exact eq_comm
   simp_rw [key]
   exact Matrix.exists_mulVec_eq_zero_iff

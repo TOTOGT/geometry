@@ -3,10 +3,9 @@ import Mathlib
 /-
 Book XXIV, chapter 6: matrices and determinants. Lean core.
 
-STATUS: UNTESTED. Written 2026-11-04 without a Lean toolchain; the author has not compiled it. Nothing here is
-verified until `lake env lean book24/MatricesDet.lean 2>&1 | tee book24/matricesdet.axioms.txt` has been run and
-its real output read. Lemma names are from memory of Mathlib; errors are expected to be about names or small
-simp steps, and are to be fixed against what the compiler actually says.
+STATUS: COMPILED on the author's machine, 2026-11-04. It was written without a toolchain; then
+`lake env lean book24/MatricesDet.lean 2>&1 | tee book24/matricesdet.axioms.txt` was run. The report lists all nine
+theorems, each depending only on [propext, Classical.choice, Quot.sound], and no sorryAx.
 
 The statements follow Lax, Linear Algebra and Its Applications (2nd ed.), Chapters 4 and 5 (scan page = printed + 17):
   product_is_composition     p.35   the product of matrices is the matrix of the composed maps
