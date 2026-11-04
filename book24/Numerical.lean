@@ -3,12 +3,14 @@ import Mathlib
 /-
 Book XXIV, chapter 9: the numerical side (norms, singular values, conditioning). Lean core.
 
-STATUS: UNTESTED. Written 2026-11-04 without a Lean toolchain; the author has not compiled it. Nothing here is
-verified until `lake env lean book24/Numerical.lean 2>&1 | tee book24/numerical.axioms.txt` has been run and its
-real output read. Lemma names are from memory of Mathlib; errors are expected to be about names or small simp
-steps, and are to be fixed against what the compiler actually says. The likeliest to need a fix: `opNorm_comp_le`
-and `condition_ge_one` (the name of the operator-norm lemmas has changed from `op_norm_*` to `opNorm_*`),
-`gram_same_nonzero_spectrum` (the exact form of `Matrix.charpoly_mul_comm'`), and the `simp` step in the control.
+STATUS: COMPILED 2026-11-04, NINE OF TEN CLEAN. The first run (output in numerical.axioms.txt) accepted the first nine
+theorems with axioms [propext, Classical.choice, Quot.sound] only, and failed on `control_hilbert3_inverse`: the `simp`
+step left `![9, -36, 30] 2` and the `vecCons ... 2` terms unevaluated, so nine goals stayed open and the theorem
+carries sorryAx. The proof of that one theorem has since been replaced (a `first` over `Matrix.mul_fin_three` and a
+`simp` with `Matrix.vecHead`/`Matrix.vecTail`); the replacement has NOT been compiled. Two lint warnings in the first run
+say the fallback alternatives in `opNorm_comp_le` and `gram_same_nonzero_spectrum` never ran: the first alternative
+worked in both, so the fallbacks are harmless and can be dropped. Recompile with
+`lake env lean book24/Numerical.lean 2>&1 | tee book24/numerical.axioms.txt` and read the real output.
 
 The statements follow Lax, Linear Algebra and Its Applications (2nd ed.), Chapters 7, 10 and 17 (scan page = printed + 17):
   opNorm_le                    p.90   |Az| <= |A| |z|                                    Theorem 13 (33)
@@ -102,8 +104,11 @@ theorem gram_same_nonzero_spectrum {m n : Type*} [Fintype m] [Fintype n] [Decida
 theorem control_hilbert3_inverse :
     (!![(9 : ℚ), -36, 30; -36, 192, -180; 30, -180, 180]) *
       (!![(1 : ℚ), 1 / 2, 1 / 3; 1 / 2, 1 / 3, 1 / 4; 1 / 3, 1 / 4, 1 / 5]) = 1 := by
-  ext i j
-  fin_cases i <;> fin_cases j <;> norm_num [Matrix.mul_apply, Fin.sum_univ_three]
+  first
+  | (rw [Matrix.mul_fin_three]; norm_num [Matrix.one_fin_three])
+  | (ext i j
+     fin_cases i <;> fin_cases j <;>
+       simp [Matrix.mul_apply, Fin.sum_univ_three, Matrix.vecHead, Matrix.vecTail] <;> norm_num)
 
 end Book24Nm
 
