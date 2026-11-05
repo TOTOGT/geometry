@@ -125,6 +125,8 @@ check("says the certificates are for reaching a level, not winning", "reaching a
 check("says nothing was tested on market data", "has not yet been tested on market data" in txt and "not an edge" in txt)
 check("gender-neutral: no he/his/him/she/her", not re.search(r"\\b(he|his|him|himself|she|her|hers)\\b", txt, re.I))
 check("states Bronze, Silver and Gold as levels reached, three certificates", "three certificates" in txt and "Bronze, Silver and Gold" in txt)
+from datetime import date
+check("level dates May 15 to Jun 22 span 38 days; page says so and gives no year", (date(2026,6,22)-date(2026,5,15)).days == 38 and "38 days" in txt and "no year" in txt)
 check("no claim that a level is a job, a payment or a placement", not re.search(r"consultant (status|role|position)|paid consultant|hired", txt, re.I))
 
 print(f"\n{'ALL PASS' if not FAIL else 'FAILURES: ' + str(len(FAIL))}  ({len(SKIP)} SKIP)")
