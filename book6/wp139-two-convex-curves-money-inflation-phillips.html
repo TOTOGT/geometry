@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP139 · Two Convex Curves: Money, Inflation and the Phillips Curve</title>
+<meta name="description" content="Colwell (2022) on money growth and inflation beside Phillips (1958) on unemployment and wage change: what each curve says, the checked arithmetic, and what the pairing does not show.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],tags:'ams'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+:root{
+  --void:    #04040a;
+  --surface: #0c0d16;
+  --card:    #10111c;
+  --gold:    #c9a84c;
+  --teal:    #0ABAB5;
+  --red:     #e05a3a;
+  --purple:  #c084fc;
+  --green:   #50c878;
+  --amber:   #f59e0b;
+  --deep:    #5b4fcf;   /* deep quantum violet */
+  --text:    #e8e4d8;
+  --muted:   #6b6757;
+  --dim:     #2a2920;
+  --rule:    rgba(201,168,76,0.18);
+  --serif:   'Noto Serif', Georgia, serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--serif);background:var(--void);color:var(--text);font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(4,4,10,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.nav-series{font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.2rem;}
+.nav-links a{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-links a.here{color:var(--purple);}
+
+.hero{padding:5rem 2rem 4rem;text-align:center;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(91,79,207,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--deep);border:1px solid currentColor;padding:.2rem .65rem;display:inline-block;margin-bottom:2rem;opacity:.9;}
+.hero h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:400;letter-spacing:.04em;color:var(--gold);margin-bottom:.4rem;line-height:1.25;}
+.hero-sub{font-size:1rem;color:rgba(232,228,216,.7);max-width:680px;margin:.6rem auto 0;font-style:italic;line-height:1.7;}
+.hero-eq{margin-top:2rem;font-family:var(--mono);font-size:.85rem;letter-spacing:.08em;color:rgba(201,168,76,.4);line-height:2;}
+.hero-wp{margin-top:.8rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+
+.page{max-width:900px;margin:0 auto;padding:4rem 2rem;}
+
+h2{font-size:1.25rem;font-weight:400;color:var(--gold);letter-spacing:.04em;margin:3.5rem 0 1.2rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule);}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin:2rem 0 .7rem;letter-spacing:.02em;}
+p{margin-bottom:1.2rem;}
+p:last-child{margin-bottom:0;}
+a{color:var(--teal);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* Theorem blocks */
+.block-verified{border-left:3px solid var(--teal);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(10,186,181,.03);}
+.block-model{border-left:3px solid var(--gold);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(201,168,76,.025);}
+.block-open{border-left:3px solid var(--amber);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(245,158,11,.025);}
+.block-proof{border-left:3px solid var(--purple);padding:1.1rem 1.5rem;margin:1.5rem 0;background:rgba(192,132,252,.025);}
+.block-defn{border-left:3px solid var(--deep);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(91,79,207,.03);}
+.block-lens{border-left:3px solid var(--muted);padding:1.1rem 1.5rem;margin:1.8rem 0;background:rgba(107,103,87,.03);}
+.block-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:.6rem;display:block;}
+.block-verified .block-label{color:var(--teal);}
+.block-model   .block-label{color:var(--gold);}
+.block-open    .block-label{color:var(--amber);}
+.block-proof   .block-label{color:var(--purple);}
+.block-defn    .block-label{color:var(--deep);}
+.block-lens    .block-label{color:var(--muted);}
+.block-body{font-size:.95rem;line-height:1.82;color:var(--text);}
+.qed{text-align:right;font-family:var(--mono);font-size:.85rem;color:var(--purple);margin-top:.6rem;}
+
+.block-math{font-family:var(--mono);font-size:.9rem;color:var(--gold);background:var(--surface);border:1px solid var(--dim);padding:1rem 1.4rem;margin:1.2rem 0;overflow-x:auto;line-height:2;}
+
+.op-chain{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:1rem 0;}
+.op{font-family:var(--mono);font-size:.78rem;padding:.2rem .55rem;border-radius:2px;}
+.op-c{background:rgba(10,186,181,.12);color:#0ABAB5;border:1px solid rgba(10,186,181,.3);}
+.op-k{background:rgba(224,90,58,.12);color:#e05a3a;border:1px solid rgba(224,90,58,.3);}
+.op-f{background:rgba(192,132,252,.12);color:#c084fc;border:1px solid rgba(192,132,252,.3);}
+.op-u{background:rgba(80,200,120,.12);color:#50c878;border:1px solid rgba(80,200,120,.3);}
+.op-arr{color:var(--muted);}
+
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0;}
+@media(max-width:700px){.compare-grid{grid-template-columns:1fr;}}
+.cg-card{background:var(--card);border:1px solid var(--rule);padding:1.4rem;border-radius:2px;}
+.cg-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;display:block;}
+.cg-body{font-size:.88rem;line-height:1.75;color:rgba(232,228,216,.8);}
+.cg-card.purple-accent{border-color:rgba(192,132,252,.25);}
+.cg-card.purple-accent .cg-title{color:var(--purple);}
+.cg-card.deep-accent{border-color:rgba(91,79,207,.25);}
+.cg-card.deep-accent .cg-title{color:rgba(91,79,207,.9);}
+
+.step-list{list-style:none;counter-reset:step-counter;margin:1rem 0;}
+.step-list li{counter-increment:step-counter;padding:.5rem 0 .5rem 2.2rem;position:relative;border-bottom:1px solid var(--dim);font-size:.94rem;line-height:1.75;}
+.step-list li:last-child{border-bottom:none;}
+.step-list li::before{content:counter(step-counter)".";position:absolute;left:0;font-family:var(--mono);font-size:.75rem;color:var(--purple);font-weight:700;top:.55rem;}
+
+.pull{text-align:center;padding:2.5rem 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:3rem 0;}
+.pull-text{font-size:1.15rem;font-style:italic;color:var(--gold);max-width:660px;margin:0 auto;line-height:1.75;}
+.pull-attr{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.8rem;}
+
+.infinity-tower{background:var(--surface);border:1px solid var(--rule);padding:2rem;margin:2rem 0;text-align:center;}
+.it-row{font-family:var(--mono);font-size:.85rem;color:rgba(232,228,216,.7);line-height:2.2;}
+.it-row .highlight{color:var(--gold);}
+.it-row .dim{color:var(--muted);}
+.it-arrow{color:var(--muted);font-size:1.1rem;display:block;}
+
+.po-ring-strip{display:flex;justify-content:center;align-items:center;gap:0;border-top:1px solid var(--rule);padding:0;font-family:var(--mono);font-size:.58rem;flex-wrap:wrap;}
+.po-ring-strip a{display:inline-block;padding:.65rem 1.1rem;color:var(--muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;border-right:1px solid var(--rule);transition:color .2s,background .2s;}
+.po-ring-strip a:last-child{border-right:none;}
+.po-ring-strip a:hover{color:var(--gold);background:rgba(201,168,76,.04);}
+.po-ring-strip a.here{color:var(--purple);}
+
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid var(--rule);}
+footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);line-height:2;}
+
+  /* --- provenance footer (added 2026-08-12) --- */
+  footer .prov{max-width:760px;margin:1.5rem auto 0;padding-top:1.1rem;
+    border-top:1px solid currentColor;display:flex;gap:34px;flex-wrap:wrap;
+    text-align:left;font-size:.72rem;line-height:1.7;opacity:.9}
+  footer .prov>div{flex:1 1 300px}
+  footer .prov a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+  footer .prov .disc{opacity:.85}
+</style>
+<!--po-subject--><meta name="po-subject" content="ENGINEERING"><meta name="po-subject-2" content="SOCIAL"><!--/po-subject-->
+</head>
+<body>
+<style>
+.wp139 table{border-collapse:collapse;width:100%;margin:1rem 0 1.6rem;font-size:.86rem;}
+.wp139 th,.wp139 td{border:1px solid var(--rule);padding:.45rem .6rem;text-align:left;vertical-align:top;}
+.wp139 th{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;}
+.wp139 .tblwrap{overflow-x:auto;}
+.wp139 .tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;}
+.wp139 svg{width:100%;height:auto;max-width:860px;display:block;margin:1.2rem auto;background:var(--surface);border:1px solid var(--rule);}
+.wp139 svg text{font-family:var(--mono);}
+</style>
+<nav>
+  <a class="nav-series" href="../index.html">Principia Orthogona</a>
+  <div class="nav-links">
+    <a href="wp137-reading-newarks-budget.html">WP137 Newark's budget</a>
+    <a href="wp138-the-hive-on-earth.html">WP138 Maxley</a>
+    <a class="here" href="wp139-two-convex-curves-money-inflation-phillips.html">WP139 Two convex curves</a>
+  </div>
+</nav>
+<header class="hero">
+  <span class="hero-tag">Working paper &middot; reading and arithmetic</span>
+  <h1>Two convex curves</h1>
+  <p class="hero-sub">Money growth against inflation (Colwell, 2022) and unemployment against wage change (Phillips, 1958): what each curve says, the arithmetic that can be checked on this page, and what the pairing does not show.</p>
+  <p class="hero-wp">WP139 &middot; 2026-11-05 &middot; not peer-reviewed</p>
+</header>
+<main class="page wp139">
+
+<div class="block-open"><span class="block-label">What this is, and what it is not</span><div class="block-body">
+A reading of three papers with checked arithmetic on invented numbers. It is not a forecast, not investment or policy advice, and not a test of any paper&rsquo;s empirical results: no data were downloaded and none of the estimations were reproduced. Parts of the papers I read are named in &sect;6; the rest I did not read.
+</div></div>
+
+<h2>&sect;1 &middot; The papers</h2>
+<p>Peter F. Colwell, <em>Money, Inflation, and a Macro Model</em>, version 2.0, 5 July 2022 (48 pages; I read the abstract, introduction, the opening of the model and the conclusions). It argues that inflation is an increasing, convex function of the rate of money growth and builds a simple monetarist steady-state model around that. A. W. Phillips, <em>The Relation between Unemployment and the Rate of Change of Money Wage Rates in the United Kingdom, 1861&ndash;1957</em>, <em>Economica</em>, November 1958 (I read the passage giving the fitted equation). Joseph E. Gagnon and Christopher G. Collins, <em>Low Inflation Bends the Phillips Curve</em>, Peterson Institute working paper 19-6, April 2019 (abstract and introduction only).</p>
+
+<h2>&sect;2 &middot; The identity</h2>
+<p>Colwell starts from the equation of exchange, M&middot;V = P&middot;Q, which is true by the definition of velocity (V = PQ/M). In rates of change it reads m + v &asymp; p + q, where m, v, p, q are the growth rates of money, velocity, prices and real output. In discrete steps the exact form is (1 + m)(1 + v) = (1 + p)(1 + q).</p>
+<p>An invented example: money grows 6%, velocity 1%, prices 3%. Then (1.06)(1.01) = 1.0706, so nominal activity grows <strong>7.06%</strong>, and real output grows 1.0706 / 1.03 &minus; 1 = <strong>3.94%</strong>. The additive rule gives 6 + 1 &minus; 3 = 4.00%. The 0.06-point gap is the product term, small at low rates and growing as rates rise.</p>
+
+<h2>&sect;3 &middot; The shape of Colwell&rsquo;s curve, on invented numbers</h2>
+<p>Colwell hypothesises that for positive money growth, inflation p(m) rises at an increasing rate, with a positive intercept p(0). I do not use his estimates. To see what such a shape implies, take an invented form p(m) = a + b&middot;m&sup2; with a = 0.02 and b = 2.5, and, as in his steady state, constant velocity (v = 0), so that real growth is q = m &minus; p(m).</p>
+<div class="tblwrap"><table>
+<thead><tr><th>Target</th><th>Rule</th><th>Money growth m</th><th>Inflation p</th><th>Growth q</th></tr></thead>
+<tbody>
+<tr><td>Best growth-to-inflation ratio</td><td>m = &radic;(a/b)</td><td>0.0894</td><td>0.0400</td><td>0.0494</td></tr>
+<tr><td>Best growth minus inflation</td><td>m = 1/(4b)</td><td>0.1000</td><td>0.0450</td><td>0.0550</td></tr>
+<tr><td>Best growth</td><td>m = 1/(2b)</td><td>0.2000</td><td>0.1200</td><td>0.0800</td></tr>
+</tbody></table></div>
+<p>The ordering is the point: the ratio-maximising money growth is lowest, the net-benefit one is in the middle, and the growth-maximising one is highest, and the growth-maximising point comes with a much higher inflation rate (12%) than the other two. The ordering holds whenever a&middot;b &lt; 1/16, which these numbers satisfy (a&middot;b = 0.05). Colwell reports the same qualitative ordering for his estimated function, with Friedman&rsquo;s 4% rule nearest the ratio maximum and the Fed&rsquo;s 2% target nearest the growth maximum; I could not check those correspondences, which depend on his data.</p>
+
+<h2>&sect;4 &middot; Phillips&rsquo;s curve, as printed</h2>
+<p>For 1861&ndash;1913 Phillips fitted y + 0.900 = 9.638&nbsp;x<sup>&minus;1.394</sup>, where y is the percentage rate of change of wage rates and x is the percentage unemployment; equivalently log(y + 0.900) = 0.984 &minus; 1.394 log x. The two forms agree: log<sub>10</sub> 9.638 = 0.984.</p>
+<div class="tblwrap"><table>
+<thead><tr><th>Unemployment x (%)</th><th>2</th><th>4</th><th>5.48</th><th>6</th><th>8</th><th>10</th></tr></thead>
+<tbody><tr><td>Wage change y (% per year)</td><td>2.77</td><td>0.50</td><td>0.00</td><td>&minus;0.11</td><td>&minus;0.37</td><td>&minus;0.51</td></tr></tbody></table></div>
+<p>Wage change is zero at an unemployment rate of about <strong>5.48%</strong> (the fitted curve crosses zero there), and the curve never falls below &minus;0.9% per year however high unemployment goes: that is the shift constant. The curve is convex and flattens: the fall in y between x = 2 and x = 3 is 1.58 points, and between x = 8 and x = 9 it is only 0.08. These are properties of the fitted equation, not claims that wages behave this way today.</p>
+
+<h2>&sect;5 &middot; Putting them side by side</h2>
+<p>Both curves are convex, and both papers handle rates that can be negative with a shifted logarithm: Phillips uses log(y + 0.900), and Colwell&rsquo;s estimation tables use ln(p + 0.025). Beyond that they differ. Colwell&rsquo;s curve has inflation rising with money growth; Phillips&rsquo;s has wage change falling with unemployment. They relate different variables, in different periods and countries, with different data.</p>
+<p><strong>Shared functional form, not a shared invariant.</strong> Nothing here derives either curve from the other or shows that one constant governs both. The resemblance is in shape and in the use of a shift; it is not evidence that they are two views of one law.</p>
+<p>Gagnon and Collins argue that the Phillips curve may be nonlinear when inflation is low, so that the economy could have spent about twenty years on a flat part of the curve; their abstract says the data are consistent with that and with a fall in the curve&rsquo;s slope, and that the next few years might decide between the two. That paper is from 2019. What the data have shown since is not checked here.</p>
+
+<h2>&sect;6 &middot; What is not established</h2>
+<ul>
+<li>Colwell&rsquo;s empirical results: not reproduced and not read in full. I read the abstract, introduction, the opening of the model and the conclusions, and I did not read the estimation sections line by line. His figures for his rules are his claims.</li>
+<li>The status of the Colwell paper: it appears to be an author-circulated working paper; I saw no journal citation. Treat its claims as unreviewed.</li>
+<li>The numbers in &sect;3 are invented to show a shape, and the form a + b&middot;m&sup2; is my choice, not his.</li>
+<li>Phillips&rsquo;s data and fit: only the printed equation was used, which is the fit in his section on 1861&ndash;1913; his later periods (1913&ndash;1948 and 1948&ndash;1957) were not used. Later work, including the expectations critique, is not covered.</li>
+<li>Gagnon and Collins: abstract and introduction only; their estimates were not read.</li>
+<li>Anything about current inflation, unemployment or monetary policy.</li>
+</ul>
+
+<h2>Sources</h2>
+<p>Three PDFs held by the author, read 2026-11-05: Colwell (2022), Phillips (<em>Economica</em>, November 1958), Gagnon and Collins (PIIE 19-6, 2019). Checked by <code>wp139-verify.py</code>: every number in &sect;2 to &sect;4.</p>
+
+</main>
+<footer>
+  <p>Principia Orthogona &middot; Book VI &middot; Working Paper 139</p>
+  <p>Two convex curves &middot; Reading and arithmetic &middot; 2026</p>
+  <span style="display:block;margin-top:.5rem">&copy; 2026 Pablo Nogueira Grossi / <a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">G6 LLC</a> &middot; Newark, New Jersey &middot; CC BY-NC-ND 4.0</span>
+  <div class="prov"><div class="disc"><strong>Notice</strong><br>Independent working paper; not peer-reviewed. Not investment, policy or tax advice.</div></div>
+</footer>
+</body>
+</html>
