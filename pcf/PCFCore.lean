@@ -1,5 +1,8 @@
 /-
-  pcf/PCFCore.lean -- UNTESTED (written 2026-11-06 without a Lean toolchain; not yet run).
+  pcf/PCFCore.lean -- run by the author 2026-11-06 (`lake env lean`, repo pin): 0 errors, all six theorems on
+  [propext, Classical.choice, Quot.sound] (branch_iterate on propext, Quot.sound; pc_subset_of_uniform_bound on none).
+  That run produced two `push_neg` deprecation warnings; both were then changed to `push Not` and the file
+  has NOT been re-run since that edit.
 
   Source: Dupuy-Levy-Tucker-Wang, "PCF all the way down", arXiv:2611.06106v1.
 
@@ -69,7 +72,7 @@ theorem preperiodic_of_orbit_finite (f : D → D) (d : D)
     apply Set.infinite_range_of_injective hinj
     exact h
   unfold Function.Injective at hni
-  push_neg at hni
+  push Not at hni
   obtain ⟨m, n, hmn, hne⟩ := hni
   rcases Nat.lt_or_gt_of_ne hne with hlt | hlt
   · exact ⟨m, n - m, by omega, by rw [show m + (n - m) = n by omega]; exact hmn.symm⟩
@@ -84,7 +87,7 @@ theorem orbit_finite_of_preperiodic (f : D → D) (d : D) (r s : ℕ) (hs : 1 �
     intro n ih
     by_cases hn : n < r + s
     · exact ⟨n, hn, rfl⟩
-    · push_neg at hn
+    · push Not at hn
       obtain ⟨i, hi, hi'⟩ := ih (n - s) (by omega)
       refine ⟨i, hi, ?_⟩
       rw [hi']
