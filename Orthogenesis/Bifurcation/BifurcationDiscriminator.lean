@@ -66,7 +66,7 @@ theorem sn_expand {μ : ℝ} (hμ : 0 ≤ μ) (h : ℝ) :
   linear_combination (-1 : ℝ) * hs
 
 /-- The linear coefficient (relaxation rate) of the saddle-node about √μ. -/
-def snRate (μ : ℝ) : ℝ := -2 * Real.sqrt μ
+noncomputable def snRate (μ : ℝ) : ℝ := -2 * Real.sqrt μ
 
 /-! ## §2 Transcritical and pitchfork/Hopf: rates linear in μ -/
 
