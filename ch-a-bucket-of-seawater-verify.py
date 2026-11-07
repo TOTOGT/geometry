@@ -4,7 +4,7 @@
 """ch-a-bucket-of-seawater-verify.py -- every number on ch-a-bucket-of-seawater.html (Book 3). Run first (R24).
     python3 ch-a-bucket-of-seawater-verify.py
   [1] the bucket: viruses per bucket at the reported density, against the world's population
-  [2] the fruit-fly toy model as it behaves (the author's own code, papers/multi-orbit-bioswarm/)
+  [2] the fruit-fly toy model as it behaves (my own code, papers/multi-orbit-bioswarm/)
   [3] why the printed contraction could not hold: C jumps, four fixed points at alpha = 0, U fixes the norm
   [4] the link to Book XIV ch 10: fast settling, and the chain law
   [5] the Lean: BioSwarmCheck.lean
@@ -20,15 +20,16 @@ def check(label, ok, detail=""):
     if not ok: FAIL.append(label)
 
 print("[1] the bucket")
-per_ml = 10 ** 7            # typical surface seawater, as reported by Suttle (2005, 2007); not held
+per_ml = 10 ** 7            # my round figure; Suttle (2007) says "millions" per mL, not one number
 bucket_l = 10
 people = 8.0e9              # world population passed 8 billion in November 2022 (UN)
 v = per_ml * bucket_l * 1000
 check("a 10-litre bucket at 10^7 viruses per mL holds 10^11 viruses", v == 10 ** 11)
 check("that is 12.5 times the world's 8 billion people", abs(v / people - 12.5) < 1e-9, f"{v/people}")
 check("even at 10^6 per mL (ten times fewer) the bucket still beats the population", 10 ** 6 * 10 * 1000 > people)
+check("at 10^6 per mL the bucket holds 10^10 viruses, 1.25 times the population", abs(10 ** 6 * 10 * 1000 / people - 1.25) < 1e-9)
 
-print("[2] the fruit-fly toy model, run from the author's code")
+print("[2] the fruit-fly toy model, run from my code")
 spec = importlib.util.spec_from_file_location("bio", ROOT / "papers/multi-orbit-bioswarm/multi_orbit_bioswarm.py")
 bio = importlib.util.module_from_spec(spec); sys.modules["bio"] = bio; spec.loader.exec_module(bio)
 import numpy as np
@@ -105,9 +106,10 @@ check("the V2 file's 'obligations' contain no sorry: two conclude True, one uses
       "sorry" not in re.sub(r"/-.*?-/|--[^\n]*", "", v2, flags=re.S) and v2.count("True := by") == 2 and "-- identity placeholder" in v2)
 
 print("[HONESTY]")
-print("  The virus density (10^7 per mL) is Suttle's reported typical figure; the papers are not held (WANTED).")
-print("  The lecture is the author's recollection of V. Racaniello's Columbia virology course (2020); no transcript is")
-print("  held. The model is run from the author's own code; the attractor counts depend on N = 8, 40 seeds and 400")
+print("  The virus density (10^7 per mL) is my round figure; Suttle (2007) says 'millions' per mL (read via a text")
+print("  extraction of a hosted copy, 2026-11-06). The ocean results in section 2 are cited from four sources, none held as files, and are not computed here.")
+print("  The lecture is my recollection of V. Racaniello's Columbia virology course (2020); no transcript is")
+print("  held. The model is run from my own code; the attractor counts depend on N = 8, 40 seeds and 400")
 print("  steps, and are a measurement of this toy model, not of any fly. The V2 reference [11] (Bhaskaran et al.,")
 print("  J. Theor. Biol. 540, 111077, doi:10.1016/j.jtbi.2022.111077) returned 404 at doi.org on 2026-09-29 and was not")
 print("  found by title search; that check needs a network and is not repeated here. BioSwarmCheck.lean was compiled in")
