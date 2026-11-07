@@ -9,7 +9,8 @@ re-measured). Everything else is arithmetic on them.
   [2] recovery as a one-variable relaxation: mu = -ln2 / half-time, with the confidence range
   [3] what that relaxation predicts at 12 months, against the 2022 tibia deficits (different bone, different method)
   [4] the 4-half-life statement
-  [5] the dm3 row test: is bone recovery, as fitted, a spiral sink?
+  [5] the dm3 row test
+  [6] K as feedback strength (curvature), constant K => no F, critical duration T_c: is bone recovery, as fitted, a spiral sink?
   [HONESTY]
 """
 import math, sys
@@ -77,10 +78,34 @@ check("fitted bone recovery has one real eigenvalue, so omega = 0 and it is NOT 
 check("its damping per cycle exp(2 pi mu/omega) is undefined (no cycle)", omega == 0)
 check("a 12-month residual of about 30 % of the landing loss follows from a single 211-day half-time with no fold or memory", abs(0.5 ** (365 / 211) - 0.3015) < 1e-3, f"{0.5**(365/211):.4f}")
 
+
+print("[6] K as the feedback strength (curvature of the restoring potential), and the F test on the mechanostat loop")
+# loop: h' = -r (h - hstar(L)); V = (r/2)(h - hstar)^2 so V'' = r = K, whatever L is
+r_fn = math.log(2) / 211.0
+hE, hc, eps0 = 1.0, 0.9, 1.0
+def h_t(L, t): hs = L / eps0; return hs + (hE - hs) * math.exp(-r_fn * t)
+check("K = V'' = r = ln2/211 = 0.003285 per day at the femoral neck", abs(r_fn - 0.003285) < 1e-6, f"{r_fn:.6f}")
+rates = []
+for L in (0.95, 0.9, 0.85, 0.5, 0.1):
+    d = 1e-6                                 # numerical rate of approach: -d ln|h - h*| / dt
+    hs = L / eps0
+    lam = -(math.log(abs(h_t(L, 100 + d) - hs)) - math.log(abs(h_t(L, 100) - hs))) / d
+    rates.append(lam)
+check("the measured relaxation rate equals r at every loading (no critical slowing; exponent 0, not 1/2)", all(abs(x - r_fn) < 1e-7 for x in rates), str([round(x, 6) for x in rates]))
+check("so F is absent as modelled: the rate does not vanish toward any loading", max(rates) - min(rates) < 1e-7)
+for L in (0.89, 0.85, 0.8, 0.7):
+    hs = L / eps0
+    Tc = math.log((hE - hs) / (hc - hs)) / r_fn
+    check(f"T_c at loading {L}: h(T_c) = h_c", abs(h_t(L, Tc) - hc) < 1e-9, f"T_c = {Tc:.1f} d = {Tc/211:.3f} half-times")
+check("T_c grows without bound as loading approaches L_c = eps0*h_c = 0.9 (loading 0.89999 -> over 10 half-times)", math.log((hE - 0.89999) / (hc - 0.89999)) / r_fn / 211 > 10)
+check("pelvis K / femoral neck K = 211/97 = 2.175 (sourced half-times)", abs((math.log(2)/97) / r_fn - 211/97) < 1e-9)
+check("constant K gives a proportional residue: doubling the landing loss doubles the 12-month deficit", abs((2*6.8*0.5**(365/211)) / (6.8*0.5**(365/211)) - 2) < 1e-12)
+
 print("[HONESTY]")
 print("  Source numbers are typed from one 2006 NASA manuscript and one 2022 abstract; the 2006 manuscript predates ARED (installed 2008).")
 print("  The half-times are the source's own fits; this script does not refit raw data (none held).")
 print("  Section [3] compares femoral-neck DXA to tibia HR-pQCT: different bones, methods and crews. It is a consistency check, not a test.")
+print("  Section [6] is the mechanostat toy loop (assumptions: one slow variable, h* = L/eps0, a critical thickness h_c); it is not fitted to data.")
 print("  Nothing here tests kappa*, a fold, or hysteresis in bone: the data held cannot.")
 print("\nFAIL: %d" % len(FAIL) if FAIL else "\nALL PASS")
 sys.exit(1 if FAIL else 0)
