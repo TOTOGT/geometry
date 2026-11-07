@@ -96,9 +96,27 @@ def main():
     print("      So this property is shared, and is shared by ANY such system --")
     print("      it is not evidence of a common mechanism.")
 
+    print("\n  (d) DAMPING PER CYCLE -- needs only the printed numbers (added 2026-11-06)")
+    print("      Over one period T = 2*pi/omega the amplitude is multiplied by exp(2*pi*mu/omega).")
+    print("      Assumes mu and omega are in the same time units (the table header says s^-1 and")
+    print("      rad/s; at least one chapter writes omega in rad/day, so this is itself uncertain).")
+    print("      %-34s %12s %14s" % ("domain", "period (1/w)", "ln(amp/cycle)"))
+    heavy = []
+    for n, mu, w in good:
+        if w > 0:
+            e = 2 * math.pi * mu / w
+            print("      %-34s %12.4g %14.2f" % (n[:34], 2 * math.pi / w, e))
+            if e < -3:
+                heavy.append(n)
+    print("      rows whose amplitude falls by more than e^3 (about 20x) per cycle: %d of %d" % (len(heavy), len(good)))
+    print("      Such a row is not a sustained oscillator at its stated omega. A sustained rhythm")
+    print("      needs |mu|/omega well below 1; a row far above 1 is either in different units or")
+    print("      does not describe an oscillation. This test reports a measurement; it does not gate.")
+
     print("\n  READING")
     print("    Under the strict test the bridge has %d similar pairs." % len(pairs))
     print("    Under the most generous test that still means 'similar', it has %d." % len(exact))
+    print("    Under (d), %d of %d rows lose more than e^3 of amplitude per cycle at the stated numbers." % (len(heavy), len(good)))
     print("    What the rows do share is being spiral sinks, which is a class so")
     print("    wide that membership carries no information about mechanism.")
     return 0
