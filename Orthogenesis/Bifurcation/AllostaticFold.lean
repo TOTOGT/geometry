@@ -21,6 +21,7 @@ What is proved here (all exact, no numerics):
   §4  `alloS_hasDerivAt`: the formula `alloSp` really is the derivative of `alloS`
       (so "stable" in §3 means f' = −S' < 0 for the model's right-hand side f = s − S).
   §5  Sign pattern of S' at 0, 1, 2 (+, −, +): S rises, falls, rises.
+  §6  S ≤ 0 on [x₋, x₊] (`alloS_nonpos_between`): the sign fact behind the persistence argument.
 
 What this file does NOT do:
   * It does not locate the folds (x ≈ 0.17731 and 1.36416, s ≈ 0.08587 and −0.58723 for
@@ -204,6 +205,28 @@ theorem alloSp_signs : 0 < alloSp 0 ∧ alloSp 1 < 0 ∧ 0 < alloSp 2 := by
   unfold alloSp
   refine ⟨?_, ?_, ?_⟩ <;> norm_num
 
+-- §6 ---------------------------------------------------------------------------
+
+/-- The barrier fact behind persistence (k = 1, b = 3): S ≤ 0 on [x₋, x₊], so
+    f = s − S ≥ s ≥ 0 there. With f(x₋) = s ≥ 0 (since S(x₋) = 0, `middle_state_unstable`)
+    and f(x₊) = s ≥ 0 (`high_state_stable`), non-negative stress can never push the load
+    below x₋ once it is above it. The comparison argument that turns this sign fact into
+    "x(t) stays ≥ x₋ for every non-negative stress history" is NOT formalised here. -/
+theorem alloS_nonpos_between {x : ℝ} (h1 : (3 - Real.sqrt 5) / 2 ≤ x)
+    (h2 : x ≤ (3 + Real.sqrt 5) / 2) : alloS x ≤ 0 := by
+  have h5 := sqrt5_sq
+  have hs3 : Real.sqrt 5 < 3 := by
+    have hs : 0 ≤ Real.sqrt 5 := Real.sqrt_nonneg 5
+    nlinarith
+  have hx : 0 ≤ x := by linarith
+  have hq : 1 * x ^ 2 - 3 * x + 1 ≤ 0 := by
+    nlinarith [mul_nonneg (sub_nonneg.2 h1) (sub_nonneg.2 h2)]
+  have hprod : x * (1 * x ^ 2 - 3 * x + 1) ≤ 0 := by
+    nlinarith [mul_nonneg hx (neg_nonneg.2 hq)]
+  unfold alloS
+  rw [allo_factor, div_le_iff₀ (by positivity)]
+  nlinarith
+
 end Orthogenesis.Bifurcation
 
 #print axioms Orthogenesis.Bifurcation.allo_factor
@@ -216,3 +239,4 @@ end Orthogenesis.Bifurcation
 #print axioms Orthogenesis.Bifurcation.middle_state_unstable
 #print axioms Orthogenesis.Bifurcation.alloS_hasDerivAt
 #print axioms Orthogenesis.Bifurcation.alloSp_signs
+#print axioms Orthogenesis.Bifurcation.alloS_nonpos_between
