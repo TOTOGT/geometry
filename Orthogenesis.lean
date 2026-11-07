@@ -60,3 +60,4 @@ import Orthogenesis.Eta.EtaChecks
 import Orthogenesis.Architecture.WignerChecks
 import Orthogenesis.NestedInfinities.EightChecks
 import Orthogenesis.Bifurcation.BifurcationDiscriminator
+import Orthogenesis.Bifurcation.AllostaticFold
