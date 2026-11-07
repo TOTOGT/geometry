@@ -68,16 +68,16 @@ theorem allo_neg_iff (k b : ℝ) (hk : 0 < k) :
     have hpos : 0 < 1 + x ^ 2 := by positivity
     have hnum : x * (k * x ^ 2 - b * x + k) < 0 := by
       by_contra hcon
-      push_neg at hcon
+      push Not at hcon
       have : 0 ≤ x * (k * x ^ 2 - b * x + k) / (1 + x ^ 2) := div_nonneg hcon hpos.le
       linarith
     have hq : k * x ^ 2 - b * x + k < 0 := by
       by_contra hcon
-      push_neg at hcon
+      push Not at hcon
       have : 0 ≤ x * (k * x ^ 2 - b * x + k) := mul_nonneg hx.le hcon
       linarith
     by_contra hb
-    push_neg at hb
+    push Not at hb
     have h1 : b * x ≤ 2 * k * x := by nlinarith
     have h2 : 0 ≤ k * (x - 1) ^ 2 := mul_nonneg hk.le (sq_nonneg _)
     nlinarith
@@ -183,8 +183,15 @@ theorem alloS_hasDerivAt (x : ℝ) : HasDerivAt alloS (alloSp x) x := by
     simpa using (hasDerivAt_pow 2 x).const_mul 3
   have c : HasDerivAt (fun y : ℝ => 1 + y ^ 2) (2 * x) x := by
     simpa using (hasDerivAt_pow 2 x).const_add 1
-  have h1 := a.div c hd
-  have h2 := (hasDerivAt_id x).sub h1
+  have h1 : HasDerivAt (fun y : ℝ => 3 * y ^ 2 / (1 + y ^ 2))
+      ((3 * (2 * x) * (1 + x ^ 2) - 3 * x ^ 2 * (2 * x)) / (1 + x ^ 2) ^ 2) x := a.div c hd
+  have h2 : HasDerivAt (fun y : ℝ => y - 3 * y ^ 2 / (1 + y ^ 2))
+      (1 - (3 * (2 * x) * (1 + x ^ 2) - 3 * x ^ 2 * (2 * x)) / (1 + x ^ 2) ^ 2) x :=
+    (hasDerivAt_id' x).sub h1
+  have h3 : alloS = fun y : ℝ => y - 3 * y ^ 2 / (1 + y ^ 2) := by
+    funext y
+    simp [alloS, alloSgen]
+  rw [h3]
   refine h2.congr_deriv ?_
   unfold alloSp
   field_simp
