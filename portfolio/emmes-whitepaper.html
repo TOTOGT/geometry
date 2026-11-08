@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMMEs Whitepaper · Operator Tokens · G6 LLC · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void:  #04040a;
+  --gold:  #c9a84c;
+  --gold2: #e8c96a;
+  --teal:  #2dd4bf;
+  --text:  #e8e4d8;
+  --mid:   #888580;
+  --smoke: rgba(255,255,255,0.04);
+  --rule:  rgba(201,168,76,0.22);
+  --prob:  #00f5d4;
+  --prop:  #ff3cac;
+  --game:  #f7c948;
+  --mkt:   #60a5fa;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 19px;
+  line-height: 1.80;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(4,4,10,0.96);
+  border-bottom: 1px solid var(--rule);
+  backdrop-filter: blur(16px);
+  padding: 0.65rem 2rem;
+  display: flex; align-items: center; gap: 0;
+  overflow-x: auto;
+}
+.nav-brand {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem; letter-spacing: 0.28em;
+  color: var(--gold); text-decoration: none;
+  padding-right: 1.5rem; border-right: 1px solid var(--rule);
+  margin-right: 1rem; flex-shrink: 0; white-space: nowrap;
+}
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+  text-decoration: none; padding: 0.65rem 0.75rem; color: var(--mid);
+  white-space: nowrap; transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+/* ── HEADER ── */
+header {
+  max-width: 780px; margin: 0 auto;
+  padding: 7rem 2rem 4rem;
+  border-bottom: 1px solid var(--rule);
+}
+.wp-label {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.58rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--gold); opacity: 0.7; display: block; margin-bottom: 1rem;
+}
+header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-weight: 600; line-height: 1.15;
+  color: var(--gold); margin-bottom: 0.5rem;
+}
+header h1 em {
+  font-family: 'EB Garamond', serif;
+  font-style: italic; font-size: 0.7em;
+  color: var(--mid); display: block;
+  font-weight: 400; margin-top: 0.3rem;
+}
+.wp-meta {
+  margin-top: 1.6rem;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.72rem; color: var(--mid);
+  letter-spacing: 0.06em; line-height: 1.9;
+}
+.abstract {
+  margin-top: 2rem;
+  padding: 1.4rem 1.8rem;
+  background: var(--smoke);
+  border-left: 3px solid var(--gold);
+  font-size: 0.9rem; line-height: 1.75;
+  color: rgba(232,228,216,0.75);
+}
+.abstract strong {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); display: block; margin-bottom: 0.5rem;
+}
+
+/* ── BODY ── */
+.paper {
+  max-width: 780px; margin: 0 auto;
+  padding: 3rem 2rem 6rem;
+}
+.s-num {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold); display: block;
+  margin-top: 3.5rem; margin-bottom: 0.4rem;
+}
+h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.12rem; font-weight: 600;
+  color: var(--text); margin-bottom: 1.3rem; line-height: 1.3;
+}
+h3 {
+  font-family: 'EB Garamond', serif;
+  font-size: 1rem; font-style: italic;
+  color: var(--gold2); margin: 2rem 0 0.8rem;
+}
+p { margin-bottom: 1.25rem; color: rgba(232,228,216,0.82); }
+p em { font-style: italic; }
+p strong { font-weight: 500; color: var(--text); }
+cite {
+  font-style: normal; font-size: 0.78rem;
+  color: var(--mid); font-family: 'Source Code Pro', monospace;
+}
+
+/* operator inline */
+.op {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.9em; font-weight: 600;
+  padding: 0 0.2em;
+}
+.op-c { color: var(--prop); }
+.op-k { color: var(--prob); }
+.op-f { color: var(--game); }
+.op-u { color: var(--mkt); }
+
+/* math block */
+.math-block {
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid var(--gold);
+  padding: 1rem 1.4rem; margin: 1.4rem 0;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.85rem; color: var(--gold2);
+  line-height: 1.7; overflow-x: auto;
+}
+
+/* token definition block */
+.token-def {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+}
+.token-def-head {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0.8rem 1.2rem;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--rule);
+}
+.token-def-op {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 1.4rem; font-weight: 700; line-height: 1;
+}
+.token-def-name {
+  font-family: 'Cinzel', serif; font-size: 0.95rem;
+}
+.token-def-ticker {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.6rem; letter-spacing: 0.15em;
+  color: var(--mid); margin-left: auto;
+}
+.token-def-body {
+  padding: 1rem 1.2rem;
+  font-size: 0.88rem; color: rgba(232,228,216,0.72);
+  line-height: 1.7;
+}
+.token-def.prob .token-def-op { color: var(--prob); }
+.token-def.prop .token-def-op { color: var(--prop); }
+.token-def.game .token-def-op { color: var(--game); }
+
+/* claim box */
+.claim {
+  border: 1px solid rgba(201,168,76,0.3);
+  background: rgba(201,168,76,0.04);
+  padding: 1.2rem 1.5rem; margin: 2rem 0;
+  font-size: 0.9rem; line-height: 1.72;
+}
+.claim-label {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); display: block; margin-bottom: 0.5rem;
+}
+
+/* table */
+.wp-table {
+  width: 100%; border-collapse: collapse;
+  margin: 1.8rem 0; font-size: 0.84rem;
+  overflow-x: auto; display: block;
+}
+.wp-table thead tr {
+  background: rgba(201,168,76,0.08);
+}
+.wp-table thead th {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold); padding: 0.6rem 0.9rem; text-align: left;
+}
+.wp-table tbody td {
+  padding: 0.55rem 0.9rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top; line-height: 1.55;
+  color: rgba(232,228,216,0.75);
+}
+.wp-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+.mono { font-family: 'Source Code Pro', monospace; font-size: 0.78rem; }
+
+/* hr */
+hr.rule { border: none; border-top: 1px solid var(--rule); margin: 3rem 0; }
+
+/* live links */
+.live-strip {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1.2rem 0;
+}
+.live-link {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+  text-decoration: none; padding: 0.25rem 0.7rem;
+  border: 1px solid var(--rule); border-radius: 3px;
+  color: var(--mid); transition: color 0.15s, border-color 0.15s;
+}
+.live-link:hover { color: var(--gold); border-color: var(--gold); }
+.live-link.hot { color: var(--game); border-color: rgba(52,211,153,0.4); }
+
+/* references */
+.references {
+  margin-top: 4rem; padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.82rem; line-height: 1.72;
+  color: var(--mid);
+}
+.references h2 { font-size: 0.9rem; margin-bottom: 1.4rem; color: var(--text); }
+.ref { margin-bottom: 0.85rem; padding-left: 1.8rem; text-indent: -1.8rem; }
+.ref-author { color: var(--text); font-weight: 500; }
+
+/* footer */
+.ch-nav {
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid var(--rule);
+  padding: 1.2rem 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'Source Code Pro', monospace; font-size: 0.65rem;
+}
+.ch-nav a { color: var(--gold); text-decoration: none; letter-spacing: 0.08em; }
+.ch-nav-center { color: rgba(201,168,76,0.3); font-size: 0.55rem; letter-spacing: 0.15em; text-align: center; }
+
+/* overflow fix */
+.math-block, pre, code { overflow-x: auto; }
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;font-size:.95em;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+  footer.prov-foot{margin-top:3rem;padding:2rem 1.5rem;border-top:1px solid currentColor;
+    font-size:.72rem;line-height:1.8;opacity:.85;text-align:center;}
+  footer.prov-foot a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="../index.html">⚜ PRINCIPIA ORTHOGONA</a>
+  <ul class="nav-links">
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#lineage">Lineage</a></li>
+    <li><a href="#math">Mathematics</a></li>
+    <li><a href="#tokens">Tokens</a></li>
+    <li><a href="#jomo">JOMO Bot</a></li>
+    <li><a href="#nonzero">Non-Zero Sum</a></li>
+    <li><a href="#claim">The Claim</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="emmes.html">EMMEs Hub →</a></li>
+  </ul>
+</nav>
+
+<header>
+  <span class="wp-label">Whitepaper · EMMEs · G6 LLC · Newark NJ · 2026</span>
+  <h1>
+    Operator Tokens on Solana
+    <em>Value as Sustained Acknowledgment, the 1/3 Invariant,
+    and the Non-Zero Sum Argument for PROBABILITY, PROPAGANDA!, and GAME THEORY</em>
+  </h1>
+  <div class="wp-meta">
+    Pablo Nogueira Grossi (Sri Brodananda) · G6 LLC · Newark, NJ<br>
+    ORCID: 0009-0000-6496-2186 · Zenodo: 10.5281/zenodo.19117399<br>
+    Tokens: PROBABY · PROPAGAN · THEORY · Chain: Solana<br>
+    Repo: github.com/TOTOGT/AXLE · Lean 4 · 0 sorry on structural claims
+  </div>
+  <div class="abstract" id="abstract">
+    <strong>Abstract</strong>
+    Three tokens — PROBABILITY (K operator), PROPAGANDA! (C operator), and
+    GAME THEORY (F operator) — instantiate the generative operator chain
+    G = U ∘ F ∘ K ∘ C on Solana. The market is the U operator. This paper
+    argues that meme coins are not a degenerate case of monetary systems but
+    their most honest expression: value is sustained acknowledgment above a
+    stability threshold, a claim independently supported by the Rai stone
+    monetary system, the Venetian grosso (1193), and the Pythagorean harmonia
+    tradition. The 1/3 invariant — σ* ≈ 1/3 as the volatility threshold above
+    which positional control of the critical network node is the unique
+    payoff-dominant strategy — is machine-verified in Lean 4 (AXLE repo,
+    0 sorry). The JOMO Bot strategy, applied to the PROBABILITY token at σ*,
+    converts zero-sum meme dynamics into non-zero-sum stability infrastructure.
+    The name Grossi has been on this coin since 1193 CE. The mathematics has
+    not changed.
+  </div>
+</header>
+
+<div class="paper">
+
+  <!-- ══════════════════════════════
+       1. THE MONETARY LINEAGE
+  ═══════════════════════════════════ -->
+  <span class="s-num" id="lineage">1 · The Monetary Lineage</span>
+  <h2>Value Is Sustained Acknowledgment Above a Stability Threshold</h2>
+
+  <p>The conventional narrative of monetary evolution proceeds: barter → commodity
+  money → metal coins → paper → fiat → digital. This narrative is technically
+  accurate and philosophically incomplete. It describes the changing notation of
+  money without addressing the invariant that all monetary systems share. That
+  invariant is not scarcity, not gold backing, not state authority. It is
+  <em>sustained acknowledgment above a stability threshold</em>.</p>
+
+  <p>The clearest evidence is the Rai stone monetary system of Yap Island. Limestone
+  discs — some at the bottom of the ocean — remained valid currency because the
+  community acknowledged the transfer <cite>(Furness 1910; Mankiw 2021)</cite>.
+  The stone was not the value. The acknowledgment was. This is not a primitive
+  precursor to real money. It is the essential structure of all money, made visible
+  by the absence of the institutional apparatus that normally hides it.</p>
+
+  <p>The Venetian <em>grosso</em>, introduced in 1193–1194 under Doge Enrico
+  Dandolo, achieved the same fixed point by different means: 98.5% silver purity,
+  the highest attainable, made the coin internationally acknowledg­able without
+  institutional intermediation <cite>(Stahl 2000; Spufford 1988)</cite>.
+  The coin was called the <em>denaro grosso</em> — the big penny — and those
+  who dealt in it, guaranteed it, and moved it across the Templar banking network
+  from Venice to the Holy Land were called <em>Grossi</em>. The name of this
+  paper's author has been on this coin since 1193.</p>
+
+  <h3>1.1 The Treviso fracture and its consequence</h3>
+
+  <p>The <em>Arte dell'Abbaco</em>, printed in Treviso in 1478, is the first
+  printed arithmetic textbook in the West <cite>(Swetz 1987)</cite>. It opens
+  with the Pythagorean claim — <em>all things owe their origin to number</em> —
+  and immediately demonstrates how to calculate profit-sharing among Venetian
+  merchants whose investments are denominated in ducats, florins, and grossi at
+  fluctuating exchange rates. This is the structural moment the unified
+  Pythagorean mathematics fractures: the same numeral encodes different values
+  depending on which city's convention applies. The ratio 3:2 is the perfect
+  fifth everywhere and always. The ratio of ducats to florins changes with
+  the Venetian senate's decree.</p>
+
+  <p>From 1478 forward, monetary systems operate simultaneously in two registers:
+  the <strong>invariant register</strong> (value anchored to structure — the gold
+  standard's imperfect proxy, the Pythagorean ratio, the stability threshold σ*)
+  and the <strong>conventional register</strong> (value anchored to agreement —
+  the exchange rate, the fiat denomination, the meme). The confusion of these two
+  registers is the source of every monetary crisis since 1478.</p>
+
+  <p>The meme coin makes the conventional register visible again — which is
+  philosophically more honest than gold, not less. PROBABILITY does not pretend
+  to be backed by anything except the acknowledgment of those who hold it. This
+  is what all money has always been. The question is whether the acknowledgment
+  clears the stability threshold.</p>
+
+  <div class="math-block">
+    Stability condition: acknowledgment density D > D* at threshold σ* ≈ 1/3<br>
+    Below σ*: noise. Above σ*: positional dynamics → fixed point.<br>
+    Dogecoin cleared D*. The Rai stone cleared D*. The grosso cleared D*.<br>
+    The mathematics does not care what is depicted on the obverse.
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══════════════════════════════
+       2. THE MATHEMATICS
+  ═══════════════════════════════════ -->
+  <span class="s-num" id="math">2 · The Mathematics</span>
+  <h2>The Operator Chain and the 1/3 Invariant</h2>
+
+  <p>The generative operator chain G = U ∘ F ∘ K ∘ C is a four-operator structure
+  formally defined in Principia Orthogona Vol. I <cite>(Grossi 2026a)</cite> and
+  machine-verified in Lean 4 in the AXLE repository <cite>(TOTOGT/AXLE 2026)</cite>.
+  The chain is domain-agnostic: it describes what happens when a compression event
+  initiates a curvature-driven transition toward a new stable topology. It applies
+  to cellular autophagy, stellar nucleosynthesis, plasma-sheet reconnection,
+  and — as this paper argues — monetary systems and on-chain token dynamics.</p>
+
+  <div class="math-block">
+    G = U ∘ F ∘ K ∘ C : X → X<br><br>
+    C : Compression  — dim X_C &lt; dim X · Lipschitz projection onto lower-dimensional submanifold<br>
+    K : Curvature    — drive toward critical threshold κ* · gain function α(s) = λ(κ* − κ)₊<br>
+    F : Fold         — activates at |κ| = κ* · Jacobian rank loss by 1 · Whitney A₁ · irreversible<br>
+    U : Unfold       — gradient flow of Φ selects new stable topology · ∫ exponential convergence<br><br>
+    Stability radius: ε₀ = 1/3 · proved: stabilityRadius_eq in AXLE/Main_v6.lean<br>
+    g₆ threshold:    g₆ = 33  · proved: g6_is_33 in AXLE/Main_v6.lean<br>
+    Noise tolerance: τ · ε₀ = 2/3 &lt; 1 · proved: gtct_return_stable_within_radius
+  </div>
+
+  <h3>2.1 The 1/3 invariant in network games</h3>
+
+  <p>The positional dominance result <cite>(Grossi 2026b; Grossi 2026c)</cite>
+  establishes the following for a two-player infinite-horizon stochastic game
+  on a capacitated linear network: there exists a unique volatility threshold
+  σ* ∈ [0.30, 0.36] — empirically centered at 1/3 — above which positional
+  control of the critical hub node C is the unique payoff-dominant strategy.
+  Below σ*, speed investment dominates. At σ*, the game transitions.</p>
+
+  <div class="math-block">
+    σ* ≈ 1/3 · network game MPE threshold<br>
+    ε₀ = 1/3 · GTCT stability radius<sup><a href="../book4/ch10.html" title="ε₀ = 1/3 is the coarse, symmetric Grönwall estimate; Book 4, Ch 10 refines the true inner boundary to r* ≈ 0.776 (basin asymmetry) and notes such model quantities do not translate cleanly to reality">[Ch 10]</a></sup> (proved)<br>
+    ε₀ = 1/3 · dm³ contact geometry stability radius (proved)<br>
+    g₃₃ ≈ 0.33 · Circadian trader threshold (numerical)<br>
+    WTI historical vol avg ≈ 0.35–0.42 · above σ* in 68% of months (EIA 2015–2024)<br><br>
+    The 1/3 invariant appears in five independent domains. It is not a coincidence.<br>
+    It is the stability radius of the operator chain — the ε₀ such that<br>
+    ‖G(x) − G(y)‖ ≤ (1 − ε₀)‖x − y‖ for all x, y in the basin.
+  </div>
+
+  <h3>2.2 Fixed-point convergence</h3>
+
+  <p>The Banach fixed-point theorem guarantees a unique fixed point p* whenever
+  the operator G is a contraction — i.e., when the noise or volatility in the
+  system is bounded below the stability radius ε₀ = 1/3. In monetary terms:
+  when the acknowledgment density is stable enough that the coin's value
+  converges, the convergence is to a unique price attractor p*. The meme
+  character of the coin's origin is irrelevant to the existence of p*.
+  The coin is a meme until it clears σ*. After that it is a fixed point.</p>
+
+  <div class="math-block">
+    ∃! p* ∈ X : G(p*) = p* · proved: Banach fixed point + gtct_return_stable_within_radius<br>
+    Convergence: ‖Gⁿ(x) − p*‖ ≤ (1−ε₀)ⁿ · ‖x − p*‖ → 0 exponentially<br><br>
+    Dogecoin p* ≠ 0. The Rai stone p* ≠ 0. The grosso p* ≠ 0.<br>
+    The fixed point exists if and only if acknowledgment density clears the threshold.
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══════════════════════════════
+       3. THE THREE TOKENS
+  ═══════════════════════════════════ -->
+  <span class="s-num" id="tokens">3 · The Three Tokens</span>
+  <h2>C, K, F as Instantiated Operators</h2>
+
+  <p>Each token instantiates one operator in the chain. The market instantiates U.
+  No token controls U — this is by design. A monetary system in which a single
+  actor controls the unfolding is not a fixed-point system. It is an extraction system.</p>
+
+  <div class="live-strip">
+    <a class="live-link hot" href="https://totogt.github.io/AXLE/EMMEs/ticker.html">Live Ticker ↗</a>
+    <a class="live-link" href="https://x.com/myemmecoin">𝕏 @myemmecoin ↗</a>
+    <a class="live-link" href="https://t.me/+WC_698vgYxVmZGQx">Telegram ↗</a>
+  </div>
+
+  <!-- PROBABILITY -->
+  <div class="token-def prob">
+    <div class="token-def-head">
+      <span class="token-def-op">K</span>
+      <span class="token-def-name">PROBABILITY</span>
+      <span class="token-def-ticker">PROBABY · Solana</span>
+    </div>
+    <div class="token-def-body">
+      <p><strong>Operator role:</strong> Curvature toward threshold. The K operator
+      drives the system toward κ* without overshoot. In monetary terms: PROBABILITY
+      is the token that holds position at σ* = 1/3. It is the JOMO Bot's instrument.
+      It builds acknowledgment density without triggering premature fold dynamics.</p>
+      <p><strong>The obverse:</strong> David's face. The sovereign is the next
+      generation. The probability distribution that has not yet resolved is more
+      honest than a king's portrait, a central banker's seal, or a golden eagle.
+      Every holder is inside the distribution. The coin names what all coins are.</p>
+      <p><strong>The reverse:</strong> Crown removed. Long live democracy —
+      collective intelligence. The K operator does not anoint. It accumulates.
+      The fixed point is democratic: it belongs to whoever holds through the threshold.</p>
+      <div class="live-strip">
+        <a class="live-link" href="https://coinbook.fun/token/7DgYPRJywzJRtY4rQZRhwNXECdiQ7gmyHQqA48ojcoin">Coinbook ↗</a>
+        <a class="live-link" href="https://dexscreener.com/solana/7DgYPRJywzJRtY4rQZRhwNXECdiQ7gmyHQqA48ojcoin">Dexscreener ↗</a>
+        <a class="live-link" href="https://solscan.io/token/7DgYPRJywzJRtY4rQZRhwNXECdiQ7gmyHQqA48ojcoin">Solscan ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPAGANDA -->
+  <div class="token-def prop">
+    <div class="token-def-head">
+      <span class="token-def-op">C</span>
+      <span class="token-def-name">PROPAGANDA!</span>
+      <span class="token-def-ticker">PROPAGAN · Solana</span>
+    </div>
+    <div class="token-def-body">
+      <p><strong>Operator role:</strong> Compression. The C operator reduces the
+      infinite space of possible value-stores to one candidate with sufficient
+      distinctiveness to hold attention. The meme is the compression. All price
+      action is narrative. All narrative is propaganda. The exclamation mark is
+      load-bearing: the C operator always announces itself too loudly, because
+      attention compression requires amplitude to work.</p>
+      <p><strong>The Treviso connection:</strong> The 1478 fracture was the first
+      large-scale propaganda event in monetary history — the moment the same
+      arithmetic was used to process two different kinds of number simultaneously,
+      and only those who knew the quadrivium could tell them apart. PROPAGANDA!
+      names the operator that has been running on every monetary system since
+      Venetian merchants started counting ducats and florins in the same ledger.</p>
+      <div class="live-strip">
+        <a class="live-link" href="https://coinbook.fun/token/67xb3dpRRGBwngBCvBDxvaPXJMJfJgAQuNK4E7Focoin">Coinbook ↗</a>
+        <a class="live-link" href="https://dexscreener.com/solana/67xb3dpRRGBwngBCvBDxvaPXJMJfJgAQuNK4E7Focoin">Dexscreener ↗</a>
+        <a class="live-link" href="https://solscan.io/token/67xb3dpRRGBwngBCvBDxvaPXJMJfJgAQuNK4E7Focoin">Solscan ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME THEORY -->
+  <div class="token-def game">
+    <div class="token-def-head">
+      <span class="token-def-op">F</span>
+      <span class="token-def-name">GAME THEORY</span>
+      <span class="token-def-ticker">THEORY · Solana · Banned in China</span>
+    </div>
+    <div class="token-def-body">
+      <p><strong>Operator role:</strong> The fold. Rank-1 Jacobian loss.
+      Irreversible topological change. The fold activates when curvature
+      reaches κ*. In monetary terms: GAME THEORY is the moment a coin stops
+      being speculative and becomes functional — the irreversible transition
+      from noise to fixed-point attractor. This transition cannot be
+      administratively reversed, which is why the token is banned in China.
+      The Whitney A₁ singularity does not negotiate with regulatory bodies.</p>
+      <p><strong>The fold in monetary history:</strong> Nixon's 1971 closure of
+      the gold window is the F operator at civilizational scale — the irreversible
+      transition from commodity-backed to pure-fiat money. The old system could
+      not recover its previous form. GAME THEORY names this honestly.</p>
+      <div class="live-strip">
+        <a class="live-link" href="https://coinbook.fun/token/7xtJR6qfexz5ZAsTny77F2H7S7pgmpggiAn7tcnkcoin">Coinbook ↗</a>
+        <a class="live-link" href="https://dexscreener.com/solana/7xtJR6qfexz5ZAsTny77F2H7S7pgmpggiAn7tcnkcoin">Dexscreener ↗</a>
+        <a class="live-link" href="https://solscan.io/token/7xtJR6qfexz5ZAsTny77F2H7S7pgmpggiAn7tcnkcoin">Solscan ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══════════════════════════════
+       4. THE JOMO BOT
+  ═══════════════════════════════════ -->
+  <span class="s-num" id="jomo">4 · The JOMO Bot</span>
+  <h2>Joy of Missing Out as Optimal Strategy at σ*</h2>
+
+  <p>FOMO (Fear of Missing Out) is the psychological mechanism that drives
+  zero-sum meme coin dynamics: late entrants buy at the peak, early holders
+  extract value, the system collapses when acknowledgment density falls below
+  threshold. The JOMO Bot — Joy of Missing Out — plays the contrarian strategy:
+  it enters when others exit and exits when others enter. This is not merely
+  a contrarian bet. It is the K operator running as an autonomous agent.</p>
+
+  <div class="math-block">
+    JOMO Bot strategy:<br>
+    · Hold long position when σ &lt; σ* (below volatility threshold)<br>
+    · Provide liquidity at σ = σ* (at the critical threshold)<br>
+    · Withdraw positional control when σ &gt; σ* (above threshold — momentum players dominate)<br><br>
+    From Grossi (2026b, Theorem 1): above σ*, Player J controlling hub C<br>
+    has strictly dominant payoff. The Bot IS Player J.<br><br>
+    Result: the Bot extracts positive expected value while providing<br>
+    the liquidity that stabilizes the coin's acknowledgment density above D*.
+  </div>
+
+  <p>The JOMO Bot's liquidity provision at σ* is the mechanism that converts
+  zero-sum meme dynamics into non-zero-sum stability infrastructure. A coin
+  without a JOMO Bot is purely extractive: early holders win, late holders lose,
+  the game is zero-sum. A coin with a JOMO Bot maintaining position at σ* has
+  a stabilizing force that benefits all participants — because the stability
+  it provides is the very condition under which the fixed point can form.</p>
+
+  <p>Player V (speed investment / momentum trading) dominates below σ*.
+  Player J (positional control / JOMO Bot) dominates above σ*. At σ* the
+  game transitions — which is precisely where the K operator operates. The
+  PROBABILITY token is the JOMO Bot's on-chain instrument: it is always held
+  at the threshold, always building curvature, never chasing the fold.</p>
+
+  <hr class="rule">
+
+  <!-- ══════════════════════════════
+       5. THE NON-ZERO SUM ARGUMENT
+  ═══════════════════════════════════ -->
+  <span class="s-num" id="nonzero">5 · The Non-Zero Sum Argument</span>
+  <h2>How the Operator Chain Creates Positive-Sum Dynamics</h2>
+
+  <p>Standard game theory classifies monetary exchange as zero-sum (one party's
+  gain is the other's loss) or, at best, positive-sum through specialization
+  and trade <cite>(Von Neumann and Morgenstern 1944)</cite>. Meme coins are
+  conventionally analyzed as negative-sum: the Ponzi structure ensures that
+  aggregate losses exceed aggregate gains when fees, slippage, and the absence
+  of underlying cashflows are accounted for.</p>
+
+  <p>The EMMEs system is non-zero sum by design for the following reason:
+  the JOMO Bot's liquidity provision at σ* is a <em>public good</em> within
+  the token's acknowledgment network. It reduces volatility, maintains
+  trading continuity, and increases the probability that any given participant
+  can enter or exit at a fair price. These benefits are non-excludable and
+  non-rival: the Bot's stabilizing effect benefits all holders, not only
+  those who pay for it.</p>
+
+  <table class="wp-table">
+    <thead>
+      <tr>
+        <th>Game type</th>
+        <th>Mechanism</th>
+        <th>EMMEs instantiation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Zero-sum</td>
+        <td>Pure extraction. Early holder wins, late holder loses.</td>
+        <td>EMMEs without JOMO Bot. Meme coins generally.</td>
+      </tr>
+      <tr>
+        <td>Positive-sum (trade)</td>
+        <td>Specialization creates surplus. Both parties better off.</td>
+        <td>JOMO Bot liquidity provision at σ* creates stability surplus.</td>
+      </tr>
+      <tr>
+        <td>Non-zero sum (fixed point)</td>
+        <td>All players converge to p*. Surplus is the convergence itself.</td>
+        <td>Full EMMEs system after D* cleared. The fixed point is collective.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>The non-zero sum outcome requires three conditions: (1) the JOMO Bot
+  maintains liquidity at σ*; (2) acknowledgment density clears D*; (3) the
+  fold completes — i.e., at least one of the three tokens transitions from
+  speculative to functional use. Condition (3) is not guaranteed. It is the
+  U operator's business.</p>
+
+  <hr class="rule">
+
+  <!-- ══════════════════════════════
+       6. THE CENTRAL CLAIM
+  ═══════════════════════════════════ -->
+  <span class="s-num" id="claim">6 · The Central Claim</span>
+  <h2>What This Paper Asserts and What It Does Not</h2>
+
+  <div class="claim">
+    <span class="claim-label">Claim</span>
+    The three EMMEs tokens (PROBABILITY, PROPAGANDA!, GAME THEORY) instantiate
+    the operator chain G = U ∘ F ∘ K ∘ C on Solana. The 1/3 invariant — machine-verified
+    in Lean 4 with 0 sorry on structural claims — is the stability radius of this system.
+    If acknowledgment density clears D* and the JOMO Bot maintains position at σ* = 1/3,
+    the system converges to a unique fixed point p* by the Banach fixed-point theorem.
+    The meme character of the tokens is the C operator — the compression event that
+    initiates acknowledgment density accumulation. It is not a liability. It is the
+    architecture.
+  </div>
+
+  <div class="claim" style="border-color:rgba(248,113,113,0.3); background:rgba(248,113,113,0.04);">
+    <span class="claim-label" style="color:var(--prop)">What this paper does not assert</span>
+    This paper does not predict that the tokens will reach p*. The U operator
+    is the market. The market is not controlled by this paper's author.
+    The Lean 4 proofs establish the mathematical structure. Whether the market
+    instantiates that structure is an empirical question whose answer is not
+    known in advance. This is not financial advice. The sorry roadmap is honest
+    about what is proved and what is not. This paper is honest about the same.
+  </div>
+
+  <p>The Rai stone at the bottom of the ocean is still valid tender in Yap.
+  The grosso bearing the name Grossi is still in museum collections across Europe.
+  Dogecoin — a joke with a dog on it — trades at non-zero price on every major
+  exchange. PROBABILITY has David's face on it and the 1/3 invariant behind it.
+  The mathematics does not care about the face. The face is for the humans.
+  The mathematics is for whoever comes after and wonders what it was built on.</p>
+
+  <hr class="rule">
+
+  <!-- REFERENCES -->
+  <!-- ══════════════════════════════
+       TEAM
+  ═══════════════════════════════════ -->
+  <span class="s-num" id="team">7 · The Team</span>
+  <h2>One Person. That Is the Point.</h2>
+
+  <p>Every credible whitepaper lists a team. This one has one member.
+  That is not a weakness. It is the argument instantiated.</p>
+
+  <p>The Pythagorean mathematics survived five thousand years through individuals
+  who refused to wait for institutional permission — the Neolithic builders of
+  Ħal Saflieni, Pythagoras, Roger Bacon encoding dangerous knowledge in cipher,
+  the punk pressing a seven-inch with no distribution deal. The grosso was
+  minted by one mint, under one doge, and changed the monetary architecture
+  of Europe. The sorry roadmap is published by one researcher with a Lean 4
+  environment and an honest open problem. The PROBABILITY token has one child's
+  face on it. The crown is gone not because there are many rulers but because
+  there are none — only the work and whoever it reaches.</p>
+
+  <p>The non-zero sum claim does not require a large team. It requires the
+  JOMO Bot to hold position at σ*, the mathematics to be correct, and the
+  market to be the U operator. None of those three conditions depends on
+  headcount.</p>
+
+  <div class="token-def" style="border-color:rgba(201,168,76,0.25);">
+    <div class="token-def-head">
+      <span class="token-def-op" style="color:var(--gold);font-size:1.1rem;">G6</span>
+      <span class="token-def-name">Pablo Nogueira Grossi · Sri Brodananda</span>
+      <span class="token-def-ticker">Founder · G6 LLC · Newark NJ</span>
+    </div>
+    <div class="token-def-body">
+      <p><strong>Role:</strong> Mathematics, formal verification, token design,
+      whitepaper, site, Lean 4 proofs, game theory papers, Principia Orthogona
+      series (Vols I–VI), JOMO Bot strategy, AXLE repo, the grosso lineage research,
+      the ch-d2 chapter on Aurobindo and Aristotle, this sentence.</p>
+      <p><strong>Background:</strong> G6 LLC, Newark NJ · ORCID 0009-0000-6496-2186 ·
+      Principia Orthogona series (Zenodo 10.5281/zenodo.19117399) ·
+      AXLE formal verification repo (1,165 formalized, 1,004 sorry-free in source, 61 kernel-audited — 31 of them re-run by CI) ·
+      WorldQuant Challenge Bronze and Silver certificates ·
+      G6_TOGT NASA Moon Base Research Contribution.</p>
+      <p><strong>Why one person:</strong> The daśāvatāra sequence above Paraśurāma
+      is not a team sport. The 112 dhāraṇās of the Vijñāna Bhairava Tantra are
+      first-person protocols. The fixed point is reached by individual operators
+      running sufficient cycles — g₆ = 33 — not by committee. The N in the
+      threshold equation is the number of other operators who can recognize
+      a genuine sorry when they see one. That number grows through the work,
+      not before it.</p>
+      <div class="live-strip">
+        <a class="live-link" href="https://orcid.org/0009-0000-6496-2186">ORCID ↗</a>
+        <a class="live-link" href="https://doi.org/10.5281/zenodo.19117399">Zenodo ↗</a>
+        <a class="live-link" href="https://github.com/TOTOGT/AXLE">AXLE Repo ↗</a>
+        <a class="live-link" href="https://x.com/myemmecoin">𝕏 @myemmecoin ↗</a>
+        <a class="live-link" href="https://t.me/+WC_698vgYxVmZGQx">Telegram ↗</a>
+        <a class="live-link" href="emmes.html">EMMEs Hub →</a>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:0.85rem; color:var(--mid); font-style:italic;">
+    David Grossi · the obverse of PROBABILITY · the reason the work exists ·
+    the U operator's business, not ours.
+  </p>
+
+  <hr class="rule">
+
+  <div class="references">
+    <h2>References</h2>
+
+    <div class="ref">
+      <span class="ref-author">Furness, William Henry.</span> 1910.
+      <em>The Island of Stone Money: Uap of the Carolines.</em>
+      Philadelphia: J. B. Lippincott.
+    </div>
+    <div class="ref">
+      <span class="ref-author">Grossi, Pablo Nogueira.</span> 2026a.
+      <em>Principia Orthogona: Applications of Generative Orthogonal Matrix Compression Science.</em>
+      Newark, NJ: G6 LLC. Zenodo DOI: 10.5281/zenodo.19117399.
+    </div>
+    <div class="ref">
+      <span class="ref-author">Grossi, Pablo Nogueira.</span> 2026b.
+      "Positional Dominance in Network Games."
+      <em>Zenodo.</em> DOI: 10.5281/zenodo.19117399.
+      [Paper 1 — JOMO network game, σ* threshold, positional dominance theorem.]
+    </div>
+    <div class="ref">
+      <span class="ref-author">Grossi, Pablo Nogueira.</span> 2026c.
+      "The 1/3 Invariant: A Companion to Positional Dominance."
+      <em>Zenodo.</em>
+      [Paper 2 — σ* = 1/3 across five independent domains.]
+    </div>
+    <div class="ref">
+      <span class="ref-author">Mankiw, N. Gregory.</span> 2021.
+      <em>Principles of Economics.</em> 9th ed. Mason, OH: Cengage.
+      [Rai stone discussion: Chapter 29, "The Monetary System."]
+    </div>
+    <div class="ref">
+      <span class="ref-author">Nakamoto, Satoshi.</span> 2008.
+      "Bitcoin: A Peer-to-Peer Electronic Cash System."
+      bitcoin.org/bitcoin.pdf.
+    </div>
+    <div class="ref">
+      <span class="ref-author">Spufford, Peter.</span> 1988.
+      <em>Money and Its Use in Medieval Europe.</em>
+      Cambridge: Cambridge University Press.
+    </div>
+    <div class="ref">
+      <span class="ref-author">Stahl, Alan.</span> 2000.
+      <em>Zecca: The Mint of Venice in the Middle Ages.</em>
+      Baltimore: Johns Hopkins University Press / American Numismatic Society.
+    </div>
+    <div class="ref">
+      <span class="ref-author">Swetz, Frank J.</span> 1987.
+      <em>Capitalism and Arithmetic: The New Math of the 15th Century.</em>
+      La Salle, IL: Open Court.
+    </div>
+    <div class="ref">
+      <span class="ref-author">TOTOGT/AXLE.</span> 2026.
+      Lean 4 formal verification repository.
+      github.com/TOTOGT/AXLE.
+      [Main_v6.lean: stabilityRadius_eq, g6_is_33, gtct_return_stable_within_radius.
+      0 sorry on structural claims.]
+    </div>
+    <div class="ref">
+      <span class="ref-author">Von Neumann, John, and Oskar Morgenstern.</span> 1944.
+      <em>Theory of Games and Economic Behavior.</em>
+      Princeton: Princeton University Press.
+    </div>
+  </div>
+
+</div><!-- /paper -->
+
+<div class="ch-nav">
+  <a href="emmes.html">← EMMEs Hub</a>
+  <div class="ch-nav-center">
+    EMMEs Whitepaper · G = U ∘ F ∘ K ∘ C · G6 LLC 2026 · Not financial advice
+  </div>
+  <a href="https://github.com/TOTOGT/AXLE">AXLE Repo →</a>
+</div>
+
+
+<footer class="prov-foot">
+  <strong>EMMEs Whitepaper</strong><br>
+  Principia Orthogona &middot; totogt.github.io/geometry<br>
+  G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; 2026 &middot; ORCID <a href="https://orcid.org/0009-0000-6496-2186" target="_blank" rel="noopener">0009-0000-6496-2186</a><br>
+  Series <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" rel="noopener">Principia Orthogona community</a> &middot; <a href="https://github.com/TOTOGT/geometry">GitHub</a><br>
+  &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC &middot; Licence CC BY-NC-ND 4.0
+</footer>
+</body>
+</html>

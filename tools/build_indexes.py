@@ -122,6 +122,9 @@ FOLDERS: list[tuple[str, str, str]] = [
     ("AMonster", "A Monster's Law", "AMonster"),
     ("Orthogenesis", "Orthogenesis", "Orthogenesis"),
     ("book", "Book (misc/legacy)", "book"),
+    ("courses", "Courses — dm³ 101–103, English for Researchers, HIST 201, IMPA sessions", "courses"),
+    ("soundworks", "Soundworks and wellness", "soundworks"),
+    ("portfolio", "Portfolio, preprints and pitches", "portfolio"),
     ("root", "Book III — The Mini-Beast, and other root chapters", ""),
     ("_archive", "Archive (legacy)", "_archive"),
 ]
@@ -156,7 +159,7 @@ H1 = re.compile(r"<h1[^>]*>(.*?)</h1>", re.S | re.I)
 
 def generated_names() -> set[str]:
     """Index files this script owns — never counted as link sources."""
-    return ({"master-index.html", "index-excluded.html"}
+    return ({"master-index.html", "index-excluded.html", "gold-standard.html"}
             | {f"index-{slug}.html" for slug, _, _ in FOLDERS})
 
 

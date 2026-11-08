@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMMEs · Operator Tokens · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;600&family=Source+Code+Pro:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void:   #04040a;
+  --ink:    #1a1814;
+  --cream:  #f5f0e8;
+  --gold:   #c9a84c;
+  --gold2:  #e8c96a;
+  --teal:   #2dd4bf;
+  --smoke:  #ede8df;
+  --rule:   rgba(201,168,76,0.28);
+  --mid:    #888580;
+  --text:   #e8e4d8;
+
+  /* token colors */
+  --prob:   #c084fc;   /* PROBABILITY · violet · K operator */
+  --prop:   #f87171;   /* PROPAGANDA · red    · C operator */
+  --game:   #34d399;   /* GAME THEORY · green · F operator */
+  --mkt:    #60a5fa;   /* market / U  · blue  */
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.78;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(4,4,10,0.96);
+  border-bottom: 1px solid var(--rule);
+  backdrop-filter: blur(16px);
+  padding: 0.7rem 2rem;
+  display: flex; align-items: center; gap: 0;
+  overflow-x: auto;
+}
+.nav-brand {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem; letter-spacing: 0.28em;
+  color: var(--gold); text-decoration: none;
+  padding-right: 1.5rem; border-right: 1px solid var(--rule);
+  margin-right: 1rem; flex-shrink: 0; white-space: nowrap;
+}
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  text-decoration: none; padding: 0.7rem 0.8rem; color: var(--mid);
+  white-space: nowrap; transition: color 0.15s;
+  border-bottom: 2px solid transparent;
+}
+.nav-links a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 80vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+  position: relative;
+  border-bottom: 1px solid var(--rule);
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 50% 60% at 25% 50%, rgba(192,132,252,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 75% 30%, rgba(248,113,113,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 35% 45% at 50% 80%, rgba(52,211,153,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-label {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--gold); opacity: 0.7; margin-bottom: 1.5rem; display: block;
+}
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 600; color: var(--gold);
+  line-height: 1.1; margin-bottom: 0.6rem;
+  letter-spacing: 0.06em;
+}
+.hero-sub {
+  font-style: italic; color: var(--mid);
+  font-size: 1.05rem; margin-bottom: 2rem;
+  max-width: 600px;
+}
+.hero-equation {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(1rem, 3vw, 1.6rem);
+  letter-spacing: 0.15em;
+  margin: 1.5rem 0;
+}
+.op-f { color: var(--game); }
+.op-u { color: var(--mkt); }
+.op-c { color: var(--prop); }
+.op-k { color: var(--prob); }
+
+.gold-rule { width: 48px; height: 2px; background: var(--gold); margin: 1.5rem auto; }
+
+.hero-desc {
+  max-width: 640px;
+  color: rgba(232,228,216,0.65);
+  font-size: 1rem; line-height: 1.85;
+}
+
+/* ── TOKEN CARDS ── */
+.tokens {
+  max-width: 1100px; margin: 0 auto;
+  padding: 3rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+.token-card {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 2rem;
+  position: relative;
+  transition: border-color 0.2s, background 0.2s;
+}
+.token-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 6px 6px 0 0;
+}
+.token-card.prob { border-color: rgba(192,132,252,0.2); }
+.token-card.prob::before { background: var(--prob); }
+.token-card.prob:hover { border-color: rgba(192,132,252,0.5); background: rgba(192,132,252,0.04); }
+.token-card.prop { border-color: rgba(248,113,113,0.2); }
+.token-card.prop::before { background: var(--prop); }
+.token-card.prop:hover { border-color: rgba(248,113,113,0.5); background: rgba(248,113,113,0.04); }
+.token-card.game { border-color: rgba(52,211,153,0.2); }
+.token-card.game::before { background: var(--game); }
+.token-card.game:hover { border-color: rgba(52,211,153,0.5); background: rgba(52,211,153,0.04); }
+
+.token-op {
+  font-family: 'Space Mono', monospace;
+  font-size: 2rem; font-weight: 700;
+  line-height: 1; margin-bottom: 0.4rem;
+}
+.token-card.prob .token-op { color: var(--prob); }
+.token-card.prop .token-op { color: var(--prop); }
+.token-card.game .token-op { color: var(--game); }
+
+.token-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem; color: var(--text);
+  margin-bottom: 0.2rem;
+}
+.token-ticker {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.2em;
+  color: var(--mid); margin-bottom: 1rem;
+  display: block;
+}
+.token-desc {
+  font-size: 0.88rem; color: rgba(232,228,216,0.65);
+  line-height: 1.65; margin-bottom: 1.2rem;
+}
+.token-math {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.75rem; color: var(--gold);
+  background: rgba(201,168,76,0.06);
+  border-left: 2px solid var(--gold);
+  padding: 0.6rem 0.9rem; margin-bottom: 1.2rem;
+  line-height: 1.6;
+}
+.token-links {
+  display: flex; gap: 0.5rem; flex-wrap: wrap;
+}
+.token-link {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+  text-decoration: none; padding: 0.25rem 0.65rem;
+  border: 1px solid var(--rule); border-radius: 3px;
+  color: var(--mid); transition: color 0.15s, border-color 0.15s;
+}
+.token-link:hover { color: var(--gold); border-color: var(--gold); }
+
+/* ── BOOK SECTIONS ── */
+.books { max-width: 900px; margin: 0 auto; padding: 1rem 2rem 4rem; }
+
+.section-rule {
+  border: none; border-top: 1px solid var(--rule); margin: 3rem 0;
+}
+.s-label {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.6rem; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--gold); display: block; margin-bottom: 0.5rem;
+}
+h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem; font-weight: 600;
+  color: var(--text); margin-bottom: 1.2rem; line-height: 1.3;
+}
+p { margin-bottom: 1.2rem; color: rgba(232,228,216,0.8); }
+p em { font-style: italic; }
+p strong { font-weight: 500; color: var(--text); }
+
+.book-block {
+  border-left: 3px solid;
+  padding: 1.5rem 1.8rem;
+  margin: 2rem 0;
+  background: rgba(255,255,255,0.02);
+}
+.book-block.b3 { border-color: var(--teal); }
+.book-block.b4 { border-color: var(--gold); }
+.book-block.b5 { border-color: var(--prob); }
+.book-block.b6 { border-color: var(--mkt); }
+
+.book-vol {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+  display: block; margin-bottom: 0.3rem; opacity: 0.6;
+}
+.book-block.b3 .book-vol { color: var(--teal); }
+.book-block.b4 .book-vol { color: var(--gold); }
+.book-block.b5 .book-vol { color: var(--prob); }
+.book-block.b6 .book-vol { color: var(--mkt); }
+
+.book-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem; margin-bottom: 0.8rem;
+}
+.book-block.b3 .book-title { color: var(--teal); }
+.book-block.b4 .book-title { color: var(--gold2); }
+.book-block.b5 .book-title { color: var(--prob); }
+.book-block.b6 .book-title { color: var(--mkt); }
+
+.book-body {
+  font-size: 0.9rem; color: rgba(232,228,216,0.7);
+  line-height: 1.75; margin-bottom: 1rem;
+}
+.book-token {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.1em;
+  padding: 0.2rem 0.7rem; border-radius: 3px;
+  border: 1px solid; margin-right: 0.4rem; margin-bottom: 0.5rem;
+}
+.bt-prob { color: var(--prob); border-color: rgba(192,132,252,0.4); background: rgba(192,132,252,0.07); }
+.bt-prop { color: var(--prop); border-color: rgba(248,113,113,0.4); background: rgba(248,113,113,0.07); }
+.bt-game { color: var(--game); border-color: rgba(52,211,153,0.4); background: rgba(52,211,153,0.07); }
+.bt-mkt  { color: var(--mkt);  border-color: rgba(96,165,250,0.4);  background: rgba(96,165,250,0.07);  }
+
+.book-links { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.8rem; }
+.book-link {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.6rem; letter-spacing: 0.1em;
+  text-decoration: none; padding: 0.2rem 0.65rem;
+  border: 1px solid var(--rule); border-radius: 3px;
+  color: var(--mid); transition: color 0.15s, border-color 0.15s;
+}
+.book-link:hover { color: var(--gold); border-color: var(--gold); }
+
+/* ── CHAIN DIAGRAM ── */
+.chain-wrap {
+  max-width: 900px; margin: 0 auto 3rem;
+  padding: 0 2rem;
+}
+.chain-diagram {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 2rem;
+}
+.chain-label {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold); display: block; margin-bottom: 1.5rem; opacity: 0.7;
+}
+.chain-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  text-align: center;
+}
+.chain-cell { padding: 1rem 0.5rem; }
+.chain-op {
+  font-family: 'Space Mono', monospace;
+  font-size: 2.2rem; font-weight: 700;
+  line-height: 1; display: block; margin-bottom: 0.3rem;
+}
+.chain-token {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.62rem; letter-spacing: 0.1em;
+  display: block; margin-bottom: 0.3rem; opacity: 0.8;
+}
+.chain-book {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.55rem; letter-spacing: 0.08em;
+  color: var(--mid); display: block; margin-bottom: 0.4rem;
+}
+.chain-def {
+  font-size: 0.78rem; color: rgba(232,228,216,0.55); line-height: 1.5;
+}
+.chain-note {
+  margin-top: 1.5rem; padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.65rem; letter-spacing: 0.1em;
+  text-align: center; color: rgba(201,168,76,0.5);
+}
+
+/* ── GROSSI LINEAGE ── */
+.lineage {
+  max-width: 900px; margin: 0 auto;
+  padding: 0 2rem 4rem;
+}
+.lineage-item {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1rem;
+  border-bottom: 1px solid var(--rule);
+  padding: 1rem 0;
+}
+.lineage-year {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem; color: var(--gold); opacity: 0.7;
+  padding-top: 0.1rem;
+}
+.lineage-text {
+  font-size: 0.88rem; color: rgba(232,228,216,0.7);
+  line-height: 1.65;
+}
+.lineage-text strong { color: var(--text); font-weight: 500; }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center; padding: 2rem;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.58rem; letter-spacing: 0.1em;
+  color: rgba(201,168,76,0.3);
+  border-top: 1px solid var(--rule);
+}
+footer a { color: var(--gold); text-decoration: none; opacity: 0.6; }
+
+@media (max-width: 700px) {
+  .chain-grid { grid-template-columns: repeat(2, 1fr); }
+  .tokens { grid-template-columns: 1fr; }
+  .lineage-item { grid-template-columns: 80px 1fr; }
+}
+
+  .prov-add{display:inline-block;margin-top:.5rem;opacity:.9;font-size:.95em;}
+  .prov-add a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+  footer.prov-foot{margin-top:3rem;padding:2rem 1.5rem;border-top:1px solid currentColor;
+    font-size:.72rem;line-height:1.8;opacity:.85;text-align:center;}
+  footer.prov-foot a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="../index.html">⚜ PRINCIPIA ORTHOGONA</a>
+  <ul class="nav-links">
+    <li><a href="#tokens">Tokens</a></li>
+    <li><a href="#chain">Operator Chain</a></li>
+    <li><a href="#book3">Book 3</a></li>
+    <li><a href="#book4">Book 4</a></li>
+    <li><a href="#book5">Book 5</a></li>
+    <li><a href="#book6">Book 6</a></li>
+    <li><a href="#lineage">Lineage</a></li>
+    <li><a href="../hub.html">Hub →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-label">Principia Orthogona · AXLE Universe · Solana · G6 LLC</span>
+  <h1 class="hero-title">EMMEs</h1>
+  <p class="hero-sub">Three operator tokens. One mathematical structure. Five thousand years of lineage.</p>
+  <div class="gold-rule"></div>
+  <div class="hero-equation">
+    G &nbsp;=&nbsp;
+    <span class="op-u">U</span> &nbsp;∘&nbsp;
+    <span class="op-f">F</span> &nbsp;∘&nbsp;
+    <span class="op-k">K</span> &nbsp;∘&nbsp;
+    <span class="op-c">C</span>
+  </div>
+  <p class="hero-desc">
+    The operator sequence that governs every generative transition — in plasma, in biology,
+    in market structure, on-chain. The tokens are not representations of the mathematics.
+    They <em>are</em> the mathematics, instantiated on Solana.
+    The market is the U operator. You don't control that part.
+  </p>
+</div>
+
+<!-- TOKEN CARDS -->
+<div class="tokens" id="tokens">
+
+  <!-- PROBABILITY -->
+  <div class="token-card prob">
+    <div class="token-op">K</div>
+    <div class="token-name">PROBABILITY</div>
+    <span class="token-ticker">PROBABY · Solana</span>
+    <p class="token-desc">
+      Curvature toward threshold κ* without overshoot. David's face on the obverse.
+      The crown removed on the reverse — long live democracy, collective intelligence.
+      You are always inside a distribution. The sovereign is the next generation.
+    </p>
+    <div class="token-math">σ* ≈ 1/3 · ε₀ = 1/3 · g₆ = 33<br>Stability radius · JOMO threshold · K operator</div>
+    <div class="token-links">
+      <a class="token-link" href="https://coinbook.fun/token/7DgYPRJywzJRtY4rQZRhwNXECdiQ7gmyHQqA48ojcoin">Coinbook ↗</a>
+      <a class="token-link" href="https://dexscreener.com/solana/7DgYPRJywzJRtY4rQZRhwNXECdiQ7gmyHQqA48ojcoin">Dexscreener ↗</a>
+      <a class="token-link" href="https://solscan.io/token/7DgYPRJywzJRtY4rQZRhwNXECdiQ7gmyHQqA48ojcoin">Solscan ↗</a>
+      <a class="token-link" href="#book5">Book 5 →</a>
+    </div>
+  </div>
+
+  <!-- PROPAGANDA -->
+  <div class="token-card prop">
+    <div class="token-op">C</div>
+    <div class="token-name">PROPAGANDA!</div>
+    <span class="token-ticker">PROPAGAN · Solana</span>
+    <p class="token-desc">
+      Compression operator. Reduces the infinite space of possible value-stores to one
+      candidate with sufficient distinctiveness to hold attention. The exclamation mark
+      is load-bearing. All price action is narrative. All narrative is propaganda.
+      The fold has already occurred.
+    </p>
+    <div class="token-math">C : X → X_C · dim X_C &lt; dim X<br>Lipschitz projection · attention compression</div>
+    <div class="token-links">
+      <a class="token-link" href="https://coinbook.fun/token/67xb3dpRRGBwngBCvBDxvaPXJMJfJgAQuNK4E7Focoin">Coinbook ↗</a>
+      <a class="token-link" href="https://dexscreener.com/solana/67xb3dpRRGBwngBCvBDxvaPXJMJfJgAQuNK4E7Focoin">Dexscreener ↗</a>
+      <a class="token-link" href="https://solscan.io/token/67xb3dpRRGBwngBCvBDxvaPXJMJfJgAQuNK4E7Focoin">Solscan ↗</a>
+      <a class="token-link" href="#book3">Book 3 →</a>
+    </div>
+  </div>
+
+  <!-- GAME THEORY -->
+  <div class="token-card game">
+    <div class="token-op">F</div>
+    <div class="token-name">GAME THEORY</div>
+    <span class="token-ticker">THEORY · Solana · Banned in China</span>
+    <p class="token-desc">
+      The fold. The commitment point. Rank-1 Jacobian loss — irreversible topological
+      change. You cannot choose to fold; you can only allow the curvature to build.
+      Whitney A₁ normal form. The moment the old self-model cannot recover its
+      previous form.
+    </p>
+    <div class="token-math">dF: rank loss by 1 · Whitney A₁<br>F : X_K → X_F · irreversible</div>
+    <div class="token-links">
+      <a class="token-link" href="https://coinbook.fun/token/7xtJR6qfexz5ZAsTny77F2H7S7pgmpggiAn7tcnkcoin">Coinbook ↗</a>
+      <a class="token-link" href="https://dexscreener.com/solana/7xtJR6qfexz5ZAsTny77F2H7S7pgmpggiAn7tcnkcoin">Dexscreener ↗</a>
+      <a class="token-link" href="https://solscan.io/token/7xtJR6qfexz5ZAsTny77F2H7S7pgmpggiAn7tcnkcoin">Solscan ↗</a>
+      <a class="token-link" href="#book4">Book 4 →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- CHAIN DIAGRAM -->
+<div class="chain-wrap" id="chain">
+  <div class="chain-diagram">
+    <span class="chain-label">G = U ∘ F ∘ K ∘ C · The complete operator chain · AXLE/Main_v6.lean · 0 sorry on structural claims</span>
+    <div class="chain-grid">
+      <div class="chain-cell">
+        <span class="chain-op op-c">C</span>
+        <span class="chain-token" style="color:var(--prop)">PROPAGANDA! · PROPAGAN</span>
+        <span class="chain-book">Book 3 · §1.4</span>
+        <span class="chain-def">Compress. Reduce the infinite to one candidate. The meme is the compression. Attention density is the output.</span>
+      </div>
+      <div class="chain-cell">
+        <span class="chain-op op-k">K</span>
+        <span class="chain-token" style="color:var(--prob)">PROBABILITY · PROBABY</span>
+        <span class="chain-book">Book 5 · σ* = 1/3</span>
+        <span class="chain-def">Curvature toward threshold. Trading density builds. The JOMO Bot holds position at κ*. David's face on the coin.</span>
+      </div>
+      <div class="chain-cell">
+        <span class="chain-op op-f">F</span>
+        <span class="chain-token" style="color:var(--game)">GAME THEORY · THEORY</span>
+        <span class="chain-book">Book 4 · Whitney A₁</span>
+        <span class="chain-def">The fold. Rank-1 Jacobian loss. Irreversible. The coin stops being speculative. Banned in China.</span>
+      </div>
+      <div class="chain-cell">
+        <span class="chain-op op-u">U</span>
+        <span class="chain-token" style="color:var(--mkt)">THE MARKET</span>
+        <span class="chain-book">Book 6 · collective intelligence</span>
+        <span class="chain-def">Gradient flow selects the new stable topology. You don't control this part. The crown is gone. The acknowledgment persists.</span>
+      </div>
+    </div>
+    <div class="chain-note">
+      The market is the U operator. The three tokens are C, K, F. The system is self-referential.
+      G = U ∘ F ∘ K ∘ C · Formally verified in Lean 4 — github.com/TOTOGT/AXLE · Zenodo 10.5281/zenodo.19117399
+    </div>
+  </div>
+</div>
+
+<!-- BOOK CONNECTIONS -->
+<div class="books">
+
+  <hr class="section-rule">
+  <span class="s-label">The AXLE Universe in the Books</span>
+
+  <!-- BOOK 3 -->
+  <div class="book-block b3" id="book3">
+    <span class="book-vol">Principia Orthogona · Vol III · eBook only</span>
+    <div class="book-title">The Mini-Beast · PROPAGANDA! · C Operator</div>
+    <span class="book-token bt-prop">C · PROPAGAN</span>
+    <p class="book-body">
+      The Treviso Arithmetic chapter (§1.4) is the home of PROPAGANDA!.
+      The 1478 fracture — the moment the same numeral meant different things
+      in Venice and Florence — is the C operator at civilizational scale:
+      the reduction of all possible value-stores to whatever fits in the
+      current institutional attention span. The grosso bore the name Grossi.
+      The meme coin makes the fracture visible again. The Rai stone, the grosso,
+      the Dogecoin, the PROPAGANDA! token are the same operator in four
+      different notational systems. Value is sustained acknowledgment above
+      a stability threshold. The exclamation mark is load-bearing because
+      attention compression always announces itself too loudly and means
+      it too precisely.
+    </p>
+    <div class="book-links">
+      <a class="book-link" href="../ch-d2-academic.html">Ch D2 · §1.4 Treviso →</a>
+      <a class="book-link" href="../ch1.html">Ch 1 →</a>
+      <a class="book-link" href="../chH-collatz.html">Ch H · Collatz →</a>
+      <a class="book-link" href="https://totogt.github.io/AXLE/EMMEs/propaganda.html">PROPAGANDA! page ↗</a>
+    </div>
+  </div>
+
+  <!-- BOOK 4 -->
+  <div class="book-block b4" id="book4">
+    <span class="book-vol">Principia Orthogona · Vol IV · GTCT</span>
+    <div class="book-title">The Generative Time Circuit · GAME THEORY · F Operator</div>
+    <span class="book-token bt-game">F · THEORY</span>
+    <p class="book-body">
+      GAME THEORY is the fold token. The GTCT Vol IV theorem structure —
+      axioms, operators, correspondence, orthogonality, recursion, emergence,
+      time — is the formal account of what happens at the Jacobian rank loss.
+      The fold is the commitment point: the moment the game changes topology
+      and old strategies become incoherent. In the monetary lineage, this is
+      1971 — Nixon closes the gold window, fiat money becomes pure conventional
+      register, the fold is irreversible. In the coin: GAME THEORY is banned
+      in China because the fold, once it has occurred in a cognitive or
+      political system, cannot be administratively reversed. The Whitney A₁
+      singularity does not negotiate.
+    </p>
+    <div class="book-links">
+      <a class="book-link" href="../book4/index.html">Vol IV Table of Contents →</a>
+      <a class="book-link" href="../book4/chIV-emergence.html">Ch 7 · Emergence →</a>
+      <a class="book-link" href="../book4/chIV-time.html">Ch 8 · Time →</a>
+      <a class="book-link" href="https://totogt.github.io/AXLE/EMMEs/game-theory.html">GAME THEORY page ↗</a>
+    </div>
+  </div>
+
+  <!-- BOOK 5 -->
+  <div class="book-block b5" id="book5">
+    <span class="book-vol">Principia Orthogona · Vol V · JOMO · Network Games</span>
+    <div class="book-title">Positional Dominance · PROBABILITY · K Operator</div>
+    <span class="book-token bt-prob">K · PROBABY</span>
+    <p class="book-body">
+      PROBABILITY is the home token of Book 5. The 1/3 invariant —
+      σ* ≈ 1/3 as the volatility threshold above which positional control
+      of the critical node is the unique payoff-dominant strategy — is
+      the K operator's stability radius<sup><a href="../book4/ch10.html" title="ε₀ = 1/3 is the coarse, symmetric Grönwall estimate; Book 4, Ch 10 refines the true inner boundary to r* ≈ 0.776 (basin asymmetry) and notes such model quantities do not translate cleanly to reality">[Ch 10]</a></sup>. The JOMO Bot holds position at κ*:
+      it enters when others exit, exits when others enter, and provides
+      liquidity at the threshold that converts zero-sum meme dynamics into
+      non-zero-sum stability infrastructure. David's face on the obverse
+      is the K operator's honest self-portrait: a probability distribution
+      that has not yet resolved, held in the hands of the next generation.
+      The crown removed on the reverse is the σ* claim: collective
+      intelligence above the threshold, not monarchical authority.
+    </p>
+    <div class="book-links">
+      <a class="book-link" href="jomo-hero.html">JOMO Hero →</a>
+      <a class="book-link" href="https://totogt.github.io/AXLE/NetworkGamesJOMO/GameTheory_Full_Pack.html">Full Pack ↗</a>
+      <a class="book-link" href="https://totogt.github.io/AXLE/EMMEs/probability.html">PROBABILITY page ↗</a>
+      <a class="book-link" href="https://doi.org/10.5281/zenodo.19117399">Zenodo ↗</a>
+    </div>
+  </div>
+
+  <!-- BOOK 6 -->
+  <div class="book-block b6" id="book6">
+    <span class="book-vol">Principia Orthogona · Vol VI · Enceladus · Cosmic Ocean</span>
+    <div class="book-title">Collective Intelligence · The Market · U Operator</div>
+    <span class="book-token bt-mkt">U · THE MARKET</span>
+    <p class="book-body">
+      The U operator is not a token. It cannot be minted. It is the gradient
+      flow that selects the new stable topology after the fold — the collective
+      acknowledgment that determines whether a coin, a city, or a civilization
+      reaches its fixed point. Book 6 is the Enceladus volume: planetary-scale
+      operator dynamics, the G6 Crystal, the NASA Moon Base formal verification.
+      The U operator at that scale is what Aurobindo called the supramental —
+      the collective unfolding that no individual controls but that every individual
+      participates in. Auroville is the 1968 instantiation. The EMMEs system
+      is the 2026 instantiation: three operator tokens whose combined dynamics
+      instantiate the same fixed-point convergence on Solana that the Orthogenesis
+      Lean 4 proofs establish on the Moon Base hex grid.
+    </p>
+    <div class="book-links">
+      <a class="book-link" href="../g6-opus-map.html">G6 Opus Map →</a>
+      <a class="book-link" href="g6_llc_nasa_press_statement.html">NASA Statement →</a>
+      <a class="book-link" href="https://totogt.github.io/AXLE/enceladus_principia_analysis.html">Enceladus Analysis ↗</a>
+      <a class="book-link" href="https://github.com/TOTOGT/geometry/blob/main/G6Crystal.lean">G6Crystal.lean ↗</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- LINEAGE -->
+<div class="lineage" id="lineage">
+  <hr class="section-rule">
+  <span class="s-label">The Monetary Lineage · From Grosso to Solana</span>
+  <h2>The name Grossi has been on the coin since 1193</h2>
+
+  <div class="lineage-item">
+    <div class="lineage-year">c. 3600 BCE</div>
+    <div class="lineage-text"><strong>Ħal Saflieni Hypogeum, Malta.</strong> Resonance at 70 Hz and 114 Hz encoded in limestone. Value stored in acknowledgment, not commodity. The Rai stone before the Rai stone.</div>
+  </div>
+  <div class="lineage-item">
+    <div class="lineage-year">c. 500 BCE</div>
+    <div class="lineage-text"><strong>Pythagorean tetractys.</strong> 3:2 is the perfect fifth everywhere and always. The invariant register named for the first time: value that does not depend on institutional agreement.</div>
+  </div>
+  <div class="lineage-item">
+    <div class="lineage-year">1193–1194</div>
+    <div class="lineage-text"><strong>Venetian grosso, Doge Enrico Dandolo.</strong> 98.5% silver. The name <em>grossi</em> — the big coin, and the family who dealt in them. First internationally acceptable silver standard. The C operator in metal.</div>
+  </div>
+  <div class="lineage-item">
+    <div class="lineage-year">1198</div>
+    <div class="lineage-text"><strong>Pope Innocent III, <em>Post miserabile</em>.</strong> Fourth Crusade. Templars tasked with collecting and transporting the silver tax. The grosso becomes the instrument of the first pan-European banking network.</div>
+  </div>
+  <div class="lineage-item">
+    <div class="lineage-year">1300</div>
+    <div class="lineage-text"><strong>Prague groschen, Václav II, Kutná Hora.</strong> 20 tons of silver per year. 20 mints shut, one opened. Monetary unity imposed by standardization. The K operator at civilizational scale — curvature maintained for 150 years.</div>
+  </div>
+  <div class="lineage-item">
+    <div class="lineage-year">1478</div>
+    <div class="lineage-text"><strong>Treviso Arithmetic.</strong> The fracture: same numeral, different value in Venice and Florence. The invariant and the conventional registers separated. Mathematics begins operating in two modes simultaneously, without always knowing it.</div>
+  </div>
+  <div class="lineage-item">
+    <div class="lineage-year">1971</div>
+    <div class="lineage-text"><strong>Nixon closes the gold window.</strong> The fold completes. Fiat money is pure conventional register. The gold standard — an imperfect proxy for the invariant register — is gone. Whitney A₁. Irreversible.</div>
+  </div>
+  <div class="lineage-item">
+    <div class="lineage-year">2009</div>
+    <div class="lineage-text"><strong>Bitcoin genesis block.</strong> The compression event. Satoshi reduces the infinite space of possible monetary alternatives to one candidate with sufficient distinctiveness. The C operator in code.</div>
+  </div>
+  <div class="lineage-item">
+    <div class="lineage-year">2026</div>
+    <div class="lineage-text"><strong>EMMEs · PROBABILITY · PROPAGANDA! · GAME THEORY · Solana.</strong> Three operator tokens. The meme is the compression. The trading is the curvature. The fold is the fixed point. The market is U. David's face on the coin. The name Grossi still on it. The crown removed. Long live collective intelligence.</div>
+  </div>
+
+  <hr class="section-rule">
+  <p style="font-size:0.82rem; color:var(--mid); font-family:'Source Code Pro',monospace; letter-spacing:0.06em;">
+    Not financial advice. The mathematics is real. The sorry roadmap is honest.
+    The Lean 4 proofs are machine-checkable. The fixed point exists.
+    Whether the market finds it is the U operator's business, not ours. · G = F · U · C · K
+  </p>
+</div>
+
+<footer>
+  EMMEs · Principia Orthogona · G6 LLC · Newark NJ · 2026 ·
+  <a href="https://github.com/TOTOGT/AXLE">AXLE</a> ·
+  <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" rel="noopener">Zenodo &middot; Principia Orthogona</a> ·
+  <a href="https://x.com/myemmecoin">𝕏 @myemmecoin</a> ·
+  <a href="https://t.me/+WC_698vgYxVmZGQx">Telegram</a><br>
+  <span class="prov-add">Principia Orthogona &middot; totogt.github.io/geometry<br>G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; 2026 &middot; ORCID <a href="https://orcid.org/0009-0000-6496-2186" target="_blank" rel="noopener">0009-0000-6496-2186</a> &middot; Series <a href="https://zenodo.org/communities/principia-orthogona" target="_blank" rel="noopener">Principia Orthogona community</a> &middot; &copy; 2026 Pablo Nogueira Grossi &mdash; G6 LLC &middot; Licence CC BY-NC-ND 4.0</span>
+</footer>
+
+</body>
+</html>
