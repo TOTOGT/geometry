@@ -101,9 +101,52 @@ theorem finite_branches {β : Type*} {S : Set ℝ} (B : ℝ → Set β)
     (hS : S.Finite) (hB : ∀ t ∈ S, (B t).Finite) : (⋃ t ∈ S, B t).Finite :=
   hS.biUnion hB
 
+/-! ## §4  Finite crossings from transversality alone (Assumption 2.7 as written)
+
+Volume I Assumption 2.7 says only that each crossing of `Δ(s) = κ(s) − κ*(s)` is simple:
+`Δ(s₀) = 0` and `Δ′(s₀) ≠ 0`. It does not say `Δ` is analytic. This theorem uses exactly that
+hypothesis. A simple zero is isolated (the first-order expansion), the zero set in a compact
+interval is closed, and an infinite subset of a compact set accumulates somewhere in it; that
+accumulation point is a zero (continuity) and is isolated (transversality), a contradiction.
+No analyticity, no connectedness of a domain, no `C¹`: differentiability at every point of `[a,b]`
+and `h′ ≠ 0` at the zeros is enough. What is NOT here: `Δ` built from `κ_K` and `κ*` of an
+actual trajectory (the operators are not defined on a state space), and the fact that
+transversality cannot be dropped (`x² sin(1/x)` is differentiable with infinitely many zeros
+accumulating at a point where `h′ = 0`; not formalised). Written untested 2026-11-08. -/
+
+theorem finite_crossings {h h' : ℝ → ℝ} {a b : ℝ}
+    (hd : ∀ x ∈ Icc a b, HasDerivAt h (h' x) x)
+    (htr : ∀ x ∈ Icc a b, h x = 0 → h' x ≠ 0) :
+    (h ⁻¹' {0} ∩ Icc a b).Finite := by
+  by_contra hinf
+  have hinf' : (h ⁻¹' {0} ∩ Icc a b).Infinite := hinf
+  obtain ⟨x, hxK, hacc⟩ :=
+    hinf'.exists_accPt_of_subset_isCompact isCompact_Icc inter_subset_right
+  have hfreq : ∃ᶠ z in 𝓝[≠] x, h z = 0 := by
+    rw [accPt_iff_frequently] at hacc
+    rw [frequently_nhdsWithin_iff]
+    exact hacc.mono fun z hz => ⟨hz.2.1, hz.1⟩
+  have hx0 : h x = 0 := by
+    by_contra hne
+    have hev : ∀ᶠ z in 𝓝 x, h z ≠ 0 := (hd x hxK).continuousAt.eventually_ne hne
+    obtain ⟨z, hz0, hzne⟩ := (hfreq.and_eventually (nhdsWithin_le_nhds hev)).exists
+    exact hzne hz0
+  have hev2 : ∀ᶠ z in 𝓝[≠] x, h z ≠ 0 := (hd x hxK).eventually_ne (htr x hxK hx0)
+  obtain ⟨z, hz0, hzne⟩ := (hfreq.and_eventually hev2).exists
+  exact hzne hz0
+
+/-- The crossing times can be listed. -/
+theorem finite_crossings_indexed {h h' : ℝ → ℝ} {a b : ℝ}
+    (hd : ∀ x ∈ Icc a b, HasDerivAt h (h' x) x)
+    (htr : ∀ x ∈ Icc a b, h x = 0 → h' x ≠ 0) :
+    ∃ n : ℕ, ∃ e : Fin n ↪ ℝ, range e = h ⁻¹' {0} ∩ Icc a b :=
+  (finite_crossings hd htr).fin_embedding
+
 end Orthogenesis.Vol1
 
 #print axioms Orthogenesis.Vol1.axle_finiteBranching_false
 #print axioms Orthogenesis.Vol1.finite_zeros
 #print axioms Orthogenesis.Vol1.finite_zeros_indexed
 #print axioms Orthogenesis.Vol1.finite_branches
+#print axioms Orthogenesis.Vol1.finite_crossings
+#print axioms Orthogenesis.Vol1.finite_crossings_indexed
