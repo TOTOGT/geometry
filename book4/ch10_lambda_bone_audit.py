@@ -6,8 +6,9 @@ Book 4 Chapter 10 (dm3) system, read as a bone model (A: density loss/recovery, 
     r' = (r-1)[2 e^{-z} - r(r+1)],   z' = lam r^2 - 2 (r-1)^2 e^{-z},   theta' = 1
 
 lam = 1 is Chapter 10 (eps = 2).  lam is an EXTENSION introduced here, not in the chapter.
-Author of this script: Claude (Anthropic) in a Cowork session, 2026-11-07.  Run by the author
-of the script in a cloud sandbox only; NOT yet run on the user's machine.
+Author: Pablo Nogueira Grossi.  Copyright (c) 2026 G6 LLC.  CC BY-NC-ND 4.0 (as the Book 4 pages).
+Drafted and run with a Claude Cowork session on 2026-11-07 (configured model id claude-sonnet-5-5; the
+serving model may differ).  Run in a cloud sandbox only; NOT yet run on the author's machine.
 
 Prints PASS/FAIL for every number it regenerates.  Final line: ALL PASS or FAIL: n.
 Usage:  python3 -I ch10_lambda_bone_audit.py [--noplot]
