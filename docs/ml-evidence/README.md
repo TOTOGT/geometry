@@ -47,8 +47,9 @@ history, where it can be cited and where it survives a cleared working tree.
 | `OrthogonalWitness.lean.bak` | 1 | Pre-edit copy of the orthogonal-witness Lean file. |
 | `AMonster/law-of-monsters-v2.html` | 1 | Superseded v2 of the Law of Monsters page. |
 | `V4,` | 1 | Zero bytes. A shell typo — a `V4,` argument that became a filename. Kept because it is the smallest possible example of the class, and because the class is real: see `stray-numeric-files/`. |
+| `reviews/2026-11-08-process-review-open-claims.md` | 1 | An outside review of the assisted process (supplied by the author, reviewer model not named): claims marked "open" before they were stated, label arithmetic read as dynamics, equilibrium geometry standing in for motion, a `True` placeholder. Kept verbatim with the receiving session's spot-checks; its work order item 1 became `Orthogenesis/Taxonomy/FoldSoftening.lean`. |
 
-Total 58 files.
+Total 59 files.
 
 ## What is deliberately NOT here
 

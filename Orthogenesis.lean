@@ -43,6 +43,7 @@ import Orthogenesis.Market.CircadianTrader
 import Orthogenesis.Matrix.CajueiroPrinciple
 import Orthogenesis.Taxonomy.GSeries
 import Orthogenesis.Taxonomy.FoldHysteresis
+import Orthogenesis.Taxonomy.FoldSoftening
 import Orthogenesis.Immune.CommitmentThreshold
 import Orthogenesis.Tubulin.TubulinChecks
 import Orthogenesis.Phi.SubcriticalApproach
