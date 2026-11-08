@@ -99,6 +99,7 @@ FOLDERS: list[tuple[str, str, str]] = [
     ("book14", "Book XIV — The Language of Mathematics", "book14"),
     # book15 and book26 were absent from this list when the FOLDER GUARD stopped the build on 2026-10-22; titles taken from each book's index.html.
     ("book15", "Book XV — The Mathematics of Travel and Trade", "book15"),
+    ("book16", "Book XVI — LLMs Explained", "book16"),
     ("book17", "Book XVII — The Machine Floor", "book17"),
     ("book18", "Book XVIII — The Chain Rule", "book18"),
     ("book19", "Book XIX — AXLE and the Manual", "book19"),
@@ -106,6 +107,8 @@ FOLDERS: list[tuple[str, str, str]] = [
     ("book21", "Book XXI — The Classification of Planar Linear Systems", "book21"),
     ("book22", "Book XXII — Language Arts and Added Languages", "book22"),
     ("book23", "Book XXIII — 22 Days", "book23"),
+    ("book24", "Book XXIV — Linear Algebra for Graduate Study", "book24"),
+    ("book25", "Book XXV — Ponte / Bridge", "book25"),
     ("book26", "Book XXVI — 2026", "book26"),
     ("book28", "Book XXVIII — Index Theory", "book28"),
     ("book29", "Book XXIX — Open Threads", "book29"),
@@ -133,8 +136,13 @@ if _cfg.exists():
 
 # FOLDER GUARD (2026-09-27): a book directory absent from FOLDERS gets no index and its
 # chapters get no address. Refuse to run rather than write indexes that silently omit it.
+# A folder counts as covered if it is a slug or one of a FOLDERS entry's prefixes
+# (AXLE's "book45" entry covers book4 and book5 through a prefix list; 2026-11-08).
+_covered = {slug for slug, _, _ in FOLDERS}
+for _slug, _name, _pref in FOLDERS:
+    _covered |= set(_pref) if isinstance(_pref, (list, tuple)) else {_pref}
 _missing = sorted(d.name for d in ROOT.glob("book[0-9]*") if d.is_dir()
-                  and d.name not in {slug for slug, _, _ in FOLDERS})
+                  and d.name not in _covered)
 if _missing:
     raise SystemExit(f"build_indexes: book folders missing from FOLDERS: {_missing}")
 
