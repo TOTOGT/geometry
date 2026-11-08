@@ -61,7 +61,8 @@ SITE   = "totogt.github.io/geometry"
 PREFIX = "/geometry/"
 REPO   = "geometry"
 SKIP   = ["docs/ml-evidence/", ".lake/", "_to_delete/", "_archive/scratch/",
-          "Claude outputs/"]
+          "Claude outputs/", "gcm-v2/out/"]
+# gcm-v2/out/ added 2026-11-08: untracked build output of gcm-v2, not a page.
 # .lake/ added 2026-09-13. It is gitignored, so the two vendored templates
 # under it -- importGraph's html-template/index.html and mathlib's
 # lakeprof_report_template.html -- resolve at a desk that has built Mathlib
@@ -121,7 +122,7 @@ FOLDERS: list[tuple[str, str, str]] = [
     ("AMonster", "A Monster's Law", "AMonster"),
     ("Orthogenesis", "Orthogenesis", "Orthogenesis"),
     ("book", "Book (misc/legacy)", "book"),
-    ("root", "Root — Standalone Chapters", ""),
+    ("root", "Book III — The Mini-Beast, and other root chapters", ""),
     ("_archive", "Archive (legacy)", "_archive"),
 ]
 
@@ -155,7 +156,8 @@ H1 = re.compile(r"<h1[^>]*>(.*?)</h1>", re.S | re.I)
 
 def generated_names() -> set[str]:
     """Index files this script owns — never counted as link sources."""
-    return {"master-index.html"} | {f"index-{slug}.html" for slug, _, _ in FOLDERS}
+    return ({"master-index.html", "index-excluded.html"}
+            | {f"index-{slug}.html" for slug, _, _ in FOLDERS})
 
 
 def discover() -> list[str]:
