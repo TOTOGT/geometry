@@ -73,11 +73,12 @@ HEAD_END = re.compile(r'</head>', re.I)
 
 def chapters():
     out = []
-    for d in sorted(glob.glob(os.path.join(ROOT, 'book*'))):
-        if not re.match(r'^book\d+$', os.path.basename(d)):
+    # omega/ is Book IX (Omega Point); added 2026-11-08 so its chapters are stamped too.
+    for d in sorted(glob.glob(os.path.join(ROOT, 'book*'))) + [os.path.join(ROOT, 'omega')]:
+        if not (re.match(r'^book\d+$', os.path.basename(d)) or os.path.basename(d) == 'omega'):
             continue
         for f in sorted(os.listdir(d)):
-            if f.endswith('.html') and f != 'index.html':
+            if f.endswith('.html') and f not in ('index.html', 'omega-point-index.html'):
                 out.append(os.path.basename(d) + '/' + f)
     for f in sorted(glob.glob(os.path.join(ROOT, '*.html'))):
         if 'name="po-book"' in open(f, encoding='utf-8', errors='replace').read(8000):

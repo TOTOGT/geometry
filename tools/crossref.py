@@ -31,7 +31,7 @@ ROOT = ST.ROOT
 BEGIN, END = '<!--po-related-->', '<!--/po-related-->'
 BLOCK = re.compile(re.escape(BEGIN) + r'.*?' + re.escape(END) + r'\n?', re.S)
 STRIP = re.compile(r'(?is)<(script|style)[^>]*>.*?</\1>')
-ROMAN = {1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI',7:'VII',8:'VIII',10:'X',11:'XI',12:'XII',13:'XIII',
+ROMAN = {1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI',7:'VII',8:'VIII',9:'IX',10:'X',11:'XI',12:'XII',13:'XIII',
          17:'XVII',18:'XVIII',19:'XIX',20:'XX',21:'XXI',28:'XXVIII',29:'XXIX'}
 SIM_FLOOR = 0.15
 # surnames shared by two gallery pages, or common words/adjectives: full name only
@@ -40,7 +40,7 @@ SURNAME_STOP = {'klein', 'noether', 'thoreau', 'curie', 'ramanujan', 'newton', '
 
 def book_of(rel, src):
     m = re.match(r'book(\d+)/', rel)
-    n = int(m.group(1)) if m else None
+    n = int(m.group(1)) if m else (9 if rel.startswith('omega/') else None)
     if n is None:
         mm = re.search(r'<meta name="po-book" content="book(\d+)"', src)
         n = int(mm.group(1)) if mm else 3
