@@ -44,6 +44,8 @@ import Orthogenesis.Matrix.CajueiroPrinciple
 import Orthogenesis.Taxonomy.GSeries
 import Orthogenesis.Taxonomy.FoldHysteresis
 import Orthogenesis.Taxonomy.FoldSoftening
+import Orthogenesis.Vol1.FiniteBranchingRepaired
+import Orthogenesis.Vol1.ChainContraction
 import Orthogenesis.Immune.CommitmentThreshold
 import Orthogenesis.Tubulin.TubulinChecks
 import Orthogenesis.Phi.SubcriticalApproach
