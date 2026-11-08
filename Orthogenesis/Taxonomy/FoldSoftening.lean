@@ -108,8 +108,8 @@ theorem softening_limit {ε : ℝ} (hε : 0 < ε) :
     rw [e] at h0
     exact h0
   have hxρ : x < ρ := by
-    by_contra hc
-    push_neg at hc
+    by_contra hc0
+    have hc : ρ ≤ x := not_lt.mp hc0
     have hsq : ρ * ρ ≤ x * x := mul_le_mul hc hc hρ.le hx.le
     have hge := foldGap_ge hx
     nlinarith
