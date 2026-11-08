@@ -3,8 +3,10 @@
 /-
 Orthogenesis/Taxonomy/FoldFlowPassage.lean — T3, the passage-time lower bound.
 
-UNTESTED. Written 2026-11-08 without a Lean toolchain; lemma names read from the pinned Mathlib
-(rev 81a5d257c8, Lean v4.32.0). Imports `FoldFlowInvariance.lean`, which compiled on the author's Mac.
+Written 2026-11-08 without a Lean toolchain; lemma names read from the pinned Mathlib
+(rev 81a5d257c8, Lean v4.32.0). Compiled on the author's Mac the same day with `lake env lean`: no errors,
+both #print axioms report only [propext, Classical.choice, Quot.sound]; one `push_neg` deprecation note, replaced
+afterwards by `not_le.1` (that edit is not re-run). Imports `FoldFlowInvariance.lean`.
 
 Setting (as in FoldFlow.lean): a = 2 + ε with ε > 0, f(q) = q³ − 3q + a, and a solution is any q with
   hq : ∀ t, 0 ≤ t → HasDerivAt q (−f(q t)) t.
@@ -117,7 +119,7 @@ theorem passage_time_diverges {ε : ℝ} (hε : 0 < ε) (hε3 : ε ≤ 3) {q : �
   have h31 : 1 ≤ 3 / ε := by rw [le_div_iff₀ hε]; linarith
   have hk1 : 1 ≤ Real.sqrt (3 / ε) := by
     by_contra hlt
-    push_neg at hlt
+    replace hlt := not_le.1 hlt
     have hsq := Real.sq_sqrt (show 0 ≤ 3 / ε by positivity)
     nlinarith [Real.sqrt_nonneg (3 / ε)]
   have hat : Real.arctan 1 ≤ Real.arctan (Real.sqrt (3 / ε)) :=

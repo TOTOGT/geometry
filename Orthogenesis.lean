@@ -46,6 +46,7 @@ import Orthogenesis.Taxonomy.FoldHysteresis
 import Orthogenesis.Taxonomy.FoldSoftening
 import Orthogenesis.Taxonomy.FoldFlow
 import Orthogenesis.Taxonomy.FoldFlowInvariance
+import Orthogenesis.Taxonomy.FoldFlowPassage
 import Orthogenesis.Vol1.FiniteBranchingRepaired
 import Orthogenesis.Vol1.ChainContraction
 import Orthogenesis.Immune.CommitmentThreshold
