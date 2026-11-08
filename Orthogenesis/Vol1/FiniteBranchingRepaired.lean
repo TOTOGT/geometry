@@ -33,7 +33,7 @@ noncomputable def gStep (x : ℝ) : ℝ := if x < 5 / 2 then 0 else 1
 /-- The open set with two components. -/
 def U2 : Set ℝ := Ioo (-1) 2 ∪ Ioo 3 4
 
-theorem gStep_analyticOnNhds : AnalyticOnNhds ℝ gStep U2 := by
+theorem gStep_analyticOnNhds : AnalyticOnNhd ℝ gStep U2 := by
   intro x hx
   rcases hx with h | h
   · refine (analyticAt_const (v := (0 : ℝ))).congr ?_
@@ -72,7 +72,7 @@ theorem axle_finiteBranching_false :
 analytic on a neighbourhood of every point of `U`, and `g` is not identically zero on `U`, then
 `g` has finitely many zeros in `[a,b]`. -/
 theorem finite_zeros {U : Set ℝ} {g : ℝ → ℝ} {a b : ℝ}
-    (hU : IsPreconnected U) (hab : Icc a b ⊆ U) (hg : AnalyticOnNhds ℝ g U)
+    (hU : IsPreconnected U) (hab : Icc a b ⊆ U) (hg : AnalyticOnNhd ℝ g U)
     (hne : ∃ x ∈ U, g x ≠ 0) : (g ⁻¹' {0} ∩ Icc a b).Finite := by
   by_contra hinf
   have hinf' : (g ⁻¹' {0} ∩ Icc a b).Infinite := hinf
@@ -88,7 +88,7 @@ theorem finite_zeros {U : Set ℝ} {g : ℝ → ℝ} {a b : ℝ}
 
 /-- The zeros can be listed: `Fin n ↪ ℝ` onto the zero set. -/
 theorem finite_zeros_indexed {U : Set ℝ} {g : ℝ → ℝ} {a b : ℝ}
-    (hU : IsPreconnected U) (hab : Icc a b ⊆ U) (hg : AnalyticOnNhds ℝ g U)
+    (hU : IsPreconnected U) (hab : Icc a b ⊆ U) (hg : AnalyticOnNhd ℝ g U)
     (hne : ∃ x ∈ U, g x ≠ 0) :
     ∃ n : ℕ, ∃ e : Fin n ↪ ℝ, range e = g ⁻¹' {0} ∩ Icc a b :=
   (finite_zeros hU hab hg hne).fin_embedding
