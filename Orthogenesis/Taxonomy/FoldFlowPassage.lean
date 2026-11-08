@@ -52,7 +52,7 @@ theorem passage_time_lower_bound {ε : ℝ} (hε : 0 < ε) {q : ℝ → ℝ}
   have hm : Real.sqrt (3 * ε) = k * ε := by
     have h3 : 3 * ε = (k * ε) ^ 2 := by
       rw [mul_pow, hk2]; field_simp
-    rw [h3]; exact Real.sqrt_sq (by positivity)
+    rw [h3]; exact Real.sqrt_sq (mul_pos hkpos hε).le
   set ψ : ℝ → ℝ := fun t => Real.arctan (k * (q t - 1)) + k * ε * t with hψ
   have hψd : ∀ t, 0 ≤ t → HasDerivAt ψ
       (1 / (1 + (k * (q t - 1)) ^ 2) * (k * (-(foldF (2 + ε) (q t)))) + k * ε) t := by
@@ -102,7 +102,7 @@ theorem passage_time_lower_bound {ε : ℝ} (hε : 0 < ε) {q : ℝ → ℝ}
   have hψT : ψ T = -Real.arctan k + k * ε * T := by simp [hψ, hqT, Real.arctan_neg]
   rw [hψ0, hψT] at hle
   rw [hm]
-  have hpos : 0 < k * ε := by positivity
+  have hpos : 0 < k * ε := mul_pos hkpos hε
   rw [div_le_iff₀ hpos]
   nlinarith [hle]
 
