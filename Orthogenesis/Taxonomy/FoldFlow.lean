@@ -3,8 +3,10 @@
 /-
 Orthogenesis/Taxonomy/FoldFlow.lean — gradient flow q' = −dW/dq on the fold, as TRAJECTORY statements.
 
-UNTESTED. Written 2026-11-08 without a Lean toolchain; every lemma name was read from the pinned Mathlib
-(rev 81a5d257c8, Lean v4.32.0) but no elaboration has been run. Errors are expected at tactic level.
+Written 2026-11-08 without a Lean toolchain; every lemma name was read from the pinned Mathlib
+(rev 81a5d257c8, Lean v4.32.0). Compiled on the author's Mac the same day with `lake env lean`: no errors,
+all six #print axioms report only [propext, Classical.choice, Quot.sound]. (One unused-tactic note on a
+`beta_reduce`, since removed; that edit is not re-run.)
 
 Setting. f(q) = q³ − 3q + a = dW/dq. A "solution" is a function q : ℝ → ℝ with
   hq : ∀ t, 0 ≤ t → HasDerivAt q (−f(q t)) t.
@@ -216,7 +218,6 @@ theorem flow_fixed_at_fold {q : ℝ → ℝ}
     (by simp [h0])
     (by
       intro x hx
-      beta_reduce
       have hxI : x ∈ Icc 0 T := ⟨hx.1, hx.2.le⟩
       have hy : |q x - 1| ≤ M := by simpa [Real.norm_eq_abs] using hM x hxI
       have h3 : |q x - 1 + 3| ≤ M + 3 := by
