@@ -92,7 +92,9 @@ theorem solution_meets_equilibrium {a r : ℝ} (hr : foldF a r = 0) {q : ℝ →
     intro x hx
     have hBx : |q x| ≤ B := by simpa [Real.norm_eq_abs] using hB x hx
     have hg : |q x ^ 2 + q x * r + r ^ 2 - 3| ≤ L := by
-      have h1 : q x ^ 2 ≤ B ^ 2 := by nlinarith [abs_le.1 hBx]
+      obtain ⟨hB1, hB2⟩ := abs_le.1 hBx
+      have h1 : q x ^ 2 ≤ B ^ 2 := by
+        nlinarith [mul_nonneg (sub_nonneg.2 hB2) (show (0 : ℝ) ≤ q x + B by linarith)]
       have h2 : |q x * r| ≤ B * |r| := by
         rw [abs_mul]; exact mul_le_mul_of_nonneg_right hBx (abs_nonneg r)
       apply abs_le.2
@@ -101,11 +103,11 @@ theorem solution_meets_equilibrium {a r : ℝ} (hr : foldF a r = 0) {q : ℝ →
       · nlinarith [sq_nonneg (q x), sq_nonneg r, le_abs_self (q x * r), h1, h2]
     rw [abs_neg, foldF_factor hr (q x), abs_mul]
     nlinarith [mul_le_mul_of_nonneg_left hg (abs_nonneg (q x - r))]
-  exact fun _ => by
-    have key := zero_propagates (y := fun x => q x - r) (y' := fun x => -(foldF a (q x)))
-      (L := L) (T := T) (s := s)
-      (fun x hx => (hq x hx.1).sub_const r) hbound hsT (by simp [hqs]) t htT
-    linarith [key]
+  have key := zero_propagates (y := fun x => q x - r) (y' := fun x => -(foldF a (q x)))
+    (L := L) (T := T) (s := s)
+    (fun x hx => (hq x hx.1).sub_const r) hbound hsT (by simp [hqs]) t htT
+  have key' : q t - r = 0 := key
+  linarith
 
 /-- **Equilibria are barriers.** For any equilibrium `r` of the flow, a solution keeps the strict sign
 of `q 0 − r` for all `t ≥ 0`, and a solution that starts at `r` stays at `r`. -/
@@ -120,13 +122,15 @@ theorem equilibrium_invariance {a r : ℝ} (hr : foldF a r = 0) {q : ℝ → ℝ
   · intro h0 t ht
     by_contra hlt
     have hle : q t ≤ r := not_lt.1 hlt
-    obtain ⟨s, hs, hsr⟩ := intermediate_value_Icc' ht (hcont t ht) ⟨hle, h0.le⟩
+    obtain ⟨s, hs, hsr⟩ := intermediate_value_Icc' ht (hcont t ht)
+      (show r ∈ Icc (q t) (q 0) from ⟨hle, h0.le⟩)
     have := solution_meets_equilibrium hr hq hs.1 hsr 0 le_rfl
     linarith
   · intro h0 t ht
     by_contra hlt
     have hle : r ≤ q t := not_lt.1 hlt
-    obtain ⟨s, hs, hsr⟩ := intermediate_value_Icc ht (hcont t ht) ⟨h0.le, hle⟩
+    obtain ⟨s, hs, hsr⟩ := intermediate_value_Icc ht (hcont t ht)
+      (show r ∈ Icc (q 0) (q t) from ⟨h0.le, hle⟩)
     have := solution_meets_equilibrium hr hq hs.1 hsr 0 le_rfl
     linarith
 
