@@ -2,11 +2,11 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2026 Pablo Nogueira Grossi / G6 LLC
 """
-ch01-verify.py -- what Book XXVI's index and Chapter 1 say about their own counts.
+ch01-verify.py -- what Book XXVI's index and Chapter 1 say about themselves (no count is claimed).
 
 R6/R24. Checks, from the pages alone:
-  [1] the table in index.html has the number of rows ch01 states (22)
-  [2] every row carries a month in {Aug, Sep, Oct}; no row claims a sent status or an outcome
+  [1] neither page states a number of applications (the applicant is not counting)
+  [2] every row carries a month in {Aug, Sep, Oct, Nov}; no row claims an outcome
   [3] ch01's "roughly a dozen or more industries" is true of the table (>= 12 distinct, 'Not identified' excluded)
   [4] no employer is named: every word on both pages is hashed and compared with a list of hashed
       employer tokens (the names are kept as hashes so this file does not publish them)
@@ -40,12 +40,14 @@ def main():
     if "--control" in sys.argv:
         idx=idx.replace("Local government","Local government Yale"); print("control: planted an employer word")
     rows=re.findall(r"<tr><td class=\"m\">(\w+)</td><td>(.*?)</td><td>(.*?)</td><td class=\"blank\">(.*?)</td><td class=\"blank\">(.*?)</td></tr>", idx)
-    print("[1] row count"); n=len(rows); m=re.search(r"lists (\d+) applications", ch)
-    ok(n==22, f"table has {n} rows"); ok(bool(m) and int(m.group(1))==n, f"ch01 states {m.group(1) if m else 'nothing'} and the table has {n}")
+    print("[1] no count is claimed")
+    ok(not re.search(r"lists \d+ applications|count of \d+|which of the \d+", ch+idx), "neither page states a number of applications")
+    ok("claims no number of applications" in ch, "ch01 says it claims no number of applications")
+    ok(len(rows)>0, f"the table has rows ({len(rows)}); the number is not asserted")
     print("[2] months and statuses")
-    ok(all(r[0] in ("Aug","Sep","Oct") for r in rows), "every month is Aug, Sep or Oct")
-    known=[r for r in rows if not (r[3]=="to confirm" and r[4]=="not recorded")]
-    ok(len(known)==0, "no row asserts a sent status or an outcome: every row is 'to confirm' / 'not recorded'")
+    ok(all(r[0] in ("Aug","Sep","Oct","Nov") for r in rows), "every month is Aug, Sep, Oct or Nov")
+    known=[r for r in rows if r[3] not in ("to confirm","applied (applicant report)") or r[4]!="not recorded"]
+    ok(len(known)==0, "no row asserts an outcome; a sent status appears only as 'applied (applicant report)'")
     ok("no outcome is recorded" in idx and "a blank is not a rejection" in idx, "index says no outcome is recorded and keeps 'a blank is not a rejection'")
     ok("form letter" not in ch and "form letter" not in idx, "no rejection is described on either page")
     idx_planted=idx.replace('<td class="blank">not recorded</td>','<td class="blank">not progressing (form letter)</td>',1)
@@ -59,7 +61,8 @@ def main():
     for page,s in (("index.html",idx),("ch01-two-conversations.html",ch)):
         for h in re.findall(r'href="([^"#]+)"', s):
             if h.startswith("http"): continue
-            ok((H/h).resolve().exists(), f"{page} -> {h}")
+            tgt=(H.parent/h[len("/geometry/"):]) if h.startswith("/geometry/") else (H/h)  # site root /geometry/ = repo root
+            ok(tgt.resolve().exists(), f"{page} -> {h}")
     print("[7] tags")
     for page,s in (("index.html",idx),("ch01-two-conversations.html",ch)):
         p=P(); p.feed(s); ok(not p.st and not p.bad, f"{page} balanced")
