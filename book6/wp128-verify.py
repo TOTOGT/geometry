@@ -47,7 +47,7 @@ if S:
     parts = lambda d: ((S['CNP16OV'][d] - S['CLF16OV'][d]) / S['CNP16OV'][d] * 100, S['UNEMPLOY'][d] / S['CNP16OV'][d] * 100)
     head(2, 'THE IDENTITY AND THE PAGE\'S TABLE')
     worst = max(abs(peg(d) - (100 - S['EMRATIO'][d])) for d in common)
-    check(len(common) == 943, 'the page says "all 943 months since January 1948": %d months from %s' % (len(common), common[0]))
+    check(len(common) == 945, 'the page says "all 945 months since January 1948": %d months from %s' % (len(common), common[0]))
     check(worst < 0.051, 'PEG equals 100 - EMRATIO on all %d months with the series it needs (largest gap %.4f; EMRATIO is published to 0.1)' % (len(common), worst))
     w3 = max(abs(S['UNEMPLOY'][d] / S['CLF16OV'][d] * 100 - S['UNRATE'][d]) for d in common)
     check(w3 < 0.051, 'U-3 recomputed as UNEMPLOY / CLF16OV equals UNRATE on every month (largest gap %.4f)' % w3)
