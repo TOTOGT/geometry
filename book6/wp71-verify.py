@@ -74,6 +74,28 @@ if os.path.exists(sp):
     body=re.sub(r'<style.*?</style>|<script.*?</script>|<div class="po-proved-block">.*?</span>\s*</div>|<aside class="po-run".*?</aside>|<div class="correction-note".*?</div>','',pg,flags=re.S)
     check(len(re.findall(r'eigenvalue|determinant|\bmatrix\b|spiral',re.sub(r'<[^>]+>',' ',body),flags=re.I))==0,'the page has no matrix, eigenvalue or spiral content for that theorem to support: the "Proved" block is a NAME MATCH (tools/proved_labels.py matches the word in prose), not evidence for the page')
 
+head(8,'measured record added 2026-11-08: NASA monthly rates compounded, the lunar-vs-weightless comparison, the per-month division of the npj Microgravity losses')
+_pg=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'wp71-lunar-survivability.html'),encoding='utf-8').read()
+def months(x,r): return math.log(1-x)/math.log(1-r)
+_nasa={0.01:{0.05:5.1,0.10:10.5,0.20:22.2,0.30:35.5},0.015:{0.05:3.4,0.10:7.0,0.20:14.8,0.30:23.6}}
+def table_ok(tab):
+    return all(abs(months(x,r)-pm)<0.06 for r,c in tab.items() for x,pm in c.items())
+check(table_ok(_nasa),'NASA 1%/month and 1.5%/month table')
+_bad={0.01:dict(_nasa[0.01]),0.015:_nasa[0.015]}; _bad[0.01][0.20]=23.7
+check(not table_ok(_bad),'control: a damaged table cell is caught')
+for r,c in _nasa.items():
+    for x,pm in c.items(): check(('%.1f months'%pm) in _pg,'cell on page: %.1f months'%pm)
+_mo=lambda w: 100*(1-(1-w)**WPM)
+print('    lunar %.2f%%/month, Mars %.2f%%/month'%(_mo(0.0039),_mo(0.0022)))
+check(_mo(0.0039)>1.5 and abs(_mo(0.0039)-1.7)<0.05,'0.39%/week is about 1.7%/month and above the 1.5%/month top of NASA range')
+check(_mo(0.0022)<1.0 and abs(_mo(0.0022)-0.95)<0.01,'0.22%/week is about 0.95%/month, under NASA low end')
+_M=178/30.44
+check(abs(2.1/_M-0.36)<0.005 and abs(3.7/_M-0.63)<0.005,'2.1%% and 3.7%% over a mean %.2f-month mission give 0.36 and 0.63%%/month'%_M)
+for _s in ('20110023081','20140013496','20240008206','s41526-023-00256-5','10.1073/pnas.2014716117'):
+    check(_s in _pg,'citation present: %s'%_s)
+check('it is not currently collected' not in _pg.split('Added and corrected 2026-11-08')[1].split('</div>',1)[1],'the over-strong "not currently collected" sentence is gone from the body')
+print('    NOT CHECKED HERE: the sources themselves (read 2026-11-08 through a fetch tool or as attachments). Whether the jump lever works is [OPEN].')
+
 print('\nRESULT: %s'%('ALL PASS' if not fails else '%d FAIL'%len(fails)))
 for f in fails: print('  FAIL:',f)
 sys.exit(1 if fails else 0)
