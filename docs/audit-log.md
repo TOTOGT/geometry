@@ -12359,3 +12359,7 @@ CLAUDE.md "Open" item 2 is stale on this page; next in Book 3 roster order is th
 - **Page:** new section `#oct`, hero value line, history-table row. EMRATIO 59.3 gives 100 - 59.3 = 40.7, agreeing with 40.65 to the published 0.1.
 - **Repairs, unrelated to October's value:** `wp128-verify.py` hardcoded 943 months (now 945, with Sep and Oct); the page's 2020-on Phillips row moved from 2020-01..2025-07 (n=67, U-3 +0.57) to 2020-01..2025-08 (n=68, U-3 +0.56) because newer core-CPI data extended the window. U-6 +0.55 and PEG +0.69 unchanged. `docs/claims.tsv` row 3899 count updated. The earlier "verify script not re-run" note for September is now closed: it was re-run today and passes.
 - **Open, unchanged:** by-reason split, Okun conversion, ShadowStats status. The WP-32 addendum sentence still cites Aug/Sep only; not changed.
+
+## 2026-11-09 - book1/verification-registry.html: dated update paragraph in the superseded-snapshot banner
+- Added a paragraph recording that the page's `FiniteBranching.lean` sorry rows are superseded by `FiniteBranchingRepaired.lean`, kernel-checked 2026-11-08 (axle_finiteBranching_false, finite_zeros, finite_crossings), with the open items stated. Counts, status cells and the other four files unchanged; the page still says not to cite its counts. Wording taken from the 2026-11-08 audit-log entries, not re-run today.
+- Retraction: I first called the banner's `sluing.github.io/neuro/SBM/1080.html` link a foreign domain. It is the author's own `sluing/neuro` repo (CLAUDE.md, HANDOFF-2026-09-18). Link left as is.
