@@ -108,12 +108,12 @@ td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:n
 
 <section id="result">
 <p class="lead">Among New York local-court misdemeanors with a recorded first cash-bail amount above $1, not posting bail at arraignment goes with a plea disposition rate about 7.6 percentage points higher within 30 days.</p>
-<p>That figure compares cases with the same charge, county, year and criminal-history category. It holds at +7.6, +7.7 and +7.6 under three sets of controls on one fixed group of 4,778 not-posted and 977 posted cases.</p>
+<p>That figure compares cases with the same charge, court, year, criminal-history category and bail band, on the 4,778 not-posted and 977 posted cases with a match. It holds at +7.6, +7.7 and +7.6 under three sets of controls on that one fixed group.</p>
 </section>
 
 <section id="sample">
 <h2><span class="num">1</span>From a million rows to the comparison</h2>
-<p>The source is the Office of Court Administration's pretrial release extract. Each row is one defendant on one docket, and a person's separate cases cannot be linked.</p>
+<p>The source is the Office of Court Administration's pretrial release extract. Each row is one defendant on one docket. Dockets from the same arrest can be linked, but one person cannot be followed across arrests.</p>
 <div class="tablewrap"><table>
 <tr><th>Step</th><th>Rows</th></tr>
 <tr><td>All extract rows, 2023 to 2025</td><td>1,028,073</td></tr>
@@ -130,7 +130,7 @@ td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:n
 <h2><span class="num">2</span>What the fields actually mean</h2>
 <ul>
 <li><strong>Timing.</strong> Dates are month and year only, so the elapsed-days field is used, never subtracted dates. Same-day dispositions are recorded as 1, and results are reported at both 30 and 31.</li>
-<li><strong>The $1 code.</strong> The data dictionary says $1 is often set to credit time served when a person is remanded on another case. Of 43,803 misdemeanor bail cases, 24,913 carry exactly $1. Treating them as people unable to find a dollar would be wrong, so they are kept apart.</li>
+<li><strong>The $1 code.</strong> The data dictionary says $1 is often set to credit time served when a person is remanded on another case. Of 43,803 misdemeanor bail cases, 24,913 carry exactly $1. That is why they are kept apart. The $1 amount is an imperfect marker of another hold, and an amount above $1 does not exclude one.</li>
 <li><strong>Criminal history.</strong> A blank means no matching record, not a clean record, so there are three categories: positive, all zero, unknown.</li>
 <li><strong>Plea date.</strong> Disposition is when all charges were resolved. The outcome is a plea disposition, not the day a plea was entered.</li>
 <li><strong>Later posting.</strong> Among not-posted cases above $1, 13,050 of 15,876 show no posting observed. That is not the same as never posted.</li>
@@ -140,7 +140,7 @@ td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:n
 <section id="rates">
 <h2><span class="num">3</span>Plea disposition within 30 days, by status at arraignment</h2>
 <div class="tablewrap"><table>
-<tr><th>Status at arraignment</th><th>Cases</th><th>At most 30 days</th></tr>
+<tr><th>Status at arraignment</th><th>Eligible</th><th>At most 30 days</th></tr>
 <tr><td><strong>Not posted, above $1</strong></td><td>15,876</td><td><strong>15.9%</strong></td></tr>
 <tr><td>Not posted, $1 bail</td><td>22,413</td><td>8.9%</td></tr>
 <tr><td>Bail posted, above $1</td><td>1,413</td><td>5.6%</td></tr>
@@ -148,23 +148,26 @@ td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:n
 <tr><td>Released on recognizance</td><td>354,884</td><td>4.1%</td></tr>
 <tr><td>Nonmonetary release</td><td>65,576</td><td>2.1%</td></tr>
 </table></div>
+<p>Rates exclude cases with unknown timing: 40 of the not-posted and 6 of the posted cases above $1. Assigning those to either extreme keeps the not-posted rate within 15.9% to 16.1% and the posted rate within 5.6% to 6.0%. Transfers within 30 days are 2.8% and 4.4%.</p>
 </section>
 
 <section id="contrast">
 <h2><span class="num">4</span>The contrast inside matched cells</h2>
 <div class="tablewrap"><table>
-<tr><th>Compared within</th><th>At most 30</th><th>At most 31</th><th>Range</th><th>Not posted / posted used</th></tr>
-<tr><td>Charge, county, year, history</td><td>+7.6</td><td>+7.7</td><td>5.6 to 9.3</td><td>9,910 / 1,265</td></tr>
-<tr><td>Adding bail band</td><td>+7.1</td><td>+7.3</td><td>5.3 to 9.0</td><td>5,118 / 1,058</td></tr>
-<tr><td>Court for county, with bail band</td><td>+7.6</td><td>+7.8</td><td>5.6 to 9.8</td><td>4,778 / 977</td></tr>
+<tr><th>Compared within</th><th>At most 30 (points)</th><th>Not posted / posted used</th></tr>
+<tr><td><strong>Primary: charge, court, year, history, bail band</strong></td><td><strong>+7.6</strong></td><td>4,778 / 977</td></tr>
+<tr><td>Charge, county, year, history</td><td>+7.6</td><td>9,910 / 1,265</td></tr>
+<tr><td>Charge, county, year, history, bail band</td><td>+7.1</td><td>5,118 / 1,058</td></tr>
+<tr><td>Primary, cohorts through June 2025</td><td>+7.2</td><td>4,174 / 844</td></tr>
+<tr><td>Primary, cohorts through December 2024</td><td>+7.2</td><td>3,491 / 710</td></tr>
 </table></div>
-<p>The unadjusted gap on the fixed group is 10.8 points. The range comes from 200 draws of random positive weights on arrest cycles, which keeps every cell in place. It is not a 95% confidence interval: cells are thin, and the median cell holds one posted case.</p>
+<p>The unadjusted gap on the fixed group is 10.8 points. Two sets of 1,000 draws, with exponential weights on arrest cycles and posted weights frozen, give sensitivity ranges of 6.7 to 8.5 and 6.8 to 8.6. In 462 of 645 cells there is one posted case, so this understates uncertainty and is not a confidence interval.</p>
 </section>
 
 <section id="judges">
-<h2><span class="num">5</span>A judge check that fails</h2>
-<p>The natural next step is to compare stricter and more lenient judges. The extract gives the judge but only the month, so judges can be compared only within a court and month, across 440,248 cases, 426 judges and 56 courts.</p>
-<p>A judge one standard deviation stricter also receives a caseload 2.41 points more likely to be a class A misdemeanor, 1.09 points more likely to be assault and 0.71 points more likely to involve a Black defendant, and each of those ranges excludes zero. Assignment does not look as good as random at this resolution, so no causal judge result is reported.</p>
+<h2><span class="num">5</span>A judge check that does not support the design</h2>
+<p>The natural next step is to compare stricter and more lenient judges. The extract gives the judge but only the month, so judges can be compared only within a court and month, across 596,710 arraignments and 426 judges.</p>
+<p>A judge one standard deviation stricter also hears a caseload 3.26 points more likely to be a class A misdemeanor, 1.39 points more likely to be assault and 1.07 points more likely to involve a Black defendant, and cases are 2.57 points more likely to continue past arraignment. These checks cannot separate judge assignment from other causes, so no causal judge result is reported.</p>
 </section>
 
 <section id="limits">
@@ -173,7 +176,7 @@ td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:n
 <li>People who post bail differ: 53% of posted cases have a positive criminal history, against 74% of not-posted cases.</li>
 <li>Bail amounts reflect a judge's view of the case, so they are not a dose of financial pressure.</li>
 <li>The extract has no measure of wealth, work or obligations such as rent.</li>
-<li>Data with court date and shift would allow a defensible judge design.</li>
+<li>Court date and shift data would improve assignment controls, but would not establish a causal design on their own.</li>
 </ul>
 </section>
 
