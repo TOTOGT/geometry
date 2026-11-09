@@ -3,10 +3,10 @@ import Mathlib
 -- GATE-DECLARE: sorries = none
 -- GATE-REASON: Pauli algebra, a Clifford conjugation, and the inner-product core of
 --   no-cloning, stated over explicit 2x2 complex matrices and an abstract inner-product
---   space. UNTESTED when written: no toolchain in the session that wrote it. The author
---   runs `lake build Orthogenesis.Quantum.QubitAlgebra`; errors get fixed against the
---   compiler's actual output. NOT yet imported from Orthogenesis.lean (add the import in
---   the commit that follows a clean build).
+--   space. Built clean on the author's machine 2026-11-09 (`lake build
+--   Orthogenesis.Quantum.QubitAlgebra`, 8655 jobs, all ten theorems on [propext,
+--   Classical.choice, Quot.sound]); statements read after the build, see below. The
+--   header comment was edited after that build, so the file has not been re-run since.
 --
 -- What each theorem actually says (read these, not just the names):
 --   * pauli_*       : the Pauli matrices square to 1, satisfy XY = iZ, YZ = iX, ZX = iY,
