@@ -27,5 +27,5 @@ check('fixed-population values',all(x in a3b for x in('7.6 [','7.7 [','raw on fi
 for s in ('3.26 pp','1.39 pp','1.07 pp','2.57 pp'):check('judge slope in output: '+s,s in a4)
 check('control: a damaged number is not found',('n=  99999' not in a3) and not inout('1,028,074','1028074',a3))
 for w in ('Princeton','Yang,','Crystal'):check('no posting or contact named: '+w,w not in re.sub(r'Dobbie, Goldin and Yang','',txt))
-check('states non-causal',"does not show that anyone could not pay" in txt and 'not a 95% confidence interval' in txt)
+check('states non-causal',"does not show that anyone could not pay" in txt and 'not a confidence interval' in txt)
 print('RESULT:','ALL PASS' if not F else '%d FAIL'%len(F));raise SystemExit(bool(F))
