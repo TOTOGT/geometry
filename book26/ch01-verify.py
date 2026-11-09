@@ -45,11 +45,11 @@ def main():
     print("[2] months and statuses")
     ok(all(r[0] in ("Aug","Sep","Oct") for r in rows), "every month is Aug, Sep or Oct")
     known=[r for r in rows if not (r[3]=="to confirm" and r[4]=="not recorded")]
-    ok(all(r[3]=="yes" and r[4]=="not progressing (form letter)" for r in known) and len(known)==1 and known[0][2]=="Business manager",
-       "exactly one row asserts an outcome: Business manager, sent 'yes', 'not progressing (form letter)'; every other row is 'to confirm' / 'not recorded'")
-    ok("one outcome is recorded" in idx and "a blank is not a rejection" in idx, "index says one outcome is recorded and keeps 'a blank is not a rejection'")
-    idx_no=idx.replace('<td class="blank">not progressing (form letter)</td>','<td class="blank">not recorded</td>')
-    ok(not all(r[4]=="not recorded" for r in re.findall(r"<tr><td class=\"m\">(\w+)</td><td>(.*?)</td><td>(.*?)</td><td class=\"blank\">(.*?)</td><td class=\"blank\">(.*?)</td></tr>", idx)), "control: the asserted outcome is seen (not every row reads 'not recorded')")
+    ok(len(known)==0, "no row asserts a sent status or an outcome: every row is 'to confirm' / 'not recorded'")
+    ok("no outcome is recorded" in idx and "a blank is not a rejection" in idx, "index says no outcome is recorded and keeps 'a blank is not a rejection'")
+    ok("form letter" not in ch and "form letter" not in idx, "no rejection is described on either page")
+    idx_planted=idx.replace('<td class="blank">not recorded</td>','<td class="blank">not progressing (form letter)</td>',1)
+    ok(any(r[4]!="not recorded" for r in re.findall(r"<tr><td class=\"m\">(\w+)</td><td>(.*?)</td><td>(.*?)</td><td class=\"blank\">(.*?)</td><td class=\"blank\">(.*?)</td></tr>", idx_planted)), "control: a planted outcome is seen")
     print("[3] industries")
     inds={r[1] for r in rows if not r[1].startswith("Not identified")}; ok(len(inds)>=12, f"{len(inds)} distinct industries named")
     print("[4] employer names"); L=leaks(idx)+leaks(ch); ok(not L, "no employer token found" if not L else "employer token(s) found: "+", ".join(L))
