@@ -53,7 +53,15 @@ except Exception:
     HAVE = False
 check(HAVE, 'tools/corpus_count.py imported -- counts are entity-aware')
 OWN = {'book7/ch-cantor.html', 'book7/ch-cantor-verify.py', 'book7/index.html'}
-def files(pat): return [f for f in _files(pat) if f not in OWN and classify(f) not in ('listing', 'audit')]
+BOX = re.compile(r'<aside class="po-(?:related|run|gss)".*?</aside>', re.S)
+def _own_text(f):
+    try: return BOX.sub('', H.unescape(open(os.path.join(REPO, f), encoding='utf-8', errors='replace').read()))
+    except OSError: return ''
+def files(pat):
+    # candidates from the entity-aware counter, then re-tested with the generated link boxes removed:
+    # those boxes name this page's title on other pages and would count Cantor chapters that never mention him.
+    rx = re.compile(pat, re.I)
+    return [f for f in _files(pat) if f not in OWN and classify(f) not in ('listing', 'audit') and rx.search(_own_text(f))]
 def classify(f):
     if f.startswith('tools/'): return 'tooling'
     if f.startswith('docs/'): return 'audit'
