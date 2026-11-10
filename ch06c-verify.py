@@ -92,7 +92,7 @@ for s in ["St Petri-Schule from about age 8 and the timetable (Sinkevich 2018)",
           "1869 census, 45.5 thousand Germans, <= 7% (Shaidurov & Osipov 2024)", "Acta Math. 2 (1883) French translations; Gerbaldi's Italian; Jourdain 1915 (Grattan-Guinness 1970; MacTutor)"]:
     skip(s + " -- read through a fetch tool on 2026-11-10, not machine-checked")
 check("Marotte" in txt and "not confirmed" in txt, "the page states that Marotte's 1899 translation was not confirmed")
-check("author and licence were not recorded" in txt, "the page states that the article's author and licence were not recorded")
+check("Jeremy" in txt and "surname" in txt and "licence were not recorded" in txt, "the page names the author as Jeremy and states that his surname, address and licence were not recorded")
 
 head(6, "CONTROLS (each check must be able to fail)")
 check(sections(html.replace('id="S5"', 'id="XX"')) != SECS, "control: a missing section is detected")
