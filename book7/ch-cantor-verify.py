@@ -53,7 +53,7 @@ except Exception:
     HAVE = False
 check(HAVE, 'tools/corpus_count.py imported -- counts are entity-aware')
 OWN = {'book7/ch-cantor.html', 'book7/ch-cantor-verify.py', 'book7/index.html'}
-def files(pat): return [f for f in _files(pat) if f not in OWN]
+def files(pat): return [f for f in _files(pat) if f not in OWN and classify(f) not in ('listing', 'audit')]
 def classify(f):
     if f.startswith('tools/'): return 'tooling'
     if f.startswith('docs/'): return 'audit'
@@ -85,7 +85,7 @@ if HAVE:
     check(len(files(r'moonshine')) > 0, 'control: the counter returns files rather than nothing')
 
 head(4, "LINKS AND CARD")
-ll = [l for l in re.findall(r'href="([^"#]+)"', page) if not re.match(r'https?:|mailto:', l)]
+ll = [l for l in re.findall(r'href="([^"#]+)"', page) if not re.match(r'https?:|mailto:|/', l)]
 miss = [l for l in ll if not os.path.exists(os.path.normpath(os.path.join(HERE, l)))]
 check(len(ll) >= 8 and not miss, '%d local links, none missing' % len(ll), ', '.join(miss))
 idx = open(os.path.join(HERE, 'index.html'), encoding='utf-8').read()

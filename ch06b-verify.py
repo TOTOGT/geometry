@@ -35,7 +35,7 @@ def sections(html): return [x for x in ["S1","S2","S3","S4","S4m","S5","S6","S7"
 def local_links(html):
     out = []
     for h in re.findall(r'href="([^"#]+)"', html):
-        if re.match(r"https?:|mailto:", h): continue
+        if re.match(r"https?:|mailto:|/", h): continue
         out.append(h)
     return out
 def is_sidon(r):

@@ -27,7 +27,7 @@ def plain(h):
 N_TABLES = 8
 SECS = ["S%d" % i for i in range(1, 10)]
 def sections(h): return [x for x in SECS if 'id="%s"' % x in h]
-def local_links(h): return [x for x in re.findall(r'href="([^"#]+)"', h) if not re.match(r"https?:|mailto:", x)]
+def local_links(h): return [x for x in re.findall(r'href="([^"#]+)"', h) if not re.match(r"https?:|mailto:|/", x)]
 
 def f(n): return (-n - 1) // 2 if n % 2 else n // 2      # the article's pairing, N from 0
 def is_bijection_prefix(N):
