@@ -12509,3 +12509,6 @@ CLAUDE.md "Open" item 2 is stale on this page; next in Book 3 roster order is th
 - Added a section: Jyotisa/Vedanga setting (invocation convention stated; which deities NOT checked), who wrote what (Tantrasangraha by Nilakantha ~1500, Yuktibhasa by Jyesthadeva ~1530; neither by Madhava; the English block quote is a paraphrase), the three reported correction terms checked numerically with an interactive log-log plot, and a "not checked" list.
 - New `omega/ch-madhava-verify.py` (all pass): Machin pi in 60 digits; alternating-series bound; each correction shrinks the error at n = 5, 10, 50, 100, 1000; measured orders n^-3, n^-5, n^-7. It checks convergence of the formulas only, not that Madhava wrote them or the dates.
 - Flagged, not changed: "had it by approximately 1375", "Newton did not [give error bounds]", and "Madhava knew this / found the Mercy Radius" are unsourced or framework readings. The generated Gold Standard and Run-it-yourself boxes were not hand-edited (R8/R25/R26); regenerate them to pick up the new verifier.
+
+## 2026-11-11 (h) — portfolio/about-pablo-and-companies.html: trade name removed
+- Per the author: the registered trade name was misspelled at registration; the page now names the Brazilian entity only as "PABLO NOGUEIRA GROSSI - ME" (the PJ). No other file in the repo contained the trade name.
