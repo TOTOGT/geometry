@@ -71,6 +71,7 @@ ok_v3 = mons(Lv(3)) == sorted([(0, 0, 2), (0, 3, 0), (1, 2, 0), (2, 1, 0), (3, 0
 ok_a = all(mons(La(n)) == sorted([(0, 0, 2), (n - 1, 0, 1), (1, 2, 0), (2 * n - 2, 0, 0)]) for n in NS)
 check("v-row, n >= 4: exactly z^2, x y^2, x^(n-1) y, x^(2n-3)", ok_v)
 check("v-row, n = 3: z^2 and the four cubic monomials x^3, x^2 y, x y^2, y^3", ok_v3)
+check("a-row, all n: exactly z^2, x^(n-1) z, x y^2, x^(2n-2)", ok_a)
 
 print("[3] Milnor-Orlik number")
 ok = True
