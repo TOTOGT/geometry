@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 11 · Normal matrices: norm, spectral radius and entries · Book XXIV · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090f;--panel:#0d111b;--ink:#e8ebf2;--dim:#7d869c;--rule:#1c2233;--gold:#d9b76a;--teal:#58c7d1;--serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.65}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.7rem 1.25rem;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;color:var(--dim)}
+header,.wrap{max-width:900px;margin:0 auto;padding-inline:1.25rem}
+header{padding-top:2.4rem;padding-bottom:1rem}
+.kick{font-family:var(--mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:500;font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.1;margin:.5rem 0 .8rem}h1 em{color:var(--gold)}
+.lede{color:#b9c0d1;font-style:italic;max-width:42rem}
+h2{font-weight:500;font-size:1.35rem;margin:2.2rem 0 .7rem;padding-bottom:.3rem;border-bottom:1px solid var(--rule)}
+p{margin-bottom:.9rem}
+.mono,code{font-family:var(--mono);font-size:.82em;color:var(--teal)}
+.eq{font-family:var(--mono);font-size:.88rem;background:var(--panel);border-left:2px solid var(--gold);padding:.7rem 1rem;margin:1rem 0;overflow-x:auto;white-space:pre}
+.box{border:1px solid var(--rule);background:var(--panel);padding:1rem 1.2rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}
+.box.warn{border-color:#5a4720}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;background:rgba(7,9,15,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);padding:.55rem 0;margin:1.6rem 0 .4rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.bar button{font:inherit;letter-spacing:inherit;text-transform:inherit;background:transparent;border:1px solid var(--rule);color:var(--dim);padding:.35rem .55rem;cursor:pointer}
+.bar button[aria-pressed="true"]{color:var(--c);border-color:var(--c)}
+.bar button.q{--c:var(--ink)}
+.layer{border-left:2px solid var(--c);padding:.1rem 0 .1rem 1rem;margin:.7rem 0 1rem;--c:var(--teal)}
+.layer>.tag{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--c);margin-bottom:.25rem}
+.layer[data-l="statement"]{--c:var(--gold)}.layer[data-l="proof"]{--c:#9aa3ba}.layer[data-l="remarks"]{--c:#b497d9}
+.bar [data-l="intuition"]{--c:var(--teal)}.bar [data-l="statement"]{--c:var(--gold)}.bar [data-l="proof"]{--c:#9aa3ba}.bar [data-l="remarks"]{--c:#b497d9}
+body.off-intuition .layer[data-l="intuition"],body.off-statement .layer[data-l="statement"],body.off-proof .layer[data-l="proof"],body.off-remarks .layer[data-l="remarks"]{display:none}
+ol.ex{padding-left:1.4rem}ol.ex li{margin-bottom:.6rem}
+.stage{max-width:1100px;margin:1.4rem auto 0;padding:0 1.25rem}
+.grid{display:grid;grid-template-columns:1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.panel{background:var(--panel);padding:1.1rem;display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.btn{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem .6rem;background:transparent;border:1px solid var(--rule);color:var(--dim);cursor:pointer}
+.btn.on,.btn:hover{border-color:var(--teal);color:var(--teal)}
+.row{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.read{border-top:1px solid var(--rule);padding-top:.8rem;font-family:var(--mono);font-size:.64rem;line-height:1.9;color:var(--dim);overflow-wrap:anywhere}
+.read b{color:var(--gold);font-weight:500}
+footer{max-width:900px;margin:3rem auto 0;padding:1.2rem 1.25rem 3rem;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.9}
+.nav{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;max-width:900px;margin:2.2rem auto 0;padding:1rem 1.25rem 0;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.75rem}
+.metagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.4rem 0;font-size:.8rem;line-height:1.5}.metagrid>div{background:var(--panel);padding:.7rem .9rem;min-width:0}.metagrid strong{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.25rem}select{font-family:var(--mono);font-size:.7rem;background:var(--bg);color:var(--ink);border:1px solid var(--rule);padding:.2rem .3rem}
+.mono{overflow-wrap:anywhere}
+[hidden]{display:none!important}
+canvas{display:block;max-width:100%;background:#05070c;border:1px solid var(--rule)}.cv{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-start}.cv>div{flex:1 1 300px}.sl{display:flex;gap:.6rem;align-items:center;font-family:var(--mono);font-size:.72rem;margin:.5rem 0}.sl input[type=range]{flex:1}.leg{font-family:var(--mono);font-size:.68rem;color:var(--dim)}.leg i{display:inline-block;width:.7rem;height:.7rem;margin-right:.3rem;vertical-align:middle}
+</style>
+</head>
+<body>
+<div class="top"><span><a href="index.html">Book XXIV contents</a> &middot; <a href="ch10-duality.html">&larr; Chapter 10</a> &middot; <a href="../master-index.html">master index</a></span><span>Chapter 11 &middot; <a href="../book21/index.html">Book XXI &rarr;</a></span></div>
+<header>
+<div class="kick">Principia Orthogona &middot; Book XXIV &middot; Linear and nonlinear &middot; Chapter 11</div>
+<h1>Normal matrices: the norm <em>is</em> the spectral radius</h1>
+<p class="lede">The eigenvalues of a matrix usually say little about how large its entries can be: a matrix whose only eigenvalue is 1 can have an entry of 1000. For normal matrices that gap closes. The longest stretch of the matrix, its norm, equals the largest eigenvalue modulus, and since no entry can exceed the norm, no entry can exceed the largest eigenvalue modulus either. This chapter states that, shows why, breaks it on purpose, and explains why a real matrix needs its complex spectrum.</p>
+</header>
+
+<div class="stage"><p class="mono" style="margin:0 0 .5rem;line-height:1.7"><strong style="color:var(--gold)">The object.</strong> A real 2&times;2 matrix A. The gold curve is the image of the unit circle under A, an ellipse; its longest semi-axis is the norm. The teal circle has radius equal to the spectral radius &rho;, the largest modulus of an eigenvalue (complex ones included). For a normal matrix the teal circle touches the tip of the ellipse. For any other matrix it falls short.</p>
+<div class="cv"><div><canvas id="c1" width="320" height="320"></canvas><div class="leg"><i style="background:#d9b76a"></i>image of the unit circle &nbsp; <i style="background:#58c7d1"></i>circle of radius &rho; &nbsp; <i style="background:#7d869c"></i>unit circle</div></div>
+<div class="panel"><div class="row"><span>a</span><select id="ma"></select><span>b</span><select id="mb"></select><span>c</span><select id="mc"></select><span>d</span><select id="md"></select></div>
+<div><button class="btn" type="button" data-p="1,-1,1,1">rotation + scaling</button> <button class="btn" type="button" data-p="2,1,1,2">symmetric</button> <button class="btn" type="button" data-p="0,1,-1,0">rotation by 90&deg;</button> <button class="btn" type="button" data-p="1,2,0,1">Jordan block</button> <button class="btn" type="button" data-p="0,1,0,0">nilpotent</button></div>
+<div class="read" id="read"></div></div></div></div>
+
+<div class="wrap">
+<div class="metagrid"><div><strong>Held text</strong>Lax, <em>Linear Algebra and Its Applications</em> 2nd ed.: Chapter 8 (the norm as the largest singular value, p.119) and Chapter 17 (spectral radius and norms of powers); the page checks are in <a href="ch11-verify.py">ch11-verify.py</a> where the scan allows. Gelfand&rsquo;s spectral radius formula is cited, not proved here.</div><div><strong>Claim type</strong>standard mathematics, no new results; the Lean file is new and is <strong>uncompiled</strong></div><div><strong>Lean</strong><a href="SpectralDiagonalBound.lean">SpectralDiagonalBound.lean</a>: four statements, <strong>uncompiled</strong> (no axiom report yet)</div><div><strong>Checks</strong><a href="ch11-verify.py">ch11-verify.py</a>: exact integer tests over all 2401 matrices with entries &minus;3..3, 60-digit decimal for square roots</div></div>
+
+<div class="bar" id="bar" aria-label="Layers of the text"><span>layers</span>
+<button type="button" data-l="intuition" aria-pressed="true">Intuition</button>
+<button type="button" data-l="statement" aria-pressed="true">Statement</button>
+<button type="button" data-l="proof" aria-pressed="true">Proof</button>
+<button type="button" data-l="remarks" aria-pressed="true">Remarks</button>
+<button type="button" class="q" id="only">Intuition only</button><button type="button" class="q" id="all">All</button></div>
+
+<h2>1 &middot; The statement</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>Eigenvalues are the stretches along directions that A only scales. For most matrices those directions are tilted against each other, and a tilted pair can pile up stretching that no single eigenvalue shows: shear a square and the diagonal grows although the eigenvalues stay at 1. A normal matrix has perpendicular eigen-directions. Nothing piles up, and the largest eigenvalue modulus is the full story.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Normal matrices</span>A square complex matrix A is <em>normal</em> if A<sup>*</sup>A = AA<sup>*</sup>. Real symmetric, skew-symmetric and orthogonal matrices are normal, and so is every matrix of the form [[a, &minus;b], [b, a]] and every circulant.</div>
+<div class="box"><span class="lab">Theorem (standard)</span>If A is normal, then |A| = &rho;(A), where |A| is the operator norm (the largest value of |Ax| over unit x) and &rho;(A) is the largest modulus of an eigenvalue of A over the complex numbers.</div>
+<div class="box"><span class="lab">Corollary: every entry is bounded</span>If A is normal and every eigenvalue &mu; has |&mu;| &le; r, then |A<sub>ij</sub>| &le; r for <em>every</em> i and j, the diagonal entries included.</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p><strong>Entries.</strong> A<sub>ij</sub> = e<sub>i</sub><sup>*</sup>(Ae<sub>j</sub>), a scalar product of two vectors, one of length 1 and one of length at most |A|. So |A<sub>ij</sub>| &le; |A|. This holds for every matrix and uses no eigenvalue.</p>
+<p><strong>Norm equals spectral radius.</strong> For any matrix, |A<sup>*</sup>A| = |A|&sup2;. If A is normal, (A&sup2;)<sup>*</sup>A&sup2; = (A<sup>*</sup>A)&sup2;, and A<sup>*</sup>A is Hermitian, so |(A<sup>*</sup>A)&sup2;| = |A<sup>*</sup>A|&sup2; = |A|<sup>4</sup>. Hence |A&sup2;|&sup2; = |A|<sup>4</sup>, that is |A&sup2;| = |A|&sup2;. The same step applies to A&sup2;, which is again normal, so |A<sup>2<sup>k</sup></sup>| = |A|<sup>2<sup>k</sup></sup>. Gelfand&rsquo;s formula (cited) says &rho;(A) = lim |A<sup>m</sup>|<sup>1/m</sup>; along m = 2<sup>k</sup> the sequence is constantly |A|, so &rho;(A) = |A|. Combining: |A<sub>ij</sub>| &le; |A| = &rho;(A) &le; r.</p></div>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>The bound |A<sub>ij</sub>| &le; |A| is true for all matrices; the work normality does is to replace |A| by something computed from eigenvalues alone.</p></div>
+
+<h2>2 &middot; Breaking it on purpose</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>Slide t in the second picture. The matrix [[1, t],[0, 1]] has the single eigenvalue 1 for every t, so the spectral radius never moves. The norm grows like t and the entry t grows with it. At t = 0 the matrix is the identity and everything agrees. The moment t is not zero the matrix is no longer normal and the gap opens; once t passes 1 the entry is larger than every eigenvalue.</p>
+<div class="cv"><div><canvas id="c2" width="480" height="260"></canvas><div class="leg"><i style="background:#58c7d1"></i>&rho; = 1 &nbsp; <i style="background:#d9b76a"></i>norm (t + &radic;(t&sup2;+4))/2 &nbsp; <i style="background:#e0788f"></i>entry t</div>
+<div class="sl"><span>t</span><input type="range" id="t" min="0" max="4" step="0.01" value="0"><button class="btn" id="play2" type="button">play</button></div><div class="read" id="r2"></div></div></div></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">Controls</span>[[1, t],[0, 1]] with t &ne; 0 is not normal, has &rho; = 1, norm (t + &radic;(t&sup2;+4))/2 and an entry t that exceeds &rho; for t &gt; 1. The nilpotent [[0, 1],[0, 0]] has A&sup2; = 0, so its only eigenvalue is 0, &rho; = 0, yet its norm is 1 and one entry is 1.</div>
+<div class="box"><span class="lab">Exhaustive count</span>Among the 2401 real 2&times;2 matrices with entries &minus;3 to 3, exactly 385 are normal and 2016 are not. For all 385 normal ones the spectral radius equals the norm and every entry is at most &rho;. Of the 2016 that are not normal, all 2016 have &rho; strictly below the norm, and 872 have an entry larger than &rho;. (ch11-verify.py, exact integer tests, 60-digit decimal for the square roots.)</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p>For [[1,t],[0,1]] the characteristic polynomial is (&lambda;&minus;1)&sup2;, so &rho; = 1. Here F = 2 + t&sup2; and D = 1, so the norm squared is (F + &radic;(F&sup2;&minus;4))/2 = (t&sup2;+2+t&radic;(t&sup2;+4))/2 = ((t+&radic;(t&sup2;+4))/2)&sup2;. The matrix is not normal because AA<sup>T</sup> has (1,1) entry 1 + t&sup2; while A<sup>T</sup>A has 1. For the nilpotent, A&sup2; = 0 forces every eigenvalue to be 0.</p></div>
+
+<h2>3 &middot; Real matrices need the complex spectrum</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>Rotate the plane by &theta;. Nothing except the zero angle and a half turn keeps any direction fixed, so the matrix has no real eigenvalue at all, yet it is perfectly normal and its entries cos &theta; and sin &theta; are bounded by 1. The eigenvalues e<sup>&plusmn;i&theta;</sup> live off the real axis, on the unit circle. A statement about &ldquo;the maximum over real eigenvalues&rdquo; would be a maximum over the empty set. The bound has to be read in the complex plane.</p>
+<div class="cv"><div><canvas id="c3" width="320" height="320"></canvas><div class="leg"><i style="background:#58c7d1"></i>eigenvalues e<sup>&plusmn;i&theta;</sup> &nbsp; <i style="background:#7d869c"></i>unit circle and real axis</div>
+<div class="sl"><span>&theta;</span><input type="range" id="th" min="0" max="6.2832" step="0.01" value="0.9"><button class="btn" id="play3" type="button">play</button></div><div class="read" id="r3"></div></div></div></div>
+<div class="layer" data-l="statement"><span class="tag">Statement</span>
+<div class="box"><span class="lab">The real case</span>For a real matrix A, form its complexification (the same entries read as complex numbers). If that is normal and every eigenvalue &mu; in its complex spectrum has |&mu;| &le; r, then |A<sub>ij</sub>| &le; r. The 110 matrices [[a, &minus;b],[b, a]] with b &ne; 0 and |a|, |b| &le; 5 are all normal, all have negative discriminant (no real eigenvalue), and all satisfy the bound with &rho; = &radic;(a&sup2;+b&sup2;).</div></div>
+<div class="layer" data-l="proof"><span class="tag">Proof</span>
+<p>The characteristic polynomial of [[a,&minus;b],[b,a]] is &lambda;&sup2; &minus; 2a&lambda; + a&sup2; + b&sup2;, with discriminant &minus;4b&sup2; &lt; 0, so the eigenvalues are a &plusmn; ib, of modulus &radic;(a&sup2;+b&sup2;), which is at least max(|a|, |b|).</p></div>
+
+<h2>4 &middot; What is not here</h2>
+<div class="layer" data-l="remarks"><span class="tag">Remarks</span>
+<p>A stronger statement is true for normal matrices: every diagonal entry lies in the convex hull of the eigenvalues, because A<sub>ii</sub> = &Sigma;<sub>k</sub> |U<sub>ik</sub>|&sup2;&lambda;<sub>k</sub> when A = U diag(&lambda;) U<sup>*</sup>. That is the direct computation behind the Schur&ndash;Horn picture, and it is not proved in this chapter or in the Lean file; the corollary above is weaker and is what the file states. Off-diagonal entries are not in the convex hull in general, only bounded by &rho;. The Lean file <a href="SpectralDiagonalBound.lean">SpectralDiagonalBound.lean</a> is uncompiled: it was written against the pinned Mathlib by reading its source and has never been run, and the first compile may fail on the instance for the matrix norm. Until the manual workflow has run and the axiom report exists, nothing here may be quoted as machine-checked.</p></div>
+
+<h2>5 &middot; Exercises</h2>
+<ol class="ex">
+<li>Show that a real symmetric matrix with eigenvalues 3 and &minus;5 has every entry of absolute value at most 5, and find one where the bound is attained.</li>
+<li>Find a 2&times;2 integer matrix, not normal, whose eigenvalues are both 0 and whose entries are all nonzero. (Hint: rank one, trace zero.)</li>
+<li>Show that if A is normal and invertible then |A<sup>&minus;1</sup>| = 1/(smallest eigenvalue modulus), and explain why this makes the condition number of a normal matrix the ratio of its largest to its smallest eigenvalue modulus (compare Chapter 9, section 3).</li>
+<li>For which &theta; does the rotation by &theta; have a real eigenvalue? What are the eigenvalues then, and do they satisfy the bound?</li>
+</ol>
+</div>
+
+<footer>
+<strong style="color:var(--gold)">Status.</strong> Standard mathematics, no new results. The statement, the proof and the controls are checked by <a class="mono" href="ch11-verify.py">ch11-verify.py</a> (exact integer tests over the stated families, 60-digit decimal for square roots). Gelfand&rsquo;s spectral radius formula is cited and not proved here. <a class="mono" href="SpectralDiagonalBound.lean">SpectralDiagonalBound.lean</a> states four results and is <strong>uncompiled</strong>: it has not been run, no axiom report exists, and the convex-hull statement is not proved. Held text: Lax only, referenced by chapter; the chapter&rsquo;s page checks are not yet matched against the scan.
+</footer>
+
+<script>
+(function(){
+var body=document.body,bar=document.getElementById('bar');
+function set(l,on){body.classList.toggle('off-'+l,!on);var b=bar.querySelector('button[data-l="'+l+'"]');if(b)b.setAttribute('aria-pressed',on?'true':'false')}
+bar.querySelectorAll('button[data-l]').forEach(function(b){b.onclick=function(){set(b.dataset.l,b.getAttribute('aria-pressed')!=='true')}});
+document.getElementById('only').onclick=function(){['intuition','statement','proof','remarks'].forEach(function(l){set(l,l==='intuition')})};
+document.getElementById('all').onclick=function(){['intuition','statement','proof','remarks'].forEach(function(l){set(l,true)})};
+function f(x){return String(Math.round(x*1000)/1000)}
+function line(c,x0,y0,x1,y1,col,w,dash){c.beginPath();c.strokeStyle=col;c.lineWidth=w||1;c.setLineDash(dash||[]);c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();c.setLineDash([])}
+/* picture 1 */
+var c1=document.getElementById('c1').getContext('2d'),ids=['ma','mb','mc','md'],sel=ids.map(function(i){return document.getElementById(i)}),M=[1,-1,1,1];
+function stats(a,b,c,d){var tr=a+d,det=a*d-b*c,disc=tr*tr-4*det,rho,F=a*a+b*b+c*c+d*d;
+ if(disc<0)rho=Math.sqrt(det);else{var r=Math.sqrt(disc);rho=Math.max(Math.abs((tr+r)/2),Math.abs((tr-r)/2))}
+ var nrm=Math.sqrt((F+Math.sqrt(Math.max(0,F*F-4*det*det)))/2);
+ return {normal:(b*b===c*c&&a*c+b*d===a*b+c*d),rho:rho,nrm:nrm,mx:Math.max(Math.abs(a),Math.abs(b),Math.abs(c),Math.abs(d)),real:disc>=0,tr:tr,det:det,disc:disc}}
+function draw1(){var a=M[0],b=M[1],c=M[2],d=M[3],s=stats(a,b,c,d),W=320,H=320,k=130/Math.max(1,s.nrm,s.mx);
+ c1.clearRect(0,0,W,H);line(c1,0,H/2,W,H/2,'#1c2233');line(c1,W/2,0,W/2,H,'#1c2233');
+ c1.strokeStyle='#7d869c';c1.setLineDash([3,3]);c1.beginPath();c1.arc(W/2,H/2,k,0,6.2832);c1.stroke();c1.setLineDash([]);
+ c1.strokeStyle='#58c7d1';c1.lineWidth=2;c1.beginPath();c1.arc(W/2,H/2,s.rho*k,0,6.2832);c1.stroke();
+ c1.strokeStyle='#d9b76a';c1.lineWidth=2;c1.beginPath();
+ for(var i=0;i<=200;i++){var p=i/200*6.2832,x=Math.cos(p),y=Math.sin(p),X=a*x+b*y,Y=c*x+d*y;
+  var px=W/2+X*k,py=H/2-Y*k;if(i===0)c1.moveTo(px,py);else c1.lineTo(px,py)}c1.stroke();
+ var h='A = [['+a+','+b+'],['+c+','+d+']] &middot; '+(s.normal?'<b>normal</b>':'<b>not normal</b>')+'<br>';
+ h+='eigenvalues: '+(s.disc<0?'complex, no real eigenvalue':'real')+' &middot; &rho; = <b>'+f(s.rho)+'</b><br>norm |A| = <b>'+f(s.nrm)+'</b> &middot; largest entry = <b>'+s.mx+'</b><br>';
+ h+=(Math.abs(s.rho-s.nrm)<1e-9?'&rho; = |A|: the teal circle touches the ellipse.':'&rho; &lt; |A|: the teal circle falls short.')+'<br>';
+ h+=(s.mx<=s.rho+1e-9?'every entry &le; &rho;: the bound holds.':'an entry exceeds &rho;: the bound <b>fails</b> (the matrix is not normal).');
+ document.getElementById('read').innerHTML=h}
+sel.forEach(function(el,i){for(var v=-5;v<=5;v++){var o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o)}el.value=M[i];el.onchange=function(){M[i]=+el.value;draw1()}});
+document.querySelectorAll('button[data-p]').forEach(function(b){b.onclick=function(){M=b.dataset.p.split(',').map(Number);sel.forEach(function(el,i){el.value=M[i]});draw1()}});
+draw1();
+/* picture 2 */
+var c2=document.getElementById('c2').getContext('2d'),tI=document.getElementById('t'),t2=0,timer2=null;
+function draw2(){var W=480,H=260,L=36,B=H-26,T=12,R=W-10,tx=function(t){return L+(R-L)*t/4},ty=function(v){return B-(B-T)*v/5};
+ c2.clearRect(0,0,W,H);line(c2,L,B,R,B,'#7d869c');line(c2,L,T,L,B,'#7d869c');
+ for(var v=0;v<=4;v++){line(c2,L,ty(v),R,ty(v),'#1c2233');c2.fillStyle='#7d869c';c2.font='10px monospace';c2.fillText(v,12,ty(v)+3);c2.fillText(v,tx(v)-3,H-10)}
+ function curve(fn,col){c2.beginPath();c2.strokeStyle=col;c2.lineWidth=2;for(var i=0;i<=160;i++){var t=i/40,x=tx(t),y=ty(fn(t));if(i===0)c2.moveTo(x,y);else c2.lineTo(x,y)}c2.stroke()}
+ curve(function(){return 1},'#58c7d1');curve(function(t){return (t+Math.sqrt(t*t+4))/2},'#d9b76a');curve(function(t){return t},'#e0788f');
+ line(c2,tx(t2),T,tx(t2),B,'#e8ebf2',1,[4,3]);
+ var n=(t2+Math.sqrt(t2*t2+4))/2;
+ document.getElementById('r2').innerHTML='t = <b>'+f(t2)+'</b> &middot; &rho; = 1 &middot; |A| = <b>'+f(n)+'</b> &middot; entry = <b>'+f(t2)+'</b><br>'+(t2===0?'the identity: normal, everything agrees.':(t2<=1?'not normal: &rho; &lt; |A|, but the entry t is still &le; &rho;.':'the entry t exceeds every eigenvalue: the bound is <b>broken</b>.'))}
+tI.oninput=function(){t2=+tI.value;draw2()};
+document.getElementById('play2').onclick=function(){var b=this;if(timer2){clearInterval(timer2);timer2=null;b.textContent='play';return}b.textContent='pause';timer2=setInterval(function(){t2+=0.02;if(t2>4)t2=0;tI.value=t2;draw2()},30)};
+draw2();
+/* picture 3 */
+var c3=document.getElementById('c3').getContext('2d'),thI=document.getElementById('th'),th=0.9,timer3=null;
+function draw3(){var W=320,H=320,k=120;c3.clearRect(0,0,W,H);line(c3,0,H/2,W,H/2,'#7d869c');line(c3,W/2,0,W/2,H,'#1c2233');
+ c3.strokeStyle='#7d869c';c3.lineWidth=1;c3.beginPath();c3.arc(W/2,H/2,k,0,6.2832);c3.stroke();
+ [1,-1].forEach(function(sg){c3.fillStyle='#58c7d1';c3.beginPath();c3.arc(W/2+k*Math.cos(th),H/2-sg*k*Math.sin(th),6,0,6.2832);c3.fill()});
+ var co=Math.cos(th),si=Math.sin(th),onr=(Math.abs(si)<0.02);
+ document.getElementById('r3').innerHTML='A = [['+f(co)+', '+f(-si)+'],['+f(si)+', '+f(co)+']] &middot; &theta; = '+f(th)+'<br>eigenvalues '+f(co)+' &plusmn; '+f(si)+'i &middot; '+(onr?'on the real axis: real eigenvalues &plusmn;1':'<b>no real eigenvalue</b>')+'<br>&rho; = 1 &middot; entries |cos|, |sin| &le; 1: the bound holds.'}
+thI.oninput=function(){th=+thI.value;draw3()};
+document.getElementById('play3').onclick=function(){var b=this;if(timer3){clearInterval(timer3);timer3=null;b.textContent='play';return}b.textContent='pause';timer3=setInterval(function(){th+=0.02;if(th>6.2832)th=0;thI.value=th;draw3()},30)};
+draw3();
+})();
+</script>
+</div></body></html>

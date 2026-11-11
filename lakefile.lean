@@ -270,4 +270,4 @@ lean_lib P2xP2 where
   via spectralRadius = operator norm. UNCOMPILED draft; non-default; manual workflow only.
 -/
 lean_lib SpectralDiagonalBound where
-  srcDir := "standard-conjectures"
+  srcDir := "book24"
