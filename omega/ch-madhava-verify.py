@@ -57,7 +57,7 @@ for n in (10, 100):
 check('page calls the English quotation a paraphrase', 'paraphrase' in page.lower())
 check('page separates what Madhava wrote from what successors recorded', 'successors' in page.lower() and 'Nilakantha' in page.replace('ī', 'i').replace('ṇ', 'n').replace('ṭ', 't').replace('Nīlakaṇṭha', 'Nilakantha') or 'Nīlakaṇṭha' in page)
 check('page lists what was not checked', 'not checked' in page.lower())
-for bad in ('approximately 1375', 'which Newton did not', 'Madhava knew this', 'he found the Mercy Radius', 'structurally identical'):
+for bad in ('approximately 1375', 'which Newton did not', 'Madhava knew this', 'he found the Mercy Radius', 'structurally identical', 'most sophisticated mathematical analysis', 'near-total isolation from European mathematics.</p>'):
     check('page no longer contains the unsourced claim: %r' % bad, bad not in page)
 check("page says the Mercy Radius is this series' term, not Madhava's", 'not Madhava' in page.replace('&rsquo;', "'"))
 print()
