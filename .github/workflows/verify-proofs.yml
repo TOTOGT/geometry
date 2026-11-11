@@ -271,6 +271,32 @@ jobs:
 
           python3 tools/axiom_gate.py /tmp/catgt.txt 28
 
+      # Reeb flow, its exterior-derivative link, and the bridge from CatGT_Main's
+      # `reebOrbit` (2026-11-11). Own library `ReebFlow`, built here so the probe has
+      # its oleans; a failure shows up as its own step. Gates sorryAx and non-standard
+      # axioms only. Hand-built by the author 2026-11-11: 8659 jobs, 21 theorems.
+      - name: Kernel axiom check on the Reeb flow and bridge theorems
+        run: |
+          set -u
+          lake build ReebFlow
+          PROBE=tools/verify-catgt/probe_reeb.lean
+
+          set +e
+          lake env lean "$PROBE" > /tmp/reeb.txt 2>&1
+          rc=$?
+          set -e
+
+          echo "----- Reeb: axiom report -----"
+          cat /tmp/reeb.txt
+          echo "------------------------------"
+
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::Reeb probe failed to elaborate (exit $rc)"
+            exit 1
+          fi
+
+          python3 tools/axiom_gate.py /tmp/reeb.txt 21
+
       # =================================================================
       # AUTHORITATIVE STEP. The floor rungs that import nothing.
       # Added 2026-09-19. book11/Numerals.lean and book12/Counting.lean are the
