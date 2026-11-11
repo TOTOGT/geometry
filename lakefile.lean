@@ -167,6 +167,16 @@ lean_lib CatGT where
   roots := #[`CatGT_Main]
 
 /-
+  catgt/lean/ReebFlow.lean, ReebFlowExtDeriv.lean and ReebBridge.lean (2026-11-11).
+  Copied from TOTOGT/io (CatGT/); ReebBridge connects CatGT_Main's `reebOrbit` to
+  `ReebFlow.reebFlow`. Own library, so a failure here cannot block `CatGT`.
+  Built clean 2026-11-11 (`lake build ReebFlow`, 8659 jobs, 21 theorems on the standard axioms).
+-/
+lean_lib ReebFlow where
+  srcDir := "catgt/lean"
+  roots := #[`ReebFlow, `ReebFlowExtDeriv, `ReebBridge]
+
+/-
   book18/ChainRule.lean and book21/Conjugacy.lean, the Lean behind Book XVIII chs 2-4
   and Book XXI ch 2. Hand-run by the author 2026-09-27 with tools/leancheck.sh --audit:
   6 + 3 theorems, all on [propext, Classical.choice, Quot.sound] (dual_pow on propext
