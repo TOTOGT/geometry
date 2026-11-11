@@ -12461,3 +12461,10 @@ CLAUDE.md "Open" item 2 is stale on this page; next in Book 3 roster order is th
 ## 2026-11-11 (P³×P³)
 
 - `standard-conjectures/p3xp3.md` and `verify_p3xp3.py`: Hodge-type positivity on all primitive algebraic classes of P³×P³ for every ample rational polarization; dim P^r = 1 exact; reduction to s=t=1 by the ring automorphism a↦sa, b↦tb; V_r = 20, 4, 20/9, 4; 24/24 PASS. Classical case, not new. Inputs (cellularity, projective bundle formula) are on paper, not checked by the script. Not formalised in Lean.
+
+## 2026-11-11 (chapter "Primitive" and its cross-references)
+
+- New standalone chapter `standard-conjectures/ch-primitive.html` with verifier `ch-primitive-verify.py` (14/14 PASS; re-runs verify_p2xp2.py, verify_p3xp3.py, verify_surfaces.py and checks the numbers printed on the page). No book number; no DOI (the series DOI problem in CLAUDE.md is not repeated in its footer). Terms guard: passes.
+- Cross-references, hand-added in prose where each page already says the conjectures are open (not in generated boxes, R8): `book7/ch-grothendieck.html` (timeline row), `book7/ch-weil.html` (timeline row), `omega/ch-in-the-air.html` ("walked only in part" now links to it). No other text changed.
+- NOT done: enrolling the page in `tools/subject_tags.py`'s roster, because `tools/crossref.py --write` would also rewrite the 16 boxes that the tool already reports stale (pre-existing, unrelated). Decision for the author: enrol and accept the 16-page rewrite, or leave the chapter outside the generated boxes.
+- Not done: claims.tsv rows for the new page.
