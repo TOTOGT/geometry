@@ -105,7 +105,7 @@ noncomputable def J : Matrix (Fin 3) (Fin 3) R :=
      -x^3]
 
 theorem jacobianMatrix_eq : jacobianMatrix = J := by
-  ext i j
+  refine Matrix.ext fun i j => ?_
   fin_cases i <;> fin_cases j
   · first | exact d_f1_x | simpa [jacobianMatrix, F, J] using d_f1_x
   · first | exact d_f1_y | simpa [jacobianMatrix, F, J] using d_f1_y
@@ -123,9 +123,13 @@ theorem det_J : J.det = -2 := by
   simp [J]
   ring
 
+theorem C_two : (C (2 : ℚ) : R) = 2 := by
+  have h : (2 : ℚ) = 1 + 1 := by norm_num
+  rw [h, map_add, map_one]
+  norm_num
+
 theorem det_jacobian : jacobianMatrix.det = C (-2 : ℚ) := by
-  rw [jacobianMatrix_eq, det_J]
-  simp
+  rw [jacobianMatrix_eq, det_J, map_neg, C_two]
 
 /-! ## The collision -/
 

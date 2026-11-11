@@ -265,7 +265,7 @@ theorem F_scalar (q : ℚ) : Fm q = (q ^ 2) • (1 : Matrix (Fin 2) (Fin 2) ℚ)
   fin_cases i <;> fin_cases j <;> simp [Fm]
 
 /-- Fᵀ J F = q⁴ J -/
-theorem F_similitude (q : ℚ) : (Fm q)ᵀ * Jm * Fm q = (q ^ 4) • Jm := by
+theorem F_similitude (q : ℚ) : Matrix.transpose (Fm q) * Jm * Fm q = (q ^ 4) • Jm := by
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp [Fm, Jm, Matrix.mul_apply, Fin.sum_univ_two] <;> ring

@@ -18,13 +18,13 @@ jobs:
 
       - name: Fetch Mathlib cache
         run: |
-          set -eux
+          set -euxo pipefail
           lake update
           lake exe cache get || echo "::warning::cache get failed; Mathlib will build from source"
 
       - name: Build JacobianCE and print axioms
         run: |
-          set -eux
+          set -euxo pipefail
           lake build JacobianCE 2>&1 | tee /tmp/jce.txt
           grep -n "sorry" /tmp/jce.txt && { echo "::error::sorry in output"; exit 1; } || true
           lake env lean book7/JacobianCE.lean 2>&1 | tee /tmp/jce-axioms.txt
@@ -33,7 +33,7 @@ jobs:
       - name: Build BraidDichotomy and print axioms
         if: always()
         run: |
-          set -eux
+          set -euxo pipefail
           lake build BraidDichotomy 2>&1 | tee /tmp/bd.txt
           grep -n "sorry" /tmp/bd.txt && { echo "::error::sorry in output"; exit 1; } || true
           lake env lean book7/BraidDichotomy.lean 2>&1 | tee /tmp/bd-axioms.txt
@@ -42,7 +42,7 @@ jobs:
       - name: Build P2xP2 (standard conjectures benchmark) and print axioms
         if: always()
         run: |
-          set -eux
+          set -euxo pipefail
           lake build P2xP2 2>&1 | tee /tmp/p2.txt
           grep -n "sorry" /tmp/p2.txt && { echo "::error::sorry in output"; exit 1; } || true
           lake env lean standard-conjectures/P2xP2.lean 2>&1 | tee /tmp/p2-axioms.txt
