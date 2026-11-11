@@ -12487,3 +12487,4 @@ CLAUDE.md "Open" item 2 is stale on this page; next in Book 3 roster order is th
 
 ## 2026-11-11 (c) — SpectralDiagonalBound.lean (uncompiled)
 - New `standard-conjectures/SpectralDiagonalBound.lean`: normal A, spectrum moduli <= r implies |A i i| <= r. Route: IsStarNormal.spectralRadius_eq_nnnorm plus entry <= l2 operator norm. Lemma names checked by grep against the pinned Mathlib; NOT compiled (no Lean locally). Risks: CStarAlgebra instance for Matrix under scoped l2 norms; the mulVec entry step. Non-default lean_lib and a workflow step added. Nothing promoted (R22); convex-hull version not proved.
+- (c, later) Generalized to all entries (`entry_norm_le_of_spectrum_bound`), diagonal as a corollary, plus a real-matrix corollary stated via the complex spectrum of the complexification. Still UNCOMPILED. Deriving star-normality of the complexification from A*Aᵀ = Aᵀ*A is not yet written.

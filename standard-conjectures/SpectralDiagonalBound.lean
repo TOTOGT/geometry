@@ -7,7 +7,8 @@ STATUS: UNCOMPILED DRAFT (no Lean toolchain where this was written). Not promote
 Built only by the manual workflow `jacobian-lean.yml`; read `#print axioms` from that run.
 
 Statement (complex, finite square matrices):
-  if `A` is normal and every `μ ∈ spectrum ℂ A` has `‖μ‖ ≤ r`, then `‖A i i‖ ≤ r` for all `i`.
+  if `A` is normal and every `μ ∈ spectrum ℂ A` has `‖μ‖ ≤ r`, then `‖A i j‖ ≤ r` for ALL `i j`
+  (diagonal case and a real-matrix corollary via the complex spectrum are stated separately).
 
 Route (not the convex-hull route): for normal `A`, in the C*-algebra `Matrix n n ℂ` with the
 l2 operator norm, `spectralRadius = ‖A‖` (`IsStarNormal.spectralRadius_eq_nnnorm`), and every
@@ -36,19 +37,37 @@ theorem entry_norm_le_opNorm (A : Matrix n n ℂ) (i j : n) : ‖A i j‖ ≤ �
   refine le_trans ?_ (hc.trans h)
   simp [Matrix.mulVec, dotProduct, Pi.single_apply]
 
-/-- Main statement: bound by any upper bound `r` of the moduli of the spectrum. -/
-theorem diag_norm_le_of_spectrum_bound
+/-- Every entry (not only diagonal ones) of a normal matrix is bounded by any upper bound `r`
+of the moduli of its complex spectrum. -/
+theorem entry_norm_le_of_spectrum_bound
     (A : Matrix n n ℂ) [IsStarNormal A] {r : NNReal}
-    (hr : ∀ μ ∈ spectrum ℂ A, ‖μ‖₊ ≤ r) (i : n) : ‖A i i‖ ≤ r := by
+    (hr : ∀ μ ∈ spectrum ℂ A, ‖μ‖₊ ≤ r) (i j : n) : ‖A i j‖ ≤ r := by
   have hsr : spectralRadius ℂ A ≤ (r : ENNReal) :=
     iSup₂_le fun μ hμ => ENNReal.coe_le_coe.2 (hr μ hμ)
   have hnorm : ‖A‖₊ ≤ r := by
     have := IsStarNormal.spectralRadius_eq_nnnorm A
     rw [this] at hsr
     exact_mod_cast hsr
-  exact (entry_norm_le_opNorm A i i).trans (by exact_mod_cast hnorm)
+  exact (entry_norm_le_opNorm A i j).trans (by exact_mod_cast hnorm)
+
+/-- The diagonal case. -/
+theorem diag_norm_le_of_spectrum_bound
+    (A : Matrix n n ℂ) [IsStarNormal A] {r : NNReal}
+    (hr : ∀ μ ∈ spectrum ℂ A, ‖μ‖₊ ≤ r) (i : n) : ‖A i i‖ ≤ r :=
+  entry_norm_le_of_spectrum_bound A hr i i
+
+/-- Real matrices: the hypothesis must be about the COMPLEX spectrum of the complexification,
+since a real matrix (a rotation, say) can have no real eigenvalues. Normality is assumed on the
+complexification; deriving it from `A * Aᵀ = Aᵀ * A` is left as a separate lemma. -/
+theorem real_entry_abs_le_of_complex_spectrum_bound
+    (A : Matrix n n ℝ) [IsStarNormal (A.map (algebraMap ℝ ℂ))] {r : NNReal}
+    (hr : ∀ μ ∈ spectrum ℂ (A.map (algebraMap ℝ ℂ)), ‖μ‖₊ ≤ r) (i j : n) : |A i j| ≤ r := by
+  have h := entry_norm_le_of_spectrum_bound (A.map (algebraMap ℝ ℂ)) hr i j
+  simpa [Matrix.map_apply] using h
 
 #print axioms entry_norm_le_opNorm
+#print axioms entry_norm_le_of_spectrum_bound
 #print axioms diag_norm_le_of_spectrum_bound
+#print axioms real_entry_abs_le_of_complex_spectrum_bound
 
 end SpectralDiagonalBound
