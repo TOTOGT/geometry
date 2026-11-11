@@ -79,3 +79,4 @@ promise of an outcome.
 - **One finding of the note that is right:** section 7, the s -> 1-s versus s -> 1-conj(s) distinction. Book 4 s12.8 conflated them; a dated correction box was added to `book4/ch12.html` on 2026-11-11.
 | `verify_cartan.py` | 40 exact checks: Cartan matrices A, D, E definite with LDL certificates, affine control singular, Kronecker eigenvalues, Milnor numbers of A and D normal forms | COMPUTED |
 | `open-questions.html` | Six tagged open questions with what is known, for the wider community; invites replies via GitHub Issues | OPEN (questions, not results) |
+| `verify_projected_chain.py` | 26 exact checks: projected (-2)-chains on T x S, explicit sum-of-squares certificate for deg z^2 | COMPUTED |

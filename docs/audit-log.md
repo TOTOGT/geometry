@@ -12480,3 +12480,7 @@ CLAUDE.md "Open" item 2 is stale on this page; next in Book 3 roster order is th
 - `ch-primitive.html` gains section 6 (intersection graphs; quiver note linked, connection stated as shared matrices only); `ch-primitive-verify.py` now runs the Cartan script and checks the new claims.
 - New `open-questions.html` (Q1–Q6, tagged). Draft community question in `docs/draft-community-question-primitive.md` is NOT posted; collaborator not contacted and not spoken for (house rule).
 - Nothing promoted (R22). JacobianCE axiom line still unread.
+
+## 2026-11-11 (b) — correction: effective (-2)-chains are not primitive
+- Reviewer correction accepted: for ample H every effective curve has H.E>0, so the chapter's statement that E_i⊗F_j lie in P_T⊗P_S was wrong. Replaced with projected classes e_i = E_i - (H.E_i/H^2)H; Gram = C + uu^T/d.
+- Added `verify_projected_chain.py` (26/26): explicit four-term sum-of-squares certificate for deg z^2 on the projected-chain subspace. Scope stated: subset of the product-generated part, so explicit certificate only, nothing new in coverage. Chapter verifier 24/24.

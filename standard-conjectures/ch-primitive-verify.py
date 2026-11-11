@@ -13,7 +13,7 @@ def run(script):
     r = subprocess.run([sys.executable, '-I', os.path.join(here, script)], capture_output=True, text=True, timeout=170)
     return r.returncode, r.stdout
 outs = {}
-for sc in ('verify_p2xp2.py', 'verify_p3xp3.py', 'verify_surfaces.py', 'verify_cartan.py'):
+for sc in ('verify_p2xp2.py', 'verify_p3xp3.py', 'verify_surfaces.py', 'verify_cartan.py', 'verify_projected_chain.py'):
     rc, out = run(sc); outs[sc] = out
     chk('%s exits 0' % sc, rc == 0)
 p3 = outs['verify_p3xp3.py']
@@ -29,6 +29,9 @@ chk('page states the 40 exact checks of verify_cartan.py', '40 exact checks' in 
 chk('page links the quiver note', '../collab/pinot-orthogonal-quivers/index.html' in page)
 chk('page links the open questions page', 'open-questions.html' in page and os.path.exists(os.path.join(here, 'open-questions.html')))
 chk('page does not claim a quiver-to-conjecture link is established', 'Nothing on this page links the quiver note' in page)
+chk('projected-chain script passes 26/26 and page cites it', '26/26' in outs['verify_projected_chain.py'] and '26 exact checks' in page)
+chk('page states ample curves are not primitive', 'never itself primitive' in page)
+chk('page no longer claims chain classes lie in P_T x P_S directly', 'classes $E_i\\otimes F_j$' not in page)
 chk('page carries the open lemma tag', '[OPEN]' in page)
 chk('page says it does not approach a proof of the standard conjectures', 'does not approach one' in page)
 bad = [s for s in ('proves the standard conjecture', 'establishes the general', 'new theorem') if s in page.lower()]
