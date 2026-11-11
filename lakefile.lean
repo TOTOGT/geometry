@@ -265,3 +265,9 @@ lean_lib BraidDichotomy where
 -/
 lean_lib P2xP2 where
   srcDir := "standard-conjectures"
+/-
+  SpectralDiagonalBound.lean (2026-11-11): |A i i| <= spectral radius for normal complex matrices,
+  via spectralRadius = operator norm. UNCOMPILED draft; non-default; manual workflow only.
+-/
+lean_lib SpectralDiagonalBound where
+  srcDir := "standard-conjectures"

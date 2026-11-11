@@ -80,3 +80,4 @@ promise of an outcome.
 | `verify_cartan.py` | 40 exact checks: Cartan matrices A, D, E definite with LDL certificates, affine control singular, Kronecker eigenvalues, Milnor numbers of A and D normal forms | COMPUTED |
 | `open-questions.html` | Six tagged open questions with what is known, for the wider community; invites replies via GitHub Issues | OPEN (questions, not results) |
 | `verify_projected_chain.py` | 26 exact checks: projected (-2)-chains on T x S, explicit sum-of-squares certificate for deg z^2 | COMPUTED |
+| `SpectralDiagonalBound.lean` | Diagonal entries of a normal complex matrix are bounded by its spectral radius (via spectralRadius = operator norm); not the convex-hull statement | UNCOMPILED draft, manual workflow only |

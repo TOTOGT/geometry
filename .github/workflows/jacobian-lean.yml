@@ -47,3 +47,11 @@ jobs:
           grep -n "sorry" /tmp/p2.txt && { echo "::error::sorry in output"; exit 1; } || true
           lake env lean standard-conjectures/P2xP2.lean 2>&1 | tee /tmp/p2-axioms.txt
           grep -n "depends on axioms" /tmp/p2-axioms.txt
+      - name: Build SpectralDiagonalBound and print axioms
+        if: always()
+        run: |
+          set -euxo pipefail
+          lake build SpectralDiagonalBound 2>&1 | tee /tmp/sdb.txt
+          grep -n "sorry" /tmp/sdb.txt && { echo "::error::sorry in output"; exit 1; } || true
+          lake env lean standard-conjectures/SpectralDiagonalBound.lean 2>&1 | tee /tmp/sdb-axioms.txt
+          grep -n "depends on axioms" /tmp/sdb-axioms.txt
