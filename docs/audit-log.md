@@ -12457,3 +12457,7 @@ CLAUDE.md "Open" item 2 is stale on this page; next in Book 3 roster order is th
 - `P2xP2`: compiles. `hodge_codim1`, `hodge_codim2`, `pushforward_L2`, `L2_pushforward`, `FrobeniusCountermodel.F_similitude` depend on [propext, Classical.choice, Quot.sound]; no `sorry`. Header and README updated from "uncompiled". The geometric inputs remain assumptions (file header). Not constructive in the axiom sense.
 - `BraidDichotomy`: unchanged, builds clean.
 - `JacobianCE`: still failing. The nine partials, `jacobianMatrix_eq` and the later declarations now elaborate, but `pd_two`, `pd_three`, `pd_four` were admitted with errors (`simp` cannot prove `3 = C 3`), so the result carried `sorryAx`. Lemmas rewritten via `Nat` casts / 1+1+1 with `Derivation.map_one_eq_zero`, with fallbacks. Not yet run. Until a run shows no `sorryAx`, nothing may cite JacobianCE as checked.
+
+## 2026-11-11 (P³×P³)
+
+- `standard-conjectures/p3xp3.md` and `verify_p3xp3.py`: Hodge-type positivity on all primitive algebraic classes of P³×P³ for every ample rational polarization; dim P^r = 1 exact; reduction to s=t=1 by the ring automorphism a↦sa, b↦tb; V_r = 20, 4, 20/9, 4; 24/24 PASS. Classical case, not new. Inputs (cellularity, projective bundle formula) are on paper, not checked by the script. Not formalised in Lean.
