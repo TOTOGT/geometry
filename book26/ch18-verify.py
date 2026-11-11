@@ -77,7 +77,8 @@ print("== [1] structure"); run("[1]", c_structure(raw))
 # internal links
 links = re.findall(r'href="([^"#:]+\.html)"', raw)
 for l in sorted(set(links)):
-    check(f"[1] link resolves: {l}", (HERE / l).resolve().exists())
+    target = (HERE.parent / l[len('/geometry/'):]) if l.startswith('/geometry/') else (HERE / l)
+    check(f"[1] link resolves: {l}", target.resolve().exists())
 print("== [2] typed facts"); run("[2]", c_facts(txt))
 print("== [3] failure conditions"); run("[3]", c_fail(txt))
 print("== [4] honesty"); run("[4]", c_honest(txt, body_txt))
