@@ -12468,3 +12468,9 @@ CLAUDE.md "Open" item 2 is stale on this page; next in Book 3 roster order is th
 - Cross-references, hand-added in prose where each page already says the conjectures are open (not in generated boxes, R8): `book7/ch-grothendieck.html` (timeline row), `book7/ch-weil.html` (timeline row), `omega/ch-in-the-air.html` ("walked only in part" now links to it). No other text changed.
 - NOT done: enrolling the page in `tools/subject_tags.py`'s roster, because `tools/crossref.py --write` would also rewrite the 16 boxes that the tool already reports stale (pre-existing, unrelated). Decision for the author: enrol and accept the 16-page rewrite, or leave the chapter outside the generated boxes.
 - Not done: claims.tsv rows for the new page.
+
+## 2026-11-11 (run #4 of jacobian-lean.yml, commit b3599b1, pipefail on)
+
+- Run #4 completed successfully: all three steps (JacobianCE, BraidDichotomy, P2xP2) green. The earlier `JacobianCE` failure is cleared: the `pd_two/three/four` lemmas now go through by the first alternative (Nat casts); the log shows only linter warnings for the unused fallback alternatives and unused simp arguments (`pd_two`), no errors, no "declaration uses sorry".
+- NOT read: the `#print axioms JacobianCE.jacobian_counterexample` line. The Actions log viewer would not render the end of that step. What supports "no sorryAx" is indirect: the workflow fails the step if `sorry` appears in the build output, and it passed. Until the line is read (re-run and view the raw log, or print axioms to a job summary), the pages and README keep saying "compiled, axiom report not yet read" for JacobianCE, and nothing is promoted to a default target (R22).
+- Warnings to tidy later, not errors: unused simp arguments `pd_two`/`pd_four` in several partials; the fallback `first` alternatives in the three numeral lemmas never run.
