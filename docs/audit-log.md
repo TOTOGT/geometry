@@ -12451,3 +12451,9 @@ CLAUDE.md "Open" item 2 is stale on this page; next in Book 3 roster order is th
 ## 2026-11-11 (family test) — T × S, product of two surfaces
 
 - `standard-conjectures/product_of_surfaces.md` and `verify_surfaces.py`: Hodge-type positivity on the product-generated primitive codimension-2 classes of T×S (deg z² = 3c²H_T²H_S² + ⟨ω′,ω′⟩, positive definite by Hodge index on each factor); exact LDLᵀ certificates on three generic Gram matrices and two negative controls, 5/5 PASS. The unresolved lemma is positivity on algebraic classes outside NS(T)⊗NS(S). Not a new result; no general claim; not formalised in Lean (P2xP2.lean covers ρ = 1 only). A first run of the script crashed in the final count (sympy booleans) after all checks had printed PASS; fixed and re-run.
+
+## 2026-11-11 (run #3 of jacobian-lean.yml, commit 45cdb1f, pipefail on)
+
+- `P2xP2`: compiles. `hodge_codim1`, `hodge_codim2`, `pushforward_L2`, `L2_pushforward`, `FrobeniusCountermodel.F_similitude` depend on [propext, Classical.choice, Quot.sound]; no `sorry`. Header and README updated from "uncompiled". The geometric inputs remain assumptions (file header). Not constructive in the axiom sense.
+- `BraidDichotomy`: unchanged, builds clean.
+- `JacobianCE`: still failing. The nine partials, `jacobianMatrix_eq` and the later declarations now elaborate, but `pd_two`, `pd_three`, `pd_four` were admitted with errors (`simp` cannot prove `3 = C 3`), so the result carried `sorryAx`. Lemmas rewritten via `Nat` casts / 1+1+1 with `Derivation.map_one_eq_zero`, with fallbacks. Not yet run. Until a run shows no `sorryAx`, nothing may cite JacobianCE as checked.

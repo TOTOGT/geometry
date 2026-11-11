@@ -47,19 +47,22 @@ noncomputable def jacobianMatrix : Matrix (Fin 3) (Fin 3) R :=
 /-- Derivatives of the numeral literals 2, 3, 4 vanish. CI run #1 of jacobian-lean.yml (d9782d0)
     left `pderiv i 2`, `pderiv i 3`, `pderiv i 4` unsolved in the nine partials. -/
 theorem pd_two (i : Fin 3) : pderiv i (2 : R) = 0 := by
-  have h : (2 : R) = C (2 : ℚ) := by simp
-  rw [h]
-  first | exact pderiv_C | simp
+  first
+  | (rw [show (2 : R) = ((2 : ℕ) : R) by norm_num]; exact (pderiv i).map_natCast 2)
+  | (rw [show (2 : R) = 1 + 1 by norm_num]; simp [map_add, Derivation.map_one_eq_zero])
+  | (rw [show (2 : R) = C (2 : ℚ) from by simpa using (map_natCast (C : ℚ →+* R) 2).symm]; exact pderiv_C)
 
 theorem pd_three (i : Fin 3) : pderiv i (3 : R) = 0 := by
-  have h : (3 : R) = C (3 : ℚ) := by simp
-  rw [h]
-  first | exact pderiv_C | simp
+  first
+  | (rw [show (3 : R) = ((3 : ℕ) : R) by norm_num]; exact (pderiv i).map_natCast 3)
+  | (rw [show (3 : R) = 1 + 1 + 1 by norm_num]; simp [map_add, Derivation.map_one_eq_zero])
+  | (rw [show (3 : R) = C (3 : ℚ) from by simpa using (map_natCast (C : ℚ →+* R) 3).symm]; exact pderiv_C)
 
 theorem pd_four (i : Fin 3) : pderiv i (4 : R) = 0 := by
-  have h : (4 : R) = C (4 : ℚ) := by simp
-  rw [h]
-  first | exact pderiv_C | simp
+  first
+  | (rw [show (4 : R) = ((4 : ℕ) : R) by norm_num]; exact (pderiv i).map_natCast 4)
+  | (rw [show (4 : R) = 1 + 1 + 1 + 1 by norm_num]; simp [map_add, Derivation.map_one_eq_zero])
+  | (rw [show (4 : R) = C (4 : ℚ) from by simpa using (map_natCast (C : ℚ →+* R) 4).symm]; exact pderiv_C)
 
 section partials
 

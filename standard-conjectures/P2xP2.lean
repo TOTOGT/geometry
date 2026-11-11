@@ -3,8 +3,10 @@ import Mathlib
 /-!
 # P² × P²: the Hodge-type and inverse-Lefschetz calculations, and the Frobenius-only countermodel
 
-STATUS: uncompiled when written (no Lean on the authoring machine). Built by
-`.github/workflows/jacobian-lean.yml` (manual). Do not cite as checked until that run is green.
+STATUS: written without a Lean toolchain; compiled by CI run #3 of `.github/workflows/jacobian-lean.yml`
+(manual, commit 45cdb1f, `set -o pipefail` on): no `sorry`; axiom reports for `hodge_codim1`, `hodge_codim2`,
+`pushforward_L2`, `L2_pushforward`, `FrobeniusCountermodel.F_similitude` are [propext, Classical.choice,
+Quot.sound] (Mathlib tactic infrastructure; not a constructive build). Non-default target; not on the main gate.
 
 WHAT THIS FILE IS. Exact arithmetic in the truncated ring CH = ℚ[a,b]/(a³,b³), graded
 pieces stored as coefficient records. It proves identities about those records.
