@@ -1,6 +1,6 @@
 # Manual run for book7/JacobianCE.lean (see the note in lakefile.lean). Not on push, so it
 # cannot affect the main verification gate. Trigger: Actions > "Jacobian counterexample (Lean)" > Run workflow.
-name: Jacobian counterexample (Lean)
+name: Jacobian counterexample (Lean)  # also builds BraidDichotomy
 
 on:
   workflow_dispatch:
@@ -29,3 +29,12 @@ jobs:
           grep -n "sorry" /tmp/jce.txt && { echo "::error::sorry in output"; exit 1; } || true
           lake env lean book7/JacobianCE.lean 2>&1 | tee /tmp/jce-axioms.txt
           grep -n "depends on axioms" /tmp/jce-axioms.txt
+
+      - name: Build BraidDichotomy and print axioms
+        if: always()
+        run: |
+          set -eux
+          lake build BraidDichotomy 2>&1 | tee /tmp/bd.txt
+          grep -n "sorry" /tmp/bd.txt && { echo "::error::sorry in output"; exit 1; } || true
+          lake env lean book7/BraidDichotomy.lean 2>&1 | tee /tmp/bd-axioms.txt
+          grep -n "depends on axioms" /tmp/bd-axioms.txt

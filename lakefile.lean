@@ -248,3 +248,11 @@ lean_lib Vol2NonArchimedeanCollatz
 -/
 lean_lib JacobianCE where
   srcDir := "book7"
+
+/-
+  book7/BraidDichotomy.lean (2026-11-11): braid relation plus commutation forces equality; the
+  abelian-or-non-abelian dichotomy for braid generators, behind clause (0) of Theorem 7.1 in
+  ch7-topological-orthogenesis.html. Uncompiled; non-default; same manual workflow as JacobianCE.
+-/
+lean_lib BraidDichotomy where
+  srcDir := "book7"
