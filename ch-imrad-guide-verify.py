@@ -87,7 +87,8 @@ def run(label, rs):
     for l, o in rs: check(f"{label} {l}", o)
 print("== [1] structure"); run("[1]", c_structure(raw))
 for l in sorted(set(re.findall(r'href="([^"#:]+\.html)"', raw))):
-    check(f"[1] link resolves: {l}", (HERE / l).resolve().exists())
+    target = (HERE / l[len("/geometry/"):]) if l.startswith("/geometry/") else (HERE / l)   # generated boxes use site-absolute links
+    check(f"[1] link resolves: {l}", target.resolve().exists())
 print("== [2] tense table"); run("[2]", c_tense(txt))
 print("== [3] exercise answers"); run("[3]", c_ex1(txt))
 print("== [4] numbers and lists"); run("[4]", c_numbers(txt))
