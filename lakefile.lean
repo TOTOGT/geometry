@@ -256,3 +256,12 @@ lean_lib JacobianCE where
 -/
 lean_lib BraidDichotomy where
   srcDir := "book7"
+
+/-
+  standard-conjectures/ (2026-11-11): P2xP2.lean (P2xP2 Hodge-type and inverse-Lefschetz arithmetic,
+  Frobenius-only countermodel) and StandardConjectures.lean (Milne linear-algebra core). Both
+  uncompiled; non-default; built by the manual workflow jacobian-lean.yml only. They prove
+  arithmetic in a supplied ring and say nothing about the general standard conjectures.
+-/
+lean_lib P2xP2 where
+  srcDir := "standard-conjectures"

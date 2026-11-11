@@ -38,3 +38,12 @@ jobs:
           grep -n "sorry" /tmp/bd.txt && { echo "::error::sorry in output"; exit 1; } || true
           lake env lean book7/BraidDichotomy.lean 2>&1 | tee /tmp/bd-axioms.txt
           grep -n "depends on axioms" /tmp/bd-axioms.txt
+
+      - name: Build P2xP2 (standard conjectures benchmark) and print axioms
+        if: always()
+        run: |
+          set -eux
+          lake build P2xP2 2>&1 | tee /tmp/p2.txt
+          grep -n "sorry" /tmp/p2.txt && { echo "::error::sorry in output"; exit 1; } || true
+          lake env lean standard-conjectures/P2xP2.lean 2>&1 | tee /tmp/p2-axioms.txt
+          grep -n "depends on axioms" /tmp/p2-axioms.txt
