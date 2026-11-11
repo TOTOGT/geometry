@@ -1,0 +1,31 @@
+# Manual run for book7/JacobianCE.lean (see the note in lakefile.lean). Not on push, so it
+# cannot affect the main verification gate. Trigger: Actions > "Jacobian counterexample (Lean)" > Run workflow.
+name: Jacobian counterexample (Lean)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  jacobian:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- --default-toolchain none -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Fetch Mathlib cache
+        run: |
+          set -eux
+          lake update
+          lake exe cache get || echo "::warning::cache get failed; Mathlib will build from source"
+
+      - name: Build JacobianCE and print axioms
+        run: |
+          set -eux
+          lake build JacobianCE 2>&1 | tee /tmp/jce.txt
+          grep -n "sorry" /tmp/jce.txt && { echo "::error::sorry in output"; exit 1; } || true
+          lake env lean book7/JacobianCE.lean 2>&1 | tee /tmp/jce-axioms.txt
+          grep -n "depends on axioms" /tmp/jce-axioms.txt

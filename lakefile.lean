@@ -236,3 +236,15 @@ lean_lib Book28 where
 -/
 @[default_target]
 lean_lib Vol2NonArchimedeanCollatz
+
+
+/-
+  book7/JacobianCE.lean (2026-11-11): Alpoge's three-dimensional counterexample to the
+  Jacobian conjecture, in Gao's form (arXiv:2608.00222, Thm 3.3). Written without a Lean
+  toolchain and NOT compiled. Deliberately NOT a default target, so a failure cannot turn
+  the main gate red; run it with the manual workflow jacobian-lean.yml, or locally with
+  `lake build JacobianCE`. Promote it to @[default_target] and add it to the axiom gate only
+  after one green run (R22).
+-/
+lean_lib JacobianCE where
+  srcDir := "book7"
