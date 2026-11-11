@@ -63,3 +63,12 @@ promise of an outcome.
   pre-register what would count as progress (R30);
 - the 2026 status sentence in `omega/ch-in-the-air.html` ("open in 2026") rests
   on one search that returned no accepted proof (R15: not a survey).
+
+## Added 2026-11-11 (later): the other session's benchmark note
+
+`Grothendieck_research_start.md` and `verify_p2xp2.py` were written by another AI session (not identified in the files) and are kept here unedited, as received.
+
+- **Checked by Claude Sonnet 5.5:** the script reads cleanly and runs here (SymPy 1.14, exact arithmetic): 24 of 24 checks pass. An independent re-derivation matched it: h*p1 and h*p2 vanish; deg(p2^2) = 3 s^2 t^2; the L^2 matrix, its determinant 3 s^2 t^2 and its inverse; the correspondence action reproducing the inverse; the middle form of signature (2,1). The Frobenius control (F = q^2 I, J = diag(1,-1)) is trivially true and rules out only that shortcut.
+- **What it is:** a known case. In P^2 x P^2 every class is algebraic, so the standard conjectures hold and the positivity is classical. It shows the machinery is right, and proves nothing new.
+- **Not verified, and not to be cited as fact:** note section 2 says Milne's Nov 2026 report (reached through hexagonmath.org/2611.00244v1, not arXiv or jmilne.org) states the Hodge standard conjecture for all abelian varieties as Theorem 3.5, and that Milne's author page and a Michigan seminar page record Oct-Nov 2026 updates. None of those pages could be opened from here, and a search found nothing under that arXiv number. What was found: Agugliaro, arXiv:2510.21562, proves the Hodge-type conjecture for powers of abelian threefolds and some families over finite fields, not for all abelian varieties. Status: reported, unverified.
+- **One finding of the note that is right:** section 7, the s -> 1-s versus s -> 1-conj(s) distinction. Book 4 s12.8 conflated them; a dated correction box was added to `book4/ch12.html` on 2026-11-11.
