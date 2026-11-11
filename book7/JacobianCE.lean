@@ -44,34 +44,51 @@ noncomputable def jacobianMatrix : Matrix (Fin 3) (Fin 3) R :=
 
 /-! ## The nine partial derivatives (explicit) -/
 
+/-- Derivatives of the numeral literals 2, 3, 4 vanish. CI run #1 of jacobian-lean.yml (d9782d0)
+    left `pderiv i 2`, `pderiv i 3`, `pderiv i 4` unsolved in the nine partials. -/
+theorem pd_two (i : Fin 3) : pderiv i (2 : R) = 0 := by
+  have h : (2 : R) = C (2 : ℚ) := by simp
+  rw [h]
+  first | exact pderiv_C | simp
+
+theorem pd_three (i : Fin 3) : pderiv i (3 : R) = 0 := by
+  have h : (3 : R) = C (3 : ℚ) := by simp
+  rw [h]
+  first | exact pderiv_C | simp
+
+theorem pd_four (i : Fin 3) : pderiv i (4 : R) = 0 := by
+  have h : (4 : R) = C (4 : ℚ) := by simp
+  rw [h]
+  first | exact pderiv_C | simp
+
 section partials
 
 theorem d_f1_x : pderiv 0 f1 = 3*x^2*y^3*z + 6*x*y^4 + 6*x*y^2*z + 7*y^3 + 3*y*z := by
-  simp [f1, x, y, z, pderiv_X, Pi.single_apply] <;> ring
+  simp [f1, x, y, z, pderiv_X, pd_two, pd_three, pd_four] <;> ring
 
 theorem d_f1_y : pderiv 1 f1 = 3*x^3*y^2*z + 12*x^2*y^3 + 6*x^2*y*z + 21*x*y^2 + 3*x*z + 8*y := by
-  simp [f1, x, y, z, pderiv_X, Pi.single_apply] <;> ring
+  simp [f1, x, y, z, pderiv_X, pd_two, pd_three, pd_four] <;> ring
 
 theorem d_f1_z : pderiv 2 f1 = x^3*y^3 + 3*x^2*y^2 + 3*x*y + 1 := by
-  simp [f1, x, y, z, pderiv_X, Pi.single_apply] <;> ring
+  simp [f1, x, y, z, pderiv_X, pd_two, pd_three, pd_four] <;> ring
 
 theorem d_f2_x : pderiv 0 f2 = 9*x^2*y^2*z + 18*x*y^3 + 12*x*y*z + 12*y^2 + 3*z := by
-  simp [f2, x, y, z, pderiv_X, Pi.single_apply] <;> ring
+  simp [f2, x, y, z, pderiv_X, pd_two, pd_three, pd_four] <;> ring
 
 theorem d_f2_y : pderiv 1 f2 = 6*x^3*y*z + 27*x^2*y^2 + 6*x^2*z + 24*x*y + 1 := by
-  simp [f2, x, y, z, pderiv_X, Pi.single_apply] <;> ring
+  simp [f2, x, y, z, pderiv_X, pd_two, pd_three, pd_four] <;> ring
 
 theorem d_f2_z : pderiv 2 f2 = 3*x^3*y^2 + 6*x^2*y + 3*x := by
-  simp [f2, x, y, z, pderiv_X, Pi.single_apply] <;> ring
+  simp [f2, x, y, z, pderiv_X, pd_two, pd_three, pd_four] <;> ring
 
 theorem d_f3_x : pderiv 0 f3 = -3*x^2*z - 6*x*y + 2 := by
-  simp [f3, x, y, z, pderiv_X, Pi.single_apply] <;> ring
+  simp [f3, x, y, z, pderiv_X, pd_two, pd_three, pd_four] <;> ring
 
 theorem d_f3_y : pderiv 1 f3 = -3*x^2 := by
-  simp [f3, x, y, z, pderiv_X, Pi.single_apply] <;> ring
+  simp [f3, x, y, z, pderiv_X, pd_two, pd_three, pd_four] <;> ring
 
 theorem d_f3_z : pderiv 2 f3 = -x^3 := by
-  simp [f3, x, y, z, pderiv_X, Pi.single_apply] <;> ring
+  simp [f3, x, y, z, pderiv_X, pd_two, pd_three, pd_four] <;> ring
 
 end partials
 
