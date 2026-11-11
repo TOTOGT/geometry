@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Burn Worth Measuring &middot; Book XXVI &middot; 2026 &mdash; Principia Orthogona</title>
+<meta name="description" content="Book XXVI, 2026. Chapter 18: a study proposal to measure how planned forest burns change forest structure with drone lidar, thermal imaging and machine learning, with a test that can fail, written for a state fire service and a machine-learning lab; no agency or lab has agreed to anything.">
+<!-- Template B: the design for chapters 10 to 19 of Book XXVI. Chapters 1 to 9 use template A. The template changes every ten chapters. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b2545; --navy2:#13315c; --gold:#c8962b; --goldsoft:#f6ead0;
+  --paper:#fbf9f4; --ink:#1d2433; --muted:#5a6275; --rule:#d9d3c3; --card:#ffffff;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --paper:#0d1424; --ink:#e8e6df; --muted:#a3a9b8; --rule:#2a3552; --card:#131c33; --goldsoft:#2a2414; --navy:#e8d9b0; --navy2:#c8962b; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:64px}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:"EB Garamond",Georgia,serif; font-size:19px; line-height:1.65;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px)}
+a{color:var(--navy2)}
+.wrap{max-width:780px; margin:0 auto; padding:0 22px}
+header.hero{background:#0b2545; color:#f4efe0; padding:56px 0 48px; border-bottom:4px solid var(--gold)}
+header.hero .kicker{font-family:Cinzel,serif; letter-spacing:.18em; font-size:13px; color:#e3b95a; text-transform:uppercase; margin:0 0 14px}
+header.hero h1{font-family:Cinzel,serif; font-weight:700; font-size:clamp(28px,5.2vw,44px); line-height:1.15; margin:0 0 14px}
+header.hero p.sub{margin:0; font-size:20px; color:#d8d2c0; max-width:640px}
+header.hero p.meta{margin:18px 0 0; font-size:15px; color:#aeb6c9; letter-spacing:.03em}
+nav.pillars{position:sticky; top:env(safe-area-inset-top,0px); z-index:10; background:var(--card); border-bottom:1px solid var(--rule)}
+nav.pillars .wrap{display:flex; gap:6px; overflow-x:auto; padding:10px 22px}
+nav.pillars a{flex:0 0 auto; text-decoration:none; font-family:Cinzel,serif; font-size:12.5px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--navy); padding:7px 12px; border:1px solid var(--rule); border-radius:999px}
+nav.pillars a:hover{border-color:var(--gold); background:var(--goldsoft)}
+main{padding:34px 0 20px}
+h2{font-family:Cinzel,serif; font-weight:700; color:var(--navy); font-size:clamp(22px,3.6vw,30px); line-height:1.2; margin:46px 0 6px}
+h2 .num{display:block; font-size:12.5px; letter-spacing:.2em; color:var(--gold); margin-bottom:6px}
+h3{font-family:Cinzel,serif; font-weight:500; font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:26px 0 6px}
+p{margin:0 0 14px}
+.lead{font-size:21px; color:var(--ink)}
+.tagline{font-style:italic; color:var(--muted); margin:0 0 18px}
+table{border-collapse:collapse; width:100%; font-size:16.5px; margin:10px 0 18px}
+th,td{padding:9px 10px; text-align:left; vertical-align:top; border-bottom:1px solid var(--rule)}
+th{font-family:Cinzel,serif; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:500}
+.tablewrap{overflow-x:auto}
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin:16px 0 20px}
+.stat{background:var(--card); border:1px solid var(--rule); border-top:3px solid var(--gold); border-radius:6px; padding:12px 14px}
+.stat b{display:block; font-family:Cinzel,serif; font-size:24px; color:var(--navy); line-height:1.15}
+.stat span{font-size:15px; color:var(--muted); line-height:1.35; display:block; margin-top:4px}
+ul{margin:0 0 16px; padding-left:22px}
+li{margin:0 0 9px}
+.counter{background:var(--goldsoft); border-left:4px solid var(--gold); border-radius:0 6px 6px 0; padding:14px 18px; margin:18px 0}
+.counter h3{margin:0 0 6px}
+.aside{border:1px dashed var(--gold); border-radius:6px; padding:14px 18px; margin:20px 0; background:var(--card)}
+.aside h3{margin-top:0}
+.note{border:1px solid var(--rule); border-radius:6px; padding:14px 18px; margin:20px 0; background:var(--card); font-size:17px}
+.note h3{margin-top:0}
+hr.sep{border:0; border-top:1px solid var(--rule); margin:40px 0 0}
+footer{border-top:4px solid var(--gold); background:var(--card); margin-top:40px; padding:26px 0 34px; font-size:15.5px; color:var(--muted)}
+footer h3{margin-top:0}
+footer ul{padding-left:18px}
+footer li{margin-bottom:5px}
+.chapnav{display:flex; justify-content:space-between; gap:10px; font-family:Cinzel,serif; font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; margin-top:20px; color:var(--muted)}
+@media print{
+  nav.pillars{display:none}
+  header.hero{background:#fff; color:#000; border-bottom:2px solid #000; padding:20px 0}
+  header.hero h1,header.hero p{color:#000 !important}
+  body{font-size:11.5pt; background:#fff; color:#000}
+  .stat,.counter,.aside{break-inside:avoid}
+  h2{break-after:avoid}
+}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+</style>
+<!--po-subject--><meta name="po-subject" content="EARTH · CLIMATE"><!--/po-subject-->
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker"><a href="../index.html" style="color:inherit;text-decoration:none">Principia Orthogona</a> &middot; <a href="index.html" style="color:inherit;text-decoration:none">Book XXVI &middot; 2026</a> &middot; Chapter 18</p>
+    <!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#5a3a06;background:#f7ecd6;border:1px solid #e0c48a;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">EARTH · CLIMATE</span></div><!--/po-subject-->
+<h1>A Burn Worth Measuring</h1>
+    <p class="sub">A study proposal: use the planned burns a state fire service already runs as known events, measure how each changes forest structure with drone lidar and thermal imaging, and test whether a sparse satellite lidar sees any of it. Written for a fire service and for a machine-learning lab. Neither has seen it or agreed to anything.</p>
+    <p class="meta">Newark, New Jersey &middot; 11 November 2026 &middot; a proposal, with a test that can fail</p>
+  </div>
+</header>
+
+<nav class="pillars" aria-label="Sections">
+  <div class="wrap">
+    <a href="#intro">Introduction</a>
+    <a href="#record">1 &middot; The public record</a>
+    <a href="#proposal">2 &middot; The proposal</a>
+    <a href="#test">3 &middot; A test that can fail</a>
+    <a href="#readers">4 &middot; Two readers</a>
+    <a href="#limits">Limits</a>
+    <a href="#updates">Updates</a>
+    <a href="#checked">Checked</a>
+    <a href="#sources">Sources</a>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+<div class="note">
+  <h3>What this chapter is, and what it is not</h3>
+  <p>This chapter is part of Book XXVI, 2026, the author&rsquo;s published record of his applications. It is a study proposal. It names the New Jersey Forest Fire Service and the BeeryLab at the Massachusetts Institute of Technology (MIT), as <a href="ch17-the-credit-behind-the-annuity.html">chapter 17</a> names its organizations, because it is written for them and reads only public material: a state web page, a social-media notice from the Service, an encyclopedic mission summary of a NASA instrument, and one preprint. Nothing here comes from anyone at either organization. <strong>Neither has seen this page, and neither has agreed to anything.</strong> It is not a statement by either.</p>
+  <p><strong>It claims no experience in wildland fire, forestry or remote sensing.</strong> The author&rsquo;s background is in banking, finance and economics. The proposal is a design for a measurement, and every part of it that depends on a person or an agency saying yes is marked as a request.</p>
+</div>
+
+<section id="intro">
+  <h2><span class="num">Introduction</span>The question, and why planned burns</h2>
+  <p class="lead">Can a repeatable measurement protocol turn planned forest burns into a labeled record of how fire changes forest structure, and can a satellite lidar that samples only sparsely recover any of it?</p>
+  <p>A wildfire is hard to study because no one knows in advance where or when it will start. A planned burn is different: the date, the place and the boundary are set before it happens. A fire service that runs planned burns every year therefore already produces known events. If the same measurements are made before and after each one, the result is a comparable record. That is the idea. This chapter writes it as a proposal, states what would count as it failing, and says what has to be agreed with others before anything is flown.</p>
+</section>
+
+<hr class="sep">
+
+<section id="record">
+  <h2><span class="num">Section 1 &middot; Read on 11 November 2026</span>The public record</h2>
+  <p class="tagline">Four sources, read for what they state and what they leave out.</p>
+
+  <h3>The New Jersey Forest Fire Service</h3>
+  <p>The Service&rsquo;s prescribed-fire web page says it has used fire as a tool since 1928, that it conducts prescribed burns every year, and that the primary purpose is to reduce hazardous accumulations of forest fuel. It lists secondary benefits including wildlife habitat management and ecological plant and animal management. It describes two kinds of help to applicants, technical assistance and operational assistance, and three application types: landowner, Service-implemented, and qualified professional. The same page says its application period is open for the 2025 season, so the page appears out of date for the 2026&ndash;27 season, and the current process has to be confirmed with the Service.</p>
+  <p>A notice posted by the Service on its social-media page on 11 November 2026 announced prescribed fire operations that day in Somerset County, said the schedule depends on weather and can change, and pointed to a prescribed fire notifications map. The same notice says most prescribed fire takes place between February and early April. The page and the notice say nothing about research partnerships, data sharing or drones.</p>
+
+  <h3>A satellite lidar, and its status</h3>
+  <p>The Global Ecosystem Dynamics Investigation (GEDI) is a lidar instrument on the International Space Station that samples forest structure along its ground track. An encyclopedic mission summary (eoPortal) states that GEDI went into storage in March 2023, began returning to service on 22 April 2024, and resumed nominal science operations with all three lasers on 11 June 2024. The newest dated item in the text read is that one. No National Aeronautics and Space Administration (NASA) page confirming current operations could be read. Whether GEDI is collecting data now is therefore not established here.</p>
+
+  <h3>A preprint on habitat and imagery</h3>
+  <p>Haucke and colleagues (bioRxiv, version posted 17 February 2026) add image-derived habitat features to species occupancy models. The features come from two sources: overhead satellite imagery and ground-level camera-trap images. They fit models on 83 camera-trap datasets and test on a held-out Snapshot USA set with a 10 km buffer between training and test sites. They report that satellite and ground-level imagery each improve held-out prediction, by about 0.10 and about 0.17 in normalized predictive score on average, and that the gains add. They say satellite imagery alone fails to capture the structure of vegetation under the tree canopy, and they name other data types, passive acoustics and environmental DNA, as future directions. A search of the preprint&rsquo;s text for the words lidar and GEDI found neither. Canopy-penetrating structure is not among the data types the authors consider.</p>
+
+  <h3>What the sources do not say</h3>
+  <p>None of the four says that any fire service wants this study, that any lab is looking for it, or that a drone flight near a planned burn would be permitted. Those are the open questions the rest of the chapter turns into requests.</p>
+</section>
+
+<hr class="sep">
+
+<section id="proposal">
+  <h2><span class="num">Section 2</span>The proposal</h2>
+  <p class="tagline">Four aims, each stated so it can be checked.</p>
+  <ul>
+    <li><strong>Aim 1, a protocol.</strong> For each pilot burn, drone lidar and thermal and red-green-blue (RGB) imaging before and after the burn, and during it only if the fire service approves, with a fixed log of conditions: date, weather, visibility, fuel type and the burn plan. Canopy-structure measures, such as canopy height and the vertical layering of foliage, are computed from the lidar with stated uncertainty.</li>
+    <li><strong>Aim 2, models.</strong> Machine-learning (ML) models for structure change and burn extent, tested on burns held out from training, reporting calibrated uncertainty and not only accuracy.</li>
+    <li><strong>Aim 3, a satellite comparison.</strong> Where GEDI passes exist over a burn, ask how much of the drone-measured change a sparse satellite lidar recovers, and with what delay. This is a question, and the answer may be little or nothing.</li>
+    <li><strong>Aim 4, a record.</strong> Every output carries its inputs, assumptions and uncertainty, so a reviewer can see why a number was produced.</li>
+  </ul>
+  <p>The deliverable is a shared report and data for the fire service first. An open protocol and dataset would follow only if the service agrees.</p>
+  <div class="counter">
+    <h3>What would make this the wrong study</h3>
+    <p>Planned burns are usually lower in intensity than wildfires, so a result from them may not carry over to wildfire. One pilot burn gives a proof of concept, not a general result. Forest types differ, so a model built at one site has to be tested at another before it is trusted.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section id="test">
+  <h2><span class="num">Section 3</span>A test that can fail</h2>
+  <p class="tagline">Stated before any flight, so the outcome cannot be rewritten afterward. The thresholds are the author&rsquo;s proposal and can be changed by the people who would run the study, before the first flight.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Claim</th><th>It holds if</th><th>It fails if</th></tr></thead>
+    <tbody>
+      <tr><td>H1. Drone lidar sees the burn&rsquo;s effect on structure.</td><td>The before-to-after change in a canopy-structure measure differs between burned and unburned control plots by more than twice the standard deviation of that measure between repeat flights over unchanged ground.</td><td>The difference is not larger than that repeat-flight spread. Then the instrument cannot tell the burn from its own noise at this site, and the study reports that.</td></tr>
+      <tr><td>H2. A satellite comparison is possible at all.</td><td>At least 30 GEDI footprints fall inside the burn units, on dates before and after the burn.</td><td>Fewer than 30 do. Aim 3 is then dropped for that burn and the count is reported.</td></tr>
+      <tr><td>H3. The models generalize.</td><td>Error on a held-out burn is within the error range seen on the burns used to build the model.</td><td>Held-out error is clearly worse. The model is then described as site-specific.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The test has two other ways to fail that are not about the data. If the fire service does not approve flights, there is no study. If the service allows it but flights cannot be made safely or legally, there is no study. Neither is a result about fire.</p>
+</section>
+
+<hr class="sep">
+
+<section id="readers">
+  <h2><span class="num">Section 4</span>Two readers</h2>
+
+  <h3>For a fire service</h3>
+  <p>The request is narrow: one scheduled burn, a pilot at no cost to the service, with the service setting every safety, airspace and access rule, and with flights made by its staff or with its approval. The service would receive the results and data first, and data ownership and publication terms would be agreed in writing before any flight. The pilot would be planned for the February to early April window named in the Service&rsquo;s notice. What is needed from the service is the right contact for research requests, its current process, and whether it would consider this at all. Drone rules, insurance and any permits are the author&rsquo;s to confirm and are not confirmed here.</p>
+
+  <h3>For a machine-learning lab</h3>
+  <p>The preprint in Section 1 uses satellite and ground-level imagery as habitat covariates in occupancy models and says satellite imagery misses structure under the canopy. A canopy-penetrating lidar measure of vertical structure is a third kind of covariate that fits the same framework, and a burn changes that structure on a known date. Two problems follow. GEDI samples sparsely, so many ground sites will have no footprint. And a drone lidar covers only the sites flown. Choosing where a sparse accurate sensor should look, and saying how uncertain a prediction is where it did not, are machine-learning questions. This chapter makes no claim that the lab has not considered them and asks nothing of it beyond reading the proposal.</p>
+</section>
+
+<hr class="sep">
+
+<section id="limits">
+  <h2><span class="num">Limits</span>What this does not show</h2>
+  <ul>
+    <li><strong>Any experience in fire science, forestry or remote sensing.</strong> The author has none to claim here.</li>
+    <li><strong>Any agreement, interest or review.</strong> Neither the Service nor the lab has seen this page, and nothing here says either would take part.</li>
+    <li><strong>Any result.</strong> No measurement has been made. Section 3 states what would count as failure before one is.</li>
+    <li><strong>That a drone flight near a burn is permitted.</strong> Rules, insurance and permits are not confirmed.</li>
+    <li><strong>That GEDI is operating now.</strong> The newest source dates from June 2024.</li>
+    <li><strong>Wildfire.</strong> Planned burns are not wildfires, and nothing here says results would transfer.</li>
+    <li><strong>The whole preprint.</strong> Its first eight pages were read and a text search was run on the rest. Its methods and supplementary tables were not read in full.</li>
+    <li><strong>Anything after the date read.</strong> Sources were read on 11 November 2026.</li>
+  </ul>
+</section>
+
+<section id="updates">
+  <h2><span class="num">Updates</span>What changed after the first version</h2>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Date found</th><th>What changed</th><th>Where it shows</th></tr></thead>
+    <tbody>
+      <tr><td>11 Nov 2026</td><td>First version.</td><td>All sections.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="checked">
+  <div class="note">
+    <h3>What was checked, and what was not</h3>
+    <p><strong>Checked on 11 November 2026:</strong> that ch18-verify.py finds on the page every date and figure typed from the sources, that the page names no individual, claims no result, agreement or experience, states all three failure conditions, and carries the limits, and that each check fails when run on a page with the matching statement removed. <strong>Not machine-checked:</strong> that the typed facts match the sources. The Service&rsquo;s web page and notice were read as text supplied to the author, the GEDI summary through a web-fetch tool, and the preprint was read in part. The verifier prints SKIP for the preprint check unless a copy is held, and never PASS. A reader should confirm each fact against the sources below before relying on it.</p>
+  </div>
+</section>
+
+</div>
+</main>
+
+<!--po-gss--><aside class="po-gss" style="max-width:860px;margin:1.2rem auto 1rem;padding:.8rem 1.1rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(40,80,150,.85);border-radius:0 6px 6px 0;background:rgba(40,80,150,.05);font-family:ui-monospace,Menlo,monospace;font-size:.78rem;line-height:1.55"><details><summary style="cursor:pointer;letter-spacing:.08em"><b>Gold Standard Science &middot; 6 of 9 tenets shown</b> &middot; self-assessed against <a href="https://www.federalregister.gov/documents/2025/05/29/2025-09802/restoring-gold-standard-science" style="color:inherit">EO 14303 &sect;3(a)</a> &mdash; not a federal certification</summary><ul style="list-style:none;margin:.5rem 0 .3rem;padding:0"><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(i) reproducible <span style="opacity:.6">&mdash; a script or Lean file beside the page re-derives its numbers</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(ii) transparent <span style="opacity:.6">&mdash; code downloadable and sources named with addresses</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iii) error and uncertainty <span style="opacity:.6">&mdash; MODEL / OPEN tags or an [HONESTY] block</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iv) collaborative, interdisciplinary <span style="opacity:.6">&mdash; cross-linked to other volumes</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(v) skeptical <span style="opacity:.6">&mdash; states what it does not claim, or leaves items open</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(vi) falsifiable <span style="opacity:.6">&mdash; its script can print FAIL</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(vii) unbiased peer review <span style="opacity:.6">&mdash; not independently peer reviewed</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(viii) negative results <span style="opacity:.6">&mdash; no negative result reported on this page</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#9675;</span>(ix) conflicts of interest <span style="opacity:.6">&mdash; disclosed: author-published through G6 LLC, the author&#x27;s company</span></li></ul><div style="opacity:.75">Scored by <code>tools/gold_standard.py</code> from what is observable on this page and beside it. &#10003; shown &middot; &#10007; not shown &middot; &#9675; disclosure. No agency has reviewed this page. <a href="/geometry/gold-standard.html" style="color:inherit">What the order says and why this series follows it</a>.</div></details></aside><!--/po-gss-->
+<!--po-run--><aside class="po-run" style="max-width:860px;margin:1.6rem auto 1rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(80,140,110,.85);border-radius:0 6px 6px 0;background:rgba(80,140,110,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Run it yourself &middot; one-click download</div><ul style="margin:.4rem 0 .5rem 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book26/ch18-verify.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">ch18-verify.py</a> <span style="opacity:.6">&middot; Python 3 &middot; book26/ch18-verify.py</span></li></ul><div style="font-size:.92em;opacity:.85"><b>Python</b>: <code>python3 FILE.py</code> &mdash; standard library only; pages that read a book also need <code>pdftotext</code> and the book in <code>~/Downloads</code>, and say SKIP rather than PASS without it.</div></aside><!--/po-run-->
+<footer id="sources">
+  <div class="wrap">
+    <h3>Sources</h3>
+    <ul>
+      <li>New Jersey Department of Environmental Protection, <a href="https://dep.nj.gov/parksandforests/wildfire/prescribed-fire/">Forest Fire Service: Prescribed Fire</a> (web page, application period stated for the 2025 season).</li>
+      <li>New Jersey Forest Fire Service, prescribed fire notification of 11 November 2026 (social-media post), which refers to the <a href="https://dep.nj.gov/parksandforests/wildfire/prescribed-fire-notifications/">Prescribed Fire Notifications map</a>.</li>
+      <li>eoPortal, <a href="https://eoportal.org/satellite-missions/iss-gedi">ISS: GEDI (Global Ecosystems Dynamics Investigation Lidar)</a>, mission status section.</li>
+      <li>Haucke, Harrell, Shen, Klein, Rolnick, Gillespie and Beery, <a href="https://doi.org/10.1101/2025.09.06.674602">Seeing Above and Below the Canopy: Modeling and Interpreting Species Occupancy with Multimodal Habitat Representations</a>, bioRxiv, version posted 17 February 2026.</li>
+    </ul>
+    <div class="chapnav"><span>Book XXVI &middot; 2026</span><span>Chapter 18</span></div>
+    <p style="margin-top:14px">2026-11-11 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0. A proposal, not a statement by the New Jersey Forest Fire Service or the BeeryLab. Figures and dates are the sources&rsquo; as read.</p>
+  </div>
+</footer>
+
+</body>
+</html>
