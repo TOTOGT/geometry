@@ -12512,3 +12512,8 @@ CLAUDE.md "Open" item 2 is stale on this page; next in Book 3 roster order is th
 
 ## 2026-11-11 (h) — portfolio/about-pablo-and-companies.html: trade name removed
 - Per the author: the registered trade name was misspelled at registration; the page now names the Brazilian entity only as "PABLO NOGUEIRA GROSSI - ME" (the PJ). No other file in the repo contained the trade name.
+
+## 2026-11-11 (i) — Gumroad: brodanova6 storefront retired, links moved to g6llc
+- Author: brodanova6.gumroad.com is retired; g6llc.gumroad.com is fine. Replaced every brodanova6 reference in the 10 live pages that had one (HVEH/ch02, book4/ch02, book5/GTCT_V_Student_Edition, ch-eta-dnls, ch01-one-equation, ch1-seed, ch2-allostatic, dm3-lab-index, impa-portal, livro3-brasil): 41 occurrences. Seven were the misspelled path /sourdworks (ch2-allostatic); these now point at /l/soundworks, the product every other link uses. Not touched: _archive/, _to_delete/, and historical mentions in CLAUDE.md, CLAUDE-ARCHIVE.md and this log.
+- Nothing about prices, product labels or which product the links point at was changed. Whether the single /l/soundworks product should still back every "Buy" button is the earlier, separate finding in CLAUDE-ARCHIVE.md.
+- Caught while doing this: my earlier edit of the about page ("Brazilian microempresa (ME)") tripped the vocabulary guard (UNDECLARED expansion/acronym pattern) and was pushed with CI red on that check. Reworded the sentence; the guard and TERMS.md are unchanged. Lesson: run tools/terms.py --check after every page edit, not only after the first draft.
