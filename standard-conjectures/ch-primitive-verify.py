@@ -13,7 +13,7 @@ def run(script):
     r = subprocess.run([sys.executable, '-I', os.path.join(here, script)], capture_output=True, text=True, timeout=170)
     return r.returncode, r.stdout
 outs = {}
-for sc in ('verify_p2xp2.py', 'verify_p3xp3.py', 'verify_surfaces.py'):
+for sc in ('verify_p2xp2.py', 'verify_p3xp3.py', 'verify_surfaces.py', 'verify_cartan.py'):
     rc, out = run(sc); outs[sc] = out
     chk('%s exits 0' % sc, rc == 0)
 p3 = outs['verify_p3xp3.py']
@@ -23,6 +23,12 @@ chk('page prints V_r = 20, 4, 20/9, 4', '20,\\ 4,\\ 20/9,\\ 4' in page)
 chk('page prints P2xP2 values 6s^2t^2, 2s^2t^2, 3s^2t^2', all(x in page for x in ('$6s^2t^2$', '$2s^2t^2$', '$3s^2t^2$')))
 chk('P2xP2 script reports codim-2 value 3 s^2 t^2 (24 checks)', '24/24' in outs['verify_p2xp2.py'] or 'PASS' in outs['verify_p2xp2.py'])
 chk('T x S: dimension formula 1+(rho_T-1)(rho_S-1) printed by script', 'dim primitive=5 (expected 5)' in outs['verify_surfaces.py'])
+cc = outs['verify_cartan.py']
+chk('Cartan script reports all checks passed', re.search(r'(\d+)/\1 checks passed', cc) is not None)
+chk('page states the 40 exact checks of verify_cartan.py', '40 exact checks' in page and '40/40' in cc)
+chk('page links the quiver note', '../collab/pinot-orthogonal-quivers/index.html' in page)
+chk('page links the open questions page', 'open-questions.html' in page and os.path.exists(os.path.join(here, 'open-questions.html')))
+chk('page does not claim a quiver-to-conjecture link is established', 'Nothing on this page links the quiver note' in page)
 chk('page carries the open lemma tag', '[OPEN]' in page)
 chk('page says it does not approach a proof of the standard conjectures', 'does not approach one' in page)
 bad = [s for s in ('proves the standard conjecture', 'establishes the general', 'new theorem') if s in page.lower()]

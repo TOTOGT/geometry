@@ -12474,3 +12474,9 @@ CLAUDE.md "Open" item 2 is stale on this page; next in Book 3 roster order is th
 - Run #4 completed successfully: all three steps (JacobianCE, BraidDichotomy, P2xP2) green. The earlier `JacobianCE` failure is cleared: the `pd_two/three/four` lemmas now go through by the first alternative (Nat casts); the log shows only linter warnings for the unused fallback alternatives and unused simp arguments (`pd_two`), no errors, no "declaration uses sorry".
 - NOT read: the `#print axioms JacobianCE.jacobian_counterexample` line. The Actions log viewer would not render the end of that step. What supports "no sorryAx" is indirect: the workflow fails the step if `sorry` appears in the build output, and it passed. Until the line is read (re-run and view the raw log, or print axioms to a job summary), the pages and README keep saying "compiled, axiom report not yet read" for JacobianCE, and nothing is promoted to a default target (R22).
 - Warnings to tidy later, not errors: unused simp arguments `pd_two`/`pd_four` in several partials; the fallback `first` alternatives in the three numeral lemmas never run.
+
+## 2026-11-11 — intersection graphs, open questions (standard conjectures)
+- Added `verify_cartan.py` (40/40): Cartan A/D/E definiteness with LDL certificates, affine control, Kronecker eigenvalues, Milnor numbers.
+- `ch-primitive.html` gains section 6 (intersection graphs; quiver note linked, connection stated as shared matrices only); `ch-primitive-verify.py` now runs the Cartan script and checks the new claims.
+- New `open-questions.html` (Q1–Q6, tagged). Draft community question in `docs/draft-community-question-primitive.md` is NOT posted; collaborator not contacted and not spoken for (house rule).
+- Nothing promoted (R22). JacobianCE axiom line still unread.
