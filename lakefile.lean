@@ -174,7 +174,7 @@ lean_lib CatGT where
 -/
 lean_lib ReebFlow where
   srcDir := "catgt/lean"
-  roots := #[`ReebFlow, `ReebFlowExtDeriv, `ReebBridge, `ReebUnique]
+  roots := #[`ReebFlow, `ReebFlowExtDeriv, `ReebBridge, `ReebUnique, `ReebPullback]
 
 /-
   book18/ChainRule.lean and book21/Conjugacy.lean, the Lean behind Book XVIII chs 2-4
