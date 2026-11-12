@@ -1,7 +1,7 @@
 -- tools/verify-catgt/probe_reeb.lean
 --
 -- Probe for catgt/lean/ReebFlow.lean, ReebFlowExtDeriv.lean and ReebBridge.lean
--- (added 2026-11-11; ReebUnique.lean added the same day). Thirty-one declarations: 8 + 11 + 2 + 4 + 6 (ReebPullback.lean). A `#print axioms` line
+-- (added 2026-11-11; ReebUnique.lean added the same day). Thirty-four declarations: 8 + 11 + 2 + 4 + 6 (ReebPullback.lean) + 3 (ReebWedge.lean, 2026-11-12). A `#print axioms` line
 -- proves the named theorem rests on no sorryAx; it does not prove it says what its name
 -- says. In particular `reebOrbit_hasDerivAt` says the curve t |-> reebOrbit r0 th0 z0 t has
 -- velocity `reebR` at every time; uniqueness of integral curves is `reebOrbit_unique`
@@ -12,6 +12,7 @@ import ReebBridge
 import ReebFlowExtDeriv
 import ReebUnique
 import ReebPullback
+import ReebWedge
 
 #print axioms ReebFlow.reebFlow_zero
 #print axioms ReebFlow.reebFlow_add
@@ -44,3 +45,6 @@ import ReebPullback
 #print axioms reebFlow_contDiffAt
 #print axioms reebFlow_preserves_extDeriv_omega
 #print axioms reeb_interior_extDeriv
+#print axioms ReebWedge.wedge12_eq_shuffle
+#print axioms ReebWedge.contactVol_eq_wedge12
+#print axioms ReebWedge.wedge12_frame
