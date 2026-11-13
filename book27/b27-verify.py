@@ -68,6 +68,9 @@ for fn, h in pages.items():
     for href in re.findall(r'href="([^"#]+)"', h):
         if href.startswith(("http", "mailto")):
             continue
+        if href.startswith("../") and not os.path.isdir(os.path.join(HERE, "..", "book24")):
+            print(f"SKIP  {fn} link {href} (sibling book folder not present here; run from inside the geometry repo)")
+            continue
         ok = os.path.exists(os.path.normpath(os.path.join(HERE, href)))
         check(f"{fn} link {href} resolves", ok)
 
@@ -133,8 +136,7 @@ check("expectancy example: 0.8 x 0.5 x 6 = 2.4", abs(0.8 * 0.5 * 6 - 2.4) < 1e-9
 ch2 = pages.get("b27-ch02-business-law-ethics-csr.html", "")
 idx = pages.get("index.html", "")
 for name, h in (("ch1", ch1), ("ch2", ch2), ("ch3", ch3), ("index", idx)):
-    check(f"{name} carries the study-aid / reading-status statement",
-          "not read" in h or "have not read" in h or "has not read" in h or "do not name a textbook" in h)
+    check(f"{name} carries the reading-status statement (what it is not based on)", "not based on" in h)
 check("ch1 flags the disagreement between two official pages", "two official pages disagree" in ch1 and 'class="tag">to confirm' in ch1)
 check("ch2 says it is not legal advice", "not legal advice" in ch2)
 check("ch2 says cases must be re-read in a primary source", "primary source" in ch2)
@@ -209,7 +211,7 @@ check("page states capstone arithmetic", "sum to 100" in c12 and "1.875" in c12 
 
 # ---- flags and reading-status statements for chapters 4-12
 for i, h in zip(range(4, 13), (c4, c5, c6, c7, c8, c9, c10, c11, c12)):
-    check(f"ch{i} states what it has not read", "not read" in h or "not</b> read" in h or "have not read" in h)
+    check(f"ch{i} states what it is not based on", "not based on" in h)
     check(f"ch{i} has the sourced box and the study-aid box", '<span class="tag">sourced</span>' in h and "does not contain answers to graded assignments" in h)
     check(f"ch{i} has an open box with to confirm", 'class="box open"' in h and 'class="tag">to confirm' in h)
     check(f"ch{i} has at least one computed tag", 'class="tag">computed' in h or i in (10, 11, 12) and 'class="tag">computed' in h)
@@ -249,6 +251,41 @@ for nm, h in (("ch0", c0), ("ch0b", c0b)):
 check("ch0b says toy numbers are not secure and gives no attack procedure", "not secure" in c0b and "no attack procedures" in c0b)
 check("ch11 points to chapter 0b and says the units contain no cryptography", "contain no cryptography" in c11 and "b27-ch00b" not in c11 and "chapter 0b" in c11)
 check("index lists Part 0 with both chapters and says they sit before every path", "b27-ch00-math-for-msit.html" in idx and "b27-ch00b-cryptography-math.html" in idx and "before every path" in idx)
+
+# ---- cross-check of the worked examples in Hoffstein, Pipher, Silverman (2008) that chapter 0b cites
+check("book Ex 1.6: gcd(2024, 748) = 44 by Euclid's steps", C.ext_gcd(2024, 748)[0] == 44 and 2024 == 748 * 2 + 528 and 748 == 528 + 220 and 528 == 220 * 2 + 88 and 220 == 88 * 2 + 44 and 88 == 44 * 2)
+check("book Ex 1.26: 2^(p-1) = 1 mod 15485863", pow(2, 15485862, 15485863) == 1)
+check("book Ex 1.28: inverse of 7814 mod 17449 is 1284, with (u,v) = (1284,-575)", C.mod_inv(7814, 17449) == 1284 and 7814 * 1284 + 17449 * (-575) == 1 and pow(7814, 17447, 17449) == 1284)
+check("book Ex 2.7: p=941, g=627, a=347, b=781 gives 390, 691 and shared 470", (pow(627, 347, 941), pow(627, 781, 941), pow(691, 347, 941), pow(390, 781, 941)) == (390, 691, 470, 470))
+NN = 1223 * 1987
+check("book Ex 3.8: RSA N=2430101, (p-1)(q-1)=2426892, d=1051235, c=1473513, m=1070777",
+      NN == 2430101 and 1222 * 1986 == 2426892 and math.gcd(948047, 2426892) == 1 and C.mod_inv(948047, 2426892) == 1051235
+      and pow(1070777, 948047, NN) == 1473513 and pow(1473513, 1051235, NN) == 1070777)
+check("ch0b cites the book and its ISBN, and states what was and was not read",
+      "Hoffstein" in c0b and "978-0-387-77993-5" in c0b and "Example 3.8" in c0b and "Example 2.7" in c0b and "I did <b>not</b> work from its proofs" in c0b)
+check("ch0b reading map shows the recomputed book values", all(t in c0b for t in ["= 44", "= 1284", "shared secret 470", "d = 1051235", "1473513"]))
+check("ch0b no longer uses lambda for (p-1)(q-1) (matches the book's notation)", "&lambda;" not in c0b and "(p-1)(q-1) = 3120" in c0b)
+
+# ---- voice: first person, to a classmate; no notes addressed to the author or to a model
+ALLP = {n: pages.get(n, "") for n in FILES}
+BANNED = ["you pasted", "pasted", "your catalog", "your pasted", "this session", "you asked", "you supplied", "I have not read", "I have <b>not read", "not read</b>", "Claude"]
+for nm, h in ALLP.items():
+    bad = [b for b in BANNED if b in h]
+    check(f"{nm} has no notes-to-the-author wording", not bad, str(bad))
+check("study-aid box speaks in the first person to a classmate", all("I'm writing these chapters" in ALLP[f] for f in ALLP if f != "index.html"))
+check("index preface speaks in the first person", "I'm starting the program now" in ALLP["index.html"] and "can work from the same page" in ALLP["index.html"])
+
+# ---- cross-references to other books of the Opus
+XREF = {"b27-ch00-math-for-msit.html": ["../book24/index.html", "../book24/ch01-vectors-span-independence.html", "../book24/ch05-linear-maps.html", "../book24/ch06-matrices-determinants.html", "../book18/ch02-the-rule-itself.html", "../book18/ch08-several-variables.html", "../book18/ch07-sequences-and-series.html", "../book20/ch03-what-to-expect.html", "../book20/ch04-back-toward-the-mean.html", "../book14/ch01-the-grammar-of-notation.html"],
+        "b27-ch00b-cryptography-math.html": ["../book24/index.html", "../book24/ch01-vectors-span-independence.html", "../book24/ch06-matrices-determinants.html"],
+        "b27-ch07-programming-languages.html": ["../book14/ch01-the-grammar-of-notation.html", "../book14/ch02-how-mathematical-prose-parses.html", "../book19/ch03-elaborator-macro-kernel.html"],
+        "b27-ch08-machine-learning.html": ["../book17/index.html", "../book16/index.html", "../book18/ch02-the-rule-itself.html", "../book18/ch08-several-variables.html", "../book24/ch06-matrices-determinants.html", "../book24/ch08-inner-products.html", "../book24/ch09-numerical.html", "../book20/ch03-what-to-expect.html", "../book20/ch04-back-toward-the-mean.html"],
+        "index.html": ["../book24/index.html", "../book18/index.html", "../book20/index.html", "../book17/index.html", "../book16/index.html", "../book14/index.html"]}
+for fn, links in XREF.items():
+    check(f"{fn} links to {len(links)} other books of the Opus", all(f'href="{l}"' in ALLP[fn] for l in links) and "See also in the Opus" in ALLP[fn] or (fn == "index.html" and all(f'href="{l}"' in ALLP[fn] for l in links)))
+check("ch0b links the linear-algebra prerequisite to Book XXIV right where the preface is mentioned", "first course in linear algebra" in ALLP["b27-ch00b-cryptography-math.html"] and "Book XXIV, Linear Algebra for Graduate Study" in ALLP["b27-ch00b-cryptography-math.html"])
+check("ch0 unit 7 points to Book XXIV", "Book XXIV, Linear Algebra for Graduate Study" in ALLP["b27-ch00-math-for-msit.html"])
+check("cross-reference boxes say the match was chosen by title and description", all("by chapter title and description" in ALLP[f] for f in XREF if f != "index.html") and "by title and description" in ALLP["index.html"])
 
 # ---- paths through the book
 paths = {m.group(1): [int(x) for x in re.findall(r"<li>(\d+)</li>", m.group(2))]
