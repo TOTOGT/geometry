@@ -52,6 +52,8 @@ FILES = {
     "b27-ch10-hci.html": ["Introduction to HCI", "User Interface Design", "Smart Interfaces", "Virtual Worlds", "Brain Interfaces", "Input/Output", "Digital Assistants", "The Internet of Things (IoT)"],
     "b27-ch11-cybersecurity.html": ["Introduction to Cyber Security", "Ethical Hacking & Cyber Security methodologies", "Cyber Security Methodologies and setting up Lab for Cyber Security", "Website Pentesting & Security", "Mobile Pentesting & Wireless Security", "Dark web and Deep Web", "Cyber Forensics", "Bug Bounty Platforms & Reporting"],
     "b27-ch12-capstone.html": ["Project Proposal: Part 1", "Project Proposal: Part 2", "Project Implementation Plan: Part 1", "Project Implementation Plan: Part 2", "Project Implementation Plan: Part 3", "Project Implementation Plan: Part 4", "Final Project Due", "Capstone Report Submission"],
+    "b27-ch00-math-for-msit.html": ["Logic and Proof", "Sets, Relations and Functions", "Counting and Combinatorics", "Probability and Bayes' Rule", "Sequences, Sums and Recurrences", "Graphs and Trees", "Linear Algebra", "Calculus for Learning"],
+    "b27-ch00b-cryptography-math.html": ["Modular Arithmetic", "Primes, GCD and Euclid's Algorithm", "Fermat's and Euler's Theorems", "Fast Exponentiation", "Symmetric Ciphers and Why Keys Matter", "The Public-Key Idea and Diffie-Hellman", "RSA", "Hashes, Signatures and Limits"],
 }
 
 # ---- files, self-containment, links
@@ -219,6 +221,34 @@ check("ch11 does not tag 5270 as identity verification", "Identity Verification"
 check("ch12 flags BUS 5612 vs 5611, 'all eight' vs seven, and the unit-number conflict", "5612" in c12 and "5611" in c12 and "all eight" in c12 and "Unit 6" in c12)
 check("ch3 links forward to ch4 and ch4..12 chain forward", "b27-ch04-databases.html" in ch3 and all(f in P[g] for g, f in zip(list(FILES)[4:12], list(FILES)[5:13])))
 check("index links every chapter 1-12 and no longer says planned", all(f in idx for f in list(FILES)[1:13]) and "planned" not in idx)
+
+# ---- chapters 0 and 0b: pre-MSIT math, independent checks
+c0 = pages.get("b27-ch00-math-for-msit.html", ""); c0b = pages.get("b27-ch00b-cryptography-math.html", "")
+check("math: p->q false only at (T,F)", [t[2] for t in C.implies_table()] == [True, False, True, True])
+check("math: C(10,3)=120, 5!=120, C(52,5)=2,598,960", (math.comb(10, 3), math.factorial(5), math.comb(52, 5)) == (120, 120, 2598960))
+check("math: Bayes posterior 0.009/(0.009+0.0495) = 0.1538", abs(0.009 / (0.009 + 0.0495) - 0.15384615) < 1e-6 and abs(C.bayes(0.01, 0.9, 0.05) - 0.15384615) < 1e-6)
+check("math: sum 1..100 = 5050; matmul and det", sum(range(1, 101)) == 5050 == 100 * 101 // 2 and C.matmul([[1, 2], [3, 4]], [[0, 1], [1, 0]]) == [[2, 1], [4, 3]] and C.det2([[1, 2], [3, 4]]) == -2)
+check("math: gradient formula -26.4 matches numerical slope", C.mse_grad_w(0, 0, C.ML_X, C.ML_Y) == -26.4 and abs(C.numeric_grad_w(0, 0, C.ML_X, C.ML_Y) + 26.4) < 1e-4)
+check("page states chapter 0 results", "= 120" in c0 and "2,598,960" in c0 and "0.1538" in c0 and "5050" in c0 and "[[2, 1], [4, 3]]" in c0 and "-26.4" in c0 and "-2" in c0 and "5 edges" not in c0 and "handshake" in c0)
+# crypto: independent of b27_calc where the identity is textbook
+g_, x_, y_ = C.ext_gcd(240, 46)
+check("crypto: gcd(240,46)=2 and 240x+46y=2", g_ == 2 and 240 * x_ + 46 * y_ == 2 and math.gcd(240, 46) == 2)
+check("crypto: 17*2753 = 15*3120 + 1, so 2753 is the inverse of 17 mod 3120", 17 * 2753 == 15 * 3120 + 1 and C.mod_inv(17, 3120) == 2753 == pow(17, -1, 3120))
+check("crypto: phi(12)=4, phi(3233)=3120=60*52", C.phi(12) == 4 and C.phi(3233) == 3120 == 60 * 52 and 61 * 53 == 3233)
+check("crypto: Fermat 2^10 mod 11 = 1; 7^222 mod 11 = 5", pow(2, 10, 11) == 1 and pow(7, 222, 11) == 5)
+check("crypto: 65^17 mod 3233 = 2790 in 6 multiplications; 17 = 10001b", C.modexp_steps(65, 17, 3233) == (2790, 6) == (pow(65, 17, 3233), 6) and bin(17) == "0b10001")
+check("crypto: RSA toy n=3233, lambda=3120, d=2753, c=2790, back to 65", C.rsa_toy() == (3233, 3120, 2753, 2790, 65))
+check("crypto: DH p=23 g=5 gives 8 and 19 and shared secret 2", C.dh_toy() == (8, 19, 2, 2) and pow(5, 6, 23) == 8 and pow(5, 15, 23) == 19)
+check("crypto: XOR pad round trip", C.xor_demo()[0] == C.xor_demo()[3] and C.xor_demo()[0] ^ C.xor_demo()[1] == C.xor_demo()[2])
+check("crypto: birthday 23 -> 0.5073, 57 -> 0.9901", round(C.birthday(23), 4) == 0.5073 and round(C.birthday(57), 4) == 0.9901)
+dd0 = C.bit_diff(C.sha256_hex("password1"), C.sha256_hex("password2"))
+check("page states cryptography-math results", all(t in c0b for t in ["= 2, with 240", "2753", "3233", "2790", "= 65", "6 modular multiplications", "10001", "publishes 8", "Bob publishes 19", "0.5073", "0.9901", f"differ in {dd0} of 256"]))
+for nm, h in (("ch0", c0), ("ch0b", c0b)):
+    check(f"{nm} says it is not from a UoPeople course", "not</b> drawn from a UoPeople course page" in h or "not</b> part of any UoPeople course" in h)
+    check(f"{nm} has the study-aid box and a computed tag and an open box", "does not contain answers to graded assignments" in h and 'class="tag">computed' in h and 'class="box open"' in h)
+check("ch0b says toy numbers are not secure and gives no attack procedure", "not secure" in c0b and "no attack procedures" in c0b)
+check("ch11 points to chapter 0b and says the units contain no cryptography", "contain no cryptography" in c11 and "b27-ch00b" not in c11 and "chapter 0b" in c11)
+check("index lists Part 0 with both chapters and says they sit before every path", "b27-ch00-math-for-msit.html" in idx and "b27-ch00b-cryptography-math.html" in idx and "before every path" in idx)
 
 # ---- paths through the book
 paths = {m.group(1): [int(x) for x in re.findall(r"<li>(\d+)</li>", m.group(2))]

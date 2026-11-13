@@ -306,3 +306,51 @@ def risk_score(likelihood, impact): return likelihood * impact
 CAP_WEIGHTS = dict(discussion=15, portfolio=34, identity=6, report=20, presentation=25)
 CFG_EDGES = [(1,2),(2,3),(2,7),(3,4),(3,5),(4,6),(5,6),(6,2),(7,8)]
 CFG_NODES = 8
+
+# ---------------- Chapter 0 / 0b: pre-MSIT math and cryptography math ----------------
+from math import comb, factorial, gcd
+def implies_table():
+    return [(p, q, (not p) or q) for p in (True, False) for q in (True, False)]
+def bayes(prev, sens, fpr):
+    tp = prev * sens; fp = (1 - prev) * fpr
+    return tp / (tp + fp)
+def matmul(A, B): return [[sum(a * b for a, b in zip(r, c)) for c in zip(*B)] for r in A]
+def det2(M): return M[0][0] * M[1][1] - M[0][1] * M[1][0]
+def mse_grad_w(w, b, x, y):
+    return sum(2 * ((w * a + b) - t) * a for a, t in zip(x, y)) / len(x)
+def numeric_grad_w(w, b, x, y, h=1e-6):
+    f = lambda ww: sum(((ww * a + b) - t) ** 2 for a, t in zip(x, y)) / len(x)
+    return (f(w + h) - f(w - h)) / (2 * h)
+def handshake_ok(deg): return sum(deg) % 2 == 0 and sum(deg) // 2
+def ext_gcd(a, b):
+    if b == 0: return a, 1, 0
+    g, x, y = ext_gcd(b, a % b); return g, y, x - (a // b) * y
+def mod_inv(a, m):
+    g, x, _ = ext_gcd(a, m)
+    return x % m if g == 1 else None
+def phi(n): return sum(1 for k in range(1, n + 1) if gcd(k, n) == 1)
+def modexp_steps(base, exp, mod):
+    r, b, mults = 1, base % mod, 0
+    while exp:
+        if exp & 1: r = r * b % mod; mults += 1
+        exp >>= 1
+        if exp: b = b * b % mod; mults += 1
+    return r, mults
+RSA = dict(p=61, q=53, e=17, m=65)
+def rsa_toy():
+    p, q, e, m = RSA["p"], RSA["q"], RSA["e"], RSA["m"]
+    n = p * q; lam = (p - 1) * (q - 1); d = mod_inv(e, lam)
+    cph = pow(m, e, n); back = pow(cph, d, n)
+    return n, lam, d, cph, back
+DH = dict(p=23, g=5, a=6, b=15)
+def dh_toy():
+    p, g, a, b = DH["p"], DH["g"], DH["a"], DH["b"]
+    A, B = pow(g, a, p), pow(g, b, p)
+    return A, B, pow(B, a, p), pow(A, b, p)
+def birthday(n, days=365):
+    p = 1.0
+    for i in range(n): p *= (days - i) / days
+    return 1 - p
+def xor_demo():
+    m = 0b01001000; k = 0b10110101; c = m ^ k
+    return m, k, c, c ^ k
