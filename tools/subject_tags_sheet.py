@@ -11,6 +11,9 @@ REMOVED, so a labeller can choose from the vocabulary without seeing the editor'
 
     python3 tools/subject_tags_sheet.py > subject-tags-blind.tsv
 
+Note: the draw is from the pool of rows as it stood on 2026-11-13 BEFORE 187 rows were added the same day (docs/subjects.tsv);
+re-running now draws a different 60. docs/subject-tags-gold.tsv and docs/blind/subject-tags-blind.tsv are the frozen sample.
+
 Columns: id, page, title, description, opening, label (empty, for the labeller). The vocabulary is the VOCAB set of subject_tags.py
 (listed at the top of the sheet). Standard library only.
 """
