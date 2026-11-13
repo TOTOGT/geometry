@@ -81,11 +81,14 @@ print("[5] with the sister repositories")
 import os
 R = [os.path.expanduser(x) for x in ("~/Desktop/AXLE", "~/Desktop/GTCT")]
 if all(os.path.isdir(r) for r in R):
-    o2 = subprocess.run([sys.executable, str(ROOT / "tools/lean_addresses.py"), str(ROOT), "--roots", *R], capture_output=True, text=True).stdout
+    o2 = subprocess.run([sys.executable, str(ROOT / "tools/lean_addresses.py"), str(SNAP), "--legacy-names", "--roots", *R], capture_output=True, text=True).stdout
     m = re.search(r"(\d+) names resolve nowhere", o2)
-    check("49 names resolve nowhere across all three roots", m and m.group(1) == "49", m and m.group(1))
+    check("49 names resolve nowhere across all three roots (pinned snapshot, as the page counts)", m and m.group(1) == "49", m and m.group(1))
     c = re.search(r"(\d+) citations in all", o2)
     print(f"     citations in all (incl. case-only and upstream): {c and c.group(1)}")
+    live = subprocess.run([sys.executable, str(ROOT / "tools/lean_addresses.py"), str(ROOT), "--roots", *R], capture_output=True, text=True).stdout
+    m3 = re.search(r"(\d+) names resolve nowhere", live)
+    print(f"     for information, the live tree now: {m3 and m3.group(1)} names resolve nowhere (corpus has grown since {PIN}; not a check)")
 else:
     print("     AXLE/GTCT not present here; the page's 49 is the Mac run of 2026-09-27 (e6c5e85)")
 print("[HONESTY]")

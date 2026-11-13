@@ -167,6 +167,20 @@ print("     " + _r4.stdout.strip().split("\n")[0])
 check("subject agreement script ran, 60 pages, none stale", _r4.returncode == 0 and "60 pages (0 stale)" in _r4.stdout, _r4.stderr[-200:])
 check("exact 40 of 60 (0.67), same field 46 of 60 (0.77)", "exact agreement 40/60 = 0.67; same field 46/60 = 0.77" in _r4.stdout)
 
+print("[8] second blind pass (fresh Claude agents) against the first labels")
+_gb = str(Path(__file__).resolve().parents[1] / "tools" / "gold_blind.py")
+_bd = Path(__file__).resolve().parents[1] / "docs" / "blind"
+def _agree(n):
+    r = subprocess.run([sys.executable, _gb, "agree", n, str(_bd / f"returned-{n}-fresh-claude.tsv")], capture_output=True, text=True)
+    return re.sub(r"[ ]+", " ", r.stdout)
+for n, want in [("key-register", ["exact agreement 85/94 = 0.90; Cohen kappa 0.44", "85/86 = 0.99, kappa 0.88"]),
+                ("lean-addresses", ["exact agreement 149/150 = 0.99"]),
+                ("crossref", ["exact agreement 186/220 = 0.85; Cohen kappa 0.72", "180/189 = 0.95, kappa 0.90", "rows both mark Y: 66; same target set on 66"]),
+                ("subject-tags", ["exact agreement 48/60 = 0.80; Cohen kappa 0.78", "same field (text before the dot): 51/60 = 0.85"])]:
+    o = _agree(n)
+    print("     " + o.splitlines()[0] if o else "     (no output)")
+    check(f"{n}: second pass agreement as the page states", all(w in o for w in want))
+
 print("[HONESTY]")
 print("  The tags are an editor's decisions, not ground truth about the pages; 'accuracy' here means")
 print("  agreement with those decisions. Fields with fewer than 10 pages are left out. Tokens are")
