@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSIT 5212 · Operating Systems · Book XXVII</title>
+<meta name="description" content="Study chapter for UoPeople MSIT 5212 Operating Systems with computed scheduling, page-replacement and banker's-algorithm examples.">
+<style>
+:root{--bg:#07090f;--panel:#0d111b;--ink:#e8ebf2;--dim:#8a93a8;--rule:#1c2233;--gold:#d9b76a;--teal:#58c7d1;--red:#e08a7a;--serif:Georgia,'Times New Roman',serif;--mono:ui-monospace,Menlo,Consolas,'Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.65}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding:.7rem 1.2rem;border-bottom:1px solid var(--rule);font:13px var(--mono);color:var(--dim)}
+header{max-width:46rem;margin:0 auto;padding:3rem 1.2rem 1rem}
+.kick{font:12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:400;font-size:clamp(2rem,5.5vw,3rem);line-height:1.12;margin:.6rem 0 1rem}
+h1 em{color:var(--gold);font-style:italic}
+.lede{color:#cdd3e2;font-size:1.05rem}
+.wrap{max-width:46rem;margin:0 auto;padding:1rem 1.2rem 4rem}
+h2{font:600 13px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:2.6rem 0 .8rem}
+h3{font-weight:600;font-size:1.05rem;margin:1.4rem 0 .4rem;color:#f0e6c8}
+p{margin:0 0 1rem}
+ul{margin:0 0 1rem 1.2rem}li{margin:.25rem 0}
+.box{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:1rem 1.2rem;margin:1.4rem 0}
+.box.open{border-left-color:var(--red)}
+.box .lab{display:block;font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+.box.open .lab{color:var(--red)}
+.box p:last-child{margin-bottom:0}
+code{font:14px var(--mono);color:#cdd3e2}
+.tag{font:11px var(--mono);color:var(--dim);border:1px solid var(--rule);border-radius:3px;padding:.05rem .4rem;margin-left:.3rem;white-space:nowrap}
+.tw{overflow-x:auto;margin:1.2rem 0}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:34rem}
+th,td{border-bottom:1px solid var(--rule);padding:.45rem .6rem;text-align:left;vertical-align:top}
+th{font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.q{border-top:1px dashed var(--rule);margin-top:1rem;padding-top:.6rem;color:#cdd3e2;font-size:17px}
+.q b{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.path{list-style:none;margin:0;display:flex;flex-wrap:wrap;gap:.3rem}.path li{font:600 13px var(--mono);border:1px solid var(--rule);border-radius:3px;padding:.1rem .45rem;margin:0}.path li:nth-child(n){color:var(--gold)}
+.nav{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:3rem;font:14px var(--mono)}
+footer{max-width:46rem;margin:0 auto;padding:0 1.2rem 3rem;font:12px var(--mono);color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="top"><span><a href="../index.html">&#9884; Principia Orthogona</a> &middot; <a href="index.html">Book XXVII</a></span><span>Chapter 5</span></div>
+<header>
+  <div class="kick">Book XXVII &middot; Core &middot; MSIT 5212 &middot; draft 2026-11-12</div>
+  <h1><em>Operating Systems</em></h1>
+  <p class="lede">Processes, scheduling, devices, deadlock, files, virtual memory and modern environments, with every number computed rather than typed.</p>
+</header>
+<div class="wrap">
+<div class="box"><span class="lab">How to use this chapter</span>
+<p>This is a study aid in my own words. It maps the course's official unit list, explains the standard theories behind each unit, and ends each unit with a self-check question. It does not contain answers to graded assignments, and it is not a substitute for the course's own readings: UoPeople's course pages do not name a textbook, and I have not read the syllabus PDF or the Learning Guides. Write your own work in your own words.</p></div><div class="box"><span class="lab">Official unit list <span class="tag">sourced</span></span>
+<p>From UoPeople's course page for MSIT 5212 (read 2026-11-12): 3 credits, 8 weeks, no prerequisites, final exam in week 9. Units in order: Introduction to Operating Systems; Understanding System Structures; Fundamental Principles of Operating Systems; Device Interaction and Management; Resource Allocation Strategies; Operating System Services; Enhancing System Efficiency; Modern Computing Environments. Outcomes: understand core OS ideas (hardware abstraction, concurrency, scalability, durable storage, resource sharing); apply them to program execution and device communication; analyze the OS as the link between people and hardware; evaluate ways to improve performance, inter-process communication and security.</p>
+<p>I have <b>not read</b> the MSIT 5212 syllabus or textbook, so the content below follows standard operating-systems teaching, not the course's assigned book.</p></div><div class="box open"><span class="lab">Open <span class="tag">to confirm</span></span>
+<p>Textbook, grading weights and exact assignment placement for 5212 are unconfirmed. Read the term syllabus before relying on this chapter's emphasis. Also confirm whether your term uses the same unit titles.</p></div><h2>Unit 1 &middot; Introduction to Operating Systems</h2>
+<p>An operating system (OS) is the software layer between applications and hardware. It does four jobs: it <b>abstracts</b> hardware (files instead of disk blocks), <b>multiplexes</b> scarce resources among programs, <b>protects</b> programs from each other, and provides services through <b>system calls</b>. Hardware support makes this possible: a timer interrupt lets the OS regain the CPU, and <b>dual-mode operation</b> (user mode and kernel mode) stops ordinary programs from executing privileged instructions.</p>
+<p>The classic evolution runs from batch systems to multiprogramming and time-sharing to today's multicore, mobile and cloud systems. Keep the distinction between <i>mechanism</i> (how something is done, such as a context switch) and <i>policy</i> (what should be done, such as which process runs next).</p>
+<div class="q"><b>Self-check</b> Why must the instruction that disables interrupts be privileged? Describe what an ordinary program could do if it were not.</div>
+<h2>Unit 2 &middot; Understanding System Structures</h2>
+<p>System calls are the OS's public interface; they fall into process control, file management, device management, information maintenance and communication. A call traps into the kernel, which checks arguments, does the work and returns. Structures differ in where the code lives: a <b>monolithic</b> kernel runs most services in kernel mode (fast, large trusted base), a <b>microkernel</b> keeps only the essentials in the kernel and runs the rest as user-level servers (smaller trusted base, more message passing), and <b>layered</b> and <b>modular</b> designs sit between. Virtual machines apply the same idea one level down by presenting each guest a virtual copy of the hardware.</p>
+<div class="q"><b>Self-check</b> Name one advantage and one cost of a microkernel compared with a monolithic kernel, and say what in the design causes each.</div>
+<h2>Unit 3 &middot; Fundamental Principles of Operating Systems</h2>
+<p>A <b>process</b> is a program in execution: code, data, stack, heap and a record of its state in the <b>process control block</b>. States are new, ready, running, waiting and terminated. A <b>thread</b> is a unit of execution inside a process; threads share the address space but have their own stack and registers. A <b>context switch</b> saves one process's state and loads another's; it is pure overhead.</p>
+<p><b>CPU scheduling</b> decides which ready process runs. Common metrics are waiting time (time spent ready), turnaround time (finish minus arrival) and response time. <b>Worked example</b> <span class="tag">computed</span>. Processes (arrival, burst): P1 (0, 5), P2 (1, 3), P3 (2, 8), P4 (3, 6). Non-preemptive first-come-first-served gives average waiting time 5.75 and average turnaround 11.25. Shortest-job-first (non-preemptive) gives 5.25 and 10.75. Round robin with quantum 4 gives 9.25 and 14.75. Shortest-job-first minimizes average waiting among non-preemptive orders but can starve long jobs and needs burst estimates; round robin is fairer for response time and pays more in context switches.</p>
+<div class="q"><b>Self-check</b> Rework the example by hand for first-come-first-served and confirm the two averages. Then say which process waits longest under SJF and why.</div>
+<h2>Unit 4 &middot; Device Interaction and Management</h2>
+<p>Devices connect through controllers and are driven by <b>device drivers</b>. The CPU can poll a device, take an interrupt, or hand bulk transfers to a <b>DMA</b> controller that moves data to memory without per-byte CPU work. The kernel's I/O subsystem adds buffering, caching, spooling and error handling, and presents uniform interfaces to block and character devices.</p>
+<p>For disks, seek time dominates, so scheduling orders requests to cut head movement: first-come-first-served, shortest-seek-time-first, SCAN (elevator) and its variants. Solid-state drives have no head, so those policies matter less, but wear and write amplification matter instead.</p>
+<div class="q"><b>Self-check</b> A disk head is at cylinder 53 with requests at 98, 183, 37, 122, 14, 124, 65, 67. Without computing everything, say why SSTF might starve some request.</div>
+<h2>Unit 5 &middot; Resource Allocation Strategies</h2>
+<p>When concurrent processes share data, a <b>race condition</b> makes the result depend on timing. A <b>critical section</b> needs mutual exclusion, progress and bounded waiting. Tools are locks, semaphores and monitors; the classics are producer-consumer, readers-writers and dining philosophers.</p>
+<p><b>Deadlock</b> needs four conditions at once: mutual exclusion, hold-and-wait, no preemption and circular wait. Remove any one to prevent it. The <b>banker's algorithm</b> avoids deadlock by granting a request only if the system stays in a <i>safe state</i>, meaning some order exists in which every process can finish. <b>Worked example</b> <span class="tag">computed</span>. Three resource types, available (3, 3, 2), five processes P0-P4 with the allocation and maximum matrices of the standard textbook example (allocations P0 (0,1,0), P1 (2,0,0), P2 (3,0,2), P3 (2,1,1), P4 (0,0,2); maxima P0 (7,5,3), P1 (3,2,2), P2 (9,0,2), P3 (2,2,2), P4 (4,3,3)). Need = max minus allocation gives P0 (7,4,3), P1 (1,2,2), P2 (6,0,0), P3 (0,1,1), P4 (4,3,1). A safe sequence found by the scan is P1, P3, P4, P0, P2, so the state is safe. Safe is a promise that a way out exists, not that the system is idle; unsafe does not mean deadlocked, only that deadlock is possible.</p>
+<div class="q"><b>Self-check</b> Explain why the circular-wait condition is the one most often broken in practice, for example by ordering locks.</div>
+<h2>Unit 6 &middot; Operating System Services</h2>
+<p>The file system gives names and structure to persistent data: files, directories, metadata and access control. Allocation can be contiguous, linked or indexed (the Unix inode is an indexed scheme with direct and indirect pointers). Free space is tracked by bitmaps or lists. Journaling file systems write intent to a log first so a crash leaves the structure consistent, the same idea as write-ahead logging in databases.</p>
+<p>Protection and security answer different questions: protection controls which processes may access which resources (access-control lists, capabilities), security defends against threats from outside that model. Authentication, least privilege and auditing are the working habits. Networking services, naming and time are also OS services in distributed settings.</p>
+<div class="q"><b>Self-check</b> A file has permissions rw-r----- owned by user alice, group staff. State exactly who can read it and who can write it.</div>
+<h2>Unit 7 &middot; Enhancing System Efficiency</h2>
+<p>Memory management turns the programmer's contiguous addresses into scattered physical memory. With <b>paging</b>, a virtual address splits into a page number and an offset; the page table maps pages to frames; a <b>TLB</b> caches recent translations. <b>Worked example</b> <span class="tag">computed</span>. With 4096-byte pages, virtual address 20000 is page 4, offset 3616 (20000 = 4 x 4096 + 3616). If page 4 sits in frame 9, the physical address is 9 x 4096 + 3616 = 40480.</p>
+<p><b>Virtual memory</b> lets a process use more memory than is resident by faulting pages in on demand. When memory is full, a replacement policy picks a victim. <span class="tag">computed</span> For the reference string 7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1 with 3 frames, FIFO gives 15 faults, LRU 12 and the optimal policy 9; with 4 frames they give 10, 8 and 8. Optimal needs the future and so is a yardstick, not an algorithm you can run. <b>Belady's anomaly</b> <span class="tag">computed</span>: FIFO can fault <i>more</i> with more frames; on 1,2,3,4,1,2,5,1,2,3,4,5 it takes 9 faults with 3 frames and 10 with 4. LRU does not have this anomaly. Too little memory causes <b>thrashing</b>, where the system spends its time paging; the working-set idea limits it.</p>
+<div class="q"><b>Self-check</b> For the Belady string, list the frame contents after each reference for FIFO with 3 frames and check the fault count.</div>
+<h2>Unit 8 &middot; Modern Computing Environments</h2>
+<p>Today's systems are multicore, virtualized and distributed. Hypervisors share hardware among guest operating systems; containers share one kernel and isolate processes with namespaces and resource limits, which is lighter but a weaker boundary. Cloud platforms schedule thousands of such units. Mobile and embedded systems add energy limits and real-time deadlines, where a <b>real-time</b> OS guarantees bounded response rather than best average speed.</p>
+<p>Performance, inter-process communication (pipes, shared memory, message passing, sockets) and security remain the three levers the course's fourth outcome names. When comparing environments, state the workload, the isolation you need, and what you give up for it.</p>
+<div class="q"><b>Self-check</b> Pick a hospital monitoring device and a web server farm. Which needs a real-time OS, which needs containers, and why?</div>
+<h2>What this chapter is not</h2>
+<p>It is not a kernel-programming course; the scheduling, paging and banker's examples are small hand-checkable models, recomputed by <code>b27-verify.py</code>, and real systems add many refinements.</p>
+<div class="nav"><a href="b27-ch04-databases.html">&larr; Chapter 4 &middot; MSIT 5210</a><a href="b27-ch06-algorithms.html">Chapter 6 &middot; MSIT 5214 &rarr;</a></div>
+</div>
+<footer>Book XXVII &middot; Chapter 5 &middot; draft</footer>
+</body>
+</html>

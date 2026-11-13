@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSIT 5270 · Foundations of Cybersecurity · Book XXVII</title>
+<meta name="description" content="Study chapter for UoPeople MSIT 5270 Foundations of Cybersecurity with computed risk-scoring and hashing examples.">
+<style>
+:root{--bg:#07090f;--panel:#0d111b;--ink:#e8ebf2;--dim:#8a93a8;--rule:#1c2233;--gold:#d9b76a;--teal:#58c7d1;--red:#e08a7a;--serif:Georgia,'Times New Roman',serif;--mono:ui-monospace,Menlo,Consolas,'Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.65}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding:.7rem 1.2rem;border-bottom:1px solid var(--rule);font:13px var(--mono);color:var(--dim)}
+header{max-width:46rem;margin:0 auto;padding:3rem 1.2rem 1rem}
+.kick{font:12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:400;font-size:clamp(2rem,5.5vw,3rem);line-height:1.12;margin:.6rem 0 1rem}
+h1 em{color:var(--gold);font-style:italic}
+.lede{color:#cdd3e2;font-size:1.05rem}
+.wrap{max-width:46rem;margin:0 auto;padding:1rem 1.2rem 4rem}
+h2{font:600 13px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:2.6rem 0 .8rem}
+h3{font-weight:600;font-size:1.05rem;margin:1.4rem 0 .4rem;color:#f0e6c8}
+p{margin:0 0 1rem}
+ul{margin:0 0 1rem 1.2rem}li{margin:.25rem 0}
+.box{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:1rem 1.2rem;margin:1.4rem 0}
+.box.open{border-left-color:var(--red)}
+.box .lab{display:block;font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+.box.open .lab{color:var(--red)}
+.box p:last-child{margin-bottom:0}
+code{font:14px var(--mono);color:#cdd3e2}
+.tag{font:11px var(--mono);color:var(--dim);border:1px solid var(--rule);border-radius:3px;padding:.05rem .4rem;margin-left:.3rem;white-space:nowrap}
+.tw{overflow-x:auto;margin:1.2rem 0}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:34rem}
+th,td{border-bottom:1px solid var(--rule);padding:.45rem .6rem;text-align:left;vertical-align:top}
+th{font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.q{border-top:1px dashed var(--rule);margin-top:1rem;padding-top:.6rem;color:#cdd3e2;font-size:17px}
+.q b{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.path{list-style:none;margin:0;display:flex;flex-wrap:wrap;gap:.3rem}.path li{font:600 13px var(--mono);border:1px solid var(--rule);border-radius:3px;padding:.1rem .45rem;margin:0}.path li:nth-child(n){color:var(--gold)}
+.nav{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:3rem;font:14px var(--mono)}
+footer{max-width:46rem;margin:0 auto;padding:0 1.2rem 3rem;font:12px var(--mono);color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="top"><span><a href="../index.html">&#9884; Principia Orthogona</a> &middot; <a href="index.html">Book XXVII</a></span><span>Chapter 11</span></div>
+<header>
+  <div class="kick">Book XXVII &middot; Core &middot; MSIT 5270 &middot; draft 2026-11-12</div>
+  <h1><em>Foundations of Cybersecurity</em></h1>
+  <p class="lede">Threats and the CIA triad, authorized testing, lab setup, web and mobile security, anonymity networks, forensics, and responsible reporting.</p>
+</header>
+<div class="wrap">
+<div class="box"><span class="lab">How to use this chapter</span>
+<p>This is a study aid in my own words. It maps the course's official unit list, explains the standard theories behind each unit, and ends each unit with a self-check question. It does not contain answers to graded assignments, and it is not a substitute for the course's own readings: UoPeople's course pages do not name a textbook, and I have not read the syllabus PDF or the Learning Guides. Write your own work in your own words.</p></div><div class="box"><span class="lab">Official unit list <span class="tag">sourced</span></span>
+<p>From UoPeople's course page for MSIT 5270 (read 2026-11-12): 3 credits, 8 weeks, no prerequisites. Units in order: Introduction to Cyber Security; Ethical Hacking &amp; Cyber Security methodologies; Cyber Security Methodologies and setting up Lab for Cyber Security; Website Pentesting &amp; Security; Mobile Pentesting &amp; Wireless Security; Dark web and Deep Web; Cyber Forensics; Bug Bounty Platforms &amp; Reporting. Outcomes include analyzing threats, laws and categories of hacking; using social-engineering tools, VirtualBox and Kali; building an OSINT framework and writing a bug report; evaluating Wireshark for penetration testing; investigating the Darknet; studying forensics; and using Burp Suite and OWASP guidelines.</p>
+<p>I have <b>not read</b> the syllabus or textbook (none found this session).</p></div><div class="box open"><span class="lab">Open <span class="tag">to confirm</span></span>
+<p>Grading weights and textbook for 5270 are unconfirmed; the English page title uses &ldquo;Unit 2 &ndash; Ethical Hacking &amp; Cyber Security methodologies&rdquo; and &ldquo;Unit 3 &ndash; Cyber Security Methodologies and setting up Lab&rdquo;, which overlap, so check the term guide for how topics are divided. This chapter stays at the level of concepts and defences and gives no working attack steps; do any hands-on work only in your own isolated lab or with written authorization.</p></div><h2>Unit 1 &middot; Introduction to Cyber Security</h2>
+<p>Security protects <b>confidentiality</b>, <b>integrity</b> and <b>availability</b> (the CIA triad). A <b>threat</b> is something that could cause harm, a <b>vulnerability</b> a weakness, and <b>risk</b> the combination of likelihood and impact. <span class="tag">computed</span> A simple qualitative score multiplies likelihood (1-5) by impact (1-5); a likelihood of 4 and impact of 5 scores 20 out of 25, a priority over a 2 by 3 risk scoring 6. Attackers range from opportunists to organized groups; categories of attack include malware, phishing, denial of service, and exploitation of software flaws. Defence is layered: no single control is relied on. Cyber law covers computer misuse, data protection and breach notification, and differs by country.</p>
+<div class="q"><b>Self-check</b> Classify a stolen laptop with unencrypted student records under the CIA triad and name one control for each affected property.</div>
+<h2>Unit 2 &middot; Ethical Hacking & Cyber Security methodologies</h2>
+<p>Ethical hacking is security testing done with <b>written authorization</b> and a defined scope. The same technique without permission is a crime in most countries. Testers follow a methodology: planning and scoping, reconnaissance, scanning and enumeration, exploitation, post-exploitation and reporting. Hackers are described as white hat (authorized), black hat (malicious) and grey hat (unauthorized but without malicious aim, still unlawful). Social engineering exploits people, not software, and training and verification procedures are the main defence.</p>
+<p>Only test systems you own or have explicit written permission to test. Practising on deliberately vulnerable lab machines you set up yourself is the safe way to learn.</p>
+<div class="q"><b>Self-check</b> List what a written authorization to test should state, and explain why scope matters.</div>
+<h2>Unit 3 &middot; Cyber Security Methodologies and setting up Lab for Cyber Security</h2>
+<p>A home lab isolates practice from real networks. Virtualization software runs several virtual machines on one computer: an attacker machine (the course uses Kali Linux), and deliberately vulnerable targets, connected over an isolated host-only or internal network so nothing reaches the internet or your real devices. Take snapshots before experiments so you can roll back. Frameworks that structure work include the NIST Cybersecurity Framework (identify, protect, detect, respond, recover), OWASP guidance for web security, and the MITRE ATT&amp;CK catalogue of adversary techniques.</p>
+<div class="q"><b>Self-check</b> Why must a vulnerable practice VM be on an isolated network, and what setting would break that isolation?</div>
+<h2>Unit 4 &middot; Website Pentesting & Security</h2>
+<p>Web applications are tested against known weakness classes, catalogued in the OWASP Top 10: broken access control, cryptographic failures, injection, insecure design, security misconfiguration, vulnerable components, authentication failures, integrity failures, logging failures and server-side request forgery. <b>Injection</b> arises when user input is mixed into a command or query; the defence is parameterized queries and input validation. <b>Cross-site scripting</b> runs attacker script in a victim's browser; the defence is output encoding and content security policy. An intercepting proxy such as Burp Suite lets an authorized tester inspect and modify traffic.</p>
+<p>The defensive habits are what matter for study: validate on the server, encode on output, enforce authorization on every request, keep components patched and log security events.</p>
+<div class="q"><b>Self-check</b> Explain in two sentences why client-side validation alone does not stop injection.</div>
+<h2>Unit 5 &middot; Mobile Pentesting & Wireless Security</h2>
+<p>Mobile apps are tested for insecure data storage, weak transport security, poor authentication, excessive permissions and exposed components; platforms differ in sandboxing and permission models. Wireless networks are protected by WPA2 and WPA3; open or weakly protected networks expose traffic to eavesdropping, and rogue access points imitate legitimate ones. Defences are strong passphrases or enterprise authentication, current protocols, VPNs on untrusted networks, and device updates. Testing a network you do not own is unlawful without permission.</p>
+<div class="q"><b>Self-check</b> Why is a public Wi-Fi network without encryption a confidentiality risk even if the website you visit uses HTTPS?</div>
+<h2>Unit 6 &middot; Dark web and Deep Web</h2>
+<p>The <b>deep web</b> is content not indexed by search engines, such as banking portals, email and paywalled pages, and is mostly mundane. The <b>dark web</b> is a small part reachable through anonymizing overlay networks such as Tor, which route traffic through several relays to hide who is communicating. Anonymity serves journalists, dissidents and privacy-seeking users, and also illegal markets. Investigators study it with legal authority and careful safety. For study, learn how onion routing layers encryption and why anonymity is a property of the network design, not a guarantee of safety.</p>
+<div class="q"><b>Self-check</b> In one paragraph, give a legitimate use of anonymizing networks and one reason law enforcement still succeeds despite them.</div>
+<h2>Unit 7 &middot; Cyber Forensics</h2>
+<p>Digital forensics collects and analyzes evidence so that it can be used in a legal or disciplinary process. The key rules are to preserve the original, work on a <b>forensic image</b> (a bit-for-bit copy), use a <b>write blocker</b>, and keep a <b>chain of custody</b> recording who held the evidence and when. <b>Hashes</b> prove integrity: a cryptographic hash of the image taken at acquisition and again later must match. <span class="tag">computed</span> SHA-256 of the three characters <code>abc</code> is <code>ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad</code>, and the hashes of <code>password1</code> and <code>password2</code>, which differ in one character, differ in 124 of 256 bits, so a small change yields an unrelated-looking hash (the avalanche effect). Anti-forensics tries to hide or destroy evidence, through encryption, wiping or timestamp changes.</p>
+<div class="q"><b>Self-check</b> A forensic image's hash differs from the one recorded at acquisition. What does that tell you, and what is your next step?</div>
+<h2>Unit 8 &middot; Bug Bounty Platforms & Reporting</h2>
+<p>Bug bounty programs let organizations invite researchers to find vulnerabilities under published rules. Follow the program's scope, never access more data than needed to prove an issue, and report privately through the platform so the organization can fix it before details are public (<b>coordinated disclosure</b>). A good report has a clear title, the affected asset, steps to reproduce, observed versus expected behavior, impact, a severity estimate (often CVSS) and a suggested fix. Open-source intelligence (OSINT) gathers information from public sources and should also respect law and privacy.</p>
+<p>The outcomes include writing a bug report. Structure matters more than length; a developer should be able to reproduce the issue from your report alone.</p>
+<div class="q"><b>Self-check</b> Draft the title and the reproduction-steps list for a hypothetical stored-XSS in a comment field, without any working payload.</div>
+<h2>What this chapter is not</h2>
+<p>It is not a penetration-testing manual. The risk score and hash figures are recomputed by <code>b27-verify.py</code>.</p>
+<div class="nav"><a href="b27-ch10-hci.html">&larr; Chapter 10 &middot; MSIT 5260</a><a href="b27-ch12-capstone.html">Chapter 12 &middot; MSIT 5910 &rarr;</a></div>
+</div>
+<footer>Book XXVII &middot; Chapter 11 &middot; draft</footer>
+</body>
+</html>

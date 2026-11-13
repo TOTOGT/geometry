@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSIT 5210 · Databases · Book XXVII</title>
+<meta name="description" content="Study chapter for UoPeople MSIT 5210 Databases with computed normalization, SQL and serializability examples.">
+<style>
+:root{--bg:#07090f;--panel:#0d111b;--ink:#e8ebf2;--dim:#8a93a8;--rule:#1c2233;--gold:#d9b76a;--teal:#58c7d1;--red:#e08a7a;--serif:Georgia,'Times New Roman',serif;--mono:ui-monospace,Menlo,Consolas,'Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.65}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding:.7rem 1.2rem;border-bottom:1px solid var(--rule);font:13px var(--mono);color:var(--dim)}
+header{max-width:46rem;margin:0 auto;padding:3rem 1.2rem 1rem}
+.kick{font:12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:400;font-size:clamp(2rem,5.5vw,3rem);line-height:1.12;margin:.6rem 0 1rem}
+h1 em{color:var(--gold);font-style:italic}
+.lede{color:#cdd3e2;font-size:1.05rem}
+.wrap{max-width:46rem;margin:0 auto;padding:1rem 1.2rem 4rem}
+h2{font:600 13px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:2.6rem 0 .8rem}
+h3{font-weight:600;font-size:1.05rem;margin:1.4rem 0 .4rem;color:#f0e6c8}
+p{margin:0 0 1rem}
+ul{margin:0 0 1rem 1.2rem}li{margin:.25rem 0}
+.box{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:1rem 1.2rem;margin:1.4rem 0}
+.box.open{border-left-color:var(--red)}
+.box .lab{display:block;font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+.box.open .lab{color:var(--red)}
+.box p:last-child{margin-bottom:0}
+code{font:14px var(--mono);color:#cdd3e2}
+.tag{font:11px var(--mono);color:var(--dim);border:1px solid var(--rule);border-radius:3px;padding:.05rem .4rem;margin-left:.3rem;white-space:nowrap}
+.tw{overflow-x:auto;margin:1.2rem 0}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:34rem}
+th,td{border-bottom:1px solid var(--rule);padding:.45rem .6rem;text-align:left;vertical-align:top}
+th{font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.q{border-top:1px dashed var(--rule);margin-top:1rem;padding-top:.6rem;color:#cdd3e2;font-size:17px}
+.q b{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.path{list-style:none;margin:0;display:flex;flex-wrap:wrap;gap:.3rem}.path li{font:600 13px var(--mono);border:1px solid var(--rule);border-radius:3px;padding:.1rem .45rem;margin:0}.path li:nth-child(n){color:var(--gold)}
+.nav{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:3rem;font:14px var(--mono)}
+footer{max-width:46rem;margin:0 auto;padding:0 1.2rem 3rem;font:12px var(--mono);color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="top"><span><a href="../index.html">&#9884; Principia Orthogona</a> &middot; <a href="index.html">Book XXVII</a></span><span>Chapter 4</span></div>
+<header>
+  <div class="kick">Book XXVII &middot; Core &middot; MSIT 5210 &middot; draft 2026-11-12</div>
+  <h1><em>Databases</em></h1>
+  <p class="lede">From files to a DBMS: ER modelling, the relational model and normalization, SQL, administration, transactions, security and recovery, and emerging models. Three examples are computed, not typed.</p>
+</header>
+<div class="wrap">
+<div class="box"><span class="lab">How to use this chapter</span>
+<p>This is a study aid in my own words. It maps the course's official unit list, explains the standard theories behind each unit, and ends each unit with a self-check question. It does not contain answers to graded assignments, and it is not a substitute for the course's own readings: UoPeople's course pages do not name a textbook, and I have not read the syllabus PDF or the Learning Guides. Write your own work in your own words.</p></div><div class="box"><span class="lab">Official unit list and syllabus <span class="tag">sourced</span></span>
+<p>From UoPeople's course page for MSIT 5210 (read 2026-11-12): 3 credits, 8 weeks, no prerequisites, final exam in week 9. Units in order: Database Systems Fundamentals; Entity-Relationship Modelling; Relational Data Modelling; Structured Query Language; Database Administration; Transaction Management; Database Security, Backup and Recovery; Emerging Database Technologies. Learning outcomes: compare an RDBMS with file processing; design an ER model and a relational database with justifications; apply administration techniques with attention to ethics (transactions, security, backup and recovery); compare emerging database models.</p>
+<p>From the public syllabus PDF (2510 version): the textbook is Vidhya, Jeyaram and Ishwarya (2016), <i>Database Management Systems</i>, Alpha Science International, accessed through LIRN. Grading is Discussions 40% (units 1, 3, 4, 5, 6, 8) and Assignment Activities 60% (units 2, 3, 4, 5, 7). Late work is generally not accepted. I have not read the textbook, so unit contents below follow standard database teaching, not that book.</p></div><div class="box open"><span class="lab">Open <span class="tag">to confirm</span></span>
+<p>The course page misspells &ldquo;Structured Query Language&rdquo; in its own unit title; the syllabus has the right spelling. Check the current syllabus for dates and weights, which can change by term.</p></div><h2>Unit 1 &middot; Database Systems Fundamentals</h2>
+<p>Before databases, applications kept their own files. That <b>file-processing</b> approach duplicates data (redundancy), lets copies disagree (inconsistency), ties programs to file formats, and makes concurrent access and security hard. A <b>database management system</b> (DBMS) centralizes data and provides a data model, a query language, integrity rules, concurrency control, recovery, and access control. This is the first learning outcome of the course: compare an RDBMS with file processing and explain why the RDBMS is needed.</p>
+<p>The <b>three-schema architecture</b> separates the <i>external</i> views users see, the <i>conceptual</i> schema for the whole database, and the <i>internal</i> storage schema. It gives <b>data independence</b>: you can change storage without rewriting programs (physical independence) and change the conceptual schema without breaking every view (logical independence). Typical actors are database designers, application developers, end users and the database administrator (DBA).</p>
+<div class="q"><b>Self-check</b> Name three problems a spreadsheet-per-department approach causes that a shared DBMS solves, and say which of the three schema levels each fix lives at.</div>
+<h2>Unit 2 &middot; Entity-Relationship Modelling</h2>
+<p>The ER model describes a domain before choosing tables. An <b>entity</b> is a thing with an identity (Student, Course), an <b>attribute</b> is a property (name; a key attribute identifies the entity), and a <b>relationship</b> links entities (Student <i>enrols in</i> Course). Relationships carry <b>cardinality</b> (one-to-one, one-to-many, many-to-many) and participation (total or partial). A <b>weak entity</b> has no key of its own and depends on an owner entity (a Dependent identified by its Employee plus a name).</p>
+<p>Mapping ER to relations follows rules: an entity becomes a table with its key; a one-to-many relationship puts the key of the &ldquo;one&rdquo; side into the &ldquo;many&rdquo; side as a <b>foreign key</b>; a many-to-many relationship becomes its own table whose key combines both keys; multivalued attributes get their own table. Justify each modelling choice by the requirement it serves, because the course asks for justifications based on database principles.</p>
+<div class="q"><b>Self-check</b> A hospital stores doctors, patients and appointments. Sketch the entities and cardinalities, and say which relationship becomes its own table and why.</div>
+<h2>Unit 3 &middot; Relational Data Modelling</h2>
+<p>A <b>relation</b> is a set of tuples over named attributes. A <b>superkey</b> identifies a tuple; a <b>candidate key</b> is a minimal superkey; the <b>primary key</b> is the chosen one. Two integrity rules matter: <b>entity integrity</b> (a primary key is never null) and <b>referential integrity</b> (a foreign key is null or matches an existing key). <b>Relational algebra</b> gives the query core: select &sigma; (rows), project &pi; (columns), join &#8904;, union, difference, and rename.</p>
+<p><b>Normalization</b> removes redundancy using <b>functional dependencies</b> (FDs). X &rarr; Y means any two tuples that agree on X agree on Y. The closure X<sup>+</sup> is every attribute determined by X. First normal form requires atomic values; 2NF removes partial dependencies on part of a key; 3NF removes transitive dependencies; BCNF requires every determinant to be a superkey.</p>
+<p><b>Worked example</b> <span class="tag">computed</span>. Relation R(A, B, C, D, E) with FDs A &rarr; B, B &rarr; C, CD &rarr; E. Then A<sup>+</sup> = ABC and (AD)<sup>+</sup> = ABCDE. A and D never appear on a right-hand side, so every key must contain both, and AD already determines everything, so the only candidate key is AD. The FD A &rarr; B has a left side that is part of the key and a non-key right side, a <b>partial dependency</b>, so R is not in 2NF. Fixing it means splitting the relation so each non-key attribute depends on the whole key of its table.</p>
+<div class="q"><b>Self-check</b> Find the candidate keys of S(P, Q, R, T) with FDs P &rarr; Q and QR &rarr; T, then state the highest normal form S satisfies and why.</div>
+<h2>Unit 4 &middot; Structured Query Language</h2>
+<p>SQL has a data definition part (<code>CREATE TABLE</code>, constraints, <code>ALTER</code>), a data manipulation part (<code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>), and control statements for transactions and permissions. A query reads in this logical order: <code>FROM</code> (with joins), <code>WHERE</code>, <code>GROUP BY</code>, <code>HAVING</code>, <code>SELECT</code>, <code>ORDER BY</code>. Aggregates (<code>COUNT</code>, <code>AVG</code>, <code>SUM</code>) collapse groups; <code>WHERE</code> filters rows before grouping and <code>HAVING</code> filters groups after. Beware <b>NULL</b>: it is not equal to anything, comparisons with it are unknown, and <code>COUNT(col)</code> skips it.</p>
+<p><b>Worked example</b> <span class="tag">computed</span>. Tables <code>dept</code>(1 Sales, 2 Engineering, 3 Legal) and <code>emp</code>(Ana, Sales, 50000; Bo, Eng, 80000; Cy, Eng, 90000; Di, Sales, 60000; Ed, no department, 40000). Run in SQLite:</p>
+<pre><code>SELECT d.name, COUNT(e.id), AVG(e.salary)
+FROM dept d LEFT JOIN emp e ON e.dept_id = d.id GROUP BY d.id;</code></pre>
+<p>returns Sales, 2, 55000; Engineering, 2, 85000; Legal, 0, NULL. The left join keeps Legal even with no employees, so its count is 0 and its average is NULL. An inner join <code>emp JOIN dept</code> returns 4 rows, dropping Ed because his department is NULL. <code>HAVING AVG(e.salary) &gt; 70000</code> returns only Engineering.</p>
+<div class="q"><b>Self-check</b> Rewrite the query so Legal is dropped, then explain in one sentence why replacing HAVING with WHERE would be an error.</div>
+<h2>Unit 5 &middot; Database Administration</h2>
+<p>The DBA installs and configures the system, creates schemas and users, monitors performance, plans capacity, and keeps the database available. A central tool is the <b>index</b>, usually a B-tree, which trades extra storage and slower writes for faster lookups on the indexed columns. A query that filters or joins on an unindexed column forces a full scan; the query plan shows which choice the optimizer made. The <b>system catalog</b> stores metadata about tables, columns, indexes and users.</p>
+<p>The course ties administration to ethics: DBAs see sensitive data, so access should follow least privilege, changes should be logged, and personal data should be handled under the rules that apply to it. Good habits are documented schemas, tested changes in a staging environment, and routine monitoring rather than firefighting.</p>
+<div class="q"><b>Self-check</b> A report query slows down as a table grows from thousands to millions of rows. Name two checks you would make before adding an index, and one cost of adding it.</div>
+<h2>Unit 6 &middot; Transaction Management</h2>
+<p>A <b>transaction</b> is a unit of work that must satisfy ACID: <b>atomicity</b> (all or nothing), <b>consistency</b> (constraints hold before and after), <b>isolation</b> (concurrent transactions do not see each other's partial work) and <b>durability</b> (committed work survives failures). Without isolation come the classic anomalies: lost update, dirty read, non-repeatable read and phantom read. SQL's isolation levels (read uncommitted, read committed, repeatable read, serializable) trade protection against performance.</p>
+<p>A schedule is <b>conflict serializable</b> if it is equivalent to some serial order. Build a precedence graph: draw an edge T<sub>i</sub> &rarr; T<sub>j</sub> when an operation of T<sub>i</sub> precedes a conflicting operation of T<sub>j</sub> (same item, different transactions, at least one write). The schedule is serializable exactly when the graph has no cycle. <span class="tag">computed</span> For S1 = r1(X) w1(X) r2(X) w2(X) r1(Y) w1(Y) r2(Y) w2(Y), the edges are T1&rarr;T2, no cycle, so S1 is equivalent to T1 then T2. For S2 = r1(X) r2(X) w1(X) w2(X), the edges are T1&rarr;T2, T2&rarr;T1, a cycle, so S2 is not serializable. Two-phase locking (acquire locks, then only release) guarantees serializability but can deadlock, which the system detects or prevents.</p>
+<p><b>Atomicity demo</b> <span class="tag">computed</span>. A table with 5 rows had one row inserted inside a transaction (6 rows visible inside); after <code>ROLLBACK</code> it had 5 rows again.</p>
+<div class="q"><b>Self-check</b> Two transactions both read a balance of 100 and each subtracts 30, writing 70. Name the anomaly, and name one isolation mechanism that prevents it.</div>
+<h2>Unit 7 &middot; Database Security, Backup and Recovery</h2>
+<p>Security covers authentication (who are you), authorization (what may you do), and auditing. SQL uses <code>GRANT</code> and <code>REVOKE</code> on tables, columns and views; views can hide columns or rows. Common threats are weak credentials, over-privileged accounts, unencrypted data and <b>SQL injection</b>, where input text changes the meaning of a query. Defenses are parameterized queries, least privilege, input validation, encryption at rest and in transit, and patching.</p>
+<p>Recovery rests on the <b>log</b>. With write-ahead logging, changes are recorded in the log before data pages are written, so after a crash the system <b>redoes</b> committed work and <b>undoes</b> uncommitted work; <b>checkpoints</b> limit how far back it must look. Backups are full, incremental or differential, taken on a schedule and, importantly, restore-tested. Two numbers drive the plan: how much data loss is tolerable (recovery point objective) and how long recovery may take (recovery time objective).</p>
+<div class="q"><b>Self-check</b> A nightly full backup plus an hourly log backup is in place. What is the worst-case data loss, and what must be true for a point-in-time restore to work?</div>
+<h2>Unit 8 &middot; Emerging Database Technologies</h2>
+<p>Relational systems are not the only model. <b>NoSQL</b> families include key-value stores, document stores, wide-column stores and graph databases, each suited to a different access pattern. They often relax strict consistency to scale across machines. The <b>CAP</b> theorem says a distributed store facing a network partition must choose between consistency and availability, and many systems use <b>eventual consistency</b>. <b>NewSQL</b> tries to keep SQL and ACID at scale. Data warehouses and column stores serve analytics, and big-data platforms process data too large for one machine.</p>
+<p>The course asks you to compare models by design, implementation and query language. A useful comparison table has columns for data model, query style, consistency choice, typical workload and main risk, and one row for each of the relational, document, key-value and graph models.</p>
+<div class="q"><b>Self-check</b> Pick a social-network feature such as &ldquo;friends of friends&rdquo;. Which database model fits it best and which fits worst, and what query would each need?</div>
+<h2>What this chapter is not</h2>
+<p>It does not follow the course textbook, and the SQL runs on SQLite, which differs from commercial systems in details such as types and isolation levels. The computed examples are re-run by <code>b27-verify.py</code>.</p>
+<div class="nav"><a href="b27-ch03-managing-projects-programs.html">&larr; Chapter 3 &middot; BUS 5611</a><a href="b27-ch05-operating-systems.html">Chapter 5 &middot; MSIT 5212 &rarr;</a></div>
+</div>
+<footer>Book XXVII &middot; Chapter 4 &middot; draft</footer>
+</body>
+</html>

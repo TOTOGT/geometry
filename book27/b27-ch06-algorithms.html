@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSIT 5214 · Algorithms · Book XXVII</title>
+<meta name="description" content="Study chapter for UoPeople MSIT 5214 Algorithms with computed merge sort, hashing, Dijkstra and KMP examples.">
+<style>
+:root{--bg:#07090f;--panel:#0d111b;--ink:#e8ebf2;--dim:#8a93a8;--rule:#1c2233;--gold:#d9b76a;--teal:#58c7d1;--red:#e08a7a;--serif:Georgia,'Times New Roman',serif;--mono:ui-monospace,Menlo,Consolas,'Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.65}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding:.7rem 1.2rem;border-bottom:1px solid var(--rule);font:13px var(--mono);color:var(--dim)}
+header{max-width:46rem;margin:0 auto;padding:3rem 1.2rem 1rem}
+.kick{font:12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:400;font-size:clamp(2rem,5.5vw,3rem);line-height:1.12;margin:.6rem 0 1rem}
+h1 em{color:var(--gold);font-style:italic}
+.lede{color:#cdd3e2;font-size:1.05rem}
+.wrap{max-width:46rem;margin:0 auto;padding:1rem 1.2rem 4rem}
+h2{font:600 13px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:2.6rem 0 .8rem}
+h3{font-weight:600;font-size:1.05rem;margin:1.4rem 0 .4rem;color:#f0e6c8}
+p{margin:0 0 1rem}
+ul{margin:0 0 1rem 1.2rem}li{margin:.25rem 0}
+.box{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:1rem 1.2rem;margin:1.4rem 0}
+.box.open{border-left-color:var(--red)}
+.box .lab{display:block;font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+.box.open .lab{color:var(--red)}
+.box p:last-child{margin-bottom:0}
+code{font:14px var(--mono);color:#cdd3e2}
+.tag{font:11px var(--mono);color:var(--dim);border:1px solid var(--rule);border-radius:3px;padding:.05rem .4rem;margin-left:.3rem;white-space:nowrap}
+.tw{overflow-x:auto;margin:1.2rem 0}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:34rem}
+th,td{border-bottom:1px solid var(--rule);padding:.45rem .6rem;text-align:left;vertical-align:top}
+th{font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.q{border-top:1px dashed var(--rule);margin-top:1rem;padding-top:.6rem;color:#cdd3e2;font-size:17px}
+.q b{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.path{list-style:none;margin:0;display:flex;flex-wrap:wrap;gap:.3rem}.path li{font:600 13px var(--mono);border:1px solid var(--rule);border-radius:3px;padding:.1rem .45rem;margin:0}.path li:nth-child(n){color:var(--gold)}
+.nav{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:3rem;font:14px var(--mono)}
+footer{max-width:46rem;margin:0 auto;padding:0 1.2rem 3rem;font:12px var(--mono);color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="top"><span><a href="../index.html">&#9884; Principia Orthogona</a> &middot; <a href="index.html">Book XXVII</a></span><span>Chapter 6</span></div>
+<header>
+  <div class="kick">Book XXVII &middot; Core &middot; MSIT 5214 &middot; draft 2026-11-12</div>
+  <h1><em>Algorithms</em></h1>
+  <p class="lede">Correctness and growth rates, divide and conquer, sorting, data structures, hashing, graphs and string matching, with small computed examples.</p>
+</header>
+<div class="wrap">
+<div class="box"><span class="lab">How to use this chapter</span>
+<p>This is a study aid in my own words. It maps the course's official unit list, explains the standard theories behind each unit, and ends each unit with a self-check question. It does not contain answers to graded assignments, and it is not a substitute for the course's own readings: UoPeople's course pages do not name a textbook, and I have not read the syllabus PDF or the Learning Guides. Write your own work in your own words.</p></div><div class="box"><span class="lab">Official unit list and syllabus <span class="tag">sourced</span></span>
+<p>From UoPeople's course page for MSIT 5214 (read 2026-11-12): 3 credits, 8 weeks. Units as the page lists them: The Role of Algorithms in Computing; Growth of Functions and Asymptotic Analysis of Algorithms; Divide and Conquer; Analysis of Sorting Algorithms; Data Structures and Algorithms; Hash Tables and their Applications; Graphs and Algorithms; String Matching Algorithms. Outcomes: appraise correctness with inductive proofs and loop invariants; analyze running times asymptotically; evaluate the use of algorithms in the world; compare design paradigms and analysis methods; synthesize efficient algorithms in software design.</p>
+<p>From the public syllabus PDF (2510 version): textbooks are Advanced Data Structures and Algorithms (BPB, 2023), Java Basics Using ChatGPT/GPT-4 (Campesato, 2024) and Beginning Java Data Structures and Algorithms (Cutajar, 2018), all via LIRN. Grading: Discussions 40%, Assignment Activities 60%. I have not read these books.</p></div><div class="box open"><span class="lab">Open <span class="tag">to confirm</span></span>
+<p><b>The two official sources disagree on unit titles.</b> The syllabus lists Unit 1 as &ldquo;Fundamentals of Algorithms: Concepts, Analysis, and Applications&rdquo;, Unit 2 as Divide and Conquer, Unit 3 as &ldquo;Analysis of Searching and Sorting Algorithms&rdquo;, Units 4 and 5 as Data Structures I and II, and Units 6-8 as on the page. The page has asymptotic analysis as its own Unit 2. This chapter follows the page and covers the syllabus topics too. The syllabus's textbooks use Java; the examples here are language-neutral and computed in Python.</p></div><h2>Unit 1 &middot; The Role of Algorithms in Computing</h2>
+<p>An <b>algorithm</b> is a finite, precise procedure that maps inputs to outputs. Two questions govern it: is it <b>correct</b>, and how <b>expensive</b>? Correctness is shown by proof. A <b>loop invariant</b> is a statement true before the loop, kept true by each iteration, and which gives the result when the loop ends; you prove initialization, maintenance and termination. Induction proves recursive algorithms the same way: base case, then assume the claim for smaller inputs.</p>
+<p>Algorithms matter because hardware speedups do not rescue a poor growth rate; a better algorithm beats a faster machine as input grows.</p>
+<div class="q"><b>Self-check</b> State a loop invariant for finding the maximum of an array and prove its three parts in two sentences each.</div>
+<h2>Unit 2 &middot; Growth of Functions and Asymptotic Analysis of Algorithms</h2>
+<p>Running time is counted as a function of input size n and compared by growth. <b>Big-O</b> gives an upper bound (f = O(g) if f &le; c&middot;g for large n), <b>Omega</b> a lower bound and <b>Theta</b> a tight bound. The usual ladder, slow to fast growing, is 1, log n, n, n log n, n&sup2;, n&sup3;, 2<sup>n</sup>, n!. Constants and lower-order terms drop out: 3n&sup2; + 10n + 7 = &Theta;(n&sup2;).</p>
+<p>Recurrences describe recursive costs. The <b>master theorem</b> solves T(n) = aT(n/b) + f(n): compare f(n) with n<sup>log<sub>b</sub> a</sup>. If f is polynomially smaller, T = &Theta;(n<sup>log<sub>b</sub> a</sup>); if equal, &Theta;(n<sup>log<sub>b</sub> a</sup> log n); if larger (with a regularity condition), &Theta;(f). Merge sort has T(n) = 2T(n/2) + n, so &Theta;(n log n).</p>
+<div class="q"><b>Self-check</b> Solve T(n) = 4T(n/2) + n and T(n) = 2T(n/2) + n&sup2; with the master theorem, and say which case each is.</div>
+<h2>Unit 3 &middot; Divide and Conquer</h2>
+<p>Divide and conquer splits a problem into smaller instances of itself, solves them recursively and combines the answers. Merge sort, quicksort, binary search and Strassen's matrix multiplication are examples. The cost is the recurrence from Unit 2: work to divide and combine plus the cost of the subproblems.</p>
+<p><b>Worked example</b> <span class="tag">computed</span>. Merge sort on [38, 27, 43, 3, 9, 82, 10, 5] makes 17 comparisons while merging and returns [3, 5, 9, 10, 27, 38, 43, 82]. For n = 8 the worst case is n log&#8322; n - n + 1 = 17 comparisons, so this input hits the worst case. <b>Binary search</b> halves the range each step: searching the sorted array for 43 takes 3 probes and finds it at index 6; the worst case is floor(log&#8322; n) + 1 = 4 probes for n = 8.</p>
+<div class="q"><b>Self-check</b> Why does merge sort need extra memory but binary search does not? State the space cost of each.</div>
+<h2>Unit 4 &middot; Analysis of Sorting Algorithms</h2>
+<p>Insertion, selection and bubble sort are &Theta;(n&sup2;) in the worst case; insertion sort is &Theta;(n) on nearly sorted data. Merge sort and heapsort are &Theta;(n log n) in the worst case; quicksort is &Theta;(n log n) on average and &Theta;(n&sup2;) in the worst case, which a good pivot rule makes rare. Merge sort is <b>stable</b> (equal keys keep their order); quicksort and heapsort are not by default.</p>
+<p>Any sort that works only by comparing elements needs &Omega;(n log n) comparisons in the worst case: the decision tree has n! leaves and height at least log&#8322;(n!) = &Theta;(n log n). Counting sort and radix sort beat this by not comparing, at the price of assumptions about the keys.</p>
+<div class="q"><b>Self-check</b> You must sort a million records by date and then stably by customer. Which algorithm properties do you need, and in which order do you sort?</div>
+<h2>Unit 5 &middot; Data Structures and Algorithms</h2>
+<p>Choose a structure by the operations you need. Arrays give O(1) indexing but costly insertion in the middle; linked lists give O(1) insertion at a known node but O(n) search; stacks and queues restrict access to one end or two; <b>heaps</b> give O(log n) insert and extract-min and back priority queues; <b>balanced binary search trees</b> (AVL, red-black) give O(log n) search, insert and delete in sorted order. The Java textbooks the course uses implement these; the ideas are language-independent.</p>
+<p>Trees add traversals: in-order on a binary search tree visits keys in sorted order, and a tree of height h costs O(h), which is O(log n) only if the tree stays balanced. An unbalanced insert sequence can degrade a plain BST to a list.</p>
+<div class="q"><b>Self-check</b> Insert 10, 20, 30, 40, 50 in order into an empty plain BST and state the height; then say what a balanced tree would do differently.</div>
+<h2>Unit 6 &middot; Hash Tables and their Applications</h2>
+<p>A hash table maps keys to array slots with a hash function, giving O(1) expected lookup when the load factor stays bounded. Two keys landing in one slot is a <b>collision</b>, resolved by <b>chaining</b> (each slot holds a list) or <b>open addressing</b> (probe for another slot). A good function spreads keys evenly; with n keys and m slots the expected chain length is the load factor n/m.</p>
+<p><b>Worked example</b> <span class="tag">computed</span>. Insert keys 50, 700, 76, 85, 92, 73, 101 into 7 slots using h(k) = k mod 7 with chaining. The slots hold: slot 0: [700]; slot 1: [50, 85, 92]; slot 2: empty; slot 3: [73, 101]; slot 4: empty; slot 5: empty; slot 6: [76]. The load factor is 7/7 = 1, and the longest chain has 3 keys. Hash tables give no sorted order and have O(n) worst case if everything collides.</p>
+<div class="q"><b>Self-check</b> Rehash the same keys into 11 slots with k mod 11 and report the longest chain.</div>
+<h2>Unit 7 &middot; Graphs and Algorithms</h2>
+<p>A graph is vertices and edges, stored as an adjacency list (space O(V+E), good for sparse graphs) or a matrix (O(V&sup2;), O(1) edge test). <b>Breadth-first search</b> explores by distance in edges and finds shortest paths in unweighted graphs; <b>depth-first search</b> underlies topological sort, cycle detection and strongly connected components. With non-negative weights, <b>Dijkstra's algorithm</b> repeatedly settles the nearest unsettled vertex; with a binary heap it runs in O((V+E) log V). Bellman-Ford handles negative edges. Minimum spanning trees come from Kruskal or Prim.</p>
+<p><b>Worked example</b> <span class="tag">computed</span>. Edges S-A 7, S-B 2, B-A 3, B-C 8, B-D 5, A-C 1, D-C 2, C-T 4, D-T 9 (directed as written). Dijkstra from S gives distances S = 0, A = 5, B = 2, C = 6, D = 7, T = 10, and the shortest path to T is S &rarr; B &rarr; A &rarr; C &rarr; T with length 10. Note the direct edge S-A costs 7 but the route through B costs 5.</p>
+<div class="q"><b>Self-check</b> Why does Dijkstra fail when an edge has negative weight? Give a three-vertex counterexample.</div>
+<h2>Unit 8 &middot; String Matching Algorithms</h2>
+<p>The naive search tries every alignment, O(nm) for text length n and pattern length m. <b>Knuth-Morris-Pratt</b> precomputes a failure table: for each prefix of the pattern, the length of the longest proper prefix that is also a suffix. On a mismatch the pattern shifts using the table and the text pointer never moves back, giving O(n + m). Rabin-Karp compares rolling hashes, and Boyer-Moore skips ahead using the pattern's last characters.</p>
+<p><b>Worked example</b> <span class="tag">computed</span>. For the pattern ABABC the failure table is [0, 0, 1, 2, 0]. Searching the text ABABABCABABC, the pattern occurs at positions 2 and 7 (counting from 0).</p>
+<div class="q"><b>Self-check</b> Build the failure table for AABAAB by hand and explain what the last entry means.</div>
+<h2>What this chapter is not</h2>
+<p>It is not a proof-writing course for every algorithm, and the computed examples are small instances recomputed by <code>b27-verify.py</code>, not benchmarks.</p>
+<div class="nav"><a href="b27-ch05-operating-systems.html">&larr; Chapter 5 &middot; MSIT 5212</a><a href="b27-ch07-programming-languages.html">Chapter 7 &middot; MSIT 5216 &rarr;</a></div>
+</div>
+<footer>Book XXVII &middot; Chapter 6 &middot; draft</footer>
+</body>
+</html>
