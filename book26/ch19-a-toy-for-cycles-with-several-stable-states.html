@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Toy for Cycles With Several Stable States &middot; Book XXVI &middot; 2026 &mdash; Principia Orthogona</title>
+<meta name="description" content="Book XXVI, 2026. Chapter 19: a work sample, a small model of two coupled cycles with several stable states, a test for it with its failure conditions stated first, and a measured limit on what one national time series can show. No real data; no organization has seen it.">
+<!-- Template B: the design for chapters 10 to 19 of Book XXVI. Chapters 1 to 9 use template A. The template changes every ten chapters. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b2545; --navy2:#13315c; --gold:#c8962b; --goldsoft:#f6ead0;
+  --paper:#fbf9f4; --ink:#1d2433; --muted:#5a6275; --rule:#d9d3c3; --card:#ffffff;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --paper:#0d1424; --ink:#e8e6df; --muted:#a3a9b8; --rule:#2a3552; --card:#131c33; --goldsoft:#2a2414; --navy:#e8d9b0; --navy2:#c8962b; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:64px}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:"EB Garamond",Georgia,serif; font-size:19px; line-height:1.65;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px)}
+a{color:var(--navy2)}
+.wrap{max-width:780px; margin:0 auto; padding:0 22px}
+header.hero{background:#0b2545; color:#f4efe0; padding:56px 0 48px; border-bottom:4px solid var(--gold)}
+header.hero .kicker{font-family:Cinzel,serif; letter-spacing:.18em; font-size:13px; color:#e3b95a; text-transform:uppercase; margin:0 0 14px}
+header.hero h1{font-family:Cinzel,serif; font-weight:700; font-size:clamp(28px,5.2vw,44px); line-height:1.15; margin:0 0 14px}
+header.hero p.sub{margin:0; font-size:20px; color:#d8d2c0; max-width:640px}
+header.hero p.meta{margin:18px 0 0; font-size:15px; color:#aeb6c9; letter-spacing:.03em}
+nav.pillars{position:sticky; top:env(safe-area-inset-top,0px); z-index:10; background:var(--card); border-bottom:1px solid var(--rule)}
+nav.pillars .wrap{display:flex; gap:6px; overflow-x:auto; padding:10px 22px}
+nav.pillars a{flex:0 0 auto; text-decoration:none; font-family:Cinzel,serif; font-size:12.5px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--navy); padding:7px 12px; border:1px solid var(--rule); border-radius:999px}
+nav.pillars a:hover{border-color:var(--gold); background:var(--goldsoft)}
+main{padding:34px 0 20px}
+h2{font-family:Cinzel,serif; font-weight:700; color:var(--navy); font-size:clamp(22px,3.6vw,30px); line-height:1.2; margin:46px 0 6px}
+h2 .num{display:block; font-size:12.5px; letter-spacing:.2em; color:var(--gold); margin-bottom:6px}
+h3{font-family:Cinzel,serif; font-weight:500; font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:26px 0 6px}
+p{margin:0 0 14px}
+.lead{font-size:21px; color:var(--ink)}
+.tagline{font-style:italic; color:var(--muted); margin:0 0 18px}
+table{border-collapse:collapse; width:100%; font-size:16.5px; margin:10px 0 18px}
+th,td{padding:9px 10px; text-align:left; vertical-align:top; border-bottom:1px solid var(--rule)}
+th{font-family:Cinzel,serif; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:500}
+.tablewrap{overflow-x:auto}
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin:16px 0 20px}
+.stat{background:var(--card); border:1px solid var(--rule); border-top:3px solid var(--gold); border-radius:6px; padding:12px 14px}
+.stat b{display:block; font-family:Cinzel,serif; font-size:24px; color:var(--navy); line-height:1.15}
+.stat span{font-size:15px; color:var(--muted); line-height:1.35; display:block; margin-top:4px}
+ul{margin:0 0 16px; padding-left:22px}
+li{margin:0 0 9px}
+.counter{background:var(--goldsoft); border-left:4px solid var(--gold); border-radius:0 6px 6px 0; padding:14px 18px; margin:18px 0}
+.counter h3{margin:0 0 6px}
+.aside{border:1px dashed var(--gold); border-radius:6px; padding:14px 18px; margin:20px 0; background:var(--card)}
+.aside h3{margin-top:0}
+.note{border:1px solid var(--rule); border-radius:6px; padding:14px 18px; margin:20px 0; background:var(--card); font-size:17px}
+.note h3{margin-top:0}
+hr.sep{border:0; border-top:1px solid var(--rule); margin:40px 0 0}
+footer{border-top:4px solid var(--gold); background:var(--card); margin-top:40px; padding:26px 0 34px; font-size:15.5px; color:var(--muted)}
+footer h3{margin-top:0}
+footer ul{padding-left:18px}
+footer li{margin-bottom:5px}
+.chapnav{display:flex; justify-content:space-between; gap:10px; font-family:Cinzel,serif; font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; margin-top:20px; color:var(--muted)}
+@media print{
+  nav.pillars{display:none}
+  header.hero{background:#fff; color:#000; border-bottom:2px solid #000; padding:20px 0}
+  header.hero h1,header.hero p{color:#000 !important}
+  body{font-size:11.5pt; background:#fff; color:#000}
+  .stat,.counter,.aside{break-inside:avoid}
+  h2{break-after:avoid}
+}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+</style>
+<!--po-subject--><meta name="po-subject" content="ECONOMICS · POLICY"><!--/po-subject-->
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker"><a href="../index.html" style="color:inherit;text-decoration:none">Principia Orthogona</a> &middot; <a href="index.html" style="color:inherit;text-decoration:none">Book XXVI &middot; 2026</a> &middot; Chapter 19</p>
+    <!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#5a3a06;background:#f7ecd6;border:1px solid #e0c48a;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">ECONOMICS · POLICY</span></div><!--/po-subject-->
+<h1>A Toy for Cycles With Several Stable States</h1>
+    <p class="sub">A work sample: a two-node model in which a smaller economy orbits a larger one, a test that tells a system with two stable states from one with a common shock, and a measured limit on what a single national time series can show. It uses no real data and claims no finding about any real place.</p>
+    <p class="meta">Newark, New Jersey &middot; 13 November 2026 &middot; a toy, with stated ways to fail</p>
+  </div>
+</header>
+
+<nav class="pillars" aria-label="Sections">
+  <div class="wrap">
+    <a href="#intro">Introduction</a>
+    <a href="#model">1 &middot; The model</a>
+    <a href="#test">2 &middot; The test, and how it can fail</a>
+    <a href="#results">3 &middot; What the toy does</a>
+    <a href="#power">4 &middot; Power at macro length</a>
+    <a href="#next">5 &middot; The real test</a>
+    <a href="#limits">Limits</a>
+    <a href="#updates">Updates</a>
+    <a href="#checked">Checked</a>
+    <a href="#sources">Sources</a>
+  </div>
+</nav>
+
+
+<main>
+<div class="wrap">
+
+<div class="note">
+  <h3>What this chapter is, and what it is not</h3>
+  <p>This chapter is part of Book XXVI, 2026, the author&rsquo;s published record of his applications. It is a work sample written for two applications to research positions at Princeton University, one in a school of public and international affairs and one in public finance, as <a href="ch16-when-bail-is-not-posted.html">chapter 16</a> was written for another. It reads no material from the university and no data from anywhere: everything on this page is a model the reader can run. <strong>No one at the university has seen this page, and it says nothing about what anyone there has read or wants.</strong> It is not a statement by the university or by any person there.</p>
+  <p><strong>It makes no claim about any real economy.</strong> The author&rsquo;s background is in banking, finance and economics, not in dynamical systems, and the model is a toy. Where it points to a real question, that question is marked as open.</p>
+</div>
+
+<section id="intro">
+  <h2><span class="num">Introduction</span>The question</h2>
+  <p class="lead">If economic and political cycles are coupled, can they have several stable states, and could a time series show it?</p>
+  <p>Macro series often move together. One reading is that a shared shock moves them. Another is that the system has more than one stable state and pushes between them. Both give series that are correlated, so correlation cannot tell them apart. This chapter builds the smallest model that has both readings, asks what test could separate them, and measures how often that test works on a series of the length macroeconomics usually has. The second half of the chapter is the honest part: at that length, the test often cannot answer.</p>
+</section>
+
+<hr class="sep">
+
+<section id="model">
+  <h2><span class="num">Section 1</span>The model</h2>
+  <p class="tagline">Two nodes, one larger and one smaller, each with its own stable states, and a pull between them.</p>
+  <p>Each node has a state that sits near one of two values, high or low. Node A is the larger economy. Node B is the smaller one and has shallower wells, which means it is easier to push from one state to the other. In the model, each node is pulled toward the other with strengths <code>k_AB</code> (A on B) and <code>k_BA</code> (B on A), and both are shaken by noise:</p>
+  <pre>dxA = ( xA - xA^3 + k_BA (xB - xA) ) dt + s dW
+dxB = ( mB xB - xB^3 + k_AB (xA - xB) ) dt + s dW        mB = 0.6 (shallower wells)</pre>
+  <p>The only part derived by hand is the symmetric case, with both nodes equal (<code>mB = 1</code>) and equal pulls <code>k</code>. A state with the nodes on opposite sides, <code>xA = &minus;xB = x</code>, needs <code>x&sup2; = 1 &minus; 2k</code>, so it exists only when <code>k &lt; 1/2</code>. The two eigenvalues of the linearization there are <code>&minus;2 + 6k</code> and <code>&minus;2 + 4k</code>, so it is stable only when <code>k &lt; 1/3</code>. The states with both nodes on the same side are stable for every <code>k</code>. Stated plainly: <strong>enough coupling removes the several stable states.</strong> A strong pull makes the pair behave as one.</p>
+  <p>The script checks these thresholds against a numerical Jacobian and prints PASS or FAIL. What the model has is a pull, not care or investment: nothing in it says why a larger economy would pull a smaller one, or whether it should.</p>
+</section>
+
+<hr class="sep">
+
+<section id="test">
+  <h2><span class="num">Section 2</span>The test, and how it can fail</h2>
+  <p class="tagline">Stated before the numbers were run. The thresholds are the author&rsquo;s and can be changed by anyone who would run it on real data, before they run it.</p>
+  <p>The test asks whether a series is better described by two hidden states than by one. It fits one Gaussian and a mixture of two, and calls the series bimodal only if both conditions hold: the Bayesian information criterion favors two by more than 10, and the two components are well separated (Ashman&rsquo;s D above 2). The second condition exists because a series whose spread changes over time, with one mean throughout, can fool the first alone.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Claim</th><th>It holds if</th><th>It fails if</th></tr></thead>
+    <tbody>
+      <tr><td>M1. The hand-derived thresholds are right.</td><td>The numerical Jacobian gives the same stable and unstable ranges for <code>k</code>.</td><td>It does not. The derivation is then wrong and Section 1 is withdrawn.</td></tr>
+      <tr><td>M2. Correlation cannot separate the two readings.</td><td>A bistable pair and a linear pair with a common shock can be made to have the same correlation and the same spread.</td><td>They cannot be matched. Then the premise of the chapter fails.</td></tr>
+      <tr><td>M3. The test gets three known cases right.</td><td>It calls the bistable pair bimodal, and the linear pair with a common shock and the volatility cycle not bimodal.</td><td>Any of the three verdicts is wrong. The test is then not used.</td></tr>
+      <tr><td>M4. The test has enough power at macro length.</td><td>At about 250 points per series, it calls a truly bistable pair bimodal in at least 80% of series.</td><td>Below 80%. Then a &ldquo;not bimodal&rdquo; verdict on one real series of that length is not evidence against several stable states, and the chapter says so.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section id="results">
+  <h2><span class="num">Section 3</span>What the toy does</h2>
+  <p class="tagline">Run of 13 November 2026, <code>tools/multistability_toy.py</code>; it prints 0 FAIL.</p>
+
+  <h3>Correlation cannot tell them apart (M2)</h3>
+  <p>A bistable pair and a linear pair with a common shock were tuned to the same correlation, 0.828, and the same spread, 0.879. Nothing in those two numbers separates them.</p>
+
+  <h3>The test gets the three known cases right (M3)</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Series (truth)</th><th>BIC gain</th><th>Ashman D</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>Bistable pair (several stable states)</td><td>13934.5</td><td>5.65</td><td>bimodal</td></tr>
+      <tr><td>Linear pair with a common shock (not)</td><td>&minus;29.7</td><td>0.64</td><td>not bimodal</td></tr>
+      <tr><td>Volatility cycle, one mean (not)</td><td>3996.1</td><td>0.00</td><td>not bimodal</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The volatility cycle shows why the second condition is there: its BIC gain of 3996.1 is far above 10, and BIC alone would call it bimodal. Ashman&rsquo;s D of 0.00 is what rules it out. The BIC gains are inflated because the points are not independent, so only the verdicts, not the sizes, mean anything.</p>
+
+  <h3>Does a pull from the larger node change the smaller one&rsquo;s fate?</h3>
+  <p>Over 64 simulated paths of 360 time units each, after a burn-in, the table counts sign changes (flips) of each node and the share of time B sits on the opposite side from A. It describes what the model does under stated couplings, not any real pair of places.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>k_AB</th><th>k_BA</th><th>Flips of A</th><th>Flips of B</th><th>Share of time B opposite A</th></tr></thead>
+    <tbody>
+      <tr><td>0.0</td><td>0.0</td><td>492</td><td>1671</td><td>0.390</td></tr>
+      <tr><td>0.3</td><td>0.0</td><td>492</td><td>1220</td><td>0.053</td></tr>
+      <tr><td>0.3</td><td>0.3</td><td>575</td><td>1147</td><td>0.040</td></tr>
+      <tr><td>0.0</td><td>0.3</td><td>1077</td><td>1671</td><td>0.162</td></tr>
+      <tr><td>0.6</td><td>0.0</td><td>492</td><td>687</td><td>0.014</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>A pull of A on B (<code>k_AB &gt; 0</code>) reduces B&rsquo;s flips and the time it spends opposite A; the flips of A do not change when B has no pull on A. When B pulls on A (<code>k_BA &gt; 0</code>), A flips more often: 1077 flips with only B pulling, against 492 with none. That is the whole of the toy&rsquo;s answer to &ldquo;why would the larger one gain from keeping the smaller one steady&rdquo;: it matters only if the smaller one&rsquo;s pull on the larger one is not zero. <strong>That is a condition inside the model, not a finding about Newark, New York or anywhere else.</strong></p>
+</section>
+
+<hr class="sep">
+
+<section id="power">
+  <h2><span class="num">Section 4</span>Power at macro length (M4)</h2>
+  <p class="tagline">One series of about 250 points, like quarterly data over sixty years.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Case</th><th>Flips of A per series</th><th>Called bimodal in</th></tr></thead>
+    <tbody>
+      <tr><td>Bistable pair, switching often (about 8 flips)</td><td>about 8</td><td>0.98 of series</td></tr>
+      <tr><td>Bistable pair, noise 0.35</td><td>0.9</td><td>0.59</td></tr>
+      <tr><td>Bistable pair, noise 0.30</td><td>0.2</td><td>0.17</td></tr>
+      <tr><td>Bistable pair, noise 0.25</td><td>0.0</td><td>0.02</td></tr>
+      <tr><td>Linear pair with a common shock (control)</td><td>&mdash;</td><td>0.00</td></tr>
+      <tr><td>Volatility cycle (control)</td><td>&mdash;</td><td>0.00</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The controls are never called bimodal, which is good. But when the pair switches rarely, as real regimes do, the test finds the several stable states in only 17% of series at 0.2 flips per series and in 2% at none. M4 fails for those cases. <strong>A single national series can neither confirm nor rule out several stable states.</strong> A negative result on one series of that length means almost nothing.</p>
+</section>
+
+<hr class="sep">
+
+<section id="next">
+  <h2><span class="num">Section 5</span>What a real test would need</h2>
+  <p class="tagline">Not run. A design, with its failure conditions stated first.</p>
+  <p>The way out of the power problem is many units, not a longer series: a panel of cities, regions or countries, each observed over the same period, so that the number of possible switches is the number of units times the number of periods. The test would be applied as follows, and none of it has been done.</p>
+  <ul>
+    <li><strong>Before any run,</strong> compute the test&rsquo;s power at the real panel&rsquo;s size, as Section 4 does for a single series. If the power is below 80%, the data cannot answer and the result is reported as unable to answer, not as a negative.</li>
+    <li><strong>Controls first.</strong> The two non-bistable constructions must be called bimodal in no more than 5% of series at that size. If they are called more often, the test is not used.</li>
+    <li><strong>Choose the series before looking at them.</strong> The panel, the period and the measure are fixed in writing first, so the outcome cannot decide the choice.</li>
+    <li><strong>The satellite question is a separate test</strong> and needs a measure of how strongly the small unit depends on the large one, such as commuting or fiscal flows. It is open, and the model above supplies a condition, not evidence.</li>
+  </ul>
+  <p>A reader in public finance would know which regional series of that kind are held and in what form. That is the one thing this chapter asks of anyone: whether such a panel exists and is usable. It asks nothing else of any reader.</p>
+  <div class="counter">
+    <h3>What would make this the wrong approach</h3>
+    <p>Two-state models fit a series well when the series is bounded and noisy, which most macro series are not once trends are present. The method assumes the trend has been removed, and how it is removed can create or erase two peaks. The toy has no trend at all, so it cannot say how much this matters.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section id="limits">
+  <h2><span class="num">Limits</span>What this does not show</h2>
+  <ul>
+    <li><strong>Any finding about a real economy.</strong> No real series was used. The model is a toy with chosen numbers.</li>
+    <li><strong>That coupled cycles in markets, economics or geopolitics have several stable states.</strong> The model shows what such a system would do if they did.</li>
+    <li><strong>That the test works on real data.</strong> It was run on simulated series with the known answer, and its power at the real data&rsquo;s length is poor when regimes switch rarely.</li>
+    <li><strong>Care, investment or any motive.</strong> The model has a pull and nothing else. Why a larger economy would support a smaller one is not in it.</li>
+    <li><strong>Anything about Newark or New York.</strong> They appear here only as the motivating example.</li>
+    <li><strong>Any experience in dynamical systems.</strong> The author claims none; the derivation is one page and the script checks it.</li>
+    <li><strong>Any agreement, interest or review.</strong> No one at the university has seen this page.</li>
+    <li><strong>Anything after the date written.</strong> 13 November 2026.</li>
+  </ul>
+</section>
+
+<section id="updates">
+  <h2><span class="num">Updates</span>What changed after the first version</h2>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Date found</th><th>What changed</th><th>Where it shows</th></tr></thead>
+    <tbody>
+      <tr><td>13 Nov 2026</td><td>First version.</td><td>All sections.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="cross">
+  <div class="note">
+    <h3>See also in the Opus</h3>
+    <p>Matched by title and description, so open each to see how closely it fits. <a href="../book6/wp32-forced-urgency-gap.html">Book 6, WP-32</a> (a macroeconomic series and the question this toy would test) &middot; <a href="../book6/wp137-reading-newarks-budget.html">WP-137</a> (the Newark side: a municipal series read with the same labelling habit) &middot; <a href="../book6/wp135-who-owns-the-machines.html">WP-135</a> &middot; <a href="../book7/ch-piketty.html">Book 7, Thomas Piketty</a> (two regimes in wealth shares, and why a single country is too few switches) &middot; <a href="../book7/ch-strogatz.html">Strogatz</a>, <a href="../book7/ch-waddington.html">Waddington</a>, <a href="../book7/ch-thom.html">Thom</a>, <a href="../book7/ch-bak.html">Bak</a> (limit cycles, valleys, catastrophes, criticality) &middot; <a href="../book14/ch05-the-machines-that-read-us.html">Book XIV, chapter 5</a> (measuring a tool&rsquo;s recall on a small labelled set) &middot; <a href="ch16-when-bail-is-not-posted.html">chapter 16</a> (the earlier Princeton work sample). A shared mathematical form across these is not a shared mechanism, and nothing here says otherwise.</p>
+  </div>
+</section>
+
+<section id="checked">
+  <div class="note">
+    <h3>What was checked, and what was not</h3>
+    <p><strong>Checked on 13 November 2026:</strong> that ch19-verify.py runs <code>tools/multistability_toy.py</code> and finds on the page every number the script prints (the thresholds, the correlation and spread, the three verdicts with their BIC gains and D values, the satellite table and the power figures), that the page claims no finding, agreement or experience, states the four failure conditions, carries the limits, and that each check fails when run on a page with the matching statement removed. <strong>Not machine-checked:</strong> that the unit names in the first paragraph match the applications, which the author must confirm against his own letters. The simulation is random with a fixed seed, so the numbers repeat on the same Python and numpy and may differ in the last digits on another; the script reports a mismatch and does not hide it.</p>
+  </div>
+</section>
+
+</div>
+</main>
+
+<!--po-gss--><aside class="po-gss" style="max-width:860px;margin:1.2rem auto 1rem;padding:.8rem 1.1rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(40,80,150,.85);border-radius:0 6px 6px 0;background:rgba(40,80,150,.05);font-family:ui-monospace,Menlo,monospace;font-size:.78rem;line-height:1.55"><details><summary style="cursor:pointer;letter-spacing:.08em"><b>Gold Standard Science &middot; 6 of 9 tenets shown</b> &middot; self-assessed against <a href="https://www.federalregister.gov/documents/2025/05/29/2025-09802/restoring-gold-standard-science" style="color:inherit">EO 14303 &sect;3(a)</a> &mdash; not a federal certification</summary><ul style="list-style:none;margin:.5rem 0 .3rem;padding:0"><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(i) reproducible <span style="opacity:.6">&mdash; a script or Lean file beside the page re-derives its numbers</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(ii) transparent <span style="opacity:.6">&mdash; code downloadable and sources named with addresses</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iii) error and uncertainty <span style="opacity:.6">&mdash; MODEL / OPEN tags or an [HONESTY] block</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(iv) collaborative, interdisciplinary <span style="opacity:.6">&mdash; cross-linked to other volumes</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(v) skeptical <span style="opacity:.6">&mdash; states what it does not claim, or leaves items open</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10003;</span>(vi) falsifiable <span style="opacity:.6">&mdash; its script can print FAIL</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(vii) unbiased peer review <span style="opacity:.6">&mdash; not independently peer reviewed</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#10007;</span>(viii) negative results <span style="opacity:.6">&mdash; no negative result reported on this page</span></li><li style="margin:.1rem 0"><span style="display:inline-block;width:1.2em">&#9675;</span>(ix) conflicts of interest <span style="opacity:.6">&mdash; disclosed: author-published through G6 LLC, the author&#x27;s company</span></li></ul><div style="opacity:.75">Scored by <code>tools/gold_standard.py</code> from what is observable on this page and beside it. &#10003; shown &middot; &#10007; not shown &middot; &#9675; disclosure. No agency has reviewed this page. <a href="/geometry/gold-standard.html" style="color:inherit">What the order says and why this series follows it</a>.</div></details></aside><!--/po-gss-->
+<!--po-run--><aside class="po-run" style="max-width:860px;margin:1.6rem auto 1rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(80,140,110,.85);border-radius:0 6px 6px 0;background:rgba(80,140,110,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Run it yourself &middot; one-click download</div><ul style="margin:.4rem 0 .5rem 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="../book26/ch19-verify.py" download style="color:inherit;text-decoration:underline;text-underline-offset:2px">ch19-verify.py</a> <span style="opacity:.6">&middot; Python 3 &middot; book26/ch19-verify.py</span></li></ul><div style="font-size:.92em;opacity:.85"><b>Python</b>: <code>python3 FILE.py</code> &mdash; standard library only; pages that read a book also need <code>pdftotext</code> and the book in <code>~/Downloads</code>, and say SKIP rather than PASS without it.</div></aside><!--/po-run-->
+<footer id="sources">
+  <div class="wrap">
+    <h3>Sources</h3>
+    <ul>
+      <li><a href="../tools/multistability_toy.py">tools/multistability_toy.py</a>, the model, the test and every number on this page (Python 3 and numpy).</li>
+      <li>Ashman, Bird and Zepf, <em>Astronomical Journal</em> 108 (1994), for the separation statistic D; the Bayesian information criterion as in Schwarz (1978). Cited from memory of the standard references; not re-read for this page.</li>
+    </ul>
+    <div class="chapnav"><span>Book XXVI &middot; 2026</span><span>Chapter 19</span></div>
+    <p style="margin-top:14px">2026-11-13 &middot; G6 LLC &middot; Pablo Nogueira Grossi &middot; Newark NJ &middot; CC BY-NC-ND 4.0. A work sample, not a statement by any university. Figures are the script&rsquo;s output as run.</p>
+  </div>
+</footer>
+
+</body>
+</html>
