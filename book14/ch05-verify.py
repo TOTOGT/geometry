@@ -131,6 +131,14 @@ print("     RESULT", RESULT)
 for k, v in EXPECT.items():
     if v is not None: check(f"{k} = {v}", RESULT[k] == v, str(RESULT[k]))
 
+print("[4] recall of the key register against the hand-labelled gold set")
+_r = subprocess.run([sys.executable, str(Path(__file__).resolve().parents[1] / "tools" / "key_register_recall.py")],
+                    capture_output=True, text=True)
+print("     " + _r.stdout.strip().replace("\n", "\n     "))
+check("recall script ran with no stale gold contexts", _r.returncode == 0, _r.stderr[-200:])
+check("mention recall 29 of 88 (0.33)", "tool fires on 29 -> mention recall 0.33" in _r.stdout and "labelled Y: 88" in _r.stdout)
+check("pair recall 19 of 39 (0.49); 9 of 17 pages", "finds 19 -> pair recall 0.49" in _r.stdout and "17; tool finds one on 9" in _r.stdout)
+
 print("[HONESTY]")
 print("  The tags are an editor's decisions, not ground truth about the pages; 'accuracy' here means")
 print("  agreement with those decisions. Fields with fewer than 10 pages are left out. Tokens are")
