@@ -149,6 +149,24 @@ check("before the fix 144 of 148 (0.97), all four misses sentence-final",
       and all(m in _r2.stdout for m in ("'PrincipiaVol1.lean.'", "'AXLE/Main_v6.lean.'", "'AutophagyDm3.lean.'", "'CardiacHopfReduction.lean.'")))
 check("after the fix 148 of 148", "now:            pattern fires on 148 -> recall 1.00" in _r2.stdout)
 
+print("[6] recall of the cross-link tool against its hand-labelled gold set")
+_r3 = subprocess.run([sys.executable, str(Path(__file__).resolve().parents[1] / "tools" / "crossref_recall.py")],
+                     capture_output=True, text=True)
+print("     " + _r3.stdout.strip().replace("\n", "\n     "))
+_o3 = re.sub(r"[ ]+", " ", _r3.stdout)
+check("crossref recall script ran with no stale gold rows", _r3.returncode == 0 and "stale 0" in _o3, _r3.stderr[-200:])
+check("WP numbers 22 of 22", "WP 22 pairs: 22 in the tool's named list, 0 already linked, 0 missed" in _o3)
+check("gallery people 19 of 31 (0.61)", "PERSON 31 pairs: 17 in the tool's named list, 2 already linked, 12 missed recall 0.61" in _o3)
+check("'Chapter N' mentions: 42 pairs, 0 in the list, 33 already linked, 9 missed", "CHAPTER 42 pairs: 0 in the tool's named list, 33 already linked, 9 missed" in _o3)
+check("63 named entries on 38 pages, 39 backed by a Y label", "tool named entries on the 38 sampled pages: 63; with a Y label behind them: 39" in _o3)
+
+print("[7] agreement of a blind reading with the subject tags")
+_r4 = subprocess.run([sys.executable, str(Path(__file__).resolve().parents[1] / "tools" / "subject_tags_agreement.py")],
+                     capture_output=True, text=True)
+print("     " + _r4.stdout.strip().split("\n")[0])
+check("subject agreement script ran, 60 pages, none stale", _r4.returncode == 0 and "60 pages (0 stale)" in _r4.stdout, _r4.stderr[-200:])
+check("exact 40 of 60 (0.67), same field 46 of 60 (0.77)", "exact agreement 40/60 = 0.67; same field 46/60 = 0.77" in _r4.stdout)
+
 print("[HONESTY]")
 print("  The tags are an editor's decisions, not ground truth about the pages; 'accuracy' here means")
 print("  agreement with those decisions. Fields with fewer than 10 pages are left out. Tokens are")

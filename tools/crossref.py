@@ -139,11 +139,12 @@ def cos(a, b):
     if len(a) > len(b): a, b = b, a
     return sum(x * b.get(w, 0) for w, x in a.items())
 
-def plan(pages):
+def named_mentions(pages):
+    """rel -> [(target, wording)]: pages the prose names without linking. Used by plan() and by crossref_recall.py."""
     wps, people = wp_index(pages), people_index(pages)
     named = defaultdict(list)
     for rel, p in pages.items():
-        for n in sorted({int(x) for x in re.findall(r'\bWP[-‑\s]?(\d{1,3})\b', p['text'])}):
+        for n in sorted({int(x) for x in re.findall(r'\bWP[-\u2011\s]?(\d{1,3})\b', p['text'])}):
             t = wps.get(n)
             if t and t != rel:
                 named[rel].append((t, f'WP-{n}'))
@@ -155,6 +156,10 @@ def plan(pages):
                                         and len(re.findall(r'\b' + re.escape(sur) + r'\b', p['text'])) >= 2)
             if hit:
                 named[rel].append((t, name))
+    return named
+
+def plan(pages):
+    named = named_mentions(pages)
     cited = defaultdict(set)
     for a, lst in named.items():
         for t, _ in lst:
