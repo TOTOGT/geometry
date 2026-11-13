@@ -133,6 +133,19 @@ for code in ("5210", "5212", "5214", "5216", "5220", "5224", "5226", "5228", "52
     check(f"index lists course {code}", code in idx)
 check("index flags the capstone rule and the BUS 5611 prerequisite as to confirm", "B-" in idx and "prerequisite of BUS 5611" in idx and idx.count("to confirm") >= 2)
 
+# ---- paths through the book
+paths = {m.group(1): [int(x) for x in re.findall(r"<li>(\d+)</li>", m.group(2))]
+         for m in re.finditer(r'<ol class="path" data-path="(\w)">(.*?)</ol>', idx, re.S)}
+check("index has paths A, B, C and D", sorted(paths) == ["A", "B", "C", "D"], str(sorted(paths)))
+for k, p in sorted(paths.items()):
+    check(f"path {k} lists chapters 1-12 exactly once", sorted(p) == list(range(1, 13)), str(p))
+    check(f"path {k} ends with the Capstone (12)", p and p[-1] == 12)
+    check(f"path {k} puts BUS 5113 (1) before BUS 5611 (3)", p and p.index(1) < p.index(3))
+if "A" in paths:
+    # catalog sample: BUS5113, 5210, 5212, 5214, 5216, BUS5115, 5226, 5250, BUS5611, 5260, 5270, 5910
+    check("path A matches the catalog sample sequence", paths["A"] == [1, 4, 5, 6, 7, 2, 8, 9, 3, 10, 11, 12])
+check("index says B, C, D are suggestions and A is the catalog's", "B, C and D are my suggestions" in idx)
+
 print()
 print("ALL PASS" if fails == 0 else f"{fails} FAILED")
 sys.exit(1 if fails else 0)
