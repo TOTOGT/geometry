@@ -28,7 +28,8 @@ subprocess.run(["tar", "-x", "-C", str(SNAP)], input=arc, check=True)
 if (ROOT / ".lake").exists(): os.symlink(ROOT / ".lake", SNAP / ".lake")   # upstream Mathlib, for UPSTREAM rows
 
 print(f"[1] the address check, on the corpus at {PIN}")
-out = subprocess.run([sys.executable, str(ROOT / "tools/lean_addresses.py"), str(SNAP)],
+# --legacy-names: the name pattern as of PIN. A later fix (sentence-final names, Book XIV ch 5) changes these counts on purpose.
+out = subprocess.run([sys.executable, str(ROOT / "tools/lean_addresses.py"), str(SNAP), "--legacy-names"],
                      capture_output=True, text=True).stdout
 print("    " + out.splitlines()[1].strip())
 rows = {}

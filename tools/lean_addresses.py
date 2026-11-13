@@ -51,7 +51,15 @@ TAG = re.compile(r'<[^>]+>')
 # Without this strip, run_yourself's 'lake env lean FILE.lean' instruction
 # read as 96 dangling citations (Book XIX ch4, 2026-09-27).
 GENERATED = re.compile(r'<!--po-(run|gss|related|subject)-->.*?<!--/po-\1-->', re.S)
-NAME = re.compile(r'\b([A-Za-z][A-Za-z0-9_]*(?:[-_][A-Za-z0-9_]+)*\.lean)(?![-./\w])')
+# A name ends at ".lean" unless that is followed by a name character, a hyphen (live.lean-lang.org),
+# a slash, or a dot that continues a word (x.lean.html). A dot that closes a sentence does not
+# continue the name: the old lookahead (?![-./\w]) rejected "see Ghost.lean." and so never saw
+# a file named at the end of a sentence. Found by the gold set docs/lean-addresses-gold.tsv
+# (Book XIV ch 5): 4 of 148 labelled citations, all of that form.
+NAME = re.compile(r'\b([A-Za-z][A-Za-z0-9_]*(?:[-_][A-Za-z0-9_]+)*\.lean)(?![-/\w]|\.\w)')
+# The pattern as it was before that fix. `--legacy-names` selects it, so that Book XIX ch 4, which reports
+# counts for the corpus frozen at e6c5e85, can keep reproducing them. Not for new use.
+NAME_LEGACY = re.compile(r'\b([A-Za-z][A-Za-z0-9_]*(?:[-_][A-Za-z0-9_]+)*\.lean)(?![-./\w])')
 
 # (page relpath, cited name) pairs that are deliberate illustrations, or a file
 # the page is instructing the READER to create rather than citing as evidence.
@@ -161,6 +169,9 @@ SELFTEST = [
     ('<a href="x.html" class="lean">Real.lean</a>', []),
     ('<p>run it on live.lean-lang.org</p>', []),
     ('<p>see real.lean</p>', ['real.lean']),
+    ('<p>see Ghost.lean.</p>', ['Ghost.lean']),
+    ('<p>see Real.lean.</p>', []),
+    ('<p>open page.lean.html</p>', []),
 ]
 
 
@@ -192,6 +203,9 @@ if __name__ == '__main__':
         print('selftest clean' if not bad else f'{bad} case(s) failed')
         sys.exit(1 if bad else 0)
     argv = sys.argv[1:]
+    if '--legacy-names' in argv:
+        argv.remove('--legacy-names')
+        NAME = NAME_LEGACY
     if '--roots' in argv:
         i = argv.index('--roots')
         site, roots = argv[0], argv[i + 1:]

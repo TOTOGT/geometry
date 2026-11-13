@@ -139,6 +139,16 @@ check("recall script ran with no stale gold contexts", _r.returncode == 0, _r.st
 check("mention recall 29 of 88 (0.33)", "tool fires on 29 -> mention recall 0.33" in _r.stdout and "labelled Y: 88" in _r.stdout)
 check("pair recall 19 of 39 (0.49); 9 of 17 pages", "finds 19 -> pair recall 0.49" in _r.stdout and "17; tool finds one on 9" in _r.stdout)
 
+print("[5] recall of the address tool against its hand-labelled gold set")
+_r2 = subprocess.run([sys.executable, str(Path(__file__).resolve().parents[1] / "tools" / "lean_addresses_recall.py")],
+                     capture_output=True, text=True)
+print("     " + _r2.stdout.strip().replace("\n", "\n     "))
+check("address recall script ran with no stale gold contexts", _r2.returncode == 0, _r2.stderr[-200:])
+check("before the fix 144 of 148 (0.97), all four misses sentence-final",
+      "labelled Y: 148" in _r2.stdout and "fires on 144 -> recall 0.97" in _r2.stdout
+      and all(m in _r2.stdout for m in ("'PrincipiaVol1.lean.'", "'AXLE/Main_v6.lean.'", "'AutophagyDm3.lean.'", "'CardiacHopfReduction.lean.'")))
+check("after the fix 148 of 148", "now:            pattern fires on 148 -> recall 1.00" in _r2.stdout)
+
 print("[HONESTY]")
 print("  The tags are an editor's decisions, not ground truth about the pages; 'accuracy' here means")
 print("  agreement with those decisions. Fields with fewer than 10 pages are left out. Tokens are")
