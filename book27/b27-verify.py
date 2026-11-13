@@ -129,9 +129,9 @@ check("ch3 flags the guessed planning split as to confirm", "to confirm" in ch3 
 check("every chapter has the 'sourced' unit-list box", all('<span class="tag">sourced</span>' in h for h in (ch1, ch2, ch3)))
 check("every chapter has the study-aid box with no-answers statement",
       all("does not contain answers to graded assignments" in h for h in (ch1, ch2, ch3)))
-for code in ("5210", "5212", "5214", "5216", "5226", "5250", "5260", "5270", "5113", "5115", "5611"):
+for code in ("5210", "5212", "5214", "5216", "5220", "5224", "5226", "5228", "5230", "5240", "5250", "5260", "5270", "5910", "5113", "5115", "5611"):
     check(f"index lists course {code}", code in idx)
-check("index marks the open question about two empty bullets and MS in CS", "MS in Computer Science" in idx)
+check("index flags the capstone rule and the BUS 5611 prerequisite as to confirm", "B-" in idx and "prerequisite of BUS 5611" in idx and idx.count("to confirm") >= 2)
 
 print()
 print("ALL PASS" if fails == 0 else f"{fails} FAILED")
