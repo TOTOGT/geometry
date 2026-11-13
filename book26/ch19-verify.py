@@ -9,6 +9,7 @@ two-node model with several stable states, a bimodality test with stated failure
       in its output (thresholds, correlation, verdicts, BIC gains, D values, satellite table, power shares)
   [3] the four failure conditions M1-M4 are stated
   [4] honesty: no finding, agreement, review or experience claimed; no individual named; limits present
+  [6] Lean file: no sorry/axiom/native_decide outside comments, the 14 theorem names present, and the page says what it does not cover (the compile is run by hand)
   [5] controls: each check family is run on a page with the matching statement removed and must fail   [HONESTY]
 Standard library only (the toy needs numpy). Takes about 15 s.
 """
@@ -69,6 +70,19 @@ def run(tag, results):
 
 bt = body(raw)
 run("[1]", c_struct(raw)); run("[2]", c_numbers(bt)); run("[3]", c_fail(bt)); run("[4]", c_honest(bt))
+LEAN = HERE.parent / "Ch19MultistabilityAlgebra.lean"
+THMS = ["mixed_fixed_iff","mixed_fixed_both","mixed_exists_iff","aligned_fixed","partialA_a","partialA_b","partialB_b","partialB_a",
+        "eig2","mixed_eigenvalues","mixed_both_negative_iff","mixed_saddle","aligned_eigenvalues","aligned_both_negative"]
+def c_lean(t, src):
+    code = re.sub(r"/-.*?-/", "", src, flags=re.S); code = re.sub(r"--[^\n]*", "", code)
+    out = [("lean file present", bool(src)),
+           ("no sorry / native_decide / axiom in code", not re.search(r"\b(sorry|native_decide|axiom)\b", code))]
+    out += [(f"theorem {n}", re.search(r"theorem\s+"+n+r"\b", code) is not None) for n in THMS]
+    out += [("page links the Lean file", "Ch19MultistabilityAlgebra.lean" in t),
+            ("page says the asymmetric case is not covered", "does not cover the asymmetric case" in t),
+            ("page says linearization theorem not formalised", "not formalised" in t)]
+    return out
+run("[6]", c_lean(bt, LEAN.read_text(encoding="utf-8") if LEAN.exists() else ""))
 for l in sorted(set(re.findall(r'href="([^"#:]+\.html)"', raw))):
     check(f"[1] link resolves: {l}", ((HERE.parent / l[len("/geometry/"):]) if l.startswith("/geometry/") else (HERE / l)).exists())
 
@@ -80,6 +94,7 @@ ctl("numbers fail when a number is altered", lambda r: c_numbers(body(r)), lambd
 ctl("failure conditions fail when M4 removed", lambda r: c_fail(body(r)), lambda r: r.replace("M4.", "X."))
 ctl("honesty fails when the 'no one has seen it' line is removed", lambda r: c_honest(body(r)), lambda r: r.replace("No one at the university has seen this page", "Seen"))
 ctl("honesty fails with an agreement claim added", lambda r: c_honest(body(r)), lambda r: r.replace("<section id=\"limits\">", "<p>The group has approved this.</p><section id=\"limits\">"))
+ctl("Lean check fails when the not-covered sentence is removed", lambda r: c_lean(body(r), LEAN.read_text(encoding="utf-8")), lambda r: r.replace("does not cover the asymmetric case", "covers all"))
 ctl("structure fails when a section is removed", c_struct, lambda r: r.replace('<section id="power">', '<section id="powerX">'))
 
 print(f"{len(FAIL)} FAIL"); sys.exit(1 if FAIL else 0)

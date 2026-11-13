@@ -282,3 +282,14 @@ lean_lib P2xP2 where
 -/
 lean_lib SpectralDiagonalBound where
   srcDir := "book24"
+
+/-
+  Ch19MultistabilityAlgebra.lean (2026-11-13): the SYMMETRIC-case algebra behind
+  book26/ch19-a-toy-for-cycles-with-several-stable-states.html (mixed fixed points exist iff
+  k < 1/2; eigenvalues -2+6k and -2+4k; both negative iff k < 1/3; aligned eigenvalues).
+  Compiled with no output on the author's Mac against v4.32.0 on 2026-11-13. #print axioms check
+  pending at registration. Default target, so a regression fails the job. It does not cover the
+  asymmetric toy (mB = 0.6), the linearisation theorem, or any measured number.
+-/
+@[default_target]
+lean_lib Ch19MultistabilityAlgebra
