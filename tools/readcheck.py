@@ -26,7 +26,7 @@ Labels, number sheet:     R  recomputed independently, matches to the stated pre
                           C  cannot recompute from what is stated
 Standard library only. Flags are heuristics: a flag is a reason to read, never a verdict.
 """
-import csv, html, os, random, re, subprocess, sys, glob
+import hashlib, csv, html, os, random, re, subprocess, sys, glob
 from collections import Counter, defaultdict
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 SEED = 20261114
@@ -120,6 +120,33 @@ def repo_rev(path):
     v = subprocess.run(['git', '-C', r, 'rev-parse', 'HEAD'], capture_output=True, text=True).stdout.strip()
     return '%s@%s' % (os.path.basename(r), v[:10])
 
+_PROV = {}
+def file_prov(path):
+    """actual source bytes: repo, tracked?, modified vs HEAD?, sha256 of the file as read, sha256 of HEAD's copy"""
+    if path in _PROV: return _PROV[path]
+    ap = os.path.realpath(path if os.path.isabs(path) else os.path.join(ROOT, path)); d = os.path.dirname(ap); g = lambda *a: subprocess.run(['git', '-C', d] + list(a), capture_output=True, text=True)
+    top = os.path.realpath(g('rev-parse', '--show-toplevel').stdout.strip() or '/nonexistent'); sh = hashlib.sha256(open(ap, 'rb').read()).hexdigest()
+    if not top: r = dict(repo='none', head='', tracked='no-repo', dirty='', sha=sh, sha_head='', match=False)
+    else:
+        rel = os.path.relpath(ap, top); gt = lambda *a: subprocess.run(['git', '-C', top] + list(a), capture_output=True, text=True)
+        head = gt('rev-parse', 'HEAD').stdout.strip()[:10]; tracked = gt('ls-files', '--error-unmatch', '--', rel).returncode == 0
+        ig = gt('check-ignore', '-q', '--', rel).returncode == 0
+        shh = hashlib.sha256(subprocess.run(['git', '-C', top, 'show', 'HEAD:' + rel], capture_output=True).stdout).hexdigest() if tracked else ''
+        other = ''
+        if not tracked:
+            c = gt('log', '--all', '-1', '--diff-filter=AMR', '--format=%H', '--', rel).stdout.strip()
+            if c:
+                shc = hashlib.sha256(subprocess.run(['git', '-C', top, 'show', c + ':' + rel], capture_output=True).stdout).hexdigest()
+                if shc == sh: other = c[:10]
+        if other:
+            br = gt('branch', '-a', '--contains', other).stdout.split()
+            r = dict(repo=os.path.basename(top), head=other, tracked='NOT-IN-CHECKED-OUT-HEAD; bytes equal commit ' + other + ' on ' + ','.join(x for x in br if x != '*')[:80], dirty='', sha=sh, sha_head=sh, match=True)
+            r['rel'] = os.path.relpath(ap, ROOT) if ap.startswith(ROOT) else ap; _PROV[path] = r; return r
+        r = dict(repo=os.path.basename(top), head=head, tracked=('tracked' if tracked else ('UNTRACKED-ignored' if ig else 'UNTRACKED')), dirty=('' if not tracked else ('modified' if shh != sh else 'clean')), sha=sh, sha_head=shh, match=bool(tracked and shh == sh))
+    r['rel'] = os.path.relpath(ap, ROOT) if ap.startswith(ROOT) else ap; _PROV[path] = r; return r
+def prov_str(path):
+    r = file_prov(path); return '%s@%s %s%s sha256:%s' % (r['repo'], r['head'], r['tracked'], ('/' + r['dirty']) if r['dirty'] else '', r['sha'][:12])
+
 NSEV = re.compile(r'^[ \t]*(namespace|end|section)(?:[ \t]+([A-Za-z0-9_.]+))?[ \t]*$', re.M)
 def namespaces_at(s, pos_list):
     """namespace stack at each declaration position (namespace X ... end X); sections push a blank frame"""
@@ -171,7 +198,7 @@ def resolve(decl, cands, text_near, text_page):
 
 DEFKINDS = ('def', 'abbrev', 'structure', 'inductive', 'class')
 def definitions_for(chosen, idx):
-    gaps = []; out = []; seen = set()
+    gaps = []; out = []; seen = set(); files = []
     for tok in re.findall(r"[A-Za-z_][A-Za-z0-9_'.]*", chosen['stmt']):
         t = tok.split('.')[-1]
         if t in seen or t not in idx: continue
@@ -179,9 +206,9 @@ def definitions_for(chosen, idx):
         if not cs: continue
         same = [c for c in cs if c['file'] == chosen['file']] or cs
         if len({(c['stmt'], norm(re.split(r'/-|--', c['body'].split('\n\n')[0])[0])[:300]) for c in same}) > 1: gaps.append('AMBIGUOUS_DEF:' + t); continue
-        c = same[0]; val = re.split(r'/-|--', c['body'].split('\n\n')[0])[0]; out.append('%s := %s' % (c['stmt'], norm(val)[:300]))
+        c = same[0]; files.append(c['file']); val = re.split(r'/-|--', c['body'].split('\n\n')[0])[0]; out.append('%s := %s' % (c['stmt'], norm(val)[:300]))
         if len(out) >= 6: gaps.append('MORE_DEFS_OMITTED'); break
-    return ' || '.join(out), gaps
+    return ' || '.join(out), gaps, files
 
 def units(page, idx):
     t = page_text(os.path.join(ROOT, page)); sents = [x.strip() for x in re.split(r'(?<=[.!?])\s+(?=[A-Z0-9\\(])', t) if len(x.strip()) > 25]
@@ -240,20 +267,25 @@ def cmd_extract(args):
 
 def cmd_freeze(args):
     d = args[0]; idx = index_lean(); rep = axiom_reports(); units_ = rtsv(os.path.join(d, 'units.tsv')); M = Counter()
-    frozen, smap, unres = [], [], []
+    frozen, smap, unres = [], [], []; used_files = set()
     for u in units_:
         cands = idx.get(u['decl'], []); pg = u['pages'].split(';')[0]
         raw = open(os.path.join(ROOT, pg), encoding='utf-8', errors='replace').read()
         status, ch, narrowed = resolve(u['decl'], cands, u['context'] + ' ' + u['sentence'], raw); M['status:' + status] += 1
-        cand_s = ' | '.join('%s:%d ns=%s %s' % (c['file'], c['line'], c['ns'] or '-', c['rev']) for c in cands)
+        cand_s = ' | '.join('%s:%d ns=%s %s' % (c['file'], c['line'], c['ns'] or '-', prov_str(c['file'])) for c in cands)
         if ch is None:
             unres.append([u['id'], u['pages'], u['decl'], cand_s]); smap.append([u['id'], u['pages'], u['decl'], status, '', cand_s, '', '', '', '']); continue
-        defs, gaps = definitions_for(ch, idx)
+        defs, gaps, dfiles = definitions_for(ch, idx); used_files.update([ch['file']] + dfiles)
+        stmt_shown = ch['stmt'] if ch['kind'] not in DEFKINDS else ch['stmt'] + ' := ' + norm(re.split(r'/-|--', ch['body'].split('\n\n')[0])[0])[:300]
         fl = flags(dict(kind=ch['kind'], stmt=ch['stmt'], head=ch['head'], body=ch['body'], file_has_axiom=False))
         k = rep.get(u['decl']); ar = 'no-report' if k is None else ('report:sorryAx' if k else 'report:no-sorryAx')
-        row = [u['id'], u['sentence'], u['context'], u['decl'], ch['kind'], ch['stmt'], defs]; row.append(sha(*row[1:])); frozen.append(row)
-        smap.append([u['id'], u['pages'], u['decl'], status, '%s:%d ns=%s %s' % (ch['file'], ch['line'], ch['ns'] or '-', ch['rev']), cand_s, ';'.join(fl),
+        row = [u['id'], u['sentence'], u['context'], u['decl'], ch['kind'], stmt_shown, defs]; row.append(sha(*row[1:])); frozen.append(row)
+        smap.append([u['id'], u['pages'], u['decl'], status, '%s:%d ns=%s %s' % (ch['file'], ch['line'], ch['ns'] or '-', prov_str(ch['file'])), cand_s, ';'.join(fl),
                      ar + ('; name-is-ambiguous' if len(cands) > 1 and k is not None else ''), 'file-declares-an-axiom' if ch['file_declares_axiom'] else '', ';'.join(gaps)])
+    P = [[f, file_prov(f)['repo'], file_prov(f)['head'], file_prov(f)['tracked'], file_prov(f)['dirty'], file_prov(f)['sha'], file_prov(f)['sha_head'], 'yes' if file_prov(f)['match'] else 'NO'] for f in sorted(used_files)]
+    wtsv(os.path.join(d, 'provenance.tsv'), ['file(source actually read)', 'repo', 'HEAD', 'git_status', 'vs_HEAD', 'sha256_as_read', 'sha256_at_HEAD', 'bytes_match_HEAD'], P)
+    nm = sum(1 for r in P if r[7] == 'NO'); M['source files used'] = len(P); M['source files whose bytes do NOT match a committed HEAD (untracked or modified)'] = nm
+    M['INPUT MODE'] = 'working-tree files read; every file is byte-identical to its committed HEAD blob' if nm == 0 else 'WORKING-TREE SNAPSHOT (%d of %d files are not at a committed state)' % (nm, len(P))
     H = ['id', 'sentence', 'context', 'declaration', 'kind', 'statement', 'definitions', 'input_sha']
     wtsv(os.path.join(d, 'frozen-statements.tsv'), H, frozen)
     wtsv(os.path.join(d, 'unresolved.tsv'), ['id', 'pages', 'decl', 'candidates'], unres)
@@ -345,31 +377,39 @@ def cmd_verify(args):
 
 ALLOWED = {'S': 'MWUVK', 'C': 'PSBFK', 'N': 'RXC'}
 def cmd_agree(args):
-    d, ret = args[0], args[1]; lab = {}
+    """primary statistics exclude seeded controls; controls are scored separately; K (missing context) is reported, not hidden"""
+    d, ret = args[0], args[1]; lab = {}; ctrl = {}
+    ce = os.path.join(d, 'chunk1-controls-expected.tsv')
+    if os.path.exists(ce): ctrl = {r['id']: r['expected'] for r in rtsv(ce)}
     for fn in ('worklist.tsv', 'worklist-claims.tsv', 'worklist-numbers.tsv'):
         p = os.path.join(d, fn)
         if os.path.exists(p):
             for r in rtsv(p):
                 if r['label_claude'].strip(): lab[r['id']] = r
-    theirs = {r['id']: r for r in rtsv(ret)}; bad = 0
+    theirs = {r['id']: r for r in rtsv(ret)}
+    also = {r['id']: r.get('also_in', '') for r in rtsv(os.path.join(d, 'numbers.tsv'))} if os.path.exists(os.path.join(d, 'numbers.tsv')) else {}
     for kind, nm in (('S', 'statement support'), ('C', 'prose claims'), ('N', 'numerical claims')):
-        ids = [i for i in lab if i.startswith(kind + '-') and i in theirs and (theirs[i].get('label') or '').strip()]
-        if not ids: print('[%s] no rows labelled by both readers' % nm); continue
+        ids = [i for i in lab if i.startswith(kind + '-') and i not in ctrl and i in theirs and (theirs[i].get('label') or '').strip()]
+        if not ids: print('[%s] no primary rows labelled by both readers' % nm); continue
         a = {i: lab[i]['label_claude'].strip().upper() for i in ids}; b = {i: theirs[i]['label'].strip().upper() for i in ids}
-        invalid = [i for i in ids if a[i] not in ALLOWED[kind] or b[i] not in ALLOWED[kind]]
-        kk = [i for i in ids if i not in invalid and kind != 'N' and 'K' in (a[i], b[i])]; sc = [i for i in ids if i not in invalid and i not in kk]
-        print('[%s] both labelled %d | scored %d | excluded for missing context (K by either) %d | invalid labels %d' % (nm, len(ids), len(sc), len(kk), len(invalid)))
+        invalid = [i for i in ids if a[i] not in ALLOWED[kind] or b[i] not in ALLOWED[kind]]; ok = [i for i in ids if i not in invalid]
+        print('[%s] primary rows labelled by both: %d (invalid labels %d)' % (nm, len(ids), len(invalid)))
+        if kind != 'N':
+            ka = [i for i in ok if a[i] == 'K']; kb = [i for i in ok if b[i] == 'K']; kd = [i for i in ok if (a[i] == 'K') != (b[i] == 'K')]
+            print('     missing-context (K) rate: claude %.2f, second reader %.2f | disagree on whether context is sufficient: %d rows (%.2f)' % (len(ka) / max(1, len(ok)), len(kb) / max(1, len(ok)), len(kd), len(kd) / max(1, len(ok))))
+            sc = [i for i in ok if 'K' not in (a[i], b[i])]
+        else: sc = ok
         if sc:
-            po, k = kappa([a[i] for i in sc], [b[i] for i in sc]); print('     exact agreement %.2f   Cohen kappa %.2f' % (po, k))
+            po, k = kappa([a[i] for i in sc], [b[i] for i in sc]); print('     scored (no K on either side) %d of %d: exact agreement %.2f, Cohen kappa %.2f' % (len(sc), len(ok), po, k))
             for i in sc:
                 if a[i] != b[i]: print('     DISAGREE %s claude=%s second=%s | %s | %s' % (i, a[i], b[i], lab[i].get('note', '')[:60], (theirs[i].get('note') or '')[:60]))
-        for i in kk: print('     K-row %s claude=%s second=%s' % (i, a[i], b[i]))
-    ce = os.path.join(d, 'chunk1-controls-expected.tsv')
-    if os.path.exists(ce):
-        for r in rtsv(ce):
-            got = (theirs.get(r['id'], {}).get('label') or '').strip().upper()
-            if got != r['expected']: print('CONTROL MISSED: %s expected %s, second reader gave %s' % (r['id'], r['expected'], got or 'nothing')); bad += 1
-        print('controls (second reader): %s' % ('all seeded rows labelled as expected' if not bad else '%d missed: do not trust that reader on this sheet' % bad))
+        if kind == 'N': print('     of these %d number rows, %d also appear as a statement or claim row (disclosed overlap; totals are not additive)' % (len(ok), sum(1 for i in ok if also.get(i))))
+    if ctrl:
+        print('SEEDED CONTROLS (reported separately, never in the statistics above):')
+        for who, getl in (('second reader', lambda i: (theirs.get(i, {}).get('label') or '').strip().upper()), ('claude', lambda i: (lab.get(i, {}).get('label_claude') or '').strip().upper())):
+            got = {i: getl(i) for i in ctrl}
+            if not any(got.values()): print('   %s: no control labels recorded' % who); continue
+            print('   %s: %d/%d correct' % (who, sum(got[i] == e for i, e in ctrl.items()), len(ctrl)) + ''.join(' | MISSED %s expected %s gave %s' % (i, e, got[i] or '-') for i, e in ctrl.items() if got[i] != e))
     return 0
 
 CONTROLS = [  # (lean source, flag that MUST appear, or None for the sound control that must have NO flags)
@@ -395,6 +435,12 @@ def cmd_selftest():
                            ('resolve: identical statements, no evidence', resolve('f', [A, B2], '', '')[0], 'IDENTICAL_COPIES'),
                            ('namespaces_at', namespaces_at('namespace P\nsection\ntheorem a\nend\nend P\ntheorem b\n', [20, 40])[0], 'P')):
         ok = got == want; print(('PASS ' if ok else 'FAIL ') + lab + ' -> ' + got); bad += (not ok)
+    import tempfile, shutil
+    tmp = tempfile.mkdtemp(); run = lambda *a: subprocess.run(['git', '-C', tmp] + list(a), capture_output=True, text=True)
+    run('init', '-q'); run('config', 'user.email', 'a@b'); run('config', 'user.name', 'x'); fp = os.path.join(tmp, 'T.lean'); open(fp, 'w').write('theorem t : 1 = 1 := rfl\n'); run('add', 'T.lean'); run('commit', '-qm', 'c')
+    q1 = file_prov(fp); _PROV.clear(); open(fp, 'a').write('-- edit\n'); q2 = file_prov(fp); _PROV.clear(); fu = os.path.join(tmp, 'U.lean'); open(fu, 'w').write('x\n'); q3 = file_prov(fu); shutil.rmtree(tmp)
+    for lab, ok in (('provenance: committed file reads as tracked, bytes match HEAD', q1['tracked'] == 'tracked' and q1['match']), ('provenance: edited file is flagged modified, no match', q2['dirty'] == 'modified' and not q2['match']), ('provenance: untracked file is flagged, no match', q3['tracked'].startswith('UNTRACKED') and not q3['match'])):
+        print(('PASS ' if ok else 'FAIL ') + lab); bad += (not ok)
     print('selftest: %s' % ('ALL PASS' if not bad else '%d FAIL' % bad)); return 1 if bad else 0
 
 if __name__ == '__main__':
