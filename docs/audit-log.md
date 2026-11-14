@@ -12558,3 +12558,145 @@ CLAUDE.md "Open" item 2 is stale on this page; next in Book 3 roster order is th
 
 ## 2026-11-12 contactVol is Mathlib's wedge omega ^ extDeriv omega
 `catgt/lean/ReebWedge.lean` (new), run by the author (`lake env lean`, v4.32.0, sixth round): no errors; `#print axioms` on `wedge12_eq_shuffle`, `contactVol_eq_wedge12` and `wedge12_frame` = [propext, Classical.choice, Quot.sound], no sorryAx. `wedge12 a b` is defined in the file as `TensorProduct.lid` of Mathlib's `AlternatingMap.domCoprod` (the unnormalized shuffle sum). `wedge12_eq_shuffle`: for any 1-form a and 2-form b, wedge12 a b (u, v, w) = a(u) b(v,w) - a(v) b(u,w) + a(w) b(u,v), proved through `MultilinearMap.domCoprod_alternization_eq` and an explicit sum over the six permutations of Fin 1 ⊕ Fin 2. `contactVol_eq_wedge12`: with a = omega p and b = extDeriv omega p this equals `contactVol p u v w` for every p, u, v, w (uses `dAlpha_eq_extDeriv`). `wedge12_frame`: value -2 r on (d_r, d_theta, d_z). Read for vacuity (R20): the statement of `contactVol_eq_wedge12` is an equality between a Mathlib object and the explicit formula, with no hypothesis beyond the points; it is not a restatement of its own conclusion. This closes the gap named in the ReebPullback entry above. Not claimed: r = 0 in the polar chart; anything beyond a 1-form wedged with a 2-form; Mathlib's own normalization of the wedge (a different convention rescales both sides by a constant). Failure record, kept: round 1 hid a residual goal behind `first | ... | skip` and `all_goals sorry`; round 2 faced an opaque sum over `Perm.ModSumCongr` cosets; round 3 re-expanded the right-hand side; round 4 `congr 2` tried to unify a MultilinearMap with a ContinuousAlternatingMap; round 5 rewrote function compositions where the goal had lambdas. Added to `lean_lib ReebFlow` roots; probe_reeb.lean and the CI gate now expect 34 (31 + 3). The diagnostic lemma `card_perm_diag` was deleted after it passed. Not done: `lake build ReebFlow` with the new root; a CI run of the 34-theorem gate; the build under io's v4.14.0 pin (ReebPullback already cannot build there, and this file uses `extDeriv` through ReebFlowExtDeriv). The header and the deleted diagnostic are the only edits after the author's run: comment and one unused lemma, so run once more before pushing. Run before pushing: `lake build ReebFlow && lake env lean tools/verify-catgt/probe_reeb.lean > /tmp/reeb.txt; python3 tools/axiom_gate.py /tmp/reeb.txt 34`.
+
+
+# CH10: "CERTIFIED" r* WITHDRAWN; AXIOM COUNT AND LISTING SOURCE CORRECTED (2026-11-14)
+
+**What was wrong.** `book4/ch10.html` called r* = 0.77594058 "certified" (abstract, body, key constants,
+Proposition B.6, falsifiable prediction). `certify_rstar_rigorous.py` was cited as a rigorous certificate.
+Run first (R24): its centre trajectory differs by 1.2e-15 (t=2) and 6.1e-13 (t=6) between dt=5e-4 and
+dt=2.5e-4, while it reports an error radius <= 2.0e-53 at decision time
+(`book4/ch10_rstar_rigorous_check.py`, exit 0 = radius smaller than the measured error). The radius is not
+an enclosure. Read from the code: error transport uses a float-converted Euler-linearised matrix with no
+truncation bound; escape/convergence thresholds (r<1e-3, |r-1|<1e-3) are not shown to decide the fate;
+the endpoints of the starting bracket are never classified inside the bisection loop.
+
+**What stands.** r* is computed numerically three ways (float64 DOP853 bisection tol 1e-7; stable-manifold
+crossing 0.775940575502; mpmath RK4 bracket [0.7759405755019531, 0.7759405755023437]); the last two agree to
+within about 4e-13. No rigorous error bound exists for any of them. The page now says "computed".
+
+**Also corrected on the page (dated box at the top of ch10).** (a) The registered
+`AXLE/NASA/MoonBase/AXLE_lean_files/Chain_updated.lean` declares THREE axioms (`inner_basin_is_asymmetric`,
+`outer_basin_unbounded`, `poincare_collatz`); the page said two and "0 logic axioms". (b) `inner_basin_is_asymmetric`
+as written is inconsistent by hand derivation (r0=0, z=-1; the conclusion negates a statement true for every T):
+NOT checked in Lean. Whether the four "fully proved" theorems depend on it: not checked. (c) The page's code
+listing is headed github.com/TOTOGT/GTCT and shows `r_star := 0.77594058`; the registered copy has
+`r_star := 0.8`. The text had attributed 0.8 to the older GTCT draft; that attribution is removed. The GTCT
+file is not in this audit's index and was not checked. The quoted listing itself (with its own comment
+"-- certified inner boundary") is left as quoted, per the rule against editing quoted code.
+
+**Script.** `certify_rstar_rigorous.py` carries a dated header note; original text kept below it.
+
+**Open, not done.** The registered Chain_updated.lean is unchanged (0.8 and the three axioms); it needs a Lean run
+and a decision whether to update it. `book4/ch10_lambda_bone_audit.py:149` labels the value "Chapter 10 certified".
+About 55 other pages mention "certified" near 0.7759 (vol2-toymodel, vol2-contact, r-star-mess, living-book,
+chGravity-scales, book6/wp62, wp69, wp70, book7/wp58, book4/ch24, ch10-lambda-bone-handoff, and others); each
+needs the page-by-page read (R29), not a bulk replace. The ch3, ch4, ch9, ch16, ch5 and spiral-return fixes from
+the same audit are not started.
+
+
+# CH10 FOLLOW-UP: THE LEAN FILE ITSELF (2026-11-14, same day as the entry above)
+
+**Could not run Lean here.** The Linux VM and the cloud container have no toolchain; Lean runs on the Mac
+(`tools/leancheck.sh`, geometry's v4.32.0 build). Nothing below is compiler output.
+
+**Established by reading and git history (not by Lean).** `AXLE/NASA/MoonBase/AXLE_lean_files/Chain_updated.lean`
+and `GTCT/GTCT/GCTC/Operators/Chain.lean` are byte-identical; both have `r_star := 0.8` and three axioms.
+No commit of any Chain / Chain_updated .lean in the full histories of GTCT (111 commits), AXLE (805) and
+geometry (2023) defines `r_star` near 0.7759. The only Lean `r_star` values near it are in
+`AXLE/lean/Dm3Arithmetic.lean`, `Dm3Arithmetic_fixed.lean`, `lean/f35/Dm3Arithmetic.lean`: 0.77594059 (not ...058).
+So the ch10 listing (headed GTCT, `r_star := 0.77594058`) matches no committed file found. Clones not re-fetched.
+
+**Hand derivations, untested.** (1) `inner_basin_is_asymmetric` implies False (r0=0, z=-1).
+(2) `poincare_collatz` implies False: GChain on R with C=x/2, K=id, F=x/2 (attractor 0), U=8x (seed 0);
+composite x->2x; from x=1, dist(G^n, G^(n+1)) = 2^n >= 1 > r_star. (3) `outer_basin_unbounded` is true and
+provable (M+1), so an axiom is unnecessary. `book4/ChainAxiomProbe.lean` encodes all three, self-contained.
+
+**To run:** `bash ~/Desktop/geometry/tools/leancheck.sh --audit ~/Desktop/geometry/book4/ChainAxiomProbe.lean`.
+If it compiles, both `*_gives_false` theorems are accepted. If one fails, read the error: it may be a script slip.
+
+**Not done.** The registered files are unchanged. Whether the four "proved" theorems depend on the axioms needs
+a build of the GCTC project (Mathlib v4.11.0, partial in GTCT/GTCT; the repo's own note says check before
+building) and cannot be answered from geometry's v4.32.0 build without porting the operator files.
+
+
+**Addendum (2026-11-14): GTCT remote checked.** Fetched from `raw.githubusercontent.com/TOTOGT/GTCT/main`:
+root `Chain_updated.lean` (2026-04-18 draft): `r_star := 0.8`, two `sorry` (lines 212, 230), axioms
+`inner_basin_is_asymmetric` and `outer_basin_unbounded`. This matches the page's original sentence about the draft;
+the earlier removal of that attribution is reversed and the sentence now cites this check.
+`GTCT/GCTC/Operators/Chain.lean`: `r_star := 0.8`, three axioms (same line positions as the local copy; not byte-compared).
+No file on main has `r_star` near 0.7759. Other branches/PRs could not be inspected (GitHub API access not enabled
+for this session), so "no remote version has 0.77594058" is established for main only.
+
+
+**Probe result and the Lean edits (2026-11-14, later).** Run on the Mac with `tools/leancheck.sh --audit book4/ChainAxiomProbe.lean`
+(geometry, Lean 4.32.0). `#print axioms`: `inner_basin_axiom_gives_false` depends on `inner_basin_is_asymmetric`;
+`poincare_axiom_gives_false` depends on `poincare_collatz`; `outer_basin_is_provable` on the standard three only. The
+run reported FAIL with 3 errors, all `lean.dependsOnNoncomputable` on `halfC`, `halfF`, `Gdouble` (missing `noncomputable`
+markers on the example chain, code generation only); the three markers are now added and the file has NOT been re-run.
+The same two refutations already exist in `Orthogenesis/Taxonomy/GSeries.lean` §5-§6 (commit 1a06c7f9); this session had
+not looked there first.
+Edited, identical in both: `GTCT/GTCT/GCTC/Operators/Chain.lean` and `AXLE/NASA/MoonBase/AXLE_lean_files/Chain_updated.lean`
+(sha256 prefix c80708eeef92 after edit): `inner_basin_is_asymmetric` and `poincare_collatz` axioms replaced by dated
+comments (obligations OPEN), `outer_basin_unbounded` is now `theorem ... := fun M => ⟨M + 1, by linarith, trivial⟩`,
+`r_star := 0.77594058`. Zero `axiom` lines remain. **Neither edited file has been compiled** (GTCT is pinned to Mathlib
+v4.11.0 with only a partial build on this Mac). Left untouched: GTCT root `Chain.lean`, `Chain_updated.lean` (2026-04-18
+draft, two sorrys, same two axioms) and `Operators/Chain.lean`: older drafts. Still open: whether `spiral_return_exists`,
+`gronwall_outer`, `iter_consecutive_dist`, `poincare_collatz_contracting` compile unchanged.
+
+
+# CH3: THEOREM 3.2 RESTRICTED, r* AND THETA-DOT CORRECTED (2026-11-14)
+
+**Wrong on the page.** `book4/ch03.html` Theorem 3.2: "every trajectory with r(0) > 1 converges exponentially ... at rate mu = -2". False:
+ch10 recorded this on 2026-10-01 and `ch10.html` carries the restricted statement, but ch3 was never updated. Run first (R24): `book4/ch03_outer_basin_check.py`
+(adaptive DOP853, rtol 1e-13, atol 1e-15), ALL CHECKS PASSED: largest converging r(0) at z(0)=0 is 6.85922137; inner r* = 0.77594058; the starts
+(8,0), (10,0), (1.5,-2), (2,-1), (1.001,-3) do NOT converge; (1.5,0), (3,0), (5,0), (0.9,0) do.
+
+**Also found.** `ch10-outer-basin-check.py` prints 6.8963 for the outer limit; that is a fixed-step RK4 (dt=0.01) artefact, not the true value 6.859221
+(its docstring says it was cross-checked against DOP853; the printed number was not). Dated note added to that script; its logic is unchanged.
+
+**Fixed in place on ch3.** (1) Theorem 3.2 now states: (i) on {r>=1, z>=ln 2} forward invariant, exponential convergence with
+0 <= r-1 <= (r0-1)exp[-2t + 2e^{-z0}(1-e^{-t})] (hand-derived in ch10 Prop 3.1, re-derived here, not machine-checked), (ii) numerical limit 6.859 at z(0)=0, and says outright that
+the all-r(0)>1 statement is false. (2) r* ~ 0.8 (three places) -> ~0.776 (0.77594058); the simulator drew the line at 0.77594058 but labelled it at 0.8; label fixed.
+(3) theta-dot = 1 was "one full revolution per unit time" in 3.3 (and 2*pi in 3.7); now one radian per unit time. (4) The exercise summary sentence repeated the false claim; restated.
+(5) "The Lean 4 formalisation in AXLE has been updated to reflect this" replaced by a pointer to the ch10 correction (that file had r_star := 0.8 and inconsistent axioms).
+Dated correction box added after Theorem 3.2.
+
+**Not done on ch3.** No verify script exists for ch3 (R6). The sentence calling Book 3's circadian clock "this theorem, instantiated in biology" (Weinstein/Taubes: closed contact 3-manifolds) was not audited. The
+Gronwall remark "see the GTCT repository" was not rechecked. Prop 3.1's proof is hand-derived only; no Lean.
+
+## 2026-11-14 — CH4 (book4/ch04.html), audit page by page (R29)
+- Theorem 4.2 withdrawn as a theorem; restated as Conjecture 4.2 (open). System (4.1) never specifies s in w-dot = s(r,theta,z,w), so persistence and any w-direction exponent are undefined. The "bound -2" was not derived: radial exponent at r=1 is 2e^{-z}-2 (equals -2 only as z->inf).
+- gamma* was called a closed Reeb orbit with z=z0. Reeb field of dz - r^2 dtheta is d_z; the attractor is the Legendrian helix z=z0+theta (alpha(T)=0), not Reeb, not closed. "Every Reeb orbit has period 2pi" holds for the standard form on unit S^3, not the dm3 form.
+- The 2pi disk area equals |oint alpha| by Stokes; "period = area = Lyapunov rate, one number pi" withdrawn. Remark 4.3 (local->global) restated as hope, not result. Gromov-compactness sentence qualified. Ladder line and pb-prompt updated. Dated correction box id=correction-2026-11-14 added.
+- Tool: book4/ch04_theorem42_check.py (sympy; derivable items only). Not Lean-checked.
+- Side finding (cloud scratch, bisection DOP853 rtol 1e-12): inner boundary depends on the initial z0: r*=0.775941 (z0=0), 0.773158 (z0=0.01), 0.761945 (z0=0.05), 0.629892 (z0=0.5). The old GTCT v3 deposit's "r*=0.7732" matches z0=0.01 (its sim used z0=0.01). So a single "r*" is the z0=0 slice; the pages quoting 0.776 should say "at z0=0". TO DO: add that qualifier and a producing script in tools/ (R12) before publishing the z0 table.
+- Old deposit (GTCT_v3_complete_deposit.zip, user upload): Chain_updated.lean there has r_star := 0.8, axioms inner_basin_is_asymmetric/outer_basin_unbounded/poincare_collatz, i.e. the origin of the axioms removed on 2026-11-14.
+
+## 2026-11-14 — CH16 (book4/ch16-crystal-lattice.html), integer check
+- 1,7,19,37,61 = 1+3n(n+1) = distinct hex coordinates (ring n adds 6n): verified in integers. Stage-tagged cells under the expand rule stated in DM3Bridge.lean conjunct (a) give 1,7,26,63,124 (book4/ch16_colony_count_check.py). Page claim "depth 2 = 19 cells, colony_depth2_cells proved" withdrawn/unverified: dm3_bridge itself only evaluates depth 1; colony_depth2_cells and Colony.lean not in this repo (only ~/Desktop/geometry-backup-jul5/DM3Bridge.lean). Re-run the script against the real Colony.expand before restoring. dm3_bridge (e) is monotone growth, not "Lyapunov descent". Dated box added. Not Lean-checked.
+
+## 2026-11-14 — CH9 (book4/ch09.html), Proofs VI–VII
+- Proof VI numbers (P_ON ~0.94, collapse <3 T*, 10/50/100-yr sweep): no producing script/data found in book4/, tools/, AXLE/ (grep P_ON, 0.94) -> labelled unreproduced (R12); "confirms Ch 8" withdrawn.
+- Proof VII invalid as written: gamma_K, gamma_F have different endpoints (not elements of pi_1); Cartan-Hadamard: complete simply connected K<0 is contractible, so same-endpoint paths are homotopic; K_sec<0 never derived. Withdrawn as proof; "bracket from opposite sides" withdrawn. Ch 8 "no almost-correct design" not established here.
+- r*=0.77594058 on Belleville text -> "≈0.77594 at z(0)=0, numerically computed"; river-as-dm3-IC called a modelling hypothesis. Not checked: §4 Lean counts (21/18, "0 extra axioms"); NJDEP/FERC and MWh claims (external facts, not audited). Dated box added. Not Lean-checked.
+- CH9 follow-up: book4/ch09_pon_toy.py (our own explicit fold toy, K/F undefined in the book; seed 12345, N=2000): K->F vs F->K P_ON = 0.934/0.930 (A=1.5), 0.985/0.710 (A=2), 0.961/0.493 (A=3). Does NOT reproduce "0.94 vs ->0"; not Proof VI. The original figures may have been computed ad hoc and the script lost; unverifiable. To restore Proof VI: define K, F as operators, then simulate.
+
+## 2026-11-14 — CH5 (book4/ch05.html)
+- §5.5 "every letter appears twice except N" false: counts S2 A4 T4 O4 R4 E4 P2 N1 (=25), only N odd, N at (2,2) only; fixed under transpose and 180-degree rotation. Sentence corrected; tool book4/ch05_sator_count_check.py (integers). Ladder line "Reeb orbit {r=1}" -> Legendrian helix (as ch3). Not Lean-checked.
+
+## 2026-11-14 — spiral-return pages (ch06, chIV-recursion) and Chain header
+- ch06 and chIV-recursion already carry the 2026-10-09 corrections (T1 assumes its conclusion; snippets match no file); re-read, still accurate, no page edit needed.
+- Chain_updated.lean / GTCT Operators/Chain.lean header comments: "(a) gronwall_outer CLOSED" and "(c) spiral_return_exists CLOSED" were the compiles-is-not-proves pattern: gronwall_outer is exp((μ+3ε)t) ≤ C·exp(−μ_bound t) from its hypothesis alone (no ODE); spiral_return_exists assumes h_second_circuit. Comments rewritten in both files (comment-only, uncompiled; AXLE copy uncommitted; GTCT copy edit not yet committed on fix-chain-axioms).
+
+## 2026-11-14 — r* wording across pages; tool for r*(z0)
+- tools/dm3_rstar_vs_z0.py (DOP853 bisection; run on Mac): r*=0.775941 (z0=0), 0.773158 (0.01), 0.761945 (0.05), 0.629892 (0.5). Producing tool for the figure and for its z0 dependence (R12).
+- Replaced "certified numerically / by bisection / inner boundary, certified / certified inner-basin boundary / certified value" with "computed" wording on the pages listed by that grep (exact phrases only; counts printed in the run). Remaining "certified" wording on other pages is by phrase not matched; pages not re-read individually.
+- CH16 follow-up (supersedes "not located"): geometry/Orthogenesis already has Colony.lean and, in Architecture/G6Crystal.lean, colony_depth1_cells (7) and colony_depth2_coords (19 coordinates; docstring says stage-tagged cells = 26, matching ch16_colony_count_check.py). The page cited a stale name colony_depth2_cells; page corrected. Added theorem colony_depth2_cells (card = 26 := by decide) after colony_depth2_coords in G6Crystal.lean; leancheck would not run on the Mac VM (rc=127), so it is UNCOMPILED. The earlier statement that Colony.lean was not in the repo was wrong (I searched book4/AXLE, not Orthogenesis).
+- 2026-11-14 user run: `lake build GCTC.Operators.Chain` in ~/Desktop/GTCT/GTCT (Mathlib v4.11.0 fetched fresh): Build completed successfully, 0 errors, 5 unused-variable warnings: Chain.lean:83 `a`,`b` (outer_basin_unbounded stub), :114 `hμ_bound` (gronwall_outer — confirms it does not use its own positivity hypothesis), :148 `h_nontrivial` (spiral_return_exists — the hypothesis is not used; only h_second_circuit is), :210 `hd_def`. This compiled the edited Chain.lean (axioms removed, r_star=0.77594058, header comments). G6Crystal.lean leancheck result pending at time of entry.
+- 2026-11-14 user run: `leancheck.sh --audit Orthogenesis/Architecture/G6Crystal.lean` (v4.32.0): OK, 65s. colony_depth2_cells (card = 26, decide) compiles; the "not yet compiled" wording on ch16 is now out of date and is corrected.
+
+## 2026-11-14 — book26 ch19 and AXLE Vol. 18 (external reader's check)
+- Headline "enough coupling removes the several stable states" contradicted the chapter's own algebra (aligned states eigenvalues -2, -2-2k, stable for all k; mixed states x^2=1-2k with eigenvalues -2+6k, -2+4k re-derived by hand): corrected to "removes the opposite-sides states, not the stable states".
+- "A single national series can neither confirm nor rule out" narrowed to this test under the simulated rare-switching conditions; low power = weak evidence, not none; panel adequacy untested. Chapter, dated Updates row, and Vol. 18 (pull-quote, page 2 summary, page 3 conclusion) edited; ch19-verify.py 0 FAIL after the edit. Vol. 18 AXLE copy uncommitted.
+- Vol. 18 page 4 (four sets: Lean addresses, cross-links, subject tags, key register) is distinct from the statements/claims/numbers pilot; the pilot does not close its request for a non-Claude reader. Vol. 18 reports compilation of Ch19MultistabilityAlgebra.lean, not ChainAxiomProbe.lean.
