@@ -576,7 +576,7 @@ table { min-width: max-content; }
       <div class="ln-body">
         <div class="ln-tag">Contact Geometry · Toy Model</div>
         <div class="ln-title">dm³ System</div>
-        <p class="ln-text">The contact 3-manifold M = ℝ²₊ × ℝ with exact equations ṙ = r(1−r²) + 2(r−1)e⁻ʳ, θ̇ = 1, ż = r² − 2(r−1)²e⁻ʳ. Limit cycle Γ = {r=1}, T* = 2π. Transverse eigenvalue μₘₐₓ = −2, τ = 2. The Coherence Bridge Theorem (5.4) proves that 16+ domains spanning 17 orders of magnitude are objects in the same category dm³, related by explicit contact morphisms.</p>
+        <p class="ln-text">The contact 3-manifold M = ℝ²₊ × ℝ with exact equations ṙ = r(1−r²) + 2(r−1)e⁻ᶻ, θ̇ = 1, ż = r² − 2(r−1)²e⁻ᶻ (corrected 2026-11-14: this line previously printed e⁻ʳ; every defining source in the repo — certify_rstar.py, ch03, ch10 — has e⁻ᶻ, and the r* ≈ 0.776 cited across this page is computed from the e⁻ᶻ system). Limit cycle Γ = {r=1}, T* = 2π. Radial exponent at r=1 is 2e⁻ᶻ − 2, approaching μₘₐₓ = −2 as z → ∞; τ = 2. The Coherence Bridge identity claim is withdrawn (see the 2026-09-19 box in §V): where a contact morphism between two domains is exhibited the relation is an identity; where none is, the domains share a functional form, not a shared invariant.</p>
       </div>
     </div>
     <div class="ln">
@@ -593,7 +593,7 @@ table { min-width: max-content; }
       <div class="ln-body">
         <div class="ln-tag">Formal Proof Series · Live · Growing</div>
         <div class="ln-title">AXLE — Formal Verification</div>
-        <p class="ln-text">1,165 entries formalized in Lean 4 &mdash; 1,004 sorry-free in source, 61 kernel-audited &mdash; 31 re-run by CI on every push in geometry, 30 registry entries in AXLE, which has no CI (registry recounted 15 August 2026; an earlier figure of 1,080 proved was withdrawn on audit). Chapter A (Autophagy + Triple-Alpha): 26 theorems, 0 sorry. Ch.η (DNLS/N-bonacci): proved. FruitFly connectome: proved. Intel Swarm: proved. 50+ HTML chapters live. The Coherence Bridge with parameters (μₘₐₓ, ω, β, κ*) formally verified across all confirmed domains. This list grows weekly.</p>
+        <p class="ln-text">1,165 entries formalized in Lean 4 &mdash; 1,004 sorry-free in source, 61 kernel-audited &mdash; 31 re-run by CI on every push in geometry, 30 registry entries in AXLE, which has no CI (registry recounted 15 August 2026; an earlier figure of 1,080 proved was withdrawn on audit). Chapter A (Autophagy + Triple-Alpha): 26 theorems, 0 sorry. Ch.η (DNLS/N-bonacci): proved. FruitFly connectome: proved. Intel Swarm: proved. 50+ HTML chapters live. The Coherence Bridge parameters (μₘₐₓ, ω, β, κ*) are tabulated per domain; the cross-domain identity claim is withdrawn (0 of 55 pairs similar, tools/coherence_similarity.py — see the 2026-09-19 box in §V). This list grows weekly.</p>
       </div>
     </div>
     <div class="ln">
@@ -659,15 +659,16 @@ table { min-width: max-content; }
   </div>
   <div class="math-block">
     <span class="math-label">dm³ Contact Equations — M = ℝ²₊ × ℝ, α = dz − r²dθ</span>
-    <div class="ml">ṙ = r(1 − r²) + 2(r−1)·e<sup>−r</sup></div>
+    <div class="ml">ṙ = r(1 − r²) + 2(r−1)·e<sup>−z</sup></div>
     <div class="ml">θ̇ = 1</div>
-    <div class="ml">ż = r² − 2(r−1)²·e<sup>−r</sup></div>
+    <div class="ml">ż = r² − 2(r−1)²·e<sup>−z</sup></div>
     <br>
     <div class="mc">-- Limit cycle: Γ = {r=1}, T* = 2π</div>
-    <div class="mc">-- Transverse eigenvalue: λ(z) = −2(1−e⁻ʳ) → μₘₐₓ = −2, τ = 2</div>
-    <div class="mc">-- Outer basin: ε₀ = 1/3, boundary r_att + ε₀ = 4/3</div>
+    <div class="mc">-- Transverse eigenvalue: λ(z) = −2(1−e⁻ᶻ) → μₘₐₓ = −2 as z→∞, τ = 2</div>
+    <div class="mc">-- Outer basin: ε₀ = 1/3 certified inclusion r_att + ε₀ = 4/3 (boundary ≈ 6.859 at z₀=0, ch03)</div>
     <div class="mc">-- Inner basin: r* ≈ 0.776 (DOP853, rtol=10⁻¹⁰, binary search 20 iter)</div>
     <div class="mc">-- Hierarchy: ε₀=1/3 &lt; 2/3 &lt; r*≈0.776 &lt; κ*≈0.882 &lt; 1</div>
+    <div class="mc">-- Corrected 2026-11-14: exponents above previously printed e⁻ʳ; the defining sources (ToyModel.lean, certify_rstar.py) have e⁻ᶻ.</div>
   </div>
   <figure style="margin:3rem 0;border:1px solid var(--border);background:var(--card);overflow:hidden;">
     <svg viewBox="0 0 900 175" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:175px;background:#07080f;">
@@ -751,7 +752,7 @@ table { min-width: max-content; }
 <section class="section" id="coherence">
   <div class="sec-label">§ V — The Coherence Bridge</div>
   <h2>Seventeen orders of magnitude. One operator sequence.</h2>
-  <p><strong>Coherence Bridge Theorem (5.4) — proved in Lean 4.</strong> The systems below are objects in the same category dm³, related by explicit contact morphisms fᵢⱼ: Xᵢ → Xⱼ with fᵢⱼ(Γᵢ) = Γⱼ. Each instantiates the same contact normal form with parameters (μₘₐₓ, ω, β, κ*). These are not analogies. Where the morphisms f&#7522;&#11388; are exhibited they are exact mathematical identities; where they are not, the systems share a functional form.</p>
+  <p><strong>Coherence Bridge (5.4) — identity claim withdrawn 2026-09-19 (box below).</strong> The systems below each instantiate the same contact normal form with parameters (μₘₐₓ, ω, β, κ*). That is a shared functional form. Where a contact morphism fᵢⱼ: Xᵢ → Xⱼ with fᵢⱼ(Γᵢ) = Γⱼ is exhibited, the relation between those two systems is an identity; for the tabulated domain pairs none is exhibited, and the similarity test below returned 0 of 55 — so the table records analogous forms, not one shared invariant.</p>
   <div style="border:1px solid #d9a8a8;background:#fdeaea;padding:1rem 1.2rem;margin:1.3rem 0;color:#2b1010" class="corr-box"><span style="display:block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;color:#8b1a1a;margin-bottom:.5rem">Corrected 2026-09-19 &mdash; the identity claim is withdrawn</span><p style="margin:0">&ldquo;Identity&rdquo; is a standard term with a decision procedure attached, and the procedure had never been run. Two matrices are similar exactly when they represent one linear map in different bases; near &Gamma; each domain is a 2&times;2 system with eigenvalues &mu;&nbsp;&plusmn;&nbsp;i&omega;. <span style="font-family:ui-monospace,Menlo,monospace">tools/coherence_similarity.py</span> reads the eleven bridge rows that carry both numbers and tests every pair. <strong>Linear similarity: 0 of 55.</strong> Allowing the clock to be rescaled &mdash; comparing only the ratio &mu;/&omega; &mdash; <strong>0 of 55</strong>. The closest pair is Immune adaptation (&minus;2.4444) against Market volatility (&minus;2.3929): near, not equal. What all eleven do share is that every 2D linear spiral sink is topologically conjugate to every other &mdash; true of eleven damped oscillators picked at random, so it carries no information about these eleven. The claim is true at the level where it says nothing and false at every level where it would say something. See <a href="../ch20-coherence-bridge.html">ch20</a>.</p></div>
   <table class="coh-table">
     <thead><tr><th>Domain</th><th>μₘₐₓ (s⁻¹)</th><th>ω (rad/s)</th><th>β</th><th>κ*</th><th>Status</th></tr></thead>
