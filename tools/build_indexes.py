@@ -111,6 +111,8 @@ FOLDERS: list[tuple[str, str, str]] = [
     ("book24", "Book XXIV — Linear Algebra for Graduate Study", "book24"),
     ("book25", "Book XXV — Ponte / Bridge", "book25"),
     ("book26", "Book XXVI — 2026", "book26"),
+    # book27 was absent when the FOLDER GUARD stopped the build on 2026-11-14; title from its index.html.
+    ("book27", "Book XXVII — UoPeople MSIT Study Book", "book27"),
     ("book28", "Book XXVIII — Index Theory", "book28"),
     ("book29", "Book XXIX — Open Threads", "book29"),
     ("book30", "Book XXX — Planned", "book30"),
