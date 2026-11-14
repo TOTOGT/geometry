@@ -293,3 +293,11 @@ lean_lib SpectralDiagonalBound where
 -/
 @[default_target]
 lean_lib Ch19MultistabilityAlgebra
+
+/-
+  ChainAxiomProbe.lean: kernel-checks that two removed Chain axioms were each inconsistent as stated.
+  It declares those axioms on purpose, so its #print axioms output lists them; the job does not gate on it.
+-/
+@[default_target]
+lean_lib ChainAxiomProbe where
+  srcDir := "book4"
