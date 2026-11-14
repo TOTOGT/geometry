@@ -16,7 +16,7 @@ script checks the MARKDOWN as found (git ref pinned below) and as corrected. Use
   [9] the corrected manuscript prints the corrected statements
 
 Prints SKIP, never PASS, when the pinned ref, the source or a library is missing. NOT checked: the Lean
-source (not in this checkout), RH, section 6, the p-adic remarks, the citations in section 4.7.
+source statements' mathematical content, RH, section 6, the p-adic remarks, the citations in section 4.7.
 """
 import os, re, subprocess, sys
 BASELINE = 'd1e8ad0'
@@ -159,7 +159,21 @@ else:
     check(len(lines) >= 16, 'at least 16 declarations are reported (page: "18 theorems")')
     for nm in ('reflection_law', 'Zlog_add_Zlog_one_sub', 'chiLog_real_on_critical_line', 'logDeriv_Gammaℝ', 'gCoef_odd_in_t', 'cCoef_even_in_t', 'lseries_vonMangoldt_eq_neg_Zlog'):
         check(any(nm in l for l in lines), 'the report contains ' + nm)
-    note('book4/ZetaReflection.lean itself is not in this checkout: the report is a receipt for a file I cannot read; the theorem statements are WANTED.')
+    src_lean = os.path.join(ROOT, 'book4/ZetaReflection.lean')
+    if not os.path.exists(src_lean):
+        note('book4/ZetaReflection.lean itself is not in this checkout: the report is a receipt for a file I cannot read; the theorem statements are WANTED.')
+    else:
+        lean = open(src_lean, encoding='utf-8').read()
+        decls = re.findall(r'^(?:theorem|lemma)\s+([A-Za-z0-9_\u0370-\u03ff\u2100-\u214f]+)', lean, re.M)
+        check(len(decls) == 18, 'the Lean source has exactly 18 theorem/lemma declarations (found %d)' % len(decls))
+        code = re.sub(r'--.*', '', lean); code = re.sub(r'/-.*?-/', '', code, flags=re.S)
+        check(not re.search(r'\bsorry\b', code), 'no sorry outside comments in ZetaReflection.lean')
+        rep_names = set(re.findall(r"'Book4\.Ch12\.([^']+)'", ''.join(lines)))
+        missing = [n for n in rep_names if n not in lean]
+        check(not missing, 'every declaration named in the receipt appears in the source (missing: %s)' % (missing or 'none'))
+        fel = os.path.join(ROOT, 'book4/ZetaFELogDeriv.lean')
+        if os.path.exists(fel):
+            note('ZetaFELogDeriv.lean present too: %d theorem/lemma declarations; its receipt (2026-09-08) reports 7, 0 sorryAx.' % len(re.findall(r'^(?:theorem|lemma)\s', open(fel, encoding='utf-8').read(), re.M)))
 
 head(9, 'THE CORRECTED MANUSCRIPT   (working tree)')
 try: cur = sq(open(os.path.join(ROOT, SRC), encoding='utf-8').read())
@@ -187,7 +201,7 @@ if fails:
     print('  %d FAIL:' % len(fails)); [print('    - ' + f) for f in fails]; sys.exit(1)
 print('  all run checks passed.')
 print('  Recorded as open, NOT checked here:')
-print('   - the Lean source book4/ZetaReflection.lean and ZetaFELogDeriv.lean are not in this checkout; the axiom report is a receipt only.')
+print('   - the Lean sources book4/ZetaReflection.lean and ZetaFELogDeriv.lean were copied into this checkout on 2026-11-14 from the GTCT repo (book4/); section [8] now reads the source as well as the receipt.')
 print('   - Conjecture 6.1, Weil/Connes comparisons (7.1, 7.2): the "morally identical" and "Reeb vector field = our Reeb flow" statements are analogies, not derivations.')
 print('   - the citations of section 4.7 (Anthropic 2026-08-11, Baluyot et al. arXiv:2306.04799, Lamzouri arXiv:2609.02882, Pratt et al.): cited, not read here; Lamzouri 2609.02882 and the Anthropic page exist (web search 2026-09-29, titles only). Search listings also show later arXiv items (2609.07918, 2609.24167, 2609.33043) dated after version 3: not read.')
 print('   - "Proposition 4.6", the contactomorphism refutation, is argued not proved; "Step 3" in section 8 predates section 4.5 (the involution is s -> 1 - conj(s), not sigma -> 1 - sigma alone).')
