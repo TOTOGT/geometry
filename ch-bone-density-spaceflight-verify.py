@@ -11,6 +11,7 @@ re-measured). Everything else is arithmetic on them.
   [4] the 4-half-life statement
   [5] the dm3 row test
   [6] K as feedback strength (curvature), constant K => no F, critical duration T_c: is bone recovery, as fitted, a spiral sink?
+  [7] negative controls: corrupted inputs that the checks must reject
   [HONESTY]
 """
 import math, sys
@@ -100,6 +101,30 @@ for L in (0.89, 0.85, 0.8, 0.7):
 check("T_c grows without bound as loading approaches L_c = eps0*h_c = 0.9 (loading 0.89999 -> over 10 half-times)", math.log((hE - 0.89999) / (hc - 0.89999)) / r_fn / 211 > 10)
 check("pelvis K / femoral neck K = 211/97 = 2.175 (sourced half-times)", abs((math.log(2)/97) / r_fn - 211/97) < 1e-9)
 check("constant K gives a proportional residue: doubling the landing loss doubles the 12-month deficit", abs((2*6.8*0.5**(365/211)) / (6.8*0.5**(365/211)) - 2) < 1e-12)
+
+print("[7] negative controls: each check above must be able to fail. A corrupted input is fed to the same test and must be REJECTED")
+def rejects(label, ok):
+    """PASS only if the corrupted case fails the check it is aimed at."""
+    check("control: " + label, not ok)
+# (a) the pelvis/femoral-neck ratio test must reject a wrong half-time (pelvis 211 instead of 97)
+rejects("pelvis K / femoral neck K test rejects a wrong pelvis half-time (211)", abs((math.log(2)/211) / r_fn - 211/97) < 1e-9)
+# (b) the no-critical-slowing test must reject a loop whose rate falls toward L_c = 0.9
+def rate_bad(L, t=100.0, d=1e-6):
+    rr = r_fn * max(0.9 - L, 1e-3)           # corrupted loop: K shrinks as loading approaches 0.9
+    hs = L / eps0
+    f = lambda tt: hs + (hE - hs) * math.exp(-rr * tt)
+    return -(math.log(abs(f(t + d) - hs)) - math.log(abs(f(t) - hs))) / d
+bad_rates = [rate_bad(L) for L in (0.5, 0.8, 0.85, 0.89)]
+rejects("F-absent test rejects a loop whose rate vanishes toward L_c", max(bad_rates) - min(bad_rates) < 1e-7)
+# (c) the sign test must reject a wrong-signed rate
+rejects("'all five mu negative' test rejects a flipped sign", all(-m < 0 for m in mu.values()))
+# (d) the proportional-residue test must reject a residue that grows faster than the loss
+rejects("proportional-residue test rejects a residue quadratic in the loss", abs(((2*6.8)**2 * 0.5**(365/211)) / (6.8**2 * 0.5**(365/211)) - 2) < 1e-12)
+# (e) T_c must reject a wrong closed form (log of the inverted ratio)
+Tc_ok = math.log((hE - 0.8/eps0) / (hc - 0.8/eps0)) / r_fn
+Tc_bad = math.log((hc - 0.8/eps0) / (hE - 0.8/eps0)) / r_fn
+rejects("h(T_c) = h_c test rejects an inverted T_c formula", abs(h_t(0.8, Tc_bad) - hc) < 1e-9)
+check("control sanity: the correct T_c is accepted by the same test", abs(h_t(0.8, Tc_ok) - hc) < 1e-9)
 
 print("[HONESTY]")
 print("  Source numbers are typed from one 2006 NASA manuscript and one 2022 abstract; the 2006 manuscript predates ARED (installed 2008).")
