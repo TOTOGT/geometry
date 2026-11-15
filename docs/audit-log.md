@@ -12916,3 +12916,11 @@ book7/wp56-special-relativity.html, box id="correction-2026-11-15". Theorem SR.5
 
 Edited: chGravity-scales.html (the "Proved: Whitney A1 fold at r*" sentence now "Stated, not proved here"; three other A1 labels qualified), wp59-dark-matter-lensing.html (lensing fold is A2; five places), wp58-galactic-fold.html (hero line; title and body left, so indexes stay in step), chE-gtct.html (A1-A3 hierarchy is A2-A4 in Arnold's indexing; "established in Volume One / verified in AXLE v6.1" relabelled a model reading; the JavaScript node labels F1..F3 and the "Open · Whitney A1" tier label left), chIV-axioms.html (code line).
 NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-causal, chGravity-scales, index-book7, master-index) still carry the old WP57 title "Milkomeda and the Spacelike-to-Timelike Transition"; they come from generators and update when the title is regenerated. ch7-crystalline.html, chGravity-scales.html and wp58 body text still present Milkomeda as "fix(G_LocalGroup)" / g96 attractor merger: these are CONJECTURE-labelled on the pages and were not rewritten. wp58 body, chE-gtct JS labels, and the "ADE" claim in chGravity (§F hierarchy) are unaudited.
+
+## 2026-11-15 — book7/wp58-galactic-fold.html (body audit)
+
+- Computed: independent bisection (book7/wp58_audit_check.py, DOP853, rtol 1e-12) reproduces the printed r*(eps) for eps = 0.5, 1, 1.5, 2.5, 3, 4 and r*(2,0) = 0.7759405755 to about 1e-9 or better. Exit 0.
+- Corrected: galactic rows use exact nu/kappa (1.1375, 1.6085, 1.8489, 1.9261); r* = 0.611, 0.714, 0.754, 0.765 (was 0.610, 0.713, 0.755, 0.765). R* to two decimals unchanged (2.14, 2.50, 2.64, 2.68).
+- Corrected: "certified" relabelled "computed". certify_rstar.py states a 1e-7 tolerance, which does not back 10 significant figures; the new script is the check for those digits.
+- Corrected: r*(1.5) differs from ln 2 by 1.7e-5, far above numerical error, so not equal; "tantalizing" wording replaced.
+- Not checked: kappa and nu inputs (unsourced), eps_gal = nu/kappa (a model), 2:1 resonance claim, observed bulge-disc range. Milkomeda-as-fix(G) remains a CONJECTURE on this page.
