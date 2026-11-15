@@ -12758,3 +12758,6 @@ ch26-verify.py (40 PASS), new ch26_audit_check.py (8 PASS). Findings F26-1..F26-
 
 ## 2026-11-15 — ch27 audited; evidence prose added to ch27
 ch27-verify.py (PASS) and new ch27_audit_check.py (8 PASS). Findings F27-1..F27-5; main: ⟨log W⟩ formula is the log of the mean (measured 1.127 vs 1.306 at 4e6); K, C differ from the exact Euler-product values in the fourth decimal. Page edit: one "Evidence beside this chapter" paragraph in book4/ch27-measure-that-binds.html; run box regenerated for this page only. Mathematical statements NOT changed. Last chapter completed: 27. Next: ch28 (book4/ch28-what-the-flow-pays.html, ch28-verify.py).
+
+## 2026-11-15 — ch28 audited; evidence prose added to ch28; Book 4 sweep ch21-ch28 complete
+ch28-verify.py (PASS) and new ch28_audit_check.py (7 PASS + 3 hand-argument notes). Findings F28-1..F28-8 (Gamma is a cylinder not Legendrian; Reeb sign; dS=0 cost nonzero; sigma contains undefined T; saddle cubic derivation; r* 0.7732 vs 0.7759; Zenodo record unconfirmed). Page edit: one "Evidence beside this chapter" paragraph in book4/ch28-what-the-flow-pays.html; run box regenerated for this page only. Mathematical statements NOT changed. Last chapter completed: 28 (the last chapter of Book 4). Sweep summary in docs/audit-book4-ch11-14-ch18-ch19-2026-11-14.md.
