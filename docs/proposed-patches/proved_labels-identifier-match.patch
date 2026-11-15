@@ -1,0 +1,33 @@
+--- a/tools/proved_labels.py
++++ b/tools/proved_labels.py
+@@ -79,6 +79,18 @@
+             'assume its conclusion and still report clean. Follow the link before citing one '
+             'as evidence.</span>\n</div>\n' % (MARK, "<br>\n  ".join(items)))
+ 
++def named(short, s):
++    """True only if the page names the declaration as a declaration, not as an English word.
++    A name that is identifier-shaped (underscore, digit, prime, or an interior capital) matches
++    as a bare word. A plain all-lowercase name (e.g. 'discriminant') must appear inside a
++    <code>...</code> element, so ordinary prose or a nav title cannot pull in an unrelated proof."""
++    w = re.compile(r"\b" + re.escape(short) + r"\b")
++    if re.search(r"[_0-9'!?]|[a-z][A-Z]", short):
++        return bool(w.search(s))
++    for m in re.finditer(r"(?is)<code[^>]*>(.*?)</code>", s):
++        if w.search(m.group(1)): return True
++    return False
++
+ def main(write=False):
+     pages = [p for p in glob.glob("**/*.html", recursive=True) if not p.startswith(SKIP_DIRS)]
+     hits, skipped, tainted = {}, 0, collections.defaultdict(set)
+@@ -89,9 +101,9 @@
+         for short in SHORT:
+             if len(short) < 7: continue
+             if short not in LEAN: continue          # must resolve, R11
+-            if re.search(r"\b" + re.escape(short) + r"\b", s): found.add(short)
++            if named(short, s): found.add(short)
+         for short in DIRTY_SHORT:
+-            if len(short) >= 7 and re.search(r"\b" + re.escape(short) + r"\b", s):
++            if len(short) >= 7 and named(short, s):
+                 tainted[p].add(short)
+         if found: hits[p] = found
+     print("=" * 74)
