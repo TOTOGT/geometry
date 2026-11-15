@@ -12899,3 +12899,7 @@ book4/ch05.html, box id="correction-2026-11-15". F5-1 "torus (wraps)" removed; F
 ## 2026-11-15 — ch00-student-edition (applied from the other session's findings)
 
 book4/ch00-student-edition.html, box id="correction-2026-11-15". F0s-1 Rule 5 example replaced (r(0)>1 coupled statement withdrawn; now the 1D radial equation); F0s-2 Pass 2 no longer converges (Collatz open; 16 of 28 orbits leave the book); F0s-3 pointers (Ch 10 / Ch 5 / Ch 6 / 0 -> 28); F0s-4 jet row now rank-3 Pfaffian system, theta-dot=1 is constant; F0s-5 "one job" softened. ch00-definitions.html hash staleness NOT touched (decision pending: regenerate all vs one-page mode).
+
+## 2026-11-15 — wp56 §10 (applied from docs/proposed-patches/wp56-section10-replacement.md)
+
+book7/wp56-special-relativity.html, box id="correction-2026-11-15". Theorem SR.5 and the Literature block replaced by Proposition 10.1 (common causal receiver: A, B stay spacelike; M receives both for T > d/2c = 1.2685 Myr), Definition 10.2 (T_CI), Proposition 10.3 (stationary receiver), merger as conditional MODEL (Sawala et al. 2025, paper not read), Sheffer literature note (abstract only). "Appears to be original / absent from the literature" withdrawn; "Penrose 1960" replaced by Rietdijk 1966 / Putnam 1967 / Penrose 1989, attribution UNVERIFIED. Heading now "A Common Causal Receiver"; evidence paragraph updated. wp56_audit_check.py 6 PASS. The book6 paper sharing the number WP-56 is not touched; book8 ch8-3 and other pages that cite the Milkomeda claim not checked.
