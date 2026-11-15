@@ -1,0 +1,90 @@
+# Check runs, 2026-11-15 (cwd: repo root; python3 3.10.12, mpmath 1.3.0, numpy 2.2.6; no Lean toolchain available)
+
+$ python3 book4/ch18_audit_check.py   (exit status below)
+PASS [A] the 1x3 bricks cover the torus exactly once (a tiling by one convex tile)
+    edge-neighbour counts by brick type: [('h', 8), ('v', 4)]
+PASS [A] some tile has more than 6 edge-neighbours (found 8): equal split gives 1/8 < 1/6
+PASS [A] mean neighbour count is still <= 6 (5.00): the bound that survives is on the average
+PASS [A] control: every hexagon in the regular tiling has exactly 6
+PASS [B] Lean statement as written holds for the hexagonal vertex (Fin 6, others +2,+4)
+PASS [B] the same form of statement ALSO holds for the square grid (Fin 4, others +1,+2,+3)
+PASS [B] yet the square grid has a straight continuation
+PASS [B] and the hexagonal vertex has none (d+3 not in {d+2, d+4})
+    => 'd != d+2 and d != d+4' says the other two edges differ from the arrival edge;
+       it does not distinguish hexagon from square. The statement that does is d+3 != d+2 and d+3 != d+4.
+PASS [B] honeycomb built correctly (unit edges, 50 interior degree-3 vertices)
+PASS [B] honeycomb: no vertex has two collinear incident edges (0 found)
+PASS [B] control: the square grid has collinear pairs (48 found)
+    Lean: 17 theorems; 'sorry' in code (comments stripped): 0
+PASS [C] Lean file has no sorry in code
+    page says Q1 is 'left open' in sec 18.2: False
+    page table marks no_straight_continuation proved: True
+    page says 'three hard obligations are named and open': False
+    page 'What is not claimed' still lists Q1 and Q2 as unproved: True
+    Lean closing summary still says 'Q2 response-spectrum detuning (sorry)': True
+    placeholder with conclusion True: ['hexagrid_collapse_superior_placeholder']
+exit=0
+
+$ python3 book4/ch19_audit_check.py   (exit status below)
+PASS [1] delay D(n) strictly increasing in all 20000 random uniform-stair geometries (r_n is convex in n)
+PASS [1] control: listener collinear with the step edges gives constant delay (spread 4.1e-17 s)
+    El Castillo-like stair, ear height 1.6 m, c = 343 m/s, 91 steps:
+      listener    3 m out: pitch   1358 ->  463 Hz, fall = 1.55 octave
+      listener    5 m out: pitch    951 ->  465 Hz, fall = 1.03 octave
+      listener   10 m out: pitch    771 ->  471 Hz, fall = 0.71 octave
+      listener   20 m out: pitch    705 ->  485 Hz, fall = 0.54 octave
+      listener   40 m out: pitch    677 ->  512 Hz, fall = 0.40 octave
+PASS [2] far-field first delay -> 2q/c (1.533525 vs 1.533528 ms)
+PASS [2] far up the stair delay -> 2*sqrt(q^2+p^2)/c (2.16874 vs 2.16874 ms)
+    => for a distant listener the fall is at most log2(sqrt(1+(p/q)^2)) = 0.50 octave for run = riser;
+       'about one octave' needs the listener close in (a few metres). The page gives no listener distance.
+PASS [3] total fall decreases as the listener moves back (1.55, 1.03, 0.71, 0.54, 0.40, 0.27)
+PASS [4] in THIS model (straight uniform stair, point reflectors at the step edges, source and listener together, listener height 0-2 m, distance 0.5-60 m, run/riser 0.15-0.5 m) no sampled geometry gives an ascending chirp (0 of 20000); this is sampling, the convexity argument in AuditFixes_2026_11_15.lean gives the non-strict statement for all listener positions. Extended surfaces, separated source/listener, curved or non-uniform stairs are not covered
+PASS [4] a stair whose steps shrink with height does give an ascending chirp (exists)
+PASS [5] doubling the delay halves the pitch
+exit=0
+
+$ python3 book4/ch20_audit_check.py   (exit status below)
+square     m=4  A_m(1)=1.000  A_m(N=16,32,64,128)=3.226e-02, 1.587e-02, 7.874e-03, 3.922e-03
+           tail exponent (N>=16): A_m -> -1.013   B_m (angular distribution) -> -0.982
+triangular m=6  A_m(1)=1.000  A_m(N=16,32,64,128)=7.163e-04, 1.706e-04, 4.166e-05, 1.029e-05
+           tail exponent (N>=16): A_m -> -2.038   B_m (angular distribution) -> -0.979
+PASS square: A_4 ~ N^-1 (exponent -1.013), as the page states
+PASS triangular: A_6 ~ N^-2 (exponent -2.038), NOT N^-1 as the page's table states
+PASS hex quartic term is isotropic: sum_j cos(4(theta - j*60deg)) = [ 0.  0. -0.  0.  0. -0. -0.]
+     hex sextic term is anisotropic: sum_j cos(6(theta - j*60deg)) = [ 3. -3.  3. -3.  3. -3.  3.]
+exit=0
+
+$ python3 book4/ch14_W_point_check.py   (exit status below)
+point sigma=0.99  t=95.3333333333
+   dps=30  c=-0.445808448983  g=-0.0240931376565  |zeta|=0.461193  W(analytic)=-0.454179456877189
+   dps=50  c=-0.445808448983  g=-0.0240931376565  |zeta|=0.461193  W(analytic)=-0.454179456877189
+   dps=80  c=-0.445808448983  g=-0.0240931376565  |zeta|=0.461193  W(analytic)=-0.454179456877189
+   h=0.001  W(central difference)=-0.454177170251625
+   h=1.0e-5  W(central difference)=-0.454179456648527
+   h=1.0e-7  W(central difference)=-0.454179456877166
+   route 3 (numerical derivative of zeta, h=1e-6): W=-0.454179456875
+   W<0 and stable across precision (spread 3.2e-33): PASS
+point sigma=0.9  t=60.0
+   dps=30  c=-0.12029032241  g=-0.267295898885  |zeta|=0.495917  W(analytic)=-0.0439451856640713
+   dps=50  c=-0.12029032241  g=-0.267295898885  |zeta|=0.495917  W(analytic)=-0.0439451856640713
+   dps=80  c=-0.12029032241  g=-0.267295898885  |zeta|=0.495917  W(analytic)=-0.0439451856640713
+   h=0.001  W(central difference)=-0.0439446740762192
+   h=1.0e-5  W(central difference)=-0.0439451856129126
+   h=1.0e-7  W(central difference)=-0.0439451856640662
+   route 3 (numerical derivative of zeta, h=1e-6): W=-0.0439451856636
+   W<0 and stable across precision (spread 6.26e-32): PASS
+point sigma=0.25  t=59.35
+   dps=30  c=5.30152844057  g=0.306428523264  |zeta|=0.470763  W(analytic)=-81.0525444479808
+   dps=50  c=5.30152844057  g=0.306428523264  |zeta|=0.470763  W(analytic)=-81.0525444479808
+   dps=80  c=5.30152844057  g=0.306428523264  |zeta|=0.470763  W(analytic)=-81.0525444479808
+   h=0.001  W(central difference)=-81.0511920218081
+   h=1.0e-5  W(central difference)=-81.052544312736
+   h=1.0e-7  W(central difference)=-81.0525444479673
+   route 3 (numerical derivative of zeta, h=1e-6): W=-81.0525444466
+   W<0 and stable across precision (spread 3.8e-29): PASS
+exit=0
+
+$ python3 book4/ch11_14_wronskian_check.py   (full output: docs/evidence-wronskian-check-run-2026-11-15.txt; exit 0, 21 PASS, 0 FAIL)
+$ python3 tools/terms.py --check
+OK: 176 declared terms, all present; 2 disowned terms, mentioned only where declared.

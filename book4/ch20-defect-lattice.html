@@ -243,14 +243,14 @@ ul.tight { margin:1rem 0 1rem 1.5rem; line-height:2.05; }
 <table class="status-table">
   <tr><th>Lattice</th><th>Point group</th><th>Tail exponent ($N \geq 16$)</th><th>$A$ at $N=1$</th></tr>
   <tr><td>Square</td><td>4-fold</td><td><code>&minus;0.990</code></td><td><code>1.000</code></td></tr>
-  <tr><td>Triangular</td><td>6-fold</td><td><code>&minus;0.986</code></td><td><code>1.000</code></td></tr>
+  <tr><td>Triangular</td><td>6-fold</td><td><code>&minus;0.986</code> as reported (<code>&minus;2.04</code> at typical scale: see the correction box)</td><td><code>1.000</code></td></tr>
 </table>
 
-<p>The exponent is $-1$, and it is not fitted from the numerics alone. For the square set the characteristic function is $\varphi(k) = (\cos k_x + \cos k_y)/2$, whose expansion carries an anisotropic quartic term $k_x^4 + k_y^4 = \tfrac{3}{4}k^4 + \tfrac{1}{4}k^4\cos 4\theta$. Summing $N$ independent defects raises $\varphi$ to the $N$th power; evaluating at the typical scale $k \sim N^{-1/2}$ leaves a relative anisotropy of order $1/N$. Analytics and numerics agree to better than two percent.</p>
+<p>For the square set the exponent is $-1$, and it is not fitted from the numerics alone: the characteristic function is $\varphi(k) = (\cos k_x + \cos k_y)/2$, whose expansion carries an anisotropic quartic term $k_x^4 + k_y^4 = \tfrac{3}{4}k^4 + \tfrac{1}{4}k^4\cos 4\theta$. Summing $N$ independent defects raises $\varphi$ to the $N$th power; evaluating at the typical scale $k \sim N^{-1/2}$ leaves a relative anisotropy of order $1/N$. Analytics and numerics agree to better than two percent for the square set. The same argument does not give $-1$ for the triangular set: its quartic term is isotropic ($\sum_{j=0}^{2}\cos 4(\theta-60^\circ j)=0$), so the first anisotropic term is sextic and the typical-scale argument predicts $N^{-2}$ (see the correction box).</p>
 
 <div class="thm-box">
   <div class="thm-label">Result 20.2 · emergent rotational covariance &nbsp;<span style="color:var(--proved)">[VERIFIED]</span> analytics · <span style="color:var(--u-color)">[SIMULATION]</span> numerics</div>
-  The rotational covariance of coarse-grained torsion is not exact but emergent, with residual point-group anisotropy $A \propto N^{-1}$ in the defect count per coarse-graining cell. At $N = 1$, $A = 1$: maximally anisotropic.
+  The rotational covariance of coarse-grained torsion is not exact but emergent, with residual point-group anisotropy $A \propto N^{-1}$ in the defect count per coarse-graining cell for the square (4-fold) lattice; for the triangular (6-fold) lattice the exponent is $-1$ or $-2$ depending on how $A$ is defined (see the correction box). At $N = 1$, $A = 1$: maximally anisotropic.
 </div>
 
 <div class="insight-box">
@@ -293,6 +293,7 @@ ul.tight { margin:1rem 0 1rem 1.5rem; line-height:2.05; }
 
 <hr class="gold-rule">
 
+<div class="correction" id="correction-2026-11-15" style="border:2px solid #d9a8a8;background:#fdeaea;padding:1rem 1.2rem;margin:1.3rem 0;color:#2b1010"><span style="display:block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;color:#8b1a1a;margin-bottom:.5rem">Corrected 2026-11-15 &mdash; triangular-lattice exponent</span><p style="margin:0 0 .6rem">Exact computation (no sampling) of the sum <em>S<sub>N</sub></em> of <em>N</em> Burgers vectors drawn uniformly from the 4 (square) or 6 (triangular) lattice translations (<code>book4/ch20_audit_check.py</code>): the amplitude <em>A<sub>m</sub></em>(<em>N</em>) = |E <em>S</em><sup>m</sup>| / E|<em>S</em>|<sup>m</sup> has tail exponent &minus;1.01 (square, m = 4) and &minus;2.04 (triangular, m = 6); the angular-distribution measure |E e<sup>im arg S</sup>| gives &minus;0.98 for both lattices. The reported &minus;0.990 and &minus;0.986 match the angular-distribution measure. For the triangular lattice the analytic argument above (typical scale <em>k</em> ~ <em>N</em><sup>&minus;1/2</sup>) predicts the other value, &minus;2, because the quartic term is isotropic. Why the two measures differ for the triangular lattice was not tested; the difference would be expected if the angular-distribution measure is dominated by small |<em>S</em>|. Which definition <code>op2b.py</code> used cannot be checked, since the script is absent. Result 20.1 was not re-run: the integral of the torsion over a region is additive over any partition into cells, so independence of the partition holds by construction, and the 10<sup>&minus;14</sup> deviation is floating-point summation.</p></div>
 <div class="section-tag">§ 20.5</div>
 <h2>Honest Inventory</h2>
 
@@ -300,14 +301,14 @@ ul.tight { margin:1rem 0 1rem 1.5rem; line-height:2.05; }
   <tr><th>Claim</th><th>Status</th><th>Basis</th></tr>
   <tr><td>Defect &harr; Riemann&ndash;Cartan dictionary</td><td><span style="color:var(--proved)">[VERIFIED]</span></td><td>Kleinert; Katanaev&ndash;Volovich; Ruggiero&ndash;Tartaglia</td></tr>
   <tr><td>Scheme independence of integrated $T^a$</td><td><span style="color:var(--proved)">[VERIFIED]</span></td><td>topological; confirmed to $10^{-14}$</td></tr>
-  <tr><td>$A \propto N^{-1}$ anisotropy decay</td><td><span style="color:var(--proved)">[VERIFIED]</span> analytic + <span style="color:var(--u-color)">[SIMULATION]</span></td><td>characteristic function; 3&times;10<sup>6</sup> samples/point</td></tr>
+  <tr><td>$A \propto N^{-1}$ anisotropy decay (square; triangular: see correction)</td><td><span style="color:var(--proved)">[VERIFIED]</span> analytic + <span style="color:var(--u-color)">[SIMULATION]</span></td><td>characteristic function; 3&times;10<sup>6</sup> samples/point</td></tr>
   <tr><td>Codimension mismatch</td><td><span style="color:var(--proved)">[VERIFIED]</span></td><td>Teo&ndash;Kane; Ran&ndash;Zhang&ndash;Vishwanath</td></tr>
   <tr><td>Boost covariance of coarse-grained $T^a$</td><td><span style="color:var(--open)">[OPEN]</span></td><td>non-compact; argument does not extend</td></tr>
   <tr><td>Extension of 2+1 result to 3+1</td><td><span style="color:var(--open)">[OPEN]</span></td><td>not attempted here</td></tr>
   <tr><td>Any action principle for a defect substrate</td><td><span style="color:var(--open)">[OPEN]</span></td><td>none written down</td></tr>
 </table>
 
-<p>Reproducibility: the producing scripts are <code>op2.py</code> (scheme independence; falsification criterion recorded in the file <em>before</em> the run) and <code>op2b.py</code> (anisotropy scaling, chunked and noise-debiased). The criterion was fixed in advance precisely so that a scheme-dependent result would have been recorded as a refutation rather than reinterpreted.</p>
+<p>Reproducibility (corrected 2026-11-15: <code>op2.py</code> and <code>op2b.py</code> are not in the repository at this commit, so the table above could not be re-run; the exponents were recomputed exactly, without sampling, by <code>book4/ch20_audit_check.py</code>): the producing scripts were <code>op2.py</code> (scheme independence; falsification criterion recorded in the file <em>before</em> the run) and <code>op2b.py</code> (anisotropy scaling, chunked and noise-debiased). The criterion was fixed in advance precisely so that a scheme-dependent result would have been recorded as a refutation rather than reinterpreted.</p>
 
 <hr class="gold-rule">
 
