@@ -12804,3 +12804,11 @@ Correction to the Schumann entry above: Cole (1965) Table 1 is on printed page 1
 
 ## 2026-11-15 — ch05 remaining claims and ch00 staleness (read-only)
 New book4/ch05_audit_check.py (9 PASS + 2 hand notes). F5-1..F5-6 (torus claim unsupported; symmetry group is the Klein four-group, not rotations/reflections on five directions; TENET given two roles; dm3 is contactomorphic only onto {p>0}; z as independent variable needs zdot>0; section-number typo). ch00: ch00-verify.py numeric rows PASS; page stale (embedded sha1 8f178c3635 vs docs/definitions.md 03d379aaba, changed 2026-10-15); same for book5-8, omega, book10; repair is `python3 tools/chapter_zero.py --write` (not run). Closing inventory: docs/audit-book4-closing-inventory-2026-11-15.md. Pages NOT edited.
+
+Correction (2026-11-15, on review) to the ch05 entries above: F5-5 should read that using z as the independent variable needs zdot != 0 locally (p2 = 1/zdot undefined at zdot = 0; zdot < 0 only reverses the parameter; zdot > 0 is a separate orientation choice), and the Cartan distribution is of rank 3 = codimension 2 on a 5-manifold whereas a contact distribution there has rank 4 (dimension alone does not decide contactness). Record and script labels updated.
+
+## 2026-11-15 — ch00 regeneration trial (reverted) and CI status
+chapter_zero.py --write --book 4 fixes the staleness (verify passes) but drops the po-subject/gss/run/related boxes; page restored to HEAD. CI for 6aaee037 not readable (no GitHub access); LadderBound.lean and LadderRung.lean are not lean_lib targets, so no CI compile or axiom report covers them. Details in the audit record.
+
+## 2026-11-15 — ch00-student-edition, ch09b, ch10-lambda-bone-handoff audited (read-only)
+New book4/ch00_student_audit_check.py. F0s-1..5 (withdrawn "every orbit with r(0)>1 converges" used as the example theorem; Collatz asserted; stale chapter pointers; J^1(R,R^2) as 5D contact). ch09b-verify.py: 106 checks, 6 controls pass (DEM and NOAA PDF sections skipped). ch10_lambda_bone_audit.py rerun from a scratch copy: ALL PASS, 75 lines (python3 -I fails only because scipy lives in user site-packages). Closing inventory updated. Pages NOT edited. Sweep over ch00-ch28 and the three supplementary pages complete as far as recorded; open items in the inventory.

@@ -21,7 +21,7 @@ ck('"reads the same as a torus (wraps)" has no support: no nontrivial cyclic col
 # Cartan distribution rank
 a1 = sp.Matrix([[ -sp.Symbol('p1'), 1, 0, 0, 0]]); a2 = sp.Matrix([[ -sp.Symbol('p2'), 0, 1, 0, 0]])
 A = sp.Matrix.vstack(a1, a2)
-ck('ker(alpha1) ∩ ker(alpha2) on J^1(R,R^2) has dimension 5-2 = 3 (a Pfaffian system, not contact)', A.rank() == 2 and 5-A.rank() == 3)
+ck('ker(alpha1) ∩ ker(alpha2) on J^1(R,R^2) has dimension 5-2 = 3 (rank 3 on a 5-manifold = codimension 2, not the rank-4 hyperplane field a contact structure needs)', A.rank() == 2 and 5-A.rank() == 3)
 # dm3 manifold -> J^1(R,R): alpha = dz - r^2 dtheta with (x,y,p) = (theta, z, r^2)
 r, th, z = sp.symbols('r theta z', positive=True)
 print('INFO substitution (x,y,p)=(theta,z,r^2) turns dy - p dx into dz - r^2 dtheta (identity by inspection, not a test)')
@@ -29,7 +29,7 @@ print('NOTE hand argument, not computed: that substitution is a contactomorphism
 # z as independent variable: zdot = r^2 - 2 (r-1)^2 e^{-z} can be <= 0
 rr, zz = np.meshgrid(np.linspace(0.05, 2, 400), np.linspace(-3, 3, 400))
 zd = rr**2 - 2*(rr-1)**2*np.exp(-zz)
-ck('zdot = r^2 - 2(r-1)^2 e^{-z} takes values <= 0 on the sampled region (so z is not a global independent variable and p2 = 1/zdot is undefined there)', (zd <= 0).any())
+ck('zdot = r^2 - 2(r-1)^2 e^{-z} takes both signs on the sampled region, so it vanishes on a hypersurface: z is a local independent variable only where zdot != 0 and p2 = 1/zdot is undefined at zdot = 0', (zd > 0).any() and (zd < 0).any())
 ck('on r=1: zdot = 1, p1 = 0, p2 = 1 (the attractor curve prolongs to a Legendrian curve in J^1)', sp.simplify((r**2 - 2*(r-1)**2*sp.exp(-z)).subs(r, 1)) == 1)
 print('NOTE hand argument, not computed: Theorem 5.1 (Backlund) is classical (Olver); not re-derived here (as the page says). The page cites "Chapter 23, §23.6–22.7": the second number is a typo for 23.7; ch23 has sections 23.6 and 23.7 (not re-audited for this claim here).')
 sys.exit(1 if bad else 0)

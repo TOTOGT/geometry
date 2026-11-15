@@ -3,8 +3,8 @@
 Audit records and proposed repairs only. No manuscript page, generator, Lean file or sealed readcheck artifact was edited by this audit. Remote `main` was reported at f249696f after the last push (publication only; CI and Lean kernel results for these commits are not confirmed here).
 
 ## 1. Coverage
-Audited with a record in docs/audit-book4-ch11-14-ch18-ch19-2026-11-14.md: ch00 (staleness), 01, 02, 05, 06, 06b, 07, 08, 12, 15, 16, 21–28; earlier in this audit ch11, 13, 14, 17, 18, 19, 20. From the earlier external pass (docs/audit-ranking-2026-11-14.tsv, not re-audited here): ch03, ch04, ch09, ch10.
-Not audited: ch00-student-edition, ch09b (flood-lines, sites, verify), ch10-lambda-bone-handoff, ch10 sidebar and §6 beyond the recorded items; book5–book10 pages beyond the dependency grep (D1–D6).
+Audited with a record in docs/audit-book4-ch11-14-ch18-ch19-2026-11-14.md: ch00 (staleness) and ch00-student-edition, 01, 02, 05, 06, 06b, 07, 08, 09b, 10-lambda-bone-handoff, 12, 15, 16, 21–28; earlier in this audit ch11, 13, 14, 17, 18, 19, 20. From the earlier external pass (docs/audit-ranking-2026-11-14.tsv, not re-audited here): ch03, ch04, ch09, ch10.
+Not audited: ch09b's sites script and DEM/NOAA source checks (files not available here), ch10 sidebar and §6 beyond the recorded items; book5–book10 pages beyond the dependency grep (D1–D6).
 
 ## 2. Findings that change a mathematical statement (highest consequence first)
 - ch22: Con(X) equals the graph of the Gauss map only for hypersurfaces. ch23: cusp/flex swap; π₂ not birational for defective X.
@@ -28,6 +28,11 @@ Manuscript wording: items in each chapter's "Proposed corrections" line in the a
 - Open scripts: re-run ch11_14_wronskian_check.py on the Mac; ch16 Mars troposphere figure; ch07 source of 2.6 MW; which ch15 file is live (book4/ch15.html, book4/ch15-complex-turn.html, root copy differ).
 - Uncommitted files of unknown origin left untouched: Orthogenesis/Architecture/G6Crystal.lean, TERMS.md, book4/certify_rstar*.py, readcheck tracked-file edits (eight files), other modified book4 pages.
 - Readcheck publication status: sourcemap.tsv and chunk1-controls-expected.tsv are in remote history; sealed labels and blind returns are not; Pablo to decide whether any of this needs action.
+
+## 5b. Added after the first version (2026-11-15)
+- ch00-student-edition F0s-1..5 (the withdrawn r(0)>1 statement used as the model theorem; Collatz asserted; stale chapter pointers; J¹(ℝ,ℝ²) as "5D contact"). ch09b: own verifier passes (106 checks, 6 controls), NOAA numbers unchecked here. ch10-lambda-bone-handoff: script rerun on the Mac side, ALL PASS (75 lines).
+- ch05 F5-5 reworded: ż ≠ 0 locally, not ż > 0; the Cartan distribution is rank 3 = codimension 2 on a 5-manifold (a contact distribution there has rank 4).
+- ch00 regeneration trial: chapter_zero.py --write --book 4 fixes the hash but drops four downstream generated boxes; page left at its committed state. CI for 6aaee037 not readable here; LadderBound.lean and LadderRung.lean are not lean_lib targets, so no CI compile or axiom report covers them.
 
 ## 6. Method notes
 Check scripts are read-only and live beside their chapters (ch06…ch28, wp56). Lines labelled NOTE in a script are hand arguments, not computed. A passing script does not establish a prose claim; where a script checks arithmetic only, the record says so.
