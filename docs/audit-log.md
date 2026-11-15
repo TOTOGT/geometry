@@ -12932,3 +12932,10 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 - Corrected: galactic "A1 Whitney singularity" no longer asserted; Milkomeda timescale called a model prediction, not measured. The 4.5 Gyr figure and Sawala 2025 not checked.
 - Corrected: "the lock gap is the Whitney fold" / "balance exactly" / "locks an electron..., a quark" restated as model identification and conjecture; contradicted the page's own Stated-not-proved box.
 - Not rechecked: string-vertex and hadronization table entries (rows near the scale table).
+
+## 2026-11-15 — Milkomeda claims on book8/ch8-3-galaxy-mergers.html and ch7-crystalline.html
+
+- Corrected: "confirmed the collision trajectory" (ch8-3) and "they will collide" (ch7) restated as predictions. A 2025 Hubble/Gaia reanalysis (Sawala et al., Nature Astronomy) gives about 50% odds of a merger within 10 Gyr; source read only as the ESA/Hubble news release heic2508 (https://esahubble.org/news/heic2508/), paper not read.
+- Corrected: operator assignment labelled an interpretation. Three pages now assign the event differently (ch7: merger = U; ch8-3: SMBH coalescence = F, elliptical = U; WP58 / chGravity: merger = fold). Not reconciled; no definition forces any of them.
+- Noted, not changed: ch7 animation timeline (3.75 / 5 Gyr) disagrees with ch8-3 (3.9 / 6 Gyr). The 3.9, 6 and 8-10 Gyr figures, and the 4.5 Gyr figure, not rechecked.
+- book8/ch9-causal.html: Milkomeda appears only in the generated related-links row (WP57 title); no claim to correct.
