@@ -37,9 +37,11 @@ lean_lib Orthogenesis
       What they lack is not a check. It is a check that repeats.
 
     No audit report on record --
-      CollatzDescent (346 L), FoldCentralCharge, LadderBound (172 L), DomainCheck.
+      CollatzDescent (346 L), FoldCentralCharge, DomainCheck.
+      (Revised 2026-11-15: LadderBound is no longer in this list; see the Ladder note above
+      and tools/verify-audit/2026-11-15/RECORD.md.)
       Nothing is known either way about these, which is a different and weaker
-      position than the four above. CollatzDescent and LadderBound carry the
+      position than the four above. CollatzDescent carries the
       most unaudited mathematics in the repository.
 
   DomainCheck.lean elaborated clean under `lake env lean` on 2026-09-11 -- five
@@ -50,6 +52,17 @@ lean_lib Orthogenesis
 -/
 @[default_target]
 lean_lib SaturnHexagon
+
+/-
+  LadderBound.lean and LadderRung.lean (Book 4 ch26), added as targets 2026-11-15. Until then neither was in any target,
+  workflow step or import; LadderRung.lean as first committed did not compile. The CI step "Kernel axiom check on the
+  Ladder files" runs tools/verify-ladder/run.sh (compile both, gate 6 and 3 theorems, probe via these targets, pin check).
+-/
+@[default_target]
+lean_lib LadderBound
+
+@[default_target]
+lean_lib LadderRung
 
 -- Book 3, "A Bucket of Seawater": what the fruit-fly toy model's pipeline does (C jumps, U fixes the norm, 4 fixed points at alpha = 0).
 @[default_target]

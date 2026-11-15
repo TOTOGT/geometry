@@ -1,18 +1,24 @@
 /-
   LadderRung.lean — the bracketing lemma that LadderBound.lean assumes.
 
-  STATUS: DRAFT, NOT COMPILED.  Written 2026-11-15 in a container with no Lean
-  toolchain.  Nothing below may be described as kernel-checked until Pablo runs
+  STATUS (2026-11-15): COMPILES in the recorded environments; correspondence with
+  Chapter 26 NOT YET REVIEWED.  Compilation and the axiom gate say only that these three
+  statements are proved in Lean; they do not say the statements are what the chapter claims.
 
-      cd ~/Desktop/geometry
-      mkdir -p tools/verify-audit/2026-11-15
-      lake env lean LadderRung.lean | tee tools/verify-audit/2026-11-15/LadderRung.axioms.txt
-      python3 tools/axiom_gate.py tools/verify-audit/2026-11-15/LadderRung.axioms.txt 3
+  History.  First written 2026-11-15 in a container with no Lean toolchain (DRAFT, NOT
+  COMPILED).  The first committed version did not compile: two `rwa` steps failed (lines
+  68 and 71) and two theorems carried sorryAx.  Two proof steps were then changed
+  (`rwa` -> `rw` then `linarith`); no theorem statement changed.
+  Recorded run: Lean 4.32.0, Mathlib 81a5d257c8e410db227a6665ed08f64fea08e997, Linux
+  x86_64, exit 0, all three theorems on [propext, Classical.choice, Quot.sound],
+  tools/axiom_gate.py ... 3 prints OK.  Record: tools/verify-audit/2026-11-15/RECORD.md.
 
-  and the gate prints OK.  Per the file-header lesson in LadderBound.lean, lemma
-  names here are from memory of Mathlib and may need renaming; the tactic steps
-  are written to avoid depending on exact names where possible.  Expect to fix
-  small errors on first compile and send the compiler output back.
+  Checks.  `lean_lib LadderRung` is a default target in lakefile.lean, and the CI step
+  "Kernel axiom check on the Ladder files" runs tools/verify-ladder/run.sh (compile,
+  gate 3, probe through the target, pin check).  This header does not record that the CI
+  step has passed; its result is the authority.  Re-run locally:
+      bash tools/verify-ladder/run.sh
+  Not run on the author's machine as of this note.
 
   WHAT THIS ADDS.  LadderBound.lean takes the bracket
       c/(n+1) ≤ f ≤ c/n,  1 ≤ n
@@ -65,10 +71,12 @@ theorem ladder_nearest_rung {c f : ℝ} (hc : 0 < c) (hf : 0 < f) (hfc : f < c) 
   have hcf : 0 < c - f := by linarith
   -- (n+1) f ≥ c, from the lower bracket
   have hlo' : c ≤ ((n : ℝ) + 1) * f := by
-    rwa [div_le_iff₀ hn1'] at hlo
+    rw [div_le_iff₀ hn1'] at hlo
+    linarith
   -- n f ≤ c, from the upper bracket
   have hhi' : (n : ℝ) * f ≤ c := by
-    rwa [le_div_iff₀ hn] at hhi
+    rw [le_div_iff₀ hn] at hhi
+    linarith
   -- key bound: c/(n(n+1)) / 2 ≤ f²/(2(c−f))
   have key : c / (2 * ((n : ℝ) * ((n : ℝ) + 1))) ≤ f ^ 2 / (2 * (c - f)) := by
     rw [div_le_div_iff₀ (by positivity) (by positivity)]

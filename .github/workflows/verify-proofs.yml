@@ -235,6 +235,33 @@ jobs:
           python3 tools/axiom_gate.py /tmp/gb.txt 8
       
       # =================================================================
+      # AUTHORITATIVE STEP. LadderBound.lean (6 theorems) and LadderRung.lean
+      # (3 theorems), Book 4 ch26. Added 2026-11-15. Before this step neither
+      # file was in a target, a workflow step or an import, and LadderRung.lean
+      # as first committed did not compile; a green `lake build` said nothing
+      # about them. This step runs tools/verify-ladder/run.sh, the same script
+      # used locally: pin check (toolchain, committed lake-manifest.json,
+      # resolved Mathlib revision against tools/verify-ladder/pins.txt), build
+      # of the two targets, direct compile of each file with the compiler's exit
+      # status kept, tools/axiom_gate.py on each file's report (6 and 3) and on
+      # a probe through the library targets (9). It runs every step, fails the
+      # job if any failed, and the logs are uploaded either way. It checks that
+      # the statements are proved; it does not check that they say what
+      # Chapter 26 says.
+      # =================================================================
+
+      - name: Kernel axiom check on the Ladder files (LadderBound, LadderRung)
+        run: bash tools/verify-ladder/run.sh "$RUNNER_TEMP/ladder-logs"
+
+      - name: Keep the Ladder logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ladder-logs
+          path: ${{ runner.temp }}/ladder-logs
+          if-no-files-found: warn
+
+      # =================================================================
       # AUTHORITATIVE STEP. CatGT_Main.lean (self-trapping selectivity, V5).
       # Added 2026-09-21. Twenty-eight declarations since 2026-10-06 (13, then
       # +5 §4b r* normalisation 2026-09-23, +5 §4c sech relation derived
