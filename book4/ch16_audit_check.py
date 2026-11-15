@@ -41,6 +41,6 @@ for R in (6371.0,):
     print('INFO ideal-cavity f1..f5 (R=6371 km):', [round(f(n), 2) for n in range(1, 6)])
     ck('f4 (ideal) = 33.50 Hz with R=6371 km; page prints 33.516 (implies R~6366 km)', abs(f(4)-33.50) < 0.02 and abs(f(4)-33.516) > 0.01)
     ck('|33-f4|/f4 = 1.5%', abs(abs(33-f(4))/f(4) - 0.0149) < 0.001)
-print('NOTE hand argument, not computed: the ideal-cavity formula overestimates the MEASURED Schumann modes; commonly reported measured values are ~7.8, 14.3, 20.8, 27.3, 33.8 Hz, so ideal f4 sits near the measured 5th mode (from memory, verify against a source before citing).')
+print('NOTE hand argument, not computed: the ideal-cavity formula overestimates the MEASURED Schumann modes; measured modes are lower than the ideal formula; the only values located are secondary (Wikipedia citing Cole 1965: 7.83, 14.1, 20.3, 26.3, 32.5 Hz); no primary source read, so treat as unconfirmed.')
 print('NOTE hand argument, not computed: the Schumann section rows are already withdrawn on the page; 33 (a count) vs hertz is dimensionally unrelated, as the page itself says.')
 sys.exit(1 if bad else 0)
