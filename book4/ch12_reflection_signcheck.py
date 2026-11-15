@@ -9,7 +9,7 @@ import mpmath as mp
 mp.mp.dps = 30
 lz = lambda s: mp.zeta(s, derivative=1) / mp.zeta(s)
 chi = lambda s: mp.log(mp.pi) - mp.digamma(s / 2) / 2 - mp.digamma((1 - s) / 2) / 2
-pts = [(0.3, 0.7), (0.5, 7.0), (0.8, 3.0), (1.1, 12.0), (1.5, 18.0), (2.3, 25.0), (0.3, 25.0), (0.8, 0.7)]
+pts = [(mp.mpf(a), mp.mpf(b)) for a, b in [('0.3', '0.7'), ('0.5', '7'), ('0.8', '3'), ('1.1', '12'), ('1.5', '18'), ('2.3', '25'), ('0.3', '25'), ('0.8', '0.7')]]  # exact decimal inputs (2026-11-15: float inputs limited agreement to ~1e-16)
 worstL = worstP = 0
 for sg, t in pts:
     s = mp.mpc(sg, t)
