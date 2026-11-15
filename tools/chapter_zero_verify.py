@@ -50,19 +50,55 @@ def math_checks():
     check(1 - hi < 1/3, f"displacement 1 − r* = {1-hi:.4f} < ε₀ = 1/3: the Gronwall disc crosses the fold inward")
     check(not converges(0.70) and converges(0.80), "r0 = 0.70 escapes, r0 = 0.80 converges (inside the Gronwall gap 0.667–0.776)")
 
+# Four other generators add boxes to every chapter page (subject_tags, gold_standard, run_yourself, crossref); each has its own
+# --check. This verifier compares only what chapter_zero.py owns, so those regions are removed first -- but only if they are
+# exactly the expected regions: right count, begin/end alternating, nothing nested, no stray marker, and no chapter content
+# (heading or table) inside a region. Anything else is reported as a problem and the page fails; nothing is silently excluded.
+BOX_COUNTS = {"subject": 2, "gss": 1, "run": 1, "related": 1}   # regions per chapter page (subject: head meta + body tags)
+MARK = re.compile(r"<!--(/?)po-([A-Za-z0-9_-]+)-->")
+def strip_boxes(src):
+    problems, regions, open_at = [], [], {}
+    for m in MARK.finditer(src):
+        end, name = bool(m.group(1)), m.group(2)
+        if name not in BOX_COUNTS:
+            problems.append(f"unknown marker {m.group(0)}"); continue
+        if open_at:
+            other = next(iter(open_at))
+            if not end or name != other:
+                problems.append(f"{m.group(0)} inside an open {other} region"); continue
+        if not end:
+            if name in open_at: problems.append(f"nested {m.group(0)}")
+            open_at[name] = m.start()
+        else:
+            if name not in open_at: problems.append(f"{m.group(0)} without a begin marker"); continue
+            start = open_at.pop(name); stop = m.end()
+            inner = src[start:stop]
+            if re.search(r"<(h1|h2|table)\b", inner, re.I): problems.append(f"{name} region contains chapter content (heading or table)")
+            regions.append((name, start, stop))
+    for name, start in open_at.items(): problems.append(f"po-{name} begin marker has no end marker")
+    for name, want in BOX_COUNTS.items():
+        have = sum(1 for r in regions if r[0] == name)
+        if have != want: problems.append(f"po-{name}: {have} region(s), expected {want}")
+    out, pos = [], 0
+    for name, start, stop in sorted(regions, key=lambda r: r[1]):
+        out.append(src[pos:start]); pos = stop
+        if src[pos:pos + 1] == "\n": pos += 1
+    out.append(src[pos:])
+    return "".join(out), problems
+
 def page_checks(books):
     print("[2] generated pages match definitions.md")
     md = open(cz.SRC, encoding="utf-8").read(); sha = hashlib.sha1(md.encode()).hexdigest()[:10]
     sections = cz.parse(md)
-    # Four other generators add boxes to every chapter page (subject_tags, gold_standard, run_yourself, crossref); each has
-    # its own --check. This verifier compares only what chapter_zero.py owns, so those marked regions are removed first.
-    boxes = re.compile(r"<!--po-(subject|gss|run|related)-->.*?<!--/po-\1-->\n?", re.S)
-    strip = lambda s: re.sub(r"Generated \d{4}-\d{2}-\d{2}", "Generated DATE", boxes.sub("", s))
+    strip = lambda s: re.sub(r"Generated \d{4}-\d{2}-\d{2}", "Generated DATE", s)
     for n in books:
         d = cz.BOOKS[n][0]; p = os.path.join(cz.ROOT, d, "ch00-definitions.html")
         if not os.path.exists(p): check(False, f"{d}/ch00-definitions.html is missing"); continue
         have = open(p, encoding="utf-8").read()
-        check(strip(have) == strip(cz.render(n, sections, sha)), f"{d}/ch00-definitions.html is current (sha1 {sha})")
+        body, problems = strip_boxes(have)
+        for pr in problems: check(False, f"{d}/ch00-definitions.html box markers: {pr}")
+        check(not problems, f"{d}/ch00-definitions.html has exactly the expected generator boxes, well formed")
+        check(not problems and strip(body) == strip(cz.render(n, sections, sha)), f"{d}/ch00-definitions.html is current (sha1 {sha})")
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--book", type=int); a = ap.parse_args()
