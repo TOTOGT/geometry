@@ -252,7 +252,10 @@ def main():
     write = '--write' in sys.argv
     stale = changed = 0
     tally = Counter()
+    sc = ST.scope(); ST.check_scope(sc, list(pl))   # the link graph is always built from every page; only writes are scoped
     for rel, entry in pl.items():
+        if not ST.in_scope(rel, sc):
+            continue
         tally['named'] += len(entry[0]); tally['cited'] += len(entry[1]); tally['same'] += len(entry[2])
         path = os.path.join(ROOT, rel)
         new = place(pages[rel]['src'], box(rel, pages, entry))

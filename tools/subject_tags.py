@@ -71,6 +71,32 @@ BODY = re.compile(r'<body\b[^>]*>', re.I)
 HEAD_END = re.compile(r'</head>', re.I)
 
 
+def scope(argv=None):
+    """Optional write scope shared by the generators: `--book N` (repeatable; `omega` allowed) and `--page REL`
+    (repeatable). Returns None when neither is given, which means every page, exactly as before."""
+    argv = sys.argv if argv is None else argv
+    books, pages = set(), set()
+    for i, a in enumerate(argv[:-1]):
+        if a == '--book':
+            b = argv[i + 1]
+            books.add('omega' if b == 'omega' else 'book' + b.lstrip('book'))
+        elif a == '--page':
+            pages.add(argv[i + 1].replace('\\', '/').lstrip('./'))
+    return (books, pages) if (books or pages) else None
+
+
+def in_scope(rel, sc):
+    """True when rel is selected by scope() (always True when sc is None)."""
+    return sc is None or rel in sc[1] or rel.split('/')[0] in sc[0]
+
+
+def check_scope(sc, rels):
+    """Exit 2 if a scope was given but selects no page (so a typo cannot silently do nothing)."""
+    if sc is not None and not any(in_scope(r, sc) for r in rels):
+        print(f'scope {sc} selects no page', file=sys.stderr)
+        raise SystemExit(2)
+
+
 def chapters():
     out = []
     # omega/ is Book IX (Omega Point); added 2026-11-08 so its chapters are stamped too.
@@ -160,7 +186,10 @@ def main():
         print('secondary:', ', '.join(f'{k} {v}' for k, v in c2.most_common()))
         return 0
     changed = 0
+    sc = scope(); check_scope(sc, chs)
     for p, (a, b) in sorted(table.items()):
+        if not in_scope(p, sc):
+            continue
         path = os.path.join(ROOT, p)
         if not os.path.exists(path) or a not in VOCAB or (b and b not in VOCAB):
             continue

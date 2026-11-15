@@ -54,7 +54,10 @@ def page_checks(books):
     print("[2] generated pages match definitions.md")
     md = open(cz.SRC, encoding="utf-8").read(); sha = hashlib.sha1(md.encode()).hexdigest()[:10]
     sections = cz.parse(md)
-    strip = lambda s: re.sub(r"Generated \d{4}-\d{2}-\d{2}", "Generated DATE", s)
+    # Four other generators add boxes to every chapter page (subject_tags, gold_standard, run_yourself, crossref); each has
+    # its own --check. This verifier compares only what chapter_zero.py owns, so those marked regions are removed first.
+    boxes = re.compile(r"<!--po-(subject|gss|run|related)-->.*?<!--/po-\1-->\n?", re.S)
+    strip = lambda s: re.sub(r"Generated \d{4}-\d{2}-\d{2}", "Generated DATE", boxes.sub("", s))
     for n in books:
         d = cz.BOOKS[n][0]; p = os.path.join(cz.ROOT, d, "ch00-definitions.html")
         if not os.path.exists(p): check(False, f"{d}/ch00-definitions.html is missing"); continue

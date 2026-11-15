@@ -205,7 +205,9 @@ def main():
         for name, ok, why in score(r, open(os.path.join(ROOT, r), encoding='utf-8').read()): print(ok, name, '-', why)
         return 0
     write = '--write' in sys.argv; stale = changed = 0; hist = {}; results = []
+    sc = ST.scope(); ST.check_scope(sc, ST.chapters())
     for rel in ST.chapters():
+        if not ST.in_scope(rel, sc): continue
         if ST.rows().get(rel, ('',))[0] == 'SERIES APPARATUS': continue
         path = os.path.join(ROOT, rel); src = open(path, encoding='utf-8', errors='replace').read()
         new = place(src, stamp(rel, src))
@@ -214,7 +216,7 @@ def main():
         if new != src:
             if write: open(path, 'w', encoding='utf-8').write(new); changed += 1
             else: stale += 1
-    if write:
+    if write and sc is None:   # the gold-standard.html index is repo-wide; a scoped run leaves it alone
         write_index(results, hist)
     print('tenets shown -> pages:', dict(sorted(hist.items())), f'; {changed} written' if write else f'; {stale} stale')
     return 1 if stale and not write else 0

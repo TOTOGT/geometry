@@ -79,7 +79,10 @@ def place(src, b):
 def main():
     write = '--write' in sys.argv
     stale = changed = boxes = 0
+    sc = ST.scope(); ST.check_scope(sc, ST.chapters())
     for rel in ST.chapters():
+        if not ST.in_scope(rel, sc):
+            continue
         path = os.path.join(ROOT, rel)
         src = open(path, encoding='utf-8', errors='replace').read()
         files = files_for(rel, src)
