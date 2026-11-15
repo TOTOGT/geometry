@@ -119,8 +119,8 @@ cur = None
 try: cur = sq(open(os.path.join(ROOT, PAGE), encoding='utf-8').read())
 except OSError: print('    SKIP  page not found'); skips.append('page')
 if cur is not None:
-    for needle, msg in (('first intersect,at$\\approx1.27$myr', 'abstract: cones first intersect at about 1.27 Myr'),
-                        ('t_{\\text{geo}}\\approx d/2c', 'Theorem 3.1: T_geo = d/2c'),
+    for needle, msg in (('$d/2c\\approx1.27$myr', 'abstract: common receiver for two events at d/2c, about 1.27 Myr (restated 2026-11-15)'),
+                        ('first intersect at $t=d/2c$', 'Proposition 3.1: cones first intersect at T = d/2c (restated 2026-11-15)'),
                         ('about9days', 'section 1: two walkers about 9 days'),
                         ('about4daysinandromeda', 'section 4: shift about 4 days'),
                         ('+1.27myr', 'timeline row at +1.27 Myr'),
