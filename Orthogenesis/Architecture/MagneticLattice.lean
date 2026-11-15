@@ -18,12 +18,16 @@
 #
 # CENTRAL BRIDGE (proved, no sorry)
 # ---------------------------------
-#   Every helimagnetic spin  Sₙ = (cos nq, sin nq)  lies on the dm³ limit
-#   cycle Γ = {r = 1}, and a helimagnet whose pitch closes after p sites
-#   (p·q = T* = 2π) is exactly p-periodic.  The magnetic winding q is the
-#   discrete image of the dm³ angular velocity θ̇ = 1; commensurability is
-#   governed by the canonical period T* = 2π.  A helimagnet is, literally,
-#   the dm³ helical attractor realised in spin space.
+#   Every helimagnetic spin  Sₙ = (cos nq, sin nq)  has unit length, i.e.
+#   lies on the unit circle {r = 1} of the spin plane, and a helimagnet whose
+#   pitch closes after p sites (p·q = 2π) is exactly p-periodic.
+#   [Corrected 2026-11-14: earlier text here said this "lies on the dm³ limit
+#   cycle" and that a helimagnet "is, literally, the dm³ helical attractor".
+#   What is proved is the identity cos² + sin² = 1 for a vector defined as
+#   (cos nq, sin nq), and the 2π-periodicity of cos and sin.  This file
+#   contains no dm³ vector field, flow or attraction; the match of the unit
+#   circle with Γ = {r = 1}, of q with θ̇ = 1 and of 2π with T* is an
+#   analogy of notation, not a theorem here.]
 #
 # What is proved here WITHOUT sorry
 # ----------------------------------
@@ -33,9 +37,12 @@
 #    (paramagnetic / grey-group) moment; ordered magnets break 1'.
 #  · Collinear order: the ferromagnet has period 1, the antiferromagnet
 #    period 2 with a neutral magnetic cell — doubling the chemical cell.
-#  · Helical order lives on Γ = {r=1}; the ferromagnet is the zero-pitch
-#    helix; a pitch closing after p sites (p·q = 2π) gives p-periodicity.
-#  · The dm³ invariant signs μ_max < 0, T* > 0 (mirrored from G6Crystal).
+#  · Helical spins have unit length (the unit circle {r=1} of the spin plane);
+#    the ferromagnet is the zero-pitch helix; a pitch closing after p sites
+#    (p·q = 2π) gives p-periodicity.
+#  · Arithmetic on two constants defined in this file, mu_max := −2 < 0 and
+#    T_star := 2π > 0 (mirrored from G6Crystal).  These are not statements
+#    about the dm³ system.
 #  · A capstone `magnetic_bridge` bundling the proved correspondence.
 #
 # What is NOT claimed (named open obligations)
@@ -101,8 +108,10 @@ theorem magnetic_exceeds_ordinary :
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- §2  Time reversal 1'
---     The primed generator flips a moment. It is the discrete image of the
---     dm³ temporal operator T under t ↦ −t.
+--     The primed generator flips a moment.  (Analogy, not proved here: the
+--     dm³ temporal operator under t ↦ −t reverses a vector field, whereas 1'
+--     is an antiunitary operation on spin states; no map between them is
+--     constructed in this file.)
 -- ─────────────────────────────────────────────────────────────────────────────
 
 /-- Time reversal acting on a (scalar) magnetic moment: 1' : s ↦ −s. -/
@@ -155,8 +164,8 @@ theorem afm_cell_neutral : afmSpin 0 + afmSpin 1 = 0 := by norm_num [afmSpin]
 theorem ferro_cell_moment : ferroSpin 0 + ferroSpin 1 = 2 := by norm_num [ferroSpin]
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- §4  Helical order — the dm³ limit cycle in spin space
---     Sₙ = (cos nq, sin nq). This is the heart of the bridge.
+-- §4  Helical order — the unit circle of the spin plane
+--     Sₙ = (cos nq, sin nq).  The match with the dm³ limit cycle is notation.
 -- ─────────────────────────────────────────────────────────────────────────────
 
 /-- A helimagnetic spin at site `n` with pitch angle `q`. -/
@@ -164,9 +173,13 @@ noncomputable def heliSpin (q : ℝ) (n : ℤ) : ℝ × ℝ :=
   (Real.cos ((n : ℝ) * q), Real.sin ((n : ℝ) * q))
 
 -- ── Fact 12 ─────────────────────────────────────────────────────────────────
-/-- **Bridge to Γ.** Every helimagnetic spin lies on the dm³ limit cycle
-    Γ = {r = 1}: ‖Sₙ‖² = cos²(nq) + sin²(nq) = 1. The helimagnet is the
-    discrete helical attractor of the dm³ contact system. -/
+/-- **Unit length of a helimagnetic spin.** ‖Sₙ‖² = cos²(nq) + sin²(nq) = 1,
+    so every spin lies on the unit circle {r = 1} of the spin plane.  This is
+    the Pythagorean identity for a vector defined as (cos nq, sin nq); it is
+    unit length by definition.  It is NOT a statement about the dm³ limit
+    cycle Γ or about attraction: this file has no dm³ dynamics.  (The name
+    `heliSpin_on_limit_cycle` is kept so that the audit receipt and page
+    references still resolve.) -/
 theorem heliSpin_on_limit_cycle (q : ℝ) (n : ℤ) :
     (heliSpin q n).1 ^ 2 + (heliSpin q n).2 ^ 2 = 1 := by
   simp only [heliSpin]
@@ -179,9 +192,10 @@ theorem ferromagnet_is_zero_pitch (n : ℤ) : heliSpin 0 n = (1, 0) := by
   simp [heliSpin]
 
 -- ── Fact 14 ─────────────────────────────────────────────────────────────────
-/-- **Commensurate lock.** If the pitch closes after `p` sites — i.e. `p·q`
-    equals the dm³ canonical period T* = 2π — the helimagnet is exactly
-    `p`-periodic. Magnetic commensurability is controlled by T* = 2π. -/
+/-- **Commensurate lock.** If the pitch closes after `p` sites — i.e. `p·q = 2π`
+    — the helimagnet is exactly `p`-periodic.  The proof is the 2π-periodicity
+    of cos and sin; `T* = 2π` is the same number, and no dm³ period enters the
+    argument. -/
 theorem heliSpin_period (q : ℝ) (n p : ℤ) (h : (p : ℝ) * q = 2 * Real.pi) :
     heliSpin q (n + p) = heliSpin q n := by
   simp only [heliSpin, Int.cast_add, add_mul, h]
@@ -191,12 +205,16 @@ theorem heliSpin_period (q : ℝ) (n p : ℤ) (h : (p : ℝ) * q = 2 * Real.pi) 
 -- §5  dm³ invariant anchors (mirrored from G6Crystal.lean)
 -- ─────────────────────────────────────────────────────────────────────────────
 
-/-- Maximal transverse Lyapunov exponent bound μ_max = −2. Under time
-    reversal t ↦ −t the sign of every Lyapunov exponent flips: this is the
-    dynamical face of the magnetic 1' operator. -/
+/-- The constant −2.  In the dm³ system the radial exponent at r = 1 is
+    2·e^(−z) − 2, which tends to −2 only as z → ∞ (it is 0 at z = 0); this
+    definition records the limiting value as a bare real number and is not
+    connected to the vector field here.  Under t ↦ −t the exponents of a flow
+    change sign; the identification of that with the magnetic 1' is an
+    analogy, not proved in this file. -/
 def mu_max : ℝ := -2
 
-/-- Canonical dm³ period T* = 2π — the pitch that closes a helix in one turn. -/
+/-- The constant 2π (the dm³ period T* is 2π; the definition is just the real
+    number 2π). -/
 noncomputable def T_star : ℝ := 2 * Real.pi
 
 -- ── Fact 15 ─────────────────────────────────────────────────────────────────
@@ -259,6 +277,8 @@ theorem kramers_degeneracy_placeholder :
     the moment density, vanishing where the chemical-cell periodicity alone
     would predict a peak. Requires scattering theory; not formalised here. -/
 theorem neutron_selection_rule_placeholder : True := trivial
+-- Note: the statement is literally `True`; the axiom receipt for this name
+-- reads "no axioms" and certifies nothing about neutron scattering.
 
 /-!
 ## Summary of verified facts (no sorry)
@@ -272,10 +292,10 @@ theorem neutron_selection_rule_placeholder : True := trivial
   afm_period_two              antiferromagnet period 2 (cell doubling)    ✓
   afm_flips                   AFM flips site to site                      ✓
   afm_cell_neutral            AFM cell net moment 0                       ✓
-  heliSpin_on_limit_cycle     helimagnet spins lie on Γ = {r=1}           ✓
+  heliSpin_on_limit_cycle     helical spins have unit length (cos²+sin²=1) ✓
   ferromagnet_is_zero_pitch   ferromagnet = zero-pitch helix              ✓
-  heliSpin_period             p·q = T* = 2π ⟹ p-periodic                  ✓
-  mu_max_neg, T_star_pos      dm³ invariant signs                         ✓
+  heliSpin_period             p·q = 2π ⟹ p-periodic                       ✓
+  mu_max_neg, T_star_pos      −2 < 0 and 0 < 2π for two defined constants ✓
   magnetic_bridge             proved core, bundled                        ✓
 
 Open, disclosed:  M1 Kramers T²=−1 · M2 incommensurate aperiodicity (sorry)

@@ -146,7 +146,7 @@ print("\n[3] INNER BASIN BOUNDARY r*(z=0) = z=0 crossing of the inner saddle's s
 CERT = 0.775940575502
 for eps in (1e-5, 1e-8, 1e-12):
     v = rstar(1.0, eps)
-    check(f"lam=1 r* vs Chapter 10 certified 0.775940575502, seed distance {eps:g}", abs(v - CERT) < 1e-9, f"{v:.12f}")
+    check(f"lam=1 r* vs Chapter 10 numerically computed (not certified) 0.775940575502, seed distance {eps:g}", abs(v - CERT) < 1e-9, f"{v:.12f}")
 STATED_RS = [0.776, 0.847, 0.893, 0.938]
 RS = {}
 for l, st in zip(LAMS, STATED_RS):

@@ -418,6 +418,14 @@ theorem colony_depth2_coords :
     (seed.expand.expand.cells.image (fun c => c.coord)).card = 19 := by
   decide
 
+/-- Seed colony at depth 2: 26 stage-tagged cells (1 + 6 + 19: the origin recurs at stage 2,
+    and each ring-1 coordinate recurs at stage 2 as well as stage 1).  Companion to
+    `colony_depth2_coords`; added 2026-11-14 so the page can cite both counts. -/
+theorem colony_depth2_cells :
+    let seed : Colony := { cells := {Cell.mk ⟨0,0⟩ 0} }
+    seed.expand.expand.cells.card = 26 := by
+  decide
+
 -- ─────────────────────────────────────────────────────────────────────────────
 -- §9  Former Open Obligations — all three resolved; none was ever a `sorry`
 -- ─────────────────────────────────────────────────────────────────────────────
