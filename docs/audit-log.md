@@ -12924,3 +12924,11 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 - Corrected: "certified" relabelled "computed". certify_rstar.py states a 1e-7 tolerance, which does not back 10 significant figures; the new script is the check for those digits.
 - Corrected: r*(1.5) differs from ln 2 by 1.7e-5, far above numerical error, so not equal; "tantalizing" wording replaced.
 - Not checked: kappa and nu inputs (unsourced), eps_gal = nu/kappa (a model), 2:1 resonance claim, observed bulge-disc range. Milkomeda-as-fix(G) remains a CONJECTURE on this page.
+
+## 2026-11-15 — chGravity-scales.html (ADE section, galactic fold, gravity paragraph)
+
+- Corrected: Arnold indexing (fold A2, cusp A3, swallowtail A4; A1 is a nondegenerate critical point). The three panels were each shifted by one; "SU(4) / Sp(2)" reduced to SU(4) (Sp(2) is not SU(4)).
+- Corrected: "matches exactly" / "same hierarchy" / "follows from the ADE structure" replaced by shared labels only. No map from F to C^2/Gamma is defined on the page; QCD colour SU(3) is not the enhanced gauge group of a Type IIA orbifold. McKay/IIA statement kept as a standard result, not rechecked.
+- Corrected: galactic "A1 Whitney singularity" no longer asserted; Milkomeda timescale called a model prediction, not measured. The 4.5 Gyr figure and Sawala 2025 not checked.
+- Corrected: "the lock gap is the Whitney fold" / "balance exactly" / "locks an electron..., a quark" restated as model identification and conjecture; contradicted the page's own Stated-not-proved box.
+- Not rechecked: string-vertex and hadronization table entries (rows near the scale table).
