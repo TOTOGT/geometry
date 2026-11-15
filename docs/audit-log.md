@@ -12870,3 +12870,15 @@ Method: re-ran ch22/23/24_audit_check.py (all pass), then corrected the pages in
 ## 2026-11-15 — ch16 (applied from the other session's findings)
 
 book4/ch16-crystal-lattice.html: box id="correction-2026-11-15". F16-1 eps0 printed chain 2/(2*2)=1/3 corrected (=1/2); eps0=1/3 stated as a chosen constant, H=2 not assumed; inventory row dm3_epsilon0 no longer "Proved" (restates a definition). F16-2 Schumann: 33 is a count, 33.516 implies R~6366 km (6371 gives 33.49), measured fourth mode ~26.3 Hz (Cole 1965 Table 1, read by the other session; Balser-Wagner original not read), "designed to couple" relabelled motivation. F16-3 "twenty proved" relabelled, count not re-derived. F16-4 template box recorded, not edited. G6Crystal.lean NOT re-run or edited (uncommitted changes of unknown origin there).
+
+## 2026-11-15 — ch25 (applied from the other session's findings)
+
+book4/ch25-selection-principle.html, box id="correction-2026-11-15". F25-1 Carmichael split 3 closable / 5 not; F25-2 cost assumption log T (log(10T+2) gives 0.0096 at s=2, not 1.2852), scaling inconsistency with §25.5 recorded, assumption still unargued; F25-3 Prop 25.1 entropy conditional on equiprobable shells; F25-4 chirality wording (GP(m,n) achiral iff n=0 or m=n); F25-5 K~0.6389 and Larsen journal year marked unchecked (ratio 0.670 reproduced); F25-6 "maximum-entropy shell" narrowed, script assertion recorded; F25-7 data recorded as support, mechanism untested. ch25_audit_check.py: 9 PASS, 0 FAIL after edits.
+
+## 2026-11-15 — ch27 (applied from the other session's findings)
+
+book4/ch27-measure-that-binds.html, box id="correction-2026-11-15". F27-1 second display is log<W>, an upper bound for <log W> (measured 0.712..1.127 vs 0.911..1.306; heuristic coefficient ln2/2, untested); hero and §27.3 table relabelled formula; F27-2 C=0.9463 (K=0.638909); F27-3 absolute-cost comparison caveat; F27-4 disc count/units note and Exercise 27.2 (pi/4); F27-5 CHECKED tag -> from memory, Trefethen content not read. ch27-verify.py NOT changed (hard-coded K still mismatched).
+
+## 2026-11-15 — ch28 (applied from the other session's findings)
+
+book4/ch28-what-the-flow-pays.html, box id="correction-2026-11-15". F28-1 Gamma = invariant cylinder foliated by Legendrian helices, not Legendrian (hero, §28.3, Exercise 28.1); F28-2 sign of Reeb unit vs dissipation convention flagged unresolved; F28-3 dS=0 gives alpha(gamma-dot)=dQ, not zero; F28-4 "none by hand"/"no sixth parameter" narrowed; F28-5 saddle cubic derivation added; F28-6 r*=0.7732 vs 0.7759 unresolved; F28-7 Zenodo 21708678 unconfirmed; F28-8 §28.4 row marked upper bound. ch28-verify.py not changed.
