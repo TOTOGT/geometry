@@ -17,8 +17,25 @@ def final_r(r0, z0=0.0, T=60):
     return s.y[0, -1], s.t[-1], s.y[1, -1]
 r_in, _, _ = final_r(2.0)
 ck('r(0)=2, z(0)=0 converges to r=1 (final r = %.6f)' % r_in, abs(r_in-1) < 1e-4)
-r_out, tend, zend = final_r(7.5)
-ck('r(0)=7.5, z(0)=0 (r(0)>1) does NOT converge to 1 (r = %.4g, z = %.3g when integration stops at t=%.3g): the statement "every orbit with r(0)>1 converges" is false as written' % (r_out, zend, tend), abs(r_out-1) > 1e-2)
+# Observed trajectory for r(0)=7.5, z(0)=0, recorded with solver status. A numerical stop is NOT evidence of finite-time
+# blow-up or of non-convergence by itself: the word "blows up" is reserved for an analytic argument or validated bound,
+# and this script has neither. The claim that "every orbit with r(0)>1 converges" is flagged on SEPARATE evidence:
+# ch03_outer_basin_check.py (DOP853 rtol 1e-13 bisection: largest converging r(0) at z(0)=0 is ~6.859, numerical, not a proof).
+import warnings
+def run(method, rtol, atol):
+    with np.errstate(all='ignore'), warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        s = solve_ivp(rhs, [0, 60], [7.5, 0.0], method=method, rtol=rtol, atol=atol)  # no event: plain integration
+    return s
+print('INFO r(0)=7.5, z(0)=0, T=60 (observations, not a blow-up proof):')
+stops = []
+for m, rt, at in [('RK45', 1e-9, 1e-12), ('RK45', 1e-12, 1e-14), ('DOP853', 1e-13, 1e-15), ('Radau', 1e-10, 1e-12)]:
+    s = run(m, rt, at)
+    stops.append(s.t[-1])
+    print('INFO   %-6s rtol=%g atol=%g: status=%d (%s) stopped at t=%.5f after %d steps; r=%.4g z=%.4g' % (m, rt, at, s.status, s.message, s.t[-1], len(s.t), s.y[0, -1], s.y[1, -1]))
+print('INFO   all four integrations stopped with a step-size failure (status -1) before t=60; the final z differs between runs (about -27 to -29), so the endpoint is solver-dependent and is not a limiting value.')
+r_out = run('RK45', 1e-9, 1e-12).y[0, -1]
+ck('r(0)=7.5, z(0)=0: the integrations did not reach t=60 at r=1 (all four solver runs failed at t=%.5f +/- %.1e); this is an observation, and the claim "every orbit with r(0)>1 converges" is flagged on the separate ch03/ch10 evidence, not on this stop' % (stops[0], max(stops) - min(stops)), max(stops) < 1.0 and abs(r_out - 1) > 1e-2)
 rz, tz, zz = final_r(1.5, z0=-8.0)
 print('INFO r(0)=1.5, z(0)=-8: r = %.4g, z = %.3g at t = %.3g (ch12 notes the global statement also fails at very negative z)' % (rz, zz, tz))
 # 2. Collatz reading order on chapters 0..28

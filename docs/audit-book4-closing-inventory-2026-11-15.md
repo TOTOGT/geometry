@@ -3,6 +3,7 @@
 Audit records and proposed repairs only. No manuscript page, generator, Lean file or sealed readcheck artifact was edited by this audit. Remote `main` was reported at f249696f after the last push (publication only; CI and Lean kernel results for these commits are not confirmed here).
 
 ## 1. Coverage
+Coverage sweep complete; listed verification gaps remain (see "Not audited" below and sections 4–5b).
 Audited with a record in docs/audit-book4-ch11-14-ch18-ch19-2026-11-14.md: ch00 (staleness) and ch00-student-edition, 01, 02, 05, 06, 06b, 07, 08, 09b, 10-lambda-bone-handoff, 12, 15, 16, 21–28; earlier in this audit ch11, 13, 14, 17, 18, 19, 20. From the earlier external pass (docs/audit-ranking-2026-11-14.tsv, not re-audited here): ch03, ch04, ch09, ch10.
 Not audited: ch09b's sites script and DEM/NOAA source checks (files not available here), ch10 sidebar and §6 beyond the recorded items; book5–book10 pages beyond the dependency grep (D1–D6).
 
@@ -30,9 +31,9 @@ Manuscript wording: items in each chapter's "Proposed corrections" line in the a
 - Readcheck publication status: sourcemap.tsv and chunk1-controls-expected.tsv are in remote history; sealed labels and blind returns are not; Pablo to decide whether any of this needs action.
 
 ## 5b. Added after the first version (2026-11-15)
-- ch00-student-edition F0s-1..5 (the withdrawn r(0)>1 statement used as the model theorem; Collatz asserted; stale chapter pointers; J¹(ℝ,ℝ²) as "5D contact"). ch09b: own verifier passes (106 checks, 6 controls), NOAA numbers unchecked here. ch10-lambda-bone-handoff: script rerun on the Mac side, ALL PASS (75 lines).
+- ch00-student-edition F0s-1..5 (the "every orbit with r(0)>1 converges" statement, flagged on the separate ch03/ch10 numerical evidence (largest converging r(0) ≈ 6.859 at z(0)=0), used as the model theorem; the r(0)=7.5 run is recorded as an observation only (four solvers stop with a step-size failure at t ≈ 0.178, endpoint solver-dependent), not as blow-up; Collatz asserted; stale chapter pointers; J¹(ℝ,ℝ²) as "5D contact"). ch09b: its own verifier passes (106 checks, 6 controls); the NOAA inputs remain unchecked. ch10-lambda-bone-handoff: the script runs successfully in this environment (75 PASS lines); that does not establish that it ran on Pablo's Mac or independently validate every proof.
 - ch05 F5-5 reworded: ż ≠ 0 locally, not ż > 0; the Cartan distribution is rank 3 = codimension 2 on a 5-manifold (a contact distribution there has rank 4).
-- ch00 regeneration trial: chapter_zero.py --write --book 4 fixes the hash but drops four downstream generated boxes; page left at its committed state. CI for 6aaee037 not readable here; LadderBound.lean and LadderRung.lean are not lean_lib targets, so no CI compile or axiom report covers them.
+- ch00 regeneration trial: chapter_zero.py --write --book 4 fixes the hash but drops four downstream generated boxes; page left at its committed state. CI for 6aaee037 not readable here; LadderBound.lean and LadderRung.lean are not lean_lib targets, so no CI compile or axiom report covers them. Ladder files: kernel status unverified; adding explicit compilation and axiom reporting is a separate repair.
 
 ## 6. Method notes
 Check scripts are read-only and live beside their chapters (ch06…ch28, wp56). Lines labelled NOTE in a script are hand arguments, not computed. A passing script does not establish a prose claim; where a script checks arithmetic only, the record says so.
