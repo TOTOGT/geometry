@@ -28,6 +28,8 @@ def zmin(r0, lo=-6.0, hi=0.0):
         if conv(r0, mid): hi = mid
         else: lo = mid
     return hi
+# NOTE 2026-11-14 (Book 4 audit): the value this prints (6.8963) is a fixed-step RK4 artefact (dt=0.01 is too
+# coarse where r' ~ -r^3). Adaptive DOP853 (rtol 1e-13) gives 6.859221; see book4/ch03_outer_basin_check.py.
 def rmax_at_zero(lo=3.0, hi=40.0):
     if not conv(lo, 0.0) or conv(hi, 0.0): return None
     for _ in range(30):

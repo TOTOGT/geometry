@@ -201,16 +201,23 @@ table { min-width: max-content; }
 
     <p>This is not arbitrary. Each term is geometrically motivated:</p>
 
-    <p>The $r(1-r^2)$ term in $\dot{r}$ is the radial ODE from Chapter 1, pulling every radius toward $r = 1$. The correction term $2(r-1)e^{-z}$ encodes the coupling between radial and axial dynamics — it vanishes when $r = 1$ (on the attractor) and decays exponentially as $z \to \infty$. The $\dot{\theta} = 1$ says the orbit winds at constant angular speed: one full revolution per unit time. The $\dot{z}$ equation advances height at a rate that also settles when $r \to 1$.</p>
+    <p>The $r(1-r^2)$ term in $\dot{r}$ is the radial ODE from Chapter 1, pulling every radius toward $r = 1$. The correction term $2(r-1)e^{-z}$ encodes the coupling between radial and axial dynamics — it vanishes when $r = 1$ (on the attractor) and decays exponentially as $z \to \infty$. The $\dot{\theta} = 1$ says the orbit winds at constant angular speed: one radian per unit time, so a full revolution takes $2\pi$ time units. The $\dot{z}$ equation advances height at a rate that also settles when $r \to 1$.</p>
 
     <div class="section-label">§ 3.4</div>
     <h2>The attractor theorem</h2>
 
     <div class="env thm">
       <div class="env-head">Theorem 3.2 — Helical convergence (dm³)</div>
-      <p>For System (3.1), every trajectory with initial condition $r(0) > 1$ converges exponentially to the unit circle $r = 1$ at rate $\mu = -2$. The attractor is the <strong>Legendrian helix</strong> $\gamma^* = \{r = 1,\, \dot{\theta} = 1\}$, winding at unit speed around the cylinder $r = 1$. It is Legendrian, not Reeb: its tangent is $\dot\gamma = (0,1,1)$ in $(r,\theta,z)$, and $\alpha(\dot\gamma) = \dot z - r^2\dot\theta = 1 - r^2 = 0$ at $r=1$, so $\gamma^*$ lies <em>inside</em> the contact distribution. The Reeb field of $\alpha = dz - r^2 d\theta$ is $\partial_z$, which is transverse to that distribution and has no closed orbits — consistent with the flat case noted above, to which this manifold is contactomorphic (Ch 23, &#167;23.7).</p>
-      <p>On the inner side, the true basin boundary is $r^* \approx 0.8$. Trajectories with $r(0) \in (r^*, 1)$ also converge to $\gamma^*$; trajectories with $r(0) < r^*$ diverge inward.</p>
+      <p>For System (3.1): (i) every trajectory that starts in the region $\{r \ge 1,\ z \ge \ln 2\}$ stays in it and converges exponentially to the unit circle $r = 1$, with $0 \le r(t)-1 \le (r(0)-1)\exp[-2t + 2e^{-z(0)}(1-e^{-t})]$, so the rate tends to $\mu = -2$ (hand-derived in Chapter 10, Proposition 3.1; not machine-checked in Lean). (ii) Numerically, at $z(0) = 0$ the starts with $r(0)$ up to about $6.859$ converge and those above it do not. <strong>The statement that every trajectory with $r(0) > 1$ converges is false</strong>: for example $(r(0), z(0)) = (10, 0)$ and $(1.5, -2)$ do not converge (<code>ch03_outer_basin_check.py</code>). The attractor is the <strong>Legendrian helix</strong> $\gamma^* = \{r = 1,\, \dot{\theta} = 1\}$, advancing $\theta$ at one radian per unit time around the cylinder $r = 1$. It is Legendrian, not Reeb: its tangent is $\dot\gamma = (0,1,1)$ in $(r,\theta,z)$, and $\alpha(\dot\gamma) = \dot z - r^2\dot\theta = 1 - r^2 = 0$ at $r=1$, so $\gamma^*$ lies <em>inside</em> the contact distribution. The Reeb field of $\alpha = dz - r^2 d\theta$ is $\partial_z$, which is transverse to that distribution and has no closed orbits — consistent with the flat case noted above, to which this manifold is contactomorphic (Ch 23, &#167;23.7).</p>
+      <p>On the inner side, at $z(0) = 0$ the basin boundary is $r^* \approx 0.776$ ($0.77594058$, computed numerically). Trajectories with $r(0) \in (r^*, 1)$ also converge to $\gamma^*$; trajectories with $r(0) < r^*$ diverge inward (numerical).</p>
     </div>
+
+        <div class="env" style="border-left:3px solid #8b3a0f">
+  <div class="env-head">Correction &#183; 2026-11-14 &#183; Book 4 audit, by hand</div>
+  <p><strong>1. Theorem 3.2 said every trajectory with $r(0) > 1$ converges. That is false.</strong> Chapter 10 recorded this on 2026-10-01; this chapter had not been updated. The theorem now states what is hand-derived on $\{r \ge 1,\, z \ge \ln 2\}$ and what is numerical at $z(0) = 0$. The numerical outer limit at $z(0)=0$ is $6.859221$ with an adaptive integrator (DOP853, rtol $10^{-13}$); the fixed-step script <code>ch10-outer-basin-check.py</code> reports 6.8963, which is a step-size artefact.</p>
+  <p><strong>2. The basin boundary is $r^* \approx 0.776$</strong> ($0.77594058$, computed numerically, not certified; Chapter 10). This chapter said $\approx 0.8$ in three places and $0.776$ in two; the simulator drew the line at $0.77594058$ but placed its label at $0.8$.</p>
+  <p><strong>3. $\dot\theta = 1$ is one radian per unit time.</strong> &sect;3.3 said one full revolution per unit time; a revolution takes $2\pi$ time units, as &sect;3.7 already said.</p>
+</div>
 
     <div class="env" style="border-left:3px solid #8b3a0f">
   <div class="env-head">Version note &#183; Reeb versus Legendrian</div>
@@ -221,7 +228,7 @@ table { min-width: max-content; }
 
     <div class="keyidea">
       <strong>Why r* ≈ 0.776, not 1/3</strong>
-      <p>An earlier Gronwall estimate suggested the inner basin boundary was the symmetric ball $|r - 1| < 1/3 = \varepsilon_0$. Numerical integration (DOP853 integrator, see the GTCT repository) revealed the true boundary is $r^* \approx 0.8$ — asymmetric because the correction term $2(r-1)e^{-z}$ is not symmetric in $r$ around $r=1$. The Lean 4 formalisation in AXLE has been updated to reflect this. $\varepsilon_0 = 1/3$ remains the <em>stability radius<sup><a href="ch10.html" title="ε₀ = 1/3 is the coarse, symmetric Grönwall estimate; Book 4, Ch 10 refines the true inner boundary to r* ≈ 0.776 (basin asymmetry) and notes such model quantities do not translate cleanly to reality">[Ch 10]</a></sup></em> for the linearised system; $r^*$ is the true nonlinear boundary.</p>
+      <p>An earlier Gronwall estimate suggested the inner basin boundary was the symmetric ball $|r - 1| < 1/3 = \varepsilon_0$. Numerical integration (DOP853 integrator, see the GTCT repository) revealed the true boundary is $r^* \approx 0.776$ ($0.77594058$) — asymmetric because the correction term $2(r-1)e^{-z}$ is not symmetric in $r$ around $r=1$. The Lean 4 file in AXLE records $r^*$ as a named constant; the correction at the top of Chapter 10 gives the status of that file. $\varepsilon_0 = 1/3$ remains the <em>stability radius<sup><a href="ch10.html" title="ε₀ = 1/3 is the coarse, symmetric Grönwall estimate; Book 4, Ch 10 refines the true inner boundary to r* ≈ 0.776 (basin asymmetry) and notes such model quantities do not translate cleanly to reality">[Ch 10]</a></sup></em> for the linearised system; $r^*$ is the true nonlinear boundary.</p>
     </div>
 
     <div class="section-label">§ 3.5</div>
@@ -239,7 +246,7 @@ table { min-width: max-content; }
           <input type="checkbox" id="show_basin" checked> Show basin boundary r*
         </label>
       </div>
-      <p class="sim-caption">Fig 3.1 — Left: $(r,z)$ portrait. Dashed lines: attractor $r=1$ (gold) and basin boundary $r^* \approx 0.8$ (red). Right: helical orbits in $(r, \theta, z)$ space. All outer orbits converge to the unit helix.</p>
+      <p class="sim-caption">Fig 3.1 — Left: $(r,z)$ portrait. Dashed lines: attractor $r=1$ (gold) and basin boundary $r^* \approx 0.776$ (red). Right: helical orbits in $(r, \theta, z)$ space. All outer orbits converge to the unit helix.</p>
     </div>
 
     <div class="section-label">§ 3.6</div>
@@ -326,7 +333,7 @@ Attractor: r = 1, μ = −2, basin: r* ≈ 0.776</div>
     <div class="pb-prompt">
       You are reading Chapter 3 of <em>Principia Orthogona Book 4 — Higher Dimensions</em> by Pablo Nogueira Grossi.
 
-The chapter introduces the contact 3-manifold, the Reeb vector field, and the dm³ toy ODE (System 3.1). The key result is Theorem 3.2: every trajectory with r(0) > 1 converges exponentially to the helix r = 1 at rate μ = −2. The inner basin boundary is r* ≈ 0.776, not the symmetric 1/3.
+The chapter introduces the contact 3-manifold, the Reeb vector field, and the dm³ toy ODE (System 3.1). The key result is Theorem 3.2: trajectories that start in the region {r ≥ 1, z ≥ ln 2} converge exponentially to the helix r = 1 at rate μ = −2; convergence for every r(0) > 1 is false. The inner basin boundary is r* ≈ 0.776, not the symmetric 1/3.
 
 Your task: The chapter claims that the Lyapunov exponent μ = −2 of the Reeb attractor is the same μ that appears in the dm³ recurrence ladder (π → φ → μ → η → Δ → Σ → Ω). Write two paragraphs: (1) what a Lyapunov exponent measures in general — its geometric meaning in terms of nearby trajectories; (2) why it is significant that μ = −2 appears both as a convergence rate of a specific ODE and as a rung of the recurrence ladder. Is this a coincidence, a definition, or a theorem? Use the language of this chapter.
       <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.innerText.replace('COPY PROMPT','').trim());this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1800)">Copy</button>
@@ -432,7 +439,7 @@ function drawLeft() {
   ctx.fillStyle='#c9a84c'; ctx.font='10px sans-serif';
   ctx.fillText('r=1', ax+4, 30);
   if (document.getElementById('show_basin').checked) {
-    const [bx2] = rzToCanvas(0.8,-1);
+    const [bx2] = rzToCanvas(0.77594058,-1);
     ctx.fillStyle='#e05a3a'; ctx.fillText('r*', bx2+3, 30);
   }
 

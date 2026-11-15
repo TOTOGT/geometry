@@ -171,6 +171,9 @@ ul.tight { margin:1rem 0 1rem 1.5rem; line-height:2.05; }
     <span>Crystallography → dm³</span>
     <span>Mathlib v4.14.0</span>
   </div>
+<div style="border:1px solid var(--gold);border-left-width:5px;padding:1rem 1.2rem;margin:1.4rem auto;max-width:46rem;font-size:.85rem;line-height:1.6" id="correction-2026-11-14">
+  <strong>Correction · 14 November 2026.</strong> The sequence $1,7,19,37,61$ counts distinct hexagonal <em>coordinates</em> (integer check: $1+3n(n+1)$, rings of $6n$). The colony's cells carry a stage tag, and under the expand rule stated in <code>dm3_bridge</code>(a) the same coordinate recurs at several stages, so the cell counts are $1,7,26,63,124$ (script <code>ch16_colony_count_check.py</code>, integer arithmetic; it models the rule of <code>Colony.expand</code> as stated in <code>dm3_bridge</code>(a)). Hence the page's "depth 2 = 19 cells" was wrong as worded: the repository's own theorem is <code>colony_depth2_coords</code> (19 coordinates) and its docstring already gives 26 for cells. The depth-1 count (7) and the coordinate count are unaffected. Also, conjunct (e) of <code>dm3_bridge</code> is monotone growth of $R$, not a "Lyapunov descent". Not re-run in Lean.
+</div>
 </section>
 
 <div class="content-wrap">
@@ -267,7 +270,7 @@ ul.tight { margin:1rem 0 1rem 1.5rem; line-height:2.05; }
 
 <p>The bridge from the smooth system to the physical lattice is the <strong>colony</strong> — a finite set of hexagonal cells that grows by the operator <code>Colony.expand</code>. The bridge file <code>DM3Bridge.lean</code> proves that <code>expand</code> is exactly the composite $U \circ F \circ K \circ C$ acting on space: compress each cell to its coordinate ($C$), find the boundary neighbours ($K$), fold them into new coordinates ($F$), and unfold them as fresh cells one stage deeper ($U$).</p>
 
-<p>Run that operator from a single seed and the cell count follows the <strong>centered hexagonal numbers</strong> $\text{cHex}(n) = 1 + 3n(n+1)$: $1 \to 7 \to 19 \to 37 \to 61$. Each new ring adds exactly $6n$ cells — the <code>ring_card</code> theorem — which is the discrete signature of six-fold symmetry. The figure below runs the growth interactively.</p>
+<p>Run that operator from a single seed and the number of distinct <em>lattice coordinates</em> follows the <strong>centered hexagonal numbers</strong> $\text{cHex}(n) = 1 + 3n(n+1)$: $1 \to 7 \to 19 \to 37 \to 61$ (the number of stage-tagged cells does not: see the correction above). Each new ring adds exactly $6n$ coordinates — the <code>ring_card</code> theorem — which is the discrete signature of six-fold symmetry. The figure below runs the growth interactively.</p>
 
 <div class="figure-wrap">
   <div class="figure-header">
@@ -280,7 +283,7 @@ ul.tight { margin:1rem 0 1rem 1.5rem; line-height:2.05; }
     <span class="dn">Depth 0 · 1 cell</span> — the seed. A single G¹ module. Press a depth button to apply <code>Colony.expand</code>.
   </div>
   <div class="figure-caption">
-    Each application of <code>Colony.expand</code> adds one ring of $6n$ cells around the colony. The counts $1, 7, 19, 37, 61$ are the centered hexagonal numbers, proved individually in <code>DM3Bridge.lean</code> (<code>centeredHex_zero…four</code>) and shown to be strictly monotone (<code>centeredHex_strictMono</code>). Depths 1 and 2 are additionally proved by direct evaluation of the colony (<code>colony_depth1_cells</code> = 7, <code>colony_depth2_cells</code> = 19).
+    Each application of <code>Colony.expand</code> adds one ring of $6n$ cells around the colony. The counts $1, 7, 19, 37, 61$ are the centered hexagonal numbers, proved individually in <code>DM3Bridge.lean</code> (<code>centeredHex_zero…four</code>) and shown to be strictly monotone (<code>centeredHex_strictMono</code>). Only depth 1 is evaluated in <code>dm3_bridge</code> (7 cells). At depth 2 the repository states <code>colony_depth2_coords</code> (19 distinct coordinates, in <code>Orthogenesis/Architecture/G6Crystal.lean</code>), and its docstring gives the stage-tagged cell count as 26, agreeing with <code>ch16_colony_count_check.py</code>; the companion <code>colony_depth2_cells</code> (= 26) was added on 14 Nov 2026 and compiles (Lean 4.32.0, leancheck OK).
   </div>
 </div>
 
@@ -325,7 +328,7 @@ ul.tight { margin:1rem 0 1rem 1.5rem; line-height:2.05; }
   <tr><td>Noise tolerance covers the $g^6/f_4$ error</td><td><code>noise_tol_covers_g6_error</code></td><td class="open-s">✗ Withdrawn 2026-09-11</td></tr>
   <tr><td>Planetary scaling: lunar taller, Mars $<40$ km, ratios invariant</td><td><code>lunar_crystal_taller</code>, <code>mars_height_within_troposphere</code></td><td class="proved-s">✓ Proved</td></tr>
   <tr><td>Centered-hex growth $1,7,19,37,61$; rings of $6n$; monotone</td><td><code>centeredHex_*</code>, <code>ring_card</code></td><td class="proved-s">✓ Proved</td></tr>
-  <tr><td>Colony depth 1 = 7 cells, depth 2 = 19 cells</td><td><code>colony_depth1_cells</code>, <code>colony_depth2_cells</code></td><td class="proved-s">✓ Proved</td></tr>
+  <tr><td>Colony depth 1 = 7 cells; depth 2 = 19 coordinates (26 stage-tagged cells)</td><td><code>colony_depth1_cells</code>, <code>colony_depth2_coords</code>, <code>colony_depth2_cells</code></td><td>Depth 1 and the 19 coordinates proved (CI); the 26 compiles (14 Nov 2026)</td></tr>
   <tr><td>expand $= U\!\circ\! F\!\circ\! K\!\circ\! C$; six neighbours; bridge bundle</td><td><code>expand_is_UCKF_composite</code>, <code>dm3_bridge</code></td><td class="proved-s">✓ Proved</td></tr>
   <tr><td><strong>S1 · Arnold tongue $A_{4:1}$ Schumann coupling</strong> — subject withdrawn with §4</td><td><code>arnold_tongue_A4_coupling</code></td><td class="open-s">✗ Deleted 2026-09-11</td></tr>
   <tr><td><strong>S2 · Hexagrid progressive-collapse superiority</strong> — an FEM result from the literature, cited in prose</td><td><code>hexagrid_collapse_resistance_superior</code></td><td class="open-s">✗ Deleted 2026-08-21</td></tr>
@@ -413,7 +416,7 @@ const DEPTHS = [0,1,2,3,4];
 const NOTES = {
   0: 'the seed. A single G¹ module.',
   1: 'the first ring — seven cells. NASA Phase 02: seven G¹ modules form the first G² ring. Proved as <code>colony_depth1_cells</code>.',
-  2: 'two rings — nineteen cells. Proved as <code>colony_depth2_cells</code>.',
+  2: 'two rings — nineteen distinct lattice coordinates (26 stage-tagged cells). Proved as <code>colony_depth2_coords</code>.',
   3: 'three rings — thirty-seven cells (<code>centeredHex_three</code>).',
   4: 'four rings — sixty-one cells (<code>centeredHex_four</code>).'
 };

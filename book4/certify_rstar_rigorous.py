@@ -1,6 +1,14 @@
 """
 certify_rstar_rigorous.py
 ==========================
+NOTE 2026-11-14 (Book 4 audit): the "certified radius" printed below is NOT a valid
+enclosure. The RK4 centre trajectory has step-size error ~1e-15 at t=2 and ~6e-13 at
+t=6 (book4/ch10_rstar_rigorous_check.py), against a reported radius <= 2e-53; the error
+transport uses a float-converted Euler-linearised matrix with no truncation bound; and
+the escape/convergence thresholds are not proved to decide the long-time fate. Read the
+bracket and the word "certificate" below as a high-precision numerical result only.
+The original text is kept unchanged under this note.
+
 Rigorous (Lohner-style) certification of the inner stability boundary r*
 for the dm^3 system:
 

@@ -3,7 +3,7 @@
 """
 certify_rstar.py
 ================
-Numerical certification of the inner basin boundary r* for the dm3
+Numerical computation (not a certificate; 2026-11-14 note) of the inner basin boundary r* for the dm3
 contact-geometric ODE system.
 
 Author  : Pablo Nogueira Grossi  |  G6 LLC  |  Newark, NJ  |  2026
@@ -232,7 +232,7 @@ def main():
     kappa_star = np.sqrt(7.0 / 9.0)
     print(f"  eps_0        = 1/3              = {eps0:.6f}  [Gronwall outer radius]")
     print(f"  2/3          = 2/3              = {gronwall_inner:.6f}  [symmetric estimate, WRONG]")
-    print(f"  r*           = {rstar:.6f}        [true inner boundary, certified here]")
+    print(f"  r*           = {rstar:.6f}        [inner boundary, computed by bisection at z0=0; numerically computed, NOT certified]")
     print(f"  kappa*       = sqrt(7/9)        = {kappa_star:.6f}  [K-operator Lipschitz bound]")
     print()
     assert gronwall_inner < rstar < kappa_star < 1.0, "Hierarchy violated!"
@@ -250,7 +250,7 @@ def main():
     else:
         print("  Agreement: REVIEW — check T_MAX and tolerances")
     print()
-    print("Run complete. Reproducible on any IEEE-754 double-precision platform.")
+    print("Run complete. This is a bisection with a fixed integrator (DOP853); it computes r* at z0=0 and does not certify it (see ch10_rstar_rigorous_check.py).")
     print()
 
     return 0 if outer_ok else 1

@@ -268,6 +268,10 @@ mjx-container { overflow-x: auto; max-width: 100%; display: block !important; }
 }
 table { min-width: max-content; }
 .table-wrap { overflow-x: auto; }
+.correction{border:1px solid var(--accent);border-left-width:5px;background:var(--paper2);padding:1rem 1.2rem;margin:1.4rem 0;font-size:.85rem;line-height:1.6;}
+.correction .corr-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem;font-weight:700;}
+.correction p{margin:0 0 .6rem;}
+.correction p:last-child{margin-bottom:0;}
 </style>
 <!--po-subject--><meta name="po-subject" content="MATHEMATICS · PURE"><!--/po-subject-->
 </head>
@@ -322,6 +326,13 @@ table { min-width: max-content; }
   <h2>Before the Mathematics</h2>
   <p>This chapter adds a fourth dimension — a genuinely new, independent direction, not time in disguise and not a hidden small one. The aim is to build both the intuition and the tools for a space your eyes cannot enter.</p>
   <p>The honest difficulty is stated up front: any picture of four dimensions is a <em>projection</em> back into three, and your 3D intuition will fight it. That is not a failure — reading what the projection distorts is the actual skill being taught. The rotating tesseract shows all sixteen corners of the hypercube at once, always flattened; learning to see the flattening is the lesson.</p>
+  <div class="correction" id="correction-2026-11-14">
+    <div class="corr-label">Correction · 14 November 2026</div>
+    <p>1. Theorem 4.2 (attractor persistence in the 4D lift) is withdrawn as a theorem and restated as Conjecture 4.2 (open). System (4.1) never specifies the $w$-equation $s$, so no persistence or $w$-exponent statement can follow from it; the "bound $-2$" was not derived (the radial exponent at $r=1$ is $2e^{-z}-2$, equal to $-2$ only as $z\to\infty$).</p>
+    <p>2. $\gamma^*$ was called a closed Reeb orbit with $z=z_0$. For $\alpha=dz-r^2d\theta$ the Reeb field is $\partial_z$, and the attractor is the Legendrian helix $z=z_0+\theta$ (since $\dot z=r^2=1$ at $r=1$): not Reeb, not closed. The statement that every Reeb orbit has period $2\pi$ holds for the standard form on the unit $S^3$, not for the dm³ form.</p>
+    <p>3. The 2$\pi$ area equals $|\oint\alpha|$ by Stokes; the identification of period, area and Lyapunov rate as one number, and the claim that holomorphic curves turn Theorem 3.2 into a global result, are withdrawn. Checked by hand and in <span class="mono">ch04_theorem42_check.py</span> (sympy; it checks the derivable items only). Not Lean-checked.</p>
+  </div>
+
   <p>What follows: §4.1 says what a fourth dimension is; the tesseract makes it visible; then the 3-sphere appears "as a face of the room", four-dimensional space is introduced as the natural arena (the symplectisation), the dm³ system is lifted into 4D, and holomorphic curves enter as the new tool. Read it as training the eye, not memorizing formulas.</p>
 
   <span class="sec-label">§ 4.1</span>
@@ -384,7 +395,7 @@ table { min-width: max-content; }
     $$S^2 \subset \mathbb{R}^3 \quad (\text{sphere in space})$$
     $$S^3 \subset \mathbb{R}^4 \quad (\text{3-sphere in hyperspace})$$
     <div class="mc">-- S³ = boundary of the 4-ball B⁴</div>
-    <div class="mc">-- Every Reeb orbit of the standard contact structure has period 2π = T*</div>
+    <div class="mc">-- For the standard contact form on the unit S³ (Hopf), every Reeb orbit has period 2π. This is NOT the dm³ form dz − r²dθ, whose Reeb field is ∂_z (no closed orbits)</div>
     <div class="mc">-- The Hopf fibration: S³ → S² with fibers S¹</div>
   </div>
 
@@ -421,20 +432,20 @@ table { min-width: max-content; }
     $$\dot{\theta} = 1$$
     $$\dot{z} = r^2 - 2(r-1)^2 e^{-z}$$
     $$\dot{w} = s(r,\theta,z,w)$$
-    <div class="mc">-- w is the symplectisation coordinate (the "height" s above S³)</div>
-    <div class="mc">-- s(r,θ,z,w) encodes the symplectic flow in the new direction</div>
+    <div class="mc">-- w is the symplectisation coordinate (the "height" above S³)</div>
+    <div class="mc">-- s(r,θ,z,w) is NOT specified in this chapter: the 4D dynamics is not defined, only the 3D part is</div>
     <div class="mc">-- On w=0: reduces exactly to System (3.1)</div>
-    <div class="mc">-- The attractor {r=1, w=0} is still a closed Reeb orbit on S³ ⊂ ℝ⁴</div>
+    <div class="mc">-- On w=0, {r=1} is the Legendrian helix z = z₀ + θ of System (3.1) (not a Reeb orbit, not closed)</div>
   </div>
 
-  <p>The key question is whether the helical attractor $\{r=1\}$ persists when we allow the system to move in the $w$-direction. The answer is yes — and the reason is a theorem in symplectic topology, not just a calculation.</p>
+  <p>The key question is whether the helical attractor $\{r=1\}$ persists when we allow the system to move in the $w$-direction. This chapter does not answer it: without a specified $s$ there is nothing to compute, and no theorem of symplectic topology is invoked that would decide it. The statement below is therefore an open conjecture.</p>
 
   <div class="env thm">
-    <div class="env-head">Theorem 4.2 — Attractor persistence under symplectisation</div>
-    <p>The closed Reeb orbit $\gamma^* = \{r=1, \theta \in [0,2\pi), z = z_0, w = 0\}$ of System (3.1) persists as an attractor of the 4D system (4.1). Its Lyapunov exponents in the $w$-direction are determined by the symplectic area $\int_D \omega$ of a disk $D$ bounded by $\gamma^*$ in the symplectisation. For the dm³ contact form, this area equals $2\pi$, and the $w$-direction exponent is bounded by $-2$.</p>
+    <div class="env-head">Conjecture 4.2 (open) — Attractor persistence under symplectisation</div>
+    <p><strong>Conjecture (open, not proved).</strong> For a suitable choice of $s$ in System (4.1) (none is given here), the Legendrian helix $\gamma^* = \{r=1,\ z = z_0+\theta,\ w = 0\}$ of System (3.1) is an attractor of the 4D system, with a negative Lyapunov exponent in the $w$-direction. <strong>What is established:</strong> on $w=0$ the system is System (3.1); the radial exponent at $r=1$ is $2e^{-z}-2\in(-2,0]$ for $z\ge 0$ (equal to $-2$ only as $z\to\infty$); and for $\alpha=dz-r^2d\theta$ one has $|\int_D d\alpha| = |\oint_{\partial D}\alpha| = 2\pi$ for the disk $r\le 1$, $z$ fixed, by Stokes. <strong>What is not established:</strong> any link between that area and a $w$-exponent, any bound $-2$ in the $w$-direction, and persistence itself.</p>
   </div>
 
-  <p>The $2\pi$ that appears in the area integral is the same $T^* = 2\pi$ that appeared as the Reeb period in Chapter 3. The period, the area, and the Lyapunov rate are all expressions of the single number $\pi$ that anchors the dm³ system — each a different face of the same geometric object.</p>
+  <p>The $2\pi$ in the area integral is the $\theta$-period of the helix (times $r^2=1$); it is not a Reeb period, since the dm³ Reeb field $\partial_z$ has no closed orbits. The earlier sentence identifying the period, the area and a Lyapunov rate as "faces of one geometric object" is withdrawn: only the first two are related, by Stokes, and the third was not derived.</p>
 
   <span class="sec-label">§ 4.6</span>
   <h2>Holomorphic curves: the new tool</h2>
@@ -447,14 +458,14 @@ table { min-width: max-content; }
     <div class="mc">-- j is the complex structure on the source Riemann surface Σ</div>
     <div class="mc">-- J is an almost complex structure on W compatible with ω</div>
     <div class="mc">-- Solutions are "pseudo-holomorphic" curves (Gromov 1985)</div>
-    <div class="mc">-- Each Reeb orbit γ* is the asymptotic limit of a family of holomorphic curves</div>
+    <div class="mc">-- For suitable (e.g. nondegenerate) Reeb orbits, holomorphic cylinders asymptotic to them exist in the symplectisation; no such statement is proved here for the dm³ helix</div>
   </div>
 
-  <p>Gromov's 1985 paper introducing pseudo-holomorphic curves transformed symplectic topology. The key insight: holomorphic curves have a compactness property controlled by the symplectic area $\int_\Sigma u^*\omega$. If you have a sequence of holomorphic curves with bounded area, a subsequence converges — possibly to a broken curve whose pieces are asymptotic to Reeb orbits. This is <em>Gromov compactness</em>, and it is why the closed Reeb orbits (like the dm³ attractor) are not just locally stable but globally detected.</p>
+  <p>Gromov's 1985 paper introducing pseudo-holomorphic curves transformed symplectic topology. The key insight: holomorphic curves have a compactness property controlled by the symplectic area $\int_\Sigma u^*\omega$. If you have a sequence of holomorphic curves with bounded area, a subsequence converges — possibly to a broken curve whose pieces are asymptotic to Reeb orbits. This is <em>Gromov compactness</em>. It is a general tool for closed Reeb orbits; this chapter does not apply it to the dm³ helix, which is Legendrian and not closed, so no claim of "global detection" of the attractor is made.</p>
 
   <div class="env rem">
     <div class="env-head">Remark 4.3 — Why this matters for dm³</div>
-    <p>In 3D, Theorem 3.2 (attractor convergence) was proved by direct ODE estimates — Gronwall's inequality, Lyapunov functions, the DOP853 numerical correction. Those tools are local: they tell you what happens near $r=1$. Holomorphic curves in the 4D symplectisation are global: they detect $\gamma^*$ from anywhere in the manifold, not just from nearby initial conditions. The 4D lift turns a local convergence theorem into a global topological statement.</p>
+    <p>In 3D, Theorem 3.2 (restated in Chapter 3: local convergence near $r=1$ plus a numerically computed inner boundary $r^*\approx0.776$) rests on ODE estimates and DOP853 integration, tools that are local or numerical. Holomorphic curves are a global tool in general, and one may hope they give a global statement about $\gamma^*$; that hope is the content of Conjecture 4.2, not a result.</p>
   </div>
 
   <span class="sec-label">§ 4.7</span>
@@ -468,7 +479,7 @@ table { min-width: max-content; }
     <strong>The ladder so far</strong>
     <p>1D: fermion seed $\psi^2 = 0$, pure potential.<br>
     2D+t: extended phase space, contact form $\alpha = dy - f\,dx$ born.<br>
-    3D: contact 3-manifold, Reeb flow, helical attractor $T^* = 2\pi$, $S^3$ identified.<br>
+    3D: contact 3-manifold, Legendrian helical attractor ($\theta$-period $2\pi$), $S^3$ identified.<br>
     4D: $\mathbb{R}^4$ entered, $S^3$ as hypersurface, symplectisation $\omega = d\alpha$, holomorphic curves appear.<br>
     Next: Chapter 5 lifts to 5D — jet space $J^1(\mathbb{R}, \mathbb{R}^2)$, where prolongation carries the ODE into a 5-dimensional contact structure.</p>
   </div>
@@ -476,9 +487,9 @@ table { min-width: max-content; }
   <div class="pb-prompt">
 You are reading Chapter 4 of <em>Principia Orthogona Book 4 — Higher Dimensions</em> by Pablo Nogueira Grossi.
 
-The chapter introduces 4D space via the tesseract, establishes S³ as a hypersurface in ℝ⁴, defines the symplectisation W = S³ × ℝ with symplectic form ω = d(eˢα), and states Theorem 4.2 (attractor persistence). The key new tool is the holomorphic curve — a map satisfying the Cauchy-Riemann equation in the symplectisation.
+The chapter introduces 4D space via the tesseract, establishes S³ as a hypersurface in ℝ⁴, defines the symplectisation W = S³ × ℝ with symplectic form ω = d(eˢα), and states Conjecture 4.2 (attractor persistence, open). The key new tool is the holomorphic curve — a map satisfying the Cauchy-Riemann equation in the symplectisation.
 
-Your task: The chapter claims that "the period, the area, and the Lyapunov rate are all expressions of the single number π." Write three paragraphs, one for each of the three appearances of π: (1) as the Reeb period T* = 2π in the contact 3-manifold; (2) as the symplectic area ∫_D ω = 2π of the disk bounded by the attractor; (3) as the Lyapunov rate bound −2 connected to π via the attractor geometry. For each, give the precise mathematical definition of the quantity and explain why π appears in it. Is the same π in all three cases — or three different faces of one object?
+Your task: Earlier printings claimed that "the period, the area, and the Lyapunov rate are all expressions of the single number π." Check this. For (1) the θ-period 2π of the helix r=1, (2) the area ∫_D dα = 2π of the disk r≤1 (Stokes, ∮α), (3) the radial exponent 2e^{−z}−2 at r=1: give the precise definition of each and say which, if any, are related. Which part of the earlier claim survives?
     <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.innerText.replace('COPY PROMPT','').trim());this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1800)">Copy</button>
   </div>
 

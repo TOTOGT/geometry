@@ -82,6 +82,9 @@ footer a:hover{color:#c8a96e;}
 @media(max-width:860px){.body-wrap{grid-template-columns:1fr;}.side{position:static;}.ladder{grid-template-columns:repeat(4,1fr);}.ft-grid{grid-template-columns:1fr;gap:1.5rem;}.ch-open,.body-wrap,footer{padding-left:1.5rem;padding-right:1.5rem;}}
 @media(max-width:520px){body{font-size:17px;}.ladder{grid-template-columns:repeat(2,1fr);}.ft-copy{flex-direction:column;gap:0.3rem;}}
 .eq,pre,code{overflow-x:auto;}
+.correction{border:1px solid var(--accent,#a33);border-left-width:5px;padding:1rem 1.2rem;margin:1.4rem 0;font-size:.85rem;line-height:1.6;}
+.correction .corr-label{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:.5rem;}
+.correction p{margin:0 0 .6rem;}
 </style>
 <!--po-subject--><meta name="po-subject" content="ECONOMICS · POLICY"><!--/po-subject-->
 </head>
@@ -102,6 +105,12 @@ footer a:hover{color:#c8a96e;}
     <div class="meta"><strong>Object</strong><br>Numerical &amp; formal verification · 8 Belleville sites</div>
     <div class="meta"><strong>Closes</strong><br>The dimension ladder at 6D · handoff to Ch 10</div>
     <div class="meta"><strong>License</strong><br>MIT (code) · CC BY-NC-ND 4.0 (text)</div>
+  </div>
+  <div class="correction" id="correction-2026-11-14">
+    <div class="corr-label">Correction · 14 November 2026</div>
+    <p>1. Proof VI: the figures (P_ON ≈ 0.94, collapse within 3 T*, robustness sweep) are not produced by any script or data file in this repository (searched book4/, tools/, AXLE/); they are now labelled unreproduced, and the claim that they confirm Chapter 8 is withdrawn until a producing tool exists.</p>
+    <p>2. Proof VII: the argument is invalid as written (paths with different endpoints are not classes in π₁; a simply connected negatively curved manifold is contractible by Cartan–Hadamard; the curvature sign was never derived). Withdrawn as a proof; any basin-separation statement is open and dynamical.</p>
+    <p>3. r* = 0.77594 is the z(0)=0 slice and is numerically computed; the §4 Lean statistics (21 stated, 18 proved, "0 extra axioms") were not re-checked here, and the AXLE Chain file did contain axioms until the 14 Nov edit. Not Lean-checked.</p>
   </div>
   <div class="ch-abs">
     Newark gave the field, Harrison the law; Belleville gives the verification. This chapter closes the descent from the conjectural 6D arena to the proven dm³ ODE. We present the two proofs that turn existence claims into checkable facts — the numerical/constructive confirmation that P_ON &gt; 0 only in the correct order (Proof VI) and the information-geometric result that correct and wrong outcomes are topologically separated (Proof VII) — then read the honest Lean 4 record from AXLE, eight Belleville sites, and the economic case for the corridor. Finally we end the volume's ladder where it belongs: at six dimensions, the arena in which the operator chain closes into a generative spiral. Dimensions beyond six are not abandoned; they are the explicit subject of Volume V. The chapter hands the reader to Chapter 10, where the dm³ attractor is no longer conjectured but proved.
@@ -140,16 +149,16 @@ footer a:hover{color:#c8a96e;}
 
     <div class="eq f">
       P_ON = lim<sub>t→∞</sub> P(vortex coherent at t) <span class="cm">// the order parameter</span><br>
-      K before F → P_ON ≈ 0.94 within 5 T* <span class="cm">// converges and holds</span><br>
+      K before F → P_ON ≈ 0.94 within 5 T* <span class="cm">// NOT REPRODUCED: no script in this repo produces it</span><br>
       F before K → P_ON → 0 within 3 T* <span class="cm">// collapses regardless of inflow</span><br>
       grid: Δr = 0.01, Δθ = π/180, Δt = 0.001 T* <span class="cm">// DOP853-class resolution</span>
     </div>
 
-    <p>Under correct order the vortex-coherence probability converges to about 0.94 within five turnover times and stays stable across every tested storm scenario. Under reversed order it decays to zero within three turnover times regardless of inflow strength — turbulent, non-rotating, no harvest, no flood attenuation. A sensitivity sweep across 10-, 50-, and 100-year design-storm inflows confirms the correct-order result is robust: the vortex forms <em>faster</em> at higher inflow and steady-state coherence does not degrade. The system performs better at scale — the inverted vulnerability curve of Chapter 8, now confirmed numerically rather than asserted.</p>
+    <p><strong>Status (14 Nov 2026): the numbers in this section are not backed by any script or data file in this repository, so they are reported as unreproduced, not as confirmation. They may have been computed in an earlier session and the script lost; that is possible but cannot be checked.</strong> A toy encoding, <span class="mono">ch09_pon_toy.py</span> (operators K, F are not defined in the book, so the model is our own choice, not a test of the book's operators), gives P_ON = 0.93/0.93, 0.99/0.71 and 0.96/0.49 for K-then-F / F-then-K at amplification levels 1.5, 2.0, 3.0: an order effect that grows with amplification, but F-then-K does not go to 0 and there is no order effect at the lowest level. The text below states what the earlier version claimed. Under correct order the vortex-coherence probability was said to converge to about 0.94 within five turnover times and stay stable across every tested storm scenario. Under reversed order it was said to decay to zero within three turnover times regardless of inflow strength — turbulent, non-rotating, no harvest, no flood attenuation. A sensitivity sweep across 10-, 50-, and 100-year design-storm inflows was said to confirm robustness. None of this is a result until a script in <span class="mono">tools/</span> or <span class="mono">book4/</span> reproduces it; the claim that it confirms Chapter 8's inverted vulnerability curve is withdrawn until then.</p>
 
     <div class="sec-num" id="s3">§ 3</div>
     <h2 class="sec">Proof VII — Topologically Separated Outcomes</h2>
-    <p>The deepest of the seven proofs says the two outcomes cannot be smoothly interpolated. Flow states — vorticity distribution, coherence spectrum, phase statistics — are points on a statistical manifold carrying the Fisher information metric, and that manifold has negative sectional curvature everywhere, a consequence of the contact structure and the log-concavity of the vortex phase distribution.</p>
+    <p>The deepest of the seven proofs says the two outcomes cannot be smoothly interpolated. Flow states — vorticity distribution, coherence spectrum, phase statistics — are points on a statistical manifold carrying the Fisher information metric, and the earlier text asserted that this manifold has negative sectional curvature everywhere. That assertion is not derived here: neither the family of distributions nor a curvature computation is given, and log-concavity of the phase distribution does not by itself fix the sign of the Fisher curvature.</p>
 
     <div class="eq f">
       g<sub>ij</sub>(θ) = E[∂<sub>i</sub> log p · ∂<sub>j</sub> log p] <span class="cm">// Fisher information metric</span><br>
@@ -157,10 +166,10 @@ footer a:hover{color:#c8a96e;}
       [γ<sub>K</sub>] ≠ [γ<sub>F</sub>] in π₁(M) <span class="cm">// no continuous deformation between outcomes</span>
     </div>
 
-    <p>On a negatively curved manifold geodesics diverge exponentially. The correct and wrong operator sequences are geodesics γ<sub>K</sub> (LAMINAR → VORTEX) and γ<sub>F</sub> (LAMINAR → CHAOS) lying in different homotopy classes of the fundamental group. There is no smooth interpolation between VORTEX and CHAOS — no fine-tuning, no partial operator application, can slide a wrong-order system into the correct basin. This is the rigorous form of Chapter 8's "no almost-correct design": the failure is topological, not quantitative.</p>
+    <p><strong>Proof VII is withdrawn as a proof; the argument as written is not valid.</strong> γ<sub>K</sub> (LAMINAR → VORTEX) and γ<sub>F</sub> (LAMINAR → CHAOS) have different endpoints, so they are not elements of π₁ and "[γ<sub>K</sub>] ≠ [γ<sub>F</sub>] in π₁(M)" has no meaning. If M is complete, simply connected and of negative curvature, then by Cartan–Hadamard it is contractible and any two paths with the same endpoints are homotopic; exponential divergence of geodesics does not obstruct homotopy. What may be true, and is open, is a statement about basins of attraction (the two outcomes lie in different basins of the dynamics); that is a dynamical statement, not a topological one on the statistical manifold. Chapter 8's "no almost-correct design" is therefore not established by this section.</p>
 
     <div class="rem env f">
-      <p>Proofs VI and VII bracket the claim from opposite sides. VI is constructive and concrete — run the grid, read P_ON. VII is topological and abstract — count homotopy classes. That a hands-on simulation and a curvature argument return the same verdict is the point of the seven-proofs methodology: no single formalism carries the result, and independent routes converge.</p>
+      <p>The earlier sentence that Proofs VI and VII "bracket the claim from opposite sides" and that independent routes converge is withdrawn: VI is unreproduced and VII is invalid as written, so at present neither supports the claim. The three Lean obligations in §4 are the formal statements still open.</p>
     </div>
 
     <div class="sec-num" id="s4">§ 4</div>
@@ -191,11 +200,11 @@ footer a:hover{color:#c8a96e;}
       </tbody>
     </table>
 
-    <p>The Second River confluence is Belleville's El Ojo analogue: a natural junction where two directional flows already meet, the easiest place to hold an initial state inside the convergent basin r(0) &gt; r* = 0.77594058. Where Newark's strength is volume (the harbor tidal gate) and Harrison's is visibility (the World Cup waterfront), Belleville's is hydraulic quality — clean confluence geometry that the contact-geometric siting criterion favours.</p>
+    <p>The Second River confluence is Belleville's El Ojo analogue: a natural junction where two directional flows already meet, the easiest place to hold an initial state inside the convergent basin, which for the dm³ ODE is r(0) &gt; r* ≈ 0.77594 <em>at z(0)=0</em> (numerically computed, not certified; r* depends on z(0)). That a river confluence realises the dm³ initial condition is a modelling hypothesis, not a measurement. Where Newark's strength is volume (the harbor tidal gate) and Harrison's is visibility (the World Cup waterfront), Belleville's is hydraulic quality — clean confluence geometry that the contact-geometric siting criterion favours.</p>
 
     <div class="sn">
       <strong>Mill Mode — Second River / Watsessing (continuous generation)</strong>
-      The Second River is the corridor's primary continuous-mode site. The confluence geometry holds r(0) above the basin threshold r* = 0.77594058 under normal non-storm flow, not just at storm peak — the two directional flows meeting at Watsessing provide the rotational component the helical attractor requires year-round. Estimated steady-state output: 10–20 kW per module continuous (vs. ~200 kW storm peak). The Second River is non-navigable and below 100 kW per module, placing continuous operation in the NJDEP small hydro permit lane (N.J.A.C. 7:13) — no FERC license required. At near-100% capacity factor, annual energy yield from the 3 medium units approaches 260–525 MWh/yr, comparable in revenue to storm-peak-only operation and substantially more bankable as baseload. See Chapter HALO §10 for the full continuous-mode economic case.
+      The Second River is the corridor's primary continuous-mode site. The confluence geometry is hypothesised to hold r(0) above the basin threshold (r* ≈ 0.77594 at z(0)=0, numerically computed) under normal non-storm flow, not just at storm peak — the two directional flows meeting at Watsessing provide the rotational component the helical attractor requires year-round. Estimated steady-state output: 10–20 kW per module continuous (vs. ~200 kW storm peak). The Second River is non-navigable and below 100 kW per module, placing continuous operation in the NJDEP small hydro permit lane (N.J.A.C. 7:13) — no FERC license required. At near-100% capacity factor, annual energy yield from the 3 medium units approaches 260–525 MWh/yr, comparable in revenue to storm-peak-only operation and substantially more bankable as baseload. See Chapter HALO §10 for the full continuous-mode economic case.
     </div>
 
     <div class="sec-num" id="s6">§ 6</div>
@@ -252,7 +261,7 @@ footer a:hover{color:#c8a96e;}
 
   </div>
   <div class="side">
-    <div class="sn f"><strong>THE TWO VERIFIERS</strong>VI · constructive: run the grid, P_ON ≈ 0.94 (K→F) vs → 0 (F→K). VII · topological: K_sec &lt; 0, [γ_K] ≠ [γ_F]. Same verdict, opposite methods.</div>
+    <div class="sn f"><strong>THE TWO VERIFIERS</strong>VI · constructive: P_ON ≈ 0.94 (K→F) vs → 0 (F→K), unreproduced. VII · topological argument withdrawn (see correction). Neither is currently a verification.</div>
     <div class="sn f"><strong>LEAN STATUS</strong>AutophagyDm3.lean: 21 theorems, 0 sorry. Project 1080 (June 22, 2026) — all obligations closed.</div>
     <div class="sn f"><strong>CORRIDOR TOTALS</strong>25 modules · ~$2.8M · ~2.6 MW storm-time · −30–50% peak. Newark 14 · Belleville 8 · Harrison 3.</div>
     <div class="sn f"><strong>THE CAP</strong>Ladder ends at 6D (GTCT closes). Dimensions &gt; 6 → Volume V. Book 4 proves by descending to 3D (Ch 10).</div>
