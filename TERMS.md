@@ -17,10 +17,12 @@ have reported it. Now something does.
 
 ---
 
+- ABC and (AD)   # standard textbook term in the University of the People MSIT study book (Book 27); not coined by this corpus
 - Adeno-associated viruses (AAV)
 - Adopted Legal Line Budget (PDF)
 - AI that OpenAI itself convened (AGMAI)   # abbreviation defined inline in book8/ch-dueling-proofs; origin of the acronym not checked against the SciAm article
 - An integer linear recurrence sequence (LRS)
+- An operating system (OS)   # standard textbook term in the University of the People MSIT study book (Book 27); not coined by this corpus
 - Atlantic Meridional Overturning Circulation (AMOC)
 - Atmospheric Water Extraction (AWE)
 - Azwinndini MURONGA (NMMU)
@@ -55,6 +57,7 @@ have reported it. Now something does.
 - Domain 2 (NGS)
 - Draft Climate Migration Act (US)
 - Dutch East India Company (VOC)
+- Earned value management (EVM)   # standard textbook term in the University of the People MSIT study book (Book 27); not coined by this corpus
 - Einstein-Rosen bridges and quantum entanglement (EPR)
 - EMPIRICAL HEXAGON THEOREM (EHT)
 - Empirical Hexagon Theorem (EHT)
@@ -111,7 +114,9 @@ have reported it. Now something does.
 - New Jersey State Police (SORA)
 - Nonsense-mediated decay (NMD)
 - Nucleic Acid Compiler (NAC)
+- Open-source intelligence (OSINT)   # standard textbook term in the University of the People MSIT study book (Book 27); not coined by this corpus
 - Operator-order switch in MCM-22 (DRIFTS)
+- Organizational behavior (OB)   # standard textbook term in the University of the People MSIT study book (Book 27); not coined by this corpus
 - Organoid intelligence (OI)
 - Os Sete Axiomas (PT)
 - Pascal Fries's Communication-Through-Coherence (CTC)
@@ -149,6 +154,7 @@ have reported it. Now something does.
 - Teorema T1 (GTCT)
 - Teoria de Contato Temporal Generativa (GTCT)
 - Teoria do Contato Generativo Temporal (GTCT)
+- The critical path method (CPM)   # standard textbook term in the University of the People MSIT study book (Book 27); not coined by this corpus
 - The Forced Urgency Gap (FUG)
 - The galaxy-galaxy strong lensing (GGSL)
 - The Generative Contact Mechanics (GCM)
@@ -164,6 +170,7 @@ have reported it. Now something does.
 - Theorem T1 (GTCT)
 - This chapter (GTCT)
 - This is a metal-organic framework (MOF)
+- Three-point (PERT)   # standard textbook term in the University of the People MSIT study book (Book 27); not coined by this corpus
 - Topographical Orthogenetic Architecture (TOA)
 - Topographical Orthogenetic Theory (TOGT)
 - Topographical Orthogenetics (TO)
