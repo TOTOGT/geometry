@@ -29,3 +29,12 @@ Scope: what these two compiles establish, and what they do not. Recorded by an a
 
 ## To make it routine (not done here)
 Add the two files as targets or a probe step in verify-proofs.yml with `tools/axiom_gate.py ... 6` and `... 3`, and track `lake-manifest.json` or state the Mathlib rev in the workflow.
+
+## CI confirmation (added 2026-11-15)
+
+Workflow "Verify Lean proofs (real kernel check)", GitHub Actions API, repository TOTOGT/geometry:
+
+- Run #949 (id 43679237713), commit 71ef42ca: job `verify` success; step 11 "Kernel axiom check on the Ladder files (LadderBound, LadderRung)" success; step 12 "Keep the Ladder logs" success; step 6 `lake build` success; step 19 "Vocabulary guard" success.
+- Run #950 (id 43679801851), commit c0037f9a: same steps, all success.
+
+Evidence level: step conclusions as reported by the API. The step logs were not read (sign-in required), so the six and three theorem-report counts printed by the step are not independently confirmed here. Runs #951 and #952 were in progress when checked and are not relied on. This confirms compile and axiom-gate status of the two Ladder files in CI only; it does not establish the Chapter 26 prose claims. A Mac run remains open.
