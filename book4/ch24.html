@@ -183,16 +183,23 @@ exactly when f&prime;(r*) = 0 &mdash; and since r* is already a root, exactly wh
 <em>multiple</em> root of f.</p>
 
 <div class="env thm">
-<p>For the family r&#775; = f(r; &lambda;), &theta;&#775; = 1 with f polynomial in r, the
-bifurcation set in parameter space is { &lambda; : disc<sub>r</sub> f(&middot;; &lambda;) = 0 }, and
-the Floquet multiplier equals 1 at every point of it.</p>
+<p>For the family r&#775; = f(r; &lambda;), &theta;&#775; = 1 with f polynomial in r, a cycle r = r* &gt; 0
+has Floquet multiplier 1 if and only if r* is a <em>positive real multiple root</em> of f. A necessary
+condition on the parameter is disc<sub>r</sub> f(&middot;; &lambda;) = 0; it is not sufficient, because
+the multiple root may be zero, negative or complex, or the discriminant may vanish identically in
+&lambda;. (Corrected 2026-11-15: this theorem previously said the bifurcation set <em>is</em>
+{ disc<sub>r</sub> f = 0 }.)</p>
 </div>
 
 <div class="pf">Proof</div>
 <p>The discriminant of a polynomial vanishes precisely when it has a multiple root; a multiple root
-of f is precisely a common root of f and f&prime;; a common root is precisely a cycle with
-f&prime;(r*) = 0, hence m = e<sup>0</sup> = 1. Each step is an equivalence, so the three
-descriptions cut out the same set. &#9633;</p>
+of f is a common root of f and f&prime;. If that root r* is real and positive it is a cycle with
+f&prime;(r*) = 0, hence m = e<sup>0</sup> = 1, and conversely. The step from &ldquo;a multiple root
+exists&rdquo; to &ldquo;a non-hyperbolic cycle exists&rdquo; needs the root to be real and positive.
+Counterexamples to the unqualified statement: f = (r + 1)<sup>2</sup>(r &minus; &lambda;) has
+disc<sub>r</sub> f &equiv; 0 but its only positive root is simple for &lambda; &gt; 0; f = r(r<sup>2</sup> + &lambda;) has
+disc = &minus;4&lambda;<sup>3</sup>, which vanishes at &lambda; = 0 although f = r<sup>3</sup> has no positive root there (the multiple root is r = 0); for &lambda; &lt; 0 its positive root &radic;(&minus;&lambda;) is simple.
+&#9633;</p>
 
 <div class="env rem">
 <p>Nothing dynamical survives in the statement. The left-hand side is defined by the behaviour of
@@ -326,7 +333,7 @@ integrating to t = 300 and asking whether the trajectory settled on a finite roo
 </div>
 
 <p>Sixty bisection steps, each one an initial-value problem integrated to t = 300, and the answer is
-correct to six figures. The discriminant is correct to all of them, and it is a rational number, and
+correct to five decimal places (gap 3.4 &times; 10<sup>&minus;6</sup>). The discriminant is correct to all of them, and it is a rational number, and
 it took one resultant. The gap is not an indictment of the search &mdash; near a fold the surviving
 cycle&rsquo;s basin narrows and its approach slows, so any decision rule based on a finite horizon
 degrades exactly where the answer matters most. That is a property of the method, not of the
@@ -378,11 +385,11 @@ rtol 10<sup>&minus;11</sup>, atol 10<sup>&minus;13</sup>, so its error floor is 
 Jacobian-linearised error transport, and an interval-Hessian Lagrange remainder:</p>
 
 <div class="eq">
-certified : [0.775940575501953167, 0.775940575502343743]   <span class="cm">width 3.906 &times; 10<sup>&minus;13</sup></span><br>
+computed  : [0.775940575501953167, 0.775940575502343743]   <span class="cm">width 3.906 &times; 10<sup>&minus;13</sup>; not a valid enclosure (see the correction box in §24.9)</span><br>
 block [8] :  0.775940575502539698                          <span class="cm">above the upper bound by 1.96 &times; 10<sup>&minus;13</sup></span>
 </div>
 
-<p>The float value lies <em>outside</em> the certified bracket. It is not inside it and the check
+<p>The float value lies <em>outside</em> the numerically computed bracket. It is not inside it and the check
 does not pretend otherwise: the twelve leading digits are identical &mdash; 775940575502 &mdash; and
 the two differ at the thirteenth, by an amount comparable to the width of the bracket itself. Eleven
 significant figures agree under rounding; that is the whole of what may be claimed.</p>
@@ -452,6 +459,7 @@ and it is not: the planar reduction is a limit, and the basin figure has eleven 
 figures rather than eighteen. A verification script that reported neither would still exit zero, and
 would be worth less for it.</p>
 
+<div class="correction" id="correction-2026-11-15" style="border:2px solid #d9a8a8;background:#fdeaea;padding:1rem 1.2rem;margin:1.3rem 0;color:#2b1010"><span style="display:block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;color:#8b1a1a;margin-bottom:.5rem">Corrected 2026-11-15 &mdash; Theorem 24.2 was false as stated; the &ldquo;certified&rdquo; radius is a numerical result</span><p style="margin:0">(1) <strong>Theorem 24.2.</strong> disc<sub>r</sub> f = 0 is necessary, not sufficient, for a non-hyperbolic cycle; the statement and proof above now require a positive real multiple root, and two counterexamples are given (the first checked in <code>ch24_audit_check.py</code>, the second by hand from disc(r³ + λr) = −4λ³). (2) <strong>&sect;24.3.</strong> For the family g(u) = 1 &minus; u + &epsilon;u&sup2; the planar discriminant in r is 16&epsilon;(4&epsilon; &minus; 1)&sup2;, which also vanishes at &epsilon; = 0 (a root at r = 0, not a cycle); the cycle count jumps from 1 to 2 at &epsilon; = 0 because a cycle enters from infinity, where disc<sub>u</sub> g(0) = 1 &ne; 0. (3) <strong>&sect;24.7.</strong> <code>certify_rstar_rigorous.py</code> carries a 2026-11-14 note that its output is not a valid enclosure, and the bracket printed in the page&rsquo;s block is not reproduced by the current script, which prints [0.775940575501953125, 0.77594057550234375]; the bracket is relabelled &ldquo;computed&rdquo;, and only the eleven significant figures stand. (4) &ldquo;Six figures&rdquo; in &sect;24.6 is five decimal places. (5) The three-dimensional check in &sect;24.6 covers &epsilon; &le; 0.24 in the tables; independent runs at &epsilon; = 0.249 and 0.2499 settle on the planar root and at 0.2501 and 0.26 escape, which supports the planar fold to about 10<sup>&minus;4</sup>, not beyond. Not changed: the verifier&rsquo;s generated box lists <code>discriminant</code> from <code>book21/Spiral.lean</code>, unrelated to this chapter.</p></div>
 <p><strong>Evidence beside this chapter.</strong> <a href="ch24-verify.py">ch24-verify.py</a> regenerates every row marked <em>Computed</em>; it uses scipy and sympy. <a href="ch24_audit_check.py">ch24_audit_check.py</a> (Python, sympy, numpy, scipy) tests three statements the verifier does not. First, the scope of Theorem 1: the discriminant of f in r is zero for f = (r + 1)²(r − λ) at every λ, while the only positive cycle has multiplier exp(2π(λ + 1)²) ≠ 1, and for the page’s own f = r(1 − r² + εr⁴) it equals 16ε(4ε − 1)², which also vanishes at ε = 0 where the multiplier is e<sup>−4π</sup>; the worked example in §24.3 uses the discriminant of g in u = r², which is 1 − 4ε. Second, the number of positive cycles changes from one to two across ε = 0 although that discriminant does not vanish there (a cycle enters from infinity). Third, the three-dimensional system of §24.6 matches the planar root at ε = 0.249 and 0.2499 and escapes at ε = 0.2501 and 0.26. The same script confirms that the dual of the cuspidal cubic, 4a³ + 27b²c, is the discriminant of the binary cubic c₀t³ + c₂t + c₃. The certificate <a href="certify_rstar_rigorous.py">certify_rstar_rigorous.py</a> carries a note dated 2026-11-14 saying that its “certified radius” is not a valid enclosure, so §24.7’s bracket should be read as a high-precision numerical result; the current script prints the bracket [0.775940575501953125, 0.77594057550234375], which agrees with the page to sixteen digits and not beyond. The green box at the foot of the page lists <code>discriminant</code> from <code>book21/Spiral.lean</code>, the identity τ² − 4Δ = −4ω² for a 2×2 spiral matrix; it is listed because the word occurs in the text, and no Lean file in the repository covers a claim of this chapter.</p>
 
 </div>
