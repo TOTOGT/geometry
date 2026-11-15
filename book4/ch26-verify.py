@@ -15,6 +15,10 @@ def ok(label, cond):
     if not cond: FAIL.append(label)
     print(f"  [{'PASS' if cond else 'FAIL'}] {label}")
 
+def note(text):
+    """A statement the page makes that this script does not test. Printed so it is not mistaken for a check."""
+    print(f"  [NOTE] {text}  (not a check)")
+
 # ----------------------------------------------------------------------
 print("="*72)
 print("[1] The negative test: a one-parameter ladder c/N excludes nothing")
@@ -50,7 +54,14 @@ for f in (5, 10, 20, 40, 80):
     print(f"        any target near {f:3} Hz is matched to within {f/(2*700)*100:5.2f}%")
 ok("below 50 Hz a 700/N ladder matches ANY frequency to better than 4%",
    50/(2*700) < 0.04)
-ok("a family that matches every target excludes none, so it forbids nothing", True)
+# "Forbids nothing" holds at a tolerance of order f/(2c) and not at a tolerance fixed in advance: measure it.
+random.seed(20260909)
+_t = [random.uniform(40, 60) for _ in range(200000)]
+_e = [best_rung(700, f)[1] for f in _t]
+m1 = sum(1 for e in _e if e <= 0.01)/len(_e); m01 = sum(1 for e in _e if e <= 0.001)/len(_e)
+print(f"      c = 700, targets in (40, 60) Hz: matched to 1%: {100*m1:.1f}%   to 0.1%: {100*m01:.1f}%")
+ok("at a 1% tolerance the 700/N ladder does exclude targets in (40, 60) Hz (about 29% are matched)", abs(m1 - 0.29) < 0.02)
+ok("at 0.1% it excludes almost all of them (about 2.9% are matched)", abs(m01 - 0.029) < 0.005)
 
 # ----------------------------------------------------------------------
 print()
@@ -65,7 +76,7 @@ excluded = [T for T in range(1, 40) if W(T) == 0]
 allowed  = [T for T in range(1, 40) if W(T) > 0]
 print(f"      allowed  T < 40 : {allowed}")
 print(f"      EXCLUDED T < 40 : {excluded}")
-ok("W(T) = d1(T) - d2(T) has no free parameter", True)
+note("W(T) = d1(T) - d2(T) has no free parameter: true by its definition, not computed here")
 ok("W returns 0 on a nonempty set — the count can forbid", len(excluded) > 0)
 ok("T = 2, 5, 6, 8 are forbidden outright", all(W(T) == 0 for T in (2, 5, 6, 8)))
 
@@ -90,8 +101,8 @@ ok("the allowed set is a vanishing fraction — Landau-Ramanujan, ~ K/sqrt(log x
    frac < 0.25)
 print(f"\n      The closing field forbids ~{100*(1-frac):.1f}% of sizes at x = {N},")
 print(f"      and the fraction it allows tends to 0 like 1/sqrt(log x).")
-print("      A c/N ladder forbids 0% of targets, at every x.")
-ok("the two families sit at opposite extremes of exclusion", True)
+print("      A c/N ladder forbids 0% of targets at a tolerance of order f/(2c), at every x.")
+note("the two families sit at opposite extremes of exclusion at a tolerance of order f/(2c); at a tighter tolerance the ladder also excludes (see the checks in [1])")
 
 # ----------------------------------------------------------------------
 print()
@@ -104,7 +115,7 @@ print("      boundary   -> a COUNT     (how many configurations the symmetry per
 ok("Ch 21's count: 4pi / (2pi/6) = 12 defects, from |mu_6| = 6",
    sp.simplify(4*sp.pi/(2*sp.pi/6)) == 12)
 ok("Ch 25's count: W(T), an arithmetic function of the system's own index", W(7) == 2)
-ok("a framework producing none of the three has not identified a source of order", True)
+note("a framework producing none of the three has not identified a source of order: an interpretive claim, not computed")
 
 
 # ----------------------------------------------------------------------
@@ -223,7 +234,7 @@ ok("lesson: forbidding power comes from SCARCITY of symmetry, not richness "
 # ----------------------------------------------------------------------
 print()
 print("="*72)
-print("[7] Clause (i) restated: #defects = |G| * chi(Sigma), on five surfaces")
+print("[7] Clause (i) restated: #defects = |G| * chi(Sigma), six cases on four surfaces")
 print("="*72)
 print("      total defect 2*pi*chi (Descartes/Gauss-Bonnet), elementary 2*pi/|G|")
 print()
@@ -246,10 +257,9 @@ for name, chi, orient, G, pred, what, vef in cases:
 
 ok("the naive '2|G|' form is wrong on RP^2 (predicts 12 and 8, truth is 6 and 4)",
    2*6 != 6 and 2*4 != 4)
-ok("the |G|*chi form is right on all five surfaces",
+ok("the |G|*chi column equals |G|*chi on all six cases (arithmetic on the table's own numbers)",
    all(G*chi == pred for _, chi, _, G, pred, _, _ in cases))
-ok("Klein bottle: chi = 0, so a hexagonal sheet closes on it with ZERO defects "
-   "— Klein topology costs nothing in this currency", 6*0 == 0)
+note("Klein bottle: chi = 0, so |G|*chi = 0 and the table predicts ZERO defects; no Klein-bottle tiling is constructed here, only the arithmetic 6*0 = 0")
 
 print()
 print("="*72)
