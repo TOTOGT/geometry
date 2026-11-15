@@ -12891,3 +12891,11 @@ book4/ch02.html, box id="correction-2026-11-15". F2-1 alpha = dy - f dx on (x,y,
 ## 2026-11-15 — ch06b, ch07, ch08 (applied from the other session's findings)
 
 ch06b.html: F6b-1 n 3.64 -> 3.63 (2pi/sqrt3 = 3.6276), no derivation on the page; F6b-2 chain now 1-eps0 = 0.667 < r*, sidebar label; F6b-3 El Ojo observable note. ch07.html: F7-1 2.6 MW labelled as not recomputing (3.06 MW/$2.84M from prose mix; 2.90 MW/$2.75M from site data); number left in place, source unresolved. ch08.html: "has now passed" dated. Each with box id="correction-2026-11-15". Scripts not changed.
+
+## 2026-11-15 — ch05 (applied from the other session's findings)
+
+book4/ch05.html, box id="correction-2026-11-15". F5-1 "torus (wraps)" removed; F5-2 symmetry group stated (Klein four-group, order 4), "five independent directions"/"rank-2 tensor over Z5" removed, dictionary called a mnemonic, "reflections and rotations" corrected; F5-3 TENET double role noted; F5-4 dm3 manifold contactomorphic to {p>0} in J^1(R,R); F5-5 chart needs zdot != 0; F5-6 §23.6-23.7. ch05_audit_check.py exit 0 (not re-run after edit beyond that).
+
+## 2026-11-15 — ch00-student-edition (applied from the other session's findings)
+
+book4/ch00-student-edition.html, box id="correction-2026-11-15". F0s-1 Rule 5 example replaced (r(0)>1 coupled statement withdrawn; now the 1D radial equation); F0s-2 Pass 2 no longer converges (Collatz open; 16 of 28 orbits leave the book); F0s-3 pointers (Ch 10 / Ch 5 / Ch 6 / 0 -> 28); F0s-4 jet row now rank-3 Pfaffian system, theta-dot=1 is constant; F0s-5 "one job" softened. ch00-definitions.html hash staleness NOT touched (decision pending: regenerate all vs one-page mode).
