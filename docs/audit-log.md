@@ -12939,3 +12939,9 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 - Corrected: operator assignment labelled an interpretation. Three pages now assign the event differently (ch7: merger = U; ch8-3: SMBH coalescence = F, elliptical = U; WP58 / chGravity: merger = fold). Not reconciled; no definition forces any of them.
 - Noted, not changed: ch7 animation timeline (3.75 / 5 Gyr) disagrees with ch8-3 (3.9 / 6 Gyr). The 3.9, 6 and 8-10 Gyr figures, and the 4.5 Gyr figure, not rechecked.
 - book8/ch9-causal.html: Milkomeda appears only in the generated related-links row (WP57 title); no claim to correct.
+
+## 2026-11-15 — book4/ch00-definitions.html regenerated (scoped)
+
+- Why: the chapter verifier failed on book4 only. The sha1 matched, but the generated "on N pages of this book" counts were stale after this session's page edits (epsilon_0 20 -> 21, inner-basin row 13 -> 14, displacement row 26 -> 28).
+- Done: `python3 tools/regen_scoped.py --book 4 --write`; all 6 scoped steps pass, including the chapter verifier. Only this page changed (counts and the generation date); no definitions.md edit.
+- Not done: the other books' ch00 pages were not regenerated; their checks were not completed in this run (the loop over books 1-8 timed out), so their counts may also be stale.
