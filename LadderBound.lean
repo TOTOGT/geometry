@@ -115,9 +115,12 @@ theorem ladder_abs_error {c f n : ℝ} (hc : 0 < c) (hn : 0 < n)
       ≤ (c / n - c / (n + 1)) / 2 := h
     _ = c / (2 * (n * (n + 1))) := by rw [gap_eq c hn]; field_simp
 
-/-- **Theorem 26.1.**  For a target bracketed by rungs `n` and `n+1`, the error of
-the nearer rung is at most `f / (2n)` — stated as `2n · error ≤ f`, which is the
-relative bound `error / f ≤ 1/(2n)` cleared of its division. -/
+/-- For a target bracketed by rungs `n` and `n+1`, the error of the nearer rung is at
+most `f / (2n)` — stated as `2n · error ≤ f`, which is the relative bound
+`error / f ≤ 1/(2n)` cleared of its division.  This is the bound in the bracketing
+index `n`; the bound in `f/c` that Theorem 26.1 states is `ladder_rel_error_of_lt`
+(and, with the bracket's existence and integer rungs, `ladder_nearest_rung_rel` in
+LadderRung.lean). -/
 theorem ladder_rel_error {c f n : ℝ} (hc : 0 < c) (hn : 0 < n)
     (hlo : c / (n + 1) ≤ f) (hhi : f ≤ c / n) :
     2 * n * min (c / n - f) (f - c / (n + 1)) ≤ f := by
@@ -131,8 +134,9 @@ theorem ladder_rel_error {c f n : ℝ} (hc : 0 < c) (hn : 0 < n)
     _ = c / (n + 1) := by field_simp
     _ ≤ f := hlo
 
-/-- The reader-facing form.  Since `2n · error ≤ f` and `c ≤ (n+1)f`, the error
-is at most `f·f / (2(c−f))`, which tends to `0` with `f/c`. -/
+/-- Theorem 26.1 in the form the chapter states it (bound in `f/c`), with the bracket
+as hypotheses.  Since `2n · error ≤ f` and `c ≤ (n+1)f`, the error is at most
+`f·f / (2(c−f))`, which tends to `0` with `f/c`. -/
 theorem ladder_rel_error_of_lt {c f n : ℝ} (hc : 0 < c) (hn : 0 < n)
     (hlo : c / (n + 1) ≤ f) (hhi : f ≤ c / n) (hfc : f < c) :
     2 * (c - f) * min (c / n - f) (f - c / (n + 1)) ≤ f * f := by
@@ -151,8 +155,10 @@ theorem ladder_rel_error_of_lt {c f n : ℝ} (hc : 0 < c) (hn : 0 < n)
   · push_neg at hge
     nlinarith [hge, hf, hcf]
 
-/-- The corollary the chapter states: once the target is at most half of `c`, the
-error is bounded by `f·f / c`, so the ladder excludes nothing. -/
+/-- The inequality behind the chapter's corollary: once the target is at most half of
+`c`, the error is bounded by `f·f / c`.  This is an upper bound on approximation
+error and nothing more: it does not state what the ladder forbids or what a fit to it
+conveys, which depend on a tolerance (the name is the chapter's wording). -/
 theorem ladder_forbids_nothing {c f n : ℝ} (hc : 0 < c) (hn : 0 < n)
     (hlo : c / (n + 1) ≤ f) (hhi : f ≤ c / n) (h2f : 2 * f ≤ c) :
     c * min (c / n - f) (f - c / (n + 1)) ≤ f * f := by
