@@ -12974,3 +12974,10 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 - ch-clapeyron-gibbs: references to ch21/ch25/ch28 are generated related-link rows only; no claim of the flagged statements found. No edit.
 - ch13-holology: cites the W(T) = d1 - d2 count (verified to T <= 2e6 in the ch25 audit) and "twelve defects forced by the unit group" (Euler, not the corrected F21-1 statement); its one-sentence generalisation is already stated as open. No edit.
 - Not read in full: the remaining pages named in D5 (book7 ch-escher/ch-boltzmann/ch-descartes, book6 wp28-30, wp103-105, wp107). Still queued.
+
+## 2026-11-15 — tools/run_yourself.py: apply docs/proposed-patches/run_yourself-detect-imports.patch
+
+- Why: the generated "Run it yourself" box said "standard library only" on every page, including pages whose scripts import numpy, scipy or sympy (ch21: ball3.py, gibbs-check.py).
+- Done: patch applied (`git apply`, no conflicts); the box now lists third-party imports found by `ast` (not stdlib, not a sibling file) and a `pip3 install` line. `python3 tools/run_yourself.py --write` regenerated 94 of 367 pages with code.
+- Checked: every changed generated line is the po-run box or its Python line; no other content in those pages changed. Not checked: that every imported package name maps to its pip name (only sklearn, yaml, PIL, cv2 are mapped), or that the box is right for pages whose scripts import optional modules inside functions.
+- Not mine, left alone: tools/readcheck.py, docs/readcheck/book4-v2/*, attractors-data.json, ch10-lambda-bone-handoff.html, law3m-brief.html, vol2-contact.html.
