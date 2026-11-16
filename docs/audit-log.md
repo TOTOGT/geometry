@@ -13010,3 +13010,10 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 ## 2026-11-15 — book7/wp57-causal-integration.html O4 (follow-up to the WP58 audit)
 
 - Corrected: "Whitney A1 fold radius r*" (A1 is not a fold; r* is the z(0)=0 numerical boundary of the toy model) and r*_gal 0.713 -> 0.714 (WP58 exact nu/kappa ratio). book7/wp57-verify.py note updated; exit 0.
+
+## 2026-11-16 — ChainAxiomProbe.lean run on the author's Mac (Lean v4.32.0)
+
+- Result: file compiles (192 s). Both probe theorems have the statement `False`: `inner_basin_axiom_gives_false` (axioms: propext, Classical.choice, Quot.sound, GCTC.inner_basin_is_asymmetric) and `poincare_axiom_gives_false` (same plus GCTC.poincare_collatz). So each axiom, as declared in Chain_updated.lean, is inconsistent; anything derived from them proves nothing. `outer_basin_is_provable` and `Gdouble_*` use only the three permitted axioms.
+- The audit gate printed GATE REFUSED; that is the expected outcome for this file (it exists to depend on the axioms). Receipt: tools/verify-audit/2026-11-16/geometry__book4__ChainAxiomProbe.axioms.txt.
+- Scope: the probe copies the axioms and r_star = 0.8 verbatim from Chain_updated.lean; it does not touch the dm3 value 0.7759 used on the pages (separate mismatch, see source-mismatch.tsv). Pages citing these axioms are not yet edited.
+- tools/proved_labels.py: identifier-match patch applied locally. Author's before/after report: pages to label 240 -> 56. The 184 removed pages were not individually inspected; --write not run.
