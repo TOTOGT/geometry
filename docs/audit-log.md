@@ -12987,3 +12987,9 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 - Corrected: "Whitney A1 fold" (four places) -> fold is A2; the identification of Escher's transitions with folds marked an interpretation; "Metamorphosis ... the literal translation of 'Whitney fold'" was false and is removed.
 - Read, no edit needed (no flagged claim found): book7/ch-boltzmann.html, book7/ch-descartes.html, book6/wp28 (mentions Whitney folds only when describing a Zenodo record), wp29, wp30, wp103 ("forbids" is used as the page's own subject), wp104, wp105 (calls "forbidden" five-fold a statement about unit groups; its tribonacci ladder is a different ladder from ch26's c/N), wp107 (Kaleidoscope appears only in a link row).
 - Not audited: the other claims of these pages.
+
+## 2026-11-15 — book4/ch14.html: "positivity of alpha ^ dalpha on ker alpha" is ill-typed
+
+- Found in the GPT blind-sheet return, claim row C-956411cb (label F); the earlier Claude label was B and did not test the type.
+- Hand-checked: ker(alpha) has rank 2 in a 3-manifold; (alpha ^ dalpha)(u,v,w) = alpha(u)dalpha(v,w) - alpha(v)dalpha(u,w) + alpha(w)dalpha(u,v) = 0 for u,v,w in ker(alpha). So the restriction of the 3-form to the plane field is zero and cannot be "positive".
+- Corrected: the §14.2 comparison line and the inventory row now state the condition as dalpha restricted to ker(alpha) (the page's own §14.1 definition). Direction B sentence "integral over ker(alpha) of Omega" (same type problem) marked inline as corrected 2026-11-15; the intended quantity is not specified and Chapter 15 was not checked for it.
