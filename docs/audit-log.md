@@ -13030,3 +13030,13 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 - Not established and stated as open on the page: whether any alert was issued; the cause of the overnight rise (no mixing-depth, wind or dew-point data); Carteret; anything about New York or New Jersey schools. The EPA School Flag Program description rests on a 2012 fact sheet read as a search summary only. The pollutant reports in the 2009 article are modeled, and its staff-cancer and asthma statements are anecdotes.
 - Registered in book6/index.html (row after WP39). index-count-verify.py: the heading already said 172 against 180 distinct pages before this row (now 181), and four unlisted pages lacked docs/unlisted.tsv entries; both failures pre-date this change and were NOT fixed here.
 - Not done: Book 6 ch00 regeneration (run `python3 tools/regen_scoped.py --book 6 --write` then `--check`), Carteret reading, archive timing of the alert gap.
+
+## 2026-11-16 — book6/ch-red-flag-warning-gap.html: AirNow screenshot added as Figure 1
+
+- Evidence image assets/airnow-north-charleston-2026-11-16-0500est.png (652,234 bytes, SHA-256 f0c79bdf41abe779fc27f3b66d62959e8405678c4a5622db15d05c8e98cb1d79), copied byte for byte on the Mac from the author's original capture ("Screenshot 2026-11-16 at 6.34.00 AM.png" on the Desktop). A first transfer through the session tool altered the bytes (different hash, 658,004 bytes) and was overwritten with the original.
+- Caption states source (AirNow.gov, basemap Esri), the page's own 05:00 AM EST timestamp, the capture time recorded in the file name, that the ozone row is hidden, and that real-time values are unvalidated and may later read differently. The figure is a record of what the page showed, not the validated record and not tamper-proof; a reproducible record would be the AirNow hourly file or archive for the monitor, still to be pulled (earlier fetches of those files returned HTTP 403).
+- Not done: the Esri/AirNow reuse terms were not checked beyond attribution.
+
+## 2026-11-16 — Figure 1 caption: capture date and time made explicit
+
+- Caption now states capture at Monday 16 November 2026, 6:34 AM EST (author's computer clock; file name 6.34.00 AM; file modification time 11:34 UTC = 6:34 AM EST), 1 h 34 min after the page's 05:00 AM EST data time. The clock itself is not independently verified. No change to the image or its SHA-256.
