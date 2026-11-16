@@ -140,4 +140,4 @@ print('   - Sawala et al. 2025 (addendum): ~50/50 for a collision within 10 Gyr;
 print('   - regime (a) vs (b): a causal past is transitive, so "complete histories" arrive by ~2.6 Myr (block 5), not with the merger. The author decides.')
 print('   - Penrose 1960 is cited as the origin of the Andromeda paradox, but the reference given is "The apparent shape of a relativistically moving sphere" (Proc. Camb. Phil. Soc. 55, 137, which I recall as 1959): to confirm.')
 print('   - "beyond the event horizon" is not "receding at v > c": the Hubble sphere (~14 Gly) and the event horizon (~16 Gly) differ. Not edited.')
-print('   - r* = 0.77594058 and the 10^25 magnification, the g^96 identification, WP58 r*_gal = 0.713 and 2.5 kpc: MODEL/CONJECTURE, not run here.')
+print('   - r* = 0.77594058 and the 10^25 magnification, the g^96 identification, WP58 r*_gal = 0.714 and 2.50 kpc: MODEL/CONJECTURE, not run here.')

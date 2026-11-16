@@ -12993,3 +12993,20 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 - Found in the GPT blind-sheet return, claim row C-956411cb (label F); the earlier Claude label was B and did not test the type.
 - Hand-checked: ker(alpha) has rank 2 in a 3-manifold; (alpha ^ dalpha)(u,v,w) = alpha(u)dalpha(v,w) - alpha(v)dalpha(u,w) + alpha(w)dalpha(u,v) = 0 for u,v,w in ker(alpha). So the restriction of the 3-form to the plane field is zero and cannot be "positive".
 - Corrected: the §14.2 comparison line and the inventory row now state the condition as dalpha restricted to ker(alpha) (the page's own §14.1 definition). Direction B sentence "integral over ker(alpha) of Omega" (same type problem) marked inline as corrected 2026-11-15; the intended quantity is not specified and Chapter 15 was not checked for it.
+
+## 2026-11-15 — r* 0.7732 vs 0.7759 resolved (ch28); producing tool tools/rstar_z0.py
+
+- Computed (tools/rstar_z0.py, exit 0): r* depends on z(0): 0.775940576 (z0=0), 0.773158309 (0.01), 0.761944573 (0.05), 0.629891695 (0.5). 0.7732 is the z0=0.01 value. ch28 now says so; the claim that the report used z0=0.01 is the earlier audit's reading of that report's simulation, not checked here.
+- Consequence: any page quoting "the" inner basin boundary 0.776 means the z(0)=0 slice. Not edited on other pages (they state z(0)=0 or describe the model); the stjohns-meco notes already say 0.7732 is a retired value.
+- Zenodo record 21708678: still not found by search; unchanged.
+
+## 2026-11-15 — citations: located by search, not read
+
+- Located (titles/venues only; contents NOT read, so no claim about their statements is upgraded): Viterbo, "A proof of Weinstein's conjecture in R^2n", Ann. IHP Anal. Non Lineaire 1987; Hutchings's survey of Taubes's proof, arXiv:0906.2444; Banchoff-Gaffney-McCrory, "Cusps of Gauss Mappings" (1982, listed on EMIS); Davis & Lineweaver, PASA 2004, arXiv:astro-ph/0310808; Sawala et al., Nature Astronomy, s41550-025-02563-1. Pages updated: book7/ch-symplectic.html (PT and EN), book4/ch22-gauss-map.html, book7/wp57-causal-integration.html.
+- Not found: the Balser-Wagner 1960 original (ch16 keeps "original not read"; the measured row is cited from Cole 1965).
+- Lean probe (book4/ChainAxiomProbe.lean): not run; the device shell has no lake/lean, so it must be run on the Mac (tools/leancheck.sh --audit).
+- ch07 2.6 MW: unchanged; the source is not in the repo (page says "unresolved").
+
+## 2026-11-15 — book7/wp57-causal-integration.html O4 (follow-up to the WP58 audit)
+
+- Corrected: "Whitney A1 fold radius r*" (A1 is not a fold; r* is the z(0)=0 numerical boundary of the toy model) and r*_gal 0.713 -> 0.714 (WP58 exact nu/kappa ratio). book7/wp57-verify.py note updated; exit 0.
