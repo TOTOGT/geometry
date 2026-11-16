@@ -12981,3 +12981,9 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 - Done: patch applied (`git apply`, no conflicts); the box now lists third-party imports found by `ast` (not stdlib, not a sibling file) and a `pip3 install` line. `python3 tools/run_yourself.py --write` regenerated 94 of 367 pages with code.
 - Checked: every changed generated line is the po-run box or its Python line; no other content in those pages changed. Not checked: that every imported package name maps to its pip name (only sklearn, yaml, PIL, cv2 are mapped), or that the box is right for pages whose scripts import optional modules inside functions.
 - Not mine, left alone: tools/readcheck.py, docs/readcheck/book4-v2/*, attractors-data.json, ch10-lambda-bone-handoff.html, law3m-brief.html, vol2-contact.html.
+
+## 2026-11-15 — book7/ch-escher.html (and the rest of D5)
+
+- Corrected: "Whitney A1 fold" (four places) -> fold is A2; the identification of Escher's transitions with folds marked an interpretation; "Metamorphosis ... the literal translation of 'Whitney fold'" was false and is removed.
+- Read, no edit needed (no flagged claim found): book7/ch-boltzmann.html, book7/ch-descartes.html, book6/wp28 (mentions Whitney folds only when describing a Zenodo record), wp29, wp30, wp103 ("forbids" is used as the page's own subject), wp104, wp105 (calls "forbidden" five-fold a statement about unit groups; its tribonacci ladder is a different ladder from ch26's c/N), wp107 (Kaleidoscope appears only in a link row).
+- Not audited: the other claims of these pages.
