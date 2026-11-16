@@ -12945,3 +12945,32 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 - Why: the chapter verifier failed on book4 only. The sha1 matched, but the generated "on N pages of this book" counts were stale after this session's page edits (epsilon_0 20 -> 21, inner-basin row 13 -> 14, displacement row 26 -> 28).
 - Done: `python3 tools/regen_scoped.py --book 4 --write`; all 6 scoped steps pass, including the chapter verifier. Only this page changed (counts and the generation date); no definitions.md edit.
 - Not done: the other books' ch00 pages were not regenerated; their checks were not completed in this run (the loop over books 1-8 timed out), so their counts may also be stale.
+
+## 2026-11-15 — book4/ch21-the-closing-field.html (F21-1 to F21-5, F21-8 withdrawn)
+
+- Corrected: (5,6,6)-everywhere restricted to T=3 (computed T=4,7,9,12 also have (6,6,6) vertices; ch21_audit_check.py); pentagon count rests on Euler.
+- Corrected: "without exception" / "monotone": roundness monotone, CV not (dips at T=9,13,16,21; ball3.py table).
+- Corrected: roundness is on the Goldberg polyhedron (GP(1,0)=0.7547 dodecahedron), not the hull of the sites.
+- Corrected: chirality criterion (m != n and mn != 0; split prime criterion only for prime T; GP(7,0), T=49, achiral); inventory row and Ex 21.3 answer reworded.
+- Corrected: norm-form existence stated for the icosahedral family only; the general fullerene remark is from memory (Grunbaum-Motzkin), unchecked.
+- Not changed: generated run box "standard library only" (generator text; see docs/proposed-patches/run_yourself-detect-imports.patch, not applied); Emanuel/vortex-disclination interpretive claims unchecked.
+
+## 2026-11-15 — "certified" r* wording: book8/ch2-event-horizon.html, applications/stjohns-meco/index.html
+
+- Corrected: r* is numerically located by bisection, not certified; certify_rstar.py states tolerance 1e-7 (seven decimals); independent bisection (book7/wp58_audit_check.py) gives 0.7759405755. ch2-event-horizon's "13 significant figures" match was not rechecked (about 10 reproduced).
+- stjohns-meco prints 0.77594059 (1.5e-8 from the independent value, inside the stated tolerance); other pages print 0.77594058. Number not changed on the page.
+- Not changed: quoted Lean snippet and JavaScript constant on stjohns-meco (comment "certified inner boundary"); real files not rerun.
+- Left alone: book6/wp69-the-fold-is-a-coordinate.html lines quoting Vol II's "certified" basin boundary (they report what Vol II says; line 499 already says "not certified").
+
+## 2026-11-15 — closed Reeb orbits (D4): book7/ch-symplectic.html, book8/ch12-container.html
+
+- Corrected: ch-symplectic stated Weinstein's conjecture for "every contact-type hypersurface" and called it "the mathematical guarantee that the G-chain has a fixed point". Restated with compactness (Viterbo 1987 for compact contact-type hypersurfaces in R^2n; Taubes 2007 for closed contact 3-manifolds; both from memory, not rechecked). The dm3 form on R^3 is not compact and has Reeb field d/dz with no closed orbit (as ch-feynman says); a closed Reeb orbit is periodic, not a fixed point. PT and EN sentences both edited.
+- Corrected: ch12-container "multiverse = set of closed Reeb orbits of alpha-hat in Omega" marked conditional; Omega and alpha-hat undefined; discreteness, orbit count, Tribonacci spacing, and the identification with eternal inflation/landscape/many-worlds not derived.
+- Not changed: book7/ch-feynman.html and book6/wp106 (they already state that the smooth prototype has no closed Reeb orbit; they are the consistent side). ch-symplectic hero line left as is; covered by the box.
+- Not checked: M = boundary of W = C^2 claim on ch-symplectic; "every other scale produced the dm3 structure" on ch12-container.
+
+## 2026-11-15 — dependents read (D6): book7/ch-clapeyron-gibbs.html, book8/ch13-holology.html
+
+- ch-clapeyron-gibbs: references to ch21/ch25/ch28 are generated related-link rows only; no claim of the flagged statements found. No edit.
+- ch13-holology: cites the W(T) = d1 - d2 count (verified to T <= 2e6 in the ch25 audit) and "twelve defects forced by the unit group" (Euler, not the corrected F21-1 statement); its one-sentence generalisation is already stated as open. No edit.
+- Not read in full: the remaining pages named in D5 (book7 ch-escher/ch-boltzmann/ch-descartes, book6 wp28-30, wp103-105, wp107). Still queued.
