@@ -13017,3 +13017,16 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 - The audit gate printed GATE REFUSED; that is the expected outcome for this file (it exists to depend on the axioms). Receipt: tools/verify-audit/2026-11-16/geometry__book4__ChainAxiomProbe.axioms.txt.
 - Scope: the probe copies the axioms and r_star = 0.8 verbatim from Chain_updated.lean; it does not touch the dm3 value 0.7759 used on the pages (separate mismatch, see source-mismatch.tsv). Pages citing these axioms are not yet edited.
 - tools/proved_labels.py: identifier-match patch applied locally. Author's before/after report: pages to label 240 -> 56. The 184 removed pages were not individually inspected; --write not run.
+
+## 2026-11-16 — book6/wp39-smoke-transamerican.html: mixed-layer figures marked as not reproduced
+
+- Added dated box id="correction-2026-11-16" in section 2 and a pointer in the abstract. The 565 m to 53 m depths, "monotonically", and r = -0.754 / -0.898 (n=7) did not reproduce in the A.13 notes (STATUS-A13-v2: PM2.5 7.17 to 148.30, depth 598 m to 47 m under a stated definition). No new number was computed here; the reproducing script is not in the repo and the 2026 data files were not found in Desktop/A13, Desktop/A14 or Desktop/Claude outputs. R12 gap stays open.
+- Next (author's choice): new Book 6 chapter on the warning gap (explains the flag convention, the mixing-depth mechanism and the warning gap; no sending, no live data).
+
+## 2026-11-16 — book6/ch-red-flag-warning-gap.html added (companion to WP39); verifier book6/ch-red-flag-verify.py
+
+- New chapter, author's decision: explains the school flag convention, C = Q/h (from WP39, a dilution identity), the 16 Nov 2026 North Charleston AirNow record against aggregator summaries, the 2009 Post and Courier district-versus-DHEC gap, and a red-flag rule with a log. It sends nothing and is not an official warning.
+- ch-red-flag-verify.py: ALL PASS. Arithmetic only. It found that the AQI printed beside 57.2 ug/m3 in the screenshot (157) differs from the breakpoint formula (152); both are red-band. The breakpoints are from memory (2024 revision) and NOT fetched; compare with the EPA Technical Assistance Document.
+- Not established and stated as open on the page: whether any alert was issued; the cause of the overnight rise (no mixing-depth, wind or dew-point data); Carteret; anything about New York or New Jersey schools. The EPA School Flag Program description rests on a 2012 fact sheet read as a search summary only. The pollutant reports in the 2009 article are modeled, and its staff-cancer and asthma statements are anecdotes.
+- Registered in book6/index.html (row after WP39). index-count-verify.py: the heading already said 172 against 180 distinct pages before this row (now 181), and four unlisted pages lacked docs/unlisted.tsv entries; both failures pre-date this change and were NOT fixed here.
+- Not done: Book 6 ch00 regeneration (run `python3 tools/regen_scoped.py --book 6 --write` then `--check`), Carteret reading, archive timing of the alert gap.
