@@ -33,6 +33,17 @@ jobs:
           grep -n "sorry" /tmp/fsm.txt && { echo "::error::sorry"; exit 1; } || true
           grep -n "error" /tmp/fsm.txt && { echo "::error::error in output"; exit 1; } || true
 
+      - name: HurwitzStepA
+        if: always()
+        run: |
+          set -uxo pipefail
+          lake env lean EulerLean/HurwitzStepA.lean 2>&1 | tee /tmp/hsa.txt
+          rc=${PIPESTATUS[0]}
+          [ "$rc" -eq 0 ] || { echo "::error::lean exited $rc"; exit 1; }
+          grep -n "sorry" /tmp/hsa.txt && { echo "::error::sorry"; exit 1; } || true
+          grep -n "error" /tmp/hsa.txt && { echo "::error::error in output"; exit 1; } || true
+          grep -n "depends on axioms" /tmp/hsa.txt
+
       - name: "Euler1747 (native_decide, compiler-trusting)"
         if: always()
         run: |
@@ -53,7 +64,7 @@ jobs:
           {
             echo "## EulerLean axiom report"
             echo '```'
-            grep -h -A2 "depends on axioms\|does not depend" /tmp/fsm.txt /tmp/e1747.txt 2>/dev/null || echo "no axiom lines found"
+            grep -h -A2 "depends on axioms\|does not depend" /tmp/fsm.txt /tmp/hsa.txt /tmp/e1747.txt 2>/dev/null || echo "no axiom lines found"
             echo '```'
             echo "Euler1747: AnalyticRange (paper Prop 6.1) is a hypothesis, not proved."
           } >> "$GITHUB_STEP_SUMMARY"
