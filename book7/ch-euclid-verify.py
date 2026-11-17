@@ -8,7 +8,7 @@ integer arithmetic for p = 2..31; every row of the page's table against
 tools/odd_perfect_check.py; the control (p = 11); the links.
 
 DOES NOT ESTABLISH: Euler's converse (cited), the Lean declaration names (read from
-local Mathlib checkouts, not compiled, not at pin 81a5d257c8), or anything about
+read in the source at pin 81a5d257c8 but not compiled by a Lean run), or anything about
 odd perfect numbers.
 
     python3 book7/ch-euclid-verify.py
@@ -59,8 +59,12 @@ for lab in ('THEOREM', 'CHECKED INSTANCE', 'OPEN QUESTION'):
 check('href="ch-odd-perfect.html"' in html, 'links to the interactive chapter')
 odd = open(os.path.join(HERE, 'ch-odd-perfect.html'), encoding='utf-8').read()
 check('href="ch-euclid.html"' in odd, 'interactive chapter links back')
-check('Theorems100.Nat.even_and_perfect_iff' in html and '81a5d257c8' in html, 'Lean name and pinned revision stated, with the not-compiled caveat')
-check('were not compiled here' in html, 'caveat that the Lean names were not compiled is on the page')
+check('Theorems100.Nat.even_and_perfect_iff' in html and '81a5d257c8' in html, 'Lean name and pinned revision stated')
+check('Source verified at the pinned revision' in html and 'blob/81a5d257c8/Archive/Wiedijk100Theorems/PerfectNumbers.lean' in html, 'page says source verified at the pin and links the pinned source')
+check('no Lean run' in html or 'has not been done' in html, 'page says no Lean run was done')
+check('4bbdccd9c5' not in html and 'eba3d887fc' not in html, 'old non-pinned checkout revisions are gone from the page')
+check(all(n in html for n in ('perfect_two_pow_mul_mersenne_of_prime', 'eq_two_pow_mul_prime_mersenne_of_even_perfect', 'even_and_perfect_iff')), 'all three declaration names are on the page')
+check('python3 book7/ch-euclid-verify.py' in html and 'cd geometry' in html, 'page shows the reproduce commands from the repo root')
 print('\n' + '=' * 70)
 if fails:
     print('  %d CHECK(S) FAILED:' % len(fails)); [print('    - ' + f) for f in fails]; sys.exit(1)

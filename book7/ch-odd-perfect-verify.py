@@ -16,7 +16,7 @@ WHAT IT CHECKS
 WHAT IT DOES NOT ESTABLISH
   Nothing about odd perfect numbers beyond the searched interval. The cited
   statements (Ochem-Rao bound, Euler's form, Euler's converse) are not checked here;
-  the Lean declaration names are not compiled here.
+  the Lean declaration names are read at the pin but not compiled here.
 
     python3 book7/ch-odd-perfect-verify.py
 """
@@ -62,7 +62,7 @@ else:
     harness = m.group(1) + r'''
 const out = {};
 out.sums = {}; [1,2,6,9,25,28,36,496,12].forEach(n => out.sums[n] = OP.properSum(n));
-out.search = {}; [1, 2, 27, 28, 999, 99999].forEach(l => { const r = OP.searchOdd(l); out.search[l] = {c: r.candidates, h: r.oddHits.length, p: r.perfect}; });
+out.search = {}; [1, 2, 27, 28, 999, 9999, 10000, 99999].forEach(l => { const r = OP.searchOdd(l); out.search[l] = {c: r.candidates, h: r.oddHits.length, p: r.perfect, m: r.largest}; });
 out.mers = {}; for (let p = 2; p <= 31; p++) { const r = OP.mersenne(p); out.mers[p] = {M: r.M.toString(), prime: r.prime, method: r.method}; }
 out.naive2 = OP.lucasLehmer(2).prime;
 out.euclid = {}; [2,3,5,7,11,13,17,19,31].forEach(p => { const e = OP.euclid(p); out.euclid[p] = {N: e.N.toString(), mode: e.mode, perfect: e.perfect}; });
@@ -76,10 +76,12 @@ console.log(JSON.stringify(out));
         js = json.loads(r.stdout)
         check(all(js['sums'][str(n)] == opc.proper_sum(n) for n in (1,2,6,9,25,28,36,496,12)), 'page properSum equals Python proper_sum on 1,2,6,9,12,25,28,36,496')
         check(js['sums']['9'] == 4 and js['sums']['25'] == 6 and js['sums']['36'] == 55 and js['sums']['1'] == 0 and js['sums']['12'] == 16, 's(9)=4, s(25)=6, s(36)=55, s(1)=0, s(12)=16 (square root counted once)')
-        for l in (1, 2, 27, 28, 999, 99999):
+        for l in (1, 2, 27, 28, 999, 9999, 10000, 99999):
             py = opc.compute(l); s = js['search'][str(l)]
             check(s['c'] == py['odd_candidates'] and s['h'] == len(py['odd_perfect_found']) and s['p'] == py['perfect_found'],
                   'odd search limit %d: candidates %d, hits %d, perfect %s agree with Python' % (l, s['c'], s['h'], s['p']))
+        check(js['search']['9999']['c'] == 5000 and js['search']['10000']['c'] == 5000 and js['search']['9999']['m'] == 9999 and js['search']['10000']['m'] == 9999, 'limits 9,999 and 10,000 both give 5,000 odd candidates with largest candidate 9,999')
+        check(js['search']['1']['m'] == 1 and js['search']['2']['m'] == 1 and js['search']['28']['m'] == 27, 'largest candidate is the largest odd number <= limit (1, 2, 28 give 1, 1, 27)')
         check(js['search']['1']['c'] == 1 and js['search']['2']['c'] == 1 and js['search']['27']['c'] == 14, 'candidate count is ceil(limit/2): limits 1, 2, 27 give 1, 1, 14')
         ok = all(js['mers'][str(p)]['prime'] == byp[p]['M_prime'] and js['mers'][str(p)]['M'] == str(byp[p]['M']) for p in range(2, 32))
         check(ok, 'page Mersenne primality equals Python for every p = 2..31')
@@ -104,7 +106,12 @@ idx = open(os.path.join(HERE, 'index.html'), encoding='utf-8').read()
 check('href="ch-odd-perfect.html"' in idx and 'href="ch-euclid.html"' in idx, 'Book 7 index has both cards')
 check(all(k in html for k in ('id="n-in"', 'id="p-in"', 'id="lim-in"')), 'all three controls present (divisor sum, exponent, search limit)')
 check('width=device-width' in html and '@media (max-width:600px)' in html, 'viewport meta and a phone-width rule present')
-check('81a5d257c8' in html, 'pinned Mathlib revision stated')
+check('81a5d257c8' in html and 'blob/81a5d257c8/Archive/Wiedijk100Theorems/PerfectNumbers.lean' in html, 'pinned Mathlib revision stated and pinned source linked')
+check('4bbdccd9c5' not in html and 'eba3d887fc' not in html, 'old non-pinned checkout revisions are gone from the page')
+check('Checking a candidate is easy' not in html and 'complete prime factorization' in html, 'factorization sentence corrected')
+check('counterexample' not in html, 'no \"counterexample\" wording')
+check('Math.round' not in html and 'Fractions are not accepted' in html, 'fractional exponent is rejected, not rounded')
+check('python3 book7/ch-odd-perfect-verify.py' in html and 'cd geometry' in html, 'page shows the reproduce commands from the repo root')
 
 print('\n' + '=' * 70)
 if skipped: print('  NOT RUN: %s' % ', '.join(skipped))
