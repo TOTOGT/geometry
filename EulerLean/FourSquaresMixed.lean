@@ -1,5 +1,5 @@
 /-
-  FourSquaresMixed.lean   (draft written 2026-11-16 by Claude; UNTESTED, not compiled)
+  FourSquaresMixed.lean   (draft written 2026-11-16 by Claude; UNTESTED. 2026-11-16 first compile gave 2 errors, patched, not re-run)
 
   Source: equation (2.2) of Howe-Huffman-Kohlmeyer-Kruer, hexagon:2611.00370v1.
 
@@ -27,7 +27,7 @@ import Mathlib
 namespace FourSq
 
 /-- Signed ordered representations of `n` as a sum of four squares, as a finite set. -/
-def R (n : ℕ) : Finset (Fin 4 → ℤ) :=
+noncomputable def R (n : ℕ) : Finset (Fin 4 → ℤ) :=
   (Fintype.piFinset fun _ : Fin 4 => Finset.Icc (-(n : ℤ)) n).filter
     (fun x => ∑ i, x i ^ 2 = (n : ℤ))
 
@@ -111,7 +111,7 @@ theorem mixed_count (n : ℕ) (hn : n % 4 = 2) :
   have b3 : Equiv.swap (1 : Fin 4) 3 3 = 1 := by decide
   have e13 : ((R n).filter S1).card = ((R n).filter S3).card :=
     card_filter_eq (Equiv.swap 1 3) (fun i => Equiv.swap_apply_self _ _ i) n S1 S3
-      (fun x => by simp [S1, S3, Function.comp, b0, b1, b2, b3])
+      (fun x => by simp only [S1, S3, Function.comp_apply, b0, b1, b2, b3]; omega)
   have hsum : ((R n).filter S1).card + ((R n).filter S2).card + ((R n).filter S3).card
       = 2 * (R n).card := by
     simp only [Finset.card_filter]
@@ -120,9 +120,9 @@ theorem mixed_count (n : ℕ) (hn : n % 4 = 2) :
     simp [Finset.sum_const, mul_comm]
   omega
 
-/-! Cheap sanity check, run when the file is loaded.  For n = 6 the classical count is
-    r4(6) = 8 * (1 + 2 + 3 + 6) = 96 (divisors of 6 not divisible by 4), so the pair printed
-    should be (96, 64): 64 = (2/3) * 96.  This #eval is a numerical check, not a proof. -/
-#eval ((R 6).card, ((R 6).filter S1).card)
+/-! Numerical sanity check (NOT in Lean: `R` is noncomputable). Python brute force gave
+    3*|Rmix| = 2*|R| for n = 2,6,10,14,18,22; for n = 6 the pair is (|R|, |Rmix|) = (96, 64). -/
 
 end FourSq
+
+#print axioms FourSq.mixed_count
