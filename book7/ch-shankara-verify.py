@@ -61,6 +61,9 @@ for lab in ('CITED RESULT', 'CHECKED INSTANCE', 'OPEN QUESTION'):
 check('ch-shankara-verify.py' in html, 'page names this verifier')
 check('were not checked for this page' in html, 'page states which items were not checked')
 check('href="ch-ramanujan.html"' in html, 'link to ch-ramanujan')
+check('An older witness' in html and 'Aṅguttara Nikāya 3.65' in html, 'older-witness section cites AN 3.65')
+check('Majjhima Nikāya 22' in html and 'Dīgha Nikāya 33' in html, 'older-witness section cites MN 22 and DN 33')
+check('Lost in Quotation' in html, 'page records the caution that the Kalama Sutta is often misquoted')
 print('\n' + '=' * 70)
 if fails:
     print('  %d CHECK(S) FAILED:' % len(fails)); [print('    - ' + f) for f in fails]; sys.exit(1)
