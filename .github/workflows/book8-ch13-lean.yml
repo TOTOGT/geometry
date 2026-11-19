@@ -1,0 +1,35 @@
+# Book 8 ch13 (Holology): core-Lean files, no Mathlib. Compiles each file and fails on error or sorry.
+# Trigger: Actions > "Book 8 ch13 Lean" > Run workflow (or push touching these files).
+name: Book 8 ch13 Lean
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'book8/ch13-*.lean'
+      - '.github/workflows/book8-ch13-lean.yml'
+jobs:
+  ch13:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan + toolchain
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- --default-toolchain none -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.elan/bin:$PATH"
+          elan toolchain install leanprover/lean4:v4.14.0
+          elan default leanprover/lean4:v4.14.0
+      - name: Compile files
+        run: |
+          set -uo pipefail
+          fail=0
+          for f in book8/ch13-lawvere.lean book8/ch13-cech-circle.lean; do
+            echo "== $f"
+            lean "$f" 2>&1 | tee /tmp/out.txt
+            [ "${PIPESTATUS[0]}" -eq 0 ] || { echo "::error::$f: lean failed"; fail=1; }
+            grep -n "sorry" /tmp/out.txt && { echo "::error::$f: sorry"; fail=1; } || true
+            grep -n "error" /tmp/out.txt && { echo "::error::$f: error in output"; fail=1; } || true
+            grep -n -A2 "depends on axioms\|does not depend" /tmp/out.txt || true
+          done
+          exit $fail
