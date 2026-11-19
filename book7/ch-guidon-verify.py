@@ -19,6 +19,10 @@ claim about who was first anywhere.  Standard library only.
   controls (the test must be able to fail):
   7  a corrupted birth year breaks check 1; adding the critics' 15-17 thousand-year interval empties check 2's overlap;
        removing the mentor edges changes check 6
+  9  Norse contact (Wikipedia, L'Anse aux Meadows): 1021 lies inside the earlier radiocarbon range 990-1050 and is 28
+       years after the 993 spike; 1492 is 471 years later; 1100 is outside the range (control)
+  8  after contact (Columbian exchange page, Wikipedia): the declines it states, as percentages, sit inside the 80-95%
+       it gives; a 50% decline would not (control)
 
 Not checked: dating methods; whether the Pedra Furada stones are tools; whether the Germany molar belongs to the
 orangutan lineage (the sources do not place it there); anything about the sources' accuracy.
@@ -133,6 +137,20 @@ check("6a collaboration edges only: 6 components (Guidon's cluster, the 1994 tri
 check("6b adding the six dispute edges joins all but Pelegrin: 2 components", c1 == 2, f"{c1} components")
 n2, e2 = build(with_mentors=False)
 check("7  control: dropping the two mentor edges changes the count (they are doing work)", components(n2, e2) != c0, f"{components(n2, e2)} vs {c0}")
+
+# 8  declines stated on the Columbian exchange page (Wikipedia), recomputed from its own numbers
+mexico = (1 - 1.0 / 20.0) * 100          # 'about 20 million' to 'barely more than a million'
+peru = (1 - 0.6 / 9.0) * 100             # 'about 9 million' to 600,000 by 1620
+check("8a Mexico: 20 million to about 1 million is about 95%; Peru: 9 million to 0.6 million is about 93%",
+      abs(mexico - 95.0) < 0.5 and abs(peru - 93.3) < 0.1, f"{mexico:.1f}% and {peru:.1f}%")
+check("8b both lie inside the 80-95% range the page gives", 80 <= peru <= 95 and 80 <= mexico <= 95)
+check("8c control: a 50% decline is outside that range", not (80 <= 50 <= 95))
+
+# 9  Norse contact at L'Anse aux Meadows, figures as Wikipedia states them
+lo, hi, mean, tree = 990, 1050, 1014, 1021
+check("9a 1021 and the older mean 1014 both lie inside the earlier radiocarbon range 990-1050", lo <= tree <= hi and lo <= mean <= hi)
+check("9b 1021 is 28 years after the 993 carbon-14 spike and 471 years before 1492", tree - 993 == 28 and 1492 - tree == 471)
+check("9c control: a date of 1100 falls outside that range", not (lo <= 1100 <= hi))
 
 print()
 print("Edges are only those the chapter's sources state; a missing edge means 'not stated here', not 'none exists'.")
