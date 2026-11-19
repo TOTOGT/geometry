@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book XVI &middot; Embeddings: words as points &mdash; Principia Orthogona</title>
+<meta name="description" content="Tokens, the unit a language model reads: why not letters or words, how byte pair encoding builds a vocabulary by merging frequent pairs, a worked example computed by script, and a small trainer to try."/>
+<style>
+:root{
+  --ink:#12141a;--ink2:#242833;--paper:#f6f3ec;--paper2:#ebe6da;--paper3:#e0d9c9;
+  --gold:#8a7340;--gold2:#c9a84c;--accent:#7a3410;--accent2:#17435f;--accent3:#2f5c33;
+  --rule:#c4bba8;--dim:#6f6857;--red:#8b1a1a;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--paper);font-size:18px;line-height:1.72}
+.topnav{background:var(--ink2);padding:.6rem 2rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em}
+.topnav a{color:var(--gold2);text-decoration:none}
+.topnav .crumbs,.topnav .meta{color:#918a76}
+.wp-head{max-width:900px;margin:0 auto;padding:3.4rem 2.2rem 1.6rem;border-bottom:2px solid var(--ink2)}
+.wp-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.12;color:var(--ink2);font-weight:500;margin-bottom:.5rem}
+h1 em{font-style:italic;color:var(--accent)}
+.subtitle{font-size:1.02rem;color:var(--dim);font-style:italic;margin-bottom:1.4rem}
+.metagrid{display:flex;flex-wrap:wrap;gap:1.6rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metagrid div{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);line-height:1.7}
+.metagrid strong{display:block;color:var(--ink);font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 2.2rem 4rem}
+.eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:2.4rem 0 .3rem}
+h2{font-size:1.32rem;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:.3rem;margin-bottom:.9rem}
+h3{font-size:1.02rem;font-weight:600;color:var(--ink2);margin:1.5rem 0 .5rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.0rem;background:var(--paper2);border-left:3px solid var(--accent);padding:1.1rem 1.3rem;font-style:italic;margin-bottom:1.3rem}
+.tag{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:.08rem .38rem;border-radius:2px;vertical-align:.12em;white-space:nowrap}
+.t-open{background:#f6dede;color:#8b1a1a;border:1px solid #d9a8a8}
+.t-model{background:#e0eddf;color:#2f5c33;border:1px solid #a9c8a8}
+.t-data{background:#dfeaf4;color:#17435f;border:1px solid #a8c2d8}
+.t-assume{background:#eae0f0;color:#5a3070;border:1px solid #c4addb}
+.t-stub{background:#f0ece2;color:#6f6857;border:1px solid #c4bba8}
+.box{border:1px solid var(--rule);background:var(--paper2);padding:1.05rem 1.25rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.box.thm{background:#eef2f7;border-color:#b8c9d8}
+.box.thm .lab{color:var(--accent2)}
+.box.warn{background:#fdf4e7;border-color:#e0c58e}
+.box.warn .lab{color:#8a5a10}
+.box.err{background:#fdeaea;border-color:#d9a8a8}
+.box.err .lab{color:var(--red)}
+.gap{border:1px solid var(--rule);background:#fff;padding:1rem 1.2rem;margin:1.2rem 0;border-left:3px solid var(--red)}
+.gap .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem}
+.eq{font-family:var(--mono);font-size:.85rem;background:#fff;border:1px solid var(--rule);border-left:3px solid var(--accent2);padding:.85rem 1.15rem;margin:1.1rem 0;overflow-x:auto;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.85rem}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent2);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--ink2)}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+.mono{font-family:var(--mono);font-size:.86em}
+.wrap a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wrap a:hover{color:var(--accent)}
+.metagrid a{color:var(--accent2)}
+td.n{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+tr:hover td{background:var(--paper2)}
+ul,ol{margin:0 0 .9rem 1.3rem}
+li{margin-bottom:.35rem}
+ol.refs li{margin-bottom:.6rem;font-size:.88rem}
+footer{background:var(--ink2);padding:2.2rem 2.2rem;font-family:var(--mono);font-size:.62rem;line-height:1.9;color:#8f8878}
+.fwrap{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
+footer a{color:var(--gold2);text-decoration:none}
+footer .disc{max-width:520px;color:#6f6a5c}
+@media(max-width:640px){.wp-head,.wrap,footer{padding-left:1.3rem;padding-right:1.3rem}}
+.topictag{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#17435f;background:#dfeaf4;
+  border:1px solid #a8c2d8;border-radius:3px;padding:.2rem .55rem;margin-bottom:.9rem}
+.tblwrap{overflow-x:auto;margin:1.2rem 0}
+.sim label{font-family:var(--mono);font-size:.72rem;display:block;margin:.6rem 0}
+.sim textarea{width:100%;font-family:var(--mono);font-size:.8rem;padding:.5rem;border:1px solid var(--rule);background:#fff;color:var(--ink)}
+.sim input[type=range]{width:100%}
+.sim pre{font-family:var(--mono);font-size:.78rem;background:#fff;border:1px solid var(--rule);padding:.7rem;overflow-x:auto;white-space:pre-wrap}
+.sim input[type=text]{font-family:var(--mono);padding:.3rem;border:1px solid var(--rule);background:#fff;color:var(--ink)}
+.tblwrap{overflow-x:auto}
+.hist td:nth-child(3){width:52%}
+.hist td:nth-child(2){width:14%}
+.hist td:nth-child(1){width:9%}
+.hist .tag{white-space:normal;display:inline-block;margin:.1rem .1rem .1rem 0}
+</style>
+<!--po-subject--><meta name="po-subject" content="COMPUTING · MACHINE LEARNING"><!--/po-subject-->
+</head>
+<body>
+<div class="topnav"><span class="crumbs"><a href="../index.html">Principia Orthogona</a> &middot; <a href="index.html">Book XVI</a></span><span class="meta"><a href="index.html">Contents</a> &middot; <a href="ch01-tokens.html">&larr; Chapter 1</a> &middot; Next: Attention (planned)</span></div>
+<header class="wp-head"><div class="wp-kicker">Book XVI &middot; Chapter 2</div>
+<!--po-subject--><div class="po-subject" style="margin:0 0 .6rem;text-align:inherit" aria-label="Section"><span class="po-subject-tag" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#123f5c;background:#dcedf7;border:1px solid #98c6e2;border-radius:3px;padding:.22rem .6rem;margin:0 .4rem .4rem 0;line-height:1.3">COMPUTING · MACHINE LEARNING</span></div><!--/po-subject-->
+<h1>Embeddings: <em>words as points, and the circle of the months</em></h1>
+<p class="subtitle">A shape inside a model that comes from a symmetry in the text it read.</p></header>
+<div class="wrap">
+<div class="lede">When researchers look inside language models they find that the twelve months sit on a circle, years on a smooth curve, and cities on something like a map. A 2026 paper explains the circle from a symmetry in word statistics, and shows it appears even in small word-embedding models. This chapter builds the smallest version of that argument and prints every number from a script. It covers one thread of embeddings. It does not yet cover how embeddings are trained.</div>
+
+<h2>What was observed, and what the paper claims</h2>
+<p>The observation <span class="tag t-data">quoted: Karkada et al. 2026, abstract</span>: calendar months arrange into a circle, historical years into a smooth one-dimensional curve with ripples, and the latitude and longitude of cities can be read off with a linear probe.</p>
+<p>The claim of the paper <span class="tag t-data">quoted: abstract and introduction</span>: co-occurrence statistics of words have <em>translation symmetry</em>. The frequency with which two months appear near each other depends only on the time interval between them. The authors prove that this symmetry makes embedding models learn Fourier representations, that is, sines and cosines. The circle is the longest wave, and the ripples are higher harmonics. They report the same geometry in shallow word-embedding models of the word2vec family and in large language models, and they report that it persists at intermediate embedding dimension even when all co-occurrences between months are removed.</p>
+
+<h2>1 &middot; The smallest version: twelve months</h2>
+<p>Put the months in a ring, numbered 0 to 11, and let C<sub>ij</sub> = f(i &minus; j), where the gap is measured around the ring. That is the symmetry: shifting every month by one place leaves C unchanged. For the toy I take f(d) = exp(&minus;d<sub>c</sub> / 2.5), with d<sub>c</sub> the shorter way around the ring. This kernel is my choice, not measured from text <span class="tag t-assume">assumption</span>.</p>
+<div class="eq">C<sub>ij</sub> = f(i &minus; j mod 12) &nbsp;&nbsp;&rArr;&nbsp;&nbsp; &lambda;<sub>k</sub> = &Sigma;<sub>d</sub> f(d) cos(2&pi;kd/12), &nbsp; eigenvectors cos(2&pi;kj/12), sin(2&pi;kj/12)</div>
+<p>A matrix that depends only on the gap is called circulant, and its eigenvectors are the Fourier modes (proved in <a href="../book24/ch13-circulant-matrices.html">Book XXIV, Chapter 13</a>). The script checks this directly: for each k from 0 to 11 it multiplies C by the Fourier vector and compares with &lambda;<sub>k</sub> times the vector. The largest discrepancy is below 10<sup>&minus;12</sup> <span class="tag t-model">computed</span>.</p>
+<div class="tblwrap"><table><tr><th>k</th><th>&lambda;<sub>k</sub></th><th>Reading</th></tr><tr><td class="n">0</td><td class="n">4.6069</td><td>constant: every month co-occurs with every month</td></tr><tr><td class="n">1</td><td class="n">2.0833</td><td>one full turn around the year (a circle)</td></tr><tr><td class="n">2</td><td class="n">0.6428</td><td>two turns</td></tr><tr><td class="n">3</td><td class="n">0.4144</td><td></td></tr><tr><td class="n">4</td><td class="n">0.2362</td><td></td></tr><tr><td class="n">5</td><td class="n">0.2301</td><td></td></tr><tr><td class="n">6</td><td class="n">0.1795</td><td></td></tr></table></div>
+<p>An embedding gives each month a vector, and the Gram matrix of the vectors, W W<sup>T</sup>, is meant to reproduce C. Taking W from the eigendecomposition makes this exact (the script finds a maximum error below 10<sup>&minus;7</sup>). Then I center the vectors and take the top two principal components, as the paper does for its plots. The result:</p>
+<div style="text-align:center;margin:1rem 0"><svg viewBox="0 0 420 420" role="img" aria-label="The twelve months as points on a circle, in order, from the top two principal components of the embedding" style="max-width:420px;width:100%;height:auto;background:#fff;border:1px solid #c4bba8"><polyline points="157.2,371.6 83.5,323.5 43.7,245.1 48.4,157.2 96.5,83.5 174.9,43.7 262.8,48.4 336.5,96.5 376.3,174.9 371.6,262.8 323.5,336.5 245.1,376.3 157.2,371.6" fill="none" stroke="#c4bba8" stroke-width="1"/><circle cx="157.2" cy="371.6" r="5" fill="#7a3410"/><text x="147.2" y="375.6" font-size="12" text-anchor="end" fill="#242833" font-family="Georgia,serif">Jan</text><circle cx="83.5" cy="323.5" r="5" fill="#7a3410"/><text x="73.5" y="327.5" font-size="12" text-anchor="end" fill="#242833" font-family="Georgia,serif">Feb</text><circle cx="43.7" cy="245.1" r="5" fill="#7a3410"/><text x="33.7" y="249.1" font-size="12" text-anchor="end" fill="#242833" font-family="Georgia,serif">Mar</text><circle cx="48.4" cy="157.2" r="5" fill="#7a3410"/><text x="38.4" y="161.2" font-size="12" text-anchor="end" fill="#242833" font-family="Georgia,serif">Apr</text><circle cx="96.5" cy="83.5" r="5" fill="#7a3410"/><text x="86.5" y="87.5" font-size="12" text-anchor="end" fill="#242833" font-family="Georgia,serif">May</text><circle cx="174.9" cy="43.7" r="5" fill="#7a3410"/><text x="164.9" y="47.7" font-size="12" text-anchor="end" fill="#242833" font-family="Georgia,serif">Jun</text><circle cx="262.8" cy="48.4" r="5" fill="#7a3410"/><text x="272.8" y="52.4" font-size="12" text-anchor="start" fill="#242833" font-family="Georgia,serif">Jul</text><circle cx="336.5" cy="96.5" r="5" fill="#7a3410"/><text x="346.5" y="100.5" font-size="12" text-anchor="start" fill="#242833" font-family="Georgia,serif">Aug</text><circle cx="376.3" cy="174.9" r="5" fill="#7a3410"/><text x="386.3" y="178.9" font-size="12" text-anchor="start" fill="#242833" font-family="Georgia,serif">Sep</text><circle cx="371.6" cy="262.8" r="5" fill="#7a3410"/><text x="381.6" y="266.8" font-size="12" text-anchor="start" fill="#242833" font-family="Georgia,serif">Oct</text><circle cx="323.5" cy="336.5" r="5" fill="#7a3410"/><text x="333.5" y="340.5" font-size="12" text-anchor="start" fill="#242833" font-family="Georgia,serif">Nov</text><circle cx="245.1" cy="376.3" r="5" fill="#7a3410"/><text x="255.1" y="380.3" font-size="12" text-anchor="start" fill="#242833" font-family="Georgia,serif">Dec</text></svg></div>
+<p>All twelve months land at the same distance from the center, to within 10<sup>&minus;7</sup>, in calendar order, with equal angular steps. The top two principal components have equal variance (0.1736 each) because the k = 1 cosine and sine share one eigenvalue. That degeneracy is why the picture is a circle and not an ellipse. The k = 2 mode (variance 0.0536) is the first higher harmonic, the kind of component the paper identifies with the ripples.</p>
+<div class="box warn"><span class="lab">A first attempt that failed</span>The largest eigenvalue of C (4.6069) belongs to the constant mode, which says only that every month co-occurs with every other. Taking the top two <em>uncentered</em> components gives the constant plus one cosine, and the points do not form a circle: the circular-agreement score is 0.370, against 1.000 after centering. Centering removes the constant mode before the circle appears.</div>
+
+<h2>2 &middot; Years: open ends instead of a ring</h2>
+<p>Years do not wrap around, so the kernel depends on the gap but the matrix is no longer circulant. I use K<sub>ij</sub> = exp(&minus;|i &minus; j| / 6) on 30 points. Its top eigenvalues are 9.958, 6.326, 3.749, 2.310, 1.519, 1.062. The eigenvectors oscillate with 0, 1, 2, 3, 4 and 5 sign changes, in that order <span class="tag t-model">computed</span>. They behave like sine and cosine waves fitted into a segment, with slightly different boundary behavior. That is the open-end counterpart of the ring's Fourier modes, and the paper's Figure 1 labels months periodic and years open for this reason.</p>
+<div class="box err"><span class="lab">A negative result</span>I also tested whether the first centered principal axis runs monotonically through the 30 years. It does not: the test returns <strong>false</strong>. So the toy does not by itself reproduce a clean single curve. I have not reproduced the paper's rippled-curve figure, and I have not worked out why this simple version differs.</div>
+
+<h2>3 &middot; Why deleting the months does not delete the circle</h2>
+<p>The paper reports that if every co-occurrence between two months is removed, the circle still forms at moderate embedding dimension. Its explanation is that many other words are tied to the season (ski, beach, hurricane), so the time of year acts as a hidden variable that shapes the statistics of the whole vocabulary. The months get placed by their relations to those words.</p>
+<p>Here is a toy of that mechanism, not the paper's experiment. Take the 12 months at phases 2&pi;m/12, plus S seasonal words at random phases, plus 20 unrelated words. The association between two time-linked words is the product of their strengths times the cosine of their phase difference. Add a little noise. Then <strong>zero every month-to-month entry</strong>, keep the top 6 eigen-directions, center, and ask how well the top two principal components put the months in calendar order. The score is 1 for a perfect circle in order and near 0 for scatter <span class="tag t-model">computed; seed 7</span>.</p>
+<div class="tblwrap"><table><tr><th>Seasonal words S</th><th>Score, month&ndash;month entries removed</th><th>Score, nothing removed</th></tr><tr><td class="n">0</td><td class="n">0.132</td><td class="n">1.000</td></tr><tr><td class="n">1</td><td class="n">0.651</td><td class="n">1.000</td></tr><tr><td class="n">2</td><td class="n">0.998</td><td class="n">1.000</td></tr><tr><td class="n">3</td><td class="n">0.998</td><td class="n">1.000</td></tr><tr><td class="n">5</td><td class="n">0.996</td><td class="n">1.000</td></tr><tr><td class="n">10</td><td class="n">0.999</td><td class="n">1.000</td></tr><tr><td class="n">40</td><td class="n">1.000</td><td class="n">1.000</td></tr></table></div>
+<p>With no seasonal words the score is near zero, because nothing is left to place the months. With one seasonal word the months can only be placed on a line, and the score is 0.651. With two words at different phases the circle is recovered (score 0.998). A second word fixes the second direction. Across 20 random seeds:</p>
+<div class="tblwrap"><table><tr><th>S</th><th>Minimum score</th><th>Median score</th><th>Seeds with score &ge; 0.95</th></tr><tr><td class="n">1</td><td class="n">0.639</td><td class="n">0.672</td><td class="n">0 of 20</td></tr><tr><td class="n">2</td><td class="n">0.994</td><td class="n">0.998</td><td class="n">20 of 20</td></tr><tr><td class="n">3</td><td class="n">0.992</td><td class="n">0.998</td><td class="n">20 of 20</td></tr><tr><td class="n">5</td><td class="n">0.995</td><td class="n">0.999</td><td class="n">20 of 20</td></tr><tr><td class="n">10</td><td class="n">0.995</td><td class="n">0.999</td><td class="n">20 of 20</td></tr></table></div>
+<p>This matches, in miniature, what the paper reports in its Figure 4 (right), where a handful of highly seasonal words are enough to reconstruct the month ordering. It shows the mechanism can work. It does not show the real corpus works this way, which is what the paper tests on Wikipedia.</p>
+
+<h2>4 &middot; What the paper does not claim</h2>
+<div class="box"><span class="lab">Scope</span>
+<p>The theory is derived for word-embedding algorithms. Agreement with large language models is empirical, and the paper&rsquo;s limitations paragraph notes that language models can adapt to context. (In my copy of the PDF that sentence breaks off at the end of a page, so I cannot say what the authors conclude from it.) The circle persists after removing month&ndash;month co-occurrences at intermediate embedding dimension (about 10<sup>3</sup> for a vocabulary of about 2.5&times;10<sup>4</sup> in its Figure 4), not at every size. The paper makes no claim about theories of linguistic competence, and it does not show that large models build no internal world model. It shows that this particular geometry has a simpler statistical origin.</p></div>
+<div class="gap"><span class="lab">Not done here</span>
+<p>I have not run any of this on a real corpus. I have not reproduced the paper&rsquo;s experiments or re-derived its proofs; I read the abstract, introduction, the Figure 4 caption, the limitations paragraph and one appendix derivation. I have not tested any language model. There is no Lean file for this chapter. The notes on word2vec training and on the Mikolov et al. analogy results, which this slot of the book is meant to cover, are still unwritten.</p>
+<p>Open question <span class="tag t-open">open</span>: do cyclic and ordered word classes in languages other than English, such as Portuguese, Nepali or Tibetan, show the same translation symmetry in their co-occurrence statistics? The paper tests English. A design for the check is noted in <a href="../book25/index.html">Book XXV</a>.</p></div>
+
+<h2>Sources</h2>
+<div class="tblwrap"><table><tr><th>What</th><th>Source</th><th>Status</th></tr>
+<tr><td>Everything about the paper</td><td>D. Karkada, D. J. Korchinski, A. Nava, M. Wyart, Y. Bahri, &ldquo;Symmetry in language statistics shapes the geometry of model representations,&rdquo; ICML 2026 (PMLR 306), arXiv:2602.15029v3</td><td><span class="tag t-data">quoted; parts read, see above</span></td></tr>
+<tr><td>Circulant matrices and Fourier modes</td><td><a href="../book24/ch13-circulant-matrices.html">Book XXIV, Chapter 13</a></td><td><span class="tag t-model">proved on the page, checked by script</span></td></tr>
+<tr><td>All numbers in sections 1 to 3</td><td><a href="../book16/ch02-verify.py" class="mono">ch02-verify.py</a> (Python 3, standard library only)</td><td><span class="tag t-model">computed</span></td></tr></table></div>
+<h2>Where this connects</h2>
+<p><a href="ch01-tokens.html">Chapter 1</a> (tokens) &middot; <a href="../book24/ch13-circulant-matrices.html">Book XXIV, Chapter 13</a> (circulant matrices) &middot; <a href="../book24/ch11-normal-matrices.html">Book XXIV, Chapter 11</a> (normal matrices) &middot; <a href="../book25/index.html">Book XXV</a> (languages side by side)</p>
+</div>
+<div class="wrap"><p class="mono" style="color:var(--dim)">&copy; 2026 Pablo Nogueira Grossi / G6 LLC &middot; Newark, New Jersey &middot; CC BY-NC-ND 4.0 &middot; Independent teaching text; not peer-reviewed.</p></div>
+</body>
+</html>
