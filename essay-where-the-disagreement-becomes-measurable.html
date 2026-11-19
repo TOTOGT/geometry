@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Patterns Repeat</title>
+<meta name="description" content="A second reply to James Reeves: his six-step chain as a list of premises, what a string can and cannot test, concrete lattice tests, and periodicity from boundary reflection.">
+<style>
+:root{
+  --bg:#0b0b12; --panel:#13131d; --fg:#e6e2d8; --muted:#9a968a; --rule:#2a2a38;
+  --accent:#d4a84b; --accent-soft:rgba(212,168,75,.12); --link:#e3bd69;
+  --ok:#7fb88a; --warn:#d98f5a; --open:#8fa6d9; --code:#171724;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#f7f3ea; --panel:#efe9db; --fg:#1d1b16; --muted:#6a6556; --rule:#d8d0bc;
+  --accent:#8a6410; --accent-soft:rgba(138,100,16,.1); --link:#7a5608;
+  --ok:#2f6b3d; --warn:#9a4f17; --open:#2f4a8a; --code:#ebe4d2; color-scheme:light;}}
+:root[data-theme="light"]{
+  --bg:#f7f3ea; --panel:#efe9db; --fg:#1d1b16; --muted:#6a6556; --rule:#d8d0bc;
+  --accent:#8a6410; --accent-soft:rgba(138,100,16,.1); --link:#7a5608;
+  --ok:#2f6b3d; --warn:#9a4f17; --open:#2f4a8a; --code:#ebe4d2; color-scheme:light;}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Georgia,"Iowan Old Style","Times New Roman",serif;font-size:1.125rem;line-height:1.72;padding-inline:1rem}
+.wrap{max-width:46rem;margin-inline:auto;padding-block:3.5rem 5rem}
+.wide{max-width:64rem;margin-inline:auto}
+.kicker,.label,th,.tag,.byline,footer{font-family:"Courier New",Courier,monospace;text-transform:uppercase;letter-spacing:.12em}
+.kicker{font-size:.75rem;color:var(--accent);margin:0 0 1.2rem}
+h1{font-size:clamp(2.2rem,6vw,3.6rem);line-height:1.08;margin:0 0 1rem;font-weight:400;text-wrap:balance;letter-spacing:-.01em}
+h1::after{content:"";display:block;width:4rem;height:2px;background:var(--accent);margin-top:1.4rem}
+.byline{font-size:.72rem;color:var(--muted);margin:0 0 3rem}
+h2{font-size:1.55rem;font-weight:400;line-height:1.25;margin:3.2rem 0 1rem;text-wrap:balance;color:var(--fg)}
+h2::before{content:attr(data-n);display:block;font-family:"Courier New",monospace;font-size:.72rem;letter-spacing:.14em;color:var(--accent);margin-bottom:.4rem}
+p{margin:0 0 1.15rem}
+a{color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--link) 45%,transparent)}
+a:hover{text-decoration-color:var(--link)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.lede{font-size:1.28rem;line-height:1.6}
+.lede::first-letter{float:left;font-size:4.1rem;line-height:.82;padding:.28rem .6rem 0 0;color:var(--accent)}
+.formula{margin:1.6rem 0;padding:1.1rem 1.2rem;background:var(--code);border-left:2px solid var(--accent);overflow-x:auto;font-size:1.15rem;text-align:center;white-space:nowrap}
+.formula .lbl{display:block;font-family:"Courier New",monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.formula i{font-style:italic}
+.pull{margin:2.2rem 0;padding:1.3rem 1.5rem;background:var(--accent-soft);border-left:3px solid var(--accent);font-size:1.18rem;line-height:1.6}
+.pull p:last-child{margin:0}
+.tablebox{margin:1.6rem -1rem 1.6rem;overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(min-width:60rem){.tablebox{margin-inline:-9rem}}
+table{border-collapse:collapse;width:100%;min-width:42rem;font-size:.92rem;line-height:1.5}
+th{font-size:.66rem;text-align:left;color:var(--muted);padding:.7rem .8rem;border-bottom:1px solid var(--accent);background:var(--panel);position:sticky;top:0}
+td{padding:.85rem .8rem;border-bottom:1px solid var(--rule);vertical-align:top}
+td:first-child{font-style:italic;width:11rem}
+tr:hover td{background:color-mix(in srgb,var(--panel) 60%,transparent)}
+td.st{font-size:.85rem;color:var(--muted)}
+.tag{display:inline-block;font-size:.6rem;padding:.12rem .45rem;border:1px solid currentColor;margin-bottom:.4rem;letter-spacing:.1em}
+.t-ok{color:var(--ok)}.t-warn{color:var(--warn)}.t-open{color:var(--open)}
+.caption{font-family:"Courier New",monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:2rem 0 -.6rem}
+.divider{display:flex;align-items:center;gap:1rem;margin:3rem 0;color:var(--accent);font-family:"Courier New",monospace;font-size:.8rem}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--rule)}
+.ask{margin-top:2.4rem;padding:1.5rem;border:1px solid var(--accent);background:var(--panel)}
+.ask .label{font-size:.7rem;color:var(--accent);margin:0 0 .6rem;display:block}
+footer{margin-top:4rem;padding-top:1.4rem;border-top:1px solid var(--rule);font-size:.68rem;color:var(--muted);line-height:1.9}
+footer a{color:var(--muted)}
+.theme{position:fixed;top:max(.8rem,env(safe-area-inset-top,0px));right:.8rem;font-family:"Courier New",monospace;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;background:var(--panel);color:var(--muted);border:1px solid var(--rule);padding:.35rem .6rem;cursor:pointer}
+.theme:hover{color:var(--accent);border-color:var(--accent)}
+@media(max-width:34rem){body{font-size:1.04rem}.lede{font-size:1.15rem}.lede::first-letter{font-size:3.4rem}}
+
+.fig{margin:1.8rem 0}
+.fig svg{width:100%;height:auto;display:block;background:var(--panel);border:1px solid var(--rule)}
+.fig .ax{stroke:var(--muted);stroke-width:1;fill:none}
+.fig .grid{stroke:var(--rule);stroke-width:1;fill:none}
+.fig .t{fill:var(--muted);font-family:"Courier New",monospace;font-size:11px}
+.fig .tl{fill:var(--fg);font-family:"Courier New",monospace;font-size:12px}
+.fig .cont{stroke:var(--warn);stroke-width:2;fill:none;stroke-dasharray:6 4}
+.fig .chain{stroke:var(--accent);stroke-width:2.4;fill:none}
+.fig .dot{fill:var(--accent);stroke:var(--bg);stroke-width:1.5}
+.fig figcaption{font-family:"Courier New",monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.7rem;line-height:1.7}
+.note{font-size:.92rem;color:var(--muted)}
+.sub{font-size:1.15rem;color:var(--muted);margin:0 0 1.4rem;line-height:1.5}
+.mono{font-family:"Courier New",monospace;font-size:.95em}
+td:first-child{font-style:normal}
+</style>
+</head>
+<body>
+<button class="theme" id="theme" type="button" aria-label="Toggle light and dark">Theme</button>
+<main class="wrap">
+
+<p class="kicker">Principia Orthogona · A second reply</p>
+<h1>How patterns repeat</h1>
+<p class="sub">A second reply to James Reeves: where the disagreement becomes measurable.</p>
+<p class="byline">19 November 2026 · in response to <a href="https://www.linkedin.com/pulse/reduction-before-oscillator-james-reeves-3plgc/">James Reeves, “The Reduction Before the Oscillator”</a> · continues <a href="essay-the-reduction-was-not-missed.html">“The reduction was not missed”</a></p>
+
+<h2 data-n="01">Where we now agree</h2>
+<p class="lede">James, thank you for narrowing the claim. Your reply concedes three things we care about: the Taylor-expansion argument stands, repeated mathematical form is not by itself a common cause, and neither a universal substrate nor a new observable has been established yet. That leaves one question on the table: is the oscillator the smallest premise, or does it rest on something smaller?</p>
+<p>Your six-step chain (a state-bearing thing, constraints on its states, change producing difference, inverse directions around a reference, a restoring constraint, recurrence as frequency) is a fair list of what an oscillator model needs. We accept it as that: a list of premises. The rest of this reply is about what the list contains and what it can and cannot test.</p>
+
+<h2 data-n="02">Where the chain stops</h2>
+<p>Steps 1 to 4 set up a coordinate and a reference point. Step 4, two inverse directions around <i>x</i><sub>0</sub>, is the sign structure of a one-dimensional coordinate. With more than one degree of freedom the allowed directions form a sphere, not a pair, so “polarity” already assumes a one-dimensional configuration space. That is an input, not a consequence of movement.</p>
+<p>Step 5 is where the physics enters, and it is the premise the Taylor argument already states:</p>
+<div class="formula" role="math" aria-label="V prime of x zero equals zero and V double prime of x zero is positive, equivalently F equals minus k q near the minimum">
+  <span class="lbl">The restoring premise, in energy and in force form</span>
+  <i>V</i>′(<i>x</i><sub>0</sub>) = 0, &nbsp; <i>V</i>″(<i>x</i><sub>0</sub>) &gt; 0 &nbsp;⇔&nbsp; <i>F</i> ≈ −<i>k</i>(<i>x</i> − <i>x</i><sub>0</sub>)
+</div>
+<p>Your own sources (OpenStax on simple harmonic motion, Cline on linear restoring forces) say exactly this. So the chain does not reach below the Taylor argument. It unpacks the premises that argument names.</p>
+
+<h2 data-n="03">What the string can and cannot test</h2>
+<p>The stretched string shows that a string exists before it vibrates and that sound depends on it. Nobody disputes that, and it cannot fail as a test: it would fail only if zero displacement meant the string itself was absent, which contradicts what zero displacement means.</p>
+<p>A structured substrate does make one checkable prediction: discreteness. For masses <i>m</i> joined by springs <i>K</i> at spacing <i>a</i>, the frequency is</p>
+<div class="formula" role="math" aria-label="omega of k equals two times the square root of K over m times the absolute value of sine of k a over two">
+  <span class="lbl">Dispersion of a discrete chain</span>
+  ω(<i>k</i>) = 2 √(<i>K</i>/<i>m</i>) · |sin(<i>ka</i>/2)|
+</div>
+<p>A continuous string gives ω proportional to <i>k</i>. Relative to the continuum value the chain is low by 1 − sin(<i>ka</i>/2)/(<i>ka</i>/2), which is about (<i>ka</i>)²/24 for small <i>ka</i>.</p>
+<figure class="fig"><svg viewBox="0 0 620 340" role="img" aria-label="Frequency against wavenumber for a discrete chain and a continuous string. The chain follows two times sine of ka over two and falls below the straight continuum line; it is one percent low at ka 0.49, five percent low at 1.10, ten percent low at 1.57, and flat at the zone boundary.">
+<line class="grid" x1="62" x2="600" y1="288.0" y2="288.0"/><text class="t" x="54" y="292.0" text-anchor="end">0.0</text><line class="grid" x1="62" x2="600" y1="222.0" y2="222.0"/><text class="t" x="54" y="226.0" text-anchor="end">0.4</text><line class="grid" x1="62" x2="600" y1="156.0" y2="156.0"/><text class="t" x="54" y="160.0" text-anchor="end">0.8</text><line class="grid" x1="62" x2="600" y1="90.0" y2="90.0"/><text class="t" x="54" y="94.0" text-anchor="end">1.2</text><line class="grid" x1="62" x2="600" y1="24.0" y2="24.0"/><text class="t" x="54" y="28.0" text-anchor="end">1.6</text><line class="grid" x1="62.0" x2="62.0" y1="24" y2="288"/><text class="t" x="62.0" y="304" text-anchor="middle">0.00</text><line class="grid" x1="196.5" x2="196.5" y1="24" y2="288"/><text class="t" x="196.5" y="304" text-anchor="middle">0.25</text><line class="grid" x1="331.0" x2="331.0" y1="24" y2="288"/><text class="t" x="331.0" y="304" text-anchor="middle">0.50</text><line class="grid" x1="465.5" x2="465.5" y1="24" y2="288"/><text class="t" x="465.5" y="304" text-anchor="middle">0.75</text><line class="grid" x1="600.0" x2="600.0" y1="24" y2="288"/><text class="t" x="600.0" y="304" text-anchor="middle">1.00</text>
+<line class="ax" x1="62" x2="600" y1="288" y2="288"/><line class="ax" x1="62" x2="62" y1="24" y2="288"/>
+<polyline class="cont" points="62.0,288.0 64.7,286.7 67.4,285.4 70.1,284.1 72.8,282.8 75.5,281.5 78.1,280.2 80.8,278.9 83.5,277.6 86.2,276.3 88.9,275.0 91.6,273.7 94.3,272.4 97.0,271.2 99.7,269.9 102.3,268.6 105.0,267.3 107.7,266.0 110.4,264.7 113.1,263.4 115.8,262.1 118.5,260.8 121.2,259.5 123.9,258.2 126.6,256.9 129.2,255.6 131.9,254.3 134.6,253.0 137.3,251.7 140.0,250.4 142.7,249.1 145.4,247.8 148.1,246.5 150.8,245.2 153.5,243.9 156.1,242.6 158.8,241.3 161.5,240.1 164.2,238.8 166.9,237.5 169.6,236.2 172.3,234.9 175.0,233.6 177.7,232.3 180.4,231.0 183.1,229.7 185.7,228.4 188.4,227.1 191.1,225.8 193.8,224.5 196.5,223.2 199.2,221.9 201.9,220.6 204.6,219.3 207.3,218.0 210.0,216.7 212.6,215.4 215.3,214.1 218.0,212.8 220.7,211.5 223.4,210.2 226.1,208.9 228.8,207.7 231.5,206.4 234.2,205.1 236.8,203.8 239.5,202.5 242.2,201.2 244.9,199.9 247.6,198.6 250.3,197.3 253.0,196.0 255.7,194.7 258.4,193.4 261.1,192.1 263.8,190.8 266.4,189.5 269.1,188.2 271.8,186.9 274.5,185.6 277.2,184.3 279.9,183.0 282.6,181.7 285.3,180.4 288.0,179.1 290.6,177.8 293.3,176.6 296.0,175.3 298.7,174.0 301.4,172.7 304.1,171.4 306.8,170.1 309.5,168.8 312.2,167.5 314.9,166.2 317.5,164.9 320.2,163.6 322.9,162.3 325.6,161.0 328.3,159.7 331.0,158.4 333.7,157.1 336.4,155.8 339.1,154.5 341.8,153.2 344.4,151.9 347.1,150.6 349.8,149.3 352.5,148.0 355.2,146.7 357.9,145.5 360.6,144.2 363.3,142.9 366.0,141.6 368.7,140.3 371.3,139.0 374.0,137.7 376.7,136.4 379.4,135.1 382.1,133.8 384.8,132.5 387.5,131.2 390.2,129.9 392.9,128.6 395.6,127.3 398.2,126.0 400.9,124.7 403.6,123.4 406.3,122.1 409.0,120.8 411.7,119.5 414.4,118.2 417.1,116.9 419.8,115.6 422.5,114.3 425.2,113.1 427.8,111.8 430.5,110.5 433.2,109.2 435.9,107.9 438.6,106.6 441.3,105.3 444.0,104.0 446.7,102.7 449.4,101.4 452.1,100.1 454.7,98.8 457.4,97.5 460.1,96.2 462.8,94.9 465.5,93.6 468.2,92.3 470.9,91.0 473.6,89.7 476.3,88.4 478.9,87.1 481.6,85.8 484.3,84.5 487.0,83.2 489.7,82.0 492.4,80.7 495.1,79.4 497.8,78.1 500.5,76.8 503.2,75.5 505.8,74.2 508.5,72.9 511.2,71.6 513.9,70.3 516.6,69.0 519.3,67.7 522.0,66.4 524.7,65.1 527.4,63.8 530.1,62.5 532.8,61.2 535.4,59.9 538.1,58.6 540.8,57.3 543.5,56.0 546.2,54.7 548.9,53.4 551.6,52.1 554.3,50.8 557.0,49.6 559.7,48.3 562.3,47.0 565.0,45.7 567.7,44.4 570.4,43.1 573.1,41.8 575.8,40.5 578.5,39.2 581.2,37.9 583.9,36.6 586.5,35.3 589.2,34.0 591.9,32.7 594.6,31.4 597.3,30.1 600.0,28.8"/>
+<polyline class="chain" points="62.0,288.0 64.7,286.7 67.4,285.4 70.1,284.1 72.8,282.8 75.5,281.5 78.1,280.2 80.8,278.9 83.5,277.6 86.2,276.3 88.9,275.1 91.6,273.8 94.3,272.5 97.0,271.2 99.7,269.9 102.3,268.6 105.0,267.3 107.7,266.0 110.4,264.8 113.1,263.5 115.8,262.2 118.5,260.9 121.2,259.6 123.9,258.4 126.6,257.1 129.2,255.8 131.9,254.5 134.6,253.3 137.3,252.0 140.0,250.7 142.7,249.5 145.4,248.2 148.1,247.0 150.8,245.7 153.5,244.5 156.1,243.2 158.8,242.0 161.5,240.7 164.2,239.5 166.9,238.2 169.6,237.0 172.3,235.8 175.0,234.6 177.7,233.3 180.4,232.1 183.1,230.9 185.7,229.7 188.4,228.5 191.1,227.3 193.8,226.1 196.5,224.9 199.2,223.7 201.9,222.5 204.6,221.3 207.3,220.1 210.0,218.9 212.6,217.7 215.3,216.6 218.0,215.4 220.7,214.2 223.4,213.1 226.1,211.9 228.8,210.8 231.5,209.6 234.2,208.5 236.8,207.4 239.5,206.2 242.2,205.1 244.9,204.0 247.6,202.9 250.3,201.8 253.0,200.7 255.7,199.6 258.4,198.5 261.1,197.4 263.8,196.3 266.4,195.3 269.1,194.2 271.8,193.1 274.5,192.1 277.2,191.0 279.9,190.0 282.6,188.9 285.3,187.9 288.0,186.9 290.6,185.8 293.3,184.8 296.0,183.8 298.7,182.8 301.4,181.8 304.1,180.8 306.8,179.9 309.5,178.9 312.2,177.9 314.9,177.0 317.5,176.0 320.2,175.0 322.9,174.1 325.6,173.2 328.3,172.2 331.0,171.3 333.7,170.4 336.4,169.5 339.1,168.6 341.8,167.7 344.4,166.8 347.1,166.0 349.8,165.1 352.5,164.2 355.2,163.4 357.9,162.5 360.6,161.7 363.3,160.9 366.0,160.0 368.7,159.2 371.3,158.4 374.0,157.6 376.7,156.8 379.4,156.1 382.1,155.3 384.8,154.5 387.5,153.8 390.2,153.0 392.9,152.3 395.6,151.5 398.2,150.8 400.9,150.1 403.6,149.4 406.3,148.7 409.0,148.0 411.7,147.3 414.4,146.6 417.1,146.0 419.8,145.3 422.5,144.7 425.2,144.0 427.8,143.4 430.5,142.8 433.2,142.2 435.9,141.6 438.6,141.0 441.3,140.4 444.0,139.8 446.7,139.3 449.4,138.7 452.1,138.2 454.7,137.6 457.4,137.1 460.1,136.6 462.8,136.1 465.5,135.6 468.2,135.1 470.9,134.6 473.6,134.1 476.3,133.7 478.9,133.2 481.6,132.8 484.3,132.3 487.0,131.9 489.7,131.5 492.4,131.1 495.1,130.7 497.8,130.3 500.5,129.9 503.2,129.6 505.8,129.2 508.5,128.8 511.2,128.5 513.9,128.2 516.6,127.9 519.3,127.6 522.0,127.3 524.7,127.0 527.4,126.7 530.1,126.4 532.8,126.2 535.4,125.9 538.1,125.7 540.8,125.5 543.5,125.2 546.2,125.0 548.9,124.8 551.6,124.6 554.3,124.5 557.0,124.3 559.7,124.1 562.3,124.0 565.0,123.9 567.7,123.7 570.4,123.6 573.1,123.5 575.8,123.4 578.5,123.3 581.2,123.2 583.9,123.2 586.5,123.1 589.2,123.1 591.9,123.0 594.6,123.0 597.3,123.0 600.0,123.0"/>
+<circle class="dot" cx="146.1" cy="247.9" r="4"/><text class="t" x="156.1" y="265.9">1% low</text><circle class="dot" cx="251.1" cy="201.5" r="4"/><text class="t" x="261.1" y="219.5">5% low</text><circle class="dot" cx="331.4" cy="171.2" r="4"/><text class="t" x="341.4" y="189.2">10% low</text>
+<text class="tl" x="94.3" y="48.8">dashed: continuum string, ω = vk</text>
+<text class="tl" x="94.3" y="73.5">solid: discrete chain</text>
+<text class="t" x="331.0" y="328" text-anchor="middle">ka / π  (1 = zone boundary, wavelength = 2a)</text>
+<text class="t" x="14" y="156.0" transform="rotate(-90 14 156.0)" text-anchor="middle">ω / ω_max,  ω_max = 2√(K/m)</text>
+</svg><figcaption>Figure 1 · Chain against continuum. The curves part company only when the wavelength is within a few spacings.</figcaption></figure>
+<div class="tablebox"><table>
+<thead><tr><th>Deviation from continuum</th><th><i>ka</i></th><th>Wavelength / <i>a</i></th></tr></thead>
+<tbody>
+<tr><td>1%</td><td>0.49</td><td>12.8</td></tr>
+<tr><td>5%</td><td>1.10</td><td>5.7</td></tr>
+<tr><td>10%</td><td>1.57</td><td>4.0</td></tr>
+</tbody></table></div>
+<p>For a guitar string, atomic spacing near 0.3 nm and a fundamental wavelength near 1.3 m put the deviation near 10<sup>−19</sup>. No standing-wave lab can see it, so the string cannot decide between a structured substrate and a continuum. A bead chain, an LC ladder or a crystal lattice can, because there the wavelength is within a few spacings.</p>
+
+<h2 data-n="04">The test, made concrete</h2>
+<p>In each system below, the spacing <i>a</i> is fixed by a measurement that does not use the dispersion curve, and the premise then predicts the whole curve with no free parameter. The test is whether the measured curve lands on the prediction.</p>
+<div class="tablebox"><table>
+<thead><tr><th>System</th><th>How <i>a</i> and the other inputs are fixed</th><th>Prediction</th><th>Counts as a pass</th></tr></thead>
+<tbody>
+<tr><td>Bead chain, <i>N</i> = 10 beads on a stretched wire</td><td><i>a</i> by ruler, <i>m</i> by balance, <i>K</i> by the static stretch under a known load</td><td>Mode <i>n</i> at 2√(<i>K</i>/<i>m</i>) sin(<i>n</i>π / (2(<i>N</i>+1))). Mode 1 sits 0.34% below the continuum value, mode 3 sits 3.0% below</td><td>Measured mode frequencies within the combined measurement uncertainty, including the sub-percent offsets the continuum string cannot produce</td></tr>
+<tr><td>LC ladder, <i>N</i> = 10 identical sections</td><td><i>L</i> and <i>C</i> of each section from an LCR meter</td><td>Cutoff at 2/√(<i>LC</i>); resonances below it follow the same sine law with <i>a</i> = one section</td><td>Measured cutoff and resonances within component tolerance of the predicted values</td></tr>
+<tr><td>Crystal chain direction, by neutron scattering</td><td><i>a</i> from X-ray diffraction; sound speed <i>v</i> from ultrasound</td><td>Zone-boundary frequency near 2<i>v</i>/<i>a</i> for a single-mass chain along that direction</td><td>Agreement within the known corrections for 3D crystals: several branches, anisotropy, multiple atoms per cell</td></tr>
+</tbody></table></div>
+<p class="note">The first two are bench experiments that take days, and the sine law is the standard textbook result for them. We have not looked up measured crystal values for the third, so we offer it as a test design, not a result.</p>
+<p>A match supports the premise for lattice-like media. A mismatch, or no way to fix <i>a</i> in advance, means the premise adds a definition and no prediction.</p>
+<p>One more point, so the test is fair to both sides. Ordinary atomism already predicts these curves correctly, because the medium visibly has parts. The test becomes informative for your claim only where <i>a</i> is not known from microstructure: what value of <i>a</i> does the substrate premise predict for a medium with no visible constituents, and what independent measurement would fix it?</p>
+
+<h2 data-n="05">What we can isolate: periodicity from boundary reflection</h2>
+<p>A repeating pattern appears in very different media. The string, the pipe, the bead chain and even the repeating cells in a rocket exhaust (Mach diamonds) share one mechanism class. A disturbance travelling at speed <i>v</i> reflects at boundaries, and the pattern repeats whenever the round trip closes its phase:</p>
+<div class="formula" role="math" aria-label="Two k L plus phi one plus phi two equals two pi n">
+  <span class="lbl">Round-trip condition</span>
+  2<i>kL</i> + φ<sub>1</sub> + φ<sub>2</sub> = 2π<i>n</i>
+</div>
+<p>Here <i>L</i> is the distance between boundaries and φ<sub>1</sub>, φ<sub>2</sub> are the reflection phases, 0 or π depending on whether the boundary is fixed or free. This is textbook resonance (Sturm–Liouville quantization), not a new result. Its use here is that it separates three things: the geometry of the boundaries (<i>L</i>), the reflection type (φ), and the medium (<i>v</i>). Periodicity comes from the first two. The medium enters only through <i>v</i>.</p>
+<div class="tablebox"><table>
+<thead><tr><th>Instance</th><th>Boundaries and spacing</th><th>What sets <i>v</i> or the scale</th><th>What it adds beyond the condition</th></tr></thead>
+<tbody>
+<tr><td>String, both ends fixed</td><td>φ = π at each end; λ/2 = <i>L</i>/<i>n</i></td><td><i>v</i> = √(<i>T</i>/μ)</td><td>Linear, smooth sinusoid; oscillates in time</td></tr>
+<tr><td>Open pipe</td><td>Free ends; λ/2 = <i>L</i>/<i>n</i></td><td>Sound speed of the gas</td><td>Linear; pressure and displacement nodes swap</td></tr>
+<tr><td>Bead chain, fixed ends</td><td>ω<sub><i>n</i></sub> = 2√(<i>K</i>/<i>m</i>) sin(<i>n</i>π / (2(<i>N</i>+1)))</td><td><i>v</i> = <i>a</i>√(<i>K</i>/<i>m</i>) in the long-wave limit</td><td>Discreteness: the sine law and a cutoff at the zone boundary</td></tr>
+<tr><td>LC ladder</td><td>Same sine law with <i>a</i> = one section</td><td>Cutoff at 2/√(<i>LC</i>)</td><td>An electrical instance of the chain</td></tr>
+<tr><td>Mach diamonds in an underexpanded jet</td><td>Expansion waves reflect off the free jet edge with a sign flip; cell spacing scales as <i>D</i>√(<i>M</i>² − 1)</td><td>Sound and flow speeds of the exhaust gas</td><td>Nonlinear: sharp shock fronts, stationary pattern because the gas flows; needs the gas to exist</td></tr>
+</tbody></table></div>
+<p>The jet is a useful case against reading too much from periodicity. A strongly periodic pattern appears there with no lattice at all: the gas is treated as a continuum and no spacing <i>a</i> appears in the equations. Seeing a repeating structure therefore does not tell you whether a discrete substrate lies underneath. It does support your dependency order in one respect, since the pattern cannot exist without the gas. The exact prefactor of the cell spacing is not derived here; only the scaling is stated.</p>
+
+<h2 data-n="06">The question back: what sets <i>v</i>?</h2>
+<p>Once the pattern is separated from the medium, your substrate question becomes sharp. For the string, <i>v</i> = √(<i>T</i>/μ). For a lattice, <i>v</i> = <i>a</i>√(<i>K</i>/<i>m</i>). For the jet, it is the gas sound speed and flow speed. In each case something measurable fixes <i>v</i>, and it can be checked independently of the pattern.</p>
+<div class="ask">
+  <span class="label">What we ask</span>
+  <p>What fixes <i>v</i> in your substrate, from measurements independent of the pattern it is meant to explain? And what result would count against your premise? Your string test, as written, has no such result. If you can name both, the premise has content. If not, the periodicity argument holds without it.</p>
+</div>
+
+<h2 data-n="07">What we are not claiming</h2>
+<p>A match in one lattice system would support a structured substrate for that kind of medium, not one universal substrate; that step would need its own derivation. The round-trip condition and the dispersion form are shared across many systems because they are generic results for waves and coupled oscillators, so we read them as a shared functional form, not a shared invariant between unrelated systems. The figures and tables here are standard textbook results checked numerically; we have not compared them against measured data in this note.</p>
+
+<footer>
+  Principia Orthogona · <a href="https://totogt.github.io/geometry/">totogt.github.io/geometry</a><br>
+  Source article: <a href="https://www.linkedin.com/pulse/reduction-before-oscillator-james-reeves-3plgc/">The Reduction Before the Oscillator</a> · J. Reeves
+</footer>
+</main>
+<script>
+(function(){
+  var b=document.getElementById('theme'),r=document.documentElement;
+  function cur(){var t=r.getAttribute('data-theme');if(t)return t;return matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}
+  b.addEventListener('click',function(){r.setAttribute('data-theme',cur()==='dark'?'light':'dark');});
+})();
+</script>
+</body>
+</html>
