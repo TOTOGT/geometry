@@ -13046,3 +13046,17 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 - Record: docs/audit-book7-ch-hawking-2026-11-20.md; proposed repair: docs/proposed-patches/ch-hawking-h1-replacement.md. No chapter edited.
 - Main findings: Theorem H.1 does not state either singularity theorem (missing non-compact Cauchy surface, or generic and chronology conditions); "instantiation of Banach" and "unique fixed point" are not supported by the proofs (focusing plus compactness); "3 structural identifications verified" has no Lean file or script behind it; claims.tsv ch-hawking#5 is `proved` only because "Not proved" contains "proved".
 - Open: nine open versus nine closed sorrys (Book V ch3), Reith quote source, "29 years old", section 8 beyond 8.2 not read.
+
+## 2026-11-20 — Book 7: Raychaudhuri, Schwarzschild and Penrose chapters added (author's decision; neighbors: ch-chandrasekhar template)
+
+- New: book7/ch-raychaudhuri.html, ch-schwarzschild.html, ch-penrose.html with ch-raychaudhuri-verify.py, ch-schwarzschild-verify.py, ch-penrose-verify.py (all ALL PASS on the Mac); docs/subjects.tsv rows; book7/index.html cards.
+- Generated boxes (po-subject, po-run, po-related) written by tools/subject_tags.py, run_yourself.py, crossref.py. The generators also rewrote 50, 7 and 11 unrelated stale pages; those were restored to HEAD content and are NOT part of this change (48 crossref and 11 run_yourself pages remain stale from before).
+- tools/gold_standard.py did not stamp a Gold Standard box on the three new pages (it reports 0 stale); not hand-written. Cause not investigated.
+- Not established: the biographical facts and journal references in all three chapters are from memory (a search confirmed pages exist, none read); Penrose's non-compact Cauchy-surface hypothesis is stated, not computed; no map from the dm3 fold to a conjugate point or to the ISCO exists, and each chapter says so.
+- Correction to Gravity/FERREIRA_REVIEW_MAP.md: Hawking and Ellis section 5.5 was not found to treat circular orbits; the ISCO is computed in ch-schwarzschild-verify.py instead.
+
+## 2026-11-20 — chGravity-scales.html: ladder gains a column "Is gravity measured here?" (author's go-ahead)
+
+- Added to the g-series ladder in chGravity-scales.html: one column, qualitative statements only (no numbers, so nothing is published without a producing script), a dated note under the ladder, and a mobile rule so the 5-column grid stacks below 700 px. Background about the experimental status of gravity from the standard literature, not a dm3 result; not checked against sources in this session beyond the Ferreira review headings (arXiv:1902.10503).
+- The Gravity paper's own Table 1 (the Zenodo PDF in DM3-lab/Gravity) is NOT edited; the same column would need adding there.
+- Pre-existing, not changed: the operator table on the same page (.op-table) overflows to 687 px at a 420 px viewport. The commit also carries the author's uncommitted regenerated po-related box.
