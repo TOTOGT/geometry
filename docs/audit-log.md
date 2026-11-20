@@ -13040,3 +13040,9 @@ NOT edited: generated "related" asides and index rows (book8/ch8-3, book8/ch9-ca
 ## 2026-11-16 — Figure 1 caption: capture date and time made explicit
 
 - Caption now states capture at Monday 16 November 2026, 6:34 AM EST (author's computer clock; file name 6.34.00 AM; file modification time 11:34 UTC = 6:34 AM EST), 1 h 34 min after the page's 05:00 AM EST data time. The clock itself is not independently verified. No change to the image or its SHA-256.
+
+## 2026-11-20 — book7/ch-hawking.html audited against Hawking and Ellis (1973) section 8.2
+
+- Record: docs/audit-book7-ch-hawking-2026-11-20.md; proposed repair: docs/proposed-patches/ch-hawking-h1-replacement.md. No chapter edited.
+- Main findings: Theorem H.1 does not state either singularity theorem (missing non-compact Cauchy surface, or generic and chronology conditions); "instantiation of Banach" and "unique fixed point" are not supported by the proofs (focusing plus compactness); "3 structural identifications verified" has no Lean file or script behind it; claims.tsv ch-hawking#5 is `proved` only because "Not proved" contains "proved".
+- Open: nine open versus nine closed sorrys (Book V ch3), Reith quote source, "29 years old", section 8 beyond 8.2 not read.
