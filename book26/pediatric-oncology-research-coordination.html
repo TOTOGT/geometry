@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pediatric oncology research coordination: a synthetic demonstration · Pablo Nogueira Grossi</title>
+<meta name="description" content="A fully synthetic research-coordination workflow: protocol-to-task matrix, participant tracking, data-quality audit, weekly report and escalation guide, with reproducible code.">
+<style>
+:root{--bg:#fbfaf7;--fg:#1d2430;--mute:#5a6472;--line:#d9d6cc;--card:#fff;--acc:#1f4e79}
+@media (prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e8e6df;--mute:#a3abb7;--line:#2c333f;--card:#1b212b;--acc:#8fb8e0}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 Georgia,"Times New Roman",serif}
+main{max-width:46rem;margin:0 auto;padding:2rem 1rem 4rem}
+h1{font-size:1.8rem;line-height:1.2;margin:0 0 .3rem}
+h2{font-size:1.2rem;margin:2.2rem 0 .5rem;border-bottom:1px solid var(--line);padding-bottom:.2rem}
+h3{font-size:1.02rem;margin:1.1rem 0 .1rem}
+.meta{color:var(--mute);font-size:.95rem;margin:0 0 .3rem;font-style:italic}
+ul{margin:.3rem 0 .6rem;padding-left:1.2rem}
+a{color:var(--acc)}
+.note{color:var(--mute);font-size:.95rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:1rem 1.2rem;margin:1rem 0}
+footer{margin-top:3rem;border-top:1px solid var(--line);padding-top:1rem;color:var(--mute);font-size:.95rem}
+/* Shared employer-facing layer for Book XXVI chapters. Add one <link> in <head>, one block after <body>. */
+.ei{--ei-bg:#f4f1e8;--ei-fg:#1d2430;--ei-mute:#5a6472;--ei-line:#d9d6cc;--ei-acc:#1f4e79;
+  max-width:46rem;margin:1rem auto 2rem;padding:1rem 1.2rem;background:var(--ei-bg);color:var(--ei-fg);
+  border:1px solid var(--ei-line);border-left:4px solid var(--ei-acc);border-radius:6px;font:16px/1.55 Georgia,serif}
+@media (prefers-color-scheme:dark){.ei{--ei-bg:#1b212b;--ei-fg:#e8e6df;--ei-mute:#a3abb7;--ei-line:#2c333f;--ei-acc:#8fb8e0}}
+.ei a{color:var(--ei-acc)}
+.ei .ei-kicker{font:600 .75rem/1.2 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--ei-mute);margin:0}
+.ei h2{font-size:1.25rem;margin:.3rem 0 .1rem}
+.ei .ei-by{color:var(--ei-mute);margin:0 0 .8rem;font-size:.95rem}
+.ei dl{margin:0}
+.ei dt{font:600 .75rem/1.2 system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--ei-mute);margin:.7rem 0 .1rem}
+.ei dd{margin:0}
+.ei .ei-scope{margin-top:.9rem;padding-top:.7rem;border-top:1px solid var(--ei-line);color:var(--ei-mute);font-size:.95rem}
+.ei nav{margin-top:.8rem;font:.9rem system-ui,sans-serif}
+.ei nav a{margin-right:1rem}
+
+table{width:100%;border-collapse:collapse;margin:.6rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:.5rem .4rem}
+th{font:600 .75rem/1.2 system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--mute)}
+@media (max-width:560px){table,thead,tbody,tr,th,td{display:block}thead{display:none}tr{border-bottom:1px solid var(--line);padding:.5rem 0}td{border:0;padding:.15rem 0}}
+</style>
+</head>
+<body>
+<!--
+Preprint. The CSV and scripts are in pediatric-coordination/ beside this page. Open item: a second person has not yet re-run the scripts.
+-->
+<main>
+<aside class="ei" aria-label="Employer-facing introduction">
+  <p class="ei-kicker">Career portfolio work sample · Research coordination</p>
+  <h2>Pediatric oncology research coordination: a synthetic demonstration</h2>
+  <p class="ei-by">Pablo Nogueira Grossi · Newark, NJ</p>
+  <dl>
+    <dt>The problem</dt><dd>A principal investigator running a pediatric oncology study needs a coordinator who keeps the study organized, notices missing or inconsistent information, and produces reports a team can trust. A résumé cannot show that. This chapter shows the working method on made-up data.</dd>
+    <dt>What this chapter gives you</dt><dd>A protocol-to-task matrix, a participant-tracking file of 30 fictional participants, a data-quality audit, a weekly coordinator report, and an escalation guide, with the code that produces every number.</dd>
+    <dt>Skills shown</dt><dd>Turning a protocol into tasks, record tracking, data-quality checking, reproducible reporting, knowing what to escalate, plain-language documentation.</dd>
+    <dt>How it was made</dt><dd>The workflow and code were produced with AI assistance (Claude) under my direction. I set the scope and the rules. No second person has re-run the code, and the audit rules are mine, not a published standard.</dd>
+  </dl>
+  <p class="ei-scope"><strong>Scope:</strong> Everything here is fictional. The study, the participants and the events are invented, and no patients were recruited, contacted or followed. This is not clinical research, has no IRB approval, and does not show oncology, clinical or protocol-compliance experience. Consent, safety and protocol questions are for the study team, not for a coordinator's judgment.</p>
+  <nav><a href="../portfolio.html">Portfolio home</a><a href="index.html">Book index</a></nav>
+</aside>
+<h1>Pediatric oncology research coordination</h1>
+<p class="meta">Preprint · Book XXVI · November 2026 · synthetic data only</p>
+
+<h2>1. The setting, invented</h2>
+<p>Imagine an observational study of children receiving standard cancer care at two sites. The study does not change treatment. The coordinator tracks consent, scheduled research visits, whether each record is complete, and who still needs follow-up. Everything below is made up to show the method: study IDs run SYN-001 to SYN-030, with no names, birth dates or other identifying information.</p>
+
+<h2>2. Protocol-to-task matrix</h2>
+<table>
+<thead><tr><th>A protocol says</th><th>The coordinator's task</th><th>Who decides if it is unclear</th></tr></thead>
+<tbody>
+<tr><td data-l="Protocol">Participants give consent before any study procedure</td><td data-l="Task">Check each record shows a consent date and form version that come before enrollment and the first visit</td><td data-l="Decides">Study lead, and the IRB where required</td></tr>
+<tr><td data-l="Protocol">Research visits at baseline, about 3 months and about 6 months</td><td data-l="Task">Track visit dates; flag visits out of order or missing</td><td data-l="Decides">PI</td></tr>
+<tr><td data-l="Protocol">Participants are followed until completion or withdrawal</td><td data-l="Task">Flag active participants with no contact for over 90 days</td><td data-l="Decides">PI and study team</td></tr>
+<tr><td data-l="Protocol">Records are complete and accurate</td><td data-l="Task">Run the audit weekly; list open queries; never overwrite a source value</td><td data-l="Decides">Data manager and PI</td></tr>
+<tr><td data-l="Protocol">Safety events and deviations are reported as required</td><td data-l="Task">Pass the information to the right person the same day</td><td data-l="Decides">Clinical team and PI; not the coordinator</td></tr>
+</tbody>
+</table>
+<p class="note">The protocol statements are illustrative choices for this demonstration, not quotations from a real protocol. Published requirements come from sources such as <a href="https://clinicaltrials.gov">ClinicalTrials.gov</a> and the <a href="https://www.cancer.gov">National Cancer Institute</a>. I have not summarized those here, and a real study follows its own protocol and institution.</p>
+
+<h2>3. The tracking file</h2>
+<p><a href="pediatric-coordination/synthetic_participants.csv">synthetic_participants.csv</a> holds 31 rows for 30 participants, one row per participant plus one deliberately duplicated row. Columns: study ID, site, age group, consent date and version, enrollment date, baseline and two later visit dates, last contact, follow-up status, and whether a data query is open. It is generated by <a href="pediatric-coordination/synth_generate.py">synth_generate.py</a> with a fixed random seed. The generator plants a known set of defects, listed in a separate file that the audit never reads.</p>
+
+<h2>4. The data-quality audit</h2>
+<p><a href="pediatric-coordination/coordination_audit.py">coordination_audit.py</a> applies five rules as of 2026-11-02: a required field is blank; a study ID appears twice; dates are out of order; an active participant has had no contact for more than 90 days; a participant marked Completed has no third visit. Results:</p>
+<table>
+<thead><tr><th>Rule</th><th>Records</th><th>Study IDs</th></tr></thead>
+<tbody>
+<tr><td data-l="Rule">completed_missing_visit3</td><td data-l="Records">2</td><td data-l="IDs">SYN-006, SYN-021</td></tr>
+<tr><td data-l="Rule">duplicate_id</td><td data-l="Records">1</td><td data-l="IDs">SYN-009</td></tr>
+<tr><td data-l="Rule">missing_field</td><td data-l="Records">4</td><td data-l="IDs">SYN-004, SYN-011, SYN-017, SYN-023</td></tr>
+<tr><td data-l="Rule">overdue</td><td data-l="Records">3</td><td data-l="IDs">SYN-002, SYN-011, SYN-020</td></tr>
+<tr><td data-l="Rule">sequence</td><td data-l="Records">3</td><td data-l="IDs">SYN-008, SYN-014, SYN-026</td></tr>
+</tbody>
+</table>
+<p><strong>Counting.</strong> The file has 31 rows because SYN-009 appears twice. That is 30 unique participants, and the audit counts participants by unique study ID. Of those 30, 12 carry at least one flag and 18 carry none. There are 13 flags in all, because a record can carry more than one: SYN-011 appears under two rules. 8 participants have an open data query. Follow-up status counts: Active 23, Completed 5, Withdrawn 2. These counts are computed from the file, not typed in.</p>
+<p><strong>Flags and open queries measure different things.</strong> A flag is something the audit found. An open query is something already raised with the site. Three of the 12 flagged participants have an open query; the other 9 have none, and 5 participants have an open query the audit did not flag. In this made-up file the query column is random and not linked to the audit, which shows the operational point: a flagged record that nobody has queried is a record nobody is yet working on, and the weekly report should make that visible.</p>
+<h3>Every flag</h3>
+<table>
+<thead><tr><th>Record</th><th>Rule</th><th>Why flagged</th></tr></thead>
+<tbody>
+<tr><td data-l="Record">SYN-002</td><td data-l="Rule">overdue</td><td data-l="Why flagged">last contact 135 days before 2026-11-02</td></tr>
+<tr><td data-l="Record">SYN-004</td><td data-l="Rule">missing_field</td><td data-l="Why flagged">consent_date is blank</td></tr>
+<tr><td data-l="Record">SYN-006</td><td data-l="Rule">completed_missing_visit3</td><td data-l="Why flagged">status Completed but visit 3 is blank</td></tr>
+<tr><td data-l="Record">SYN-008</td><td data-l="Rule">sequence</td><td data-l="Why flagged">enrollment before consent</td></tr>
+<tr><td data-l="Record">SYN-009</td><td data-l="Rule">duplicate_id</td><td data-l="Why flagged">2 rows share this study_id</td></tr>
+<tr><td data-l="Record">SYN-011</td><td data-l="Rule">missing_field</td><td data-l="Why flagged">baseline_visit_date is blank</td></tr>
+<tr><td data-l="Record">SYN-011</td><td data-l="Rule">overdue</td><td data-l="Why flagged">last contact 135 days before 2026-11-02</td></tr>
+<tr><td data-l="Record">SYN-014</td><td data-l="Rule">sequence</td><td data-l="Why flagged">visit 2 before baseline</td></tr>
+<tr><td data-l="Record">SYN-017</td><td data-l="Rule">missing_field</td><td data-l="Why flagged">consent_version is blank</td></tr>
+<tr><td data-l="Record">SYN-020</td><td data-l="Rule">overdue</td><td data-l="Why flagged">last contact 135 days before 2026-11-02</td></tr>
+<tr><td data-l="Record">SYN-021</td><td data-l="Rule">completed_missing_visit3</td><td data-l="Why flagged">status Completed but visit 3 is blank</td></tr>
+<tr><td data-l="Record">SYN-023</td><td data-l="Rule">missing_field</td><td data-l="Why flagged">enrollment_date is blank</td></tr>
+<tr><td data-l="Record">SYN-026</td><td data-l="Rule">sequence</td><td data-l="Why flagged">baseline visit before consent</td></tr>
+</tbody>
+</table>
+<h3>A check that could fail</h3>
+<p><a href="pediatric-coordination/verify.py">verify.py</a> compares what the audit found with the defects the generator planted, rule by rule. It reports any planted defect the audit missed and any flag the audit raised that was not planted. In this run it printed PASS: every planted defect was found and nothing else was flagged. The audit never reads the planted-defect list, so the check does not just repeat the same calculation twice. It is only partly independent: I wrote the generator, the rules and the check, so a mistaken idea of what counts as a defect would pass all three. It shows that the rules fire as designed on this file. It does not show the rules are complete, and real data would contain problems I did not think to plant. I also re-ran all three scripts from a clean directory and the outputs matched the files in this chapter byte for byte.</p>
+
+<h2>5. The weekly coordinator report</h2>
+<p>The script also writes <a href="pediatric-coordination/weekly_report.md">weekly_report.md</a>: counts by status, flagged records by rule, records with more than one flag, open queries, and a short section on what needs a person. A real report would go to the PI and use the study's own template.</p>
+
+<h2>6. Escalation guide</h2>
+<ul>
+<li><strong>Consent.</strong> A missing or inconsistent consent date or version goes to the study lead, and to the IRB where required. A coordinator does not decide whether consent was valid.</li>
+<li><strong>Protocol deviations.</strong> Report to the PI the same day. Do not correct, explain away or backfill.</li>
+<li><strong>Safety or clinical questions.</strong> Pass to the clinical team immediately. The coordinator makes no clinical judgment.</li>
+<li><strong>Duplicate or conflicting records.</strong> Compare against source documents under the study's procedures. Never overwrite a value without a documented query and resolution.</li>
+<li><strong>Anything unsure.</strong> Ask. When in doubt, the answer is a person, not a script.</li>
+</ul>
+
+<h2>7. What I would ask the principal investigator before starting</h2>
+<ul>
+<li>Which approved protocol and amendment version applies, and where the current copy lives.</li>
+<li>The study's data dictionary: which fields are required, their formats, and what a valid value looks like.</li>
+<li>Who resolves a data query, how a resolution is documented, and how long it should take.</li>
+<li>The escalation pathway: who receives a consent concern, a deviation or a safety event, and how fast.</li>
+<li>The reporting schedule and template, and who receives the weekly report.</li>
+<li>Which study-management and data-capture systems the team uses, and what training comes first.</li>
+</ul>
+<p>Each is a decision that belongs to the institution and the study team. A coordinator's job is to find out the answer, not to invent one.</p>
+
+<h2>8. What this does not show</h2>
+<ul>
+<li>That I have run a clinical study, worked with patients, handled consent, or used any study-management system.</li>
+<li>That the audit rules match any real protocol or a standard such as good clinical practice. They are a worked example.</li>
+<li>Anything about children, cancer or treatment. The data carry no clinical content.</li>
+</ul>
+<p>What it does show is how I would organize records, check them, document what I did, and know where my role ends. A real study would teach me the rest under supervision.</p>
+</main>
+</body>
+</html>

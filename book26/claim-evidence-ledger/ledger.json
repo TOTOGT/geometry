@@ -1,0 +1,66 @@
+[
+ {
+  "id": "C1",
+  "kind": "Arithmetic",
+  "statement": "The radiologist average F1 (0.387) is the mean of the four individual F1 values.",
+  "status": "Verified (arithmetic, from printed values)",
+  "detail": "Mean of [0.383, 0.356, 0.365, 0.442] = 0.3865; range allowing for rounding 0.3860 to 0.3870; printed 0.387. This shows the printed average is consistent with the arithmetic mean of the four printed scores. The text read describes it only as the average F1 across radiologists, so that it is defined as an arithmetic mean is an inference that fits the numbers, not a stated definition.",
+  "agreement_by_construction": false
+ },
+ {
+  "id": "C2",
+  "kind": "Arithmetic",
+  "statement": "The F1 difference (0.051) equals CheXNet F1 minus the radiologist average.",
+  "status": "Partially supported: printed values do not reproduce it",
+  "detail": "0.435 - 0.387 = 0.048; allowing for rounding of both inputs 0.047 to 0.049; printed 0.051 lies outside that range. The paper says the difference was computed on the same bootstrap samples, so the printed difference may be a different statistic (for example a mean of resampled differences). The text read does not say. This is an unexplained discrepancy, not a demonstrated error.",
+  "agreement_by_construction": false
+ },
+ {
+  "id": "C3a",
+  "kind": "Statistical",
+  "statement": "The CheXNet F1 interval is centred near the point estimate.",
+  "status": "Consistent (not a verification)",
+  "detail": "Midpoint 0.4340 vs point 0.435. Percentile-bootstrap intervals can be asymmetric, especially for a nonlinear statistic such as F1, so being centred near the estimate is neither required nor a check on the interval. This is a weak plausibility signal only and says nothing about whether the F1 itself is right.",
+  "agreement_by_construction": true
+ },
+ {
+  "id": "C3b",
+  "kind": "Statistical",
+  "statement": "The radiologist average F1 interval is centred near the point estimate.",
+  "status": "Consistent (not a verification)",
+  "detail": "Midpoint 0.3860 vs point 0.387. Percentile-bootstrap intervals can be asymmetric, especially for a nonlinear statistic such as F1, so being centred near the estimate is neither required nor a check on the interval. This is a weak plausibility signal only and says nothing about whether the F1 itself is right.",
+  "agreement_by_construction": true
+ },
+ {
+  "id": "C4",
+  "kind": "Statistical",
+  "statement": "The difference interval (0.005 to 0.084) is compatible with the two F1 intervals.",
+  "status": "Consistent (plausibility only; not independently checkable without the per-image data)",
+  "detail": "Normal-approximation standard errors: CheXNet 0.0240, radiologists 0.0286, difference 0.0202. Treating the percentile intervals as if they were symmetric normal intervals, these imply a correlation of 0.72 between the two resampled F1 values. That is an exploratory approximation, not a reconstruction or a check of the published bootstrap, and its only use is to see whether the three intervals could plausibly belong together when both F1 values are scored on the same 420 images.",
+  "agreement_by_construction": false
+ },
+ {
+  "id": "C5",
+  "kind": "Statistical",
+  "statement": "CheXNet F1 = 0.435 (95% CI 0.387 to 0.481) on 420 images.",
+  "status": "Not independently checkable",
+  "detail": "Needs per-image predictions and labels, or at least the number of pneumonia-positive images, none of which is in the text read. The bootstrap (10,000 resamples) cannot be rerun. Recorded for the reader: the paper says the difference was computed on the same bootstrap samples (paired resampling). Whether unrounded values were used is not stated in the text read, and subtracting the displayed point estimates does not reproduce the whole analysis.",
+  "agreement_by_construction": false
+ },
+ {
+  "id": "C6",
+  "kind": "Clinical interpretation",
+  "statement": "'CheXNet exceeds average radiologist performance on the F1 metric' (abstract).",
+  "status": "Partially supported",
+  "detail": "What the printed numbers support: a higher F1 on one 420-image set, with a difference interval whose lower bound (0.005) is close to zero. What they do not establish: performance in clinical use, performance on other hospitals' images, or that F1 against these labels measures diagnostic quality. The paper itself names frontal-only images and no patient history as limits. The abstract wording is about F1; a reader should not carry it over to 'radiologist-level pneumonia detection' without the qualifiers.",
+  "agreement_by_construction": false
+ },
+ {
+  "id": "C7",
+  "kind": "Arithmetic",
+  "statement": "A reader might assume that exceeding the average radiologist means exceeding each radiologist.",
+  "status": "Contradicted by the printed values",
+  "detail": "The highest printed individual F1 is 0.442 (radiologist 4), above CheXNet's 0.435. Exceeding the average is not exceeding every radiologist. The text read gives no interval for individual radiologists, so whether radiologist 4 and CheXNet differ meaningfully is not checkable here. The abstract does not claim to exceed every radiologist; the check guards against a reader assuming it does.",
+  "agreement_by_construction": false
+ }
+]

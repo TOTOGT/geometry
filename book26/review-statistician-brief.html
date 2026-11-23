@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistician review brief: CheXNet</title>
+<meta name="description" content="Review document, working version">
+<style>
+:root{--bg:#fbfaf7;--fg:#1d2430;--mute:#5a6472;--line:#d9d6cc;--card:#fff;--acc:#1f4e79}
+@media (prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e8e6df;--mute:#a3abb7;--line:#2c333f;--card:#1b212b;--acc:#8fb8e0}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 Georgia,"Times New Roman",serif}
+main{max-width:46rem;margin:0 auto;padding:2rem 1rem 4rem}
+h1{font-size:1.8rem;line-height:1.2;margin:0 0 .3rem}
+h2{font-size:1.2rem;margin:2.2rem 0 .5rem;border-bottom:1px solid var(--line);padding-bottom:.2rem}
+h3{font-size:1.02rem;margin:1.1rem 0 .1rem}
+.meta{color:var(--mute);font-size:.95rem;margin:0 0 .3rem;font-style:italic}
+ul{margin:.3rem 0 .6rem;padding-left:1.2rem}
+a{color:var(--acc)}
+.note{color:var(--mute);font-size:.95rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:1rem 1.2rem;margin:1rem 0}
+footer{margin-top:3rem;border-top:1px solid var(--line);padding-top:1rem;color:var(--mute);font-size:.95rem}
+/* Shared employer-facing layer for Book XXVI chapters. Add one <link> in <head>, one block after <body>. */
+.ei{--ei-bg:#f4f1e8;--ei-fg:#1d2430;--ei-mute:#5a6472;--ei-line:#d9d6cc;--ei-acc:#1f4e79;
+  max-width:46rem;margin:1rem auto 2rem;padding:1rem 1.2rem;background:var(--ei-bg);color:var(--ei-fg);
+  border:1px solid var(--ei-line);border-left:4px solid var(--ei-acc);border-radius:6px;font:16px/1.55 Georgia,serif}
+@media (prefers-color-scheme:dark){.ei{--ei-bg:#1b212b;--ei-fg:#e8e6df;--ei-mute:#a3abb7;--ei-line:#2c333f;--ei-acc:#8fb8e0}}
+.ei a{color:var(--ei-acc)}
+.ei .ei-kicker{font:600 .75rem/1.2 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--ei-mute);margin:0}
+.ei h2{font-size:1.25rem;margin:.3rem 0 .1rem}
+.ei .ei-by{color:var(--ei-mute);margin:0 0 .8rem;font-size:.95rem}
+.ei dl{margin:0}
+.ei dt{font:600 .75rem/1.2 system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--ei-mute);margin:.7rem 0 .1rem}
+.ei dd{margin:0}
+.ei .ei-scope{margin-top:.9rem;padding-top:.7rem;border-top:1px solid var(--ei-line);color:var(--ei-mute);font-size:.95rem}
+.ei nav{margin-top:.8rem;font:.9rem system-ui,sans-serif}
+.ei nav a{margin-right:1rem}
+
+table{width:100%;border-collapse:collapse;margin:.6rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:.5rem .4rem}
+th{font:600 .75rem/1.2 system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--mute)}
+@media (max-width:560px){table,thead,tbody,tr,th,td{display:block}thead{display:none}tr{border-bottom:1px solid var(--line);padding:.5rem 0}td{border:0;padding:.15rem 0}}
+</style>
+</head>
+<body>
+<!-- Preprint. Review document, working version. -->
+<main>
+<h1>Statistician review brief: CheXNet worked example</h1>
+<p class="meta">Review document · working version · for an independent statistician</p>
+<h2>Context</h2>
+<p>A short chapter demonstrates a method for checking medical-AI claims, using the CheXNet paper (arXiv:1711.05225 v3) as the worked example. The chapter recomputes what the printed numbers allow and labels each result as verified, partially supported, contradicted or not independently checkable. We ask for a review of three statistical statements only. Please do not review the clinical claims.</p>
+<p>Please work from the source-verified figures that accompany this brief (the output of the separate source-fidelity checklist). If a figure there differs from the chapter, use the verified figure and tell us.</p>
+<h2>Figures in use (as printed in the paper, once verified)</h2>
+<ul>
+<li>420 test images; four radiologists; bootstrap with 10,000 resamples; 95% intervals from the 2.5th and 97.5th percentiles; the difference computed on the same bootstrap samples.</li>
+<li>F1: CheXNet 0.435 (0.387, 0.481); radiologist average 0.387 (0.330, 0.442); individual radiologists 0.383, 0.356, 0.365, 0.442; difference 0.051 (0.005, 0.084).</li>
+<li>Not available to us: the number of pneumonia-positive images, per-image predictions and labels, and bootstrap replicates.</li>
+</ul>
+<h2>Question 1: the difference (ledger row C2)</h2>
+<p>The paper prints a difference of 0.051. Subtracting the printed point estimates gives 0.435 − 0.387 = 0.048, and rounding both to three decimals cannot account for the gap. The chapter calls this an unexplained discrepancy, not an error. <strong>Could the bootstrap estimator explain it, for example a mean or median of the resampled differences, or a different way of averaging across radiologists? What evidence would establish the explanation?</strong></p>
+<h2>Question 2: interval midpoints (rows C3a and C3b)</h2>
+<p>The chapter notes that each interval's midpoint is close to its point estimate, and says percentile-bootstrap intervals can be asymmetric for a nonlinear statistic such as F1, so this is only a weak plausibility signal. <strong>Is that description statistically accurate? Do the midpoint calculations carry any meaningful evidence?</strong></p>
+<h2>Question 3: implied correlation (row C4)</h2>
+<p>Treating the percentile intervals as if they were symmetric normal intervals, we derived standard errors of about 0.024 (CheXNet), 0.029 (radiologists) and 0.020 (difference). These imply a correlation of about 0.72 between the two resampled F1 values. The chapter calls this an exploratory approximation, not a check of the bootstrap. <strong>Is that a defensible exploratory use, or is even that too strong given what is printed?</strong></p>
+<h2>One more request</h2>
+<p>Please separate, in your answer, (a) conclusions that can be established from the published summary statistics alone from (b) conclusions that would need per-image predictions, labels or bootstrap replicates.</p>
+<h2>Boundaries</h2>
+<ul>
+<li>This is not a review of the paper's clinical claims, its labels, or its model.</li>
+<li>The scripts have been independently run, and that confirms only that the code reproduces its own ledger.</li>
+<li>Please say plainly where you cannot tell from the information given.</li>
+</ul>
+<p>Reviewer name: ______  Date: ______</p>
+</main>
+</body>
+</html>

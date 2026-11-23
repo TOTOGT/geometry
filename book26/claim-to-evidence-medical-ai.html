@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From claim to evidence: an auditable method for evaluating medical AI · Pablo Nogueira Grossi</title>
+<meta name="description" content="A five-step method for checking exactly which medical-AI performance claims the available evidence supports, with one reproducible worked example.">
+<style>
+:root{--bg:#fbfaf7;--fg:#1d2430;--mute:#5a6472;--line:#d9d6cc;--card:#fff;--acc:#1f4e79}
+@media (prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e8e6df;--mute:#a3abb7;--line:#2c333f;--card:#1b212b;--acc:#8fb8e0}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 Georgia,"Times New Roman",serif}
+main{max-width:46rem;margin:0 auto;padding:2rem 1rem 4rem}
+h1{font-size:1.8rem;line-height:1.2;margin:0 0 .3rem}
+h2{font-size:1.2rem;margin:2.2rem 0 .5rem;border-bottom:1px solid var(--line);padding-bottom:.2rem}
+h3{font-size:1.02rem;margin:1.1rem 0 .1rem}
+.meta{color:var(--mute);font-size:.95rem;margin:0 0 .3rem;font-style:italic}
+ul{margin:.3rem 0 .6rem;padding-left:1.2rem}
+a{color:var(--acc)}
+.note{color:var(--mute);font-size:.95rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:1rem 1.2rem;margin:1rem 0}
+footer{margin-top:3rem;border-top:1px solid var(--line);padding-top:1rem;color:var(--mute);font-size:.95rem}
+/* Shared employer-facing layer for Book XXVI chapters. Add one <link> in <head>, one block after <body>. */
+.ei{--ei-bg:#f4f1e8;--ei-fg:#1d2430;--ei-mute:#5a6472;--ei-line:#d9d6cc;--ei-acc:#1f4e79;
+  max-width:46rem;margin:1rem auto 2rem;padding:1rem 1.2rem;background:var(--ei-bg);color:var(--ei-fg);
+  border:1px solid var(--ei-line);border-left:4px solid var(--ei-acc);border-radius:6px;font:16px/1.55 Georgia,serif}
+@media (prefers-color-scheme:dark){.ei{--ei-bg:#1b212b;--ei-fg:#e8e6df;--ei-mute:#a3abb7;--ei-line:#2c333f;--ei-acc:#8fb8e0}}
+.ei a{color:var(--ei-acc)}
+.ei .ei-kicker{font:600 .75rem/1.2 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--ei-mute);margin:0}
+.ei h2{font-size:1.25rem;margin:.3rem 0 .1rem}
+.ei .ei-by{color:var(--ei-mute);margin:0 0 .8rem;font-size:.95rem}
+.ei dl{margin:0}
+.ei dt{font:600 .75rem/1.2 system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--ei-mute);margin:.7rem 0 .1rem}
+.ei dd{margin:0}
+.ei .ei-scope{margin-top:.9rem;padding-top:.7rem;border-top:1px solid var(--ei-line);color:var(--ei-mute);font-size:.95rem}
+.ei nav{margin-top:.8rem;font:.9rem system-ui,sans-serif}
+.ei nav a{margin-right:1rem}
+
+table{width:100%;border-collapse:collapse;margin:.6rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:.5rem .4rem}
+th{font:600 .75rem/1.2 system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--mute)}
+@media (max-width:560px){table,thead,tbody,tr,th,td{display:block}thead{display:none}tr{border-bottom:1px solid var(--line);padding:.5rem 0}td{border:0;padding:.15rem 0}}
+</style>
+</head>
+<body>
+<!--
+Preprint. The code files are in claim-evidence-ledger/ beside this page. Open items: confirm every number against the PDF of arXiv:1711.05225 v3 (only Table 1 and Section 4.1 key figures have been confirmed by a reviewer); statistician review of the ledger.
+-->
+<main>
+<aside class="ei" aria-label="Employer-facing introduction">
+  <p class="ei-kicker">Career portfolio work sample · Research method</p>
+  <h2>From claim to evidence: an auditable method for evaluating medical AI</h2>
+  <p class="ei-by">Pablo Nogueira Grossi · Newark, NJ</p>
+  <dl>
+    <dt>The problem</dt><dd>Medical-AI papers and product claims arrive faster than most clinicians and researchers can check them. The useful question is not "is this AI trustworthy?" but "exactly which claims does the available evidence support?"</dd>
+    <dt>What this chapter gives you</dt><dd>A five-step procedure, a vocabulary of findings that includes a category for agreement that proves nothing, and one worked example on a public paper, with the code that produces each recomputation.</dd>
+    <dt>Skills shown</dt><dd>Reading a technical paper for its exact claims, recomputing what the printed numbers allow, separating a correct calculation from evidence for a conclusion, and recording limits in a form others can challenge.</dd>
+    <dt>How it was made</dt><dd>The method and the worked example were produced with AI assistance (Claude) under my direction. The paper's numbers were extracted from the PDF by a tool. A reviewer then confirmed the key figures against the PDF (see the boundaries note in section 3); I have not, and not every number was in that confirmation. No statistician or clinician has reviewed this chapter.</dd>
+  </dl>
+  <p class="ei-scope"><strong>Scope:</strong> A method for checking claims, not a clinical product. It uses no patient records, makes no claim of clinical validation, and does not replace medical or statistical peer review. The worked example does not conclude that the paper is right or wrong.</p>
+  <nav><a href="../portfolio.html">Portfolio home</a><a href="index.html">Book index</a></nav>
+</aside>
+<h1>From claim to evidence</h1>
+<p class="meta">Preprint · Book XXVI · November 2026 · method with one worked example</p>
+
+<h2>1. What question this answers</h2>
+<p>A medical-AI claim can fail in many ways, and most are not mistakes of arithmetic. A correct number can sit on a test set too small to bear it, a reference standard that is itself uncertain, or a metric that does not measure what the headline implies. This method does not rate a system as trustworthy or untrustworthy. It records, claim by claim, what the available evidence supports and where it stops.</p>
+
+<h2>2. The five steps</h2>
+<ol>
+<li><strong>Extract the claim.</strong> Copy the exact performance statement, with its population, dataset, metric and stated limitations.</li>
+<li><strong>Trace the evidence.</strong> Find the paper, supplementary material, code and underlying data that are publicly available, and note which are not.</li>
+<li><strong>Recompute what is reproducible.</strong> Check arithmetic, denominators, confidence intervals and reported comparisons. Never fill a gap with an assumed value.</li>
+<li><strong>Test the logical connection.</strong> Ask whether an internally correct calculation actually supports the clinical conclusion drawn from it.</li>
+<li><strong>Record the boundary.</strong> Give each finding one of four statuses: <em>verified</em>, <em>partially supported</em>, <em>contradicted</em>, or <em>not independently checkable</em>.</li>
+</ol>
+<h3>Three kinds of verification, kept apart</h3>
+<p>Each ledger row is tagged with the kind of check it is, because they answer different questions and one does not stand in for another:</p>
+<ul>
+<li><strong>Arithmetic verification:</strong> can a number be reproduced from the figures printed in the paper?</li>
+<li><strong>Statistical verification:</strong> do the reported comparisons support the stated performance conclusion? This often needs data that are not printed.</li>
+<li><strong>Clinical validation:</strong> does the evidence show the system would perform safely and effectively in clinical practice? Reproducing a paper's calculations cannot establish this.</li>
+</ul>
+<h3>One extra label: agreement by construction</h3>
+<p>Two calculations that agree are not independent confirmation if they share the same assumptions, inputs or code. A total that matches the sum of the parts it was built from, or a rebuilt number that only restates the same inputs, tells you the numbers are consistent with each other, not that either is correct. An interval that sits near its estimate is an even weaker signal, since percentile-bootstrap intervals can be asymmetric. The ledger marks these cases so that a reader does not count them as checks.</p>
+<p>Choosing a paper: the aim is not to find a flawed one. A successful verification is as informative as a failed one, so the example below was chosen because it is public, widely cited, and prints enough numbers to recompute something, not because its claims look doubtful.</p>
+
+<h2>3. Worked example: CheXNet</h2>
+<p><strong>Source:</strong> Rajpurkar et al., <a href="https://arxiv.org/abs/1711.05225">CheXNet: Radiologist-Level Pneumonia Detection on Chest X-Rays with Deep Learning</a>, arXiv:1711.05225, version v3 (25 December 2017). <strong>Claim (abstract):</strong> "We find that CheXNet exceeds average radiologist performance on the F1 metric."</p>
+<h3>What the paper prints</h3>
+<p>A test set of 420 frontal chest X-rays from 389 patients, labelled by four radiologists. F1 for CheXNet 0.435 (95% CI 0.387 to 0.481); for the radiologist average 0.387 (0.330 to 0.442); individual radiologists 0.383, 0.356, 0.365 and 0.442; a difference of 0.051 (0.005 to 0.084). Intervals are bootstrap percentiles from 10,000 resamples. The text I read does not give the number of pneumonia-positive images. Note that the highest individual radiologist score (0.442) is above CheXNet's 0.435, so "exceeds the average radiologist" is not "exceeds every radiologist".</p>
+<h3>The ledger</h3>
+<p>Each row below comes from <a href="claim-evidence-ledger/claim_check.py">claim_check.py</a>, which uses only the printed numbers, allows for their rounding, and invents nothing.</p>
+<table>
+<thead><tr><th>ID</th><th>Kind of check</th><th>Claim</th><th>Status</th><th>What the recomputation shows</th></tr></thead>
+<tbody>
+<tr><td data-l="ID">C1</td><td data-l="Kind">Arithmetic</td><td data-l="Claim">The radiologist average F1 (0.387) is the mean of the four individual F1 values.</td><td data-l="Status"><strong>Verified (arithmetic, from printed values)</strong></td><td data-l="What the recomputation shows">Mean of [0.383, 0.356, 0.365, 0.442] = 0.3865; range allowing for rounding 0.3860 to 0.3870; printed 0.387. This shows the printed average is consistent with the arithmetic mean of the four printed scores. The text read describes it only as the average F1 across radiologists, so that it is defined as an arithmetic mean is an inference that fits the numbers, not a stated definition.</td></tr>
+<tr><td data-l="ID">C2</td><td data-l="Kind">Arithmetic</td><td data-l="Claim">The F1 difference (0.051) equals CheXNet F1 minus the radiologist average.</td><td data-l="Status"><strong>Partially supported: printed values do not reproduce it</strong></td><td data-l="What the recomputation shows">0.435 - 0.387 = 0.048; allowing for rounding of both inputs 0.047 to 0.049; printed 0.051 lies outside that range. The paper says the difference was computed on the same bootstrap samples, so the printed difference may be a different statistic (for example a mean of resampled differences). The text read does not say. This is an unexplained discrepancy, not a demonstrated error.</td></tr>
+<tr><td data-l="ID">C3a</td><td data-l="Kind">Statistical</td><td data-l="Claim">The CheXNet F1 interval is centred near the point estimate.</td><td data-l="Status"><strong>Consistent (not a verification)</strong> <br><em>(agreement by construction)</em></td><td data-l="What the recomputation shows">Midpoint 0.4340 vs point 0.435. Percentile-bootstrap intervals can be asymmetric, especially for a nonlinear statistic such as F1, so being centred near the estimate is neither required nor a check on the interval. This is a weak plausibility signal only and says nothing about whether the F1 itself is right.</td></tr>
+<tr><td data-l="ID">C3b</td><td data-l="Kind">Statistical</td><td data-l="Claim">The radiologist average F1 interval is centred near the point estimate.</td><td data-l="Status"><strong>Consistent (not a verification)</strong> <br><em>(agreement by construction)</em></td><td data-l="What the recomputation shows">Midpoint 0.3860 vs point 0.387. Percentile-bootstrap intervals can be asymmetric, especially for a nonlinear statistic such as F1, so being centred near the estimate is neither required nor a check on the interval. This is a weak plausibility signal only and says nothing about whether the F1 itself is right.</td></tr>
+<tr><td data-l="ID">C4</td><td data-l="Kind">Statistical</td><td data-l="Claim">The difference interval (0.005 to 0.084) is compatible with the two F1 intervals.</td><td data-l="Status"><strong>Consistent (plausibility only; not independently checkable without the per-image data)</strong></td><td data-l="What the recomputation shows">Normal-approximation standard errors: CheXNet 0.0240, radiologists 0.0286, difference 0.0202. Treating the percentile intervals as if they were symmetric normal intervals, these imply a correlation of 0.72 between the two resampled F1 values. That is an exploratory approximation, not a reconstruction or a check of the published bootstrap, and its only use is to see whether the three intervals could plausibly belong together when both F1 values are scored on the same 420 images.</td></tr>
+<tr><td data-l="ID">C5</td><td data-l="Kind">Statistical</td><td data-l="Claim">CheXNet F1 = 0.435 (95% CI 0.387 to 0.481) on 420 images.</td><td data-l="Status"><strong>Not independently checkable</strong></td><td data-l="What the recomputation shows">Needs per-image predictions and labels, or at least the number of pneumonia-positive images, none of which is in the text read. The bootstrap (10,000 resamples) cannot be rerun. Recorded for the reader: the paper says the difference was computed on the same bootstrap samples (paired resampling). Whether unrounded values were used is not stated in the text read, and subtracting the displayed point estimates does not reproduce the whole analysis.</td></tr>
+<tr><td data-l="ID">C6</td><td data-l="Kind">Clinical interpretation</td><td data-l="Claim">&#x27;CheXNet exceeds average radiologist performance on the F1 metric&#x27; (abstract).</td><td data-l="Status"><strong>Partially supported</strong></td><td data-l="What the recomputation shows">What the printed numbers support: a higher F1 on one 420-image set, with a difference interval whose lower bound (0.005) is close to zero. What they do not establish: performance in clinical use, performance on other hospitals&#x27; images, or that F1 against these labels measures diagnostic quality. The paper itself names frontal-only images and no patient history as limits. The abstract wording is about F1; a reader should not carry it over to &#x27;radiologist-level pneumonia detection&#x27; without the qualifiers.</td></tr>
+<tr><td data-l="ID">C7</td><td data-l="Kind">Arithmetic</td><td data-l="Claim">A reader might assume that exceeding the average radiologist means exceeding each radiologist.</td><td data-l="Status"><strong>Contradicted by the printed values</strong></td><td data-l="What the recomputation shows">The highest printed individual F1 is 0.442 (radiologist 4), above CheXNet&#x27;s 0.435. Exceeding the average is not exceeding every radiologist. The text read gives no interval for individual radiologists, so whether radiologist 4 and CheXNet differ meaningfully is not checkable here. The abstract does not claim to exceed every radiologist; the check guards against a reader assuming it does.</td></tr>
+</tbody>
+</table>
+<h3>A check that can fail</h3>
+<p><a href="claim-evidence-ledger/negative_control.py">negative_control.py</a> changes the printed radiologist average to a wrong value and reruns the checks. C1 then reports Contradicted, so the arithmetic check is capable of failing. When the difference is changed to match the altered average, C2 passes, which is correct: that check tests consistency between printed numbers, not their truth.</p>
+<h3>What the example does and does not show</h3>
+<p>The printed radiologist average does follow from the four individual values. The printed difference of 0.051 does not follow from the printed point estimates (0.048 after rounding allowance), and the text I read does not say why. That is an unexplained discrepancy and not a demonstrated error: it may reflect a different statistic computed inside the bootstrap. The F1 values, the bootstrap intervals, and the claim itself cannot be rechecked without per-image data. The headline claim is about F1 on one 420-image set, and a reader should keep that qualifier attached.</p>
+<p><strong>Boundaries of this example.</strong> I did not read the paper's methods section for the exact definition of the reference standard, and my text extraction may have dropped part of the limitations section. I did not check later versions of the paper, a published journal version, or any follow-up work. A reviewer confirmed against the PDF the main figures: Table 1 on page 2 (CheXNet 0.435, radiologist average 0.387, radiologist 4 0.442) and Section 4.1 on page 3 (difference 0.051, 95% CI 0.005 to 0.084, computed on the same bootstrap samples). I have not compared them with the PDF myself, and the other printed values were not part of that confirmation. Anyone relying on the remaining numbers should check them against the PDF.</p>
+<p>Two points of precision. First, the paper describes its comparison as against the radiologist <em>average</em>, so row C7 contradicts an overgeneralized reading of the claim, not the authors' actual comparison. Second, a negative control shows only that the checker catches the alteration that was tried. It does not show that the checker would catch every possible inconsistency.</p>
+
+<h3>Review status of this example</h3>
+<p>Three different checks apply, and a pass on one is not a pass on the others.</p>
+<table>
+<thead><tr><th>Review outcome</th><th>Question</th><th>Status now</th></tr></thead>
+<tbody>
+<tr><td data-l="Outcome">Source fidelity</td><td data-l="Question">Do the inputs match arXiv v3?</td><td data-l="Status now">Key figures (Table 1, Section 4.1) confirmed by one reviewer; the remaining values not yet</td></tr>
+<tr><td data-l="Outcome">Computational reproducibility</td><td data-l="Question">Do the scripts reproduce the ledger and catch the planted alteration?</td><td data-l="Status now">A reviewer ran both scripts in a clean directory (Python 3.13.5): the ledger matched byte for byte, and negative_control.py printed CONTROL PASS with exit code 0. This covers the documented two-command workflow and these inputs only</td></tr>
+<tr><td data-l="Outcome">Statistical interpretation</td><td data-l="Question">Is the bootstrap comparison and its limits described correctly?</td><td data-l="Status now">No statistician has reviewed it</td></tr>
+</tbody>
+</table>
+<p>The independent run establishes only the second row, and only for these two scripts and inputs. It does not establish that the inputs are accurate or that the statistics are interpreted correctly.</p>
+
+<h2>4. How this connects to my other work</h2>
+<p>The same habit runs through the rest of this book: recompute quoted numbers, state what was and was not checked, and keep verified, partly supported and unchecked claims apart. The oath chapter applies the idea to professional promises. This chapter applies it to performance claims. The common principle is that accountability needs records others can inspect, not an assurance that someone checked.</p>
+
+<h2>5. A question for researchers and clinicians</h2>
+<p><strong>Which medical-AI performance claims are hardest for you to evaluate, and what kind of independent evidence would help you make better decisions?</strong></p>
+<p>I do not know what practitioners actually need, and I would rather hear it than guess. Replies could change the steps, the statuses, or the choice of worked examples. Contact: <a href="mailto:g6llc@proton.me">g6llc@proton.me</a>.</p>
+
+<h2>6. What this does not show</h2>
+<ul>
+<li>That the CheXNet claim is correct or incorrect.</li>
+<li>That I have clinical, biostatistical or regulatory expertise.</li>
+<li>That the method replaces peer review, or applies equally to every kind of medical-AI claim. It was tried on one paper.</li>
+</ul>
+</main>
+</body>
+</html>
