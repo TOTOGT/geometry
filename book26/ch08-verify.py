@@ -61,7 +61,7 @@ def plain(t):
     for a, b in (("&rsquo;", "'"), ("&ldquo;", '"'), ("&rdquo;", '"'), ("&amp;", "&"), ("&mdash;", "-"), ("&ndash;", "-"), ("&middot;", "."), ("&nbsp;", " "), ("&thinsp;", " "), ("&hbar;", "h"), ("&prime;", "'"), ("&radic;", "sqrt"), ("&minus;", "-")):
         t = t.replace(a, b)
     return re.sub(r"\s+", " ", t)
-SECS = ["S1", "S2", "S3", "S4", "S5", "S6"]
+SECS = ["S1", "S2", "S3", "S4", "S5", "S5a", "S6"]
 LABELS = ["two of the fifteen checklist items below are open", "a hand derivation", "this is an estimate", "not a verdict", "not established here", "keyword matching"]
 BANNED = ["citadel", "north bridge", "uerj", "zilacleide"]
 FORBIDDEN = ["fetch(", "XMLHttpRequest", "localStorage", "<form", "action=", "<script"]
