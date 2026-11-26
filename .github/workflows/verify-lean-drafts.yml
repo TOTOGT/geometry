@@ -1,0 +1,131 @@
+# Verify Lean drafts (contact geometry T1/T2/T5/T3, legal possibility).
+#
+# Separate from verify-proofs.yml on purpose: the drafts are not a default build
+# target, so a failure here cannot turn the main workflow red and the main
+# workflow cannot mask a failure here. The same rule applies as there: the step
+# that decides is the kernel axiom check on named theorems, through
+# tools/axiom_gate.py. A file that elaborates is not thereby verified; the
+# statements still have to be read against their names.
+name: Verify Lean drafts
+
+on:
+  push:
+    paths:
+      - 'lean-drafts/**'
+      - '.github/workflows/verify-lean-drafts.yml'
+  workflow_dispatch:
+
+jobs:
+  contact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- --default-toolchain none -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Cache Mathlib build
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake
+          key: geometry-lake-${{ hashFiles('lakefile.lean', 'lean-toolchain') }}
+
+      - name: Fetch Mathlib
+        run: |
+          set -eux
+          lean --version || true
+          lake update
+          lake exe cache get || echo "::warning::lake exe cache get failed; Mathlib will build from source"
+
+      - name: Elaborate ContactJacobian.lean
+        run: |
+          set -eux
+          lake env lean lean-drafts/ContactJacobian.lean
+
+      - name: Kernel axiom check on the ContactJacobian theorems
+        run: |
+          set -u
+          cp lean-drafts/ContactJacobian.lean /tmp/probe_contact.lean
+          cat >> /tmp/probe_contact.lean << 'EOF'
+
+          #print axioms AXLE.Contact.det_mulLeft_complex
+          #print axioms AXLE.Contact.det_real_fderiv
+          #print axioms AXLE.Contact.contactCoeff_eq_normSq
+          #print axioms AXLE.Contact.contactCoeff_ne_zero_iff
+          #print axioms AXLE.Contact.contact_nondegenerate_simple_zero
+          #print axioms AXLE.Contact.contact_degenerate_multiple_zero
+          #print axioms AXLE.Contact.contactCoeff_eq_det
+          #print axioms AXLE.Contact.energy_dissipation
+          #print axioms AXLE.Contact.harmonic_quadratic
+          #print axioms AXLE.Contact.harmonic_quartic
+          EOF
+          set +e
+          lake env lean /tmp/probe_contact.lean > /tmp/axioms_contact.txt 2>&1
+          rc=$?
+          set -e
+          echo "----- probe output -----"
+          cat /tmp/axioms_contact.txt
+          echo "------------------------"
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::probe failed to elaborate (exit $rc)"
+            exit 1
+          fi
+          python3 tools/axiom_gate.py /tmp/axioms_contact.txt 10
+
+  legal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- --default-toolchain none -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Elaborate LegalPossibility.lean (core Lean only, no Mathlib)
+        run: |
+          set -eux
+          lean --version
+          lean lean-drafts/LegalPossibility.lean
+
+      - name: Kernel axiom check on the LegalPossibility theorems
+        run: |
+          set -u
+          cp lean-drafts/LegalPossibility.lean /tmp/probe_legal.lean
+          cat >> /tmp/probe_legal.lean << 'EOF'
+
+          #print axioms Jur.acc_sub_adm
+          #print axioms Jur.acc_mono
+          #print axioms Jur.reachable_imp_available
+          #print axioms Jur.intervention_expands
+          #print axioms Jur.cor_cor
+          #print axioms Jur.opp_opp
+          #print axioms Jur.cor_opp_comm
+          #print axioms Jur.cor_ne_opp
+          #print axioms Jur.cor_ne_self
+          #print axioms Jur.opp_ne_self
+          #print axioms Jur.free_klein
+          #print axioms Jur.flip_flip
+          EOF
+          set +e
+          lean /tmp/probe_legal.lean > /tmp/axioms_legal.txt 2>&1
+          rc=$?
+          set -e
+          echo "----- probe output -----"
+          cat /tmp/axioms_legal.txt
+          echo "------------------------"
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::probe failed to elaborate (exit $rc)"
+            exit 1
+          fi
+          python3 tools/axiom_gate.py /tmp/axioms_legal.txt 12
+
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the deterministic legal-accessibility example
+        run: python3 lean-drafts/legal_transition_demo.py
