@@ -86,16 +86,23 @@ def Pos.opp : Pos → Pos
   | .claim => .noClaim | .noClaim => .claim | .privilege => .duty | .duty => .privilege
   | .power => .disability | .disability => .power | .immunity => .liability | .liability => .immunity
 
-theorem cor_cor : ∀ p : Pos, p.cor.cor = p := by decide
-theorem opp_opp : ∀ p : Pos, p.opp.opp = p := by decide
-theorem cor_opp_comm : ∀ p : Pos, p.cor.opp = p.opp.cor := by decide
+theorem cor_cor : ∀ p : Pos, p.cor.cor = p := by
+  intro p; cases p <;> decide
+theorem opp_opp : ∀ p : Pos, p.opp.opp = p := by
+  intro p; cases p <;> decide
+theorem cor_opp_comm : ∀ p : Pos, p.cor.opp = p.opp.cor := by
+  intro p; cases p <;> decide
 /-- Correlatives are never opposites, and neither is the identity. -/
-theorem cor_ne_opp : ∀ p : Pos, p.cor ≠ p.opp := by decide
-theorem cor_ne_self : ∀ p : Pos, p.cor ≠ p := by decide
-theorem opp_ne_self : ∀ p : Pos, p.opp ≠ p := by decide
+theorem cor_ne_opp : ∀ p : Pos, p.cor ≠ p.opp := by
+  intro p; cases p <;> decide
+theorem cor_ne_self : ∀ p : Pos, p.cor ≠ p := by
+  intro p; cases p <;> decide
+theorem opp_ne_self : ∀ p : Pos, p.opp ≠ p := by
+  intro p; cases p <;> decide
 /-- The Klein four-group {id, cor, opp, cor∘opp} acts freely: all four images are distinct. -/
 theorem free_klein : ∀ p : Pos, p ≠ p.cor ∧ p ≠ p.opp ∧ p ≠ p.cor.opp ∧
-    p.cor ≠ p.opp ∧ p.cor ≠ p.cor.opp ∧ p.opp ≠ p.cor.opp := by decide
+    p.cor ≠ p.opp ∧ p.cor ≠ p.cor.opp ∧ p.opp ≠ p.cor.opp := by
+  intro p; cases p <;> decide
 
 /-- A directed normative relation between two subjects; descriptive facts are a separate type. -/
 structure NormRel (Agent Act : Type) where
