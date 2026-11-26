@@ -19,4 +19,4 @@ Layout: `atomic/`, `contact-nodal/`, `axle/`, `jurisprudence/`. Nothing here is 
 - `FORMALIZATION-TARGETS.md` — specifications only; Speiser's criterion stays an explicit external hypothesis.
 
 ## Computational Jurisprudence (new workstream; Phase I) — `jurisprudence/`
-- `PHASE-I-computational-jurisprudence.md` — original research report and plan. The al-Khwārizmī/inheritance connection is **unverified** (not checked against primary or scholarly sources). The 1968 Black's Law Dictionary scan, its OCR text, extracted definitions and the pilot data are **not published** (copyright; kept private). Opus volume: Book XXXIV is reserved provisionally for this workstream (see `../book34/index.html`).
+- `PHASE-I-computational-jurisprudence.md` — original research report and plan. The al-Khwārizmī/inheritance connection is **unverified** (not checked against primary or scholarly sources). The 1968 Black's Law Dictionary scan, its OCR text, extracted definitions and the pilot data are **not published** (copyright; kept private). Opus volume: Book XXXI is reserved provisionally for this workstream (see `../book31/index.html`).
