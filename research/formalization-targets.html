@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AXLE Formalization Targets T1–T5 (Proposed and Untested)</title>
+<meta name="description" content="Specification only: five minimal Lean 4 targets from the contact and nodal research. Nothing is written, compiled or verified.">
+<meta name="author" content="Pablo Nogueira Grossi / G6 LLC">
+<meta name="date" content="2026-11-26">
+<meta property="og:title" content="AXLE Formalization Targets T1–T5 (Proposed and Untested)">
+<meta property="og:description" content="Specification only: five minimal Lean 4 targets from the contact and nodal research. Nothing is written, compiled or verified.">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://totogt.github.io/geometry/research/formalization-targets.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="research.css">
+<script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]],displayMath:[["\\[","\\]"]]},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+</head>
+<body>
+<div class="w">
+<div class="crumb"><a href="../index.html">Principia Orthogona</a> &rsaquo; <a href="index.html">Research</a> &rsaquo; AXLE Formalization Specifications</div>
+<div class="k">AXLE Formalization Specifications</div>
+<div class="meta"><div>Author: Pablo Nogueira Grossi / G6 LLC &middot; analysis and drafting assisted by Claude (Sonnet 5.5)</div><div>Version date: 2026-11-26 &middot; Status: proposed and untested; specification only</div><div>Source: <a href="https://github.com/TOTOGT/geometry/blob/main/research/axle/FORMALIZATION-TARGETS.md">research/axle/FORMALIZATION-TARGETS.md</a> (Markdown, GitHub)</div></div>
+<div class="status">Published for review. Nothing on this page is kernel-verified or independently peer reviewed. <a href="index.html">Research portal</a> &middot; <a href="../ch14-axle.html">Opus chapter 14 (AXLE)</a></div>
+<main>
+<h1 id="axle-minimal-formalization-targets-proposed-and-untested-specification-only-nothing-written-nothing-compiled-nothing-lean-verified">AXLE minimal formalization targets — PROPOSED AND UNTESTED (specification only: nothing written, nothing compiled, nothing Lean-verified)</h1>
+<p>Duplicate check (2026-11-26): GitHub tree access for TOTOGT repos was refused this session ("repository access not enabled"), so I could <strong>not</strong> re-list the repos. Basis = project records: the 2026-09-21 Reeb session note and the Ch 14 review ("TOTOGT/AXLE 133 files, TOTOGT/geometry 197 files, checked by filename and declaration names"). Present there: <code>ReebFlow.lean</code> (alphaCat, reeb_alpha_eq_one, reeb_interior_dAlpha, reebFlow_preserves_alpha, contactVol), <code>ReebFlowExtDeriv.lean</code>, <code>ReebWedge.lean</code> (contactVol_eq_wedge12), <code>ReebUnique.lean</code>, <code>ReebNoAttractor.lean</code>, <code>Orthogenesis/Taxonomy/FoldFlow.lean</code> (gradient flow of a cubic fold), <code>Orthogenesis/Figure8/A1Node.lean</code> (nodes of plane curves). <strong>Not found</strong> there: Cauchy–Riemann/Jacobian identity, contact test for η=dz+u dv, harmonic-polynomial classification, dissipation lemma. Before writing: re-grep those names (esp. A1Node.lean for overlap with the nodal items) and check Mathlib (Complex.det…, Polynomial/MvPolynomial harmonic) — Mathlib names below are UNCHECKED. Repo note (memory): AXLE is a site/book repo; the Lean project belongs in its own folder. Style rule from this project: each statement names its hypotheses and a non-vacuous conclusion; no <code>∃ x, True</code>-type conclusions.</p>
+<h2 id="t1-regularized-contact-jacobian-core-identity">T1 — Regularized contact Jacobian (core identity)</h2>
+<p>Statement: for f : ℂ → ℂ, <code>HasDerivAt f f' s</code> ⇒ the real Jacobian determinant of (σ,t) ↦ (Re f(σ+it), Im f(σ+it)) at s equals ‖f'‖² (= <code>Complex.normSq f'</code>). Needs: <code>HasDerivAt.hasFDerivAt</code> over ℝ (restrict scalars), the matrix of ℝ-linear map z↦f'·z in basis (1,i) is [[Re f', −Im f'],[Im f', Re f']] with det = (Re f')²+(Im f')². Pure algebra after that. CR equations u_σ=v_t, u_t=−v_σ as corollary.</p>
+<h2 id="t2-contact-nondegeneracy-coefficient-level-avoiding-mathlib-differential-forms">T2 — Contact nondegeneracy (coefficient level, avoiding Mathlib differential forms)</h2>
+<p>Define <code>contactCoeff (u v : ℝ×ℝ → ℝ) p := u_σ·v_t − u_t·v_σ</code> (the coefficient of dz∧dσ∧dt in η∧dη for η = dz + u dv; also dη = (u_σ v_t − u_t v_σ) dσ∧dt).</p>
+<ul>
+<li><code>contactCoeff_eq : contactCoeff (re∘f) (im∘f) = ‖deriv f s‖²</code> (from T1).
+</li><li><code>contact_iff : contactCoeff ≠ 0 ↔ deriv f s ≠ 0</code>.
+</li><li><code>simple_zero_contact : f s = 0 → deriv f s ≠ 0 → contactCoeff ≠ 0</code> (hypothesis names both parts: zero <strong>and</strong> simple; conclusion nonvacuous).
+</li><li><code>multiple_zero_not_contact : AnalyticAt ℂ f s → f s = 0 → order ≥ 2 → contactCoeff = 0</code> (Mathlib: <code>AnalyticAt.order</code>, <code>AnalyticAt.deriv…</code> unchecked).
+</li><li>Reeb: <code>η(∂_z)=1</code>, <code>ι_{∂_z}dη=0</code> as coefficient-vector identities (reuse the pattern of <code>reeb_alpha_eq_one</code>, <code>reeb_interior_dAlpha</code>).
+</li><li>ζ-instance: any statement using <code>riemannZeta</code> must take Speiser as an explicit hypothesis: <code>def Speiser : Prop := RiemannHypothesis ↔ ∀ s : ℂ, 0 &lt; s.re → s.re &lt; 1/2 → deriv riemannZeta s ≠ 0</code> — never an axiom, never used in T1–T5. Differentiability of ζ off s=1 is in Mathlib.
+</li></ul>
+<h2 id="t3-homogeneous-harmonic-polynomial-classification-finite-linear-algebra-ring-linarith-level">T3 — Homogeneous harmonic polynomial classification (finite linear algebra, <code>ring</code>/<code>linarith</code>-level)</h2>
+<ul>
+<li><code>harm2 : P = αx²+βxv+γv², Δ P = 0 ⇒ γ = −α</code> (so P = α(x²−v²)+βxv).
+</li><li><code>harm2_even_sigma : harmonic, even in x ⇒ P = α(x²−v²)</code> (β=0).
+</li><li><code>harm4_even_sigma : P=Σ_{j=0}^4 c_j x^{4−j}v^j harmonic, P(−x,v)=P(x,v), P(−x,−v)=P ⇒ ∃ c, P = c(x⁴−6x²v²+v⁴)</code>. (Equations: c₁=c₃=0 (evenness), c₀·12+2c₂=0, 2c₂+12c₄=0 ⇒ c₂=−6c₀, c₄=c₀.) Conclusion is an explicit polynomial identity, not an existential over a free class.
+</li><li><code>odd_degree_excluded : harmonic, even in x, odd degree k, P(−x,−v)=P ⇒ P = 0</code> for k=1,3,5.
+</li><li>Optional later (heavier): general k via Re/Im (w^k); order-2k nodal count via IVT + simple roots of cos kθ (the full theorem (C) needs the implicit function theorem plus polar blow-up: not a minimal target).
+</li></ul>
+<h2 id="t4-quartic-reduction-lemma-algebra-only">T4 — Quartic reduction lemma (algebra only)</h2>
+<p>Given the three linear constraint systems of <code>nodal_taylor.py</code> as hypotheses on coefficients c_{jk} (degrees ≤5), conclude <code>a = 4(10c40+c41)/(μ−10)</code> and, if a=0, c41 = −10c40 with degree-4 part c40(x⁴−6x²v²+v⁴) and degree-5 part −2c40(5x⁴v−10x²v³+v⁵). Pure <code>field_simp; ring</code>. Hypotheses must include μ≠10.</p>
+<h2 id="t5-energy-dissipation-under-a-positive-semidefinite-mobility">T5 — Energy dissipation under a positive-semidefinite mobility</h2>
+<p>Statement: E : (Fin n → ℝ) → ℝ differentiable, x : ℝ → (Fin n → ℝ) differentiable with x'(t) = −G·∇E(x(t)), G : Matrix (Fin n)(Fin n) ℝ with ∀ y, 0 ≤ y ⬝ᵥ (G *ᵥ y). Then <code>HasDerivAt (E ∘ x) (−(∇E(x t)) ⬝ᵥ (G *ᵥ ∇E(x t))) t</code> and hence <code>deriv (E∘x) t ≤ 0</code>; equality iff G∇E=0 when G is PSD (G∇E=0 ⇔ ∇Eᵀ G ∇E = 0 requires PSD: Cauchy–Schwarz for PSD). Standard mathematics; no TOGT content. Use <code>HasFDerivAt.comp_hasDerivAt</code>. The "gradient" must be a stated Euclidean gradient (<code>toDual</code>) or the statement stays in terms of <code>fderiv E (x t) (x' t)</code>, which avoids the metric.</p>
+<h2 id="priority">Priority</h2>
+<p>T3 and T4 (decidable, cheap), then T1→T2 (the contact result), T5. Speiser stays external and conditional.</p>
+</main>
+
+<footer>Principia Orthogona &middot; G6 LLC, Newark, NJ &middot; version 2026-11-26 &middot; this research directory is evidence and derivation; the Opus chapters are the exposition. Content licence: see <a href="https://github.com/TOTOGT/geometry">repository</a>. Formal-verification status of every item is as stated in the text; none is claimed beyond it.</footer>
+</div>
+</body>
+</html>
