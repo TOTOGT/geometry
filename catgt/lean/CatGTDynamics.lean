@@ -144,9 +144,7 @@ theorem relax_flow_lyapunov {r : ℝ → ℝ} {k rstar t : ℝ}
     HasDerivAt (fun s => (r s - rstar) ^ 2) (-2 * k * (r t - rstar) ^ 2) t := by
   have h1 : HasDerivAt (fun s => r s - rstar) (-k * (r t - rstar)) t := h.sub_const rstar
   have h2 := h1.pow 2
-  convert h2 using 1
-  simp
-  ring
+  exact h2.congr_deriv (by first | ring | (norm_num; ring) | (simp; ring) | (beta_reduce; norm_num; ring))
 
 /-- Explicit solution r(t) = r* + (r₀ - r*) e^{-k t}. -/
 theorem relax_solution (k rstar r0 t : ℝ) :
@@ -156,8 +154,7 @@ theorem relax_solution (k rstar r0 t : ℝ) :
     simpa using (hasDerivAt_id t).const_mul (-k)
   have h2 := (h1.exp).const_mul (r0 - rstar)
   have h3 := h2.const_add rstar
-  convert h3 using 1
-  ring
+  exact h3.congr_deriv (by first | ring | (beta_reduce; ring) | (simp; ring))
 
 end C
 
