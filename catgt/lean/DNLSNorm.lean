@@ -77,14 +77,17 @@ theorem drift_zero (σ τ : Fin N → Fin N) (hστ : ∀ n, τ (σ n) = n) (hτ
 theorem hasDerivAt_normSq {f : ℝ → ℂ} {f' : ℂ} {t : ℝ} (h : HasDerivAt f f' t) :
     HasDerivAt (fun s => Complex.normSq (f s))
       (2 * (f t).re * f'.re + 2 * (f t).im * f'.im) t := by
-  have hre : HasDerivAt (fun s => (f s).re) f'.re t := by
-    simpa using Complex.reCLM.hasFDerivAt.comp_hasDerivAt t h
-  have him : HasDerivAt (fun s => (f s).im) f'.im t := by
-    simpa using Complex.imCLM.hasFDerivAt.comp_hasDerivAt t h
-  have := (hre.mul hre).add (him.mul him)
-  convert this using 1
-  · funext s; simp [Complex.normSq_apply]
-  · ring
+  have hre : HasDerivAt (fun s => (f s).re) f'.re t :=
+    Complex.reCLM.hasFDerivAt.comp_hasDerivAt t h
+  have him : HasDerivAt (fun s => (f s).im) f'.im t :=
+    Complex.imCLM.hasFDerivAt.comp_hasDerivAt t h
+  have hsum := ((hre.mul hre).add (him.mul him)).congr_deriv
+    (show f'.re * (f t).re + (f t).re * f'.re + (f'.im * (f t).im + (f t).im * f'.im)
+        = 2 * (f t).re * f'.re + 2 * (f t).im * f'.im by ring)
+  have e : (fun s => Complex.normSq (f s))
+      = ((fun s => (f s).re) * (fun s => (f s).re)) + ((fun s => (f s).im) * (fun s => (f s).im)) := by
+    funext s; simp [Complex.normSq_apply]
+  rw [e]; exact hsum
 
 /-- **Continuous-time norm balance.** If every component of ψ(·) has derivative F(ψ(t))_n,
     then d/dt Σ_n normSq ψ_n = 0. -/
@@ -94,8 +97,10 @@ theorem dnls_norm_hasDerivAt (σ τ : Fin N → Fin N) (hστ : ∀ n, τ (σ n)
     HasDerivAt (fun s => ∑ n, Complex.normSq (ψ s n)) 0 t := by
   have h := HasDerivAt.sum (u := Finset.univ) (fun n _ => hasDerivAt_normSq (hψ t n))
   have h0 := drift_zero σ τ hστ hτσ J lam (ψ t)
-  rw [← h0]
-  simpa using h
+  have h' := h.congr_deriv h0
+  have e : (fun s => ∑ n, Complex.normSq (ψ s n)) = ∑ n, (fun s => Complex.normSq (ψ s n)) := by
+    funext s; simp [Finset.sum_apply]
+  rw [e]; exact h'
 
 /-- **Norm conservation for the CatGT DNLS chain (continuous time).**
     For a solution on all of ℝ, ‖ψ(t)‖² = ‖ψ(0)‖² for every t. -/
@@ -138,7 +143,8 @@ theorem periodic_shift_inverse (hN : 0 < N) :
   show ((n.val + N - 1) % N + 1) % N = n.val
   rcases Nat.eq_zero_or_pos n.val with h0 | hpos
   · rw [h0]
-    have : (0 + N - 1) % N = N - 1 := Nat.mod_eq_of_lt (by omega)
+    have e : 0 + N - 1 = N - 1 := by omega
+    have : (0 + N - 1) % N = N - 1 := by rw [e]; exact Nat.mod_eq_of_lt (by omega)
     rw [this, Nat.sub_add_cancel hN, Nat.mod_self]
   · have : (n.val + N - 1) % N = n.val - 1 := by
       have e : n.val + N - 1 = (n.val - 1) + N := by omega
