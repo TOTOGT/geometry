@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saddle at i, Minimum at ρ · Chapter 29 Companion · Principia Orthogona Book 4</title>
+<meta name="description" content="Interactive companion to Book 4 Ch 29 and the Ch 14 addendum: the real Epstein sum E(z,s) over the modular fundamental domain, with the square lattice (z=i) a saddle and the triangular lattice (z=ρ) a minimum. All displayed values are numerical.">
+<style>
+:root{--bg:#fbfaf7;--fg:#1d2230;--mut:#5b6275;--line:#d9d6cc;--card:#fff;--acc:#1f5f8b;--acc2:#a3471f;--ok:#2d6a4f;--warn:#8a5a00;--bad:#9b2226;--code:#f1efe8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171f;--fg:#e6e8ee;--mut:#a0a7ba;--line:#2e3445;--card:#1b1f2a;--acc:#6fb3e0;--acc2:#e69a6b;--ok:#7fcf9f;--warn:#e3b448;--bad:#f08a8f;--code:#222838;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14171f;--fg:#e6e8ee;--mut:#a0a7ba;--line:#2e3445;--card:#1b1f2a;--acc:#6fb3e0;--acc2:#e69a6b;--ok:#7fcf9f;--warn:#e3b448;--bad:#f08a8f;--code:#222838;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.58 Georgia,"Times New Roman",serif;padding-inline:16px}
+.wrap{max-width:980px;margin:0 auto;padding-block:20px 56px}
+nav.top{font:600 .8rem ui-monospace,Menlo,monospace;display:flex;gap:12px;flex-wrap:wrap;color:var(--mut);padding-block:6px}
+nav.top a{color:var(--acc)}
+h1{font-size:1.8rem;line-height:1.2;margin:.3em 0;text-wrap:balance}
+h2{font-size:1.25rem;margin:1.8em 0 .4em;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.02rem;margin:1.1em 0 .3em}
+.sub{color:var(--mut)} .mono,code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em}
+code{background:var(--code);padding:0 .25em;border-radius:3px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:12px 0}
+.honest{border-left:4px solid var(--warn)} .lab{border-left:4px solid var(--acc)}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}.row>*{min-width:0}
+label{font:600 .85rem system-ui,sans-serif}
+input[type=range]{width:min(320px,70vw);accent-color:var(--acc)}
+select,button{font:inherit;font-size:.9rem;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:4px 10px}
+button{cursor:pointer} button[aria-pressed=true]{background:var(--acc);color:#fff;border-color:var(--acc)}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+canvas{width:100%;max-width:100%;height:auto;background:var(--card);border:1px solid var(--line);border-radius:6px;display:block}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.tbl{overflow-x:auto} table{border-collapse:collapse;font:.82rem ui-monospace,Menlo,monospace}
+td,th{border-bottom:1px solid var(--line);padding:3px 8px;text-align:right;white-space:nowrap} th{color:var(--mut)} td:first-child,th:first-child{text-align:left}
+.tag{font:600 .7rem system-ui,sans-serif;border:1px solid var(--warn);color:var(--warn);border-radius:10px;padding:0 7px;white-space:nowrap}
+.tag.k{border-color:var(--ok);color:var(--ok)}
+.pt{font-weight:700} .sad{color:var(--acc2)} .min{color:var(--ok)}
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--line)}
+.chapter-nav a{color:var(--acc);text-decoration:none;border:1px solid var(--line);padding:.45rem .9rem;border-radius:3px;font:.82rem ui-monospace,Menlo,monospace}
+.gfoot{margin-top:1.5rem;text-align:right;font:.72rem sans-serif;color:var(--mut)}
+</style>
+<script>
+window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top"><span>PO · BOOK 4 · Companion to Ch 29</span><a href="contents.html">Book 4 contents</a><a href="ch29-discrete-to-continuum-spectral-limits.html">Chapter 29 (GS-2)</a><a href="nodal-addendum-ch14.html">Chapter 14 addendum</a><a href="ch14.html">Chapter 14</a></nav>
+<p class="sub mono">Principia Orthogona · Book 4 · Companion page to Chapter 29 · interactive</p>
+<h1>The Square Lattice Is a Saddle, the Triangular Lattice a Minimum</h1>
+<p class="sub">The real Epstein sum $E(z,s)=\sum_{(m,n)\neq 0} y^{s}/|m+nz|^{2s}$ over the standard fundamental domain, for $s>1$.</p>
+
+<div class="box honest"><b>Status.</b> Every number on this page is a <span class="tag">NUMERICAL</span> value, computed in your browser from truncated lattice sums (with a continuum estimate for the tail) and cross-checked against an independent Fourier&ndash;Bessel evaluation in Python/mpmath. Nothing here is a proof, and nothing here proves or implies the Riemann Hypothesis. The one theorem quoted, about the global minimum, is a published result; it is cited with its exact range and was <em>not</em> re-proved here. Not human-reviewed.</div>
+
+<h2>1 &middot; What is plotted</h2>
+<p>For $z=x+iy$ in the upper half-plane, $E(z,s)$ is the Epstein zeta function (sum of $|v|^{-2s}$ over nonzero vectors) of the lattice $\mathbb{Z}+\mathbb{Z}z$ rescaled to covolume&nbsp;1. Its value depends only on the lattice up to rotation and scale, so it is enough to look at the fundamental domain $|x|\le\tfrac12,\ x^2+y^2\ge1$. Two lattices sit on its boundary: the <b class="sad">square lattice</b> $z=i$ and the <b class="min">triangular (hexagonal) lattice</b> $z=\rho=e^{i\pi/3}=\tfrac12+\tfrac{\sqrt3}{2}i$. The slider is limited to $s\ge1.5$ because the plain sum converges like $R^{2-2s}$ in the cutoff radius $R$ and is too slow close to $s=1$.</p>
+<div class="box lab" id="lab-map">
+<div class="row"><label>s &nbsp;<input type="range" id="s" min="1.5" max="8" step="0.05" value="2" aria-describedby="sv"></label><b id="sv" class="mono">s = 2.00</b>
+<span class="sub">map cutoff radius $R=14$ (value + tail estimate)</span></div>
+<div class="cols" style="margin-top:10px">
+<div><canvas id="cmap" width="420" height="360" role="img" aria-label="Heat map of E(z,s) over the fundamental domain, with the square lattice at i and the triangular lattice at rho marked"></canvas>
+<p class="sub" style="font-size:.85rem;margin:.3em 0 0">Horizontal: $x\in[-\tfrac12,\tfrac12]$. Vertical: $y$ from $0.8$ to $1.5$. Dark = low, light = high (colours are clipped at the 45th percentile of the plotted values so that the region near $i$ and $\rho$ is readable; the clipped top band is uniform); thin lines are level sets. Circle = $i$ (saddle), diamond = $\rho$ and its mirror $-\bar\rho$ (minimum).</p></div>
+<div id="pts" aria-live="polite"></div>
+</div></div>
+
+<h2>2 &middot; The same identity at both points</h2>
+<p>Because $E(\cdot,s)$ is an eigenfunction of the hyperbolic Laplacian $\Delta=y^2(\partial_x^2+\partial_y^2)$ with eigenvalue $s(s-1)$, the Euclidean Hessian trace obeys $y^2(f_{xx}+f_{yy})=s(s-1)f$ at <em>every</em> point, including $i$ ($y=1$) and $\rho$ ($y^2=\tfrac34$). The table in the panel above shows both sides (the panel uses $R=200$, so the two sides agree to about $10^{-5}$ relative; Section 4 shows the residual shrinking as $R$ grows). What differs between the two points is how that trace is split between the eigenvalues: at $i$ it splits unevenly with one negative eigenvalue (a saddle), at $\rho$ it splits equally by the three-fold symmetry (a minimum). Signs of Hessian eigenvalues at a critical point are coordinate-independent; their sizes are not (the $(x,y)$ chart is not isometric to the hyperbolic metric).</p>
+
+<h2>3 &middot; Local view: a saddle and a minimum</h2>
+<div class="box lab" id="lab-loc">
+<div class="row"><span class="lvl" role="group" aria-label="Centre point"><button id="cI" aria-pressed="true">centre at i (square)</button> <button id="cR" aria-pressed="false">centre at &rho; (triangular)</button></span>
+<label>half-width &nbsp;<input type="range" id="w" min="0.05" max="0.4" step="0.01" value="0.2"></label><b id="wv" class="mono">0.20</b></div>
+<div class="cols" style="margin-top:10px"><div><canvas id="cloc" width="420" height="420" role="img" aria-label="Local contour plot of E minus its value at the centre"></canvas></div>
+<div id="locinfo" aria-live="polite" class="sub"></div></div>
+<p class="sub">Plot of $E(z,s)-E(z_0,s)$ around the centre $z_0$: blue = below the centre value, red = above; thick line = level 0. At $i$ the level-0 set is a pair of crossing curves (a saddle: lower along $x$, higher along $y$). At $\rho$ there is no blue at all (a minimum), and the contours are nearly circles.</p></div>
+
+<h2>4 &middot; Reproducing the numbers at a larger cutoff</h2>
+<div class="box lab" id="lab-stab"><div class="tbl" id="stab"></div>
+<p class="sub">Each row sums every lattice vector with $|m+nz|\le R$. "f raw" is the truncated sum; "f + tail" adds the continuum estimate $\pi y^{s-1}R^{2-2s}/(s-1)$ of the omitted vectors. Derivatives are the truncated sums only. The raw error shrinks like $R^{2-2s}$, so rows should stabilise as $R$ grows; at $s=2$ the displayed digits settle by $R\approx160$&ndash;$320$. $\lambda_{\pm}$ are the Hessian eigenvalues in $(x,y)$ coordinates; "trace residual" is $|y^2(f_{xx}+f_{yy})-s(s-1)f|/(s(s-1)f)$.</p></div>
+
+<h3>Independent reference (Python / mpmath, not computed in your browser)</h3>
+<div class="tbl"><table id="reft"><thead><tr><th>s</th><th>point</th><th>f</th><th>f<sub>xx</sub></th><th>f<sub>yy</sub></th><th>$y^2$&middot;trace</th><th>$s(s-1)f$</th></tr></thead><tbody></tbody></table></div>
+<p class="sub">Computed from the Fourier&ndash;Bessel expansion of $E$ (40-digit arithmetic, derivatives by numerical differentiation), a method independent of the lattice sum above. The expansion was first checked against a direct lattice sum at $s=2,3$ (agreement to the size of the direct sum's own truncation error). Numerical, not certified. An earlier finite-difference estimate made with a smaller cutoff gave $f(i)\approx6.0261$ at $s=2$; the converged value is $6.02681$, which is why this page reports the larger-cutoff numbers.</p>
+<p id="refcmp" class="sub" aria-live="polite"></p>
+
+<h2>5 &middot; The same point on the critical line (the addendum)</h2>
+<p>This is a different situation, and the two should not be confused. On the critical line $s=\tfrac12+it$ the function $f=E^*(z,s)$ is real-valued, and the same eigenvalue identity reads $y^2(f_{xx}+f_{yy})=s(s-1)f=-(\tfrac14+t^2)f$. At the height of a zero of $F(t)=f(i)$ we have $f(i)=0$, so the trace <em>vanishes</em>, and the Hessian at $i$ is trace-free, $\operatorname{diag}(b,-b)$. If $b\ne0$ (this is the nondegeneracy hypothesis $a(t_0)\ne0$ of the <a href="nodal-addendum-ch14.html">addendum</a>) the nodal set near $i$ is a pair of orthogonal lines; a transversal reconnection as $t$ varies additionally needs $F'(t_0)\ne0$. Neither is established at every zero. The saddle at $i$ for real $s>1$ above is a different phenomenon: the trace is positive, $s(s-1)f(i)>0$, and $f(i)$ is not a zero. The sign pattern of the Hessian at $i$ and $\rho$ was checked on the slider grid $1.5\le s\le8$ (step $0.05$) with cutoff $R=300$ and showed no exceptions; this is a numerical scan, not a proof for all $s>1$.</p>
+
+<h2>6 &middot; The global minimum: what is actually known</h2>
+<p>Define $Z_L(s)=\sum_{v\in L\setminus0}|v|^{-2s}$ for a lattice $L\subset\mathbb{R}^2$ of covolume&nbsp;1; then $E(z,s)=Z_L(s)$ for $L=(\mathbb{Z}+\mathbb{Z}z)/\sqrt{y}$. The result below is quoted as read in the published sources, and was not re-proved here:</p>
+<ul>
+<li><b>Epstein zeta, every real $s>0$.</b> Among binary quadratic forms of fixed discriminant, the hexagonal form minimizes the Epstein zeta function for every real $s>0$: Rankin (1953), Cassels (1959), Ennola (1964) and Diananda (1964) proved this between them; Montgomery (<i>Minimal theta functions</i>, Glasgow Math. J. 30 (1988), 75&ndash;85) proved the stronger theta-function version for every $\alpha>0$, from which the Epstein inequality follows, and showed the minimizer is unique up to integral equivalence. (Source reading note: in the text of Montgomery's paper available to me the displayed inequalities were garbled; the statement and direction are confirmed by Bétermin&ndash;Faulhuber, <a href="https://arxiv.org/abs/2007.15977">arXiv:2007.15977</a>, Thm 1.4. Montgomery normalizes by discriminant, not covolume; the factor convention was not independently resolved.)</li>
+<li><b>This page uses only $s\ge1.5$,</b> where the sum converges and the theorem applies as stated. The statement for $0<s<1$ concerns the analytically continued function and is not used or displayed here.</li>
+<li><b>Not claimed here:</b> that $i$ and $\rho$ are the only critical points of $E(\cdot,s)$ on the domain, or that the saddle at $i$ persists for every $s$ (see Section 5 for what was scanned).</li>
+</ul>
+
+<h2>7 &middot; Where this connects</h2>
+<p>The square lattice is the point treated in the Chapter 14 <a href="nodal-addendum-ch14.html">addendum</a>; the square and triangular lattices are the two cases compared in Chapter 29 (<a href="ch29-discrete-to-continuum-spectral-limits.html">GS-2</a>), where their lattice-sum coefficients differ but the bulk-subtracted values at $s=0$ and negative integers agree. This page does not claim that the saddle/minimum picture explains that agreement.</p>
+
+<div class="chapter-nav"><a href="ch29-discrete-to-continuum-spectral-limits.html">&larr; Ch 29 &middot; Discrete-to-Continuum Spectral Limits</a><span class="sub mono">COMPANION TO CH 29</span><a href="contents.html">Book 4 contents</a></div>
+<div class="gfoot"><a href="https://grossi-ops.github.io/g6/" target="_blank" rel="noopener" style="color:inherit">G6 LLC</a> &middot; &copy; 2026 Pablo Nogueira Grossi</div>
+</div>
+<script>
+
+function latticeSums(x,y,s,Rs){
+  // Rs ascending radii; returns cumulative sums for each R of f,fx,fy,fxx,fyy,fxy over lattice points (m,n)!=0 with |m+nz|<=R
+  const K=Rs.length, Rmax=Rs[K-1], R2=Rs.map(r=>r*r);
+  const acc=[]; for(let k=0;k<K;k++) acc.push([0,0,0,0,0,0]);
+  const nmax=Math.floor(Rmax/y);
+  const ys=Math.pow(y,s);
+  for(let n=-nmax;n<=nmax;n++){
+    const b=n*y, rem=Rmax*Rmax-b*b; if(rem<0) continue;
+    const sq=Math.sqrt(rem);
+    const m0=Math.ceil(-n*x-sq), m1=Math.floor(-n*x+sq);
+    for(let m=m0;m<=m1;m++){
+      if(m===0&&n===0) continue;
+      const a=m+n*x, q=a*a+b*b;
+      let k=0; while(q>R2[k]) k++;
+      const g=ys*Math.exp(-s*Math.log(q)), q2=q*q;
+      const A=acc[k];
+      A[0]+=g;
+      A[1]+=g*(-2*s*n*a/q);
+      A[2]+=g*(s/y)*(a*a-b*b)/q;
+      A[3]+=g*2*s*n*n*((2*s+1)*a*a-b*b)/q2;
+      A[4]+=g*(s/(y*y*q2))*(-4*s*b*b*q+2*b*b*((2*s+1)*b*b-a*a)+(s-1)*q2);
+      A[5]+=g*2*s*a*b*(2*b*b*(s+1)-s*q)/(y*y*q2);
+    }
+  }
+  for(let k=1;k<K;k++) for(let j=0;j<6;j++) acc[k][j]+=acc[k-1][j];
+  return acc;
+}
+function tail(y,s,R){ return Math.PI*Math.pow(y,s-1)*Math.pow(R,2-2*s)/(s-1); }
+function eig2(a,b,d){ const t=(a+d)/2, r=Math.sqrt(((a-d)/2)**2+b*b); return [t-r,t+r]; }
+function Eval(x,y,s,R){ const a=latticeSums(x,y,s,[R])[0]; return a[0]+tail(y,s,R); }
+
+const REF={"2": {"i": {"value": 6.02681203969194, "fx": 0.0, "fy": -4.276423536147513e-50, "fxx": -3.4268239667697524, "fyy": 15.480448046153633, "fxy": 0.0, "ev": [-3.4268239667697524, 15.480448046153633], "trace_lhs": 12.05362407938388, "trace_rhs": 12.05362407938388}, "rho": {"value": 5.783359299678672, "fx": 0.0, "fy": 6.879937340243574e-42, "fxx": 7.711145732904896, "fyy": 7.711145732904896, "fxy": 0.0, "ev": [7.711145732904896, 7.711145732904896], "trace_lhs": 11.566718599357344, "trace_rhs": 11.566718599357344}}, "3": {"i": {"value": 4.6589136156038435, "fx": 0.0, "fy": 0.0, "fxx": -7.280778481980424, "fyy": 35.23426017560349, "fxy": 0.0, "ev": [-7.280778481980424, 35.23426017560349], "trace_lhs": 27.95348169362306, "trace_rhs": 27.95348169362306}, "rho": {"value": 4.141256547203416, "fx": 0.0, "fy": 1.4779430543059627e-41, "fxx": 16.565026188813665, "fyy": 16.565026188813665, "fxy": 0.0, "ev": [16.565026188813665, 16.565026188813665], "trace_lhs": 24.8475392832205, "trace_rhs": 24.8475392832205}}, "5": {"i": {"value": 4.1317748017458795, "fx": 0.0, "fy": 0.0, "fxx": -16.854450950914106, "fyy": 99.48994698583171, "fxy": 0.0, "ev": [-16.854450950914106, 99.48994698583171], "trace_lhs": 82.6354960349176, "trace_rhs": 82.6354960349176}, "rho": {"value": 2.9381509701304034, "fx": 0.0, "fy": 3.4952513998404855e-41, "fxx": 39.17534626840538, "fyy": 39.17534626840538, "fxy": 0.0, "ev": [39.17534626840538, 39.17534626840538], "trace_lhs": 58.763019402608066, "trace_rhs": 58.763019402608066}}};
+const $=id=>document.getElementById(id);
+const RHO=[0.5,Math.sqrt(3)/2];
+const fmt=(v,d=5)=>(Math.abs(v)<1e-9?'0':v.toFixed(d));
+function pointRows(s){
+  const out=[];
+  for(const [nm,x,y] of [['i (square)',0,1],['ρ (triangular)',RHO[0],RHO[1]]]){
+    const a=latticeSums(x,y,s,[200])[0]; const f=a[0]+tail(y,s,200);
+    const ev=eig2(a[3],a[5],a[4]); const tr=y*y*(a[3]+a[4]), rhs=s*(s-1)*f;
+    out.push({nm,x,y,f,ev,tr,rhs,gx:a[1],gy:a[2]});
+  }
+  return out;
+}
+function renderPts(s){
+  const rows=pointRows(s);
+  let h='';
+  rows.forEach((r,k)=>{
+    const kind=ev=>ev[0]<0&&ev[1]>0?'saddle (eigenvalues of opposite sign)':(ev[0]>0?'local minimum (both eigenvalues positive)':'other');
+    h+=`<div class="box"><div class="pt ${k?'min':'sad'}">${r.nm} &nbsp;<span class="tag">NUMERICAL</span></div>
+<div class="tbl"><table><tbody>
+<tr><td>E(z,s)</td><td>${fmt(r.f,6)}</td></tr>
+<tr><td>gradient</td><td>(${r.gx.toExponential(1)}, ${r.gy.toExponential(1)})</td></tr>
+<tr><td>Hessian eigenvalues</td><td>${fmt(r.ev[0],4)}, ${fmt(r.ev[1],4)}</td></tr>
+<tr><td>y²(f<sub>xx</sub>+f<sub>yy</sub>)</td><td>${fmt(r.tr,5)}</td></tr>
+<tr><td>s(s−1)f</td><td>${fmt(r.rhs,5)}</td></tr>
+</tbody></table></div><div class="sub" style="font-size:.85rem">${kind(r.ev)}</div></div>`;
+  });
+  $('pts').innerHTML=h;
+}
+/* colour map: dark blue -> teal -> yellow */
+function cmap(t){t=Math.max(0,Math.min(1,t));const st=[[26,35,126],[0,121,107],[38,166,154],[255,235,59],[255,255,224]];const u=t*(st.length-1),i=Math.min(st.length-2,Math.floor(u)),f=u-i;
+  return st[i].map((c,k)=>Math.round(c+(st[i+1][k]-c)*f));}
+function themeColors(){const cs=getComputedStyle(document.documentElement);return{fg:cs.getPropertyValue('--fg').trim()||'#222',card:cs.getPropertyValue('--card').trim()||'#fff'}}
+let mapBusy=false,mapNext=false;
+function drawMap(){
+  if(mapBusy){mapNext=true;return}
+  mapBusy=true;
+  const s=parseFloat($('s').value); $('sv').textContent='s = '+s.toFixed(2);
+  renderPts(s);
+  const cv=$('cmap'),W=cv.width,H=cv.height,ctx=cv.getContext('2d');
+  const GW=84,GH=72,ymin=0.8,ymax=1.5;
+  const val=new Float64Array(GW*GH),inD=new Uint8Array(GW*GH);
+  let lo=Infinity,hi=-Infinity;
+  const R=14;
+  for(let j=0;j<GH;j++)for(let i=0;i<GW;i++){
+    const x=-0.5+(i+0.5)/GW, y=ymax-(j+0.5)/GH*(ymax-ymin);
+    const k=j*GW+i;
+    if(x*x+y*y<1){inD[k]=0;continue}
+    inD[k]=1; const v=latticeSums(x,y,s,[R])[0][0]+tail(y,s,R); val[k]=v; if(v<lo)lo=v; if(v>hi)hi=v;
+  }
+  const img=ctx.createImageData(W,H); const d=img.data;
+  const sorted=Array.from(val).filter((v,k)=>inD[k]).sort((a,b)=>a-b);
+  hi=sorted[Math.floor(sorted.length*0.45)];   // clip colours at the 45th percentile so the structure near i and rho is visible
+  const ratio=Math.log(hi/lo);
+  for(let py=0;py<H;py++)for(let px=0;px<W;px++){
+    const gi=Math.min(GW-1,Math.floor(px/W*GW)),gj=Math.min(GH-1,Math.floor(py/H*GH)),k=gj*GW+gi,o=(py*W+px)*4;
+    if(!inD[k]){d[o+3]=0;continue}
+    const c=cmap(Math.log(val[k]/lo)/ratio); d[o]=c[0];d[o+1]=c[1];d[o+2]=c[2];d[o+3]=255;
+  }
+  ctx.clearRect(0,0,W,H); ctx.putImageData(img,0,0);
+  // level lines (marching-squares edge crossings) at 10 log-spaced levels between min and the clip value
+  ctx.strokeStyle='rgba(0,0,0,.45)';ctx.lineWidth=1;ctx.beginPath();
+  for(let kL=1;kL<10;kL++){
+    const L0=lo*Math.exp(ratio*kL/10);
+    for(let j=0;j<GH-1;j++)for(let i=0;i<GW-1;i++){
+      const k=j*GW+i; if(!(inD[k]&&inD[k+1]&&inD[k+GW]&&inD[k+GW+1]))continue;
+      const c=[val[k],val[k+1],val[k+GW+1],val[k+GW]],P=[[i,j],[i+1,j],[i+1,j+1],[i,j+1]],pts=[];
+      for(let e=0;e<4;e++){const a1=c[e],b1=c[(e+1)%4];if((a1-L0)*(b1-L0)<0){const tt=(L0-a1)/(b1-a1);pts.push([P[e][0]+(P[(e+1)%4][0]-P[e][0])*tt,P[e][1]+(P[(e+1)%4][1]-P[e][1])*tt]);}}
+      for(let q=0;q+1<pts.length;q+=2){ctx.moveTo((pts[q][0]+0.5)/GW*W,(pts[q][1]+0.5)/GH*H);ctx.lineTo((pts[q+1][0]+0.5)/GW*W,(pts[q+1][1]+0.5)/GH*H);}
+    }
+  }
+  ctx.stroke();
+  const X=x=>(x+0.5)*W, Y=y=>(ymax-y)/(ymax-ymin)*H;
+  const tc=themeColors();
+  ctx.lineWidth=2;ctx.strokeStyle='#fff';ctx.fillStyle='#000';
+  // i : circle
+  ctx.beginPath();ctx.arc(X(0),Y(1),7,0,6.2832);ctx.fill();ctx.stroke();
+  for(const sx of [0.5,-0.5]){ctx.beginPath();ctx.moveTo(X(sx),Y(RHO[1])-9);ctx.lineTo(X(sx)+9,Y(RHO[1]));ctx.lineTo(X(sx),Y(RHO[1])+9);ctx.lineTo(X(sx)-9,Y(RHO[1]));ctx.closePath();ctx.fill();ctx.stroke();}
+  ctx.font='bold 15px system-ui,sans-serif';ctx.fillStyle='#fff';ctx.strokeStyle='#000';ctx.lineWidth=3;
+  for(const [t,x,y] of [['i',X(0)+10,Y(1)-8],['ρ',X(0.5)-26,Y(RHO[1])-10],['−ρ̄',X(-0.5)+12,Y(RHO[1])-10]]){ctx.strokeText(t,x,y);ctx.fillText(t,x,y)}
+  mapBusy=false; if(mapNext){mapNext=false;requestAnimationFrame(drawMap)}
+}
+let center='i';
+function drawLoc(){
+  const s=parseFloat($('s').value), w=parseFloat($('w').value); $('wv').textContent=w.toFixed(2);
+  const [x0,y0]=center==='i'?[0,1]:RHO;
+  const cv=$('cloc'),W=cv.width,H=cv.height,ctx=cv.getContext('2d'),N=51,R=18;
+  const f0=latticeSums(x0,y0,s,[R])[0][0]+tail(y0,s,R);
+  const g=new Float64Array(N*N); let mx=0;
+  for(let j=0;j<N;j++)for(let i=0;i<N;i++){
+    const x=x0+(-1+2*i/(N-1))*w, y=y0+(1-2*j/(N-1))*w;
+    const v=latticeSums(x,y,s,[R])[0][0]+tail(y,s,R)-f0; g[j*N+i]=v; if(Math.abs(v)>mx)mx=Math.abs(v);
+  }
+  const img=ctx.createImageData(W,H),d=img.data;
+  for(let py=0;py<H;py++)for(let px=0;px<W;px++){
+    const u=px/(W-1)*(N-1),v=py/(H-1)*(N-1),i0=Math.min(N-2,Math.floor(u)),j0=Math.min(N-2,Math.floor(v)),fu=u-i0,fv=v-j0;
+    const val=g[j0*N+i0]*(1-fu)*(1-fv)+g[j0*N+i0+1]*fu*(1-fv)+g[(j0+1)*N+i0]*(1-fu)*fv+g[(j0+1)*N+i0+1]*fu*fv;
+    const t=val/mx, o=(py*W+px)*4;
+    if(t<0){const a=Math.min(1,-t);d[o]=Math.round(255-a*205);d[o+1]=Math.round(255-a*155);d[o+2]=255;}
+    else{const a=Math.min(1,t);d[o]=255;d[o+1]=Math.round(255-a*185);d[o+2]=Math.round(255-a*185);}
+    d[o+3]=255;
+  }
+  ctx.putImageData(img,0,0);
+  // contour lines via grid-edge crossings, levels k*mx/6
+  const levels=[];for(let k=-6;k<=6;k++)levels.push(k*mx/6);
+  levels.forEach(L0=>{
+    ctx.strokeStyle=L0===0?'#000':'rgba(0,0,0,.45)';ctx.lineWidth=L0===0?2.4:1;
+    ctx.beginPath();
+    for(let j=0;j<N-1;j++)for(let i=0;i<N-1;i++){
+      const c=[g[j*N+i],g[j*N+i+1],g[(j+1)*N+i+1],g[(j+1)*N+i]];
+      const pts=[];const P=[[i,j],[i+1,j],[i+1,j+1],[i,j+1]];
+      for(let e=0;e<4;e++){const a=c[e],b=c[(e+1)%4];if((a-L0)*(b-L0)<0){const t=(L0-a)/(b-a);pts.push([P[e][0]+(P[(e+1)%4][0]-P[e][0])*t,P[e][1]+(P[(e+1)%4][1]-P[e][1])*t]);}}
+      for(let k=0;k+1<pts.length;k+=2){ctx.moveTo(pts[k][0]/(N-1)*W,pts[k][1]/(N-1)*H);ctx.lineTo(pts[k+1][0]/(N-1)*W,pts[k+1][1]/(N-1)*H);}
+    }
+    ctx.stroke();
+  });
+  ctx.fillStyle='#000';ctx.beginPath();ctx.arc(W/2,H/2,4,0,6.2832);ctx.fill();
+  const a=latticeSums(x0,y0,s,[200])[0],ev=eig2(a[3],a[5],a[4]);
+  $('locinfo').innerHTML=`<p><b>Centre ${center==='i'?'i (square lattice)':'ρ (triangular lattice)'}</b>, s = ${s.toFixed(2)}, window half-width ${w.toFixed(2)} in both x and y, ${center==='i'?'x horizontal, y vertical (up)':'x horizontal, y vertical (up)'}.</p><p>Hessian eigenvalues at the centre (numerical): ${fmt(ev[0],4)}, ${fmt(ev[1],4)} &mdash; ${ev[0]<0&&ev[1]>0?'one negative, one positive: a saddle':'both positive: a local minimum'}.</p><p>Largest |E − E(centre)| in the window: ${mx.toExponential(2)}. Cutoff R=${R}, plus tail estimate.</p>`;
+}
+function renderStab(){
+  const s=parseFloat($('s').value);
+  const Rs=[10,20,40,80,160,320];
+  let h='<table><thead><tr><th>point</th><th>R</th><th>f raw</th><th>f + tail</th><th>λ−</th><th>λ+</th><th>trace residual</th></tr></thead><tbody>';
+  for(const [nm,x,y] of [['i',0,1],['ρ',RHO[0],RHO[1]]]){
+    const A=latticeSums(x,y,s,Rs);
+    Rs.forEach((R,k)=>{const a=A[k],f=a[0]+tail(y,s,R),ev=eig2(a[3],a[5],a[4]),res=Math.abs(y*y*(a[3]+a[4])-s*(s-1)*f)/(s*(s-1)*f);
+      h+=`<tr><td>${nm}</td><td>${R}</td><td>${a[0].toFixed(7)}</td><td>${f.toFixed(7)}</td><td>${ev[0].toFixed(5)}</td><td>${ev[1].toFixed(5)}</td><td>${res.toExponential(1)}</td></tr>`;});
+  }
+  $('stab').innerHTML=h+'</tbody></table>';
+  const r=REF[String(Math.round(s))]; const ok=Math.abs(s-Math.round(s))<1e-9&&r;
+  if(ok){const a=latticeSums(0,1,s,[320])[0],f=a[0]+tail(1,s,320);$('refcmp').textContent=`At s = ${s} the browser value E(i) = ${f.toFixed(8)} (R=320 + tail) differs from the mpmath reference ${r.i.value.toFixed(8)} by ${Math.abs(f-r.i.value).toExponential(1)}.`}
+  else $('refcmp').textContent='Set the slider to s = 2, 3 or 5 to compare the browser values with the embedded mpmath reference.';
+}
+function renderRef(){
+  const tb=document.querySelector('#reft tbody');let h='';
+  for(const s of Object.keys(REF))for(const k of ['i','rho']){const r=REF[s][k];h+=`<tr><td>${s}</td><td>${k==='i'?'i':'ρ'}</td><td>${r.value.toFixed(8)}</td><td>${r.fxx.toFixed(6)}</td><td>${r.fyy.toFixed(6)}</td><td>${r.trace_lhs.toFixed(6)}</td><td>${r.trace_rhs.toFixed(6)}</td></tr>`}
+  tb.innerHTML=h;
+}
+let tmr=null;
+function all(){drawMap();drawLoc();renderStab()}
+$('s').addEventListener('input',()=>{clearTimeout(tmr);$('sv').textContent='s = '+parseFloat($('s').value).toFixed(2);tmr=setTimeout(all,60)});
+$('w').addEventListener('input',()=>{clearTimeout(tmr);tmr=setTimeout(drawLoc,40)});
+function setC(c){center=c;$('cI').setAttribute('aria-pressed',c==='i');$('cR').setAttribute('aria-pressed',c==='rho');drawLoc()}
+$('cI').onclick=()=>setC('i');$('cR').onclick=()=>setC('rho');
+renderRef();all();
+</script>
+<!--po-related--><aside class="po-related" style="max-width:860px;margin:2.2rem auto 1.4rem;padding:1rem 1.25rem;border:1px solid rgba(128,128,128,.35);border-left:3px solid rgba(201,168,76,.8);border-radius:0 6px 6px 0;background:rgba(128,128,128,.06);font-family:ui-monospace,Menlo,monospace;font-size:.8rem;line-height:1.6"><div style="font-size:.72em;letter-spacing:.16em;text-transform:uppercase;opacity:.85">Across the series</div><div style="margin:.5rem 0 .2rem;font-size:.7em;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Definitions</div><ul style="margin:0 0 0 1.1rem;padding:0"><li style="margin:.2rem 0"><a href="ch00-definitions.html" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Chapter 0 &middot; Definitions and notation for this book</a></li></ul></aside><!--/po-related-->
+</body>
+</html>
