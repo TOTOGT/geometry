@@ -1,0 +1,60 @@
+# Verify catgt/lean/DNLSNorm.lean (Worker 1, 2026-11-28): continuous-time norm conservation for
+# the CatGT DNLS chain. Separate workflow so a failure here cannot mask or be masked by the main
+# verification job. The file had never been compiled when this was written: the first run is the
+# first kernel verdict, and its compiler output is what gets repaired against.
+name: Verify DNLSNorm (norm conservation)
+
+on:
+  push:
+    paths:
+      - 'catgt/lean/DNLSNorm.lean'
+      - '.github/workflows/verify-dnlsnorm.yml'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- --default-toolchain none -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Cache Mathlib build
+        uses: actions/cache@v4
+        with:
+          path: .lake
+          key: geometry-lake-${{ hashFiles('lakefile.lean', 'lean-toolchain') }}
+
+      - name: Fetch Mathlib cache
+        run: |
+          set -eux
+          lake update
+          lake exe cache get || echo "::warning::lake exe cache get failed; Mathlib will build from source"
+
+      - name: Compile DNLSNorm.lean and print axioms
+        run: |
+          set -u
+          { cat catgt/lean/DNLSNorm.lean
+            echo
+            echo '#print axioms CatGTNorm.hasDerivAt_normSq'
+            echo '#print axioms CatGTNorm.drift_zero'
+            echo '#print axioms CatGTNorm.dnls_norm_hasDerivAt'
+            echo '#print axioms CatGTNorm.dnls_norm_conserved'
+            echo '#print axioms CatGTNorm.euler_norm_sq'
+            echo '#print axioms CatGTNorm.periodic_shift_inverse'
+          } > /tmp/DNLSNormProbe.lean
+          set +e
+          lake env lean /tmp/DNLSNormProbe.lean > /tmp/dnlsnorm.txt 2>&1
+          rc=$?
+          set -e
+          echo "----- DNLSNorm: compiler and axiom report -----"
+          cat /tmp/dnlsnorm.txt
+          echo "-----------------------------------------------"
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::DNLSNorm.lean failed to elaborate (exit $rc); read the report above"
+            exit 1
+          fi
+          python3 tools/axiom_gate.py /tmp/dnlsnorm.txt 6
