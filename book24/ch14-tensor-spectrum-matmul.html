@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 14 · Matrix multiplication as a tensor: prices, wires and the exponent nine-fourths · Book XXIV · Principia Orthogona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="description" content="An audit companion to the OpenAI Family 379 preprints: tensors, spectral points, prices, wire distances and CAT(0) spaces, with each hypothesis marked. Not a verification of the theorem.">
+<style>
+:root{--bg:#07090f;--panel:#0d111b;--ink:#e8ebf2;--dim:#7d869c;--rule:#1c2233;--gold:#d9b76a;--teal:#58c7d1;--serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono','Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.65}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.7rem 1.25rem;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;color:var(--dim)}
+header,.wrap{max-width:900px;margin:0 auto;padding-inline:1.25rem}
+header{padding-top:2.4rem;padding-bottom:1rem}
+.kick{font-family:var(--mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:500;font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.1;margin:.5rem 0 .8rem}h1 em{color:var(--gold)}
+.lede{color:#b9c0d1;font-style:italic;max-width:42rem}
+h2{font-weight:500;font-size:1.35rem;margin:2.2rem 0 .7rem;padding-bottom:.3rem;border-bottom:1px solid var(--rule)}
+p{margin-bottom:.9rem}
+.mono,code{font-family:var(--mono);font-size:.82em;color:var(--teal)}
+.eq{font-family:var(--mono);font-size:.88rem;background:var(--panel);border-left:2px solid var(--gold);padding:.7rem 1rem;margin:1rem 0;overflow-x:auto;white-space:pre}
+.box{border:1px solid var(--rule);background:var(--panel);padding:1rem 1.2rem;margin:1.3rem 0}
+.box .lab{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}
+.box.warn{border-color:#5a4720}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;background:rgba(7,9,15,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);padding:.55rem 0;margin:1.6rem 0 .4rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.bar button{font:inherit;letter-spacing:inherit;text-transform:inherit;background:transparent;border:1px solid var(--rule);color:var(--dim);padding:.35rem .55rem;cursor:pointer}
+.bar button[aria-pressed="true"]{color:var(--c);border-color:var(--c)}
+.bar button.q{--c:var(--ink)}
+.layer{border-left:2px solid var(--c);padding:.1rem 0 .1rem 1rem;margin:.7rem 0 1rem;--c:var(--teal)}
+.layer>.tag{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--c);margin-bottom:.25rem}
+.layer[data-l="statement"]{--c:var(--gold)}.layer[data-l="proof"]{--c:#9aa3ba}.layer[data-l="remarks"]{--c:#b497d9}
+.bar [data-l="intuition"]{--c:var(--teal)}.bar [data-l="statement"]{--c:var(--gold)}.bar [data-l="proof"]{--c:#9aa3ba}.bar [data-l="remarks"]{--c:#b497d9}
+body.off-intuition .layer[data-l="intuition"],body.off-statement .layer[data-l="statement"],body.off-proof .layer[data-l="proof"],body.off-remarks .layer[data-l="remarks"]{display:none}
+ol.ex{padding-left:1.4rem}ol.ex li{margin-bottom:.6rem}
+.stage{max-width:1100px;margin:1.4rem auto 0;padding:0 1.25rem}
+.grid{display:grid;grid-template-columns:1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.panel{background:var(--panel);padding:1.1rem;display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.btn{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem .6rem;background:transparent;border:1px solid var(--rule);color:var(--dim);cursor:pointer}
+.btn.on,.btn:hover{border-color:var(--teal);color:var(--teal)}
+.row{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.read{border-top:1px solid var(--rule);padding-top:.8rem;font-family:var(--mono);font-size:.64rem;line-height:1.9;color:var(--dim);overflow-wrap:anywhere}
+.read b{color:var(--gold);font-weight:500}
+footer{max-width:900px;margin:3rem auto 0;padding:1.2rem 1.25rem 3rem;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.9}
+.nav{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;max-width:900px;margin:2.2rem auto 0;padding:1rem 1.25rem 0;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.75rem}
+.metagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.4rem 0;font-size:.8rem;line-height:1.5}.metagrid>div{background:var(--panel);padding:.7rem .9rem;min-width:0}.metagrid strong{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.25rem}select{font-family:var(--mono);font-size:.7rem;background:var(--bg);color:var(--ink);border:1px solid var(--rule);padding:.2rem .3rem}
+.mono{overflow-wrap:anywhere}
+[hidden]{display:none!important}
+canvas{display:block;max-width:100%;background:#05070c;border:1px solid var(--rule)}.cv{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-start}.cv>div{flex:1 1 300px}.sl{display:flex;gap:.6rem;align-items:center;font-family:var(--mono);font-size:.72rem;margin:.5rem 0}.sl input[type=range]{flex:1}.leg{font-family:var(--mono);font-size:.68rem;color:var(--dim)}.leg i{display:inline-block;width:.7rem;height:.7rem;margin-right:.3rem;vertical-align:middle}
+.tblwrap{overflow-x:auto;margin:1rem 0}table{border-collapse:collapse;width:100%;font-size:.88rem}th{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--rule)}td{padding:.4rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}td.n{font-family:var(--mono);text-align:right;white-space:nowrap}
+</style>
+<!--po-subject--><meta name="po-subject" content="MATHEMATICS · PURE"><!--/po-subject-->
+</head>
+<body>
+<div class="top"><span><a href="index.html">Book XXIV contents</a> &middot; <a href="ch13-circulant-matrices.html">&larr; Chapter 13</a> &middot; <a href="../master-index.html">master index</a></span><span>Chapter 14 &middot; <a href="family379-release.html">Family 379 release index &rarr;</a></span></div>
+<header>
+<div class="kick">Principia Orthogona &middot; Book XXIV &middot; Linear and nonlinear &middot; Chapter 14</div>
+<h1>Matrix multiplication as a tensor: <em>prices, wires and the exponent nine-fourths</em></h1>
+<p class="lede">A recent set of OpenAI preprints claims that the exponent of square matrix multiplication is exactly 9/4 over every field. This chapter explains the objects the argument is built from, spectral points, prices, wire distances and CAT(0) spaces, and marks where each hypothesis is used. It reports a partial audit. It does not verify the theorem.</p>
+</header>
+<div class="wrap">
+<div class="box warn"><span class="lab">Status of this chapter</span>
+The results discussed here are claims of the preprints listed in section 9, which their authors describe as raw research output in which some unformalized results could have issues. They have not been independently verified here. What was audited, and what was not, is set out in the <a href="family379-audit-note.html">technical audit note</a>. The Lean formalization status is <b>unverified</b>: a continuous-integration job that compiles the files and prints the axioms behind each cited declaration is part of this release, and its result is recorded in the <a href="family379-release.html">release index</a> when it finishes.</div>
+
+<h2>1 &middot; What is claimed</h2>
+<p>Multiplying two n&times;n matrices by the schoolbook rule takes about n<sup>3</sup> multiplications, and Strassen showed in 1969 that about n<sup>log<sub>2</sub>7</sup> &asymp; n<sup>2.807</sup> suffice. The exponent &omega; is the infimum of the s for which n&times;n products can be computed with O(n<sup>s+&epsilon;</sup>) arithmetic operations. Trivially 2 &le; &omega; &le; 3. The preprint titled <em>The matrix multiplication exponent is nine fourths</em> states that &omega; = 9/4 over every field, in a model that counts additions, subtractions and multiplications in division-free programs and asks for formal polynomial identities even over finite fields (this is the statement recorded in the Lean catalogue file <span class="mono">lean/docs/379.md</span> of the same repository). The same catalogue states the dual exponent as 1/2 and gives a closed formula for rectangular products.</p>
+<p>That is a large claim, so the useful questions are structural. What is the proof made of, which pieces depend on which hypotheses, and which pieces a reader can check?</p>
+
+<h2>2 &middot; A matrix product is a tensor</h2>
+<p>Multiplying matrices is a bilinear map, and a bilinear map is a three-index array. For n&times;n matrices the array is the matrix multiplication tensor &lang;n,n,n&rang; = &Sigma; e<sub>ij</sub>&otimes;e<sub>jk</sub>&otimes;e<sub>ki</sub>. A tensor <em>restricts</em> to another if the second is obtained from the first by applying linear maps to each index, and this preorder is the right notion of &ldquo;at least as hard&rdquo;. Everything in this chapter is a statement about how the sizes of the tensors &lang;n,n,n&rang; grow, measured by quantities that respect restriction, sums and products of tensors.</p>
+
+<h2>3 &middot; Spectral points and Strassen duality (background)</h2>
+<p>This section is standard and is due to Strassen (<em>The asymptotic spectrum of tensors</em>, J. reine angew. Math. 384, 1988). A <em>spectral point</em> is a map f from tensors to the non-negative reals that is monotone under restriction, additive under direct sum, multiplicative under tensor product and normalised on the unit tensor. Strassen duality says the asymptotic rank of a tensor is the maximum of f over all spectral points. For &lang;n,n,n&rang; each spectral point f gives f(&lang;n,n,n&rang;) = n<sup>e(f)</sup> for an exponent e(f), and &omega; is the largest e(f). So an upper bound on &omega; is a bound on every spectral point, and a lower bound on &omega; is an exhibited spectral point or an obstruction to cheaper circuits.</p>
+<p>The October preprint (<em>Matrix Multiplication Nine Fourths</em>, 13 pages) proves &omega; &le; 9/4 over the complex numbers this way. In the audit it was read independently of the November lower bound and does not use ports or CAT(0). Its chain, in the audit&rsquo;s summary: put t = (p<sub>X</sub>+p<sub>Y</sub>+p<sub>Z</sub>)/3 for the exponents of a spectral point, build a profile P(a,b) from the point&rsquo;s values on the tensors C(a,b), show P(a,a) &ge; a<sup>4/3</sup> for every a (Lemma 5.1), and let a grow to force t &le; 3/4, hence e(f) = 3t &le; 9/4. The audit rechecked Lemma 5.1 by hand: with H<sub>a</sub> and D<sub>a</sub> = (3a&minus;1)H<sub>a</sub>/2 the inequality D<sub>a</sub>&minus;D<sub>a&minus;1</sub> &ge; H<sub>a&minus;1</sub>+H<sub>a</sub> gives H<sub>a</sub> &ge; (1+1/(3(a&minus;1)))H<sub>a&minus;1</sub>, and (1+1/(3m))<sup>3</sup> &ge; 1+1/m, so H<sub>a</sub><sup>3</sup> &ge; a. Its appendix on the existence of detecting characters was not checked.</p>
+
+<h2>4 &middot; Prices and wire distances</h2>
+<div class="layer" data-l="intuition"><span class="tag">Intuition</span>
+<p>The lower-bound side is where the geometry enters. Think of a circuit for a tensor as a network. Each index of the tensor sits at a site, and a bit of information that two sites must share has to be carried along wires. A <em>price</em> assigns to every finite configuration of sites a cost for sharing information, and a <em>wire distance</em> measures what a single connection costs. The companion preprint <em>Euclidean geometry in the asymptotic spectrum of tensors</em> shows that the sites can be placed in Euclidean space so that the wire cost between two sites is their Euclidean distance.</p></div>
+<div class="layer" data-l="statement"><span class="tag">Statement (as reported)</span>
+<p>Companion Theorem 1.1, read in the source file <span class="mono">intro.tex</span>: for any field k and any real Hilbert space K there is a compatible price assignment with wire equal to Euclidean distance and, for a finite set S of sites and q a power of the field size, H(&Delta;<sub>S</sub>(q)) = W(S)&middot;log<sub>2</sub>q, where W(S) = &radic;(2&pi;)&middot;E max<sub>s&isin;S</sub>&lang;g,s&rang; is the Gaussian mean width of S. For two sites W is their distance, and for three sites it is half the perimeter of their triangle.</p></div>
+<div class="layer" data-l="proof"><span class="tag">A check you can run</span>
+<p>In the plane W(S) = (perimeter of the convex hull of S)/2, because E max<sub>s&isin;S</sub>&lang;g,s&rang; = E|g|&middot;(mean over directions of the support function) = &radic;(&pi;/2)&middot;perimeter/(2&pi;) by Cauchy&rsquo;s formula. The script <a class="mono" href="ch14-verify.py">ch14-verify.py</a> evaluates the direction average numerically and confirms this for an equilateral triangle, a 3-4-5 triangle and three collinear points. The audit also confirmed it by Monte Carlo (2&times;10<sup>6</sup> samples): an equilateral triangle with side 2 gave 3.0027 against the exact 3.</p>
+<p>The unit tripod, three sites pairwise at distance 2, therefore costs 3 under Euclidean prices. The main preprint&rsquo;s count compares that to what a circuit needs: the ratio is 6/3 = 2 under Euclidean prices, which is the ratio of two that the main paper says Euclidean flats give. The exponent 9/4 appears when the rate is the non-Euclidean tripod value 8/3, since 6/(8/3) = 9/4. This chapter does not derive the numerator 6 or the value 8/3; both are quoted from the main paper&rsquo;s text as read in the audit.</p></div>
+
+<h2>5 &middot; Where CAT(0) enters</h2>
+<p>A CAT(0) space, also called a Hadamard space when complete, is a geodesic metric space in which every triangle is no fatter than the Euclidean triangle with the same side lengths. Hilbert spaces and trees are examples. A <em>flat</em> is an isometric copy of R<sup>a</sup>. The companion preprint works with &ldquo;spectral spaces&rdquo; over a field, and per the audit its Theorem 4.3 allows them to be taken to be complete CAT(0) spaces, closed under positive rescaling, closed convex subspaces and pointed ultralimits. These closure properties are what the arguments use. They let one rescale a configuration, pass to a limit, and then apply the flat-rectangle theorem of CAT(0) geometry.</p>
+<p>Three constructions use this setting; the numbers are those of the companion preprint.</p>
+<p><b>Field transfer (Lemma 7.1).</b> If spectral a-flats exist over every finite prime field, they exist over every field. The proof extends scalars, takes a limit over primes in characteristic zero and uses a pointed ultralimit to pass from Q<sup>a</sup> to R<sup>a</sup>. The hypothesis is flats over <em>every</em> prime field.</p>
+<p><b>Cube exclusion.</b> If a finite field F has a largest flat dimension k, the distance matrix of the corners of the (k+1)-cube stays at positive distance from every realizable matrix. Otherwise an ultralimit would realize the cube, the flat-rectangle theorem would fill it, and rescaling would give a (k+1)-flat. The constants depend on F and k.</p>
+<p><b>Ports (Definition 11.1).</b> A field <em>has ports</em> if there is one constant &gamma; and a family of regular symmetric multigraphs of unbounded order and bounded degree such that V(x) &le; &gamma;&middot;E<sub>G</sub>(x) for every graph in the family and every assignment x of vertices into a spectral space over the field. Here V is the mean squared distance between two independent uniform vertices and E<sub>G</sub> the mean squared length of a uniform edge. For maps into a Hilbert space this is, up to constants, the spectral gap of the graph; the definition asks it to hold in every spectral space over the field. Whether a given characteristic has ports depends only on the characteristic.</p>
+
+<h2>6 &middot; Where each hypothesis is used</h2>
+<div class="tblwrap"><table>
+<tr><th>Step</th><th>Hypothesis</th><th>Source</th></tr>
+<tr><td>Cube exclusion gives ports</td><td>a finite largest flat dimension k over a finite field F</td><td>Companion Prop. 11.2, with Lemma 11.3. One direction only; no converse was found.</td></tr>
+<tr><td>A contradiction from finite k</td><td>ports implies compression, then a diagonal argument</td><td>Companion Section 16; conclusion is Theorem 1.2: flats of every dimension over every finite field</td></tr>
+<tr><td>Exact batch lower bound, Theorem 12.1</td><td>finite field F; ports supplied by the Part II heading and Section 13</td><td>Circuit companion, printed statement begins &ldquo;Fix a finite field F of characteristic &chi;&rdquo;</td></tr>
+<tr><td>No-ports case</td><td>a class of Hadamard spaces closed under rescaling, convex subspaces and ultralimits</td><td>Circuit companion Theorem 6.1, Corollary 5.2; imported by the main paper&rsquo;s Theorem 2.2</td></tr>
+<tr><td>Sorting exponent p &lt; 2</td><td>the shared-price hypothesis</td><td>Lean: <span class="mono">sorting_of_shared_price</span>; companion Lemma 14.2 and Theorem 10.1</td></tr>
+</table></div>
+<p>The ports/no-ports split is exhaustive by definition, as the negation of an existence statement, so the main theorem needs no classification of characteristics. What is geometric is one implication: a finite largest flat dimension forces ports. Because Section 16 then refutes that finite dimension, the hypothesis of that implication is never satisfied. The sources read do not show that any characteristic admits ports, so Part II of the circuit companion and Section 4.3 of the main paper sit under a hypothesis whose non-vacuity is not established. Nothing is lost for the main theorem if that branch is empty, since the no-ports branch then covers every case, but a reader should know which branch is populated. The <a href="family379-audit-note.html">technical audit note</a> gives page and theorem references.</p>
+
+<h2>7 &middot; What the Lean files do and do not say</h2>
+<p>The repository ships a Lean 4 library. Its headline theorem is stated in the source as <span class="mono">omega F = 9 / 4 &and; Rectangle.Rigidity F</span> for every field F in a formal rational-circuit model, and its comparator file states the square, dual and rectangular exponents. The audit read the sources and found: the library does not mention CAT(0) spaces, Hadamard spaces or Poincar&eacute; inequalities, so it does not formalize the ports/no-ports split; it proves its lower bound by a different route, a case split on the shared-price hypothesis; and the repository&rsquo;s own catalogue lists several results as unformalized, among them the n<sup>9/4</sup>/2 bound on multiplication gates at each side length. A source scan found no <span class="mono">sorry</span>, <span class="mono">axiom</span>, <span class="mono">native_decide</span> or <span class="mono">unsafe</span> inside the <span class="mono">OAI</span> modules. <span class="mono">sorry</span> appears only in the comparator challenge file, where it marks the statements to be proved, and <span class="mono">unsafe</span> once in a build-script line of the package&rsquo;s lakefile. A source scan is not a kernel check. The declaration-level axiom output is pending; see the release index.</p>
+
+<h2>8 &middot; Exercises</h2>
+<ol class="ex">
+<li>Show that W of a segment of length L is L, and that W of three collinear points with extreme distance L is L.</li>
+<li>For the triangle with vertices (0,0), (4,0), (1,0.5), compute half its perimeter and compare it with the value 4.0744 obtained by Monte Carlo in the audit. Which is exact?</li>
+<li>Check that 6/3 = 2 and 6/(8/3) = 9/4, then say in one sentence why replacing the tripod rate 3 by 8/3 moves the exponent from 2 to 9/4.</li>
+<li>Prove the lemma behind Lemma 5.1: (1+1/(3m))<sup>3</sup> &ge; 1+1/m for every positive integer m.</li>
+<li>Write down, for a Hilbert-space-valued x on a graph with normalized spectral gap &lambda;, the inequality V(x) &le; E<sub>G</sub>(x)/&lambda; up to a constant, and say which graph property makes a family of graphs have uniformly bounded &gamma;.</li>
+</ol>
+
+<h2>9 &middot; Sources</h2>
+<p>All papers below are by their listed authors at their original location; they are linked here and not reproduced. The repository states that the manuscripts were produced by an internal OpenAI model and that they are best read as raw research data.</p>
+<ul>
+<li>OpenAI, <em>Euclidean geometry in the asymptotic spectrum of tensors</em>, November 24, 2026: <a href="https://github.com/openai/math/blob/main/preprints/Euclidean-geometry-in-the-asymptotic-spectrum-of-tensors-November-24-2026/paper.pdf">paper.pdf (current)</a>, <a href="https://github.com/openai/math/blob/92b516ef8e2abf66c3db7aa31438d3010bc7956f/preprints/Euclidean-geometry-in-the-asymptotic-spectrum-of-tensors-November-24-2026/paper.pdf">pinned to commit 92b516e</a>.</li>
+<li>OpenAI, <em>Circuit lower bounds for Hamiltonian cycle and the permanent</em>, November 24, 2026: <a href="https://github.com/openai/math/blob/92b516ef8e2abf66c3db7aa31438d3010bc7956f/preprints/Circuit-lower-bounds-for-Hamiltonian-cycle-and-the-permanent-November-24-2026/paper.pdf">paper.pdf</a>.</li>
+<li>OpenAI, <em>The matrix multiplication exponent is nine fourths</em>, November 24, 2026: <a href="https://github.com/openai/math/blob/92b516ef8e2abf66c3db7aa31438d3010bc7956f/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026/paper.pdf">paper.pdf</a>.</li>
+<li>OpenAI, <em>Matrix Multiplication Nine Fourths</em>, October 2, 2026: <a href="https://github.com/openai/math/blob/92b516ef8e2abf66c3db7aa31438d3010bc7956f/preprints/Matrix-Multiplication-Nine-Fourths-October-2-2026/paper.pdf">paper.pdf</a>.</li>
+<li>V. Strassen, <em>The asymptotic spectrum of tensors</em>, J. reine angew. Math. 384 (1988), 102&ndash;152.</li>
+<li>Repository: <a href="https://github.com/openai/math">github.com/openai/math</a>. Everything here was read at commit 92b516ef8e2abf66c3db7aa31438d3010bc7956f.</li>
+</ul>
+<p>Next: the <a href="family379-audit-note.html">technical audit note</a> and the <a href="family379-release.html">release index</a>.</p>
+<div class="nav"><a href="ch13-circulant-matrices.html">&larr; Chapter 13</a><a href="family379-release.html">Family 379 release index &rarr;</a></div>
+</div>
+<footer>Chapter 14 was written 2026-11-28 as an audit companion to the OpenAI preprints cited above. It is checked by <a class="mono" href="ch14-verify.py">ch14-verify.py</a>, which covers only the arithmetic and the planar mean-width identity. It makes no claim that the preprints&rsquo; theorems are correct and does not describe the Lean files as verified. Layers in other chapters of this book can be toggled; this one is short enough to read straight through.</footer>
+
+</body>
+</html>
