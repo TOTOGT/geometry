@@ -103,7 +103,7 @@ ul li strong{color:var(--cream);}
 /* ── HEXAGONAL MACHINE ── */
 .machine-wrap{background:var(--navy-light);border:1px solid rgba(0,156,59,.2);border-radius:8px;padding:2rem;margin:2.5rem 0;}
 .machine-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brazil-green);margin-bottom:1rem;opacity:.8;}
-#hex-canvas{width:100%;display:block;border-radius:4px;background:var(--navy);}
+#hex-canvas{width:100%;height:380px;display:block;border-radius:4px;background:var(--navy);}
 .hex-controls{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.2rem;align-items:center;}
 .hex-ctrl{display:flex;flex-direction:column;gap:.25rem;flex:1;min-width:120px;}
 .hex-ctrl-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim);}
@@ -304,11 +304,11 @@ footer a{color:var(--brazil-gold);text-decoration:none;}
       <div class="hex-controls">
         <div class="hex-ctrl">
           <div class="hex-ctrl-label">Ca²⁺ concentration <span class="hex-ctrl-val" id="v-ca">0.50</span></div>
-          <input type="range" id="sl-ca" min="0" max="1" step="0.01" value="0.5" oninput="hexCa=parseFloat(this.value);document.getElementById('v-ca').textContent=parseFloat(this.value).toFixed(2)">
+          <input type="range" id="sl-ca" min="0" max="1" step="0.01" value="0.5">
         </div>
         <div class="hex-ctrl">
           <div class="hex-ctrl-label">Cycle (g-series) <span class="hex-ctrl-val" id="v-cycle">g⁰</span></div>
-          <input type="range" id="sl-cycle" min="0" max="6" step="1" value="0" oninput="hexCycle=parseInt(this.value);document.getElementById('v-cycle').textContent='g'+['⁰','¹','²','³','⁴','⁵','⁶'][parseInt(this.value)]">
+          <input type="range" id="sl-cycle" min="0" max="6" step="1" value="0">
         </div>
         <div class="phase-row">
           <div class="ph c" id="phc">C</div>
@@ -316,6 +316,7 @@ footer a{color:var(--brazil-gold);text-decoration:none;}
           <div class="ph f" id="phf">F</div>
           <div class="ph u" id="phu">U</div>
         </div>
+        <button class="btn-sm" id="btn-auto" onclick="toggleHexAuto()">❚❚ Pause</button>
         <button class="btn-sm" onclick="resetHex()">↺ Reset</button>
       </div>
     </div>
@@ -525,11 +526,16 @@ heroLoop();
 const hcan=document.getElementById('hex-canvas');
 const hctx=hcan.getContext('2d');
 let HW,HH,hdpr;
-let hexCa=0.5,hexCycle=0,hexT=0;
+let hexCa=0.5,hexCycle=0,hexT=0,hexAuto=true;
 
 function rHex(){hdpr=window.devicePixelRatio||1;HW=hcan.offsetWidth;HH=hcan.offsetHeight;hcan.width=HW*hdpr;hcan.height=HH*hdpr;hctx.scale(hdpr,hdpr);}
 rHex();window.addEventListener('resize',rHex);
-window.resetHex=function(){hexCa=0.5;hexCycle=0;hexT=0;document.getElementById('sl-ca').value=0.5;document.getElementById('sl-cycle').value=0;document.getElementById('v-ca').textContent='0.50';document.getElementById('v-cycle').textContent='g⁰';};
+(function(){var sc=document.getElementById('sl-ca'),sy=document.getElementById('sl-cycle');
+  sc.addEventListener('input',function(){hexAuto=false;hexCa=parseFloat(sc.value);document.getElementById('v-ca').textContent=hexCa.toFixed(2);var b=document.getElementById('btn-auto');if(b)b.textContent='▶ Auto';});
+  sy.addEventListener('input',function(){hexAuto=false;hexCycle=parseInt(sy.value);document.getElementById('v-cycle').textContent='g'+['⁰','¹','²','³','⁴','⁵','⁶'][hexCycle];var b=document.getElementById('btn-auto');if(b)b.textContent='▶ Auto';});
+})();
+window.toggleHexAuto=function(){hexAuto=!hexAuto;var b=document.getElementById('btn-auto');if(b)b.textContent=hexAuto?'❚❚ Pause':'▶ Auto';};
+window.resetHex=function(){hexAuto=false;var b=document.getElementById('btn-auto');if(b)b.textContent='▶ Auto';hexCa=0.5;hexCycle=0;hexT=0;document.getElementById('sl-ca').value=0.5;document.getElementById('sl-cycle').value=0;document.getElementById('v-ca').textContent='0.50';document.getElementById('v-cycle').textContent='g⁰';};
 
 const CYCLE_LABELS=['⁰','¹','²','³','⁴','⁵','⁶'];
 const PHASE_NAMES=['c','k','f','u'];
@@ -538,6 +544,9 @@ function hexLoop(){
   if(!HW||!HH){rHex();}
   hctx.clearRect(0,0,HW,HH);
   hexT+=0.02;
+  if(hexAuto){hexCa=(hexT*0.04)%1;hexCycle=Math.floor((hexT*0.04)/1)%7;
+    document.getElementById('sl-ca').value=hexCa;document.getElementById('v-ca').textContent=hexCa.toFixed(2);
+    document.getElementById('sl-cycle').value=hexCycle;document.getElementById('v-cycle').textContent='g'+['⁰','¹','²','³','⁴','⁵','⁶'][hexCycle];}
 
   const cx=HW/2,cy=HH/2;
   const baseR=Math.min(HW,HH)*0.055;
