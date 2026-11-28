@@ -1,0 +1,127 @@
+# Family 379 Lean audit (Book XXIV, Chapter 14 release).
+#
+# Purpose: compile the OpenAI Lean library at a pinned commit and ask the Lean kernel, for each
+# declaration listed in book24/family379-audit-decls.txt, which axioms it depends on. The job
+# fails on sorryAx or on any axiom outside {propext, Classical.choice, Quot.sound}. A textual scan
+# of the sources is run too, but it is informational and gates nothing: a scan cannot tell a real
+# proof from a vacuous one, and the printed statement of each declaration is what a human must read.
+#
+# Written 2026-11-28 and NOT YET RUN when committed: the first run is the test of this file.
+# The library is large. The job builds only the modules containing the listed declarations
+# (their import closure), after fetching the Mathlib cache.
+name: Family 379 Lean audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/family379-lean-audit.yml'
+      - 'book24/family379-audit-decls.txt'
+
+env:
+  OAI_COMMIT: 92b516ef8e2abf66c3db7aa31438d3010bc7956f
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch the OpenAI library at the pinned commit
+        run: |
+          mkdir oai && cd oai
+          git init -q
+          git remote add origin https://github.com/openai/math.git
+          git fetch -q --depth 1 origin "$OAI_COMMIT"
+          git checkout -q FETCH_HEAD
+          test "$(git rev-parse HEAD)" = "$OAI_COMMIT"
+          echo "library commit: $(git rev-parse HEAD)"
+          cat lean/lean-toolchain
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Source scan (informational)
+        working-directory: oai/lean
+        run: |
+          set +e
+          for k in 'sorry' '^[[:space:]]*axiom ' 'native_decide' 'unsafe' 'implemented_by'; do
+            echo "== $k"; grep -rEn --include=*.lean "$k" . | cut -c1-160 | head -20
+          done
+          echo "lean files: $(find . -name '*.lean' | wc -l)"
+          true
+
+      - name: Fetch dependencies and the Mathlib cache
+        working-directory: oai/lean
+        run: |
+          lake --version
+          lake exe cache get
+
+      - name: Build the modules that hold the audited declarations
+        working-directory: oai/lean
+        run: |
+          set -e
+          mods=$(awk -F' [|] ' '{print $2}' "$GITHUB_WORKSPACE/book24/family379-audit-decls.txt" \
+                 | sed -E 's#:[0-9]+$##; s#\.lean$##; s#/#.#g; s#^#OAI.LinearAlgebra.#' | sort -u)
+          echo "$mods"
+          lake build $mods 2>&1 | tee "$GITHUB_WORKSPACE/build.log" | tail -40
+
+      - name: Print axioms for each declaration
+        working-directory: oai/lean
+        run: |
+          set -e
+          mods=$(awk -F' [|] ' '{print $2}' "$GITHUB_WORKSPACE/book24/family379-audit-decls.txt" \
+                 | sed -E 's#:[0-9]+$##; s#\.lean$##; s#/#.#g; s#^#OAI.LinearAlgebra.#' | sort -u)
+          { for m in $mods; do echo "import $m"; done
+            awk -F' [|] ' '{print "#print axioms " $1}' "$GITHUB_WORKSPACE/book24/family379-audit-decls.txt"
+          } > FamilyAudit.lean
+          cat FamilyAudit.lean
+          lake env lean FamilyAudit.lean 2>&1 | tee "$GITHUB_WORKSPACE/axioms.txt"
+
+      - name: Gate (kernel result decides)
+        run: |
+          python3 - <<'PY'
+          import re, sys
+          txt = open('axioms.txt').read()
+          decls = [l.split(' | ')[0].strip() for l in open('book24/family379-audit-decls.txt') if l.strip()]
+          allowed = {'propext', 'Classical.choice', 'Quot.sound'}
+          # Lean wraps long axiom lists across lines; join each block before parsing.
+          blocks = re.split(r"(?m)^(?=')", txt)
+          found = {}
+          for b in blocks:
+              m = re.match(r"'([^']+)' (depends on axioms: \[(.*?)\]|does not depend on any axioms)", b, re.S)
+              if m:
+                  axs = set() if m.group(3) is None else {a.strip() for a in m.group(3).replace('\n', ' ').split(',') if a.strip()}
+                  found[m.group(1)] = axs
+          bad = 0
+          lines = ['| declaration | axioms |', '|---|---|']
+          for d in decls:
+              if d not in found:
+                  lines.append(f'| `{d}` | NOT REPORTED |'); bad += 1; continue
+              extra = found[d] - allowed
+              status = 'OK' if not extra else 'FAIL ' + ', '.join(sorted(extra))
+              if extra: bad += 1
+              lines.append(f'| `{d}` | {", ".join(sorted(found[d])) or "none"} ({status}) |')
+          summary = '\n'.join(lines)
+          print(summary)
+          open('summary.md', 'w').write(summary + '\n')
+          sys.exit(1 if bad else 0)
+          PY
+
+      - name: Job summary
+        if: always()
+        run: |
+          { echo "## Family 379 Lean audit"; echo "Library commit: $OAI_COMMIT"; echo "Toolchain: $(cat oai/lean/lean-toolchain)";
+            test -f summary.md && cat summary.md; } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: family379-lean-audit
+          path: |
+            axioms.txt
+            build.log
+            summary.md
