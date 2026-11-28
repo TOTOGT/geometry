@@ -1,0 +1,49 @@
+# Verify catgt/lean/CatGTDynamics.lean (Worker 4 draft, UNTESTED: first run is the first compile).
+# Standalone `lake env lean` (no lakefile change); the file carries its own #print axioms lines.
+name: Verify CatGTDynamics (norm law, energy law, relaxation)
+
+on:
+  push:
+    paths:
+      - 'catgt/lean/CatGTDynamics.lean'
+      - 'lakefile.lean'
+      - '.github/workflows/verify-catgtdyn.yml'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- --default-toolchain none -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Cache Mathlib build
+        uses: actions/cache@v4
+        with:
+          path: .lake
+          key: geometry-lake-${{ hashFiles('lakefile.lean', 'lean-toolchain') }}
+
+      - name: Fetch Mathlib cache
+        run: |
+          set -eux
+          lake update
+          lake exe cache get || echo "::warning::lake exe cache get failed; Mathlib will build from source"
+
+      - name: Compile CatGTDynamics.lean and gate its axioms
+        run: |
+          set +e
+          lake env lean catgt/lean/CatGTDynamics.lean > /tmp/catgtdyn.txt 2>&1
+          rc=$?
+          set -e
+          echo "----- CatGTDynamics: compiler and axiom report -----"
+          cat /tmp/catgtdyn.txt
+          echo "----------------------------------------------------"
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::CatGTDynamics.lean failed to elaborate (exit $rc); read the report above"
+            exit 1
+          fi
+          python3 tools/axiom_gate.py /tmp/catgtdyn.txt 8
