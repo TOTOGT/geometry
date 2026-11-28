@@ -8,6 +8,8 @@ on:
   push:
     paths:
       - 'catgt/lean/DNLSNorm.lean'
+      - 'catgt/lean/DNLSStepNorm.lean'
+      - 'lakefile.lean'
       - '.github/workflows/verify-dnlsnorm.yml'
   workflow_dispatch:
 
@@ -58,3 +60,29 @@ jobs:
             exit 1
           fi
           python3 tools/axiom_gate.py /tmp/dnlsnorm.txt 6
+
+      - name: Build DNLSStepNorm (ties the result to the actual dnlsStep) and print axioms
+        run: |
+          set -u
+          lake build CatGT DNLSNorm
+          cat > /tmp/probe_step.lean << 'EOF2'
+          import DNLSStepNorm
+          #print axioms CatGTNorm.next_prev
+          #print axioms CatGTNorm.prev_next
+          #print axioms CatGTNorm.dnlsStep_eq_euler
+          #print axioms CatGTNorm.dnlsStep_norm_sq
+          #print axioms CatGTNorm.dnlsStep_norm_ge
+          EOF2
+          sed -i 's/^          //' /tmp/probe_step.lean
+          set +e
+          lake env lean /tmp/probe_step.lean > /tmp/step.txt 2>&1
+          rc=$?
+          set -e
+          echo "----- DNLSStepNorm: compiler and axiom report -----"
+          cat /tmp/step.txt
+          echo "---------------------------------------------------"
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::DNLSStepNorm failed (exit $rc); read the report above"
+            exit 1
+          fi
+          python3 tools/axiom_gate.py /tmp/step.txt 5
