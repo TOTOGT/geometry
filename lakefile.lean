@@ -306,3 +306,14 @@ lean_lib SpectralDiagonalBound where
 -/
 @[default_target]
 lean_lib Ch19MultistabilityAlgebra
+
+/-
+  catgt/lean/DNLSNorm.lean and DNLSStepNorm.lean (2026-11-28, Worker 1): continuous-time norm
+  conservation for the CatGT DNLS chain, and the exact norm law for the explicit-Euler `dnlsStep`.
+  DNLSNorm.lean: CI run #2 (commit c2565a8), 6 declarations on [propext, Classical.choice, Quot.sound].
+  DNLSStepNorm.lean: not compiled when added. NOT a default target, so a failure cannot block
+  the other libraries; checked by .github/workflows/verify-dnlsnorm.yml.
+-/
+lean_lib DNLSNorm where
+  srcDir := "catgt/lean"
+  roots := #[`DNLSNorm, `DNLSStepNorm]
